@@ -14,7 +14,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from dataops.pandas import destroy_db_engine, engine
+from dataops.pandas import destroy_db_engine
 import test
 from workflow.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
@@ -159,15 +159,16 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
 
 
 class WorkflowImportExportCycle(test.OnTaskTestCase):
     fixtures = ['initial_db']
 
-    filename = os.path.join(settings.BASE_DIR(),
-                            '..',
-                            'initial_workflow.gz')
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        '..',
+        'initial_workflow.gz')
     tmp_filename = os.path.join('tmp')
 
     wflow_name = 'initial workflow'

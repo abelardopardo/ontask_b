@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_auth_lti.thread_local import get_current_request
 
-logger = logging.getLogger('onTask')
+logger = logging.getLogger('ontask')
 register = template.Library()
 
 

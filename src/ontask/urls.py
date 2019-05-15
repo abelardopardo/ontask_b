@@ -125,7 +125,7 @@ set_engine()
 
 # Make sure the Site has the right information
 try:
-    site = Site.objects.get(pk=settings.SITE_ID)
+    site = Site.objects.get(wid=settings.SITE_ID)
     site.domain = settings.DOMAIN_NAME
     site.name = settings.DOMAIN_NAME
     site.save()

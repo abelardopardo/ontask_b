@@ -24,6 +24,7 @@ from ontask.decorators import access_workflow, get_workflow
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.forms import WorkflowForm
 from workflow.models import Workflow
+from workflow.ops import store_workflow_in_session
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
@@ -144,6 +145,8 @@ def save_workflow_form(
         if form.instance.id:
             log_type = Log.WORKFLOW_UPDATE
             redirect_url = ''
+            # Save the instance
+            workflow_item = form.save()
         else:
             # This is a new instance!
             form.instance.user = request.user
@@ -152,8 +155,9 @@ def save_workflow_form(
             log_type = Log.WORKFLOW_CREATE
             redirect_url = reverse('dataops:uploadmerge')
 
-        # Save the instance
-        workflow_item = form.save()
+            # Save the instance
+            workflow_item = form.save()
+            store_workflow_in_session(request, workflow_item)
 
         # Log event
         Log.objects.register(
@@ -251,7 +255,6 @@ def delete(
     workflow: Optional[Workflow] = None,
 ) -> JsonResponse:
     """Delete a workflow."""
-    # If the request is not done by the user, flag the error
     if request.method == 'POST':
         # Log the event
         Log.objects.register(

@@ -48,7 +48,8 @@ def save_attribute_form(request, workflow, template, form, attr_idx):
                 action_item.rename_variable(key, form.cleaned_data['key'])
 
         # Update value
-        wf_attributes[form.cleaned_data['key']] = form.cleaned_data['value']
+        wf_attributes[form.cleaned_data['key']] = form.cleaned_data[
+            'attr_value']
 
         workflow.attributes = wf_attributes
         workflow.save()

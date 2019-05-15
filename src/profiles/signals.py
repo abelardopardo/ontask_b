@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from . import models
 
-logger = logging.getLogger('onTask')
+logger = logging.getLogger('ontask')
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

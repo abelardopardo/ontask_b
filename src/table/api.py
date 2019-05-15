@@ -40,15 +40,15 @@ class TableBasicOps(APIView):
     def override(
         self,
         request: HttpRequest,
-        pk: int,
+        wid: int,
         format=None,
-        workflow: Optional[Workflow] = None
+        workflow: Optional[Workflow] = None,
     ) -> HttpResponse:
         """Method to override the content in the workflow.
 
         :param request: Received request object
 
-        :param pk: Workflow ID
+        :param wid: Workflow ID
 
         :param format: format for the response
 
@@ -85,9 +85,9 @@ class TableBasicOps(APIView):
     def get(
         self,
         request: HttpRequest,
-        pk: int,
+        wid: int,
         format=None,
-        workflow: Optional[Workflow] = None
+        workflow: Optional[Workflow] = None,
     ) -> HttpResponse:
         serializer = self.serializer_class(
             {'data_frame':
@@ -101,25 +101,40 @@ class TableBasicOps(APIView):
     def post(
         self,
         request: HttpRequest,
-        pk: int,
+        wid: int,
         format=None,
-        workflow: Optional[Workflow] = None
+        workflow: Optional[Workflow] = None,
     ) -> HttpResponse:
         if load_table(workflow.get_data_frame_table_name()) is not None:
             raise APIException(_('Post request requires workflow without '
                                  'a table'))
-        return self.override(request, pk, format)
+        return self.override(
+            request,
+            wid=wid,
+            format=format,
+            workflow=workflow)
 
     # Update
-    def put(self, request, pk, format=None):
-        return self.override(request, pk, format)
+    @method_decorator(get_workflow(pf_related='columns'))
+    def put(
+        self,
+        request: HttpRequest,
+        wid: int,
+        format=None,
+        workflow: Optional[Workflow] = None,
+    ):
+        return self.override(
+            request,
+            wid=wid,
+            format=format,
+            workflow=workflow)
 
     # Delete
     @method_decorator(get_workflow(pf_related='columns'))
     def delete(
         self,
         request: HttpRequest,
-        pk: int,
+        wid: int,
         format=None,
         workflow: Optional[Workflow] = None
     ) -> HttpResponse:
@@ -222,7 +237,7 @@ class TableBasicMerge(APIView):
     def get(
         self,
         request: HttpRequest,
-        pk: int,
+        wid: int,
         format=None,
         workflow: Optional[Workflow] = None
     ) -> HttpResponse:
@@ -241,7 +256,7 @@ class TableBasicMerge(APIView):
     def put(
         self,
         request: HttpRequest,
-        pk: int,
+        wid: int,
         format=None,
         workflow: Optional[Workflow] = None
     ) -> HttpResponse:

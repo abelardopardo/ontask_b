@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
-import json
 from builtins import object, range, str
+import json
 from typing import Optional
 
-import django_tables2 as tables
 from celery.task.control import inspect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -15,7 +14,9 @@ from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.urls import resolve
 from django.utils.html import format_html
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
+from django_tables2 import A
+import django_tables2 as tables
 
 from dataops.forms import FIELD_PREFIX, PluginInfoForm
 from dataops.models import PluginRegistry
@@ -34,20 +35,14 @@ class PluginRegistryTable(tables.Table):
     customisation.
     """
 
-    more_button = (
-        '<button type="button"'
-        + 'class="btn btn-sm btn-light float-right js-plugin-show-description'
-        + 'data-url="{0}" data-toggle="tooltip" title="{1}">&plus;</button>'
+    name = tables.Column(verbose_name=_('Name'), empty_values=None)
+
+    description_txt = tables.TemplateColumn(
+        verbose_name=_('Description'),
+        template_name='dataops/includes/partial_plugin_description.html',
     )
 
-    name = tables.Column(verbose_name=_('Name'))
-
-    description_txt = tables.Column(verbose_name=_('Description'))
-
-    last_exec = tables.DateTimeColumn(
-        verbose_name=_('Last executed'),
-        extra_context={''},
-    )
+    last_exec = tables.DateTimeColumn(verbose_name=_('Last executed'))
 
     def __init__(self, *args, **kwargs):
         """Set workflow and request."""
@@ -57,7 +52,7 @@ class PluginRegistryTable(tables.Table):
         super().__init__(*args, **kwargs)
 
     def render_name(self, record):
-        """Render as a link."""
+        """Render as a link or empty if it has not been verified."""
         if record.is_verified:
             return format_html(
                 '<a href="{0}" '
@@ -67,15 +62,7 @@ class PluginRegistryTable(tables.Table):
                 record.name,
             )
 
-        return record.name
-
-    def render_description_txt(self, record):
-        """Render with a button to expand."""
-        return format_html(record.description_txt) + format_html(
-            self.more_button,
-            reverse('dataops:plugin_moreinfo', kwargs={'pk': record.id}),
-            ugettext(_('More information')),
-        )
+        return record.filename
 
     def render_is_verified(self, record):
         """Render as an icon."""
@@ -208,7 +195,7 @@ def diagnose(
     return JsonResponse({
         'html_form': render_to_string(
             'dataops/includes/partial_diagnostics.html',
-            {'diagnostic_table': msgs},
+            {'diagnostic_table': msgs, 'folder': plugin.filename},
             request=request),
     })
 
@@ -290,7 +277,7 @@ def plugin_invoke(
             for idx, __ in enumerate(plugin_instance.input_column_names):
                 cid = form.cleaned_data[FIELD_PREFIX + 'input_%s' % idx]
                 input_column_names.append(
-                    workflow.columns.get(pk=int(cid)).name,
+                    workflow.columns.get(wid=int(cid)).name,
                 )
         else:
             input_column_names = [

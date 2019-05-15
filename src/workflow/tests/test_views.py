@@ -44,7 +44,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         )
 
         # Set the file name
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          'workflow',
                          'fixtures',
@@ -100,7 +100,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.go_to_csv_upload_merge_step_1()
 
         # Set the file name
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          'workflow',
                          'fixtures',
@@ -197,7 +197,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         )
 
         # Set the file name
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          'workflow',
                          'fixtures',
@@ -298,7 +298,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
-            db.check_wf_df(Workflow.objects.get(pk=1))
+            db.check_wf_df(Workflow.objects.get(wid=1))
             idx += 1
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
@@ -450,8 +450,8 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.wait_for_modal_open()
         self.selenium.find_element_by_id('id_key').clear()
         self.selenium.find_element_by_id('id_key').send_keys('newkey2')
-        self.selenium.find_element_by_id('id_value').clear()
-        self.selenium.find_element_by_id('id_value').send_keys('newvalue2')
+        self.selenium.find_element_by_id('id_attr_value').clear()
+        self.selenium.find_element_by_id('id_attr_value').send_keys('newvalue2')
 
         # Click in the submit button
         self.selenium.find_element_by_xpath(

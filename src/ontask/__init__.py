@@ -8,6 +8,7 @@ import pytz
 from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
+from psycopg2 import sql
 
 from ontask.celery import app as celery_app
 
@@ -113,6 +114,16 @@ def create_new_name(old_name: str, obj_manager) -> str:
     return new_name
 
 
+class OnTaskDBIdentifier(sql.Identifier):
+    """Class to manage the presence of % in SQL identifiers."""
+
+    def __init__(self, *strings):
+        if not strings:
+            raise TypeError("Identifier cannot be empty")
+
+        super().__init__(*[val.replace('%', '%%') for val in strings])
+
+
 class OnTaskException(Exception):
     """
     Generic class in OnTask for our own exception
@@ -127,9 +138,7 @@ class OnTaskException(Exception):
 
 
 class OnTaskDataFrameNoKey(OnTaskException):
-    """
-    Exception to raise when a data frame has no key column
-    """
+    """Exception to raise when a data frame has no key column."""
     pass
 
 
@@ -139,15 +148,15 @@ class OnTaskDataFrameHasDuplicatedColumns(OnTaskException):
 
 
 class OnTaskNoWorkflow(OnTaskException):
-    """Exception to raise when there is no workflow"""
+    """Exception to raise when there is no workflow."""
     pass
 
 
 class OnTaskEmptyWorkflow(OnTaskException):
-    """Exception to raise when the workflow has no table"""
+    """Exception to raise when the workflow has no table."""
     pass
 
 
 class OnTaskNoAction(OnTaskException):
-    """Exception to raise when there is no action"""
+    """Exception to raise when there is no action."""
     pass

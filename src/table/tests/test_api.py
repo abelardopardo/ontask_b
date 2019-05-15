@@ -2,15 +2,16 @@
 
 
 import os
-import test
 
-import pandas as pd
 from django.conf import settings
 from django.shortcuts import reverse
+import pandas as pd
 from rest_framework.authtoken.models import Token
 
 from dataops.pandas import check_wf_df, detect_datetime_columns, load_table
 from table.serializers import string_to_df
+from table.serializers.pandas import df_to_string
+import test
 from workflow.models import Workflow
 from workflow.ops import workflow_delete_column
 
@@ -43,22 +44,22 @@ class TableApiBase(test.OnTaskApiTestCase):
 
     incorrect_table_1 = {
         "email": {
-          "0": "student1@bogus.com",
-          "1": "student2@bogus.com",
-          "2": "student3@bogus.com",
-          "3": "student1@bogus.com"
+            "0": "student1@bogus.com",
+            "1": "student2@bogus.com",
+            "2": "student3@bogus.com",
+            "3": "student1@bogus.com"
         },
         "Another column": {
-          "0": 6.93333333333333,
-          "1": 9.1,
-          "2": 9.1,
-          "3": 5.03333333333333
+            "0": 6.93333333333333,
+            "1": 9.1,
+            "2": 9.1,
+            "3": 5.03333333333333
         },
         "Quiz": {
-          "0": 1,
-          "1": 0,
-          "2": 3,
-          "3": 0
+            "0": 1,
+            "1": 0,
+            "2": 3,
+            "3": 0
         }
     }
 
@@ -87,13 +88,14 @@ class TableApiBase(test.OnTaskApiTestCase):
 
 class TableApiCreate(TableApiBase):
     # Getting the table attached to the workflow
+
     def test_table_JSON_get(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
         response = self.client.get(reverse('table:api_ops',
-                                           kwargs={'pk': workflow.id}))
+                                           kwargs={'wid': workflow.id}))
 
         # Transform the response into a data frame
         r_df = pd.DataFrame(response.data['data_frame'])
@@ -112,7 +114,7 @@ class TableApiCreate(TableApiBase):
 
         # Get the data through the API
         response = self.client.get(reverse('table:api_pops',
-                                           kwargs={'pk': workflow.id}))
+                                           kwargs={'wid': workflow.id}))
 
         # Transform the response into a data frame
         r_df = string_to_df(response.data['data_frame'])
@@ -130,14 +132,17 @@ class TableApiCreate(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Override the table
-        response = self.client.post(reverse('table:api_ops',
-                                            kwargs={'pk': workflow.id}),
-                                    self.new_table,
-                                    format='json')
+        response = self.client.post(
+            reverse(
+                'table:api_ops',
+                kwargs={'wid': workflow.id}),
+            self.new_table,
+            format='json')
 
         # Check that the right message is returned
-        self.assertIn('Post request requires workflow without a table',
-                      response.data['detail'])
+        self.assertIn(
+            'Post request requires workflow without a table',
+            response.data['detail'])
 
     def test_table_try_pandas_overwrite(self):
         # Upload a table and try to overwrite an existing one (should fail)
@@ -146,34 +151,36 @@ class TableApiCreate(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Override the table
-        response = self.client.post(reverse('table:api_pops',
-                                            kwargs={'pk': workflow.id}),
-                                    self.new_table,
-                                    format='json')
+        response = self.client.post(
+            reverse(
+                'table:api_pops',
+                kwargs={'wid': workflow.id}),
+            self.new_table,
+            format='json')
 
         # Check that the right message is returned
-        self.assertIn('Post request requires workflow without a table',
-                      response.data['detail'])
+        self.assertIn(
+            'Post request requires workflow without a table',
+            response.data['detail'])
 
     def test_table_json_create(self):
         # Create a second workflow
-        response = self.client.post(reverse('workflow:api_workflows'),
-                                    {'name': test.wflow_name + '2',
-                                     'attributes': {'one': 'two'}},
-                                    format='json')
+        response = self.client.post(
+            reverse('workflow:api_workflows'),
+            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            format='json')
 
         # Get the only workflow in the fixture
-        workflow = Workflow.objects.get(pk=response.data['id'])
+        workflow = Workflow.objects.get(id=response.data['id'])
 
         # Upload the table
         response = self.client.post(
-            reverse('table:api_ops',
-                    kwargs={'pk': workflow.id}),
+            reverse('table:api_ops', kwargs={'wid': workflow.id}),
             {'data_frame': self.new_table},
             format='json')
 
         # Refresh wflow (has been updated)
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
         df = load_table(workflow.get_data_frame_table_name())
@@ -189,18 +196,17 @@ class TableApiCreate(TableApiBase):
 
     def test_table_json_create_error(self):
         # Create a second workflow
-        response = self.client.post(reverse('workflow:api_workflows'),
-                                    {'name': test.wflow_name + '2',
-                                     'attributes': {'one': 'two'}},
-                                    format='json')
+        response = self.client.post(
+            reverse('workflow:api_workflows'),
+            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            format='json')
 
         # Get the only workflow in the fixture
-        workflow = Workflow.objects.get(pk=response.data['id'])
+        workflow = Workflow.objects.get(id=response.data['id'])
 
         # Upload the table
         response = self.client.post(
-            reverse('table:api_ops',
-                    kwargs={'pk': workflow.id}),
+            reverse('table:api_ops', kwargs={'wid': workflow.id}),
             {'data_frame': self.incorrect_table_1},
             format='json')
 
@@ -211,13 +217,13 @@ class TableApiCreate(TableApiBase):
 
     def test_table_pandas_create(self):
         # Create a second workflow
-        response = self.client.post(reverse('workflow:api_workflows'),
-                                    {'name': test.wflow_name + '2',
-                                     'attributes': {'one': 'two'}},
-                                    format='json')
+        response = self.client.post(
+            reverse('workflow:api_workflows'),
+            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            format='json')
 
         # Get the only workflow in the fixture
-        workflow = Workflow.objects.get(pk=response.data['id'])
+        workflow = Workflow.objects.get(id=response.data['id'])
 
         # Transform new table into a data frame
         r_df = pd.DataFrame(self.new_table)
@@ -225,13 +231,12 @@ class TableApiCreate(TableApiBase):
 
         # Upload the table
         response = self.client.post(
-            reverse('table:api_pops',
-                    kwargs={'pk': workflow.id}),
+            reverse('table:api_pops', kwargs={'wid': workflow.id}),
             {'data_frame': df_to_string(r_df)},
             format='json')
 
         # Refresh wflow (has been updated)
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
         df = load_table(workflow.get_data_frame_table_name())
@@ -253,13 +258,14 @@ class TableApiCreate(TableApiBase):
 
         # Upload a new table
         response = self.client.put(
-            reverse('table:api_ops',
-                    kwargs={'pk': workflow.id}),
+            reverse(
+                'table:api_ops',
+                kwargs={'wid': workflow.id}),
             {'data_frame': self.new_table},
             format='json')
 
         # Refresh wflow (has been updated)
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
         df = load_table(workflow.get_data_frame_table_name())
@@ -269,7 +275,7 @@ class TableApiCreate(TableApiBase):
 
         # Check that the rest of the
         # information is correct
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
         self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_update(self):
@@ -282,13 +288,14 @@ class TableApiCreate(TableApiBase):
 
         # Upload a new table
         response = self.client.put(
-            reverse('table:api_pops',
-                    kwargs={'pk': workflow.id}),
-            {'data_frame': table.serializers.pandas.df_to_string(r_df)},
+            reverse(
+                'table:api_pops',
+                kwargs={'wid': workflow.id}),
+            {'data_frame': df_to_string(r_df)},
             format='json')
 
         # Refresh wflow (has been updated)
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
         df = load_table(workflow.get_data_frame_table_name())
@@ -298,7 +305,7 @@ class TableApiCreate(TableApiBase):
 
         # Check that the rest of the
         # information is correct
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
         self.assertTrue(check_wf_df(workflow))
 
     def test_table_JSON_flush(self):
@@ -306,8 +313,9 @@ class TableApiCreate(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Flush the data in the table
-        response = self.client.delete(reverse('table:api_ops',
-                                              kwargs={'pk': workflow.id}))
+        response = self.client.delete(reverse(
+            'table:api_ops',
+            kwargs={'wid': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
         self.assertTrue(check_wf_df(workflow))
@@ -317,8 +325,8 @@ class TableApiCreate(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Flush the data in the table
-        response = self.client.delete(reverse('table:api_pops',
-                                              kwargs={'pk': workflow.id}))
+        response = self.client.delete(
+            reverse('table:api_pops', kwargs={'wid': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
         self.assertTrue(check_wf_df(workflow))
@@ -332,8 +340,8 @@ class TableApiMerge(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('table:api_merge',
-                                           kwargs={'pk': workflow.id}))
+        response = self.client.get(
+            reverse('table:api_merge', kwargs={'wid': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
 
@@ -353,13 +361,13 @@ class TableApiMerge(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('table:api_pmerge',
-                                           kwargs={'pk': workflow.id}))
+        response = self.client.get(
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
 
         # Transform new table into string
-        r_df = table.serializers.pandas.string_to_df(response.data['src_df'])
+        r_df = string_to_df(response.data['src_df'])
 
         # Load the df from the db
         df = load_table(workflow.get_data_frame_table_name())
@@ -375,7 +383,7 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.new_table,
                 "how": "inner",
@@ -400,9 +408,9 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": table.serializers.pandas.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "inner",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -423,7 +431,7 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df,
                 "how": "inner",
@@ -450,9 +458,9 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": table.serializers.pandas.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "inner",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -483,7 +491,7 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df,
                 "how": "outer",
@@ -521,9 +529,9 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": table.serializers.pandas.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "outer",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -557,7 +565,7 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df,
                 "how": "left",
@@ -588,9 +596,9 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": table.serializers.pandas.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "left",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -638,7 +646,7 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df2,
                 "how": "outer",
@@ -690,9 +698,9 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": table.serializers.pandas.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "outer",
                 "left_on": "sid",
                 "right_on": "sid"

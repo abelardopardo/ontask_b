@@ -4,19 +4,19 @@
 import datetime
 import io
 import os
-import test
 
-import pandas as pd
 from django.conf import settings
+import pandas as pd
 
-import dataops.forms
 from action.models import Action
 from dataops.forms.upload import load_df_from_csvfile
 from dataops.formula import EVAL_EXP, evaluate_formula
 from dataops.pandas import (
-    engine, load_table, perform_dataframe_upload_merge, store_table,
+    get_subframe, load_table,
+    perform_dataframe_upload_merge, store_table
 )
 from dataops.sql import get_rows, get_select_query_txt
+import test
 from workflow.models import Workflow
 
 
@@ -85,7 +85,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
                 0
             )
 
-        df_src = dataops.forms.dataframeupload.load_df_from_csvfile(
+        df_src = load_df_from_csvfile(
             io.StringIO(self.csv2),
             0,
             0)
@@ -233,6 +233,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         type_value,
         value
     ):
+
         self.set_skel(
             input_value,
             op_value.format(''),
@@ -244,7 +245,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
             self.test_columns,
             self.skel,
         )
-        result = pd.read_sql_query(query, engine, params=fields)
+        result = load_table(self.test_table, self.test_columns, self.skel)
         self.assertEqual(len(result), 1)
 
     def test_eval_node(self):
@@ -611,8 +612,10 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
         conditions = self.action.conditions.filter(is_filter=False)
 
         # Get dataframe
-        df = dataops.pandas.dataframe.get_subframe(wflow_table, filter_formula,
-                                                   column_names)
+        df = get_subframe(
+            wflow_table,
+            filter_formula,
+            column_names)
 
         # Get the query set
         qs = get_rows(wflow_table, column_names, filter_formula)

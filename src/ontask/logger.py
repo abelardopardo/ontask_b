@@ -58,6 +58,6 @@ class StyleAdapter(logging.LoggerAdapter):
                 **log_kwargs)
 
 
-logger = StyleAdapter(logging.getLogger('onTask'))
+logger = StyleAdapter(logging.getLogger('ontask'))
 #   Emits "Lazily formatted log entry: 123 foo" in log
 # logger.debug('Lazily formatted entry: {0} {keyword}', 123, keyword='foo')

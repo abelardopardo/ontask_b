@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from dataops.pandas import destroy_db_engine, engine
+from dataops.pandas import destroy_db_engine
 
 
 class Scenario3Captures(ScreenTests):
@@ -110,4 +110,4 @@ class Scenario3Captures(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()

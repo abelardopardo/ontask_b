@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .timer import Timer
 
-logger = logging.getLogger('onTask')
+logger = logging.getLogger('ontask')
 
 
 class LTIAuthMiddleware(object):

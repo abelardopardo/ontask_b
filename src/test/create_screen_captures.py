@@ -14,7 +14,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from action.models import Action
-from dataops.pandas import destroy_db_engine, engine
+from dataops.pandas import destroy_db_engine
 
 standard_library.install_aliases()
 
@@ -64,7 +64,7 @@ class ScreenTutorialTest(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
 
 
 class ScreenImportTest(ScreenTests):
@@ -114,7 +114,7 @@ class ScreenImportTest(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
 
 
 class ScreenTestFixture(ScreenTests):
@@ -179,7 +179,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
 
     def test_ss_workflow(self):
         # Login
@@ -265,7 +265,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
 
     def test_ss_details(self):
         # Login
@@ -294,7 +294,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
 
     def test_ss_dataops(self):
         # Login
@@ -311,7 +311,7 @@ class ScreenTestFixture(ScreenTests):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          '..',
                          'initial_workflow',
@@ -441,7 +441,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
 
     def test_ss_table(self):
         # Login
@@ -494,7 +494,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
 
     def test_ss_action(self):
         # Login
@@ -753,8 +753,6 @@ Course Coordinator""")
         # End of session
         self.logout()
 
-        # Close the db_engine
-        # pandas_destroy_db_engine(pandas_engine)
 
     def test_ss_scheduler(self):
         # Login
@@ -842,7 +840,7 @@ Course Coordinator""")
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
 
     def test_ss_logs(self):
         # Login
@@ -863,4 +861,4 @@ Course Coordinator""")
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()

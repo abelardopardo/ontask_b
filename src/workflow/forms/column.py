@@ -290,6 +290,11 @@ class ColumnRenameForm(ColumnBasicForm):
         """Set the data type to disable to prevent type changes."""
         super().__init__(*args, **kwargs)
 
+        # Remember the column name and position to perform content substitution
+        if self.instance.name:
+            self.old_name = self.instance.name
+            self.old_position = self.instance.position
+
         self.fields['data_type'].disabled = True
 
     def clean(self):

@@ -14,15 +14,15 @@ urlpatterns = [
     #
     # API JSON
     #
-    path('<int:pk>/ops/', api.TableJSONOps.as_view(), name='api_ops'),
-    path('<int:pk>/merge/', api.TableJSONMerge.as_view(), name='api_merge'),
+    path('<int:wid>/ops/', api.TableJSONOps.as_view(), name='api_ops'),
+    path('<int:wid>/merge/', api.TableJSONMerge.as_view(), name='api_merge'),
 
     #
     # API PANDAS
     #
-    path('<int:pk>/pops/', api.TablePandasOps.as_view(), name='api_pops'),
+    path('<int:wid>/pops/', api.TablePandasOps.as_view(), name='api_pops'),
     path(
-        '<int:pk>/pmerge/',
+        '<int:wid>/pmerge/',
         api.TablePandasMerge.as_view(),
         name='api_pmerge'),
 
@@ -76,7 +76,10 @@ urlpatterns = [
     # CSV Download
     #
     path('csvdownload/', views.csvdownload, name='csvdownload'),
-    path('<int:pk>/csvdownload/', views.csvdownload, name='csvdownload_view'),
+    path(
+        '<int:pk>/csvdownload/',
+        views.csvdownload_view,
+        name='csvdownload_view'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

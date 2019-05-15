@@ -25,12 +25,12 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from action.models import Action
-from dataops.pandas import destroy_db_engine, engine
+from dataops.pandas import destroy_db_engine
+from dataops.pandas.db import engine
 from ontask.permissions import group_names
 from workflow.models import Workflow
 
 standard_library.install_aliases()
-
 
 
 # email, [groups], Superuser?
@@ -839,7 +839,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         element = self.selenium.find_element_by_id('id_key')
         element.clear()
         element.send_keys(attribute_key)
-        element = self.selenium.find_element_by_id('id_value')
+        element = self.selenium.find_element_by_id('id_attr_value')
         element.clear()
         element.send_keys(attribute_value)
 
@@ -1545,7 +1545,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         element = self.selenium.find_element_by_id('id_key')
         element.clear()
         element.send_keys(nkey)
-        element = self.selenium.find_element_by_id('id_value')
+        element = self.selenium.find_element_by_id('id_attr_value')
         element.clear()
         element.send_keys(nvalue)
 

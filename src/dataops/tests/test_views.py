@@ -393,7 +393,7 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
         self.go_to_excel_upload_merge_step_1()
 
         # Upload file
-        self.selenium.find_element_by_id("id_file").send_keys(
+        self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'dataops',
                          'fixtures',
@@ -442,7 +442,7 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
         self.go_to_excel_upload_merge_step_1()
 
         # Upload the file
-        self.selenium.find_element_by_id("id_file").send_keys(
+        self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'dataops',
                          'fixtures',
@@ -499,7 +499,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         )
 
         # Select file and upload
-        self.selenium.find_element_by_id("id_file").send_keys(
+        self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'dataops',
                          'fixtures',
@@ -518,7 +518,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         self.go_to_csv_upload_merge_step_1()
 
         # Select the second file and submit
-        self.selenium.find_element_by_id("id_file").send_keys(
+        self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'dataops',
                          'fixtures',
@@ -846,7 +846,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
-        self.selenium.find_element_by_id('id_file').send_keys(self.merge_file)
+        self.selenium.find_element_by_id('id_data_file').send_keys(self.merge_file)
 
         # Click the NEXT button
         self.selenium.find_element_by_xpath(

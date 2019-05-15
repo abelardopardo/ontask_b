@@ -30,7 +30,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
 
         # Get the workflow and compare
         wflow_id = response.data['results'][0]['id']
-        workflow = Workflow.objects.get(pk=wflow_id)
+        workflow = Workflow.objects.get(wid=wflow_id)
         self.assertEqual(wflow_id, 1)
         self.compare_wflows(response.data['results'][0], workflow)
 
@@ -73,7 +73,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
 
         # Get the workflow and verify
         wflow_id = response.data['id']
-        workflow = Workflow.objects.get(pk=wflow_id)
+        workflow = Workflow.objects.get(wid=wflow_id)
         self.assertEqual(workflow.name, test.wflow_name + '2')
 
     def test_workflow_delete(self):

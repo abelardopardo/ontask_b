@@ -18,7 +18,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.templatetags.ontask_tags
-from dataops.pandas import pandas_datatype_names
+from dataops.pandas import pandas_datatype_names, load_table
 from dataops.sql import delete_table
 
 
@@ -130,6 +130,10 @@ class Workflow(models.Model):
                 return
             except Exception:
                 raise Exception('Unable to unlock workflow {0}'.format(wid))
+
+    def data_frame(self):
+        # Function used by the serializer to access the data frame in the DB
+        return load_table(self.get_data_frame_table_name())
 
     def get_data_frame_table_name(self):
         """
@@ -334,7 +338,7 @@ class Workflow(models.Model):
             return
 
         # Cases 3 and 4. Update the existing session
-        session = Session.objects.get(pk=self.session_key)
+        session = Session.objects.get(wid=self.session_key)
         session.expire_date = timezone.now() + datetime.timedelta(
             seconds=settings.SESSION_COOKIE_AGE)
         session.save()

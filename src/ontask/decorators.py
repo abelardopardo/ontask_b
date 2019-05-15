@@ -333,7 +333,7 @@ def get_view(
                 return redirect(reverse('action:index'))
 
             if not kwargs.get('view'):
-                # Get the condition
+                # Get the view
                 view = View.objects.filter(pk=pk).filter(
                     Q(workflow__user=request.user)
                     | Q(workflow__shared=request.user),

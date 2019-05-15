@@ -1,5 +1,10 @@
+# -*- coding: utf-8 -*-
+
+"""Functions to implement CRUD views for Views."""
+
 from typing import Optional
 
+import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -8,9 +13,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
-import django_tables2 as tables
 
-from dataops.pandas import get_subframe
 from logs.models import Log
 from ontask import create_new_name
 from ontask.decorators import get_view, get_workflow
@@ -22,42 +25,44 @@ from workflow.models import Workflow
 
 
 class ViewTable(tables.Table):
-    """
-    Table to display the set of views handled in a workflow
-    """
+    """Table to display the set of views handled in a workflow."""
+
     name = tables.Column(verbose_name=_('Name'))
 
     description_text = tables.Column(
         empty_values=[],
-        verbose_name=_('Description')
-    )
+        verbose_name=_('Description'))
+
     operations = OperationsColumn(
         verbose_name='',
         template_file='table/includes/partial_view_operations.html',
-        template_context=lambda record: {'id': record['id']}
+        template_context=lambda record: {'id': record['id']},
     )
 
     def render_name(self, record):
+        """Render the name of the action as a link."""
         return format_html(
             """<a href="#" class="js-view-edit"
                   data-toggle="tooltip" data-url="{0}"
                   title="{1}">{2}</a>""",
             reverse('table:view_edit', kwargs={'pk': record['id']}),
             _('Change the columns present in the view'),
-            record['name']
+            record['name'],
         )
 
     class Meta(object):
-        """
-        Select the model and specify fields, sequence and attributes
-        """
+        """Select the model and specify fields, sequence and attributes."""
+
         model = View
+
         fields = ('name', 'description_text', 'operations')
+
         sequence = ('name', 'description_text', 'operations')
+
         attrs = {
             'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
-            'id': 'view-table'
+            'id': 'view-table',
         }
 
 
@@ -67,10 +72,12 @@ def view_index(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    """
-    Render the list of views attached to a workflow
+    """Render the list of views attached to a workflow.
+
     :param request:
+
     :return: HTTP response with the table
+
     """
     # Get the views
     views = workflow.views.values(
@@ -96,7 +103,7 @@ def view_add(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    """Create a new view by processing the GET/POST requests related to the form.
+    """Create a new view.
 
     :param request: Request object
 
@@ -115,7 +122,7 @@ def view_add(
     return save_view_form(
         request,
         form,
-        'table/includes/partial_view_add.html'
+        'table/includes/partial_view_add.html',
     )
 
 
@@ -127,10 +134,12 @@ def view_edit(
     workflow: Optional[Workflow] = None,
     view: Optional[View] = None,
 ) -> HttpResponse:
-    """
-    Process the GET/POST for the form to edit the content of a view
+    """Edit the content of a view.
+
     :param request: Request object
+
     :param pk: Primary key of the view
+
     :return: AJAX Response
     """
     # Form to read/process data
@@ -150,10 +159,14 @@ def view_delete(
     workflow: Optional[Workflow] = None,
     view: Optional[View] = None,
 ) -> HttpResponse:
-    """
+    """Delete a view.
+
     AJAX processor for the delete view operation
+
     :param request: AJAX request
+
     :param pk: primary key of the view to delete
+
     :return: AJAX response to handle the form.
     """
     if request.method == 'POST':
@@ -178,7 +191,7 @@ def view_delete(
         'html_form': render_to_string(
             'table/includes/partial_view_delete.html',
             {'view': view},
-            request=request)
+            request=request),
     })
 
 
@@ -190,7 +203,7 @@ def view_clone(
     workflow: Optional[Workflow] = None,
     view: Optional[View] = None,
 ) -> HttpResponse:
-    """AJAX handshake to clone a view attached to the table.
+    """Clone a view.
 
     :param request: HTTP request
 
@@ -210,13 +223,15 @@ def view_clone(
 
     # Proceed to clone the view
     old_name = view.name
+    columns = workflow.views.get(wid=pk).columns.all()
+
     view.id = None
     view.name = create_new_name(view.name, workflow.views)
     view.save()
 
     # Clone the columns
     view.columns.clear()
-    view.columns.add(*list(workflow.views.get(pk=pk).columns.all()))
+    view.columns.add(*list(columns))
 
     # Log the event
     Log.objects.register(
@@ -231,51 +246,10 @@ def view_clone(
     return JsonResponse({'html_redirect': ''})
 
 
-@user_passes_test(is_instructor)
-@get_view(pf_related=['columns', 'views'])
-def csvdownload(
-    request: HttpRequest,
-    pk: Optional[int] = None,
-    workflow: Optional[Workflow] = None,
-    view: Optional[View] = None,
-) -> HttpResponse:
-    """
-
-    :param request: HTML request
-    :param pk: If given, the PK of the view to subset the table
-    :return: Return a CSV download of the data in the table
-    """
-    # Fetch the data frame
-    if view:
-        col_names = [x.name for x in view.columns.all()]
-        formula = view.formula
-    else:
-        col_names = workflow.get_column_names()
-        formula = None
-    data_frame = get_subframe(
-        workflow.get_data_frame_table_name(),
-        formula,
-        col_names
-    )
-
-    # Create the response object
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = \
-        'attachment; filename="ontask_table.csv"'
-
-    # Dump the data frame as the content of the response object
-    data_frame.to_csv(path_or_buf=response,
-                      sep=str(','),
-                      index=False,
-                      encoding='utf-8')
-
-    return response
-
-
 def save_view_form(
     request: HttpRequest,
     form: ViewAddForm,
-    template_name: str
+    template_name: str,
 ) -> HttpResponse:
     """Save the data attached to a view as provided in a form.
 
@@ -318,5 +292,5 @@ def save_view_form(
         'html_form': render_to_string(
             template_name,
             {'form': form, 'id': form.instance.id},
-            request=request)
+            request=request),
     })

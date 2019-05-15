@@ -239,7 +239,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
             return redirect('action:index')
 
         # Get the item being processed
-        schedule_item = ScheduledAction.objects.get(pk=s_item_id)
+        schedule_item = ScheduledAction.objects.get(wid=s_item_id)
 
     # Check for exclude values and store them if needed
     exclude_values = payload.get('exclude_values')

@@ -1,11 +1,17 @@
 {% load i18n %}
-<a class="btn btn-sm btn-light spin" href="{{ edit_url }}"
-   title="{% trans 'Edit the values in this row' %}">
-  <span class="fa fa-pencil"></span></a>
-<a href="{{ stat_url }}" class="btn btn-sm btn-light spin"
-   title="{% trans 'Compare values in the row with the rest of the table' %}">
-  <span class="fa fa-bar-chart"></span></a>
-<button type="button" class="btn btn-sm btn-light js-row-delete"
-   data-url="{% url 'table:row_delete' %}{{ delete_key }}"
-   title="{% trans 'Delete this row' %}">
-  <span class="fa fa-trash"></span></button>
+<div class="dropdown">
+  <button class="btn btn-light btn-sm" type="button" id="rowMoreOperations"
+          data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
+  <div class="shadow dropdown-menu dropdown-menu-right" aria-labelledby="rowMoreOperations">
+    <a class="btn btn-sm btn-light spin" href="{{ edit_url }}"
+       title="{% trans 'Edit the values in this row' %}">
+      <span class="fa fa-pencil"></span></a>
+    <a href="{{ stat_url }}" class="btn btn-sm btn-light spin"
+       title="{% trans 'Compare values in the row with the rest of the table' %}">
+      <span class="fa fa-bar-chart"></span></a>
+    <button type="button" class="btn btn-sm btn-light js-row-delete"
+       data-url="{% url 'table:row_delete' %}{{ delete_key }}"
+       title="{% trans 'Delete this row' %}">
+      <span class="fa fa-trash"></span></button>
+  </div>
+</div>

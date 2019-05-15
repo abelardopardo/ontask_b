@@ -160,7 +160,7 @@ def column_add(
         column.save()
         form.save_m2m()
         workflow = Workflow.objects.prefetch_related('columns').get(
-            pk=workflow.id)
+            wid=workflow.id)
 
         # Store the df to DB
         store_dataframe(df, workflow)
@@ -310,7 +310,7 @@ def formula_column_add(
         # Save column and refresh the prefetched related in the workflow
         column.save()
         workflow = Workflow.objects.prefetch_related('columns').get(
-            pk=workflow.id)
+            wid=workflow.id)
 
         # Store the df to DB
         store_dataframe(df, workflow)
@@ -448,7 +448,7 @@ def random_column_add(
 
         column.save()
         workflow = Workflow.objects.prefetch_related('columns').get(
-            pk=workflow.id)
+            wid=workflow.id)
 
         # Store the df to DB
         store_dataframe(df, workflow)
@@ -506,9 +506,6 @@ def column_edit(
             workflow=workflow,
             instance=column)
 
-    old_name = column.name
-    # Keep a copy of the previous position
-    old_position = column.position
     if request.method == 'POST' and form.is_valid():
         # Process further only if any data changed.
         if form.changed_data:
@@ -518,16 +515,16 @@ def column_edit(
             column = form.save(commit=False)
 
             # If there is a new name, rename the data frame columns
-            if 'name' in form.changed_data:
+            if form.old_name != form.cleaned_data['name']:
                 db_rename_column(
                     workflow.get_data_frame_table_name(),
-                    old_name,
+                    form.old_name,
                     column.name)
-                rename_df_column(workflow, old_name, column.name)
+                rename_df_column(workflow, form.old_name, column.name)
 
-            if 'position' in form.changed_data:
+            if form.old_position != form.cleaned_data['position']:
                 # Update the positions of the appropriate columns
-                workflow.reposition_columns(old_position, column.position)
+                workflow.reposition_columns(form.old_position, column.position)
 
             # Save the column information
             column.save()
@@ -535,7 +532,7 @@ def column_edit(
             # Go back to the DB because the prefetch columns are not valid
             # any more
             workflow = Workflow.objects.prefetch_related('columns').get(
-                pk=workflow.id,
+                wid=workflow.id,
             )
 
             # Changes in column require rebuilding the query_builder_ops
@@ -556,7 +553,7 @@ def column_edit(
             {
                 'id': workflow.id,
                 'name': workflow.name,
-                'column_name': old_name,
+                'column_name': form.old_name,
                 'new_name': column.name})
 
         # Done processing the correct POST request
@@ -570,7 +567,7 @@ def column_edit(
         'html_form': render_to_string(
             template,
             {'form': form,
-             'cname': old_name,
+             'cname': form.old_name,
              'pk': pk},
             request=request),
     })

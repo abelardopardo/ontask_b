@@ -13,7 +13,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from action.models import Action
-from dataops.pandas import destroy_db_engine, engine
+from dataops.pandas import destroy_db_engine
 
 
 class TutorialCaptures(ScreenTests):
@@ -61,7 +61,7 @@ class TutorialCaptures(ScreenTests):
         )
 
         # Set the file name
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          '..',
                          'docs_src',
@@ -201,7 +201,7 @@ class TutorialCaptures(ScreenTests):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          '..',
                          'docs_src',
@@ -760,4 +760,4 @@ class TutorialCaptures(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine()
