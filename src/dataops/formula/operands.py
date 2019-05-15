@@ -7,7 +7,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext
 from psycopg2 import sql
 
-from ontask import OnTaskException
+from ontask import OnTaskException, OnTaskDBIdentifier
 
 # Type of evaluations for the formulas
 EVAL_EXP = 0
@@ -76,7 +76,7 @@ def equal(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} = {1}) AND ({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = [str(constant)]
@@ -110,7 +110,7 @@ def not_equal(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} != {1}) OR ({0} is null)').format(
-            sql.Identifier(node['field']),
+            OnTaskException(node['field']),
             sql.Placeholder(),
         )
         fields = [str(constant)]
@@ -146,7 +146,7 @@ def begins_with(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} LIKE {1}) AND ({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = [node['value'] + '%']
@@ -179,7 +179,7 @@ def not_begins_with(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} NOT LIKE {1}) OR ({0} is null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = [node['value'] + '%']
@@ -214,7 +214,7 @@ def contains(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} LIKE {1}) AND ({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = ['%' + node['value'] + '%']
@@ -248,7 +248,7 @@ def not_contains(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} NOT LIKE {1}) OR ({0} is null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = ['%' + node['value'] + '%']
@@ -280,7 +280,7 @@ def ends_with(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} LIKE {1}) AND ({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = ['%' + node['value']]
@@ -315,7 +315,7 @@ def not_ends_with(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} NOT LIKE {1}) OR ({0} is null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = ['%' + node['value']]
@@ -345,7 +345,7 @@ def is_empty(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} = \'\') OR ({0} is null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
         )
         fields = [node['value']]
 
@@ -374,7 +374,7 @@ def is_not_empty(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} != \'\') AND ({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
         )
         fields = [node['value']]
 
@@ -403,7 +403,7 @@ def is_null(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} is null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
         )
 
         return query, []
@@ -430,7 +430,7 @@ def is_not_null(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
         )
 
         return query, []
@@ -467,7 +467,7 @@ def less(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} < {1}) AND ({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = [str(constant)]
@@ -508,7 +508,7 @@ def less_or_equal(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} <= {1}) AND ({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = [str(constant)]
@@ -550,7 +550,7 @@ def greater(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} > {1}) AND ({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = [str(constant)]
@@ -591,7 +591,7 @@ def greater_or_equal(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} >= {1}) AND ({0} is not null)').format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = [str(constant)]
@@ -639,7 +639,7 @@ def between(node, eval_type, given_variables):
         query = sql.SQL(
             '({0} BETWEEN {1} AND {2}) AND ({0} is not null)',
         ).format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
             sql.Placeholder(),
         )
@@ -690,7 +690,7 @@ def not_between(node, eval_type, given_variables):
         query = sql.SQL(
             '({0} NOT BETWEEN {1} AND {2}) AND ({0} is null)',
         ).format(
-            sql.Identifier(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
             sql.Placeholder(),
         )

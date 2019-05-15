@@ -9,6 +9,7 @@ from django.db import connection
 from psycopg2 import sql
 
 from dataops.formula import EVAL_SQL, evaluate_formula
+from ontask import OnTaskDBIdentifier
 
 logger = logging.getLogger('ontask')
 
@@ -42,12 +43,12 @@ def get_boolean_clause(
         c_txt = ' AND ' if conjunction else ' OR '
         pairs_clause = sql.SQL(c_txt).join([
             sql.SQL('{0} = {1}').format(
-                sql.Identifier(key), sql.Literal(lit_val))
-            for key, lit_val in filter_pairs
+                OnTaskDBIdentifier(key), sql.Literal(lit_val))
+            for key, lit_val in filter_pairs.items()
         ])
-        pairs_fields = [lit_val for __, lit_val in filter_pairs]
+        pairs_fields = [lit_val for __, lit_val in filter_pairs.items()]
         if clause:
-            clause = sql.SQL(' AND ').join([clause, pairs_clause])
+            clause = clause + sql.SQL(' AND ') + pairs_clause
             clause_fields += pairs_fields
         else:
             clause = pairs_clause
@@ -79,7 +80,7 @@ def get_select_query(
 
     query = sql.SQL('SELECT {0} FROM {1}').format(
         sql.SQL(', ').join([
-            sql.Identifier(cname) for cname in column_names
+            OnTaskDBIdentifier(cname) for cname in column_names
         ]),
         sql.Identifier(table_name),
     )
@@ -92,7 +93,7 @@ def get_select_query(
         )
 
         if bool_clause:
-            query = sql.SQL(' WHERE ').join([query, bool_clause])
+            query = query + sql.SQL(' WHERE ') + bool_clause
 
     return query, query_fields
 
@@ -162,55 +163,53 @@ def search_table(
     :return: The resulting query set
     """
     # Create the query
-    query = sql.SQL('SELECT {0} FROM {1} WHERE ').format(
+    query = sql.SQL('SELECT {0} FROM {1}').format(
         sql.SQL(', ').join([
-            sql.Identifier(colname) for colname in columns_to_search
+            OnTaskDBIdentifier(colname) for colname in columns_to_search
         ]),
         sql.Identifier(table_name),
     )
     query_fields = []
 
+    where_clause = sql.SQL('')
     # Add filter part if present
     if filter_formula:
         filter_query, filter_fields = evaluate_formula(
             filter_formula,
             EVAL_SQL)
         if filter_query:
-            query = sql.SQL('{0} AND ').format(
-                sql.SQL('').join([query, filter_query]),
-            )
+            where_clause = filter_query
             query_fields += filter_fields
 
-    # Combine the search subqueries
-    if any_join:
-        conn_txt = ' OR '
-    else:
-        conn_txt = ' AND '
-
     # Add the CAST {0} AS TEXT LIKE ...
-    query = sql.SQL('').join([
-        query,
-        sql.SQL('({0})').format(
-            sql.SQL(conn_txt).join([
-                sql.SQL('(CAST ({0} AS TEXT) LIKE %s)').format(
-                    sql.Identifier(cname),
-                ) for cname in columns_to_search
-            ]),
-        ),
-    ])
-    query_fields += ['%' + search_value + '%'] * len(columns_to_search)
+    if search_value:
+        if where_clause != sql.SQL(''):
+            where_clause = where_clause + sql.SQL(' AND ')
+
+        # Combine the search subqueries
+        if any_join:
+            conn_txt = ' OR '
+        else:
+            conn_txt = ' AND '
+
+        where_clause = where_clause + sql.SQL(conn_txt).join([
+            sql.SQL('(CAST ({0} AS TEXT) LIKE %s)').format(
+                OnTaskDBIdentifier(cname),
+            ) for cname in columns_to_search
+        ])
+
+        query_fields += ['%' + search_value + '%'] * len(columns_to_search)
+
+    if where_clause != sql.SQL(''):
+        query = query + sql.SQL(' WHERE') + where_clause
 
     # Add the order if needed
     if order_col_name:
-        query = sql.SQL(' ').join(
-            [
-                query,
-                sql.SQL('ORDER BY {0}').format(sql.Identifier(order_col_name)),
-            ],
-        )
+        query = query + sql.SQL(' ') + sql.SQL('ORDER BY {0}').format(
+            OnTaskDBIdentifier(order_col_name))
 
     if not order_asc:
-        query = sql.SQL(' ').join([query, sql.SQL('DESC')])
+        query = query + sql.SQL(' DESC')
 
     # Execute the query
     with connection.cursor() as cursor:

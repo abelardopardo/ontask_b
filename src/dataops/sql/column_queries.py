@@ -7,6 +7,8 @@ from typing import List
 from django.db import connection
 from psycopg2 import sql
 
+from ontask import OnTaskDBIdentifier
+
 sql_to_ontask_datatype_names = {
     # Translation between SQL data type names, and those handled in OnTask
     'text': 'string',
@@ -51,7 +53,7 @@ def add_column_to_db(
     )
 
     if initial:
-        query = sql.SQL(' DEFAULT ').join([query, sql.Literal(initial)])
+        query = query + sql.SQL(' DEFAULT ') + sql.Literal(initial)
 
     connection.cursor().execute(query)
 
@@ -85,7 +87,7 @@ def is_column_table_unique(table_name: str, column_name: str) -> bool:
     :return: Boolean (is unique)
     """
     query = sql.SQL('SELECT COUNT(DISTINCT {0}) = count(*) from {1}').format(
-        sql.Identifier(column_name),
+        OnTaskDBIdentifier(column_name),
         sql.Identifier(table_name),
     )
 
@@ -156,7 +158,7 @@ def get_text_column_hash(table_name: str, column_name: str) -> str:
     :return: MD5 hash of the concatenation of the column values
     """
     query = sql.SQL('SELECT MD5(STRING_AGG({0}, {1})) FROM {2}').format(
-        sql.Identifier(column_name),
+        OnTaskDBIdentifier(column_name),
         sql.Literal(''),
         sql.Identifier(table_name),
     )

@@ -10,6 +10,7 @@ from psycopg2.extras import DictCursor
 
 from dataops.formula import EVAL_SQL, evaluate_formula
 from dataops.sql.table_queries import get_boolean_clause, get_select_query
+from ontask import OnTaskDBIdentifier
 
 
 def get_rows(
@@ -107,42 +108,32 @@ def update_row(
 
     :param table_name: Table name
 
-    :param set_fields: List of field names to be updated
+    :param set_pairs: Dictionary of pairs key, value to set
 
-    :param set_values: List of values to update the fields of the previous list
-
-    :param where_fields: List of fields used to filter the row in the table
-
-    :param where_values: List of values of the previous fields to filter the
-    row
+    :param field_pairs: Dictionary of key, value to find the row
 
     :return:
     """
-    query = sql.SQL(' ').join([
-        sql.SQL('UPDATE {0} SET ').format(sql.Identifier(table_name)),
-        sql.SQL(' AND ').join([
-            sql.SQL('{0} = {1}').format(
-                sql.Identifier(key), sql.Literal(lit_val))
-            for key, lit_val in set_pairs
-        ]),
+    query = sql.SQL('UPDATE {0} SET ').format(
+        sql.Identifier(table_name)) + sql.SQL(', ').join([
+        sql.SQL('{0} = {1}').format(
+            OnTaskDBIdentifier(key), sql.Literal(lit_val))
+        for key, lit_val in set_pairs.items()
     ])
     query_fields = []
 
     if filter_pairs:
-        query = sql.SQL(' WHERE ').join([
-            query,
-            sql.SQL(' AND ').join([
-                sql.SQL('{0} = {1}').format(
-                    sql.Identifier(key), sql.Literal(lit_val))
-                for key, lit_val in filter_pairs
-            ]),
+        query = query + sql.SQL(' WHERE ') + sql.SQL(' AND ').join([
+            sql.SQL('{0} = {1}').format(
+                OnTaskDBIdentifier(key), sql.Literal(lit_val))
+            for key, lit_val in filter_pairs.items()
         ])
-        query_fields += [lit_val for __, lit_val in filter_pairs]
+        query_fields += [lit_val for __, lit_val in filter_pairs.items()]
 
     # Execute the query
     with connection.cursor() as cursor:
         cursor.execute(query, query_fields)
-        connection.commit()
+    connection.commit()
 
 
 def increase_row_integer(
@@ -168,8 +159,8 @@ def increase_row_integer(
     """
     query = sql.SQL('UPDATE {0} SET {1} = {1} + 1 WHERE {2} = %s').format(
         sql.Identifier(table_name),
-        sql.Identifier(set_field),
-        sql.Identifier(where_field),
+        OnTaskDBIdentifier(set_field),
+        OnTaskDBIdentifier(where_field),
         sql.Literal(where_value))
 
     # Execute the query
@@ -218,7 +209,7 @@ def select_ids_all_false(
             filter_formula,
             EVAL_SQL,
         )
-        query = sql.SQL(' AND ').join([query, filter_query])
+        query = query + sql.SQL(' AND ') + filter_query
         query_fields += filter_fields
 
     # Run the query and return the list
