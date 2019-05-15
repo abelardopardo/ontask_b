@@ -7,6 +7,7 @@ from urllib.parse import urlparse, urlunparse
 
 import pandas as pd
 from smart_open import smart_open
+from django.conf import settings as ontask_settings
 
 from dataops.models import SQLConnection
 from dataops.pandas import create_db_engine
@@ -221,7 +222,17 @@ def strip_and_convert_to_datetime(data_frame: pd.DataFrame) -> pd.DataFrame:
                 series = pd.to_datetime(
                     data_frame[column],
                     infer_datetime_format=True)
-                # Datetime conversion worked! Update the data_frame
+
+                # Datetime conversion worked!
+                if any(
+                    sitem.tzinfo is None or sitem.tzinfo.utcoffset(sitem)
+                    for sitem in series
+                ):
+                    # If series has no timezone, add the system one
+                    series = series.dt.tz_localize('UTC').dt.tz_convert(
+                        ontask_settings.TIME_ZONE,
+                    )
+
                 data_frame[column] = series
 
     return data_frame
