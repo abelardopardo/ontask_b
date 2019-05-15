@@ -79,7 +79,7 @@ class PluginInfoForm(forms.Form):
 
     def _create_param_fields(self):
         """Create the fields to capture the parameters."""
-        for idx, lbl, p_type, p_allow, p_init, p_help in enumerate(
+        for idx, (lbl, p_type, p_allow, p_init, p_help) in enumerate(
             self.plugin_instance.parameters,
         ):
 
@@ -90,11 +90,7 @@ class PluginInfoForm(forms.Form):
                     label=lbl,
                     help_text=p_help)
             else:
-                new_field = self._create_datatype_field(
-                    self,
-                    p_type,
-                    p_help,
-                    lbl)
+                new_field = self._create_datatype_field(p_type, p_help, lbl)
 
             # Set the initial value of each field
             if p_allow:
