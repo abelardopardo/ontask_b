@@ -152,7 +152,7 @@ def view_edit(
 
 
 @user_passes_test(is_instructor)
-@get_workflow(pf_related='views')
+@get_view(pf_related='views')
 def view_delete(
     request: HttpRequest,
     pk: Optional[int] = None,
@@ -196,7 +196,7 @@ def view_delete(
 
 
 @user_passes_test(is_instructor)
-@get_workflow(pf_related='views')
+@get_view(pf_related='views')
 def view_clone(
     request: HttpRequest,
     pk: Optional[int] = None,
@@ -223,7 +223,7 @@ def view_clone(
 
     # Proceed to clone the view
     old_name = view.name
-    columns = workflow.views.get(wid=pk).columns.all()
+    columns = workflow.views.get(id=pk).columns.all()
 
     view.id = None
     view.name = create_new_name(view.name, workflow.views)
