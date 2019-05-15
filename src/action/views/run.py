@@ -136,7 +136,7 @@ def run_action_item_filter(request: HttpRequest) -> HttpResponse:
         return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(pk=action_info['action_id'])
+    action = Action.objects.get(wid=action_info['action_id'])
 
     form = ValueExcludeForm(
         request.POST or None,
