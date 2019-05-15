@@ -212,13 +212,6 @@ def rename_df_column(workflow, old_name, new_name):
     for action_item in workflow.actions.prefetch_related('conditions').all():
         action_item.rename_variable(old_name, new_name)
 
-        # Rename the appearances of the variable in all conditions/filters
-        conditions = action_item.conditions.all()
-        for cond in conditions:
-            cond.formula = evaluation.rename_variable(
-                cond.formula, old_name, new_name)
-            cond.save()
-
     # Rename the appearances of the variable in the formulas in the views
     for view in workflow.views.all():
         view.formula = evaluation.rename_variable(
