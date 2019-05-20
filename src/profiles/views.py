@@ -102,7 +102,7 @@ def delete_token(request, pk):
     """
 
     # Delete the token
-    OnTaskOAuthUserTokens.objects.get(wid=pk).delete()
+    OnTaskOAuthUserTokens.objects.get(id=pk).delete()
 
     # Go back to showing the profile
     return redirect('profiles:show_self')

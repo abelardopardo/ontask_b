@@ -822,12 +822,12 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
 
         # Refresh variables
         workflow = Workflow.objects.prefetch_related('columns').get(
-            wid=workflow.id
+            id=workflow.id
         )
-        column = workflow.columns.get(wid=column.id)
+        column = workflow.columns.get(id=column.id)
         attributes = workflow.attributes
-        action_out = Action.objects.get(wid=action_out.id)
-        condition = Condition.objects.get(wid=condition.id)
+        action_out = Action.objects.get(id=action_out.id)
+        condition = Condition.objects.get(id=condition.id)
         filter_formula = action_out.get_filter_formula()
 
         # Post conditions

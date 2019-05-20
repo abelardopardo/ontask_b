@@ -161,7 +161,7 @@ def column_add(
         column.save()
         form.save_m2m()
         workflow = Workflow.objects.prefetch_related('columns').get(
-            wid=workflow.id)
+            id=workflow.id)
 
         # Store the df to DB
         try:
@@ -555,7 +555,7 @@ def column_edit(
             # Go back to the DB because the prefetch columns are not valid
             # any more
             workflow = Workflow.objects.prefetch_related('columns').get(
-                wid=workflow.id,
+                id=workflow.id,
             )
 
             # Changes in column require rebuilding the query_builder_ops

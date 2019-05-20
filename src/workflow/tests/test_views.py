@@ -298,7 +298,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
-            db.check_wf_df(Workflow.objects.get(wid=1))
+            db.check_wf_df(Workflow.objects.get(id=1))
             idx += 1
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)

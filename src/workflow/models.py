@@ -338,7 +338,7 @@ class Workflow(models.Model):
             return
 
         # Cases 3 and 4. Update the existing session
-        session = Session.objects.get(wid=self.session_key)
+        session = Session.objects.get(pk=self.session_key)
         session.expire_date = timezone.now() + datetime.timedelta(
             seconds=settings.SESSION_COOKIE_AGE)
         session.save()
