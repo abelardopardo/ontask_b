@@ -13,7 +13,7 @@ from dataops.forms.upload import load_df_from_csvfile
 from dataops.formula import EVAL_EXP, evaluate_formula
 from dataops.pandas import (
     get_subframe, load_table,
-    perform_dataframe_upload_merge, store_table
+    perform_dataframe_upload_merge, store_table,
 )
 from dataops.sql import get_rows, get_select_query_txt
 import test
@@ -110,7 +110,8 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
 
         # Load it from the DB
         df_dst = load_table(self.table_name)
-
+        df_dst['date1'] = df_dst['date1'].dt.tz_convert('Australia/Adelaide')
+        df_dst['date2'] = df_dst['date2'].dt.tz_convert('Australia/Adelaide')
         # Data frames mut be identical
         assert df_source.equals(df_dst)
 
@@ -124,10 +125,11 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
 
         self.merge_info['how_merge'] = 'inner'
 
-        result = perform_dataframe_upload_merge(self.workflow,
-                                                df_dst,
-                                                df_src,
-                                                self.merge_info)
+        result = perform_dataframe_upload_merge(
+            self.workflow,
+            df_dst,
+            df_src,
+            self.merge_info)
 
         # Load again the workflow data frame
         df_dst = load_table(self.workflow.get_data_frame_table_name())
@@ -239,11 +241,6 @@ class FormulaEvaluation(test.OnTaskTestCase):
             op_value.format(''),
             type_value,
             value, 'v_' + type_value
-        )
-        query, fields = get_select_query_txt(
-            self.test_table,
-            self.test_columns,
-            self.skel,
         )
         result = load_table(self.test_table, self.test_columns, self.skel)
         self.assertEqual(len(result), 1)
@@ -618,7 +615,10 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
             column_names)
 
         # Get the query set
-        qs = get_rows(wflow_table, column_names, filter_formula)
+        qs = get_rows(
+            wflow_table,
+            column_names=column_names,
+            filter_formula=filter_formula)
 
         # Iterate over the rows in the dataframe and compare
         for idx, row in enumerate(qs):
