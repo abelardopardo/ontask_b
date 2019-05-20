@@ -170,7 +170,7 @@ def evaluate_action(
     # Get the table data
     rows = get_rows(
         action.workflow.get_data_frame_table_name(),
-        action.get_filter_formula())
+        filter_formula=action.get_filter_formula())
     list_of_renders = []
     for row in rows:
         if (exclude_values and str(row[column_name]) in exclude_values):
@@ -188,10 +188,10 @@ def evaluate_action(
 
     # Check field n_rows_selected (table may have been modified)
     action_filter = action.get_filter()
-    if action_filter and action_filter.n_rows_selected != len(rows):
+    if action_filter and action_filter.n_rows_selected != rows.rowcount:
         # Filter now returns different number of rows. Action conditions need
         # to be refreshed
-        action_filter.n_rows_selected = len(rows)
+        action_filter.n_rows_selected = rows.rowcount
         action.update_n_rows_selected(filter_formula=action_filter.formula)
 
     return list_of_renders

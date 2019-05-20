@@ -16,9 +16,7 @@ class RowForm(forms.Form):
         # Store the instance
         self.workflow = kargs.pop('workflow', None)
         self.columns = self.workflow.get_columns()
-        self.initial_values = kargs.pop(
-            'initial_values',
-            [None] * len(self.columns))
+        self.initial_values = kargs.pop('initial_values', {})
 
         super().__init__(*args, **kargs)
 
@@ -26,10 +24,11 @@ class RowForm(forms.Form):
             return
 
         for idx, column in enumerate(self.columns):
-            field = column_to_field(column, self.initial_values[idx])
+            col_val = self.initial_values.get(column.name)
+            field = column_to_field(column, col_val)
 
             if column.is_key:
-                if self.initial_values[idx]:
+                if col_val:
                     field.widget.attrs['readonly'] = 'readonly'
                 else:
                     field.required = True

@@ -134,7 +134,6 @@ class EmailActionForm(forms.Form):
         ]
         self.action_info['track_read'] = form_data['track_read']
         self.action_info['export_wf'] = form_data['export_wf']
-        self.action_info['exclude_values'] = []
 
         # Check if the values in the email column are correct emails
         try:
@@ -282,7 +281,7 @@ class ZipActionForm(forms.Form):
             return form_data
 
         # If a moodle zip has been requested
-        if form_data.get('zip_for_moodle', default=False):
+        if form_data.get('zip_for_moodle'):
             if not pcolumn or not ufname_column:
                 self.add_error(
                     None,
@@ -293,11 +292,10 @@ class ZipActionForm(forms.Form):
             # Participant columns must match the pattern 'Participant [0-9]+'
             pcolumn_data = get_rows(
                 self.action.workflow.get_data_frame_table_name(),
-                column_names=[pcolumn],
-                filter_formula=None)
+                column_names=[pcolumn])
             participant_error = any(
-                not participant_re.search(str(col_value))
-                for __, col_value in pcolumn_data
+                not participant_re.search(str(row[pcolumn]))
+                for row in pcolumn_data
             )
             if participant_error:
                 self.add_error(
@@ -329,8 +327,8 @@ class ValueExcludeForm(forms.Form):
 
         self.fields['exclude_values'].choices = get_rows(
             self.action.workflow.get_data_frame_table_name(),
-            [self.column_name, self.column_name],
-            self.action.get_filter_formula()).fetchall()
+            column_names=[self.column_name, self.column_name],
+            filter_formula=self.action.get_filter_formula()).fetchall()
         self.fields['exclude_values'].initial = self.exclude_init
 
 
@@ -404,7 +402,6 @@ class JSONActionForm(JSONBasicActionForm):
         # Move data to the payload so that is ready to be used
         self.action_info['token'] = form_data['token']
         self.action_info['item_column'] = form_data['key_column']
-        self.action_info['exclude_values'] = []
 
         return form_data
 
@@ -476,8 +473,6 @@ class CanvasEmailActionForm(JSONBasicActionForm):
                 None,
                 _('No Canvas Service available for this action.'),
             )
-
-        self.action_info['exclude_values'] = []
 
         return form_data
 

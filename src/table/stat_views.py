@@ -255,12 +255,12 @@ def stat_row_view(
         # No view given, fetch the entire data frame
         df = load_table(workflow.get_data_frame_table_name())
 
-    # Get the rows from the table
+    # Get the row from the table
     row = get_rows(
         workflow.get_data_frame_table_name(),
         column_names=column_names,
         filter_pairs={update_key: update_val},
-    )[0]
+    ).fetchone()
 
     vis_scripts = []
     visualizations = []

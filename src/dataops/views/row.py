@@ -46,7 +46,7 @@ def row_update(
 
     row_form = RowForm(request.POST or None,
                        workflow=workflow,
-                       initial_values=list(rows[0]))
+                       initial_values=rows.fetchone())
 
     if request.method == 'POST' and row_form.is_valid():
 
