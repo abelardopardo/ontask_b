@@ -310,14 +310,38 @@ table td,
     vertical-align: middle;
 }
 
-.table {
+/*.table {
   overflow-y: visible !important;
+}*/
+/* .DTFC_LeftBodyLiner {
+  overflow-x: auto !important;
+  width: unset !important;
+}*/
+/* For row operations in table view left fixed column */
+div[aria-labelledby="rowMoreOperations"] {
+  min-width: unset;
+}
+div[aria-labelledby="rowMoreOperations"] > a,
+div[aria-labelledby="rowMoreOperations"] > button {
+  width: 30px;
+  padding-left: 1rem;
 }
 
 /* Needed to show summer note aligned to the left */
 .note-editor.note-frame.panel .note-editing-area .note-editable {
     text-align: left;
 }
+
+/*
+.dropdown-menu .btn {
+    width:100%;
+}
+
+.dropdown-menu{
+    max-height:300px;
+    overflow-y:auto;
+}
+*/
 
 /* Wflow name */
 #wflow-name {
@@ -345,16 +369,6 @@ table#attribute-table {
   text-align: center;
   transform: translate(-50%, 0);
 }
-
-.dropdown-menu .btn {
-    width:100%;
-}
-
-.dropdown-menu{
-    max-height:300px;
-    overflow-y:auto;
-}
-
 div.sol-container {
     display: table;
 }
