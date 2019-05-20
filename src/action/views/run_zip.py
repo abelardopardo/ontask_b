@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """Views to run the personalized zip action."""
-import zipfile
 from datetime import datetime
 from io import BytesIO
 from typing import List, Optional, Tuple
+import zipfile
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -30,7 +30,7 @@ from workflow.models import Workflow
 @user_passes_test(is_instructor)
 @get_action(pf_related='actions')
 def zip_action(
-    request: HttpRequest,
+    req: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
     action: Optional[Action] = None,
@@ -40,44 +40,48 @@ def zip_action(
     Form asking for participant column, user file name column, file suffix,
     if it is a ZIP for Moodle and confirm users step.
 
-    :param request: HTTP request (GET)
+    :param req: HTTP request (GET)
     :param pk: Action key
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
-    action_info = get_action_info(request.session, ZipPayload)
-    if not action_info:
-        action_info = ZipPayload(
-            action_id=action.id,
-            prev_url=reverse('action:run', kwargs={'pk': action.id}),
-            post_url=reverse('action:email_done'))
-        request.session[action_session_dictionary] = action_info.get_store()
-        request.session.save()
+    action_info = get_action_info(
+        req.session,
+        ZipPayload,
+        initial_values={
+            'action_id': action.id,
+            'prev_url': reverse('action:run', kwargs={'pk': action.id}),
+            'post_url': reverse('action:zip_done'),
+        }
+    )
 
     # Create the form to ask for the email subject and other information
     form = ZipActionForm(
-        request.POST or None,
+        req.POST or None,
         column_names=[col.name for col in workflow.columns.all()],
         action=action,
         action_info=action_info,
     )
 
-    if request.method == 'POST' and form.is_valid():
+    if req.method == 'POST' and form.is_valid():
         if action_info['confirm_items']:
             # Add information to the session object to execute the next pages
             action_info['button_label'] = ugettext('Create ZIP')
             action_info['valuerange'] = 2
             action_info['step'] = 2
-            request.session[action_session_dictionary] = action_info.get_store()
+            req.session[action_session_dictionary] = action_info.get_store()
 
             return redirect('action:item_filter')
 
         # Go straight to the final step.
-        return run_zip_done(request, action_info)
+        return run_zip_done(
+            req,
+            action_info=action_info,
+            workflow=workflow)
 
     # Render the form
     return render(
-        request,
+        req,
         'action/action_zip_step1.html',
         {'action': action,
          'num_msgs': action.get_rows_selected(),
@@ -99,7 +103,10 @@ def run_zip_done(
     :return: HTTP response
     """
     # Get the payload from the session if not given
-    action_info = get_action_info(request.session, ZipPayload, action_info)
+    action_info = get_action_info(
+        request.session,
+        ZipPayload,
+        action_info=action_info)
     if action_info is None:
         # Something is wrong with this execution. Return to action table.
         messages.error(request, _('Incorrect ZIP action invocation.'))
@@ -132,9 +139,9 @@ def run_zip_done(
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def action_zip_export(
-    request,
+    request: HttpRequest,
     workflow: Optional[Workflow] = None,
-):
+) -> HttpResponse:
     """Create a zip with the personalised text and return it as response.
 
     :param request: Request object with a Dictionary with all the required
@@ -142,7 +149,7 @@ def action_zip_export(
     :return: Response (download)
     """
     # Get the payload from the session if not given
-    action_info = get_action_info(request.session, ZipPayload)
+    action_info = get_action_info(request.session)
     if not action_info:
         # Something is wrong with this execution. Return to action table.
         messages.error(request, _('Incorrect ZIP action invocation.'))

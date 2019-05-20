@@ -25,6 +25,7 @@ from action.views.run_json import run_json_action
 from action.views.run_survey import run_survey_action
 from action.views.serve_survey import serve_survey_row
 from logs.models import Log
+from ontask.celery import celery_is_up
 from ontask.decorators import get_action
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
@@ -55,6 +56,14 @@ def run_action(
     :param pk: Action id. It is assumed to be an action In
     :return: HttpResponse
     """
+
+    if not celery_is_up():
+        messages.error(
+            request,
+            _('Unable to execute actions due to a misconfiguration. '
+              + 'Ask your system administrator to enable message queueing.'))
+        return redirect(reverse('action:index'))
+
     if action.action_type not in fn_distributor:
         # Incorrect type of action.
         return redirect(reverse('action:index'))
@@ -142,14 +151,14 @@ def run_action_item_filter(request: HttpRequest) -> HttpResponse:
         request.POST or None,
         action=action,
         column_name=action_info['item_column'],
-        exclude_values=action_info.get('exclude_values', list),
+        exclude_values=action_info['exclude_values'],
     )
     context = {
         'form': form,
         'action': action,
         'button_label': action_info['button_label'],
-        'valuerange': range(action_info.get('valuerange', 0)),
-        'step': action_info.get('step', 0),
+        'valuerange': range(action_info['valuerange']),
+        'step': action_info['step'],
         'prev_step': action_info['prev_url'],
     }
 
@@ -179,16 +188,10 @@ def serve_action_out(
     :return:
     """
     # For the response
-    payload = {
-        'action': action.name,
-        'action_id': action.id,
-    }
+    payload = {'action': action.name, 'action_id': action.id}
 
     # User_instance has the record used for verification
-    row_values = get_row_values(
-        action,
-        (user_attribute_name, user.email),
-    )
+    row_values = get_row_values(action, (user_attribute_name, user.email))
 
     # Get the dictionary containing column names, attributes and condition
     # valuations:

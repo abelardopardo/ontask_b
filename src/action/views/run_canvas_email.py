@@ -5,7 +5,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-import pytz
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -13,6 +12,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
+import pytz
 
 from action.forms import CanvasEmailActionForm
 from action.models import Action
@@ -20,7 +20,6 @@ from action.payloads import (
     CanvasEmailPayload, action_session_dictionary, get_action_info,
 )
 from logs.models import Log
-from ontask.celery import celery_is_up
 from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import send_canvas_email_messages
@@ -30,7 +29,7 @@ from workflow.models import Workflow
 
 
 def run_canvas_email_action(
-    request: HttpRequest,
+    req: HttpRequest,
     workflow: Workflow,
     action: Action,
 ) -> HttpResponse:
@@ -40,38 +39,31 @@ def run_canvas_email_action(
     confirm items (add extra step to drop items), export workflow and
     target_rul (if needed).
 
-    :param request: HTTP request (GET)
+    :param req: HTTP request (GET)
     :param workflow: workflow being processed
     :param action: Action begin run
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
-    action_info = get_action_info(request.session, CanvasEmailPayload)
-    if not action_info:
-        action_info = CanvasEmailPayload(
-            action_id=action.id,
-            prev_url=reverse('action:run', kwargs={'pk': action.id}),
-            post_url=reverse('action:email_done'))
-        request.session[action_session_dictionary] = action_info.get_store()
-        request.session.save()
-
-    # Verify that celery is running!
-    if not celery_is_up():
-        messages.error(
-            request,
-            _('Unable to send emails due to a misconfiguration. '
-              + 'Ask your system administrator to enable email queueing.'))
-        return redirect(reverse('action:index'))
+    action_info = get_action_info(
+        req.session,
+        CanvasEmailPayload,
+        initial_values={
+            'action_id': action.id,
+            'prev_url': reverse('action:run', kwargs={'pk': action.id}),
+            'post_url': reverse('action:email_done')
+        }
+    )
 
     # Create the form to ask for the email subject and other information
     form = CanvasEmailActionForm(
-        request.POST or None,
+        req.POST or None,
         column_names=[
             col.name for col in workflow.columns.filter(is_key=True)],
         action=action,
         action_info=action_info)
 
-    if request.method == 'POST' and form.is_valid():
+    if req.method == 'POST' and form.is_valid():
         # Request is a POST and is valid
 
         if action_info['confirm_items']:
@@ -80,17 +72,18 @@ def run_canvas_email_action(
             action_info['button_label'] = ugettext('Send')
             action_info['valuerange'] = 2
             action_info['step'] = 2
-            request.session[
-                action_session_dictionary] = action_info.get_store()
+            req.session[action_session_dictionary] = action_info.get_store()
 
             return redirect('action:item_filter')
 
         # Go straight to the token request step
-        return canvas_get_or_set_oauth_token(request, action_info['target_url'])
+        return canvas_get_or_set_oauth_token(
+            req,
+            action_info['target_url'])
 
     # Render the form
     return render(
-        request,
+        req,
         'action/request_canvas_email_data.html',
         {'action': action,
          'num_msgs': action.get_rows_selected(),
@@ -111,7 +104,9 @@ def canvas_get_or_set_oauth_token(
     process starts.
 
     :param request: Request object to process
+
     :param oauth_instance_name: Locator for the OAuth instance in OnTask
+
     :return: Http response
     """
     # Get the information from the payload
@@ -172,7 +167,7 @@ def run_canvas_email_done(
     action_info = get_action_info(
         request.session,
         CanvasEmailPayload,
-        action_info)
+        action_info=action_info)
     if action_info is None:
         # Something is wrong with this execution. Return to action table.
         messages.error(

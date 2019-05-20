@@ -16,7 +16,6 @@ from action.payloads import (
     JSONPayload, action_session_dictionary, get_action_info,
 )
 from logs.models import Log
-from ontask.celery import celery_is_up
 from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import send_json_objects
@@ -24,7 +23,7 @@ from workflow.models import Workflow
 
 
 def run_json_action(
-    request: HttpRequest,
+    req: HttpRequest,
     workflow: Workflow,
     action: Action,
 ) -> HttpResponse:
@@ -33,60 +32,54 @@ def run_json_action(
     Form asking for token, key_column and if an item confirmation step is
     needed
 
-    :param request: HTTP request (GET)
+    :param req: HTTP request (GET)
     :param workflow: workflow being processed
     :param action: Action begin run
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
-    action_info = get_action_info(request.session, JSONPayload)
-    if not action_info:
-        action_info = JSONPayload(
-            action_id=action.id,
-            prev_url=reverse('action:run', kwargs={'pk': action.id}),
-            post_url=reverse('action:json_done'))
-        request.session[action_session_dictionary] = action_info.get_store()
-        request.session.save()
-
-    # Verify that celery is running!
-    if not celery_is_up():
-        messages.error(
-            request,
-            _('Unable to send json objects due to a misconfiguration. '
-              + 'Ask your system administrator to enable JSON queueing.'))
-        return redirect(reverse('action:index'))
+    action_info = get_action_info(
+        req.session,
+        JSONPayload,
+        initial_values={
+            'action_id': action.id,
+            'prev_url': reverse('action:run', kwargs={'pk': action.id}),
+            'post_url': reverse('action:json_done')
+        },
+    )
 
     # Create the form to ask for the email subject and other information
     form = JSONActionForm(
-        request.POST or None,
+        req.POST or None,
         column_names=[
             col.name for col in workflow.columns.filter(is_key=True)],
         action_info=action_info)
 
-    if request.method == 'POST' and form.is_valid():
+    if req.method == 'POST' and form.is_valid():
         if action_info['confirm_items']:
             # Add information to the session object to execute the next pages
             action_info['button_label'] = ugettext('Send')
             action_info['valuerange'] = 2
             action_info['step'] = 2
-            request.session[
-                action_session_dictionary] = action_info.get_store()
+            req.session[action_session_dictionary] = action_info.get_store()
 
             return redirect('action:item_filter')
 
         # Go straight to the final step.
-        return run_json_done(request, action_info)
+        return run_json_done(
+            req,
+            action_info=action_info,
+            workflow=workflow)
 
     # Render the form
     return render(
-        request,
+        req,
         'action/request_json_data.html',
         {'action': action,
          'num_msgs': action.get_rows_selected(),
          'form': form,
          'valuerange': range(2),
          'rows_all_false': action.get_row_all_false_count()})
-
 
 
 @user_passes_test(is_instructor)
@@ -106,7 +99,10 @@ def run_json_done(
     :return: HTTP response
     """
     # Get the payload from the session if not given
-    action_info = get_action_info(request.session, JSONPayload, action_info)
+    action_info = get_action_info(
+        request.session,
+        JSONPayload,
+        action_info=action_info)
     if action_info is None:
         # Something is wrong with this execution. Return to action table.
         messages.error(request, _('Incorrect JSON action invocation.'))

@@ -25,7 +25,7 @@ from action.models import Action
 from action.views.serve_survey import serve_survey_row
 from core.datatables import DataTablesServerSidePaging
 from dataops.sql import search_table
-from ontask.decorators import get_action
+from ontask.decorators import get_action, ajax_required
 from ontask.permissions import is_instructor
 from workflow.models import Column, Workflow
 
@@ -59,6 +59,7 @@ def run_survey_action(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @require_http_methods(['POST'])
 @get_action(pf_related='actions')
 def run_survey_ss(
@@ -86,7 +87,7 @@ def run_survey_ss(
     columns = [ccpair.column for ccpair in action.column_condition_pair.all()]
     key_idx = next(idx for idx, col in enumerate(columns) if col.is_key)
 
-    query_set = create_initial_qs(
+    query_set = _create_initial_qs(
         workflow.get_data_frame_table_name(),
         action.get_filter_formula(),
         columns,
@@ -94,7 +95,7 @@ def run_survey_ss(
     )
 
     # Get the subset of the qs to show in the table
-    query_set = create_table_qsdata(
+    query_set = _create_table_qsdata(
         action.id,
         query_set,
         dt_page,
@@ -140,7 +141,7 @@ def run_survey_row(
     return serve_survey_row(request, action, user_attribute_name)
 
 
-def create_initial_qs(
+def _create_initial_qs(
     table_name,
     filter_formula,
     columns,
@@ -172,7 +173,7 @@ def create_initial_qs(
     return qs
 
 
-def create_table_qsdata(
+def _create_table_qsdata(
     action_id: int,
     qs,
     dt_page: DataTablesServerSidePaging,
@@ -196,7 +197,7 @@ def create_table_qsdata(
         # Render the first element (the key) as the link to the page to update
         # the content.
         row = list(row)
-        row[key_idx] = create_link_to_survey_row(
+        row[key_idx] = _create_link_to_survey_row(
             action_id,
             columns[key_idx].name,
             row[key_idx],
@@ -212,7 +213,7 @@ def create_table_qsdata(
     return final_qs
 
 
-def create_link_to_survey_row(
+def _create_link_to_survey_row(
     action_id: int,
     key_name: str,
     key_value,
@@ -237,7 +238,7 @@ def create_link_to_survey_row(
 
 @login_required
 def survey_thanks(request: HttpRequest) -> HttpResponse:
-    """Responde simply saying thanks.
+    """Respond simply saying thanks.
 
     :param request: Http requst
     :return: Http response
