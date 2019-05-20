@@ -14,7 +14,7 @@ from action.forms import ConditionForm, FilterForm
 from action.models import Action, Condition
 from dataops.formula import EVAL_TXT, evaluate_formula, get_variables
 from logs.models import Log
-from ontask.decorators import get_action, get_condition
+from ontask.decorators import ajax_required, get_action, get_condition
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.models import Workflow
 
@@ -114,6 +114,7 @@ class ConditionFilterCreateView(UserIsInstructor, generic.TemplateView):
     template_name = None
 
     @method_decorator(user_passes_test(is_instructor))
+    @method_decorator(ajax_required)
     @method_decorator(get_action(pf_related=['actions', 'columns']))
     def get(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
         """Process GET request to create a filter."""
@@ -125,6 +126,7 @@ class ConditionFilterCreateView(UserIsInstructor, generic.TemplateView):
             is_filter=isinstance(self, FilterCreateView))
 
     @method_decorator(user_passes_test(is_instructor))
+    @method_decorator(ajax_required)
     @method_decorator(get_action(pf_related=['actions', 'columns']))
     def post(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
         """Process POST request to  create a filter."""
@@ -148,6 +150,7 @@ class FilterCreateView(ConditionFilterCreateView):
 
 
 @user_passes_test(is_instructor)
+@method_decorator(ajax_required)
 @get_condition(pf_related='columns', is_filter=True)
 def edit_filter(
     request: HttpRequest,
@@ -176,6 +179,7 @@ def edit_filter(
 
 
 @user_passes_test(is_instructor)
+@method_decorator(ajax_required)
 @get_condition(pf_related='columns', is_filter=True)
 def delete_filter(
     request: HttpRequest,
@@ -229,6 +233,8 @@ def delete_filter(
     # Number of selected rows now needs to be updated in all remaining
     # conditions
     action.update_n_rows_selected()
+    action.rows_all_false = None
+    action.save()
 
     return JsonResponse({'html_redirect': ''})
 
@@ -242,6 +248,7 @@ class ConditionCreateView(ConditionFilterCreateView):
 
 
 @user_passes_test(is_instructor)
+@method_decorator(ajax_required)
 @get_condition(pf_related=['columns'])
 def edit_condition(
     request: HttpRequest,
@@ -269,6 +276,7 @@ def edit_condition(
 
 
 @user_passes_test(is_instructor)
+@method_decorator(ajax_required)
 @get_condition(pf_related='columns')
 def delete_condition(
     request: HttpRequest,
@@ -307,6 +315,7 @@ def delete_condition(
 
         # Reset the count of number of rows with all conditions false
         condition.action.rows_all_false = None
+        condition.action.save()
 
         return JsonResponse({'html_redirect': ''})
 

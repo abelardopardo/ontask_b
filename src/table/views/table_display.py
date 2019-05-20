@@ -20,14 +20,14 @@ from pytz import timezone
 
 from core.datatables import DataTablesServerSidePaging
 from dataops.sql import delete_row, search_table
-from ontask.decorators import get_view, get_workflow
+from ontask.decorators import get_view, get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from table.models import View
 from visualizations.plotly import PlotlyHandler
 from workflow.models import Workflow
 
 
-def render_table_display_page(
+def _render_table_display_page(
     request: HttpRequest,
     workflow: Workflow,
     view: Optional[View],
@@ -79,13 +79,13 @@ def render_table_display_page(
     return render(request, 'table/display.html', context)
 
 
-def render_table_display_data(
+def _render_table_display_data(
     request,
     workflow,
     columns,
     formula,
     view_id=None,
-):
+) -> JsonResponse:
     """Render the appropriate subset of the data table.
 
     Use the search string provided in the UI + the filter (if applicable)
@@ -208,7 +208,7 @@ def display(
         # Table is empty, redirect to data upload
         return redirect('dataops:uploadmerge')
 
-    return render_table_display_page(
+    return _render_table_display_page(
         request,
         workflow,
         None,
@@ -219,12 +219,13 @@ def display(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @require_http_methods(['POST'])
 @get_workflow(pf_related='columns')
 def display_ss(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Provide the server-side portion to display as a table.
 
     :param request: HTTP request from dataTables
@@ -235,7 +236,7 @@ def display_ss(
     if not workflow.has_table():
         return JsonResponse({'error': _('There is no data in the table')})
 
-    return render_table_display_data(
+    return _render_table_display_data(
         request,
         workflow,
         workflow.columns.all(),
@@ -259,7 +260,7 @@ def display_view(
 
     :return: Initial rendering of the page with the table skeleton
     """
-    return render_table_display_page(
+    return _render_table_display_page(
         request,
         workflow,
         view,
@@ -270,6 +271,7 @@ def display_view(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @require_http_methods(['POST'])
 @get_view(pf_related='views')
 def display_view_ss(
@@ -277,7 +279,7 @@ def display_view_ss(
     pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
     view: Optional[View] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Render a view (subset of the table).
 
     AJAX function to provide a subset of the table for visualisation. The
@@ -289,7 +291,7 @@ def display_view_ss(
 
     :return: AJAX response
     """
-    return render_table_display_data(
+    return _render_table_display_data(
         request,
         workflow,
         view.columns.all(),
@@ -299,11 +301,12 @@ def display_view_ss(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow(pf_related='actions')
 def row_delete(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Handle the steps to delete a row in the table.
 
     :param request: HTTP request

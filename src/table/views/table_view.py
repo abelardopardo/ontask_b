@@ -16,7 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_view, get_workflow
+from ontask.decorators import get_view, get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from table.forms import ViewAddForm
@@ -98,11 +98,12 @@ def view_index(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow(pf_related='columns')
 def view_add(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Create a new view.
 
     :param request: Request object
@@ -127,13 +128,14 @@ def view_add(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_view(pf_related='views')
 def view_edit(
     request: HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
     view: Optional[View] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Edit the content of a view.
 
     :param request: Request object
@@ -152,13 +154,14 @@ def view_edit(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_view(pf_related='views')
 def view_delete(
     request: HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
     view: Optional[View] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Delete a view.
 
     AJAX processor for the delete view operation
@@ -196,13 +199,14 @@ def view_delete(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_view(pf_related='views')
 def view_clone(
     request: HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
     view: Optional[View] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Clone a view.
 
     :param request: HTTP request
@@ -250,7 +254,7 @@ def save_view_form(
     request: HttpRequest,
     form: ViewAddForm,
     template_name: str,
-) -> HttpResponse:
+) -> JsonResponse:
     """Save the data attached to a view as provided in a form.
 
     :param request: HTTP request

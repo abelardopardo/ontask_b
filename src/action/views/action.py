@@ -5,17 +5,16 @@
 from builtins import object
 from typing import Optional, Union
 
-from django_tables2 import A
-import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.utils.html import format_html
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django.views import generic
+from django_tables2 import A
+import django_tables2 as tables
 
 from action.forms import ActionForm, ActionUpdateForm
 from action.models import Action
@@ -24,10 +23,11 @@ from action.views.edit_personalized import edit_action_out
 from action.views.edit_survey import edit_action_in
 from logs.models import Log
 from ontask import simplify_datetime_str
-from ontask.decorators import get_action, get_workflow
+from ontask.decorators import ajax_required, get_action, get_workflow
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
+
 
 class ActionTable(tables.Table):
     """Class to render the list of actions per workflow.
@@ -224,6 +224,7 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
     template_name = 'action/includes/partial_action_create.html'
 
     @method_decorator(user_passes_test(is_instructor))
+    @method_decorator(ajax_required)
     @method_decorator(get_workflow())
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Process the get requet when creating an action."""
@@ -235,6 +236,7 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
         )
 
     @method_decorator(user_passes_test(is_instructor))
+    @method_decorator(ajax_required)
     @method_decorator(get_workflow())
     def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         """Process the post request when creating an action."""
@@ -269,6 +271,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
         return act_obj
 
     @method_decorator(user_passes_test(is_instructor))
+    @method_decorator(ajax_required)
     @method_decorator(get_workflow())
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Process the get request."""
@@ -280,6 +283,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
             self.template_name)
 
     @method_decorator(user_passes_test(is_instructor))
+    @method_decorator(ajax_required)
     @method_decorator(get_workflow())
     def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
         """Process post request."""
@@ -319,6 +323,7 @@ def edit_action(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_action()
 def delete_action(
     request: HttpRequest,

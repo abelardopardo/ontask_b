@@ -9,20 +9,22 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
+from django.urls import reverse
 
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from workflow.forms import SharedForm
 from workflow.models import Workflow
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow(pf_related='shared')
 def share_create(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Add a new user to the list of those sharing the workflow.
 
     :param request:
@@ -62,12 +64,13 @@ def share_create(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow(pf_related='shared')
 def share_delete(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Delete one of the users sharing the workflow.
 
     :param request:
@@ -79,7 +82,7 @@ def share_delete(
     # If the user does not exist, go back to home page
     user = get_user_model().objects.filter(id=pk).first()
     if not user:
-        return redirect('home')
+        return JsonResponse({'html_redirect': reverse('home')})
 
     if request.method == 'POST':
         workflow.shared.remove(user)

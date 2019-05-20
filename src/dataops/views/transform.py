@@ -22,7 +22,7 @@ from dataops.forms import FIELD_PREFIX, PluginInfoForm
 from dataops.models import PluginRegistry
 from dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from ontask.tasks import run_plugin_task
 from workflow.models import Workflow
@@ -163,11 +163,12 @@ def transform_model(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 def diagnose(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Show the diagnostics of a plugin that failed the verification tests.
 
     :param request: HTML request object
@@ -345,12 +346,13 @@ def plugin_invoke(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def moreinfo(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Show the detailed information about a plugin.
 
     :param request: HTML request object

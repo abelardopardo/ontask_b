@@ -11,6 +11,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
 from django_auth_lti.decorators import lti_role_required
+from ontask.decorators import ajax_required
 from ontask.permissions import UserIsInstructor, is_admin, is_instructor
 from ontask.tasks import increase_track_count
 from workflow.views import index
@@ -43,7 +44,7 @@ class ToBeDone(UserIsInstructor, generic.TemplateView):
 
 
 @login_required
-def entry(request):
+def entry(request: HttpRequest) -> HttpResponse:
     """Entry point."""
     return redirect('home')
 
@@ -51,14 +52,14 @@ def entry(request):
 @csrf_exempt
 @xframe_options_exempt
 @lti_role_required(['Instructor', 'Student'])
-def lti_entry(request):
+def lti_entry(request: HttpRequest) -> HttpResponse:
     """Enter the application through LTI."""
     return redirect('home')
 
 
 # No permissions in this URL as it is supposed to be wide open to track email
 #  reads.
-def trck(request):
+def trck(request: HttpRequest) -> HttpResponse:
     """Receive a request with a token from email read tracking.
 
     :param request: Request object
@@ -74,18 +75,19 @@ def trck(request):
 
 @login_required
 @csrf_exempt
-def keep_alive(request):
+@ajax_required
+def keep_alive(request: HttpRequest) -> JsonResponse:
     """Return empty response to keep session alive.
 
     :param request:
 
-    :return:
+    :return: Empty JSON response
     """
     return JsonResponse({})
 
 
 @login_required
-def under_construction(request):
+def under_construction(request: HttpRequest) -> HttpResponse:
     """Produce a page saying that this is under construction.
 
     :param request: Request object
@@ -95,28 +97,28 @@ def under_construction(request):
     return render(request, 'under_construction.html', {})
 
 
-def ontask_handler400(request, exception):
+def ontask_handler400(request: HttpRequest, exception) -> HttpResponse:
     """Return error 400."""
     response = render(request, '400.html', {})
     response.status_code = 400
     return response
 
 
-def ontask_handler403(request, exception):
+def ontask_handler403(request: HttpRequest, exception) -> HttpResponse:
     """Return error 403."""
     response = render(request, '403.html', {})
     response.status_code = 403
     return response
 
 
-def ontask_handler404(request, exception):
+def ontask_handler404(request: HttpRequest, exception) -> HttpResponse:
     """Return error 404."""
     response = render(request, '404.html', {})
     response.status_code = 404
     return response
 
 
-def ontask_handler500(request):
+def ontask_handler500(request: HttpRequest) -> HttpResponse:
     """Return error 500."""
     response = render(request, '500.html', {})
     response.status_code = 500

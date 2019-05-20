@@ -17,7 +17,7 @@ from django.views.decorators.http import require_http_methods
 from core.datatables import DataTablesServerSidePaging
 from logs.models import Log
 from ontask import simplify_datetime_str
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
@@ -49,12 +49,13 @@ def display(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @require_http_methods(['POST'])
 @get_workflow(pf_related='logs')
 def display_ss(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Return the subset of logs to include in a table page."""
     # Try to get workflow and if not present, go to home page
     # Check that the GET parameter are correctly given

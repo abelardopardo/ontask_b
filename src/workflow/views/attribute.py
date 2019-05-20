@@ -5,19 +5,26 @@
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
+from django.forms import forms
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from action.models import Condition
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from workflow.forms import AttributeItemForm
 from workflow.models import Workflow
 
 
-def save_attribute_form(request, workflow, template, form, attr_idx):
+def save_attribute_form(
+    request: HttpRequest,
+    workflow: Workflow,
+    template: str,
+    form: forms.Form,
+    attr_idx: int
+) -> JsonResponse:
     """Process the AJAX request to create or update an attribute.
 
     :param request: Request object received
@@ -77,11 +84,12 @@ def save_attribute_form(request, workflow, template, form, attr_idx):
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def attribute_create(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Render the view to create an attribute."""
     form = AttributeItemForm(
         request.POST or None,
@@ -98,12 +106,13 @@ def attribute_create(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def attribute_edit(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Render the edit attribute page."""
     # Get the list of keys
     keys = sorted(workflow.attributes.keys())
@@ -132,12 +141,13 @@ def attribute_edit(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def attribute_delete(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Delete an attribute attached to the workflow.
 
     :param request: Request object

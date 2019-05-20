@@ -18,7 +18,7 @@ from django.views.decorators.http import require_http_methods
 from action.models import Action, ActionColumnConditionTuple, Condition
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_action, get_condition
+from ontask.decorators import get_action, get_condition, ajax_required
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
@@ -100,6 +100,7 @@ def do_clone_action(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_action(pf_related='actions')
 def clone_action(
     request: HttpRequest,
@@ -153,6 +154,7 @@ def clone_action(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @require_http_methods(['POST'])
 @get_condition(pf_related='actions', is_filter=None)
 def clone_condition(

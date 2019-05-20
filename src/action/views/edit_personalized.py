@@ -14,7 +14,7 @@ from action.evaluate import render_action_template
 from action.forms import EditActionOutForm, EnableURLForm, FilterForm
 from action.models import Action, Condition
 from logs.models import Log
-from ontask.decorators import get_action
+from ontask.decorators import get_action, ajax_required
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyHandler
 from workflow.models import Workflow
@@ -50,6 +50,7 @@ def text_renders_correctly(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @get_action(pf_related='actions')
 def action_out_save_content(
     request: HttpRequest,
@@ -167,12 +168,13 @@ def edit_action_out(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 def showurl(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
     action: Optional[Action] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Create page to show URL to access action.
 
     Function that given a JSON request with an action pk returns the URL used

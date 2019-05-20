@@ -18,7 +18,7 @@ from django.views.decorators.http import require_http_methods
 from action.forms import ActionDescriptionForm
 from action.models import Action, ActionColumnConditionTuple
 from logs.models import Log
-from ontask.decorators import get_action, get_columncondition
+from ontask.decorators import get_action, get_columncondition, ajax_required
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler
@@ -177,6 +177,7 @@ def edit_action_in(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @require_http_methods(['POST'])
 @get_action(pf_related=['columns', 'actions'])
 def select_column_action(
@@ -248,6 +249,7 @@ def unselect_column_action(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @require_http_methods(['POST'])
 @get_columncondition(pf_related=['columns', 'actions'])
 def select_condition_for_question(
@@ -283,13 +285,14 @@ def select_condition_for_question(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_action(pf_related='actions')
 def shuffle_questions(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
     action: Optional[Action] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Enable/Disable the shuffle question flag in Surveys.
 
     :param request: Request object
@@ -304,6 +307,7 @@ def shuffle_questions(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_action(pf_related='actions')
 def edit_description(
     request: HttpRequest,

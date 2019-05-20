@@ -22,7 +22,7 @@ from action.models import Action
 from action.payloads import action_session_dictionary
 from logs.models import Log
 from ontask.celery import celery_is_up
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from scheduler.models import ScheduledAction
@@ -126,12 +126,13 @@ def index(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def view(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """View an existing scheduled action.
 
     :param request: HTTP request
@@ -242,12 +243,13 @@ def edit(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow(pf_related='actions')
 def delete(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """View screen to confirm deletion scheduled item.
 
     :param request: Request object

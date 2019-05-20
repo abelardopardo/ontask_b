@@ -18,13 +18,14 @@ from action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from action.models import Action
-from ontask.decorators import get_action
+from ontask.decorators import ajax_required, get_action
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
 
 @csrf_exempt
 @user_passes_test(is_instructor)
+@ajax_required
 @get_action(pf_related='actions')
 def preview_next_all_false_response(
     request: HttpRequest,
@@ -70,6 +71,7 @@ def preview_next_all_false_response(
 
 @csrf_exempt
 @user_passes_test(is_instructor)
+@ajax_required
 @get_action(pf_related='actions')
 def preview_response(
     request: HttpRequest,

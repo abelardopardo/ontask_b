@@ -21,7 +21,7 @@ from core.datatables import DataTablesServerSidePaging
 from dataops.sql import get_rows, get_text_column_hash
 from logs.models import Log
 from ontask import is_correct_email
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from ontask.tasks import workflow_update_lusers
@@ -135,6 +135,7 @@ def operations(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def flush(
     request: HttpRequest,
@@ -185,6 +186,7 @@ def flush(
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @require_http_methods(['POST'])
 @get_workflow(pf_related='columns')
 def column_ss(
@@ -266,6 +268,7 @@ def column_ss(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow(pf_related=['columns', 'lusers'])
 def assign_luser_column(
     request: HttpRequest,
@@ -313,7 +316,7 @@ def assign_luser_column(
     table_name = workflow.get_data_frame_table_name()
 
     # Get the column content
-    emails = get_rows(table_name, [column.name], None)
+    emails = get_rows(table_name, column_names=[column.name])
 
     # Verify that the column as a valid set of emails
     if not all(is_correct_email(email_val) for __, email_val in emails):

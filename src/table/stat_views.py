@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 
 from dataops.pandas import get_column_statistics, load_table
 from dataops.sql.row_queries import get_rows
-from ontask.decorators import get_column, get_workflow
+from ontask.decorators import get_column, get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 from workflow.models import Column, Workflow
@@ -167,13 +167,14 @@ def stat_column(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_column(pf_related='columns')
 def stat_column_json(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
     column: Optional[Column] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Process JSON GET request to show the column statistics in a modal.
 
     :param request: HTTP request

@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, reverse
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
@@ -20,7 +21,7 @@ from dataops.pandas import check_wf_df, load_table, store_dataframe
 from logs.models import Log
 from ontask import create_new_name
 from ontask.celery import celery_is_up
-from ontask.decorators import access_workflow, get_workflow
+from ontask.decorators import access_workflow, get_workflow, ajax_required
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.forms import WorkflowForm
 from workflow.models import Workflow
@@ -39,6 +40,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         return context
 
+    @method_decorator(ajax_required)
     def get(
         self,
         request: HttpRequest,
@@ -51,12 +53,13 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
             self.form_class(workflow_user=request.user),
             self.template_name)
 
+    @method_decorator(ajax_required)
     def post(
         self,
         request: HttpRequest,
         *args,
         **kwargs,
-    ) -> HttpResponse:
+    ) -> JsonResponse:
         """Process the post request."""
         return save_workflow_form(
             request,
@@ -178,7 +181,7 @@ def save_workflow_form(
 
 
 @user_passes_test(is_instructor)
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     """Render the page with the list of workflows."""
     wid = request.session.pop('ontask_workflow_id', None)
     # If removing workflow from session, mark it as available for sharing
@@ -214,6 +217,7 @@ def index(request):
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def update(
     request: HttpRequest,
@@ -248,6 +252,7 @@ def update(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def delete(
     request: HttpRequest,
@@ -280,6 +285,7 @@ def delete(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def clone(
     request: HttpRequest,
@@ -331,7 +337,14 @@ def clone(
 
     # Clone the data frame
     data_frame = load_table(workflow.get_data_frame_table_name())
-    store_dataframe(data_frame, workflow_new)
+    try:
+        store_dataframe(data_frame, workflow_new)
+    except Exception as exc:
+        messages.error(
+            request,
+            _('Unable to clone column: {0}').format(str(exc)),
+        )
+        return JsonResponse({'html_redirect': ''})
 
     # Clone actions
     for action in workflow.actions.all():

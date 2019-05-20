@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.db.models import Q
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -23,6 +23,17 @@ from workflow.models import Workflow
 from workflow.ops import (
     store_workflow_in_session, store_workflow_nrows_in_session,
 )
+
+
+def ajax_required(func):
+    """Verify that the request is AJAX."""
+    @wraps(func)
+    def function_wrapper(request, *args, **kwargs):  #noqa Z430
+        if not request.is_ajax():
+            return HttpResponseBadRequest()
+        return func(request, *args, **kwargs)
+
+    return function_wrapper
 
 
 def get_workflow(

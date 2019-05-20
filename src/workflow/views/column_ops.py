@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from dataops.pandas import load_table
 from logs.models import Log
-from ontask.decorators import get_column, get_workflow
+from ontask.decorators import get_column, get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from workflow.models import Column, Workflow
 from workflow.ops import workflow_restrict_column
@@ -23,11 +23,12 @@ from workflow.ops import workflow_restrict_column
 
 @user_passes_test(is_instructor)
 @csrf_exempt
+@ajax_required
 @get_workflow(pf_related='columns')
 def column_move(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Move a column using two names: from_name and to_name (POST params).
 
     The changes are reflected in the DB
@@ -101,13 +102,14 @@ def column_move_bottom(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_column(pf_related='columns')
 def column_restrict_values(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
     column: Optional[Column] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Restrict future values in this column to one of those already present.
 
     :param request: HTTP request
