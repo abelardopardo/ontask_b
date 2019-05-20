@@ -2,46 +2,12 @@
 
 """Classes capturing the payloads used when running actions."""
 import collections
-from typing import Dict
+from typing import Dict, Optional
 
 from django.conf import settings as ontask_settings
 from django.contrib.sessions.models import Session
 
 action_session_dictionary = 'action_run_payload'
-
-
-def get_action_payload(session: Session) -> Dict:
-    """Get the payload from the current session.
-
-    :param session: Session object
-
-    :return: request.session[session_dictionary_name] or None
-    """
-    return session.get(action_session_dictionary)
-
-
-def get_action_info(session, payloadclass=None, action_info=None):
-    """Check the value of action_info and if needed, fetch from request.
-
-    :param session: HTTP session object
-
-    :param payloadclass: class to use to create action_info if needed. If None,
-    it not created.
-
-    :param action_info: Potentially existing action_info
-
-    :return: Existing or newly created one
-    """
-    if action_info is not None:
-        # It already exists, so simply return
-        return action_info
-
-    action_info = session.get(action_session_dictionary)
-    if not action_info:
-        # No action_info object found in session, return None!
-        return action_info
-
-    return payloadclass(action_info)
 
 
 class ActionPayload(collections.MutableMapping):
@@ -52,12 +18,20 @@ class ActionPayload(collections.MutableMapping):
 
     fields = []
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, initial_values=None):
         """Initialize the store and store given arguments."""
         super().__init__()
-        self.store = {}
-        if args or kwargs:
-            self.update(dict(*args, **kwargs))
+        self.store = {
+            'exclude_values': [],
+            'prev_url': '',
+            'post_url': '',
+            'button_label': '',
+            'valuerange': 0,
+            'step': 0,
+        }
+
+        if initial_values:
+            self.update(initial_values)
 
     def __getitem__(self, key):
         """Verify that the key is in the allowed fields.
@@ -67,7 +41,7 @@ class ActionPayload(collections.MutableMapping):
         """
         if ontask_settings.DEBUG:
             if key not in self.fields:
-                raise Exception('Incorrect key lookup.')
+                raise Exception('Incorrect key:' + key)
         return self.store[self.__keytransform__(key)]
 
     def __setitem__(self, key, item_value):
@@ -234,3 +208,54 @@ class ZipPayload(ActionPayload):
         'valuerange',
         'step',
     ]
+
+
+def get_action_payload(session: Session) -> Dict:
+    """Get the payload from the current session.
+
+    :param session: Session object
+
+    :return: request.session[session_dictionary_name] or None
+    """
+    return session.get(action_session_dictionary)
+
+
+def get_action_info(
+    session: Session,
+    payloadclass,
+    action_info: Optional[ActionPayload] = None,
+    initial_values: Optional[Dict] = None,
+) -> Optional[ActionPayload]:
+    """Get (from the session object) or create an ActionPayload object.
+
+    First check if one is given. If not, check in the session. If there is no
+    object in the session, create a new one with the initial values.
+
+    :param session: HTTP session object
+
+    :param payloadclass: class to use to create a action_info object.
+
+    :param action_info: ActionInfo object just in case it is present.
+
+    :param initial_values: A dictionary to initialize the class if required
+
+    :return: Existing,newly created ActionInfo object, or None
+    """
+    if action_info:
+        # Already exists, no need to create a new one
+        return action_info
+
+    action_info = session.get(action_session_dictionary)
+    if action_info:
+        return payloadclass(action_info)
+
+    if not initial_values:
+        # Nothing found in the session and no initial values given.
+        return None
+
+    # Create the object with the given class
+    action_info = payloadclass(initial_values)
+    session[action_session_dictionary] = action_info.get_store()
+    session.save()
+
+    return payloadclass(initial_values)
