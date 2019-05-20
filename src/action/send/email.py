@@ -24,7 +24,7 @@ from action.models import Action
 from action.payloads import EmailPayload
 from dataops.sql.column_queries import add_column_to_db
 from logs.models import Log
-from ontask import is_correct_email
+from ontask import is_correct_email, simplify_datetime_str
 from workflow.models import Column
 
 logger = get_task_logger('celery_execution')
@@ -57,13 +57,13 @@ def send_emails(
     action_evals = evaluate_action(
         action,
         extra_string=action_info['subject'],
-        column_name=action_info['email_column'],
+        column_name=action_info['item_column'],
         exclude_values=action_info['exclude_values'])
 
-    check_cc_lists(action_info['cc_email_list'], action_info['bcc_email_list'])
+    check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
 
     track_col_name = ''
-    if action['track_read']:
+    if action_info['track_read']:
         track_col_name = create_track_column(action)
         # Get the log item payload to store the tracking column
         log_item.payload['track_column'] = track_col_name
@@ -120,10 +120,11 @@ def create_track_column(action: Action) -> str:
     """
     # Make sure the column name does not collide with an existing one
     idx = 0  # Suffix to rename
+    cnames = [col.name for col in action.workflow.columns.all()]
     while True:
         idx += 1
         track_col_name = 'EmailRead_{0}'.format(idx)
-        if track_col_name not in action.workflow.columns.all():
+        if track_col_name not in cnames:
             break
 
     # Add the column if needed (before the mass email to avoid overload
@@ -132,7 +133,7 @@ def create_track_column(action: Action) -> str:
         name=track_col_name,
         description_text='Emails sent with action {0} on {1}'.format(
             action.name,
-            str(datetime.datetime.now(pytz.timezone(
+            simplify_datetime_str(datetime.datetime.now(pytz.timezone(
                 ontask_settings.TIME_ZONE))),
         ),
         workflow=action.workflow,
@@ -151,6 +152,7 @@ def create_track_column(action: Action) -> str:
         action.workflow.get_data_frame_table_name(),
         track_col_name,
         'integer',
+        0
     )
 
     return track_col_name
@@ -255,8 +257,8 @@ def create_messages(
             msg_body_sbj_to,
             track_str,
             user.email,
-            action_info['cc_email_list'],
-            action_info['bcc_email_list'],
+            action_info['cc_email'],
+            action_info['bcc_email'],
         )
         msgs.append(msg)
 

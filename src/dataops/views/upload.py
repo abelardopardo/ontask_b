@@ -153,21 +153,24 @@ def upload_s2(
                 'error.html',
                 {'message': _('Exception while retrieving the data frame')})
 
-        # Update the data frame
-        status = perform_dataframe_upload_merge(
-            workflow,
-            existing_df,
-            data_frame,
-            upload_data)
-
-        if status:
+        try:
+            perform_dataframe_upload_merge(
+                workflow,
+                existing_df,
+                data_frame,
+                upload_data)
+        except Exception as exc:
             # Something went wrong. Flag it and reload
-            context = {'form': form,
-                       'wid': workflow.id,
-                       'prev_step': upload_data['step_1'],
-                       'valuerange': range(
-                           5) if workflow.has_table() else range(3),
-                       'df_info': df_info}
+            form.error(
+                None,
+                'Unable to perform merge: {0}'.format(str(exc))
+            )
+            context = {
+                'form': form,
+                'wid': workflow.id,
+                'prev_step': upload_data['step_1'],
+                'valuerange': range(5) if workflow.has_table() else range(3),
+                'df_info': df_info}
             return render(request, 'dataops/upload_s2.html', context)
 
         # Update the session information
@@ -381,19 +384,19 @@ def upload_s4(
                           {'message': _('Exception while loading data frame')})
 
         # Performing the merge
-        status = perform_dataframe_upload_merge(
+        try:
+            perform_dataframe_upload_merge(
             workflow,
             dst_df,
             src_df,
             upload_data)
+        except Exception as exc:
+            # Nuke the temporary table
+            table_queries.delete_table(
+                workflow.get_data_frame_upload_table_name()
+            )
 
-        # Nuke the temporary table
-        table_queries.delete_table(
-            workflow.get_data_frame_upload_table_name()
-        )
-
-        col_info = workflow.get_column_info()
-        if status:
+            col_info = workflow.get_column_info()
             Log.objects.register(request.user,
                                  Log.WORKFLOW_DATA_FAILEDMERGE,
                                  workflow,
@@ -404,12 +407,13 @@ def upload_s4(
                                   'column_names': col_info[0],
                                   'column_types': col_info[1],
                                   'column_unique': col_info[2],
-                                  'error_msg': status})
+                                  'error_msg': str(exc)})
 
-            messages.error(request, _('Merge operation failed. ') + status),
+            messages.error(request, _('Merge operation failed. ') + str(exc)),
             return redirect(reverse('table:display'))
 
         # Log the event
+        col_info = workflow.get_column_info()
         Log.objects.register(request.user,
                              Log.WORKFLOW_DATA_MERGE,
                              workflow,

@@ -7,7 +7,7 @@ from builtins import zip
 import numpy as np
 import pandas as pd
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, gettext
 
 from dataops.formula import evaluation
 from dataops.pandas.datatypes import pandas_datatype_names
@@ -38,37 +38,117 @@ def _store_temporary_dataframe(data_frame, workflow):
     return [df_column_types, column_unique]
 
 
-def _update_key_and_position(workflow, data_frame, wf_cols, reset_keys):
-    """Update the is_key and position of the columns."""
+def _realign_column_info(workflow, data_frame):
+    """Realign the column information between the data frame and the workflow.
+
+    This function is crucial to make sure the information stored in the
+    workflow and the one in the dataframe is consistent. It it assumed that
+    the data frame given as parameter contains a superset of the columns
+    already present in the workflow. This means:
+
+    1) The Value of "is_key" needs to be updated.
+
+    2) The data types stored in the column.data_type field is consistent with
+    that observed in the data frame.
+
+    3) If there are extra columns in the data_frame, they are created with
+    the correct data types (and the information in the workflow object
+    updated from the db)
+    """
+    df_column_names = list(data_frame.columns)
+    wf_column_names = [col.name for col in workflow.columns.all()]
+
+    if settings.DEBUG:
+        # There should not be any columns in the workflow that are not in the
+        # DF
+        assert not (set(wf_column_names) - set(df_column_names))
+
     # Loop over the columns in the Workflow to refresh the is_key value. There
     # may be values that have been added to the column, so this field needs to
     # be reassessed
-    df_column_names = list(data_frame.columns)
-    for col in wf_cols:
-        if reset_keys:
-            new_val = is_unique_column(data_frame[col.name])
-            if col.is_key and not new_val:
-                # Only set the is_key value if the column states that it is a
-                # key column, but the values say no. Othe other way around
-                # is_key is false in the column will be ignored as it may have
-                # been set by the user
-                col.is_key = new_val
-                col.save()
+    for col in workflow.columns.all():
+        # Condition 1: If the column is marked as a key column, it should
+        # maintain this property
+        if col.is_key and not is_unique_column(data_frame[col.name]):
+            raise Exception(gettext(
+                'Column {0} looses its "key" property through this merge.'
+                + ' Either remove this property from the column or '
+                + 'remove the rows that cause this problem in the new '
+                + 'dataset').format(col.name))
 
-        # Remove this column name from wf_col_names, no further processing is
-        # needed.
+        # Get the pandas data type
+        df_col_type = pandas_datatype_names.get(
+            data_frame[col.name].dtype.name)
+
+        # Condition 2: Review potential data type changes
+        if col.data_type == 'boolean' and df_col_type == 'string':
+            column_data_types = {
+                type(row_value)
+                for row_value in data_frame[col.name]
+                # Remove the NoneType and Float
+                if type(row_value) != float and type(row_value) != type(None)
+            }
+            if len(column_data_types) != 1 or column_data_types.pop() != bool:
+                raise Exception(gettext(
+                    'New values in column {0} are not of type {1}',
+                ).format(col.name, col.data_type))
+        elif (
+            col.data_type == 'integer' and df_col_type != 'integer'
+            and df_col_type != 'double'
+        ):
+            # Numeric column results in a non-numeric column
+            raise Exception(gettext(
+                'New values in column {0} are not of type number',
+            ).format(col.name))
+        elif col.data_type != 'integer' and df_col_type != col.data_type:
+            # Any other type change
+            raise Exception(gettext(
+                'New values in column {0} are not of type {1}',
+            ).format(col.name, col.data_type))
+
+        # Condition 3: If there are categories, the new values should be
+        # compatible with them.
+        if col.categories and not all(
+            row_val in col.categories for row_val in data_frame[col.name]
+            if row_val and not pd.isnull(row_val)
+        ):
+            raise Exception(gettext(
+                'New values in column {0} are not in categories {1}',
+            ).format(col.name, ', '.join(col.categories)))
+
+
+        # Remove this column name from wf_col_names
         df_column_names.remove(col.name)
 
-    # Loop over the remaining columns in the data frame and create the new
-    # column objects in the workflow
-    workflow.add_new_columns(
-        df_column_names,
-        [data_frame[col].dtype.name for col in df_column_names],
-        [is_unique_column(data_frame[col]) for col in df_column_names]
-    )
+    # Loop over the remaining columns in the data frame and create them in the
+    # workflow
+    data_types = []
+    is_unique = []
+    for col_name in df_column_names:
+        # Detect columns of type "object" in pandas that contain only bools and
+        # True/False and marke them as
+        if data_frame[col_name].dtype.name == 'object':
+            column_data_types = {
+                type(row_value)
+                for row_value in data_frame[col_name]
+                # Remove the NoneType and Float
+                if type(row_value) != float and type(row_value) != type(None)
+            }
+            if len(column_data_types) == 1 and column_data_types.pop() == bool:
+                data_types.append('bool')
+            else:
+                data_types.append(data_frame[col_name].dtype.name)
+        else:
+            data_types.append(data_frame[col_name].dtype.name)
+
+        # Calculate the is_unique value
+        is_unique.append(is_unique_column(data_frame[col_name]))
+
+    # Create the new required columns
+    workflow.add_new_columns(df_column_names, data_types, is_unique)
 
 
-def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
+def store_dataframe(data_frame, workflow, temporary=False):
     """Update or create a table in the DB with the data in the data frame.
 
     It also updates the corresponding column information
@@ -97,13 +177,9 @@ def store_dataframe(data_frame, workflow, temporary=False, reset_keys=True):
 
     # We are modifying an existing DF
     if settings.DEBUG:
-        print('Storing table ', workflow.get_data_frame_table_name())
+        print('Storing dataframe ', workflow.get_data_frame_table_name())
 
-    _update_key_and_position(
-        workflow,
-        data_frame,
-        workflow.columns.all(),
-        reset_keys)
+    _realign_column_info(workflow, data_frame)
 
     # Refresh the workflow object and its set of columns
     workflow.refresh_from_db()
@@ -151,8 +227,8 @@ def get_table_row_by_index(workflow, filter_formula, idx):
     # Get the data
     df_data = get_rows(
         workflow.get_data_frame_table_name(),
-        workflow.get_column_names(),
-        filter_formula)
+        column_names=workflow.get_column_names(),
+        filter_formula=filter_formula)
 
     # If the data is not there, return None
     if idx > df_data.rowcount:
@@ -239,8 +315,8 @@ def get_subframe(table_name, filter_formula, column_names) -> pd.DataFrame:
     return pd.DataFrame.from_records(
         get_rows(
             table_name,
-            column_names,
-            filter_formula,
+            column_names=column_names,
+            filter_formula=filter_formula,
         ).fetchall(),
         columns=column_names,
         coerce_float=True)

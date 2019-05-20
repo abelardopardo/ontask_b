@@ -67,12 +67,12 @@ class TableBasicOps(APIView):
         try:
             # Verify the data frame
             verify_data_frame(df)
-        except OnTaskDataFrameNoKey as e:
-            return Response(str(e),
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        # Store the content in the db and...
-        store_dataframe(df, workflow)
+            # Store the content in the db and...
+            store_dataframe(df, workflow)
+        except OnTaskDataFrameNoKey as exc:
+            return Response(
+                str(exc),
+                status=status.HTTP_400_BAD_REQUEST)
 
         # Update all the counters in the conditions
         for action in workflow.actions.all():
@@ -304,17 +304,14 @@ class TableBasicMerge(APIView):
 
         # Ready to perform the MERGE
         try:
-            merge_result = perform_dataframe_upload_merge(
+            perform_dataframe_upload_merge(
                 workflow,
                 dst_df,
                 src_df,
                 merge_info)
-        except Exception:
-            raise APIException(_('Unable to perform merge operation'))
-
-        if merge_result:
-            # Something went wrong, raise the exception
-            raise APIException(merge_result)
+        except Exception as exc:
+            raise APIException(
+                _('Unable to perform merge operation: {0}').format(str(exc)))
 
         # Merge went through.
         return Response(serializer.data,

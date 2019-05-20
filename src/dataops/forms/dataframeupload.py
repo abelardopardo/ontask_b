@@ -13,6 +13,58 @@ from dataops.models import SQLConnection
 from dataops.pandas import create_db_engine
 
 
+def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
+    """Processes additional steps in every object dataframe column.
+
+    The process includes:
+
+    1) Strip empty spaces
+
+    2) Try date/time conversion
+
+    3) If the previous fails, replace NaN with None as it will be done once it
+    is dumped and reloaded from the DB
+
+    :param data_frame:
+
+    :return: new data frame
+    """
+    for column in list(data_frame.columns):
+        if data_frame[column].dtype.name == 'object':
+            # Column is a string! Remove the leading and trailing white
+            # space
+            data_frame[column] = data_frame[column].str.strip().fillna(
+                data_frame[column]
+            )
+
+            # Try the datetime conversion
+            try:
+                series = pd.to_datetime(
+                    data_frame[column],
+                    infer_datetime_format=True)
+            except (ValueError, TypeError):
+                # Datetime failed. Rows with no value may be read as NaN from
+                # the read CSV but will turn into None when looping through the
+                # DB, so ensure consistency.
+                data_frame[column] = data_frame[column].where(
+                    pd.notnull(data_frame[column]),
+                    None)
+            else:
+                # Datetime conversion worked!
+                if any(
+                    sitem.tzinfo is None
+                    or sitem.tzinfo.utcoffset(sitem) is None
+                    for sitem in series
+                ):
+                    # If series has no timezone, add the system one
+                    series = series.dt.tz_localize('UTC').dt.tz_convert(
+                        ontask_settings.TIME_ZONE,
+                    )
+                data_frame[column] = series
+
+    return data_frame
+
+
 def load_df_from_csvfile(
     file_obj,
     skiprows: Optional[int] = 0,
@@ -46,7 +98,7 @@ def load_df_from_csvfile(
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return strip_and_convert_to_datetime(data_frame)
+    return _process_object_column(data_frame)
 
 
 def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
@@ -73,7 +125,7 @@ def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return strip_and_convert_to_datetime(data_frame)
+    return _process_object_column(data_frame)
 
 
 def load_df_from_s3(
@@ -126,7 +178,7 @@ def load_df_from_s3(
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return strip_and_convert_to_datetime(data_frame)
+    return _process_object_column(data_frame)
 
 
 def load_df_from_googlesheet(
@@ -195,44 +247,8 @@ def load_df_from_sqlconnection(
         conn_item.db_name)
 
     # Try to fetch the data
-    data_frame = pd.read_sql(conn_item.db_table, db_engine)
+    data_frame = pd.read_sql_table(conn_item.db_table, db_engine)
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return strip_and_convert_to_datetime(data_frame)
-
-
-def strip_and_convert_to_datetime(data_frame: pd.DataFrame) -> pd.DataFrame:
-    """Strip white space and convert to date time all string columns.
-
-    :param data_frame:
-
-    :return: new data frame
-    """
-    for column in list(data_frame.columns):
-        if data_frame[column].dtype.name == 'object':
-            # Column is a string! Remove the leading and trailing white
-            # space
-            data_frame[column] = data_frame[column].str.strip().fillna(
-                data_frame[column],
-            )
-
-            # Try the datetime conversion
-            with contextlib.suppress(ValueError, TypeError):
-                series = pd.to_datetime(
-                    data_frame[column],
-                    infer_datetime_format=True)
-
-                # Datetime conversion worked!
-                if any(
-                    sitem.tzinfo is None or sitem.tzinfo.utcoffset(sitem)
-                    for sitem in series
-                ):
-                    # If series has no timezone, add the system one
-                    series = series.dt.tz_localize('UTC').dt.tz_convert(
-                        ontask_settings.TIME_ZONE,
-                    )
-
-                data_frame[column] = series
-
-    return data_frame
+    return _process_object_column(data_frame)

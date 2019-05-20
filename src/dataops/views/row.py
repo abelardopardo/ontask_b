@@ -143,8 +143,19 @@ def row_create(
                                'form': form,
                                'cancel_url': reverse('table:display')})
 
-        # Restore the dataframe to the DB
-        store_dataframe(df, workflow)
+        # Store the dataframe to the DB
+        try:
+            store_dataframe(df, workflow)
+        except Exception as exc:
+            form.add_error(
+                None,
+                _('Unable to create the row: {0}').format(str(exc))
+            )
+            return render(request,
+                          'dataops/row_create.html',
+                          {'workflow': workflow,
+                           'form': form,
+                           'cancel_url': reverse('table:display')})
 
         # Update the session information
         store_workflow_in_session(request, workflow)

@@ -23,7 +23,7 @@ from dataops.pandas import (
 from dataops.sql import db_rename_column
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_column, get_workflow
+from ontask.decorators import get_column, get_workflow, ajax_required
 from ontask.permissions import is_instructor
 from workflow.forms import (
     ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
@@ -78,12 +78,13 @@ def partition(list_in, num):
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow(pf_related=['actions', 'columns'])
 def column_add(
     request: HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Add column.
 
     :param request:
@@ -163,7 +164,14 @@ def column_add(
             wid=workflow.id)
 
         # Store the df to DB
-        store_dataframe(df, workflow)
+        try:
+            store_dataframe(df, workflow)
+        except Exception as exc:
+            messages.error(
+                request,
+                _('Unable to clone column: {0}').format(str(exc))
+            )
+            return JsonResponse({'html_redirect': ''})
 
         # If the column is a question, add it to the action
         if is_question:
@@ -207,11 +215,12 @@ def column_add(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow(pf_related='columns')
 def formula_column_add(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Add a formula column.
 
     :param request:
@@ -309,11 +318,17 @@ def formula_column_add(
 
         # Save column and refresh the prefetched related in the workflow
         column.save()
-        workflow = Workflow.objects.prefetch_related('columns').get(
-            wid=workflow.id)
+        workflow.refresh_from_db()
 
         # Store the df to DB
-        store_dataframe(df, workflow)
+        try:
+            store_dataframe(df, workflow)
+        except Exception as exc:
+            messages.error(
+                request,
+                _('Unable to clone column: {0}').format(str(exc))
+            )
+            return JsonResponse({'html_redirect': ''})
 
         # Log the event
         Log.objects.register(
@@ -338,11 +353,12 @@ def formula_column_add(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow(pf_related='columns')
 def random_column_add(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Create a column with random values (Modal).
 
     :param request:
@@ -447,11 +463,17 @@ def random_column_add(
         workflow.reposition_columns(workflow.ncols + 1, column.position)
 
         column.save()
-        workflow = Workflow.objects.prefetch_related('columns').get(
-            wid=workflow.id)
+        workflow.refresh_from_db()
 
         # Store the df to DB
-        store_dataframe(df, workflow)
+        try:
+            store_dataframe(df, workflow)
+        except Exception as exc:
+            messages.error(
+                request,
+                _('Unable to clone column: {0}').format(str(exc))
+            )
+            return JsonResponse({'html_redirect': ''})
 
         # Log the event
         Log.objects.register(
@@ -476,13 +498,14 @@ def random_column_add(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_column(pf_related=['columns', 'views', 'actions'])
 def column_edit(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
     column: Optional[Column] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Edit a column.
 
     :param request:
@@ -574,13 +597,14 @@ def column_edit(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_column(pf_related=['columns', 'actions'])
 def column_delete(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
     column: Optional[Column] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Delete a column in the table attached to a workflow.
 
     :param request: HTTP request
@@ -648,13 +672,14 @@ def column_delete(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_column(pf_related='columns')
 def column_clone(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
     column: Optional[Column] = None,
-) -> HttpResponse:
+) -> JsonResponse:
     """Clone a column in the table attached to a workflow.
 
     :param request: HTTP request
@@ -681,10 +706,17 @@ def column_clone(
     old_name = column.name
 
     # Proceed to clone the column
-    column = clone_column(
-        column,
-        None,
-        create_new_name(column.name, workflow.columns))
+    try:
+        column = clone_column(
+            column,
+            None,
+            create_new_name(column.name, workflow.columns))
+    except Exception as exc:
+        messages.error(
+            request,
+            _('Unable to clone column: {0}').format(str(exc))
+        )
+        return JsonResponse({'html_redirect': ''})
 
     # Log the event
     Log.objects.register(
