@@ -15,7 +15,7 @@ from ontask.celery import app as celery_app
 __all__ = [
     'celery_app', 'OnTaskException', 'is_legal_name',
     'OnTaskDataFrameNoKey', 'simplify_datetime_str', 'is_correct_email',
-    'OnTaskEmptyWorkflow'
+    'OnTaskEmptyWorkflow', 'OnTaskDBIdentifier'
 ]
 
 __version__ = 'B.4.3.5'

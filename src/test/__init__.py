@@ -329,6 +329,80 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             dd_xpath + '/..//*[normalize-space() = "{0}"]'.format(option_name)
         ).click()
 
+    def click_dropdown_option_and_wait(self, dd_xpath, option_name, wait_for=None):
+        """
+        Given a dropdown xpath, click to open and then click in the given option
+        :param dd_xpath: xpath to locate the dropdown element (top level)
+        :param option_name: name of the option in the dropdown to click
+        :param wait_for: @id to wait for, or modal open if none.
+        :return: Nothing
+        """
+        self.click_dropdown_option(dd_xpath, option_name)
+
+        if wait_for:
+            WebDriverWait(self.selenium, 10).until(
+                EC.presence_of_element_located(
+                    (By.ID, wait_for)
+                )
+            )
+            WebDriverWait(self.selenium, 10).until_not(
+                EC.visibility_of_element_located((By.ID, 'div-spinner'))
+            )
+        else:
+            self.wait_for_modal_open()
+
+    def click_dropdown_option_by_number(self, dd_xpath, option_num):
+        """Click the nth option in a dropdown menu.
+
+        Given a dropdown xpath, click to open and then click in the given option
+
+        :param dd_xpath: xpath to locate the dropdown element (top level)
+
+        :param option_num: position of the option in the dropdown to click
+
+        :return: Nothing
+        """
+        self.selenium.find_element_by_xpath(dd_xpath).click()
+        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
+            (By.XPATH,
+             dd_xpath + '/..//*[{0}]'.format(option_num))
+        ))
+        self.selenium.find_element_by_xpath(
+            dd_xpath + '/..//*[{0}]'.format(option_num)
+        ).click()
+
+    def click_dropdown_option_num_and_wait(
+        self,
+        dd_xpath,
+        option_num,
+        wait_for=None
+    ):
+        """Click the nth option in a dropdown menu and wait.
+
+        Given a dropdown xpath, click to open and then click in the given option
+
+        :param dd_xpath: xpath to locate the dropdown element (top level)
+
+        :param option_num: posotion of the option in the dropdown to click
+
+        :param wait_for: @id to wait for, or modal open if none.
+
+        :return: Nothing
+        """
+        self.click_dropdown_option_by_number(dd_xpath, option_num)
+
+        if wait_for:
+            WebDriverWait(self.selenium, 10).until(
+                EC.presence_of_element_located(
+                    (By.ID, wait_for)
+                )
+            )
+            WebDriverWait(self.selenium, 10).until_not(
+                EC.visibility_of_element_located((By.ID, 'div-spinner'))
+            )
+        else:
+            self.wait_for_modal_open()
+
     def search_table_row_by_string(self, table_id, colidx, value):
         """
         Given a table id and a column index, it traverses the table searching
@@ -723,7 +797,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 col_name
             )
         # Click in the dropdown
-        self.open_dropdown_click_option(
+        self.click_dropdown_option_and_wait(
             xpath_txt + "/td[6]/div/button",
             'Delete'
         )
@@ -1061,43 +1135,14 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         ).click()
         self.wait_close_modal_refresh_table('view-table_previous')
 
-    def open_dropdown_click_option(self, dd_xpath, option_name, wait_for=None):
-        """
-        Given a dropdown xpath, click to open and then click in the given option
-        :param dd_xpath: xpath to locate the dropdown element (top level)
-        :param option_name: name of the option in the dropdown to click
-        :param wait_for: @id to wait for, or modal open if none.
-        :return: Nothing
-        """
-        self.selenium.find_element_by_xpath(dd_xpath).click()
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH,
-             dd_xpath + '/..//*[normalize-space() = "{0}"]'.format(option_name))
-        ))
-        self.selenium.find_element_by_xpath(
-            dd_xpath + '/..//*[normalize-space() = "{0}"]'.format(option_name)
-        ).click()
-
-        if wait_for:
-            WebDriverWait(self.selenium, 10).until(
-                EC.presence_of_element_located(
-                    (By.ID, wait_for)
-                )
-            )
-            WebDriverWait(self.selenium, 10).until_not(
-                EC.visibility_of_element_located((By.ID, 'div-spinner'))
-            )
-        else:
-            self.wait_for_modal_open()
-
     def open_add_regular_column(self):
         # Click on the Add Column button
-        self.open_dropdown_click_option('//*[@id="addColumnOperations"]',
+        self.click_dropdown_option_and_wait('//*[@id="addColumnOperations"]',
                                         'Regular column')
 
     def open_add_derived_column(self):
         # Click on the Add Column button
-        self.open_dropdown_click_option('//*[@id="addColumnOperations"]',
+        self.click_dropdown_option_and_wait('//*[@id="addColumnOperations"]',
                                         'Formula-derived column')
 
     def open_column_edit(self, name):
@@ -1115,13 +1160,13 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             "//table[@id='table-data']" \
             "//tr/td[{0}][normalize-space() = '{1}']/" \
             "../td[1]/div/button".format(col_idx, text)
-        self.open_dropdown_click_option(xpath_str, ddown_option)
+        self.click_dropdown_option_and_wait(xpath_str, ddown_option)
 
     def open_view_row_op(self, text, ddown_option):
         xpath_str = \
             "//table[@id='view-table']//tr/td[1][normalize-space() = '{0}']/" \
             "../td[3]/div/button".format(text)
-        self.open_dropdown_click_option(xpath_str, ddown_option)
+        self.click_dropdown_option_and_wait(xpath_str, ddown_option)
 
     def open_action_edit(self, name):
         self.selenium.find_element_by_xpath(
@@ -1141,7 +1186,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             "//table[@id='action-table']" \
             "//tr/td[2][normalize-space() = '{0}']/" \
             "../td[5]/div/div/button".format(name)
-        self.open_dropdown_click_option(xpath_str, 'Rename')
+        self.click_dropdown_option_and_wait(xpath_str, 'Rename')
 
     def open_action_email(self, name):
         element = self.search_action(name)
@@ -1167,14 +1212,14 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             "//table[@id='action-table']" \
             "//tr/td[2][normalize-space() = '{0}']/" \
             "../td[5]/div/div/button".format(name)
-        self.open_dropdown_click_option(xpath_str, txt)
+        self.click_dropdown_option_and_wait(xpath_str, txt)
 
     def open_action_zip(self, name):
         xpath_str = \
             "//table[@id='action-table']" \
             "//tr/td[2][normalize-space() = '{0}']/" \
             "../td[5]/div/div/button".format(name)
-        self.open_dropdown_click_option(xpath_str,
+        self.click_dropdown_option_and_wait(xpath_str,
                                         'ZIP',
                                         'zip-action-request-data')
 
@@ -1205,7 +1250,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             "//table[@id='action-table']" \
             "//tr/td[2][normalize-space() = '{0}']/" \
             "../td[5]/div/div/button".format(name)
-        self.open_dropdown_click_option(xpath_str,
+        self.click_dropdown_option_and_wait(xpath_str,
                                         'Schedule',
                                         'email-schedule-send')
 

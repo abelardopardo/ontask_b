@@ -204,7 +204,7 @@ def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
     # Get the column content
     emails = get_rows(
         workflow.get_data_frame_table_name(),
-        [workflow.luser_email_column.name])
+        column_names=[workflow.luser_email_column.name])
 
     luser_list = []
     created = 0

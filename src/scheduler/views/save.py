@@ -242,9 +242,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
         schedule_item = ScheduledAction.objects.get(wid=s_item_id)
 
     # Check for exclude values and store them if needed
-    exclude_values = payload.get('exclude_values')
-    if exclude_values:
-        schedule_item.exclude_values = exclude_values
+    schedule_item.exclude_values = payload.get('exclude_values', [])
 
     schedule_item.status = ScheduledAction.STATUS_PENDING
     schedule_item.save()

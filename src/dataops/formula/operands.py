@@ -110,7 +110,7 @@ def not_equal(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL('({0} != {1}) OR ({0} is null)').format(
-            OnTaskException(node['field']),
+            OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
         )
         fields = [str(constant)]

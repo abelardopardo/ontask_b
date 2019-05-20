@@ -7,7 +7,7 @@ from builtins import object
 import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.db import IntegrityError
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -18,6 +18,7 @@ from dataops.forms import SQLConnectionForm
 from dataops.models import SQLConnection
 from logs.models import Log
 from ontask import create_new_name
+from ontask.decorators import ajax_required
 from ontask.permissions import is_admin, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
@@ -89,7 +90,10 @@ class SQLConnectionTableRun(tables.Table):
         }
 
 
-def save_conn_form(request, form, template_name):
+def save_conn_form(
+    request: HttpRequest,
+    form,
+    template_name: str) -> JsonResponse:
     """Save the connection provided in the form.
 
     :param request: HTTP request
@@ -165,7 +169,7 @@ def save_conn_form(request, form, template_name):
 
 
 @user_passes_test(is_admin)
-def sqlconnection_admin_index(request):
+def sqlconnection_admin_index(request: HttpRequest) -> HttpResponse:
     """Show and handle the SQL connections.
 
     :param request: Request
@@ -192,7 +196,7 @@ def sqlconnection_admin_index(request):
 
 
 @user_passes_test(is_instructor)
-def sqlconnection_instructor_index(request):
+def sqlconnection_instructor_index(request: HttpRequest) -> HttpResponse:
     """Render a page showing a table with the SQL connections.
 
     :param request:
@@ -215,7 +219,8 @@ def sqlconnection_instructor_index(request):
 
 
 @user_passes_test(is_instructor)
-def sqlconn_view(request, pk):
+@ajax_required
+def sqlconn_view(request: HttpRequest, pk: int) -> JsonResponse:
     """Show the DB connection in a modal.
 
     :param request: Request object
@@ -244,7 +249,8 @@ def sqlconn_view(request, pk):
 
 
 @user_passes_test(is_admin)
-def sqlconn_add(request):
+@ajax_required
+def sqlconn_add(request: HttpRequest) -> JsonResponse:
     """Create a new SQL connection processing the GET/POST requests.
 
     :param request: Request object
@@ -261,7 +267,8 @@ def sqlconn_add(request):
 
 
 @user_passes_test(is_admin)
-def sqlconn_edit(request, pk):
+@ajax_required
+def sqlconn_edit(request: HttpRequest, pk: int) -> JsonResponse:
     """Respond to the reqeust to edit a SQL CONN object.
 
     :param request: HTML request
@@ -285,7 +292,8 @@ def sqlconn_edit(request, pk):
 
 
 @user_passes_test(is_admin)
-def sqlconn_clone(request, pk):
+@ajax_required
+def sqlconn_clone(request: HttpRequest, pk: int) -> JsonResponse:
     """AJAX handshake to clone a SQL connection.
 
     :param request: HTTP request
@@ -341,7 +349,8 @@ def sqlconn_clone(request, pk):
 
 
 @user_passes_test(is_admin)
-def sqlconn_delete(request, pk):
+@ajax_required
+def sqlconn_delete(request: HttpRequest, pk: int) -> JsonResponse:
     """AJAX processor for the delete sql connection operation.
 
     :param request: AJAX request

@@ -110,12 +110,13 @@ def update_row(
 
     :param set_pairs: Dictionary of pairs key, value to set
 
-    :param field_pairs: Dictionary of key, value to find the row
+    :param filter_pairs: Dictionary of key, value to find the row
 
     :return:
     """
     query = sql.SQL('UPDATE {0} SET ').format(
-        sql.Identifier(table_name)) + sql.SQL(', ').join([
+        sql.Identifier(table_name),
+    ) + sql.SQL(', ').join([
         sql.SQL('{0} = {1}').format(
             OnTaskDBIdentifier(key), sql.Literal(lit_val))
         for key, lit_val in set_pairs.items()
@@ -123,7 +124,8 @@ def update_row(
     query_fields = []
 
     if filter_pairs:
-        query = query + sql.SQL(' WHERE ') + sql.SQL(' AND ').join([
+        query = query + sql.SQL(' WHERE ')
+        query = query + sql.SQL(' AND ').join([
             sql.SQL('{0} = {1}').format(
                 OnTaskDBIdentifier(key), sql.Literal(lit_val))
             for key, lit_val in filter_pairs.items()
@@ -258,14 +260,13 @@ def delete_row(table_name: str, kv_pair: Tuple[str, Any]):
     """
     # Get the key/value subclause
     bool_clause, query_fields = get_boolean_clause(
-        filter_pairs=dict(kv_pair),
+        filter_pairs={kv_pair[0]: kv_pair[1]},
     )
 
     # Create the query
-    query = sql.SQL('DELETE FROM {0} WHERE {1}').format(
+    query = sql.SQL('DELETE FROM {0}').format(
         sql.Identifier(table_name),
-        bool_clause,
-    )
+    ) + sql.SQL(' WHERE ') + bool_clause
 
     # Execute the query
     with connection.cursor() as cursor:

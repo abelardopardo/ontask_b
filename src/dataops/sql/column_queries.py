@@ -52,7 +52,7 @@ def add_column_to_db(
         sql.Literal(initial),
     )
 
-    if initial:
+    if initial is not None:
         query = query + sql.SQL(' DEFAULT ') + sql.Literal(initial)
 
     connection.cursor().execute(query)

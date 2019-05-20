@@ -43,8 +43,8 @@ def get_boolean_clause(
         c_txt = ' AND ' if conjunction else ' OR '
         pairs_clause = sql.SQL(c_txt).join([
             sql.SQL('{0} = {1}').format(
-                OnTaskDBIdentifier(key), sql.Literal(lit_val))
-            for key, lit_val in filter_pairs.items()
+                OnTaskDBIdentifier(key), sql.Placeholder())
+            for key, __ in filter_pairs.items()
         ])
         pairs_fields = [lit_val for __, lit_val in filter_pairs.items()]
         if clause:
@@ -75,15 +75,16 @@ def get_select_query(
 
     :return: (sql query, sql params)
     """
-    if not column_names:
-        column_names = ['*']
+    if column_names:
+        query = sql.SQL('SELECT {0} FROM {1}').format(
+            sql.SQL(', ').join([
+                OnTaskDBIdentifier(cname) for cname in column_names
+            ]),
+            sql.Identifier(table_name),
+        )
+    else:
+        query = sql.SQL('SELECT * FROM {0}').format(sql.Identifier(table_name))
 
-    query = sql.SQL('SELECT {0} FROM {1}').format(
-        sql.SQL(', ').join([
-            OnTaskDBIdentifier(cname) for cname in column_names
-        ]),
-        sql.Identifier(table_name),
-    )
     query_fields = []
 
     if filter_formula or filter_pairs:

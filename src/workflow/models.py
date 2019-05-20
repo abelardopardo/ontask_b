@@ -405,16 +405,17 @@ class Workflow(models.Model):
     def add_new_columns(self, col_names, data_types, are_keys):
         """Add a set of columns to the workflow"""
         start = self.columns.count() + 1
+        bulk_list = []
         for idx in range(len(col_names)):
             # Create the new column
-            column = Column(
+            bulk_list.append(Column(
                 name=col_names[idx],
                 workflow=self,
                 data_type=pandas_datatype_names.get(data_types[idx]),
                 is_key=are_keys[idx],
-                position=start + idx)
-            column.save()
+                position=start + idx))
             idx += 1
+        Column.objects.bulk_create(bulk_list)
 
     def reposition_columns(self, from_idx, to_idx):
         """

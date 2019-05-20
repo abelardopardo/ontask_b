@@ -100,7 +100,7 @@ def create_db_engine(
         paramstyle='format')
 
 
-def destroy_db_engine(db_engine):
+def destroy_db_engine(db_engine = None):
     """Destroys the DB SQAlchemy engine.
 
     :param db_engine: Engine to destroy
@@ -144,7 +144,7 @@ def load_table(
         return pd.read_sql_query(query, engine, params=query_fields)
 
     # No special fields given, load the whole thing
-    return pd.read_sql(table_name, engine)
+    return pd.read_sql_table(table_name, engine)
 
 
 def store_table(

@@ -72,7 +72,9 @@ def get_execution_items(
     action = None
     if action_id:
         # Get the action
-        action = Action.objects.filter(user=user, pk=action_id).first()
+        action = Action.objects.filter(
+            workflow__user=user,
+            pk=action_id).first()
         if not action:
             raise Exception(
                 ugettext('Unable to find action with id {0}').format(
