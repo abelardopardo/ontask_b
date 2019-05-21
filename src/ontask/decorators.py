@@ -445,8 +445,12 @@ def access_workflow(
             return wf_lock_and_update(request, workflow, create_session=True)
 
         # Get the owner of the session locking the workflow
-        owner = get_user_model().objects.get(
-            id=session.get_decoded().get('_auth_user_id'))
+        user_id = session.get_decoded().get('_auth_user_id')
+        if not user_id:
+            # Session has no user_id, so proceed to lock the workflow
+            return wf_lock_and_update(request, workflow)
+
+        owner = get_user_model().objects.get(id=user_id)
 
         # Step 5: The workflow is locked by a session that is valid. See
         # if the session locking happens to be from the same user (a
