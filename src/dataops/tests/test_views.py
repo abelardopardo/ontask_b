@@ -807,21 +807,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsMerge(test.OnTaskLiveTestCase):
-    wf_name = 'Testing Merge'
-    fixtures = ['test_merge']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'dataops',
-        'fixtures',
-        'test_merge.sql'
-    )
-    merge_file = os.path.join(
-        settings.BASE_DIR(),
-        'dataops',
-        'fixtures',
-        'test_df_merge_update_df2.csv'
-    )
+class DataopsMergeBasic(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
@@ -897,6 +883,23 @@ class DataopsMerge(test.OnTaskLiveTestCase):
             "//button[normalize-space()='Finish']"
         ).click()
         self.wait_for_datatable('table-data_previous')
+
+
+class DataopsMerge(DataopsMergeBasic):
+    wf_name = 'Testing Merge'
+    fixtures = ['test_merge']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_merge.sql'
+    )
+    merge_file = os.path.join(
+        settings.BASE_DIR(),
+        'dataops',
+        'fixtures',
+        'test_df_merge_update_df2.csv'
+    )
 
     def test_01_merge_inner(self):
         self.template_merge('inner')
@@ -999,7 +1002,7 @@ class DataopsMerge(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsEmptyKeyAfterMerge(DataopsMerge):
+class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
     wf_name = 'Test Empty Key after Merge'
     fixtures = ['test_empty_key_after_merge']
     filename = os.path.join(

@@ -481,6 +481,11 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         ).click()
         # MODAL WAITING
         self.wait_for_page(element_id='workflow-detail')
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, "js-attribute-create")
+            )
+        )
 
         # There should only be a single element
         self.assertEqual(
