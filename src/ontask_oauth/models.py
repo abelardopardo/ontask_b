@@ -27,7 +27,6 @@ class OnTaskOAuthUserTokens(models.Model):
     # instances
     instance_name = models.CharField(
         max_length=2048,
-        null=False,
         blank=False)
 
     access_token = models.CharField(max_length=2048, blank=False)

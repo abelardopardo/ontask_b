@@ -24,9 +24,8 @@ import scheduler.urls
 import table.urls
 import workflow.urls
 from dataops.pandas import set_engine
-from ontask.templatetags.ontask_tags import ontask_version
-
 from ontask import views
+from ontask.templatetags.ontask_tags import ontask_version
 
 api_description = ugettext(
     'The OnTask API offers functionality to manipulate workflows, tables '

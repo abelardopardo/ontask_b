@@ -5,6 +5,7 @@
 from builtins import object
 from typing import Optional, Union
 
+import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -14,7 +15,6 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django_tables2 import A
-import django_tables2 as tables
 
 from action.forms import ActionForm, ActionUpdateForm
 from action.models import Action

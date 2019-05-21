@@ -14,8 +14,8 @@ from django.utils.translation import ugettext as _
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
-from dataops.pandas.datatypes import pandas_datatype_names
 from dataops.pandas.columns import has_unique_column, is_unique_column
+from dataops.pandas.datatypes import pandas_datatype_names
 from dataops.sql import get_select_query_txt
 from ontask import OnTaskDataFrameNoKey
 

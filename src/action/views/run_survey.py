@@ -25,7 +25,7 @@ from action.models import Action
 from action.views.serve_survey import serve_survey_row
 from core.datatables import DataTablesServerSidePaging
 from dataops.sql import search_table
-from ontask.decorators import get_action, ajax_required
+from ontask.decorators import ajax_required, get_action
 from ontask.permissions import is_instructor
 from workflow.models import Column, Workflow
 

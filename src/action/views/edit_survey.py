@@ -18,7 +18,7 @@ from django.views.decorators.http import require_http_methods
 from action.forms import ActionDescriptionForm
 from action.models import Action, ActionColumnConditionTuple
 from logs.models import Log
-from ontask.decorators import get_action, get_columncondition, ajax_required
+from ontask.decorators import ajax_required, get_action, get_columncondition
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from visualizations.plotly import PlotlyHandler

@@ -59,7 +59,6 @@ class Action(models.Model):
     name = models.CharField(
         max_length=ACTION_NAME_LENGTH,
         blank=False,
-        null=False,
         verbose_name=_('name'),
     )
 

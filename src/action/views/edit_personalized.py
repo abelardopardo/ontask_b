@@ -14,7 +14,7 @@ from action.evaluate import render_action_template
 from action.forms import EditActionOutForm, EnableURLForm, FilterForm
 from action.models import Action, Condition
 from logs.models import Log
-from ontask.decorators import get_action, ajax_required
+from ontask.decorators import ajax_required, get_action
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyHandler
 from workflow.models import Workflow

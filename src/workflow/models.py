@@ -18,7 +18,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.templatetags.ontask_tags
-from dataops.pandas import pandas_datatype_names, load_table
+from dataops.pandas import load_table, pandas_datatype_names
 from dataops.sql import delete_table
 
 
@@ -42,9 +42,10 @@ class Workflow(models.Model):
 
     name = models.CharField(max_length=512, null=False, blank=False)
 
-    description_text = models.CharField(max_length=2048,
-                                        default='',
-                                        blank=True)
+    description_text = models.CharField(
+        max_length=2048,
+        default='',
+        blank=True)
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
@@ -73,17 +74,17 @@ class Workflow(models.Model):
                                   null=True)
 
     # Name of the table storing the data frame
-    data_frame_table_name = models.CharField(max_length=1024,
-                                             default='',
-                                             null=False,
-                                             blank=True)
+    data_frame_table_name = models.CharField(
+        max_length=1024,
+        default='',
+        blank=True)
 
     # The key of the session locking this workflow (to allow sharing
     # workflows among users
-    session_key = models.CharField(max_length=40,
-                                   default='',
-                                   null=False,
-                                   blank=True)
+    session_key = models.CharField(
+        max_length=40,
+        default='',
+        blank=True)
 
     # Workflows shared among users. One workflow can be shared with many
     # users, and many users can have this workflow as available to them.
@@ -91,17 +92,18 @@ class Workflow(models.Model):
                                     related_name='workflows_shared')
 
     # Column stipulating where are the learner email values (or empty)
-    luser_email_column = models.ForeignKey('Column',
-                                           on_delete=models.CASCADE,
-                                           null=True,
-                                           blank=False,
-                                           related_name='luser_email_column')
+    luser_email_column = models.ForeignKey(
+        'Column',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=False,
+        related_name='luser_email_column')
 
     # MD5 to detect changes in the previous column
-    luser_email_column_md5 = models.CharField(max_length=32,
-                                              default='',
-                                              null=False,
-                                              blank=True)
+    luser_email_column_md5 = models.CharField(
+        max_length=32,
+        default='',
+        blank=True)
 
     lusers = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                     default=None,
@@ -472,9 +474,10 @@ class Column(models.Model):
     """
 
     # Column name
-    name = models.CharField(max_length=512,
-                            blank=False,
-                            verbose_name=_('column name'))
+    name = models.CharField(
+        max_length=512,
+        blank=False,
+        verbose_name=_('column name'))
 
     description_text = models.CharField(
         max_length=2048,
@@ -495,7 +498,6 @@ class Column(models.Model):
     data_type = models.CharField(
         max_length=512,
         blank=False,
-        null=False,
         choices=[(x, x)
                  for __, x in list(pandas_datatype_names.items())],
         verbose_name=_('type of data to store in the column')
@@ -682,7 +684,7 @@ class Column(models.Model):
         verbose_name = 'column'
         verbose_name_plural = 'columns'
         unique_together = ('name', 'workflow')
-        ordering = ['position',]
+        ordering = ['position', ]
 
 
 def is_table_in_db(table_name: str) -> bool:

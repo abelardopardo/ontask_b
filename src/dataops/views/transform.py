@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import object, range, str
 import json
+from builtins import object, range, str
 from typing import Optional
 
+import django_tables2 as tables
 from celery.task.control import inspect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -16,13 +17,12 @@ from django.urls import resolve
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
-import django_tables2 as tables
 
 from dataops.forms import FIELD_PREFIX, PluginInfoForm
 from dataops.models import PluginRegistry
 from dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
 from logs.models import Log
-from ontask.decorators import get_workflow, ajax_required
+from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import run_plugin_task
 from workflow.models import Workflow

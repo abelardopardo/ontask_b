@@ -5,6 +5,7 @@ import gzip
 import os
 import shutil
 import tempfile
+import test
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -15,7 +16,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 from dataops.pandas import destroy_db_engine
-import test
 from workflow.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )

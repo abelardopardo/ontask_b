@@ -7,7 +7,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext
 from psycopg2 import sql
 
-from ontask import OnTaskException, OnTaskDBIdentifier
+from ontask import OnTaskDBIdentifier, OnTaskException
 
 # Type of evaluations for the formulas
 EVAL_EXP = 0

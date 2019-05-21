@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 
 from dataops.pandas import get_column_statistics, load_table
 from dataops.sql.row_queries import get_rows
-from ontask.decorators import get_column, get_workflow, ajax_required
+from ontask.decorators import ajax_required, get_column, get_workflow
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 from workflow.models import Column, Workflow

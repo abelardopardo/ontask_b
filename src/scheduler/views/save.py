@@ -4,14 +4,13 @@
 
 import datetime
 
-from django.contrib import messages
-from past.utils import old_div
-
 import pytz
 from django.conf import settings
+from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext, ugettext_lazy as _
+from past.utils import old_div
 
 from action.models import Action
 from action.payloads import action_session_dictionary

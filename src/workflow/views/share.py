@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from logs.models import Log
-from ontask.decorators import get_workflow, ajax_required
+from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import is_instructor
 from workflow.forms import SharedForm
 from workflow.models import Workflow

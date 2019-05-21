@@ -52,10 +52,14 @@ def row_update(
 
         # Create the query to update the row
         set_pairs = {}
-        unique_names = workflow.get_unique_columns().values_list('name', flat=True)
+        unique_names = workflow.get_unique_columns().values_list(
+            'name',
+            flat=True)
         filter_pair = {}
         log_payload = []
-        for idx, colname in enumerate(unique_names):
+        for idx, colname in enumerate(
+            [col.name for col in workflow.columns.all()]
+        ):
             value = row_form.cleaned_data[FIELD_PREFIX + '%s' % idx]
             set_pairs[colname] = value
             log_payload.append((colname, str(value)))

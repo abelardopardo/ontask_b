@@ -7,11 +7,11 @@ from builtins import zip
 import numpy as np
 import pandas as pd
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _, gettext
+from django.utils.translation import gettext, ugettext_lazy as _
 
 from dataops.formula import evaluation
-from dataops.pandas.datatypes import pandas_datatype_names
 from dataops.pandas.columns import are_unique_columns, is_unique_column
+from dataops.pandas.datatypes import pandas_datatype_names
 from dataops.pandas.db import store_table
 from dataops.sql.column_queries import get_df_column_types
 from dataops.sql.row_queries import get_rows

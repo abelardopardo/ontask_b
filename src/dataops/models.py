@@ -21,7 +21,6 @@ class PluginRegistry(models.Model):
     # file in the server
     filename = models.CharField(
         max_length=FIELD_LENGTH,
-        null=False,
         blank=False,
         unique=True,
     )
@@ -94,7 +93,6 @@ class SQLConnection(models.Model):
     name = models.CharField(
         verbose_name=_('Name'),
         max_length=FIELD_LENGTH,
-        null=False,
         blank=False,
         unique=True)
 
@@ -110,7 +108,6 @@ class SQLConnection(models.Model):
         verbose_name=_('Type'),
         max_length=FIELD_LENGTH,
         blank=False,
-        null=False,
         help_text=_('Postgresql, Mysql, etc.'))
 
     # Connection driver
@@ -153,16 +150,14 @@ class SQLConnection(models.Model):
         max_length=FIELD_LENGTH,
         verbose_name=_('DB name'),
         default='',
-        blank=False,
-        null=False)
+        blank=False)
 
     # DB table name
     db_table = models.CharField(
         max_length=FIELD_LENGTH,
         verbose_name=_('Table'),
         default='',
-        blank=False,
-        null=False)
+        blank=False)
 
     def __str__(self):
         """Render with name field."""

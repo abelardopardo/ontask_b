@@ -4,19 +4,18 @@
 import datetime
 import io
 import os
+import test
 
-from django.conf import settings
 import pandas as pd
+from django.conf import settings
 
 from action.models import Action
 from dataops.forms.upload import load_df_from_csvfile
 from dataops.formula import EVAL_EXP, evaluate_formula
 from dataops.pandas import (
-    get_subframe, load_table,
-    perform_dataframe_upload_merge, store_table,
+    get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
 from dataops.sql import get_rows, get_select_query_txt
-import test
 from workflow.models import Workflow
 
 

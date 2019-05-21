@@ -16,7 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_view, get_workflow, ajax_required
+from ontask.decorators import ajax_required, get_view, get_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from table.forms import ViewAddForm

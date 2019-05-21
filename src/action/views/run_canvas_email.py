@@ -5,6 +5,7 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
+import pytz
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -12,7 +13,6 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
-import pytz
 
 from action.forms import CanvasEmailActionForm
 from action.models import Action

@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from action.models import Condition
 from logs.models import Log
-from ontask.decorators import get_workflow, ajax_required
+from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import is_instructor
 from workflow.forms import AttributeItemForm
 from workflow.models import Workflow

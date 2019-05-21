@@ -2,10 +2,11 @@
 
 """Views to manipulate the CRUD for scheduled exections."""
 
-from builtins import object
 import json
+from builtins import object
 from typing import Optional
 
+import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
@@ -16,13 +17,12 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
-import django_tables2 as tables
 
 from action.models import Action
 from action.payloads import action_session_dictionary
 from logs.models import Log
 from ontask.celery import celery_is_up
-from ontask.decorators import get_workflow, ajax_required
+from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from scheduler.models import ScheduledAction

@@ -21,7 +21,7 @@ from dataops.pandas import check_wf_df, load_table, store_dataframe
 from logs.models import Log
 from ontask import create_new_name
 from ontask.celery import celery_is_up
-from ontask.decorators import access_workflow, get_workflow, ajax_required
+from ontask.decorators import access_workflow, ajax_required, get_workflow
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.forms import WorkflowForm
 from workflow.models import Workflow
@@ -81,12 +81,12 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
     def get_object(self, queryset=None):
         """Get the current object."""
-        old_obj = super().get_object(queryset=queryset)
+        # old_obj = super().get_object(queryset=queryset)
 
         # Check if the workflow is locked
         workflow = access_workflow(
             self.request,
-            old_obj.id,
+            None,
             prefetch_related=['actions', 'columns'])
 
         return workflow
