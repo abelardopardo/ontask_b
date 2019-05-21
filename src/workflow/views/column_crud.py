@@ -140,7 +140,7 @@ def column_add(
         # Catch the special case of integer type and no initial value. Pandas
         # encodes it as NaN but a cycle through the database transforms it into
         # a string. To avoid this case, integer + empty value => double
-        if column.data_type == 'integer' and not column_initial_value:
+        if column.data_type == 'integer' and column_initial_value is None:
             column.data_type = 'double'
 
         # Fill in the remaining fields in the column
