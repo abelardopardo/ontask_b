@@ -4,15 +4,14 @@
 
 from builtins import object
 
-import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
-from django.db import IntegrityError
-from django.http import JsonResponse, HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
+import django_tables2 as tables
 
 from dataops.forms import SQLConnectionForm
 from dataops.models import SQLConnection
@@ -93,7 +92,8 @@ class SQLConnectionTableRun(tables.Table):
 def save_conn_form(
     request: HttpRequest,
     form,
-    template_name: str) -> JsonResponse:
+    template_name: str
+) -> JsonResponse:
     """Save the connection provided in the form.
 
     :param request: HTTP request
@@ -115,24 +115,10 @@ def save_conn_form(
     # If it is a POST and it is correct
     if request.method == 'POST' and form.is_valid():
 
-        # Correct POST submission
-        try:
-            conn = form.save()
-        except IntegrityError:
-            form.add_error(
-                'name',
-                _('A connection with this name already exists'))
-            return JsonResponse({
-                'html_form': render_to_string(
-                    template_name,
-                    {
-                        'form': form,
-                        'id': form.instance.id,
-                        'add': is_add,
-                    },
-                    request=request,
-                ),
-            })
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+
+        conn = form.save()
 
         # Log the event
         Log.objects.register(

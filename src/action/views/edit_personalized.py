@@ -201,8 +201,9 @@ def showurl(
                 {'id': action.id,
                  'name': action.name,
                  'serve_enabled': action.serve_enabled})
+            return JsonResponse({'html_redirect': reverse('action:index')})
 
-        return JsonResponse({'html_redirect': reverse('action:index')})
+        return JsonResponse({'html_redirect': None})
 
     # Create the text for the action
     url_text = reverse('action:serve', kwargs={'action_id': action.pk})

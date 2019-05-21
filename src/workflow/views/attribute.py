@@ -41,6 +41,8 @@ def save_attribute_form(
     """
     if request.method == 'POST' and form.is_valid():
         # Correct form submitted
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
 
         # proceed with updating the attributes.
         wf_attributes = workflow.attributes

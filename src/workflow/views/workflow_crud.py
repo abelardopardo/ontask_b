@@ -145,6 +145,9 @@ def save_workflow_form(
     :return:
     """
     if request.method == 'POST' and form.is_valid():
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+
         if form.instance.id:
             log_type = Log.WORKFLOW_UPDATE
             redirect_url = ''

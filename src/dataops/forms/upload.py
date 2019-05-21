@@ -359,6 +359,22 @@ class SQLConnectionForm(forms.ModelForm):
     dialect[+driver]://user:password@host/dbname[?key=value..]
     """
 
+    def clean(self):
+        """Validate the initial value."""
+        form_data = super().clean()
+
+        # Check if the name already exists
+        name_exists = SQLConnection.objects.filter(
+            name=self.cleaned_data['name'],
+        ).exclude(id=self.instance.id).exists()
+        if name_exists:
+            self.add_error(
+                'name',
+                _('There is already a connection with this name.'),
+            )
+
+        return form_data
+
     class Meta(object):
         """Define the model and the fields to manipulate."""
 

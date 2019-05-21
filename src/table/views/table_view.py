@@ -266,6 +266,10 @@ def save_view_form(
     :return: AJAX Response
     """
     if request.method == 'POST' and form.is_valid():
+
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+
         # Correct POST submission
         view = form.save(commit=False)
         view.workflow = form.workflow

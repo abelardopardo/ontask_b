@@ -130,6 +130,7 @@ def column_add(
         form = ColumnAddForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
+
         # Processing now a valid POST request
         # Access the updated information
         column_initial_value = form.initial_valid_value
@@ -530,39 +531,39 @@ def column_edit(
             instance=column)
 
     if request.method == 'POST' and form.is_valid():
-        # Process further only if any data changed.
-        if form.changed_data:
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
 
-            # Some field changed value, so save the result, but
-            # no commit as we need to propagate the info to the df
-            column = form.save(commit=False)
+        # Some field changed value, so save the result, but
+        # no commit as we need to propagate the info to the df
+        column = form.save(commit=False)
 
-            # If there is a new name, rename the data frame columns
-            if form.old_name != form.cleaned_data['name']:
-                db_rename_column(
-                    workflow.get_data_frame_table_name(),
-                    form.old_name,
-                    column.name)
-                rename_df_column(workflow, form.old_name, column.name)
+        # If there is a new name, rename the data frame columns
+        if form.old_name != form.cleaned_data['name']:
+            db_rename_column(
+                workflow.get_data_frame_table_name(),
+                form.old_name,
+                column.name)
+            rename_df_column(workflow, form.old_name, column.name)
 
-            if form.old_position != form.cleaned_data['position']:
-                # Update the positions of the appropriate columns
-                workflow.reposition_columns(form.old_position, column.position)
+        if form.old_position != form.cleaned_data['position']:
+            # Update the positions of the appropriate columns
+            workflow.reposition_columns(form.old_position, column.position)
 
-            # Save the column information
-            column.save()
+        # Save the column information
+        column.save()
 
-            # Go back to the DB because the prefetch columns are not valid
-            # any more
-            workflow = Workflow.objects.prefetch_related('columns').get(
-                id=workflow.id,
-            )
+        # Go back to the DB because the prefetch columns are not valid
+        # any more
+        workflow = Workflow.objects.prefetch_related('columns').get(
+            id=workflow.id,
+        )
 
-            # Changes in column require rebuilding the query_builder_ops
-            workflow.set_query_builder_ops()
+        # Changes in column require rebuilding the query_builder_ops
+        workflow.set_query_builder_ops()
 
-            # Save the workflow
-            workflow.save()
+        # Save the workflow
+        workflow.save()
 
         # Log the event
         if is_question:

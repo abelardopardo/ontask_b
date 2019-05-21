@@ -37,23 +37,22 @@ def share_create(
         user=request.user,
         workflow=workflow)
 
-    if request.method == 'POST':
-        if form.is_valid():
-            # proceed with the update
-            workflow.shared.add(form.user_obj)
-            workflow.save()
+    if request.method == 'POST' and form.is_valid():
+        # proceed with the update
+        workflow.shared.add(form.user_obj)
+        workflow.save()
 
-            # Log the event
-            Log.objects.register(
-                request.user,
-                Log.WORKFLOW_SHARE_ADD,
-                workflow,
-                {
-                    'id': workflow.id,
-                    'name': workflow.name,
-                    'user_email': form.user_obj.email})
+        # Log the event
+        Log.objects.register(
+            request.user,
+            Log.WORKFLOW_SHARE_ADD,
+            workflow,
+            {
+                'id': workflow.id,
+                'name': workflow.name,
+                'user_email': form.user_obj.email})
 
-            return JsonResponse({'html_redirect': ''})
+        return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({
         'html_form': render_to_string(

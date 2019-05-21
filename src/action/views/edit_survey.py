@@ -329,6 +329,9 @@ def edit_description(
         instance=action)
 
     if request.method == 'POST' and form.is_valid():
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+
         action.save()
 
         # Log the event
