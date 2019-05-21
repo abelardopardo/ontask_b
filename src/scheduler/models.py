@@ -75,7 +75,6 @@ class ScheduledAction(models.Model):
     status = models.CharField(
         name='status',
         max_length=256,
-        null=False,
         blank=False,
         choices=SCHEDULED_STATUS,
         verbose_name=_('Execution Status'))

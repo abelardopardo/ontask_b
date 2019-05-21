@@ -20,7 +20,7 @@ class BaseProfile(models.Model):
                                 upload_to='profile_pics/%Y-%m-%d/',
                                 null=True,
                                 blank=True)
-    bio = models.CharField("Short Bio", max_length=200, blank=True, null=True)
+    bio = models.CharField("Short Bio", max_length=200, blank=True, default='')
     email_verified = models.BooleanField(_("Email verified"), default=False)
 
     class Meta(object):

@@ -124,10 +124,10 @@ class Action(models.Model):
     # PERSONALIZED_JSON
     #
     # Text to be personalised for action OUT
-    text_content = models.TextField(default='', null=False, blank=True)
+    text_content = models.TextField(default='', blank=True)
 
     # URL for PERSONALIZED_JSON actions
-    target_url = models.TextField(default='', null=True, blank=True)
+    target_url = models.TextField(default='', blank=True)
 
     #
     # Fields for action SURVEY and TODO_LIST
