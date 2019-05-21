@@ -19,7 +19,7 @@ from workflow.models import Workflow
 @get_workflow(pf_related='logs')
 def show_timeline(
     request: HttpRequest,
-    pk: Optional[int],
+    pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
     """Show a vertical timeline of action executions.
