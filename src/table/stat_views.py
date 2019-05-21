@@ -333,14 +333,13 @@ def stat_table_view(
         return redirect('worflow:detail', workflow.id)
 
     # If a view is given, filter the columns
-    columns_to_view = workflow.columns.all()
     view = None
     if pk:
         view = workflow.views.filter(pk=pk).first()
         if not view:
             # View not found. Redirect to workflow detail
             return redirect('home')
-        columns_to_view = view.columns.all()
+        columns_to_view = view.columns.filter(is_key=False)
 
         df = load_table(
             workflow.get_data_frame_table_name(),
@@ -348,6 +347,7 @@ def stat_table_view(
             view.formula)
     else:
         # No view given, fetch the entire data frame
+        columns_to_view = workflow.columns.filter(is_key=False)
         df = load_table(workflow.get_data_frame_table_name())
 
     vis_scripts = []

@@ -23,16 +23,22 @@
       {% else %}
         {% trans 'Dashboard' %}
       {% endif %}</h1>
+    {% if visualizations %}
+      <div class="text-center my-3">
+        <a href="{{ request.META.HTTP_REFERER }}"
+             class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+      </div>
+    {% endif %}
     <div class="text-center">
-      <a href="{{ request.META.HTTP_REFERER }}"
-           class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+      {% if visualizations %}
+        {% for vis_item in visualizations %}
+          {{ vis_item|safe }}
+        {% endfor %}
+      {% else %}
+        <p class="lead my-3">{% trans 'There is no data to show in the dashboard' %}</p>
+      {% endif %}
     </div>
-    <div class="text-center">
-      {% for vis_item in visualizations %}
-        {{ vis_item|safe }}
-      {% endfor %}
-    </div>
-    <div class="text-center">
+    <div class="text-center my-3">
       <a href="{{ request.META.HTTP_REFERER }}"
            class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
     </div>
