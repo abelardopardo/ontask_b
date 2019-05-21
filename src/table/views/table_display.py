@@ -20,7 +20,7 @@ from pytz import timezone
 
 from core.datatables import DataTablesServerSidePaging
 from dataops.sql import delete_row, search_table
-from ontask.decorators import get_view, get_workflow, ajax_required
+from ontask.decorators import ajax_required, get_view, get_workflow
 from ontask.permissions import is_instructor
 from table.models import View
 from visualizations.plotly import PlotlyHandler
@@ -68,6 +68,7 @@ def _render_table_display_page(
             col.data_type for col in columns])
         context['columns_datatables'] = [{'data': 'Operations'}] + [
             {'data': col.name.replace('.', '\\.')} for col in columns]
+        context['stat_columns'] = workflow.columns.filter(is_key=False)
     else:
         context['columns'] = None
         context['columns_datatables'] = []
