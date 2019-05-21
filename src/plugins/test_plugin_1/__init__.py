@@ -11,6 +11,8 @@ class_name = 'OnTaskTestPlugin'
 
 # The class must have the name stored in the previous field and must inherit
 # from OnTaskPluginAbstract
+
+
 class OnTaskTestPlugin(OnTaskPluginAbstract):
     """
     Example of a class that implements the OnTask plugin interface. The
@@ -89,7 +91,8 @@ class OnTaskTestPlugin(OnTaskPluginAbstract):
         self.output_column_names = ['RESULT 1', 'RESULT 2']
         # Example of how to use the parameters field (not used)
         self.parameters = [
-            ('param string', 'string', ['v1', 'v2'], 'v1', 'help param string'),
+            ('param string', 'string', [
+             'v1', 'v2'], 'v1', 'help param string'),
             ('param integer', 'integer', [], None, 'help param integer'),
             ('param double',
              'double',

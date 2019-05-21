@@ -570,7 +570,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_link_text('Row').click()
 
         # Fill out the fields in the form
-        for x in range(0,10):
+        for x in range(0, 10):
             keyelem = self.selenium.find_element_by_id(
                 'id____ontask___upload_{0}'.format(x)
             )

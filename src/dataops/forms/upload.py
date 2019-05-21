@@ -340,7 +340,8 @@ class UploadS3FileForm(UploadBasic):
         except Exception as exc:
             self.add_error(
                 None,
-                _('S3 bucket file could not be processed: {0}').format(str(exc)),
+                _('S3 bucket file could not be processed: {0}').format(
+                    str(exc)),
             )
             return resp_data
 

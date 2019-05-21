@@ -61,6 +61,7 @@ class EmailActionTracking(test.OnTaskTestCase):
             for uemail in [x[1] for x in test.user_info
                            if x[1].startswith('student')]:
                 self.assertEqual(
-                    int(df.loc[df['email'] == uemail, 'EmailRead_1'].values[0]),
+                    int(df.loc[df['email'] == uemail,
+                               'EmailRead_1'].values[0]),
                     idx
                 )

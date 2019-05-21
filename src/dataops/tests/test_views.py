@@ -139,7 +139,8 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 
         # Set some parameters
         self.select_parameters_tab()
-        self.click_dropdown_option("//div[@id='select-key-column-name']", 'sid')
+        self.click_dropdown_option(
+            "//div[@id='select-key-column-name']", 'sid')
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
@@ -160,7 +161,8 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         element.find_element_by_link_text("Run").click()
         # Wait for paging widget
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
+            EC.presence_of_element_located(
+                (By.ID, 'actioninrun-data_previous'))
         )
 
         # Enter data using the RUN menu. Select one entry to populate
@@ -185,7 +187,8 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
             "//div[@id='action-row-datainput']//form//button").click()
         # Wait for paging widget
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'actioninrun-data_previous'))
+            EC.presence_of_element_located(
+                (By.ID, 'actioninrun-data_previous'))
         )
 
         # Go Back to the action table
@@ -225,7 +228,8 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('js-action-preview').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'js-action-preview-nxt'))
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'js-action-preview-nxt'))
         )
 
         # Certain name should be in the page now.
@@ -703,7 +707,8 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         # Put the suffix _2
         self.selenium.find_element_by_id("id_out_column_suffix").click()
         self.selenium.find_element_by_id("id_out_column_suffix").clear()
-        self.selenium.find_element_by_id("id_out_column_suffix").send_keys("_2")
+        self.selenium.find_element_by_id(
+            "id_out_column_suffix").send_keys("_2")
 
         # Submit the execution
         self.selenium.find_element_by_name("Submit").click()
@@ -832,7 +837,8 @@ class DataopsMergeBasic(test.OnTaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
-        self.selenium.find_element_by_id('id_data_file').send_keys(self.merge_file)
+        self.selenium.find_element_by_id(
+            'id_data_file').send_keys(self.merge_file)
 
         # Click the NEXT button
         self.selenium.find_element_by_xpath(

@@ -9,4 +9,5 @@ from .models import OnTaskUser
 class OnTaskUserAdmin(admin.ModelAdmin):
     pass
 
+
 admin.site.register(OnTaskUser, OnTaskUserAdmin)

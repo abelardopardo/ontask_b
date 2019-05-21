@@ -90,7 +90,7 @@ class TableBasicOps(APIView):
     ) -> HttpResponse:
         serializer = self.serializer_class(
             {'data_frame':
-                 load_table(workflow.get_data_frame_table_name())
+             load_table(workflow.get_data_frame_table_name())
              }
         )
         return Response(serializer.data)
@@ -243,7 +243,7 @@ class TableBasicMerge(APIView):
         # Try to retrieve the wflow to check for permissions
         serializer = self.serializer_class(
             {'src_df':
-                 load_table(workflow.get_data_frame_table_name()),
+             load_table(workflow.get_data_frame_table_name()),
              'how': '',
              'left_on': '',
              'right_on': ''}

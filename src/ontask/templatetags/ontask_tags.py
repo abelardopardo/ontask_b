@@ -50,7 +50,7 @@ datetimepicker_css = \
 
 datetimepicker_js = \
     '<script type="text/javascript" src="{0}"></script>'.format(
-      static('site/js/moment-with-locales.js')
+        static('site/js/moment-with-locales.js')
     ) + """<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="{0}"></script>""".format(
         static('bootstrap_datepicker_plus/js/datepicker-widget.js')
@@ -70,9 +70,11 @@ shim_and_respond = \
 def ontask_version():
     return ontask.__version__
 
+
 @register.filter
 def country(value):
     return value[0:value.find("-")]
+
 
 @register.simple_tag
 def ontask_jquery():

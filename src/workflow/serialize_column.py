@@ -13,7 +13,7 @@ from workflow.models import Column
 try:
     profile  # noqa: Z444
 except NameError:
-    profile = lambda bogus_param: bogus_param  # noqa: E731
+    def profile(bogus_param): return bogus_param  # noqa: E731
 
 
 class ColumnSerializer(serializers.ModelSerializer):

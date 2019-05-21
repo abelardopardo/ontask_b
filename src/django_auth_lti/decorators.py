@@ -15,7 +15,7 @@ def lti_role_required(allowed_roles,
         def _wrapped_view(request, *args, **kwargs):
             if is_allowed(request, allowed_roles, raise_exception):
                 return view_func(request, *args, **kwargs)
-            
+
             return redirect(redirect_url)
         return _wrapped_view
     return decorator

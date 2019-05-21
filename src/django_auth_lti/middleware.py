@@ -103,8 +103,10 @@ class LTIAuthMiddleware(object):
                 }
                 # If a custom role key is defined in project, merge into existing role list
                 if hasattr(settings, 'LTI_CUSTOM_ROLE_KEY'):
-                    custom_roles = request.POST.get(settings.LTI_CUSTOM_ROLE_KEY, '').split(',')
-                    lti_launch['roles'] += [_f for _f in custom_roles if _f]  # Filter out any empty roles
+                    custom_roles = request.POST.get(
+                        settings.LTI_CUSTOM_ROLE_KEY, '').split(',')
+                    # Filter out any empty roles
+                    lti_launch['roles'] += [_f for _f in custom_roles if _f]
 
                 request.session['LTI_LAUNCH'] = lti_launch
 
@@ -133,7 +135,7 @@ class LTIAuthMiddleware(object):
         try:
             logger.debug(
                 _('calling the backend {0} clean_username with {1}').format(
-                backend, username
+                    backend, username
                 )
             )
             username = backend.clean_username(username)

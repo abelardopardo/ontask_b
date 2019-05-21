@@ -66,7 +66,8 @@ def column_to_field(col, initial=None, required=False, label=None):
         new_field.initial = ''
 
     if col.data_type == 'datetime':
-        new_field.widget = DateTimePickerInput(options=date_time_widget_options)
+        new_field.widget = DateTimePickerInput(
+            options=date_time_widget_options)
 
     return new_field
 

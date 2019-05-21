@@ -108,7 +108,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH,
-                 "//h5[contains(@class, 'card-header') " \
+                 "//h5[contains(@class, 'card-header') "
                  "and normalize-space(text()) = '{0}']".format('newwf')),
             )
         )

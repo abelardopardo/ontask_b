@@ -14,6 +14,7 @@ from django.contrib.auth.models import Group
 
 ___doc___ = """Script to create users. Execute without parameters for help"""
 
+
 def get_column_value_list(filenames, column_name, debug=False):
     """
     Function that given a set of filenames returns the list of values
@@ -95,7 +96,7 @@ def create_users(emails, password, group=None, debug=False):
         # Get or create the user
         user, created = get_user_model().objects.get_or_create(email=email)
         if created:
-            user.name ='User Name'
+            user.name = 'User Name'
             user.set_password(password)
             user.save()
 

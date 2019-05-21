@@ -15,4 +15,5 @@ class OnTaskOAuthUserTokensAdmin(admin.ModelAdmin):
                     'modified',
                     'valid_until')
 
+
 admin.site.register(OnTaskOAuthUserTokens, OnTaskOAuthUserTokensAdmin)

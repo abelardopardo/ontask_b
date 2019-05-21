@@ -449,7 +449,8 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id('id_key').clear()
         self.selenium.find_element_by_id('id_key').send_keys('newkey2')
         self.selenium.find_element_by_id('id_attr_value').clear()
-        self.selenium.find_element_by_id('id_attr_value').send_keys('newvalue2')
+        self.selenium.find_element_by_id(
+            'id_attr_value').send_keys('newvalue2')
 
         # Click in the submit button
         self.selenium.find_element_by_xpath(

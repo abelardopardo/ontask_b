@@ -8,15 +8,15 @@ from ontask.tasks.basic import get_execution_items, get_log_item
 
 @shared_task
 def run_plugin_task(
-    user_id,
-    workflow_id,
-    plugin_id,
-    input_column_names,
-    output_column_names,
-    output_suffix,
-    merge_key,
-    parameters,
-    log_id):
+        user_id,
+        workflow_id,
+        plugin_id,
+        input_column_names,
+        output_column_names,
+        output_suffix,
+        merge_key,
+        parameters,
+        log_id):
     """
 
     Execute the run method in a plugin with the dataframe from the given

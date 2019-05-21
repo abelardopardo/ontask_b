@@ -17,7 +17,7 @@ from workflow.serialize_column import ColumnSerializer
 try:
     profile  # noqa: Z444
 except NameError:
-    profile = lambda bogus: bogus  # noqa: E731
+    def profile(bogus): return bogus  # noqa: E731
 
 
 class WorkflowListSerializer(serializers.ModelSerializer):

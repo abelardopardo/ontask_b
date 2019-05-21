@@ -100,7 +100,7 @@ def create_db_engine(
         paramstyle='format')
 
 
-def destroy_db_engine(db_engine = None):
+def destroy_db_engine(db_engine=None):
     """Destroys the DB SQAlchemy engine.
 
     :param db_engine: Engine to destroy
@@ -113,6 +113,7 @@ def destroy_db_engine(db_engine = None):
         db_engine.dispose()
     else:
         engine.dispose()
+
 
 def load_table(
     table_name: str,

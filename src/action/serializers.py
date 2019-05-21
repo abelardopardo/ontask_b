@@ -16,7 +16,7 @@ from workflow.serialize_column import ColumnNameSerializer, ColumnSerializer
 try:
     profile  # noqa: Z444
 except NameError:
-    profile = lambda x: x # noqa E731
+    def profile(x): return x  # noqa E731
 
 
 def create_columns(new_columns, context):
@@ -334,7 +334,7 @@ class ActionSerializer(serializers.ModelSerializer):
                 active_to=validated_data['active_to'],
                 text_content=validated_data.get(
                     'content',
-                    validated_data.get('text_content')  # Legacy
+                    validated_data.get('text_content'),  # Legacy
                 ),
                 target_url=validated_data.get('target_url'),
                 shuffle=validated_data.get('shuffle', False),

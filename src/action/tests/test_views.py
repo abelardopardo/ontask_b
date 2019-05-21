@@ -499,7 +499,8 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Introduce text and then the URL
         self.select_json_text_tab()
-        self.selenium.find_element_by_id('id_text_content').send_keys(content_txt)
+        self.selenium.find_element_by_id(
+            'id_text_content').send_keys(content_txt)
         self.selenium.find_element_by_id('id_target_url').send_keys(target_url)
 
         # Save action and back to action index

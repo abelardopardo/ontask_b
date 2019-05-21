@@ -2,9 +2,9 @@ import oauth2
 
 
 class RequestValidatorMixin:
-    '''
+    """
     A 'mixin' for OAuth request validation.
-    '''
+    """
 
     def __init__(self):
         super().__init__()
@@ -17,11 +17,11 @@ class RequestValidatorMixin:
 
     def is_valid_request(self, request, parameters=dict,
                          fake_method=None, handle_error=True):
-        '''
+        """
         Validates an OAuth request using the python-oauth2 library:
             https://github.com/simplegeo/python-oauth2
 
-        '''
+        """
         try:
             # Set the parameters to be what we were passed earlier
             # if we didn't get any passed to us now
@@ -56,7 +56,7 @@ class RequestValidatorMixin:
         return True
 
     def parse_request(self, request, parameters, fake_method=None):
-        '''
+        """
         This must be implemented for the framework you're using
 
         Returns a tuple: (method, url, headers, parameters)
@@ -64,25 +64,25 @@ class RequestValidatorMixin:
         url is the full absolute URL of the request
         headers is a dictionary of any headers sent in the request
         parameters are the parameters sent from the LMS
-        '''
+        """
         raise NotImplementedError
 
     def valid_request(self, request):
-        '''
+        """
         Check whether the OAuth-signed request is valid and throw error if not.
-        '''
+        """
         self.is_valid_request(request, parameters={}, handle_error=False)
 
 
 class FlaskRequestValidatorMixin(RequestValidatorMixin):
-    '''
+    """
     A mixin for OAuth request validation using Flask
-    '''
+    """
 
     def parse_request(self, request, parameters, fake_method=None):
-        '''
+        """
         Parse Flask request
-        '''
+        """
         return (request.method,
                 request.url,
                 request.headers,
@@ -90,14 +90,14 @@ class FlaskRequestValidatorMixin(RequestValidatorMixin):
 
 
 class DjangoRequestValidatorMixin(RequestValidatorMixin):
-    '''
+    """
     A mixin for OAuth request validation using Django
-    '''
+    """
 
     def parse_request(self, request, parameters, fake_method=None):
-        '''
+        """
         Parse Django request
-        '''
+        """
         return (fake_method or request.method,
                 request.build_absolute_uri(),
                 request.META,

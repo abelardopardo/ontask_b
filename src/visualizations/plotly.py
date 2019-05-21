@@ -151,7 +151,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
         # Special case for bool and datetime. Turn into strings to be
         # treated as such
         if column_dtype == 'boolean' or column_dtype == 'datetime' or \
-            column_dtype == 'string':
+                column_dtype == 'string':
             data_list = [str(x) for x in data_list]
 
         data.append(

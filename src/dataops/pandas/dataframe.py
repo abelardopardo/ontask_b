@@ -116,7 +116,6 @@ def _realign_column_info(workflow, data_frame):
                 'New values in column {0} are not in categories {1}',
             ).format(col.name, ', '.join(col.categories)))
 
-
         # Remove this column name from wf_col_names
         df_column_names.remove(col.name)
 

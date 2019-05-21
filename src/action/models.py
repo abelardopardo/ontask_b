@@ -15,7 +15,7 @@ from django.db import models
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
 
-import dataops.sql.row_queries
+from dataops.sql import get_num_rows, select_ids_all_false
 import ontask
 from dataops.formula import EVAL_TXT, evaluate_formula, evaluation
 from logs.models import Log
@@ -305,7 +305,6 @@ class Action(models.Model):
                 cond.formula, old_name, new_name)
             cond.save()
 
-
     def update_n_rows_selected(self, filter_formula=None, column=None):
         """Reset the field n_rows_selected in all conditions.
 
@@ -364,7 +363,7 @@ class Action(models.Model):
             # Workflow has a data frame and condition list is non empty
 
             # Get the list of indeces
-            self.rows_all_false = dataops.sql.row_queries.select_ids_all_false(
+            self.rows_all_false = select_ids_all_false(
                 self.workflow.get_data_frame_table_name(),
                 filter_item.formula if filter_item else None,
                 cond_list.values_list('formula', flat=True),
@@ -469,7 +468,7 @@ class Condition(models.Model):
                 'valid': True,
             }
 
-        new_count = dataops.sql.row_queries.get_num_rows(
+        new_count = get_num_rows(
             self.action.workflow.get_data_frame_table_name(),
             formula,
         )

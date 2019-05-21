@@ -60,8 +60,8 @@ class EditProfile(LoginRequiredMixin, generic.TemplateView):
             user_form = forms.UserForm(instance=user)
             profile_form = forms.ProfileForm(instance=user.profile)
             return super().get(request,
-                                                user_form=user_form,
-                                                profile_form=profile_form)
+                               user_form=user_form,
+                               profile_form=profile_form)
         # Both forms are fine. Time to save!
         user_form.save()
         profile = profile_form.save(commit=False)

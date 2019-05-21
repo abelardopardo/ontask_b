@@ -386,8 +386,10 @@ class FormulaEvaluation(test.OnTaskTestCase):
                         '1',
                         None,
                         None)
-        self.do_operand('number', 'greater_or_equal', 'double', '1.2', 3.2, 0.2)
-        self.do_operand('number', 'greater_or_equal', 'double', '1.2', 1.2, 0.2)
+        self.do_operand('number', 'greater_or_equal',
+                        'double', '1.2', 3.2, 0.2)
+        self.do_operand('number', 'greater_or_equal',
+                        'double', '1.2', 1.2, 0.2)
         self.do_operand('number',
                         'greater_or_equal',
                         'double',

@@ -3,6 +3,8 @@
 """Data types considered in OnTask and its relation with Pandas data types"""
 
 # Translation between pandas data type names, and those handled in OnTask
+
+
 class TypeDict(dict):
     """Class to detect multiple datetime types in Pandas."""
 

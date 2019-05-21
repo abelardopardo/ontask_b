@@ -25,7 +25,7 @@ class LoginForm(AuthenticationForm):
             Submit('sign_in', _("Log in"),
                    css_class="btn btn-lg btn-outline-primary btn-block"),
             HTML('<a href="{}">Forgot Password?</a>'.format(
-               reverse("accounts:password-reset"))),
+                reverse("accounts:password-reset"))),
             Field('remember_me'),
         )
 
@@ -43,7 +43,7 @@ class SignupForm(authtoolsforms.UserCreationForm):
             Field('password1', placeholder="Enter Password"),
             Field('password2', placeholder="Re-enter Password"),
             Submit('sign_up', 'Sign up', css_class="btn-warning"),
-            )
+        )
 
 
 class PasswordChangeForm(authforms.PasswordChangeForm):
@@ -60,7 +60,7 @@ class PasswordChangeForm(authforms.PasswordChangeForm):
             Submit('pass_change',
                    'Change Password',
                    css_class="btn-outline-primary"),
-            )
+        )
 
 
 class PasswordResetForm(authtoolsforms.FriendlyPasswordResetForm):
@@ -75,7 +75,7 @@ class PasswordResetForm(authtoolsforms.FriendlyPasswordResetForm):
             Submit('pass_reset',
                    'Reset Password',
                    css_class="btn-outline-primary"),
-            )
+        )
 
 
 class SetPasswordForm(authforms.SetPasswordForm):
@@ -90,4 +90,4 @@ class SetPasswordForm(authforms.SetPasswordForm):
             Submit('pass_change',
                    'Change Password',
                    css_class="btn-outline-primary"),
-            )
+        )

@@ -22,6 +22,7 @@ GET_CONSTANT = {
     'datetime': lambda operand: parse_datetime(operand),
 }
 
+
 def value_is_null(var_value):
     """Check if the value is None or NaN."""
     return var_value is None or pd.isna(var_value)

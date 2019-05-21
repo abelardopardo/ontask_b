@@ -24,7 +24,8 @@ class ResourceLinkIdNode(template.Node):
                       "{0}").format(json.dumps(request.LTI, indent=4))
                 )
         else:
-            logger.warning(_("Failed to get current request from thread_local"))
+            logger.warning(
+                _("Failed to get current request from thread_local"))
         return ''
 
 

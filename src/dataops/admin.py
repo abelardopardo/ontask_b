@@ -28,5 +28,6 @@ class SQLConnectionAdmin(admin.ModelAdmin):
                     'db_name',
                     'db_table')
 
+
 admin.site.register(PluginRegistry, PluginRegistryAdmin)
 admin.site.register(SQLConnection, SQLConnectionAdmin)

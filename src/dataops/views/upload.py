@@ -28,7 +28,8 @@ def upload_s2(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    """
+    """Second step of the upload process.
+
     The four step process will populate the following dictionary with name
     upload_data (divided by steps in which they are set
 
@@ -53,6 +54,7 @@ def upload_s2(
     keep_key_column: Boolean list with those key columns that need to be kept.
 
     :param request: Web request
+
     :return: the dictionary upload_data in the session object
     """
     # Get the dictionary to store information about the upload
@@ -63,15 +65,17 @@ def upload_s2(
         # jump to this step, get back to the dataops page
         return redirect('dataops:uploadmerge')
 
-    # Get the column names, types, and those that are unique from the data frame
+    # Get the column names, types, and those that are unique from the data
+    # frame
     try:
         initial_columns = upload_data.get('initial_column_names')
         column_types = upload_data.get('column_types')
         src_is_key_column = upload_data.get('src_is_key_column')
     except KeyError:
         # The page has been invoked out of order
-        return redirect(upload_data.get('step_1',
-                                        reverse('dataops:uploadmerge')))
+        return redirect(upload_data.get(
+            'step_1',
+            reverse('dataops:uploadmerge')))
 
     # Get or create the list with the renamed column names
     rename_column_names = upload_data.get('rename_column_names')
@@ -110,24 +114,26 @@ def upload_s2(
 
     # Create one of the context elements for the form. Pack the lists so that
     # they can be iterated in the template
-    df_info = [list(i) for i in zip(load_fields,
-                                    initial_columns,
-                                    newname_fields,
-                                    column_types,
-                                    src_key_fields)]
+    df_info = [list(i) for i in zip(
+        load_fields,
+        initial_columns,
+        newname_fields,
+        column_types,
+        src_key_fields)]
 
     if request.method == 'POST' and form.is_valid():
 
-        # We need to modify upload_data with the information received in the post
-        for i in range(len(initial_columns)):
-            new_name = form.cleaned_data['new_name_%s' % i]
-            upload_data['rename_column_names'][i] = new_name
-            upload = form.cleaned_data['upload_%s' % i]
-            upload_data['columns_to_upload'][i] = upload
+        # We need to modify upload_data with the information received in the
+        # post
+        for idx in range(len(initial_columns)):
+            new_name = form.cleaned_data['new_name_%s' % idx]
+            upload_data['rename_column_names'][idx] = new_name
+            upload = form.cleaned_data['upload_%s' % idx]
+            upload_data['columns_to_upload'][idx] = upload
 
-            if src_is_key_column[i]:
+            if src_is_key_column[idx]:
                 # If the column is key, check if the user wants to keep it
-                keep_key_column[i] = form.cleaned_data['make_key_%s' % i]
+                keep_key_column[idx] = form.cleaned_data['make_key_%s' % idx]
 
         # Update the dictionary with the session information
         request.session['upload_data'] = upload_data
@@ -139,13 +145,13 @@ def upload_s2(
             # This is a merge operation, so move to Step 3
             return redirect('dataops:upload_s3')
 
-        # This is an upload operation (not a merge) save the uploaded dataframe in
-        # the DB and finish.
+        # This is an upload operation (not a merge) save the uploaded
+        # dataframe in the DB and finish.
 
         # Get the uploaded data_frame
         try:
             data_frame = load_table(
-                workflow.get_data_frame_upload_table_name()
+                workflow.get_data_frame_upload_table_name(),
             )
         except Exception:
             return render(
@@ -163,7 +169,7 @@ def upload_s2(
             # Something went wrong. Flag it and reload
             form.error(
                 None,
-                'Unable to perform merge: {0}'.format(str(exc))
+                'Unable to perform merge: {0}'.format(str(exc)),
             )
             context = {
                 'form': form,
@@ -181,27 +187,29 @@ def upload_s2(
 
         # Log the event
         col_info = workflow.get_column_info()
-        Log.objects.register(request.user,
-                             Log.WORKFLOW_DATA_UPLOAD,
-                             workflow,
-                             {'id': workflow.id,
-                              'name': workflow.name,
-                              'num_rows': workflow.nrows,
-                              'num_cols': workflow.ncols,
-                              'column_names': col_info[0],
-                              'column_types': col_info[1],
-                              'column_unique': col_info[2]})
+        Log.objects.register(
+            request.user,
+            Log.WORKFLOW_DATA_UPLOAD,
+            workflow,
+            {'id': workflow.id,
+             'name': workflow.name,
+             'num_rows': workflow.nrows,
+             'num_cols': workflow.ncols,
+             'column_names': col_info[0],
+             'column_types': col_info[1],
+             'column_unique': col_info[2]})
 
         # Go back to show the workflow detail
         return redirect(reverse('table:display'))
 
     # Update the dictionary with the session information
     request.session['upload_data'] = upload_data
-    context = {'form': form,
-               'wid': workflow.id,
-               'prev_step': upload_data['step_1'],
-               'valuerange': range(5) if workflow.has_table() else range(3),
-               'df_info': df_info}
+    context = {
+        'form': form,
+        'wid': workflow.id,
+        'prev_step': upload_data['step_1'],
+        'valuerange': range(5) if workflow.has_table() else range(3),
+        'df_info': df_info}
 
     if not workflow.has_table():
         # It is an upload, not a merge, set the next step to finish
@@ -280,8 +288,9 @@ def upload_s3(
     # Array of unique col names in DST
     dst_unique_col_names = upload_data.get('dst_unique_col_names')
     if dst_unique_col_names is None:
-        dst_unique_col_names = [v for x, v in enumerate(dst_column_names)
-                                if dst_is_unique_column[x]]
+        dst_unique_col_names = [
+            v for x, v in enumerate(dst_column_names)
+            if dst_is_unique_column[x]]
         upload_data['dst_unique_col_names'] = dst_unique_col_names
 
     # Get the column names of the unique columns to upload in the DF to
@@ -289,8 +298,9 @@ def upload_s3(
     columns_to_upload = upload_data['columns_to_upload']
     src_column_names = upload_data['rename_column_names']
     src_is_key_column = upload_data['src_is_key_column']
-    src_unique_col_names = [v for x, v in enumerate(src_column_names)
-                            if src_is_key_column[x] and columns_to_upload[x]]
+    src_unique_col_names = [
+        v for x, v in enumerate(src_column_names)
+        if src_is_key_column[x] and columns_to_upload[x]]
 
     # Bind the form with the received data (remember unique columns and
     # preselected keys.)'
@@ -300,7 +310,7 @@ def upload_s3(
         src_keys=src_unique_col_names,
         src_selected_key=upload_data.get('src_selected_key'),
         dst_selected_key=upload_data.get('dst_selected_key'),
-        how_merge=upload_data.get('how_merge')
+        how_merge=upload_data.get('how_merge'),
     )
 
     if request.method == 'POST' and form.is_valid():
@@ -315,10 +325,12 @@ def upload_s3(
         return redirect('dataops:upload_s4')
 
     return render(
-        request, 'dataops/upload_s3.html',
-        {'form': form,
-         'valuerange': range(5),
-         'prev_step': reverse('dataops:upload_s2')})
+        request,
+        'dataops/upload_s3.html',
+        {
+            'form': form,
+            'valuerange': range(5),
+            'prev_step': reverse('dataops:upload_s2')})
 
 
 @user_passes_test(is_instructor)
@@ -373,57 +385,60 @@ def upload_s4(
         # Get the dataframes to merge
         try:
             dst_df = load_table(
-                workflow.get_data_frame_table_name()
+                workflow.get_data_frame_table_name(),
             )
             src_df = load_table(
-                workflow.get_data_frame_upload_table_name()
+                workflow.get_data_frame_upload_table_name(),
             )
         except Exception:
-            return render(request,
-                          'error.html',
-                          {'message': _('Exception while loading data frame')})
+            return render(
+                request,
+                'error.html',
+                {'message': _('Exception while loading data frame')})
 
         # Performing the merge
         try:
             perform_dataframe_upload_merge(
-            workflow,
-            dst_df,
-            src_df,
-            upload_data)
+                workflow,
+                dst_df,
+                src_df,
+                upload_data)
         except Exception as exc:
             # Nuke the temporary table
             table_queries.delete_table(
-                workflow.get_data_frame_upload_table_name()
+                workflow.get_data_frame_upload_table_name(),
             )
 
             col_info = workflow.get_column_info()
-            Log.objects.register(request.user,
-                                 Log.WORKFLOW_DATA_FAILEDMERGE,
-                                 workflow,
-                                 {'id': workflow.id,
-                                  'name': workflow.name,
-                                  'num_rows': workflow.nrows,
-                                  'num_cols': workflow.ncols,
-                                  'column_names': col_info[0],
-                                  'column_types': col_info[1],
-                                  'column_unique': col_info[2],
-                                  'error_msg': str(exc)})
+            Log.objects.register(
+                request.user,
+                Log.WORKFLOW_DATA_FAILEDMERGE,
+                workflow,
+                {'id': workflow.id,
+                 'name': workflow.name,
+                 'num_rows': workflow.nrows,
+                 'num_cols': workflow.ncols,
+                 'column_names': col_info[0],
+                 'column_types': col_info[1],
+                 'column_unique': col_info[2],
+                 'error_msg': str(exc)})
 
-            messages.error(request, _('Merge operation failed. ') + str(exc)),
+            messages.error(request, _('Merge operation failed. ') + str(exc))
             return redirect(reverse('table:display'))
 
         # Log the event
         col_info = workflow.get_column_info()
-        Log.objects.register(request.user,
-                             Log.WORKFLOW_DATA_MERGE,
-                             workflow,
-                             {'id': workflow.id,
-                              'name': workflow.name,
-                              'num_rows': workflow.nrows,
-                              'num_cols': workflow.ncols,
-                              'column_names': col_info[0],
-                              'column_types': col_info[1],
-                              'column_unique': col_info[2]})
+        Log.objects.register(
+            request.user,
+            Log.WORKFLOW_DATA_MERGE,
+            workflow,
+            {'id': workflow.id,
+             'name': workflow.name,
+             'num_rows': workflow.nrows,
+             'num_cols': workflow.ncols,
+             'column_names': col_info[0],
+             'column_types': col_info[1],
+             'column_unique': col_info[2]})
 
         # Update the session information
         store_workflow_in_session(request, workflow)
@@ -442,13 +457,13 @@ def upload_s4(
     # List of final column names
     final_columns = sorted(set().union(
         dst_column_names,
-        upload_data['rename_column_names']
+        upload_data['rename_column_names'],
     ))
     # Dictionary with (new src column name: (old name, is_uploaded?)
-    src_info = {x: (y, z) for (x, y, z) in zip(
+    src_info = {rname: (iname, upload) for (rname, iname, upload) in zip(
         upload_data['rename_column_names'],
         upload_data['initial_column_names'],
-        upload_data['columns_to_upload']
+        upload_data['columns_to_upload'],
     )}
 
     # Create the strings to show in the table for each of the rows explaining
@@ -523,8 +538,11 @@ def upload_s4(
     # Store the value in the request object and update
     request.session['upload_data'] = upload_data
 
-    return render(request, 'dataops/upload_s4.html',
-                  {'prev_step': reverse('dataops:upload_s3'),
-                   'info': info,
-                   'valuerange': range(5),
-                   'next_name': 'Finish'})
+    return render(
+        request,
+        'dataops/upload_s4.html',
+        {
+            'prev_step': reverse('dataops:upload_s3'),
+            'info': info,
+            'valuerange': range(5),
+            'next_name': 'Finish'})

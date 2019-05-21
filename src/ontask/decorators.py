@@ -28,7 +28,7 @@ from workflow.ops import (
 def ajax_required(func):
     """Verify that the request is AJAX."""
     @wraps(func)
-    def function_wrapper(request, *args, **kwargs):  #noqa Z430
+    def function_wrapper(request, *args, **kwargs):  # noqa Z430
         if not request.is_ajax():
             return HttpResponseBadRequest()
         return func(request, *args, **kwargs)

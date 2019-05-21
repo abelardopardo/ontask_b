@@ -997,7 +997,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             form_field.clear()
             form_field.send_keys(cname)
         if cdesc:
-            form_field = self.selenium.find_element_by_id("id_description_text")
+            form_field = self.selenium.find_element_by_id(
+                "id_description_text")
             form_field.click()
             form_field.clear()
             form_field.send_keys(cdesc)
@@ -1138,12 +1139,12 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def open_add_regular_column(self):
         # Click on the Add Column button
         self.click_dropdown_option_and_wait('//*[@id="addColumnOperations"]',
-                                        'Regular column')
+                                            'Regular column')
 
     def open_add_derived_column(self):
         # Click on the Add Column button
         self.click_dropdown_option_and_wait('//*[@id="addColumnOperations"]',
-                                        'Formula-derived column')
+                                            'Formula-derived column')
 
     def open_column_edit(self, name):
         self.selenium.find_element_by_xpath(
@@ -1220,8 +1221,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             "//tr/td[2][normalize-space() = '{0}']/" \
             "../td[5]/div/div/button".format(name)
         self.click_dropdown_option_and_wait(xpath_str,
-                                        'ZIP',
-                                        'zip-action-request-data')
+                                            'ZIP',
+                                            'zip-action-request-data')
 
     def open_action_json_run(self, name):
         element = self.search_action(name)
@@ -1251,8 +1252,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             "//tr/td[2][normalize-space() = '{0}']/" \
             "../td[5]/div/div/button".format(name)
         self.click_dropdown_option_and_wait(xpath_str,
-                                        'Schedule',
-                                        'email-schedule-send')
+                                            'Schedule',
+                                            'email-schedule-send')
 
     def open_preview(self):
         self.selenium.find_element_by_xpath(
@@ -1287,7 +1288,6 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                     (By.CLASS_NAME, 'js-action-preview-nxt')
                 )
             )
-
 
         if close:
             self.selenium.find_element_by_xpath(

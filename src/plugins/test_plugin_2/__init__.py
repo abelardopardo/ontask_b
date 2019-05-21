@@ -89,14 +89,15 @@ class OnTaskTestPlugin(OnTaskPluginAbstract):
         self.output_column_names = ['RESULT 3', 'RESULT 4']
         # Example of how to use the parameters field (not used)
         self.parameters = [
-            ('param string', 'string', ['v1', 'v2'], 'v1', 'help param string'),
+            ('param string', 'string', [
+             'v1', 'v2'], 'v1', 'help param string'),
             ('param integer', 'integer', [], None, 'help param integer'),
             ('param double', 'double', [1.2, 2.2, 3.2], None,
                              'help param double'),
             ('param boolean', 'boolean', [], True, 'help param boolean'),
             ('param datetime', 'datetime', [], '2018-05-25 18:03:00+09:30',
                                'help param datetime'),
-            ('param datetime2', 'datetime', 
+            ('param datetime2', 'datetime',
                                 [],
                                 '2018-05-25 18:03:00+09:30',
                                 'help param datetime'),
@@ -123,9 +124,9 @@ class OnTaskTestPlugin(OnTaskPluginAbstract):
         # Process the given data and create the result
         result[self.output_column_names[0]] = \
             data_frame[self.input_column_names[0]] + \
- 	        data_frame[self.input_column_names[1]]
+            data_frame[self.input_column_names[1]]
         result[self.output_column_names[1]] = \
             data_frame[self.input_column_names[0]] - \
- 	        data_frame[self.input_column_names[1]]
+            data_frame[self.input_column_names[1]]
 
         return result

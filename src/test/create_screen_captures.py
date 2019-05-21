@@ -19,7 +19,6 @@ from dataops.pandas import destroy_db_engine
 standard_library.install_aliases()
 
 
-
 class ScreenTutorialTest(ScreenTests):
 
     def setUp(self):
@@ -43,7 +42,8 @@ class ScreenTutorialTest(ScreenTests):
             'js-create-workflow').click()
         self.wait_for_modal_open()
 
-        self.selenium.find_element_by_id('id_name').send_keys(self.workflow_name)
+        self.selenium.find_element_by_id(
+            'id_name').send_keys(self.workflow_name)
         desc = self.selenium.find_element_by_id('id_description_text')
         desc.send_keys(self.description)
 
@@ -752,7 +752,6 @@ Course Coordinator""")
 
         # End of session
         self.logout()
-
 
     def test_ss_scheduler(self):
         # Login

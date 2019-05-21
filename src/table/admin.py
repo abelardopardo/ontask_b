@@ -14,6 +14,7 @@ class ViewAdmin(admin.ModelAdmin):
                     'created',
                     'modified',
                     'formula')
- 
+
+
 # Register your models here.
 admin.site.register(View, ViewAdmin)

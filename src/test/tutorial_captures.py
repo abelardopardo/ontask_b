@@ -132,7 +132,8 @@ class TutorialCaptures(ScreenTests):
         element = self.selenium.find_element_by_id("id_description_text")
         element.click()
         element.clear()
-        element.send_keys('View only student email, program and enrolment type')
+        element.send_keys(
+            'View only student email, program and enrolment type')
 
         # Focus on the column area
         self.selenium.find_element_by_xpath(

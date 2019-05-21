@@ -28,7 +28,7 @@ class LoginView(bracesviews.AnonymousRequiredMixin,
         redirect = super().form_valid(form)
         remember_me = form.cleaned_data.get('remember_me')
         if remember_me is True:
-            ONE_MONTH = 30*24*60*60
+            ONE_MONTH = 30 * 24 * 60 * 60
             expiry = getattr(settings, "KEEP_LOGGED_DURATION", ONE_MONTH)
             self.request.session.set_expiry(expiry)
         return redirect

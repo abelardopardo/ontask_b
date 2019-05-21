@@ -102,10 +102,10 @@ class LTIAuthBackend(ModelBackend):
         # Retrieve username from LTI parameter or default to an overridable
         # function return value
         username = tool_provider.lis_person_sourcedid or \
-                   self.get_default_username(
-                       tool_provider,
-                       prefix=self.unknown_user_prefix
-                   )
+            self.get_default_username(
+                tool_provider,
+                prefix=self.unknown_user_prefix
+            )
         username = self.clean_username(username)  # Clean it
 
         email = tool_provider.lis_person_contact_email_primary
@@ -131,7 +131,8 @@ class LTIAuthBackend(ModelBackend):
             })
 
             if created:
-                logger.debug('authenticate created a new user for %s', username)
+                logger.debug(
+                    'authenticate created a new user for %s', username)
             else:
                 logger.debug('authenticate found an existing user for %s',
                              username)
