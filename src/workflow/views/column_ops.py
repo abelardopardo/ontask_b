@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from dataops.pandas import load_table
 from logs.models import Log
-from ontask.decorators import get_column, get_workflow, ajax_required
+from ontask.decorators import ajax_required, get_column, get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Column, Workflow
 from workflow.ops import workflow_restrict_column
@@ -75,7 +75,7 @@ def column_move_top(
     if column.position > 1:
         column.reposition_and_update_df(1)
 
-    return redirect('workflow:detail', pk=workflow.id)
+    return redirect('workflow:detail')
 
 
 @user_passes_test(is_instructor)
@@ -98,7 +98,7 @@ def column_move_bottom(
     if column.position < workflow.ncols:
         column.reposition_and_update_df(workflow.ncols)
 
-    return redirect('workflow:detail', pk=workflow.id)
+    return redirect('workflow:detail')
 
 
 @user_passes_test(is_instructor)
@@ -124,11 +124,7 @@ def column_restrict_values(
     if column.is_key:
         # This is the only key column
         messages.error(request, _('You cannot restrict a key column'))
-        return JsonResponse({
-            'html_redirect': reverse(
-                'workflow:detail',
-                kwargs={'pk': workflow.id}),
-        })
+        return JsonResponse({'html_redirect': reverse('workflow:detail')})
 
     # Get the name of the column to delete
     context = {'pk': pk, 'cname': column.name}
@@ -161,11 +157,7 @@ def column_restrict_values(
         if from_url.endswith(reverse('table:display')):
             return JsonResponse({'html_redirect': reverse('table:display')})
 
-        return JsonResponse({
-            'html_redirect': reverse(
-                'workflow:detail',
-                kwargs={'pk': workflow.id}),
-        })
+        return JsonResponse({'html_redirect': reverse('workflow:detail')})
 
     return JsonResponse({
         'html_form': render_to_string(

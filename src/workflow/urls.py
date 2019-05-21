@@ -15,8 +15,7 @@ urlpatterns = [
     path('<int:wid>/update/', views.update, name='update'),
     path('<int:wid>/delete/', views.delete, name='delete'),
     path('<int:wid>/flush/', views.flush, name='flush'),
-    path('<int:pk>/detail/', views.WorkflowDetailView.as_view(),
-         name='detail'),
+    path('detail/', views.WorkflowDetailView.as_view(), name='detail'),
     path('operations/', views.operations, name='operations'),
 
     # Column table manipulation

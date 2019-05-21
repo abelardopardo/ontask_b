@@ -23,7 +23,7 @@ from dataops.pandas import (
 from dataops.sql import db_rename_column
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import get_column, get_workflow, ajax_required
+from ontask.decorators import ajax_required, get_column, get_workflow
 from ontask.permissions import is_instructor
 from workflow.forms import (
     ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
@@ -622,11 +622,7 @@ def column_delete(
     if column.is_key and len([col for col in unique_column if col]) == 1:
         # This is the only key column
         messages.error(request, _('You cannot delete the only key column'))
-        return JsonResponse({
-            'html_redirect': reverse(
-                'workflow:detail',
-                kwargs={'pk': workflow.id}),
-        })
+        return JsonResponse({'html_redirect': reverse('workflow:detail')})
 
     # Get the name of the column to delete
     context = {'pk': pk, 'cname': column.name}
@@ -658,11 +654,7 @@ def column_delete(
         if from_url.endswith(reverse('table:display')):
             return JsonResponse({'html_redirect': reverse('table:display')})
 
-        return JsonResponse({
-            'html_redirect': reverse(
-                'workflow:detail',
-                kwargs={'pk': workflow.id}),
-        })
+        return JsonResponse({'html_redirect': reverse('workflow:detail')})
 
     return JsonResponse({
         'html_form': render_to_string(
