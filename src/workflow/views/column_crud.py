@@ -169,7 +169,7 @@ def column_add(
         except Exception as exc:
             messages.error(
                 request,
-                _('Unable to clone column: {0}').format(str(exc))
+                _('Unable to add column: {0}').format(str(exc))
             )
             return JsonResponse({'html_redirect': ''})
 
@@ -297,7 +297,7 @@ def formula_column_add(
             # Notify in the form
             form.add_error(
                 None,
-                _('Unable to perform the requested operation ({0})').format(
+                _('Unable to add the column: {0}').format(
                     exc,
                 ),
             )
@@ -471,7 +471,7 @@ def random_column_add(
         except Exception as exc:
             messages.error(
                 request,
-                _('Unable to clone column: {0}').format(str(exc))
+                _('Unable to add the column: {0}').format(str(exc))
             )
             return JsonResponse({'html_redirect': ''})
 
