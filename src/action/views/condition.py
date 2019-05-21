@@ -150,7 +150,7 @@ class FilterCreateView(ConditionFilterCreateView):
 
 
 @user_passes_test(is_instructor)
-@method_decorator(ajax_required)
+@ajax_required
 @get_condition(pf_related='columns', is_filter=True)
 def edit_filter(
     request: HttpRequest,
@@ -179,7 +179,7 @@ def edit_filter(
 
 
 @user_passes_test(is_instructor)
-@method_decorator(ajax_required)
+@ajax_required
 @get_condition(pf_related='columns', is_filter=True)
 def delete_filter(
     request: HttpRequest,
@@ -248,7 +248,7 @@ class ConditionCreateView(ConditionFilterCreateView):
 
 
 @user_passes_test(is_instructor)
-@method_decorator(ajax_required)
+@ajax_required
 @get_condition(pf_related=['columns'])
 def edit_condition(
     request: HttpRequest,
@@ -276,7 +276,7 @@ def edit_condition(
 
 
 @user_passes_test(is_instructor)
-@method_decorator(ajax_required)
+@ajax_required
 @get_condition(pf_related='columns')
 def delete_condition(
     request: HttpRequest,
