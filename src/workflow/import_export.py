@@ -22,6 +22,26 @@ from workflow.serialize_workflow import (
 )
 
 
+def _run_compatibility_patches(json_data):
+    """Function to patch the incoming JSON to make it compatible.
+
+    Over time the structure of the JSON information used to dump a workflow
+    has changed. These patches are to guarantee that an old workflow is
+    compliant with the new structure. The patches applied are:
+
+    1. Change action.target_url from None to ''
+
+    :param json_data: Json object to process
+
+    :return: Modified json_data
+    """
+    for action_obj in json_data['actions']:
+        if action_obj['target_url'] is None:
+            action_obj['target_url'] = ''
+
+    return json_data
+
+
 def do_import_workflow_parse(
     user,
     name: str,
@@ -41,6 +61,8 @@ def do_import_workflow_parse(
     """
     data_in = gzip.GzipFile(fileobj=file_item)
     json_data = JSONParser().parse(data_in)
+
+    _run_compatibility_patches(json_data)
 
     # Serialize content
     workflow_data = WorkflowImportSerializer(
