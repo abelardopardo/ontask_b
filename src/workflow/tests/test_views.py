@@ -415,9 +415,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         super().tearDown()
 
     def test_workflow_attributes(self):
-        categories = 'aaa, bbb, ccc'
-        action_name = 'simple action'
-        action_desc = 'action description text'
+        pass
 
         # Login
         self.login('instructor01@bogus.com')

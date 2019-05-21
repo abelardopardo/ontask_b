@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db.models import Q
-from rest_framework import generics, status
+from rest_framework import generics
 
 from action.models import Action
 from ontask.permissions import UserIsInstructor

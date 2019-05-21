@@ -15,7 +15,7 @@ from dataops.formula import EVAL_EXP, evaluate_formula
 from dataops.pandas import (
     get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
-from dataops.sql import get_rows, get_select_query_txt
+from dataops.sql import get_rows
 from workflow.models import Workflow
 
 

@@ -16,7 +16,7 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
         super().setUp()
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email='instructor01@bogus.com')
-        auth = 'Token ' + token.key
+        'Token ' + token.key
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     def test_workflow_list(self):

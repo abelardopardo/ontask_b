@@ -1,8 +1,6 @@
 
-import json
 import logging
 from builtins import object
-from collections import OrderedDict
 
 from django.conf import settings
 from django.contrib import auth

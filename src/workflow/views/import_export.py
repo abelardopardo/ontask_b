@@ -9,7 +9,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from ontask.decorators import get_workflow

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Upload DataFrames from Files."""
-import contextlib
 from typing import Optional
 from urllib.parse import urlparse, urlunparse
 

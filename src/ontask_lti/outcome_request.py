@@ -4,7 +4,7 @@ import oauth2
 from lxml import etree, objectify
 
 from .outcome_response import OutcomeResponse
-from .utils import InvalidLTIConfigError, InvalidLTIRequestError
+from .utils import InvalidLTIConfigError
 
 REPLACE_REQUEST = 'replaceResult'
 DELETE_REQUEST = 'deleteResult'

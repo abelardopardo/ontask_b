@@ -38,4 +38,3 @@ class LTIRoleRequiredMixin(LoginRequiredMixin, LTIRoleRestrictionMixin):
     """
     Mixin is a shortcut to use both LoginRequiredMixin and LTIRoleRestrictionMixin
     """
-    pass

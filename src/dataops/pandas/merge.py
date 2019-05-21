@@ -4,7 +4,6 @@
 import pandas as pd
 from django.utils.translation import gettext
 
-from dataops.pandas import pandas_datatype_names
 from dataops.pandas.columns import has_unique_column, is_unique_column
 from dataops.pandas.dataframe import store_dataframe
 

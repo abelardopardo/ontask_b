@@ -139,24 +139,19 @@ class OnTaskException(Exception):
 
 class OnTaskDataFrameNoKey(OnTaskException):
     """Exception to raise when a data frame has no key column."""
-    pass
 
 
 class OnTaskDataFrameHasDuplicatedColumns(OnTaskException):
     """Exception to raise when the column names are duplicated."""
-    pass
 
 
 class OnTaskNoWorkflow(OnTaskException):
     """Exception to raise when there is no workflow."""
-    pass
 
 
 class OnTaskEmptyWorkflow(OnTaskException):
     """Exception to raise when the workflow has no table."""
-    pass
 
 
 class OnTaskNoAction(OnTaskException):
     """Exception to raise when there is no action."""
-    pass

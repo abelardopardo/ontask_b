@@ -34,7 +34,6 @@ from ontask import OnTaskDataFrameNoKey, ontask_prefs
 from ontask.forms import RestrictedFileField
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
-from workflow.models import Workflow
 
 FIELD_PREFIX = '___ontask___upload_'
 CHAR_FIELD_LENGTH = 512

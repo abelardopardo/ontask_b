@@ -6,11 +6,9 @@ from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
 from django.forms import forms
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
 
-from action.models import Condition
 from logs.models import Log
 from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import is_instructor

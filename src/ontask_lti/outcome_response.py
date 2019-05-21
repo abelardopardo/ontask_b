@@ -105,7 +105,7 @@ class OutcomeResponse():
                 # Try to get the score
                 self.score = str(root.imsx_POXBody.readResultResponse.\
                         result.resultScore.textString)
-            except AttributeError as e:
+            except AttributeError:
                 # Not a readResult, just ignore!
                 pass
         except:

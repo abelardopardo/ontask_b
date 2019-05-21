@@ -211,4 +211,3 @@ class FlaskToolProvider(FlaskRequestValidatorMixin, ToolProvider):
     '''
     OAuth ToolProvider that works with Flask requests
     '''
-    pass

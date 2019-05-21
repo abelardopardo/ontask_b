@@ -1676,8 +1676,8 @@ class ScreenTests(OnTaskLiveTestCase):
             raise Exception('Incorrect invocation of element_ss')
 
         element = self.selenium.find_element_by_xpath(xpath)
-        coord = element.location
-        dims = element.size
+        element.location
+        element.size
 
         # Get the image
         img = self._get_image(xpath)
