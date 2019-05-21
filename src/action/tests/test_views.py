@@ -150,7 +150,6 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Add a second clause to the filter
         # Click in the edit filter button
-        self.select_filter_tab()
         self.selenium.find_element_by_class_name('js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
@@ -575,7 +574,11 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
             'registered'
         )
         self.wait_for_datatable('column-selected-table_previous')
-
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.LINK_TEXT, 'Done')
+            )
+        )
         # Submit the action
         self.selenium.find_element_by_link_text('Done').click()
         self.wait_for_datatable('action-table_previous')

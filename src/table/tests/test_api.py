@@ -392,8 +392,10 @@ class TableApiMerge(TableApiBase):
             },
             format='json')
 
-        self.assertEqual(response.data['detail'],
-                         'Merge operation produced a result with no rows')
+        self.assertEqual(
+            response.data['detail'],
+            'Unable to perform merge operation: '
+            + 'Merge operation produced a result with no rows')
 
         # Check for df/wf consistency
         workflow = Workflow.objects.all()[0]
@@ -418,7 +420,8 @@ class TableApiMerge(TableApiBase):
             format='json')
 
         self.assertEqual(response.data['detail'],
-                         'Merge operation produced a result with no rows')
+                         'Unable to perform merge operation: '
+                         + 'Merge operation produced a result with no rows')
 
         # Check for df/wf consistency
         workflow = Workflow.objects.all()[0]
