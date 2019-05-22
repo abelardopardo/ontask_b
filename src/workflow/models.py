@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Model description for the Workflow and Column entities."""
 
 import datetime
 import json
@@ -17,13 +18,17 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
-import ontask.templatetags.ontask_tags
 from dataops.pandas import load_table, pandas_datatype_names
 from dataops.sql import delete_table
 
+FIELD_MID_SIZE = 512
+FIELD_LONG_SIZE = 2048
+FIELD_MD5 = 32
+
 
 class Workflow(models.Model):
-    """
+    """Workflow model.
+
     Model for a workflow, that is, a table, set of column descriptions and
     all the information regarding the actions, conditions and such. This is
     the main object in the relational model.
@@ -33,17 +38,18 @@ class Workflow(models.Model):
     df_table_prefix = table_prefix + '{0}'
     upload_table_prefix = table_prefix + 'UPLOAD_{0}'
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             db_index=True,
-                             on_delete=models.CASCADE,
-                             null=False,
-                             blank=False,
-                             related_name='workflows_owner')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name='workflows_owner')
 
-    name = models.CharField(max_length=512, null=False, blank=False)
+    name = models.CharField(max_length=FIELD_MID_SIZE, null=False, blank=False)
 
     description_text = models.CharField(
-        max_length=2048,
+        max_length=FIELD_LONG_SIZE,
         default='',
         blank=True)
 
@@ -52,26 +58,24 @@ class Workflow(models.Model):
     modified = models.DateTimeField(auto_now=True, null=False)
 
     # Storing the number of rows currently in the data_frame
-    nrows = models.IntegerField(verbose_name=_('number of rows'),
-                                default=0,
-                                name='nrows',
-                                null=False,
-                                blank=True)
+    nrows = models.IntegerField(
+        verbose_name=_('number of rows'),
+        default=0,
+        name='nrows',
+        null=False,
+        blank=True)
 
     # Storing the number of rows currently in the data_frame
-    ncols = models.IntegerField(verbose_name=_('number of columns'),
-                                default=0,
-                                name='ncols',
-                                null=False,
-                                blank=True)
+    ncols = models.IntegerField(
+        verbose_name=_('number of columns'),
+        default=0,
+        name='ncols',
+        null=False,
+        blank=True)
 
-    attributes = JSONField(default=dict,
-                           blank=True,
-                           null=True)
+    attributes = JSONField(default=dict, blank=True, null=True)
 
-    query_builder_ops = JSONField(default=dict,
-                                  blank=True,
-                                  null=True)
+    query_builder_ops = JSONField(default=dict, blank=True, null=True)
 
     # Name of the table storing the data frame
     data_frame_table_name = models.CharField(
@@ -82,14 +86,15 @@ class Workflow(models.Model):
     # The key of the session locking this workflow (to allow sharing
     # workflows among users
     session_key = models.CharField(
-        max_length=40,
+        max_length=FIELD_MD5,
         default='',
         blank=True)
 
     # Workflows shared among users. One workflow can be shared with many
     # users, and many users can have this workflow as available to them.
-    shared = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                    related_name='workflows_shared')
+    shared = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='workflows_shared')
 
     # Column stipulating where are the learner email values (or empty)
     luser_email_column = models.ForeignKey(
@@ -101,13 +106,14 @@ class Workflow(models.Model):
 
     # MD5 to detect changes in the previous column
     luser_email_column_md5 = models.CharField(
-        max_length=32,
+        max_length=FIELD_MD5,
         default='',
         blank=True)
 
-    lusers = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                    default=None,
-                                    related_name='workflows_luser')
+    lusers = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        default=None,
+        related_name='workflows_luser')
 
     # Boolean that flags if the lusers field needs to be updated
     lusers_is_outdated = models.BooleanField(
@@ -115,17 +121,15 @@ class Workflow(models.Model):
         null=False,
         blank=False)
 
-    @staticmethod
-    def unlock_workflow_by_id(wid):
-        """
-        Removes the session_key from the workflow with given id
+    @classmethod
+    def unlock_workflow_by_id(cls, wid: int):
+        """Remove the session_key from the workflow with given id.
+
         :param wid: Workflow id
-        :return:
         """
         with cache.lock('ONTASK_WORKFLOW_{0}'.format(wid)):
             try:
                 workflow = Workflow.objects.get(id=wid)
-
                 # Workflow exists, unlock
                 workflow.unlock()
             except ObjectDoesNotExist:
@@ -134,13 +138,13 @@ class Workflow(models.Model):
                 raise Exception('Unable to unlock workflow {0}'.format(wid))
 
     def data_frame(self):
-        # Function used by the serializer to access the data frame in the DB
+        """Access the data frame by the serializer."""
         return load_table(self.get_data_frame_table_name())
 
     def get_data_frame_table_name(self):
-        """
-        Function to get the data_frame_table_name and update it in case it is
-        empty in the DB
+        """Get the table name containing the data frame.
+
+        It updates the field if not present.
         :return: The table name to store the data frame
         """
         if not self.data_frame_table_name:
@@ -149,9 +153,8 @@ class Workflow(models.Model):
         return self.data_frame_table_name
 
     def get_data_frame_upload_table_name(self):
-        """
-        Function to get the table name for the upload data frame and update
-        data_frame_table_name if empty.
+        """Get table name used for temporary data upload.
+
         :return: The table name to store the data frame
         """
         if not self.data_frame_table_name:
@@ -160,134 +163,112 @@ class Workflow(models.Model):
         return self.upload_table_prefix.format(self.id)
 
     def has_table(self):
-        """
+        """Check if the workflow has a table.
+
         Boolean stating if there is a table storing a data frame
         :return: True if the workflow has a table storing the data frame
         """
-
         return is_table_in_db(self.get_data_frame_table_name())
 
-    def get_columns(self):
-        """
-        Function to access the Columns
-
-        :return: List with columns
-        """
-
-        return self.columns.all()
-
     def get_column_info(self):
-        """
+        """Access name, data_type and key for all columns.
+
         :return: List of three lists with column info (name, type, is_unique)
         """
-
-        columns = self.get_columns()
-        return [[x.name for x in columns],
-                [x.data_type for x in columns],
-                [x.is_key for x in columns]]
+        columns = self.columns.all()
+        return [
+            [col.name for col in columns],
+            [col.data_type for col in columns],
+            [col.is_key for col in columns]]
 
     def get_column_names(self):
-        """
-        Function to access the Column names.
+        """Access column names.
 
         :return: List with column names
         """
-
-        return list(self.columns.all().values_list('name', flat=True))
+        return list(self.columns.values_list('name', flat=True))
 
     def get_column_types(self):
-        """
-        Function to access the Column types.
+        """Access column types.
 
         :return: List with column types
         """
-
-        return list(self.columns.all().values_list('data_type', flat=True))
+        return list(self.columns.values_list('data_type', flat=True))
 
     def get_column_unique(self):
-        """
-        Function to access the Column unique.
+        """Access the is_key values of all the columns.
 
-        :return: List with column types
+        :return: List with is_key value for all columns.
         """
-        return list(self.columns.all().values_list('is_key', flat=True))
+        return list(self.columns.values_list('is_key', flat=True))
 
     def get_unique_columns(self):
-        """
-        Function to access the Column unique.
+        """Get the unique columns.
 
-        :return: List with column types
+        :return: Column list.
         """
         return self.columns.filter(is_key=True)
 
     def set_query_builder_ops(self):
-        """
-        Update the JS structure with the initial operators and names for the
-        columns
+        """Update the jason object with operator and names for the columns.
 
         Example:
 
         [{id: 'FIELD1', type: 'string'}, {id: 'FIELD2', type: 'integer'}]
         """
-
-        result = []
+        json_value = []
         for column in self.columns.all():
-            item = {'id': column.name, 'type': column.data_type}
+            op_item = {'id': column.name, 'type': column.data_type}
 
             # Deal first with the Boolean columns
             if column.data_type == 'boolean':
                 # Boolean will only use EQUAL and Yes/No as choices
-                item['input'] = 'radio'
-                item['values'] = {True: 'Yes', False: 'No'}
-                item['operators'] = ['equal', 'is_null', 'is_not_null']
-                result.append(item)
+                op_item['input'] = 'radio'
+                op_item['values'] = {True: 'Yes', False: 'No'}
+                op_item['operators'] = ['equal', 'is_null', 'is_not_null']
+                json_value.append(op_item)
                 continue
 
             # Remaining cases
             if column.data_type == 'double':
                 # Double field needs validation field to bypass browser forcing
                 # integer
-                item['validation'] = {'step': 'any'}
+                op_item['validation'] = {'step': 'any'}
 
             if column.get_categories():
-                item['input'] = 'select'
-                item['values'] = column.get_categories()
-                item['operators'] = ['equal',
-                                     'not_equal',
-                                     'is_null',
-                                     'is_not_null']
+                op_item['input'] = 'select'
+                op_item['values'] = column.get_categories()
+                op_item['operators'] = [
+                    'equal',
+                    'not_equal',
+                    'is_null',
+                    'is_not_null']
+            # TODO: Filter is_null and is_not_null out of string columns if
+            # NULL values are avoided.
 
-            result.append(item)
+            json_value.append(op_item)
 
-        self.query_builder_ops = result
+        self.query_builder_ops = json_value
 
     def get_query_builder_ops_as_str(self):
-        """
-        Function to access the query_builder_ops and return it as a string
+        """Obtain the query builder operands as a string.
 
         :return: Query builder ops structure as string (JSON dumps)
         """
         return json.dumps(self.query_builder_ops)
 
-    def version(self):
-        """
-        Function that simply returns the platform version (function used by
-        the serializer
-        :return: the platform version
-        """
-        return ontask.templatetags.ontask_tags.ontask_version()
-
     def has_data_frame(self):
-        """
+        """Check if a workflow has data frame.
+
         :return: If the workflow has a dataframe
         """
         return is_table_in_db(self.get_data_frame_table_name())
 
     def is_locked(self):
-        """
+        """Check if the workflow is locked.
+
         :return: Is the given workflow locked?
         """
-
         if not self.session_key:
             # No key in the workflow, then it is not locked.
             return False
@@ -302,12 +283,13 @@ class Workflow(models.Model):
         return session.expire_date >= timezone.now()
 
     def lock(self, request, create_session=False):
-        """
-        Function that sets the session key in the workflow to flag that is
-        locked.
+        """Set a session key in the workflow to set is as locked.
+
         :param request: HTTP request
+
         :param create_session: Boolean to flag if a new session has to be
                created.
+
         :return: The session_key is assigned and saved.
         """
         if request.session.session_key is not None:
@@ -346,17 +328,19 @@ class Workflow(models.Model):
         session.save()
 
     def unlock(self):
-        """
-        Removes the session_key from the workflow
+        """Remove the session_key from the workflow.
+
         :return: Nothing
         """
         self.session_key = ''
         self.save()
 
     def get_user_locking_workflow(self):
-        """
-        Given a workflow that is supposed to be locked, it returns the user that
-        is locking it.
+        """Get the user that is locking a workflow.
+
+        Given a workflow that is supposed to be locked, it returns the user
+        that is locking it.
+
         :return: The user object that is locking this workflow
         """
         session = Session.objects.get(session_key=self.session_key)
@@ -365,10 +349,10 @@ class Workflow(models.Model):
             id=session_data.get('_auth_user_id'))
 
     def flush(self):
-        """
-        Flush all the data from the workflow and propagate changes throughout
-        the relations with columns, conditions, filters, etc. These steps
-        require:
+        """Flush all the data from the workflow and propagate changes.
+
+        It removes relations with columns, conditions, filters, etc. These
+        steps require:
 
         1) Delete the data frame from the database
 
@@ -380,7 +364,6 @@ class Workflow(models.Model):
 
         :return: Reflected in the DB
         """
-
         # Step 1: Delete the data frame from the database
         delete_table(self.get_data_frame_table_name())
 
@@ -405,7 +388,7 @@ class Workflow(models.Model):
         self.save()
 
     def add_new_columns(self, col_names, data_types, are_keys):
-        """Add a set of columns to the workflow"""
+        """Add a set of columns to the workflow."""
         start = self.columns.count() + 1
         bulk_list = []
         for idx in range(len(col_names)):
@@ -420,24 +403,27 @@ class Workflow(models.Model):
         Column.objects.bulk_create(bulk_list)
 
     def reposition_columns(self, from_idx, to_idx):
-        """
+        """Relocate the columns from one index to another.
 
         :param from_idx: Position from which the column is repositioned.
-        :param to_idx: New position for the column
-        :return: Appropriate column positions are modified
-        """
 
+        :param to_idx: New position for the column
+
+        :return: Nothing. Column is repositioned.
+        """
         # If the indeces are identical, nothing needs to be moved.
         if from_idx == to_idx:
             return
 
         if from_idx < to_idx:
-            cols = self.columns.filter(position__gt=from_idx,
-                                       position__lte=to_idx)
+            cols = self.columns.filter(
+                position__gt=from_idx,
+                position__lte=to_idx)
             step = -1
         else:
-            cols = self.columns.filter(position__gte=to_idx,
-                                       position__lt=from_idx)
+            cols = self.columns.filter(
+                position__gte=to_idx,
+                position__lt=from_idx)
             step = 1
 
         # Update the positions of the appropriate columns
@@ -446,21 +432,26 @@ class Workflow(models.Model):
             col.save()
 
     def __str__(self):
+        """Render as string."""
         return self.name
 
     def __unicode__(self):
+        """Render as unicode."""
         return self.name
 
     class Meta(object):
+        """Define verbose and unique together."""
+
         verbose_name = 'workflow'
         verbose_name_plural = 'workflows'
         unique_together = ('user', 'name')
 
 
 class Column(models.Model):
-    """
-    Column object. contains information that should be at all times
-    consistent with the structure of the data frame stored in the database.
+    """Column object.
+
+    Contains information that should be at all times consistent with the
+    structure of the data frame stored in the database.
 
     The column must point to the workflow.
 
@@ -470,44 +461,44 @@ class Column(models.Model):
     The data type is computed by Pandas upon reading the data.
 
     The categories field is to provide a finite set of values as a JSON list
-
     """
 
     # Column name
     name = models.CharField(
-        max_length=512,
+        max_length=FIELD_MID_SIZE,
         blank=False,
         verbose_name=_('column name'))
 
     description_text = models.CharField(
-        max_length=2048,
+        max_length=FIELD_LONG_SIZE,
         default='',
         blank=True,
-        verbose_name=_('description')
-    )
+        verbose_name=_('description'))
 
-    workflow = models.ForeignKey(Workflow,
-                                 db_index=True,
-                                 editable=False,
-                                 null=False,
-                                 blank=False,
-                                 on_delete=models.CASCADE,
-                                 related_name='columns')
+    workflow = models.ForeignKey(
+        Workflow,
+        db_index=True,
+        editable=False,
+        null=False,
+        blank=False,
+        on_delete=models.CASCADE,
+        related_name='columns')
 
     # Column type
     data_type = models.CharField(
-        max_length=512,
+        max_length=FIELD_MID_SIZE,
         blank=False,
-        choices=[(x, x)
-                 for __, x in list(pandas_datatype_names.items())],
-        verbose_name=_('type of data to store in the column')
-    )
+        choices=[
+            (dtype, dtype)
+            for __, dtype in list(pandas_datatype_names.items())],
+        verbose_name=_('type of data to store in the column'))
 
     # Boolean stating if the column is a unique key
-    is_key = models.BooleanField(default=False,
-                                 verbose_name=_('has unique values per row'),
-                                 null=False,
-                                 blank=False)
+    is_key = models.BooleanField(
+        default=False,
+        verbose_name=_('has unique values per row'),
+        null=False,
+        blank=False)
 
     # Position of the column in the workflow table
     position = models.IntegerField(
@@ -515,14 +506,14 @@ class Column(models.Model):
         default=0,
         name='position',
         null=False,
-        blank=False
-    )
+        blank=False)
 
     # Boolean stating if the column is included in the visualizations
-    in_viz = models.BooleanField(default=True,
-                                 verbose_name=_('include in visualization'),
-                                 null=False,
-                                 blank=False)
+    in_viz = models.BooleanField(
+        default=True,
+        verbose_name=_('include in visualization'),
+        null=False,
+        blank=False)
 
     # Storing a JSON element with a list of categorical values to use for
     #  this column [val, val, val]
@@ -530,62 +521,62 @@ class Column(models.Model):
         default=list,
         blank=True,
         null=True,
-        verbose_name=_('comma separated list of values allowed')
-    )
+        verbose_name=_('comma separated list of values allowed'))
 
     # Validity window
     active_from = models.DateTimeField(
         _('Column active from'),
         blank=True,
         null=True,
-        default=None,
-    )
+        default=None)
 
     active_to = models.DateTimeField(
         _('Column active until'),
         blank=True,
         null=True,
-        default=None
-    )
+        default=None)
 
     def get_categories(self):
-        """
-        Return the categories and parse datetime if needed.
+        """Return the categories and parse datetime if needed.
+
         :return: List of values
         """
         if self.data_type == 'datetime':
-            return [parse_datetime(x) for x in self.categories]
+            return [parse_datetime(cat) for cat in self.categories]
 
         return self.categories
 
-    def set_categories(self, values, validate=False):
-        """
-        Set the categories available in a column. The function checks that
-        the values are compatible with the declared column type. There is a
-        special case with datetime objects, because they are not JSON
-        serializable. In that case, they are translated to the ISO 8601
-        string format and stored.
+    def set_categories(self, cat_values, validate=False):
+        """Set the categories available in a column.
 
-        :param values: List of category values
+        The function checks that the values are compatible with the declared
+        column type. There is a special case with datetime objects, because
+        they are not JSON serializable. In that case, they are translated to
+        the ISO 8601 string format and stored.
+
+        :param cat_values: List of category values
+
         :param validate: Boolean to enable validation of the given values
+
         :return: Nothing. Sets the value in the object
         """
         # Calculate the values to store
         if validate:
             to_store = self.validate_column_values(
                 self.data_type,
-                [x.strip() for x in values]
+                [cat_value.strip() for cat_value in cat_values],
             )
         else:
-            to_store = values
+            to_store = cat_values
 
         if self.data_type == 'datetime':
-            self.categories = [x.isoformat() for x in to_store]
+            self.categories = [cat_val.isoformat() for cat_val in to_store]
         else:
             self.categories = to_store
 
     def get_simplified_data_type(self):
-        """
+        """Get a data type name to show to users.
+
         :return: The simplified data type using "number" for either integer or
         double
         """
@@ -604,93 +595,107 @@ class Column(models.Model):
         raise Exception('Unexpected data type {0}'.format(self.data_type))
 
     def reposition_and_update_df(self, to_idx):
-        """
+        """Recalculate the position of this column.
 
         :param to_idx: Destination index of the given column
         :return: Content reflected in the DB
         """
-
         self.workflow.reposition_columns(self.position, to_idx)
         self.position = to_idx
         self.save()
 
-    @staticmethod
-    def validate_column_value(data_type, value):
-        """
+    @classmethod
+    def validate_column_value(cls, data_type, col_value):
+        """Check if a value is correct for a column.
+
         Test that a value is suitable to be stored in this column. It is done
          simply by casting the type and throwing the corresponding exception.
+
         :param data_type: string specifying the data type
-        :param value: Value to store in the column
+
+        :param col_value: Value to store in the column
+
         :return: The new value to be stored
         """
-
         # Remove spaces
-        value = value.strip()
+        col_value = col_value.strip()
 
-        # Check the different data types
-        if data_type == 'string':
-            newval = str(value)
-        elif data_type == 'integer':
+        distrib = {
+            'string': lambda txt_val: str(txt_val),
+            'double': lambda txt_val: float(txt_val),
+            'boolean': lambda txt_val: (
+                txt_val.lower() == 'true' or txt_val == 1),
+            'datetime': lambda txt_val: parse_datetime(txt_val),
+        }
+
+        if data_type not in distrib.keys():
+            raise ValueError(
+                _('Unsupported type %(type)s') % {'type': str(data_type)})
+
+        if data_type == 'integer':
             # In this case, although the column has been declared as an
             # integer, it could mutate to a float, so we allow this value.
             try:
-                newval = int(value)
+                newval = int(col_value)
             except ValueError:
-                newval = float(value)
-        elif data_type == 'double':
-            newval = float(value)
-        elif data_type == 'boolean':
-            newval = value.lower() == 'true' or value == 1
-        elif data_type == 'datetime':
-            newval = parse_datetime(value)
+                newval = float(col_value)
         else:
-            raise ValueError(
-                _('Unsupported type %(type)s') % {'type': str(data_type)}
-            )
+            newval = distrib[data_type](col_value)
 
         return newval
 
-    @staticmethod
-    def validate_column_values(data_type, values):
-        """
+    @classmethod
+    def validate_column_values(cls, data_type, col_values):
+        """Check if column values are valid.
+
         Test that a list of values are suitable to be stored in this column.
         It is done simply by casting the type to each element and throwing the
         corresponding exception.
+
         :param data_type: string specifying the data type
-        :param values: List of values to store in the column
+
+        :param col_values: List of values to store in the column
+
         :return: The new values to be stored
         """
-
-        return [Column.validate_column_value(data_type, x) for x in values]
+        return [
+            Column.validate_column_value(data_type, col_val)
+            for col_val in col_values]
 
     @property
     def is_active(self):
-        """
-        Function to ask if a column is active: the current time is within the
+        """Check if a column is active.
+
+        The current time is within the
         interval defined by active_from - active_to.
+
         :return: Boolean encoding the active status
         """
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        return not ((self.active_from and now < self.active_from) or
-                    (self.active_to and self.active_to < now))
+        return not (
+            (self.active_from and now < self.active_from)
+            or (self.active_to and self.active_to < now))
 
     def __str__(self):
+        """Render as string."""
         return self.name
 
     def __unicode__(self):
+        """Render as unicode."""
         return self.name
 
     class Meta(object):
+        """Define additional fields, unique criteria and ordering."""
+
         verbose_name = 'column'
         verbose_name_plural = 'columns'
         unique_together = ('name', 'workflow')
-        ordering = ['position', ]
+        ordering = ['position']
 
 
 def is_table_in_db(table_name: str) -> bool:
+    """Check if the given table is in the DB."""
     with connection.cursor() as cursor:
-        return next(
-            (True for x in connection.introspection.get_table_list(cursor)
-             if x.name == table_name),
-            False
-        )
+        return table_name in [
+            conn.name
+            for conn in connection.introspection.get_table_list(cursor)]

@@ -12,6 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from workflow.models import Workflow
 
+FIELD_NAME_LENGH = 256
+
 
 class LogManager(models.Manager):
     """Manager to create elements with the right parameters."""
@@ -183,7 +185,7 @@ class Log(models.Model):
 
     # Type of event logged see above
     name = models.CharField(
-        max_length=256,
+        max_length=FIELD_NAME_LENGH,
         blank=False,
         choices=LOG_TYPES)
 
@@ -202,17 +204,16 @@ class Log(models.Model):
         verbose_name=_('payload'))
 
     # Use our own manager
-    objects = LogManager()
+    objects = LogManager()  # noqa: Z110
 
     def get_payload(self):
-        """Function to access the payload information.
+        """Access the payload information.
 
         If using a DB that supports JSON this function should be rewritten (
         to be transparent).
 
         :return: The JSON structure with the payload
         """
-
         if self.payload == '':
             return {}
 
@@ -229,10 +230,11 @@ class Log(models.Model):
 
     def __unicode__(self):
         """Represent as a tuple."""
-        return '%s %s %s %s' % (self.user,
-                                self.created,
-                                self.name,
-                                self.payload)
+        return '%s %s %s %s' % (
+            self.user,
+            self.created,
+            self.name,
+            self.payload)
 
     @cached_property
     def log_useremail(self):

@@ -81,8 +81,6 @@ class WorkflowDetailView(UserIsInstructor, generic.DetailView):
 
     def get_object(self, queryset=None):
         """Get the current object."""
-        # old_obj = super().get_object(queryset=queryset)
-
         # Check if the workflow is locked
         workflow = access_workflow(
             self.request,
@@ -235,9 +233,10 @@ def update(
 
     :return: JSON response
     """
-    form = WorkflowForm(request.POST or None,
-                        instance=workflow,
-                        workflow_user=workflow.user)
+    form = WorkflowForm(
+        request.POST or None,
+        instance=workflow,
+        workflow_user=workflow.user)
 
     # If the user owns the workflow, proceed
     if workflow.user == request.user:
@@ -315,11 +314,6 @@ def clone(
                 request=request),
         })
 
-    # Get the new name appending as many times as needed the 'Copy of '
-    new_name = 'Copy of ' + workflow.name
-    while Workflow.objects.filter(name=new_name).exists():
-        new_name = 'Copy of ' + new_name
-
     workflow.id = None
     workflow.name = create_new_name(
         workflow.name,
@@ -330,8 +324,10 @@ def clone(
 
     try:
         workflow.save()
-    except IntegrityError:
-        messages.error(request, _('Unable to clone workflow'))
+    except IntegrityError as exc:
+        messages.error(
+            request,
+            _('Unable to clone workflow: {0}').format(str(exc)))
         return JsonResponse({'html_redirect': ''})
 
     # Get the initial object back

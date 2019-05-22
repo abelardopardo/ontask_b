@@ -101,12 +101,14 @@ def upload_s2(
         column_names=rename_column_names,
         columns_to_upload=columns_to_upload,
         is_key=src_is_key_column,
-        keep_key=keep_key_column
+        keep_key=keep_key_column,
     )
 
     # Get a hold of the fields to create a list to be processed in the page
-    load_fields = [f for f in form if f.name.startswith('upload_')]
-    newname_fields = [f for f in form if f.name.startswith('new_name_')]
+    load_fields = [
+        ffield for ffield in form if ffield.name.startswith('upload_')]
+    newname_fields = [
+        ffield for ffield in form if ffield.name.startswith('new_name_')]
     src_key_fields = [
         form['make_key_%s' % idx] if src_is_key_column[idx] else None
         for idx in range(len(src_is_key_column))
@@ -114,7 +116,7 @@ def upload_s2(
 
     # Create one of the context elements for the form. Pack the lists so that
     # they can be iterated in the template
-    df_info = [list(i) for i in zip(
+    df_info = [list(info_item) for info_item in zip(
         load_fields,
         initial_columns,
         newname_fields,
@@ -223,8 +225,7 @@ def upload_s3(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
-    """
-    Step 3: This is already a merge operation (not an upload)
+    """Step 3: This is already a merge operation (not an upload).
 
     The columns to merge have been selected and renamed. The data frame to
     merge is called src.
@@ -289,18 +290,17 @@ def upload_s3(
     dst_unique_col_names = upload_data.get('dst_unique_col_names')
     if dst_unique_col_names is None:
         dst_unique_col_names = [
-            v for x, v in enumerate(dst_column_names)
-            if dst_is_unique_column[x]]
+            cname for idx, cname in enumerate(dst_column_names)
+            if dst_is_unique_column[idx]]
         upload_data['dst_unique_col_names'] = dst_unique_col_names
 
-    # Get the column names of the unique columns to upload in the DF to
-    # merge (source)
+    # Get the names of he unique columns to upload in the source DF
     columns_to_upload = upload_data['columns_to_upload']
     src_column_names = upload_data['rename_column_names']
     src_is_key_column = upload_data['src_is_key_column']
     src_unique_col_names = [
-        v for x, v in enumerate(src_column_names)
-        if src_is_key_column[x] and columns_to_upload[x]]
+        cname for idx, cname in enumerate(src_column_names)
+        if src_is_key_column[idx] and columns_to_upload[idx]]
 
     # Bind the form with the received data (remember unique columns and
     # preselected keys.)'
@@ -495,7 +495,7 @@ def upload_s4(
     # Case 8: NOT in DST, in SRC, loaded, renamed
     #         Dst Name (NEW) | <-- | src name (renamed)
     #
-    info = []
+    column_info = []
     for colname in final_columns:
 
         # Case 1: Skip the keys
@@ -504,7 +504,7 @@ def upload_s4(
 
         # Case 2: Column is in DST and left untouched (no counter part in SRC)
         if colname not in list(src_info.keys()):
-            info.append((colname, False, ''))
+            column_info.append((colname, False, ''))
             continue
 
         # Get old name and if it is going to be loaded
@@ -514,10 +514,10 @@ def upload_s4(
         if not to_load:
             if colname in dst_column_names:
                 # Case 3
-                info.append((colname, False, colname + _(' (Ignored)')))
+                column_info.append((colname, False, colname + _(' (Ignored)')))
             else:
                 # Case 4
-                info.append(('', False, colname + _(' (Ignored)')))
+                column_info.append(('', False, colname + _(' (Ignored)')))
             continue
 
         # Initial name on the dst data frame
@@ -533,7 +533,7 @@ def upload_s4(
             src_name += _(' (Renamed)')
 
         # Cases 5 - 8
-        info.append((dst_name, True, src_name))
+        column_info.append((dst_name, True, src_name))
 
     # Store the value in the request object and update
     request.session['upload_data'] = upload_data
@@ -543,6 +543,6 @@ def upload_s4(
         'dataops/upload_s4.html',
         {
             'prev_step': reverse('dataops:upload_s3'),
-            'info': info,
+            'info': column_info,
             'valuerange': range(5),
             'next_name': 'Finish'})

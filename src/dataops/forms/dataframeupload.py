@@ -13,7 +13,7 @@ from dataops.pandas import create_db_engine
 
 
 def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
-    """Processes additional steps in every object dataframe column.
+    """Perform additional steps in every object dataframe column.
 
     The process includes:
 
@@ -33,8 +33,7 @@ def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
             # Column is a string! Remove the leading and trailing white
             # space
             data_frame[column] = data_frame[column].str.strip().fillna(
-                data_frame[column]
-            )
+                data_frame[column])
 
             # Try the datetime conversion
             try:

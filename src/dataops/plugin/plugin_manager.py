@@ -452,10 +452,9 @@ def run_plugin(
         if plugin_instance.get_input_column_names():
             sub_df.columns = plugin_instance.get_input_column_names()
     except Exception as exc:
-        raise Exception(
-            ugettext(
-                'Error when creating data frame for plugin: {0}').format(str(exc)),
-        )
+        raise Exception(ugettext(
+                'Error when creating data frame for plugin: {0}'
+        ).format(str(exc)))
 
     # Try the execution and catch any exception
     try:

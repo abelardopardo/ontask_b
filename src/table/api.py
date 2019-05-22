@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+"""Functions implementing the API calls to manipulate the table."""
+
 from typing import Optional
 
 from django.http import HttpRequest, HttpResponse
@@ -24,15 +27,16 @@ from workflow.models import Workflow
 
 
 class TableBasicOps(APIView):
-    """
-    Basic class to implement the table API operations so that we can provide
-    two versions, one handling data frames in JSON format, and the other one
-    using the pickle format in Pandas to preserve NaN and NaT and maintain
-    column data types between exchanges.
+    """Basic class to implement the table API operations.
+
+    Inheritance will implement two versions, one handling data frames in JSON
+    format, and the other one using the pickle format in Pandas to preserve
+    NaN and NaT and maintain column data types between exchanges.
     """
 
     # The serializer class needs to be overwritten by the subclasses.
     serializer_class = None
+
     permission_classes = (UserIsInstructor,)
 
     @method_decorator(get_workflow(pf_related='columns'))
@@ -43,22 +47,21 @@ class TableBasicOps(APIView):
         format=None,
         workflow: Optional[Workflow] = None,
     ) -> HttpResponse:
-        """Method to override the content in the workflow.
+        """Override the content in the workflow.
 
         :param request: Received request object
 
         :param wid: Workflow ID
 
         :param format: format for the response
-
-        :return:
         """
         # Try to retrieve the wflow to check for permissions
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             # Flag the error
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
         # Data received is a correct data frame.
         df = serializer.validated_data['data_frame']
@@ -79,7 +82,6 @@ class TableBasicOps(APIView):
 
         return Response(None, status=status.HTTP_201_CREATED)
 
-    # Retrieve
     @method_decorator(get_workflow(pf_related='columns'))
     def get(
         self,
@@ -88,14 +90,11 @@ class TableBasicOps(APIView):
         format=None,
         workflow: Optional[Workflow] = None,
     ) -> HttpResponse:
+        """Retrieve the existing data frame."""
         serializer = self.serializer_class(
-            {'data_frame':
-             load_table(workflow.get_data_frame_table_name())
-             }
-        )
+            {'data_frame': load_table(workflow.get_data_frame_table_name())})
         return Response(serializer.data)
 
-    # Create
     @method_decorator(get_workflow(pf_related='columns'))
     def post(
         self,
@@ -104,16 +103,16 @@ class TableBasicOps(APIView):
         format=None,
         workflow: Optional[Workflow] = None,
     ) -> HttpResponse:
+        """Create a new data frame."""
         if load_table(workflow.get_data_frame_table_name()) is not None:
-            raise APIException(_('Post request requires workflow without '
-                                 'a table'))
+            raise APIException(
+                _('Post request requires workflow without a table'))
         return self.override(
             request,
             wid=wid,
             format=format,
             workflow=workflow)
 
-    # Update
     @method_decorator(get_workflow(pf_related='columns'))
     def put(
         self,
@@ -122,6 +121,7 @@ class TableBasicOps(APIView):
         format=None,
         workflow: Optional[Workflow] = None,
     ):
+        """Process the put method to update the data frame."""
         return self.override(
             request,
             wid=wid,
@@ -135,35 +135,38 @@ class TableBasicOps(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None
+        workflow: Optional[Workflow] = None,
     ) -> HttpResponse:
+        """Flush the data in the data frame."""
         workflow.flush()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class TableJSONOps(TableBasicOps):
-    """
-    get:
-    Get all the data in the table corresponding to the workflow (no matter
-    how big). If the workflow has no data, an empty {} is returned.
+    """Class to provide a JSON serialization of the data frame.
 
-    post:
-    Upload a new table to a workflow without. If there is a table already, the
-    operation will be rejected (consider deleting the table first or use PUT)
+    The purpose of the methods are:
 
-    put:
-    Replace the table currently in the workflow with the one given
+    - get: Get all the data in the table corresponding to the workflow (no
+    matter how big). If the workflow has no data, an empty dictionary is
+    returned.
 
-    delete:
-    Flush the data frame from the workflow. The workflow object remains, just
-    the data frame is deleted.
+    - post: Upload a new table to a workflow without. If there is a table
+    already, the operation will be rejected (consider deleting the table
+    first or use PUT)
+
+    - put: Replace the table currently in the workflow with the one given
+
+    - delete: Flush the data frame from the workflow. The workflow object
+    remains, just the data frame is deleted.
     """
 
     serializer_class = DataFrameJSONSerializer
 
 
 class TablePandasOps(TableBasicOps):
-    """
+    """API to store a table internally as a data frame.
+
     This API is provided because OnTask stores the table internally as a
     Pandas data frame. When using conventional API transactions using JSON
     strings, it is possible to loose information because JSON cannot handle
@@ -200,18 +203,15 @@ class TablePandasOps(TableBasicOps):
 
     These are the methods made available by the API
 
-    get:
-    Get all the data in the table corresponding to the workflow (no matter
-    how big) as a Base64 encoded string of the binary data frame. If the
-    workflow has no data, an empty {} is returned.
+    get: Get all the data in the table corresponding to the workflow (no
+    matter how big) as a Base64 encoded string of the binary data frame. If
+    the workflow has no data, an empty dictionary is returned.
 
-    post:
-    Upload a new table (Base64 encoded of a binary data frame) to a workflow
-    without. If there is a table already, the operation will be rejected
-    (consider deleting the table first or use PUT)
+    post: Upload a new table (Base64 encoded of a binary data frame) to a
+    workflow without. If there is a table already, the operation will be
+    rejected (consider deleting the table first or use PUT)
 
-    put:
-    Replace the table currently in the workflow with the one given Base64
+    put: Replace the table currently in the workflow with the one given Base64
     encoded string of the binary representation of a pandas data frame.
     """
 
@@ -228,7 +228,9 @@ class TableBasicMerge(APIView):
     post:
     Request to merge a given data frame with the one attached to the workflow.
     """
+
     serializer_class = None
+
     permission_classes = (UserIsInstructor,)
 
     # Retrieve
@@ -238,16 +240,15 @@ class TableBasicMerge(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None
+        workflow: Optional[Workflow] = None,
     ) -> HttpResponse:
+        """Process the GET request."""
         # Try to retrieve the wflow to check for permissions
-        serializer = self.serializer_class(
-            {'src_df':
-             load_table(workflow.get_data_frame_table_name()),
-             'how': '',
-             'left_on': '',
-             'right_on': ''}
-        )
+        serializer = self.serializer_class({
+            'src_df': load_table(workflow.get_data_frame_table_name()),
+            'how': '',
+            'left_on': '',
+            'right_on': ''})
         return Response(serializer.data)
 
     # Update
@@ -257,26 +258,28 @@ class TableBasicMerge(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None
+        workflow: Optional[Workflow] = None,
     ) -> HttpResponse:
+        """Process the put request."""
         # Get the dst_df
         dst_df = load_table(workflow.get_data_frame_table_name())
 
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
         # Check that the parameters are correct
         how = serializer.validated_data['how']
         if how == '' or how not in ['left', 'right', 'outer', 'inner']:
-            raise APIException(_('how must be one of left, right, outer '
-                                 'or inner'))
+            raise APIException(
+                _('how must be one of left, right, outer or inner'))
 
         left_on = serializer.validated_data['left_on']
         if not is_unique_column(dst_df[left_on]):
-            raise APIException(_('column {0} does not contain a unique '
-                                 'key.').format(left_on))
+            raise APIException(
+                _('column {0} does not contain a unique key.').format(left_on))
 
         # Operation has been accepted by the serializer
         src_df = serializer.validated_data['src_df']
@@ -284,13 +287,11 @@ class TableBasicMerge(APIView):
         right_on = serializer.validated_data['right_on']
         if right_on not in list(src_df.columns):
             raise APIException(_('column {0} not found in data frame').format(
-                right_on)
-            )
+                right_on))
 
         if not is_unique_column(src_df[right_on]):
-            raise APIException(
-                _('column {0} does not contain a unique key.').format(right_on)
-            )
+            raise APIException(_(
+                'column {0} does not contain a unique key.').format(right_on))
 
         merge_info = {
             'how_merge': how,
@@ -313,12 +314,12 @@ class TableBasicMerge(APIView):
                 _('Unable to perform merge operation: {0}').format(str(exc)))
 
         # Merge went through.
-        return Response(serializer.data,
-                        status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class TableJSONMerge(TableBasicMerge):
-    """
+    """Basic methods to perform JSON merge.
+
     get:
     Retrieves the data frame attached to the workflow and returns it labeled
     as "data_frame"
@@ -331,7 +332,8 @@ class TableJSONMerge(TableBasicMerge):
 
 
 class TablePandasMerge(TableBasicMerge):
-    """
+    """API to merge using a pandas data structure.
+
     This API is provided because OnTask stores the table internally as a
     Pandas data frame. When using conventional API transactions using JSON
     strings, it is possible to loose information because JSON cannot handle

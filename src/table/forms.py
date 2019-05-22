@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 
+"""Forms to manage Views."""
 
 from builtins import next, object
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import View
+from table.models import View
 
 
 class ViewAddForm(forms.ModelForm):
+    """Form to add a view."""
 
     # Columns to combine
     columns = forms.ModelMultipleChoiceField(queryset=None, required=False)
 
-    def __init__(self, data, *args, **kwargs):
+    def __init__(self, data, *args, **kwargs):  # noqa: Z110
+        """Initialize the object, store the workflow and rename fields."""
         self.workflow = kwargs.pop('workflow', None)
 
         super().__init__(data, *args, **kwargs)
@@ -47,14 +50,15 @@ class ViewAddForm(forms.ModelForm):
         if form_data['columns'].count() == 0:
             self.add_error(
                 None,
-                _('The view needs at least one column to show')
-            )
+                _('The view needs at least one column to show'))
 
-        if not next((x for x in form_data['columns'] if x.is_key), None):
+        if not next(
+            (col for col in form_data['columns'] if col.is_key),
+            None,
+        ):
             self.add_error(
                 None,
-                _('There needs to be at least one key column')
-            )
+                _('There needs to be at least one key column'))
 
         # Check if the name already exists
         name_exists = self.workflow.views.filter(
@@ -69,8 +73,7 @@ class ViewAddForm(forms.ModelForm):
         return form_data
 
     class Meta(object):
+        """Define models and fields to consider."""
+
         model = View
-        fields = ['name',
-                  'description_text',
-                  'formula',
-                  'columns']
+        fields = ['name', 'description_text', 'formula', 'columns']

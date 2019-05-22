@@ -164,12 +164,15 @@ def search_table(
     :return: The resulting query set
     """
     # Create the query
-    query = sql.SQL('SELECT {0} FROM {1}').format(
-        sql.SQL(', ').join([
-            OnTaskDBIdentifier(colname) for colname in columns_to_search
-        ]),
-        sql.Identifier(table_name),
-    )
+    if columns_to_search:
+        query = sql.SQL('SELECT {0} FROM {1}').format(
+            sql.SQL(', ').join([
+                OnTaskDBIdentifier(colname) for colname in columns_to_search
+            ]),
+            sql.Identifier(table_name),
+        )
+    else:
+        query = sql.SQL('SELECT * from {1}').format(sql.Identifier(table_name))
     query_fields = []
 
     where_clause = sql.SQL('')
@@ -206,7 +209,7 @@ def search_table(
 
     # Add the order if needed
     if order_col_name:
-        query = query + sql.SQL(' ') + sql.SQL('ORDER BY {0}').format(
+        query = query + sql.SQL(' ORDER BY ') + sql.SQL(
             OnTaskDBIdentifier(order_col_name))
 
     if not order_asc:

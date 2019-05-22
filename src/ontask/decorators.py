@@ -366,7 +366,7 @@ def get_view(
 
 def access_workflow(
     request,
-    wid: int,
+    wid: Optional[int],
     select_related: Optional[Union[str, List]] = None,
     prefetch_related: Optional[Union[str, List]] = None,
 ) -> Optional[Workflow]:

@@ -23,8 +23,7 @@ accessors = [
 
 
 class ToolConfig():
-    """
-    Object used to represent LTI configuration.
+    """Object used to represent LTI configuration.
 
     Capable of creating and reading the Common Cartridge XML representation of
     LTI links as described here:
@@ -33,9 +32,8 @@ class ToolConfig():
     """
 
     def __init__(self, **kwargs):
-        """
-        Create a new ToolConfig with the given options.
-        """
+        """Create a new ToolConfig with the given options."""
+
         # Initialize all class accessors to None
         for opt in accessors:
             setattr(self, opt, None)
@@ -49,8 +47,8 @@ class ToolConfig():
         for (key, val) in kwargs.items():
             setattr(self, key, val)
 
-    @staticmethod
-    def create_from_xml(xml):
+    @classmethod
+    def create_from_xml(cls, xml):
         """
         Create a ToolConfig from the given XML.
         """
@@ -59,48 +57,37 @@ class ToolConfig():
         return config
 
     def set_custom_param(self, key, val):
-        """
-        Set a custom parameter to provided value.
-        """
+        """Set a custom parameter to provided value."""
         self.custom_params[key] = val
 
     def get_custom_param(self, key):
-        """
-        Gets a custom parameter. It not yet set, returns None object.
-        """
+        """Gets a custom parameter. It not yet set, returns None object."""
         return self.custom_params[key]
 
     def set_ext_params(self, ext_key, ext_params):
-        """
-        Set the extension parameters for a specific vendor.
-        """
+        """Set the extension parameters for a specific vendor."""
         self.extensions[ext_key] = ext_params
 
     def get_ext_params(self, ext_key):
-        """
-        Get extension paramaters for provided extension. It not set, returns None object.
+        """Get extension paramaters for provided extension.
+
+        If not set, returns None object.
         """
         return self.extensions[ext_key]
 
     def set_ext_param(self, ext_key, param_key, val):
-        """
-        Set the provided parameter in a set of extension parameters.
-        """
+        """Set the provided parameter in a set of extension parameters."""
         if not self.extensions[ext_key]:
             self.extensions[ext_key] = defaultdict(lambda: None)
         self.extensions[ext_key][param_key] = val
 
     def get_ext_param(self, ext_key, param_key):
-        """
-        Get specific param in set of provided extension parameters.
-        """
+        """Get specific param in set of provided extension parameters."""
         return self.extensions[ext_key][param_key] if self.extensions[ext_key]\
             else None
 
     def process_xml(self, xml):
-        """
-        Parse tool configuration data out of the Common Cartridge LTI link XML.
-        """
+        """Parse tool configuration in the Common Cartridge LTI link XML."""
         root = objectify.fromstring(xml, parser=etree.XMLParser())
         # Parse all children of the root node
         for child in root.getchildren():
@@ -165,9 +152,7 @@ class ToolConfig():
                 self.set_ext_params(platform, properties)
 
     def to_xml(self, opts=defaultdict(lambda: None)):
-        """
-        Generate XML from the current settings.
-        """
+        """Generate XML from the current settings."""
         if not self.launch_url or not self.secure_launch_url:
             raise InvalidLTIConfigError('Invalid LTI configuration')
 
