@@ -469,7 +469,7 @@
     "fields": {
         "slug": "625c9377-9fa5-4565-8076-241cc5915c3f",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -479,7 +479,7 @@
     "fields": {
         "slug": "5c5f63d2-bd40-4edf-b8ce-c942ef3f76c6",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -489,7 +489,7 @@
     "fields": {
         "slug": "6c89d4f7-f6d4-4828-939c-e3eccb1a6ca7",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -499,7 +499,7 @@
     "fields": {
         "slug": "a73d2eed-14b1-42b3-81a1-25fcc7284936",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -509,7 +509,7 @@
     "fields": {
         "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -519,7 +519,7 @@
     "fields": {
         "slug": "7196ba08-9652-47f9-8f1f-dbc4ee33fa35",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -529,7 +529,7 @@
     "fields": {
         "slug": "66816e31-b582-401e-94e0-702d101a5413",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
