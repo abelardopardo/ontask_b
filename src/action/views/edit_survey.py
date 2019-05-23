@@ -49,7 +49,7 @@ class ColumnSelectedTable(tables.Table):
     def render_column__name(self, record):  # noqa: Z116
         """Render as a link."""
         return format_html(
-            '<a href="#" data-toggle="tooltip"'
+            '<a href="#questions" data-toggle="tooltip"'
             + ' class="js-workflow-question-edit" data-url="{0}"'
             + ' title="{1}">{2}</a>',
             reverse(
