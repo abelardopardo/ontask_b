@@ -15,11 +15,13 @@ from dataops.forms import SQLRequestPassword, load_df_from_sqlconnection
 from dataops.models import SQLConnection
 from dataops.pandas import store_dataframe, verify_data_frame
 from ontask import OnTaskDataFrameNoKey
+from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
 
 @user_passes_test(is_instructor)
+@get_workflow()
 def sqlupload_start(
     request: HttpRequest,
     pk: int,

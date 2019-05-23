@@ -170,6 +170,7 @@ def edit_action_out(
 
 @user_passes_test(is_instructor)
 @ajax_required
+@get_action()
 def showurl(
     request: HttpRequest,
     pk: int,
@@ -207,7 +208,7 @@ def showurl(
         return JsonResponse({'html_redirect': None})
 
     # Create the text for the action
-    url_text = reverse('action:serve', kwargs={'action_id': action.pk})
+    url_text = reverse('action:serve', kwargs={'action_id': action.id})
 
     # Render the page with the abolute URI
     return JsonResponse({
