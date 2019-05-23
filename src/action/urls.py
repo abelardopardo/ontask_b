@@ -27,7 +27,7 @@ urlpatterns = [
     path('', action_index, name='index'),
     path('<int:wid>/index/', action_index, name='index_set'),
 
-    # Create an action of type 0: in, 1: Out
+    # Create an action
     path('create/', ActionCreateView.as_view(), name='create'),
 
     # Show timeline
