@@ -123,7 +123,10 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
 
 @user_passes_test(is_instructor)
 @get_workflow()
-def run_action_item_filter(request: HttpRequest) -> HttpResponse:
+def run_action_item_filter(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Offer a select widget to tick items to exclude from selection.
 
     This is a generic Web function. It assumes that the session object has a
