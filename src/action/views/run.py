@@ -26,7 +26,7 @@ from action.views.run_survey import run_survey_action
 from action.views.serve_survey import serve_survey_row
 from logs.models import Log
 from ontask.celery import celery_is_up
-from ontask.decorators import get_action
+from ontask.decorators import get_action, get_workflow
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
 
@@ -122,6 +122,7 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
 
 
 @user_passes_test(is_instructor)
+@get_workflow()
 def run_action_item_filter(request: HttpRequest) -> HttpResponse:
     """Offer a select widget to tick items to exclude from selection.
 
