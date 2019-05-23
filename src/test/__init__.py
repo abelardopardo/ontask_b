@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from builtins import object, range, str
 import io
 import math
 import os
 import subprocess
+from builtins import object, range, str
 
-from PIL import Image
+import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -13,7 +13,7 @@ from django.db import connection
 from django.shortcuts import reverse
 from django.test import LiveServerTestCase, TransactionTestCase
 from future import standard_library
-import pandas as pd
+from PIL import Image
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver

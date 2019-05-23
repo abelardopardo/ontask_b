@@ -15,9 +15,9 @@ from django.db import models
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.sql import get_num_rows, select_ids_all_false
 import ontask
 from dataops.formula import EVAL_TXT, evaluate_formula, evaluation
+from dataops.sql import get_num_rows, select_ids_all_false
 from logs.models import Log
 from workflow.models import Column, Workflow
 

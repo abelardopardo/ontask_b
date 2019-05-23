@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 
 """Functions to do data frame merging."""
+from typing import Dict
+
 import pandas as pd
 from django.utils.translation import gettext
 
 from dataops.pandas.columns import has_unique_column, is_unique_column
 from dataops.pandas.dataframe import store_dataframe
+from workflow.models import Workflow
 
 
 def _perform_non_overlapping_column_merge(
-    dst_df,
-    src_df_no_overlap,
-    merge_info,
-    dst_key,
-    src_key
-):
+    dst_df: pd.DataFrame,
+    src_df_no_overlap: pd.DataFrame,
+    merge_info: Dict,
+    dst_key: str,
+    src_key: str,
+) -> pd.DataFrame:
     """Merge the non overlapping columns of the new data frame.
 
     :param dst_df: Existing data frame
@@ -26,7 +29,8 @@ def _perform_non_overlapping_column_merge(
     :param dst_key: key column in dst_frame
 
     :param src_key: key column in src_frame
-    :return:
+
+    :return: Modified data frame
     """
     # Step A. Perform the merge of non-overlapping columns
     new_df = dst_df
@@ -54,73 +58,7 @@ def _perform_non_overlapping_column_merge(
     return new_df
 
 
-# TODO: Remove this function
-# def _review_column_data_types(columns, new_df):
-#     """Traverse the resulting columns and verify the data types.
-#
-#     :param columns: List of columns in the workflow
-#
-#     :param new_df: resulting data frame to process
-#
-#     :return: String with diagnostics, or None if everything is right.
-#     """
-#     # For each column check that the new column is consistent with data_type,
-#     # and allowed values, and recheck its unique key status
-#     for col in columns:
-#         # New values in this column should be compatible with the current
-#         # column properties.
-#         # Condition 1: Data type is correct (there is an exception for columns
-#         # of type "object" in the data frame and "boolean" in the column as the
-#         # new resulting column may have a mix of booleans and floats.
-#         df_col_type = pandas_datatype_names.get(new_df[col.name].dtype.name)
-#
-#         if col.data_type == 'boolean' and df_col_type == 'string':
-#             column_data_types = {type(cname) for cname in new_df[col.name]}
-#             # Remove the NoneType and Float
-#             column_data_types.discard(type(None))
-#             column_data_types.discard(float)
-#             if len(column_data_types) != 1 or column_data_types.pop() != bool:
-#                 return gettext(
-#                     'New values in column {0} are not of type {1}',
-#                 ).format(col.name, col.data_type)
-#         elif (
-#             col.data_type == 'integer' and df_col_type != 'integer'
-#             and df_col_type != 'double'
-#         ):
-#             # Numeric column results in a non-numeric column
-#             return gettext(
-#                 'New values in column {0} are not of type number',
-#             ).format(col.name)
-#         elif col.data_type != 'integer' and df_col_type != col.data_type:
-#             # Any other type change
-#             return gettext(
-#                 'New values in column {0} are not of type {1}',
-#             ).format(col.name, col.data_type)
-#
-#         # Condition 2: If there are categories, the new values should be
-#         # compatible with them.
-#         if col.categories and not all(
-#             colname in col.categories for colname in new_df[col.name]
-#             if colname and not pd.isnull(colname)
-#         ):
-#             return gettext(
-#                 'New values in column {0} are not in categories {1}',
-#             ).format(col.name, ', '.join(col.categories))
-#
-#         # Condition 3: If the column is marked as a key column, it should
-#         # maintain that property.
-#         if col.is_key:
-#             if not is_unique_column(new_df[col.name]):
-#                 return gettext(
-#                     'Column {0} looses its "key" property through this merge.'
-#                     + ' Either remove this property from the column or '
-#                     + 'remove the rows that cause this problem in the new '
-#                     + 'dataset').format(col.name)
-#
-#     return None
-
-
-def _update_is_key_field(merge_info, workflow):
+def _update_is_key_field(merge_info: Dict, workflow: Workflow):
     """Traverse the list of columns and reset the key property.
 
     :param merge_info: dictionary with the lists of columns to upload, rename
@@ -152,7 +90,13 @@ def _update_is_key_field(merge_info, workflow):
         col.save()
 
 
-def _perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
+def _perform_overlap_update(
+    dst_df: pd.DataFrame,
+    src_df: pd.DataFrame,
+    dst_key: str,
+    src_key: str,
+    how_merge: str,
+) -> pd.DataFrame:
     """Perform the updat of the columns that overlap with the data_frame.
 
     :param dst_df: Left data frame with all the columns
@@ -250,7 +194,12 @@ def _perform_overlap_update(dst_df, src_df, dst_key, src_key, how_merge):
     return overlap_df.reset_index(drop=True)
 
 
-def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
+def perform_dataframe_upload_merge(
+    workflow: Workflow,
+    dst_df: pd.DataFrame,
+    src_df: pd.DataFrame,
+    merge_info: Dict
+):
     """Merge the existing data frame (dst) with a new one (src).
 
     It either stores a data frame in the db (dst_df is None), or combines
@@ -345,7 +294,7 @@ def perform_dataframe_upload_merge(workflow, dst_df, src_df, merge_info):
             column.is_key = is_key
             column.save()
 
-        return None
+        return
 
     # Get the keys
     src_key = merge_info['src_selected_key']

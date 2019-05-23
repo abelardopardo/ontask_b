@@ -3,12 +3,12 @@
 """Tests redirection to home when no workflow is selected."""
 
 import os
+import test
 
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
-from django.conf import settings
 
-import test
 from workflow.models import Workflow
 
 

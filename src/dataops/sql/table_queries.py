@@ -18,7 +18,7 @@ def get_boolean_clause(
     filter_formula: Optional[Dict] = None,
     filter_pairs: Optional[Mapping] = None,
     conjunction: bool = True,
-):
+) -> Tuple[sql.Composed, List]:
     """Create the boolean clause based on a formula and a list of pairs.
 
     Create the SQL boolean clause to be added to a query by combining a
@@ -30,7 +30,10 @@ def get_boolean_clause(
 
     :param filter_pairs: Dictionary of key/value pairs.
 
-    :return: SQL clause
+    :param conjunction: Boolean stating if the clauses need to be in a
+    conjunction.
+
+    :return: SQL clause and list of fields.
     """
     clause = None
     clause_fields = []

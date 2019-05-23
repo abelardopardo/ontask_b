@@ -32,6 +32,7 @@ from dataops.models import SQLConnection
 from dataops.pandas import store_dataframe, verify_data_frame
 from ontask import OnTaskDataFrameNoKey, ontask_prefs
 from ontask.forms import RestrictedFileField
+
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
 
