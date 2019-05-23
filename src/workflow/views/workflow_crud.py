@@ -67,64 +67,52 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
             self.template_name)
 
 
-class WorkflowDetailView(UserIsInstructor, generic.DetailView):
-    """Class to provide the detailed view of a single workflow.
+@user_passes_test(is_instructor)
+@get_workflow(pf_related=['columns', 'shared'])
+def detail(
+    request: HttpRequest,
+    workflow: Optional[Workflow],
+) -> HttpResponse:
+    """Http request to serve the details page for the workflow.
 
-    @DynamicAttrs
+    :param request: HTTP Request
+
+    :return:
     """
+    context = {}
+    # Get the table information (if it exist)
+    context['workflow'] = workflow
+    context['table_info'] = None
+    if workflow.has_table():
+        context['table_info'] = {
+            'num_rows': workflow.nrows,
+            'num_cols': workflow.ncols,
+            'num_actions': workflow.actions.count(),
+            'num_attributes': len(workflow.attributes)}
 
-    model = Workflow
+    # put the number of key columns in the context
+    context['num_key_columns'] = workflow.columns.filter(
+        is_key=True,
+    ).count()
 
-    template_name = 'workflow/detail.html'
+    # Guarantee that column position is set for backward compatibility
+    columns = workflow.columns.all()
+    if any(col.position == 0 for col in columns):
+        # At least a column has index equal to zero, so reset all of them
+        for idx, col in enumerate(columns):
+            col.position = idx + 1
+            col.save()
 
-    context_object_name = 'workflow'
+    # Safety check for consistency (only in development)
+    if settings.DEBUG:
+        check_wf_df(workflow)
 
-    def get_object(self, queryset=None):
-        """Get the current object."""
-        # Check if the workflow is locked
-        workflow = access_workflow(
-            self.request,
-            None,
-            prefetch_related=['actions', 'columns'])
+        # Columns are properly numbered
+        cpos = workflow.columns.all().values_list('position', flat=True)
+        rng = range(1, len(cpos) + 1)
+        assert sorted(cpos) == list(rng)
 
-        return workflow
-
-    def get_context_data(self, **kwargs):
-        """Get the context data to render the detailed page."""
-        context = super().get_context_data(**kwargs)
-
-        # Get the table information (if it exist)
-        context['table_info'] = None
-        if self.object.has_table():
-            context['table_info'] = {
-                'num_rows': self.object.nrows,
-                'num_cols': self.object.ncols,
-                'num_actions': self.object.actions.count(),
-                'num_attributes': len(self.object.attributes)}
-
-        # put the number of key columns in the context
-        context['num_key_columns'] = self.object.columns.filter(
-            is_key=True,
-        ).count()
-
-        # Guarantee that column position is set for backward compatibility
-        columns = self.object.columns.all()
-        if any(col.position == 0 for col in columns):
-            # At least a column has index equal to zero, so reset all of them
-            for idx, col in enumerate(columns):
-                col.position = idx + 1
-                col.save()
-
-        # Safety check for consistency (only in development)
-        if settings.DEBUG:
-            check_wf_df(self.object)
-
-            # Columns are properly numbered
-            cpos = self.object.columns.all().values_list('position', flat=True)
-            rng = range(1, len(cpos) + 1)
-            assert sorted(cpos) == list(rng)
-
-        return context
+    return render(request, 'workflow/detail.html', context)
 
 
 def save_workflow_form(

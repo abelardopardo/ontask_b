@@ -13,7 +13,7 @@ from workflow.views.column_ops import (
 from workflow.views.import_export import export, export_ask, import_workflow
 from workflow.views.share import share_create, share_delete
 from workflow.views.workflow_crud import (
-    WorkflowCreateView, WorkflowDetailView, clone, delete, index, update,
+    WorkflowCreateView, detail, clone, delete, index, update,
 )
 from workflow.views.workflow_ops import (
     assign_luser_column, column_ss, flush, operations,
