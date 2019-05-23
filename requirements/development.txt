@@ -1,4 +1,4 @@
 -r base.txt
 django-debug-toolbar==1.11
-Werkzeug==0.15.2
+Werkzeug==0.15.4
 selenium==3.141.0
