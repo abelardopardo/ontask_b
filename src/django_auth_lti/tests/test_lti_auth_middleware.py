@@ -33,8 +33,8 @@ class TestLTIAuthMiddleware(unittest.TestCase):
     @patch('django_auth_lti.middleware.auth')
     def test_roles_merged_with_custom_roles(self, mock_auth, mock_logger):
         """
-        Assert that 'roles' list in session contains merged set of roles when custom role key is
-        defined and values have been passed in.
+        Assert that 'roles' list in session contains merged set of roles when
+        custom role key is defined and values have been passed in.
         """
         request = self.build_lti_launch_request({
             'roles': 'RoleOne,RoleTwo',

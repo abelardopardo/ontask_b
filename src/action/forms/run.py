@@ -511,6 +511,7 @@ class EnableURLForm(forms.ModelForm):
         fields = ('serve_enabled', 'active_from', 'active_to')
 
         widgets = {
-            'active_from': DateTimePickerInput(options=date_time_widget_options),
+            'active_from': DateTimePickerInput(
+                options=date_time_widget_options),
             'active_to': DateTimePickerInput(options=date_time_widget_options),
         }

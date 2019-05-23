@@ -22,7 +22,7 @@ accessors = [
 ]
 
 
-class ToolConfig():
+class ToolConfig(object):
     """Object used to represent LTI configuration.
 
     Capable of creating and reading the Common Cartridge XML representation of

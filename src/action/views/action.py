@@ -57,7 +57,7 @@ class ActionTable(tables.Table):
         text=lambda record: simplify_datetime_str(
             record.last_executed_log.modified),
         kwargs={'pk': A('last_executed_log.id')},
-        attrs={'a': {'class': 'spin'}}
+        attrs={'a': {'class': 'spin'}},
     )
 
     #
@@ -92,7 +92,7 @@ class ActionTable(tables.Table):
                     record.get_row_all_false_count or not record.is_executable
                 ),
                 'action_name': record.name,
-            }
+            },
         )
 
     class Meta(object):

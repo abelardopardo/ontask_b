@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
 
-import random
 from builtins import str
+import random
 
 import pandas as pd
 
@@ -163,8 +162,9 @@ def main():
 
     # df.to_csv('mslq_sample.csv', index=False)
     plugin_instance = MSLQEvaluate()
-    result = plugin_instance.run(df,
-                                 parameters={'answer_list': ', '.join(answers)})
+    result = plugin_instance.run(
+        df,
+        parameters={'answer_list': ', '.join(answers)})
 
     print(result)
 

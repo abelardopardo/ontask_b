@@ -86,7 +86,7 @@ def _realign_column_info(workflow, data_frame):
                 type(row_value)
                 for row_value in data_frame[col.name]
                 # Remove the NoneType and Float
-                if type(row_value) != float and type(row_value) != type(None)
+                if not isinstance(row_value, float) and not row_value is None
             }
             if len(column_data_types) != 1 or column_data_types.pop() != bool:
                 raise Exception(gettext(

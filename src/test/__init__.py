@@ -1124,7 +1124,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             '//*[@id="div_id_columns"]//div[@class="sol-selection"]'
         )
         for cname in cols:
-            element = options.find_element_by_xpath(
+            options.find_element_by_xpath(
                 'div/label/div[normalize-space()="{0}"]'.format(cname)
             ).click()
 
@@ -1693,8 +1693,9 @@ class ScreenTests(OnTaskLiveTestCase):
         dims = body.size
 
         # If the bottom of the content is before the footer, crop
-        if (coord['y'] + dims['height'] * self.device_pixel_ratio) \
-            < self.viewport_height:
+        if (
+            coord['y'] + dims['height'] * self.device_pixel_ratio
+        ) < self.viewport_height:
             img = img.crop(
                 (0,
                  0,

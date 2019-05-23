@@ -77,7 +77,6 @@ class TableApiBase(test.OnTaskApiTestCase):
         super().setUp()
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email='instructor01@bogus.com')
-        'Token ' + token.key
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         test.pg_restore_table(self.filename)
 

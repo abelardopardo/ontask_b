@@ -91,7 +91,7 @@ class SQLConnectionTableRun(tables.Table):
 
 def save_conn_form(
     request: HttpRequest,
-    form: SQLConnectionForm ,
+    form: SQLConnectionForm,
     template_name: str,
 ) -> JsonResponse:
     """Save the connection provided in the form.

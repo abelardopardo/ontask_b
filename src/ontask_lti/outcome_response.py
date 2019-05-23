@@ -27,7 +27,7 @@ accessors = [
 ]
 
 
-class OutcomeResponse():
+class OutcomeResponse(object):
     """
     This class consumes & generates LTI Outcome Responses.
 

@@ -29,7 +29,6 @@ class BackToHome(TestCase):
         super().setUp()
         test.pg_restore_table(self.filename)
 
-
     def test_back_to_home_page(self):
 
         redirect = [

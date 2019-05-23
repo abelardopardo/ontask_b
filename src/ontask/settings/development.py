@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 import logging.config
 
-from .base import *  # NOQA
+from ontask.settings.base import *  # NOQA
 
 # Turn off debug while imported by Celery with a workaround
 # See http://stackoverflow.com/a/4806384
