@@ -565,8 +565,7 @@ def column_edit(
             {
                 'id': workflow.id,
                 'name': workflow.name,
-                'column_name': form.old_name,
-                'new_name': column.name})
+                'column_name': column.name})
 
         # Done processing the correct POST request
         return JsonResponse({'html_redirect': ''})
@@ -579,7 +578,7 @@ def column_edit(
         'html_form': render_to_string(
             template,
             {'form': form,
-             'cname': form.old_name,
+             'cname': column.name,
              'pk': pk},
             request=request),
     })
