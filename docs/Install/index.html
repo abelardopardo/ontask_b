@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>2. Installation process &#8212; OnTask (B.4.3.2) 1.1.0 documentation</title>
+    <title>2. Installation process &#8212; OnTask (B.5) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -57,7 +57,7 @@
 <h2>2.1. Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>OnTask has been developed as a <a class="reference external" href="https://www.djangoproject.com/">Django</a> application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. But as with many other applications, OnTask requires a set of additional applications for its execution:</p>
 <ul class="simple">
-<li><p>Python 3.7</p></li>
+<li><p>Python 3</p></li>
 <li><p>Django 2.2</p></li>
 <li><p>Additional Django modules (included in the requirements/base.txt) file</p></li>
 <li><p>Redis</p></li>
@@ -75,7 +75,7 @@
 </div>
 <div class="section" id="are-you-upgrading-from-version-4-3-to-4-3">
 <h2>2.4. Are you upgrading from version &lt; 4.3 to 4.3?<a class="headerlink" href="#are-you-upgrading-from-version-4-3-to-4-3" title="Permalink to this headline">¶</a></h2>
-<p>The  upgrade to 4.3 or later no longer requires two versions of Python. It only requires Python 3.7. Make sure the application is only using version 3.7</p>
+<p>The  upgrade to 4.3 or later no longer requires two versions of Python. It only requires Python 3. Make sure the application is only using version 3.</p>
 </div>
 <div class="section" id="required-tools">
 <h2>2.5. Required tools<a class="headerlink" href="#required-tools" title="Permalink to this headline">¶</a></h2>
@@ -113,11 +113,11 @@ options.</p>
 </div>
 <div class="section" id="install-python-3">
 <h3>2.5.3. Install Python 3<a class="headerlink" href="#install-python-3" title="Permalink to this headline">¶</a></h3>
-<p>In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreter for version 3.7.</p>
+<p>In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreter for version 3.</p>
 <ol class="arabic simple">
 <li><p>Install <a class="reference external" href="https://www.python.org/">python</a></p></li>
-<li><p>Verify that the interpreter can run and has the right version (3.7) using the command line interpreter (either <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">--version</span></code> or <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">--version</span></code>).</p></li>
-<li><p>Install <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a> (the package may be called <code class="docutils literal notranslate"><span class="pre">python3-pip</span></code> for Python 3.7). This tool will be used to install additional libraries required to execute OnTask.</p></li>
+<li><p>Verify that the interpreter can run and has the right version (3) using the command line interpreter (either <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">--version</span></code> or <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">--version</span></code>).</p></li>
+<li><p>Install <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a> (the package may be called <code class="docutils literal notranslate"><span class="pre">python3-pip</span></code> for Python 3). This tool will be used to install additional libraries required to execute OnTask.</p></li>
 </ol>
 </div>
 </div>
@@ -318,9 +318,13 @@ different content after the equal sign):</p>
 </div>
 <div class="section" id="ontask-installation">
 <h3>2.6.2. OnTask Installation<a class="headerlink" href="#ontask-installation" title="Permalink to this headline">¶</a></h3>
-<p>Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next step is to create the initial database configuration, documentation, additional site files, and deploy. If at some point during the following steps you want to reset the content of the database, run the commands <code class="docutils literal notranslate"><span class="pre">dropdb</span></code> and <code class="docutils literal notranslate"><span class="pre">createdb</span></code> explained in <a class="reference internal" href="#install-postgresql"><span class="std std-ref">Install and Configure PostgreSQL</span></a>.</p>
+<p>Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next steps create the documentation, initial database configuration, additional site files, and deploy. To generate the documentation go to the folder <code class="docutils literal notranslate"><span class="pre">docs_src</span></code>, make sure it contains the sub-folders with names <code class="docutils literal notranslate"><span class="pre">_static</span></code> and <code class="docutils literal notranslate"><span class="pre">_templates</span></code> and execute the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span> <span class="n">html</span> <span class="n">copy_to_docs</span>
+</pre></div>
+</div>
+<p>The documentation is created by the application <code class="docutils literal notranslate"><span class="pre">sphinx-doc</span></code> and stored in the directory <code class="docutils literal notranslate"><span class="pre">_build</span></code> which is then copied to the <code class="docutils literal notranslate"><span class="pre">../docs</span></code> folder. Once the documentation has been created, the next steps configure the database. If at some point during the following steps you want to reset the content of the database, run the commands <code class="docutils literal notranslate"><span class="pre">dropdb</span></code> and <code class="docutils literal notranslate"><span class="pre">createdb</span></code> explained in <a class="reference internal" href="#install-postgresql"><span class="std std-ref">Install and Configure PostgreSQL</span></a>. The following commands have to be execute from the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder.</p>
 <ol class="arabic">
-<li><p>Execute the following command from the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder to create the database internal structure:</p>
+<li><p>Execute the following command to create the database internal structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
 </pre></div>
 </div>
@@ -338,20 +342,12 @@ different content after the equal sign):</p>
 </div>
 <p>Remember the data that you enter in this step so that you use it when you enter OnTask with your browser.</p>
 </li>
-<li><p>Go to the <code class="docutils literal notranslate"><span class="pre">docs_src</span></code> folder to generate the documentation. Make sure this folder contains the sub-folders with name <code class="docutils literal notranslate"><span class="pre">_static</span></code> and <code class="docutils literal notranslate"><span class="pre">_templates</span></code>. Execute the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span> <span class="n">html</span> <span class="n">copy_to_docs</span>
-</pre></div>
-</div>
-<p>The documentation is produced by the <code class="docutils literal notranslate"><span class="pre">sphinx-doc</span></code> application and generates the directory <code class="docutils literal notranslate"><span class="pre">_build</span></code> which is then created to the folder <code class="docutils literal notranslate"><span class="pre">../docs</span></code> folder.</p>
-</li>
-<li><p>From the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder execute the following command to collect and install
-the static content:</p>
+<li><p>Execute the following command to collect and install the static content:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
 </pre></div>
 </div>
 </li>
-<li><p>If you are running a production instance, execute the following
-command to check the status of the platform:</p>
+<li><p>If you are running a production instance, execute the following command to check the status of the platform:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="o">--</span><span class="n">deploy</span>
 </pre></div>
 </div>
@@ -767,7 +763,7 @@ before starting the application. Make sure the server is running <strong>in prod
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">dataops.plugin</span> <span class="kn">import</span> <span class="n">OnTaskPluginAbstract</span>
+<span class="kn">from</span> <span class="nn">dataops.plugin.ontask_plugin</span> <span class="kn">import</span> <span class="n">OnTaskPluginAbstract</span>
 
 <span class="c1"># The field class_name contains the name of the class to load to execute the</span>
 <span class="c1"># plugin.</span>
@@ -953,6 +949,17 @@ this with the option <code class="docutils literal notranslate"><span class="pre
 </li>
 </ol>
 </div>
+<div class="section" id="creating-a-development-server-using-docker">
+<span id="docker"></span><h2>2.16. Creating a Development Server using Docker<a class="headerlink" href="#creating-a-development-server-using-docker" title="Permalink to this headline">¶</a></h2>
+<p>You may use <cite>Docker &lt;https://docker.com&gt;</cite> to create a set of containers that run a <strong>development</strong> server. The file <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> and the folder <code class="docutils literal notranslate"><span class="pre">docker</span></code> contains the configuration files to create the required images and instantiate them as containers. The current configuration creates three containers: one running Postgresql, one running Redis (cache), and the third runs the web server (Apache) with the wsgi connector, and <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> controlling the executing of two Celery workers (one for asynchronous tasks, and one for scheduled ones).</p>
+<p>The server running in the docker container needs an extra configuration file with the database and redis connection pointing to the right locations within the docker network.</p>
+<p>After installing the Docker environment in your computer and creating the configuration file for the server running in the container, the sequence of commands to start the server is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">build</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
+</pre></div>
+</div>
+<p>If successful, the process will create three containers and the development server will be accessible through port 8080 in the host machine.</p>
+</div>
 </div>
 
 
@@ -1017,6 +1024,7 @@ this with the option <code class="docutils literal notranslate"><span class="pre
 <li class="toctree-l2"><a class="reference internal" href="#plugins">2.13. Plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sql-connections">2.14. SQL Connections</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-users-in-bulk">2.15. Creating users in Bulk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-development-server-using-docker">2.16. Creating a Development Server using Docker</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Using/index.html">3. Using OnTask</a></li>
