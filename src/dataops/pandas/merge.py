@@ -8,7 +8,6 @@ from django.utils.translation import gettext
 
 from dataops.pandas.columns import has_unique_column, is_unique_column
 from dataops.pandas.dataframe import store_dataframe
-from workflow.models import Workflow
 
 
 def _perform_non_overlapping_column_merge(
@@ -58,7 +57,7 @@ def _perform_non_overlapping_column_merge(
     return new_df
 
 
-def _update_is_key_field(merge_info: Dict, workflow: Workflow):
+def _update_is_key_field(merge_info: Dict, workflow):
     """Traverse the list of columns and reset the key property.
 
     :param merge_info: dictionary with the lists of columns to upload, rename
@@ -195,7 +194,7 @@ def _perform_overlap_update(
 
 
 def perform_dataframe_upload_merge(
-    workflow: Workflow,
+    workflow,
     dst_df: pd.DataFrame,
     src_df: pd.DataFrame,
     merge_info: Dict
