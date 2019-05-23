@@ -38,6 +38,11 @@ class ColumnBasicForm(forms.ModelForm):
 
         super().__init__(*args, **kwargs)
 
+        # Remember the column name and position to perform content substitution
+        if self.instance.name:
+            self.old_name = self.instance.name
+            self.old_position = self.instance.position
+
         self.fields['raw_categories'].initial = ', '.join(
             [str(cat) for cat in self.instance.get_categories()])
 
@@ -289,11 +294,6 @@ class ColumnRenameForm(ColumnBasicForm):
     def __init__(self, *args, **kwargs):
         """Set the data type to disable to prevent type changes."""
         super().__init__(*args, **kwargs)
-
-        # Remember the column name and position to perform content substitution
-        if self.instance.name:
-            self.old_name = self.instance.name
-            self.old_position = self.instance.position
 
         self.fields['data_type'].disabled = True
 
