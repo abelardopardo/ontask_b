@@ -5,6 +5,7 @@ import collections
 from typing import Dict, Optional
 
 from django.conf import settings as ontask_settings
+from django.contrib.sessions.backends.base import SessionBase
 from django.contrib.sessions.models import Session
 
 action_session_dictionary = 'action_run_payload'
@@ -210,7 +211,7 @@ class ZipPayload(ActionPayload):
     ]
 
 
-def get_action_payload(session: Session) -> Dict:
+def get_action_payload(session: SessionBase) -> Dict:
     """Get the payload from the current session.
 
     :param session: Session object

@@ -19,7 +19,7 @@ except NameError:
     def profile(x): return x  # noqa E731
 
 
-def create_columns(new_columns, context):
+def _create_columns(new_columns, context):
     """Add new_columns just created to the DB in the given context.
 
     :param new_columns: List of columns that have been already created
@@ -64,7 +64,7 @@ def create_columns(new_columns, context):
     return new_columns
 
 
-def process_columns(validated_data, context):
+def _process_columns(validated_data, context):
     """Process the used_columns field of a serializer.
 
     Verifies if the column is new or not. If not new, it verifies that is
@@ -111,7 +111,7 @@ def process_columns(validated_data, context):
     if not new_columns:
         return new_columns
 
-    return create_columns(new_columns, context)
+    return _create_columns(new_columns, context)
 
 
 class ConditionSerializer(serializers.ModelSerializer):
@@ -135,7 +135,6 @@ class ConditionSerializer(serializers.ModelSerializer):
         """
         condition_obj = None
         try:
-            # Bypass create to insert the reference to the action (in context)
             condition_obj = Condition(
                 action=self.context['action'],
                 name=validated_data['name'],
@@ -395,7 +394,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
         """Create the Action object with the validated data."""
         new_columns = []
         try:
-            new_columns = process_columns(
+            new_columns = _process_columns(
                 validated_data['used_columns'],
                 self.context)
 
