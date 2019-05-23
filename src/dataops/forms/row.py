@@ -15,7 +15,7 @@ class RowForm(forms.Form):
         """Initialize form based on list of columns."""
         # Store the instance
         self.workflow = kargs.pop('workflow', None)
-        self.columns = self.workflow.get_columns()
+        self.columns = self.workflow.columns.all()
         self.initial_values = kargs.pop('initial_values', {})
 
         super().__init__(*args, **kargs)
