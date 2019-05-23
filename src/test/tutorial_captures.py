@@ -448,7 +448,7 @@ class TutorialCaptures(ScreenTests):
         ).click()
         self.selenium.find_element_by_name('exclude_values').click()
         self.selenium.find_element_by_xpath(
-            '(//input[@name="exclude_values"]0)[2]'
+            '(//input[@name="exclude_values"])[2]'
         ).click()
         self.selenium.find_element_by_xpath(
             '(//input[@name="exclude_values"])[3]'
@@ -601,6 +601,7 @@ class TutorialCaptures(ScreenTests):
         self.body_ss('tutorial_survey_editor.png')
 
         # Click on the Add Column button
+        self.select_questions_tab()
         self.selenium.find_element_by_xpath(
             '//button[normalize-space()="Create question"]'
         ).click()

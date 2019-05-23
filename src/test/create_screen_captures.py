@@ -2,8 +2,6 @@
 
 
 import os
-import test
-from test import ElementHasFullOpacity, ScreenTests
 
 from django.conf import settings
 from future import standard_library
@@ -15,6 +13,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from action.models import Action
 from dataops.pandas import destroy_db_engine
+import test
+from test import ElementHasFullOpacity, ScreenTests
 
 standard_library.install_aliases()
 
@@ -426,10 +426,11 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('dataops_transform_list.png')
 
         # Click to run test_plugin_1
-        element = self.search_table_row_by_string('transform-table',
-                                                  1,
-                                                  'test_plugin_1')
-        element.find_element_by_xpath('td[2]/a').click()
+        element = self.search_table_row_by_string(
+            'transform-table',
+            1,
+            'Test Plugin 1 Name')
+        element.find_element_by_xpath('td[1]/a').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -517,6 +518,7 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('action_edit_action_in.png')
 
         # Open the "Create question modal"
+        self.select_questions_tab()
         self.selenium.find_element_by_xpath(
             "//button[contains(@class, 'js-workflow-question-add')]").click()
         self.wait_for_modal_open()
