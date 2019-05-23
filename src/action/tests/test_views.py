@@ -515,6 +515,57 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+    def test_action_URL(self):
+
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        self.open_action_url('simple action', txt='URL Off')
+
+        # Assert the content in the modal
+        self.assertIn(
+            'This URL provides access to the content personalised',
+            self.selenium.page_source)
+
+        # Enable the URL
+        self.selenium.find_element_by_id('id_serve_enabled').click()
+
+        # Click OK
+        self.selenium.find_element_by_css_selector(
+            'div.modal-footer > button.btn.btn-outline-primary'
+        ).click()
+
+        # close modal
+        self.wait_for_modal_close()
+
+        # Assert that the action has the value changed
+        a = Action.objects.get(name='simple action')
+        self.assertEqual(a.serve_enabled, True)
+
+        self.open_action_url('simple action')
+        # Disable the URL
+        self.selenium.find_element_by_id('id_serve_enabled').click()
+        # Click OK
+        self.selenium.find_element_by_css_selector(
+            'div.modal-footer > button.btn.btn-outline-primary'
+        ).click()
+
+        # close modal
+        self.wait_for_modal_close()
+
+        # Assert that the action has the value changed
+        a.refresh_from_db()
+        self.assertEqual(a.serve_enabled, False)
+
+        # End of session
+        self.logout()
+
 
 class ActionActionInCreate(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
