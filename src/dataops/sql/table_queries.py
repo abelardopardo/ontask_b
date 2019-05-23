@@ -209,7 +209,7 @@ def search_table(
 
     # Add the order if needed
     if order_col_name:
-        query = query + sql.SQL(' ORDER BY ') + sql.SQL(
+        query = query + sql.SQL(' ORDER BY {0}').format(
             OnTaskDBIdentifier(order_col_name))
 
     if not order_asc:
