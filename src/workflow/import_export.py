@@ -36,7 +36,7 @@ def _run_compatibility_patches(json_data):
     :return: Modified json_data
     """
     for action_obj in json_data['actions']:
-        if action_obj['target_url'] is None:
+        if action_obj.get('target_url') is None:
             action_obj['target_url'] = ''
 
     return json_data
