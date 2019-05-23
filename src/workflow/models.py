@@ -626,6 +626,7 @@ class Column(models.Model):
             'boolean': lambda txt_val: (
                 txt_val.lower() == 'true' or txt_val == 1),
             'datetime': lambda txt_val: parse_datetime(txt_val),
+            'integer': None,
         }
 
         if data_type not in distrib.keys():
