@@ -55,7 +55,7 @@ def add_column_to_db(
     if initial is not None:
         query = query + sql.SQL(' DEFAULT ') + sql.Literal(initial)
 
-    connection.cursor().execute(query)
+    connection.connection.cursor().execute(query)
 
 
 def is_column_in_table(table_name: str, column_name: str) -> bool:
@@ -72,7 +72,7 @@ def is_column_in_table(table_name: str, column_name: str) -> bool:
         + 'WHERE table_name = {0} AND column_name = {1})',
     ).format(sql.Literal(table_name), sql.Literal(column_name))
 
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(query, [table_name, column_name])
         return cursor.fetchone()[0]
 
@@ -92,7 +92,7 @@ def is_column_table_unique(table_name: str, column_name: str) -> bool:
     )
 
     # Get the result
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(query, [])
         return cursor.fetchone()[0]
 
@@ -104,7 +104,7 @@ def get_df_column_types(table_name: str) -> List[str]:
 
     :return: List of SQL types
     """
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(sql.SQL(
             'SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS '
             + 'WHERE TABLE_NAME = {0}').format(sql.Literal(table_name)))
@@ -125,7 +125,7 @@ def db_rename_column(table: str, old_name: str, new_name: str):
 
     :return: Nothing. Change reflected in the database table
     """
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(sql.SQL('ALTER TABLE {0} RENAME {1} TO {2}').format(
             sql.Identifier(table),
             sql.Identifier(old_name),
@@ -142,7 +142,7 @@ def df_drop_column(table_name: str, column_name: str):
 
     :return: Drops the column from the corresponding DB table
     """
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(sql.SQL('ALTER TABLE {0} DROP COLUMN {1}').format(
             sql.Identifier(table_name),
             sql.Identifier(column_name)))
@@ -163,6 +163,6 @@ def get_text_column_hash(table_name: str, column_name: str) -> str:
         sql.Identifier(table_name),
     )
 
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(query)
         return cursor.fetchone()[0]

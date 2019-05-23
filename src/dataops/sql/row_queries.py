@@ -133,7 +133,7 @@ def update_row(
         query_fields += [lit_val for __, lit_val in filter_pairs.items()]
 
     # Execute the query
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(query, query_fields)
     connection.commit()
 
@@ -166,7 +166,7 @@ def increase_row_integer(
         sql.Literal(where_value))
 
     # Execute the query
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(query, [where_value])
         connection.commit()
 
@@ -215,7 +215,7 @@ def select_ids_all_false(
         query_fields += filter_fields
 
     # Run the query and return the list
-    cursor = connection.cursor()
+    cursor = connection.connection.cursor()
     cursor.execute(query, query_fields)
 
     return [id_tuple[0] for id_tuple in cursor.fetchall()]
@@ -241,7 +241,7 @@ def get_num_rows(table_name, cond_filter=None):
         )
         query = sql.SQL('{0} WHERE {1}').format(query, cond_filter)
 
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(query, cond_fields)
         num_rows = cursor.fetchone()[0]
 
@@ -269,5 +269,5 @@ def delete_row(table_name: str, kv_pair: Tuple[str, Any]):
     ) + sql.SQL(' WHERE ') + bool_clause
 
     # Execute the query
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(query, query_fields)

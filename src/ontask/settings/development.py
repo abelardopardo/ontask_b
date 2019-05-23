@@ -15,8 +15,7 @@ else:
 
 # Django Debug Toolbar
 if DEBUG:
-    pass
-    #INSTALLED_APPS += ['debug_toolbar']
+    INSTALLED_APPS += ['debug_toolbar']
 
 if ONTASK_TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
@@ -33,8 +32,7 @@ else:
 
 # Additional middleware introduced by debug toolbar
 if DEBUG:
-    pass
-    # MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 # Show thumbnail generation errors
 THUMBNAIL_DEBUG = True

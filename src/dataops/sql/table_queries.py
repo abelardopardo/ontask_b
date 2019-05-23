@@ -216,7 +216,7 @@ def search_table(
         query = query + sql.SQL(' DESC')
 
     # Execute the query
-    with connection.cursor() as cursor:
+    with connection.connection.cursor() as cursor:
         cursor.execute(query, query_fields)
         search_result = cursor.fetchall()
 
@@ -233,7 +233,7 @@ def delete_table(table_name: str):
     query = sql.SQL('DROP TABLE {0}').format(sql.Identifier(table_name))
 
     try:
-        with connection.cursor() as cursor:
+        with connection.connection.cursor() as cursor:
             cursor.execute(query)
             connection.commit()
     except Exception as exc:
