@@ -165,6 +165,10 @@ class ConditionSerializer(serializers.ModelSerializer):
             condition_obj.columns.set(
                 [col for col in self.context['columns'] if col.name in cnames])
 
+            # If n_rows_selected is -1, reevaluate
+            if condition_obj.n_rows_selected == -1:
+                condition_obj.update_n_rows_selected()
+
             # Save condition object
             condition_obj.save()
         except Exception:
