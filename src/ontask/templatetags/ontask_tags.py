@@ -4,15 +4,16 @@
 
 from django import template
 from django.utils.html import format_html
+from django.conf import settings
 
 import ontask
 
 register = template.Library()
 
 jquery = \
-    """<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    """<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>"""
+       <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>"""
 
 #
 # Bootstrap
@@ -43,12 +44,12 @@ datatables_bootstrap_js = \
 #
 datetimepicker_css = \
     """<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" type="text/css" media="all" rel="stylesheet">
-    <link href="bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">"""
+    <link href="{0}bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">""".format(settings.STATIC_URL)
 
 datetimepicker_js = \
-    '<script type="text/javascript" src="site/js/moment-with-locales.js"></script>' \
+    '<script type="text/javascript" src="{0}site/js/moment-with-locales.js"></script>'.format(settings.STATIC_URL) \
     + """<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="bootstrap_datepicker_plus/js/datepicker-widget.js"></script>"""
+<script type="text/javascript" src="{0}bootstrap_datepicker_plus/js/datepicker-widget.js"></script>""".format(settings.STATIC_URL)
 
 #
 # Auxiliary
