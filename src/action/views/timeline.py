@@ -46,7 +46,9 @@ def show_timeline(
         Log.SCHEDULE_CANVAS_EMAIL_EXECUTE,
         Log.SCHEDULE_EMAIL_EDIT,
         Log.SCHEDULE_JSON_EDIT,
-        Log.SCHEDULE_CANVAS_EMAIL_EXECUTE]
+        Log.SCHEDULE_CANVAS_EMAIL_EXECUTE,
+        Log.SURVEY_INPUT,
+    ]
 
     # Filter the logs to display and transform into values (process the json
     # and the long value for the log name

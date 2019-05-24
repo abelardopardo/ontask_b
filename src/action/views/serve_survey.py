@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from action.evaluate import get_action_evaluation_context, get_row_values
-from action.forms import FIELD_PREFIX, EnterActionIn
+from action.forms import EnterActionIn, FIELD_PREFIX
 from action.models import Action, ActionColumnConditionTuple
 from dataops.sql.row_queries import update_row
 from logs.models import Log
@@ -38,7 +38,7 @@ def serve_survey_row(
     # Get the attribute value depending if the user is managing the workflow
     # User is instructor, and either owns the workflow or is allowed to access
     # it as shared
-    manager = has_access(request.user, action. workflow)
+    manager = has_access(request.user, action.workflow)
     if manager:
         user_attribute_value = request.GET.get('uatv')
     else:
@@ -93,10 +93,12 @@ def serve_survey_row(
         # Log the event and update its content in the action
         log_item = Log.objects.register(
             request.user,
-            Log.TABLEROW_UPDATE,
+            Log.SURVEY_INPUT,
             action.workflow,
             {'id': action.workflow.id,
              'name': action.workflow.name,
+             'action': action.name,
+             'action_id': action.id,
              'new_values': json.dumps(name_value_pairs)})
 
         # Modify the time of execution for the action

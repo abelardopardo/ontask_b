@@ -75,6 +75,7 @@ class Log(models.Model):
     CONDITION_CLONE = 'condition_clone'
     TABLEROW_UPDATE = 'tablerow_update'
     TABLEROW_CREATE = 'tablerow_create'
+    SURVEY_INPUT = 'survey_input'
     VIEW_CREATE = 'view_create'
     VIEW_EDIT = 'view_edit'
     VIEW_DELETE = 'view_delete'
@@ -142,6 +143,7 @@ class Log(models.Model):
         (CONDITION_CLONE, _('Condition cloned')),
         (TABLEROW_UPDATE, _('Table row updated')),
         (TABLEROW_CREATE, _('Table row created')),
+        (SURVEY_INPUT, _('Survey data input')),
         (VIEW_CREATE, _('Table view created')),
         (VIEW_EDIT, _('Table view edited')),
         (VIEW_DELETE, _('Table view deleted')),
