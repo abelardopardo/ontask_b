@@ -29,8 +29,8 @@ from workflow.models import Workflow
 @get_action(pf_related='actions')
 def preview_next_all_false_response(
     request: HttpRequest,
-    pk: int,
-    idx: int,
+    pk: Optional[int] = None,
+    idx: Optional[int] = None,
     workflow: Optional[Workflow] = None,
     action: Optional[Action] = None,
 ) -> JsonResponse:
@@ -66,7 +66,7 @@ def preview_next_all_false_response(
         next_idx = idx_list[0]
 
     # Return the rendering of the given element
-    return preview_response(request, pk, next_idx, action)
+    return preview_response(request, pk, idx=next_idx, action=action)
 
 
 @csrf_exempt
