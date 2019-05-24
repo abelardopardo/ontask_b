@@ -79,7 +79,7 @@ def send_json(
     # Evaluate the action string and obtain the list of list of JSON objects
     action_evals = evaluate_action(
         action,
-        column_name=action_info['key_column'],
+        column_name=action_info['item_column'],
         exclude_values=action_info['exclude_values'],
     )
 

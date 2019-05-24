@@ -402,6 +402,7 @@ class JSONActionForm(JSONBasicActionForm):
         # Move data to the payload so that is ready to be used
         self.action_info['token'] = form_data['token']
         self.action_info['item_column'] = form_data['key_column']
+        self.action_info['confirm_items'] = form_data['confirm_items']
 
         return form_data
 

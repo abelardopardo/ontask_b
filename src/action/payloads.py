@@ -42,7 +42,7 @@ class ActionPayload(collections.MutableMapping):
         """
         if ontask_settings.DEBUG:
             if key not in self.fields:
-                raise Exception('Incorrect key:' + key)
+                raise Exception('Incorrect key: ' + key)
         return self.store[self.__keytransform__(key)]
 
     def __setitem__(self, key, item_value):
@@ -142,6 +142,7 @@ class CanvasEmailPayload(ActionPayload):
         'item_column',
         'export_wf',
         'target_url',
+        'confirm_items',
         'exclude_values',
         'prev_url',
         'post_url',
@@ -173,6 +174,7 @@ class JSONPayload(ActionPayload):
         'action_id',
         'token',
         'item_column',
+        'confirm_items',
         'exclude_values',
         'prev_url',
         'post_url',
