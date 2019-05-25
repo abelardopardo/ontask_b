@@ -4,7 +4,11 @@ import math
 import os
 import subprocess
 from builtins import object, range, str
+import test
+from typing import Optional, Mapping
 
+from django.contrib.sessions.middleware import SessionMiddleware
+from django.http import HttpRequest
 import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -109,6 +113,19 @@ class ElementHasFullOpacity(object):
 class OnTaskTestCase(TransactionTestCase):
     """OnTask test cases."""
 
+    user_email = None
+    user_pwd = None
+    workflow_name = None
+
+    fixtures = []
+    filename = None
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        super().setUpClass()
+        if cls.filename:
+            test.pg_restore_table(cls.filename)
+
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
@@ -131,7 +148,46 @@ class OnTaskTestCase(TransactionTestCase):
         super().setUp()
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
+        if self.user_email:
+            self.user = get_user_model().objects.get(email=self.user_email)
+            self.client.login(email=self.user_email, password=self.user_pwd)
+        if self.workflow_name:
+            self.workflow = Workflow.objects.get(name=self.workflow_name)
 
+    def get_request(
+        self,
+        url_name: str,
+        method: Optional[str] = 'GET',
+        req_params: Optional[Mapping] = None,
+        **kwargs
+    ) -> HttpRequest:
+        """Add the user to the request."""
+        if req_params is None:
+            req_params = {}
+        if method == 'GET':
+            request = self.factory.get(url_name, req_params, **kwargs)
+        elif method == 'POST':
+            request = self.factory.post(url_name, req_params, **kwargs)
+
+        request.user = self.user
+        # adding session
+        SessionMiddleware().process_request(request)
+        self.store_workflow_in_session(request.session, self.workflow)
+        request.session.save()
+        return request
+
+    def get_ajax_request(
+        self,
+        url_name: str,
+        method: Optional[str] = 'GET',
+        req_params: Optional[Mapping] = None,
+    ) -> HttpRequest:
+        """Add the user to the request."""
+        req = self.get_request(
+            url_name, method,
+            req_params,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        return req
 
 
 class OnTaskApiTestCase(APITransactionTestCase):

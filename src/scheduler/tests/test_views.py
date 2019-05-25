@@ -37,53 +37,6 @@ class SchedulerForms(test.OnTaskTestCase):
     s_desc = 'First JSON intervention'
     s_execute = '2119-05-03 12:32:18+10:30'
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        test.pg_restore_table(cls.filename)
-
-    def setUp(self):
-        """Restore data tables."""
-        super().setUp()
-        self.user = get_user_model().objects.get(email=self.user_email)
-        self.client.login(email=self.user_email, password=self.user_pwd)
-        self.workflow = Workflow.objects.get(name=self.workflow_name)
-
-    def get_request(
-        self,
-        url_name: str,
-        method: Optional[str] = 'GET',
-        req_params: Optional[Mapping] = None,
-        **kwargs
-    ) -> HttpRequest:
-        """Add the user to the request."""
-        if req_params is None:
-            req_params = {}
-        if method == 'GET':
-            request = self.factory.get(url_name, req_params, **kwargs)
-        elif method == 'POST':
-            request = self.factory.post(url_name, req_params, **kwargs)
-
-        request.user = self.user
-        # adding session
-        SessionMiddleware().process_request(request)
-        self.store_workflow_in_session(request.session, self.workflow)
-        request.session.save()
-        return request
-
-    def get_ajax_request(
-        self,
-        url_name: str,
-        method: Optional[str] = 'GET',
-        req_params: Optional[Mapping] = None,
-    ) -> HttpRequest:
-        """Add the user to the request."""
-        req = self.get_request(
-            url_name, method,
-            req_params,
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        return req
-
     def test_views_email(self):
         """Test the use of forms in to schedule actions."""
         # Index of all scheduled actions

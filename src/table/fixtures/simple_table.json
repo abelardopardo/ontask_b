@@ -43,8 +43,8 @@
     "model": "sites.site",
     "pk": 1,
     "fields": {
-        "domain": "127.0.0.1:8000",
-        "name": "127.0.0.1:8000"
+        "domain": "127.0.0.1",
+        "name": "127.0.0.1"
     }
 },
 {
@@ -111,8 +111,8 @@
     "model": "authtools.user",
     "pk": 16,
     "fields": {
-        "password": "pbkdf2_sha256$36000$tThbdsofgEo0$9M1t2jOuuD6XslPzk+uTSzKxOYijQWaFJdfkF6xP2eE=",
-        "last_login": null,
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$bEdBVXhGWGhVZnFj$W1njxsfyN7jsVihPc0o6XA",
+        "last_login": "2019-05-25T22:41:54.961Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -300,6 +300,69 @@
     }
 },
 {
+    "model": "siteprefs.preference",
+    "pk": 1,
+    "fields": {
+        "app": "core",
+        "name": "help_url",
+        "text": "html/index.html"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 2,
+    "fields": {
+        "app": "core",
+        "name": "minute_step",
+        "text": "15"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 3,
+    "fields": {
+        "app": "dataops",
+        "name": "plugin_directory",
+        "text": "/Users/pardosa/ontask_b/src/plugins"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 4,
+    "fields": {
+        "app": "action",
+        "name": "notification_template",
+        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }}\n{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent\nresulting from the execution of the action with name \"{{ action.name }}\".</p>\n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from\n{{ num_rows }} to {{ num_selected }}.</p>\n{% else %}\n<p>All the data rows stored in the workflow table were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body></html>"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 5,
+    "fields": {
+        "app": "action",
+        "name": "notification_subject",
+        "text": "OnTask: Action executed"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 6,
+    "fields": {
+        "app": "action",
+        "name": "notification_sender",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 7,
+    "fields": {
+        "app": "logs",
+        "name": "max_list_size",
+        "text": "200"
+    }
+},
+{
     "model": "authtoken.token",
     "pk": "06464f54eda1490dc4c1ea18c9f14663024812df",
     "fields": {
@@ -418,6 +481,66 @@
         ],
         "created": "2017-11-08T00:12:05.819Z"
     }
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 22,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 23,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 18,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 19,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 20,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 21,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 16,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 17,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 13,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 15,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 14,
+    "fields": {}
+},
+{
+    "model": "core.ontaskuser",
+    "pk": 24,
+    "fields": {}
 },
 {
     "model": "profiles.profile",
@@ -549,7 +672,7 @@
         "name": "wflow1",
         "description_text": "description text for workflow 1",
         "created": "2017-11-08T00:12:08.645Z",
-        "modified": "2017-11-08T00:13:01.728Z",
+        "modified": "2019-05-25T22:41:58.216Z",
         "nrows": 3,
         "ncols": 8,
         "attributes": {},
@@ -599,8 +722,12 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "p3twqqajkksl412665u71r8rsp1f0yb2",
-        "shared": []
+        "session_key": "u8bd2myyxgv6efwu78kwhbkko9w90ygy",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "lusers": []
     }
 },
 {
@@ -729,6 +856,29 @@
         "categories": [],
         "active_from": null,
         "active_to": null
+    }
+},
+{
+    "model": "table.view",
+    "pk": 1,
+    "fields": {
+        "workflow": 1,
+        "name": "simple view",
+        "description_text": "",
+        "created": "2019-05-25T22:56:49.296Z",
+        "modified": "2019-05-25T22:56:49.296Z",
+        "formula": {
+            "not": false,
+            "rules": [],
+            "valid": true,
+            "condition": "AND"
+        },
+        "columns": [
+            2,
+            6,
+            7,
+            8
+        ]
     }
 }
 ]

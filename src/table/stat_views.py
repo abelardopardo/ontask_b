@@ -22,7 +22,7 @@ VISUALIZATION_WIDTH = 468
 VISUALIZATION_HEIGHT = 250
 
 
-def get_column_visualisations(
+def _get_column_visualisations(
     column,
     col_data,
     vis_scripts,
@@ -89,7 +89,7 @@ def get_column_visualisations(
     return visualizations
 
 
-def get_column_visualization_items(
+def _get_column_visualization_items(
     workflow,
     column,
     max_width=VISUALIZATION_WIDTH,
@@ -115,7 +115,7 @@ def get_column_visualization_items(
     stat_data = get_column_statistics(df[column.name])
 
     vis_scripts = []
-    visualizations = get_column_visualisations(
+    visualizations = _get_column_visualisations(
         column,
         df[[column.name]],
         vis_scripts,
@@ -152,7 +152,7 @@ def stat_column(
 
     :return: Render the page
     """
-    stat_data, vis_scripts, visualizations = get_column_visualization_items(
+    stat_data, vis_scripts, visualizations = _get_column_visualization_items(
         workflow, column)
 
     return render(
@@ -186,7 +186,7 @@ def stat_column_json(
     # Request to see the statistics for a non-key column that belongs to the
     # selected workflow
 
-    stat_data, __, visualizations = get_column_visualization_items(
+    stat_data, __, visualizations = _get_column_visualization_items(
         workflow,
         column,
         max_height=VISUALIZATION_HEIGHT,
@@ -289,7 +289,7 @@ def stat_row_view(
 
         visualizations.append('<div style="display: inline-flex;">')
 
-        col_viz = get_column_visualisations(
+        col_viz = _get_column_visualisations(
             column,
             df[[column.name]],
             vis_scripts=vis_scripts,
@@ -370,7 +370,7 @@ def stat_table_view(
 
         visualizations.append('<div style="display: inline-flex;">')
 
-        column_viz = get_column_visualisations(
+        column_viz = _get_column_visualisations(
             column,
             df[[column.name]],
             vis_scripts=vis_scripts,

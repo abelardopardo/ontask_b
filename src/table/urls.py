@@ -53,6 +53,11 @@ urlpatterns = [
     #
     # Stats
     #
+    path('stat_table/', stat_views.stat_table_view, name='stat_table'),
+    path(
+        '<int:pk>/stat_table_view/',
+        stat_views.stat_table_view,
+        name='stat_table_view'),
     path('stat_row/', stat_views.stat_row_view, name='stat_row'),
     path(
         '<int:pk>/stat_row_view/',
@@ -66,11 +71,6 @@ urlpatterns = [
         '<int:pk>/stat_column_JSON/',
         stat_views.stat_column_json,
         name='stat_column_JSON'),
-    path('stat_table/', stat_views.stat_table_view, name='stat_table'),
-    path(
-        '<int:pk>/stat_table_view/',
-        stat_views.stat_table_view,
-        name='stat_table_view'),
 
     #
     # CSV Download
