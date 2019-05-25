@@ -4,19 +4,46 @@
 
 import datetime
 
-import pytz
 from django.conf import settings
 from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext, ugettext_lazy as _
-from past.utils import old_div
+import pytz
 
 from action.models import Action
 from action.payloads import action_session_dictionary
 from logs.models import Log
 from scheduler.forms import EmailScheduleForm, JSONScheduleForm
 from scheduler.models import ScheduledAction
+
+
+def create_timedelta_string(dtime: datetime.datetime) -> str:
+    """Create a string rendering a time delta between now and the given one.
+
+    The rendering proceeds gradually to see if the words days, hours, minutes
+    etc. are needed.
+
+    :param dtime: datetime object
+
+    :return: String rendering
+    """
+    tdelta = dtime - datetime.datetime.now(
+        pytz.timezone(settings.TIME_ZONE))
+    delta_string = []
+    if tdelta.days // 365 >= 1:
+        delta_string.append(ugettext('{0} years').format(tdelta.days // 365))
+    days = tdelta.days % 365
+    if days != 0:
+        delta_string.append(ugettext('{0} days').format(days))
+    hours = tdelta.seconds // 3600
+    if hours != 0:
+        delta_string.append(ugettext('{0} hours').format(hours))
+    minutes = (tdelta.seconds % 3600) // 60
+    if minutes != 0:
+        delta_string.append(ugettext('{0} minutes').format(minutes))
+
+    return ', '.join(delta_string)
 
 
 def save_email_schedule(request, action, schedule_item, op_payload):
@@ -302,30 +329,14 @@ def finish_scheduling(request, schedule_item=None, payload=None):
         schedule_item.action.workflow,
         log_payload)
 
-    # Notify the user. Show the time left until execution and a link to
-    # view the scheduled events with possibility of editing/deleting.
-    # Successful processing.
-    now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-    tdelta = schedule_item.execute - now
-
     # Reset object to carry action info throughout dialogs
     request.session[action_session_dictionary] = None
     request.session.save()
-
-    # Create the timedelta string
-    delta_string = ''
-    if tdelta.days != 0:
-        delta_string += ugettext('{0} days').format(tdelta.days)
-    hours = old_div(tdelta.seconds, 3600)
-    if hours != 0:
-        delta_string += ugettext(', {0} hours').format(hours)
-    minutes = old_div((tdelta.seconds % 3600), 60)
-    if minutes != 0:
-        delta_string += ugettext(', {0} minutes').format(minutes)
 
     # Successful processing.
     return render(
         request,
         'scheduler/schedule_done.html',
-        {'tdelta': delta_string,
-         's_item': schedule_item})
+        {
+            'tdelta': create_timedelta_string(schedule_item.execute),
+            's_item': schedule_item})
