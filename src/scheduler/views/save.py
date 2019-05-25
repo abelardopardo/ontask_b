@@ -91,6 +91,8 @@ def save_email_schedule(request, action, schedule_item, op_payload):
             op_payload['exclude_values'] = s_item.exclude_values
             op_payload['item_column'] = s_item.item_column.name
             op_payload['button_label'] = ugettext('Schedule')
+            op_payload['valuerange'] = 2
+            op_payload['step'] = 2
             request.session[action_session_dictionary] = op_payload
 
             return redirect('action:item_filter')
@@ -110,6 +112,7 @@ def save_email_schedule(request, action, schedule_item, op_payload):
             'action': action,
             'form': form,
             'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'valuerange': range(2),
         },
     )
 
@@ -178,6 +181,8 @@ def save_json_schedule(request, action, schedule_item, op_payload):
             op_payload['item_column'] = s_item.item_column.name
             op_payload['exclude_values'] = s_item.exclude_values
             op_payload['button_label'] = ugettext('Schedule')
+            op_payload['valuerange'] = 2
+            op_payload['step'] = 2
             request.session[action_session_dictionary] = op_payload
 
             return redirect('action:item_filter')
@@ -197,6 +202,7 @@ def save_json_schedule(request, action, schedule_item, op_payload):
             'action': action,
             'form': form,
             'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'valuerange': range(2),
         },
     )
 

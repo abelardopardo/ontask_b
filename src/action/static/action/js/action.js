@@ -140,11 +140,6 @@ var conditionClone = function() {
     },
   });
 }
-var select_next_button = function(e) {
-  $("#step_sequence").prop('hidden', !e.is(":checked"));
-  $("#next-step-on").prop('hidden', !e.is(":checked"));
-  $("#next-step-off").prop('hidden', e.is(":checked"));
-}
 $(function () {
   $("#checkAll").click(function () {
        $("input[id*='id_upload_']").prop("checked", this.checked);

@@ -166,6 +166,18 @@ var assignColumn = function () {
     }
   });
 }
+var select_next_button = function(e) {
+  if (e.is('input')) {
+    val = !e.is(":checked");
+  } else if (e.is('select')) {
+    val = e.val() == '';
+  } else {
+    return;
+  }
+  $("#step_sequence").prop('hidden', val);
+  $("#next-step-on").prop('hidden', val);
+  $("#next-step-off").prop('hidden', !val);
+}
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip({
     trigger: "hover",
