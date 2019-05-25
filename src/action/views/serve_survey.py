@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from action.evaluate import get_action_evaluation_context, get_row_values
-from action.forms import EnterActionIn, FIELD_PREFIX
+from action.forms import FIELD_PREFIX, EnterActionIn
 from action.models import Action, ActionColumnConditionTuple
 from dataops.sql.row_queries import update_row
 from logs.models import Log

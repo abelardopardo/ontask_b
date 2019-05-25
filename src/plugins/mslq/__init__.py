@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from builtins import str
 import random
+from builtins import str
 
 import pandas as pd
 

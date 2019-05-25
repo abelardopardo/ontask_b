@@ -3,15 +3,15 @@
 """Tags to include URLS and other auxiliary HTML resources."""
 
 from django import template
-from django.utils.html import format_html
 from django.conf import settings
+from django.utils.html import format_html
 
 import ontask
 
 register = template.Library()
 
 jquery = \
-    """<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+    """<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>"""
 
