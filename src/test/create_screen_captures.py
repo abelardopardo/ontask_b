@@ -2,6 +2,8 @@
 
 
 import os
+import test
+from test import ElementHasFullOpacity, ScreenTests
 
 from django.conf import settings
 from future import standard_library
@@ -13,8 +15,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from action.models import Action
 from dataops.pandas import destroy_db_engine
-import test
-from test import ElementHasFullOpacity, ScreenTests
 
 standard_library.install_aliases()
 

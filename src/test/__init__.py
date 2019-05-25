@@ -11,7 +11,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.db import connection
 from django.shortcuts import reverse
-from django.test import LiveServerTestCase, TransactionTestCase
+from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from future import standard_library
 from PIL import Image
 from rest_framework.authtoken.models import Token
@@ -107,14 +107,36 @@ class ElementHasFullOpacity(object):
 
 
 class OnTaskTestCase(TransactionTestCase):
+    """OnTask test cases."""
+
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
         destroy_db_engine(engine)
         super().tearDownClass()
 
+    @classmethod
+    def store_workflow_in_session(cls, session, wflow: Workflow):
+        """Store the workflow id, name, and number of rows in the session.
+
+        :param wflow: Workflow object
+
+        :return: Nothing. Store the id, name and nrows in the session
+        """
+        session['ontask_workflow_rows'] = wflow.nrows
+        session['ontask_workflow_id'] = wflow.id
+        session['ontask_workflow_name'] = wflow.name
+
+    def setUp(self):
+        super().setUp()
+        # Every test needs access to the request factory.
+        self.factory = RequestFactory()
+
+
 
 class OnTaskApiTestCase(APITransactionTestCase):
+    """OnTask tests for the API."""
+
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
@@ -165,6 +187,8 @@ class OnTaskApiTestCase(APITransactionTestCase):
 
 
 class OnTaskLiveTestCase(LiveServerTestCase):
+    """OnTask tests that use selenium."""
+
     viewport_height = 1024
     viewport_width = 1024
     device_pixel_ratio = 1
