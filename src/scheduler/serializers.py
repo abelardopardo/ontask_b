@@ -117,7 +117,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
 
         exclude_values = validated_data.get('exclude_values')
         # Exclude_values has to be a list
-        if exclude_values and not isinstance(exclude_values, list):
+        if not exclude_values is None and not isinstance(exclude_values, list):
             raise APIException(_('Exclude_values must be a list'))
 
         # Exclude_values can only have content if item_column is given.
@@ -207,14 +207,16 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
             raise APIException(_('Personalized text needs a subject.'))
 
         if not column:
-            raise APIException(_('Personalized text needs a item_column'))
+            raise APIException(_('Personalized text needs an item_column'))
 
         # Check if the values in the email column are correct emails
         try:
             column_data = get_rows(
                 act.workflow.get_data_frame_table_name(),
                 column_names=[column.name])
-            if not all(is_correct_email(email) for __, email in column_data):
+            if not all(
+                is_correct_email(row[column.name]) for row in column_data
+            ):
                 # column has incorrect email addresses
                 raise APIException(
                     _('The column with email addresses has incorrect values.'))
@@ -222,18 +224,26 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
             raise APIException(
                 _('The column with email addresses has incorrect values.'))
 
-        if not all(
-            is_correct_email(email_val)
-            for email_val in payload.get('cc_email', [])
-            if email_val
-        ):
+        try:
+            if not all(
+                is_correct_email(email_val)
+                for email_val in payload.get('cc_email', [])
+                if email_val
+            ):
+                raise APIException(
+                    _('cc_email must be a comma-separated list of emails.'))
+        except TypeError:
             raise APIException(
                 _('cc_email must be a comma-separated list of emails.'))
 
-        if not all(
-            is_correct_email(email)
-            for email in payload.get('bcc_email', []) if email
-        ):
+        try:
+            if not all(
+                is_correct_email(email)
+                for email in payload.get('bcc_email', []) if email
+            ):
+                raise APIException(
+                    _('bcc_email must be a comma-separated list of emails.'))
+        except TypeError:
             raise APIException(
                 _('bcc_email must be a comma-separated list of emails.'))
 

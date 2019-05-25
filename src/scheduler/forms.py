@@ -137,6 +137,8 @@ class EmailScheduleForm(ScheduleForm):
                 'track_read',
                 False,
             )
+            self.fields['confirm_items'].initial = bool(
+                self.instance.exclude_values)
 
         self.order_fields([
             'name',
@@ -199,8 +201,10 @@ class JSONScheduleForm(ScheduleForm):
         super().__init__(form_data, *args, **kwargs)
 
         self.fields['item_column'].label = _(
-            'Column to select elements (empty to skip)')
+            'Column to pick elements to ignore (empty to skip)')
         self.fields['item_column'].required = False
+        # No longer needed, item column does the same
+        self.fields.pop('confirm_items')
 
         # If there is an instance, push the values in the payload to the form
         if self.instance:

@@ -18,13 +18,13 @@ urlpatterns = [
     # Create scheduled email action
     path('<int:pk>/create/', edit, name='create'),
 
-    # View the details of a scheduled action
-    path('<int:pk>/view/', view, name='view'),
-
     # Edit scheduled email action
     path('<int:pk>/edit/', edit, name='edit'),
 
-    # Deletell scheduled email action
+    # View the details of a scheduled action
+    path('<int:pk>/view/', view, name='view'),
+
+    # Delete scheduled email action
     path('<int:pk>/delete/', delete, name='delete'),
 
     path(
