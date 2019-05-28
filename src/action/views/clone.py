@@ -3,19 +3,19 @@
 """Functions to clone the actions."""
 
 from builtins import str
+import copy
 from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, JsonResponse
-from django.shortcuts import redirect
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from action.models import Action, ActionColumnConditionTuple, Condition
+from dataops.formula import get_variables
 from logs.models import Log
 from ontask import create_new_name
 from ontask.decorators import ajax_required, get_action, get_condition
@@ -27,23 +27,44 @@ def do_clone_condition(
     condition: Condition,
     new_action: Action = None,
     new_name: str = None,
-):
+) -> Condition:
     """Clone a condition.
 
     Function to clone a condition and change action and/or name
+
     :param condition: Condition to clone
+
     :param new_action: New action to point
+
     :param new_name: New name
+
     :return: New condition
     """
-    condition.id = None
-    if new_action:
-        condition.action = new_action
-    if new_name:
-        condition.name = new_name
-    condition.save()
+    if new_name is None:
+        new_name = condition.name
+    if new_action is None:
+        new_action = condition.action
 
-    return condition
+    new_condition = Condition(
+        name=new_name,
+        description_text=condition.description_text,
+        action=new_action,
+        formula=copy.deepcopy(condition.formula),
+        n_rows_selected=condition.n_rows_selected,
+        is_filter=condition.is_filter
+    )
+    new_condition.save()
+
+    try:
+        # Update the many to many field.
+        new_condition.columns.set(new_condition.action.workflow.columns.filter(
+            name__in=get_variables(new_condition.formula),
+        ))
+    except Exception as exc:
+        new_condition.delete()
+        raise exc
+
+    return new_condition
 
 
 def do_clone_action(
@@ -54,49 +75,58 @@ def do_clone_action(
     """Clone an action.
 
     Function that given an action clones it and changes workflow and name
+
     :param action: Object to clone
+
     :param new_workflow: New workflow object to point
+
     :param new_name: New name
+
     :return: Cloned object
     """
-    # Store the old object id before squashing it
-    old_id = action.id
+    if new_name is None:
+        new_name = action.name
+    if new_workflow is None:
+        new_workflow = action.workflow
 
-    # Clone
-    action.id = None
+    new_action = Action(
+        name=new_name,
+        description_text=action.description_text,
+        workflow=new_workflow,
+        last_executed_log=None,
+        action_type=action.action_type,
+        serve_enabled=action.serve_enabled,
+        active_from=action.active_from,
+        active_to=action.active_to,
+        rows_all_false=copy.deepcopy(action.rows_all_false),
+        text_content=action.text_content,
+        target_url=action.target_url,
+        shuffle=action.shuffle,
+    )
+    new_action.save()
 
-    # Update some of the fields
-    if new_name:
-        action.name = new_name
-    if new_workflow:
-        action.workflow = new_workflow
-
-    # Update
-    action.save()
-
-    # Get back the old action
-    old_action = Action.objects.prefetch_related(
-        'column_condition_pair', 'conditions',
-    ).get(id=old_id)
-
-    # Clone the columns field (in case of an action in).
-    if action.is_in:
-        action.column_condition_pair.delete()
-        for acc_tuple in old_action.column_condition_pair.all():
-            __, __ = ActionColumnConditionTuple.objects.get_or_create(
-                action=action,
-                column=acc_tuple.column,
-                condition=acc_tuple.condition,
+    try:
+        # Clone the column/condition pairs field.
+        for acc_tuple in action.column_condition_pair.all():
+            cname = acc_tuple.condition.name if acc_tuple.condition else None
+            ActionColumnConditionTuple.objects.get_or_create(
+                action=new_action,
+                column=new_action.workflow.columns.get(
+                    name=acc_tuple.column.name),
+                condition=new_action.conditions.filter(name=cname).first(),
             )
 
-    # Clone the conditions
-    for condition in old_action.conditions.all():
-        do_clone_condition(condition, action)
+        # Clone the conditions
+        for condition in action.conditions.all():
+            do_clone_condition(condition, new_action)
 
-    # Update
-    action.save()
+        # Update
+        new_action.save()
+    except Exception as exc:
+        new_action.delete()
+        raise exc
 
-    return action
+    return new_action
 
 
 @user_passes_test(is_instructor)
@@ -114,9 +144,6 @@ def clone_action(
     :param pk: id of the action to clone
     :return:
     """
-    # JSON response
-    resp_data = {}
-
     if request.method == 'GET':
         return JsonResponse({
             'html_form': render_to_string(
@@ -148,8 +175,7 @@ def clone_action(
 
     messages.success(request, _('Action successfully cloned.'))
 
-    resp_data['html_redirect'] = reverse('action:index')
-    return redirect(reverse('action:index'))
+    return JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
