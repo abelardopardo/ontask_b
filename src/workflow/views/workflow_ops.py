@@ -147,22 +147,10 @@ def flush(
         # Table is empty, redirect to data upload
         return JsonResponse({'html_redirect': reverse('dataops:uploadmerge')})
 
-    if request.user != workflow.user:
-        # If the user does not own the workflow, notify error and go back to
-        # index
-        messages.error(
-            request,
-            _('You can only flush the data of  workflows you created.'))
-
-        if request.is_ajax():
-            return JsonResponse({'html_redirect': reverse('home')})
-
-        return redirect('home')
-
     if request.method == 'POST':
         # Delete the table
         workflow.flush()
-
+        workflow.refresh_from_db()
         # update the request object with the new number of rows
         store_workflow_in_session(request, workflow)
 

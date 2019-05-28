@@ -8,20 +8,20 @@ from typing import Optional
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.db import IntegrityError
-from django.db.models import Q
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render, reverse
+from django.http import JsonResponse
+from django.http.request import HttpRequest
+from django.http.response import HttpResponse
+from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.urls.base import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
-from dataops.pandas import check_wf_df, load_table, store_dataframe
+from dataops.pandas import check_wf_df
 from logs.models import Log
-from ontask import create_new_name
 from ontask.celery import celery_is_up
-from ontask.decorators import access_workflow, ajax_required, get_workflow
+from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.forms import WorkflowForm
 from workflow.models import Workflow
@@ -255,10 +255,15 @@ def delete(
         Log.objects.register(
             request.user,
             Log.WORKFLOW_DELETE,
-            workflow,
+            None,
             {
                 'id': workflow.id,
                 'name': workflow.name})
+
+        # Nuke the logs pointing to the workflow
+        for litem in workflow.logs.all():
+            litem.workflow = None
+            litem.save()
 
         # Perform the delete operation
         workflow.delete()
@@ -272,86 +277,3 @@ def delete(
             {'workflow': workflow},
             request=request),
     })
-
-
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow()
-def clone(
-    request: HttpRequest,
-    wid: Optional[int] = None,
-    workflow: Optional[Workflow] = None,
-) -> JsonResponse:
-    """Clone a workflow.
-
-    :param request: HTTP request
-
-    :param pk: Workflow id
-
-    :return: JSON data
-    """
-    # Get the current workflow
-    # Initial data in the context
-    context = {'pk': wid, 'name': workflow.name}
-
-    if request.method == 'GET':
-        return JsonResponse({
-            'html_form': render_to_string(
-                'workflow/includes/partial_workflow_clone.html',
-                context,
-                request=request),
-        })
-
-    workflow.id = None
-    workflow.name = create_new_name(
-        workflow.name,
-        Workflow.objects.filter(
-            Q(workflow__user=request.user) | Q(workflow__shared=request.user),
-        ),
-    )
-
-    try:
-        workflow.save()
-    except IntegrityError as exc:
-        messages.error(
-            request,
-            _('Unable to clone workflow: {0}').format(str(exc)))
-        return JsonResponse({'html_redirect': ''})
-
-    # Get the initial object back
-    workflow_new = workflow
-    workflow = access_workflow(request, wid, prefetch_related='actions')
-
-    # Clone the data frame
-    data_frame = load_table(workflow.get_data_frame_table_name())
-    try:
-        store_dataframe(data_frame, workflow_new)
-    except Exception as exc:
-        messages.error(
-            request,
-            _('Unable to clone column: {0}').format(str(exc)),
-        )
-        return JsonResponse({'html_redirect': ''})
-
-    # Clone actions
-    for action in workflow.actions.all():
-        action.ops.clone_action(action, workflow_new)
-
-    # Done!
-    workflow_new.save()
-
-    # Log event
-    Log.objects.register(
-        request.user,
-        Log.WORKFLOW_CLONE,
-        workflow_new,
-        {
-            'id_old': workflow_new.id,
-            'id_new': workflow.id,
-            'name_old': workflow_new.name,
-            'name_new': workflow.name})
-
-    messages.success(
-        request,
-        _('Workflow successfully cloned.'))
-    return JsonResponse({'html_redirect': ''})
