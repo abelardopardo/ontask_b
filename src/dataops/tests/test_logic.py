@@ -63,10 +63,6 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
         super().__init__(*args, **kwargs)
         self.workflow = None
 
-    def setUp(self):
-        super().setUp()
-        test.pg_restore_table(self.filename)
-
     def tearDown(self):
         test.delete_all_tables()
         super().tearDown()

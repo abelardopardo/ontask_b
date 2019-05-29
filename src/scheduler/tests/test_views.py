@@ -4,17 +4,11 @@
 
 import os
 import test
-from typing import Mapping, Optional
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.contrib.sessions.middleware import SessionMiddleware
-from django.http import HttpRequest
-from django.urls import reverse
 
 import scheduler.views
 from scheduler.models import ScheduledAction
-from workflow.models import Workflow
 
 
 class SchedulerForms(test.OnTaskTestCase):
@@ -40,47 +34,49 @@ class SchedulerForms(test.OnTaskTestCase):
     def test_views_email(self):
         """Test the use of forms in to schedule actions."""
         # Index of all scheduled actions
-        req = self.get_request(reverse('scheduler:index'))
-        resp = scheduler.views.index(req)
+        resp = self.get_response('scheduler:index', scheduler.views.index)
         self.assertEqual(resp.status_code, 200)
 
         # Get the email action object
         action = self.workflow.actions.get(name='simple action')
 
         # Get the form to schedule this action
-        req = self.get_request(
-            reverse('scheduler:create', kwargs={'pk': action.id}))
-        resp = scheduler.views.edit(req, pk=action.id)
+        resp = self.get_response(
+            'scheduler:create',
+            scheduler.views.edit,
+            {'pk': action.id})
         self.assertEqual(resp.status_code, 200)
 
         # POST the form to schedule this action
-        req = self.get_request(
-            reverse('scheduler:create', kwargs={'pk': action.id}),
-            'POST',
-            {
+        resp = self.get_response(
+            'scheduler:create',
+            scheduler.views.edit,
+            {'pk': action.id},
+            method='POST',
+            req_params={
                 'name': 'First scheduling round',
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'execute': '05/31/2119 14:35',
                 'subject': 'Subject text',
             },
         )
-        resp = scheduler.views.edit(req, pk=action.id)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(ScheduledAction.objects.count(), 1)
 
         # Change the name of the scheduled item
         sc_item = ScheduledAction.objects.first()
-        req = self.get_request(
-            reverse('scheduler:edit', kwargs={'pk': sc_item.id}),
-            'POST',
-            {
+        resp = self.get_response(
+            'scheduler:edit',
+            scheduler.views.edit,
+            {'pk': sc_item.id},
+            method='POST',
+            req_params={
                 'name': 'First scheduling round2',
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'execute': '05/31/2119 14:35',
                 'subject': 'Subject text',
             },
         )
-        resp = scheduler.views.edit(req, pk=sc_item.id)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(ScheduledAction.objects.count(), 1)
         sc_item.refresh_from_db()
@@ -89,10 +85,12 @@ class SchedulerForms(test.OnTaskTestCase):
 
         # Select the confirm items
         sc_item = ScheduledAction.objects.first()
-        req = self.get_request(
-            reverse('scheduler:edit', kwargs={'pk': sc_item.id}),
-            'POST',
-            {
+        resp = self.get_response(
+            'scheduler:edit',
+            scheduler.views.edit,
+            {'pk': sc_item.id},
+            method='POST',
+            req_params={
                 'name': 'First scheduling round3',
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'confirm_items': True,
@@ -100,78 +98,82 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             },
         )
-        resp = scheduler.views.edit(req, pk=sc_item.id)
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(ScheduledAction.objects.count(), 1)
 
         # Index of all scheduled actions (to execute the table render)
-        req = self.get_request(reverse('scheduler:index'))
-        resp = scheduler.views.index(req)
+        resp = self.get_response('scheduler:index', scheduler.views.index)
         self.assertEqual(resp.status_code, 200)
 
         # View the information with a JSON request
-        req = self.get_ajax_request(
-            reverse('scheduler:view', kwargs={'pk': sc_item.id}))
-        resp = scheduler.views.view(req, pk=sc_item.id)
+        resp = self.get_response(
+            'scheduler:view',
+            scheduler.views.view,
+            {'pk': sc_item.id},
+            is_ajax=True)
         self.assertEqual(resp.status_code, 200)
 
         # Request to delete
-        req = self.get_ajax_request(
-            reverse('scheduler:delete', kwargs={'pk': sc_item.id}))
-        resp = scheduler.views.delete(req, pk=sc_item.id)
+        resp = self.get_response(
+            'scheduler:delete',
+            scheduler.views.delete,
+            {'pk': sc_item.id},
+            is_ajax=True)
         self.assertEqual(resp.status_code, 200)
 
         # DELETE
-        req = self.get_ajax_request(
-            reverse('scheduler:delete', kwargs={'pk': sc_item.id}),
-            'POST'
-        )
-        resp = scheduler.views.delete(req, pk=sc_item.id)
+        resp = self.get_response(
+            'scheduler:delete',
+            scheduler.views.delete,
+            {'pk': sc_item.id},
+            method='POST',
+            is_ajax=True)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(ScheduledAction.objects.count(), 0)
 
     def test_views_json(self):
         """Test the use of forms in to schedule actions."""
         # Index of all scheduled actions
-        req = self.get_request(reverse('scheduler:index'))
-        resp = scheduler.views.index(req)
+        resp = self.get_response('scheduler:index', scheduler.views.index)
         self.assertEqual(resp.status_code, 200)
 
         # Get the email action object
         action = self.workflow.actions.get(name='json action')
 
         # Get the form to schedule this action
-        req = self.get_request(
-            reverse('scheduler:create', kwargs={'pk': action.id}))
-        resp = scheduler.views.edit(req, pk=action.id)
+        resp = self.get_response(
+            'scheduler:create',
+            scheduler.views.edit,
+            {'pk': action.id})
         self.assertEqual(resp.status_code, 200)
 
         # POST the form to schedule this action
-        req = self.get_request(
-            reverse('scheduler:create', kwargs={'pk': action.id}),
-            'POST',
-            {
+        resp = self.get_response(
+            'scheduler:create',
+            scheduler.views.edit,
+            {'pk': action.id},
+            method='POST',
+            req_params={
                 'name': 'First scheduling round',
                 'execute': '05/31/2119 14:35',
                 'token': 'faketoken',
             },
         )
-        resp = scheduler.views.edit(req, pk=action.id)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(ScheduledAction.objects.count(), 1)
 
         # Change the name of the scheduled item
         sc_item = ScheduledAction.objects.first()
-        req = self.get_request(
-            reverse('scheduler:edit', kwargs={'pk': sc_item.id}),
-            'POST',
-            {
+        resp = self.get_response(
+            'scheduler:edit',
+            scheduler.views.edit,
+            {'pk': sc_item.id},
+            method='POST',
+            req_params={
                 'name': 'First scheduling round2',
                 'execute': '05/31/2119 14:35',
                 'token': 'faketoken',
-            },
-        )
-        resp = scheduler.views.edit(req, pk=sc_item.id)
+            })
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(ScheduledAction.objects.count(), 1)
         sc_item.refresh_from_db()
@@ -180,36 +182,38 @@ class SchedulerForms(test.OnTaskTestCase):
 
         # Select the item_column for confirmation
         sc_item = ScheduledAction.objects.first()
-        req = self.get_request(
-            reverse('scheduler:edit', kwargs={'pk': sc_item.id}),
-            'POST',
-            {
+        resp = self.get_response(
+            'scheduler:edit',
+            scheduler.views.edit,
+            {'pk': sc_item.id},
+            method='POST',
+            req_params={
                 'name': 'First scheduling round3',
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'execute': '05/31/2119 14:35',
                 'token': 'faketoken',
-            },
-        )
-        resp = scheduler.views.edit(req, pk=sc_item.id)
+            })
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(ScheduledAction.objects.count(), 1)
 
         # Index of all scheduled actions (to execute the table render)
-        req = self.get_request(reverse('scheduler:index'))
-        resp = scheduler.views.index(req)
+        resp = self.get_response('scheduler:index', scheduler.views.index)
         self.assertEqual(resp.status_code, 200)
 
         # Request to delete
-        req = self.get_ajax_request(
-            reverse('scheduler:delete', kwargs={'pk': sc_item.id}))
-        resp = scheduler.views.delete(req, pk=sc_item.id)
+        resp = self.get_response(
+            'scheduler:delete',
+            scheduler.views.delete,
+            {'pk': sc_item.id},
+            is_ajax=True)
         self.assertEqual(resp.status_code, 200)
 
         # DELETE
-        req = self.get_ajax_request(
-            reverse('scheduler:delete', kwargs={'pk': sc_item.id}),
-            'POST'
-        )
-        resp = scheduler.views.delete(req, pk=sc_item.id)
+        resp = self.get_response(
+            'scheduler:delete',
+            scheduler.views.delete,
+            {'pk': sc_item.id},
+            method='POST',
+            is_ajax=True)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(ScheduledAction.objects.count(), 0)
