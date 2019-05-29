@@ -2,16 +2,16 @@
 
 
 import os
-import test
 
-import pandas as pd
 from django.conf import settings
 from django.shortcuts import reverse
+import pandas as pd
 from rest_framework.authtoken.models import Token
 
 from dataops.pandas import check_wf_df, detect_datetime_columns, load_table
 from table.serializers import string_to_df
 from table.serializers.pandas import df_to_string
+import test
 from workflow.models import Workflow
 from workflow.ops import workflow_delete_column
 
@@ -93,8 +93,8 @@ class TableApiCreate(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('table:api_ops',
-                                           kwargs={'wid': workflow.id}))
+        response = self.client.get(
+            reverse('table:api_ops', kwargs={'wid': workflow.id}))
 
         # Transform the response into a data frame
         r_df = pd.DataFrame(response.data['data_frame'])
@@ -112,8 +112,8 @@ class TableApiCreate(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('table:api_pops',
-                                           kwargs={'wid': workflow.id}))
+        response = self.client.get(
+            reverse('table:api_pops', kwargs={'wid': workflow.id}))
 
         # Transform the response into a data frame
         r_df = string_to_df(response.data['data_frame'])

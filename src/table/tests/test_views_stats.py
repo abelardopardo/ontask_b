@@ -8,7 +8,7 @@ from django.conf import settings
 from django.urls import reverse
 
 from dataops.pandas import get_table_row_by_index
-from table.stat_views import (
+from table.views.stats import (
     stat_column, stat_column_json, stat_table_view,
     stat_row_view,
 )
@@ -31,49 +31,56 @@ class TableTestStatView(test.OnTaskTestCase):
 
     workflow_name = 'wflow1'
 
-    def test_stats_email(self):
+    def test_stats(self):
         """Test the use of forms in to schedule actions."""
+        # Remove is_key from column 'age'
+        col = self.workflow.columns.get(name='age')
+        col.is_key = False
+        col.save()
+
         # Get the visualization for the whole table
-        req = self.get_request(
-            reverse('table:stat_table'))
-        resp = stat_table_view(req)
+        resp = self.get_response('table:stat_table', stat_table_view)
         self.assertEqual(resp.status_code, 200)
 
         # GEt the visualization of the view
         view = self.workflow.views.get(name='simple view')
-        req = self.get_request(
-            reverse('table:stat_table_view', kwargs={'pk': view.id}))
-        resp = stat_table_view(req, pk=view.id)
+        resp = self.get_response(
+            'table:stat_table_view',
+            stat_table_view,
+            {'pk': view.id})
         self.assertEqual(resp.status_code, 200)
 
         # Get one of the rows
         r_val = get_table_row_by_index(self.workflow, None, 1)
-        req = self.get_request(
-            reverse('table:stat_row'),
-            req_params={'key': 'email', 'val': r_val['email']}
-        )
-        resp = stat_row_view(req)
+        resp = self.get_response(
+            'table:stat_row',
+            stat_row_view,
+            req_params={'key': 'email', 'val': r_val['email']})
         self.assertEqual(resp.status_code, 200)
 
         # Get one of the rows from one of the views
-        req = self.get_request(
-            reverse('table:stat_row_view', kwargs={'pk': view.id}),
-            req_params={'key': 'email', 'val': r_val['email']}
-        )
-        resp = stat_row_view(req, pk=view.id)
+        resp = self.get_response(
+            'table:stat_row_view',
+            stat_row_view,
+            {'pk': view.id},
+            req_params={'key': 'email', 'val': r_val['email']})
         self.assertEqual(resp.status_code, 200)
 
         # Get one of the columns
-        col = self.workflow.columns.get(name='one')
+        col = self.workflow.columns.get(name='age')
         # Get the column visualization
-        req = self.get_request(
-            reverse('table:stat_column', kwargs={'pk': col.id}))
-        resp = stat_column(req, col.id)
+        resp = self.get_response(
+            'table:stat_column',
+            stat_column,
+            {'pk': col.id})
         self.assertEqual(resp.status_code, 200)
 
         # Get the JSON column visualization for a modal
-        req = self.get_ajax_request(
-            reverse('table:stat_column_JSON', kwargs={'pk': col.id}))
-        resp = stat_column_json(req, col.id)
+        col = self.workflow.columns.get(name='one')
+        resp = self.get_response(
+            'table:stat_column_JSON',
+            stat_column_json,
+            {'pk': col.id},
+            is_ajax=True)
         self.assertEqual(resp.status_code, 200)
 

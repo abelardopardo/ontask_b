@@ -3,17 +3,18 @@ import io
 import math
 import os
 import subprocess
-from builtins import object, range, str
 import test
-from typing import Optional, Mapping
+from builtins import object, range, str
+from typing import Mapping, Optional, Callable
 
-from django.contrib.sessions.middleware import SessionMiddleware
-from django.http import HttpRequest
 import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.db import connection
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import reverse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from future import standard_library
@@ -121,12 +122,6 @@ class OnTaskTestCase(TransactionTestCase):
     filename = None
 
     @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        if cls.filename:
-            test.pg_restore_table(cls.filename)
-
-    @classmethod
     def tearDownClass(cls):
         # Close the db_engine
         destroy_db_engine(engine)
@@ -146,6 +141,9 @@ class OnTaskTestCase(TransactionTestCase):
 
     def setUp(self):
         super().setUp()
+        delete_all_tables()
+        if self.filename:
+            test.pg_restore_table(self.filename)
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
         if self.user_email:
