@@ -65,8 +65,20 @@ _formula_column_operands = [
         ['boolean']),
 ]
 
+_op_distrib = {
+    'sum': lambda operand: operand.sum(axis=1, skipna=False),
+    'prod': lambda operand: operand.prod(axis=1, skipna=False),
+    'max': lambda operand: operand.max(axis=1, skipna=False),
+    'min': lambda operand: operand.min(axis=1, skipna=False),
+    'mean': lambda operand: operand.mean(axis=1, skipna=False),
+    'median': lambda operand: operand.median(axis=1, skipna=False),
+    'std': lambda operand: operand.std(axis=1, skipna=False),
+    'all': lambda operand: operand.all(axis=1, skipna=False),
+    'any': lambda operand: operand.any(axis=1, skipna=False),
+}
 
-def partition(list_in, num):
+
+def _partition(list_in, num):
     """Partitions the list in num lists.
 
     Given a list and n, returns a list with n lists, and inside each of them a
@@ -243,7 +255,7 @@ def formula_column_add(
     # Form to read/process data
     form = FormulaColumnAddForm(
         form_data=request.POST or None,
-        operands=formula_column_operands,
+        operands=_formula_column_operands,
         columns=workflow.columns.all(),
     )
 
@@ -269,23 +281,11 @@ def formula_column_add(
         # Update the data frame
         df = load_table(workflow.get_data_frame_table_name())
 
-        distrib = {
-            'sum': lambda operand: operand.sum(axis=1),
-            'prod': lambda operand: operand.prod(axis=1),
-            'max': lambda operand: operand.max(axis=1),
-            'min': lambda operand: operand.min(axis=1),
-            'mean': lambda operand: operand.mean(axis=1),
-            'median': lambda operand: operand.median(axis=1),
-            'std': lambda operand: operand.std(axis=1),
-            'all': lambda operand: operand.all(axis=1),
-            'any': lambda operand: operand.any(axis=1),
-        }
-
         try:
             # Add the column with the appropriate computation
             operation = form.cleaned_data['op_type']
             cnames = [col.name for col in form.selected_columns]
-            df[column.name] = distrib[operation](df[cnames])
+            df[column.name] = _op_distrib[operation](df[cnames])
         except Exception as exc:
             # Something went wrong in pandas, we need to remove the column
             column.delete()
@@ -437,7 +437,7 @@ def random_column_add(
         # Empty new column
         new_column = [None] * workflow.nrows
         # Create the random partitions
-        partitions = partition(
+        partitions = _partition(
             [idx for idx in range(workflow.nrows)],
             len(intvals))
 

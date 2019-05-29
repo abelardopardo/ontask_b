@@ -5,6 +5,7 @@ import os
 import shutil
 import tempfile
 import test
+from test.compare import compare_workflows
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -164,7 +165,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
 class WorkflowImportExportCycle(test.OnTaskTestCase):
     fixtures = ['initial_db']
 
-    filename = os.path.join(
+    gz_filename = os.path.join(
         settings.BASE_DIR(),
         '..',
         'initial_workflow.gz')
@@ -194,7 +195,7 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
             ).exists(),
             'A workflow with this name already exists')
 
-        with open(self.filename, 'rb') as f:
+        with open(self.gz_filename, 'rb') as f:
             do_import_workflow_parse(user, self.wflow_name, f)
 
         # Get the new workflow
@@ -215,6 +216,8 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
         # Do the export now
         workflow2 = Workflow.objects.filter(name=self.wflow_name2).first()
         self.assertIsNotNone(workflow, 'Incorrect import operation')
+
+        compare_workflows(workflow, workflow2)
 
         # Compare the workflows
         self.assertEqual(workflow.description_text, workflow2.description_text)
