@@ -152,11 +152,6 @@ def column_restrict_values(
                     'column_name': column.name,
                     'values': context['values']})
 
-        # There are various points of return
-        from_url = request.META['HTTP_REFERER']
-        if from_url.endswith(reverse('table:display')):
-            return JsonResponse({'html_redirect': reverse('table:display')})
-
         return JsonResponse({'html_redirect': reverse('workflow:detail')})
 
     return JsonResponse({

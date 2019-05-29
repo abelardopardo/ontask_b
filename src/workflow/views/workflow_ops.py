@@ -21,12 +21,15 @@ from core.datatables import DataTablesServerSidePaging
 from dataops.sql import get_rows, get_text_column_hash
 from logs.models import Log
 from ontask import is_correct_email
-from ontask.decorators import ajax_required, get_workflow
+from ontask.decorators import (
+    ajax_required, get_workflow,
+    store_workflow_in_session,
+    get_column,
+)
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from ontask.tasks import workflow_update_lusers
-from workflow.models import Workflow
-from workflow.ops import store_workflow_in_session
+from workflow.models import Workflow, Column
 
 
 class AttributeTable(tables.Table):
@@ -256,12 +259,15 @@ def column_ss(
 
 
 @user_passes_test(is_instructor)
+@csrf_exempt
 @ajax_required
-@get_workflow(pf_related=['columns', 'lusers'])
+@require_http_methods(['POST'])
+@get_column()
 def assign_luser_column(
     request: HttpRequest,
-    wid: Optional[int] = None,
+    pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
+    column: Optional[Column] = None,
 ) -> JsonResponse:
     """Render the view to assign the luser column.
 
@@ -270,7 +276,7 @@ def assign_luser_column(
 
     :param request: HTTP request
 
-    :param wid: Column id
+    :param pk: Column id
 
     :return: JSON data
     """
@@ -283,22 +289,12 @@ def assign_luser_column(
         )
         return JsonResponse({'html_redirect': reverse('action:index')})
 
-    if not wid:
+    if not pk:
         # Empty pk, means reset the field.
         workflow.luser_email_column = None
         workflow.luser_email_column_md5 = ''
         workflow.lusers.set([])
         workflow.save()
-        return JsonResponse({'html_redirect': ''})
-
-    # Get the column
-    column = workflow.columns.filter(pk=wid).first()
-
-    if not column:
-        messages.error(
-            request,
-            _('Incorrect column selected. Please select a key column.'),
-        )
         return JsonResponse({'html_redirect': ''})
 
     table_name = workflow.get_data_frame_table_name()
@@ -307,7 +303,7 @@ def assign_luser_column(
     emails = get_rows(table_name, column_names=[column.name])
 
     # Verify that the column as a valid set of emails
-    if not all(is_correct_email(email_val) for __, email_val in emails):
+    if not all(is_correct_email(row[column.name]) for row in emails):
         messages.error(
             request,
             _('The selected column does not contain email addresses.'),

@@ -4,12 +4,12 @@
 
 import datetime
 
+import pytz
 from django.conf import settings
 from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext, ugettext_lazy as _
-import pytz
 
 from action.models import Action
 from action.payloads import action_session_dictionary

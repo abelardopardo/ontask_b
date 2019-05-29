@@ -11,6 +11,7 @@ from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse
+from django.http.request import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -20,9 +21,6 @@ from action.models import ActionColumnConditionTuple, Condition
 from ontask import OnTaskException
 from table.models import View
 from workflow.models import Workflow
-from workflow.ops import (
-    store_workflow_in_session, store_workflow_nrows_in_session,
-)
 
 
 def ajax_required(func):
@@ -488,3 +486,29 @@ def wf_lock_and_update(
     store_workflow_nrows_in_session(request, workflow)
 
     return workflow
+
+
+def store_workflow_nrows_in_session(request: HttpRequest, wflow: Workflow):
+    """Store the workflow id and name in the request.session dictionary.
+
+    :param request: Request object
+
+    :param wflow: Workflow object
+
+    :return: Nothing. Store the id and the name in the session
+    """
+    request.session['ontask_workflow_rows'] = wflow.nrows
+    request.session.save()
+
+
+def store_workflow_in_session(request: HttpRequest, wflow: Workflow):
+    """Store the workflow id, name, and number of rows in the session.
+
+    :param request: Request object
+
+    :param wflow: Workflow object
+    :return: Nothing. Store the id, name and nrows in the session
+    """
+    request.session['ontask_workflow_id'] = wflow.id
+    request.session['ontask_workflow_name'] = wflow.name
+    store_workflow_nrows_in_session(request, wflow)

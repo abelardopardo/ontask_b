@@ -15,10 +15,9 @@ from dataops.forms import FIELD_PREFIX, RowForm
 from dataops.pandas import db, is_unique_column, store_dataframe
 from dataops.sql import get_rows, update_row
 from logs.models import Log
-from ontask.decorators import get_workflow
+from ontask.decorators import get_workflow, store_workflow_in_session
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
-from workflow.ops import store_workflow_in_session
 
 
 @user_passes_test(is_instructor)

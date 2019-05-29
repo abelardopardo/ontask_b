@@ -5,7 +5,8 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from table import api, stat_views, views
+from table import api, views
+from table.views import stats
 
 app_name = 'table'
 
@@ -53,23 +54,23 @@ urlpatterns = [
     #
     # Stats
     #
-    path('stat_table/', stat_views.stat_table_view, name='stat_table'),
+    path('stat_table/', stats.stat_table_view, name='stat_table'),
     path(
         '<int:pk>/stat_table_view/',
-        stat_views.stat_table_view,
+        stats.stat_table_view,
         name='stat_table_view'),
-    path('stat_row/', stat_views.stat_row_view, name='stat_row'),
+    path('stat_row/', stats.stat_row_view, name='stat_row'),
     path(
         '<int:pk>/stat_row_view/',
-        stat_views.stat_row_view,
+        stats.stat_row_view,
         name='stat_row_view'),
     path(
         '<int:pk>/stat_column/',
-        stat_views.stat_column,
+        stats.stat_column,
         name='stat_column'),
     path(
         '<int:pk>/stat_column_JSON/',
-        stat_views.stat_column_json,
+        stats.stat_column_json,
         name='stat_column_JSON'),
 
     #

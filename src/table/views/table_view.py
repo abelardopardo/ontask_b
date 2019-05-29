@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """Functions to implement CRUD views for Views."""
-
+import copy
 from typing import Optional
 
-import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -13,7 +12,9 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
+import django_tables2 as tables
 
+from dataops.formula import get_variables
 from logs.models import Log
 from ontask import create_new_name
 from ontask.decorators import ajax_required, get_view, get_workflow
@@ -64,6 +65,45 @@ class ViewTable(tables.Table):
             'style': 'width: 100%;',
             'id': 'view-table',
         }
+
+
+def do_clone_view(
+    view: View,
+    new_workflow: Workflow = None,
+    new_name: str = None,
+) -> View:
+    """Clone a view.
+
+    :param view: Object to clone
+
+    :param new_workflow: Non empty if it has to point to a new workflow
+
+    :param new_name: Non empty if it has to be renamed.
+
+    :result: New clone object
+    """
+    # Proceed to clone the view
+    if new_name is None:
+        new_name = view.name
+    if new_workflow is None:
+        new_workflow = view.workflow
+
+    new_view = View(
+        name=new_name,
+        description_text=view.description_text,
+        workflow=new_workflow,
+        formula=copy.deepcopy(view.formula),
+    )
+    new_view.save()
+
+    try:
+        # Update the many to many field.
+        new_view.columns.set(list(view.columns.all()))
+    except Exception as exc:
+        new_view.delete()
+        raise exc
+
+    return new_view
 
 
 @user_passes_test(is_instructor)
@@ -224,18 +264,13 @@ def view_clone(
         })
 
     # POST REQUEST
-
-    # Proceed to clone the view
     old_name = view.name
-    columns = workflow.views.get(id=pk).columns.all()
-
-    view.id = None
-    view.name = create_new_name(view.name, workflow.views)
-    view.save()
-
-    # Clone the columns
-    view.columns.clear()
-    view.columns.add(*list(columns))
+    view = do_clone_view(
+        view,
+        new_workflow=None,
+        new_name=create_new_name(view.name, workflow.views)
+    )
+    # Proceed to clone the view
 
     # Log the event
     Log.objects.register(

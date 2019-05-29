@@ -30,7 +30,7 @@ from workflow.forms import (
     QuestionRenameForm, RandomColumnAddForm,
 )
 from workflow.models import Column, Workflow
-from workflow.ops import clone_column, workflow_delete_column
+from workflow.ops import clone_wf_df_column, workflow_delete_column
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -38,26 +38,31 @@ from workflow.ops import clone_column, workflow_delete_column
 # - Pandas operation name
 # - Textual description
 # - List of data types that are allowed (for data type checking)
-formula_column_operands = [
+_formula_column_operands = [
     ('sum', _('sum: Sum selected columns'), ['integer', 'double']),
-    ('prod',
-     _('prod: Product of the selected columns'),
-     ['integer', 'double']),
+    (
+        'prod',
+        _('prod: Product of the selected columns'),
+        ['integer', 'double']),
     ('max', _('max: Maximum of the selected columns'), ['integer', 'double']),
     ('min', _('min: Minimum of the selected columns'), ['integer', 'double']),
     ('mean', _('mean: Mean of the selected columns'), ['integer', 'double']),
-    ('median',
-     _('median: Median of the selected columns'),
-     ['integer', 'double']),
-    ('std',
-     _('std: Standard deviation over the selected columns'),
-     ['integer', 'double']),
-    ('all',
-     _('all: True when all elements in selected columns are true'),
-     ['boolean']),
-    ('any',
-     _('any: True when any element in selected columns is true'),
-     ['boolean']),
+    (
+        'median',
+        _('median: Median of the selected columns'),
+        ['integer', 'double']),
+    (
+        'std',
+        _('std: Standard deviation over the selected columns'),
+        ['integer', 'double']),
+    (
+        'all',
+        _('all: True when all elements in selected columns are true'),
+        ['boolean']),
+    (
+        'any',
+        _('any: True when any element in selected columns is true'),
+        ['boolean']),
 ]
 
 
@@ -87,11 +92,11 @@ def column_add(
 ) -> JsonResponse:
     """Add column.
 
-    :param request:
+    :param request: Http Request
 
-    :param pk:
+    :param pk: Action ID where to add the question
 
-    :return:
+    :return: JSON response
     """
     # Detect if this operation is to add a new column or a new question (in
     # the edit in page)
@@ -682,15 +687,9 @@ def column_clone(
 
     # POST REQUEST
 
-    # Get the new name appending as many times as needed the 'Copy of '
-    old_name = column.name
-
     # Proceed to clone the column
     try:
-        column = clone_column(
-            column,
-            None,
-            create_new_name(column.name, workflow.columns))
+        new_column = clone_wf_df_column(column)
     except Exception as exc:
         messages.error(
             request,
@@ -705,7 +704,7 @@ def column_clone(
         {
             'id': workflow.id,
             'name': workflow.name,
-            'old_column_name': old_name,
-            'new_column_name': column.name})
+            'old_column_name': column.name,
+            'new_column_name': new_column.name})
 
     return JsonResponse({'html_redirect': ''})

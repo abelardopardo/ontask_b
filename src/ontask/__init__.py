@@ -15,7 +15,7 @@ from ontask.celery import app as celery_app
 __all__ = [
     'celery_app', 'OnTaskException', 'is_legal_name',
     'OnTaskDataFrameNoKey', 'simplify_datetime_str', 'is_correct_email',
-    'OnTaskEmptyWorkflow', 'OnTaskDBIdentifier'
+    'OnTaskEmptyWorkflow', 'OnTaskDBIdentifier', 'create_new_name'
 ]
 
 __version__ = 'B.5'
@@ -76,6 +76,11 @@ def is_legal_name(val):
     return None
 
 
+def entity_prefix():
+    """Return the prefix to use when cloning objects."""
+    return _('Copy of ')
+
+
 def is_correct_email(email_txt):
     try:
         validate_email(email_txt)
@@ -109,7 +114,7 @@ def create_new_name(old_name: str, obj_manager) -> str:
     # Get the new name appending as many times as needed the 'Copy of '
     new_name = old_name
     while obj_manager.filter(name=new_name).exists():
-        new_name = _('Copy of ') + new_name
+        new_name = entity_prefix() + new_name
 
     return new_name
 

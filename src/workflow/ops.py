@@ -1,49 +1,26 @@
 # -*- coding: utf-8 -*-
 
 """Functions to perform various operations in a workflow."""
-
+import copy
 from typing import List, Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.http import HttpRequest
+from django.db.models.query_utils import Q
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from action.models import Condition
+from action.views.clone import do_clone_action
 from dataops.pandas import load_table, store_dataframe
 from dataops.sql.column_queries import df_drop_column
 from dataops.sql.row_queries import get_rows
 from logs.models import Log
+from ontask import create_new_name
+from table.views.table_view import do_clone_view
 from workflow.models import Column, Workflow
 
 RANDOM_PWD_LENGTH = 50
-
-
-def store_workflow_nrows_in_session(request: HttpRequest, wflow: Workflow):
-    """Store the workflow id and name in the request.session dictionary.
-
-    :param request: Request object
-
-    :param wflow: Workflow object
-
-    :return: Nothing. Store the id and the name in the session
-    """
-    request.session['ontask_workflow_rows'] = wflow.nrows
-    request.session.save()
-
-
-def store_workflow_in_session(request: HttpRequest, wflow: Workflow):
-    """Store the workflow id, name, and number of rows in the session.
-
-    :param request: Request object
-
-    :param wflow: Workflow object
-    :return: Nothing. Store the id, name and nrows in the session
-    """
-    request.session['ontask_workflow_id'] = wflow.id
-    request.session['ontask_workflow_name'] = wflow.name
-    store_workflow_nrows_in_session(request, wflow)
 
 
 def workflow_delete_column(
@@ -141,54 +118,6 @@ def workflow_restrict_column(column: Column) -> Optional[str]:
     return None
 
 
-def clone_column(
-    column: Column,
-    new_workflow: Optional[Workflow] = None,
-    new_name: Optional[str] = None,
-) -> Column:
-    """Create a clone of a column.
-
-    :param column: Object to clone
-
-    :param new_workflow: New workflow object to point
-
-    :param new_name: New name
-
-    :return: Cloned object
-    """
-    # Store the old object name before squashing it
-    old_name = column.name
-    old_position = column.position
-
-    # Clone
-    column.id = None
-
-    # Update some of the fields
-    if new_name:
-        column.name = new_name
-    if new_workflow:
-        column.workflow = new_workflow
-
-    # Set column at the end
-    column.position = column.workflow.ncols + 1
-    column.save()
-
-    # Update the number of columns in the workflow
-    column.workflow.ncols += 1
-    column.workflow.save()
-
-    # Reposition the columns above the one being deleted
-    column.workflow.reposition_columns(column.position, old_position + 1)
-
-    # Add the column to the table and update it.
-    data_frame = load_table(
-        column.workflow.get_data_frame_table_name())
-    data_frame[new_name] = data_frame[old_name]
-    store_dataframe(data_frame, column.workflow)
-
-    return column
-
-
 def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
     """Recalculate the field lusers.
 
@@ -236,3 +165,127 @@ def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
         'Learner emails successfully updated.',
     )
     log_item.save()
+
+
+def do_clone_column_only(
+    column: Column,
+    new_workflow: Optional[Workflow] = None,
+    new_name: Optional[str] = None,
+) -> Column:
+    """Clone a column.
+
+    :param column: Object to clone.
+
+    :param new_workflow: Optional new worklow object to link to.
+
+    :param new_name: Optional new name to use.
+
+    :result: New object.
+    """
+    if new_name is None:
+        new_name = column.name
+    if new_workflow is None:
+        new_workflow = column.workflow
+
+    new_column = Column(
+        name=new_name,
+        description_text=column.description_text,
+        workflow=new_workflow,
+        data_type=column.data_type,
+        is_key=column.is_key,
+        position=column.position,
+        in_viz=column.in_viz,
+        categories=copy.deepcopy(column.categories),
+        active_from=column.active_from,
+        active_to=column.active_to,
+    )
+    new_column.save()
+    return new_column
+
+
+def clone_wf_df_column(column: Column) -> Column:
+    """Create a clone of a column.
+
+    :param column: Object to clone
+
+    :return: Cloned object (DF has an additional column as well
+    """
+    workflow = column.workflow
+
+    new_column = do_clone_column_only(
+        column,
+        new_name=create_new_name(column.name, workflow.columns))
+
+    # Update the number of columns in the workflow
+    workflow.ncols += 1
+    workflow.save()
+    workflow.refresh_from_db()
+
+    # Reposition the new column at the end
+    new_column.position = workflow.ncols
+    new_column.save()
+
+    # Add the column to the table and update it.
+    data_frame = load_table(
+        workflow.get_data_frame_table_name())
+    data_frame[new_column.name] = data_frame[column.name]
+    store_dataframe(data_frame, workflow)
+
+    return new_column
+
+
+def do_clone_workflow(workflow: Workflow) -> Workflow:
+    """Clone the workflow.
+
+    :param workflow: source workflow
+
+    :return: Clone object
+    """
+    new_workflow = Workflow(
+        user=workflow.user,
+        name=create_new_name(
+            workflow.name,
+            Workflow.objects.filter(
+                Q(user=workflow.user) | Q(shared=workflow.user)),
+        ),
+        description_text=workflow.description_text,
+        nrows=workflow.nrows,
+        ncols=workflow.ncols,
+        attributes=copy.deepcopy(workflow.attributes),
+        query_builder_ops=copy.deepcopy(workflow.query_builder_ops),
+        luser_email_column_md5=workflow.luser_email_column_md5,
+        lusers_is_outdated=workflow.lusers_is_outdated
+    )
+    new_workflow.save()
+    try:
+        new_workflow.shared.set(list(workflow.shared.all()))
+        new_workflow.lusers.set(list(workflow.lusers.all()))
+
+        # Clone the columns
+        for item_obj in workflow.columns.all():
+            do_clone_column_only(item_obj, new_workflow=new_workflow)
+
+        # Update the luser_email_column if needed:
+        if workflow.luser_email_column:
+            new_workflow.luser_email_column = new_workflow.columns.get(
+                name=workflow.luser_email_column.name,
+            )
+
+        # Clone the data frame
+        data_frame = load_table(workflow.get_data_frame_table_name())
+        store_dataframe(data_frame, new_workflow)
+
+        # Clone actions
+        for item_obj in workflow.actions.all():
+            do_clone_action(item_obj, new_workflow)
+
+        for item_obj in workflow.views.all():
+            do_clone_view(item_obj, new_workflow)
+
+        # Done!
+        new_workflow.save()
+    except Exception as exc:
+        new_workflow.delete()
+        raise exc
+
+    return new_workflow

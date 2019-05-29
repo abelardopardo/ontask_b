@@ -30,9 +30,13 @@ def serve_survey_row(
 
     Function that given a request, and an action IN, it performs the lookup
      and data input of values.
+
     :param request: HTTP request
+
     :param action:  Action In
+
     :param user_attribute_name: The column name used to check for email
+
     :return:
     """
     # Get the attribute value depending if the user is managing the workflow

@@ -358,11 +358,12 @@ class Workflow(models.Model):
 
         1) Delete the data frame from the database
 
-        2) Delete all the columns attached to the workflow
+        2) Delete all the actions attached to the workflow (with their
+        conditions)
 
-        3) Delete all the conditions attached to the actions
+        3) Delete all the views attached to the workflow
 
-        4) Delete all the views attached to the workflow
+        4) Delete all the columns attached to the workflow
 
         :return: Reflected in the DB
         """
@@ -373,18 +374,20 @@ class Workflow(models.Model):
         self.nrows = 0
         self.ncols = 0
         self.n_filterd_rows = -1
-        self.set_query_builder_ops()
         self.data_frame_table_name = ''
 
-        # Step 2: Delete the column_names, column_types and column_unique
-        self.columns.all().delete()
-
-        # Step 3: Delete the conditions attached to all the actions attached
+        # Step 2: Delete the conditions attached to all the actions attached
         # to the workflow.
-        self.actions.all().delete()
+        for act in self.actions.all():
+            act.conditions.all().delete()
+            act.delete()
 
-        # Step 4: Delete all the views attached to the workflow
+        # Step 3: Delete all the views attached to the workflow
         self.views.all().delete()
+
+        # Step 4: Delete the column_names, column_types and column_unique
+        self.columns.all().delete()
+        self.set_query_builder_ops()
 
         # Save the workflow with the new fields.
         self.save()

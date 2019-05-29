@@ -154,40 +154,46 @@ class OnTaskTestCase(TransactionTestCase):
         if self.workflow_name:
             self.workflow = Workflow.objects.get(name=self.workflow_name)
 
-    def get_request(
-        self,
-        url_name: str,
-        method: Optional[str] = 'GET',
-        req_params: Optional[Mapping] = None,
-        **kwargs
-    ) -> HttpRequest:
-        """Add the user to the request."""
-        if req_params is None:
-            req_params = {}
-        if method == 'GET':
-            request = self.factory.get(url_name, req_params, **kwargs)
-        elif method == 'POST':
-            request = self.factory.post(url_name, req_params, **kwargs)
-
+    def add_middleware(self, request):
         request.user = self.user
         # adding session
         SessionMiddleware().process_request(request)
+        # adding messages
+        setattr(request, '_messages', FallbackStorage(request))
         self.store_workflow_in_session(request.session, self.workflow)
         request.session.save()
+
         return request
 
-    def get_ajax_request(
+    def get_response(
         self,
         url_name: str,
+        view_func: Callable[..., HttpResponse],
+        url_params: Optional[Mapping] = None,
         method: Optional[str] = 'GET',
         req_params: Optional[Mapping] = None,
-    ) -> HttpRequest:
+        is_ajax: Optional[bool] = False,
+        **kwargs
+    ) -> HttpResponse:
         """Add the user to the request."""
-        req = self.get_request(
-            url_name, method,
-            req_params,
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        return req
+        url_params = {} if url_params is None else url_params
+        url_str = reverse(url_name, kwargs=url_params)
+
+        if req_params is None:
+            req_params = {}
+
+        if is_ajax:
+            kwargs['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
+        if method == 'GET':
+            request = self.factory.get(url_str, req_params, **kwargs)
+        elif method == 'POST':
+            request = self.factory.post(url_str, req_params, **kwargs)
+        else:
+            raise Exception('Incorrect request method')
+
+        request = self.add_middleware(request)
+
+        return view_func(request, **url_params)
 
 
 class OnTaskApiTestCase(APITransactionTestCase):

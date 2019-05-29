@@ -5,13 +5,14 @@
 from django.urls import path, re_path
 from rest_framework.urlpatterns import format_suffix_patterns
 
+import workflow.views.workflow_crud
 from workflow import api, views
 
 app_name = 'workflow'
 
 urlpatterns = [
     path('create/', views.WorkflowCreateView.as_view(), name='create'),
-    path('<int:wid>/clone/', views.clone, name='clone'),
+    path('<int:wid>/clone/', views.clone_workflow, name='clone'),
     path('<int:wid>/update/', views.update, name='update'),
     path('<int:wid>/delete/', views.delete, name='delete'),
     path('<int:wid>/flush/', views.flush, name='flush'),
@@ -30,7 +31,7 @@ urlpatterns = [
         r'(?P<page_data>(\d+(,\d+)*)?)/export/',
         views.export,
         name='export'),
-    path('import/', views.import_export.import_workflow, name='import'),
+    path('import/', views.import_workflow, name='import'),
 
     # Attributes
     path(
@@ -59,15 +60,13 @@ urlpatterns = [
         views.assign_luser_column,
         name='assign_luser_column'),
     path(
-        '<int:wid>/assign_luser_column/',
+        '<int:pk>/assign_luser_column/',
         views.assign_luser_column,
         name='assign_luser_column'),
 
     # Column manipulation
     path('column_add/', views.column_add, name='column_add'),
-    path(
-        '<int:pk>/question_add/', views.column_add,
-        name='question_add'),
+    path('<int:pk>/question_add/', views.column_add, name='question_add'),
     path(
         'formula_column_add',
         views.formula_column_add,
@@ -80,10 +79,7 @@ urlpatterns = [
         '<int:pk>/column_delete/',
         views.column_delete,
         name='column_delete'),
-    path(
-        '<int:pk>/column_edit/',
-        views.column_edit,
-        name='column_edit'),
+    path('<int:pk>/column_edit/', views.column_edit, name='column_edit'),
     path(
         '<int:pk>/question_edit/',
         views.column_edit,
@@ -94,18 +90,18 @@ urlpatterns = [
         name='column_clone'),
 
     # Column movement
-    path('column_move/', views.column_ops.column_move, name='column_move'),
+    path('column_move/', views.column_move, name='column_move'),
     path(
         '<int:pk>/column_move_top/',
-        views.column_ops.column_move_top,
+        views.column_move_top,
         name='column_move_top'),
     path(
         '<int:pk>/column_move_bottom/',
-        views.column_ops.column_move_bottom,
+        views.column_move_bottom,
         name='column_move_bottom'),
     path(
         '<int:pk>/column_restrict/',
-        views.column_ops.column_restrict_values,
+        views.column_restrict_values,
         name='column_restrict'),
 
     # API

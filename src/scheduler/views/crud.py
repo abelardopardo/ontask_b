@@ -2,10 +2,11 @@
 
 """Views to manipulate the CRUD for scheduled exections."""
 
-from builtins import object
 import json
+from builtins import object
 from typing import Optional
 
+import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
@@ -16,7 +17,6 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
-import django_tables2 as tables
 
 from action.models import Action
 from action.payloads import action_session_dictionary
@@ -27,8 +27,8 @@ from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from scheduler.models import ScheduledAction
 from scheduler.views.save import (
-    save_canvas_email_schedule, save_email_schedule, save_json_schedule,
-    create_timedelta_string,
+    create_timedelta_string, save_canvas_email_schedule, save_email_schedule,
+    save_json_schedule,
 )
 from workflow.models import Workflow
 

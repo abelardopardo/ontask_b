@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
 from django.http.request import HttpRequest
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls.base import reverse
@@ -21,11 +21,14 @@ from django.views import generic
 from dataops.pandas import check_wf_df
 from logs.models import Log
 from ontask.celery import celery_is_up
-from ontask.decorators import ajax_required, get_workflow
+from ontask.decorators import (
+    ajax_required, get_workflow,
+    store_workflow_in_session,
+)
 from ontask.permissions import UserIsInstructor, is_instructor
 from workflow.forms import WorkflowForm
 from workflow.models import Workflow
-from workflow.ops import store_workflow_in_session
+from workflow.ops import do_clone_workflow
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
@@ -277,3 +280,57 @@ def delete(
             {'workflow': workflow},
             request=request),
     })
+
+
+@user_passes_test(is_instructor)
+@ajax_required
+@get_workflow()
+def clone_workflow(
+    request: HttpRequest,
+    wid: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
+    """Clone a workflow.
+
+    :param request: HTTP request
+
+    :param pk: Workflow id
+
+    :return: JSON data
+    """
+    # Get the current workflow
+    # Initial data in the context
+    context = {'pk': wid, 'name': workflow.name}
+
+    if request.method == 'GET':
+        return JsonResponse({
+            'html_form': render_to_string(
+                'workflow/includes/partial_workflow_clone.html',
+                context,
+                request=request),
+        })
+
+    try:
+        workflow_new = do_clone_workflow(workflow)
+    except Exception as exc:
+        messages.error(
+            request,
+            _('Unable to clone workflow: {0}').format(str(exc)),
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    # Log event
+    Log.objects.register(
+        request.user,
+        Log.WORKFLOW_CLONE,
+        workflow_new,
+        {
+            'id_old': workflow_new.id,
+            'id_new': workflow.id,
+            'name_old': workflow_new.name,
+            'name_new': workflow.name})
+
+    messages.success(
+        request,
+        _('Workflow successfully cloned.'))
+    return JsonResponse({'html_redirect': ''})

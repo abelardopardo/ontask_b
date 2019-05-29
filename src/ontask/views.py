@@ -5,30 +5,14 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse
 from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
 from django_auth_lti.decorators import lti_role_required
 from ontask.decorators import ajax_required
-from ontask.permissions import UserIsInstructor, is_admin, is_instructor
+from ontask.permissions import UserIsInstructor
 from ontask.tasks import increase_track_count
-from workflow.views import index
-
-
-def home(request: HttpRequest) -> HttpResponse:
-    """Render the home page."""
-    if not request.user.is_authenticated:
-        # Unauthenticated request, go to login
-        return redirect(reverse('accounts:login'))
-
-    if is_instructor(request.user) or is_admin(request.user):
-        # Authenticated request, go to the workflow index
-        return index(request)
-
-    # Authenticated request from learner, show profile
-    return redirect(reverse('profiles:show_self'))
 
 
 class AboutPage(generic.TemplateView):

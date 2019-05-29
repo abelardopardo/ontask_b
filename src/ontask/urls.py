@@ -26,6 +26,8 @@ import workflow.urls
 from dataops.pandas import set_engine
 from ontask import views
 from ontask.templatetags.ontask_tags import ontask_version
+from workflow.views import home
+import workflow.views.home
 
 api_description = ugettext(
     'The OnTask API offers functionality to manipulate workflows, tables '
@@ -34,11 +36,11 @@ api_description = ugettext(
 
 urlpatterns = [
     # Home Page!
-    path('', views.home, name='home'),
+    path('', home, name='home'),
 
     path('lti_entry', views.lti_entry, name='lti_entry'),
 
-    path('not_authorized', views.home, name='not_authorized'),
+    path('not_authorized', workflow.views.home, name='not_authorized'),
 
     path('about', views.AboutPage.as_view(), name='about'),
 

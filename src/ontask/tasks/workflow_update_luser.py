@@ -2,7 +2,7 @@ from celery import shared_task
 from django.utils.translation import ugettext
 
 from ontask.tasks.basic import get_execution_items, get_log_item
-from workflow.ops import do_workflow_update_lusers
+import workflow.ops
 
 
 @shared_task
@@ -24,11 +24,11 @@ def workflow_update_lusers(user_id, workflow_id, log_id):
 
     to_return = True
     try:
-        user, workflow, __ = get_execution_items(
+        user, wflow, __ = get_execution_items(
             user_id=user_id,
             workflow_id=workflow_id)
 
-        do_workflow_update_lusers(workflow, log_item)
+        workflow.ops.do_workflow_update_lusers(wflow, log_item)
 
         # Reflect status in the log event
         log_item.payload['status'] = 'Execution finished successfully'
