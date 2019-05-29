@@ -208,7 +208,8 @@ def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
 
     luser_list = []
     created = 0
-    for __, uemail, in emails:
+    for row in emails:
+        uemail = row[workflow.luser_email_column.name]
         luser = get_user_model().objects.filter(email=uemail).first()
         if not luser:
             # Create user
