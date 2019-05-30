@@ -19,7 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
 
 from action.models import Action
-from action.payloads import action_session_dictionary
+from action.payloads import action_session_dictionary, set_action_payload
 from logs.models import Log
 from ontask.celery import celery_is_up
 from ontask.decorators import ajax_required, get_workflow
@@ -217,7 +217,7 @@ def edit(
             'post_url': reverse(
                 'scheduler:finish_scheduling'),
         }
-        request.session[action_session_dictionary] = op_payload
+        set_action_payload(request.session, op_payload)
         request.session.save()
 
     # Verify that celery is running!

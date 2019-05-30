@@ -45,7 +45,7 @@ def run_canvas_email_action(
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
-    action_info = get_action_info(
+    action_info = get_or_set_action_info(
         req.session,
         CanvasEmailPayload,
         initial_values={
@@ -72,7 +72,7 @@ def run_canvas_email_action(
             action_info['button_label'] = ugettext('Send')
             action_info['valuerange'] = 2
             action_info['step'] = 2
-            req.session[action_session_dictionary] = action_info.get_store()
+            set_action_payload(req.session, action_info.get_store())
 
             return redirect('action:item_filter')
 
@@ -164,7 +164,7 @@ def run_canvas_email_done(
     :return: HTTP response
     """
     # Get the payload from the session if not given
-    action_info = get_action_info(
+    action_info = get_or_set_action_info(
         request.session,
         CanvasEmailPayload,
         action_info=action_info)
@@ -207,7 +207,7 @@ def run_canvas_email_done(
         action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
-    request.session[action_session_dictionary] = None
+    set_action_payload(request.session)
     request.session.save()
 
     # Successful processing.

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """Views to run the personalized zip action."""
-import zipfile
 from datetime import datetime
 from io import BytesIO
 from typing import List, Optional, Tuple
+import zipfile
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -17,7 +17,7 @@ from action.evaluate.action import evaluate_action
 from action.forms import ZipActionForm
 from action.models import Action
 from action.payloads import (
-    ZipPayload, action_session_dictionary, get_action_info,
+    ZipPayload, get_or_set_action_info, set_action_payload,
 )
 from action.views.run_email import html_body
 from dataops.sql.row_queries import get_rows
@@ -45,7 +45,7 @@ def zip_action(
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
-    action_info = get_action_info(
+    action_info = get_or_set_action_info(
         req.session,
         ZipPayload,
         initial_values={
@@ -69,7 +69,7 @@ def zip_action(
             action_info['button_label'] = ugettext('Create ZIP')
             action_info['valuerange'] = 2
             action_info['step'] = 2
-            req.session[action_session_dictionary] = action_info.get_store()
+            set_action_payload(req.session, action_info.get_store())
 
             return redirect('action:item_filter')
 
@@ -103,7 +103,7 @@ def run_zip_done(
     :return: HTTP response
     """
     # Get the payload from the session if not given
-    action_info = get_action_info(
+    action_info = get_or_set_action_info(
         request.session,
         ZipPayload,
         action_info=action_info)
@@ -149,7 +149,7 @@ def action_zip_export(
     :return: Response (download)
     """
     # Get the payload from the session if not given
-    action_info = get_action_info(request.session)
+    action_info = get_or_set_action_info(request.session)
     if not action_info:
         # Something is wrong with this execution. Return to action table.
         messages.error(request, _('Incorrect ZIP action invocation.'))
@@ -184,7 +184,7 @@ def action_zip_export(
         file_name_template)
 
     # Reset object to carry action info throughout dialogs
-    request.session[action_session_dictionary] = None
+    set_action_payload(request.session)
     request.session.save()
 
     return create_response(sbuf)

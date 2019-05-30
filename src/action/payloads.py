@@ -2,7 +2,7 @@
 
 """Classes capturing the payloads used when running actions."""
 import collections
-from typing import Dict, Optional
+from typing import Dict, Optional, Mapping
 
 from django.conf import settings as ontask_settings
 from django.contrib.sessions.backends.base import SessionBase
@@ -223,7 +223,20 @@ def get_action_payload(session: SessionBase) -> Dict:
     return session.get(action_session_dictionary)
 
 
-def get_action_info(
+def set_action_payload(
+    session: SessionBase,
+    payload: Optional[Mapping] = None
+):
+    """Set the payload in the current session.
+
+    :param session: Session object
+
+    :param payload: Dictionary to store
+    """
+    session[action_session_dictionary] = payload
+
+
+def get_or_set_action_info(
     session: Session,
     payloadclass,
     action_info: Optional[ActionPayload] = None,

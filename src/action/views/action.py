@@ -18,7 +18,7 @@ from django_tables2 import A
 
 from action.forms import ActionForm, ActionUpdateForm
 from action.models import Action
-from action.payloads import action_session_dictionary
+from action.payloads import set_action_payload
 from action.views.edit_personalized import edit_action_out
 from action.views.edit_survey import edit_action_in
 from logs.models import Log
@@ -203,7 +203,7 @@ def action_index(
     :return: HTTP response
     """
     # Reset object to carry action info throughout dialogs
-    request.session[action_session_dictionary] = None
+    set_action_payload(request.session)
     request.session.save()
 
     return render(

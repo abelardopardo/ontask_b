@@ -12,7 +12,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from action.models import Action
-from action.payloads import action_session_dictionary
+from action.payloads import action_session_dictionary, set_action_payload
 from logs.models import Log
 from scheduler.forms import EmailScheduleForm, JSONScheduleForm
 from scheduler.models import ScheduledAction
@@ -120,7 +120,7 @@ def save_email_schedule(request, action, schedule_item, op_payload):
             op_payload['button_label'] = ugettext('Schedule')
             op_payload['valuerange'] = 2
             op_payload['step'] = 2
-            request.session[action_session_dictionary] = op_payload
+            set_action_payload(request.session, op_payload)
 
             return redirect('action:item_filter')
 
@@ -210,7 +210,7 @@ def save_json_schedule(request, action, schedule_item, op_payload):
             op_payload['button_label'] = ugettext('Schedule')
             op_payload['valuerange'] = 2
             op_payload['step'] = 2
-            request.session[action_session_dictionary] = op_payload
+            set_action_payload(request.session, op_payload)
 
             return redirect('action:item_filter')
 
@@ -330,7 +330,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
         log_payload)
 
     # Reset object to carry action info throughout dialogs
-    request.session[action_session_dictionary] = None
+    set_action_payload(request.session)
     request.session.save()
 
     # Successful processing.

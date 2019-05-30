@@ -13,7 +13,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from action.forms import JSONActionForm
 from action.models import Action
 from action.payloads import (
-    JSONPayload, action_session_dictionary, get_action_info,
+    JSONPayload, get_or_set_action_info, set_action_payload,
 )
 from logs.models import Log
 from ontask.decorators import get_workflow
@@ -38,7 +38,7 @@ def run_json_action(
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
-    action_info = get_action_info(
+    action_info = get_or_set_action_info(
         req.session,
         JSONPayload,
         initial_values={
@@ -61,7 +61,7 @@ def run_json_action(
             action_info['button_label'] = ugettext('Send')
             action_info['valuerange'] = 2
             action_info['step'] = 2
-            req.session[action_session_dictionary] = action_info.get_store()
+            set_action_payload(req.session, action_info.get_store())
 
             return redirect('action:item_filter')
 
@@ -99,7 +99,7 @@ def run_json_done(
     :return: HTTP response
     """
     # Get the payload from the session if not given
-    action_info = get_action_info(
+    action_info = get_or_set_action_info(
         request.session,
         JSONPayload,
         action_info=action_info)
@@ -136,7 +136,7 @@ def run_json_done(
         action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
-    request.session[action_session_dictionary] = None
+    set_action_payload(request.session)
     request.session.save()
 
     # Successful processing.
