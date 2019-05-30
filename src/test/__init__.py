@@ -3,6 +3,8 @@ import io
 import math
 import os
 import subprocess
+
+from action.payloads import set_action_payload
 import test
 from builtins import object, range, str
 from typing import Mapping, Optional, Callable
@@ -171,9 +173,22 @@ class OnTaskTestCase(TransactionTestCase):
         method: Optional[str] = 'GET',
         req_params: Optional[Mapping] = None,
         is_ajax: Optional[bool] = False,
-        **kwargs
+        session_payload: Optional[Mapping] = None,
+        **kwargs,
     ) -> HttpResponse:
-        """Add the user to the request."""
+        """Create a request and send it to a processing function.
+
+        :param url_name: URL name as defined in urls.py
+        :param view_func: Function that will be processing the request
+        :param url_params: Dictionary to give reverse to generate the full URL.
+        :param method: GET (default) or POST
+        :param req_params: Additional parameters to add to the request (for
+        POST requests)
+        :param is_ajax: Generate an ajax request or not
+        :param session_payload: Dictionary to add to the request session
+        :param kwargs: Additional arguments to attach to the URL
+        :return:
+        """
         url_params = {} if url_params is None else url_params
         url_str = reverse(url_name, kwargs=url_params)
 
@@ -190,6 +205,9 @@ class OnTaskTestCase(TransactionTestCase):
             raise Exception('Incorrect request method')
 
         request = self.add_middleware(request)
+
+        if session_payload:
+            set_action_payload(request.session, session_payload)
 
         return view_func(request, **url_params)
 

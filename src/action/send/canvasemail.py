@@ -92,7 +92,7 @@ def send_canvas_emails(
         }
 
         # Manage the bursts
-        burst_pause(burst, burst_pause, idx)
+        do_burst_pause(burst, burst_pause, idx)
         # Index to detect bursts
         idx += 1
 
@@ -114,6 +114,7 @@ def send_canvas_emails(
                     'obj': json.dumps(canvas_email_payload),
                 },
             )
+            result_msg = 'SENT TO LOGGER'
             response_status = 200
 
         # Log message sent
@@ -178,7 +179,7 @@ def refresh_and_retry_send(
     return result_msg, response_status
 
 
-def burst_pause(burst: int, burst_pause: int, idx: int):
+def do_burst_pause(burst: int, burst_pause: int, idx: int):
     """Detect end of burst and pause if needed.
 
     :param burst: Burst length
