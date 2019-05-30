@@ -338,6 +338,26 @@ class Action(models.Model):
                 filter_formula=filter_formula,
             )
 
+    def used_columns(self):
+        """Lis of column used in the action.
+
+        These are those that are used in any condition + those used
+        in the columns field.
+
+        :return: List of column objects
+        """
+        column_set = set([])
+
+        # Accumulate all columns for all conditions
+        for cond in self.conditions.all():
+            column_set = column_set.union(set(cond.columns.all()))
+
+        # Accumulate now those in the field columns
+        for ccpair in self.column_condition_pair.all():
+            column_set.add(ccpair.column)
+
+        return list(column_set)
+
     def get_row_all_false_count(self):
         """Extract the rows for which  all conditions are false.
 
