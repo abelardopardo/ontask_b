@@ -30,6 +30,33 @@ type_function = {
 }
 
 
+# Initial list of results (all false until proven otherwise
+_checks = [
+    _('Class inherits from OnTaskPluginAbstract'),
+    _('Class has a non-empty documentation string'),
+    _('Presence of a string field with name "name"'),
+    _('Presence of a string field with name "description_txt"'),
+    _(
+        'Presence of a field with name "input_column_names" storing '
+        + 'a (possible empty) list of strings'),
+    _(
+        'Presence of a field with name "output_column_names" storing '
+        + 'a (possibly empty) list of strings'),
+    _(
+        'Presence of a (possible empty) list of tuples with name '
+        + '"parameters". The tuples must have six '
+        + 'elements: name (a string), type (one of "double", "integer", '
+        + '"string", "boolean", '
+        + 'or "datetime"), (possible empty) list of allowed values of '
+        + 'corresponding type, an initial value of the right type or '
+        + 'None, and a help string to be shown when requesting this '
+        + 'parameter.'),
+    _(
+        'Presence of a method with name run receiving a data frame '
+        + 'and a dictionary with parameters.'),
+]
+
+
 def _get_plugin_path():
     plugin_folder = str(getattr(settings, 'PLUGIN_DIRECTORY'))
 
@@ -78,30 +105,7 @@ def _verify_plugin(pinobj):
 
     :return: List of Booleans with the result of the tests
     """
-    # Initial list of results (all false until proven otherwise
-    checks = [
-        _('Class inherits from OnTaskPluginAbstract'),
-        _('Class has a non-empty documentation string'),
-        _('Presence of a string field with name "name"'),
-        _('Presence of a string field with name "description_txt"'),
-        _(
-            'Presence of a field with name "input_column_names" storing '
-            + 'a (possible empty) list of strings'),
-        _(
-            'Presence of a field with name "output_column_names" storing '
-            + 'a (possibly empty) list of strings'),
-        _(
-            'Presence of a (possible empty) list of tuples with name '
-            + '"parameters". The tuples must have six '
-            + 'elements: name (a string), type (one of "double", "integer", '
-            + '"string", "boolean", '
-            + 'or "datetime"), (possible empty) list of allowed values of '
-            + 'corresponding type, an initial value of the right type or '
-            + 'None, and a help string to be shown when requesting this '
-            + 'parameter.'),
-    ]
-
-    diag = ['Unchecked'] * len(checks)
+    diag = ['Unchecked'] * len(_checks)
     check_idx = 0
     try:
         # Verify that the class inherits from OnTaskPluginAbstract
@@ -109,7 +113,7 @@ def _verify_plugin(pinobj):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect parent class')
-            return list(zip(diag, checks))
+            return list(zip(diag, _checks))
         check_idx += 1
 
         # Verify that the class has a non empty documentation string
@@ -157,27 +161,27 @@ def _verify_plugin(pinobj):
         diag[check_idx] = _('Not found')
         if not isinstance(pinobj.parameters, list):
             diag[check_idx] = _('Incorrect type')
-            return list(zip(diag, checks))
+            return list(zip(diag, _checks))
 
         for key, ptype, pallow, pinit, phelp in pinobj.parameters:
 
             if not isinstance(key, str):
                 # The type should be a string
                 diag[check_idx] = _('Key values should be strings')
-                return list(zip(diag, checks))
+                return list(zip(diag, _checks))
 
             if not isinstance(ptype, str):
                 # The type should be a string
                 diag[check_idx] = _(
                     'First tuple element should be as string')
-                return list(zip(diag, checks))
+                return list(zip(diag, _checks))
 
             t_func = type_function.get(ptype)
             if not t_func:
                 # This is an incorrect data type
                 diag[check_idx] = _(
                     'Incorrect type "{0}" in parameter').format(ptype)
-                return list(zip(diag, checks))
+                return list(zip(diag, _checks))
 
             # If the column is of type datetime, the list of allowed values
             # should be empty
@@ -185,7 +189,7 @@ def _verify_plugin(pinobj):
                 diag[check_idx] = _(
                     'Parameter of type datetime cannot have '
                     + 'list of allowed values')
-                return list(zip(diag, checks))
+                return list(zip(diag, _checks))
 
             # Translate all values to the right type
             diag[check_idx] = _('Incorrect list of allowed value')
@@ -195,12 +199,12 @@ def _verify_plugin(pinobj):
             diag[check_idx] = _('Incorrect initial value')
             if pinit:
                 if t_func(pinit) is None:
-                    return list(zip(diag, checks))
+                    return list(zip(diag, _checks))
 
             if phelp and not isinstance(phelp, str):
                 diag[check_idx] = _('Help text must be as string')
                 # Help text must be a string
-                return list(zip(diag, checks))
+                return list(zip(diag, _checks))
 
         diag[check_idx] = 'Ok'
         check_idx += 1
@@ -214,10 +218,11 @@ def _verify_plugin(pinobj):
             raise
 
         diag[check_idx] = _('Ok')
-    except Exception:
-        return list(zip(diag, checks))
 
-    return list(zip(diag, checks))
+    except Exception:
+        return list(zip(diag, _checks))
+
+    return list(zip(diag, _checks))
 
 
 def _load_plugin_info(plugin_folder, plugin_rego=None):

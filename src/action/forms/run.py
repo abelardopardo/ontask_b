@@ -434,7 +434,7 @@ class CanvasEmailActionForm(JSONBasicActionForm):
             # Add the target_url field if the system has more than one entry
             # point configured
             self.fields['target_url'] = forms.ChoiceField(
-                initial=self.action.target_url,
+                initial=self.action_info.get('target_url'),
                 required=True,
                 choices=[('', '---')] + [(key, key) for key in sorted(
                     ontask_settings.CANVAS_INFO_DICT.keys(),

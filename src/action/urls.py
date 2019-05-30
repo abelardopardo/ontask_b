@@ -70,7 +70,7 @@ urlpatterns = [
     # Run ZIP action
     path('<int:pk>/zip/', zip_action, name='zip_action'),
 
-    # Run action IN
+    # Run action
     path('<int:pk>/run/', run_action, name='run'),
 
     #

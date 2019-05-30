@@ -5,7 +5,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-import pytz
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -13,11 +12,12 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
+import pytz
 
 from action.forms import CanvasEmailActionForm
 from action.models import Action
 from action.payloads import (
-    CanvasEmailPayload, action_session_dictionary, get_action_info,
+    CanvasEmailPayload, get_or_set_action_info, set_action_payload,
 )
 from logs.models import Log
 from ontask.decorators import get_workflow
@@ -126,7 +126,7 @@ def canvas_get_or_set_oauth_token(
     if not token:
         # There is no token, authentication has to take place for the first
         # time
-        token = get_initial_token_step1(
+        return get_initial_token_step1(
             request,
             oauth_info,
             reverse('action:canvas_email_done'))
