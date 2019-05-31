@@ -132,6 +132,9 @@ def run_zip_done(
             'exclude_values': action_info['exclude_values'],
         })
 
+    # Store the payload in the session for the download part
+    set_action_payload(request.session, action_info.get_store())
+
     # Successful processing.
     return render(request, 'action/action_zip_done.html', {})
 
@@ -149,7 +152,7 @@ def action_zip_export(
     :return: Response (download)
     """
     # Get the payload from the session if not given
-    action_info = get_or_set_action_info(request.session)
+    action_info = get_or_set_action_info(request.session, ZipPayload)
     if not action_info:
         # Something is wrong with this execution. Return to action table.
         messages.error(request, _('Incorrect ZIP action invocation.'))
@@ -170,7 +173,10 @@ def action_zip_export(
             file_name_template = '{part_id}_{user_fname}_'
         else:
             file_name_template = '{part_id}'
-    file_name_template += action_info.get('file_suffix', 'feedback.html')
+    if action_info['file_suffix']:
+        file_name_template += action_info['file_suffix']
+    else:
+        file_name_template += 'feedback.html'
 
     # Create the ZIP with the eval data tuples and return it for download
     sbuf = create_zip(
@@ -211,10 +217,14 @@ def create_eval_data_tuple(
     - HTML body text
 
     :param action: Action being processed
+
     :param participant_column: The
+
     :param exclude_values: List of values to exclude from evaluation
+
     :param user_fname_column: Column name to use for filename creation
-    :return: List[text, text, text]
+
+    :return: List[Tuple[text, text, text]]
     """
     # Obtain the personalised text
     action_evals = evaluate_action(
@@ -224,17 +234,18 @@ def create_eval_data_tuple(
 
     if user_fname_column:
         # Get the user_fname_column values
-        user_fname_data = get_rows(
+        user_fname_data = [row[user_fname_column] for row in get_rows(
             action.workflow.get_data_frame_table_name(),
             column_names=[user_fname_column],
-            filter_formula=None).fetchall()
+            filter_formula=None).fetchall()]
     else:
-        # Array of Nones for the merge
+        # Array of empty strings to concatenate
         user_fname_data = [''] * len(action_evals)
 
     return [
         (user_fname, part_id, html_body.format(msg_body))
-        for msg_body, part_id, user_fname in zip(action_evals, user_fname_data)
+        for (msg_body, part_id), user_fname in
+        zip(action_evals, user_fname_data)
     ]
 
 
