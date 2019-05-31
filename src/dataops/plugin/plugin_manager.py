@@ -2,6 +2,7 @@
 
 """Functions to manipulate plugins and check their properties."""
 
+import inspect
 import os
 import time
 from builtins import map, str, zip
@@ -210,14 +211,15 @@ def _verify_plugin(pinobj):
         check_idx += 1
 
         # Test the method run
-        try:
-            pinobj.run()
-        except AttributeError:
-            # Run is either not in the class, or not a method.
+        run_method = getattr(pinobj, 'run', None)
+        if callable(run_method) and (
+            inspect.signature(OnTaskPluginAbstract.run)
+            == inspect.signature(pinobj.__class__.run)
+        ):
+            diag[check_idx] = _('Ok')
+        else:
             diag[check_idx] = _('Incorrect run method')
-            raise
-
-        diag[check_idx] = _('Ok')
+        check_idx += 1
 
     except Exception:
         return list(zip(diag, _checks))
