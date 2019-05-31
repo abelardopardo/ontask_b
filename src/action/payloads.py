@@ -204,7 +204,11 @@ class ZipPayload(ActionPayload):
     fields = [
         'action_id',
         'item_column',
+        'confirm_items',
         'exclude_values',
+        'user_fname_column',
+        'file_suffix',
+        'zip_for_moodle',
         'prev_url',
         'post_url',
         'button_label',
