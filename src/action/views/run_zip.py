@@ -85,7 +85,8 @@ def zip_action(
         'action/action_zip_step1.html',
         {'action': action,
          'num_msgs': action.get_rows_selected(),
-         'form': form})
+         'form': form,
+         'valuerange': range(2)})
 
 
 @user_passes_test(is_instructor)
