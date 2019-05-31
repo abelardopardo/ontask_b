@@ -133,14 +133,16 @@ def _verify_plugin(pinobj):
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if isinstance(pinobj.description_txt, str):
+        if pinobj.description_txt and isinstance(pinobj.description_txt, str):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect type')
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if isinstance(pinobj.input_column_names, list) and all(
+        if pinobj.input_column_names is not None and isinstance(
+            pinobj.input_column_names, list
+        ) and all(
             isinstance(colname, str)
             for colname in pinobj.input_column_names
         ):
@@ -150,7 +152,9 @@ def _verify_plugin(pinobj):
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if isinstance(pinobj.output_column_names, list) and all(
+        if pinobj.output_column_names and isinstance(
+            pinobj.output_column_names, list
+        ) and all(
             isinstance(cname, str)
             for cname in pinobj.output_column_names
         ):
@@ -160,12 +164,12 @@ def _verify_plugin(pinobj):
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if not isinstance(pinobj.parameters, list):
+        if pinobj.parameters is None or not isinstance(pinobj.parameters, list):
             diag[check_idx] = _('Incorrect type')
             return list(zip(diag, _checks))
 
+        # Loop over all the parameters to check it s format
         for key, ptype, pallow, pinit, phelp in pinobj.parameters:
-
             if not isinstance(key, str):
                 # The type should be a string
                 diag[check_idx] = _('Key values should be strings')

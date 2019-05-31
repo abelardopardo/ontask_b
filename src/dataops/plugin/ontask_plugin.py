@@ -13,13 +13,13 @@ class OnTaskPluginAbstract(object, metaclass=ABCMeta):
 
     def __init__(self):
         """Initialize the object fields."""
-        self.name = ''
-        self.description_txt = ''
+        self.name = None
+        self.description_txt = None
         self.is_model = False
-        self.input_column_names = []
-        self.output_column_names = []
-        self.output_suffix = ''
-        self.paramters = {}
+        self.input_column_names = None
+        self.output_column_names = None
+        self.output_suffix = None
+        self.paramters = None
 
     def get_name(self):
         """Access the name."""
