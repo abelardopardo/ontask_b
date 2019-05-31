@@ -689,7 +689,7 @@ def not_between(node, eval_type, given_variables):
     if eval_type == EVAL_SQL:
         # SQL evaluation
         query = sql.SQL(
-            '({0} NOT BETWEEN {1} AND {2}) AND ({0} is null)',
+            '({0} NOT BETWEEN {1} AND {2}) AND ({0} is not null)',
         ).format(
             OnTaskDBIdentifier(node['field']),
             sql.Placeholder(),
