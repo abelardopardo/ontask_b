@@ -3,11 +3,11 @@
 """Test the views for the scheduler pages."""
 
 import os
+import test
 
 from django.conf import settings
 
 from action.serializers import ActionSelfcontainedSerializer
-import test
 
 
 class ActionTestSerializers(test.OnTaskTestCase):

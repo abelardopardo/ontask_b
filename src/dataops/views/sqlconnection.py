@@ -89,7 +89,7 @@ class SQLConnectionTableRun(tables.Table):
         }
 
 
-def save_conn_form(
+def _save_conn_form(
     request: HttpRequest,
     form: SQLConnectionForm,
     template_name: str,
@@ -246,7 +246,7 @@ def sqlconn_add(request: HttpRequest) -> JsonResponse:
     # Create the form
     form = SQLConnectionForm(request.POST or None)
 
-    return save_conn_form(
+    return _save_conn_form(
         request,
         form,
         'dataops/includes/partial_sqlconn_addedit.html')
@@ -271,7 +271,7 @@ def sqlconn_edit(request: HttpRequest, pk: int) -> JsonResponse:
     # Create the form
     form = SQLConnectionForm(request.POST or None, instance=conn)
 
-    return save_conn_form(
+    return _save_conn_form(
         request,
         form,
         'dataops/includes/partial_sqlconn_addedit.html')

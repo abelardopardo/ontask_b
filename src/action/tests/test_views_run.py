@@ -1,26 +1,23 @@
 # -*- coding: utf-8 -*-
 
-"""Test views to run actions"""
+"""Test views to run actions."""
 
-from datetime import timedelta
 import os
+import test
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils import timezone
+from rest_framework import status
 
-from action.payloads import EmailPayload, JSONPayload, CanvasEmailPayload
-from action.views import (
-    run_action_item_filter, run_action,
-    run_canvas_email_done,
-)
+from action.payloads import CanvasEmailPayload, EmailPayload, JSONPayload
 from ontask_oauth.models import OnTaskOAuthUserTokens
-import test
 
 
 class ActionViewRunAction(test.OnTaskTestCase):
-    """Test the view to select items in an action."""
+    """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
     filename = os.path.join(
@@ -46,25 +43,39 @@ class ActionViewRunAction(test.OnTaskTestCase):
         })
         resp = self.get_response(
             'action:item_filter',
-            run_action_item_filter,
             session_payload=payload.get_store())
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         # POST
         resp = self.get_response(
             'action:item_filter',
-            run_action_item_filter,
             method='POST',
-            session_payload=payload.get_store(),
             req_params={
                 'exclude_values': ['ctfh9946@bogus.com'],
-            }
-        )
-        self.assertEqual(resp.status_code, 302)
+            },
+            session_payload=payload.get_store())
+        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('action:email_done'))
 
+
+class ActionViewRunJSONAction(test.OnTaskTestCase):
+    """Test the view to run actio item filter, json and email."""
+
+    fixtures = ['initial_workflow']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        '..',
+        'initial_workflow',
+        'initial_workflow.sql',
+    )
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    workflow_name = 'BIOL1011'
+
     def test_run_json_action(self):
-        """Test JSON action execution"""
+        """Test JSON action execution."""
         action = self.workflow.actions.get(name='Send JSON to remote server')
         payload = JSONPayload({
             'item_column': 'email',
@@ -73,42 +84,52 @@ class ActionViewRunAction(test.OnTaskTestCase):
             'post_url': reverse('action:json_done'),
         })
 
-        resp = self.get_response(
-            'action:run',
-            run_action,
-            url_params={'pk': action.id})
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('action:run', url_params={'pk': action.id})
+        self.assertTrue(status.is_success(resp.status_code))
 
         # POST -> redirect to item filter
         resp = self.get_response(
             'action:run',
-            run_action,
             url_params={'pk': action.id},
             method='POST',
-            session_payload=payload.get_store(),
             req_params={
                 'key_column': 'email',
                 'token': 'xxx',
-                'confirm_items': True}
-        )
-        self.assertEqual(resp.status_code, 302)
+                'confirm_items': True},
+            session_payload=payload.get_store())
+        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('action:item_filter'))
 
         # POST -> done
         resp = self.get_response(
             'action:run',
-            run_action,
             url_params={'pk': action.id},
             method='POST',
-            session_payload=payload.get_store(),
             req_params={
                 'key_column': 'email',
-                'token': 'xxx'}
-        )
-        self.assertEqual(resp.status_code, 200)
+                'token': 'xxx'},
+            session_payload=payload.get_store())
+        self.assertTrue(status.is_success(resp.status_code))
+
+
+class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
+    """Test the view to run actio item filter, json and email."""
+
+    fixtures = ['initial_workflow']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        '..',
+        'initial_workflow',
+        'initial_workflow.sql',
+    )
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    workflow_name = 'BIOL1011'
 
     def test_run_canvas_email_action(self):
-        """Test Canvas Email action execution"""
+        """Test Canvas Email action execution."""
         action = self.workflow.actions.get(name='Initial motivation')
         payload = CanvasEmailPayload({
             'item_column': 'email',
@@ -118,16 +139,12 @@ class ActionViewRunAction(test.OnTaskTestCase):
             'post_url': reverse('action:canvas_email_done'),
         })
 
-        resp = self.get_response(
-            'action:run',
-            run_action,
-            url_params={'pk': action.id})
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('action:run', url_params={'pk': action.id})
+        self.assertTrue(status.is_success(resp.status_code))
 
         # POST -> redirect to item filter
         resp = self.get_response(
             'action:run',
-            run_action,
             url_params={'pk': action.id},
             method='POST',
             req_params={
@@ -135,9 +152,8 @@ class ActionViewRunAction(test.OnTaskTestCase):
                 'key_column': 'email',
                 'target_url': 'Server one',
             },
-            session_payload=payload.get_store(),
-        )
-        self.assertEqual(resp.status_code, 302)
+            session_payload=payload.get_store())
+        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
     def test_run_canvas_email_done(self):
         """Test last step of sending canvas emails."""
@@ -166,8 +182,6 @@ class ActionViewRunAction(test.OnTaskTestCase):
         # POST -> redirect to item filter
         resp = self.get_response(
             'action:canvas_email_done',
-            run_canvas_email_done,
             method='POST',
-            session_payload=payload.get_store(),
-        )
-        self.assertEqual(resp.status_code, 200)
+            session_payload=payload.get_store())
+        self.assertTrue(status.is_success(resp.status_code))

@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
+from builtins import object, range, str
 import io
 import math
 import os
 import subprocess
+from typing import Mapping, Optional
 
-from action.payloads import set_action_payload
-import test
-from builtins import object, range, str
-from typing import Mapping, Optional, Callable
-
-import pandas as pd
+from PIL import Image
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -19,8 +16,9 @@ from django.db import connection
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import reverse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
+from django.urls import resolve
 from future import standard_library
-from PIL import Image
+import pandas as pd
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
@@ -32,9 +30,11 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from action.models import Action
+from action.payloads import set_action_payload
 from dataops.pandas import destroy_db_engine
 from dataops.pandas.db import engine
 from ontask.permissions import group_names
+import test
 from workflow.models import Workflow
 
 standard_library.install_aliases()
@@ -154,7 +154,7 @@ class OnTaskTestCase(TransactionTestCase):
         if self.workflow_name:
             self.workflow = Workflow.objects.get(name=self.workflow_name)
 
-    def add_middleware(self, request):
+    def add_middleware(self, request: HttpRequest) -> HttpRequest:
         request.user = self.user
         # adding session
         SessionMiddleware().process_request(request)
@@ -168,18 +168,16 @@ class OnTaskTestCase(TransactionTestCase):
     def get_response(
         self,
         url_name: str,
-        view_func: Callable[..., HttpResponse],
         url_params: Optional[Mapping] = None,
         method: Optional[str] = 'GET',
         req_params: Optional[Mapping] = None,
         is_ajax: Optional[bool] = False,
         session_payload: Optional[Mapping] = None,
-        **kwargs,
+        **kwargs
     ) -> HttpResponse:
         """Create a request and send it to a processing function.
 
         :param url_name: URL name as defined in urls.py
-        :param view_func: Function that will be processing the request
         :param url_params: Dictionary to give reverse to generate the full URL.
         :param method: GET (default) or POST
         :param req_params: Additional parameters to add to the request (for
@@ -209,6 +207,7 @@ class OnTaskTestCase(TransactionTestCase):
         if session_payload:
             set_action_payload(request.session, session_payload)
 
+        view_func = resolve(url_str).func
         return view_func(request, **url_params)
 
 
@@ -947,8 +946,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, '//*[@id="action-out-editor"]')
-                 )
             )
+        )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )

@@ -2,14 +2,13 @@
 
 """Test plugin manager functions."""
 
-from datetime import timedelta
 import os
+import test
 
 from django.conf import settings
+from rest_framework import status
 
 from dataops.models import PluginRegistry
-from dataops.views import transform_model
-import test
 
 
 class DataopsTransform(test.OnTaskTestCase):
@@ -32,16 +31,8 @@ class DataopsTransform(test.OnTaskTestCase):
         """Test the view to filter items."""
         # Make sure the plugins are reloaded
         PluginRegistry.objects.all().delete()
-        resp = self.get_response(
-            'dataops:transform',
-            transform_model)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('dataops:transform')
+        self.assertTrue(status.is_success(resp.status_code))
 
-        resp = self.get_response(
-            'dataops:model',
-            transform_model)
-        self.assertEqual(resp.status_code, 200)
-
-
-
-
+        resp = self.get_response('dataops:model')
+        self.assertTrue(status.is_success(resp.status_code))

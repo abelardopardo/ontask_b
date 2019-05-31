@@ -6,10 +6,10 @@ import os
 import test
 
 from django.conf import settings
+from rest_framework import status
 
 from action.models import Action
 from dataops.pandas import load_table
-import workflow.views
 
 
 class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
@@ -35,14 +35,10 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
         column_categories = '   a,b,c,d   '
 
         # Adding a new column of type integer
+        resp = self.get_response('workflow:column_add', is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
         resp = self.get_response(
             'workflow:column_add',
-            workflow.views.update,
-            is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
-        resp = self.get_response(
-            'workflow:column_add',
-            workflow.views.column_add,
             method='POST',
             req_params={
                 'name': column_name,
@@ -51,7 +47,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
                 'position': '0',
                 'raw_categories': column_categories},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         self.workflow.refresh_from_db()
         new_col = self.workflow.columns.get(name=column_name)
@@ -64,22 +60,18 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
     def test_question_add(self):
         """Test adding a question to a survey."""
         # Get the survey action
-        survey = self.workflow.actions.get(
-            action_type=Action.survey
-        )
+        survey = self.workflow.actions.get(action_type=Action.survey)
 
         # GET the form
         resp = self.get_response(
             'workflow:question_add',
-            workflow.views.column_add,
             {'pk': survey.id},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
             'workflow:question_add',
-            workflow.views.column_add,
             {'pk': survey.id},
             method='POST',
             req_params={
@@ -89,28 +81,24 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
                 'position': '0',
                 'raw_categories': 'A,B,C,D'},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
     def test_question_rename(self):
         """Test renaming a question in a survey."""
         # Get the survey action and the first of the columns
-        survey = self.workflow.actions.get(
-            action_type=Action.survey
-        )
+        survey = self.workflow.actions.get(action_type=Action.survey)
         column = survey.column_condition_pair.first().column
         old_name = column.name
         # GET the form
         resp = self.get_response(
             'workflow:question_edit',
-            workflow.views.column_edit,
             {'pk': column.id},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
             'workflow:question_edit',
-            workflow.views.column_edit,
             {'pk': column.id},
             method='POST',
             req_params={
@@ -120,7 +108,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
                 'position': column.position,
                 'raw_categories': column.categories},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         column.refresh_from_db()
         self.assertEqual(column.name, old_name + '2')
@@ -128,16 +116,12 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
     def test_formula_column_add(self):
         """Test adding a formula column."""
         # GET the form
-        resp = self.get_response(
-            'workflow:formula_column_add',
-            workflow.views.formula_column_add,
-            is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('workflow:formula_column_add', is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
             'workflow:formula_column_add',
-            workflow.views.formula_column_add,
             method='POST',
             req_params={
                 'name': 'FORMULA COLUMN',
@@ -147,7 +131,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
                 'columns': ['12', '13'],
                 'op_type': 'sum'},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         df = load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(
@@ -156,16 +140,12 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
     def test_random_column_add(self):
         """Test adding a random column."""
         # GET the form
-        resp = self.get_response(
-            'workflow:random_column_add',
-            workflow.views.random_column_add,
-            is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('workflow:random_column_add', is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
             'workflow:random_column_add',
-            workflow.views.random_column_add,
             method='POST',
             req_params={
                 'name': 'RANDOM COLUMN',
@@ -174,7 +154,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
                 'position': '0',
                 'column_values': '12'},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         df = load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(all(0 < num < 13 for num in df['RANDOM COLUMN']))
@@ -184,19 +164,17 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
         column = self.workflow.columns.get(name='Q01')
         resp = self.get_response(
             'workflow:column_clone',
-            workflow.views.column_clone,
             {'pk': column.id},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
             'workflow:column_clone',
-            workflow.views.column_clone,
             {'pk': column.id},
             method='POST',
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         df = load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(df['Copy of Q01'].equals(df['Q01']))
@@ -208,18 +186,16 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
 
         resp = self.get_response(
             'workflow:column_restrict',
-            workflow.views.column_restrict_values,
             {'pk': column.id},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         resp = self.get_response(
             'workflow:column_restrict',
-            workflow.views.column_restrict_values,
             {'pk': column.id},
             method='POST',
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         column.refresh_from_db()
         self.assertEqual(column.categories, ['female', 'male'])
@@ -231,11 +207,10 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
 
         resp = self.get_response(
             'workflow:assign_luser_column',
-            workflow.views.assign_luser_column,
             {'pk': column.id},
             method='POST',
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         column = self.workflow.columns.get(name='email')
         self.workflow.refresh_from_db()

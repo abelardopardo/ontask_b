@@ -6,10 +6,7 @@ import os
 import test
 
 from django.conf import settings
-
-from action.models import Action
-from dataops.pandas import load_table
-import workflow.views
+from rest_framework import status
 
 
 class WorkflowTestViewImportExport(test.OnTaskTestCase):
@@ -32,18 +29,16 @@ class WorkflowTestViewImportExport(test.OnTaskTestCase):
         """Export ask followed by export request."""
         resp = self.get_response(
             'workflow:export_ask',
-            workflow.views.export_ask,
             {'wid': self.workflow.id})
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
-        req_params={
+        req_params = {
             'select_{0}'.format(idx): True
             for idx in range(self.workflow.actions.count())}
         resp = self.get_response(
             'workflow:export_ask',
-            workflow.views.export_ask,
             {'wid': self.workflow.id},
             method='POST',
             req_params=req_params,
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))

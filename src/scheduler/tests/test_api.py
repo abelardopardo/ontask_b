@@ -5,6 +5,7 @@ import test
 
 from django.conf import settings
 from django.shortcuts import reverse
+from rest_framework import status
 from rest_framework.authtoken.models import Token
 
 from action.models import Action
@@ -100,7 +101,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         )
 
         # Element has been scheduled
-        self.assertEqual(response.status_code, 200)
+        self.assertTrue(status.is_success(response.status_code))
 
         sch_item = ScheduledAction.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name + '2')
@@ -169,7 +170,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         )
 
         # Element has been scheduled
-        self.assertEqual(response.status_code, 200)
+        self.assertTrue(status.is_success(response.status_code))
 
         sch_item = ScheduledAction.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name + '2')

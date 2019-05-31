@@ -8,7 +8,8 @@ from dataops.views import (
     csvupload_start, diagnose, excelupload_start, googlesheetupload_start,
     moreinfo, plugin_invoke, row_create, row_update, s3upload_start,
     sqlconn_delete, sqlconnection, sqlupload_start, transform_model, upload_s2,
-    upload_s3, upload_s4, uploadmerge,
+    upload_s3, upload_s4, uploadmerge, sqlconnection_admin_index,
+    sqlconnection_instructor_index, sqlconn_add
 )
 
 app_name = 'dataops'
@@ -63,15 +64,15 @@ urlpatterns = [
     # SQL Connections
     path(
         'sqlconns_admin',
-        sqlconnection.sqlconnection_admin_index,
+        sqlconnection_admin_index,
         name='sqlconns_admin_index'),
 
     path(
         'sqlconns_instructor/',
-        sqlconnection.sqlconnection_instructor_index,
+        sqlconnection_instructor_index,
         name='sqlconns_instructor_index'),
 
-    path('sqlconn_add/', sqlconnection.sqlconn_add, name='sqlconn_add'),
+    path('sqlconn_add/', sqlconn_add, name='sqlconn_add'),
 
     path(
         '<int:pk>/sqlconn_view/',

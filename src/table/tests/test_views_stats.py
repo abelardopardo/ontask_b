@@ -3,16 +3,12 @@
 """Test the views for the scheduler pages."""
 
 import os
+import test
 
 from django.conf import settings
-from django.urls import reverse
+from rest_framework import status
 
 from dataops.pandas import get_table_row_by_index
-from table.views.stats import (
-    stat_column, stat_column_json, stat_table_view,
-    stat_row_view,
-)
-import test
 
 
 class TableTestStatView(test.OnTaskTestCase):
@@ -39,48 +35,42 @@ class TableTestStatView(test.OnTaskTestCase):
         col.save()
 
         # Get the visualization for the whole table
-        resp = self.get_response('table:stat_table', stat_table_view)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('table:stat_table')
+        self.assertTrue(status.is_success(resp.status_code))
 
         # GEt the visualization of the view
         view = self.workflow.views.get(name='simple view')
-        resp = self.get_response(
-            'table:stat_table_view',
-            stat_table_view,
-            {'pk': view.id})
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('table:stat_table_view', {'pk': view.id})
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Get one of the rows
         r_val = get_table_row_by_index(self.workflow, None, 1)
         resp = self.get_response(
             'table:stat_row',
-            stat_row_view,
-            req_params={'key': 'email', 'val': r_val['email']})
-        self.assertEqual(resp.status_code, 200)
+            req_params={
+                'key': 'email',
+                'val': r_val['email']})
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Get one of the rows from one of the views
         resp = self.get_response(
             'table:stat_row_view',
-            stat_row_view,
             {'pk': view.id},
-            req_params={'key': 'email', 'val': r_val['email']})
-        self.assertEqual(resp.status_code, 200)
+            req_params={
+                'key': 'email',
+                'val': r_val['email']})
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Get one of the columns
         col = self.workflow.columns.get(name='age')
         # Get the column visualization
-        resp = self.get_response(
-            'table:stat_column',
-            stat_column,
-            {'pk': col.id})
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('table:stat_column', {'pk': col.id})
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Get the JSON column visualization for a modal
         col = self.workflow.columns.get(name='one')
         resp = self.get_response(
             'table:stat_column_JSON',
-            stat_column_json,
             {'pk': col.id},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
-
+        self.assertTrue(status.is_success(resp.status_code))

@@ -8,6 +8,7 @@ import test
 from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework import status
 
 from workflow.models import Workflow
 
@@ -154,11 +155,11 @@ class BackToHome(TestCase):
         wflow = Workflow.objects.first()
 
         resp = self.client.get(reverse('home'))
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         for url_name in redirect:
             resp = self.client.get(url_name)
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
             self.assertEqual(resp.url, reverse('home'))
 
         for url_name in bad_request:

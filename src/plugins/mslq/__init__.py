@@ -14,18 +14,19 @@ class_name = 'MSLQEvaluate'
 
 def mslq_encode(answers, num):
     """Function that receives an array of 44 answers and encodes the results
-       for the MSLQ survey. It returns the following tuple:
+    for the MSLQ survey. It returns the following tuple:
 
-       (IVAL: Intrinsic value,
-        SEFF: Self-efficacy,
-        TANX: Test anxiety,
-        CSUS: Cognitive strategy use,
-        SREL: Self-regulation)
+    (IVAL: Intrinsic value,
+     SEFF: Self-efficacy,
+     TANX: Test anxiety,
+     CSUS: Cognitive strategy use,
+     SREL: Self-regulation)
 
-        They are the averages of the corresponding questions.
+    They are the averages of the corresponding questions.
 
-        :param answers: Array of 44 integers encoding the answers
-        :param num: Number of possibe answers in each question
+    :param answers: Array of 44 integers encoding the answers
+
+    :param num: Number of possibe answers in each question
     """
     ival_idx = [1, 4, 5, 7, 10, 14, 15, 17, 21]
     seff_idx = [2, 6, 8, 9, 11, 13, 16, 18, 19]

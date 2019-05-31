@@ -4,14 +4,14 @@
 
 import json
 import os
+import test
 
+import pandas as pd
 from django.conf import settings
 from django.db import IntegrityError
-import pandas as pd
 
 from table.serializers import DataFrameJSONMergeSerializer, ViewSerializer
 from table.serializers.pandas import DataFramePandasSerializer, df_to_string
-import test
 
 
 class TableTestSerializers(test.OnTaskTestCase):

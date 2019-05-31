@@ -6,8 +6,8 @@ import os
 import test
 
 from django.conf import settings
+from rest_framework import status
 
-import scheduler.views
 from scheduler.models import ScheduledAction
 
 
@@ -34,23 +34,19 @@ class SchedulerForms(test.OnTaskTestCase):
     def test_views_email(self):
         """Test the use of forms in to schedule actions."""
         # Index of all scheduled actions
-        resp = self.get_response('scheduler:index', scheduler.views.index)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('scheduler:index')
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Get the email action object
         action = self.workflow.actions.get(name='simple action')
 
         # Get the form to schedule this action
-        resp = self.get_response(
-            'scheduler:create',
-            scheduler.views.edit,
-            {'pk': action.id})
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('scheduler:create', {'pk': action.id})
+        self.assertTrue(status.is_success(resp.status_code))
 
         # POST the form to schedule this action
         resp = self.get_response(
             'scheduler:create',
-            scheduler.views.edit,
             {'pk': action.id},
             method='POST',
             req_params={
@@ -58,16 +54,14 @@ class SchedulerForms(test.OnTaskTestCase):
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'execute': '05/31/2119 14:35',
                 'subject': 'Subject text',
-            },
-        )
-        self.assertEqual(resp.status_code, 200)
+            })
+        self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(ScheduledAction.objects.count(), 1)
 
         # Change the name of the scheduled item
         sc_item = ScheduledAction.objects.first()
         resp = self.get_response(
             'scheduler:edit',
-            scheduler.views.edit,
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -75,9 +69,8 @@ class SchedulerForms(test.OnTaskTestCase):
                 'item_column': str(self.workflow.columns.get(name='email').id),
                 'execute': '05/31/2119 14:35',
                 'subject': 'Subject text',
-            },
-        )
-        self.assertEqual(resp.status_code, 200)
+            })
+        self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(ScheduledAction.objects.count(), 1)
         sc_item.refresh_from_db()
 
@@ -87,7 +80,6 @@ class SchedulerForms(test.OnTaskTestCase):
         sc_item = ScheduledAction.objects.first()
         resp = self.get_response(
             'scheduler:edit',
-            scheduler.views.edit,
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -96,77 +88,67 @@ class SchedulerForms(test.OnTaskTestCase):
                 'confirm_items': True,
                 'execute': '05/31/2119 14:35',
                 'subject': 'Subject text',
-            },
-        )
-        self.assertEqual(resp.status_code, 302)
+            })
+        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(ScheduledAction.objects.count(), 1)
 
         # Index of all scheduled actions (to execute the table render)
-        resp = self.get_response('scheduler:index', scheduler.views.index)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('scheduler:index')
+        self.assertTrue(status.is_success(resp.status_code))
 
         # View the information with a JSON request
         resp = self.get_response(
             'scheduler:view',
-            scheduler.views.view,
             {'pk': sc_item.id},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Request to delete
         resp = self.get_response(
             'scheduler:delete',
-            scheduler.views.delete,
             {'pk': sc_item.id},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         # DELETE
         resp = self.get_response(
             'scheduler:delete',
-            scheduler.views.delete,
             {'pk': sc_item.id},
             method='POST',
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(ScheduledAction.objects.count(), 0)
 
     def test_views_json(self):
         """Test the use of forms in to schedule actions."""
         # Index of all scheduled actions
-        resp = self.get_response('scheduler:index', scheduler.views.index)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('scheduler:index')
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Get the email action object
         action = self.workflow.actions.get(name='json action')
 
         # Get the form to schedule this action
-        resp = self.get_response(
-            'scheduler:create',
-            scheduler.views.edit,
-            {'pk': action.id})
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('scheduler:create', {'pk': action.id})
+        self.assertTrue(status.is_success(resp.status_code))
 
         # POST the form to schedule this action
         resp = self.get_response(
             'scheduler:create',
-            scheduler.views.edit,
             {'pk': action.id},
             method='POST',
             req_params={
                 'name': 'First scheduling round',
                 'execute': '05/31/2119 14:35',
                 'token': 'faketoken',
-            },
-        )
-        self.assertEqual(resp.status_code, 200)
+            })
+        self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(ScheduledAction.objects.count(), 1)
 
         # Change the name of the scheduled item
         sc_item = ScheduledAction.objects.first()
         resp = self.get_response(
             'scheduler:edit',
-            scheduler.views.edit,
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -174,7 +156,7 @@ class SchedulerForms(test.OnTaskTestCase):
                 'execute': '05/31/2119 14:35',
                 'token': 'faketoken',
             })
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(ScheduledAction.objects.count(), 1)
         sc_item.refresh_from_db()
 
@@ -184,7 +166,6 @@ class SchedulerForms(test.OnTaskTestCase):
         sc_item = ScheduledAction.objects.first()
         resp = self.get_response(
             'scheduler:edit',
-            scheduler.views.edit,
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -193,27 +174,25 @@ class SchedulerForms(test.OnTaskTestCase):
                 'execute': '05/31/2119 14:35',
                 'token': 'faketoken',
             })
-        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(ScheduledAction.objects.count(), 1)
 
         # Index of all scheduled actions (to execute the table render)
-        resp = self.get_response('scheduler:index', scheduler.views.index)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.get_response('scheduler:index')
+        self.assertTrue(status.is_success(resp.status_code))
 
         # Request to delete
         resp = self.get_response(
             'scheduler:delete',
-            scheduler.views.delete,
             {'pk': sc_item.id},
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
 
         # DELETE
         resp = self.get_response(
             'scheduler:delete',
-            scheduler.views.delete,
             {'pk': sc_item.id},
             method='POST',
             is_ajax=True)
-        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(ScheduledAction.objects.count(), 0)
