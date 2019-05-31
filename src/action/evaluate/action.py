@@ -172,7 +172,7 @@ def evaluate_action(
         filter_formula=action.get_filter_formula())
     list_of_renders = []
     for row in rows:
-        if exclude_values and str(row[column_name] in exclude_values):
+        if exclude_values and str(row[column_name]) in exclude_values:
             # Skip the row with the col_name in exclude values
             continue
 
