@@ -6,9 +6,9 @@ import io
 import os
 import test
 
+import pandas as pd
 from django.conf import settings
 
-import pandas as pd
 from action.models import Action
 from dataops.forms.upload import load_df_from_csvfile
 from dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula

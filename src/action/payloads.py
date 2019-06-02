@@ -2,7 +2,7 @@
 
 """Classes capturing the payloads used when running actions."""
 import collections
-from typing import Dict, Optional, Mapping
+from typing import Dict, Mapping, Optional
 
 from django.conf import settings as ontask_settings
 from django.contrib.sessions.backends.base import SessionBase

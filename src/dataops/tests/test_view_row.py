@@ -3,15 +3,14 @@
 """Test the views to update or create new rews."""
 
 import os
-
-from django.urls import reverse
-
-from dataops.sql import get_row
-from dataops.views import row_update
 import test
 
 from django.conf import settings
+from django.urls import reverse
 from rest_framework import status
+
+from dataops.sql import get_row
+from dataops.views import row_update
 
 
 class DataopsViewsRow(test.OnTaskTestCase):

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """Views to run the personalized zip action."""
+import zipfile
 from datetime import datetime
 from io import BytesIO
 from typing import List, Optional, Tuple
-import zipfile
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test

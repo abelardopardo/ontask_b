@@ -4,6 +4,7 @@
 import copy
 from typing import Optional
 
+import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -12,7 +13,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
-import django_tables2 as tables
 
 from dataops.formula import get_variables
 from logs.models import Log

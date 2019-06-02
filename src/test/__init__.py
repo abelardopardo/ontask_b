@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from builtins import object, range, str
 import io
 import math
 import os
 import subprocess
+import test
+from builtins import object, range, str
 from typing import Mapping, Optional
 
-from PIL import Image
+import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -18,7 +19,7 @@ from django.shortcuts import reverse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from django.urls import resolve
 from future import standard_library
-import pandas as pd
+from PIL import Image
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
@@ -34,7 +35,6 @@ from action.payloads import set_action_payload
 from dataops.pandas import destroy_db_engine
 from dataops.pandas.db import engine
 from ontask.permissions import group_names
-import test
 from workflow.models import Workflow
 
 standard_library.install_aliases()

@@ -2,8 +2,8 @@
 
 """Functions to clone the actions."""
 
-from builtins import str
 import copy
+from builtins import str
 from typing import Optional
 
 from django.contrib import messages

@@ -2,8 +2,8 @@
 
 """Views for create/rename/update/delete columns."""
 
-from builtins import range
 import random
+from builtins import range
 from typing import Optional
 
 from django.contrib import messages
@@ -17,8 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from action.models import ActionColumnConditionTuple, Condition
 from dataops.formula import evaluation
 from dataops.pandas import (
-    load_table, pandas_datatype_names, rename_df_column,
-    store_dataframe,
+    load_table, pandas_datatype_names, rename_df_column, store_dataframe,
 )
 from dataops.sql import add_column_to_db, db_rename_column
 from logs.models import Log

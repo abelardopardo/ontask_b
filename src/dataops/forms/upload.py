@@ -20,10 +20,10 @@ from builtins import str
 from io import TextIOWrapper
 from typing import Optional
 
+import pandas as pd
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-import pandas as pd
 from dataops.forms.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,

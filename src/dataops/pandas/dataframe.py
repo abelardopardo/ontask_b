@@ -6,10 +6,10 @@ import logging
 from typing import Dict, List, Optional
 
 import numpy as np
+import pandas as pd
 from django.conf import settings
 from django.utils.translation import gettext, ugettext_lazy as _
 
-import pandas as pd
 from dataops.formula import evaluation
 from dataops.pandas import are_unique_columns, is_unique_column
 from dataops.pandas.datatypes import pandas_datatype_names
