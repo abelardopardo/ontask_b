@@ -167,18 +167,20 @@ def column_add(
         # Update the positions of the appropriate columns
         workflow.reposition_columns(workflow.ncols + 1, column.position)
 
-        # Save column and clear prefetch queryset
+        # Save column, refresh workflow, and increase number of columns
         column.save()
         form.save_m2m()
-        workflow = Workflow.objects.prefetch_related('columns').get(
-            id=workflow.id)
+        workflow.refresh_from_db()
+        workflow.ncols += 1
+        workflow.save()
 
         # Add the new column to the DB
         try:
             add_column_to_db(
                 workflow.get_data_frame_table_name(),
                 column.name,
-                column.data_type)
+                column.data_type,
+                initial=column_initial_value)
         except Exception as exc:
             messages.error(
                 request,
