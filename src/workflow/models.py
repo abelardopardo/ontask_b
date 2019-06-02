@@ -395,20 +395,27 @@ class Workflow(models.Model):
         # Save the workflow with the new fields.
         self.save()
 
-    def add_new_columns(self, col_names, data_types, are_keys):
-        """Add a set of columns to the workflow."""
-        start = self.columns.count() + 1
+    def add_columns(self, triplets):
+        """Add a set of columns to the workflow.
+
+        :param triplets: List of (column name, data type, is_key)
+
+        :return: Nothing. Create objects in the workflow.
+        """
         bulk_list = []
-        for idx in range(len(col_names)):
+        position = self.ncols
+        for cname, dtype, is_key in triplets:
+            position += 1
             # Create the new column
             bulk_list.append(Column(
-                name=col_names[idx],
+                name=cname,
                 workflow=self,
-                data_type=pandas_datatype_names.get(data_types[idx]),
-                is_key=are_keys[idx],
-                position=start + idx))
-            idx += 1
+                data_type=dtype,
+                is_key=is_key,
+                position=position))
         Column.objects.bulk_create(bulk_list)
+        self.ncols = position
+        self.save()
 
     def reposition_columns(self, from_idx, to_idx):
         """Relocate the columns from one index to another.
