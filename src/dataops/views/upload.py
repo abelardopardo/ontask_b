@@ -14,6 +14,7 @@ from django.utils.translation import ugettext as _
 
 from dataops.forms import SelectColumnUploadForm, SelectKeysForm
 from dataops.pandas import load_table, perform_dataframe_upload_merge
+from dataops.pandas.dataframe import store_workflow_table
 from dataops.sql import table_queries
 from logs.models import Log
 from ontask.decorators import get_workflow, store_workflow_in_session
@@ -136,55 +137,31 @@ def upload_s2(
                 # If the column is key, check if the user wants to keep it
                 keep_key_column[idx] = form.cleaned_data['make_key_%s' % idx]
 
-        # Update the dictionary with the session information
-        request.session['upload_data'] = upload_data
+        if workflow.has_data_frame():
+            # A Merge operation is required
 
-        # Load the existing DF or None if it doesn't exist
-        existing_df = load_table(workflow.get_data_frame_table_name())
+            # Update the dictionary with the session information so that it is
+            # available in the next step
+            request.session['upload_data'] = upload_data
 
-        if existing_df is not None:
             # This is a merge operation, so move to Step 3
             return redirect('dataops:upload_s3')
 
-        # This is an upload operation (not a merge) save the uploaded
+        # This is the first data to be stored in the workflow. Save the uploaded
         # dataframe in the DB and finish.
 
-        # Get the uploaded data_frame
         try:
-            data_frame = load_table(
-                workflow.get_data_frame_upload_table_name(),
-            )
-        except Exception:
-            return render(
-                request,
-                'error.html',
-                {'message': _('Exception while retrieving the data frame')})
-
-        try:
-            perform_dataframe_upload_merge(
-                workflow,
-                existing_df,
-                data_frame,
-                upload_data)
+            store_workflow_table(workflow, upload_data)
         except Exception as exc:
             # Something went wrong. Flag it and reload
-            form.error(
-                None,
-                'Unable to perform merge: {0}'.format(str(exc)),
+            messages.error(
+                request,
+                _('Unable to upload the data: {0}').format(str(exc)),
             )
-            context = {
-                'form': form,
-                'wid': workflow.id,
-                'prev_step': upload_data['step_1'],
-                'valuerange': range(5) if workflow.has_table() else range(3),
-                'df_info': df_info}
-            return render(request, 'dataops/upload_s2.html', context)
+            return redirect('dataops:uploadmerge')
 
         # Update the session information
         store_workflow_in_session(request, workflow)
-
-        # Nuke the temporary table
-        table_queries.delete_table(workflow.get_data_frame_upload_table_name())
 
         # Log the event
         col_info = workflow.get_column_info()

@@ -14,6 +14,34 @@ from ontask import OnTaskDBIdentifier
 logger = logging.getLogger('ontask')
 
 
+def clone_table(table_from: str, table_to: str):
+    """Clone a table in the database.
+    :param table_from: Source table.
+
+    :param table_to: New table.
+    """
+    with connection.connection.cursor() as cursor:
+        cursor.execute(sql.SQL('CREATE TABLE {0} AS TABLE {1}').format(
+            sql.Identifier(table_to),
+            sql.Identifier(table_from)))
+
+
+def rename_table(table: str, new_name: str):
+    """Rename a table in the database.
+
+    :param table: Current table name
+
+    :param new_name: New table name
+
+    :return: Nothing. Change reflected in the database table
+    """
+    with connection.connection.cursor() as cursor:
+        cursor.execute(sql.SQL('ALTER TABLE {0} RENAME TO {1}').format(
+            sql.Identifier(table),
+            sql.Identifier(new_name),
+        ))
+
+
 def get_boolean_clause(
     filter_formula: Optional[Dict] = None,
     filter_pairs: Optional[Mapping] = None,
@@ -233,7 +261,7 @@ def delete_table(table_name: str):
 
     :return: Drop the table in the DB
     """
-    query = sql.SQL('DROP TABLE {0}').format(sql.Identifier(table_name))
+    query = sql.SQL('DROP TABLE IF EXISTS {0}').format(sql.Identifier(table_name))
 
     try:
         with connection.connection.cursor() as cursor:

@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from dataops.forms import SQLRequestPassword, load_df_from_sqlconnection
 from dataops.models import SQLConnection
-from dataops.pandas import store_dataframe, verify_data_frame
+from dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask import OnTaskDataFrameNoKey
 from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
@@ -95,10 +95,9 @@ def sqlupload_start(
         # Store the data frame in the DB.
         try:
             # Get frame info with three lists: names, types and is_key
-            frame_info = store_dataframe(
+            frame_info = store_temporary_dataframe(
                 data_frame,
-                workflow,
-                temporary=True)
+                workflow)
         except Exception:
             form.add_error(
                 None,

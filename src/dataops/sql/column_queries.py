@@ -58,6 +58,30 @@ def add_column_to_db(
     connection.connection.cursor().execute(query)
 
 
+def copy_column_in_db(
+    table_name: str,
+    col_from: str,
+    col_to: str,
+):
+    """Copy the values in one column to another.
+
+    :param table_name: Table to process
+
+    :param col_from: Source columm
+
+    :param col_to: Destination column
+
+    :return: Nothing. The change is performed in the DB
+    """
+    query = sql.SQL('UPDATE TABLE SET {1}={0}').format(
+        sql.Identifier(table_name),
+        sql.Identifier(col_to),
+        sql.Identifier(col_from),
+    )
+
+    connection.connection.cursor().execute(query)
+
+
 def is_column_in_table(table_name: str, column_name: str) -> bool:
     """Check if a column is in the table.
 
@@ -77,7 +101,7 @@ def is_column_in_table(table_name: str, column_name: str) -> bool:
         return cursor.fetchone()[0]
 
 
-def is_column_table_unique(table_name: str, column_name: str) -> bool:
+def is_column_unique(table_name: str, column_name: str) -> bool:
     """Return if a table column has all non-empty unique values.
 
     :param table_name: table
