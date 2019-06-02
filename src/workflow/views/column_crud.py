@@ -172,6 +172,7 @@ def column_add(
         form.save_m2m()
         workflow.refresh_from_db()
         workflow.ncols += 1
+        workflow.set_query_builder_ops()
         workflow.save()
 
         # Add the new column to the DB
