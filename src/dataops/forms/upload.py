@@ -68,10 +68,9 @@ class UploadBasic(forms.Form):
         # Store the data frame in the DB.
         try:
             # Get frame info with three lists: names, types and is_key
-            self.frame_info = store_dataframe(
+            self.frame_info = store_temporary_dataframe(
                 self.data_frame,
-                self.workflow,
-                temporary=True)
+                self.workflow)
         except Exception as exc:
             self.add_error(
                 None,

@@ -200,12 +200,11 @@ def perform_dataframe_upload_merge(
     workflow,
     dst_df: pd.DataFrame,
     src_df: pd.DataFrame,
-    merge_info: Dict
+    merge_info: Dict,
 ):
     """Merge the existing data frame (dst) with a new one (src).
 
-    It either stores a data frame in the db (dst_df is None), or combines
-    the two data frames dst_df and src_df and stores its content.
+    It combines the two data frames dst_df and src_df and stores its content.
 
     The combination of dst_df and src_df assumes:
 
@@ -278,25 +277,6 @@ def perform_dataframe_upload_merge(
         for cname in merge_info['rename_column_names']:
             kk_column.append(is_unique_column(src_df[cname]))
         merge_info['keep_key_column'] = kk_column
-
-    # If no dst_df is given, simply dump the frame in the DB
-    if dst_df is None:
-        store_dataframe(src_df, workflow)
-        # Reconcile the label is_key with the one in the merge_info
-        for cname, uploaded, is_key in zip(
-            merge_info['rename_column_names'],
-            merge_info['columns_to_upload'],
-            merge_info['keep_key_column'],
-        ):
-            if not uploaded:
-                # If the column has not been uploaded, forget about it
-                continue
-
-            column = workflow.columns.get(name=cname)
-            column.is_key = is_key
-            column.save()
-
-        return
 
     # Get the keys
     src_key = merge_info['src_selected_key']
