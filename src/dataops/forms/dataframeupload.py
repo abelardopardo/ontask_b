@@ -4,10 +4,10 @@
 from typing import Optional
 from urllib.parse import urlparse, urlunparse
 
-import pandas as pd
 from django.conf import settings as ontask_settings
 from smart_open import smart_open
 
+import pandas as pd
 from dataops.models import SQLConnection
 from dataops.pandas import create_db_engine
 

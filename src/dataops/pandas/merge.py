@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Functions to do data frame merging."""
+
 from typing import Dict
 
 import pandas as pd
@@ -55,38 +56,6 @@ def _perform_non_overlapping_column_merge(
             new_df = new_df.rename(columns={src_key + '_x': src_key})
 
     return new_df
-
-
-def _update_is_key_field(merge_info: Dict, workflow):
-    """Traverse the list of columns and reset the key property.
-
-    :param merge_info: dictionary with the lists of columns to upload, rename
-    and keep as key
-
-    :param workflow: current workflow (to access columns)
-
-    :result: None
-    """
-    # Update the value of is_key based on "keep_key_column"
-    for to_upload, cname, keep_key in zip(
-        merge_info['columns_to_upload'],
-        merge_info['rename_column_names'],
-        merge_info['keep_key_column'],
-    ):
-        if not to_upload:
-            # Column is not uploaded, nothing to process
-            continue
-
-        col = workflow.columns.filter(name=cname).first()
-        if not col:
-            # It is a new column so no need to update the value of col_key
-            continue
-
-        # Process the is_key property. The is_key property has been
-        # recalculated during the store, now it needs to be updated looking at
-        # the keep_key value.
-        col.is_key = col.is_key and keep_key
-        col.save()
 
 
 def _perform_overlap_update(
@@ -195,7 +164,36 @@ def _perform_overlap_update(
         to_return[col] = to_return[col].dt.tz_localize('UTC')
 
     # Return result
-    return overlap_df.reset_index(drop=True)
+    return to_return
+
+
+def _update_is_key_field(merge_info: Dict, workflow):
+    """Traverse the list of columns and reset the key property.
+
+    :param merge_info: dictionary with the lists of columns to upload, rename
+    and keep as key
+
+    :param workflow: current workflow (to access columns)
+
+    :result: None
+    """
+    # Update the value of is_key based on "keep_key_column"
+    for to_upload, cname, keep_key in zip(
+        merge_info['columns_to_upload'],
+        merge_info['rename_column_names'],
+        merge_info['keep_key_column'],
+    ):
+        if not to_upload:
+            # Column is not uploaded, nothing to process
+            continue
+
+        col = workflow.columns.get(name=cname)
+
+        # Process the is_key property. The is_key property has been
+        # recalculated during the store, now it needs to be updated looking at
+        # the keep_key value.
+        col.is_key = col.is_key and keep_key
+        col.save()
 
 
 def perform_dataframe_upload_merge(

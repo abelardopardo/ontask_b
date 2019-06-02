@@ -15,7 +15,7 @@
 {% block container %}
   <div class="container">
     <h1 class="text-center">{% trans 'Edit learner data' %}</h1>
-    {% if row_form %}
+    {% if form %}
       <div class="row justify-content-center">
         <form action="" method="post">
           {% csrf_token %}
@@ -28,7 +28,7 @@
               <span class="fa fa-check"></span> {% trans 'Update' %}
             </button>
           </div>
-          {{ row_form|crispy }}
+          {{ form|crispy }}
           <div class="text-center">
             {% if cancel_url %}
               <a class="shadow btn btn-outline-dark" href="{{ cancel_url }}">{% trans 'Cancel' %}</a>
@@ -41,7 +41,7 @@
         </form>
       </div>
     {% else %}
-      <p><strong>{% trans 'No data available for this workflow' %}</strong></p>
+      <p class="text-center"><strong>{% trans 'No data available for this workflow' %}</strong></p>
     {% endif %}
   </div>
 {% endblock container %}

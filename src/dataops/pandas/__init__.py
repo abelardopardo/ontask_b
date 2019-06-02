@@ -8,7 +8,7 @@ from dataops.pandas.columns import (
 )
 from dataops.pandas.dataframe import (
     add_column_to_df, get_subframe, get_table_row_by_index, rename_df_column,
-    store_dataframe,
+    store_dataframe, store_temporary_dataframe,
 )
 from dataops.pandas.datatypes import pandas_datatype_names
 from dataops.pandas.db import (

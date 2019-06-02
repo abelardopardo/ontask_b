@@ -3,11 +3,13 @@
 """Views to manipulate the workflow."""
 
 from builtins import range
+import copy
 from typing import Optional
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models.query_utils import Q
 from django.http import JsonResponse
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse, JsonResponse
@@ -18,17 +20,21 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
+from action.views.clone import do_clone_action
 from dataops.pandas import check_wf_df
+from dataops.sql import clone_table
 from logs.models import Log
+from ontask import create_new_name
 from ontask.celery import celery_is_up
 from ontask.decorators import (
     ajax_required, get_workflow,
     store_workflow_in_session,
 )
 from ontask.permissions import UserIsInstructor, is_instructor
+from table.views.table_view import do_clone_view
 from workflow.forms import WorkflowForm
 from workflow.models import Workflow
-from workflow.ops import do_clone_workflow
+from workflow.ops import do_clone_column_only
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
@@ -68,6 +74,64 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
             request,
             self.form_class(request.POST, workflow_user=request.user),
             self.template_name)
+
+
+def _do_clone_workflow(workflow: Workflow) -> Workflow:
+    """Clone the workflow.
+
+    :param workflow: source workflow
+
+    :return: Clone object
+    """
+    new_workflow = Workflow(
+        user=workflow.user,
+        name=create_new_name(
+            workflow.name,
+            Workflow.objects.filter(
+                Q(user=workflow.user) | Q(shared=workflow.user)),
+        ),
+        description_text=workflow.description_text,
+        nrows=workflow.nrows,
+        ncols=workflow.ncols,
+        attributes=copy.deepcopy(workflow.attributes),
+        query_builder_ops=copy.deepcopy(workflow.query_builder_ops),
+        luser_email_column_md5=workflow.luser_email_column_md5,
+        lusers_is_outdated=workflow.lusers_is_outdated)
+    new_workflow.save()
+    try:
+        new_workflow.shared.set(list(workflow.shared.all()))
+        new_workflow.lusers.set(list(workflow.lusers.all()))
+
+        # Clone the columns
+        for item_obj in workflow.columns.all():
+            do_clone_column_only(item_obj, new_workflow=new_workflow)
+
+        # Update the luser_email_column if needed:
+        if workflow.luser_email_column:
+            new_workflow.luser_email_column = new_workflow.columns.get(
+                name=workflow.luser_email_column.name,
+            )
+
+        # Clone the DB table
+        clone_table(
+            workflow.get_data_frame_table_name(),
+            new_workflow.get_data_frame_table_name())
+
+        # Clone actions
+        for item_obj in workflow.actions.all():
+            do_clone_action(item_obj, new_workflow)
+
+        for item_obj in workflow.views.all():
+            do_clone_view(item_obj, new_workflow)
+
+        # Done!
+        new_workflow.save()
+    except Exception as exc:
+        new_workflow.delete()
+        raise exc
+
+    return new_workflow
+
 
 
 @user_passes_test(is_instructor)
@@ -311,7 +375,7 @@ def clone_workflow(
         })
 
     try:
-        workflow_new = do_clone_workflow(workflow)
+        workflow_new = _do_clone_workflow(workflow)
     except Exception as exc:
         messages.error(
             request,

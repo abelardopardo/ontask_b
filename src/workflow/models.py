@@ -13,12 +13,13 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import connection, models
+from django.db import models
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.pandas import load_table, pandas_datatype_names
+import dataops.pandas.datatypes
+import dataops.pandas.db
 from dataops.sql import delete_table
 
 FIELD_MID_SIZE = 512
@@ -141,7 +142,7 @@ class Workflow(models.Model):
 
     def data_frame(self):
         """Access the data frame by the serializer."""
-        return load_table(self.get_data_frame_table_name())
+        return dataops.pandas.db.load_table(self.get_data_frame_table_name())
 
     def get_data_frame_table_name(self):
         """Get the table name containing the data frame.
@@ -170,7 +171,8 @@ class Workflow(models.Model):
         Boolean stating if there is a table storing a data frame
         :return: True if the workflow has a table storing the data frame
         """
-        return is_table_in_db(self.get_data_frame_table_name())
+        return dataops.pandas.db.is_table_in_db(
+            self.get_data_frame_table_name())
 
     def get_column_info(self):
         """Access name, data_type and key for all columns.
@@ -264,7 +266,8 @@ class Workflow(models.Model):
 
         :return: If the workflow has a dataframe
         """
-        return is_table_in_db(self.get_data_frame_table_name())
+        return dataops.pandas.db.is_table_in_db(
+            self.get_data_frame_table_name())
 
     def is_locked(self):
         """Check if the workflow is locked.
@@ -497,7 +500,8 @@ class Column(models.Model):
         blank=False,
         choices=[
             (dtype, dtype)
-            for __, dtype in list(pandas_datatype_names.items())],
+            for __, dtype in list(
+                dataops.pandas.datatypes.pandas_datatype_names.items())],
         verbose_name=_('type of data to store in the column'))
 
     # Boolean stating if the column is a unique key
@@ -699,11 +703,3 @@ class Column(models.Model):
         verbose_name_plural = 'columns'
         unique_together = ('name', 'workflow')
         ordering = ['position']
-
-
-def is_table_in_db(table_name: str) -> bool:
-    """Check if the given table is in the DB."""
-    with connection.cursor() as cursor:
-        return table_name in [
-            conn.name
-            for conn in connection.introspection.get_table_list(cursor)]

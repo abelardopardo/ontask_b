@@ -20,16 +20,18 @@ from builtins import str
 from io import TextIOWrapper
 from typing import Optional
 
-import pandas as pd
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+import pandas as pd
 from dataops.forms.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
 from dataops.models import SQLConnection
-from dataops.pandas import store_dataframe, verify_data_frame
+from dataops.pandas import (
+    store_dataframe, store_temporary_dataframe, verify_data_frame,
+)
 from ontask import OnTaskDataFrameNoKey, ontask_prefs
 from ontask.forms import RestrictedFileField
 

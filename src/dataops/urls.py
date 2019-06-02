@@ -7,9 +7,9 @@ from django.urls import path
 from dataops.views import (
     csvupload_start, diagnose, excelupload_start, googlesheetupload_start,
     moreinfo, plugin_invoke, row_create, row_update, s3upload_start,
-    sqlconn_delete, sqlconnection, sqlupload_start, transform_model, upload_s2,
-    upload_s3, upload_s4, uploadmerge, sqlconnection_admin_index,
-    sqlconnection_instructor_index, sqlconn_add
+    sqlconn_add, sqlconn_delete, sqlconnection, sqlconnection_admin_index,
+    sqlconnection_instructor_index, sqlupload_start, transform_model,
+    upload_s2, upload_s3, upload_s4, uploadmerge,
 )
 
 app_name = 'dataops'

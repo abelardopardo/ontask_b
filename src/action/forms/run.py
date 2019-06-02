@@ -31,7 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 from action.forms import SUFFIX_LENGTH
 from action.models import Action
 from action.payloads import EmailPayload
-from dataops.sql.column_queries import is_column_table_unique
+from dataops.sql.column_queries import is_column_unique
 from dataops.sql.row_queries import get_rows
 from ontask import is_correct_email
 from ontask.forms import date_time_widget_options
@@ -262,7 +262,7 @@ class ZipActionForm(forms.Form):
         ufname_column = form_data['user_fname_column']
 
         # The given column must have unique values
-        if not is_column_table_unique(
+        if not is_column_unique(
             self.action.workflow.get_data_frame_table_name(),
             pcolumn,
         ):

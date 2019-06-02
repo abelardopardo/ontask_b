@@ -2,11 +2,11 @@
 
 """Functions to evaluate the operands in OnTask conditions and filters."""
 
-import pandas as pd
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext
 from psycopg2 import sql
 
+import pandas as pd
 from ontask import OnTaskDBIdentifier, OnTaskException
 
 # Type of evaluations for the formulas

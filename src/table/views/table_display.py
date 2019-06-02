@@ -158,8 +158,8 @@ def _render_table_display_data(
                 )),
                 'edit_url': reverse('dataops:rowupdate') + '?{0}'.format(
                     urlencode(
-                        {'update_key': key_name,
-                         'update_val': key_value},
+                        {'k': key_name,
+                         'v': key_value},
                     )),
                 'delete_key': '?{0}'.format(urlencode(
                     {'key': key_name, 'value': key_value},

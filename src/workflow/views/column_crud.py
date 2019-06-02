@@ -2,8 +2,8 @@
 
 """Views for create/rename/update/delete columns."""
 
-import random
 from builtins import range
+import random
 from typing import Optional
 
 from django.contrib import messages
@@ -17,12 +17,11 @@ from django.utils.translation import ugettext_lazy as _
 from action.models import ActionColumnConditionTuple, Condition
 from dataops.formula import evaluation
 from dataops.pandas import (
-    add_column_to_df, load_table, pandas_datatype_names, rename_df_column,
+    load_table, pandas_datatype_names, rename_df_column,
     store_dataframe,
 )
-from dataops.sql import db_rename_column
+from dataops.sql import add_column_to_db, db_rename_column
 from logs.models import Log
-from ontask import create_new_name
 from ontask.decorators import ajax_required, get_column, get_workflow
 from ontask.permissions import is_instructor
 from workflow.forms import (
@@ -30,7 +29,7 @@ from workflow.forms import (
     QuestionRenameForm, RandomColumnAddForm,
 )
 from workflow.models import Column, Workflow
-from workflow.ops import clone_wf_df_column, workflow_delete_column
+from workflow.ops import clone_wf_column, workflow_delete_column
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -165,13 +164,6 @@ def column_add(
         column.workflow = workflow
         column.is_key = False
 
-        # Update the data frame, which must be stored in the form because
-        # it was loaded when validating it.
-        df = load_table(workflow.get_data_frame_table_name())
-
-        # Add the column with the initial value to the dataframe
-        df = add_column_to_df(df, column, column_initial_value)
-
         # Update the positions of the appropriate columns
         workflow.reposition_columns(workflow.ncols + 1, column.position)
 
@@ -181,9 +173,12 @@ def column_add(
         workflow = Workflow.objects.prefetch_related('columns').get(
             id=workflow.id)
 
-        # Store the df to DB
+        # Add the new column to the DB
         try:
-            store_dataframe(df, workflow)
+            add_column_to_db(
+                workflow.get_data_frame_table_name(),
+                column.name,
+                column.data_type)
         except Exception as exc:
             messages.error(
                 request,
@@ -689,7 +684,7 @@ def column_clone(
 
     # Proceed to clone the column
     try:
-        new_column = clone_wf_df_column(column)
+        new_column = clone_wf_column(column)
     except Exception as exc:
         messages.error(
             request,

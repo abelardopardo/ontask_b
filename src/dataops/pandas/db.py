@@ -7,12 +7,11 @@ from typing import Dict, List, Mapping, Optional
 
 import pandas as pd
 import sqlalchemy
+import sqlalchemy.engine
 from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
 from django.utils.translation import ugettext as _
-from sqlalchemy import create_engine
-from sqlalchemy.engine import Engine
 
 from dataops.pandas.columns import has_unique_column, is_unique_column
 from dataops.pandas.datatypes import pandas_datatype_names
@@ -31,11 +30,11 @@ ontask_to_sqlalchemy = {
 }
 
 # SQLAlchemy DB Engine to use with Pandas (required by to_sql, from_sql
-engine: Optional[Engine] = None
+engine: Optional[sqlalchemy.engine.Engine] = None
 
 
 def set_engine():
-    """Create a persistmt SQLAlchemy connection to the DB."""
+    """Create a persistent SQLAlchemy connection to the DB."""
     global engine
 
     if engine:
@@ -92,7 +91,7 @@ def create_db_engine(
             'Creating engine: {db_url}',
             extra={'db_url': database_url})
 
-    return create_engine(
+    return sqlalchemy.create_engine(
         database_url,
         client_encoding=str('utf8'),
         encoding=str('utf8'),
@@ -272,3 +271,11 @@ def verify_data_frame(data_frame: pd.DataFrame) -> None:
         )
 
     return None
+
+
+def is_table_in_db(table_name: str) -> bool:
+    """Check if the given table is in the DB."""
+    with connection.cursor() as cursor:
+        return table_name in [
+            conn.name
+            for conn in connection.introspection.get_table_list(cursor)]

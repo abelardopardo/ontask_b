@@ -30,7 +30,7 @@ def row_update(
 
     :param request: Request object with all the data.
 
-    :return:
+    :return: Nothing. Effect done in the database.
     """
     # Get the pair key,value to fetch the row from the table
     update_key = request.GET.get('update_key')

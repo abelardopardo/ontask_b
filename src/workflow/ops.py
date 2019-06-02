@@ -6,18 +6,17 @@ from typing import List, Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.db.models.query_utils import Q
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from action.models import Condition
-from action.views.clone import do_clone_action
-from dataops.pandas import load_table, store_dataframe
-from dataops.sql.column_queries import df_drop_column
-from dataops.sql.row_queries import get_rows
+from dataops.pandas import load_table
+from dataops.sql import (
+    add_column_to_db, copy_column_in_db, df_drop_column, get_rows,
+    is_column_unique,
+)
 from logs.models import Log
 from ontask import create_new_name
-from table.views.table_view import do_clone_view
 from workflow.models import Column, Workflow
 
 RANDOM_PWD_LENGTH = 50
@@ -77,8 +76,7 @@ def workflow_delete_column(
     # Traverse the actions for which the filter has been deleted and reassess
     #  all their conditions
     # TODO: Explore how to do this asynchronously (or lazy)
-    for action in actions_without_filters:
-        action.update_n_rows_selected()
+    map(lambda act: act.update_n_rows_selected(), actions_without_filters)
 
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.
@@ -203,7 +201,7 @@ def do_clone_column_only(
     return new_column
 
 
-def clone_wf_df_column(column: Column) -> Column:
+def clone_wf_column(column: Column) -> Column:
     """Create a clone of a column.
 
     :param column: Object to clone
@@ -225,67 +223,36 @@ def clone_wf_df_column(column: Column) -> Column:
     new_column.position = workflow.ncols
     new_column.save()
 
-    # Add the column to the table and update it.
-    data_frame = load_table(
-        workflow.get_data_frame_table_name())
-    data_frame[new_column.name] = data_frame[column.name]
-    store_dataframe(data_frame, workflow)
+    # Create the column in the database
+    add_column_to_db(
+        workflow.get_data_frame_table_name(),
+        new_column.name,
+        new_column.data_type)
+
+    copy_column_in_db(
+        workflow.get_data_frame_table_name(),
+        column.name,
+        new_column.name)
 
     return new_column
 
 
-def do_clone_workflow(workflow: Workflow) -> Workflow:
-    """Clone the workflow.
+def check_key_columns(workflow: Workflow):
+    """Check that key columns maintain their property.
 
-    :param workflow: source workflow
+    Function used to verify that after changes in the DB the key columns
+    maintain their property.
 
-    :return: Clone object
+    :param workflow: Object to use for the verification.
+
+    :return: Nothing. Raise exception if key column lost the property.
     """
-    new_workflow = Workflow(
-        user=workflow.user,
-        name=create_new_name(
-            workflow.name,
-            Workflow.objects.filter(
-                Q(user=workflow.user) | Q(shared=workflow.user)),
-        ),
-        description_text=workflow.description_text,
-        nrows=workflow.nrows,
-        ncols=workflow.ncols,
-        attributes=copy.deepcopy(workflow.attributes),
-        query_builder_ops=copy.deepcopy(workflow.query_builder_ops),
-        luser_email_column_md5=workflow.luser_email_column_md5,
-        lusers_is_outdated=workflow.lusers_is_outdated
-    )
-    new_workflow.save()
-    try:
-        new_workflow.shared.set(list(workflow.shared.all()))
-        new_workflow.lusers.set(list(workflow.lusers.all()))
-
-        # Clone the columns
-        for item_obj in workflow.columns.all():
-            do_clone_column_only(item_obj, new_workflow=new_workflow)
-
-        # Update the luser_email_column if needed:
-        if workflow.luser_email_column:
-            new_workflow.luser_email_column = new_workflow.columns.get(
-                name=workflow.luser_email_column.name,
-            )
-
-        # Clone the data frame
-        data_frame = load_table(workflow.get_data_frame_table_name())
-        store_dataframe(data_frame, new_workflow)
-
-        # Clone actions
-        for item_obj in workflow.actions.all():
-            do_clone_action(item_obj, new_workflow)
-
-        for item_obj in workflow.views.all():
-            do_clone_view(item_obj, new_workflow)
-
-        # Done!
-        new_workflow.save()
-    except Exception as exc:
-        new_workflow.delete()
-        raise exc
-
-    return new_workflow
+    col_name = next(
+        (col.name for col in workflow.columns.filter(is_key=True)
+         if not is_column_unique(
+            workflow.get_data_frame_table_name(), col.name)),
+        None)
+    if col_name:
+        raise Exception(_(
+            'The new data does not preserve the key '
+            + 'property of column "{0}"'.format(col_name)))

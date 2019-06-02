@@ -41,9 +41,7 @@ AVAILABLE_ACTION_TYPES = [
 
 
 def is_legal_name(val):
-    """
-    Function to check if a string is a valid column name, attribute name or
-    condition name.
+    """Check if a string is a valid column, attribute or condition name.
 
     These are the characters that have been found to be problematic with
     these names and the responsible for these anomalies:
@@ -59,11 +57,12 @@ def is_legal_name(val):
 
       !#$%&()*+,-./:;<=>?@[\\]^_`{|}~
 
+    Additionally, any column name that starts with __ is reserved for OnTask.
+
     :param val: String with the column name
+
     :return: String with a message suggesting changes, or None if string correct
-
     """
-
     if "'" in val:
         return _("The symbol ' cannot be used in the name.")
 

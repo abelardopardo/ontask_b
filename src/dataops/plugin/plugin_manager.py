@@ -8,13 +8,13 @@ import time
 from builtins import map, str, zip
 from datetime import datetime
 
-import pandas as pd
 import pytz
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
+import pandas as pd
 from dataops import settings
 from dataops.models import PluginRegistry
 from dataops.pandas import load_table, perform_dataframe_upload_merge
