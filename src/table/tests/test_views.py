@@ -589,7 +589,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         )
 
         # Incorrect primary key introduced (repeated value)
-        self.assertIn('It must be different to maintain Key property',
+        self.assertIn('The new data does not preserve the key property',
                       self.selenium.page_source)
 
         # Introduce a valid primary key
