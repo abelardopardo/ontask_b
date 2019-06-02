@@ -73,7 +73,7 @@ def copy_column_in_db(
 
     :return: Nothing. The change is performed in the DB
     """
-    query = sql.SQL('UPDATE TABLE SET {1}={0}').format(
+    query = sql.SQL('UPDATE {0} SET {1}={2}').format(
         sql.Identifier(table_name),
         sql.Identifier(col_to),
         sql.Identifier(col_from),
