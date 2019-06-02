@@ -198,7 +198,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         column.refresh_from_db()
-        self.assertEqual(column.categories, ['female', 'male'])
+        self.assertEqual(set(column.categories), {'female', 'male'})
 
     def test_assign_luser_column(self):
         """Test assign luser column option."""
