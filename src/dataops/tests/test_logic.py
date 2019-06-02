@@ -4,18 +4,18 @@
 import datetime
 import io
 import os
+import test
 
 from django.conf import settings
-import pandas as pd
 
+import pandas as pd
 from action.models import Action
 from dataops.forms.upload import load_df_from_csvfile
-from dataops.formula import EVAL_EXP, evaluate_formula
+from dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
 from dataops.pandas import (
     get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
 from dataops.sql import get_rows
-import test
 from workflow.models import Workflow
 
 
@@ -223,7 +223,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
                 # If value2 is None, then all formulas should be false
                 self.assertFalse(result2)
 
-    def do_sql_operand(
+    def do_sql_txt_operand(
         self,
         input_value,
         op_value,
@@ -241,6 +241,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         )
         data_frame = load_table(self.test_table, self.test_columns, self.skel)
         self.assertEqual(data_frame.shape[0], row_yes)
+        evaluate_formula(self.skel, EVAL_TXT)
 
         if op_value.find('{0}') != -1:
             self.set_skel(
@@ -252,6 +253,8 @@ class FormulaEvaluation(test.OnTaskTestCase):
             data_frame = load_table(self.test_table, self.test_columns,
                 self.skel)
             self.assertEqual(data_frame.shape[0], row_no)
+            evaluate_formula(self.skel, EVAL_TXT)
+
 
     def test_eval_node(self):
         #
@@ -490,11 +493,11 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         # EQUAL
         #
-        self.do_sql_operand('number', '{0}equal', 'integer', '1')
-        self.do_sql_operand('number', '{0}equal', 'double', '2.0')
-        self.do_sql_operand('number', '{0}equal', 'boolean', 1)
-        self.do_sql_operand('text', '{0}equal', 'string', 'xxx')
-        self.do_sql_operand('text',
+        self.do_sql_txt_operand('number', '{0}equal', 'integer', '1')
+        self.do_sql_txt_operand('number', '{0}equal', 'double', '2.0')
+        self.do_sql_txt_operand('number', '{0}equal', 'boolean', 1)
+        self.do_sql_txt_operand('text', '{0}equal', 'string', 'xxx')
+        self.do_sql_txt_operand('text',
             '{0}equal',
             'datetime',
             '2018-01-01T00:00:00')
@@ -502,7 +505,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         # BEGINS WITH
         #
-        self.do_sql_operand('text',
+        self.do_sql_txt_operand('text',
             '{0}begins_with',
             'string',
             'x')
@@ -510,14 +513,14 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         # CONTAINS
         #
-        self.do_sql_operand('text',
+        self.do_sql_txt_operand('text',
             '{0}contains',
             'string',
             'xx')
         #
         # ENDS WITH
         #
-        self.do_sql_operand('text',
+        self.do_sql_txt_operand('text',
             '{0}ends_with',
             'string',
             'xx')
@@ -525,23 +528,23 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         # IS EMPTY
         #
-        self.do_sql_operand('text', 'is_{0}empty', 'string', None)
+        self.do_sql_txt_operand('text', 'is_{0}empty', 'string', None)
 
         #
         # IS NULL
         #
-        self.do_sql_operand('number', 'is_{0}null', 'integer', None)
-        self.do_sql_operand('number', 'is_{0}null', 'double', None)
-        self.do_sql_operand('number', 'is_{0}null', 'boolean', None)
-        self.do_sql_operand('text', 'is_{0}null', 'string', None)
-        self.do_sql_operand('text', 'is_{0}null', 'datetime', None)
+        self.do_sql_txt_operand('number', 'is_{0}null', 'integer', None)
+        self.do_sql_txt_operand('number', 'is_{0}null', 'double', None)
+        self.do_sql_txt_operand('number', 'is_{0}null', 'boolean', None)
+        self.do_sql_txt_operand('text', 'is_{0}null', 'string', None)
+        self.do_sql_txt_operand('text', 'is_{0}null', 'datetime', None)
 
         #
         # LESS
         #
-        self.do_sql_operand('number', 'less', 'integer', '2')
-        self.do_sql_operand('number', 'less', 'double', '3.2')
-        self.do_sql_operand('text',
+        self.do_sql_txt_operand('number', 'less', 'integer', '2')
+        self.do_sql_txt_operand('number', 'less', 'double', '3.2')
+        self.do_sql_txt_operand('text',
             'less',
             'datetime',
             '2018-01-02T00:00:00')
@@ -549,9 +552,9 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         # LESS OR EQUAL
         #
-        self.do_sql_operand('number', 'less_or_equal', 'integer', '1')
-        self.do_sql_operand('number', 'less_or_equal', 'double', '2.0')
-        self.do_sql_operand('text',
+        self.do_sql_txt_operand('number', 'less_or_equal', 'integer', '1')
+        self.do_sql_txt_operand('number', 'less_or_equal', 'double', '2.0')
+        self.do_sql_txt_operand('text',
             'less_or_equal',
             'datetime',
             '2018-01-01T00:00:00')
@@ -559,9 +562,9 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         # GREATER
         #
-        self.do_sql_operand('number', 'greater', 'integer', '0')
-        self.do_sql_operand('number', 'greater', 'double', '1.2')
-        self.do_sql_operand('text',
+        self.do_sql_txt_operand('number', 'greater', 'integer', '0')
+        self.do_sql_txt_operand('number', 'greater', 'double', '1.2')
+        self.do_sql_txt_operand('text',
             'greater',
             'datetime',
             '2017-01-01T00:00:00')
@@ -569,9 +572,9 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         # GREATER OR EQUAL
         #
-        self.do_sql_operand('number', 'greater_or_equal', 'integer', '1')
-        self.do_sql_operand('number', 'greater_or_equal', 'double', '2.0')
-        self.do_sql_operand('text',
+        self.do_sql_txt_operand('number', 'greater_or_equal', 'integer', '1')
+        self.do_sql_txt_operand('number', 'greater_or_equal', 'double', '2.0')
+        self.do_sql_txt_operand('text',
             'greater_or_equal',
             'datetime',
             '2018-01-01T00:00:00')
@@ -579,14 +582,14 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         # BETWEEN
         #
-        self.do_sql_operand(
+        self.do_sql_txt_operand(
             'number',
             '{0}between',
             'integer',
             ['0', '2'],
             1,
             0)
-        self.do_sql_operand(
+        self.do_sql_txt_operand(
             'number',
             '{0}between',
             'double',
@@ -594,7 +597,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
             1,
             0
         )
-        self.do_sql_operand(
+        self.do_sql_txt_operand(
             'text',
             '{0}between',
             'datetime',
