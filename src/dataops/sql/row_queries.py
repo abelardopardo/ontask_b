@@ -94,12 +94,44 @@ def get_row(
     return cursor.fetchone()
 
 
+def insert_row(
+    table_name: str,
+    keys: List[str],
+    values: List,
+):
+    """Insert a row with a set of pairs.
+
+    Given a table and a list of  (set_field, set_value) create a new row
+
+    :param table_name: Table name
+
+    :param keys: List of column names
+
+    :param values: List of column values
+
+    :return: Nothing. Effect reflected in the database.
+    """
+    ncols = len(keys)
+    query = sql.SQL('INSERT INTO {0} ({1}) VALUES ({2})').format(
+        sql.Identifier(table_name),
+        sql.SQL(', ').join([
+            OnTaskDBIdentifier(key) for key in keys
+        ]),
+        sql.SQL(', ').join([sql.Placeholder()] * ncols)
+    )
+
+    # Execute the query
+    with connection.connection.cursor() as cursor:
+        cursor.execute(query, values)
+
+
 def update_row(
     table_name: str,
-    set_pairs: Mapping,
-    filter_pairs: Optional[Mapping] = None,
+    keys: List[str],
+    values: List,
+    filter_dict: Optional[Mapping] = None,
 ):
-    """Update table row with a set of pairs where determined by filter pairs.
+    """Update table row with key,values in a row determined by a filter.
 
     Given a table, a list of  (set_field, set_value), and pairs (where_field,
     where_value), it updates the row in the table selected with the list of (
@@ -108,34 +140,34 @@ def update_row(
 
     :param table_name: Table name
 
-    :param set_pairs: Dictionary of pairs key, value to set
+    :param keys: List of column names
 
-    :param filter_pairs: Dictionary of key, value to find the row
+    :param values: List of column values
+
+    :param filter_dict: Dictionary of key, value to select the row
 
     :return:
     """
     query = sql.SQL('UPDATE {0} SET ').format(
         sql.Identifier(table_name),
     ) + sql.SQL(', ').join([
-        sql.SQL('{0} = {1}').format(
-            OnTaskDBIdentifier(key), sql.Literal(lit_val))
-        for key, lit_val in set_pairs.items()
+        sql.SQL('{0} = {1}').format(OnTaskDBIdentifier(key), sql.Placeholder())
+        for key in keys
     ])
-    query_fields = []
+    query_fields = values
 
-    if filter_pairs:
+    if filter_dict:
         query = query + sql.SQL(' WHERE ')
         query = query + sql.SQL(' AND ').join([
             sql.SQL('{0} = {1}').format(
-                OnTaskDBIdentifier(key), sql.Literal(lit_val))
-            for key, lit_val in filter_pairs.items()
+                OnTaskDBIdentifier(key), sql.Placeholder())
+            for key in filter_dict.keys()
         ])
-        query_fields += [lit_val for __, lit_val in filter_pairs.items()]
+        query_fields += [lit_val for lit_val in filter_dict.values()]
 
     # Execute the query
     with connection.connection.cursor() as cursor:
         cursor.execute(query, query_fields)
-    connection.commit()
 
 
 def increase_row_integer(

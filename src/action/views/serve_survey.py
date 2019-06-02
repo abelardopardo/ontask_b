@@ -4,7 +4,7 @@
 
 import json
 import random
-from typing import List, Mapping
+from typing import List, Mapping, Tuple
 
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
@@ -85,7 +85,7 @@ def serve_survey_row(
         and not request.POST.get('lti_version'))
     if keep_processing:
         # Update the content in the DB
-        name_value_pairs = survey_update_row_values(
+        row_keys, row_values  = survey_update_row_values(
             action,
             colcon_items,
             manager,
@@ -103,7 +103,7 @@ def serve_survey_row(
              'name': action.workflow.name,
              'action': action.name,
              'action_id': action.id,
-             'new_values': json.dumps(name_value_pairs)})
+             'new_values': json.dumps(dict(zip(row_keys, row_values)))})
 
         # Modify the time of execution for the action
         action.last_executed_log = log_item
@@ -161,7 +161,7 @@ def survey_update_row_values(
     where_field: str,
     where_value: str,
     context: Mapping,
-) -> List:
+) -> Tuple[List, List]:
     """Collect the values of the survey and update the DB.
 
     :param action: Action being executed
@@ -172,7 +172,8 @@ def survey_update_row_values(
     :param context: Condition values
     :return: Zip iterator with pairs (name, value)
     """
-    set_pairs = {}
+    keys = []
+    values = []
     # Create the SET name = value part of the query
     for idx, colcon in enumerate(colcon_items):
         if colcon.column.is_key and not show_key:
@@ -190,13 +191,15 @@ def survey_update_row_values(
             where_value = field_value
             continue
 
-        set_pairs[colcon.column.name] = field_value
+        keys.append(colcon.column.name)
+        values.append(field_value)
 
     # Execute the query
     update_row(
         action.workflow.get_data_frame_table_name(),
-        set_pairs=set_pairs,
-        filter_pairs={where_field: where_value},
+        keys,
+        values,
+        filter_dict={where_field: where_value},
     )
 
     # Recompute all the values of the conditions in each of the actions
@@ -204,4 +207,4 @@ def survey_update_row_values(
     for act in action.workflow.actions.all():
         act.update_n_rows_selected()
 
-    return list(set_pairs.items())
+    return keys, values
