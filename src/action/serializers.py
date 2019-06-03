@@ -253,7 +253,10 @@ class ActionSerializer(serializers.ModelSerializer):
 
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
-    content = serializers.CharField(required=False, initial='')
+    content = serializers.CharField(
+        required=False,
+        initial='',
+        allow_blank=True)
 
     def create_column_condition_pairs(
         self,
@@ -339,7 +342,7 @@ class ActionSerializer(serializers.ModelSerializer):
                     'content',
                     validated_data.get('text_content'),  # Legacy
                 ),
-                target_url=validated_data.get('target_url'),
+                target_url=validated_data.get('target_url', ''),
                 shuffle=validated_data.get('shuffle', False),
             )
             action_obj.save()
