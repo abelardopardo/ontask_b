@@ -232,6 +232,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'bootstrap_datepicker_plus',
+    # 'corsheaders',
 
     'authtools',
     'crispy_forms',
@@ -266,6 +267,7 @@ MIDDLEWARE = [
     # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django_auth_lti.middleware_patched.MultiLTILaunchAuthMiddleware',
@@ -294,6 +296,10 @@ AUTHENTICATION_BACKENDS = [
 CACHES = {"default": REDIS_URL}
 # Cache time to live is 15 minutes
 CACHE_TTL = 60 * 30
+
+# CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_WHITELIST = []
+# CORS_ORIGIN_REGEX_WHITELIST = []
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
