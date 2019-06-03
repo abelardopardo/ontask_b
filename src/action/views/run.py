@@ -121,61 +121,6 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
     return serve_survey_row(request, action, user_attribute_name)
 
 
-@user_passes_test(is_instructor)
-@get_workflow()
-def run_action_item_filter(
-    request: HttpRequest,
-    workflow: Optional[Workflow] = None,
-) -> HttpResponse:
-    """Offer a select widget to tick items to exclude from selection.
-
-    This is a generic Web function. It assumes that the session object has a
-    dictionary with a field stating what objects need to be considered for
-    selection. It creates the right web form and then updates in the session
-    dictionary the result and proceeds to a URL given also as part of that
-    dictionary.
-
-    :param request: HTTP request (GET) with a session object and a dictionary
-    with the right parameters. The selected values are stored in the field
-    'exclude_values'.
-
-    :return: HTTP response
-    """
-    # Get the payload from the session, and if not, use the given one
-    action_info = get_action_payload(request.session)
-    if not action_info:
-        # Something is wrong with this execution. Return to the action table.
-        messages.error(request, _('Incorrect item filter invocation.'))
-        return redirect('action:index')
-
-    # Get the information from the payload
-    action = Action.objects.get(id=action_info['action_id'])
-
-    form = ValueExcludeForm(
-        request.POST or None,
-        action=action,
-        column_name=action_info['item_column'],
-        exclude_values=action_info['exclude_values'],
-    )
-    context = {
-        'form': form,
-        'action': action,
-        'button_label': action_info['button_label'],
-        'valuerange': range(action_info['valuerange']),
-        'step': action_info['step'],
-        'prev_step': action_info['prev_url'],
-    }
-
-    # Process the initial loading of the form and return
-    if request.method != 'POST' or not form.is_valid():
-        return render(request, 'action/item_filter.html', context)
-
-    # Updating the content of the exclude_values in the payload
-    action_info['exclude_values'] = form.cleaned_data['exclude_values']
-
-    return redirect(action_info['post_url'])
-
-
 def serve_action_out(
     user,
     action: Action,
@@ -236,3 +181,58 @@ def serve_action_out(
 
     # Respond the whole thing
     return HttpResponse(response)
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def run_action_item_filter(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
+    """Offer a select widget to tick items to exclude from selection.
+
+    This is a generic Web function. It assumes that the session object has a
+    dictionary with a field stating what objects need to be considered for
+    selection. It creates the right web form and then updates in the session
+    dictionary the result and proceeds to a URL given also as part of that
+    dictionary.
+
+    :param request: HTTP request (GET) with a session object and a dictionary
+    with the right parameters. The selected values are stored in the field
+    'exclude_values'.
+
+    :return: HTTP response
+    """
+    # Get the payload from the session, and if not, use the given one
+    action_info = get_action_payload(request.session)
+    if not action_info:
+        # Something is wrong with this execution. Return to the action table.
+        messages.error(request, _('Incorrect item filter invocation.'))
+        return redirect('action:index')
+
+    # Get the information from the payload
+    action = Action.objects.get(id=action_info['action_id'])
+
+    form = ValueExcludeForm(
+        request.POST or None,
+        action=action,
+        column_name=action_info['item_column'],
+        exclude_values=action_info['exclude_values'],
+    )
+    context = {
+        'form': form,
+        'action': action,
+        'button_label': action_info['button_label'],
+        'valuerange': range(action_info['valuerange']),
+        'step': action_info['step'],
+        'prev_step': action_info['prev_url'],
+    }
+
+    # Process the initial loading of the form and return
+    if request.method != 'POST' or not form.is_valid():
+        return render(request, 'action/item_filter.html', context)
+
+    # Updating the content of the exclude_values in the payload
+    action_info['exclude_values'] = form.cleaned_data['exclude_values']
+
+    return redirect(action_info['post_url'])

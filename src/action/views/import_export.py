@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Views for import/export."""
+
 import datetime
 import gzip
 from io import BytesIO
@@ -36,6 +37,10 @@ def export_ask(
     :param request: HTTP request
 
     :param pk: Action ID
+
+    :param workflow: Workflow object (obtained by decorator)
+
+    :param action: Action object (obtained by decorator)
 
     :return: HTTP response to the next page where the export is done
     """
@@ -141,11 +146,17 @@ def action_import(
                 workflow,
                 form.cleaned_data['name'],
                 request.FILES['upload_file'])
+        except KeyError as exc:
+            # Attach the exception to the request
+            messages.error(
+                request,
+                _('Unable to import file. Incorrect fields.').format(str(exc)),
+            )
         except Exception as exc:
             # Attach the exception to the request
             messages.error(
                 request,
-                _('Unable to import action: {0}').format(str(exc)),
+                _('Unable to import file: {0}').format(str(exc)),
             )
 
         # Go back to the list of actions
