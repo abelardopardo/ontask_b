@@ -6,14 +6,13 @@ import os
 import test
 
 from django.conf import settings
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 
 from workflow.models import Workflow
 
 
-class BackToHome(TestCase):
+class BackToHome(test.OnTaskTestCase):
     """Test redirection to home page when no workflow is set."""
 
     fixtures = ['initial_workflow']
@@ -25,10 +24,6 @@ class BackToHome(TestCase):
     )
 
     wflow_name = 'wflow2'
-
-    def setUp(self):
-        super().setUp()
-        test.pg_restore_table(self.filename)
 
     def test_back_to_home_page(self):
 
