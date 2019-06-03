@@ -357,14 +357,6 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # click in the action page
         self.open_action_edit(self.action_name)
 
-        # Make sure the content has the correct text
-        self.assertEqual(
-            "{% comment %}Your action content here{% endcomment %}",
-            self.selenium.execute_script(
-                """return $("#id_text_content").summernote('code')"""
-            )
-        )
-
         # insert the first mark
         self.selenium.execute_script(
             """$('#id_text_content').summernote('editor.insertText', "mark1");"""

@@ -171,6 +171,7 @@ class OnTaskTestCase(TransactionTestCase):
         url_params: Optional[Mapping] = None,
         method: Optional[str] = 'GET',
         req_params: Optional[Mapping] = None,
+        meta = None,
         is_ajax: Optional[bool] = False,
         session_payload: Optional[Mapping] = None,
         **kwargs
@@ -182,6 +183,7 @@ class OnTaskTestCase(TransactionTestCase):
         :param method: GET (default) or POST
         :param req_params: Additional parameters to add to the request (for
         POST requests)
+        :param meta: Dictionary of name, value for META
         :param is_ajax: Generate an ajax request or not
         :param session_payload: Dictionary to add to the request session
         :param kwargs: Additional arguments to attach to the URL
@@ -201,6 +203,10 @@ class OnTaskTestCase(TransactionTestCase):
             request = self.factory.post(url_str, req_params, **kwargs)
         else:
             raise Exception('Incorrect request method')
+
+        meta = {} if meta is None else meta
+        for obj_name, obj_item in meta.items():
+            request.META[obj_name] = obj_item
 
         request = self.add_middleware(request)
 

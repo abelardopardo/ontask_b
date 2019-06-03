@@ -10,6 +10,8 @@
 
 - Import operation now allows to either provide a workflow name for the import or use the original workflow name (stored in the file).
 
+- Support for CORS Headers (using library django-cors-headers)
+
 ### Changed
 
 - Batch command for workflow import can now process multiple files (bulk upload of multiple workflows)
@@ -21,6 +23,9 @@
   
 - Major refactoring of the code to use type hints and an more adequate division into packages. 
 
+- Major rewriting of data frame manipulation to use direct database operations and reduce 
+  the number of load/store operations from DB to Pandas.
+  
 ### Fixed
 
 - Error when taking the conjunction between two queryset and not using distinct

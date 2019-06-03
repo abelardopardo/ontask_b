@@ -185,3 +185,32 @@ class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
             method='POST',
             session_payload=payload.get_store())
         self.assertTrue(status.is_success(resp.status_code))
+
+
+class ActionServe(test.OnTaskTestCase):
+    """Test the view to serve an action."""
+
+    fixtures = ['simple_action']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'action',
+        'fixtures',
+        'simple_action.sql',
+    )
+
+    user_email = 'student01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    workflow_name = 'wflow1'
+
+    def test_serve_action(self):
+        """Test the serve_action view."""
+        action = self.workflow.actions.get(name='simple action')
+        action.serve_enabled = True
+        action.save()
+
+        resp = self.get_response(
+            'action:serve',
+            {'action_id': action.id})
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertTrue('Oct. 10, 2017, 10:03 p.m.' in str(resp.content))
