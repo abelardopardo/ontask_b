@@ -117,16 +117,16 @@
           {% include 'workflow/includes/add_column_menu.html' %}
         {% endif %}
         {% if columns %}
-          <div class="dropdown btn-group">
+          <div class="dropdown btn-group shadow">
             <a href="{% url 'table:view_index' %}"
-               class="shadow btn btn-outline-dark spin"
+               class="btn btn-outline-dark spin"
                data-toggle="tooltip"
                title="{% trans 'Views available for this table' %}">
               <span class="fa fa fa-eye"></span> {% trans 'Views' %}
             </a>
             {% if views %}
               <button type="button"
-                      class="shadow btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
+                      class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="sr-only">Toggle Dropdown</span>
               </button>
