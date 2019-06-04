@@ -396,11 +396,18 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('dataops_upload_excel.png')
         self.go_to_table()
         #
-        # Dataops/Merge Excel Merge
+        # Google doc merge
         #
         # Go to Excel Upload/Merge
         self.go_to_google_sheet_upload_merge_step_1()
         self.body_ss('dataops_upload_gsheet.png')
+        self.go_to_table()
+
+        #
+        # S3 CSV merge
+        #
+        self.go_to_s3_upload_merge_step_1()
+        self.body_ss('dataops_upload_s3.png')
         self.go_to_table()
 
         #
@@ -518,7 +525,17 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('action_edit_action_in.png')
 
         # Open the "Create question modal"
+        self.select_condition_tab()
+        self.create_condition(
+            'Full time',
+            '',
+            [('Attendance', 'equal', 'Full Time')]
+        )
+
+        # Open the "Create question modal"
         self.select_questions_tab()
+        self.body_ss('action_edit_action_in_question_tab.png')
+
         self.selenium.find_element_by_xpath(
             "//button[contains(@class, 'js-workflow-question-add')]").click()
         self.wait_for_modal_open()
