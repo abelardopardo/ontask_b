@@ -741,6 +741,19 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             )
         )
 
+    def go_to_s3_upload_merge_step_1(self):
+        self.go_to_upload_merge()
+
+        # Go to S3 upload/merge
+        self.selenium.find_element_by_xpath(
+            '//table[@id="dataops-table"]//a[normalize-space()="S3 Bucket '
+            'CSV"]').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, '//form')
+            )
+        )
+
     def go_to_sql_upload_merge(self):
         self.go_to_upload_merge()
 
