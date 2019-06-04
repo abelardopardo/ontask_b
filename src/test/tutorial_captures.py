@@ -675,6 +675,9 @@ class TutorialCaptures(ScreenTests):
         )
 
         # Show the editor
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located((By.ID, 'insert-questions'))
+        )
         self.body_ss('tutorial_survey_editor2.png')
 
         # Click the preview button
