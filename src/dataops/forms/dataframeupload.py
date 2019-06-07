@@ -2,7 +2,7 @@
 
 """Upload DataFrames from Files."""
 from typing import Optional
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
 
 import pandas as pd
 from django.conf import settings as ontask_settings
@@ -210,13 +210,20 @@ def load_df_from_googlesheet(
     # https://docs.google.com/spreadsheets/d/DOCID/export?format=csv&gid=0
     parse_res = urlparse(url_string)
     if parse_res.path.endswith('/edit'):
+        qs_dict = parse_qs(parse_res.query)
+        qs_dict['format'] = 'csv'
+        new_fragment = parse_res.fragment
+        if 'gid=' in parse_res.fragment:
+            qs_dict['gid'] = parse_res.fragment.split('=')[1]
+            new_fragment = ''
+
         url_string = urlunparse([
             parse_res.scheme,
             parse_res.netloc,
-            parse_res.path[:-len('/edit')] + '/export',
+            parse_res.path.replace('/edit', '/export'),
             parse_res.params,
-            parse_res.query + '&format=csv',
-            parse_res.fragment,
+            urlencode(qs_dict, doseq=True),
+            new_fragment,
         ])
 
     # Process the link using pandas read_csv
