@@ -124,7 +124,7 @@ def do_import_workflow(user, name, file_item):
 
 def do_export_workflow_parse(
     workflow: Workflow,
-    selected_actions: Optional[List[Action]] = None,
+    selected_actions: Optional[List[int]] = None,
 ) -> BytesIO:
     """Serialize the workflow and attach its content to a BytesIO object.
 

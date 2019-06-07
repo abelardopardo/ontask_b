@@ -28,7 +28,7 @@ urlpatterns = [
         views.export_ask,
         name='export_ask'),
     re_path(
-        r'(?P<page_data>(\d+(,\d+)*)?)/export/',
+        r'(?P<page_data>\d+((,\d+)*))/export/',
         views.export,
         name='export'),
     path('import/', views.import_workflow, name='import'),

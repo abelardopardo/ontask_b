@@ -80,8 +80,9 @@ def export(
     :return:
     """
     # Get the param encoding which elements to include in the export.
-    action_ids = []
-    if page_data and page_data != '':
+    if page_data == '0':
+        action_ids = [action.id for action in workflow.actions.all()]
+    else:
         # Data has at least one integer
         try:
             action_ids = [int(a_idx) for a_idx in page_data.split(',')]

@@ -5,7 +5,7 @@
 {% block scripts %}
   {% if download %}
     <script>
-      $(window).on('load', function(){ location.href="{% url 'workflow:export' 1 %}"; });
+      $(window).on('load', function(){ location.href="{% url 'workflow:export' 0 %}"; });
     </script>
   {% endif %}
 {% endblock scripts %}
