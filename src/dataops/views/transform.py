@@ -3,7 +3,7 @@
 """Views to manipulate the transformation."""
 
 import json
-from builtins import object, range, str
+from builtins import object, str
 from typing import Optional
 
 import django_tables2 as tables
@@ -45,9 +45,9 @@ class PluginRegistryTable(tables.Table):
     last_exec = tables.DateTimeColumn(verbose_name=_('Last executed'))
 
     def __init__(self, *args, **kwargs):
-        """Set workflow and request."""
+        """Set workflow and user to get latest execution time"""
         self.workflow = kwargs.pop('workflow')
-        self.request = kwargs.pop('request')
+        self.user = kwargs.pop('user')
 
         super().__init__(*args, **kwargs)
 
@@ -64,17 +64,6 @@ class PluginRegistryTable(tables.Table):
 
         return record.filename
 
-    def render_is_verified(self, record):
-        """Render as an icon."""
-        if record.is_verified:
-            return format_html('<span class="true">✔</span>')
-
-        return render_to_string(
-            'dataops/includes/partial_plugin_diagnose.html',
-            context={'id': record.id},
-            request=None,
-        )
-
     def render_last_exec(self, record):
         """Render the last executed time.
 
@@ -83,7 +72,7 @@ class PluginRegistryTable(tables.Table):
         :return:
         """
         log_item = self.workflow.logs.filter(
-            user=self.request.user,
+            user=self.user,
             name=Log.PLUGIN_EXECUTE,
             payload__name=record.name,
         ).order_by(F('created').desc()).first()
@@ -96,36 +85,15 @@ class PluginRegistryTable(tables.Table):
 
         model = PluginRegistry
 
-        fields = ('name', 'description_txt', 'is_verified')
+        fields = ('name', 'description_txt')
 
-        sequence = ('name', 'description_txt', 'is_verified', 'last_exec')
+        sequence = ('name', 'description_txt', 'last_exec')
 
         attrs = {
             'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'transform-table',
         }
-
-
-@user_passes_test(is_instructor)
-@get_workflow()
-def uploadmerge(
-    request: HttpRequest,
-    workflow: Optional[Workflow] = None,
-) -> HttpResponse:
-    """Show the table of options for upload/merge operation.
-
-    :param request: Http Request
-
-    :param workflow: To know if this is upload or merge.
-
-    :return: Nothing
-    """
-    # Get the workflow that is being used
-    return render(
-        request,
-        'dataops/uploadmerge.html',
-        {'valuerange': range(5) if workflow.has_table() else range(3)})
 
 
 @user_passes_test(is_instructor)
@@ -149,17 +117,23 @@ def transform_model(
     # Traverse the plugin folder and refresh the db content.
     refresh_plugin_data(request, workflow)
 
-    table = PluginRegistryTable(
-        PluginRegistry.objects.filter(is_model=is_model),
+    table_ok = PluginRegistryTable(
+        PluginRegistry.objects.filter(
+            is_model=is_model,
+            is_verified=True,
+        ),
         orderable=False,
-        request=request,
-        workflow=workflow,
-    )
+        user=request.user,
+        workflow=workflow)
+
+    table_err = None
+    if request.user.is_superuser:
+        table_err = PluginRegistry.objects.filter(is_model=None)
 
     return render(
         request,
         'dataops/transform_model.html',
-        {'table': table, 'is_model': is_model})
+        {'table': table_ok, 'is_model': is_model, 'table_err': table_err})
 
 
 @user_passes_test(is_instructor)

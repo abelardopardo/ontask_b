@@ -8,11 +8,14 @@ from typing import Optional
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
+from django.http.request import HttpRequest
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from dataops.forms import SelectColumnUploadForm, SelectKeysForm
+from dataops.models import SQLConnection
 from dataops.pandas import load_table, perform_dataframe_upload_merge
 from dataops.pandas.dataframe import store_workflow_table
 from dataops.sql import table_queries
@@ -20,6 +23,30 @@ from logs.models import Log
 from ontask.decorators import get_workflow, store_workflow_in_session
 from ontask.permissions import is_instructor
 from workflow.models import Workflow
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def uploadmerge(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
+    """Show the table of options for upload/merge operation.
+
+    :param request: Http Request
+
+    :param workflow: To know if this is upload or merge.
+
+    :return: Nothing
+    """
+    # Get the workflow that is being used
+    return render(
+        request,
+        'dataops/uploadmerge.html',
+        {
+            'valuerange': range(5) if workflow.has_table() else range(3),
+            'sql_enabled': SQLConnection.objects.count() > 0
+         })
 
 
 @user_passes_test(is_instructor)
