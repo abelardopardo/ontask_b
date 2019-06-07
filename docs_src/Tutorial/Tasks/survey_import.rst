@@ -3,7 +3,7 @@
 Import a pre-defined survey
 ***************************
 
-OnTask offers a `library of pre-defined surveys <https://github.com/abelardopardo/ontask_b/tree/master/surveys>`__ that can be uploaded directly into one of your existing workflows. Go to the |fa-comments| *Action* page of an existing workflow (or alternatively create a workflow and upload some data). Download one of the `pre-defined tests <https://github.com/abelardopardo/ontask_b/tree/master/surveys>`__ and store the file in your computer.
+OnTask offers a `library of pre-defined surveys <https://github.com/abelardopardo/ontask_b/tree/master/surveys>`__ that can be uploaded directly into one of your existing workflows. Go to the |fa-comments| *Actions* page of an existing workflow (or alternatively create a workflow and upload some data). Download one of the `pre-defined tests <https://github.com/abelardopardo/ontask_b/tree/master/surveys>`__ and store the file in your computer.
 
 Click in the *import action* button.
 

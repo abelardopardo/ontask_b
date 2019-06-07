@@ -1,9 +1,9 @@
 What is OnTask
 ##############
 
-Welcome to OnTask, the platform offering instructors and educational designers the capacity to use data to personalize the learner experience.
+OnTask is a platform offering instructors and educational designers the capacity to use data to personalize the learner experience.
 
-Learning is complex, highly situated, and requires interacting with peers, instructors, resources, platforms, etc. This complexity can be alleviated providing learners with the right support actions. But this process becomes increasingly complex when the number of learners grows. The larger the number of learners, the more difficult is for instructors to provide support. Typical solutions usually include suggesting or providing generic resources that are only relevant to a subset of the audience.
+Learning is complex, highly situated, and requires interacting with peers, instructors, resources, platforms, etc. This complexity can be alleviated providing learners with the right support actions such as feedback, recommendations, discussions, etc. However, all these actions become increasingly complex when the number of learners grows. The larger the number of learners, the more difficult is for instructors to provide adequate support. Typical solutions include providing generic resources or sending announcements that are only relevant to a subset of the audience.
 
 .. sidebar:: Learner testimonials
 
@@ -12,9 +12,9 @@ Learning is complex, highly situated, and requires interacting with peers, instr
 
    "I think it makes sense as a reflection of the whole semester, oh this is where I struggled with."
 
-In parallel with this increase in complexity, learning platforms now generate a wealth of data when activities are mediated by technology. This data can be collected and used to help instructors and designers provide a truly personalized experience. Why is this not happening in current platforms? Because the connection between this data and learner support actions is challenging to implement. This is the focus of OnTask: provide instructors and designers with a platform to connect data emerging from learning environments with highly personalized student support actions.
+Learning platforms now generate a wealth of data when activities are mediated by technology. This data can be used to help instructors and designers understand the learner experience and provide a truly personalized experience. The reason why this is not is happening in current platforms is because establishing the connection between data and learner support actions is challenging to implement. This is the focus of OnTask: provide instructors and designers with a platform to easily connect existing data produced in learning environments with highly personalized student support actions.
 
-OnTask is a web application that allows instructors and designers to combine data previously captured and stored in a table with a set of rules to personalize the content of a web document. That document can then be sent as an email or made available to each learner. The following picture shows the high level structure of the platform.
+The existing data is uploaded and stored in a table so that instructors and designers can create a set of simple rules to personalize the content of a web document or a survey. Different learners see different parts of the document depending on the created rules. This document can be sent as an email or made available to each learner. The following picture shows the high level structure of the platform.
 
 .. figure:: diagram.png
    :align: center
@@ -26,13 +26,22 @@ OnTask is a web application that allows instructors and designers to combine dat
 
    "We were also very pleased to support the inclusion of OnTask into the Apereo Incubation process. We have been impressed by the thinking that informs OnTask and would like to see it thrive as an open source solution as we think it has great potential."
 
-The rest of the document is divided into blocks. The :ref:`first block <install>` covers the technical details to download, install and configure the tool. It requires technological expertise and access to the adequate computing facilities (a virtual machine, a server, or similar). The main audience of this part is system administrators and advanced users that want to use the tool within their institution or for their own use.
+The rest of the document is divided into the following blocks:
 
-The :ref:`second part <using>` explains how to use OnTask in the context of alearning experience, how to load data, manipulate the table and create the personalized actions. The audience for this part is teachers and designers that need to personalize the interactions they have with learners in a platform offering some data sources.
+:ref:`Installation <install>`
+  This block covers the technical details to download, install and configure the tool. It requires technological expertise and access to the adequate computing facilities (a virtual machine, a server, or similar). The main audience of this part is system administrators and advanced users that want to use the tool within their institution or for their own use.
 
-The :ref:`third part <tutorial>` contains a step by step tutorial on how to use OnTask from the instructor's point of view.
+:ref:`Using the tool <using>`
+  This block explains how to use OnTask in the context of alearning experience, how to load data, manipulate the table and create the personalized actions. The audience for this part is teachers and designers that need to personalize the interactions they have with learners in a platform offering some data sources.
 
-The :ref:`fourth part <advanced_features>` covers some more advanced functionalities such an application programming interface (API) that allows other platforms to upload data to OnTask.
+:ref:`Use scenarios <scenarios>`
+  A set of concrete scenarios describing situations in which OnTask is used to deliver learner support actions.
+
+:ref:`Tutorial <tutorial>`
+  This block contains a a step by step tutorial on how to use OnTask from the instructor's point of view.
+
+:ref:`Advanced features <advanced_features>`
+  This block presents more advanced functionality such an application programming interface (API) that allows other platforms to upload data to OnTask.
 
 Research
 ********

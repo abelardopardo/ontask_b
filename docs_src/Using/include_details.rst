@@ -132,17 +132,16 @@ The buttons at the top of the page offer the following operations
   Add a column with random values
     This is useful to create columns for A/B testing. The new column is created with a random value from either a numeric range (starting at 0) or a set of strings.
 
-:ref:`Manage table data <dataops>`
-  Menu to upload/merge data to the table (see :ref:`dataops` for a detailed explanation), execute a plugin, or delete the data in the table.
-
-
 Below the buttons to perform these operations the workflow columns are shown. If the number of columns is large, the information is divided into pages. The field at the top right of this list performs searches in all fields of all columns (name, type, etc). Each column has the following information (from left to right):
 
-Position
+Position (#)
   A number starting at 1. The position is used when :ref:`visualizing the table <table>`.
 
 Name
-  Unique name for the workflow that cannot contain the quotes *'* or *"*.
+  Unique name for the workflow that cannot contain the quotes *'* or *"* or start with *__*.
+
+Description
+  Description of the column.
 
 Type
   One of integer, string, double, boolean or date/time.

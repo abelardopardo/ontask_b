@@ -14,7 +14,7 @@ The next screen is the *personalized text action editor*. The functions in this 
 .. figure:: /scaptures/tutorial_personalized_text_editor.png
    :align: center
 
-Personalized Text
+Text
   This area is the HTML text editor to write the content to personalize. It contains pull-down menus to insert column values and attributes.
 
 Filter Learners

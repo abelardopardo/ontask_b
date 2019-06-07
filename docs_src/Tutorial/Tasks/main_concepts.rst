@@ -20,7 +20,9 @@ Actions
 
   * A `JSON object <https://json.org>`_ representing a set of information fields. The values of these fields can be included, excluded or changed depending on a set of **conditions** created with the learner attributes (analogous to those described for the HTML text). This object can be sent it to an external platform for further processing.
 
-The following figure illustrates the high level view of OnTask.
+  * A text message similar to the HTML text with certain parts included based on the **conditions** to be sent using the mail function of a Canvas LMS (requires server configuration).
+
+The following figure shows the high level view of OnTask.
 
 .. figure:: /scaptures/high_level_view.png
    :align: center

@@ -4,8 +4,7 @@
 Use Scenarios
 *************
 
-This section contains a set of examples or *scenarios* showing how OnTask can
- be used. If you prefer to read about use cases instead of the manual, this is your place.
+This section contains a set of examples or *scenarios* showing how OnTask can be used. If you prefer to read about use cases instead of the manual, this is your place.
 
 The first question you have to answer is if it really makes sense to use this
 tool in your context or is this yet another useless software application.

@@ -22,6 +22,18 @@ After the survey is created, the following screen is shown
 
 The editor contains three tabs:
 
+Survey Parameters
+  This tab contains additional parameters for the survey, more precisely:
+
+  Survey Description
+    Text describing the survey that is shown to the learners.
+
+  Key column to match user id
+    The key column in the table that will be used to identify the users when submitting their answers. This is typically the column that contains the user email.
+
+  Shuffle questions
+    If selected, the questions in the survey will be shuffled when shown to the learners.
+
 Survey Questions
   The columns used to collect the data. In this action, a column is equivalent to a question. The description of the column is the text of the
   question. In this part of the editor you may either use one of the existing columns as question, create a new column (or
@@ -30,19 +42,12 @@ Survey Questions
 Filter learners
   An expression identical to the one used in the personalized text to select a subset of the learners for which the will be available.
 
-Survey Parameters
-  This tab contains additional parameters for the survey, more precisely:
+Conditions
+  Set of conditions to control the appearance of questions in the surve.
 
-  Description
-    Text describing the survey that is shown to the learners.
+This page will show you warning messages when it detects a column in the survey with an empty description, the survey has an empty description, there is no key column specified to identify the users, or the conditions are false for some or all the students.
 
-  Key column to identify learners
-    The key column in the table that will be used to identify the users when submitting their answers. This is typically the column that contains the user email.
-
-  Shuffle questions
-    If selected, the questions in the survey will be shuffled when shown to the learners.
-
-This page will show you a warning message if any of the columns used in the survey has an empty description. Let's suppose you want to ask the learners two questions:
+Let's assume you want to ask the learners two questions:
 
 - What was the most challenging topic for you this week? 
 

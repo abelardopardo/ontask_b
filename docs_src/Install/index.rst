@@ -3,23 +3,20 @@
 Installation process
 ####################
 
-OnTask is a Web application that manages data about learners to offer them personalized support. For this reason the installation process complies with a set of tight security restrictions. Some of these restrictions lie within the scope of the tool, but others are part of the environment in which the application is installed. We strongly recommend to install OnTask in a web server that uses TTL encryption (HTTPS) to serve all the pages. The application requires exchanging sensitive information about your session with the browser, so the information should be encrypted.
+OnTask is a Web application that manages data about learners to offer them personalized support. For this reason the installation process includes a set of tight security restrictions. Some of them lie within the scope of the tool, but others are part of the environment in which the application is installed. We strongly recommend to install OnTask in a web server that uses TTL encryption (HTTPS) to serve all the pages. The application requires exchanging sensitive information about your session with the browser, so the information should be encrypted.
 
 Requirements
 ************
 
-OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. But as with many other applications, OnTask requires a set of additional applications for its execution:
+OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. As many other web applications, OnTask requires a set of additional libraries for its execution, namely:
 
-- Python 3
+- Python 3.7
 - Django 2.2
-- Additional Django modules (included in the requirements/base.txt) file
+- Additional Django modules listed in the file ``requirements/base.txt``
 - Redis 
 - PostgreSQL (version 9.5 or later)
 
-Some of these requirements are handled through Python's package index application `pip <https://pypi.python.org/pypi/pip>`__.
-
-Are you upgrading from a version < 2.8 to 2.8 or later?
-*******************************************************
+Some of these requirements are handled using `pip <https://pypi.python.org/pypi/pip>`__ (Python's package index application).
 
 If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you need to disable the ``crontab`` used to execute tasks asynchronously from the web server. Starting in version 2.8 those tasks are executed by an application called ``celery`` that is managed using ``supervisor`` (see :ref:`scheduling_tasks`).
 
@@ -92,13 +89,7 @@ Download, install and configure OnTask
 
 1. Download or clone a copy of `OnTask <https://github.com/abelardopardo/ontask_b>`_.
 
-#. Using a command interpreter, go to the OnTask folder and locate a folder
-   inside it with name ``requirements``. Verify that it
-   contains the files ``base.txt``, ``production.txt`` and
-   ``development.txt``. The first file contains a list of python modules that
-   are required by OnTask. The second is a set of additional modules to run a
-   *production* instance, and the third is the same list if you intend to run a
-   *development* instance.
+#. Using a command interpreter, go to the OnTask folder and locate a folder inside it with name ``requirements``. Verify that it contains the files ``base.txt``, ``production.txt`` and ``development.txt``. The first file contains a list of python modules that are required by OnTask. The second is a set of additional modules to run a *production* instance, and the third is the same list if you intend to run a *development* instance.
 
 #. If you plan to run a production instance of OnTask execute the command::
 
@@ -116,8 +107,7 @@ Download, install and configure OnTask
 OnTask Configuration
 ====================
 
-The next steps describe the configuration of the Django environment to run OnTask.
-This configuration is divided into in three groups of variables:
+The next steps describe the configuration of the Django environment to run OnTask. This configuration is divided into in three groups of variables:
 
 Environment variables (*env* level)
 
@@ -511,30 +501,15 @@ server. The solution adopted is to use `Celery <http://www.celeryproject.org/>`_
 Upgrading OnTask
 ****************
 
-If you have OnTask already configured and running, here are the steps to
-follow to upgrade to a new version. If you are upgrading from a version below
-2.8 to 2.8 or higher read :ref:`scheduling_tasks`.
+If you have OnTask already configured and running, here are the steps to follow to upgrade to a new version:
 
-If you are upgrading from a version below 4.0 to version 4.2 make sure that:
-
-- Versions 2.7 and 3 of Python are properly installed.
-
-- The library ``Celery`` is installed as part of the Python 3 system and the binary is executed using Python 3.
-
-- The library ``supervisord`` is installed as part of the Python 2.7 system and the binary is executed using Python 2.
-
-After verifying the previous requirements, proceed with the following steps.
-
-- Create a backup of the database to be able to restore the state of the tool
-  before the upgrade process.
+- Create a backup of the database to be able to restore the state of the tool before the upgrade process.
 
 - Stop the apache web server.
 
-- Open a terminal and use a command interpreter to execute the following
-  commands.
+- Open a terminal and use a command interpreter to execute the following commands.
 
-- Place the interpreter in the project folder (the one with the folder
-  ``src`` in it)
+- Place the interpreter in the project folder (the one with the folder ``src`` in it)
 
 - Pull the code for the new version from the repository::
 
@@ -572,6 +547,10 @@ After verifying the previous requirements, proceed with the following steps.
 
     supervisorctl -c ../supervisor.conf reload
 
+- Flush the cache::
+
+    redis-cli flushall
+
 - Restart the apache web server and check the new version is properly
   installed.
 
@@ -596,14 +575,6 @@ These pages offer access to several important operations:
 
 Once the instance is running, visit these pages and configure the platform to
 your needs.
-
-Production Deployment
-*********************
-
-Once OnTask is executing normally, you may configure a web server (nginx,
-apache or similar) to make it available to a community of users. The
-instructions to make such deployment are beyond the scope of this manual but
-are available through the corresponding manual pages of these applications.
 
 .. _authentication:
 
@@ -945,18 +916,28 @@ data in a CSV file through the following steps:
      $ python3 manage.py initialize_db -e your_email_column_name -i scripts/initial_learners.csv"
 
 
-.. _docker:
-
 Creating a Development Server using Docker
 ******************************************
 
-You may use `Docker <https://docker.com>` to create a set of containers that run a **development** server. The file ``docker-compose.yml`` and the folder ``docker`` contains the configuration files to create the required images and instantiate them as containers. The current configuration creates three containers: one running Postgresql, one running Redis (cache), and the third runs the web server (Apache) with the wsgi connector, and ``supervisord`` controlling the executing of two Celery workers (one for asynchronous tasks, and one for scheduled ones).
+You may use `Docker <https://docker.com>`_ to create a set of containers that run a **development** server. The file ``docker-compose.yml`` and the folder ``docker`` contains the configuration files to create the required images and instantiate them as containers. The current configuration creates the following containers:
 
-The server running in the docker container needs an extra configuration file with the database and redis connection pointing to the right locations within the docker network.
+OnTask Server
+  Built on top of an ubuntu instance with Python 3, Django and Apache installed. The application is installed internally on port 80 in the container mapped to port 8080 of the local machine.
+
+Message Queue
+  Built on top of an ubuntu instance with Python 3, Django and an the OnTask source code. It executes a Celery daemon to receive execution requests.
+
+Relational Database
+  Built on top of the latest postgres docker image. It contains the database server with the data being stored in a separated volume (preserved among executions).
+
+Redis
+  Built on top of the latest redis docker image. It contains the cache server and broker for the message passing between Django and Celery.
+
+The file ``docker-compose.yml`` contains the parameters to build the four containers and start the execution of OnTask.
 
 After installing the Docker environment in your computer and creating the configuration file for the server running in the container, the sequence of commands to start the server is::
 
   docker-compose build
   docker-compose up
 
-If successful, the process will create three containers and the development server will be accessible through port 8080 in the host machine.
+The process creates the containers and the server will be accessible through port 8080 in the host machine.

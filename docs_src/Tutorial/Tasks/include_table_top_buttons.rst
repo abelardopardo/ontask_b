@@ -18,7 +18,4 @@ The buttons at the top of the page offer the following functions:
 |fa-download| CSV Download
   This functionality downloads the data in the table as a CSV file. Combine this functionality with the table views to handle large tables.
 
-Manage table data
-  Menu to upload/merge data to the table, execute a plugin, or delete the data in the table.
-
 

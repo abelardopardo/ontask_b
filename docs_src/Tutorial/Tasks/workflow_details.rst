@@ -26,8 +26,3 @@ Add a formula-based column
 Add a column with random values
   This function creates a new column with values randomly taken from a pre-defined collection.
 
-Uploading or Merging additional data
-====================================
-
-The button labeled *Manage table data* allows to execute the operation to either upload, merge new data in the table, or execute an existing plugin.
-
