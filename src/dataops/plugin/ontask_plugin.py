@@ -13,13 +13,12 @@ class OnTaskPluginAbstract(object, metaclass=ABCMeta):
 
     def __init__(self):
         """Initialize the object fields."""
-        self.name = None
-        self.description_txt = None
-        self.is_model = False
-        self.input_column_names = None
-        self.output_column_names = None
-        self.output_suffix = None
-        self.paramters = None
+        self.name = ''
+        self.description_txt = ''
+        self.input_column_names = []
+        self.output_column_names = []
+        self.output_suffix = ''
+        self.parameters = []
 
     def get_name(self):
         """Access the name."""
@@ -35,7 +34,7 @@ class OnTaskPluginAbstract(object, metaclass=ABCMeta):
 
     def get_is_model(self):
         """Access the is_mode field."""
-        return self.is_model
+        return isinstance(self, OnTaskModel)
 
     def get_input_column_names(self):
         """Access the list of input column names."""
@@ -68,3 +67,13 @@ class OnTaskPluginAbstract(object, metaclass=ABCMeta):
         :return: a Pandas data_frame to append to the existing one
         """
         raise Exception(_('This method should be implemented!'))
+
+
+class OnTaskTransformation(OnTaskPluginAbstract):
+    """Abstract class to instantiate to create an OnTask transformation."""
+
+
+class OnTaskModel(OnTaskPluginAbstract):
+    """Abstract class to instantiate to create an OnTask model."""
+
+

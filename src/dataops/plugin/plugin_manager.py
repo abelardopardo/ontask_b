@@ -33,18 +33,18 @@ type_function = {
 
 # Initial list of results (all false until proven otherwise
 _checks = [
-    _('Class inherits from OnTaskPluginAbstract'),
+    _('Class inherits from OnTaskTransformation or OnTaskModel'),
     _('Class has a non-empty documentation string'),
-    _('Presence of a string field with name "name"'),
-    _('Presence of a string field with name "description_txt"'),
+    _('Class has a non-empty string field with name "name"'),
+    _('Class has a string field with name "description_txt"'),
     _(
-        'Presence of a field with name "input_column_names" storing '
+        'Class has a field with name "input_column_names" storing '
         + 'a (possible empty) list of strings'),
     _(
-        'Presence of a field with name "output_column_names" storing '
+        'Class has a field with name "output_column_names" storing '
         + 'a (possibly empty) list of strings'),
     _(
-        'Presence of a (possible empty) list of tuples with name '
+        'Class has a (possible empty) list of tuples with name '
         + '"parameters". The tuples must have six '
         + 'elements: name (a string), type (one of "double", "integer", '
         + '"string", "boolean", '
@@ -53,7 +53,7 @@ _checks = [
         + 'None, and a help string to be shown when requesting this '
         + 'parameter.'),
     _(
-        'Presence of a method with name run receiving a data frame '
+        'Class has a method with name run receiving a data frame '
         + 'and a dictionary with parameters.'),
 ]
 
@@ -101,6 +101,9 @@ def _verify_plugin(pinobj):
        described by the 'type string'
        initial value: one value of the type described by 'type string'
        help text: string
+
+    8. Class has a method with name run that receives a data frame and a
+       dictionary.
 
     :param pinobj: Plugin instance
 
@@ -152,7 +155,7 @@ def _verify_plugin(pinobj):
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if pinobj.output_column_names and isinstance(
+        if pinobj.output_column_names is not None and isinstance(
             pinobj.output_column_names, list
         ) and all(
             isinstance(cname, str)
@@ -317,25 +320,19 @@ def refresh_plugin_data(request, workflow):
 
     # Travers the list of registered plugins and detect changes
     for rpin in reg_plugins:
-        if rpin.filename not in pfolders:
+        i_file = os.path.join(plugin_folder, rpin.filename, '__init__.py')
+        if rpin.filename not in pfolders or not os.path.exists(i_file):
             # A plugin has vanished. Delete
-
             # Log the event
             Log.objects.register(
                 request.user,
                 Log.PLUGIN_DELETE,
                 workflow,
                 {'id': rpin.id, 'name': rpin.filename})
-
             rpin.delete()
             continue
 
-        if os.stat(os.path.join(
-            plugin_folder,
-            rpin.filename,
-            '__init__.py')).st_mtime > time.mktime(
-            rpin.modified.timetuple(),
-        ):
+        if os.stat(i_file).st_mtime > time.mktime(rpin.modified.timetuple()):
             # A plugin has changed
             _load_plugin_info(rpin.filename, rpin)
 
