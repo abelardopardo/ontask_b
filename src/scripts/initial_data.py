@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-from builtins import str
 import codecs
 import csv
 import getopt
 import os
 import shlex
 import sys
+from builtins import str
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 
 ___doc___ = """Script to create users. Execute without parameters for help"""
+
 
 def get_column_value_list(filenames, column_name, debug=False):
     """
@@ -95,7 +96,7 @@ def create_users(emails, password, group=None, debug=False):
         # Get or create the user
         user, created = get_user_model().objects.get_or_create(email=email)
         if created:
-            user.name ='User Name'
+            user.name = 'User Name'
             user.set_password(password)
             user.save()
 

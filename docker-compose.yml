@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+
+  ontask_server:
+    image: ontask_server:development
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./docker/server/Dockerfile.development
+    container_name: ontask_server
+    links:
+      - ontask_postgres
+      - ontask_redis
+    depends_on:
+      - ontask_postgres
+      - ontask_redis
+    # Needed to get the DATABASE URL (Used in docker-entrypoint)
+    env_file: ./src/ontask/settings/docker_dev.env
+    environment:
+      # OnTask configuration is on a separate env file (different REDIS, DATABASE)
+      - ENV_FILENAME=docker_dev.env
+      # Needed for Celery
+      - C_FORCE_ROOT=true
+    ports:
+      # Server will be available in port 8080 on host machine
+      - "8080:80"
+    expose:
+      - "80"
+
+  ontask_celery:
+    restart: always
+    image: ontask_celery:development
+    build:
+      context: ./
+      dockerfile: ./docker/worker/Dockerfile.development
+    container_name: ontask_celery
+    links:
+      - ontask_postgres
+      - ontask_redis
+    depends_on:
+      - ontask_server
+      - ontask_postgres
+      - ontask_redis
+    environment:
+      # OnTask configuration is on a separate env file (different REDIS, DATABASE)
+      - ENV_FILENAME=docker_dev.env
+      # Needed for Celery
+      - C_FORCE_ROOT=true
+
+  ontask_postgres:
+    restart: always
+    image: postgres:latest
+    container_name: ontask_postgres
+    volumes:
+      - ./docker/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+    env_file: ./src/ontask/settings/docker_dev.env
+
+  ontask_redis:
+    restart: always
+    image: redis:latest
+    container_name: ontask_redis
+
+volumes:
+  pgdata:

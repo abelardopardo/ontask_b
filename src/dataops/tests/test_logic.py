@@ -4,16 +4,18 @@
 import datetime
 import io
 import os
+import test
 
 import pandas as pd
 from django.conf import settings
 
-import test
 from action.models import Action
-from dataops import pandas_db
-from dataops.formula_evaluation import evaluate, NodeEvaluation
-from dataops.ops import perform_dataframe_upload_merge
-from dataops.pandas_db import get_filter_query, load_from_db, get_table_cursor
+from dataops.forms.upload import load_df_from_csvfile
+from dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
+from dataops.pandas import (
+    get_subframe, load_table, perform_dataframe_upload_merge, store_table,
+)
+from dataops.sql import get_rows
 from workflow.models import Workflow
 
 
@@ -61,10 +63,6 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
         super().__init__(*args, **kwargs)
         self.workflow = None
 
-    def setUp(self):
-        super().setUp()
-        pandas_db.pg_restore_table(self.filename)
-
     def tearDown(self):
         test.delete_all_tables()
         super().tearDown()
@@ -74,17 +72,18 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
 
         if self.workflow:
             # Get the workflow data frame
-            df_dst = load_from_db(self.workflow.get_data_frame_table_name())
+            df_dst = load_table(self.workflow.get_data_frame_table_name())
         else:
-            df_dst = pandas_db.load_df_from_csvfile(
+            df_dst = load_df_from_csvfile(
                 io.StringIO(self.csv1),
                 0,
                 0
             )
 
-        df_src = pandas_db.load_df_from_csvfile(io.StringIO(self.csv2),
-                                                0,
-                                                0)
+        df_src = load_df_from_csvfile(
+            io.StringIO(self.csv2),
+            0,
+            0)
 
         # Fix the merge_info fields.
         self.merge_info['initial_column_names'] = list(df_src.columns)
@@ -96,16 +95,18 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
     def test_df_equivalent_after_sql(self):
 
         # Parse the CSV
-        df_source = pandas_db.load_df_from_csvfile(io.StringIO(self.csv1),
-                                                   0,
-                                                   0)
+        df_source = load_df_from_csvfile(
+            io.StringIO(self.csv1),
+            0,
+            0)
 
         # Store the DF in the DB
-        pandas_db.store_table(df_source, self.table_name)
+        store_table(df_source, self.table_name)
 
         # Load it from the DB
-        df_dst = pandas_db.load_table(self.table_name)
-
+        df_dst = load_table(self.table_name)
+        df_dst['date1'] = df_dst['date1'].dt.tz_convert('Australia/Adelaide')
+        df_dst['date2'] = df_dst['date2'].dt.tz_convert('Australia/Adelaide')
         # Data frames mut be identical
         assert df_source.equals(df_dst)
 
@@ -119,13 +120,14 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
 
         self.merge_info['how_merge'] = 'inner'
 
-        result = perform_dataframe_upload_merge(self.workflow,
-                                                df_dst,
-                                                df_src,
-                                                self.merge_info)
+        result = perform_dataframe_upload_merge(
+            self.workflow,
+            df_dst,
+            df_src,
+            self.merge_info)
 
         # Load again the workflow data frame
-        df_dst = load_from_db(self.workflow.get_data_frame_table_name())
+        df_dst = load_table(self.workflow.get_data_frame_table_name())
 
         # Result must be correct (None)
         self.assertEquals(result, None)
@@ -162,27 +164,27 @@ class FormulaEvaluation(test.OnTaskTestCase):
         return self.skel
 
     def do_operand(self,
-                   input_value,
-                   op_value,
-                   type_value,
-                   value1,
-                   value2,
-                   value3):
+        input_value,
+        op_value,
+        type_value,
+        value1,
+        value2,
+        value3):
 
-        result1 = evaluate(
+        result1 = evaluate_formula(
             self.set_skel(input_value,
-                          op_value.format(''),
-                          type_value,
-                          value1),
-            NodeEvaluation.EVAL_EXP,
+                op_value.format(''),
+                type_value,
+                value1),
+            EVAL_EXP,
             {'variable': value2}
         )
-        result2 = evaluate(
+        result2 = evaluate_formula(
             self.set_skel(input_value,
-                          op_value.format(''),
-                          type_value,
-                          value1),
-            NodeEvaluation.EVAL_EXP,
+                op_value.format(''),
+                type_value,
+                value1),
+            EVAL_EXP,
             {'variable': value3}
         )
 
@@ -196,20 +198,20 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.assertFalse(result2)
 
         if op_value.find('{0}') != -1:
-            result1 = evaluate(
+            result1 = evaluate_formula(
                 self.set_skel(input_value,
-                              op_value.format('not_'),
-                              type_value,
-                              value1),
-                NodeEvaluation.EVAL_EXP,
+                    op_value.format('not_'),
+                    type_value,
+                    value1),
+                EVAL_EXP,
                 {'variable': value2}
             )
-            result2 = evaluate(
+            result2 = evaluate_formula(
                 self.set_skel(input_value,
-                              op_value.format('not_'),
-                              type_value,
-                              value1),
-                NodeEvaluation.EVAL_EXP,
+                    op_value.format('not_'),
+                    type_value,
+                    value1),
+                EVAL_EXP,
                 {'variable': value3}
             )
 
@@ -221,22 +223,38 @@ class FormulaEvaluation(test.OnTaskTestCase):
                 # If value2 is None, then all formulas should be false
                 self.assertFalse(result2)
 
-    def do_sql_operand(self,
-                       input_value,
-                       op_value,
-                       type_value,
-                       value):
+    def do_sql_txt_operand(
+        self,
+        input_value,
+        op_value,
+        type_value,
+        value,
+        row_yes=1,
+        row_no=1
+    ):
+
         self.set_skel(
             input_value,
             op_value.format(''),
             type_value,
             value, 'v_' + type_value
         )
-        query, fields = get_filter_query(self.test_table,
-                                         self.test_columns,
-                                         self.skel)
-        result = pd.read_sql_query(query, pandas_db.engine, params=fields)
-        self.assertEqual(len(result), 1)
+        data_frame = load_table(self.test_table, self.test_columns, self.skel)
+        self.assertEqual(data_frame.shape[0], row_yes)
+        evaluate_formula(self.skel, EVAL_TXT)
+
+        if op_value.find('{0}') != -1:
+            self.set_skel(
+                input_value,
+                op_value.format('not_'),
+                type_value,
+                value, 'v_' + type_value
+            )
+            data_frame = load_table(self.test_table, self.test_columns,
+                self.skel)
+            self.assertEqual(data_frame.shape[0], row_no)
+            evaluate_formula(self.skel, EVAL_TXT)
+
 
     def test_eval_node(self):
         #
@@ -253,47 +271,47 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('text', '{0}equal', 'boolean', False, False, True)
         self.do_operand('text', '{0}equal', 'boolean', False, None, None)
         self.do_operand('text',
-                        '{0}equal',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        datetime.datetime(2018, 9, 15, 0, 3, 3),
-                        datetime.datetime(2018, 9, 15, 0, 3, 4))
+            '{0}equal',
+            'datetime',
+            '2018-09-15T00:03:03',
+            datetime.datetime(2018, 9, 15, 0, 3, 3),
+            datetime.datetime(2018, 9, 15, 0, 3, 4))
         self.do_operand('text',
-                        '{0}equal',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        None,
-                        None)
+            '{0}equal',
+            'datetime',
+            '2018-09-15T00:03:03',
+            None,
+            None)
 
         #
         # BEGINS WITH
         #
         self.do_operand('text',
-                        '{0}begins_with',
-                        'string', 'ab', 'abcd', 'acd')
+            '{0}begins_with',
+            'string', 'ab', 'abcd', 'acd')
         self.do_operand('text',
-                        '{0}begins_with',
-                        'string', 'ab', None, None)
+            '{0}begins_with',
+            'string', 'ab', None, None)
 
         #
         # CONTAINS
         #
         self.do_operand('text',
-                        '{0}contains',
-                        'string', 'bc', 'abcd', 'acd')
+            '{0}contains',
+            'string', 'bc', 'abcd', 'acd')
         self.do_operand('text',
-                        '{0}contains',
-                        'string', 'bc', None, None)
+            '{0}contains',
+            'string', 'bc', None, None)
 
         #
         # ENDS WITH
         #
         self.do_operand('text',
-                        '{0}ends_with',
-                        'string', 'cd', 'abcd', 'abc')
+            '{0}ends_with',
+            'string', 'cd', 'abcd', 'abc')
         self.do_operand('text',
-                        '{0}ends_with',
-                        'string', 'cd', None, None)
+            '{0}ends_with',
+            'string', 'cd', None, None)
 
         #
         # IS EMPTY
@@ -309,17 +327,17 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', 'less', 'double', '1.2', 0.2, 3.2)
         self.do_operand('number', 'less', 'double', '1.2', None, None)
         self.do_operand('text',
-                        'less',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        datetime.datetime(2018, 9, 15, 0, 3, 2),
-                        datetime.datetime(2018, 9, 15, 0, 3, 4))
+            'less',
+            'datetime',
+            '2018-09-15T00:03:03',
+            datetime.datetime(2018, 9, 15, 0, 3, 2),
+            datetime.datetime(2018, 9, 15, 0, 3, 4))
         self.do_operand('text',
-                        'less',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        None,
-                        None)
+            'less',
+            'datetime',
+            '2018-09-15T00:03:03',
+            None,
+            None)
 
         #
         # LESS OR EQUAL
@@ -331,23 +349,23 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', 'less_or_equal', 'double', '1.2', 1.2, 3.2)
         self.do_operand('number', 'less_or_equal', 'double', '1.2', None, None)
         self.do_operand('text',
-                        'less_or_equal',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        datetime.datetime(2018, 9, 15, 0, 3, 2),
-                        datetime.datetime(2018, 9, 15, 0, 3, 4))
+            'less_or_equal',
+            'datetime',
+            '2018-09-15T00:03:03',
+            datetime.datetime(2018, 9, 15, 0, 3, 2),
+            datetime.datetime(2018, 9, 15, 0, 3, 4))
         self.do_operand('text',
-                        'less_or_equal',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        datetime.datetime(2018, 9, 15, 0, 3, 3),
-                        datetime.datetime(2018, 9, 15, 0, 3, 4))
+            'less_or_equal',
+            'datetime',
+            '2018-09-15T00:03:03',
+            datetime.datetime(2018, 9, 15, 0, 3, 3),
+            datetime.datetime(2018, 9, 15, 0, 3, 4))
         self.do_operand('text',
-                        'less_or_equal',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        None,
-                        None)
+            'less_or_equal',
+            'datetime',
+            '2018-09-15T00:03:03',
+            None,
+            None)
 
         #
         # GREATER
@@ -357,17 +375,17 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', 'greater', 'double', '1.2', 3.2, 0.2)
         self.do_operand('number', 'greater', 'double', '1.2', None, None)
         self.do_operand('text',
-                        'greater',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        datetime.datetime(2018, 9, 15, 0, 3, 4),
-                        datetime.datetime(2018, 9, 15, 0, 3, 2))
+            'greater',
+            'datetime',
+            '2018-09-15T00:03:03',
+            datetime.datetime(2018, 9, 15, 0, 3, 4),
+            datetime.datetime(2018, 9, 15, 0, 3, 2))
         self.do_operand('text',
-                        'greater',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        None,
-                        None)
+            'greater',
+            'datetime',
+            '2018-09-15T00:03:03',
+            None,
+            None)
 
         #
         # GREATER OR EQUAL
@@ -375,74 +393,76 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', 'greater_or_equal', 'integer', '1', 3, 0)
         self.do_operand('number', 'greater_or_equal', 'integer', '1', 1, 0)
         self.do_operand('number',
-                        'greater_or_equal',
-                        'integer',
-                        '1',
-                        None,
-                        None)
-        self.do_operand('number', 'greater_or_equal', 'double', '1.2', 3.2, 0.2)
-        self.do_operand('number', 'greater_or_equal', 'double', '1.2', 1.2, 0.2)
+            'greater_or_equal',
+            'integer',
+            '1',
+            None,
+            None)
+        self.do_operand('number', 'greater_or_equal',
+            'double', '1.2', 3.2, 0.2)
+        self.do_operand('number', 'greater_or_equal',
+            'double', '1.2', 1.2, 0.2)
         self.do_operand('number',
-                        'greater_or_equal',
-                        'double',
-                        '1.2',
-                        None,
-                        None)
+            'greater_or_equal',
+            'double',
+            '1.2',
+            None,
+            None)
         self.do_operand('text',
-                        'greater_or_equal',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        datetime.datetime(2018, 9, 15, 0, 3, 4),
-                        datetime.datetime(2018, 9, 15, 0, 3, 2))
+            'greater_or_equal',
+            'datetime',
+            '2018-09-15T00:03:03',
+            datetime.datetime(2018, 9, 15, 0, 3, 4),
+            datetime.datetime(2018, 9, 15, 0, 3, 2))
         self.do_operand('text',
-                        'greater_or_equal',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        datetime.datetime(2018, 9, 15, 0, 3, 3),
-                        datetime.datetime(2018, 9, 15, 0, 3, 2))
+            'greater_or_equal',
+            'datetime',
+            '2018-09-15T00:03:03',
+            datetime.datetime(2018, 9, 15, 0, 3, 3),
+            datetime.datetime(2018, 9, 15, 0, 3, 2))
         self.do_operand('text',
-                        'greater_or_equal',
-                        'datetime',
-                        '2018-09-15T00:03:03',
-                        None,
-                        None)
+            'greater_or_equal',
+            'datetime',
+            '2018-09-15T00:03:03',
+            None,
+            None)
 
         #
         # In Between (needs special function)
         #
         self.do_operand('number', '{0}between', 'integer', ['1', '4'], 2, 5)
         self.do_operand('number',
-                        '{0}between',
-                        'integer',
-                        ['1', '4'],
-                        None,
-                        None)
+            '{0}between',
+            'integer',
+            ['1', '4'],
+            None,
+            None)
         self.do_operand('number',
-                        '{0}between',
-                        'double',
-                        ['1.0',
-                         '4.0'],
-                        2.0,
-                        5.0)
+            '{0}between',
+            'double',
+            ['1.0',
+             '4.0'],
+            2.0,
+            5.0)
         self.do_operand('number',
-                        '{0}between',
-                        'double',
-                        ['1.0',
-                         '4.0'],
-                        None,
-                        None)
+            '{0}between',
+            'double',
+            ['1.0',
+             '4.0'],
+            None,
+            None)
         self.do_operand('text',
-                        '{0}between',
-                        'datetime',
-                        ['2018-09-15T00:03:03', '2018-09-15T00:04:03'],
-                        datetime.datetime(2018, 9, 15, 0, 3, 30),
-                        datetime.datetime(2018, 9, 15, 0, 4, 30))
+            '{0}between',
+            'datetime',
+            ['2018-09-15T00:03:03', '2018-09-15T00:04:03'],
+            datetime.datetime(2018, 9, 15, 0, 3, 30),
+            datetime.datetime(2018, 9, 15, 0, 4, 30))
         self.do_operand('text',
-                        '{0}between',
-                        'datetime',
-                        ['2018-09-15T00:03:03', '2018-09-15T00:04:03'],
-                        None,
-                        None)
+            '{0}between',
+            'datetime',
+            ['2018-09-15T00:03:03', '2018-09-15T00:04:03'],
+            None,
+            None)
 
         #
         # IS NULL
@@ -453,11 +473,11 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('text', 'is_{0}null', 'boolean', None, None, True)
         self.do_operand('text', 'is_{0}null', 'boolean', None, None, False)
         self.do_operand('text',
-                        'is_{0}null',
-                        'datetime',
-                        None,
-                        None,
-                        datetime.datetime(2018, 9, 15, 0, 3, 4))
+            'is_{0}null',
+            'datetime',
+            None,
+            None,
+            datetime.datetime(2018, 9, 15, 0, 3, 4))
 
     def test_eval_sql(self):
 
@@ -468,106 +488,122 @@ class FormulaEvaluation(test.OnTaskTestCase):
             columns=self.test_columns)
 
         # Store the data frame
-        pandas_db.store_table(df, 'TEST_TABLE')
+        store_table(df, 'TEST_TABLE')
 
         #
         # EQUAL
         #
-        self.do_sql_operand('number', '{0}equal', 'integer', '1')
-        self.do_sql_operand('number', '{0}equal', 'double', '2.0')
-        self.do_sql_operand('number', '{0}equal', 'boolean', 1)
-        self.do_sql_operand('text', '{0}equal', 'string', 'xxx')
-        self.do_sql_operand('text',
-                            '{0}equal',
-                            'datetime',
-                            '2018-01-01T00:00:00')
+        self.do_sql_txt_operand('number', '{0}equal', 'integer', '1')
+        self.do_sql_txt_operand('number', '{0}equal', 'double', '2.0')
+        self.do_sql_txt_operand('number', '{0}equal', 'boolean', 1)
+        self.do_sql_txt_operand('text', '{0}equal', 'string', 'xxx')
+        self.do_sql_txt_operand('text',
+            '{0}equal',
+            'datetime',
+            '2018-01-01T00:00:00')
 
         #
         # BEGINS WITH
         #
-        self.do_sql_operand('text',
-                            '{0}begins_with',
-                            'string',
-                            'x')
+        self.do_sql_txt_operand('text',
+            '{0}begins_with',
+            'string',
+            'x')
 
         #
         # CONTAINS
         #
-        self.do_sql_operand('text',
-                            '{0}contains',
-                            'string',
-                            'xx')
+        self.do_sql_txt_operand('text',
+            '{0}contains',
+            'string',
+            'xx')
         #
         # ENDS WITH
         #
-        self.do_sql_operand('text',
-                            '{0}ends_with',
-                            'string',
-                            'xx')
+        self.do_sql_txt_operand('text',
+            '{0}ends_with',
+            'string',
+            'xx')
 
         #
         # IS EMPTY
         #
-        self.do_sql_operand('text', 'is_{0}empty', 'string', None)
+        self.do_sql_txt_operand('text', 'is_{0}empty', 'string', None)
 
         #
         # IS NULL
         #
-        self.do_sql_operand('number', 'is_{0}null', 'integer', None)
-        self.do_sql_operand('number', 'is_{0}null', 'double', None)
-        self.do_sql_operand('number', 'is_{0}null', 'boolean', None)
-        self.do_sql_operand('text', 'is_{0}null', 'string', None)
-        self.do_sql_operand('text', 'is_{0}null', 'datetime', None)
+        self.do_sql_txt_operand('number', 'is_{0}null', 'integer', None)
+        self.do_sql_txt_operand('number', 'is_{0}null', 'double', None)
+        self.do_sql_txt_operand('number', 'is_{0}null', 'boolean', None)
+        self.do_sql_txt_operand('text', 'is_{0}null', 'string', None)
+        self.do_sql_txt_operand('text', 'is_{0}null', 'datetime', None)
 
         #
         # LESS
         #
-        self.do_sql_operand('number', 'less', 'integer', '2')
-        self.do_sql_operand('number', 'less', 'double', '3.2')
-        self.do_sql_operand('text',
-                            'less',
-                            'datetime',
-                            '2018-01-02T00:00:00')
+        self.do_sql_txt_operand('number', 'less', 'integer', '2')
+        self.do_sql_txt_operand('number', 'less', 'double', '3.2')
+        self.do_sql_txt_operand('text',
+            'less',
+            'datetime',
+            '2018-01-02T00:00:00')
 
         #
         # LESS OR EQUAL
         #
-        self.do_sql_operand('number', 'less_or_equal', 'integer', '1')
-        self.do_sql_operand('number', 'less_or_equal', 'double', '2.0')
-        self.do_sql_operand('text',
-                            'less_or_equal',
-                            'datetime',
-                            '2018-01-01T00:00:00')
+        self.do_sql_txt_operand('number', 'less_or_equal', 'integer', '1')
+        self.do_sql_txt_operand('number', 'less_or_equal', 'double', '2.0')
+        self.do_sql_txt_operand('text',
+            'less_or_equal',
+            'datetime',
+            '2018-01-01T00:00:00')
 
         #
         # GREATER
         #
-        self.do_sql_operand('number', 'greater', 'integer', '0')
-        self.do_sql_operand('number', 'greater', 'double', '1.2')
-        self.do_sql_operand('text',
-                            'greater',
-                            'datetime',
-                            '2017-01-01T00:00:00')
+        self.do_sql_txt_operand('number', 'greater', 'integer', '0')
+        self.do_sql_txt_operand('number', 'greater', 'double', '1.2')
+        self.do_sql_txt_operand('text',
+            'greater',
+            'datetime',
+            '2017-01-01T00:00:00')
 
         #
         # GREATER OR EQUAL
         #
-        self.do_sql_operand('number', 'greater_or_equal', 'integer', '1')
-        self.do_sql_operand('number', 'greater_or_equal', 'double', '2.0')
-        self.do_sql_operand('text',
-                            'greater_or_equal',
-                            'datetime',
-                            '2018-01-01T00:00:00')
+        self.do_sql_txt_operand('number', 'greater_or_equal', 'integer', '1')
+        self.do_sql_txt_operand('number', 'greater_or_equal', 'double', '2.0')
+        self.do_sql_txt_operand('text',
+            'greater_or_equal',
+            'datetime',
+            '2018-01-01T00:00:00')
 
         #
         # BETWEEN
         #
-        self.do_sql_operand('number', '{0}between', 'integer', ['0', '2'])
-        self.do_sql_operand('number', '{0}between', 'double', ['1.2', '2.2'])
-        self.do_sql_operand('text',
-                            '{0}between',
-                            'datetime', ['2017-01-01T00:00:00',
-                                         '2018-09-13T00:00:00'])
+        self.do_sql_txt_operand(
+            'number',
+            '{0}between',
+            'integer',
+            ['0', '2'],
+            1,
+            0)
+        self.do_sql_txt_operand(
+            'number',
+            '{0}between',
+            'double',
+            ['1.2', '2.2'],
+            1,
+            0
+        )
+        self.do_sql_txt_operand(
+            'text',
+            '{0}between',
+            'datetime',
+            ['2017-01-01T00:00:00', '2018-09-13T00:00:00'],
+            1,
+            0)
 
 
 class ConditionSetEvaluation(test.OnTaskTestCase):
@@ -585,7 +621,7 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -597,29 +633,35 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
 
         # Get wflow table, filter and column names
         wflow_table = self.action.workflow.get_data_frame_table_name()
-        cond_filter = self.action.get_filter()
+        filter_formula = self.action.get_filter_formula()
         column_names = self.action.workflow.get_column_names()
         conditions = self.action.conditions.filter(is_filter=False)
 
         # Get dataframe
-        df = pandas_db.get_subframe(wflow_table, cond_filter, column_names)
+        df = get_subframe(
+            wflow_table,
+            filter_formula,
+            column_names)
 
         # Get the query set
-        qs = get_table_cursor(wflow_table, cond_filter, column_names)
+        qs = get_rows(
+            wflow_table,
+            column_names=column_names,
+            filter_formula=filter_formula)
 
         # Iterate over the rows in the dataframe and compare
         for idx, row in enumerate(qs):
             row_value_df = dict(list(zip(column_names, df.loc[idx, :])))
             row_value_qs = dict(list(zip(column_names, row)))
 
-            cond_eval1 = [evaluate(x.formula,
-                                   NodeEvaluation.EVAL_EXP,
-                                   row_value_df)
+            cond_eval1 = [evaluate_formula(x.formula,
+                EVAL_EXP,
+                row_value_df)
                           for x in conditions]
 
-            cond_eval2 = [evaluate(x.formula,
-                                   NodeEvaluation.EVAL_EXP,
-                                   row_value_qs)
+            cond_eval2 = [evaluate_formula(x.formula,
+                EVAL_EXP,
+                row_value_qs)
                           for x in conditions]
 
             assert cond_eval1 == cond_eval2

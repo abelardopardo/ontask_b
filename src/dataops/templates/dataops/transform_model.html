@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Transform' %}{% endblock %}
+{% block extrahead %}
+  {% ontask_datatables_bootstrap_css %}
+{% endblock extrahead %}
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
+  <script type="text/javascript">
+    if (document.getElementById("transform-table") != null) {
+      $(document).ready(function() {
+        var transform_table = $('#transform-table').DataTable({
+          "autoWidth": false,
+          "search": {
+            "caseInsensitive": true,
+          },
+          stateSave: true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
+          "language": {
+            "url": location.protocol + getLanguage()
+          },
+          "columnDefs": [
+            {"className": "dt-center", "targets": [0, 2]},
+          ],
+          colReorder: false,
+          rowReorder: false,
+        });
+      })
+    };
+  </script>
+{% endblock %}
+{% block container %}
+  <div class="container">
+    {% if request.user.is_superuser and table_err %}
+      <h1 class="text-center">{% trans 'Folders with incorrect plugins' %}</h1>
+      <div class="justify-content-center" id="div-incorrect-plugins">
+        <table class="table table-hover table-bordered shadow" id="incorrect-plugins">
+          <thead>
+            <tr>
+              <th class="text-center">{% trans 'Folder' %}</th>
+              <th class="text-center">{% trans 'Diagnostics' %}</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for err_item in table_err %}
+            <tr>
+              <td class="text-center">{{ err_item.filename }}</td>
+              <td class="text-center">
+                <button type="button"
+                        class="shadow btn btn-outline-danger js-transform-diagnose"
+                        data-url="{% url 'dataops:plugin_diagnose' err_item.id %}"
+                        data-toggle="tooltip"
+                        title="{% trans 'Show diagnostics for this plugin' %}">
+                  <span class="fa fa fa-eye"></span> {% trans 'Diagnose' %}
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+    {% if is_model %}
+      <h1 class="text-center">{% trans 'Models' %}</h1>
+      <div class="text-center">
+        <a href="{% url 'dataops:transform' %}"
+           class="shadow btn btn-outline-dark spin"
+           data-toggle="tooltip" data-container="body"
+           title="{% trans 'Apply a transformation to the data' %}">
+          {% trans 'Transformations' %}</a>
+      </div>
+    {% else %}
+      <h1 class="text-center">{% trans 'Transformations' %}</h1>
+      <div class="text-center">
+        <a href="{% url 'dataops:model' %}"
+           class="shadow btn btn-outline-dark spin"
+           data-toggle="tooltip" data-container="body"
+           title="{% trans 'Execute a model with the existing data' %}">
+          {% trans 'Models' %}</a>
+      </div>
+    {% endif %}
+    <div class="justify-content-center" id="transform-selection">
+      {% render_table table %}
+    </div>
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}

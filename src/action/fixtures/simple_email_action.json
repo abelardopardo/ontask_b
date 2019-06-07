@@ -657,7 +657,7 @@
     "fields": {
         "slug": "3776b8ea-cbd4-4aab-8a70-494783f846ad",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -667,7 +667,7 @@
     "fields": {
         "slug": "bdbe4470-8a73-414d-b275-685164f220c6",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -677,7 +677,7 @@
     "fields": {
         "slug": "72f9a2b0-9b1f-4645-bc04-9325e8acc27d",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -687,7 +687,7 @@
     "fields": {
         "slug": "d10eef1a-ec45-4aa6-8eaa-ca24c76068bc",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -697,7 +697,7 @@
     "fields": {
         "slug": "58299c5f-a3b8-4d83-ae96-893661d266a5",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -707,7 +707,7 @@
     "fields": {
         "slug": "5037472b-81e3-4e76-906c-32d7cf148c43",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -717,7 +717,7 @@
     "fields": {
         "slug": "1d012d44-3e00-45d6-9731-a08f705fc64f",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -727,7 +727,7 @@
     "fields": {
         "slug": "b796849b-7af2-4b00-bfd9-41ac89f878f3",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -737,7 +737,7 @@
     "fields": {
         "slug": "d08dfd91-baec-4802-bb90-903ebc6e4812",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -747,7 +747,7 @@
     "fields": {
         "slug": "94108abd-a6c2-45ef-8230-4e09f870b9eb",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -757,7 +757,7 @@
     "fields": {
         "slug": "08c8e939-50ed-4a95-ae3d-59a1ce8de76d",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -767,7 +767,7 @@
     "fields": {
         "slug": "d8641eaf-aa99-408c-919f-fbae17dbbb8c",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -777,7 +777,7 @@
     "fields": {
         "slug": "f1efa3e0-8b8f-432d-80bf-5c3542f00897",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -787,7 +787,7 @@
     "fields": {
         "slug": "a7f78652-0138-46ec-8842-2b2f3efb4541",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -797,7 +797,7 @@
     "fields": {
         "slug": "75b111eb-12d5-42fd-98e9-23affd742d2b",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -807,7 +807,7 @@
     "fields": {
         "slug": "5f658fc8-c027-4a72-981c-6714771952ad",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -817,7 +817,7 @@
     "fields": {
         "slug": "9ae138b7-0bb3-4c2d-a334-769fde87887f",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -827,7 +827,7 @@
     "fields": {
         "slug": "c2236506-72a2-499e-b2c5-22ded8a6d509",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -837,7 +837,7 @@
     "fields": {
         "slug": "81acf660-8478-456d-89d5-aa14de731716",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -847,7 +847,7 @@
     "fields": {
         "slug": "99dabcc6-2613-4e6b-8ae1-1b8f2aee9f5a",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -1073,7 +1073,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
+        "text_content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
         "target_url": "",
         "shuffle": false
     }

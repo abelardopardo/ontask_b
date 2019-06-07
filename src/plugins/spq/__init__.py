@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 import random
-
-import pandas as pd
 from builtins import str
 
-# The field class_name contains the name of the class to load to execute the
-# plugin.
+import pandas as pd
+
+from dataops.plugin import OnTaskTransformation
+
 class_name = 'SPQEvaluate'
 
 
@@ -47,14 +46,37 @@ def spq_encode(answers):
             ss_val / len(ss_idx))
 
 
-class SPQEvaluate(object):
+class SPQEvaluate(OnTaskTransformation):
     """
-    Plugin to process the results of the SPQ test.
+    Plugin to encode the results of the SPQ test.
 
-    The possible input values are given as the param answer_list
+    Biggs, J., Kember, D., & Leung, D. Y. P. (2001). The revised two-factor
+    Study Process Questionnaire: R-SPQ-2F. British Journal of Educational
+    Psychology, 71(1), 133-149. doi:10.1348/000709901158433
+
+    It requires 20 columns with the answers to the questions and produces
+    six result columns with the DA, SA, DM, SM, DS, and SS variables:
+
+    - DA: Deep approach,
+    - SA: Surface approach,
+    - DM: Deep motive,
+    - SM: Surface motive,
+    - DS: Deep strategy,
+    - SS: Surface strategy
+
+    The input columns assume one of the following five values:
+
+    'Slightly true of me,'
+    'Moderately true of me,'
+    'Always true of me,'
+    'Never true of me,'
+    'Frequently true of me'
     """
 
     def __init__(self):
+
+        super().__init__()
+
         self.name = 'SPQ Score calculation'
         self.description_txt = """Plugin to calculate the scores of SPQ
         The names of the columns must be SPQ_Q01 to SPQ_Q44."""
@@ -79,22 +101,18 @@ class SPQEvaluate(object):
              'Comma-separated list of possible answer values')
         ]
 
-    def run(self, data_frame, merge_key, parameters=dict):
+    def run(self, data_frame, parameters=dict):
         """
         Runs the algorithm and returns a pandas data frame structure that is
-        merged with the existing data frame in the workflow using the merge_key.
+        merged with the existing data frame in the workflow 
 
         :param data_frame: Input data for the plugin
-        :param merge_key: Name of the column key that will be used for merging
         :param parameters: Dictionary with (name, value) pairs.
 
-        :return: a Pandas data_frame to merge with the existing one (must
-        contain a column with name merge_key)
+        :return: a Pandas data_frame to merge with the existing one 
         """
 
-        # Extract the key column from the given data frame
-        result = pd.DataFrame(data_frame[merge_key])
-        alist = parameters.get('answer_list', None)
+        alist = parameters.get('answer_list')
 
         if not alist:
             raise Exception('Required parameter "answer_list" not found.')
@@ -115,14 +133,8 @@ class SPQEvaluate(object):
                 [answer_values.index(x) + 1
                  for x in data_frame['SPQ_Q{:02}'.format(qidx)]]
 
-        result = pd.concat([result,
-                            pd.DataFrame(
-                                [spq_encode(x) for __, x in new_df.iterrows()],
-                                columns=self.output_column_names
-                            )],
-                           axis=1
-                           )
-        return result
+        return pd.DataFrame([spq_encode(x) for __, x in new_df.iterrows()],
+                            columns=self.output_column_names)
 
 
 def main():

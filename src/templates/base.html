@@ -39,6 +39,7 @@
         {% endcache %}
       {% endblock %}
       {% block navbar-menu %}
+
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +56,7 @@
                 </li>
               {% endif %}
               {% if request.session.ontask_workflow_id %}
-                {% url 'workflow:detail' request.session.ontask_workflow_id as workflow_detail %}
+                {% url 'workflow:detail' as workflow_detail %}
                 {% url 'workflow:operations' as workflow_ops %}
                 <li class="nav-item">
                   <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}"
@@ -63,14 +64,43 @@
                      data-toggle="tooltip" title="{% trans 'Messages and Surveys' %}">
                     <span class="fa fa-comments"></span> {% trans 'Actions' %}</a>
                 </li>
-                <li class="nav-item"><a
-                    class="nav-link spin{% if '/table/' in request.path or '/dataops' in request.path %} active{% endif %}"
-                    href="{% url 'table:display' %}"  id="ontask-base-table"
-                    data-toggle="tooltip" title="{% trans 'Data Table' %}">
-                  <span class="fa fa-table"></span> {% trans 'Table' %}</a>
+                <li class="nav-item dropdown">
+                  <a href="#"  class="nav-link dropdown-toggle{% if '/table/' in request.path or '/dataops' in request.path %} active{% endif %}"
+                    id="ontask-base-table" data-toggle="dropdown">
+                    <span class="fa fa-table"></span> {% trans 'Table' %}
+                  </a>
+                  <div class="shadow dropdown-menu" aria-labelledby="ontask-base-table">
+                    <a href="{% url 'table:display' %}"
+                       class="btn dropdown-item spin{% if not request.session.ontask_workflow_rows %} disabled{% endif %}"
+                       data-toggle="tooltip"
+                       title="{% trans 'View the complete table' %}">
+                      {% trans 'Full view' %}</a>
+                    <a href="{% url 'dataops:uploadmerge' %}"
+                       class="btn dropdown-item spin"
+                       data-toggle="tooltip"
+                       title="{% trans 'Upload or merge data into the workflow table' %}">
+                      {% trans 'Upload or merge data' %}</a>
+                    <a href="{% url 'dataops:transform' %}"
+                       class="btn dropdown-item spin"
+                       data-toggle="tooltip" data-container="body"
+                       title="{% trans 'Apply a transformation to the data' %}">
+                      {% trans 'Run Transformation' %}</a>
+                    <a href="{% url 'dataops:model' %}"
+                       class="btn dropdown-item spin"
+                       data-toggle="tooltip" data-container="body"
+                       title="{% trans 'Execute a model with the existing data' %}">
+                      {% trans 'Run Model' %}</a>
+                    <button type="button"
+                      class="dropdown-item js-workflow-flush{% if not request.session.ontask_workflow_rows %} disabled{% endif %}"
+                      data-url="{% url 'workflow:flush' request.session.ontask_workflow_id %}"
+                      data-toggle="tooltip"
+                      title="{% trans 'Delete the data in the table of this workflow' %}">
+                      <span class="fa fa-floppy-remove"></span> {% trans 'Flush data table' %}
+                    </button>
+                  </div>
                 </li>
                 <li class="nav-item dropdown">
-                  <a href="#" class="nav-link dropdown-toggle details-menu{% if '/logs/' in request.path or '/scheduler/' in request.path or '/detail/' in request.path or '/operations/' in request.path %} active{% endif %}"
+                  <a href="#" class="nav-link dropdown-toggle {% if '/logs/' in request.path or '/scheduler/' in request.path or '/detail/' in request.path or '/operations/' in request.path %} active{% endif %}"
                      data-toggle="dropdown" id="ontask-base-settings">
                    <span class="fa fa-cog"></span> {% trans 'More' %}
                   </a>
@@ -126,7 +156,7 @@
     </nav>
     {% endblock navbar %}
     {% if request.session.ontask_workflow_name %}
-      <div id="wflow-name" class="shadow text-center">
+      <div id="wflow-name" class="text-center">
         {{ request.session.ontask_workflow_name }}
       </div>
     {% endif %}
@@ -164,7 +194,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button"
-                        class="shadow btn btn-outline-primary">
+                        class="btn btn-outline-primary">
                   <span class="fa fa-check"></span> {% trans 'Ok' %}</button>
               </div>
             </div>

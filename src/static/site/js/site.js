@@ -34,11 +34,11 @@ var insert_fields = function (the_form) {
     }
     return true;
 };
-var get_id_content = function() {
-  if (typeof $("#id_content").summernote != "undefined") {
-    value = $("#id_content").summernote("code");
+var get_id_text_content = function() {
+  if (typeof $("#id_text_content").summernote != "undefined") {
+    value = $("#id_text_content").summernote("code");
   } else {
-    value = $("#id_content").val();
+    value = $("#id_text_content").val();
   }
   return value;
 };
@@ -61,7 +61,7 @@ var loadForm = function () {
         $("#modal-item").modal("show");
       },
       success: function(data) {
-        if (data.form_is_valid) {
+        if (typeof data.html_redirect != 'undefined') {
           if (data.html_redirect == "") {
             $("#div-spinner").show();
             window.location.reload(true);
@@ -98,8 +98,8 @@ var saveForm = function () {
       $("#id_formula").val(f_text);
     }
     var data = form.serializeArray();
-    if (document.getElementById("id_content") != null) {
-      value = get_id_content();
+    if (document.getElementById("id_text_content") != null) {
+      value = get_id_text_content();
       data.push({"name": "action_content", "value": value});
     }
     $("#modal-item .modal-content").html("");
@@ -109,12 +109,14 @@ var saveForm = function () {
       type: form.attr("method"),
       dataType: 'json',
       success: function (data) {
-        if (data.form_is_valid) {
+        if (typeof data.html_redirect != 'undefined') {
           if (data.html_redirect == "") {
             $('#div-spinner').show();
             window.location.reload(true);
-          } else {
+          } else if (data.html_redirect != null) {
             location.href = data.html_redirect;
+          } else {
+            $("#modal-item").modal('hide');
           }
         }
         else {
@@ -143,7 +145,7 @@ var assignColumn = function () {
   $('#div-spinner').show();
   $.ajax({
     url: $(this).attr('data-url'),
-    type: 'get',
+    type: 'post',
     dataType: 'json',
     success: function (data) {
       if (typeof data.html_redirect != 'undefined') {
@@ -164,17 +166,30 @@ var assignColumn = function () {
     }
   });
 }
+var select_next_button = function(e) {
+  if (e.is('input')) {
+    val = !e.is(":checked");
+  } else if (e.is('select')) {
+    val = e.val() == '';
+  } else {
+    return;
+  }
+  $("#step_sequence").prop('hidden', val);
+  $("#next-step-on").prop('hidden', val);
+  $("#next-step-off").prop('hidden', !val);
+}
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip({
     trigger: "hover",
     placement: "auto",
-    container: "body"
+    container: "body",
+    boundary: 'window',
   });
   $("body").on("click", ".spin", function () {
     $('#div-spinner').show();
   });
 });
-$(window).bind("load", function() {
+$(window).bind("pageshow", function() {
    $('#div-spinner').hide();
 });
 $(':input').on('invalid', function(e){
@@ -190,4 +205,8 @@ $('#modal-item').on('hide.bs.modal', function (e) {
 $(document).on("keyup", '.textEnable', function() {
   $(".button-enable").prop( "disabled", $(this).val() != $(this).attr('data-value'));
 });
-
+$(function () {
+  // Flush workflow
+  $(".js-workflow-flush").on("click", loadForm);
+  $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
+})

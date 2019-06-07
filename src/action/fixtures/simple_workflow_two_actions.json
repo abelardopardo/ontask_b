@@ -538,7 +538,7 @@
     "fields": {
         "slug": "f85b1b04-3d1b-4e3d-92d7-60e449c6ceeb",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -548,7 +548,7 @@
     "fields": {
         "slug": "625c9377-9fa5-4565-8076-241cc5915c3f",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -558,7 +558,7 @@
     "fields": {
         "slug": "5c5f63d2-bd40-4edf-b8ce-c942ef3f76c6",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -568,7 +568,7 @@
     "fields": {
         "slug": "6c89d4f7-f6d4-4828-939c-e3eccb1a6ca7",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -578,7 +578,7 @@
     "fields": {
         "slug": "a73d2eed-14b1-42b3-81a1-25fcc7284936",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -588,7 +588,7 @@
     "fields": {
         "slug": "61956bd8-4ab5-44ae-8d94-7a07bcf73031",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -598,7 +598,7 @@
     "fields": {
         "slug": "d181c982-d6f5-4eab-83f2-0a6f0425d3be",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -608,7 +608,7 @@
     "fields": {
         "slug": "eeecb911-f65a-4ba9-9b87-0514fa15c2a1",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -618,7 +618,7 @@
     "fields": {
         "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -628,7 +628,7 @@
     "fields": {
         "slug": "7196ba08-9652-47f9-8f1f-dbc4ee33fa35",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -800,7 +800,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
+        "text_content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
         "target_url": "",
         "shuffle": false
     }
@@ -819,7 +819,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "{% comment %}Your action content here{% endcomment %}",
+        "text_content": "{% comment %}Your action content here{% endcomment %}",
         "target_url": "",
         "shuffle": false
     }

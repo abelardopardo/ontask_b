@@ -12,9 +12,8 @@
     {{ form|crispy }}
   </div>
   <div class="modal-footer">
-    <button type="button" class="shadow btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
+    <button type="submit" class="btn btn-outline-primary">
+      <span class="fa fa-check"></span> {% trans 'Create action' %}
     </button>
-    <button type="submit" class="shadow btn btn-outline-primary">
-    <span class="fa fa-check"></span> {% trans 'Create action' %}
   </div>
 </form>

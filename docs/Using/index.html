@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>3. Using OnTask &#8212; OnTask (B.4.3.2) 1.1.0 documentation</title>
+    <title>3. Using OnTask &#8212; OnTask (B.5) 1.1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -55,22 +55,23 @@
 <div class="contents local topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#workflow" id="id10">Workflow</a></p></li>
-<li><p><a class="reference internal" href="#data" id="id11">Data</a></p>
+<li><p><a class="reference internal" href="#workflow" id="id9">Workflow</a></p></li>
+<li><p><a class="reference internal" href="#data" id="id10">Data</a></p>
 <ul>
-<li><p><a class="reference internal" href="#upload-data" id="id12">Upload Data</a></p>
+<li><p><a class="reference internal" href="#upload-data" id="id11">Upload Data</a></p>
 <ul>
-<li><p><a class="reference internal" href="#upload-csv-files" id="id13">Upload CSV Files</a></p></li>
-<li><p><a class="reference internal" href="#upload-excel-files" id="id14">Upload Excel Files</a></p></li>
-<li><p><a class="reference internal" href="#upload-google-spreadsheet-files" id="id15">Upload Google Spreadsheet Files</a></p></li>
+<li><p><a class="reference internal" href="#upload-csv-files" id="id12">Upload CSV Files</a></p></li>
+<li><p><a class="reference internal" href="#upload-excel-files" id="id13">Upload Excel Files</a></p></li>
+<li><p><a class="reference internal" href="#upload-google-spreadsheet-files" id="id14">Upload Google Spreadsheet Files</a></p></li>
+<li><p><a class="reference internal" href="#upload-a-csv-file-stored-in-amazon-s3-bucket" id="id15">Upload a CSV file stored in Amazon S3 Bucket</a></p></li>
 <li><p><a class="reference internal" href="#sql-connection" id="id16">SQL connection</a></p></li>
 <li><p><a class="reference internal" href="#confirmation-step-to-upload-data" id="id17">Confirmation step to upload data</a></p></li>
 </ul>
 </li>
 <li><p><a class="reference internal" href="#data-merge" id="id18">Data Merge</a></p>
 <ul>
-<li><p><a class="reference internal" href="#step-three-select-keys-and-merge-option" id="id19">Step three: select keys and merge option</a></p></li>
-<li><p><a class="reference internal" href="#step-four-verify-upcoming-changes" id="id20">Step four: verify upcoming changes</a></p></li>
+<li><p><a class="reference internal" href="#step-four-select-keys-and-merge-option" id="id19">Step four: select keys and merge option</a></p></li>
+<li><p><a class="reference internal" href="#step-five-verify-upcoming-changes" id="id20">Step five: verify upcoming changes</a></p></li>
 </ul>
 </li>
 </ul>
@@ -120,61 +121,71 @@
 <li><p><a class="reference internal" href="#view-logs" id="id44">View logs</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#plugins-transforming-the-data-with-your-own-code" id="id45">Plugins: Transforming the data with your own code</a></p>
+<li><p><a class="reference internal" href="#transforming-the-data-with-your-own-code" id="id45">Transforming the data with your own code</a></p>
 <ul>
-<li><p><a class="reference internal" href="#plugin-requirements" id="id46">Plugin requirements</a></p></li>
+<li><p><a class="reference internal" href="#transformation-requirements" id="id46">Transformation requirements</a></p></li>
 </ul>
 </li>
 </ul>
 </div>
-<p>In a nutshell, the idea behind OnTask is to help instructors, learners and designers to exchange data  about what is happening in a learning experience to design and deploy personalized learner support actions. This last term, <em>personalized support actions</em> is purposefully vague to include any action that is offered to learners in different forms depending on personalized conditions. The typical <em>workflow</em> to use OnTask starts by uploading and combining available data about the learning experience, either extracted from some platform (LMS, video annotation, quizzes), provided by the learners (questionnaires), or captured by the instructors. The instructors then write simple rules to select a subset of students and create a resource (HTML page, a message, a visualization) so that its content depends on the data available for each learner. The following figure shows an illustration of this workflow:</p>
+<p>The idea behind OnTask is to help instructors, learners and designers to exchange data  about what is happening in a learning experience to design and deploy personalized learner support actions. This last term, <em>personalized support actions</em> refers to any action that is offered to learners in different forms depending on personalized conditions. The typical <em>workflow</em> to use OnTask starts by uploading and combining available data about the learning experience, either extracted from some platform (LMS, video annotation, quizzes), provided by the learners (questionnaires), or captured by the instructors. The instructors then write simple rules to select a subset of students and create a resource (HTML page, a message, a visualization) so that its content depends on the data available for each learner. The following figure illustrates of this workflow:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/ontask_workflow.png"><img alt="../_images/ontask_workflow.png" src="../_images/ontask_workflow.png" style="width: 100%;" /></a>
 </div>
 <p>Imagine a learning experience in which you want to provide three personalized messages to the learners. In the first week, you want to send a welcome email and personalize slightly the text of this message based on the student background (courses taken before this one). The second week you want to send some comments and suggestions about the participation in the forum and the text will depend on the measures of engagement obtained from the platform. The third personalized email will vary depending on the level of engagement with the videos in the course. The idea of these messages is that you want to change the text in the message for each learner based on the information stored in the table.</p>
-<p>The main entity in OnTask is a <a class="reference internal" href="#workflow"><span class="std std-ref">workflow</span></a> that contains a <strong>table</strong> with data about the learners and a set of <strong>actions</strong>. You first need to populate the table with data extracted from the learning environment. We assume that there several data sources (coming from the use of technology, self-reported by the students, or observed and reported by the instructors). These data sources are combined and stored in the <strong>table</strong>. Think of the table as a conventional excel sheet storing the information about the learners (one learner per row and a set of features about each learner as columns).</p>
-<p>The third entity in OnTask is the <strong>action</strong> that is either a set of questions to collect information from the learner or a text with elements that are selected or ignored based on <strong>conditions</strong> that are evaluated with respect to the learner student features stored in the table. This text can be included in an email, made available through a web page, or forwarded to another system for further processing.</p>
-<p>In the remainder of this section we will use a <a class="reference download internal" download="" href="../_downloads/3f296252720ca5cd234946310996f00b/initial_workflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">initial</span> <span class="pre">workflow</span></code></a> that can be downloaded and imported to your collection of workflows in OnTask.</p>
+<p>OnTasks allows instructors to manage a set of <strong>workflows</strong>. A <a class="reference internal" href="#workflow"><span class="std std-ref">workflow</span></a> contains a <strong>table</strong> with data about the learners and a set of <strong>actions</strong>. After creating and opening a workflow you need to populate the table with data extracted from the learning environment. We assume that there several data sources (coming from the use of technology, self-reported by the students, or observed and reported by the instructors). These data sources are combined and stored in the <strong>table</strong>. Think of the table as a conventional excel sheet storing the information about the learners (one learner per row and a set of features about each learner as columns).</p>
+<p>The other relevant entity in OnTask is the <strong>action</strong> that is either a set of questions to collect information from the learner or a text with elements that are selected or ignored based on <strong>conditions</strong> that are evaluated with respect to the learner student features stored in the table. This text can be included in an email, made available through a web page, or forwarded to another system for further processing.</p>
+<p>The rest of the material in this section will use an <a class="reference download internal" download="" href="../_downloads/3f296252720ca5cd234946310996f00b/initial_workflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">initial</span> <span class="pre">workflow</span></code></a> that can be downloaded and imported to your collection of workflows in OnTask.</p>
 <div class="section" id="workflow">
 <span id="id1"></span><h2>3.1. Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>“But anyone who has experienced flow knows that the deep enjoyment it provides requires an equal degree of disciplined concentration.”
 -― Mihaly Csikszentmihalyi</p>
 </div></blockquote>
-<p>After logging into OnTask, the users sees the home page showing the collection of workflows available to the user as shown in the following figure.</p>
+<p>After logging into OnTask, the platform shows the buttons to create or import a workflow as well as those already available to the user as shown in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/workflow_index.png"><img alt="../_images/workflow_index.png" src="../_images/workflow_index.png" style="width: 100%;" /></a>
 </div>
-<p>The navigation through the platform is done using the links in the top menu bar. The <em>Workflows</em> icon in the left side of the menu brings the user back to the page showing the available workflows. The book icon in the upper right side of the menu bar opens the documentation page, and the user icon provides access to the user profile (name, last name, bio, password and authentication tokens).</p>
-<p>The home page offers the following operations:</p>
 <div class="sidebar">
 <p class="sidebar-title">Going back</p>
 <p>The <strong>Workflows</strong> link at the left corner of the top menu <em>closes</em> the workflow being manipulated and shows you the list of available workflows. The workflow is also <em>unlocked</em> so that it can be accessed by those users <a class="reference internal" href="#details-sharing"><span class="std std-ref">sharing</span></a> its access.</p>
 </div>
-<ol class="arabic" id="workflow-create">
-<li><p><em>New workflow</em> opens a dialog to set the name and description of a new workflow and then show the page to upload data in the table.</p>
+<p>The navigation through the platform is done using the links in the top menu bar. The <em>Workflows</em> icon in the left side of the menu brings the user back to the page showing the available workflows. The book icon in the upper right side of the menu bar opens the documentation page, and the user icon provides access to the user profile (name, last name, bio, password and authentication tokens).</p>
+<p>The home page offers the following operations:</p>
+<dl id="workflow-create">
+<dt><em>New workflow</em></dt><dd><p>Opens a dialog to set the name and description of a new workflow and then show the page to upload data in the table.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/workflow_create.png"><img alt="../_images/workflow_create.png" src="../_images/workflow_create.png" style="width: 60%;" /></a>
 </div>
-</li>
-</ol>
-<ol class="arabic" id="workflow-import" start="2">
-<li><p><em>Import workflow</em> opens a dialog requesting a workflow name and a file containing a previously exported OnTask workflow as shown in the following figure:</p>
+</dd>
+</dl>
+<dl id="workflow-import">
+<dt><em>Import workflow</em></dt><dd><p>Opens a dialog requesting a workflow name and a file containing a previously exported OnTask workflow as shown in the following figure:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/workflow_import.png"><img alt="../_images/workflow_import.png" src="../_images/workflow_import.png" style="width: 100%;" /></a>
 </div>
-</li>
-</ol>
+</dd>
+</dl>
 <p>This page also shows those workflows previously created by the user. Each workflow is shown as depicted in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/workflow_card.png"><img alt="../_images/workflow_card.png" src="../_images/workflow_card.png" style="width: 60%;" /></a>
 </div>
 <p>The icons in the bottom of this element allow you to perform the following operations:</p>
-<ol class="arabic">
-<li><p><em>Open the workflow</em> selects the workflow for further manipulation. Once selected, workflow name is shown under the top navigation bar as illustrated in the following figure.</p>
+<dl>
+<dt><em>Open the workflow</em></dt><dd><p>Selects the workflow for further manipulation. Once selected, workflow name is shown under the top navigation bar as illustrated in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/navigation_bar.png"><img alt="../_images/navigation_bar.png" src="../_images/navigation_bar.png" style="width: 100%;" /></a>
 </div>
+</dd>
+<dt><span class="fa fa-pencil"></span> <em>Change name or description</em></dt><dd><p>Changes the name of the description given to the workflow.</p>
+</dd>
+<dt><span class="fa fa-clone"></span> <em>Create a duplicate</em></dt><dd><p>Creates a duplicate or exact copy of the workflow with the prefix <em>Copy_of_</em> added to the  workflow name.</p>
+</dd>
+<dt><span class="fa fa-minus-square"></span> <em>Delete all data</em></dt><dd><p>Deletes all data and actions stored in the workflow (turns it into an empty workflow with just the name and the description).</p>
+</dd>
+<dt><span class="fa fa-trash"></span> <em>Delete the workflow</em></dt><dd><p>Delete the workflow from the system.</p>
+</dd>
+</dl>
 <p>When a workflow is open, the top-bar menu appears with the structure shown in the following figure.</p>
 <div class="figure align-center">
 <img alt="../_images/tutorial_top_menu_bar.png" src="../_images/tutorial_top_menu_bar.png" />
@@ -204,13 +215,7 @@
 <dt><span class="fa fa-book"></span> Manual</dt><dd><p>Link to the OnTask manual (this document)</p>
 </dd>
 </dl>
-<p>Once you open a workflow, the platform <em>locks it</em> so that no other user can manipulate it (see <a class="reference internal" href="#details-sharing"><span class="std std-ref">sharing a workflow</span></a>). The lock is release if the user goes back to the home page, logs out, or the session expires. If you access a workflow and another user is currently using it, the platform will tell you that is locked and show who is holding the lock.</p>
-</li>
-<li><p><span class="fa fa-pencil"></span> <em>Change name or description</em> changes the name of the description given to the workflow.</p></li>
-<li><p><span class="fa fa-clone"></span> <em>Create a duplicate</em> or exact copy of the workflow with the prefix <em>Copy_of_</em> added to the  workflow name.</p></li>
-<li><p><span class="fa fa-minus-square"></span> <em>Delete all data</em> and actions stored in the workflow (turns it into an empty workflow with just the name and the description).</p></li>
-<li><p><span class="fa fa-trash"></span> <em>Delete the workflow</em> from the system.</p></li>
-</ol>
+<p>Once you open a workflow, the platform <em>locks it</em> so that no other user can manipulate it (see <a class="reference internal" href="#details-sharing"><span class="std std-ref">sharing a workflow</span></a>). The lock is released navigating back to the home page, logging out, or the session expires after lack of activity. If you access a workflow and another user is currently using it, the platform will tell you that is locked and show who is holding the lock.</p>
 </div>
 <div class="section" id="data">
 <span id="dataops"></span><h2>3.2. Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
@@ -219,11 +224,25 @@
 – Brené Brown</p>
 </div></blockquote>
 <p>This section describes the operations to either upload the first set of data into the table, or merge additional data with the one already stored. This step may be done automatically before you work with a workflow. If this is the case, you may skip this section or revisit it when you need to manipulate the existing data.</p>
-<p>The data operations are divided into three categories: upload operations, merge operations, and plugin execution. All of them, together with the possibility of removing the data in the table are shown in the pull-down menu with name <strong>Manage table data</strong>.</p>
+<p>The data operations are divided into the following categories:</p>
+<dl class="simple">
+<dt>Upload</dt><dd><p>Load the first data set in an empty table.</p>
+</dd>
+<dt>Merge</dt><dd><p>Combine the existing data with new data</p>
+</dd>
+<dt>Run a Transformation</dt><dd><p>Execute an operation in the existing data and store the result as additional columns.</p>
+</dd>
+<dt>Run a model</dt><dd><p>Use the existing data to <strong>predict</strong> additional values.</p>
+</dd>
+</dl>
+<p>These operations are available after selecting a workflow for manipulation under the top menu option <strong>Table</strong>.</p>
 <p>If the workflow table is empty, OnTask will request the parameters required to <a class="reference internal" href="#upload-data"><span class="std std-ref">upload data</span></a> from a given data source. On the other hand, if the workflow table already contains data, OnTask will request the parameters to perform a <em>merge operation</em> in which the existing data is combined with the data extracted from the given source.</p>
 <div class="section" id="upload-data">
 <span id="id2"></span><h3>3.2.1. Upload Data<a class="headerlink" href="#upload-data" title="Permalink to this headline">¶</a></h3>
 <p>These operations are provided to upload the initial set of data into the workflow table using a variety of sources.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_datauploadmerge2.png" src="../_images/dataops_datauploadmerge2.png" />
+</div>
 <div class="section" id="upload-csv-files">
 <h4>3.2.1.1. Upload CSV Files<a class="headerlink" href="#upload-csv-files" title="Permalink to this headline">¶</a></h4>
 <p>CSV or “comma separated value” files are plain text files in which the first line contains a comma-separated list of column names, and every subsequent line contains the values of these columns for each row. It is a popular format to exchange data that can be represented as a table (Microsoft Excel allows to save one sheet in a spreadsheet file into this format). The following figure shows the first step to perform this operation.</p>
@@ -248,8 +267,15 @@ has to be selected to upload the data.</p>
 <img alt="../_images/dataops_upload_gsheet.png" src="../_images/dataops_upload_gsheet.png" />
 </div>
 </div>
+<div class="section" id="upload-a-csv-file-stored-in-amazon-s3-bucket">
+<span id="s3-bucket-file"></span><h4>3.2.1.4. Upload a CSV file stored in Amazon S3 Bucket<a class="headerlink" href="#upload-a-csv-file-stored-in-amazon-s3-bucket" title="Permalink to this headline">¶</a></h4>
+<p>Amazon Simple Storage Service (S3) offers the possibility of storing files in <em>buckets</em>. The service offers an API to access these files. This page in OnTask requests the credentials required to access the CSV file stored in a bucket and process its content.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_upload_s3.png" src="../_images/dataops_upload_s3.png" />
+</div>
+</div>
 <div class="section" id="sql-connection">
-<span id="sql-connection-run"></span><h4>3.2.1.4. SQL connection<a class="headerlink" href="#sql-connection" title="Permalink to this headline">¶</a></h4>
+<span id="sql-connection-run"></span><h4>3.2.1.5. SQL connection<a class="headerlink" href="#sql-connection" title="Permalink to this headline">¶</a></h4>
 <p>This operation uploads the data into the current workflow table using a SQL connection to a remote database. These connections have to be <a class="reference internal" href="../Install/index.html#sql-connections"><span class="std std-ref">previously defined and configured by the system administrator</span></a>. Instructors can use them to access the content of a previously defined table in a remote database. Once selected, the platform shows the SQL connections available and the possibility to view the connection parameters (click on the connection name), or <em>Run</em> the connection to upload the data as shown in the following figure.</p>
 <div class="figure align-center">
 <img alt="../_images/dataops_SQL_available.png" src="../_images/dataops_SQL_available.png" />
@@ -260,7 +286,7 @@ has to be selected to upload the data.</p>
 </div>
 </div>
 <div class="section" id="confirmation-step-to-upload-data">
-<h4>3.2.1.5. Confirmation step to upload data<a class="headerlink" href="#confirmation-step-to-upload-data" title="Permalink to this headline">¶</a></h4>
+<h4>3.2.1.6. Confirmation step to upload data<a class="headerlink" href="#confirmation-step-to-upload-data" title="Permalink to this headline">¶</a></h4>
 <p>When uploading data for the first time, the values are prepared to be assigned as the initial content of the workflow table. But before this assignment is done, the platform needs you to verify some information. Upon reading the new data, OnTask will automatically detect the data type in each column and those columns that have unique values (no repetitions) and mark them as <strong>keys</strong>. Key columns are very important because their values (as they are different for every row) are required for several operations. The workflow table <strong>must have at least one key column</strong>. If here are several columns with this property, OnTask <a class="reference internal" href="#details"><span class="std std-ref">allows you to *unmark* some of them as non-key</span></a> as long as there is always one of them wih such mark. Additionally, you may <a class="reference internal" href="#details"><span class="std std-ref">mark any column as a key column</span></a> if the values are all different. The operations to manipulate column information is described in the section <a class="reference internal" href="#details"><span class="std std-ref">Workflow Operations</span></a>.</p>
 <p>Before finishing the upload step and storing the data in the table, OnTask also allows you to change the name of the columns or change the <strong>Key</strong> attribute as shown in the following figure.</p>
 <div class="figure align-center">
@@ -276,8 +302,8 @@ has to be selected to upload the data.</p>
 <p>Merging is a common operation in databases and is commonly known as <em>join</em>. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist in OnTask when combining the data already existing in the table. The operation relies on the <strong>key column</strong> to merge the two sources.</p>
 </div>
 <p>A merge operation is executed when data is uploading and the workflow <strong>already has data in its table</strong>. Although this operation is common in data science contexts, it has several variants that make it challenging to use properly. These variants derive mostly from the method used to specify how the values in the new columns are <em>matched</em> with respect to the ones already existing in the table. In other words, each new column has a set of values, but they need to be in the right order so that the information is matched appropriately for every row. For example, if the table contains a column with the age of the learners, and a new column with the gender is merged, the rows of the new column need to correspond with the learners in the existing table. The way to address this issue is to use a <strong>key column* in the existing table and another ** key column</strong> in the new data. These columns uniquely distinguish each row with a value so they are used to make sure that the information for the rows with matching values in these columns are merged. These operations are executed in a set of additional steps. The first step of the merge operation is identical to the upload operation. After detecting the column data types, the key columns and offering the option of changing their names, the next steps identify the key columns to use in the merge, the variant to merge, and shows a summary of the changes that will result from the operation.</p>
-<div class="section" id="step-three-select-keys-and-merge-option">
-<h4>3.2.2.1. Step three: select keys and merge option<a class="headerlink" href="#step-three-select-keys-and-merge-option" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="step-four-select-keys-and-merge-option">
+<h4>3.2.2.1. Step four: select keys and merge option<a class="headerlink" href="#step-four-select-keys-and-merge-option" title="Permalink to this headline">¶</a></h4>
 <p>The following figure shows the third step of the merge operation.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/dataops_upload_merge_step3.png"><img alt="../_images/dataops_upload_merge_step3.png" src="../_images/dataops_upload_merge_step3.png" style="width: 100%;" /></a>
@@ -291,35 +317,35 @@ has to be selected to upload the data.</p>
 </dl>
 <p>There are four possible merge variants:</p>
 <ol class="arabic">
-<li><p><strong>Select only the rows with keys in both existing **and</strong> new table**.
+<li><p><strong>Select only the rows with keys in both existing and new table</strong>.
 It will select only the rows for which values in both key columns are present. Or in other words, any row for which there is no value in either of the key columns <strong>will be dropped</strong>.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/merge_inner.png"><img alt="../_images/merge_inner.png" src="../_images/merge_inner.png" style="width: 50%;" /></a>
+<a class="reference internal image-reference" href="../_images/merge_inner1.png"><img alt="../_images/merge_inner1.png" src="../_images/merge_inner1.png" style="width: 50%;" /></a>
 </div>
 </li>
 <li><p><strong>Select all rows in either the existing or new table</strong>.</p>
 <p>All rows in both tables will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/merge_outer.png"><img alt="../_images/merge_outer.png" src="../_images/merge_outer.png" style="width: 50%;" /></a>
+<a class="reference internal image-reference" href="../_images/merge_outer1.png"><img alt="../_images/merge_outer1.png" src="../_images/merge_outer1.png" style="width: 50%;" /></a>
 </div>
 </li>
 <li><p><strong>Select the rows with keys in the existing table</strong>.</p>
 <p>Only the rows in the new table with a value in the key column that is present in the existing table will be considered, the rest will be dropped.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/merge_left.png"><img alt="../_images/merge_left.png" src="../_images/merge_left.png" style="width: 50%;" /></a>
+<a class="reference internal image-reference" href="../_images/merge_left1.png"><img alt="../_images/merge_left1.png" src="../_images/merge_left1.png" style="width: 50%;" /></a>
 </div>
 </li>
 <li><p><strong>Select the rows with keys in the new table</strong>.</p>
 <p>Only the rows in the existing table with a value in the key column that is present in the key column from the new table will be considered, the rest will be dropped.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/merge_right.png"><img alt="../_images/merge_right.png" src="../_images/merge_right.png" style="width: 50%;" /></a>
+<a class="reference internal image-reference" href="../_images/merge_right1.png"><img alt="../_images/merge_right1.png" src="../_images/merge_right1.png" style="width: 50%;" /></a>
 </div>
 </li>
 </ol>
 <p>In any of these variants, for those columns that are present in both the existing table and the new table, the values of the second will update the existing ones in the first. This update may introduce non-values in some of the rows (for example in columns for with the new data does not provide any value). Additionally, extra care needs to be taken when performing this operation as some of the merge variants may eliminate data in the existing table. In the extreme case, if you try to merge a table with a key column with no values in common with the existing key and you select the method that considers rows with keys in both the existing and new table, the result is an empty table.</p>
 </div>
-<div class="section" id="step-four-verify-upcoming-changes">
-<h4>3.2.2.2. Step four: verify upcoming changes<a class="headerlink" href="#step-four-verify-upcoming-changes" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="step-five-verify-upcoming-changes">
+<h4>3.2.2.2. Step five: verify upcoming changes<a class="headerlink" href="#step-five-verify-upcoming-changes" title="Permalink to this headline">¶</a></h4>
 <p>After selecting these parameters the last step is to review the effect of the operation and proceed with the merge as shown in the following figure.</p>
 <div class="figure align-center">
 <img alt="../_images/dataops_upload_merge_step4.png" src="../_images/dataops_upload_merge_step4.png" />
@@ -334,7 +360,7 @@ It will select only the rows for which values in both key columns are present. O
 but you feel it”
 – Morpheus, The Matrix</p>
 </div></blockquote>
-<p>The information stored in the workflow table is accessed through the <span class="fa fa-table"></span> <em>Table</em> link in the top bar menu. These pages show the values stored in the workflow table. As this table can be arbitrarily large, OnTasks groups the rows into pages and offers the possibility to choose how many rows are contained in each page, as well as links to each of the pages. If the table has a large number of columns, a horizontal scroll is available to show the additional content. The order of the columns in the table can be changed by dragging them from the top row and dropping them in a new position.</p>
+<p>The information stored in the workflow table is accessed through the <span class="fa fa-table"></span> <em>Table</em> link in the top bar menu selecting the option <strong>Full view</strong>. As this table can be arbitrarily large, the application groups the rows into pages and provides links to each of the pages at the bottom of the table. The top of the table includes a pull down menu to choose how many rows are shown per page. If the table has a large number of columns, a horizontal scroll is available to show the additional content. The order of the columns in the table can be changed by dragging them from the top row and dropping them in a new position.</p>
 <p>The following figure shows an example of the main table page.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/table.png"><img alt="../_images/table.png" src="../_images/table.png" style="width: 100%;" /></a>
@@ -357,8 +383,6 @@ but you feel it”
 </dd>
 <dt><span class="fa fa-download"></span> CSV Download</dt><dd><p>This functionality downloads the data in the table as a CSV file. Combine this functionality with the table views to handle large tables.</p>
 </dd>
-<dt>Manage table data</dt><dd><p>Menu to upload/merge data to the table, execute a plugin, or delete the data in the table.</p>
-</dd>
 </dl>
 <p>The left-most column in the  table shows the operations to manipulate a row:</p>
 <dl class="simple">
@@ -371,7 +395,7 @@ but you feel it”
 </dl>
 <div class="section" id="table-views">
 <span id="id5"></span><h3>3.3.1. Table Views<a class="headerlink" href="#table-views" title="Permalink to this headline">¶</a></h3>
-<p>Due to the potentially large size of the workflow table in either number of rows or columns, OnTask offers the possibility to define <span class="fa fa-eye"></span> <em>views</em>. A view is a table that shows a subset of columns and rows of the original table. You may define as many views as needed. The link <em>Views</em> in the main table page shows the views available and the operations to manage them.</p>
+<p>Due to the potentially large size of the workflow table in either number of rows or columns, OnTask offers the possibility to define <em>Views</em>. A view is a subset of columns and rows of the original table. You may define as many views as needed. The link <em>Views</em> in the main table page shows the views available and the operations to manage them.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/table_views.png"><img alt="../_images/table_views.png" src="../_images/table_views.png" style="width: 100%;" /></a>
 </div>
@@ -379,7 +403,7 @@ but you feel it”
 <dl class="simple">
 <dt>Full Table</dt><dd><p>Go back to the page showing the entire data table.</p>
 </dd>
-<dt><span class="fa fa-plus"></span> Add View</dt><dd><p>Create a new view</p>
+<dt><span class="fa fa-plus"></span> View</dt><dd><p>Create a new view</p>
 </dd>
 </dl>
 <p>When creating a view you need to provide a name (required), a description, a subset of columns to show (at least one of them must be a <strong>key column</strong>), and an expression to select a subset of rows. This expression is evaluated with the values of every row and if the result is <em>True</em>, the row is included in the view. The following figure shows an example of the information that is included in the definition of a view.</p>
@@ -388,7 +412,7 @@ but you feel it”
 </div>
 <p>Once a view is created, the following operations are available:</p>
 <dl class="simple">
-<dt><span class="fa fa-pencil"></span> Edit</dt><dd><p>Click in the view name to edit its elements (name, description, set of columns to show and row filter)</p>
+<dt>Edit</dt><dd><p>Click in the view name to edit its elements (name, description, set of columns to show and row filter)</p>
 </dd>
 <dt><span class="fa fa-eye"></span> Show</dt><dd><p>Show the subset of the table selected by the view</p>
 </dd>
@@ -424,7 +448,7 @@ vision”
 </dl>
 <p>The actions in the workflow are shown in a tabular format. For each action the following main operations are offered:</p>
 <dl class="simple">
-<dt><span class="fa fa-pencil"></span> Edit</dt><dd><p>Click in the name action to edit its content.</p>
+<dt>Edit</dt><dd><p>Click in the name action to edit its content.</p>
 </dd>
 <dt><span class="fa fa-rocket"></span> Run</dt><dd><p>Use the action to either provide personalized content or run a survey (see <a class="reference internal" href="#running-actions"><span class="std std-ref">Running actions</span></a> for more information)</p>
 </dd>
@@ -457,13 +481,37 @@ vision”
 </div>
 </dd>
 </dl>
+<dl id="personalized-text-filter">
+<dt>The filter</dt><dd><p>The center tab shows a <em>filter</em>. This element is an expression used to decide which learners (or more precisely, the corresponding rows in the data table that) will be selected and used in this action.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_action_out_filterpart.png"><img alt="../_images/action_action_out_filterpart.png" src="../_images/action_action_out_filterpart.png" style="width: 100%;" /></a>
+</div>
+<p>The filter element shows the name, description, and the formula defined. The icons at the bottom of the object provide access to the following operations:</p>
+<dl class="simple">
+<dt><span class="fa fa-pencil"></span> Edit</dt><dd><p>Edit the name, description, and formula of the filter.</p>
+</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt><dd><p>Remove the filter from the action.</p>
+</dd>
+</dl>
+<p>When editing or creating a filter, the form shows the information as in the following figure:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_action_out_edit_filter.png"><img alt="../_images/action_action_out_edit_filter.png" src="../_images/action_action_out_edit_filter.png" style="width: 60%;" /></a>
+</div>
+<p>The expression in this condition is shown under the title <strong>The learner will be selected if</strong> and can be read as:</p>
+<blockquote>
+<div><p>Video_1_W4 = 0 or Video_2_W4 = 0</p>
+</div></blockquote>
+<p>The first element of the expression is the sub-expression <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span> <span class="pre">=</span> <span class="pre">0</span></code> which contains the variable <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code>, the equal sign, and the constant zero. The second element is a sub-expression with the variable <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code>, the equal sign, and the constant 0. These two sub-expressions are connected through the <strong>OR</strong> operator, which means that the expression will be <strong>True</strong> if either of the sub-expressions are <strong>True</strong>, and <strong>False</strong> in any other case. When evaluating this expression, the variables are replaced by concrete values (numbers). For example, if <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code> is replaced by 3, and <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code> is replaced by 4, the evaluation will transform the expression into <span class="math notranslate nohighlight">\(3 = 0 or 4 = 0\)</span>. The sub-expression <span class="math notranslate nohighlight">\(3 = 0\)</span> is clearly <strong>False</strong> and so is the other sub-expression <span class="math notranslate nohighlight">\(4 = 0\)</span>. This means the initial expression is <strong>False</strong>. result is either <strong>True</strong> or <strong>False</strong>. Another possible evaluation is if <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code> is equal to zero (and <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code> remains equal to 4). In this case the resulting expression is <span class="math notranslate nohighlight">\(0 = 0 or 4 = 0\)</span>. In this case, the first sub-expression is <strong>True</strong>, and although the second is <strong>False</strong>, only one is needed for the overall expression to be <strong>True</strong>.</p>
+<p>These conditions can have nested sub-expressions and get complex fairly quickly. However, the underlying mechanism to evaluate them remains the same: replace variables with values and decide the result (<strong>True</strong> or <strong>False</strong>).</p>
+</dd>
+</dl>
 <dl id="personalized-text-conditions">
-<dt>The conditions</dt><dd><p>The right tab contains the <em>conditions</em>. A condition is an expression that when evaluated with respect to the values in the table for each learner will either be <strong>True</strong> or <strong>False</strong>. These expressions are commonly used in other applications such as spreadsheets or programming languages. The following screen shows an example of the content of this tab with two conditions.</p>
+<dt>Text conditions</dt><dd><p>The right tab contains the <em>text conditions</em>. A condition is an expression that when evaluated with respect to the values in the table for each learner will either be <strong>True</strong> or <strong>False</strong>. These expressions are commonly used in other applications such as spreadsheets. The following screen shows an example of the content of this tab with two conditions.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_action_out_conditionpart.png"><img alt="../_images/action_action_out_conditionpart.png" src="../_images/action_action_out_conditionpart.png" style="width: 100%;" /></a>
 </div>
-<p>The button <span class="fa fa-plus"></span> Condition at the top of the tab opens the form to define a new condition. Once created
-The buttons in the screen allow you to edit the expression, insert the condition to control the appearance of text in the editor (below), clone the condition, or delete it from the action.</p>
+<p>The button <span class="fa fa-plus"></span> <em>Condition</em> at the top of the tab opens the form to define a new condition. Once created
+The buttons in the screen allow you to edit the expression, insert the condition to control the appearance of text in the editor (below), clone the condition, or delete it from the action. The button <span class="fa fa-clone"></span> <em>Clone other conditions</em> creates a duplicate of a condition used in any other action. The button <span class="fa fa-bar-chart"></span> <em>Column statistics</em> allows to select a column and show a statistical summary of its values.</p>
 <p>Each condition shows the number of learners for which the expression in that condition evaluates to <strong>True</strong> (if this value is zero, it means that any text you include in the editor controlled by this condition will not appear for any of the learners), the name, description, and the defined formula.</p>
 <p>The icons in the bottom of the condition element allow the following operations:</p>
 <dl class="simple">
@@ -485,31 +533,7 @@ The buttons in the screen allow you to edit the expression, insert the condition
 <p>The first element is the column name <code class="docutils literal notranslate"><span class="pre">Correct_1_W4</span></code>, followed by the equal sign, and then the constant zero. When evaluating this expression, the column name is replaced by the value from the corresponding to each learner. For example, if a given learner has <code class="docutils literal notranslate"><span class="pre">Correct_1_W4</span></code> equal to 3 the evaluation will transform the expression into <span class="math notranslate nohighlight">\(3 = 0\)</span> which is <strong>False</strong>. Another possible evaluation is if another learner has <code class="docutils literal notranslate"><span class="pre">Correct_1_W4</span></code> equal to zero. After substitution of the column by the values for the learner, the resulting expression is <span class="math notranslate nohighlight">\(0 = 0\)</span>. In this case, the expression is <strong>True</strong>. Once defined this condition can be applied to a part of the personalized text. When creating the texts, the condition is evaluated with the values for each student. If the expression is true, the text is included, if not, it is ignored. This mechanism is at the heart of how OnTask personalizes the content of the actions. In the example above, the expression in the condition one of the learners in the data table.</p>
 </dd>
 </dl>
-<dl id="personalized-text-filter">
-<dt>The filter</dt><dd><p>The center tab shows a <em>filter</em>. This element is an expression used to decide which learners (or more precisely, the corresponding rows in the data table that) will be selected and used in this action.</p>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_action_out_filterpart.png"><img alt="../_images/action_action_out_filterpart.png" src="../_images/action_action_out_filterpart.png" style="width: 100%;" /></a>
-</div>
-<p>The filter element shows the name, description, and the formula defined. The icons at the bottom of the object provide access to the following operations:</p>
-<dl class="simple">
-<dt><span class="fa fa-pencil"></span> Edit</dt><dd><p>Edit the name, description, and formula of the filter.</p>
-</dd>
-<dt><span class="fa fa-trash"></span> Delete</dt><dd><p>Remove the filter from the action.</p>
-</dd>
-</dl>
-<p>When editing or creating a filter, the form shows the information as in the following figure:</p>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_action_out_edit_filter.png"><img alt="../_images/action_action_out_edit_filter.png" src="../_images/action_action_out_edit_filter.png" style="width: 60%;" /></a>
-</div>
-<p>The expression in this condition is shown under the title <strong>The text will be shown if</strong> and can be read as:</p>
-<blockquote>
-<div><p>Video_1_W4 = 0 or Video_2_W4 = 0</p>
-</div></blockquote>
-<p>The first element of the expression is the sub-expression <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span> <span class="pre">=</span> <span class="pre">0</span></code> which contains the variable <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code>, the equal sign, and the constant zero. The second element is a sub-expression with the variable <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code>, the equal sign, and the constant 0. These two sub-expressions are connected through the <strong>OR</strong> operator, which means that the expression will be <strong>True</strong> if either of the sub-expressions are <strong>True</strong>, and <strong>False</strong> in any other case. When evaluating this expression, the variables are replaced by concrete values (numbers). For example, if <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code> is replaced by 3, and <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code> is replaced by 4, the evaluation will transform the expression into <span class="math notranslate nohighlight">\(3 = 0 or 4 = 0\)</span>. The sub-expression <span class="math notranslate nohighlight">\(3 = 0\)</span> is clearly <strong>False</strong> and so is the other sub-expression <span class="math notranslate nohighlight">\(4 = 0\)</span>. This means the initial expression is <strong>False</strong>. result is either <strong>True</strong> or <strong>False</strong>. Another possible evaluation is if <code class="docutils literal notranslate"><span class="pre">Video_1_W4</span></code> is equal to zero (and <code class="docutils literal notranslate"><span class="pre">Video_2_W4</span></code> remains equal to 4). In this case the resulting expression is <span class="math notranslate nohighlight">\(0 = 0 or 4 = 0\)</span>. In this case, the first sub-expression is <strong>True</strong>, and although the second is <strong>False</strong>, only one is needed for the overall expression to be <strong>True</strong>.</p>
-<p>These conditions can have nested sub-expressions and get complex fairly quickly. However, the underlying mechanism to evaluate them remains the same: replace variables with values and decide the result (<strong>True</strong> or <strong>False</strong>). OnTask relies on these expressions to personalize the content of the actions.</p>
-</dd>
-</dl>
-<p>The buttons at the bottom of the page offer the following operations:</p>
+<p>The buttons at the top of the page offer the following operations:</p>
 <dl>
 <dt><span class="fa fa-eye"></span> Preview</dt><dd><p>The Preview button shows how the text in the editor is shown for those
 learners selected by the filter (if any). After clicking in the button you
@@ -552,26 +576,31 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </div>
 <div class="section" id="surveys">
 <span id="id6"></span><h3>3.4.2. Surveys<a class="headerlink" href="#surveys" title="Permalink to this headline">¶</a></h3>
-<p>The personalized text actions described in the previous section makes information available to the learners. The <em>survey</em> actions perform the operation in the opposite direction, they collect information from the learners and store it in the table. This functionality can be seen as a simplified version of other survey engines such as Google Forms, SurveyMonkey or Qualtrics. In a learning context a survey can be used by the learners to submit certain data, or by the instructor to collect annotations about learners throughout the experience. OnTask supports these two modalities.</p>
-<p>The edition of a survey action is done through a page with three tabs. The following figure shows an example of this page.</p>
+<p>The personalized text actions described in the previous section make information available to the learners. The <em>survey</em> actions perform the operation in the opposite direction, they collect information from the learners and store it in the table. In a learning context a survey can be used by the learners to submit certain data, or by the instructor to collect annotations about learners throughout the experience. OnTask supports these two modalities. Survey actions are edited with a page with four tabs as shown in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_edit_action_in.png"><img alt="../_images/action_edit_action_in.png" src="../_images/action_edit_action_in.png" style="width: 100%;" /></a>
 </div>
 <p>The information collected for each question will be represented in the table by a column. The editor page allows you to use any of the existing questions to be included in a survey. The three tabs in the screen offer the following functionality.</p>
 <dl>
-<dt>Survey Questions</dt><dd><p>The tab in the left shows the questions that are contained in the survey. The two buttons at the top of the screen allow you to either insert an existing question (the pull-down menu will show all the column names available in the table) or create a new question. When creating a new question, the following form is used:</p>
+<dt>Survey parameters</dt><dd><p>This tab shows the additional parameters to deploy the survey. More precisely the screen allows to define the text that is shown at the top of the survey (<em>Survey description</em>), the key column used to identify the users, and if the questions should be shown in different order for each user.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_edit_action_in_parameters.png"><img alt="../_images/action_edit_action_in_parameters.png" src="../_images/action_edit_action_in_parameters.png" style="width: 100%;" /></a>
+</div>
+</dd>
+<dt>Survey Questions</dt><dd><p>This tab shows the questions that are contained in the survey. The two buttons at the top of the screen allow you to either insert an existing question (the pull-down menu will show all the column names available in the table) or create a new question. When creating a new question, the following form is used:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_edit_action_in_create_question.png"><img alt="../_images/action_edit_action_in_create_question.png" src="../_images/action_edit_action_in_create_question.png" style="width: 60%;" /></a>
 </div>
 <p>The field <em>Question name</em> will be used internally as the column name in the table. The <em>Description</em> field is the text shown to the learners next to the question. If the question includes a set of values allowed, the form available to the students will collect the answers using a pull-down menu with the given choices.</p>
+<p>Once a question has been defined, its inclusion in the survey can be controlled using a condition defined in the <em>Conditions</em> tab. The pull down menu to the right of the question description allows to select the condition.</p>
+<div class="figure align-center">
+<img alt="../_images/action_edit_action_in_question_tab.png" src="../_images/action_edit_action_in_question_tab.png" />
+</div>
 <p>As with other tables in OnTask, if the number of elements (in this case questions) is too large, they will be divided into pages with a link to access each page, and the content of the questions is searchable.</p>
 </dd>
-<dt>Filter Learners</dt><dd><p>The central tab in this screen is identical to <a class="reference internal" href="#personalized-text-filter"><span class="std std-ref">the filter in the personalized text action</span></a>. The tab allows to include an expression to decide if a learner is included or not in the survey. This survey has no filter defined.</p>
+<dt>Filter Learners</dt><dd><p>This tab is identical to <a class="reference internal" href="#personalized-text-filter"><span class="std std-ref">the filter in the personalized text action</span></a>. The tab allows to include an expression to decide if a learner is included or not in the survey. This survey has no filter defined.</p>
 </dd>
-<dt>Survey parameters</dt><dd><p>The tab in the right of the screen shows the additional parameters to deploy the survey. More precisely the screen allows to define the text that is shown at the top of the survey (<em>Survey description</em>), the key column used to identify the users, and if the questions should be shown in different order for each user.</p>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_edit_action_in_parameters.png"><img alt="../_images/action_edit_action_in_parameters.png" src="../_images/action_edit_action_in_parameters.png" style="width: 100%;" /></a>
-</div>
+<dt>Conditions</dt><dd><p>This tab allows the definition of conditions identical to <a class="reference internal" href="#personalized-text-conditions"><span class="std std-ref">the text condition tab</span></a> in the personalized text actions. The conditions can then be attached to the questions to decide if they are present or not in the survey.</p>
 </dd>
 </dl>
 <p>The <em>Preview</em> button at the bottom of the page shows the content as it will be shown to the learners.</p>
@@ -588,7 +617,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </div>
 <p>The tabs have the same functionality than in the case of <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>.</p>
 <dl class="simple">
-<dt>Personalized JSON Object</dt><dd><p>This tab contains a plain text editor to describe the structure of the object and <a class="reference internal" href="#using-values-attributes-conditions"><span class="std std-ref">insert column values, attribute values or use conditions to control the presence of elements in the object</span></a>.</p>
+<dt>Text</dt><dd><p>This tab contains a plain text editor to describe the structure of the object and <a class="reference internal" href="#using-values-attributes-conditions"><span class="std std-ref">insert column values, attribute values or use conditions to control the presence of elements in the object</span></a>.</p>
 </dd>
 <dt>Filter Learners</dt><dd><p>This tab allows the definition of an expression to select a subset of rows in the table for processing.</p>
 </dd>
@@ -851,15 +880,13 @@ created the current values of the other columns. The column is not refreshed if 
 </dd>
 </dl>
 </div></blockquote>
-<dl class="simple">
-<dt><a class="reference internal" href="#dataops"><span class="std std-ref">Manage table data</span></a></dt><dd><p>Menu to upload/merge data to the table (see <a class="reference internal" href="#dataops"><span class="std std-ref">Data</span></a> for a detailed explanation), execute a plugin, or delete the data in the table.</p>
-</dd>
-</dl>
 <p>Below the buttons to perform these operations the workflow columns are shown. If the number of columns is large, the information is divided into pages. The field at the top right of this list performs searches in all fields of all columns (name, type, etc). Each column has the following information (from left to right):</p>
 <dl>
-<dt>Position</dt><dd><p>A number starting at 1. The position is used when <a class="reference internal" href="#table"><span class="std std-ref">visualizing the table</span></a>.</p>
+<dt>Position (#)</dt><dd><p>A number starting at 1. The position is used when <a class="reference internal" href="#table"><span class="std std-ref">visualizing the table</span></a>.</p>
 </dd>
-<dt>Name</dt><dd><p>Unique name for the workflow that cannot contain the quotes <em>‘</em> or <em>“</em>.</p>
+<dt>Name</dt><dd><p>Unique name for the workflow that cannot contain the quotes <em>‘</em> or <em>“</em> or start with <em>__</em>.</p>
+</dd>
+<dt>Description</dt><dd><p>Description of the column.</p>
 </dd>
 <dt>Type</dt><dd><p>One of integer, string, double, boolean or date/time.</p>
 </dd>
@@ -953,9 +980,9 @@ created the current values of the other columns. The column is not refreshed if 
 </div>
 <p>The operations available for each operation are:</p>
 <dl class="simple">
-<dt><span class="fa fa-pencil"></span> Edit</dt><dd><p>This operation is accessed clicking in the name of the scheduled operation.</p>
+<dt>Edit</dt><dd><p>Click in the name of the scheduled operation.</p>
 </dd>
-<dt>Action name</dt><dd><p>The link in this field opens the edit page for the action.</p>
+<dt>Action name</dt><dd><p>The link in this field edits the action.</p>
 </dd>
 <dt>Scheduled</dt><dd><p>Time/date when the executing will take place</p>
 </dd>
@@ -977,41 +1004,42 @@ created the current values of the other columns. The column is not refreshed if 
 <p>The <span class="fa fa-download"></span> <em>CSV Download</em> button allows to download the logs in CSV format for further processing. Additionally, the content of the table is paginated and the links to access each page are shown at the botton. The records can be searched using the box at the top right corner of the table.</p>
 </div>
 </div>
-<div class="section" id="plugins-transforming-the-data-with-your-own-code">
-<span id="plugin-run"></span><h2>3.6. Plugins: Transforming the data with your own code<a class="headerlink" href="#plugins-transforming-the-data-with-your-own-code" title="Permalink to this headline">¶</a></h2>
-<p>The additional method offered by OnTask to manipulate the data in a workflow table is to execute arbitrary Python code encapsulated as a Python module and placed in a predefined folder in the computer hosting the server. In the context of the platform, these Python modules are called <strong>Plugins</strong> or <strong>Transformations</strong> and require some <a class="reference internal" href="../Install/index.html#plugin-install"><span class="std std-ref">previous configuration</span></a>. Before their execution, a plugin must be written and installed in the folder previously considered for that purpose.</p>
-<p>The purpose of the plugins is to allow arbitrary transformations of the data attached to a workflow such as machine learning algorithms, predictive models, etc. The list of plugins available for execution can be accessed through the link <em>Execute plugin</em> inside the drop-down menu <em>Manage table data</em> available in both the <span class="fa fa-comments"></span> <em>Actions</em> and <span class="fa fa-table"></span> <em>Table</em> pages. The transformations available for execution are shown in a table like the one in the next figure.</p>
+<div class="section" id="transforming-the-data-with-your-own-code">
+<span id="plugin-run"></span><h2>3.6. Transforming the data with your own code<a class="headerlink" href="#transforming-the-data-with-your-own-code" title="Permalink to this headline">¶</a></h2>
+<p>The additional method offered by OnTask to manipulate the data in a workflow table is to execute arbitrary Python code encapsulated as a Python module and placed in a predefined folder in the computer hosting the server. These Python modules are called either <strong>Transformations</strong> or <strong>Models</strong> and require some <a class="reference internal" href="../Install/index.html#plugin-install"><span class="std std-ref">previous configuration</span></a> by the system administrator, namely, the Python module must be installed in a specific folder.</p>
+<p>The purpose of these transformations and models is to allow arbitrary processing of the data attached to a workflow such as machine learning algorithms, predictive models, etc. The list of transformations available for execution can be accessed through the links <em>Run Transformation</em> and <em>Run Model</em> in the <em>Table</em> button of the top menu. The modules available for execution are shown in a table like the one in the next figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/dataops_transform_list.png"><img alt="../_images/dataops_transform_list.png" src="../_images/dataops_transform_list.png" style="width: 100%;" /></a>
 </div>
-<p>Each transformation is shown with a the name of the internal folder in which it is installed, its (unique) name, a description, if it is ready to run, and the last time the code was modified (based on the file modification time). The link in the name opens a form to introduce the information required for execution. The following figure shows and example of this page.</p>
+<p>Each transformation is shown with a name, a description and the last time the code was modified (based on the file modification time). The link in the name opens a form to introduce the information required for execution. The following figure shows and example of this page.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/dataops_transformation_run.png"><img alt="../_images/dataops_transformation_run.png" src="../_images/dataops_transformation_run.png" style="width: 100%;" /></a>
 </div>
-<p>The information requested in this page is divided into three tabs.</p>
+<p>The information requested in this page is divided into the following tabs.</p>
 <dl class="simple">
-<dt>Columns to pass to the transformation</dt><dd><p>This field is to select the subset of columns from the data table that will be passed when invoking the transformation. It is possible for a transformation to define a set of <em>fixed</em> column names as inputs. If this is the case, the field in this tab shows those names and does not allow changes.</p>
+<dt>Input columns to transformation</dt><dd><p>This field is to select the subset of columns from the data table that will be passed when invoking the transformation. It is possible for a transformation to define a set of <em>fixed</em> column names as inputs. If this is the case, the field in this tab shows those names and does not allow changes.</p>
 </dd>
-<dt>Columns to store the result</dt><dd><p>The middle tab in this page includes fields to obtain the output column names (the transformation may supply suggestions, an optional suffix to add to the result column names to be able to differentiate between multiple executions of the transformation, and a key column to be use when merging the result of the plugin with the current table.</p>
+<dt>Columns to store the result</dt><dd><p>The middle tab in this page includes fields to obtain the output column names (the transformation may supply suggestions, an optional suffix to add to the result column names to be able to differentiate between multiple executions of the transformation, and a key column to be use when merging the result of the transformation with the current table.</p>
 </dd>
 <dt>Parameters</dt><dd><p>This tab contains a form to pairs <em>(name, value)</em> as defined by the transformation.</p>
 </dd>
+<dt>Description</dt><dd><p>Text describing in detail the effect of the transformation.</p>
+</dd>
 </dl>
-<p>After the data has been provided the tool shows an transformation execution report showing the columns that will be created and how will they be merged with the existing data.</p>
-<div class="section" id="plugin-requirements">
-<span id="id9"></span><h3>3.6.1. Plugin requirements<a class="headerlink" href="#plugin-requirements" title="Permalink to this headline">¶</a></h3>
-<p>The Python modules installed in the predefined folder need to satisfy various requirements to be considered for execution within OnTask. More precisely, each plugin must be stored in its own folder (as a Python module). The file <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> in the module must contain:</p>
+<p>Once the data is filled, the program is executed by clicking in the <span class="fa fa-rocket"></span> <em>Run</em> button. The execution is done in the background (it may take some tie), and a link to the log including the report is shown.</p>
+<div class="section" id="transformation-requirements">
+<span id="plugin-requirements"></span><h3>3.6.1. Transformation requirements<a class="headerlink" href="#transformation-requirements" title="Permalink to this headline">¶</a></h3>
+<p>The information in this section is for those users that want to write a Python module. The modules installed in the predefined folder need to satisfy several requirements to be considered for execution within OnTask. More precisely, each module must be stored in its own folder (as a Python module). The file <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> in the module must contain:</p>
 <ol class="arabic">
 <li><p>Module variable <code class="docutils literal notranslate"><span class="pre">class_name</span></code> with the name of the class in the file that contains the required definitions.</p></li>
-<li><p>The definition of a class with the name stored in the previous variable.</p></li>
-<li><p>Class field <code class="docutils literal notranslate"><span class="pre">name</span></code> with the plugin name to show to the users.</p></li>
-<li><p>Class field <code class="docutils literal notranslate"><span class="pre">escription_txt</span></code> with a string with the detailed description of what the plugin does</p></li>
+<li><p>The definition of a class with the name stored in the previous variable. The class must inherit either from <code class="docutils literal notranslate"><span class="pre">dataops.plugins.OnTaskTransformation</span></code> or <code class="docutils literal notranslate"><span class="pre">dataops.plugins.OnTaskModel</span></code>.</p></li>
+<li><p>Class field <code class="docutils literal notranslate"><span class="pre">name</span></code> with the transformation name to show to the users.</p></li>
+<li><p>Class field <code class="docutils literal notranslate"><span class="pre">description_txt</span></code> with a string with the detailed description of what the transformation does</p></li>
 <li><p>Class field <code class="docutils literal notranslate"><span class="pre">input_column_names</span></code> with a potentially empty list of column names (strings). If the list is empty, the columns are selected by the user at execution time.</p></li>
-<li><p>Class field <code class="docutils literal notranslate"><span class="pre">output_column_names</span></code> with a non empty list of names (strings) of the columns to be used for the output of the transformation.</p></li>
+<li><p>Class field <code class="docutils literal notranslate"><span class="pre">output_column_names</span></code> with a potentially empty list of names (strings) of the columns to be used for the output of the transformation.</p></li>
 <li><p>Class field <code class="docutils literal notranslate"><span class="pre">parameters</span></code> with an optionally empty list with tuples with the following structure:</p>
 <p><code class="docutils literal notranslate"><span class="pre">('name',</span> <span class="pre">type,</span> <span class="pre">[list</span> <span class="pre">of</span> <span class="pre">allowed</span> <span class="pre">values],</span> <span class="pre">initial</span> <span class="pre">value,</span> <span class="pre">help_text)</span></code></p>
-<p>These elements will be requested from the user before executing the
-plugin through a form. The conditions on these values are:</p>
+<p>These elements will be requested from the user before executing the transformatino through a form. The conditions on these values are:</p>
 <ul class="simple">
 <li><p>name must be a string</p></li>
 <li><p>type must be a string equal to “integer”, “double”, “string”,
@@ -1036,10 +1064,11 @@ column with the key column name provided so that it can be properly
 merged with the existing data.</p>
 </li>
 </ol>
-<p>If a plugin does not comply with these properties the platform shows a summary of these checks to diagnose the problem.</p>
+<p>If a transformation does not comply with these properties the system administrator will see a summary of these checks to diagnose the problem.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/dataops_plugin_diagnostics.png"><img alt="../_images/dataops_plugin_diagnostics.png" src="../_images/dataops_plugin_diagnostics.png" style="width: 60%;" /></a>
 </div>
+<p>See the section <a class="reference internal" href="../Tutorial/Tasks/plugin_write.html#plugin-write"><span class="std std-ref">Write your own data processing code</span></a> for an example of a module.</p>
 </div>
 </div>
 </div>
@@ -1097,7 +1126,7 @@ merged with the existing data.</p>
 <li class="toctree-l2"><a class="reference internal" href="#table">3.3. Table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#actions">3.4. Actions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#additional-workflow-operations">3.5. Additional Workflow Operations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plugins-transforming-the-data-with-your-own-code">3.6. Plugins: Transforming the data with your own code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transforming-the-data-with-your-own-code">3.6. Transforming the data with your own code</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">4. Use Scenarios</a></li>

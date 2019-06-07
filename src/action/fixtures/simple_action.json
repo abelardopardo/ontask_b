@@ -76,7 +76,7 @@
     "pk": 3,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Y25uQ3NERU1LVVlr$Y0ZqAnyp83/Hcu6cwcylyA",
-        "last_login": "2019-04-24T07:09:07.338Z",
+        "last_login": "2019-06-03T11:14:42.044Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -405,6 +405,16 @@
     }
 },
 {
+    "model": "authtoken.token",
+    "pk": "8001cacfac70def66a9137e66a3101eee55bc0ec",
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2017-11-08T00:12:05.824Z"
+    }
+},
+{
     "model": "core.ontaskuser",
     "pk": 10,
     "fields": {}
@@ -465,7 +475,7 @@
     "fields": {
         "slug": "3776b8ea-cbd4-4aab-8a70-494783f846ad",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -475,7 +485,7 @@
     "fields": {
         "slug": "7ca4994e-34a6-40a2-b584-18d7a7f8e4a9",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -485,7 +495,7 @@
     "fields": {
         "slug": "4f5b0f2a-d4c2-4d22-82ed-1481510571a5",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -495,7 +505,7 @@
     "fields": {
         "slug": "bddb639d-f3f0-464b-8da0-35a29df20d99",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -505,7 +515,7 @@
     "fields": {
         "slug": "18e838fb-f8d9-4f0c-b979-fa8d0cbc9d14",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -515,7 +525,7 @@
     "fields": {
         "slug": "ece37e9a-ef20-4c12-8a4b-cab668564e14",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -525,7 +535,7 @@
     "fields": {
         "slug": "74432d3f-044b-43b2-9ae7-c7456ce4e09e",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -535,7 +545,7 @@
     "fields": {
         "slug": "fcfcf019-3d1c-4e28-905d-cfd774011fb0",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -545,7 +555,7 @@
     "fields": {
         "slug": "5dd3f343-8d73-4720-af1c-c79a4e05d1f9",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -555,7 +565,7 @@
     "fields": {
         "slug": "710f3cc1-4460-42c6-9703-62d07df185da",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -565,7 +575,7 @@
     "fields": {
         "slug": "859d0e9a-0d1e-4bb5-85af-5bcd9008d5f0",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -579,7 +589,7 @@
         "name": "wflow1",
         "description_text": "description text for workflow 1",
         "created": "2017-11-06T05:30:28.050Z",
-        "modified": "2019-04-24T07:15:57.175Z",
+        "modified": "2019-06-03T11:15:03.279Z",
         "nrows": 3,
         "ncols": 8,
         "attributes": {},
@@ -629,7 +639,7 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_5",
-        "session_key": "",
+        "session_key": "h9o4d638sgwtemni1mto7p3y86we13zz",
         "luser_email_column": null,
         "luser_email_column_md5": "",
         "lusers_is_outdated": false,
@@ -773,7 +783,7 @@
         "name": "simple action",
         "description_text": "action description text",
         "created": "2017-11-06T22:15:41.165Z",
-        "modified": "2019-04-24T07:14:21.394Z",
+        "modified": "2019-06-03T11:16:32.651Z",
         "last_executed_log": null,
         "action_type": "personalized_text",
         "serve_enabled": false,
@@ -782,7 +792,7 @@
         "rows_all_false": [
             2
         ],
-        "content": "{% comment %}Your action content here{% endcomment %}",
+        "text_content": "<p>{{ age }}</p><p>{{ email }}</p><p>{{ sid }}</p><p>{{ another }}</p><p>{{ name }}</p><p>{{ one }}</p><p>{{ registered }}</p><p>{{ when }}<br></p>",
         "target_url": "",
         "shuffle": false
     }

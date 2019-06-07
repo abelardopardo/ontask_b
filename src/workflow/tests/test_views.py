@@ -1,25 +1,25 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 import os
+import test
 
 from django.conf import settings
-from django.shortcuts import reverse
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-import test
-from dataops import pandas_db
+from dataops.pandas import db
 from workflow.models import Workflow
-from action.models import Action
 
 
 class WorkflowInitial(test.OnTaskLiveTestCase):
     def setUp(self):
         super().setUp()
         test.create_users()
+
+    def tearDown(self):
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_01_workflow_create_upload_merge_column_edit(self):
         """
@@ -43,7 +43,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         )
 
         # Set the file name
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          'workflow',
                          'fixtures',
@@ -99,7 +99,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.go_to_csv_upload_merge_step_1()
 
         # Set the file name
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          'workflow',
                          'fixtures',
@@ -172,7 +172,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        db.destroy_db_engine(db.engine)
 
     def test_02_workflow_create_upload_with_prelude(self):
         """
@@ -196,7 +196,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         )
 
         # Set the file name
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          'workflow',
                          'fixtures',
@@ -251,7 +251,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -297,7 +297,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
-            pandas_db.check_wf_df(Workflow.objects.get(pk=1))
+            db.check_wf_df(Workflow.objects.get(id=1))
             idx += 1
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
@@ -407,16 +407,14 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
         super().tearDown()
 
     def test_workflow_attributes(self):
-        categories = 'aaa, bbb, ccc'
-        action_name = 'simple action'
-        action_desc = 'action description text'
+        pass
 
         # Login
         self.login('instructor01@bogus.com')
@@ -449,12 +447,13 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.wait_for_modal_open()
         self.selenium.find_element_by_id('id_key').clear()
         self.selenium.find_element_by_id('id_key').send_keys('newkey2')
-        self.selenium.find_element_by_id('id_value').clear()
-        self.selenium.find_element_by_id('id_value').send_keys('newvalue2')
+        self.selenium.find_element_by_id('id_attr_value').clear()
+        self.selenium.find_element_by_id(
+            'id_attr_value').send_keys('newvalue2')
 
         # Click in the submit button
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class='modal-footer']/button"
         ).click()
 
         # Go back to the attribute table page
@@ -476,10 +475,15 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         ).click()
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
         # MODAL WAITING
         self.wait_for_page(element_id='workflow-detail')
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, "js-attribute-create")
+            )
+        )
 
         # There should only be a single element
         self.assertEqual(
@@ -508,7 +512,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -537,7 +541,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
         # Click in the share button
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
 
         # MODAL WAITING
@@ -570,7 +574,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
         # Click in the button to add the user
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
         # MODAL WAITING
         WebDriverWait(self.selenium, 10).until_not(
@@ -610,7 +614,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         )
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
-            "//div[@class='modal-footer']/button[2]"
+            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
 
         # MODAL WAITING

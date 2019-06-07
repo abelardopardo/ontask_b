@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'action:clone' pk %}" class="js-action-clone-form">
+<form method="post" action="{% url 'action:clone_action' pk %}" class="js-action-clone-form">
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm action cloning' %}</h4>
@@ -12,9 +12,7 @@
     <p>{% trans 'A new action with the prefix "Copy of " will be created' %}</p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="shadow btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
-    </button>
-    <button type="submit" class="shadow btn btn-outline-primary">
+    <button type="submit" class="btn btn-outline-primary">
       <span class="fa fa fa-clone"></span> {% trans 'Clone action' %}</button>
   </div>
 </form>

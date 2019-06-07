@@ -19,4 +19,5 @@ Surveys
 Personalized JSON object
   These actions allow to create a `JSON object <https://json.org>`_ with elements in its structure that can be present or ignored depending on how a condition is evaluated for every student (similarly to the previous actions)
 
-
+Personalized Canvas Email
+  Similar to the HTML text but using plain text and the messages are sent using the mail functionality of the Canvas Learning Management System.

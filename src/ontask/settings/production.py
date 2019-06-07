@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 import logging.config
 
-from .base import *  # NOQA
+from ontask.settings.base import *  # NOQA
 
 # Show emails to console
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -62,10 +61,10 @@ LOGGING = {
             'filename': join(LOG_FOLDER, 'django.log'),
             'formatter': 'verbose'
         },
-        'proj_log_file': {
+        'ontask_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOG_FOLDER, 'project.log'),
+            'filename': join(LOG_FOLDER, 'ontask.log'),
             'formatter': 'verbose'
         },
         'script_log_file': {
@@ -92,8 +91,8 @@ LOGGING = {
             'propagate': True,
             'level': 'ERROR',
         },
-        'project': {
-            'handlers': ['proj_log_file'],
+        'ontask': {
+            'handlers': ['ontask_log_file'],
             'level': 'ERROR',
         },
         'django.request': {

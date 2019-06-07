@@ -20,8 +20,8 @@ var insertText = function(areaId, insert_text) {
 }
 var insertConditionInContent = function() {
   var btn = $(this);
-  if (typeof $('#id_content').summernote != 'undefined') {
-    var range = $("#id_content").summernote('createRange');
+  if (typeof $('#id_text_content').summernote != 'undefined') {
+    var range = $("#id_text_content").summernote('createRange');
     condition_text = gettext('YOUR TEXT HERE');
     range_text = range.toString();
     if (range_text != '') {
@@ -32,7 +32,7 @@ var insertConditionInContent = function() {
   }
   insert_text = "{% if " + btn.text() +
       " %}" + condition_text + "{% endif %}";
-  insertText('id_content', insert_text);
+  insertText('id_text_content', insert_text);
   $(this).val(this.defaultSelected);
 };
 var insertAttributeInContent = function() {
@@ -40,10 +40,10 @@ var insertAttributeInContent = function() {
   if (val == '') {
     return;
   }
-  if (typeof $('#id_content').summernote != 'undefined') {
-    $("#id_content").summernote('createRange');
+  if (typeof $('#id_text_content').summernote != 'undefined') {
+    $("#id_text_content").summernote('createRange');
   }
-  insertText('id_content', "{{ " + val + " }}");
+  insertText('id_text_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
 var toggleShuffleQuestion = function () {
@@ -77,7 +77,7 @@ var ajax_post = function(url, data, req_type) {
       $("#modal-item").modal("show");
     },
     success: function(data) {
-      if (data.form_is_valid) {
+      if (typeof data.html_redirect != 'undefined') {
         if (data.html_redirect == "") {
           $('#div-spinner').show();
           window.location.reload(true);
@@ -101,7 +101,7 @@ var loadFormPost = function () {
   }
   ajax_post(
     $(this).attr("data-url"),
-    [{'name': 'action_content', 'value': get_id_content()}],
+    [{'name': 'action_content', 'value': get_id_text_content()}],
     'post'
   );
 }
@@ -121,7 +121,7 @@ var conditionClone = function() {
   $('#div-spinner').show();
   $.ajax({
     url: $(this).attr("data-url"),
-    data: [{'name': 'action_content', 'value': get_id_content()}],
+    data: [{'name': 'action_content', 'value': get_id_text_content()}],
     type: 'post',
     dataType: 'json',
     success: function (data) {
@@ -131,19 +131,14 @@ var conditionClone = function() {
         } else {
           location.href = data.html_redirect;
         }
-      } else {
-        $('#div-spinner').hide();
+        return;
       }
+      $('#div-spinner').hide();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       location.reload(true);
     },
   });
-}
-var select_next_button = function(e) {
-  $("#step_sequence").prop('hidden', !e.is(":checked"));
-  $("#next-step-on").prop('hidden', !e.is(":checked"));
-  $("#next-step-off").prop('hidden', e.is(":checked"));
 }
 $(function () {
   $("#checkAll").click(function () {
@@ -213,6 +208,9 @@ $(function () {
 
   // Insert columns in action in
   $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", assignColumn);
+
+  // Insert columns in action in
+  $("#edit-survey-tab-content").on("click", ".js-select-condition", assignColumn);
 
   // Toggle shuffle question
   $("#action-in-editor").on("change", "#shuffle-questions", toggleShuffleQuestion);

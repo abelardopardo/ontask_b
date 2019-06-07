@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
+
+import test
 
 from django.shortcuts import reverse
 from rest_framework.authtoken.models import Token
 
-import test
 from workflow.models import Workflow
 
 
@@ -15,7 +15,6 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
         super().setUp()
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email='instructor01@bogus.com')
-        auth = 'Token ' + token.key
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     def test_workflow_list(self):
@@ -29,7 +28,7 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
 
         # Get the workflow and compare
         wflow_id = response.data['results'][0]['id']
-        workflow = Workflow.objects.get(pk=wflow_id)
+        workflow = Workflow.objects.get(id=wflow_id)
         self.assertEqual(wflow_id, 1)
         self.compare_wflows(response.data['results'][0], workflow)
 
@@ -54,9 +53,11 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
 
     def test_workflow_no_post_on_update(self):
         # POST method is not allowed in this URL
-        response = self.client.post(reverse('workflow:api_rud',
-                                            kwargs={'pk': 1}),
-                                    {'name': test.wflow_name + '2'})
+        response = self.client.post(
+            reverse(
+                'workflow:api_rud',
+                kwargs={'pk': 1}),
+            {'name': test.wflow_name + '2'})
 
         # Verify that the method post is not allowed
         self.assertIn('Method "POST" not allowed', response.data['detail'])
@@ -72,7 +73,7 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
 
         # Get the workflow and verify
         wflow_id = response.data['id']
-        workflow = Workflow.objects.get(pk=wflow_id)
+        workflow = Workflow.objects.get(id=wflow_id)
         self.assertEqual(workflow.name, test.wflow_name + '2')
 
     def test_workflow_delete(self):

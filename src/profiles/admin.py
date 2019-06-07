@@ -29,5 +29,6 @@ class NewUserAdmin(NamedUserAdmin):
         return '<a href="{}">{}</a>'.format(url, '\xb6')
     permalink.allow_tags = True
 
+
 admin.site.unregister(User)
 admin.site.register(User, NewUserAdmin)

@@ -1,26 +1,32 @@
 # -*- coding: utf-8 -*-
 
+"""Command to export a single workflow."""
+
 import shutil
 
 from django.core.management.base import BaseCommand
 
 from workflow.models import Workflow
-from workflow.ops import do_export_workflow_parse
+from workflow.import_export import do_export_workflow_parse
 
 
 class Command(BaseCommand):
+    """Command to export a single workflow."""
 
     def add_arguments(self, parser):
-        parser.add_argument('-o', '--output',
-                            default='ontask_workflow.gz',
-                            help='Output GZ file')
+        """Parse the command arguments."""
+        parser.add_argument(
+            '-o',
+            '--output',
+            default='ontask_workflow.gz',
+            help='Output GZ file')
 
-        parser.add_argument('-w',
-                            help='Workflow ID')
-
+        parser.add_argument(
+            '-w',
+            help='Workflow ID')
 
     def handle(self, *args, **options):
-
+        """Export a single workflow."""
         # Obtain workflow id
         wid = options['w']
 
@@ -28,7 +34,7 @@ class Command(BaseCommand):
         workflow = Workflow.objects.filter(pk=wid).first()
         if not workflow:
             self.stdout.write(self.style.ERROR(
-                'There is no workflow with the given IDs'
+                'There is no workflow with the given IDs',
             ))
             return
 
@@ -40,6 +46,5 @@ class Command(BaseCommand):
 
         zbuf = do_export_workflow_parse(workflow, workflow.actions.all())
         zbuf.seek(0)
-        with open(filename, 'wb') as f:
-            shutil.copyfileobj(zbuf, f, length=131072)
-
+        with open(filename, 'wb') as f_obj:
+            shutil.copyfileobj(zbuf, f_obj, length=131072)

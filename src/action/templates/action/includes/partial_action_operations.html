@@ -30,6 +30,10 @@
             title="{% trans 'Create a ZIP with each personalised text in a file' %}">
           <span class="fa fa-file-archive-o"></span> {% trans 'ZIP' %}</a>
       {% endif %}
+      <a href="{% url 'action:timeline' id %}" class="spin dropdown-item"
+         data-toggle="tooltip"
+         title="{% trans 'See when this action was executed' %}">
+        <span class="fa fa-clock-o"></span> {% trans 'Timeline' %}</a>
       {% if is_out %}
         <a href="{% url 'scheduler:create' id %}" class="spin dropdown-item"
            data-toggle="tooltip"
@@ -43,7 +47,7 @@
           <span class="fa fa-pencil"></span> {% trans 'Rename' %}
       </button>
       <button type="button" class="js-action-clone dropdown-item"
-              data-url="{% url 'action:clone' id %}"
+              data-url="{% url 'action:clone_action' id %}"
               data-toggle="tooltip"
               title="{% trans 'Create an identical action' %}">
         <span class="fa fa-clone"></span> {% trans 'Clone' %}

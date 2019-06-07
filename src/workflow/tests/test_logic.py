@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 import gzip
 import os
 import shutil
 import tempfile
+import test
+from test.compare import compare_workflows
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -14,14 +15,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-import test
-from dataops import pandas_db
-from workflow.models import Workflow
-from workflow.ops import (
-    do_export_workflow,
-    do_import_workflow_parse,
-    do_export_workflow_parse
+from dataops.pandas import destroy_db_engine
+from workflow.import_export import (
+    do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
+from workflow.models import Workflow
 
 
 class WorkflowImportExport(test.OnTaskTestCase):
@@ -76,7 +74,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -97,7 +95,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         # Set the workflow name and file
         wname = self.selenium.find_element_by_id('id_name')
         wname.send_keys('newwf')
-        wfile = self.selenium.find_element_by_id('id_file')
+        wfile = self.selenium.find_element_by_id('id_wf_file')
         wfile.send_keys(os.path.join(settings.BASE_DIR(),
                                      'workflow',
                                      'fixtures',
@@ -110,7 +108,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH,
-                 "//h5[contains(@class, 'card-header') " \
+                 "//h5[contains(@class, 'card-header') "
                  "and normalize-space(text()) = '{0}']".format('newwf')),
             )
         )
@@ -147,7 +145,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         for x, y in zip(w1.actions.all(), w2.actions.all()):
             self.assertEqual(x.name, y.name)
             self.assertEqual(x.description_text, y.description_text)
-            self.assertEqual(x.content, y.content)
+            self.assertEqual(x.text_content, y.text_content)
             self.assertEqual(x.conditions.count(),
                              y.conditions.count())
             for c1, c2 in zip(x.conditions.all(), y.conditions.all()):
@@ -161,15 +159,16 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()
 
 
 class WorkflowImportExportCycle(test.OnTaskTestCase):
     fixtures = ['initial_db']
 
-    filename = os.path.join(settings.BASE_DIR(),
-                            '..',
-                            'initial_workflow.gz')
+    gz_filename = os.path.join(
+        settings.BASE_DIR(),
+        '..',
+        'initial_workflow.gz')
     tmp_filename = os.path.join('tmp')
 
     wflow_name = 'initial workflow'
@@ -188,16 +187,15 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
         # User must exist
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
 
-        # Search for a workflow with the given name
-        workflow = Workflow.objects.filter(
-            user__email='instructor01@bogus.com',
-            name=self.wflow_name
-        ).first()
-
         # Workflow must not exist
-        self.assertIsNone(workflow, 'A workflow with this name already exists')
+        self.assertFalse(
+            Workflow.objects.filter(
+                user__email='instructor01@bogus.com',
+                name=self.wflow_name
+            ).exists(),
+            'A workflow with this name already exists')
 
-        with open(self.filename, 'rb') as f:
+        with open(self.gz_filename, 'rb') as f:
             do_import_workflow_parse(user, self.wflow_name, f)
 
         # Get the new workflow
@@ -218,6 +216,8 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
         # Do the export now
         workflow2 = Workflow.objects.filter(name=self.wflow_name2).first()
         self.assertIsNotNone(workflow, 'Incorrect import operation')
+
+        compare_workflows(workflow, workflow2)
 
         # Compare the workflows
         self.assertEqual(workflow.description_text, workflow2.description_text)
@@ -251,7 +251,7 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
             self.assertEqual(a1.active_from, a2.active_from)
             self.assertEqual(a1.active_to, a2.active_to)
             self.assertEqual(a1.rows_all_false, a2.rows_all_false)
-            self.assertEqual(a1.content, a2.content)
+            self.assertEqual(a1.text_content, a2.text_content)
             self.assertEqual(a1.target_url, a2.target_url)
             self.assertEqual(a1.shuffle, a2.shuffle)
 
@@ -280,4 +280,3 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
                 self.assertEqual(t1.column.name, t2.column.name)
                 if t1.condition:
                     self.assertEqual(t1.condition.name, t2.condition.name)
-

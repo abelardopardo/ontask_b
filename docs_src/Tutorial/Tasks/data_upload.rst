@@ -15,14 +15,16 @@ The following page allows you to upload data from three sources:
 
 - an Excel file,
 
-- a publicly available Google Sheet, or
+- a publicly available Google Sheet,
+
+- a CSV file stored in an Amazon S3 Bucket, or
 
 - a SQL connection to a relational database.
 
-.. figure:: /scaptures/dataops_datauploadmerge.png
+.. figure:: /scaptures/dataops_datauploadmerge2.png
    :align: center
 
-Click in the *CSV Upload/Merge* button. The next screen asks you to choose a file to upload the data. A CSV file is a text file in which the data is organized by lines, and the data in each line is separated by commas. A conventional spreadsheet program can save the data in this format. When uploading the file you can optionally specify a number of lines to skip at the top or bottom of your data file. This is useful when the CSV file is produced by another tool and contains some of these lines that have to be ignored.
+Click in the *CSV* button. The next screen asks you to choose a file to upload the data. A CSV file is a text file in which the data is organized by lines, and the data in each line is separated by commas. A conventional spreadsheet program can save the data in this format. When uploading the file you can optionally specify a number of lines to skip at the top or bottom of your data file. This is useful when the CSV file is produced by another tool and contains some of these lines that have to be ignored.
 
 .. figure:: /scaptures/tutorial_csv_upload_learner_information.png
    :align: center

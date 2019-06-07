@@ -5,7 +5,6 @@
 #
 from __future__ import print_function
 
-import csv
 import random
 import string
 import sys
@@ -475,7 +474,11 @@ def create_blended_file(all_students):
 
         blended_student = {'SID': student_info['SID']}
 
-        midterm_score = int(student_info.get('MIDTERM_SCORE', 0))
+        midterm_score = student_info.get('Total', 0)
+        if pd.isna(midterm_score):
+            midterm_score = 0.0
+        else:
+            midterm_score = int(midterm_score)
 
         # Loop for weeks 2 to 6
         for week_n in range(2, 6):
@@ -487,10 +490,14 @@ def create_blended_file(all_students):
             perc = [100 if x > 100 else x for x in perc]
             perc = [0 if x < 0 else x for x in perc]
 
+            perc[0] = int(perc[0] * 100)/100.0
+            perc[1] = int(perc[1] * 100)/100.0
             blended_student['Video_1_W' + str(week_n)] = perc[0]
             blended_student['Video_2_W' + str(week_n)] = perc[1]
-            blended_student['Questions_1_W' + str(week_n)] = perc[2]
-            blended_student['Questions_2_W' + str(week_n)] = perc[3]
+            q1 = round(perc[2]/20)
+            q2 = round(perc[3]/20)
+            blended_student['Questions_1_W' + str(week_n)] = q1
+            blended_student['Questions_2_W' + str(week_n)] = q2
 
             # Percentage of correct questions
             value = random.normalvariate(midterm_score, 30)
@@ -498,6 +505,9 @@ def create_blended_file(all_students):
                 value = 0
             if value > 100:
                 value = 100
+            value = round(value/20)
+            if value > q1:
+                value = q1
             blended_student['Correct_1_W' + str(week_n)] = value
 
             value = random.normalvariate(midterm_score, 30)
@@ -505,6 +515,9 @@ def create_blended_file(all_students):
                 value = 0
             if value > 100:
                 value = 100
+            value = round(value/20)
+            if value > q2:
+                value = q2
             blended_student['Correct_2_W' + str(week_n)] = value
 
         blended_indicators = blended_indicators.append(blended_student,

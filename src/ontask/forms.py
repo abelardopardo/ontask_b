@@ -1,28 +1,27 @@
 # -*- coding: utf-8 -*-
 
-
-from builtins import next
+"""Generic forms to be used in various placdes in the platform."""
 
 import pytz
-from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext_lazy as _
 
-import ontask.ontask_prefs
+from ontask.ontask_prefs import MAX_UPLOAD_SIZE
 
-dateTimeWidgetOptions = {
+date_time_widget_options = {
     'locale': settings.LANGUAGE_CODE,
-    'icons': {'time': 'fa fa-clock-o',
-              'date': 'fa fa-calendar',
-              'up': 'fa fa-angle-up',
-              'down': 'fa fa-angle-down',
-              'previous': 'fa fa-angle-left',
-              'next': 'fa fa-angle-right',
-              'today': 'fa fa-crosshairs',
-              'clear': 'fa fa-trash',
-              'close': 'fa fa-times-circle'},
+    'icons': {
+        'time': 'fa fa-clock-o',
+        'date': 'fa fa-calendar',
+        'up': 'fa fa-angle-up',
+        'down': 'fa fa-angle-down',
+        'previous': 'fa fa-angle-left',
+        'next': 'fa fa-angle-right',
+        'today': 'fa fa-crosshairs',
+        'clear': 'fa fa-trash',
+        'close': 'fa fa-times-circle'},
     'showTodayButton': True,
     'showClear': True,
     'showClose': True,
@@ -32,96 +31,36 @@ dateTimeWidgetOptions = {
 
 
 class RestrictedFileField(forms.FileField):
+    """Restrict the File Field with a size."""
 
     def __init__(self, *args, **kwargs):
+        """Initalise the content types and the max upload size."""
         self.content_types = kwargs.pop('content_types', None)
         self.max_upload_size = kwargs.pop('max_upload_size', None)
         if not self.max_upload_size:
-            self.max_upload_size = int(ontask.ontask_prefs.MAX_UPLOAD_SIZE)
+            self.max_upload_size = int(MAX_UPLOAD_SIZE)
         super().__init__(*args, **kwargs)
 
     def clean(self, *args, **kwargs):
-        data = super().clean(*args, **kwargs)
+        """Verify that type content and size are correct."""
+        form_data = super().clean(*args, **kwargs)
         try:
-            if data.content_type in self.content_types:
-                if data.size > self.max_upload_size:
+            if form_data.content_type in self.content_types:
+                if form_data.size > self.max_upload_size:
                     raise forms.ValidationError(
-                        _('File size must be under %(max)s. Current file '
-                          'size is %(current)s.')
-                        % ({
-                            'max': filesizeformat(self.max_upload_size),
-                            'current': filesizeformat(data.size)
-                        }))
+                        _(
+                            'File size must be under %(max)s. Current file '
+                            + 'size is %(current)s.').format(
+                            filesizeformat(self.max_upload_size),
+                            filesizeformat(form_data.size),
+                        ),
+                    )
             else:
-                raise forms.ValidationError(
-                    _('File type (%s) is not supported.') % data.content_type)
+                raise forms.ValidationError(_(
+                    'File type ({0}) is not supported.').format(
+                        form_data.content_type),
+                )
         except AttributeError:
-            pass
+            return form_data
 
-        return data
-
-
-def column_to_field(col, initial=None, required=False, label=None):
-    """
-    Function that given the description of a column it generates the
-    appropriate field to be included in a form
-    :param col: Column object to use as the basis to create the field
-    :param initial: Initial value for the field
-    :param required: flag to generate the field with the required attribute
-    :param label: Value to overwrite the label attribute
-    :return: Field object
-    """
-
-    # If no label is given, take the column name
-    if not label:
-        label = col.name
-
-    if col.categories:
-        # Column has a finite set of prefixed values
-        choices = [(x, x) for x in col.categories]
-        initial = next((v for x, v in enumerate(choices) if v[0] == initial),
-                       ('', '---'))
-
-        # If the column is of type string, allow always the empty value
-        if col.data_type == 'string':
-            choices.insert(0, ('', '---'))
-
-        return forms.ChoiceField(choices=choices,
-                                 required=required,
-                                 initial=initial,
-                                 label=label)
-
-    # Column is open value
-    if col.data_type == 'string':
-        if not initial:
-            initial = ''
-        if not col.categories:
-            # The field does not have any categories
-            return forms.CharField(initial=initial,
-                                   label=label,
-                                   required=required)
-
-    elif col.data_type == 'integer':
-        return forms.IntegerField(initial=initial,
-                                  label=label,
-                                  required=required)
-
-    elif col.data_type == 'double':
-        return forms.FloatField(initial=initial,
-                                label=label,
-                                required=required)
-
-    elif col.data_type == 'boolean':
-        return forms.BooleanField(initial=initial,
-                                  label=label,
-                                  required=required)
-
-    elif col.data_type == 'datetime':
-        return forms.DateTimeField(
-            initial=initial,
-            label=label,
-            required=required,
-            widget=DateTimePickerInput(options=dateTimeWidgetOptions),
-        )
-    else:
-        raise Exception(_('Unable to process data type '), col.data_type)
+        return form_data

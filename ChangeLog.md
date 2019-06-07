@@ -1,3 +1,35 @@
+## 5 (2019-06)
+
+### Added 
+
+- The presence of a question in a survey can be controlled by a condition. Surveys now have conditions that can be assigned to questions.
+
+- Support to deploy a development server using docker (Issue #81)
+
+- Timeline visualization of action executions. In a single page the timeline of the execution of either all the actions, or a single one.
+
+- Support for CORS Headers (using library django-cors-headers)
+
+### Changed
+
+- Batch command for workflow import can now process multiple files (bulk upload of multiple workflows)
+
+- New UI to differentiate between the execution of transformations and of statistical models.
+
+- Refactoring of plugin infrastructure to execute arbitrary transformations and
+  models
+  
+- Import operation now allows to either provide a workflow name for the import or use the original workflow name (stored in the file).
+
+- Major refactoring of the code to use type hints and an more adequate division into packages. 
+
+- Major rewriting of data frame manipulation to use direct database operations and reduce 
+  the number of load/store operations from DB to Pandas.
+  
+### Fixed
+
+- Error when taking the conjunction between two queryset and not using distinct
+
 ## 4.3.5 (2019-05-06)
 
 ### Fixed

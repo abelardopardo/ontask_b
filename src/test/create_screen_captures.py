@@ -1,23 +1,25 @@
 # -*- coding: utf-8 -*-
 
 
-from future import standard_library
-
-from action.models import Action
-
-standard_library.install_aliases()
 import os
 
+# from dataops.models import SQLConnection
+import test
+from test import ElementHasFullOpacity, ScreenTests
+
 from django.conf import settings
+from future import standard_library
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-import test
-from dataops import pandas_db
-from test import ElementHasFullOpacity, ScreenTests
+from action.models import Action
+from dataops.pandas import destroy_db_engine
+
+standard_library.install_aliases()
+
 
 class ScreenTutorialTest(ScreenTests):
 
@@ -42,7 +44,8 @@ class ScreenTutorialTest(ScreenTests):
             'js-create-workflow').click()
         self.wait_for_modal_open()
 
-        self.selenium.find_element_by_id('id_name').send_keys(self.workflow_name)
+        self.selenium.find_element_by_id(
+            'id_name').send_keys(self.workflow_name)
         desc = self.selenium.find_element_by_id('id_description_text')
         desc.send_keys(self.description)
 
@@ -52,12 +55,18 @@ class ScreenTutorialTest(ScreenTests):
         # Close the modal.
         desc.send_keys(Keys.RETURN)
         self.wait_for_modal_close()
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, "//table[@id='dataops-table']")
+            )
+        )
 
+        self.body_ss('dataops_datauploadmerge2.png')
         # End of session
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()
 
 
 class ScreenImportTest(ScreenTests):
@@ -88,7 +97,7 @@ class ScreenImportTest(ScreenTests):
         self.selenium.find_element_by_id('id_name').send_keys(
             self.workflow_name
         )
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_wf_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          '..',
                          'initial_workflow.gz')
@@ -107,7 +116,7 @@ class ScreenImportTest(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()
 
 
 class ScreenTestFixture(ScreenTests):
@@ -123,7 +132,7 @@ class ScreenTestFixture(ScreenTests):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
         # Insert a SQL Connection
         # sqlc = SQLConnection(
@@ -172,7 +181,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()
 
     def test_ss_workflow(self):
         # Login
@@ -258,7 +267,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()
 
     def test_ss_details(self):
         # Login
@@ -287,7 +296,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()
 
     def test_ss_dataops(self):
         # Login
@@ -304,7 +313,7 @@ class ScreenTestFixture(ScreenTests):
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          '..',
                          'initial_workflow',
@@ -389,11 +398,18 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('dataops_upload_excel.png')
         self.go_to_table()
         #
-        # Dataops/Merge Excel Merge
+        # Google doc merge
         #
         # Go to Excel Upload/Merge
         self.go_to_google_sheet_upload_merge_step_1()
         self.body_ss('dataops_upload_gsheet.png')
+        self.go_to_table()
+
+        #
+        # S3 CSV merge
+        #
+        self.go_to_s3_upload_merge_step_1()
+        self.body_ss('dataops_upload_s3.png')
         self.go_to_table()
 
         #
@@ -419,10 +435,11 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('dataops_transform_list.png')
 
         # Click to run test_plugin_1
-        element = self.search_table_row_by_string('transform-table',
-                                                  1,
-                                                  'test_plugin_1')
-        element.find_element_by_xpath('td[2]/a').click()
+        element = self.search_table_row_by_string(
+            'transform-table',
+            1,
+            'Test Plugin 1 Name')
+        element.find_element_by_xpath('td[1]/a').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -430,11 +447,30 @@ class ScreenTestFixture(ScreenTests):
         # Picture of the body
         self.body_ss('dataops_transformation_run.png')
 
+        #
+        # Dataops: Model
+        #
+        self.go_to_model()
+        self.body_ss('dataops_model_list.png')
+
+        # Click to run linear model
+        element = self.search_table_row_by_string(
+            'transform-table',
+            1,
+            'Linear Model')
+        element.find_element_by_xpath('td[1]/a').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
+        )
+
+        # Picture of the body
+        self.body_ss('dataops_model_run.png')
+
         # End of session
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()
 
     def test_ss_table(self):
         # Login
@@ -487,7 +523,7 @@ class ScreenTestFixture(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()
 
     def test_ss_action(self):
         # Login
@@ -510,6 +546,17 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('action_edit_action_in.png')
 
         # Open the "Create question modal"
+        self.select_condition_tab()
+        self.create_condition(
+            'Full time',
+            '',
+            [('Attendance', 'equal', 'Full Time')]
+        )
+
+        # Open the "Create question modal"
+        self.select_questions_tab()
+        self.body_ss('action_edit_action_in_question_tab.png')
+
         self.selenium.find_element_by_xpath(
             "//button[contains(@class, 'js-workflow-question-add')]").click()
         self.wait_for_modal_open()
@@ -629,7 +676,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_CANVAS_EMAIL)
+        select.select_by_value(Action.personalized_canvas_email)
         desc.send_keys('Week 3 reminder to review material')
 
         self.modal_ss('action_personalized_canvas_email_create.png')
@@ -657,7 +704,7 @@ class ScreenTestFixture(ScreenTests):
         )
 
         self.select_canvas_text_tab()
-        self.selenium.find_element_by_id('id_content').send_keys(
+        self.selenium.find_element_by_id('id_text_content').send_keys(
             """Dear {{ GivenName }}
 
 We recommend that you review the discussions in the online forum about the topics we are going to cover this week
@@ -746,9 +793,6 @@ Course Coordinator""")
         # End of session
         self.logout()
 
-        # Close the db_engine
-        # pandas_db.destroy_db_engine(pandas_db.engine)
-
     def test_ss_scheduler(self):
         # Login
         self.login('instructor01@bogus.com')
@@ -835,7 +879,7 @@ Course Coordinator""")
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()
 
     def test_ss_logs(self):
         # Login
@@ -856,4 +900,4 @@ Course Coordinator""")
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()

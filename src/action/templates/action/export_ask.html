@@ -10,8 +10,8 @@
     <p class="help-block text-center">{% trans 'Type: ' %}{{ action.get_action_type_display }}</p>
     {% if action.is_out %}
       <p class="help-block text-center">{% trans 'Content' %}</p>
-      <div class="shadow border border-dark my-3">
-        {{ action.content|safe }}
+      <div class="shadow border border-dark my-3 text-left">
+        {{ action.text_content|safe }}
       </div>
     {% else %}
       <p class="help-block">{% trans 'Columns:' %} {{ cnames|join:", " }}</p>

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from rest_framework import generics, status
-
 from django.db.models import Q
-from ontask.permissions import UserIsInstructor
-from scheduler.models import ScheduledAction
-from scheduler.serializers import ScheduledEmailSerializer, \
-    ScheduledJSONSerializer
+from rest_framework import generics
 
 from action.models import Action
+from ontask.permissions import UserIsInstructor
+from scheduler.models import ScheduledAction
+from scheduler.serializers import (
+    ScheduledEmailSerializer, ScheduledJSONSerializer,
+)
 
 
 class ScheduledActionAPIListCreate(generics.ListCreateAPIView):
@@ -86,14 +86,14 @@ class ScheduledActionEmailAPIListCreate(ScheduledActionAPIListCreate):
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return ScheduledAction.objects.filter(
-                action__action_type=Action.PERSONALIZED_TEXT
+                action__action_type=Action.personalized_text
             )
 
         return ScheduledAction.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.PERSONALIZED_TEXT
+            action__action_type=Action.personalized_text
         ).distinct()
 
 
@@ -113,14 +113,14 @@ class ScheduledActionJSONAPIListCreate(ScheduledActionAPIListCreate):
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return ScheduledAction.objects.filter(
-                action__action_type=Action.PERSONALIZED_JSON
+                action__action_type=Action.personalized_json
             )
 
         return ScheduledAction.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.PERSONALIZED_JSON
+            action__action_type=Action.personalized_json
         ).distinct()
 
 
@@ -146,14 +146,14 @@ class ScheduledEmailAPIRetrieveUpdateDestroy(
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return ScheduledAction.objects.filter(
-                action__action_type=Action.PERSONALIZED_TEXT
+                action__action_type=Action.personalized_text
             )
 
         return ScheduledAction.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.PERSONALIZED_TEXT
+            action__action_type=Action.personalized_text
         ).distinct()
 
 
@@ -179,12 +179,12 @@ class ScheduledJSONAPIRetrieveUpdateDestroy(
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return ScheduledAction.objects.filter(
-                action__action_type=Action.PERSONALIZED_JSON
+                action__action_type=Action.personalized_json
             )
 
         return ScheduledAction.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.PERSONALIZED_JSON
+            action__action_type=Action.personalized_json
         ).distinct()

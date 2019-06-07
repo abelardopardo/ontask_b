@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""First entry point to define URLs."""
 
 from django.conf import settings
 from django.conf.urls import include
@@ -7,11 +8,11 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
+from django.urls import path
 from django.utils.translation import ugettext
 from django.views.decorators.cache import cache_page
 from django.views.i18n import JavaScriptCatalog
 from rest_framework.documentation import include_docs_urls
-from django.urls import path
 
 import accounts.urls
 import action.urls
@@ -22,28 +23,31 @@ import profiles.urls
 import scheduler.urls
 import table.urls
 import workflow.urls
-from dataops import pandas_db
+import workflow.views.home
+from dataops.pandas import set_engine
+from ontask import views
 from ontask.templatetags.ontask_tags import ontask_version
-from . import views
-import workflow.views
+from workflow.views import home
 
-api_description = ugettext("""The OnTask API offers functionality to manipulate 
-workflows, tables and logs. The interface provides CRUD operations over 
-these objects.""")
+api_description = ugettext(
+    'The OnTask API offers functionality to manipulate workflows, tables '
+    + 'and logs. The interface provides CRUD operations over these '
+    + 'objects.')
 
 urlpatterns = [
     # Home Page!
-    path('', views.home, name='home'),
+    path('', home, name='home'),
 
     path('lti_entry', views.lti_entry, name='lti_entry'),
 
-    path('not_authorized', views.home, name='not_authorized'),
+    path('not_authorized', workflow.views.home, name='not_authorized'),
 
     path('about', views.AboutPage.as_view(), name='about'),
 
-    path('under_construction',
-         views.under_construction,
-         name='under_construction'),
+    path(
+        'under_construction',
+        views.under_construction,
+        name='under_construction'),
 
     path('users', include(profiles.urls, namespace='profiles')),
 
@@ -69,33 +73,39 @@ urlpatterns = [
 
     path('summernote/', include('django_summernote.urls')),
 
-    path('ontask_oauth/', include(ontask_oauth.urls, namespace='ontask_oauth')),
+    path(
+        'ontask_oauth/',
+        include(ontask_oauth.urls,
+                namespace='ontask_oauth')),
 
     path('tobedone', views.ToBeDone.as_view(), name='tobedone'),
 
     # API AUTH and DOC
-    path('api-auth/',
-         include('rest_framework.urls', namespace='rest_framework')),
+    path(
+        'api-auth/',
+        include('rest_framework.urls', namespace='rest_framework')),
 
-    path('apidoc/',
-         include_docs_urls(
-             title='OnTask API',
-             description=api_description,
-             public=False),
-         ),
+    path(
+        'apidoc/',
+        include_docs_urls(
+            title='OnTask API',
+            description=api_description,
+            public=False),
+    ),
 ]
 
 # User-uploaded files like profile pics need to be served in development
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
-    path('jsi18n',
-         cache_page(
-             86400,
-             key_prefix='js18n-%s' % ontask_version())(
-             JavaScriptCatalog.as_view()),
-         name='javascript-catalog'
-         ),
+    path(
+        'jsi18n',
+        cache_page(
+            86400,
+            key_prefix='js18n-%s' % ontask_version())(
+            JavaScriptCatalog.as_view()),
+        name='javascript-catalog',
+    ),
 )
 
 # Include django debug toolbar if DEBUG is ons
@@ -112,22 +122,15 @@ handler404 = 'ontask.views.ontask_handler404'
 handler500 = 'ontask.views.ontask_handler500'
 
 # Create the DB engine with SQLAlchemy (once!)
-pandas_db.engine = pandas_db.create_db_engine(
-    'postgresql',
-    '+psycopg2',
-    settings.DATABASES['default']['USER'],
-    settings.DATABASES['default']['PASSWORD'],
-    settings.DATABASES['default']['HOST'],
-    settings.DATABASES['default']['NAME'],
-)
+set_engine()
 
 # Make sure the Site has the right information
 try:
-    site = Site.objects.get(pk=settings.SITE_ID)
+    site = Site.objects.get(id=settings.SITE_ID)
     site.domain = settings.DOMAIN_NAME
     site.name = settings.DOMAIN_NAME
     site.save()
 except Exception:
     # To bypass the migrate command execution that fails because the Site
     # table is not created yet.
-    pass
+    site = None

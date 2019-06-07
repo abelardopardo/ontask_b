@@ -30,28 +30,6 @@
           "url": location.protocol + getLanguage()
         },
         "columnDefs": [
-          {"targets": 0,
-           "createdCell": function(td, cellData, rowData, row, col) {
-             $(td).html('<div data-toggle="tooltip"><span class="fa"></span</div>');
-             if (cellData == 'personalized_text') {
-               $(td).addClass('action-type-personalized-text');
-               $('div', td).attr('title', 'Personalized text');
-               $('div > span', td).addClass('fa-file-text');
-             } else if (cellData == 'personalized_canvas_email') {
-               $(td).addClass('action-type-personalized-canvas-email');
-               $('div', td).attr('title', 'Personalized Canvas Email');
-               $('div > span', td).addClass('fa-envelope-square');
-             } else if (cellData == 'personalized_json') {
-               $(td).addClass('action-type-personalized-json');
-               $('div', td).attr('title', 'Personalized JSON');
-               $('div > span', td).addClass('fa-code');
-             } else if (cellData == 'survey') {
-               $(td).addClass('action-type-survey');
-               $('div', td).attr('title', 'Survey');
-               $('div > span', td).addClass('fa-question-circle-o');
-             }
-           }
-          },
           {"className": "dt-center", "targets": [0, 3, 4]},
           {"orderable": false, "targets": 4},
           {"searchable": false, "targets": 4},
@@ -86,8 +64,11 @@
            class="shadow btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'Import action previously exported' %}">
           <span class="fa fa-upload"></span> {% trans 'Import action' %}</a>
+        <a href="{% url 'action:timeline' %}"
+           class="shadow btn btn-outline-dark"
+           data-toggle="tooltip" title="{% trans 'See when the actions were executed' %}">
+          <span class="fa fa-clock-o"></span> {% trans 'Timeline' %}</a>
       {% endif %}
-      {% include 'workflow/includes/manage_table_data.html' %}
     </div>
     {% if table.data|length %}
       <div class="justify-content-center">

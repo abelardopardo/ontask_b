@@ -2,11 +2,11 @@
 
 from authtools import views as authviews
 from braces import views as bracesviews
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 
 from . import forms
 
@@ -28,8 +28,8 @@ class LoginView(bracesviews.AnonymousRequiredMixin,
         redirect = super().form_valid(form)
         remember_me = form.cleaned_data.get('remember_me')
         if remember_me is True:
-            ONE_MONTH = 30*24*60*60
-            expiry = getattr(settings, "KEEP_LOGGED_DURATION", ONE_MONTH)
+            one_month = 30 * 24 * 60 * 60
+            expiry = getattr(settings, "KEEP_LOGGED_DURATION", one_month)
             self.request.session.set_expiry(expiry)
         return redirect
 

@@ -7,6 +7,7 @@
     </button>
   </div>
   <div class="modal-body">
+    <h4 class="text-center">{% trans 'Folder:' %} {{ folder }}</h4>
     <table class="table shadow" id="transform-diagnostics-table">
       <thead>
         <tr>
@@ -23,10 +24,6 @@
         {% endfor %}
       </tbody>
     </table>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="shadow btn btn-outline-dark" data-dismiss="modal">{% trans 'Close' %}
-    </button>
   </div>
 </div>
 

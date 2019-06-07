@@ -6,9 +6,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.core.exceptions import PermissionDenied
+
 from ontask_lti.tool_provider import DjangoToolProvider
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('ontask')
 
 
 class LTIAuthBackend(ModelBackend):
@@ -32,7 +33,7 @@ class LTIAuthBackend(ModelBackend):
             logger.error("No request object in authenticatiton")
             return None
 
-        request_key = request.POST.get('oauth_consumer_key', None)
+        request_key = request.POST.get('oauth_consumer_key')
 
         if request_key is None:
             logger.error(
@@ -101,10 +102,10 @@ class LTIAuthBackend(ModelBackend):
         # Retrieve username from LTI parameter or default to an overridable
         # function return value
         username = tool_provider.lis_person_sourcedid or \
-                   self.get_default_username(
-                       tool_provider,
-                       prefix=self.unknown_user_prefix
-                   )
+            self.get_default_username(
+                tool_provider,
+                prefix=self.unknown_user_prefix
+            )
         username = self.clean_username(username)  # Clean it
 
         email = tool_provider.lis_person_contact_email_primary
@@ -130,7 +131,8 @@ class LTIAuthBackend(ModelBackend):
             })
 
             if created:
-                logger.debug('authenticate created a new user for %s', username)
+                logger.debug(
+                    'authenticate created a new user for %s', username)
             else:
                 logger.debug('authenticate found an existing user for %s',
                              username)

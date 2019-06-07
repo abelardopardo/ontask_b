@@ -1,6 +1,7 @@
 
-from builtins import object
 import time
+from builtins import object
+
 
 class Timer(object):
     def __init__(self, verbose=False):
@@ -17,7 +18,8 @@ class Timer(object):
         if self.verbose:
             print('elapsed time: %f ms' % self.msecs)
 
-'''
+
+"""
 Example usage:
 
 from timer import Timer
@@ -30,4 +32,4 @@ with Timer as t:
     do_something_else()
 print "=> elasped lpop: %s s" % t.secs
 
-'''
+"""

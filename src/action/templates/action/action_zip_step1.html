@@ -10,6 +10,9 @@
 {% endblock scripts %}
 {% block container %}
   <div class="container" id="zip-action-request-data">
+    <div id="step_sequence" hidden>
+      {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
+    </div>
     <h1 class="text-center">{% blocktrans with n=action.name %}ZIP for
       action "{{ n }}"{% endblocktrans %}<super>*</super></h1>
     {% if num_msgs > 0 %}
@@ -24,9 +27,12 @@
             <button type="button" class="shadow btn btn-outline-info js-action-preview"
                     data-url="{% url 'action:preview' action.id 1 %}">
               <span class="fa fa fa-eye"></span> {% trans 'Preview' %}</button>
-            <button type="Submit" name="Submit" value="Submit"
+            <button type="Submit" name="Submit" value="Submit" id="next-step-on" hidden
                     class="shadow btn btn-outline-primary btn-space spin">
               <span class="fa fa-angle-right"></span> {% trans 'Next' %}</button>
+            <button type="Submit" name="Submit" value="Submit" id="next-step-off"
+                    class="shadow btn btn-outline-primary btn-space spin">
+              <span class="fa fa-angle-right"></span> {% trans 'Send' %}</button>
           </div>
         </form>
       </div>

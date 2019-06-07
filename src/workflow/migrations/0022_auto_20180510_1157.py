@@ -3,7 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from dataops import pandas_db
+
+from dataops.pandas import load_table
 
 
 def forwards(apps, schema_editor):
@@ -14,10 +15,10 @@ def forwards(apps, schema_editor):
     Workflow = apps.get_model('workflow', 'Workflow')
 
     for w in Workflow.objects.all():
-        if not pandas_db.is_wf_table_in_db(w):
+        if not w.is_table_in_db(w):
             continue
 
-        df = pandas_db.load_from_db(w.id)
+        df = load_table(w.id)
 
         if len(df.columns) != w.ncols:
             raise Exception('Inconsistent number of columns')

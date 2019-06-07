@@ -61,7 +61,7 @@ class LaunchParamsMixin(object):
         self.ext_params = defaultdict(lambda: None)
 
     def roles(self, roles_list):
-        '''
+        """
         Set the roles for the current launch.
 
         Full list of roles can be found here:
@@ -82,18 +82,18 @@ class LaunchParamsMixin(object):
         * Administrator
         * Observer
         * None
-        '''
+        """
         if roles_list and isinstance(roles_list, list):
             self.roles = [].extend(roles_list)
         elif roles_list and isinstance(roles_list, str):
             self.roles = [role.lower() for role in roles_list.split(',')]
 
     def process_params(self, params):
-        '''
+        """
         Populates the launch data from a dictionary. Only cares about keys in
         the LAUNCH_DATA_PARAMETERS list, or that start with 'custom_' or
         'ext_'.
-        '''
+        """
         for key, val in list(params.items()):
             if key in LAUNCH_DATA_PARAMETERS and val != 'None':
                 if key == 'roles':
@@ -129,10 +129,10 @@ class LaunchParamsMixin(object):
         return self.ext_params['ext_' + key]
 
     def to_params(self):
-        '''
+        """
         Createa a new dictionary with all launch data. Custom / Extension keys
         will be included. Roles are set as a ',' separated string.
-        '''
+        """
         params = {}
         custom_params = {}
         for key in self.custom_params:

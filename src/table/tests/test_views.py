@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 import os
+import test
 
 from django.conf import settings
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
-import test
-from dataops import pandas_db
+from dataops.pandas import load_table
 from workflow.models import Workflow
 
 
@@ -27,7 +26,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -308,8 +307,8 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check that the data is correct
-        df = pandas_db.load_from_db(
-            Workflow.objects.all()[0].get_data_frame_table_name()
+        df = load_table(
+            Workflow.objects.all()[0].get_data_frame_table_name(),
         )
 
         # d1 = c1 + c2
@@ -349,7 +348,7 @@ class TableViews(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -371,7 +370,7 @@ class TableViews(test.OnTaskLiveTestCase):
 
         # Button to add a view
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add View']"
+            "//button[normalize-space()='View']"
         ).click()
         self.wait_for_modal_open()
 
@@ -411,7 +410,7 @@ class TableViews(test.OnTaskLiveTestCase):
         # Click in the link to see the table resulting from this view
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'v1']/../td[3]/div/a"
+            "//td[1][normalize-space() = 'v1']/../td[3]/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -428,7 +427,7 @@ class TableViews(test.OnTaskLiveTestCase):
 
         # Add a second view
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Add View']"
+            "//button[normalize-space()='View']"
         ).click()
         self.wait_for_modal_open()
 
@@ -472,7 +471,7 @@ class TableViews(test.OnTaskLiveTestCase):
         # Check the table resulting from the view
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'v2']/../td[3]/div/a"
+            "//td[1][normalize-space() = 'v2']/../td[3]/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -510,7 +509,7 @@ class TableViews(test.OnTaskLiveTestCase):
         # Click in the clone link of the first view
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']//tr/td[1][normalize-space() = 'v1']/"
-            "../td[3]/div/button[1]"
+            "../td[3]/button[1]"
         ).click()
         # Confirm view cloning
         self.selenium.find_element_by_xpath(
@@ -522,7 +521,7 @@ class TableViews(test.OnTaskLiveTestCase):
         # Open the view with the clone
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'Copy_of_v1']/../td[3]/div/a"
+            "//td[1][normalize-space() = 'Copy of v1']/../td[3]/a"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -549,7 +548,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -570,7 +569,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_link_text('Row').click()
 
         # Fill out the fields in the form
-        for x in range(0,10):
+        for x in range(0, 10):
             keyelem = self.selenium.find_element_by_id(
                 'id____ontask___upload_{0}'.format(x)
             )
@@ -590,7 +589,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
         )
 
         # Incorrect primary key introduced (repeated value)
-        self.assertIn('It must be different to maintain Key property',
+        self.assertIn('The new data does not preserve the key property',
                       self.selenium.page_source)
 
         # Introduce a valid primary key

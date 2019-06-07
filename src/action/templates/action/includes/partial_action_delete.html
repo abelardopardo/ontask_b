@@ -11,9 +11,7 @@
     <p class="lead">{% blocktrans with n=action.name %}Are you sure you want to delete the action <strong>{{ n }}</strong>?{% endblocktrans %}</p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="shadow btn btn-outline-dark" data-dismiss="modal">{% trans 'Cancel' %}
-    </button>
-    <button type="submit" class="shadow btn btn-outline-danger">
+    <button type="submit" class="btn btn-outline-danger">
       <span class="fa fa-trash"></span> {% trans 'Delete action' %}</button>
   </div>
 </form>

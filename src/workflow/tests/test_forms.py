@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
-
-from django.urls import reverse
 
 import test
+
 from workflow.forms import WorkflowForm
 
 
 class WorkflowFormTest(test.OnTaskTestCase):
     # Valid data
     def test_workflow_valid(self):
-        form = WorkflowForm(data={'name': 'workflow1',
-                                  'description_text': 'Fake description text'})
+        form = WorkflowForm(
+            data={
+                'name': 'workflow1',
+                'description_text': 'Fake description text'})
 
         self.assertTrue(form.is_valid())
 

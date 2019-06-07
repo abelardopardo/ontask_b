@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 from django.contrib import admin
 
@@ -14,5 +13,6 @@ class OnTaskOAuthUserTokensAdmin(admin.ModelAdmin):
                     'created',
                     'modified',
                     'valid_until')
+
 
 admin.site.register(OnTaskOAuthUserTokens, OnTaskOAuthUserTokensAdmin)

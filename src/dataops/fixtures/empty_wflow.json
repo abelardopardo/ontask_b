@@ -558,7 +558,7 @@
     "fields": {
         "slug": "625c9377-9fa5-4565-8076-241cc5915c3f",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -568,7 +568,7 @@
     "fields": {
         "slug": "5c5f63d2-bd40-4edf-b8ce-c942ef3f76c6",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -578,7 +578,7 @@
     "fields": {
         "slug": "6c89d4f7-f6d4-4828-939c-e3eccb1a6ca7",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -588,7 +588,7 @@
     "fields": {
         "slug": "a73d2eed-14b1-42b3-81a1-25fcc7284936",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -598,7 +598,7 @@
     "fields": {
         "slug": "d4cb073d-2c8f-4aa6-b333-92b0716384b0",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -608,7 +608,7 @@
     "fields": {
         "slug": "4a52ab12-2182-4352-9e7f-a705e8f952e1",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -618,7 +618,7 @@
     "fields": {
         "slug": "f224ed18-faad-4dc3-8fdf-7c182e42689c",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -628,7 +628,7 @@
     "fields": {
         "slug": "2f095e4f-b593-465c-bd9b-e2f64b729796",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -638,7 +638,7 @@
     "fields": {
         "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -648,7 +648,7 @@
     "fields": {
         "slug": "7196ba08-9652-47f9-8f1f-dbc4ee33fa35",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -658,7 +658,7 @@
     "fields": {
         "slug": "66816e31-b582-401e-94e0-702d101a5413",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },

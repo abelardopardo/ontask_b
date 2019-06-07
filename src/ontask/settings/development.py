@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 import logging.config
 
-from .base import *  # NOQA
+from ontask.settings.base import *  # NOQA
 
 # Turn off debug while imported by Celery with a workaround
 # See http://stackoverflow.com/a/4806384
@@ -17,9 +16,9 @@ else:
 if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
 
-TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
-if TESTING:
+if ONTASK_TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+    FIXTURE_DIRS = [os.path.join(PROJECT_DIR, 'initial_workflow')]
 else:
     # Show emails to console in DEBUG mode
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -62,10 +61,10 @@ LOGGING = {
             'filename': join(LOG_FOLDER, 'django.log'),
             'formatter': 'verbose'
         },
-        'proj_log_file': {
+        'ontask_log_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(LOG_FOLDER, 'project.log'),
+            'filename': join(LOG_FOLDER, 'ontask.log'),
             'formatter': 'verbose'
         },
         'script_log_file': {
@@ -92,8 +91,8 @@ LOGGING = {
             'propagate': True,
             'level': 'DEBUG',
         },
-        'project': {
-            'handlers': ['proj_log_file'],
+        'ontask': {
+            'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },
         'scripts': {
@@ -112,11 +111,11 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'django_auth_lti.backends': {
-            'handlers': ['proj_log_file'],
+            'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },
         'django_auth_lti.middleware_patched': {
-            'handlers': ['proj_log_file'],
+            'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },
     }

@@ -6,7 +6,8 @@ Implementation of visualizations using the Plotly JS library
 import json
 from builtins import str
 
-from dataops import pandas_db
+from dataops.pandas import pandas_datatype_names
+
 from . import VisHandler
 
 
@@ -81,7 +82,7 @@ class PlotlyBoxPlot(PlotlyHandler):
 
         # If an individual value has been given, add the annotation and the
         # layout to the rendering.
-        if self.format_dict.get('individual_value', None) is not None:
+        if self.format_dict.get('individual_value') is not None:
             self.layout['annotations'] = [{
                 'bgcolor': 'white',
                 'x': 0,
@@ -105,7 +106,7 @@ class PlotlyBoxPlot(PlotlyHandler):
         self.format_dict['data'] = json.dumps(data)
 
         self.html_content = ''
-        if self.format_dict.get('title', None):
+        if self.format_dict.get('title'):
             self.html_content = self.format_dict['title']
 
         self.html_content += self.html_skel.format(**self.format_dict)
@@ -131,10 +132,11 @@ class PlotlyColumnHistogram(PlotlyHandler):
 
         self.format_dict['id'] = 'histogram-id'
 
-        self.layout.update({'autobinx': True,
-                            'autobiny': True,
-                            'bargap': 0.01,
-                            'yaxis': {'title': 'Count'}})
+        self.layout.update(
+            {'autobinx': True,
+             'autobiny': True,
+             'bargap': 0.01,
+             'yaxis': {'title': 'Count'}})
 
         # Transfer the keys to the formatting dictionary
         for key, value in list(kwargs.pop('context', {}).items()):
@@ -143,7 +145,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
         data = []
         for column in self.data.columns:
             column_dtype = \
-                pandas_db.pandas_datatype_names.get(
+                pandas_datatype_names.get(
                     self.data[column].dtype.name)
         data_list = self.data[column].dropna().tolist()
         # Special case for bool and datetime. Turn into strings to be
@@ -164,7 +166,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
 
         # If an individual value has been given, add the annotation and the
         # layout to the rendering.
-        if self.format_dict.get('individual_value', None) is not None:
+        if self.format_dict.get('individual_value') is not None:
             ival = self.format_dict['individual_value']
             if column_dtype == 'boolean' or column_dtype == 'datetime':
                 ival = str(ival)
@@ -183,7 +185,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
         self.format_dict['layout'] = json.dumps(self.layout)
 
         self.html_content = ''
-        if self.format_dict.get('title', None):
+        if self.format_dict.get('title'):
             self.html_content = self.format_dict['title']
 
         self.html_content += self.html_skel.format(**self.format_dict)

@@ -3,8 +3,9 @@
 Implementation of visualizations using the Vega JS libarry
 """
 
-from builtins import object
 from abc import ABCMeta, abstractmethod
+from builtins import object
+
 from future.utils import with_metaclass
 
 
@@ -26,7 +27,6 @@ class VisHandler(with_metaclass(ABCMeta, object)):
         <script > elements to include in the HTML head
         :return: Nothing. Modify current list
         """
-        pass
 
     @abstractmethod
     def get_id(self):
@@ -34,7 +34,6 @@ class VisHandler(with_metaclass(ABCMeta, object)):
         Return the name of this handler
         :return: string with the name
         """
-        pass
 
     @abstractmethod
     def render(self):
@@ -43,4 +42,3 @@ class VisHandler(with_metaclass(ABCMeta, object)):
 
         :return: String as HTML snippet
         """
-        pass

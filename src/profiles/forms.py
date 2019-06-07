@@ -1,10 +1,11 @@
 
 from builtins import object
-from django import forms
+
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
-from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
+from crispy_forms.layout import Field, Layout, Submit
+from django import forms
 from django.contrib.auth import get_user_model
+
 from . import models
 
 User = get_user_model()
@@ -18,7 +19,7 @@ class UserForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Field('name'),
-            )
+        )
 
     class Meta(object):
         model = User
@@ -35,7 +36,7 @@ class ProfileForm(forms.ModelForm):
             Field('picture'),
             Field('bio'),
             Submit('update', 'Update', css_class="shadow btn-success"),
-            )
+        )
 
     class Meta(object):
         model = models.Profile

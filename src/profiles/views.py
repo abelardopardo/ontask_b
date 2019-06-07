@@ -1,18 +1,17 @@
 
 
-from django.contrib.auth.decorators import login_required
-from django.views import generic
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
-from rest_framework.authtoken.models import Token
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
+from django.views import generic
+from rest_framework.authtoken.models import Token
 
 from ontask.permissions import is_instructor
 from ontask_oauth.models import OnTaskOAuthUserTokens
-from . import forms
-from . import models
+
+from . import forms, models
 
 
 class ShowProfile(LoginRequiredMixin, generic.TemplateView):
@@ -61,8 +60,8 @@ class EditProfile(LoginRequiredMixin, generic.TemplateView):
             user_form = forms.UserForm(instance=user)
             profile_form = forms.ProfileForm(instance=user.profile)
             return super().get(request,
-                                                user_form=user_form,
-                                                profile_form=profile_form)
+                               user_form=user_form,
+                               profile_form=profile_form)
         # Both forms are fine. Time to save!
         user_form.save()
         profile = profile_form.save(commit=False)
@@ -103,7 +102,7 @@ def delete_token(request, pk):
     """
 
     # Delete the token
-    OnTaskOAuthUserTokens.objects.get(pk=pk).delete()
+    OnTaskOAuthUserTokens.objects.get(id=pk).delete()
 
     # Go back to showing the profile
     return redirect('profiles:show_self')

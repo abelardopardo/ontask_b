@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 import os
+import test
 
 from django.conf import settings
 from django.shortcuts import reverse
 
-import test
-from dataops import pandas_db
+from dataops.pandas import load_table
 from workflow.models import Workflow
 
 
@@ -39,7 +38,7 @@ class EmailActionTracking(test.OnTaskTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        pandas_db.pg_restore_table(cls.filename)
+        test.pg_restore_table(cls.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -55,12 +54,13 @@ class EmailActionTracking(test.OnTaskTestCase):
 
             # Get the workflow and the data frame
             workflow = Workflow.objects.get(name=self.wflow_name)
-            df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+            df = load_table(workflow.get_data_frame_table_name())
 
             # Check that the results have been updated in the DB (to 1)
             for uemail in [x[1] for x in test.user_info
                            if x[1].startswith('student')]:
                 self.assertEqual(
-                    int(df.loc[df['email'] == uemail, 'EmailRead_1'].values[0]),
+                    int(df.loc[df['email'] == uemail,
+                               'EmailRead_1'].values[0]),
                     idx
                 )

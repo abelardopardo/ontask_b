@@ -2,17 +2,15 @@
 
 
 import os
+import test
+from test import ScreenTests
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-import test
-from dataops import pandas_db
-from test import ElementHasFullOpacity, ScreenTests
+from dataops.pandas import destroy_db_engine
 
 
 class Scenario2Captures(ScreenTests):
@@ -46,7 +44,7 @@ class Scenario2Captures(ScreenTests):
         self.selenium.find_element_by_id('id_name').send_keys(
             self.workflow_name
         )
-        self.selenium.find_element_by_id('id_file').send_keys(
+        self.selenium.find_element_by_id('id_wf_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          '..',
                          'docs_src',
@@ -102,4 +100,4 @@ class Scenario2Captures(ScreenTests):
         self.logout()
 
         # Close the db_engine
-        pandas_db.destroy_db_engine(pandas_db.engine)
+        destroy_db_engine()

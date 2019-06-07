@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Django settings for ontask project.
 
@@ -7,13 +9,11 @@ https://docs.djangoproject.com/en/dev/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 import json
 import os
 import sys
-from os.path import dirname, join, exists
+from os.path import dirname, exists, join
 
 import environ
 from celery.schedules import crontab
@@ -25,28 +25,27 @@ from django.utils.translation import ugettext_lazy as _
 import ontask
 
 
-################################################################################
+###############################################################################
 #
 # DUMP CONFIG IN DEBUG
 #
-################################################################################
+###############################################################################
 def dump_config():
-    print('DEBUG:', DEBUG)
+    print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
     print('BASE_DIR:', BASE_DIR())
-    print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
-    print('STATIC_ROOT:', STATIC_ROOT)
-    print('STATIC_URL:', STATIC_URL)
+    print('CELERY_TASK_ALWAYS_EAGER:', CELERY_TASK_ALWAYS_EAGER)
     print('DATABASE_URL:', DATABASES['default'])
-    print('REDIS_URL:', REDIS_URL)
+    print('DEBUG:', DEBUG)
+    print('DOMAIN_NAME:', DOMAIN_NAME)
     print('MEDIA_ROOT:', MEDIA_ROOT)
     print('MEDIA_URL:', MEDIA_URL)
     print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
+    print('ONTASK_TESTING:', ONTASK_TESTING)
     print('REDIS_URL:', REDIS_URL)
-    print('DOMAIN_NAME:', DOMAIN_NAME)
+    print('STATICFILES_DIRS:', ', '.join(STATICFILES_DIRS))
+    print('STATIC_ROOT:', STATIC_ROOT)
+    print('STATIC_URL:', STATIC_URL)
     print('USE_SSL:', USE_SSL)
-    print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
-    print('TESTING:', TESTING)
-    print('CELERY_TASK_ALWAYS_EAGER:', CELERY_TASK_ALWAYS_EAGER)
 
 
 def get_from_os_or_env(key, env_obj, default_value=''):
@@ -82,11 +81,11 @@ if exists(env_file):
 else:
     print('WARNING: File {0} not found.'.format(env_file))
 
-################################################################################
+###############################################################################
 #
 # CONFIGURATION VARIABLES (Os Environment)
 #
-################################################################################
+###############################################################################
 AWS_ACCESS_KEY_ID = get_from_os_or_env('AWS_ACCESS_KEY_ID', env)
 AWS_SECRET_ACCESS_KEY = get_from_os_or_env('AWS_SECRET_ACCESS_KEY', env)
 AWS_STORAGE_BUCKET_NAME = get_from_os_or_env('AWS_STORAGE_BUCKET_NAME', env)
@@ -118,11 +117,11 @@ STATIC_URL_SUFFIX = get_from_os_or_env('STATIC_URL_SUFFIX', env, 'static')
 
 TIME_ZONE = get_from_os_or_env('TIME_ZONE', env, 'UTC')
 
-################################################################################
+###############################################################################
 #
 # CONFIGURATION VARIABLES (Conf File)
 #
-################################################################################
+###############################################################################
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 DATABASE_URL = env.db()
 DEBUG = env.bool('DEBUG', default=False)
@@ -146,11 +145,11 @@ SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
 # USE SSL
 USE_SSL = env.bool('USE_SSL', default=False)
 
-################################################################################
+###############################################################################
 #
 # Additional variables
 #
-################################################################################
+###############################################################################
 # Path to the src folder
 BASE_DIR = environ.Path(__file__) - 3
 # Path to the project root (where the SRC folder is)
@@ -166,7 +165,7 @@ if not DATAOPS_PLUGIN_DIRECTORY:
 LOCALE_PATHS = [join(BASE_DIR(), 'locale')]
 
 # Variable flagging that this is a test enviromnet
-TESTING = sys.argv[1:2] == ['test']
+ONTASK_TESTING = sys.argv[1:2] == ['test']
 
 # Log everything to the logs directory at the top
 if not LOG_FOLDER:
@@ -233,6 +232,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'bootstrap_datepicker_plus',
+    # 'corsheaders',
 
     'authtools',
     'crispy_forms',
@@ -267,6 +267,7 @@ MIDDLEWARE = [
     # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django_auth_lti.middleware_patched.MultiLTILaunchAuthMiddleware',
@@ -295,6 +296,10 @@ AUTHENTICATION_BACKENDS = [
 CACHES = {"default": REDIS_URL}
 # Cache time to live is 15 minutes
 CACHE_TTL = 60 * 30
+
+# CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_WHITELIST = []
+# CORS_ORIGIN_REGEX_WHITELIST = []
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
@@ -343,7 +348,7 @@ if 'RDS_DB_NAME' in os.environ:
             'PASSWORD': RDS_PASSWORD,
             'HOST': RDS_HOSTNAME,
             'PORT': RDS_PORT,
-        }
+        },
     }
 else:
     DATABASES = {'default': DATABASE_URL, }
@@ -360,12 +365,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # For Bootstrap 3, change error alert to 'danger'
 MESSAGE_STORE = 'django.contrib.messages.storage.session.SessionStorage'
 MESSAGE_LEVEL = message_constants.DEBUG
-MESSAGE_TAGS = {
-    messages.ERROR: 'danger'
-}
+MESSAGE_TAGS = {messages.ERROR: 'danger'}
 
-LOGIN_REDIRECT_URL = reverse_lazy("home")
-LOGIN_URL = reverse_lazy("accounts:login")
+LOGIN_REDIRECT_URL = reverse_lazy('home')
+LOGIN_URL = reverse_lazy('accounts:login')
 
 THUMBNAIL_EXTENSION = 'png'  # Or any extn for your thumbnails
 
@@ -373,19 +376,19 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 SITE_ID = 1
 
-################################################################################
+###############################################################################
 #
 # Authentication Settings
 #
-################################################################################
+###############################################################################
 AUTH_USER_MODEL = 'authtools.User'
 
-################################################################################
+###############################################################################
 #
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 #
-################################################################################
+###############################################################################
 LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
 LANGUAGES = (
     ('en-us', _('English')),
@@ -394,11 +397,11 @@ LANGUAGES = (
     ('fi', _('Finnish')),
 )
 
-################################################################################
+###############################################################################
 #
 # SUMMERNOTE CONFIGURATION
 #
-################################################################################
+###############################################################################
 SUMMERNOTE_THEME = 'bs4'
 SUMMERNOTE_CONFIG = {
     'iframe': False,
@@ -409,11 +412,11 @@ SUMMERNOTE_CONFIG = {
     },
     'css': (
         '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/'
-        'theme/base16-dark.min.css',
+        + 'theme/base16-dark.min.css',
     ),
     'css_for_inplace': (
         '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/'
-        'theme/base16-dark.min.css',
+        + 'theme/base16-dark.min.css',
     ),
     'codemirror': {
         'theme': 'base16-dark',
@@ -426,11 +429,11 @@ SUMMERNOTE_CONFIG = {
     'lazy': True,
 }
 
-################################################################################
+###############################################################################
 #
 # DATA UPLOAD FILES
 #
-################################################################################
+###############################################################################
 DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", ' \
                         '"application/gzip", "application/x-gzip", ' \
                         '"application/vnd.ms-excel"]'
@@ -439,39 +442,39 @@ DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE', default=209715200)
 # Raise because default of 1000 is too short
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
-################################################################################
+###############################################################################
 #
 # Disabled actions
 #
-################################################################################
+###############################################################################
 DISABLED_ACTIONS = [
     # ontask.PERSONALIZED_JSON,
     # ontask.PERSONALIZED_CANVAS_EMAIL,
     # ontask.PERSONALIZED_TEXT,
     # ontask.SURVEY,
-    ontask.TODO_LIST
+    ontask.TODO_LIST,
 ]
 
-################################################################################
+###############################################################################
 #
 # Log configuration
 #
-################################################################################
+###############################################################################
 LOGS_MAX_LIST_SIZE = 200
 SHORT_DATETIME_FORMAT = 'r'
 
-################################################################################
+###############################################################################
 #
 # Scheduler configuration
 #
-################################################################################
+###############################################################################
 SCHEDULER_MINUTE_STEP = env.int('SCHEDULER_MINUTE_STEP', default=15)
 
-################################################################################
+###############################################################################
 #
 # CELERY parameters
 #
-################################################################################
+###############################################################################
 CELERY_BROKER_URL = REDIS_URL['LOCATION']
 CELERY_RESULT_BACKEND = REDIS_URL['LOCATION']
 CELERY_ACCEPT_CONTENT = ['application/json', 'pickle']
@@ -482,16 +485,16 @@ CELERY_BEAT_SCHEDULE = {
     'ontask_scheduler': {
         'task': 'ontask.tasks.execute_scheduled_actions',
         'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
-        'args': (DEBUG,)
-    }
+        'args': (DEBUG,),
+    },
 }
-CELERY_TASK_ALWAYS_EAGER = TESTING
+CELERY_TASK_ALWAYS_EAGER = ONTASK_TESTING
 
-################################################################################
+###############################################################################
 #
 # Email sever configuration
 #
-################################################################################
+###############################################################################
 # Host, port, user and password to open the communication thorugh SMTP
 # EMAIL
 EMAIL_HOST = env('EMAIL_HOST', default='')
@@ -499,8 +502,9 @@ EMAIL_PORT = env('EMAIL_PORT', default='')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 # The from field when sending notification messages
-EMAIL_ACTION_NOTIFICATION_SENDER = env('EMAIL_ACTION_NOTIFICATION_SENDER',
-                                       default='')
+EMAIL_ACTION_NOTIFICATION_SENDER = env(
+    'EMAIL_ACTION_NOTIFICATION_SENDER',
+    default='')
 # Include HTML only email or HTML and text
 EMAIL_HTML_ONLY = env.bool('EMAIL_HTML_ONLY', default=True)
 # Use of TLS or SSL (see Django configuration)
@@ -533,20 +537,20 @@ Regards.
 The OnTask Support Team
 </body></html>"""
 
-EMAIL_ACTION_NOTIFICATION_SUBJECT = _("OnTask: Action executed")
+EMAIL_ACTION_NOTIFICATION_SUBJECT = _('OnTask: Action executed')
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
                      '0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 
-################################################################################
+###############################################################################
 #
 # LTI Authentication
 #
 # In the next variable define a dictionary with name:secret pairs.
 #
-################################################################################
+###############################################################################
 LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS', default={})
 
-################################################################################
+###############################################################################
 #
 # CANVAS API ENTRY POINTS
 #
@@ -579,11 +583,11 @@ CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT', default='{}'))
 # Number of seconds left in the token validity to refresh
 CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)
 
-################################################################################
+###############################################################################
 #
 # LDAP AUTHENTICATION
 #
-################################################################################
+###############################################################################
 # Variables taken from local.env
 # AUTH_LDAP_SERVER_URI = get_from_os_or_env('AUTH_LDAP_SERVER_URI', env)
 # AUTH_LDAP_BIND_PASSWORD = get_from_os_or_env('AUTH_LDAP_BIND_PASSWORD', env)

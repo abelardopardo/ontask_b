@@ -224,7 +224,7 @@
     "fields": {
         "slug": "fc6a5601-2dd0-4d18-94ff-0ff3ce5c11bc",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -234,7 +234,7 @@
     "fields": {
         "slug": "fdadc0dd-5a61-4d0a-900a-bf4c9ce91472",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -244,7 +244,7 @@
     "fields": {
         "slug": "a0f85b12-6c5d-42a0-b7e8-42798bc7e6e3",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -254,7 +254,7 @@
     "fields": {
         "slug": "32cb7297-eaa3-492d-afcb-2ad7ccd90299",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -264,7 +264,7 @@
     "fields": {
         "slug": "dbfeabe5-1893-46e1-9a5b-40f3a7232abb",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -274,7 +274,7 @@
     "fields": {
         "slug": "42437531-ddf1-4d2e-ac0a-40a306af0f3f",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -284,7 +284,7 @@
     "fields": {
         "slug": "673fd1ac-6ec2-4e07-b8b6-7bd28e1c0364",
         "picture": "",
-        "bio": null,
+        "bio": "",
         "email_verified": false
     }
 },
@@ -828,7 +828,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>SMED</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
+        "text_content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>SMED</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
         "target_url": "",
         "shuffle": false
     }
@@ -847,7 +847,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>FASS</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
+        "text_content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>FASS</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
         "target_url": "",
         "shuffle": false
     }
@@ -866,7 +866,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>FEIT</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
+        "text_content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>FEIT</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
         "target_url": "",
         "shuffle": false
     }
@@ -885,7 +885,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>FSCI</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
+        "text_content": "<p>Hello&nbsp;{{ GivenName }}</p><p>Welcome to the course. As you may know, there are several techniques and concepts in <b>FSCI</b> that are relevant to this course. For example one of them is ....</p><p><br></p><p>Regards.</p><p>Sarah Johnson</p><p>Course Coordinator</p>",
         "target_url": "",
         "shuffle": false
     }
@@ -904,7 +904,7 @@
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "content": "",
+        "text_content": "",
         "target_url": "",
         "shuffle": false
     }

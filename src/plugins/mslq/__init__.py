@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 import random
+from builtins import str
 
 import pandas as pd
-from builtins import str
+
+from dataops.plugin import OnTaskTransformation
 
 # The field class_name contains the name of the class to load to execute the
 # plugin.
@@ -13,18 +14,19 @@ class_name = 'MSLQEvaluate'
 
 def mslq_encode(answers, num):
     """Function that receives an array of 44 answers and encodes the results
-       for the MSLQ survey. It returns the following tuple:
+    for the MSLQ survey. It returns the following tuple:
 
-       (IVAL: Intrinsic value,
-        SEFF: Self-efficacy,
-        TANX: Test anxiety,
-        CSUS: Cognitive strategy use,
-        SREL: Self-regulation)
+    (IVAL: Intrinsic value,
+     SEFF: Self-efficacy,
+     TANX: Test anxiety,
+     CSUS: Cognitive strategy use,
+     SREL: Self-regulation)
 
-        They are the averages of the corresponding questions.
+    They are the averages of the corresponding questions.
 
-        :param answers: Array of 44 integers encoding the answers
-        :param num: Number of possibe answers in each question
+    :param answers: Array of 44 integers encoding the answers
+
+    :param num: Number of possibe answers in each question
     """
     ival_idx = [1, 4, 5, 7, 10, 14, 15, 17, 21]
     seff_idx = [2, 6, 8, 9, 11, 13, 16, 18, 19]
@@ -47,14 +49,38 @@ def mslq_encode(answers, num):
             1.0 * sum([answers[i - 1] for i in srel_idx]) / len(srel_idx))
 
 
-class MSLQEvaluate(object):
+class MSLQEvaluate(OnTaskTransformation):
     """
     Plugin to process the results of the MSLQ test.
 
-    The possible input values are given as the param answer_list
+    Pintrich, P. R., & de Groot, E. V. (1990). Motivational and self-regulated
+    learning components of classroom academic performance. Journal of
+    Educational Psychology, 82, 33-40. doi:10.1037//0022-0663.82.1.33
+
+    It assumes 44 input columns named MSLQ_Q01 to MSLQ_Q44.
+
+    It produces 5 output columns with names
+
+    - MSLQ_IVAL: Intrinsic value
+    - MSLQ_SEFF: Self efficacy
+    - MSLQ_TANX: Test anxiety
+    - MSLQ_CSUS: Cognitive Strategy Use
+    - MSLQ_SREL: Self-regulation
+
+
+    The input columns assume one of the following five values:
+
+    'Slightly true of me,'
+    'Moderately true of me,'
+    'Always true of me,'
+    'Never true of me,'
+    'Frequently true of me'
     """
 
     def __init__(self):
+
+        super().__init__()
+
         self.name = 'MSLQ Score calculation'
         self.description_txt = """Plugin to calculate the scores of MSLQ 
         The names of the columns must be MSLQ_Q01 to MSLQ_Q44."""
@@ -83,22 +109,18 @@ class MSLQEvaluate(object):
              'Comma separated list of possible answer values')
         ]
 
-    def run(self, data_frame, merge_key, parameters=dict):
+    def run(self, data_frame, parameters=dict):
         """
-        Runs the algorithm and returns a pandas data frame structure that is
-        merged with the existing data frame in the workflow using the merge_key.
+        Algorithm to encode MSLQ test responses. Creates a data frame to
+        be merged with the existing data.
 
         :param data_frame: Input data for the plugin
-        :param merge_key: Name of the column key that will be used for merging
         :param parameters: Dictionary with (name, value) pairs.
 
-        :return: a Pandas data_frame to merge with the existing one (must
-        contain a column with name merge_key)
+        :return: a Pandas data_frame to merge with the existing one 
         """
 
-        # Extract the key column from the given data frame
-        result = pd.DataFrame(data_frame[merge_key])
-        alist = parameters.get('answer_list', None)
+        alist = parameters.get('answer_list')
         if not alist:
             raise Exception('Required parameter "answer_list" not found.')
 
@@ -117,15 +139,9 @@ class MSLQEvaluate(object):
             new_df['MSLQ_Q{:02}'.format(qidx)] = \
                 [answer_values.index(x) + 1
                  for x in data_frame['MSLQ_Q{:02}'.format(qidx)]]
-        result = pd.concat([result,
-                            pd.DataFrame(
-                                [mslq_encode(x, len(answer_values))
-                                 for __, x in new_df.iterrows()],
-                                columns=self.output_column_names
-                            )],
-                           axis=1
-                           )
-        return result
+        return pd.DataFrame([mslq_encode(x, len(answer_values))
+                             for __, x in new_df.iterrows()],
+                            columns=self.output_column_names)
 
 
 def main():
@@ -147,9 +163,9 @@ def main():
 
     # df.to_csv('mslq_sample.csv', index=False)
     plugin_instance = MSLQEvaluate()
-    result = plugin_instance.run(df,
-                                 'email',
-                                 parameters={'answer_list': ', '.join(answers)})
+    result = plugin_instance.run(
+        df,
+        parameters={'answer_list': ', '.join(answers)})
 
     print(result)
 

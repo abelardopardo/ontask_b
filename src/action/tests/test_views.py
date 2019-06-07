@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 import os
+import test
 
 from django.conf import settings
 from django.core import mail
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
 
-import test
 from action.models import Action, Condition
-from dataops import pandas_db
-from dataops.formula_evaluation import has_variable
+from dataops.formula import has_variable
+from dataops.pandas import check_wf_df
 from workflow.models import Workflow
 
 
@@ -32,7 +31,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -150,7 +149,6 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Add a second clause to the filter
         # Click in the edit filter button
-        self.select_filter_tab()
         self.selenium.find_element_by_class_name('js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
@@ -250,7 +248,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote(
+            """$('#id_text_content').summernote(
                    'editor.insertText', 
                    "{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}")""")
 
@@ -344,7 +342,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # self.assertIn('EmailRead_1', self.selenium.page_source)
 
         # Make sure the workflow is consistent
-        pandas_db.check_wf_df(Workflow.objects.get(name=self.wflow_name))
+        check_wf_df(Workflow.objects.get(name=self.wflow_name))
 
         # End of session
         self.logout()
@@ -359,17 +357,9 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # click in the action page
         self.open_action_edit(self.action_name)
 
-        # Make sure the content has the correct text
-        self.assertEqual(
-            "{% comment %}Your action content here{% endcomment %}",
-            self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
-            )
-        )
-
         # insert the first mark
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "mark1");"""
+            """$('#id_text_content').summernote('editor.insertText', "mark1");"""
         )
 
         # Create filter.
@@ -380,7 +370,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "mark1",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
@@ -388,7 +378,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "mark2");"""
+            """$('#id_text_content').summernote('editor.insertText', "mark2");"""
         )
 
         # Modify the filter. Click in the edit filter button
@@ -399,7 +389,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "mark2",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
@@ -407,7 +397,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "mark3");"""
+            """$('#id_text_content').summernote('editor.insertText', "mark3");"""
         )
 
         # Click in the more ops and then the delete filter button
@@ -417,14 +407,14 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "mark3",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
         # insert the first mark
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "cmark1");"""
+            """$('#id_text_content').summernote('editor.insertText', "cmark1");"""
         )
 
         # Create condition. Click in the add condition button
@@ -436,14 +426,14 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "cmark1",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
         # insert the second mark
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "cmark2");"""
+            """$('#id_text_content').summernote('editor.insertText', "cmark2");"""
         )
 
         # Modify the condition. Click in the condition edit button
@@ -454,14 +444,14 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "cmark2",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
         # insert the third mark
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', "cmark3");"""
+            """$('#id_text_content').summernote('editor.insertText', "cmark3");"""
         )
 
         # Delete the condition
@@ -473,7 +463,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "cmark3",
             self.selenium.execute_script(
-                """return $("#id_content").summernote('code')"""
+                """return $("#id_text_content").summernote('code')"""
             )
         )
 
@@ -500,7 +490,8 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Introduce text and then the URL
         self.select_json_text_tab()
-        self.selenium.find_element_by_id('id_content').send_keys(content_txt)
+        self.selenium.find_element_by_id(
+            'id_text_content').send_keys(content_txt)
         self.selenium.find_element_by_id('id_target_url').send_keys(target_url)
 
         # Save action and back to action index
@@ -510,8 +501,59 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.wait_for_datatable('action-table_previous')
 
         action = Action.objects.get(name=action_name)
-        self.assertTrue(action.content == content_txt)
+        self.assertTrue(action.text_content == content_txt)
         self.assertTrue(action.target_url == target_url)
+
+        # End of session
+        self.logout()
+
+    def test_action_URL(self):
+
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        self.open_action_url('simple action', txt='URL Off')
+
+        # Assert the content in the modal
+        self.assertIn(
+            'This URL provides access to the content personalised',
+            self.selenium.page_source)
+
+        # Enable the URL
+        self.selenium.find_element_by_id('id_serve_enabled').click()
+
+        # Click OK
+        self.selenium.find_element_by_css_selector(
+            'div.modal-footer > button.btn.btn-outline-primary'
+        ).click()
+
+        # close modal
+        self.wait_for_modal_close()
+
+        # Assert that the action has the value changed
+        a = Action.objects.get(name='simple action')
+        self.assertEqual(a.serve_enabled, True)
+
+        self.open_action_url('simple action')
+        # Disable the URL
+        self.selenium.find_element_by_id('id_serve_enabled').click()
+        # Click OK
+        self.selenium.find_element_by_css_selector(
+            'div.modal-footer > button.btn.btn-outline-primary'
+        ).click()
+
+        # close modal
+        self.wait_for_modal_close()
+
+        # Assert that the action has the value changed
+        a.refresh_from_db()
+        self.assertEqual(a.serve_enabled, False)
 
         # End of session
         self.logout()
@@ -532,7 +574,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -575,7 +617,11 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
             'registered'
         )
         self.wait_for_datatable('column-selected-table_previous')
-
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.LINK_TEXT, 'Done')
+            )
+        )
         # Submit the action
         self.selenium.find_element_by_link_text('Done').click()
         self.wait_for_datatable('action-table_previous')
@@ -603,6 +649,126 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         self.logout()
 
 
+class ActionActionInPersonalized(test.OnTaskLiveTestCase):
+    fixtures = ['test_personalized_survey']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'action',
+        'fixtures',
+        'test_personalized_survey.sql'
+    )
+
+    wflow_name = 'Test personalized survey'
+
+    def setUp(self):
+        super().setUp()
+        test.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        test.delete_all_tables()
+        super().tearDown()
+
+    # Test operations with the filter
+    def test_action_01_condition_and_run(self):
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Open action in
+        self.open_action_edit('Survey')
+
+        # Select the condition tab
+        self.select_condition_tab()
+
+        # Create two conditions
+        self.create_condition('Text 1 is null', '',
+                              [('text1', 'is null', None)])
+        self.create_condition('Text 2 is null', '',
+                              [('text2', 'is null', None)])
+
+        # Go back to the questions
+        self.select_questions_tab()
+
+        # Select conditions to both questions
+        self.select_questions_condition('text1', 'Text 1 is null')
+        self.select_questions_condition('text2', 'Text 2 is null')
+
+        # Click the preview buttion
+        self.open_preview()
+
+        # Check there is a single field and click in next
+        for __ in range(8):
+            # There should be a single form field in the preview
+            inputs = self.selenium.find_elements_by_xpath(
+                "//div[@class='js-action-preview-form']//input"
+            )
+            self.assertEqual(len(inputs), 1)
+
+            # Click in the next button
+            self.selenium.find_element_by_class_name(
+                'js-action-preview-nxt').click()
+
+            WebDriverWait(self.selenium, 10).until(
+                EC.element_to_be_clickable(
+                    (By.CLASS_NAME, 'js-action-preview-nxt')
+                )
+            )
+
+        # Close the modal
+        self.cancel_modal()
+
+        # Done. Back to the table of actions
+        self.selenium.find_element_by_link_text('Done').click()
+        self.wait_for_datatable('action-table_previous')
+
+        # Run the action
+        self.open_action_run('Survey', True)
+
+        # Click in the first element of the survey and wait for form
+        self.selenium.find_element_by_link_text('1.0').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'id____ontask___select_2')
+            )
+        )
+
+        # There should be only three fields here (csrf, key, field)
+        inputs = self.selenium.find_elements_by_xpath(
+            "//div[@id='action-row-datainput']//input"
+        )
+        self.assertEqual(len(inputs), 3)
+
+        # Enter text in the third field
+        inputs[2].clear()
+        inputs[2].send_keys('text')
+
+        # Click in the update button
+        self.selenium.find_element_by_xpath(
+            "//div[@id='action-row-datainput']//form//button[@type = 'submit']"
+        ).click()
+        self.wait_for_datatable('actioninrun-data_previous')
+
+        # Click in the same link
+        self.selenium.find_element_by_link_text('1.0').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'action-row-datainput')
+            )
+        )
+
+        # There should be a "No responses required message"
+        self.assertIn('No responses required at this time',
+                      self.selenium.page_source)
+
+        # End of session
+        self.logout()
+
+
 class ActionActionRenameEffect(test.OnTaskLiveTestCase):
     """This test case is to check the effect of renaming columns, attributes
        and conditions. These name changes need to propagate throughout various
@@ -621,7 +787,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -639,7 +805,6 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
             workflow=workflow
         )
         condition = Condition.objects.get(name='Registered', action=action_out)
-        filter_obj = action_out.get_filter()
 
         # pre-conditions
         # Column name is the correct one
@@ -651,11 +816,11 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         # Column name is present in condition formula
         self.assertTrue(has_variable(condition.formula, 'registered'))
         # Column name is present in action_out text
-        self.assertTrue('{{ registered }}' in action_out.content)
+        self.assertTrue('{{ registered }}' in action_out.text_content)
         # Attribute name is present in action_out text
-        self.assertTrue('{{ attribute name }}' in action_out.content)
+        self.assertTrue('{{ attribute name }}' in action_out.text_content)
         # Column name is present in action-in filter
-        self.assertTrue(has_variable(filter_obj.formula, 'age'))
+        self.assertTrue(has_variable(action_out.get_filter_formula(), 'age'))
 
         # Login
         self.login('instructor01@bogus.com')
@@ -703,13 +868,13 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
 
         # Refresh variables
         workflow = Workflow.objects.prefetch_related('columns').get(
-            pk=workflow.id
+            id=workflow.id
         )
-        column = workflow.columns.get(pk=column.id)
+        column = workflow.columns.get(id=column.id)
         attributes = workflow.attributes
-        action_out = Action.objects.get(pk=action_out.id)
-        condition = Condition.objects.get(pk=condition.id)
-        filter_obj = action_out.get_filter()
+        action_out = Action.objects.get(id=action_out.id)
+        condition = Condition.objects.get(id=condition.id)
+        filter_formula = action_out.get_filter_formula()
 
         # Post conditions
         # Column name is the correct one
@@ -725,12 +890,12 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         self.assertTrue(has_variable(condition.formula,
                                      'registered new'))
         # Column name is present in action_out text
-        self.assertTrue('{{ registered new }}' in action_out.content)
+        self.assertTrue('{{ registered new }}' in action_out.text_content)
         # Attribute name is present in action_out text
-        self.assertTrue('{{ attribute name new }}' in action_out.content)
+        self.assertTrue('{{ attribute name new }}' in action_out.text_content)
         # Column age is present in action-in filter
-        self.assertFalse(has_variable(filter_obj.formula, 'age'))
-        self.assertTrue(has_variable(filter_obj.formula, 'age new'))
+        self.assertFalse(has_variable(filter_formula, 'age'))
+        self.assertTrue(has_variable(filter_formula, 'age new'))
 
         # End of session
         self.logout()
@@ -753,7 +918,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -789,7 +954,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # Click the next
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Next']").click()
+            "//button[normalize-space()='Send']").click()
         self.wait_for_page(element_id='zip-action-request-data')
 
         # Anomaly detected
@@ -806,7 +971,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # Click the next
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Next']").click()
+            "//button[normalize-space()='Send']").click()
         self.wait_for_page(element_id='zip-action-request-data')
 
         # Anomaly detected
@@ -819,11 +984,12 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # Click the next
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Next']").click()
+            "//button[normalize-space()='Send']").click()
         self.wait_for_page(element_id='zip-action-done')
 
         # End of session
         self.logout()
+
 
 class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
     action_name = 'simple action'
@@ -846,7 +1012,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -877,7 +1043,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_content').summernote('editor.insertText', 
+            """$('#id_text_content').summernote('editor.insertText', 
             "{0}");""".format(self.action_text)
         )
 
@@ -890,15 +1056,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
                       self.selenium.page_source)
 
         # Close the preview
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']/div/div/div/div[2]/button[2]"
-        ).click()
-        # Close modal (wail until the modal-open element disappears)
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
+        self.cancel_modal()
 
         # Create filter
         self.create_filter("The filter", [('another', 'equal', 'bbb')])
@@ -915,7 +1073,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         # The action should NOT flag that a user has all conditions equal to
         # False
         self.assertIn('user has all conditions equal to FALSE',
-                         self.selenium.page_source)
+                      self.selenium.page_source)
 
         # End of session
         self.logout()
@@ -935,7 +1093,7 @@ class ActionAllKeyColumns(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()

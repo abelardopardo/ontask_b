@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
+"""functions to include the visualization code."""
 
 from django import template
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from action.evaluate import action_context_var, viz_number_context_var, tr_item
-from dataops import pandas_db
+from action.evaluate import action_context_var, tr_item, viz_number_context_var
+from dataops.pandas import get_subframe
 from visualizations.plotly import PlotlyColumnHistogram
 
 register = template.Library()
 
 
 def vis_html_content(context, column_name):
+    """Create the HTML visualization code."""
     # Get the action
-    action = context.get(action_context_var, None)
+    action = context.get(action_context_var)
     if not action:
         raise Exception(_('Action object not found when processing tag'))
     workflow = action.workflow
@@ -36,17 +38,14 @@ def vis_html_content(context, column_name):
     # If the template is simply being saved and rendered to detect syntax
     # errors, we may not have the data of an individual, so we have to relax
     # this restriction.
-    ivalue = context.get(tr_item(column_name), None)
+    ivalue = context.get(tr_item(column_name))
     if ivalue is not None:
         viz_ctx['individual_value'] = ivalue
 
-    # Get the condition filter
-    cond_filter = action.get_filter()
-
     # Get the data from the data frame
-    df = pandas_db.get_subframe(
+    df = get_subframe(
         workflow.get_data_frame_table_name(),
-        cond_filter,
+        action.get_filter_formula(),
         [column_name])
 
     # Get the visualisation

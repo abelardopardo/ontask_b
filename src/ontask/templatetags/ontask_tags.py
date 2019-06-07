@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-#
-from __future__ import unicode_literals
+
+"""Tags to include URLS and other auxiliary HTML resources."""
 
 from django import template
+from django.conf import settings
 from django.utils.html import format_html
-from django.contrib.staticfiles.templatetags.staticfiles import static
 
 import ontask
 
@@ -13,7 +13,7 @@ register = template.Library()
 jquery = \
     """<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>"""
+       <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>"""
 
 #
 # Bootstrap
@@ -44,17 +44,12 @@ datatables_bootstrap_js = \
 #
 datetimepicker_css = \
     """<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" type="text/css" media="all" rel="stylesheet">
-    <link href="{0}" type="text/css" media="all" rel="stylesheet">""".format(
-        static('bootstrap_datepicker_plus/css/datepicker-widget.css')
-    )
+    <link href="{0}bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">""".format(settings.STATIC_URL)
 
 datetimepicker_js = \
-    '<script type="text/javascript" src="{0}"></script>'.format(
-      static('site/js/moment-with-locales.js')
-    ) + """<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="{0}"></script>""".format(
-        static('bootstrap_datepicker_plus/js/datepicker-widget.js')
-    )
+    '<script type="text/javascript" src="{0}site/js/moment-with-locales.js"></script>'.format(settings.STATIC_URL) \
+    + """<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="{0}bootstrap_datepicker_plus/js/datepicker-widget.js"></script>""".format(settings.STATIC_URL)
 
 #
 # Auxiliary
@@ -68,52 +63,65 @@ shim_and_respond = \
 # Tag to get ontask_version
 @register.simple_tag
 def ontask_version():
+    """Return ontask version."""
     return ontask.__version__
 
+
 @register.filter
-def country(value):
-    return value[0:value.find("-")]
+def country(country_code):
+    """Extract the country from the given variable."""
+    return country_code[0:country_code.find('-')]
+
 
 @register.simple_tag
 def ontask_jquery():
+    """Provide the JQuery URL."""
     return format_html(jquery)
 
 
 @register.simple_tag
 def ontask_bootstrap_css():
+    """Provide bootstrap CSS."""
     return format_html(bootstrap_css)
 
 
 @register.simple_tag
 def ontask_bootstrap_js():
+    """Provide the bootstrap JS."""
     return format_html(bootstrap_js)
 
 
 @register.simple_tag
 def ontask_shim_respond():
+    """Provide additional JS URLs."""
     return format_html(shim_and_respond)
 
 
 @register.simple_tag
 def ontask_datatables_jquery_js():
+    """Provide the datatables JQuery JS URL."""
     return format_html(datatables_jquery_js)
 
 
 @register.simple_tag
 def ontask_datatables_bootstrap_css():
+    """Provide the datatables bootstrap CSS URL."""
     return format_html(datatables_bootstrap_css)
 
 
 @register.simple_tag
 def ontask_datatables_bootstrap_js():
+    """Provide the datatables bootstrap JS URL."""
     return format_html(datatables_bootstrap_js)
 
 
 @register.simple_tag
 def ontask_datetimepicker_css():
+    """Provide the datetime picker CSS URL."""
     return format_html(datetimepicker_css)
 
 
 @register.simple_tag
 def ontask_datetimepicker_js():
+    """Provide the datetime picker JS URL."""
     return format_html(datetimepicker_js)

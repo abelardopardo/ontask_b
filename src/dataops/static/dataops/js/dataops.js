@@ -38,7 +38,9 @@ $(function () {
 
   $(document).on('change','#id_how_merge', show_merge_figure);
 
-  $("#transform-selection").on("click", ".js-transform-diagnose", loadForm);
+  $("#incorrect-plugins").on("click", ".js-transform-diagnose", loadForm);
+
+  $("#transform-table").on("click", ".js-plugin-show-description", loadForm);
 
   // SQL connection add, edit, delete and clone
   $("#sql-connections").on("click", ".js-sqlconn-view", loadForm);

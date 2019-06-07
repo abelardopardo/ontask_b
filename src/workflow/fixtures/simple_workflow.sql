@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.4
--- Dumped by pg_dump version 10.4
+-- Dumped from database version 11.2
+-- Dumped by pg_dump version 11.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -40,9 +40,9 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_1" (
 --
 
 COPY public."__ONTASK_WORKFLOW_TABLE_1" (age, email, sid, another, name, one, registered, "when") FROM stdin;
-12	student01@bogus.com	1	bbb	Carmelo Coton	aaa	t	2017-10-11 00:33:44 +1300
-12.0999999999999996	student02@bogus.com	2	aaa	Carmelo Coton	bbb	f	2017-10-11 00:32:44 +1300
-13.1999999999999993	student03@bogus.com	3	bbb	Carmelo Coton2	aaa	t	2017-10-11 00:32:44 +1300
+12	student01@bogus.com	1	bbb	Carmelo Coton	aaa	t	2017-10-10 22:03:44+10:30
+12.0999999999999996	student02@bogus.com	2	aaa	Carmelo Coton	bbb	f	2017-10-10 22:02:44+10:30
+13.1999999999999993	student03@bogus.com	3	bbb	Carmelo Coton2	aaa	t	2017-10-10 22:02:44+10:30
 \.
 
 

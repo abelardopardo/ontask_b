@@ -1,60 +1,50 @@
 # -*- coding: utf-8 -*-
 
+"""Models for Actions, Conditions, and pairs (column, condition)."""
 
 import datetime
-import itertools
 import re
 from builtins import object
+from typing import List
 
 import pytz
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.core.validators import URLValidator
 from django.db import models
-from django.utils.html import escape
+from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
-from django.utils.functional import cached_property
 
 import ontask
-from dataops import formula_evaluation, pandas_db
-from dataops.formula_evaluation import get_variables, evaluate, NodeEvaluation
+from dataops.formula import EVAL_TXT, evaluate_formula, evaluation
+from dataops.sql import get_num_rows, select_ids_all_false
 from logs.models import Log
-from workflow.models import Workflow, Column
+from workflow.models import Column, Workflow
 
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)
 var_use_res = [
     re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
-    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')
+    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})'),
 ]
+
+ACTION_NAME_LENGTH = 512
+ACTION_TYPE_LENGTH = 64
+
+CONDITION_NAME_LENGTH = 512
 
 
 class Action(models.Model):
-    """
+    """Object storing an action: content, conditions, filter, etc.
+
     @DynamicAttrs
     """
-    PERSONALIZED_TEXT = ontask.PERSONALIZED_TEXT
-    PERSONALIZED_CANVAS_EMAIL = ontask.PERSONALIZED_CANVAS_EMAIL
-    PERSONALIZED_JSON = ontask.PERSONALIZED_JSON
-    SURVEY = ontask.SURVEY
-    TODO_LIST = ontask.TODO_LIST
 
-    ACTION_TYPES = ontask.ACTION_TYPES
-
-    AVAILABLE_ACTION_TYPES = ontask.diff(
-        ACTION_TYPES,
-        [x for x in ACTION_TYPES if x[0] in settings.DISABLED_ACTIONS])
-
-    assert len(AVAILABLE_ACTION_TYPES) != 0, \
-        "All actions disabled. Review DISABLED_ACTIONS in base.py"
-
-    if not settings.CANVAS_INFO_DICT:
-        # If the variable CANVAS_INFO_DICT is empty, the choice for Canvas
-        # Email action should be removed.
-        AVAILABLE_ACTION_TYPES.remove(
-            next(x for x in ACTION_TYPES
-                 if x[0] == ontask.PERSONALIZED_CANVAS_EMAIL)
-        )
+    personalized_text = ontask.PERSONALIZED_TEXT
+    personalized_canvas_email = ontask.PERSONALIZED_CANVAS_EMAIL
+    personalized_json = ontask.PERSONALIZED_JSON
+    survey = ontask.SURVEY
+    todo_list = ontask.TODO_LIST
 
     workflow = models.ForeignKey(
         Workflow,
@@ -62,18 +52,21 @@ class Action(models.Model):
         null=False,
         blank=False,
         on_delete=models.CASCADE,
-        related_name='actions'
+        related_name='actions',
     )
 
-    name = models.CharField(max_length=256,
-                            blank=False,
-                            null=False,
-                            verbose_name=_('name'))
+    name = models.CharField(
+        max_length=ACTION_NAME_LENGTH,
+        blank=False,
+        verbose_name=_('name'),
+    )
 
-    description_text = models.CharField(max_length=512,
-                                        default='',
-                                        blank=True,
-                                        verbose_name=_('description'))
+    description_text = models.CharField(
+        max_length=ACTION_NAME_LENGTH,
+        default='',
+        blank=True,
+        verbose_name=_('description'),
+    )
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
@@ -89,9 +82,9 @@ class Action(models.Model):
 
     # Action type
     action_type = models.CharField(
-        max_length=64,
-        choices=ACTION_TYPES,
-        default=PERSONALIZED_TEXT
+        max_length=ACTION_TYPE_LENGTH,
+        choices=ontask.ACTION_TYPES,
+        default=personalized_text,
     )
 
     # Boolean that enables the URL to be visible ot the outside.
@@ -99,310 +92,284 @@ class Action(models.Model):
         default=False,
         verbose_name=_('URL available to users?'),
         null=False,
-        blank=False)
+        blank=False,
+    )
 
     # Validity window for URL availability
-    active_from = models.DateTimeField(_('Action available from'),
-                                       blank=True,
-                                       null=True,
-                                       default=None)
+    active_from = models.DateTimeField(
+        _('Action available from'),
+        blank=True,
+        null=True,
+        default=None,
+    )
 
-    active_to = models.DateTimeField(_('Action available until'),
-                                     blank=True,
-                                     null=True,
-                                     default=None)
+    active_to = models.DateTimeField(
+        _('Action available until'),
+        blank=True,
+        null=True,
+        default=None,
+    )
 
     # Index of rows with all conditions false
-    rows_all_false = JSONField(default=None,
-                               blank=True,
-                               null=True)
+    rows_all_false = JSONField(
+        default=None,
+        blank=True,
+        null=True,
+    )
 
     #
     # Field for actions PERSONALIZED_TEXT, PERSONALIZED_CAVNAS_EMAIL and
     # PERSONALIZED_JSON
     #
     # Text to be personalised for action OUT
-    content = models.TextField(default='', null=False, blank=True)
+    text_content = models.TextField(default='', blank=True)
 
     # URL for PERSONALIZED_JSON actions
-    target_url = models.TextField(default='', null=True, blank=True)
+    target_url = models.TextField(default='', blank=True)
 
     #
     # Fields for action SURVEY and TODO_LIST
     #
     # Shuffle column order when creating the page to serve
-    shuffle = models.BooleanField(default=False,
-                                  verbose_name=_('Shuffle questions?'),
-                                  null=False,
-                                  blank=False)
+    shuffle = models.BooleanField(
+        default=False,
+        verbose_name=_('Shuffle questions?'),
+        null=False,
+        blank=False,
+    )
 
     def __str__(self):
+        """Render the name."""
         return self.name
 
     @property
-    def is_active(self):
-        """
+    def is_active(self) -> bool:
+        """Calculate if the action is ready for execution.
+
         Function to ask if an action is active: the current time is within the
         interval defined by active_from - active_to.
         :return: Boolean encoding the active status
         """
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        return not ((self.active_from and now < self.active_from) or
-                    (self.active_to and self.active_to < now))
+        return not (
+            (self.active_from and now < self.active_from)
+            or (self.active_to and self.active_to < now)
+        )
 
-    @cached_property
-    def is_executable(self):
-        """
-        Function to answer if an action is ready to execute.
+    @functional.cached_property
+    def is_executable(self) -> bool:
+        """Answer if an action is ready to execute.
+
         :return: Boolean stating correctness
         """
-
-        if self.action_type == Action.PERSONALIZED_TEXT:
+        for_out = (
+            self.action_type == Action.personalized_text
+            or (self.action_type == Action.personalized_canvas_email
+                and settings.CANVAS_INFO_DICT is not None)
+        )
+        if for_out:
             return True
 
-        if self.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-            return settings.CANVAS_INFO_DICT is not None
-
-        if self.action_type == Action.PERSONALIZED_JSON:
-            # If None or empty, return false
-            if not self.target_url:
-                return False
-
+        if self.action_type == Action.personalized_json:
             # Validate the URL
-            validator = URLValidator()
             valid_url = True
             try:
-                validator(self.target_url)
+                URLValidator()(self.target_url)
             except Exception:
                 valid_url = False
-            return valid_url
 
-        if self.action_type == Action.SURVEY or self.action_type == \
-                Action.TODO_LIST:
-            return self.column_condition_pair.filter(
-                column__is_key=True).exists() and \
-                   self.column_condition_pair.filter(
-                       column__is_key=False).exists()
+            return self.target_url and valid_url
 
-        raise Exception('Function is_executable not implemented for action '
-                        '{0}'.format(self.get_action_type_display()))
+        if self.is_in:
+            cc_pairs = self.column_condition_pair
+            return (
+                cc_pairs.filter(column__is_key=True).exists()
+                and cc_pairs.filter(column__is_key=False).exists()
+            )
 
-    @cached_property
+        raise Exception(
+            'Function is_executable not implemented for action {0}'.format(
+                self.get_action_type_display(),
+            ),
+        )
+
+    @functional.cached_property
     def is_in(self):
-        return self.action_type == Action.SURVEY or \
-               self.action_type == Action.TODO_LIST
+        """Get bool stating if action is Survey or similar."""
+        return (
+            self.action_type == Action.survey
+            or self.action_type == Action.todo_list
+        )
 
-    @cached_property
+    @functional.cached_property
     def is_out(self):
+        """Get bool stating if action is OUT."""
         return not self.is_in
 
     def get_filter(self):
+        """Get filter condition."""
         return self.conditions.filter(is_filter=True).first()
 
-    def get_content(self):
-        """
-        Get the action out content
-        :return: context string
-        """
-        return self.content
+    def get_filter_formula(self):
+        """Get filter condition."""
+        f_obj = self.conditions.filter(is_filter=True).first()
+        return f_obj.formula if f_obj else None
 
-    def set_content(self, content):
+    def get_rows_selected(self):
+        """Get the number of rows in table selected for this action."""
+        action_filter = self.get_filter()
+        if not action_filter:
+            return self.workflow.nrows
+
+        return action_filter.n_rows_selected
+
+    def get_used_conditions(self) -> List[str]:
+        """Get list of conditions that are used in the text_content.
+
+        Iterate over the match of the regular expression in the content and
+        concatenate the condition names.
+
+        :return: List of condition names
         """
-        Set the action content and update the list of columns
-        :return: Update the DB
-        """
+        cond_names = []
+        for rexpr in var_use_res:
+            cond_names += [
+                match.group('vname')
+                for match in rexpr.finditer(self.text_content)
+            ]
+        return cond_names
+
+    def set_text_content(self, text_content: str):
+        """Set the action content and update the list of columns."""
+        # Method only used for self.is_out
+        assert self.is_out
+
         # Assign the content and clean the new lines
-        self.content = content
-        self.clean_new_lines()
+        self.text_content = re.sub(
+            '{%(?P<varname>[^%}]+)%}',
+            lambda match: '{%' + match.group(
+                'varname',
+            ).replace('\n', ' ') + '%}',
+            text_content,
+        )
+        self.text_content = re.sub(
+            '{{(?P<varname>[^%}]+)}}',
+            lambda match: '{{' + match.group(
+                'varname',
+            ).replace('\n', ' ') + '}}',
+            self.text_content,
+        )
 
         # Update the list of columns used in the action
-        cond_names = self.get_action_conditions()
-        colnames = list(itertools.chain.from_iterable(
-            [get_variables(x.formula)
-             for x in self.conditions.filter(name__in=cond_names)]
-        ))
-        for c in [x for x in self.workflow.columns.filter(name__in=colnames)]:
-            __, __ = ActionColumnConditionTuple.objects.get_or_create(
+        # Loop over the regular expressions, match the expressions and
+        # extract the list of vname fields.
+        cond_names = self.get_used_conditions()
+
+        columns = self.workflow.columns.filter(
+            conditions__name__in=set().union(*cond_names),
+        ).distinct()
+        for col in columns:
+            ActionColumnConditionTuple.objects.get_or_create(
                 action=self,
-                column=c,
-                condition=None
+                column=col,
+                condition=None,
             )
 
-    def get_action_conditions(self):
-        """
-        Return the list of contition names used in the macros contained in
-        the action content field
-        :return: list of condition names
-        """
+    def rename_variable(
+        self,
+        old_name: str,
+        new_name: str,
+    ) -> None:
+        """Rename a variable present in the action content.
 
-        result = []
-        # Loop over the regular expressions, match the expressions and extract
-        # the list of vname fields.
-        for rexpr in var_use_res:
-            result += [x.group('vname') for x in rexpr.finditer(self.content)]
-        return result
-
-    def clean_new_lines(self):
-        """
-        Function that removes the new lines from the middle of the macros in
-        the action content
-
-        :return: new text with the newlines in the middle of the macros removed
-        """
-        self.content = re.sub(
-            '{%(?P<varname>[^%}]+)%}',
-            lambda m: '{%' + m.group('varname').replace('\n', ' ') + '%}',
-            self.content)
-        self.content = re.sub(
-            '{{(?P<varname>[^%}]+)}}',
-            lambda m: '{{' + m.group('varname').replace('\n', ' ') + '}}',
-            self.content)
-
-    def rename_variable(self, old_name, new_name):
-        """
-        Function that renames a variable present in the action content
+        Two steps are performed. Rename the variable in the text_content, and
+        rename the varaible in all the conditions.
         :param old_name: Old name of the variable
         :param new_name: New name of the variable
         :return: Updates the current object
         """
-
-        if self.action_type == self.PERSONALIZED_TEXT or \
-                self.action_type == self.PERSONALIZED_JSON or \
-                self.action_type == self.PERSONALIZED_CANVAS_EMAIL:
+        if self.text_content:
             # Need to change name appearances in content
-            new_text = var_use_res[0].sub(
-                lambda m: '{{ ' +
-                          (new_name if m.group('vname') == escape(old_name)
-                           else m.group('vname')) + ' }}',
-                self.content
+            self.text_content = var_use_res[0].sub(
+                lambda match: '{{ ' + (
+                    new_name if match.group('vname') == html.escape(old_name)
+                    else match.group('vname')
+                ) + ' }}',
+                self.text_content,
             )
-            self.content = new_text
-        else:
-            # Action in: Need to change name appearances in filter
-            fcond = self.get_filter()
-            if fcond:
-                fcond.formula = formula_evaluation.rename_variable(
-                    fcond.formula, old_name, new_name
-                )
-                fcond.save()
+            self.save()
 
-        self.save()
+        # Rename the variable in all conditions
+        for cond in self.conditions.all():
+            cond.formula = evaluation.rename_variable(
+                cond.formula, old_name, new_name)
+            cond.save()
 
-    def update_n_rows_selected(self, column=None):
-        """
-        Given an action reset the field n_rows_selected in all conditions
+    def update_n_rows_selected(self, filter_formula=None, column=None):
+        """Reset the field n_rows_selected in all conditions.
 
         If the column argument is present, select only those conditions that
         have column as part of their variables.
 
-        :param column: Optional column name to process only those
-        conditions that use this column
-        :return: All appropriate conditions are updated
+        :param filter_formula: If given, the evaluation of the filter
+        condition is bypassed.
+
+        :param column: Optional column name to process only those conditions
+        that use this column
+
+        :return: All conditions (except the filter) are updated
         """
+        start_idx = 0
 
-        # Get the filter, if it exists.
-        filter_obj = self.get_filter()
-        if filter_obj:
-            # If there is a filter, update the filter and this call
-            # propagates to the other conditions. Nothing else is needed.
-            filter_obj.update_n_rows_selected(column=column)
-            return
+        if not filter_formula:
+            # Get the filter, if it exists.
+            filter_formula = None
+            conditions = self.conditions.all()
+            if conditions and conditions[0].is_filter:
+                # If there is a filter, update the formula
+                conditions[0].update_n_rows_selected(column=column)
+                filter_formula = conditions[0].formula
+                start_idx = 1
 
-        # This action does not have a filter, so simply recalculate the value
-        # for each of the conditions
-        for cond in self.conditions.all():
-            cond.update_n_rows_selected(column=column)
-
-        # Reset the counter of rows with all false conditions (will be
-        # recomputed)
-        self.rows_all_false = None
-        self.save()
+        # Recalculate for the rest of conditions
+        for cond in conditions[start_idx:]:
+            cond.update_n_rows_selected(
+                column=column,
+                filter_formula=filter_formula,
+            )
 
     def used_columns(self):
-        """
-        Function that returns a list of the columns being used in this
-        action. These are those that are used in any condition + those used
-        in the columns field (if it is an action in)
+        """Lis of column used in the action.
+
+        These are those that are used in any condition + those used
+        in the columns field.
 
         :return: List of column objects
         """
-
-        result = set([])
+        column_set = set([])
 
         # Accumulate all columns for all conditions
-        for c in self.conditions.all():
-            result = result.union(set(c.columns.all()))
+        for cond in self.conditions.all():
+            column_set = column_set.union(set(cond.columns.all()))
 
         # Accumulate now those in the field columns
-        for x in self.column_condition_pair.all():
-            result.add(x.column)
+        for ccpair in self.column_condition_pair.all():
+            column_set.add(ccpair.column)
 
-        return list(result)
-
-    def get_condition_evaluation(self, row_values):
-        condition_eval = {}
-        for condition in self.conditions.filter(is_filter=False).values(
-                'name', 'is_filter', 'formula'):
-            # Evaluate the condition
-            try:
-                condition_eval[condition['name']] = evaluate(
-                    condition['formula'],
-                    NodeEvaluation.EVAL_EXP,
-                    row_values
-                )
-            except ontask.OnTaskException:
-                # Something went wrong evaluating a condition. Stop.
-                return None
-        return condition_eval
-
-    def get_evaluation_context(self, row_values, condition_eval=None):
-        """
-        Given an action and a set of row_values, prepare the dictionary with the
-        condition names, attribute names and column names and their
-        corresponding values.
-        :param row_values: Values to use in the evaluation of conditions.
-        :param condition_eval: Dictionary with the condition evaluations
-        :return: Context dictionary, or None if there has been some anomaly
-        """
-
-        # If no row values are given, there is nothing to do here.
-        if row_values is None:
-            # No rows satisfy the given condition
-            return None
-
-        if not condition_eval:
-            # Step 1: Evaluate all the conditions
-            condition_eval = {}
-            for condition in self.conditions.filter(is_filter=False).values(
-                    'name', 'is_filter', 'formula'):
-                # Evaluate the condition
-                try:
-                    condition_eval[condition['name']] = evaluate(
-                        condition['formula'],
-                        NodeEvaluation.EVAL_EXP,
-                        row_values
-                    )
-                except ontask.OnTaskException:
-                    # Something went wrong evaluating a condition. Stop.
-                    return None
-
-        # Step 2: Create the context with the attributes, the evaluation of the
-        # conditions and the values of the columns.
-        attributes = self.workflow.attributes
-
-        return dict(dict(row_values, **condition_eval), **attributes)
+        return list(column_set)
 
     def get_row_all_false_count(self):
-        """
+        """Extract the rows for which  all conditions are false.
+
         Given a table and a list of conditions return the number of rows in
         which all the conditions are false. :return: Number of rows that have
         all conditions equal to false
         """
-        if not self.rows_all_false:
+        if self.rows_all_false is None:
             if not self.workflow.has_data_frame():
                 # Workflow does not have a dataframe
                 raise ontask.OnTaskException(
-                    'Workflow without DF in get_table_row_count_all_false'
+                    'Workflow without DF in get_table_row_count_all_false',
                 )
 
             # Separate filter from conditions
@@ -415,80 +382,69 @@ class Action(models.Model):
 
             # Workflow has a data frame and condition list is non empty
 
-            cond_sql = ''
-            cond_fields = []
-            if filter_item:
-                cond_sql, cond_fields = evaluate(filter_item.formula,
-                                                 NodeEvaluation.EVAL_SQL)
-                # Remove the filter_item
-                cond_list = cond_list.filter(is_filter=False)
-                cond_sql += ' AND '
+            # Get the list of indeces
+            self.rows_all_false = select_ids_all_false(
+                self.workflow.get_data_frame_table_name(),
+                filter_item.formula if filter_item else None,
+                cond_list.values_list('formula', flat=True),
+            )
 
-            # Calculate the evaluation of each of the conditions
-            cond_list_sql = [evaluate(x.formula, NodeEvaluation.EVAL_SQL)
-                             for x in cond_list]
-
-            cond_sql += \
-                '(NOT ' + ') AND (NOT '.join(
-                    [a for a, _ in cond_list_sql]) + ')'
-            cond_fields += sum([b for _, b in cond_list_sql], [])
-
-            query = 'SELECT t.position from (' \
-                    'SELECT *, ROW_NUMBER() OVER () ' \
-                    'as position FROM "{0}") as t WHERE '.format(
-                        self.workflow.get_data_frame_table_name()
-                    ) + cond_sql
-
-            # Run the query
-            qs = pandas_db.execute_query(query, cond_fields).fetchall()
-
-            # If the list is not empty, flatten its structure
-            if qs:
-                self.rows_all_false = [x[0] for x in qs]
-            else:
-                self.rows_all_false = qs
             self.save()
 
         return self.rows_all_false
 
     class Meta(object):
-        """
-        Define the criteria of uniqueness with name in workflow and order by
-        name
-        """
+        """Define uniqueness with name and workflow. Order by name."""
+
         unique_together = ('name', 'workflow')
-        ordering = ('name',)
+        ordering = ['name']
 
 
 class Condition(models.Model):
-    """
+    """Define object to store mainly a formula.
+
+    The object also encodes:
+    - is filter or not
+    - list of columns in the support of the formula
+    - number of rows for which the formula is true
+
     @DynamicAttrs
     """
 
-    action = models.ForeignKey(Action,
-                               db_index=True,
-                               on_delete=models.CASCADE,
-                               null=False,
-                               blank=False,
-                               related_name='conditions')
+    action = models.ForeignKey(
+        Action,
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name='conditions',
+    )
 
-    name = models.CharField(max_length=256, blank=True, verbose_name=_('name'))
+    name = models.CharField(
+        max_length=CONDITION_NAME_LENGTH,
+        blank=True,
+        verbose_name=_('name'),
+    )
 
-    description_text = models.CharField(max_length=512,
-                                        default='',
-                                        blank=True,
-                                        verbose_name=_('description'))
+    description_text = models.CharField(
+        max_length=CONDITION_NAME_LENGTH,
+        default='',
+        blank=True,
+        verbose_name=_('description'),
+    )
 
-    formula = JSONField(default=dict,
-                        blank=True,
-                        null=True,
-                        verbose_name=_('formula'))
+    formula = JSONField(
+        default=dict,
+        blank=True,
+        null=True,
+        verbose_name=_('formula'),
+    )
 
     # Set of columns that appear in this condition
     columns = models.ManyToManyField(
         Column,
-        verbose_name=_("Columns present in this condition"),
-        related_name='conditions'
+        verbose_name=_('Columns present in this condition'),
+        related_name='conditions',
     )
 
     # Number or rows selected by the expression
@@ -497,7 +453,7 @@ class Condition(models.Model):
         default=-1,
         name='n_rows_selected',
         blank=False,
-        null=False
+        null=False,
     )
 
     # Field to denote if this condition is the filter of an action
@@ -508,106 +464,72 @@ class Condition(models.Model):
     modified = models.DateTimeField(auto_now=True, null=False)
 
     def update_n_rows_selected(self, column=None, filter_formula=None):
-        """
+        """Calculate the number of rows for which condition is true.
+
         Given a condition update the number of rows
-        for which this condition will have true result. In other words,
-        we calculate the number of rows for which the condition is true.
-
-        The function implements two algorithms depending on the condition
-        being a filter or not:
-
-        Case 1: Condition is a filter
-
-        - Evaluate the filter and update field.
-
-        - Param filter_formula is ignored
-
-        Case 2: Condition is NOT a filter
-
-        - If there is a filter_formula, create the conjunction together with
-        the condition formula.
+        for which this condition will have true result.
 
         :param column: Column that has changed value (None when unknown)
         :param filter_formula: Formula provided by another filter condition
         and to take the conjunction with the condition formula.
         :return: Nothing. Effect recorded in DB objects
         """
-
         if column and column not in self.columns.all():
             # The column is not part of this condition. Nothing to do
             return
 
-        # Reset the count of all rows with false condition
-        self.action.rows_all_false = None
-        self.action.save()
-
-        # Case 1: Condition is a filter
-        if self.is_filter:
-            self.n_rows_selected = \
-                pandas_db.num_rows(
-                    self.action.workflow.get_data_frame_table_name(),
-                    self.formula
-                )
-            self.save()
-
-            # Propagate the filter effect to the rest of actions.
-            for condition in self.action.conditions.filter(is_filter=False):
-                # Update the rest of conditions. The column=None because
-                # the filter has changed, thus the condition needs to be
-                # reevaluated regardless.
-                condition.update_n_rows_selected(
-                    column=None,
-                    filter_formula=self.formula
-                )
-            return
-
-        # Case 2: Condition is NOT a filter
-        # Get the filter formula from the action if it exists
-        if not filter_formula:
-            filter_obj = self.action.conditions.filter(is_filter=True).first()
-            if filter_obj:
-                filter_formula = filter_obj.formula
-
         formula = self.formula
         if filter_formula:
             # There is a formula to add to the condition, create a conjunction
-            formula = {'condition': 'AND',
-                       'not': False,
-                       'rules': [filter_formula, self.formula],
-                       'valid': True
-                       }
-        self.n_rows_selected = pandas_db.num_rows(
+            formula = {
+                'condition': 'AND',
+                'not': False,
+                'rules': [filter_formula, self.formula],
+                'valid': True,
+            }
+
+        new_count = get_num_rows(
             self.action.workflow.get_data_frame_table_name(),
-            formula)
+            formula,
+        )
+        if new_count != self.n_rows_selected:
+            # Reset the field in the action storing rows with all conditions
+            # false. Needs to be recalculated because there is at least one
+            # condition that has changed its count. Flush the field to None
+            self.action.rows_all_false = None
+            self.action.save()
+
+        self.n_rows_selected = new_count
         self.save()
 
-        return
-
     def get_formula_text(self):
-        """
+        """Translate the formula to plain text.
+
         Return the content of the formula in a string that is human readable
         :return: String
         """
-
-        return evaluate(self.formula, NodeEvaluation.EVAL_TXT)
+        return evaluate_formula(self.formula, EVAL_TXT)
 
     def __str__(self):
+        """Render string."""
         return self.name
 
     class Meta(object):
-        """
+        """Define unique criteria and ordering.
+
         The unique criteria here is within the action, the name and being a
         filter. We may choose to name a filter and a condition with the same
         name (no need to restrict it)
         """
+
         unique_together = ('action', 'name', 'is_filter')
-        ordering = ('created',)
+        ordering = ['-is_filter', 'name']
 
 
 class ActionColumnConditionTuple(models.Model):
-    """
-    Object to represent a tuple (action, column, condition). The purpose of
-    these objects are to:
+    """Represent tuples (action, column, condition).
+
+    These objects are to:
 
     1) Represent the collection of columns attached to a regular action
 
@@ -617,29 +539,33 @@ class ActionColumnConditionTuple(models.Model):
     @DynamicAttrs
     """
 
-    action = models.ForeignKey(Action,
-                               db_index=True,
-                               on_delete=models.CASCADE,
-                               null=False,
-                               blank=False,
-                               related_name='column_condition_pair')
+    action = models.ForeignKey(
+        Action,
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name='column_condition_pair',
+    )
 
-    column = models.ForeignKey(Column,
-                               on_delete=models.CASCADE,
-                               null=False,
-                               blank=False,
-                               related_name='column_condition_pair')
+    column = models.ForeignKey(
+        Column,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name='column_condition_pair',
+    )
 
-    condition = models.ForeignKey(Condition,
-                                  on_delete=models.CASCADE,
-                                  null=True,
-                                  blank=False,
-                                  related_name='column_condition_pair')
+    condition = models.ForeignKey(
+        Condition,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=False,
+        related_name='column_condition_pair',
+    )
 
     class Meta(object):
-        """
-        Define the criteria of uniqueness with name in workflow and order by
-        name
-        """
+        """Define uniqueness with name in workflow and order by name."""
+
         unique_together = ('action', 'column', 'condition')
         ordering = ['column__position']

@@ -1,5 +1,5 @@
-import logging
 import json
+import logging
 
 from django import template
 from django.utils.html import format_html
@@ -7,8 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_auth_lti.thread_local import get_current_request
 
-
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('ontask')
 register = template.Library()
 
 
@@ -25,7 +24,8 @@ class ResourceLinkIdNode(template.Node):
                       "{0}").format(json.dumps(request.LTI, indent=4))
                 )
         else:
-            logger.warning(_("Failed to get current request from thread_local"))
+            logger.warning(
+                _("Failed to get current request from thread_local"))
         return ''
 
 

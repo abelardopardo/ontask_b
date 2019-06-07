@@ -1,4 +1,4 @@
-from django.core.exceptions import ImproperlyConfigured, PermissionDenied
+from django.core.exceptions import PermissionDenied
 
 
 def is_allowed(request, allowed_roles, raise_exception):
@@ -14,10 +14,10 @@ def is_allowed(request, allowed_roles, raise_exception):
 
     user_roles = request.LTI.get('roles', [])
     is_user_allowed = set(allowed) & set(user_roles)
-    
+
     if not is_user_allowed and raise_exception:
         raise PermissionDenied
-    
+
     return is_user_allowed
 
 

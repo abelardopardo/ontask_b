@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 from django.urls import path
 
-from . import views
+from ontask_oauth import views
 
 app_name = 'ontask_oauth'
 

@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
-import pandas as pd
-
-from dataops.plugin import OnTaskPluginAbstract
+from dataops.plugin import OnTaskTransformation
 
 # The field class_name contains the name of the class to load to execute the
 # plugin.
 class_name = 'OnTaskTestPlugin'
 
 
-class OntaskTestPlugin(OnTaskPluginAbstract):
+class OntaskTestPlugin(OnTaskTransformation):
     """
     Example of a class that implements the OnTask plugin interface. The
     objects of this class have to provide the following elements:
@@ -64,13 +61,11 @@ class OntaskTestPlugin(OnTaskPluginAbstract):
     def __init__(self):
 
         # Call the constructor in the superclass
-        super(OntaskTestPlugin).__init__()
+        super().__init__()
 
         self.name = 'Plugin Template'
         self.description_txt = 'Example of plugin description'
-        self.input_column_names = list()
         self.output_column_names = ['RESULT 1', 'RESULT 2']
-        self.output_suffix = ''
         self.parameters = [
             ('param string', 'string', ['v1', 'v2'], 'v1', 'help param string'),
             ('param integer', 'integer', [], None, 'help param integer'),
@@ -85,7 +80,7 @@ class OntaskTestPlugin(OnTaskPluginAbstract):
                                 'help param datetime'),
         ]
 
-    def run(self, data_frame, merge_key, parameters=dict):
+    def run(self, data_frame, parameters=dict):
         """
         Method to overwrite. Receives a data frame wih a number of columns
         stipulated by the num_column_input pair, the name of a key column and a
@@ -95,7 +90,7 @@ class OntaskTestPlugin(OnTaskPluginAbstract):
         merged with the existing data frame in the workflow using the merge_key.
 
         :param data_frame: Input data for the plugin
-        :param merge_key: Name of the column key that will be used for merging
+
         :param parameters: Dictionary with (name, value) pairs.
 
         :return: a Pandas data_frame to merge with the existing one (must
@@ -103,7 +98,7 @@ class OntaskTestPlugin(OnTaskPluginAbstract):
         """
 
         # Extract the key column from the given data frame
-        result = pd.DataFrame(data_frame[merge_key])
+        result = data_frame.deep_copy()
 
         # Process the given data and create the result
         result[self.output_column_names[0]] = 1

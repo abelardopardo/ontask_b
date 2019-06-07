@@ -2,15 +2,16 @@
 
 
 import os
+import test
 
 import pandas as pd
 from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework.authtoken.models import Token
 
-import test
-from dataops import pandas_db, ops
-from table import serializers
+from dataops.pandas import check_wf_df, detect_datetime_columns, load_table
+from table.serializers import string_to_df
+from table.serializers.pandas import df_to_string
 from workflow.models import Workflow
 from workflow.ops import workflow_delete_column
 
@@ -43,22 +44,22 @@ class TableApiBase(test.OnTaskApiTestCase):
 
     incorrect_table_1 = {
         "email": {
-          "0": "student1@bogus.com",
-          "1": "student2@bogus.com",
-          "2": "student3@bogus.com",
-          "3": "student1@bogus.com"
+            "0": "student1@bogus.com",
+            "1": "student2@bogus.com",
+            "2": "student3@bogus.com",
+            "3": "student1@bogus.com"
         },
         "Another column": {
-          "0": 6.93333333333333,
-          "1": 9.1,
-          "2": 9.1,
-          "3": 5.03333333333333
+            "0": 6.93333333333333,
+            "1": 9.1,
+            "2": 9.1,
+            "3": 5.03333333333333
         },
         "Quiz": {
-          "0": 1,
-          "1": 0,
-          "2": 3,
-          "3": 0
+            "0": 1,
+            "1": 0,
+            "2": 3,
+            "3": 0
         }
     }
 
@@ -76,9 +77,8 @@ class TableApiBase(test.OnTaskApiTestCase):
         super().setUp()
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email='instructor01@bogus.com')
-        auth = 'Token ' + token.key
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        pandas_db.pg_restore_table(self.filename)
+        test.pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -87,20 +87,21 @@ class TableApiBase(test.OnTaskApiTestCase):
 
 class TableApiCreate(TableApiBase):
     # Getting the table attached to the workflow
+
     def test_table_JSON_get(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('table:api_ops',
-                                           kwargs={'pk': workflow.id}))
+        response = self.client.get(
+            reverse('table:api_ops', kwargs={'wid': workflow.id}))
 
         # Transform the response into a data frame
         r_df = pd.DataFrame(response.data['data_frame'])
-        r_df = ops.detect_datetime_columns(r_df)
+        r_df = detect_datetime_columns(r_df)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
@@ -111,14 +112,14 @@ class TableApiCreate(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('table:api_pops',
-                                           kwargs={'pk': workflow.id}))
+        response = self.client.get(
+            reverse('table:api_pops', kwargs={'wid': workflow.id}))
 
         # Transform the response into a data frame
-        r_df = serializers.string_to_df(response.data['data_frame'])
+        r_df = string_to_df(response.data['data_frame'])
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
@@ -130,14 +131,17 @@ class TableApiCreate(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Override the table
-        response = self.client.post(reverse('table:api_ops',
-                                            kwargs={'pk': workflow.id}),
-                                    self.new_table,
-                                    format='json')
+        response = self.client.post(
+            reverse(
+                'table:api_ops',
+                kwargs={'wid': workflow.id}),
+            self.new_table,
+            format='json')
 
         # Check that the right message is returned
-        self.assertIn('Post request requires workflow without a table',
-                      response.data['detail'])
+        self.assertIn(
+            'Post request requires workflow without a table',
+            response.data['detail'])
 
     def test_table_try_pandas_overwrite(self):
         # Upload a table and try to overwrite an existing one (should fail)
@@ -146,61 +150,62 @@ class TableApiCreate(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Override the table
-        response = self.client.post(reverse('table:api_pops',
-                                            kwargs={'pk': workflow.id}),
-                                    self.new_table,
-                                    format='json')
+        response = self.client.post(
+            reverse(
+                'table:api_pops',
+                kwargs={'wid': workflow.id}),
+            self.new_table,
+            format='json')
 
         # Check that the right message is returned
-        self.assertIn('Post request requires workflow without a table',
-                      response.data['detail'])
+        self.assertIn(
+            'Post request requires workflow without a table',
+            response.data['detail'])
 
     def test_table_json_create(self):
         # Create a second workflow
-        response = self.client.post(reverse('workflow:api_workflows'),
-                                    {'name': test.wflow_name + '2',
-                                     'attributes': {'one': 'two'}},
-                                    format='json')
+        response = self.client.post(
+            reverse('workflow:api_workflows'),
+            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            format='json')
 
         # Get the only workflow in the fixture
-        workflow = Workflow.objects.get(pk=response.data['id'])
+        workflow = Workflow.objects.get(id=response.data['id'])
 
         # Upload the table
         response = self.client.post(
-            reverse('table:api_ops',
-                    kwargs={'pk': workflow.id}),
+            reverse('table:api_ops', kwargs={'wid': workflow.id}),
             {'data_frame': self.new_table},
             format='json')
 
         # Refresh wflow (has been updated)
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
         # Transform new table into data frame
         r_df = pd.DataFrame(self.new_table)
-        r_df = ops.detect_datetime_columns(r_df)
+        r_df = detect_datetime_columns(r_df)
 
         # Compare both elements
         self.compare_tables(r_df, df)
 
         # Check that the rest of the information is correct
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_json_create_error(self):
         # Create a second workflow
-        response = self.client.post(reverse('workflow:api_workflows'),
-                                    {'name': test.wflow_name + '2',
-                                     'attributes': {'one': 'two'}},
-                                    format='json')
+        response = self.client.post(
+            reverse('workflow:api_workflows'),
+            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            format='json')
 
         # Get the only workflow in the fixture
-        workflow = Workflow.objects.get(pk=response.data['id'])
+        workflow = Workflow.objects.get(id=response.data['id'])
 
         # Upload the table
         response = self.client.post(
-            reverse('table:api_ops',
-                    kwargs={'pk': workflow.id}),
+            reverse('table:api_ops', kwargs={'wid': workflow.id}),
             {'data_frame': self.incorrect_table_1},
             format='json')
 
@@ -211,37 +216,36 @@ class TableApiCreate(TableApiBase):
 
     def test_table_pandas_create(self):
         # Create a second workflow
-        response = self.client.post(reverse('workflow:api_workflows'),
-                                    {'name': test.wflow_name + '2',
-                                     'attributes': {'one': 'two'}},
-                                    format='json')
+        response = self.client.post(
+            reverse('workflow:api_workflows'),
+            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            format='json')
 
         # Get the only workflow in the fixture
-        workflow = Workflow.objects.get(pk=response.data['id'])
+        workflow = Workflow.objects.get(id=response.data['id'])
 
         # Transform new table into a data frame
         r_df = pd.DataFrame(self.new_table)
-        r_df = ops.detect_datetime_columns(r_df)
+        r_df = detect_datetime_columns(r_df)
 
         # Upload the table
         response = self.client.post(
-            reverse('table:api_pops',
-                    kwargs={'pk': workflow.id}),
-            {'data_frame': serializers.df_to_string(r_df)},
+            reverse('table:api_pops', kwargs={'wid': workflow.id}),
+            {'data_frame': df_to_string(r_df)},
             format='json')
 
         # Refresh wflow (has been updated)
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
 
         # Check that the rest of the
         # information is correct
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_JSON_update(self):
         # Get the only workflow in the fixture
@@ -249,28 +253,29 @@ class TableApiCreate(TableApiBase):
 
         # Transform new table into string
         r_df = pd.DataFrame(self.new_table)
-        r_df = ops.detect_datetime_columns(r_df)
+        r_df = detect_datetime_columns(r_df)
 
         # Upload a new table
         response = self.client.put(
-            reverse('table:api_ops',
-                    kwargs={'pk': workflow.id}),
+            reverse(
+                'table:api_ops',
+                kwargs={'wid': workflow.id}),
             {'data_frame': self.new_table},
             format='json')
 
         # Refresh wflow (has been updated)
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
 
         # Check that the rest of the
         # information is correct
-        workflow = Workflow.objects.get(pk=workflow.id)
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        workflow = Workflow.objects.get(id=workflow.id)
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_update(self):
         # Get the only workflow in the fixture
@@ -278,50 +283,52 @@ class TableApiCreate(TableApiBase):
 
         # Transform new table into string
         r_df = pd.DataFrame(self.new_table)
-        r_df = ops.detect_datetime_columns(r_df)
+        r_df = detect_datetime_columns(r_df)
 
         # Upload a new table
         response = self.client.put(
-            reverse('table:api_pops',
-                    kwargs={'pk': workflow.id}),
-            {'data_frame': serializers.df_to_string(r_df)},
+            reverse(
+                'table:api_pops',
+                kwargs={'wid': workflow.id}),
+            {'data_frame': df_to_string(r_df)},
             format='json')
 
         # Refresh wflow (has been updated)
-        workflow = Workflow.objects.get(pk=workflow.id)
+        workflow = Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
         self.compare_tables(r_df, df)
 
         # Check that the rest of the
         # information is correct
-        workflow = Workflow.objects.get(pk=workflow.id)
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        workflow = Workflow.objects.get(id=workflow.id)
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_JSON_flush(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Flush the data in the table
-        response = self.client.delete(reverse('table:api_ops',
-                                              kwargs={'pk': workflow.id}))
+        response = self.client.delete(reverse(
+            'table:api_ops',
+            kwargs={'wid': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_flush(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Flush the data in the table
-        response = self.client.delete(reverse('table:api_pops',
-                                              kwargs={'pk': workflow.id}))
+        response = self.client.delete(
+            reverse('table:api_pops', kwargs={'wid': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
 
 class TableApiMerge(TableApiBase):
@@ -332,41 +339,41 @@ class TableApiMerge(TableApiBase):
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('table:api_merge',
-                                           kwargs={'pk': workflow.id}))
+        response = self.client.get(
+            reverse('table:api_merge', kwargs={'wid': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
 
         # Transform new table into string
         r_df = pd.DataFrame(response.data['src_df'])
-        r_df = ops.detect_datetime_columns(r_df)
+        r_df = detect_datetime_columns(r_df)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, df)
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_get(self):
         # Get the only workflow in the fixture
         workflow = Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.get(reverse('table:api_pmerge',
-                                           kwargs={'pk': workflow.id}))
+        response = self.client.get(
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}))
 
         workflow = Workflow.objects.all()[0]
 
         # Transform new table into string
-        r_df = serializers.string_to_df(response.data['src_df'])
+        r_df = string_to_df(response.data['src_df'])
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, df)
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     # Merge and create an empty dataset
     def test_table_JSON_merge_to_empty(self):
@@ -375,7 +382,7 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.new_table,
                 "how": "inner",
@@ -384,12 +391,14 @@ class TableApiMerge(TableApiBase):
             },
             format='json')
 
-        self.assertEqual(response.data['detail'],
-                         'Merge operation produced a result with no rows')
+        self.assertEqual(
+            response.data['detail'],
+            'Unable to perform merge operation: '
+            + 'Merge operation produced a result with no rows')
 
         # Check for df/wf consistency
         workflow = Workflow.objects.all()[0]
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_to_empty(self):
         # Get the only workflow in the fixture
@@ -400,9 +409,9 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "inner",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -410,11 +419,12 @@ class TableApiMerge(TableApiBase):
             format='json')
 
         self.assertEqual(response.data['detail'],
-                         'Merge operation produced a result with no rows')
+                         'Unable to perform merge operation: '
+                         + 'Merge operation produced a result with no rows')
 
         # Check for df/wf consistency
         workflow = Workflow.objects.all()[0]
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     # Merge with inner values
     def test_table_JSON_merge_to_inner(self):
@@ -423,7 +433,7 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df,
                 "how": "inner",
@@ -439,7 +449,7 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.nrows, 2)
 
         # Check for df/wf consistency
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_to_inner(self):
         # Get the only workflow in the fixture
@@ -450,9 +460,9 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "inner",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -466,7 +476,7 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.nrows, 2)
 
         # Check for df/wf consistency
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     # Merge with outer values
     def test_table_JSON_merge_to_outer(self):
@@ -483,7 +493,7 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df,
                 "how": "outer",
@@ -493,7 +503,7 @@ class TableApiMerge(TableApiBase):
             format='json')
 
         # No anomaly should be detected
-        self.assertEqual(None, response.data.get('detail', None))
+        self.assertEqual(None, response.data.get('detail'))
 
         # Get the new workflow
         workflow = Workflow.objects.all()[0]
@@ -502,7 +512,7 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.nrows, 4)
 
         # Check for df/wf consistency
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_to_outer(self):
         # Get the only workflow in the fixture
@@ -521,9 +531,9 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "outer",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -531,7 +541,7 @@ class TableApiMerge(TableApiBase):
             format='json')
 
         # No anomaly should be detected
-        self.assertEqual(None, response.data.get('detail', None))
+        self.assertEqual(None, response.data.get('detail'))
 
         # Get the new workflow
         workflow = Workflow.objects.all()[0]
@@ -540,7 +550,7 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.nrows, 4)
 
         # Check for df/wf consistency
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     # Merge with left values
     def test_table_JSON_merge_to_left(self):
@@ -557,7 +567,7 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df,
                 "how": "left",
@@ -572,12 +582,12 @@ class TableApiMerge(TableApiBase):
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 3)
 
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
         self.assertEqual(df[df['sid'] == 1]['newcol'].values[0],
                          self.src_df['newcol'][0])
 
         # Check for df/wf consistency
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_to_left(self):
         # Get the only workflow in the fixture
@@ -588,9 +598,9 @@ class TableApiMerge(TableApiBase):
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "left",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -603,12 +613,12 @@ class TableApiMerge(TableApiBase):
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 3)
 
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
         self.assertEqual(df[df['sid'] == 1]['newcol'].values[0],
                          self.src_df['newcol'][0])
 
         # Check for df/wf consistency
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     # Merge with outer values but producing NaN everywhere
     def test_table_JSON_merge_to_outer_NaN(self):
@@ -633,12 +643,12 @@ class TableApiMerge(TableApiBase):
         r_df = pd.DataFrame(self.src_df2)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
         new_df = pd.merge(df, r_df, how="outer", left_on="sid", right_on="sid")
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_merge', kwargs={'pk': workflow.id}),
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df2,
                 "how": "outer",
@@ -655,13 +665,13 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.ncols, 8)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
         self.compare_tables(df, new_df)
 
         # Check for df/wf consistency
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_to_outer_NaN(self):
         # Get the only workflow in the fixture
@@ -685,14 +695,14 @@ class TableApiMerge(TableApiBase):
         r_df = pd.DataFrame(self.src_df2)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
         new_df = pd.merge(df, r_df, how="outer", left_on="sid", right_on="sid")
 
         # Get the data through the API
         response = self.client.put(
-            reverse('table:api_pmerge', kwargs={'pk': workflow.id}),
+            reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
-                "src_df": serializers.df_to_string(r_df),
+                "src_df": df_to_string(r_df),
                 "how": "outer",
                 "left_on": "sid",
                 "right_on": "sid"
@@ -707,10 +717,10 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.ncols, 8)
 
         # Load the df from the db
-        df = pandas_db.load_from_db(workflow.get_data_frame_table_name())
+        df = load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
         self.compare_tables(df, new_df)
 
         # Check for df/wf consistency
-        self.assertTrue(pandas_db.check_wf_df(workflow))
+        self.assertTrue(check_wf_df(workflow))

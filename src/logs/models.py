@@ -1,32 +1,37 @@
 # -*- coding: utf-8 -*-
 
+"""Model for OnTask Logs."""
 
 import json
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 
 from workflow.models import Workflow
 
+FIELD_NAME_LENGH = 256
+
 
 class LogManager(models.Manager):
+    """Manager to create elements with the right parameters."""
 
     def register(self, user, name, workflow, payload):
-        log_item = self.create(user=user,
-                               name=name,
-                               workflow=workflow,
-                               payload=payload)
+        """Handle user, name, workflow and payload."""
+        log_item = self.create(
+            user=user,
+            name=name,
+            workflow=workflow,
+            payload=payload)
         return log_item
 
 
 class Log(models.Model):
-    """
-    @DynamicAttrs
+    """Model to encode logs in OnTask.
 
-    Model to encode logs in OnTask
+    @DynamicAttrs
     """
 
     WORKFLOW_CREATE = 'workflow_create'
@@ -70,6 +75,7 @@ class Log(models.Model):
     CONDITION_CLONE = 'condition_clone'
     TABLEROW_UPDATE = 'tablerow_update'
     TABLEROW_CREATE = 'tablerow_create'
+    SURVEY_INPUT = 'survey_input'
     VIEW_CREATE = 'view_create'
     VIEW_EDIT = 'view_edit'
     VIEW_DELETE = 'view_delete'
@@ -88,6 +94,7 @@ class Log(models.Model):
     SCHEDULE_EMAIL_EDIT = 'schedule_email_edit'
     SCHEDULE_EMAIL_DELETE = 'schedule_email_delete'
     SCHEDULE_EMAIL_EXECUTE = 'schedule_email_execute'
+    SCHEDULE_CANVAS_EMAIL_EDIT = 'schedule_canvas_email_edit'
     SCHEDULE_CANVAS_EMAIL_EXECUTE = 'schedule_canvas_email_execute'
     SCHEDULE_CANVAS_EMAIL_DELETE = 'schedule_canvas_email_delete'
     DOWNLOAD_ZIP_ACTION = 'download_zip_action'
@@ -136,6 +143,7 @@ class Log(models.Model):
         (CONDITION_CLONE, _('Condition cloned')),
         (TABLEROW_UPDATE, _('Table row updated')),
         (TABLEROW_CREATE, _('Table row created')),
+        (SURVEY_INPUT, _('Survey data input')),
         (VIEW_CREATE, _('Table view created')),
         (VIEW_EDIT, _('Table view edited')),
         (VIEW_DELETE, _('Table view deleted')),
@@ -154,6 +162,8 @@ class Log(models.Model):
         (SCHEDULE_EMAIL_EDIT, _('Edit scheduled email action')),
         (SCHEDULE_EMAIL_DELETE, _('Delete scheduled email action')),
         (SCHEDULE_EMAIL_EXECUTE, _('Execute scheduled email action')),
+        (SCHEDULE_CANVAS_EMAIL_EDIT,
+         _('Edit scheduled canvas email action')),
         (SCHEDULE_CANVAS_EMAIL_EXECUTE,
          _('Execute scheduled canvas email action')),
         (SCHEDULE_CANVAS_EMAIL_DELETE,
@@ -164,63 +174,71 @@ class Log(models.Model):
         (SCHEDULE_JSON_EXECUTE, _('Execute scheduled JSON action')),
     ]
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             db_index=True,
-                             on_delete=models.CASCADE,
-                             null=False,
-                             blank=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False)
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
     modified = models.DateTimeField(auto_now=True, null=False)
 
     # Type of event logged see above
-    name = models.CharField(max_length=256,
-                            blank=False,
-                            choices=LOG_TYPES)
+    name = models.CharField(
+        max_length=FIELD_NAME_LENGH,
+        blank=False,
+        choices=LOG_TYPES)
 
-    workflow = models.ForeignKey(Workflow,
-                                 db_index=True,
-                                 on_delete=models.CASCADE,
-                                 null=True,
-                                 related_name='logs')
+    workflow = models.ForeignKey(
+        Workflow,
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name='logs')
 
     # JSON element with additional information
-    payload = JSONField(default=dict,
-                        blank=True,
-                        null=True,
-                        verbose_name=_('payload'))
+    payload = JSONField(
+        default=dict,
+        blank=True,
+        null=True,
+        verbose_name=_('payload'))
 
     # Use our own manager
-    objects = LogManager()
+    objects = LogManager()  # noqa: Z110
 
     def get_payload(self):
-        """
-        Function to access the payload information. If using a DB that
-        supports JSON this function should be rewritten (to be transparent).
+        """Access the payload information.
+
+        If using a DB that supports JSON this function should be rewritten (
+        to be transparent).
+
         :return: The JSON structure with the payload
         """
-
         if self.payload == '':
             return {}
 
         return json.loads(self.payload)
 
     def set_payload(self, payload):
-        """
-        Save the payload structure as text. If using a DB that supports JSON,
-        this function should be rewritten.
+        """Save the payload structure as text.
+
+        If using a DB that supports JSON, this function should be rewritten.
+
         :return: Nothing.
         """
-
         self.payload = json.dumps(payload)
 
     def __unicode__(self):
-        return '%s %s %s %s' % (self.user,
-                                self.created,
-                                self.name,
-                                self.payload)
+        """Represent as a tuple."""
+        return '%s %s %s %s' % (
+            self.user,
+            self.created,
+            self.name,
+            self.payload)
 
     @cached_property
     def log_useremail(self):
+        """Return the user email."""
         return self.user.email
