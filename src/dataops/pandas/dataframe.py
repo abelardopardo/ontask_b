@@ -228,7 +228,7 @@ def store_workflow_table(
     if not update_info.get('column_types'):
         raise _('Internal error while processing database.')
     if not update_info.get('keep_key_column'):
-        raise _('internal error while processing database.')
+        raise _('Internal error while processing database.')
     if not update_info.get('columns_to_upload'):
         update_info['columns_to_upload'] = [True] * len(update_info[
             'initial_column_names'])
