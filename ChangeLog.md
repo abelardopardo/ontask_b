@@ -8,8 +8,6 @@
 
 - Timeline visualization of action executions. In a single page the timeline of the execution of either all the actions, or a single one.
 
-- Import operation now allows to either provide a workflow name for the import or use the original workflow name (stored in the file).
-
 - Support for CORS Headers (using library django-cors-headers)
 
 ### Changed
@@ -21,6 +19,8 @@
 - Refactoring of plugin infrastructure to execute arbitrary transformations and
   models
   
+- Import operation now allows to either provide a workflow name for the import or use the original workflow name (stored in the file).
+
 - Major refactoring of the code to use type hints and an more adequate division into packages. 
 
 - Major rewriting of data frame manipulation to use direct database operations and reduce 
