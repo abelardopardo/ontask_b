@@ -40,10 +40,10 @@ class PluginRegistry(models.Model):
 
     # Boolean stating if the plugin is a model or a transformation
     is_model = models.BooleanField(
-        default=False,
+        default=None,
         verbose_name=_('Plugin is a model'),
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
     )
 
     # Boolean stating if the column is a unique key
