@@ -3,12 +3,12 @@
 import numpy as np
 import pandas as pd
 
-from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
+from dataops.plugin import OnTaskTransformation
 
 class_name = 'RoundColumn'
 
 
-class RoundColumn(OnTaskPluginAbstract):
+class RoundColumn(OnTaskTransformation):
     """
     Plugin that receives a set of columns of type double and tries to round
     their numbers to a number of decimal places. The parameters are:
@@ -23,9 +23,7 @@ class RoundColumn(OnTaskPluginAbstract):
         super().__init__()
 
         self.name = 'Round column'
-        self.description_txt = self.__doc__
-        self.input_column_names = list()
-        self.output_column_names = list()
+        self.description_txt = "Round the values in pre-selected columns."
         self.parameters = [
             ('Decimal places',
              'integer',

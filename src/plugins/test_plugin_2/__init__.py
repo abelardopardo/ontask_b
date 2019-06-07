@@ -2,14 +2,14 @@
 
 import pandas as pd
 
-from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
+from dataops.plugin import OnTaskTransformation
 
 # The field class_name contains the name of the class to load to execute the
 # plugin.
 class_name = 'OnTaskTestPlugin'
 
 
-class OnTaskTestPlugin(OnTaskPluginAbstract):
+class OnTaskTestPlugin(OnTaskTransformation):
     """
     Example of a class that implements the OnTask plugin interface. The
     class has to satisfy the following properties:

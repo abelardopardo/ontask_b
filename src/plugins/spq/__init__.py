@@ -5,7 +5,7 @@ from builtins import str
 
 import pandas as pd
 
-from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
+from dataops.plugin import OnTaskTransformation
 
 class_name = 'SPQEvaluate'
 
@@ -46,7 +46,7 @@ def spq_encode(answers):
             ss_val / len(ss_idx))
 
 
-class SPQEvaluate(OnTaskPluginAbstract):
+class SPQEvaluate(OnTaskTransformation):
     """
     Plugin to encode the results of the SPQ test.
 

@@ -5,7 +5,7 @@ from builtins import str
 
 import pandas as pd
 
-from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
+from dataops.plugin import OnTaskTransformation
 
 # The field class_name contains the name of the class to load to execute the
 # plugin.
@@ -49,7 +49,7 @@ def mslq_encode(answers, num):
             1.0 * sum([answers[i - 1] for i in srel_idx]) / len(srel_idx))
 
 
-class MSLQEvaluate(OnTaskPluginAbstract):
+class MSLQEvaluate(OnTaskTransformation):
     """
     Plugin to process the results of the MSLQ test.
 
