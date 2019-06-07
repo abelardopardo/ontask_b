@@ -954,7 +954,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # Click the next
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Next']").click()
+            "//button[normalize-space()='Send']").click()
         self.wait_for_page(element_id='zip-action-request-data')
 
         # Anomaly detected
@@ -971,7 +971,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # Click the next
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Next']").click()
+            "//button[normalize-space()='Send']").click()
         self.wait_for_page(element_id='zip-action-request-data')
 
         # Anomaly detected
@@ -984,7 +984,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # Click the next
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='Next']").click()
+            "//button[normalize-space()='Send']").click()
         self.wait_for_page(element_id='zip-action-done')
 
         # End of session
