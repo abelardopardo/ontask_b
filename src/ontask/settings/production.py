@@ -95,11 +95,6 @@ LOGGING = {
             'handlers': ['ontask_log_file'],
             'level': 'ERROR',
         },
-        'django.request': {
-            'handlers': ['proj_log_file'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
         'scripts': {
             'handlers': ['script_log_file'],
             'propagate': True,
