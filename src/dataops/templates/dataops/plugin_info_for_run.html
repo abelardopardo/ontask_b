@@ -106,12 +106,16 @@
           <div class="shadow rounded tab-pane px-3 fade show border border-dark"
                id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
             <div class="justify-content-center my-3">
-              <p class="lead text-center">{% trans 'Execution parameters' %}</p>
-              {% for field_item in parameters %}
-                <div class="row justify-content-center">
-                  {{ field_item|as_crispy_field }}
-                </div>
-              {% endfor %}
+              {% if parameters %}
+                <p class="lead text-center">{% trans 'Execution parameters' %}</p>
+                {% for field_item in parameters %}
+                  <div class="row justify-content-center">
+                    {{ field_item|as_crispy_field }}
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p class="lead text-center">{% trans 'No parameters required' %}</p>
+              {% endif %}
             </div>
           </div>
           <div class="shadow rounded tab-pane px-3 fade show border border-dark"
