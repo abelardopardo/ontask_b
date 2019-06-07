@@ -157,7 +157,7 @@ def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
     workflow.lusers.set(luser_list)
 
     # Report status
-    log_item.payload['total_users'] = len(emails)
+    log_item.payload['total_users'] = emails.rowcount
     log_item.payload['new_users'] = created
     log_item.payload['status'] = ugettext(
         'Learner emails successfully updated.',
