@@ -2,6 +2,8 @@
 
 
 import os
+
+# from dataops.models import SQLConnection
 import test
 from test import ElementHasFullOpacity, ScreenTests
 
@@ -444,6 +446,25 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the body
         self.body_ss('dataops_transformation_run.png')
+
+        #
+        # Dataops: Model
+        #
+        self.go_to_model()
+        self.body_ss('dataops_model_list.png')
+
+        # Click to run linear model
+        element = self.search_table_row_by_string(
+            'transform-table',
+            1,
+            'Linear Model')
+        element.find_element_by_xpath('td[1]/a').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
+        )
+
+        # Picture of the body
+        self.body_ss('dataops_model_run.png')
 
         # End of session
         self.logout()

@@ -2,6 +2,8 @@
 
 
 import os
+from time import sleep
+
 import test
 from test import ElementHasFullOpacity, ScreenTests
 
@@ -678,6 +680,9 @@ class TutorialCaptures(ScreenTests):
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.ID, 'insert-questions'))
         )
+        self.select_parameters_tab()
+        self.select_questions_tab()
+        sleep(1)
         self.body_ss('tutorial_survey_editor2.png')
 
         # Click the preview button
