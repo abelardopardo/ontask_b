@@ -4,6 +4,10 @@
 
 - Requires Django 2.2.2
 
+### Fixed
+
+- Error preventing import of duplicate workflow name for different users.
+
 ## 5 (2019-06-07)
 
 ### Added 

@@ -121,7 +121,10 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             if not wflow_name:
                 raise Exception(_('Unexpected empty workflow name.'))
 
-            if Workflow.objects.filter(name=wflow_name).exists():
+            if Workflow.objects.filter(
+                name=wflow_name,
+                user=self.context['user']
+            ).exists():
                 raise Exception(_(
                     'There is a workflow with this name. '
                     + 'Please provide a workflow name in the import page.'))
