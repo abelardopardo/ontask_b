@@ -129,7 +129,7 @@ def _verify_plugin(pinobj):
 
         # Verify that all the fields and methods are present in the instance
         diag[check_idx] = _('Not found')
-        if pinobj.name is not None and isinstance(pinobj.name, str):
+        if pinobj.name and isinstance(pinobj.name, str):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect type')

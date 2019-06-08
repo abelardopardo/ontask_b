@@ -38,7 +38,7 @@ $(function () {
 
   $(document).on('change','#id_how_merge', show_merge_figure);
 
-  $("#incorrect-plugins").on("click", ".js-transform-diagnose", loadForm);
+  $("#plugin-admin-table").on("click", ".js-plugin-diagnose", loadForm);
 
   $("#transform-table, #plugin-admin-table").on(
   "click", ".js-plugin-show-description", loadForm);

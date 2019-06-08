@@ -33,7 +33,7 @@ class PluginTable(tables.Table):
 
     """
 
-    name = tables.Column(verbose_name=_('Name'), empty_values=None)
+    filename = tables.Column(verbose_name=_('Folder'), empty_values=None)
 
     description_txt = tables.TemplateColumn(
         verbose_name=_('Description'),
@@ -422,11 +422,9 @@ def plugin_invoke(
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_workflow()
 def moreinfo(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
 ) -> JsonResponse:
     """Show the detailed information about a plugin.
 
