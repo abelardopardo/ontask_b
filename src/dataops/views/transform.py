@@ -22,7 +22,10 @@ from dataops.forms import FIELD_PREFIX, PluginInfoForm
 from dataops.models import Plugin
 from dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
 from logs.models import Log
-from ontask.decorators import ajax_required, get_workflow
+from ontask.decorators import (
+    ajax_required, get_workflow,
+    remove_workflow_from_session,
+)
 from ontask.permissions import is_instructor, is_admin
 from ontask.tasks import run_plugin_task
 from workflow.models import Workflow
@@ -32,8 +35,6 @@ class PluginTable(tables.Table):
     """Class to render plugin Tables
 
     """
-
-    filename = tables.Column(verbose_name=_('Folder'), empty_values=None)
 
     description_txt = tables.TemplateColumn(
         verbose_name=_('Description'),
@@ -47,6 +48,8 @@ class PluginAdminTable(PluginTable):
     """Class to render the table with plugins present in the system.
 
     """
+
+    filename = tables.Column(verbose_name=_('Folder'), empty_values=None)
 
     num_executions = tables.Column(
         verbose_name=_('Executions'),
@@ -194,6 +197,8 @@ def plugin_admin(
 
     :return:
     """
+    remove_workflow_from_session(request)
+
     # Traverse the plugin folder and refresh the db content.
     refresh_plugin_data(request)
 
@@ -271,13 +276,13 @@ def diagnose(
     if pinstance:
         plugin.is_verified = True
         plugin.save()
-        return JsonResponse({'html_redirect': reverse('dataops:transform')})
+        return JsonResponse({'html_redirect': reverse('dataops:plugin_admin')})
 
     # Get the diagnostics from the plugin and use it for rendering.
     return JsonResponse({
         'html_form': render_to_string(
             'dataops/includes/partial_diagnostics.html',
-            {'diagnostic_table': msgs, 'folder': plugin.filename},
+            {'diagnostic_table': msgs},
             request=request),
     })
 

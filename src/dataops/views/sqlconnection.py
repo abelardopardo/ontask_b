@@ -17,7 +17,7 @@ from dataops.forms import SQLConnectionForm
 from dataops.models import SQLConnection
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import ajax_required
+from ontask.decorators import ajax_required, remove_workflow_from_session
 from ontask.permissions import is_admin, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow
@@ -162,11 +162,7 @@ def sqlconnection_admin_index(request: HttpRequest) -> HttpResponse:
 
     :return: Render the appropriate page.
     """
-    wid = request.session.pop('ontask_workflow_id', None)
-    # If removing workflow from session, mark it as available for sharing
-    if wid:
-        Workflow.unlock_workflow_by_id(wid)
-    request.session.pop('ontask_workflow_name', None)
+    remove_workflow_from_session(request)
 
     return render(
         request,

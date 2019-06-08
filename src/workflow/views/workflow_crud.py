@@ -2,15 +2,14 @@
 
 """Views to manipulate the workflow."""
 
-import copy
 from builtins import range
+import copy
 from typing import Optional
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.query_utils import Q
-from django.http import JsonResponse
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -28,6 +27,7 @@ from ontask import create_new_name
 from ontask.celery import celery_is_up
 from ontask.decorators import (
     ajax_required, get_workflow, store_workflow_in_session,
+    remove_workflow_from_session,
 )
 from ontask.permissions import UserIsInstructor, is_instructor
 from table.views.table_view import do_clone_view
@@ -238,11 +238,7 @@ def save_workflow_form(
 @user_passes_test(is_instructor)
 def index(request: HttpRequest) -> HttpResponse:
     """Render the page with the list of workflows."""
-    wid = request.session.pop('ontask_workflow_id', None)
-    # If removing workflow from session, mark it as available for sharing
-    if wid:
-        Workflow.unlock_workflow_by_id(wid)
-    request.session.pop('ontask_workflow_name', None)
+    remove_workflow_from_session(request)
 
     workflows = (
         request.user.workflows_owner.all()

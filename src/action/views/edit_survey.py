@@ -307,7 +307,7 @@ def shuffle_questions(
     action.shuffle = not action.shuffle
     action.save()
 
-    return JsonResponse({'shuffle': action.shuffle})
+    return JsonResponse({'is_checked': action.shuffle})
 
 
 @user_passes_test(is_instructor)

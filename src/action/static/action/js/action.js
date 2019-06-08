@@ -46,26 +46,6 @@ var insertAttributeInContent = function() {
   insertText('id_text_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
-var toggleShuffleQuestion = function () {
-  $('#div-spinner').show();
-  $.ajax({
-    url: $(this).attr("data-url"),
-    type: 'get',
-    dataType: 'json',
-    success: function (data) {
-        if (data.shuffle = true) {
-            $(this).attr('checked')
-        } else {
-            $(this).removeAttr('checked')
-        }
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      $('#div-spinner').show();
-      location.reload(true);
-    }
-  });
-  $('#div-spinner').hide();
-}
 var ajax_post = function(url, data, req_type) {
   $.ajax({
     url: url,
@@ -213,7 +193,7 @@ $(function () {
   $("#edit-survey-tab-content").on("click", ".js-select-condition", assignColumn);
 
   // Toggle shuffle question
-  $("#action-in-editor").on("change", "#shuffle-questions", toggleShuffleQuestion);
+  $("#action-in-editor").on("change", "#shuffle-questions", toggleCheckBox);
 
   // Show stats
   $("#column-stat-selector").on("click", ".js-show-stats", loadForm);
