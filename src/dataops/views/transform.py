@@ -59,8 +59,13 @@ class PluginAdminTable(PluginTable):
         return render_to_string(
             'dataops/includes/partial_plugin_diagnose.html',
             context={'id': record.id},
-            request=None
-        )
+            request=None)
+
+    def render_is_enabled(self, record):
+        return render_to_string(
+            'dataops/includes/partial_plugin_enable.html',
+            context={'record': record},
+            request=None)
 
     def render_last_exec(self, record):
         """Render the last executed time.
@@ -100,7 +105,7 @@ class PluginAdminTable(PluginTable):
             'description_txt',
             'is_model',
             'is_verified',
-        )
+            'is_enabled')
 
         sequence = (
             'filename',
@@ -108,6 +113,7 @@ class PluginAdminTable(PluginTable):
             'description_txt',
             'is_model',
             'is_verified',
+            'is_enabled',
             'num_executions',
             'last_exec')
 
@@ -222,7 +228,7 @@ def transform_model(
         Plugin.objects.filter(
             is_model=is_model,
             is_verified=True,
-        ),
+            is_enabled=True),
         orderable=False,
         user=request.user,
         workflow=workflow)
@@ -449,3 +455,23 @@ def moreinfo(
             {'pinstance': pinstance},
             request=request),
     })
+
+@user_passes_test(is_instructor)
+@ajax_required
+def plugin_toggle(
+    request: HttpRequest,
+    pk: int,
+) -> JsonResponse:
+    """Toggle the field is_enabled of a plugin
+
+    :param request: HTML request object
+
+    :param pk: Primary key of the Plugin element
+
+    :return:
+    """
+    plugin_item = Plugin.objects.get(pk=pk)
+    if plugin_item.is_verified:
+        plugin_item.is_enabled = not plugin_item.is_enabled
+        plugin_item.save()
+    return JsonResponse({'is_checked': plugin_item.is_enabled})

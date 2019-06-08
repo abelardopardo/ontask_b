@@ -178,6 +178,27 @@ var select_next_button = function(e) {
   $("#next-step-on").prop('hidden', val);
   $("#next-step-off").prop('hidden', !val);
 }
+var toggleCheckBox = function () {
+  elem = $(this);
+  $('#div-spinner').show();
+  $.ajax({
+    url: $(this).attr("data-url"),
+    type: 'get',
+    dataType: 'json',
+    success: function (data) {
+        if (data.is_checked == true) {
+            elem.prop("checked", true)
+        } else {
+            elem.prop("checked", false)
+        }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      $('#div-spinner').show();
+      location.reload(true);
+    }
+  });
+  $('#div-spinner').hide();
+}
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip({
     trigger: "hover",

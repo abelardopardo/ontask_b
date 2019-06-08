@@ -46,10 +46,18 @@ class Plugin(models.Model):
         blank=True,
     )
 
-    # Boolean stating if the column is a unique key
+    # Boolean stating if the plugin is ready to run
     is_verified = models.BooleanField(
         default=False,
         verbose_name=_('Ready to run'),
+        null=False,
+        blank=False,
+    )
+
+    # Boolean stating if the plugin is allowed to run
+    is_enabled = models.BooleanField(
+        default=False,
+        verbose_name=_('Enabled'),
         null=False,
         blank=False,
     )

@@ -57,6 +57,9 @@ $(function () {
 
   $("#sqlconn-admin-table, #modal-item").on("click", ".js-sqlconn-clone", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-clone-form", saveForm);
+
+  // Toggle plugin is_enabled
+  $("#plugin-admin-table").on("change", ".plugin-toggle", toggleCheckBox);
 });
 
 window.onload = function(){

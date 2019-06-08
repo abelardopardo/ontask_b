@@ -261,6 +261,8 @@ def _load_plugin_info(plugin_folder, plugin_rego=None):
             plugin_rego.is_model = False
 
     plugin_rego.is_verified = plugin_instance is not None
+    if not plugin_rego.is_verified:
+        plugin_rego.is_enabled = False
 
     # All went good
     plugin_rego.save()
