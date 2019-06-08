@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Plugin Admin' %}{% endblock %}
+{% block extrahead %}
+  {% ontask_datatables_bootstrap_css %}
+{% endblock extrahead %}
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
+  <script type="text/javascript">
+    if (document.getElementById("plugin-admin-table") != null) {
+      $(document).ready(function() {
+        var transform_table = $('#plugin-admin-table').DataTable({
+          "autoWidth": false,
+          "search": {
+            "caseInsensitive": true,
+          },
+          stateSave: true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
+          "language": {
+            "url": location.protocol + getLanguage()
+          },
+          "columnDefs": [
+            {"className": "dt-center", "targets": [0, 1, 3, 4, 5, 6]},
+          ],
+          colReorder: false,
+          rowReorder: false,
+        });
+      })
+    };
+  </script>
+{% endblock %}
+{% block container %}
+  <div class="container">
+    <h1 class="text-center">{% trans 'Plugins' %}</h1>
+    <div class="justify-content-center" id="div-plugin-admin">
+      {% render_table table %}
+    </div>
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}

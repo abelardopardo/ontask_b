@@ -19,20 +19,18 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from dataops.forms import FIELD_PREFIX, PluginInfoForm
-from dataops.models import PluginRegistry
+from dataops.models import Plugin
 from dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
 from logs.models import Log
 from ontask.decorators import ajax_required, get_workflow
-from ontask.permissions import is_instructor
+from ontask.permissions import is_instructor, is_admin
 from ontask.tasks import run_plugin_task
 from workflow.models import Workflow
 
 
-class PluginRegistryTable(tables.Table):
-    """Class to render the table with plugins available for execution.
+class PluginTable(tables.Table):
+    """Class to render plugin Tables
 
-    The Operations column is inheriting from another class to centralise the
-    customisation.
     """
 
     name = tables.Column(verbose_name=_('Name'), empty_values=None)
@@ -43,6 +41,90 @@ class PluginRegistryTable(tables.Table):
     )
 
     last_exec = tables.DateTimeColumn(verbose_name=_('Last executed'))
+
+
+class PluginAdminTable(PluginTable):
+    """Class to render the table with plugins present in the system.
+
+    """
+
+    num_executions = tables.Column(
+        verbose_name=_('Executions'),
+        empty_values=[])
+
+    def render_is_verified(self, record):
+        if record.is_verified:
+            return format_html('<span class="true">✔</span>')
+
+        return render_to_string(
+            'dataops/includes/partial_plugin_diagnose.html',
+            context={'id': record.id},
+            request=None
+        )
+
+    def render_last_exec(self, record):
+        """Render the last executed time.
+
+        :param record: Record being processed in the table.
+
+        :return:
+        """
+        log_item = Log.objects.filter(
+            name=Log.PLUGIN_EXECUTE,
+            payload__name=record.name,
+        ).order_by(F('created').desc()).first()
+        if not log_item:
+            return '—'
+        return log_item.created
+
+    def render_num_executions(self, record):
+        """Render the last executed time.
+
+        :param record: Record being processed in the table.
+
+        :return:
+        """
+        return Log.objects.filter(
+            name=Log.PLUGIN_EXECUTE,
+            payload__name=record.name,
+        ).count()
+
+    class Meta(object):
+        """Choose fields, sequence and attributes."""
+
+        model = Plugin
+
+        fields = (
+            'filename',
+            'name',
+            'description_txt',
+            'is_model',
+            'is_verified',
+        )
+
+        sequence = (
+            'filename',
+            'name',
+            'description_txt',
+            'is_model',
+            'is_verified',
+            'num_executions',
+            'last_exec')
+
+        attrs = {
+            'class': 'table table-hover table-bordered shadow',
+            'style': 'width: 100%;',
+            'id': 'plugin-admin-table',
+            'th': {'class': 'dt-body-center'},
+            'td': {'style': 'vertical-align: middle'}}
+
+
+class PluginAvailableTable(PluginTable):
+    """Class to render the table with plugins available for execution.
+
+    The Operations column is inheriting from another class to centralise the
+    customisation.
+    """
 
     def __init__(self, *args, **kwargs):
         """Set workflow and user to get latest execution time"""
@@ -81,9 +163,9 @@ class PluginRegistryTable(tables.Table):
         return log_item.created
 
     class Meta(object):
-        """Choose model, fields, sequence and attributes."""
+        """Choose fields, sequence and attributes."""
 
-        model = PluginRegistry
+        model = Plugin
 
         fields = ('name', 'description_txt')
 
@@ -94,6 +176,25 @@ class PluginRegistryTable(tables.Table):
             'style': 'width: 100%;',
             'id': 'transform-table',
         }
+
+
+@user_passes_test(is_admin)
+def plugin_admin(
+    request: HttpRequest,
+) -> HttpResponse:
+    """Show the table of plugins and their status.
+
+    :param request: HTTP Request
+
+    :return:
+    """
+    # Traverse the plugin folder and refresh the db content.
+    refresh_plugin_data(request)
+
+    return render(
+        request,
+        'dataops/plugin_admin.html',
+        {'table': PluginAdminTable(Plugin.objects.all())})
 
 
 @user_passes_test(is_instructor)
@@ -117,8 +218,8 @@ def transform_model(
     # Traverse the plugin folder and refresh the db content.
     refresh_plugin_data(request, workflow)
 
-    table_ok = PluginRegistryTable(
-        PluginRegistry.objects.filter(
+    table_ok = PluginAvailableTable(
+        Plugin.objects.filter(
             is_model=is_model,
             is_verified=True,
         ),
@@ -128,7 +229,7 @@ def transform_model(
 
     table_err = None
     if request.user.is_superuser:
-        table_err = PluginRegistry.objects.filter(is_model=None)
+        table_err = Plugin.objects.filter(is_model=None)
 
     return render(
         request,
@@ -152,7 +253,7 @@ def diagnose(
     :return:
     """
     # Action being used
-    plugin = PluginRegistry.objects.filter(id=pk).first()
+    plugin = Plugin.objects.filter(id=pk).first()
     if not plugin:
         return JsonResponse({'html_redirect': reverse('home')})
 
@@ -203,7 +304,7 @@ def plugin_invoke(
                     + 'Ask your system administrator to enable queueing.'))
             return redirect(reverse('table:display'))
 
-    plugin_info = PluginRegistry.objects.filter(pk=pk).first()
+    plugin_info = Plugin.objects.filter(pk=pk).first()
     if not plugin_info:
         return redirect('home')
 
@@ -331,12 +432,12 @@ def moreinfo(
 
     :param request: HTML request object
 
-    :param pk: Primary key of the PluginRegistry element
+    :param pk: Primary key of the Plugin element
 
     :return:
     """
     # Action being used
-    plugin = PluginRegistry.objects.filter(id=pk).first()
+    plugin = Plugin.objects.filter(id=pk).first()
     if not plugin:
         return JsonResponse({'html_redirect': reverse('home')})
 
