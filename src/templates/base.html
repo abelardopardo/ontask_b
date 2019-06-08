@@ -121,14 +121,14 @@
                 {% if user.is_staff %}
                   <li class="nav-item dropdown">
                     <a href="#" id="ontask-base-admin"
-                       class="nav-link dropdown-toggle{% if '/dataops/sqlconns_admin' in request.path %} active{% endif %}"
+                       class="nav-link dropdown-toggle{% if '_admin' in request.path %} active{% endif %}"
                        data-toggle="dropdown">
                       <span class="fa fa-cogs"></span> {% trans 'Admin' %}
                     </a>
                     <div class="shadow dropdown-menu" aria-labelledby="ontask-base-table">
                       <a href="{% url 'admin:index' %}"
                          class="btn dropdown-item spin"
-                         data-toggle="dropdown"
+                         data-toggle="tooltip"
                          title="{% trans 'View the complete table' %}">
                         {% trans 'DB Admin' %}</a>
                       <a href="{% url 'dataops:sqlconns_admin_index' %}"
