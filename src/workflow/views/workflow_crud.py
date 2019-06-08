@@ -26,7 +26,10 @@ from logs.models import Log
 from ontask import create_new_name
 from ontask.celery import celery_is_up
 from ontask.decorators import (
-    ajax_required, get_workflow, store_workflow_in_session,
+    ajax_required, get_workflow,
+)
+from ontask.workflow_access import (
+    store_workflow_in_session,
     remove_workflow_from_session,
 )
 from ontask.permissions import UserIsInstructor, is_instructor

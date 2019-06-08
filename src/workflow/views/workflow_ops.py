@@ -22,8 +22,9 @@ from dataops.sql import get_rows, get_text_column_hash
 from logs.models import Log
 from ontask import is_correct_email
 from ontask.decorators import (
-    ajax_required, get_column, get_workflow, store_workflow_in_session,
+    ajax_required, get_column, get_workflow,
 )
+from ontask.workflow_access import store_workflow_in_session
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
 from ontask.tasks import workflow_update_lusers

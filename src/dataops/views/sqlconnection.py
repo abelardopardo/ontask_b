@@ -17,7 +17,8 @@ from dataops.forms import SQLConnectionForm
 from dataops.models import SQLConnection
 from logs.models import Log
 from ontask import create_new_name
-from ontask.decorators import ajax_required, remove_workflow_from_session
+from ontask.decorators import ajax_required
+from ontask.workflow_access import remove_workflow_from_session
 from ontask.permissions import is_admin, is_instructor
 from ontask.tables import OperationsColumn
 from workflow.models import Workflow

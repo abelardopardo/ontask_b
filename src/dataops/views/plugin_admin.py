@@ -17,7 +17,8 @@ from django.utils.translation import ugettext_lazy as _
 from dataops.models import Plugin
 from dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
 from logs.models import Log
-from ontask.decorators import ajax_required, remove_workflow_from_session
+from ontask.decorators import ajax_required
+from ontask.workflow_access import remove_workflow_from_session
 from ontask.permissions import is_admin, is_instructor
 from workflow.models import Workflow
 
