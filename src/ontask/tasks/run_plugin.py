@@ -1,7 +1,7 @@
 from celery import shared_task
 from django.utils.translation import ugettext
 
-from dataops.models import PluginRegistry
+from dataops.models import Plugin
 from dataops.plugin.plugin_manager import run_plugin
 from ontask.tasks.basic import get_execution_items, get_log_item
 
@@ -45,7 +45,7 @@ def run_plugin_task(
             user_id=user_id,
             workflow_id=workflow_id)
 
-        plugin_info = PluginRegistry.objects.filter(pk=plugin_id).first()
+        plugin_info = Plugin.objects.filter(pk=plugin_id).first()
         if not plugin_info:
             raise Exception(
                 ugettext('Unable to load plugin with id {pid}').format(

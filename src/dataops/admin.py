@@ -4,7 +4,7 @@
 
 from django.contrib import admin
 
-from dataops.models import PluginRegistry, SQLConnection
+from dataops.models import Plugin, SQLConnection
 
 
 class PluginRegistryAdmin(admin.ModelAdmin):
@@ -36,5 +36,5 @@ class SQLConnectionAdmin(admin.ModelAdmin):
         'db_table')
 
 
-admin.site.register(PluginRegistry, PluginRegistryAdmin)
+admin.site.register(Plugin, PluginRegistryAdmin)
 admin.site.register(SQLConnection, SQLConnectionAdmin)

@@ -130,7 +130,7 @@ GRAPH_MODELS = {
     'exclude_models': [
         'TaskResult',
         'SQLConnection',
-        'PluginRegistry',
+        'Plugin',
         'Site',
         'ThumbnailDimensions',
         'Thumbnail',

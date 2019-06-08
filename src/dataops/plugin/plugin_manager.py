@@ -16,7 +16,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from dataops import settings
-from dataops.models import PluginRegistry
+from dataops.models import Plugin
 from dataops.pandas import load_table, perform_dataframe_upload_merge
 from dataops.plugin import ontask_plugin
 from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
@@ -235,7 +235,7 @@ def _verify_plugin(pinobj):
 
 
 def _load_plugin_info(plugin_folder, plugin_rego=None):
-    """Load the plugin and populate the PluginRegistry table.
+    """Load the plugin and populate the Plugin table.
 
     :param plugin_folder: Folder to load the information from.
 
@@ -249,7 +249,7 @@ def _load_plugin_info(plugin_folder, plugin_rego=None):
 
     # If there is no instance given of the registry, create a new one
     if not plugin_rego:
-        plugin_rego = PluginRegistry()
+        plugin_rego = Plugin()
         plugin_rego.filename = plugin_folder
 
     if plugin_instance:
@@ -300,11 +300,11 @@ def load_plugin(foldername):
     return plugin_instance, tests
 
 
-def refresh_plugin_data(request, workflow):
+def refresh_plugin_data(request, workflow = None):
     """Refresh the plugin data in the system.
 
     Function to traverse the directory where the plugins live and check if
-    the folders in there are reflected in the PluginRegistry model.
+    the folders in there are reflected in the Plugin model.
 
     :return: Reflect the changes in the database
     """
@@ -316,9 +316,9 @@ def refresh_plugin_data(request, workflow):
     ]
 
     # Get the objects from the DB
-    reg_plugins = PluginRegistry.objects.all()
+    reg_plugins = Plugin.objects.all()
 
-    # Travers the list of registered plugins and detect changes
+    # Traverse the list of registered plugins and detect changes
     for rpin in reg_plugins:
         i_file = os.path.join(plugin_folder, rpin.filename, '__init__.py')
         if rpin.filename not in pfolders or not os.path.exists(i_file):
