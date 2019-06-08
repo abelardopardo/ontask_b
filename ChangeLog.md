@@ -6,6 +6,8 @@
 
 - New page for system administratio to handle plugins
 
+- Admin page to manage plugins (enable them for execution)
+
 ### Changed
 
 - Model name for PluginRegistry
