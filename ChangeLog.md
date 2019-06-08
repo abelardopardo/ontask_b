@@ -1,4 +1,22 @@
-## 5 (2019-06)
+## 5.1 (2019-06)
+
+### Added
+
+- Option to export workflow after JSON action run
+
+- New page for system administratio to handle plugins
+
+### Changed
+
+- Model name for PluginRegistry
+
+### Fixed
+
+- Error when handling the workflow row to user translation
+
+- Error when exporting workflow after action run
+
+## 5 (2019-06-7)
 
 ### Added 
 
