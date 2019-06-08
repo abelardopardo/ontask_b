@@ -13,7 +13,10 @@ from dataops.views.sqlconnection import (
 )
 from dataops.views.sqlupload import sqlupload_start
 from dataops.views.transform import (
-    diagnose, moreinfo, plugin_invoke, transform_model, plugin_admin,
-    plugin_toggle
+    plugin_invoke, transform_model
+)
+from dataops.views.plugin_admin import (
+    plugin_admin, diagnose, moreinfo,
+    plugin_toggle,
 )
 from dataops.views.upload import upload_s2, upload_s3, upload_s4, uploadmerge

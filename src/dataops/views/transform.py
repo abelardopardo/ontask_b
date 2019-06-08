@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
-"""Views to manipulate the transformation."""
+"""Views to manipulate the transformations and models."""
 
 import json
 from builtins import object, str
 from typing import Optional
 
 import django_tables2 as tables
-from celery.task.control import inspect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import F
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, reverse
-from django.template.loader import render_to_string
 from django.urls import resolve
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
@@ -22,18 +20,18 @@ from dataops.forms import FIELD_PREFIX, PluginInfoForm
 from dataops.models import Plugin
 from dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
 from logs.models import Log
-from ontask.decorators import (
-    ajax_required, get_workflow,
-    remove_workflow_from_session,
-)
-from ontask.permissions import is_instructor, is_admin
+from ontask.celery import celery_is_up
+from ontask.decorators import get_workflow
+from ontask.permissions import is_instructor
 from ontask.tasks import run_plugin_task
 from workflow.models import Workflow
 
 
-class PluginTable(tables.Table):
-    """Class to render plugin Tables
+class PluginAvailableTable(tables.Table):
+    """Class to render the table with plugins available for execution.
 
+    The Operations column is inheriting from another class to centralise the
+    customisation.
     """
 
     description_txt = tables.TemplateColumn(
@@ -43,100 +41,8 @@ class PluginTable(tables.Table):
 
     last_exec = tables.DateTimeColumn(verbose_name=_('Last executed'))
 
-
-class PluginAdminTable(PluginTable):
-    """Class to render the table with plugins present in the system.
-
-    """
-
-    filename = tables.Column(verbose_name=_('Folder'), empty_values=None)
-
-    num_executions = tables.Column(
-        verbose_name=_('Executions'),
-        empty_values=[])
-
-    def render_is_verified(self, record):
-        if record.is_verified:
-            return format_html('<span class="true">✔</span>')
-
-        return render_to_string(
-            'dataops/includes/partial_plugin_diagnose.html',
-            context={'id': record.id},
-            request=None)
-
-    def render_is_enabled(self, record):
-        return render_to_string(
-            'dataops/includes/partial_plugin_enable.html',
-            context={'record': record},
-            request=None)
-
-    def render_last_exec(self, record):
-        """Render the last executed time.
-
-        :param record: Record being processed in the table.
-
-        :return:
-        """
-        log_item = Log.objects.filter(
-            name=Log.PLUGIN_EXECUTE,
-            payload__name=record.name,
-        ).order_by(F('created').desc()).first()
-        if not log_item:
-            return '—'
-        return log_item.created
-
-    def render_num_executions(self, record):
-        """Render the last executed time.
-
-        :param record: Record being processed in the table.
-
-        :return:
-        """
-        return Log.objects.filter(
-            name=Log.PLUGIN_EXECUTE,
-            payload__name=record.name,
-        ).count()
-
-    class Meta(object):
-        """Choose fields, sequence and attributes."""
-
-        model = Plugin
-
-        fields = (
-            'filename',
-            'name',
-            'description_txt',
-            'is_model',
-            'is_verified',
-            'is_enabled')
-
-        sequence = (
-            'filename',
-            'name',
-            'description_txt',
-            'is_model',
-            'is_verified',
-            'is_enabled',
-            'num_executions',
-            'last_exec')
-
-        attrs = {
-            'class': 'table table-hover table-bordered shadow',
-            'style': 'width: 100%;',
-            'id': 'plugin-admin-table',
-            'th': {'class': 'dt-body-center'},
-            'td': {'style': 'vertical-align: middle'}}
-
-
-class PluginAvailableTable(PluginTable):
-    """Class to render the table with plugins available for execution.
-
-    The Operations column is inheriting from another class to centralise the
-    customisation.
-    """
-
     def __init__(self, *args, **kwargs):
-        """Set workflow and user to get latest execution time"""
+        """Set workflow and user to get latest execution time."""
         self.workflow = kwargs.pop('workflow')
         self.user = kwargs.pop('user')
 
@@ -187,27 +93,6 @@ class PluginAvailableTable(PluginTable):
         }
 
 
-@user_passes_test(is_admin)
-def plugin_admin(
-    request: HttpRequest,
-) -> HttpResponse:
-    """Show the table of plugins and their status.
-
-    :param request: HTTP Request
-
-    :return:
-    """
-    remove_workflow_from_session(request)
-
-    # Traverse the plugin folder and refresh the db content.
-    refresh_plugin_data(request)
-
-    return render(
-        request,
-        'dataops/plugin_admin.html',
-        {'table': PluginAdminTable(Plugin.objects.all())})
-
-
 @user_passes_test(is_instructor)
 @get_workflow()
 def transform_model(
@@ -249,45 +134,6 @@ def transform_model(
 
 
 @user_passes_test(is_instructor)
-@ajax_required
-def diagnose(
-    request: HttpRequest,
-    pk: int,
-    workflow: Optional[Workflow] = None,
-) -> JsonResponse:
-    """Show the diagnostics of a plugin that failed the verification tests.
-
-    :param request: HTML request object
-
-    :param pk: Primary key of the transform element
-
-    :return:
-    """
-    # Action being used
-    plugin = Plugin.objects.filter(id=pk).first()
-    if not plugin:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Reload the plugin to get the messages stored in the right place.
-    pinstance, msgs = load_plugin(plugin.filename)
-
-    # If the new instance is now properly verified, simply redirect to the
-    # transform page
-    if pinstance:
-        plugin.is_verified = True
-        plugin.save()
-        return JsonResponse({'html_redirect': reverse('dataops:plugin_admin')})
-
-    # Get the diagnostics from the plugin and use it for rendering.
-    return JsonResponse({
-        'html_form': render_to_string(
-            'dataops/includes/partial_diagnostics.html',
-            {'diagnostic_table': msgs},
-            request=request),
-    })
-
-
-@user_passes_test(is_instructor)
 @get_workflow(pf_related='columns')
 def plugin_invoke(
     request: HttpRequest,
@@ -300,20 +146,14 @@ def plugin_invoke(
     :param pk: primary key of the plugin
     :return: Page offering to select the columns to invoke
     """
-
     # Verify that celery is running!
-    celery_stats = None
-    try:
-        celery_stats = inspect().stats()
-    except Exception:
-        # If the stats are empty, celery is not running.
-        if not celery_stats:
-            messages.error(
-                request,
-                _(
-                    'Unable to run plugins due to a misconfiguration. '
-                    + 'Ask your system administrator to enable queueing.'))
-            return redirect(reverse('table:display'))
+    if not celery_is_up():
+        messages.error(
+            request,
+            _(
+                'Unable to run plugins due to a misconfiguration. '
+                + 'Ask your system administrator to enable queueing.'))
+        return redirect(reverse('table:display'))
 
     plugin_info = Plugin.objects.filter(pk=pk).first()
     if not plugin_info:
@@ -388,9 +228,9 @@ def plugin_invoke(
             ]
 
         # Pack the parameters
-        parameters = {}
+        exec_params = {}
         for idx, tpl in enumerate(plugin_instance.parameters):
-            parameters[tpl[0]] = form.cleaned_data[
+            exec_params[tpl[0]] = form.cleaned_data[
                 FIELD_PREFIX + 'parameter_%s' % idx]
 
         # Log the event with the status "preparing invocation"
@@ -403,7 +243,7 @@ def plugin_invoke(
                 'name': plugin_info.name,
                 'input_column_names': input_column_names,
                 'output_column_names': output_column_names,
-                'parameters': json.dumps(parameters, default=str),
+                'parameters': json.dumps(exec_params, default=str),
                 'status': 'preparing execution'})
 
         run_plugin_task.apply_async(
@@ -415,7 +255,7 @@ def plugin_invoke(
                 output_column_names,
                 suffix,
                 form.cleaned_data['merge_key'],
-                parameters,
+                exec_params,
                 log_item.id),
             serializer='pickle')
 
@@ -429,54 +269,3 @@ def plugin_invoke(
         request,
         'dataops/plugin_info_for_run.html',
         context)
-
-
-@user_passes_test(is_instructor)
-@ajax_required
-def moreinfo(
-    request: HttpRequest,
-    pk: int,
-) -> JsonResponse:
-    """Show the detailed information about a plugin.
-
-    :param request: HTML request object
-
-    :param pk: Primary key of the Plugin element
-
-    :return:
-    """
-    # Action being used
-    plugin = Plugin.objects.filter(id=pk).first()
-    if not plugin:
-        return JsonResponse({'html_redirect': reverse('home')})
-
-    # Reload the plugin to get the messages stored in the right place.
-    pinstance, msgs = load_plugin(plugin.filename)
-
-    # Get the descriptions and show them in the modal
-    return JsonResponse({
-        'html_form': render_to_string(
-            'dataops/includes/partial_plugin_long_description.html',
-            {'pinstance': pinstance},
-            request=request),
-    })
-
-@user_passes_test(is_instructor)
-@ajax_required
-def plugin_toggle(
-    request: HttpRequest,
-    pk: int,
-) -> JsonResponse:
-    """Toggle the field is_enabled of a plugin
-
-    :param request: HTML request object
-
-    :param pk: Primary key of the Plugin element
-
-    :return:
-    """
-    plugin_item = Plugin.objects.get(pk=pk)
-    if plugin_item.is_verified:
-        plugin_item.is_enabled = not plugin_item.is_enabled
-        plugin_item.save()
-    return JsonResponse({'is_checked': plugin_item.is_enabled})
