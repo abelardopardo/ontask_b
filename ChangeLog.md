@@ -16,6 +16,12 @@
 
 - Error when exporting workflow after action run
 
+## 5.0.1 (2019-06-08)
+
+### Changed
+
+- Requires Django 2.2.2
+
 ## 5 (2019-06-7)
 
 ### Added 
