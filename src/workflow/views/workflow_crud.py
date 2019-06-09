@@ -2,8 +2,8 @@
 
 """Views to manipulate the workflow."""
 
-from builtins import range
 import copy
+from builtins import range
 from typing import Optional
 
 from django.conf import settings
@@ -25,14 +25,11 @@ from dataops.sql import clone_table
 from logs.models import Log
 from ontask import create_new_name
 from ontask.celery import celery_is_up
-from ontask.decorators import (
-    ajax_required, get_workflow,
-)
-from ontask.workflow_access import (
-    store_workflow_in_session,
-    remove_workflow_from_session,
-)
+from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import UserIsInstructor, is_instructor
+from ontask.workflow_access import (
+    remove_workflow_from_session, store_workflow_in_session,
+)
 from table.views.table_view import do_clone_view
 from workflow.forms import WorkflowForm
 from workflow.models import Workflow
@@ -100,6 +97,7 @@ def _do_clone_workflow(workflow: Workflow) -> Workflow:
         luser_email_column_md5=workflow.luser_email_column_md5,
         lusers_is_outdated=workflow.lusers_is_outdated)
     new_workflow.save()
+
     try:
         new_workflow.shared.set(list(workflow.shared.all()))
         new_workflow.lusers.set(list(workflow.lusers.all()))
@@ -133,7 +131,6 @@ def _do_clone_workflow(workflow: Workflow) -> Workflow:
         raise exc
 
     return new_workflow
-
 
 
 @user_passes_test(is_instructor)
