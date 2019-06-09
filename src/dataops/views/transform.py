@@ -4,7 +4,7 @@
 
 import json
 from builtins import object, str
-from typing import Optional
+from typing import Dict, List, Optional, Tuple
 
 import django_tables2 as tables
 from django.contrib import messages
@@ -93,6 +93,67 @@ class PluginAvailableTable(tables.Table):
         }
 
 
+def _prepare_plugin_input_output(
+    plugin_instance: Plugin,
+    workflow: Workflow,
+    form: PluginInfoForm,
+) -> Tuple[List, List]:
+    """Prepare input, output and parameters for plugin execution.
+
+    :param plugin_instance: Plugin object allowed to execute
+
+    :param workflow: Workflow object (to access columns and similar)
+
+    :param form: Form just populated with a POST
+
+    :return: [list of inputs, list of outputs]
+    """
+    # Take the list of inputs from the form if empty list is given.
+    input_column_names = []
+    if plugin_instance.input_column_names:
+        # Traverse the fields and get the names of the columns
+        for idx, __ in enumerate(plugin_instance.input_column_names):
+            input_column_names.append(
+                workflow.columns.get(id=int(
+                    form.cleaned_data[FIELD_PREFIX + 'input_%s' % idx],
+                )).name,
+            )
+    else:
+        input_column_names = [col.name for col in form.cleaned_data['columns']]
+
+    output_column_names = []
+    if plugin_instance.output_column_names:
+        # Process the output columns
+        for idx, __ in enumerate(plugin_instance.output_column_names):
+            output_column_names.append(
+                form.cleaned_data[FIELD_PREFIX + 'output_%s' % idx])
+    else:
+        # Plugin instance has an empty set of output files, clone the input
+        output_column_names = input_column_names[:]
+
+    suffix = form.cleaned_data['out_column_suffix']
+    if suffix:
+        # A suffix has been provided, add it to the list of outputs
+        output_column_names = [
+            cname + suffix for cname in output_column_names
+        ]
+
+    return input_column_names, output_column_names
+
+
+def _prepare_plugin_parameters(
+    plugin_instance: Plugin,
+    form: PluginInfoForm,
+) -> Dict:
+    # Pack the parameters
+    exec_params = {}
+    for idx, tpl in enumerate(plugin_instance.parameters):
+        exec_params[tpl[0]] = form.cleaned_data[
+            FIELD_PREFIX + 'parameter_%s' % idx]
+
+    return exec_params
+
+
 @user_passes_test(is_instructor)
 @get_workflow()
 def transform_model(
@@ -166,7 +227,7 @@ def plugin_invoke(
             {'empty_wflow': True,
              'is_model': plugin_info.get_is_model()})
 
-    plugin_instance, msgs = load_plugin(plugin_info.filename)
+    plugin_instance, __ = load_plugin(plugin_info.filename)
     if plugin_instance is None:
         messages.error(
             request,
@@ -180,58 +241,15 @@ def plugin_invoke(
         workflow=workflow,
         plugin_instance=plugin_instance)
 
-    # Set the basic elements in the context
-    context = {
-        'form': form,
-        'input_column_fields': [
-            fld for fld in list(form)
-            if fld.name.startswith(FIELD_PREFIX + 'input')],
-        'output_column_fields': [
-            fld for fld in list(form)
-            if fld.name.startswith(FIELD_PREFIX + 'output')],
-        'parameters': [
-            fld for fld in list(form)
-            if fld.name.startswith(FIELD_PREFIX + 'parameter')],
-        'pinstance': plugin_instance,
-        'id': workflow.id,
-    }
-
     if request.method == 'POST' and form.is_valid():
-        # Take the list of inputs from the form if empty list is given.
-        input_column_names = []
-        if plugin_instance.input_column_names:
-            # Traverse the fields and get the names of the columns
-            for idx, __ in enumerate(plugin_instance.input_column_names):
-                cid = form.cleaned_data[FIELD_PREFIX + 'input_%s' % idx]
-                input_column_names.append(
-                    workflow.columns.get(id=int(cid)).name,
-                )
-        else:
-            input_column_names = [
-                col.name for col in form.cleaned_data['columns']]
+        in_cols, out_cols = _prepare_plugin_input_output(
+            plugin_instance,
+            workflow,
+            form)
 
-        output_column_names = []
-        if plugin_instance.output_column_names:
-            # Process the output columns
-            for idx, __ in enumerate(plugin_instance.output_column_names):
-                new_cname = form.cleaned_data[FIELD_PREFIX + 'output_%s' % idx]
-                output_column_names.append(new_cname)
-        else:
-            # Plugin instance has an empty set of output files, clone the input
-            output_column_names = input_column_names[:]
-
-        suffix = form.cleaned_data['out_column_suffix']
-        if suffix:
-            # A suffix has been provided, add it to the list of outputs
-            output_column_names = [
-                cname + suffix for cname in output_column_names
-            ]
-
-        # Pack the parameters
-        exec_params = {}
-        for idx, tpl in enumerate(plugin_instance.parameters):
-            exec_params[tpl[0]] = form.cleaned_data[
-                FIELD_PREFIX + 'parameter_%s' % idx]
+        exec_params = _prepare_plugin_parameters(
+            plugin_instance,
+            form)
 
         # Log the event with the status "preparing invocation"
         log_item = Log.objects.register(
@@ -241,8 +259,8 @@ def plugin_invoke(
             {
                 'id': plugin_info.id,
                 'name': plugin_info.name,
-                'input_column_names': input_column_names,
-                'output_column_names': output_column_names,
+                'input_column_names': in_cols,
+                'output_column_names': out_cols,
                 'parameters': json.dumps(exec_params, default=str),
                 'status': 'preparing execution'})
 
@@ -251,9 +269,9 @@ def plugin_invoke(
                 request.user.id,
                 workflow.id,
                 pk,
-                input_column_names,
-                output_column_names,
-                suffix,
+                in_cols,
+                out_cols,
+                form.cleaned_data['out_column_suffix'],
                 form.cleaned_data['merge_key'],
                 exec_params,
                 log_item.id),
@@ -268,4 +286,17 @@ def plugin_invoke(
     return render(
         request,
         'dataops/plugin_info_for_run.html',
-        context)
+        context={
+            'form': form,
+            'input_column_fields': [
+                fld for fld in list(form)
+                if fld.name.startswith(FIELD_PREFIX + 'input')],
+            'output_column_fields': [
+                fld for fld in list(form)
+                if fld.name.startswith(FIELD_PREFIX + 'output')],
+            'parameters': [
+                fld for fld in list(form)
+                if fld.name.startswith(FIELD_PREFIX + 'parameter')],
+            'pinstance': plugin_instance,
+            'id': workflow.id,
+        })
