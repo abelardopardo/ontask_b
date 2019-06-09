@@ -1,4 +1,4 @@
-var dtp_opts = {
+let dtp_opts = {
     format:'YYYY-MM-DD HH:mm',
     stepping: 1,
     toolbarPlacement: 'top',
@@ -6,14 +6,14 @@ var dtp_opts = {
     showClear: true,
     showClose: true,
     sideBySide: true};
-var set_qbuilder = function (element_id, qbuilder_options) {
-    var id_formula_value = $(element_id).val();
+let set_qbuilder = function (element_id, qbuilder_options) {
+    let id_formula_value = $(element_id).val();
     if (id_formula_value != "null" && id_formula_value != "{}") {
       qbuilder_options["rules"] = JSON.parse(id_formula_value);
     }
     $("#builder").queryBuilder(qbuilder_options);
 };
-var set_element_select = function(element_id) {
+let set_element_select = function(element_id) {
   $(element_id).searchableOptionList({
     maxHeight: "250px",
     showSelectAll: true,
@@ -23,7 +23,7 @@ var set_element_select = function(element_id) {
     }
   });
  };
-var insert_fields = function (the_form) {
+let insert_fields = function (the_form) {
     if (document.getElementById("id_filter") != null) {
       formula = $("#builder").queryBuilder("getRules");
       if (formula == null || !formula["valid"]) {
@@ -34,7 +34,7 @@ var insert_fields = function (the_form) {
     }
     return true;
 };
-var get_id_text_content = function() {
+let get_id_text_content = function() {
   if (typeof $("#id_text_content").summernote != "undefined") {
     value = $("#id_text_content").summernote("code");
   } else {
@@ -42,8 +42,8 @@ var get_id_text_content = function() {
   }
   return value;
 };
-var loadForm = function () {
-    var btn = $(this);
+let loadForm = function () {
+    let btn = $(this);
     if ($(this).is("[class*='disabled']")) {
       return;
     }
@@ -87,8 +87,8 @@ var loadForm = function () {
       }
     });
 };
-var saveForm = function () {
-    var form = $(this);
+let saveForm = function () {
+    let form = $(this);
     if (document.getElementById("id_formula") != null) {
       formula = $("#builder").queryBuilder('getRules');
       if (formula == null || !formula['valid']) {
@@ -97,7 +97,7 @@ var saveForm = function () {
       f_text = JSON.stringify(formula, undefined, 2);
       $("#id_formula").val(f_text);
     }
-    var data = form.serializeArray();
+    let data = form.serializeArray();
     if (document.getElementById("id_text_content") != null) {
       value = get_id_text_content();
       data.push({"name": "action_content", "value": value});
@@ -136,12 +136,12 @@ var saveForm = function () {
     });
     return false;
 };
-var setDateTimePickers = function() {
+let setDateTimePickers = function() {
   if ($('.ontask-datetimepicker').length != 0) {
     $('.ontask-datetimepicker').datetimepicker(dtp_opts);
   }
 };
-var assignColumn = function () {
+let assignColumn = function () {
   $('#div-spinner').show();
   $.ajax({
     url: $(this).attr('data-url'),
@@ -166,7 +166,7 @@ var assignColumn = function () {
     }
   });
 }
-var select_next_button = function(e) {
+let select_next_button = function(e) {
   if (e.is('input')) {
     val = !e.is(":checked");
   } else if (e.is('select')) {
@@ -178,7 +178,7 @@ var select_next_button = function(e) {
   $("#next-step-on").prop('hidden', val);
   $("#next-step-off").prop('hidden', !val);
 }
-var toggleCheckBox = function () {
+let toggleCheckBox = function () {
   elem = $(this);
   $('#div-spinner').show();
   $.ajax({
@@ -191,6 +191,25 @@ var toggleCheckBox = function () {
         } else {
             elem.prop("checked", false)
         }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      $('#div-spinner').show();
+      location.reload(true);
+    }
+  });
+  $('#div-spinner').hide();
+}
+let toggleStar = function () {
+  elem = $(this);
+  $('#div-spinner').show();
+  $.ajax({
+    url: $(this).attr("data-url"),
+    type: 'get',
+    dataType: 'json',
+    data: [],
+    success: function (data) {
+      $('#div-spinner').show();
+      window.location.reload(true);
     },
     error: function(jqXHR, textStatus, errorThrown) {
       $('#div-spinner').show();

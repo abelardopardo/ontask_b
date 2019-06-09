@@ -16,6 +16,7 @@ urlpatterns = [
     path('<int:wid>/update/', views.update, name='update'),
     path('<int:wid>/delete/', views.delete, name='delete'),
     path('<int:wid>/flush/', views.flush, name='flush'),
+    path('<int:wid>/star/', views.star, name='star'),
     path('detail/', views.detail, name='detail'),
     path('operations/', views.operations, name='operations'),
 

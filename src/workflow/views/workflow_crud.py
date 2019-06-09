@@ -246,9 +246,14 @@ def index(request: HttpRequest) -> HttpResponse:
     )
     workflows = workflows.distinct()
 
+    # Get the queryset for those with start and those without
+    workflows_star = workflows.filter(star__in=[request.user])
+    workflows_no_star = workflows.exclude(star__in=[request.user])
+
     # We include the table only if it is not empty.
     context = {
-        'workflows': workflows.order_by('name'),
+        'workflows_star': workflows_star.order_by('name'),
+        'workflows': workflows_no_star.order_by('name'),
         'nwflows': len(workflows),
     }
 

@@ -175,6 +175,35 @@ def flush(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
+@get_workflow()
+def star(
+    request: HttpRequest,
+    wid: Optional[int] = None,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
+    """Toggle the star mark in the workflow."""
+    # Get the workflows with stars
+    stars = request.user.workflows_star.all()
+    if workflow in stars:
+        workflow.star.remove(request.user)
+        has_star = False
+    else:
+        workflow.star.add(request.user)
+        has_star = True
+
+    # Log the event
+    Log.objects.register(
+        request.user,
+        Log.WORKFLOW_STAR,
+        workflow,
+        {'id': workflow.id, 'name': workflow.name, 'star': has_star})
+
+    # In this case, the form is valid
+    return JsonResponse({})
+
+
+@user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
 @require_http_methods(['POST'])

@@ -17,5 +17,5 @@ from workflow.views.workflow_crud import (
     WorkflowCreateView, clone_workflow, delete, detail, index, update,
 )
 from workflow.views.workflow_ops import (
-    assign_luser_column, column_ss, flush, operations,
+    assign_luser_column, column_ss, flush, operations, star
 )

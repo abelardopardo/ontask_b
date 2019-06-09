@@ -8,6 +8,8 @@
 
 - Admin page to manage plugins (enable them for execution)
 
+- Mark workflows as favourite and show in separate area
+
 ### Changed
 
 - Model name for PluginRegistry

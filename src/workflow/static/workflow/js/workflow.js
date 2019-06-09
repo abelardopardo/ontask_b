@@ -90,6 +90,8 @@ $(function () {
   }, function(){
     $(this).css("background-color", "white");
   });
+  // Detect click in star icon in the workflow card
+  $("button.js-workflow-star").on("click", toggleStar);
 });
 window.onload = function(){
   setDateTimePickers();
