@@ -1,9 +1,9 @@
 function insertAtCaret(areaId, text) {
-    var txtarea = document.getElementById(areaId);
-    var scrollPos = txtarea.scrollTop;
-    var caretPos = txtarea.selectionStart;
-    var front = (txtarea.value).substring(0, caretPos);
-    var back = (txtarea.value).substring(txtarea.selectionEnd, txtarea.value.length);
+    let txtarea = document.getElementById(areaId);
+    let scrollPos = txtarea.scrollTop;
+    let caretPos = txtarea.selectionStart;
+    let front = (txtarea.value).substring(0, caretPos);
+    let back = (txtarea.value).substring(txtarea.selectionEnd, txtarea.value.length);
     txtarea.value = front + text + back;
     caretPos = caretPos + text.length;
     txtarea.selectionStart = caretPos;
@@ -11,32 +11,32 @@ function insertAtCaret(areaId, text) {
     txtarea.focus();
     txtarea.scrollTop = scrollPos;
 }
-var insertText = function(areaId, insert_text) {
+let insertText = function(areaId, insert_text) {
   if (typeof $('#' + areaId).summernote != 'undefined') {
     $('#' + areaId).summernote('editor.insertText', insert_text);
   } else {
     insertAtCaret(areaId, insert_text);
   }
 }
-var insertConditionInContent = function() {
-  var btn = $(this);
+let insertConditionInContent = function() {
+  let btn = $(this);
   if (typeof $('#id_text_content').summernote != 'undefined') {
-    var range = $("#id_text_content").summernote('createRange');
-    condition_text = gettext('YOUR TEXT HERE');
-    range_text = range.toString();
+    let range = $("#id_text_content").summernote('createRange');
+    let condition_text = gettext('YOUR TEXT HERE');
+    let range_text = range.toString();
     if (range_text != '') {
       condition_text = range_text;
     }
   } else {
       condition_text = '';
   }
-  insert_text = "{% if " + btn.text() +
+  let insert_text = "{% if " + btn.text() +
       " %}" + condition_text + "{% endif %}";
   insertText('id_text_content', insert_text);
   $(this).val(this.defaultSelected);
 };
-var insertAttributeInContent = function() {
-  var val = $(this).text();
+let insertAttributeInContent = function() {
+  let val = $(this).text();
   if (val == '') {
     return;
   }
@@ -46,7 +46,7 @@ var insertAttributeInContent = function() {
   insertText('id_text_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
-var ajax_post = function(url, data, req_type) {
+let ajax_post = function(url, data, req_type) {
   $.ajax({
     url: url,
     data: data,
@@ -74,8 +74,8 @@ var ajax_post = function(url, data, req_type) {
     }
   });
 }
-var loadFormPost = function () {
-  var btn = $(this);
+let loadFormPost = function () {
+  let btn = $(this);
   if ($(this).is('[class*="disabled"]')) {
     return;
   }
@@ -85,19 +85,19 @@ var loadFormPost = function () {
     'post'
   );
 }
-var transferFormula = function () {
+let transferFormula = function () {
   if (document.getElementById("id_formula") != null) {
-    formula = $("#builder").queryBuilder('getRules');
+    let formula = $("#builder").queryBuilder('getRules');
     if (formula == null || !formula['valid']) {
       $('#div-spinner').hide();
       return false;
     }
-    f_text = JSON.stringify(formula, undefined, 2);
+    let f_text = JSON.stringify(formula, undefined, 2);
     $("#id_formula").val(f_text);
    }
    return true;
 }
-var conditionClone = function() {
+let conditionClone = function() {
   $('#div-spinner').show();
   $.ajax({
     url: $(this).attr("data-url"),
@@ -262,6 +262,6 @@ $(document).ready(function() {
   select_next_button($("#id_confirm_items"));
 });
 $(window).on("popstate", function() {
-  var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  let anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
   $("a[href='" + anchor + "']").tab("show");
 });

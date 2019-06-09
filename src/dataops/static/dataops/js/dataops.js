@@ -80,7 +80,7 @@ $(document).ready(function() {
   });
 });
 $(window).on("popstate", function() {
-  var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  let anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
   $("a[href='" + anchor + "']").tab("show");
 });
 $('#dataops-get-plugin-info-to-run form').validate({

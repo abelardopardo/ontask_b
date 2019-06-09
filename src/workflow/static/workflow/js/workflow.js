@@ -1,6 +1,6 @@
 $(function () {
   $("#checkAll").click(function () {
-       $("input[id*='id_select_']").prop("checked", this.checked);
+     $("input[id*='id_select_']").prop("checked", this.checked);
   });
 
   // Create Workflow
@@ -108,6 +108,6 @@ $(document).ready(function() {
   });
 });
 $(window).on("popstate", function() {
-  var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  let anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
   $("a[href='" + anchor + "']").tab("show");
 });
