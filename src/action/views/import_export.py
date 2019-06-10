@@ -196,8 +196,7 @@ def do_import_action(
         context={
             'user': user,
             'name': name,
-            'workflow': workflow,
-            'columns': workflow.columns.all()},
+            'workflow': workflow},
     )
 
     # If anything goes wrong, return a string to show in the page.

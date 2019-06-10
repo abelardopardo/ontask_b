@@ -82,9 +82,7 @@ def _process_columns(validated_data, context):
                 _('Incorrect column name {0}.').format(cname))
 
         # Search for the column in the workflow columns
-        col = next(
-            (col for col in context['columns'] if col.name == cname),
-            None)
+        col = context['workflow'].columns.filter(name=col.name).first()
         if not col:
             # Accumulate the new columns just in case we have to undo
             # the changes
@@ -162,7 +160,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
             # Set the condition values
             condition_obj.columns.set(
-                [col for col in self.context['columns'] if col.name in cnames])
+                self.context['workflow'].columns.filter(name__in=[cnames]))
 
             # If n_rows_selected is -1, reevaluate
             if condition_obj.n_rows_selected == -1:
@@ -207,18 +205,17 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
     def create(self, validated_data, **kwargs):
         """Create the tuple object with column, condition, action."""
         action = self.context['action']
-        columns = self.context['columns']
 
         condition_obj = None
         if validated_data.get('condition', {}):
             condition_obj = action.conditions.get(
                 name=validated_data['condition']['name'],
             )
+
         return ActionColumnConditionTuple.objects.get_or_create(
             action=action,
-            column=next(
-                col for col in columns
-                if col.name == validated_data['column']['name']),
+            column=action.workflow.columns.get(
+                name=validated_data['column']['name']),
             condition=condition_obj)
 
     class Meta(object):
@@ -304,9 +301,7 @@ class ActionSerializer(serializers.ModelSerializer):
             column_condition_pairs = ColumnConditionNameSerializer(
                 data=field_data,
                 many=True,
-                context={
-                    'action': action_obj,
-                    'columns': wflow_columns})
+                context={'action': action_obj})
 
             if column_condition_pairs.is_valid():
                 column_condition_pairs.save()
@@ -351,9 +346,7 @@ class ActionSerializer(serializers.ModelSerializer):
             condition_data = ConditionSerializer(
                 data=validated_data.get('conditions', []),
                 many=True,
-                context={
-                    'action': action_obj,
-                    'columns': self.context['columns']})
+                context={'action': action_obj})
             if condition_data.is_valid():
                 condition_data.save()
             else:
@@ -363,7 +356,7 @@ class ActionSerializer(serializers.ModelSerializer):
             self.create_column_condition_pairs(
                 validated_data,
                 action_obj,
-                self.context['columns'],
+                self.context['workflow'].columns.all(),
             )
         except Exception:
             if action_obj and action_obj.id:
