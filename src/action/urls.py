@@ -93,11 +93,15 @@ urlpatterns = [
     #
     # ACTION IN EDIT PAGE
     #
-    # Select key column for action in
+    # Manage columns for action in
     path(
         '<int:pk>/<int:cpk>/<int:key>/select_column_action/',
         select_column_action,
         name='select_key_column_action'),
+    path(
+        '<int:pk>/select_column_action/',
+        select_column_action,
+        name='unselect_key_column_action'),
 
     # Select column for action in
     path(
