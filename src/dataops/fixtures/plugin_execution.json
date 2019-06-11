@@ -771,7 +771,7 @@
     }
 },
 {
-    "model": "dataops.pluginregistry",
+    "model": "dataops.plugin",
     "pk": 8,
     "fields": {
         "filename": "test_plugin_2",
@@ -779,11 +779,12 @@
         "name": "Test Plungin 2 Name",
         "description_txt": "Test Plugin 2 Description Text",
         "is_verified": true,
+        "is_enabled": true,
         "executed": null
     }
 },
 {
-    "model": "dataops.pluginregistry",
+    "model": "dataops.plugin",
     "pk": 9,
     "fields": {
         "filename": "test_plugin_1",
@@ -791,6 +792,7 @@
         "name": "Test Plungin 1 Name",
         "description_txt": "Test Plugin 1 Description Text",
         "is_verified": true,
+        "is_enabled": true,
         "executed": null
     }
 },
