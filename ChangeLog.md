@@ -1,3 +1,27 @@
+## 5.1.0 (2019-06-11)
+
+### Added
+
+- Option to export workflow after JSON action run
+
+- New page for system administratio to handle plugins
+
+- Admin page to manage plugins (enable them for execution)
+
+- Mark workflows as favourite and show in separate area
+
+### Changed
+
+- Model name for PluginRegistry
+
+- Survey editor now allows the key column to be unset.
+
+### Fixed
+
+- Error when handling the workflow row to user translation
+
+- Error when exporting workflow after action run
+
 ## 5.0.1 (2019-06-08)
 
 ### Changed

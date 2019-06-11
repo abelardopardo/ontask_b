@@ -1,0 +1,6 @@
+<input class="plugin-toggle"
+       {% if record.is_enabled %}checked{% endif %}
+       data-toggle="toggle"
+       data-url="{% url 'dataops:plugin_toggle' record.id %}"
+       type="checkbox"/>
+

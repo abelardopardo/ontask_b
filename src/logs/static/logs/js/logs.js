@@ -1,5 +1,5 @@
-var loadLogView = function () {
-    var btn = $(this);
+let loadLogView = function () {
+    let btn = $(this);
     $.ajax({
       url: btn.attr("data-url"),
       type: 'get',

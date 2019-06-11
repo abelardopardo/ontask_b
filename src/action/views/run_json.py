@@ -122,6 +122,7 @@ def run_json_done(
          'action_id': action.id,
          'exclude_values': action_info['exclude_values'],
          'key_column': action_info['item_column'],
+         'exported_workflow': action_info['export_wf'],
          'status': 'Preparing to execute',
          'target_url': action.target_url})
 
@@ -140,4 +141,7 @@ def run_json_done(
     request.session.save()
 
     # Successful processing.
-    return render(request, 'action/action_done.html', {'log_id': log_item.id})
+    return render(
+        request,
+        'action/action_done.html',
+        {'log_id': log_item.id, 'download': action_info['export_wf']})

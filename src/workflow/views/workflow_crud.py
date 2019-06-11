@@ -10,7 +10,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.query_utils import Q
-from django.http import JsonResponse
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -26,10 +25,11 @@ from dataops.sql import clone_table
 from logs.models import Log
 from ontask import create_new_name
 from ontask.celery import celery_is_up
-from ontask.decorators import (
-    ajax_required, get_workflow, store_workflow_in_session,
-)
+from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import UserIsInstructor, is_instructor
+from ontask.workflow_access import (
+    remove_workflow_from_session, store_workflow_in_session,
+)
 from table.views.table_view import do_clone_view
 from workflow.forms import WorkflowForm
 from workflow.models import Workflow
@@ -97,6 +97,7 @@ def _do_clone_workflow(workflow: Workflow) -> Workflow:
         luser_email_column_md5=workflow.luser_email_column_md5,
         lusers_is_outdated=workflow.lusers_is_outdated)
     new_workflow.save()
+
     try:
         new_workflow.shared.set(list(workflow.shared.all()))
         new_workflow.lusers.set(list(workflow.lusers.all()))
@@ -130,7 +131,6 @@ def _do_clone_workflow(workflow: Workflow) -> Workflow:
         raise exc
 
     return new_workflow
-
 
 
 @user_passes_test(is_instructor)
@@ -238,11 +238,7 @@ def save_workflow_form(
 @user_passes_test(is_instructor)
 def index(request: HttpRequest) -> HttpResponse:
     """Render the page with the list of workflows."""
-    wid = request.session.pop('ontask_workflow_id', None)
-    # If removing workflow from session, mark it as available for sharing
-    if wid:
-        Workflow.unlock_workflow_by_id(wid)
-    request.session.pop('ontask_workflow_name', None)
+    remove_workflow_from_session(request)
 
     workflows = (
         request.user.workflows_owner.all()
@@ -250,9 +246,14 @@ def index(request: HttpRequest) -> HttpResponse:
     )
     workflows = workflows.distinct()
 
+    # Get the queryset for those with start and those without
+    workflows_star = workflows.filter(star__in=[request.user])
+    workflows_no_star = workflows.exclude(star__in=[request.user])
+
     # We include the table only if it is not empty.
     context = {
-        'workflows': workflows.order_by('name'),
+        'workflows_star': workflows_star.order_by('name'),
+        'workflows': workflows_no_star.order_by('name'),
         'nwflows': len(workflows),
     }
 

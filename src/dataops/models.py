@@ -12,7 +12,7 @@ NAME_LENGTH = 256
 DESC_LENGTH = 65536
 
 
-class PluginRegistry(models.Model):
+class Plugin(models.Model):
     """Model to store the plugins in the system.
 
     @DynamicAttrs
@@ -41,15 +41,23 @@ class PluginRegistry(models.Model):
     # Boolean stating if the plugin is a model or a transformation
     is_model = models.BooleanField(
         default=None,
-        verbose_name=_('Plugin is a model'),
+        verbose_name=_('Is a model'),
         null=True,
         blank=True,
     )
 
-    # Boolean stating if the column is a unique key
+    # Boolean stating if the plugin is ready to run
     is_verified = models.BooleanField(
         default=False,
         verbose_name=_('Ready to run'),
+        null=False,
+        blank=False,
+    )
+
+    # Boolean stating if the plugin is allowed to run
+    is_enabled = models.BooleanField(
+        default=False,
+        verbose_name=_('Enabled'),
         null=False,
         blank=False,
     )

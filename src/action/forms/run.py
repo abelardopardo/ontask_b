@@ -344,6 +344,13 @@ class JSONBasicActionForm(forms.Form):
         label=_('Check/exclude items before sending?'),
     )
 
+    export_wf = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Download a snapshot of the workflow?'),
+        help_text=_('A zip file is useful to review the action.'),
+    )
+
     def __init__(self, *args, **kargs):
         """Store column names, payload and modify key_column and confirm."""
         self.column_names: List = kargs.pop('column_names')
@@ -362,6 +369,14 @@ class JSONBasicActionForm(forms.Form):
         self.fields['key_column'].initial = key_column
         self.fields['key_column'].choices = [
             (cname, cname) for cname in self.column_names]
+
+    def clean(self):
+        """Verify form values."""
+        form_data = super().clean()
+
+        self.action_info['export_wf'] = form_data['export_wf']
+
+        return form_data
 
 
 class JSONActionForm(JSONBasicActionForm):
@@ -393,7 +408,11 @@ class JSONActionForm(JSONBasicActionForm):
             'Authentication token provided by the external platform.',
         )
 
-        self.order_fields(['key_column', 'token', 'confirm_items'])
+        self.order_fields([
+            'key_column',
+            'token',
+            'confirm_items',
+            'export_wf'])
 
     def clean(self):
         """Verify form values."""
@@ -415,13 +434,6 @@ class CanvasEmailActionForm(JSONBasicActionForm):
         strip=True,
         required=True,
         label=_('Email subject'),
-    )
-
-    export_wf = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Download a snapshot of the workflow?'),
-        help_text=_('A zip file is useful to review the emails sent.'),
     )
 
     def __init__(self, *args, **kargs):
@@ -448,12 +460,12 @@ class CanvasEmailActionForm(JSONBasicActionForm):
             'Check/Exclude Canvas IDs before sending?',
         )
 
-        self.order_fields(
-            ['key_column',
-             'subject',
-             'target_url',
-             'confirm_items',
-             'export_wf'],
+        self.order_fields([
+            'key_column',
+            'subject',
+            'target_url',
+            'confirm_items',
+            'export_wf'],
         )
 
     def clean(self):
@@ -464,7 +476,6 @@ class CanvasEmailActionForm(JSONBasicActionForm):
         self.action_info['subject'] = form_data['subject']
         self.action_info['item_column'] = form_data['key_column']
         self.action_info['confirm_items'] = form_data['confirm_items']
-        self.action_info['export_wf'] = form_data['export_wf']
         if not form_data.get('target_url'):
             self.action_info['target_url'] = next(
                 iter(ontask_settings.CANVAS_INFO_DICT.keys()),

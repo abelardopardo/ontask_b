@@ -38,9 +38,10 @@ $(function () {
 
   $(document).on('change','#id_how_merge', show_merge_figure);
 
-  $("#incorrect-plugins").on("click", ".js-transform-diagnose", loadForm);
+  $("#plugin-admin-table").on("click", ".js-plugin-diagnose", loadForm);
 
-  $("#transform-table").on("click", ".js-plugin-show-description", loadForm);
+  $("#transform-table, #plugin-admin-table").on(
+  "click", ".js-plugin-show-description", loadForm);
 
   // SQL connection add, edit, delete and clone
   $("#sql-connections").on("click", ".js-sqlconn-view", loadForm);
@@ -56,6 +57,9 @@ $(function () {
 
   $("#sqlconn-admin-table, #modal-item").on("click", ".js-sqlconn-clone", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-clone-form", saveForm);
+
+  // Toggle plugin is_enabled
+  $("#plugin-admin-table").on("change", ".plugin-toggle", toggleCheckBox);
 });
 
 window.onload = function(){
@@ -76,7 +80,7 @@ $(document).ready(function() {
   });
 });
 $(window).on("popstate", function() {
-  var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  let anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
   $("a[href='" + anchor + "']").tab("show");
 });
 $('#dataops-get-plugin-info-to-run form').validate({

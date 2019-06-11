@@ -8,7 +8,7 @@ import test
 from django.conf import settings
 from rest_framework import status
 
-from dataops.models import PluginRegistry
+from dataops.models import Plugin
 
 
 class DataopsTransform(test.OnTaskTestCase):
@@ -30,7 +30,7 @@ class DataopsTransform(test.OnTaskTestCase):
     def test_transform_model(self):
         """Test the view to filter items."""
         # Make sure the plugins are reloaded
-        PluginRegistry.objects.all().delete()
+        Plugin.objects.all().delete()
         resp = self.get_response('dataops:transform')
         self.assertTrue(status.is_success(resp.status_code))
 

@@ -198,12 +198,17 @@ def select_column_action(
 
     :param pk: Action PK
 
-    :param cpk: column PK
+    :param cpk: column PK.
 
     :param key: The columns is a key column
 
     :return: JSON response
     """
+    if cpk == -1:
+        # Unsetting key column
+        action.column_condition_pair.filter(column__is_key=True).delete()
+        return JsonResponse({'html_redirect': ''})
+
     # Get the column
     column = workflow.columns.filter(pk=cpk).first()
     if not column:
@@ -214,11 +219,12 @@ def select_column_action(
         # There can only be one key column in these pairs
         action.column_condition_pair.filter(column__is_key=True).delete()
 
-    # Insert the column in the pairs
-    ActionColumnConditionTuple.objects.get_or_create(
-        action=action,
-        column=column,
-        condition=None)
+    if key != 0:
+        # Insert the column in the pairs
+        ActionColumnConditionTuple.objects.get_or_create(
+            action=action,
+            column=column,
+            condition=None)
 
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
@@ -307,7 +313,7 @@ def shuffle_questions(
     action.shuffle = not action.shuffle
     action.save()
 
-    return JsonResponse({'shuffle': action.shuffle})
+    return JsonResponse({'is_checked': action.shuffle})
 
 
 @user_passes_test(is_instructor)

@@ -4,9 +4,12 @@ import os
 import test
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 
-from dataops.pandas import load_table
+from action.models import Action
+from action.views.import_export import do_import_action
+from dataops.pandas import check_wf_df, load_table
 from workflow.models import Workflow
 
 
@@ -44,8 +47,8 @@ class EmailActionTracking(test.OnTaskTestCase):
         test.delete_all_tables()
         super().tearDown()
 
-    # Test that tracking hits are properly stored.
     def test_tracking(self):
+        """Test that tracking hits are properly stored."""
         # Repeat the checks two times to test if they are accumulating
         for idx in range(1, 3):
             # Iterate over the tracking items
@@ -64,3 +67,34 @@ class EmailActionTracking(test.OnTaskTestCase):
                                'EmailRead_1'].values[0]),
                     idx
                 )
+
+class ActionImport(test.OnTaskTestCase):
+    fixtures = ['simple_email_action']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'action',
+        'fixtures',
+        'simple_email_action.sql'
+    )
+
+    wflow_name = 'wflow1'
+
+    def tearDown(self):
+        test.delete_all_tables()
+        super().tearDown()
+
+    def test_do_import(self):
+        """Test the do_import_action functionality."""
+        user = get_user_model().objects.get(email='instructor01@bogus.com')
+        wflow = Workflow.objects.get(name=self.wflow_name)
+
+        with open(os.path.join(
+            settings.BASE_DIR(),
+            'action',
+            'fixtures',
+            'survey_to_import.gz'
+        ), 'rb') as file_obj:
+            do_import_action(user, wflow, 'a1', file_obj)
+
+        Action.objects.get(name='a1')
+        self.assertTrue(check_wf_df(wflow))

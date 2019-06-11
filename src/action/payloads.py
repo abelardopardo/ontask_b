@@ -174,6 +174,7 @@ class JSONPayload(ActionPayload):
         'action_id',
         'token',
         'item_column',
+        'export_wf',
         'confirm_items',
         'exclude_values',
         'prev_url',

@@ -136,8 +136,12 @@
                 {% endif %}
               </button>
               <div class="shadow dropdown-menu">
+                {% if key_selected %}
+                  <button type="button" class="dropdown-item js-select-key-column-name"
+                          data-url="{% url 'action:unselect_key_column_action' action.id %}">-- {% trans 'Unset key column' %} --</button>
+                {% endif %}
                 {% for column in key_columns %}
-                  {% if column.is_key and column != key_selected.column %}
+                  {% if column != key_selected.column %}
                     <button type="button" class="dropdown-item js-select-key-column-name"
                             data-url="{% url 'action:select_key_column_action' action.id column.id 1 %}">{{ column.name }}</button>
                   {% endif %}

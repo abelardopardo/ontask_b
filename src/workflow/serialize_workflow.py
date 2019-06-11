@@ -224,6 +224,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             'data_frame_table_name',
             'session_key',
             'shared',
+            'star',
             'luser_email_column',
             'luser_email_column_md5',
             'lusers',

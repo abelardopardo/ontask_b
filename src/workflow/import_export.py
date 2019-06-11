@@ -35,6 +35,7 @@ def _run_compatibility_patches(json_data):
 
     :return: Modified json_data
     """
+    # Target_url field in actions should be present an empty by default
     for action_obj in json_data['actions']:
         if action_obj.get('target_url') is None:
             action_obj['target_url'] = ''
@@ -124,7 +125,7 @@ def do_import_workflow(user, name, file_item):
 
 def do_export_workflow_parse(
     workflow: Workflow,
-    selected_actions: Optional[List[Action]] = None,
+    selected_actions: Optional[List[int]] = None,
 ) -> BytesIO:
     """Serialize the workflow and attach its content to a BytesIO object.
 

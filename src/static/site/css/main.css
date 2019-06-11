@@ -27,16 +27,18 @@ body {
   background-color: #f8f9fa;
 }
 
+#workflows-star {
+  border: 1px solid rgba(0,0,0,.125);
+}
+
 .ontask-card {
   cursor: pointer;
-  min-width: 350px;
   max-width: 350px;
   margin-bottom: 15px;
 }
 
 .ontask-ccard {
   cursor: pointer;
-  min-width: 300px;
   max-width: 300px;
 }
 

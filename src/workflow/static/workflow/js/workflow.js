@@ -1,6 +1,6 @@
 $(function () {
   $("#checkAll").click(function () {
-       $("input[id*='id_select_']").prop("checked", this.checked);
+     $("input[id*='id_select_']").prop("checked", this.checked);
   });
 
   // Create Workflow
@@ -90,6 +90,8 @@ $(function () {
   }, function(){
     $(this).css("background-color", "white");
   });
+  // Detect click in star icon in the workflow card
+  $("button.js-workflow-star").on("click", toggleStar);
 });
 window.onload = function(){
   setDateTimePickers();
@@ -108,6 +110,6 @@ $(document).ready(function() {
   });
 });
 $(window).on("popstate", function() {
-  var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  let anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
   $("a[href='" + anchor + "']").tab("show");
 });

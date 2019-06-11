@@ -91,14 +91,8 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
     :param action_id: Action ID to use
     :return: Http response
     """
-    # Get the param dicts
-    if request.method == 'POST':
-        request_params = request.POST
-    else:
-        request_params = request.GET
-
     # Get the parameters
-    user_attribute_name = request_params.get('uatn', 'email')
+    user_attribute_name = request.GET.get('uatn', 'email')
 
     # Get the action object
     action = Action.objects.filter(pk=int(action_id)).prefetch_related(
@@ -115,10 +109,16 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
     if not action.is_active:
         raise Http404
 
-    if action.is_out:
-        return serve_action_out(request.user, action, user_attribute_name)
+    if user_attribute_name not in action.workflow.get_column_names():
+        raise Http404
 
-    return serve_survey_row(request, action, user_attribute_name)
+    try:
+        if action.is_out:
+            return serve_action_out(request.user, action, user_attribute_name)
+
+        return serve_survey_row(request, action, user_attribute_name)
+    except Exception:
+        raise Http404
 
 
 def serve_action_out(

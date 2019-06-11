@@ -9,7 +9,7 @@ from dataops.views import (
     moreinfo, plugin_invoke, row_create, row_update, s3upload_start,
     sqlconn_add, sqlconn_delete, sqlconnection, sqlconnection_admin_index,
     sqlconnection_instructor_index, sqlupload_start, transform_model,
-    upload_s2, upload_s3, upload_s4, uploadmerge,
+    upload_s2, upload_s3, upload_s4, uploadmerge, plugin_admin, plugin_toggle
 )
 
 app_name = 'dataops'
@@ -19,6 +19,7 @@ urlpatterns = [
     path('uploadmerge/', uploadmerge, name='uploadmerge'),
 
     # Show list of plugins
+    path('plugin_admin/', plugin_admin, name='plugin_admin'),
     path('transform/', transform_model, name='transform'),
     path('model/', transform_model, name='model'),
 
@@ -28,6 +29,8 @@ urlpatterns = [
     # Show detailed information about the plugin
     path('<int:pk>/plugin_moreinfo/', moreinfo, name='plugin_moreinfo'),
 
+    # Toggle plugin is_enabled
+    path('<int:pk>/plugin_toggle/', plugin_toggle, name='plugin_toggle'),
     # Plugin invocation
     path(
         '<int:pk>/plugin_invoke/',

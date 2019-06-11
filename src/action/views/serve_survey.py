@@ -43,9 +43,10 @@ def serve_survey_row(
     # User is instructor, and either owns the workflow or is allowed to access
     # it as shared
     manager = has_access(request.user, action.workflow)
+    user_attribute_value = None
     if manager:
         user_attribute_value = request.GET.get('uatv')
-    else:
+    if not user_attribute_value:
         user_attribute_value = request.user.email
 
     # Get the dictionary containing column names, attributes and condition

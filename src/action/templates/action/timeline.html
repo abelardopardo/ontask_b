@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}OnTask{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Timeline' %}{% endblock %}
 {% block container %}
 <div class="container my-3">
   <h1 class="text-center">{% trans 'Timeline' %}</h1>
@@ -21,7 +21,7 @@
               {{ event.action_name }}</a>
             </div>
           {% endif %}
-          <pre class="pt-2">{{ event.payload }}</pre>
+          <div style="white-space: pre-wrap;">{{ event.payload }}</div>
         </li>
       {% endfor %}
     </ul>

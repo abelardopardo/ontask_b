@@ -2,7 +2,7 @@
 
 """Upload DataFrames from Files."""
 from typing import Optional
-from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 import pandas as pd
 from django.conf import settings as ontask_settings

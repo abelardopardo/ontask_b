@@ -99,6 +99,11 @@ class Workflow(models.Model):
         settings.AUTH_USER_MODEL,
         related_name='workflows_shared')
 
+    # Some workflows are marked with a star to appear on top of the collection
+    star = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='workflows_star')
+
     # Column stipulating where are the learner email values (or empty)
     luser_email_column = models.ForeignKey(
         'Column',
