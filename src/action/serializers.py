@@ -160,7 +160,9 @@ class ConditionSerializer(serializers.ModelSerializer):
 
             # Set the condition values
             condition_obj.columns.set(
-                self.context['workflow'].columns.filter(name__in=[cnames]))
+                self.context['action'].workflow.columns.filter(
+                    name__in=cnames),
+            )
 
             # If n_rows_selected is -1, reevaluate
             if condition_obj.n_rows_selected == -1:
