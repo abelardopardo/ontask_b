@@ -79,7 +79,7 @@ class PluginInfoForm(forms.Form):
 
     def _create_param_fields(self):
         """Create the fields to capture the parameters."""
-        for idx, lbl, p_type, p_allow, p_init, p_help in enumerate(
+        for idx, (lbl, p_type, p_allow, p_init, p_help) in enumerate(
             self.plugin_instance.parameters,
         ):
 
