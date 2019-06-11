@@ -88,14 +88,12 @@ class ActionImport(test.OnTaskTestCase):
         user = get_user_model().objects.get(email='instructor01@bogus.com')
         wflow = Workflow.objects.get(name=self.wflow_name)
 
-        # with open(os.path.join(
-        #     settings.BASE_DIR(),
-        #     'action',
-        #     'fixtures',
-        #     'simple_email_action.sql'
-        # ),
-        #     'rb') as file_obj:
-        with open ('/Users/pardosa/tmp/ontask_action_190609_193522.gz', 'rb') as file_obj:
+        with open(os.path.join(
+            settings.BASE_DIR(),
+            'action',
+            'fixtures',
+            'survey_to_import.gz'
+        ), 'rb') as file_obj:
             do_import_action(user, wflow, 'a1', file_obj)
 
         Action.objects.get(name='a1')
