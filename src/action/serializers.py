@@ -82,7 +82,7 @@ def _process_columns(validated_data, context):
                 _('Incorrect column name {0}.').format(cname))
 
         # Search for the column in the workflow columns
-        col = context['workflow'].columns.filter(name=col.name).first()
+        col = context['workflow'].columns.filter(name=cname).first()
         if not col:
             # Accumulate the new columns just in case we have to undo
             # the changes
