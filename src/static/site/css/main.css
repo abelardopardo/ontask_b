@@ -33,12 +33,14 @@ body {
 
 .ontask-card {
   cursor: pointer;
+  min-width: 200px;
   max-width: 350px;
   margin-bottom: 15px;
 }
 
 .ontask-ccard {
   cursor: pointer;
+  min-width: 200px;
   max-width: 300px;
 }
 
