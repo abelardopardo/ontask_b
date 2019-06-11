@@ -35,6 +35,7 @@ def _run_compatibility_patches(json_data):
 
     :return: Modified json_data
     """
+    # Target_url field in actions should be present an empty by default
     for action_obj in json_data['actions']:
         if action_obj.get('target_url') is None:
             action_obj['target_url'] = ''
