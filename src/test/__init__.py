@@ -276,7 +276,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     viewport_width = 1024
     device_pixel_ratio = 1
     max_image_height = 1440
-    headless = True
+    headless = False
 
     class_and_text_xpath = \
         '//{0}[contains(@class, "{1}") and normalize-space(text()) = "{2}"]'
@@ -677,8 +677,10 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         self.assertIn('Logs', self.selenium.page_source)
 
     def go_to_sql_connections(self):
-        # Goto the details page
-        self.selenium.find_element_by_id('ontask-base-sqlconn').click()
+        # Click in the admin dropdown menu and then in the option
+        self.click_dropdown_option(
+            '//*[@id="ontask-base-admin"]',
+            'SQL Connections')
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'sqlconn-admin-table'))
         )

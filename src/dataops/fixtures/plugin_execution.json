@@ -772,6 +772,20 @@
 },
 {
     "model": "dataops.plugin",
+    "pk": 7,
+    "fields": {
+        "filename": "linear_model",
+        "modified": "2018-05-28T01:00:42.649Z",
+        "name": "Linear Model",
+        "description_txt": "Execute a linear model",
+        "is_verified": true,
+        "is_enabled": true,
+        "is_model": true,
+        "executed": null
+    }
+},
+{
+    "model": "dataops.plugin",
     "pk": 8,
     "fields": {
         "filename": "test_plugin_2",

@@ -1,4 +1,4 @@
-## 5.1 (2019-06)
+## 5.1.0 (2019-06-11)
 
 ### Added
 
@@ -13,6 +13,8 @@
 ### Changed
 
 - Model name for PluginRegistry
+
+- Survey editor now allows the key column to be unset.
 
 ### Fixed
 
