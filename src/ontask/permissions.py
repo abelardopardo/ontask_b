@@ -58,7 +58,7 @@ def has_access(user, workflow):
 
     :return: True if it is owner or in the shared list
     """
-    return workflow.user == user or user in workflow.shared
+    return workflow.user == user or user in workflow.shared.all()
 
 
 class UserIsInstructor(UserPassesTestMixin, permissions.BasePermission):
