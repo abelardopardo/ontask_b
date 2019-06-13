@@ -214,3 +214,32 @@ class ActionServe(test.OnTaskTestCase):
             {'action_id': action.id})
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue('Oct. 10, 2017, 10:03 p.m.' in str(resp.content))
+
+class ActionServeSurvey(test.OnTaskTestCase):
+    """Test the view to serve a survey."""
+
+    fixtures = ['simple_workflow_two_actions']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'action',
+        'fixtures',
+        'simple_workflow_two_actions.sql',
+    )
+
+    user_email = 'student01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    workflow_name = 'wflow2'
+
+    def test_serve_survey(self):
+        """Test the serve_action view."""
+        action = self.workflow.actions.get(name='Check registration')
+        action.serve_enabled = True
+        action.save()
+
+        resp = self.get_response(
+            'action:serve',
+            {'action_id': action.id})
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertTrue('id="action-row-datainput"' in str(resp.content))
+        self.assertTrue('csrfmiddlewaretoken' in str(resp.content))

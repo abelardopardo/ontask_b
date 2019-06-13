@@ -30,11 +30,6 @@ def _create_columns(new_columns, context):
         return []
 
     workflow = context['workflow']
-    if not workflow.has_data_frame():
-        # Cannot create columns with an empty workflow
-        raise Exception(_(
-            'Unable to import action '
-            + ' in a workflow with and empty data table'))
 
     # There are some new columns that need to be created
     column_data = ColumnSerializer(
@@ -86,6 +81,12 @@ def _process_columns(validated_data, context):
         if not col:
             # Accumulate the new columns just in case we have to undo
             # the changes
+            if citem['is_key']:
+                raise Exception(
+                    _('Action contains non-existing key column "{0}"').format(
+                        cname,
+                    )
+                )
             new_columns.append(citem)
             continue
 
@@ -104,10 +105,6 @@ def _process_columns(validated_data, context):
         # Update the column categories (just in case the new one has a
         # different order)
         col.set_categories(citem['categories'])
-
-    # Create the new columns if they have been requested
-    if not new_columns:
-        return new_columns
 
     return _create_columns(new_columns, context)
 
@@ -390,6 +387,12 @@ class ActionSelfcontainedSerializer(ActionSerializer):
 
     def create(self, validated_data, **kwargs):
         """Create the Action object with the validated data."""
+        if not self.context['workflow'].has_data_frame():
+            # Cannot create columns with an empty workflow
+            raise Exception(_(
+                'Unable to import action '
+                + ' in a workflow with and empty data table'))
+
         new_columns = []
         try:
             new_columns = _process_columns(

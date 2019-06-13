@@ -1,3 +1,9 @@
+## 5.1.1 (2019-06-13)
+
+### Fixed
+
+- Error when serving surveys to users not owning the workflow
+
 ## 5.1.0 (2019-06-11)
 
 ### Added
