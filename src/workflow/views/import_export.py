@@ -62,7 +62,7 @@ def export_ask(
 @get_workflow(pf_related='actions')
 def export(
     request: HttpRequest,
-    page_data,
+    page_data = '0',
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
     """Render the view to export a workflow.
