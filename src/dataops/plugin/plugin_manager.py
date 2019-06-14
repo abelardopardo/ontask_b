@@ -7,6 +7,7 @@ import os
 import time
 from builtins import map, str, zip
 from datetime import datetime
+from typing import Tuple, List
 
 import pandas as pd
 import pytz
@@ -67,7 +68,7 @@ def _get_plugin_path():
     return os.path.join(ontask_settings.BASE_DIR, plugin_folder)
 
 
-def _verify_plugin(pinobj):
+def _verify_plugin(pinobj: Plugin) -> List[Tuple[str, str]]:
     """Verify that plugin complies with certain tests.
 
     Run some tests in the plugin instance to make sure it complies with the
