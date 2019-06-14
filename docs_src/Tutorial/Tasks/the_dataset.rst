@@ -3,9 +3,7 @@
 The Dataset
 ***********
 
-OnTask relies on the existence of data about how learners interact in a given experience. This activity offers an *artificially generated* data set to explore the functionality in the platform.
-
-Download and unpack the zip file :download:`dataset.zip </Dataset/dataset.zip>` in a folder in your personal computer. The folder should have the following files: ``student_list.csv``, ``midterm_results.csv``, ``forum_participation.csv``, ``blended_participation.csv`` and ``all_data.csv``. These files have been derived from the :ref:`previously described scenario<the_scenario>`.
+The following activities will use an *artificially generated* data set. Download and unpack the zip file :download:`dataset.zip </Dataset/dataset.zip>` in a folder in your personal computer. The folder should have the following files: ``student_list.csv``, ``midterm_results.csv``, ``forum_participation.csv``, ``blended_participation.csv`` and ``all_data.csv``. These files have been derived from the :ref:`previously described scenario<the_scenario>`.
 
 This the information contained in each file:
 
@@ -63,4 +61,4 @@ The format of all data files is *Comma Separated Values* or CSV. This format ass
 Key columns
 ===========
 
-There is a special type of column that is of special interest in OnTask. If a column has a different value for each of the rows it is called a **key column**. The reason why these columns are important is because once one value is selected it unequivocally identifies one row in the table. For example, educational institutions typically assign an identifier (SID) to each student which is unique. If a table contains information about a set of students (one row, one student) and one column has the student ID, that column is then a **key column**.
+There are certain columns that are of special interest. If a column has a different value for each of the rows it is called a **key column**. The reason why are important is because once one value is selected it unequivocally identifies one row in the table. For example, educational institutions typically assign a unique identifier (SID) to each student. If a table contains information about a set of students (one student per row) and one column has the student ID, that column is then a **key column**.

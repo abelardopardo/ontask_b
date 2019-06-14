@@ -28,6 +28,7 @@ urlpatterns = [
         '<int:wid>/export_ask/',
         views.export_ask,
         name='export_ask'),
+    path('export/', views.export, name='export_empty'),
     re_path(
         r'(?P<page_data>\d+((,\d+)*))/export/',
         views.export,

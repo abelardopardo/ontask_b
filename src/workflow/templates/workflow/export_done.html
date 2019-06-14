@@ -4,7 +4,11 @@
 {% block title %}{% trans 'Export Done' %}{% endblock %}
 {% block scripts %}
   <script>
-    $(window).on('load', function(){ location.href="{% url 'workflow:export' include %}"; });
+    {% if include %}
+      $(window).on('load', function(){ location.href="{% url 'workflow:export' include %}"; });
+    {% else %}
+      $(window).on('load', function(){ location.href="{% url 'workflow:export_empty' %}"; });
+    {% endif %}
   </script>
 {% endblock scripts %}
 {% block container %}

@@ -1,3 +1,9 @@
+## 5.1.2 (2019-06-14)
+
+### Fixed
+
+- Error when exporting a workflow with no actions.
+
 ## 5.1.1 (2019-06-13)
 
 ### Fixed
