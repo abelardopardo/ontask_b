@@ -8,7 +8,7 @@ Log into OnTask and open a workflow. Access the *Actions* page clicking in the l
 .. figure:: /scaptures/tutorial_action_index.png
    :align: center
 
-OnTask contains functions to manage three type of actions:
+OnTask contains functions to manage the following types of actions:
 
 Personalized text
   These actions allow to create a HTML text in which some of its elements may be present/ignored depending on the how a condition is evaluated for every student.
