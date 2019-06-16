@@ -20,10 +20,11 @@ let insertText = function(areaId, insert_text) {
 }
 let insertConditionInContent = function() {
   let btn = $(this);
+  let condition_text = ''
   if (typeof $('#id_text_content').summernote != 'undefined') {
     let range = $("#id_text_content").summernote('createRange');
-    let condition_text = gettext('YOUR TEXT HERE');
     let range_text = range.toString();
+    condition_text = gettext('YOUR TEXT HERE');
     if (range_text != '') {
       condition_text = range_text;
     }
