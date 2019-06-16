@@ -54,18 +54,12 @@ Image==1.5.27
 imagesize==1.1.0
 ims-lti-py==0.6
 ipykernel==5.1.0
-ipython==7.5.0
-ipython-genutils==0.2.0
 ipywidgets==7.4.2
 itypes==1.1.0
 jdcal==1.4
 jedi==0.13.3
 Jinja2==2.10.1
 jsonschema==3.0.1
-jupyter==1.0.0
-jupyter-client==5.2.3
-jupyter-console==6.0.0
-jupyter-core==4.4.0
 kombu==4.6.1
 lxml==4.3.3
 Markdown==3.1.1
@@ -84,7 +78,6 @@ packaging==19.0
 pandas==0.24.2
 pandoc==1.0.2
 pandocfilters==1.4.2
-parso==0.4.0
 pbr==5.1.1
 pexpect==4.6.0
 pickleshare==0.7.5
