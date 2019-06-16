@@ -1,3 +1,11 @@
+## 5.1.3 (2019-06-16)
+
+### Fixed
+
+- Error when using conditions in the personalised text editor
+
+- Removed dependency from Jupyter, ipython and parso (due to vulnerability)
+
 ## 5.1.2 (2019-06-14)
 
 ### Fixed
