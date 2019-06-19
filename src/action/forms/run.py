@@ -476,7 +476,8 @@ class CanvasEmailActionForm(JSONBasicActionForm):
         self.action_info['subject'] = form_data['subject']
         self.action_info['item_column'] = form_data['key_column']
         self.action_info['confirm_items'] = form_data['confirm_items']
-        if not form_data.get('target_url'):
+        self.action_info['target_url'] = form_data.get('target_url')
+        if not self.action_info['target_url']:
             self.action_info['target_url'] = next(
                 iter(ontask_settings.CANVAS_INFO_DICT.keys()),
             )
