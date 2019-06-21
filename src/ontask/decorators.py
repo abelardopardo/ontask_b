@@ -40,18 +40,22 @@ def get_workflow(
 
     :param s_related: select_related to use when fetching the workflow
 
-    :param pf_related: prefetch_related to use when fetching the workflow
+    :param pf_related: prefetch_re  lated to use when fetching the workflow
 
     """
     def get_workflow_decorator(func):  # noqa Z430
         @wraps(func)  # noqa Z430
         def function_wrapper(request, **kwargs):  # noqa Z430
-            workflow = access_workflow(
-                request,
-                wid=kwargs.get('wid'),
-                select_related=s_related,
-                prefetch_related=pf_related,
-            )
+            try:
+                workflow = access_workflow(
+                    request,
+                    wid=kwargs.get('wid'),
+                    select_related=s_related,
+                    prefetch_related=pf_related,
+                )
+            except Exception as exc:
+                messages.error(request, str(exc))
+                workflow = None
             if not workflow:
                 if request.is_ajax():
                     return JsonResponse({'html_redirect': reverse('home')})
@@ -77,12 +81,16 @@ def get_column(
     def get_column_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            workflow = access_workflow(
-                request,
-                wid=kwargs.get('wid'),
-                select_related=s_related,
-                prefetch_related=pf_related,
-            )
+            try:
+                workflow = access_workflow(
+                    request,
+                    wid=kwargs.get('wid'),
+                    select_related=s_related,
+                    prefetch_related=pf_related,
+                )
+            except Exception as exc:
+                messages.error(request, str(exc))
+                workflow = None
             if not workflow:
                 if request.is_ajax():
                     return JsonResponse({'html_redirect': reverse('home')})
@@ -133,12 +141,16 @@ def get_action(
     def get_action_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            workflow = access_workflow(
-                request,
-                wid=kwargs.get('wid'),
-                select_related=s_related,
-                prefetch_related=pf_related,
-            )
+            try:
+                workflow = access_workflow(
+                    request,
+                    wid=kwargs.get('wid'),
+                    select_related=s_related,
+                    prefetch_related=pf_related,
+                )
+            except Exception as exc:
+                messages.error(request, str(exc))
+                workflow = None
             if not workflow:
                 if request.is_ajax():
                     return JsonResponse({'html_redirect': reverse('home')})
@@ -190,12 +202,16 @@ def get_condition(
     def get_condition_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            workflow = access_workflow(
-                request,
-                wid=kwargs.get('wid'),
-                select_related=s_related,
-                prefetch_related=pf_related,
-            )
+            try:
+                workflow = access_workflow(
+                    request,
+                    wid=kwargs.get('wid'),
+                    select_related=s_related,
+                    prefetch_related=pf_related,
+                )
+            except Exception as exc:
+                messages.error(request, str(exc))
+                workflow = None
             if not workflow:
                 if request.is_ajax():
                     return JsonResponse({'html_redirect': reverse('home')})
@@ -250,12 +266,16 @@ def get_columncondition(
     def get_columncondition_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            workflow = access_workflow(
-                request,
-                wid=kwargs.get('wid'),
-                select_related=s_related,
-                prefetch_related=pf_related,
-            )
+            try:
+                workflow = access_workflow(
+                    request,
+                    wid=kwargs.get('wid'),
+                    select_related=s_related,
+                    prefetch_related=pf_related,
+                )
+            except Exception as exc:
+                messages.error(request, str(exc))
+                workflow = None
             if not workflow:
                 if request.is_ajax():
                     return JsonResponse({'html_redirect': reverse('home')})
@@ -307,12 +327,17 @@ def get_view(
     def get_view_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            workflow = access_workflow(
-                request,
-                wid=kwargs.get('wid'),
-                select_related=s_related,
-                prefetch_related=pf_related,
-            )
+            try:
+                workflow = access_workflow(
+                    request,
+                    wid=kwargs.get('wid'),
+                    select_related=s_related,
+                    prefetch_related=pf_related,
+                )
+            except Exception as exc:
+                messages.error(request, str(exc))
+                workflow = None
+
             if not workflow:
                 if request.is_ajax():
                     return JsonResponse({'html_redirect': reverse('home')})
