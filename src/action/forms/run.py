@@ -503,8 +503,8 @@ class EnableURLForm(forms.ModelForm):
         form_data = super().clean()
 
         # Check the datetimes. One needs to be after the other
-        a_from = self.cleaned_data['active_from']
-        a_to = self.cleaned_data['active_to']
+        a_from = self.cleaned_data.get('active_from')
+        a_to = self.cleaned_data.get('active_to')
         if a_from and a_to and a_from >= a_to:
             self.add_error(
                 'active_from',

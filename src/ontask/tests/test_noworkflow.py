@@ -26,7 +26,7 @@ class BackToHome(test.OnTaskTestCase):
     wflow_name = 'wflow2'
 
     def test_back_to_home_page(self):
-
+        """Loop over all URLs and check they redirect appropriately."""
         redirect = [
             # Workflow
             reverse('workflow:detail'),

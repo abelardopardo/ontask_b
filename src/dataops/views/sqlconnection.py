@@ -170,7 +170,7 @@ def sqlconnection_admin_index(request: HttpRequest) -> HttpResponse:
         'dataops/sql_connections_admin.html',
         {
             'table': SQLConnectionTableAdmin(
-                SQLConnection.objects.all().values(
+                SQLConnection.objects.values(
                     'id',
                     'name',
                     'description_txt'),
@@ -191,7 +191,7 @@ def sqlconnection_instructor_index(request: HttpRequest) -> HttpResponse:
         'dataops/sql_connections.html',
         {
             'table': SQLConnectionTableRun(
-                SQLConnection.objects.all().values(
+                SQLConnection.objects.values(
                     'id',
                     'name',
                     'description_txt'),

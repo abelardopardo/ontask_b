@@ -117,15 +117,11 @@ class ColumnBasicForm(forms.ModelForm):
             self.instance.set_categories(valid_values)
 
         # Check the datetimes. One needs to be after the other
-        a_from = self.cleaned_data['active_from']
-        a_to = self.cleaned_data['active_to']
+        a_from = self.cleaned_data.get('active_from')
+        a_to = self.cleaned_data.get('active_to')
         if a_from and a_to and a_from >= a_to:
-            self.add_error(
-                'active_from',
-                _('Incorrect date/time window'))
-            self.add_error(
-                'active_to',
-                _('Incorrect date/time window'))
+            self.add_error('active_from', _('Incorrect date/time window'))
+            self.add_error('active_to', _('Incorrect date/time window'))
 
         return form_data
 

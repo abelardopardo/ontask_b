@@ -597,7 +597,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         # Check that the shared users are properly stored in the workflow
         workflow = Workflow.objects.all()[0]
         self.assertEqual(workflow.shared.count(), 2)
-        users = workflow.shared.all().values_list('email', flat=True)
+        users = workflow.shared.values_list('email', flat=True)
         self.assertTrue('instructor02@bogus.com' in users)
         self.assertTrue('superuser@bogus.com' in users)
 
@@ -635,7 +635,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         # Check that the shared users are properly stored in the workflow
         workflow = Workflow.objects.all()[0]
         self.assertEqual(workflow.shared.count(), 1)
-        users = workflow.shared.all().values_list('email', flat=True)
+        users = workflow.shared.values_list('email', flat=True)
         self.assertTrue('instructor02@bogus.com' in users)
 
         # End of session

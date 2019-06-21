@@ -174,7 +174,7 @@ def detail(
         check_wf_df(workflow)
 
         # Columns are properly numbered
-        cpos = workflow.columns.all().values_list('position', flat=True)
+        cpos = workflow.columns.values_list('position', flat=True)
         rng = range(1, len(cpos) + 1)
         assert sorted(cpos) == list(rng)
 

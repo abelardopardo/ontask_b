@@ -11,7 +11,7 @@
 </div>
 <div id="condition-set" class="card-deck justify-content-center my-3">
   {% for condition in conditions %}
-    <div class="shadow card ontask-ccard text-center mx-auto mb-3">
+    <div class="shadow card ontask-ccard text-center mb-3 mx-2">
       <h5 class="card-header js-condition-edit" data-url="{% url 'action:edit_condition' condition.id %}">{{ condition.name }}</h5>
       <div class="card-body js-condition-edit" data-url="{% url 'action:edit_condition' condition.id %}" style="min-height: 100px;">
         <h5 class="card-subtitle mb-2 text-muted">{% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}

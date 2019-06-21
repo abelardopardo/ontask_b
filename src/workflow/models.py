@@ -140,7 +140,7 @@ class Workflow(models.Model):
                 workflow = Workflow.objects.get(id=wid)
                 # Workflow exists, unlock
                 workflow.unlock()
-            except ObjectDoesNotExist:
+            except Workflow.DoesNotExist:
                 return
             except Exception:
                 raise Exception('Unable to unlock workflow {0}'.format(wid))

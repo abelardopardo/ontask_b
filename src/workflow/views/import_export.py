@@ -43,7 +43,7 @@ def export_ask(
     if request.method == 'POST' and form.is_valid():
         to_include = []
         for idx, a_id in enumerate(
-            workflow.actions.all().values_list('id', flat=True),
+            workflow.actions.values_list('id', flat=True),
         ):
             if form.cleaned_data['select_%s' % idx]:
                 to_include.append(str(a_id))
