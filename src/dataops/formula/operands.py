@@ -348,9 +348,8 @@ def is_empty(node, eval_type, given_variables):
         query = sql.SQL('({0} = \'\') OR ({0} is null)').format(
             OnTaskDBIdentifier(node['field']),
         )
-        fields = [node['value']]
 
-        return query, fields
+        return query, []
 
     # Text evaluation
     return '{0} is empty'.format(node['field'])
@@ -377,9 +376,8 @@ def is_not_empty(node, eval_type, given_variables):
         query = sql.SQL('({0} != \'\') AND ({0} is not null)').format(
             OnTaskDBIdentifier(node['field']),
         )
-        fields = [node['value']]
 
-        return query, fields
+        return query, []
 
     # Text evaluation
     return '{0} is not empty'.format(node['field'])
