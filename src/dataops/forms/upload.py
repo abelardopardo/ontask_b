@@ -140,7 +140,7 @@ class UploadCSVFileForm(UploadBasic):
                 self.cleaned_data['skip_lines_at_bottom'])
         except Exception as exc:
             self.add_error(
-                'data_file',
+                None,
                 _('File could not be processed ({0})').format(str(exc)))
             return form_data
 
@@ -185,7 +185,7 @@ class UploadExcelFileForm(UploadBasic):
                 form_data['sheet'])
         except Exception as exc:
             self.add_error(
-                'text_file',
+                None,
                 _('File could not be processed: {0}').format(str(exc)))
             return form_data
 
