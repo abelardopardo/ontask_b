@@ -1,3 +1,23 @@
+## 5.1.4 (2019-0)
+
+### Changed
+
+- Moved admin URL
+
+### Fixed
+
+- Mistake when cloning conditions from another action
+
+- Error in function to search value in table
+
+- Error when cacheing page chunks without the language_code
+
+- Fixed incorrect error reporting when uploading an incorrect file
+
+- Fixed error when using empty/not-empty operator in conditions
+
+- Fixed error in decorator in the case of a locked workflow
+
 ## 5.1.3 (2019-06-16)
 
 ### Fixed
