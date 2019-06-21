@@ -199,7 +199,13 @@ def clone_condition(
     :param action_pk: Primary key of the action to receive the condition
     :return: JSON response
     """
-    action = condition.action
+    if action_pk:
+        action = Action.objects.filter(id=action_pk).first()
+        if not action:
+            messages.error(request, _('Incorrect action id.'))
+            return JsonResponse({'html_redirect': ''})
+    else:
+        action = condition.action
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content')
