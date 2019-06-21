@@ -32,7 +32,7 @@
     {% block navbar %}
     <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
       {% block navbar-brand %}
-        {% cache 3600 site-navbar-brand %}
+        {% cache 3600 site-navbar-brand LANGUAGE_CODE %}
           <a class="navbar-brand" href="#">
             <img src="{% static 'site/img/logo.png' %}" height="30" alt="logo">
           </a>
@@ -195,7 +195,7 @@
       </div>
     {% endblock container %}
     {% block timeout %}
-      {% cache 3600 site-timeout %}
+      {% cache 3600 site-timeout LANGUAGE_CODE %}
         <div class="modal fade" id="session-expire-warning-modal"
              aria-hidden="true" data-keyboard="false" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -220,7 +220,7 @@
     {% endblock timeout %}
     <!-- Site footer -->
     {% block footer %}
-      {% cache 3600 site-footer %}
+      {% cache 3600 site-footer LANGUAGE_CODE %}
         <nav class="navbar navbar-light bg-light" id="base_footer">
           <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %}</span>
         </nav>

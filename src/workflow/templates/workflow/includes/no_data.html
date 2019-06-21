@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load cache %}
-{% cache 3600 workflow_no_data %}
+{% cache 3600 workflow_no_data LANGUAGE_CODE %}
   {% url 'dataops:uploadmerge' as uploadmerge %}
   <p class="lead text-center">{% blocktrans %}<strong>Next Step:</strong> The workflow data table is empty. Click in the <i>Table</i> link in the top menu and select the option to <a href="{{ uploadmerge }}">upload data to the
   table</a>.{% endblocktrans %}</p>
