@@ -236,7 +236,7 @@ def search_table(
         query_fields += ['%' + search_value + '%'] * len(columns_to_search)
 
     if where_clause != sql.SQL(''):
-        query = query + sql.SQL(' WHERE') + where_clause
+        query = query + sql.SQL(' WHERE ') + where_clause
 
     # Add the order if needed
     if order_col_name:
