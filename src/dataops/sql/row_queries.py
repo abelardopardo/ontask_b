@@ -231,9 +231,8 @@ def select_ids_all_false(
     ])
 
     # WHERE clause for the conditions
-    query = sql.SQL('{0} WHERE {1}').format(
-        query,
-        sql.SQL('(NOT {0})').format(sql.SQL(') AND (NOT ').join(cond_sql)),
+    query += sql.SQL(' WHERE ') + sql.SQL(' AND ').join(
+        [sql.SQL('(NOT ({0}))').format(cond) for cond in cond_sql],
     )
     query_fields = sum(cond_fields, [])
 
