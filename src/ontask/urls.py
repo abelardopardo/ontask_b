@@ -51,7 +51,7 @@ urlpatterns = [
 
     path('users', include(profiles.urls, namespace='profiles')),
 
-    path('admin', admin.site.urls),
+    path('ota', admin.site.urls),
 
     path('trck', views.trck, name='trck'),
 
