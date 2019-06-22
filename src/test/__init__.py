@@ -296,9 +296,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         cls.device_pixel_ratio = cls.selenium.execute_script(
             'return window.devicePixelRatio'
         )
-        print('Device Pixel Ratio: {0}'.format(cls.device_pixel_ratio))
-        print('Viewport width: {0}'.format(cls.viewport_width))
-        print('viewport height: {0}'.format(cls.viewport_height))
+        # print('Device Pixel Ratio: {0}'.format(cls.device_pixel_ratio))
+        # print('Viewport width: {0}'.format(cls.viewport_width))
+        # print('viewport height: {0}'.format(cls.viewport_height))
 
         cls.selenium.set_window_size(
             cls.viewport_width * cls.device_pixel_ratio,
@@ -1864,6 +1864,8 @@ def pg_restore_table(filename):
     :return:
     """
     process = subprocess.Popen(['psql',
+                                '-o',
+                                '/dev/null',
                                 '-d',
                                 settings.DATABASES['default']['NAME'],
                                 '-q',
