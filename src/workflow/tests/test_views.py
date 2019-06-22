@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import test
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
@@ -9,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from dataops.pandas import db
+import test
 from workflow.models import Workflow
 
 
@@ -44,10 +44,11 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
 
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
-            os.path.join(settings.BASE_DIR(),
-                         'workflow',
-                         'fixtures',
-                         'simple.csv')
+            os.path.join(
+                settings.BASE_DIR(),
+                'workflow',
+                'fixtures',
+                'simple.csv')
         )
 
         # Click on the NEXT button
@@ -56,7 +57,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Select Columns')
+                'Select Columns')
         )
 
         # Change the name of one of the columns
@@ -101,9 +102,9 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'workflow',
-                         'fixtures',
-                         'simple2.csv')
+                'workflow',
+                'fixtures',
+                'simple2.csv')
         )
 
         # Click on the NEXT button
@@ -112,7 +113,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Select Columns')
+                'Select Columns')
         )
 
         # Change the name of sid2 to sid
@@ -197,10 +198,11 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
 
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
-            os.path.join(settings.BASE_DIR(),
-                         'workflow',
-                         'fixtures',
-                         'csv_with_prelude_postlude.csv')
+            os.path.join(
+                settings.BASE_DIR(),
+                'workflow',
+                'fixtures',
+                'csv_with_prelude_postlude.csv'),
         )
         # Set the prelude to 6 lines and postlude to 3
         self.selenium.find_element_by_id('id_skip_lines_at_top').clear()
@@ -216,7 +218,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Select Columns')
+                'Select Columns')
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
@@ -368,7 +370,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         # Select filter tab
         self.select_filter_tab()
         self.open_condition(None,
-                            "//button[contains(@class, 'js-filter-create')]")
+            "//button[contains(@class, 'js-filter-create')]")
         # Select the another2 column (with new name
         select = Select(self.selenium.find_element_by_name(
             'builder_rule_0_filter'))
@@ -473,22 +475,27 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
             '//table[@id="attribute-table"]'
             '//tr[2]/td[3]//button[contains(@class, "js-attribute-delete")]'
         ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                '//div[@id="modal-item"]//div[@class="modal-footer"]/button')),
+        )
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
-            "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
+            '//div[@id = "modal-item"]//div[@class = "modal-footer"]/button'
         ).click()
         # MODAL WAITING
         self.wait_for_page(element_id='workflow-detail')
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.CLASS_NAME, "js-attribute-create")
+                (By.CLASS_NAME, 'js-attribute-create')
             )
         )
 
         # There should only be a single element
         self.assertEqual(
             len(self.selenium.find_elements_by_xpath(
-                "//table[@id='attribute-table']/tbody/tr"
+                '//table[@id="attribute-table"]/tbody/tr'
             )),
             1
         )
@@ -558,8 +565,8 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         # Value now should be in the table
         self.select_share_tab()
         self.search_table_row_by_string('share-table',
-                                        1,
-                                        'instructor02@bogus.com')
+            1,
+            'instructor02@bogus.com')
 
         # Click in the create share dialog again
         self.selenium.find_element_by_class_name('js-share-create').click()
@@ -591,8 +598,8 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         # Value now should be in the table
         self.select_share_tab()
         self.search_table_row_by_string('share-table',
-                                        1,
-                                        'instructor02@bogus.com')
+            1,
+            'instructor02@bogus.com')
 
         # Check that the shared users are properly stored in the workflow
         workflow = Workflow.objects.all()[0]
@@ -603,14 +610,14 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
         # click the delete button in the superuser@bogus.com row
         element = self.search_table_row_by_string('share-table',
-                                                  1,
-                                                  'superuser@bogus.com')
+            1,
+            'superuser@bogus.com')
         element.find_element_by_xpath('td[2]/button').click()
 
         # Wait for the delete confirmation frame
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
-                                             'Confirm user deletion')
+                'Confirm user deletion')
         )
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(

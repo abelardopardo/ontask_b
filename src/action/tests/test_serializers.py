@@ -66,7 +66,7 @@ class ActionTestSerializers(test.OnTaskTestCase):
                 "name": "age-2",
                 "description_text": "",
                 "data_type": "double",
-                "is_key": True,
+                "is_key": False,
                 "position": 1,
                 "in_viz": True,
                 "categories": [],

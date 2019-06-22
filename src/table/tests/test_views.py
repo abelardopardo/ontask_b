@@ -511,6 +511,11 @@ class TableViews(test.OnTaskLiveTestCase):
             "//table[@id='view-table']//tr/td[1][normalize-space() = 'v1']/"
             "../td[3]/button[1]"
         ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//button[normalize-space()="Clone view"]')
+            )
+        )
         # Confirm view cloning
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[normalize-space()='Clone "
