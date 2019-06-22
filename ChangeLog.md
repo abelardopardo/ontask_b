@@ -18,6 +18,8 @@
 
 - Fixed error in decorator in the case of a locked workflow
 
+- Fixed count of all false rows
+
 ## 5.1.3 (2019-06-16)
 
 ### Fixed
