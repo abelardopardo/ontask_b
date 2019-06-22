@@ -15,6 +15,7 @@ from action.views import (
     run_survey_ss, run_zip_done, select_column_action,
     select_condition_for_question, serve_action, show_timeline, showurl,
     shuffle_questions, survey_thanks, unselect_column_action, zip_action,
+    serve_visualization,
 )
 
 app_name = 'action'
@@ -168,7 +169,12 @@ urlpatterns = [
     path('<int:action_id>/serve/', serve_action, name='serve'),
 
     #
-    # DESCRIPTION
+    # Serve the personalised visualizaton
+    #
+    path('<int:wid>/serve_viz/', serve_visualization, name='serve_viz'),
+
+    #
+    # Edit action description and name
     #
     path(
         '<int:pk>/edit_description/',

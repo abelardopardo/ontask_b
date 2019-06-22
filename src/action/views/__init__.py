@@ -31,3 +31,4 @@ from action.views.run_survey import (
 )
 from action.views.run_zip import action_zip_export, run_zip_done, zip_action
 from action.views.timeline import show_timeline
+from action.views.serve_visualization import serve_visualization

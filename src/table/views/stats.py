@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 
 from dataops.pandas import get_column_statistics, load_table
-from dataops.sql.row_queries import get_rows
+from dataops.sql.row_queries import get_row
 from ontask.decorators import ajax_required, get_column, get_workflow
 from ontask.permissions import is_instructor
 from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
@@ -257,11 +257,12 @@ def stat_row_view(
         df = load_table(workflow.get_data_frame_table_name())
 
     # Get the row from the table
-    row = get_rows(
+    row = get_row(
         workflow.get_data_frame_table_name(),
+        update_key,
+        update_val,
         column_names=column_names,
-        filter_pairs={update_key: update_val},
-    ).fetchone()
+    )
 
     vis_scripts = []
     visualizations = []
