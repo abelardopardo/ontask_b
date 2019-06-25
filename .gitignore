@@ -71,6 +71,7 @@ Desktop.ini
 /logs/*.log
 .idea
 .git_OLD
+tmp
 
 /src/media/django-summernote/
 
