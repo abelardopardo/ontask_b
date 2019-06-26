@@ -6,5 +6,5 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class DataopsConfig(AppConfig):
-    name = 'dataops'
+    name = 'ontask.apps.dataops'
     verbose_name = _('Data Upload/Merge Operations')

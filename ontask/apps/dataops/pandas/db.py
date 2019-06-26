@@ -13,9 +13,9 @@ from django.core.cache import cache
 from django.db import connection
 from django.utils.translation import ugettext as _
 
-from dataops.pandas.columns import has_unique_column, is_unique_column
-from dataops.pandas.datatypes import pandas_datatype_names
-from dataops.sql import get_select_query_txt
+from ontask.apps.dataops.pandas.columns import has_unique_column, is_unique_column
+from ontask.apps.dataops.pandas.datatypes import pandas_datatype_names
+from ontask.apps.dataops.sql import get_select_query_txt
 from ontask import OnTaskDataFrameNoKey
 
 logger = logging.getLogger('console')

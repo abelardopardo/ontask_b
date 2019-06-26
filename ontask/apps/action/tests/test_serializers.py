@@ -7,7 +7,7 @@ import test
 
 from django.conf import settings
 
-from action.serializers import ActionSelfcontainedSerializer
+from ontask.apps.action.serializers import ActionSelfcontainedSerializer
 
 
 class ActionTestSerializers(test.OnTaskTestCase):

@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class ProfileConfig(AppConfig):
-    name = "profiles"
+    name = "ontask.apps.profiles"
     verbose_name = _('User Profiles')
 
     def ready(self):

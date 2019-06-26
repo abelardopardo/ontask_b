@@ -7,10 +7,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 
-from action.models import Action
-from action.views.import_export import do_import_action
-from dataops.pandas import check_wf_df, load_table
-from workflow.models import Workflow
+from ontask.apps.action.models import Action
+from ontask.apps.action.views.import_export import do_import_action
+from ontask.apps.dataops.pandas import check_wf_df, load_table
+from ontask.apps.workflow.models import Workflow
 
 
 class EmailActionTracking(test.OnTaskTestCase):

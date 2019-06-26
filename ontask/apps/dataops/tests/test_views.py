@@ -10,9 +10,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-from dataops.pandas import check_wf_df, load_table
-from dataops.sql.column_queries import is_column_in_table
-from workflow.models import Workflow
+from ontask.apps.dataops.pandas import check_wf_df, load_table
+from ontask.apps.dataops.sql.column_queries import is_column_in_table
+from ontask.apps.workflow.models import Workflow
 
 
 class DataopsSymbols(test.OnTaskLiveTestCase):

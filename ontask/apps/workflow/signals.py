@@ -5,8 +5,8 @@ import logging
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 
-from dataops.sql import delete_table
-from workflow.models import Workflow
+from ontask.apps.dataops.sql import delete_table
+from ontask.apps.workflow.models import Workflow
 
 logger = logging.getLogger("project")
 

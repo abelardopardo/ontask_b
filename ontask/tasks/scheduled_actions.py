@@ -9,13 +9,13 @@ import pytz
 from celery import shared_task
 from django.conf import settings as ontask_settings
 
-from action.models import Action
-from logs.models import Log
+from ontask.apps.action.models import Action
+from ontask.apps.logs.models import Log
 from ontask.tasks.basic import logger
 from ontask.tasks.send_canvas_email import send_canvas_email_messages
 from ontask.tasks.send_email import send_email_messages
 from ontask.tasks.send_json import send_json_objects
-from scheduler.models import ScheduledAction
+from ontask.apps.scheduler.models import ScheduledAction
 
 
 @shared_task

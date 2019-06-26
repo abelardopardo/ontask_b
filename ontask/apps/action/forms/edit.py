@@ -11,8 +11,8 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 
-from action.forms import FIELD_PREFIX
-from action.models import Action
+from ontask.apps.action.forms import FIELD_PREFIX
+from ontask.apps.action.models import Action
 from ontask.forms import date_time_widget_options
 
 

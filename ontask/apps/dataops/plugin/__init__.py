@@ -2,4 +2,4 @@
 
 """Functions and classes to manipulate OnTask Plugins."""
 
-from dataops.plugin.ontask_plugin import OnTaskTransformation, OnTaskModel
+from ontask.apps.dataops.plugin.ontask_plugin import OnTaskTransformation, OnTaskModel

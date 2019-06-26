@@ -19,14 +19,14 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-import dataops.sql.row_queries
+import ontask.apps.dataops.sql.row_queries
 import ontask
-from action.evaluate.template import render_action_template
-from action.forms import EnterActionIn
-from action.models import Action
-from dataops.formula import EVAL_EXP, evaluate_formula
-from dataops.pandas import get_table_row_by_index
-from dataops.sql.row_queries import get_rows
+from ontask.apps.action.evaluate.template import render_action_template
+from ontask.apps.action.forms import EnterActionIn
+from ontask.apps.action.models import Action
+from ontask.apps.dataops.formula import EVAL_EXP, evaluate_formula
+from ontask.apps.dataops.pandas import get_table_row_by_index
+from ontask.apps.dataops.sql.row_queries import get_rows
 
 
 def action_condition_evaluation(

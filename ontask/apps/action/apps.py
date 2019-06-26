@@ -9,5 +9,5 @@ from django.utils.translation import ugettext_lazy as _
 class ActionConfig(AppConfig):
     """Define AppConfig class."""
 
-    name = 'action'
+    name = 'ontask.apps.action'
     verbose_name = _('Actions, Conditions, Filters, Emails')

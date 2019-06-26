@@ -20,7 +20,7 @@ from builtins import object, str
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from action.models import ACTION_NAME_LENGTH, Action, Condition
+from ontask.apps.action.models import ACTION_NAME_LENGTH, Action, Condition
 from ontask import AVAILABLE_ACTION_TYPES, is_legal_name, ontask_prefs
 from ontask.forms import RestrictedFileField
 

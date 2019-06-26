@@ -13,8 +13,8 @@ from rest_framework.views import APIView
 
 from ontask.decorators import get_workflow
 from ontask.permissions import UserIsInstructor
-from workflow.models import Workflow
-from workflow.serialize_workflow import (
+from ontask.apps.workflow.models import Workflow
+from ontask.apps.workflow.serialize_workflow import (
     WorkflowListSerializer, WorkflowLockSerializer,
 )
 

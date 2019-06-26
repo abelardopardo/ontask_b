@@ -19,10 +19,10 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
-from action.views.clone import do_clone_action
-from dataops.pandas import check_wf_df
-from dataops.sql import clone_table
-from logs.models import Log
+from ontask.apps.action.views.clone import do_clone_action
+from ontask.apps.dataops.pandas import check_wf_df
+from ontask.apps.dataops.sql import clone_table
+from ontask.apps.logs.models import Log
 from ontask import create_new_name
 from ontask.celery import celery_is_up
 from ontask.decorators import ajax_required, get_workflow
@@ -30,10 +30,10 @@ from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.workflow_access import (
     remove_workflow_from_session, store_workflow_in_session,
 )
-from table.views.table_view import do_clone_view
-from workflow.forms import WorkflowForm
-from workflow.models import Workflow
-from workflow.ops import do_clone_column_only
+from ontask.apps.table.views.table_view import do_clone_view
+from ontask.apps.workflow.forms import WorkflowForm
+from ontask.apps.workflow.models import Workflow
+from ontask.apps.workflow.ops import do_clone_column_only
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):

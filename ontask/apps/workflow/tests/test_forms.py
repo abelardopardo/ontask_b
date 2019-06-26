@@ -2,7 +2,7 @@
 
 import test
 
-from workflow.forms import WorkflowForm
+from ontask.apps.workflow.forms import WorkflowForm
 
 
 class WorkflowFormTest(test.OnTaskTestCase):

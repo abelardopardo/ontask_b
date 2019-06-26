@@ -13,12 +13,12 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from dataops.pandas import load_table
-from logs.models import Log
+from ontask.apps.dataops.pandas import load_table
+from ontask.apps.logs.models import Log
 from ontask.decorators import ajax_required, get_column, get_workflow
 from ontask.permissions import is_instructor
-from workflow.models import Column, Workflow
-from workflow.ops import workflow_restrict_column
+from ontask.apps.workflow.models import Column, Workflow
+from ontask.apps.workflow.ops import workflow_restrict_column
 
 
 @user_passes_test(is_instructor)

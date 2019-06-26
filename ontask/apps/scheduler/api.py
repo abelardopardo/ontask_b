@@ -3,10 +3,10 @@
 from django.db.models import Q
 from rest_framework import generics
 
-from action.models import Action
+from ontask.apps.action.models import Action
 from ontask.permissions import UserIsInstructor
-from scheduler.models import ScheduledAction
-from scheduler.serializers import (
+from ontask.apps.scheduler.models import ScheduledAction
+from ontask.apps.scheduler.serializers import (
     ScheduledEmailSerializer, ScheduledJSONSerializer,
 )
 

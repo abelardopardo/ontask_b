@@ -16,15 +16,15 @@ from django.urls import resolve
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.forms import FIELD_PREFIX, PluginInfoForm
-from dataops.models import Plugin
-from dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
-from logs.models import Log
+from ontask.apps.dataops.forms import FIELD_PREFIX, PluginInfoForm
+from ontask.apps.dataops.models import Plugin
+from ontask.apps.dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
+from ontask.apps.logs.models import Log
 from ontask.celery import celery_is_up
 from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import run_plugin_task
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 class PluginAvailableTable(tables.Table):

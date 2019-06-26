@@ -13,11 +13,11 @@ from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
-from action.evaluate.action import evaluate_action
-from action.models import Action
-from logs.models import Log
-from ontask_oauth.models import OnTaskOAuthUserTokens
-from ontask_oauth.views import refresh_token
+from ontask.apps.action.evaluate.action import evaluate_action
+from ontask.apps.action.models import Action
+from ontask.apps.logs.models import Log
+from ontask.apps.ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask.apps.ontask_oauth.views import refresh_token
 
 logger = get_task_logger('celery_execution')
 

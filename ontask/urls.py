@@ -15,19 +15,19 @@ from django.views.i18n import JavaScriptCatalog
 from rest_framework.documentation import include_docs_urls
 
 import accounts.urls
-import action.urls
-import dataops.urls
-import logs.urls
-import ontask_oauth.urls
-import profiles.urls
-import scheduler.urls
-import table.urls
-import workflow.urls
-import workflow.views.home
-from dataops.pandas import set_engine
+import ontask.apps.action.urls
+import ontask.apps.dataops.urls
+import ontask.apps.logs.urls
+import ontask.apps.ontask_oauth.urls
+import ontask.apps.profiles.urls
+import ontask.apps.scheduler.urls
+import ontask.apps.table.urls
+import ontask.apps.workflow.urls
+import ontask.apps.workflow.views.home
+from ontask.apps.dataops.pandas import set_engine
 from ontask import views
 from ontask.templatetags.ontask_tags import ontask_version
-from workflow.views import home
+from ontask.apps.workflow.views import home
 
 api_description = ugettext(
     'The OnTask API offers functionality to manipulate workflows, tables '
@@ -40,7 +40,7 @@ urlpatterns = [
 
     path('lti_entry', views.lti_entry, name='lti_entry'),
 
-    path('not_authorized', workflow.views.home, name='not_authorized'),
+    path('not_authorized', ontask.apps.workflow.views.home, name='not_authorized'),
 
     path('about', views.AboutPage.as_view(), name='about'),
 
@@ -49,7 +49,7 @@ urlpatterns = [
         views.under_construction,
         name='under_construction'),
 
-    path('users', include(profiles.urls, namespace='profiles')),
+    path('users', include(ontask.apps.profiles.urls, namespace='profiles')),
 
     path('ota', admin.site.urls),
 
@@ -59,23 +59,23 @@ urlpatterns = [
 
     path('', include(accounts.urls, namespace='accounts')),
 
-    path('workflow/', include(workflow.urls, namespace='workflow')),
+    path('workflow/', include(ontask.apps.workflow.urls, namespace='workflow')),
 
-    path('dataops/', include(dataops.urls, namespace='dataops')),
+    path('dataops/', include(ontask.apps.dataops.urls, namespace='dataops')),
 
-    path('action/', include(action.urls, namespace='action')),
+    path('action/', include(ontask.apps.action.urls, namespace='action')),
 
-    path('table/', include(table.urls, namespace='table')),
+    path('table/', include(ontask.apps.table.urls, namespace='table')),
 
-    path('scheduler/', include(scheduler.urls, namespace='scheduler')),
+    path('scheduler/', include(ontask.apps.scheduler.urls, namespace='scheduler')),
 
-    path('logs/', include(logs.urls, namespace='logs')),
+    path('logs/', include(ontask.apps.logs.urls, namespace='logs')),
 
     path('summernote/', include('django_summernote.urls')),
 
     path(
         'ontask_oauth/',
-        include(ontask_oauth.urls,
+        include(ontask.apps.ontask_oauth.urls,
                 namespace='ontask_oauth')),
 
     path('tobedone', views.ToBeDone.as_view(), name='tobedone'),

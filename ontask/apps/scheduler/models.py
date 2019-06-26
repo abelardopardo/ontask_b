@@ -9,9 +9,9 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from action.models import Action
-from logs.models import Log
-from workflow.models import Column
+from ontask.apps.action.models import Action
+from ontask.apps.logs.models import Log
+from ontask.apps.workflow.models import Column
 
 
 class ScheduledAction(models.Model):

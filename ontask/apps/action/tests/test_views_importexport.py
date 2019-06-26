@@ -8,7 +8,7 @@ from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
-from action.views import action_import
+from ontask.apps.action.views import action_import
 import test
 
 

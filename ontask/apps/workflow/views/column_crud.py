@@ -14,21 +14,21 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from action.models import ActionColumnConditionTuple, Condition
-from dataops.formula import evaluation
-from dataops.pandas import (
+from ontask.apps.action.models import ActionColumnConditionTuple, Condition
+from ontask.apps.dataops.formula import evaluation
+from ontask.apps.dataops.pandas import (
     load_table, pandas_datatype_names, rename_df_column, store_dataframe,
 )
-from dataops.sql import add_column_to_db, db_rename_column
-from logs.models import Log
+from ontask.apps.dataops.sql import add_column_to_db, db_rename_column
+from ontask.apps.logs.models import Log
 from ontask.decorators import ajax_required, get_column, get_workflow
 from ontask.permissions import is_instructor
-from workflow.forms import (
+from ontask.apps.workflow.forms import (
     ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
     QuestionRenameForm, RandomColumnAddForm,
 )
-from workflow.models import Column, Workflow
-from workflow.ops import clone_wf_column, workflow_delete_column
+from ontask.apps.workflow.models import Column, Workflow
+from ontask.apps.workflow.ops import clone_wf_column, workflow_delete_column
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.

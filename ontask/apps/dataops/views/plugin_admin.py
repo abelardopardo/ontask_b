@@ -14,13 +14,13 @@ from django.urls.base import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.models import Plugin
-from dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
-from logs.models import Log
+from ontask.apps.dataops.models import Plugin
+from ontask.apps.dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
+from ontask.apps.logs.models import Log
 from ontask.decorators import ajax_required
 from ontask.workflow_access import remove_workflow_from_session
 from ontask.permissions import is_admin, is_instructor
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 class PluginAdminTable(tables.Table):

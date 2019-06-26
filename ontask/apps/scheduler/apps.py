@@ -6,5 +6,5 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class SchedulerConfig(AppConfig):
-    name = 'scheduler'
+    name = 'ontask.apps.scheduler'
     verbose_name = _('Task Scheduler')

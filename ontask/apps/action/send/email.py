@@ -18,14 +18,14 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
-from action import settings
-from action.evaluate.action import evaluate_action
-from action.models import Action
-from action.payloads import EmailPayload
-from dataops.sql.column_queries import add_column_to_db
-from logs.models import Log
+from ontask.apps.action import settings
+from ontask.apps.action.evaluate.action import evaluate_action
+from ontask.apps.action.models import Action
+from ontask.apps.action.payloads import EmailPayload
+from ontask.apps.dataops.sql.column_queries import add_column_to_db
+from ontask.apps.logs.models import Log
 from ontask import is_correct_email, simplify_datetime_str
-from workflow.models import Column
+from ontask.apps.workflow.models import Column
 
 logger = get_task_logger('celery_execution')
 

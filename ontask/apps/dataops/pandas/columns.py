@@ -6,7 +6,7 @@ from typing import List
 
 import pandas as pd
 
-from dataops.pandas.datatypes import pandas_datatype_names
+from ontask.apps.dataops.pandas.datatypes import pandas_datatype_names
 
 
 def get_column_statistics(df_column):

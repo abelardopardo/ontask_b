@@ -9,8 +9,8 @@ from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
-from dataops.sql import get_row
-from dataops.views import row_update
+from ontask.apps.dataops.sql import get_row
+from ontask.apps.dataops.views import row_update
 
 
 class DataopsViewsRow(test.OnTaskTestCase):

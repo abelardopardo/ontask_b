@@ -11,7 +11,7 @@ from django.template import Context, Template
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
-from action.models import Action, var_use_res
+from ontask.apps.action.models import Action, var_use_res
 
 # Variable name to store the workflow ID in the context used to render a
 # template

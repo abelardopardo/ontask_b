@@ -8,8 +8,8 @@ from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from action.models import Action
-from scheduler.models import ScheduledAction
+from ontask.apps.action.models import Action
+from ontask.apps.scheduler.models import ScheduledAction
 
 
 class ScheduleApiCreate(test.OnTaskApiTestCase):

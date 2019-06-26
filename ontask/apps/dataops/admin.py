@@ -4,7 +4,7 @@
 
 from django.contrib import admin
 
-from dataops.models import Plugin, SQLConnection
+from ontask.apps.dataops.models import Plugin, SQLConnection
 
 
 class PluginRegistryAdmin(admin.ModelAdmin):

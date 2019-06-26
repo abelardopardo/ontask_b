@@ -6,8 +6,8 @@ from django.conf import settings
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
 
-from .thread_local import set_current_request
-from .timer import Timer
+from ontask.apps.django_auth_lti.thread_local import set_current_request
+from ontask.apps.django_auth_lti.timer import Timer
 
 logger = logging.getLogger('django_auth_lti.backends')
 

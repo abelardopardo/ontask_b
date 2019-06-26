@@ -7,7 +7,7 @@ from builtins import next, object
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from table.models import View
+from ontask.apps.table.models import View
 
 
 class ViewAddForm(forms.ModelForm):

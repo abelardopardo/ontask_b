@@ -16,10 +16,10 @@ from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
 
 import ontask
-from dataops.formula import EVAL_TXT, evaluate_formula, evaluation
-from dataops.sql import get_num_rows, select_ids_all_false
-from logs.models import Log
-from workflow.models import Column, Workflow
+from ontask.apps.dataops.formula import EVAL_TXT, evaluate_formula, evaluation
+from ontask.apps.dataops.sql import get_num_rows, select_ids_all_false
+from ontask.apps.logs.models import Log
+from ontask.apps.workflow.models import Column, Workflow
 
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)

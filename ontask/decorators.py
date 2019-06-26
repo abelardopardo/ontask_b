@@ -11,9 +11,9 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from action.models import ActionColumnConditionTuple, Condition
+from ontask.apps.action.models import ActionColumnConditionTuple, Condition
 from ontask.workflow_access import access_workflow, store_workflow_in_session
-from table.models import View
+from ontask.apps.table.models import View
 
 
 def ajax_required(func):

@@ -11,11 +11,11 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.sql.row_queries import get_rows
+from ontask.apps.dataops.sql.row_queries import get_rows
 from ontask import is_correct_email
 from ontask.forms import date_time_widget_options
-from scheduler.models import ScheduledAction
-from workflow.models import Column
+from ontask.apps.scheduler.models import ScheduledAction
+from ontask.apps.workflow.models import Column
 
 
 class ScheduleForm(forms.ModelForm):

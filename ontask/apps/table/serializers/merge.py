@@ -8,8 +8,8 @@ import pandas as pd
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from dataops.pandas import detect_datetime_columns
-from table.serializers.pandas import DataFramePandasField
+from ontask.apps.dataops.pandas import detect_datetime_columns
+from ontask.apps.table.serializers.pandas import DataFramePandasField
 
 
 class DataFrameJSONField(serializers.Field):

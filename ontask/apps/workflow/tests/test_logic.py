@@ -15,11 +15,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from dataops.pandas import destroy_db_engine
-from workflow.import_export import (
+from ontask.apps.dataops.pandas import destroy_db_engine
+from ontask.apps.workflow.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 class WorkflowImportExport(test.OnTaskTestCase):

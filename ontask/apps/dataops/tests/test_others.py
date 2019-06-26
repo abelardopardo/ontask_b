@@ -2,7 +2,7 @@
 
 from django.test import TestCase
 
-from dataops.formula import EVAL_EXP, evaluation
+from ontask.apps.dataops.formula import EVAL_EXP, evaluation
 
 
 class HasVariableTest(TestCase):

@@ -12,11 +12,11 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from action.evaluate import get_action_evaluation_context, get_row_values
-from action.forms import FIELD_PREFIX, EnterActionIn
-from action.models import Action, ActionColumnConditionTuple
-from dataops.sql.row_queries import update_row
-from logs.models import Log
+from ontask.apps.action.evaluate import get_action_evaluation_context, get_row_values
+from ontask.apps.action.forms import FIELD_PREFIX, EnterActionIn
+from ontask.apps.action.models import Action, ActionColumnConditionTuple
+from ontask.apps.dataops.sql.row_queries import update_row
+from ontask.apps.logs.models import Log
 from ontask.permissions import has_access
 from ontask.views import ontask_handler404
 

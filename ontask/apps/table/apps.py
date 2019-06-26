@@ -6,5 +6,5 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class TableConfig(AppConfig):
-    name = 'table'
+    name = 'ontask.apps.table'
     verbose_name = _('Table')

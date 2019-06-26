@@ -11,10 +11,10 @@ import requests
 from celery.utils.log import get_task_logger
 from django.conf import settings as ontask_settings
 
-from action.evaluate.action import evaluate_action
-from action.models import Action
-from action.payloads import JSONPayload
-from logs.models import Log
+from ontask.apps.action.evaluate.action import evaluate_action
+from ontask.apps.action.models import Action
+from ontask.apps.action.payloads import JSONPayload
+from ontask.apps.logs.models import Log
 
 logger = get_task_logger('celery_execution')
 

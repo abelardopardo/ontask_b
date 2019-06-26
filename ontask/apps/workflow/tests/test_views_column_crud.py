@@ -8,8 +8,8 @@ import test
 from django.conf import settings
 from rest_framework import status
 
-from action.models import Action
-from dataops.pandas import load_table
+from ontask.apps.action.models import Action
+from ontask.apps.dataops.pandas import load_table
 
 
 class WorkflowTestViewColumnCrud(test.OnTaskTestCase):

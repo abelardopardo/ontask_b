@@ -15,14 +15,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from action.forms import ActionDescriptionForm
-from action.models import Action, ActionColumnConditionTuple, Condition
-from logs.models import Log
+from ontask.apps.action.forms import ActionDescriptionForm
+from ontask.apps.action.models import Action, ActionColumnConditionTuple, Condition
+from ontask.apps.logs.models import Log
 from ontask.decorators import ajax_required, get_action, get_columncondition
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
-from visualizations.plotly import PlotlyHandler
-from workflow.models import Workflow
+from ontask.apps.visualizations.plotly import PlotlyHandler
+from ontask.apps.workflow.models import Workflow
 
 
 class ColumnSelectedTable(tables.Table):

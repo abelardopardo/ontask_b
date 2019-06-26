@@ -4,7 +4,7 @@
 
 from django.urls import path
 
-from logs import api, resources, views
+from ontask.apps.logs import api, resources, views
 
 app_name = 'logs'
 

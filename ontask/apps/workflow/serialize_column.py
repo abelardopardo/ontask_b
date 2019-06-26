@@ -7,8 +7,8 @@ from builtins import object
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from dataops.pandas import pandas_datatype_names
-from workflow.models import Column
+from ontask.apps.dataops.pandas import pandas_datatype_names
+from ontask.apps.workflow.models import Column
 
 try:
     profile  # noqa: Z444

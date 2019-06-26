@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.core.exceptions import PermissionDenied
 
-from ontask_lti.tool_provider import DjangoToolProvider
+from ontask.apps.ontask_lti.tool_provider import DjangoToolProvider
 
 logger = logging.getLogger('ontask')
 

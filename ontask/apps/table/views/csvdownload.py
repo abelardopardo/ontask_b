@@ -8,11 +8,11 @@ import pandas as pd
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 
-from dataops.pandas import get_subframe
+from ontask.apps.dataops.pandas import get_subframe
 from ontask.decorators import get_view, get_workflow
 from ontask.permissions import is_instructor
-from table.models import View
-from workflow.models import Workflow
+from ontask.apps.table.models import View
+from ontask.apps.workflow.models import Workflow
 
 
 def _respond_csv(data_frame: pd.DataFrame) -> HttpResponse:

@@ -5,7 +5,7 @@ import test
 from django.shortcuts import reverse
 from rest_framework.authtoken.models import Token
 
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 class WorkflowApiCreate(test.OnTaskApiTestCase):

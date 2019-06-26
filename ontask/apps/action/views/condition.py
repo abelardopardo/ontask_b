@@ -10,13 +10,13 @@ from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.views import generic
 
-from action.forms import ConditionForm, FilterForm
-from action.models import Action, Condition
-from dataops.formula import EVAL_TXT, evaluate_formula, get_variables
-from logs.models import Log
+from ontask.apps.action.forms import ConditionForm, FilterForm
+from ontask.apps.action.models import Action, Condition
+from ontask.apps.dataops.formula import EVAL_TXT, evaluate_formula, get_variables
+from ontask.apps.logs.models import Log
 from ontask.decorators import ajax_required, get_action, get_condition
 from ontask.permissions import UserIsInstructor, is_instructor
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 def save_condition_form(

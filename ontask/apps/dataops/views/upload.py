@@ -14,16 +14,16 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
-from dataops.forms import SelectColumnUploadForm, SelectKeysForm
-from dataops.models import SQLConnection
-from dataops.pandas import load_table, perform_dataframe_upload_merge
-from dataops.pandas.dataframe import store_workflow_table
-from dataops.sql import table_queries
-from logs.models import Log
+from ontask.apps.dataops.forms import SelectColumnUploadForm, SelectKeysForm
+from ontask.apps.dataops.models import SQLConnection
+from ontask.apps.dataops.pandas import load_table, perform_dataframe_upload_merge
+from ontask.apps.dataops.pandas.dataframe import store_workflow_table
+from ontask.apps.dataops.sql import table_queries
+from ontask.apps.logs.models import Log
 from ontask.decorators import get_workflow
 from ontask.workflow_access import store_workflow_in_session
 from ontask.permissions import is_instructor
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 @user_passes_test(is_instructor)

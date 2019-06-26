@@ -24,12 +24,12 @@ import pandas as pd
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.forms.dataframeupload import (
+from ontask.apps.dataops.forms.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
-from dataops.models import SQLConnection
-from dataops.pandas import (
+from ontask.apps.dataops.models import SQLConnection
+from ontask.apps.dataops.pandas import (
     store_dataframe, store_temporary_dataframe, verify_data_frame,
 )
 from ontask import OnTaskDataFrameNoKey, ontask_prefs

@@ -4,7 +4,7 @@
 
 from django.contrib import admin
 
-from table.models import View
+from ontask.apps.table.models import View
 
 
 class ViewAdmin(admin.ModelAdmin):

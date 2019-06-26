@@ -4,7 +4,7 @@
 
 from django.contrib import admin
 
-from action.models import Action, Condition
+from ontask.apps.action.models import Action, Condition
 
 
 class ActionAdmin(admin.ModelAdmin):

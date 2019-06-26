@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from dataops.plugin import OnTaskModel
+from ontask.apps.dataops.plugin import OnTaskModel
 
 class_name = 'LinearModel'
 

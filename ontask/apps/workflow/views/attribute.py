@@ -9,11 +9,11 @@ from django.forms import forms
 from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 
-from logs.models import Log
+from ontask.apps.logs.models import Log
 from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import is_instructor
-from workflow.forms import AttributeItemForm
-from workflow.models import Workflow
+from ontask.apps.workflow.forms import AttributeItemForm
+from ontask.apps.workflow.models import Workflow
 
 
 def save_attribute_form(

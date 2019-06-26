@@ -3,7 +3,7 @@
 
 from django.contrib import admin
 
-from scheduler.models import ScheduledAction
+from ontask.apps.scheduler.models import ScheduledAction
 
 
 class ScheduledEmailActionAdmin(admin.ModelAdmin):

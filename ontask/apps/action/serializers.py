@@ -8,10 +8,14 @@ from typing import Optional
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from action.models import Action, ActionColumnConditionTuple, Condition
-from dataops.formula import get_variables
-from dataops.sql.column_queries import add_column_to_db
-from workflow.serialize_column import ColumnNameSerializer, ColumnSerializer
+from ontask.apps.action.models import (
+    Action, ActionColumnConditionTuple, Condition
+)
+from ontask.apps.dataops.formula import get_variables
+from ontask.apps.dataops.sql.column_queries import add_column_to_db
+from ontask.apps.workflow.serialize_column import (
+    ColumnNameSerializer, ColumnSerializer
+)
 
 try:
     profile  # noqa: Z444

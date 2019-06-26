@@ -4,14 +4,14 @@
 
 import os
 
-from dataops.plugin import OnTaskModel
-from dataops.plugin.plugin_manager import _verify_plugin
+from ontask.apps.dataops.plugin import OnTaskModel
+from ontask.apps.dataops.plugin.plugin_manager import _verify_plugin
 import test
 
 from django.conf import settings
 from rest_framework import status
 
-from dataops.models import Plugin
+from ontask.apps.dataops.models import Plugin
 
 class BogusPlugin(object):
     """Bogus class to be used for testing."""

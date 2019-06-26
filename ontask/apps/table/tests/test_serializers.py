@@ -10,8 +10,12 @@ import pandas as pd
 from django.conf import settings
 from django.db import IntegrityError
 
-from table.serializers import DataFrameJSONMergeSerializer, ViewSerializer
-from table.serializers.pandas import DataFramePandasSerializer, df_to_string
+from ontask.apps.table.serializers import (
+    DataFrameJSONMergeSerializer, ViewSerializer
+)
+from ontask.apps.table.serializers.pandas import (
+    DataFramePandasSerializer, df_to_string
+)
 
 
 class TableTestSerializers(test.OnTaskTestCase):

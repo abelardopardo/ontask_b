@@ -5,7 +5,7 @@ import django.db.models.deletion
 import django.utils.timezone
 from django.db import migrations, models
 
-from dataops.formula.evaluation import get_variables
+from ontask.apps.dataops.formula.evaluation import get_variables
 
 # Functions from the following migrations need manual copying.
 # Move them and any dependencies into this file, then update the

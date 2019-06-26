@@ -14,13 +14,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from action.models import Action, ActionColumnConditionTuple, Condition
-from dataops.formula import get_variables
-from logs.models import Log
+from ontask.apps.action.models import Action, ActionColumnConditionTuple, Condition
+from ontask.apps.dataops.formula import get_variables
+from ontask.apps.logs.models import Log
 from ontask import create_new_name
 from ontask.decorators import ajax_required, get_action, get_condition
 from ontask.permissions import is_instructor
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 def do_clone_condition(

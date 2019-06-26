@@ -8,7 +8,7 @@ import test
 from django.conf import settings
 from rest_framework import status
 
-from scheduler.models import ScheduledAction
+from ontask.apps.scheduler.models import ScheduledAction
 
 
 class SchedulerForms(test.OnTaskTestCase):

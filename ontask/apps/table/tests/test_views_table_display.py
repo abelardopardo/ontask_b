@@ -9,8 +9,8 @@ from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
-from dataops.pandas import get_table_row_by_index
-from table.views.table_display import row_delete
+from ontask.apps.dataops.pandas import get_table_row_by_index
+from ontask.apps.table.views.table_display import row_delete
 
 
 class TableTestViewTableDisplay(test.OnTaskTestCase):

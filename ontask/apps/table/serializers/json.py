@@ -5,7 +5,7 @@
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from table.serializers.merge import DataFrameJSONField
+from ontask.apps.table.serializers.merge import DataFrameJSONField
 
 
 class DataFrameJSONSerializer(serializers.Serializer):

@@ -6,7 +6,7 @@ Implementation of visualizations using the Plotly JS library
 import json
 from builtins import str
 
-from dataops.pandas import pandas_datatype_names
+from ontask.apps.dataops.pandas import pandas_datatype_names
 
 from . import VisHandler
 

@@ -12,15 +12,15 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import json
 import os
-import sys
 from os.path import dirname, exists, join
+import sys
 
-import environ
 from celery.schedules import crontab
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+import environ
 
 import ontask
 
@@ -93,9 +93,10 @@ AWS_LOCATION = get_from_os_or_env('AWS_LOCATION', env, 'static')
 
 BASE_URL = get_from_os_or_env('BASE_URL', env)
 
-DATAOPS_PLUGIN_DIRECTORY = get_from_os_or_env('DATAOPS_PLUGIN_DIRECTORY',
-                                              env,
-                                              '')
+DATAOPS_PLUGIN_DIRECTORY = get_from_os_or_env(
+    'DATAOPS_PLUGIN_DIRECTORY',
+    env,
+    '')
 
 DOMAIN_NAME = get_from_os_or_env('DOMAIN_NAME', env, 'localhost')
 
@@ -127,16 +128,17 @@ DATABASE_URL = env.db()
 DEBUG = env.bool('DEBUG', default=False)
 
 # JSON execution
-EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER',
-                                        default=False)
+EXECUTE_ACTION_JSON_TRANSFER = env.bool(
+    'EXECUTE_ACTION_JSON_TRANSFER',
+    default=False)
 
 # CACHE
 REDIS_URL = env.cache(
     'REDIS_URL',
     default='rediscache://localhost:6379/'
-            '?client_class=django_redis.client.DefaultClient'
-            '&timeout=1000'
-            '&key_prefix=ontask'
+            + '?client_class=django_redis.client.DefaultClient'
+            + '&timeout=1000'
+            + '&key_prefix=ontask'
 )
 
 # Login page
@@ -152,14 +154,15 @@ USE_SSL = env.bool('USE_SSL', default=False)
 ###############################################################################
 # Path to the src folder
 BASE_DIR = environ.Path(__file__) - 3
-# Path to the project root (where the SRC folder is)
-PROJECT_DIR = environ.Path(__file__) - 4
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 if not DATAOPS_PLUGIN_DIRECTORY:
-    DATAOPS_PLUGIN_DIRECTORY = os.path.join(BASE_DIR(), 'plugins')
+    DATAOPS_PLUGIN_DIRECTORY = os.path.join(
+        BASE_DIR(),
+        'lib',
+        'plugins')
 
 # Locale paths
 LOCALE_PATHS = [join(BASE_DIR(), 'locale')]
@@ -169,7 +172,7 @@ ONTASK_TESTING = sys.argv[1:2] == ['test']
 
 # Log everything to the logs directory at the top
 if not LOG_FOLDER:
-    LOG_FOLDER = join(PROJECT_DIR(), 'logs')
+    LOG_FOLDER = join(BASE_DIR(), 'logs')
 
 MEDIA_ROOT = join(BASE_DIR(), 'media')
 if AWS_ACCESS_KEY_ID:
@@ -184,7 +187,7 @@ else:
     STATICFILES_DIRS = [join(BASE_DIR(), STATIC_URL_SUFFIX)]
     STATIC_URL = BASE_URL + '/' + STATIC_URL_SUFFIX + '/'
 
-STATIC_ROOT = join(PROJECT_DIR(), 'site', 'static')
+STATIC_ROOT = join(BASE_DIR(), 'site', 'static')
 
 # URL pointing to the documentation
 ONTASK_HELP_URL = "html/index.html"
@@ -213,7 +216,8 @@ TEMPLATES = [
             ],
             'libraries': {
                 'ontask_tags': 'ontask.templatetags.ontask_tags',
-                'vis_include': 'visualizations.templatetags.vis_include',
+                'vis_include':
+                    'ontask.apps.visualizations.templatetags.vis_include',
             }
         },
     },
@@ -246,18 +250,18 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_summernote',
     'jquery',
-    'django_auth_lti',
+    'ontask.apps.django_auth_lti',
 
-    'accounts',
-    'core.apps.CoreConfig',
-    'profiles.apps.ProfileConfig',
-    'workflow.apps.WorkflowConfig',
-    'dataops.apps.DataopsConfig',
-    'table.apps.TableConfig',
-    'action.apps.ActionConfig',
-    'logs.apps.LogsConfig',
-    'scheduler.apps.SchedulerConfig',
-    'ontask_oauth.apps.OnTaskOauthConfig',
+    'ontask.apps.accounts',
+    'ontask.apps.core.apps.CoreConfig',
+    'ontask.apps.profiles.apps.ProfileConfig',
+    'ontask.apps.workflow.apps.WorkflowConfig',
+    'ontask.apps.dataops.apps.DataopsConfig',
+    'ontask.apps.table.apps.TableConfig',
+    'ontask.apps.action.apps.ActionConfig',
+    'ontask.apps.logs.apps.LogsConfig',
+    'ontask.apps.scheduler.apps.SchedulerConfig',
+    'ontask.apps.ontask_oauth.apps.OnTaskOauthConfig',
 ]
 
 if AWS_ACCESS_KEY_ID:
@@ -270,7 +274,7 @@ MIDDLEWARE = [
     # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django_auth_lti.middleware_patched.MultiLTILaunchAuthMiddleware',
+    'ontask.apps.django_auth_lti.middleware_patched.MultiLTILaunchAuthMiddleware',
     'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -287,7 +291,7 @@ PASSWORD_HASHERS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django_auth_lti.backends.LTIAuthBackend',
+    'ontask.apps.django_auth_lti.backends.LTIAuthBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
     # 'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend'

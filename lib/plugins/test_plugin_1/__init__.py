@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from dataops.plugin import OnTaskTransformation
+from ontask.apps.dataops.plugin import OnTaskTransformation
 
 # This field class_name contains the name of the class to load to execute the
 # plugin.

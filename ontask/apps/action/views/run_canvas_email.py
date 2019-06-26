@@ -14,18 +14,18 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from action.forms import CanvasEmailActionForm
-from action.models import Action
-from action.payloads import (
+from ontask.apps.action.forms import CanvasEmailActionForm
+from ontask.apps.action.models import Action
+from ontask.apps.action.payloads import (
     CanvasEmailPayload, get_or_set_action_info, set_action_payload,
 )
-from logs.models import Log
+from ontask.apps.logs.models import Log
 from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
 from ontask.tasks import send_canvas_email_messages
-from ontask_oauth.models import OnTaskOAuthUserTokens
-from ontask_oauth.views import get_initial_token_step1, refresh_token
-from workflow.models import Workflow
+from ontask.apps.ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask.apps.ontask_oauth.views import get_initial_token_step1, refresh_token
+from ontask.apps.workflow.models import Workflow
 
 
 def run_canvas_email_action(

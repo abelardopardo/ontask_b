@@ -9,15 +9,15 @@ from django.contrib.auth import get_user_model
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from action.models import Condition
-from dataops.pandas import load_table
-from dataops.sql import (
+from ontask.apps.action.models import Condition
+from ontask.apps.dataops.pandas import load_table
+from ontask.apps.dataops.sql import (
     add_column_to_db, copy_column_in_db, df_drop_column, get_rows,
     is_column_unique,
 )
-from logs.models import Log
+from ontask.apps.logs.models import Log
 from ontask import create_new_name
-from workflow.models import Column, Workflow
+from ontask.apps.workflow.models import Column, Workflow
 
 RANDOM_PWD_LENGTH = 50
 
@@ -27,7 +27,7 @@ def workflow_delete_column(
     column: Column,
     cond_to_delete: Optional[List[Condition]] = None,
 ):
-    """Remove column from workflow.
+    """Remove column from ontask.apps.workflow.
 
     Given a workflow and a column, removes it from the workflow (and the
     corresponding data frame

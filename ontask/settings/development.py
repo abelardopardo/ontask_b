@@ -18,7 +18,7 @@ if DEBUG:
 
 if ONTASK_TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
-    FIXTURE_DIRS = [os.path.join(PROJECT_DIR, 'initial_workflow')]
+    FIXTURE_DIRS = [os.path.join(BASE_DIR, 'initial_workflow')]
 else:
     # Show emails to console in DEBUG mode
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -110,11 +110,11 @@ LOGGING = {
             'propagate': True,
             'level': 'DEBUG',
         },
-        'django_auth_lti.backends': {
+        'ontask.apps.django_auth_lti.backends': {
             'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },
-        'django_auth_lti.middleware_patched': {
+        'ontask.apps.django_auth_lti.middleware_patched': {
             'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },

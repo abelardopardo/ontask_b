@@ -13,22 +13,22 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
-from action.evaluate import (
+from ontask.apps.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
-from action.forms import ValueExcludeForm
-from action.models import Action
-from action.payloads import get_action_payload
-from action.views.run_canvas_email import run_canvas_email_action
-from action.views.run_email import run_email_action
-from action.views.run_json import run_json_action
-from action.views.run_survey import run_survey_action
-from action.views.serve_survey import serve_survey_row
-from logs.models import Log
+from ontask.apps.action.forms import ValueExcludeForm
+from ontask.apps.action.models import Action
+from ontask.apps.action.payloads import get_action_payload
+from ontask.apps.action.views.run_canvas_email import run_canvas_email_action
+from ontask.apps.action.views.run_email import run_email_action
+from ontask.apps.action.views.run_json import run_json_action
+from ontask.apps.action.views.run_survey import run_survey_action
+from ontask.apps.action.views.serve_survey import serve_survey_row
+from ontask.apps.logs.models import Log
 from ontask.celery import celery_is_up
 from ontask.decorators import get_action, get_workflow
 from ontask.permissions import is_instructor
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 fn_distributor = {
     Action.personalized_text: run_email_action,

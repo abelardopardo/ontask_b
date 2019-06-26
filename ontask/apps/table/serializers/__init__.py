@@ -2,11 +2,11 @@
 
 """Functions to serialize data frames as JSON, pandas."""
 
-from table.serializers.json import DataFrameJSONSerializer
-from table.serializers.merge import (
+from ontask.apps.table.serializers.json import DataFrameJSONSerializer
+from ontask.apps.table.serializers.merge import (
     DataFrameJSONMergeSerializer, DataFramePandasMergeSerializer,
 )
-from table.serializers.pandas import (
+from ontask.apps.table.serializers.pandas import (
     DataFramePandasField, DataFramePandasSerializer, string_to_df,
 )
-from table.serializers.view import ViewSerializer
+from ontask.apps.table.serializers.view import ViewSerializer

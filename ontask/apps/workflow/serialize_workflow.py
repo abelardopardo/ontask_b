@@ -8,11 +8,11 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
-from action.serializers import ActionSerializer
-from dataops.pandas import store_table
-from table.serializers import DataFramePandasField, ViewSerializer
-from workflow.models import Workflow
-from workflow.serialize_column import ColumnSerializer
+from ontask.apps.action.serializers import ActionSerializer
+from ontask.apps.dataops.pandas import store_table
+from ontask.apps.table.serializers import DataFramePandasField, ViewSerializer
+from ontask.apps.workflow.models import Workflow
+from ontask.apps.workflow.serialize_column import ColumnSerializer
 
 try:
     profile  # noqa: Z444

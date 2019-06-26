@@ -4,7 +4,7 @@
 
 from django.urls import path
 
-from action.views import (
+from ontask.apps.action.views import (
     ActionCreateView, ActionUpdateView, ConditionCreateView, FilterCreateView,
     action_import, action_index, action_out_save_content, action_zip_export,
     clone_action, clone_condition, delete_action, delete_condition,

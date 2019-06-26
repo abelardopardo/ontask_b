@@ -13,14 +13,14 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskException
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 def access_workflow(
     request,
     wid: Optional[int],
     select_related: Optional[Union[str, List]] = None,
-    prefetch_related: Optional[Union[str, List]] = None,
+    prefetch_related:  Optional[Union[str, List]] = None,
 ) -> Optional[Workflow]:
     """Verify that the workflow stored in the request can be accessed.
 

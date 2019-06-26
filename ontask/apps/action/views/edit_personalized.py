@@ -10,14 +10,14 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from action.evaluate import render_action_template
-from action.forms import EditActionOutForm, EnableURLForm, FilterForm
-from action.models import Action, Condition
-from logs.models import Log
+from ontask.apps.action.evaluate import render_action_template
+from ontask.apps.action.forms import EditActionOutForm, EnableURLForm, FilterForm
+from ontask.apps.action.models import Action, Condition
+from ontask.apps.logs.models import Log
 from ontask.decorators import ajax_required, get_action
 from ontask.permissions import is_instructor
-from visualizations.plotly import PlotlyHandler
-from workflow.models import Workflow
+from ontask.apps.visualizations.plotly import PlotlyHandler
+from ontask.apps.workflow.models import Workflow
 
 
 def text_renders_correctly(

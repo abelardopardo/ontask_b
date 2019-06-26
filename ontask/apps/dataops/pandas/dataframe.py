@@ -10,15 +10,15 @@ import pandas as pd
 from django.conf import settings
 from django.utils.translation import gettext, ugettext_lazy as _
 
-from dataops.formula import evaluation
-from dataops.pandas import are_unique_columns, is_unique_column
-from dataops.pandas.datatypes import pandas_datatype_names
-from dataops.pandas.db import store_table
-from dataops.sql import (
+from ontask.apps.dataops.formula import evaluation
+from ontask.apps.dataops.pandas import are_unique_columns, is_unique_column
+from ontask.apps.dataops.pandas.datatypes import pandas_datatype_names
+from ontask.apps.dataops.pandas.db import store_table
+from ontask.apps.dataops.sql import (
     db_rename_column, delete_table, df_drop_column, get_num_rows, rename_table,
 )
-from dataops.sql.column_queries import get_df_column_types
-from dataops.sql.row_queries import get_rows
+from ontask.apps.dataops.sql.column_queries import get_df_column_types
+from ontask.apps.dataops.sql.row_queries import get_rows
 
 logger = logging.getLogger('console')
 

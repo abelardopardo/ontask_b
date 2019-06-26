@@ -11,12 +11,12 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 
-from dataops.pandas import get_column_statistics, load_table
-from dataops.sql.row_queries import get_rows
+from ontask.apps.dataops.pandas import get_column_statistics, load_table
+from ontask.apps.dataops.sql.row_queries import get_rows
 from ontask.decorators import ajax_required, get_column, get_workflow
 from ontask.permissions import is_instructor
-from visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
-from workflow.models import Column, Workflow
+from ontask.apps.visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
+from ontask.apps.workflow.models import Column, Workflow
 
 VISUALIZATION_WIDTH = 468
 VISUALIZATION_HEIGHT = 250

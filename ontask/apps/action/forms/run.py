@@ -28,11 +28,11 @@ from django import forms
 from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext_lazy as _
 
-from action.forms import SUFFIX_LENGTH
-from action.models import Action
-from action.payloads import EmailPayload
-from dataops.sql.column_queries import is_column_unique
-from dataops.sql.row_queries import get_rows
+from ontask.apps.action.forms import SUFFIX_LENGTH
+from ontask.apps.action.models import Action
+from ontask.apps.action.payloads import EmailPayload
+from ontask.apps.dataops.sql.column_queries import is_column_unique
+from ontask.apps.dataops.sql.row_queries import get_rows
 from ontask import is_correct_email
 from ontask.forms import date_time_widget_options
 

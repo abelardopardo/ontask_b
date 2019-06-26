@@ -18,9 +18,9 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
-import dataops.pandas.datatypes
-import dataops.pandas.db
-from dataops.sql import delete_table
+import ontask.apps.dataops.pandas.datatypes
+import ontask.apps.dataops.pandas.db
+from ontask.apps.dataops.sql import delete_table
 
 FIELD_MID_SIZE = 512
 FIELD_LONG_SIZE = 2048
@@ -147,7 +147,7 @@ class Workflow(models.Model):
 
     def data_frame(self):
         """Access the data frame by the serializer."""
-        return dataops.pandas.db.load_table(self.get_data_frame_table_name())
+        return ontask.apps.dataops.pandas.db.load_table(self.get_data_frame_table_name())
 
     def get_data_frame_table_name(self):
         """Get the table name containing the data frame.
@@ -176,7 +176,7 @@ class Workflow(models.Model):
         Boolean stating if there is a table storing a data frame
         :return: True if the workflow has a table storing the data frame
         """
-        return dataops.pandas.db.is_table_in_db(
+        return ontask.apps.dataops.pandas.db.is_table_in_db(
             self.get_data_frame_table_name())
 
     def get_column_info(self):
@@ -271,7 +271,7 @@ class Workflow(models.Model):
 
         :return: If the workflow has a dataframe
         """
-        return dataops.pandas.db.is_table_in_db(
+        return ontask.apps.dataops.pandas.db.is_table_in_db(
             self.get_data_frame_table_name())
 
     def is_locked(self):
@@ -513,7 +513,7 @@ class Column(models.Model):
         choices=[
             (dtype, dtype)
             for __, dtype in list(
-                dataops.pandas.datatypes.pandas_datatype_names.items())],
+                ontask.apps.dataops.pandas.datatypes.pandas_datatype_names.items())],
         verbose_name=_('type of data to store in the column'))
 
     # Boolean stating if the column is a unique key

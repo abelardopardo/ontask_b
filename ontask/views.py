@@ -9,7 +9,7 @@ from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
-from django_auth_lti.decorators import lti_role_required
+from ontask.apps.django_auth_lti.decorators import lti_role_required
 from ontask.decorators import ajax_required
 from ontask.permissions import UserIsInstructor
 from ontask.tasks import increase_track_count

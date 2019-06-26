@@ -16,17 +16,17 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django_tables2 import A
 
-from action.forms import ActionForm, ActionUpdateForm
-from action.models import Action
-from action.payloads import set_action_payload
-from action.views.edit_personalized import edit_action_out
-from action.views.edit_survey import edit_action_in
-from logs.models import Log
+from ontask.apps.action.forms import ActionForm, ActionUpdateForm
+from ontask.apps.action.models import Action
+from ontask.apps.action.payloads import set_action_payload
+from ontask.apps.action.views.edit_personalized import edit_action_out
+from ontask.apps.action.views.edit_survey import edit_action_in
+from ontask.apps.logs.models import Log
 from ontask import simplify_datetime_str
 from ontask.decorators import ajax_required, get_action, get_workflow
 from ontask.permissions import UserIsInstructor, is_instructor
 from ontask.tables import OperationsColumn
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 class ActionTable(tables.Table):

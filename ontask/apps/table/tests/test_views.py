@@ -9,8 +9,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from dataops.pandas import load_table
-from workflow.models import Workflow
+from ontask.apps.dataops.pandas import load_table
+from ontask.apps.workflow.models import Workflow
 
 
 class TableDerivedColumns(test.OnTaskLiveTestCase):

@@ -1,8 +1,8 @@
 from celery import shared_task
 from django.utils.translation import ugettext
 
-from action.payloads import CanvasEmailPayload
-from action.send import send_canvas_emails
+from ontask.apps.action.payloads import CanvasEmailPayload
+from ontask.apps.action.send import send_canvas_emails
 from ontask.tasks.basic import get_execution_items, get_log_item
 
 

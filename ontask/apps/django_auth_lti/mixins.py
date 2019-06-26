@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
-from django_auth_lti.verification import is_allowed
+from ontask.apps.django_auth_lti.verification import is_allowed
 
 
 class LTIUtilityMixin(object):

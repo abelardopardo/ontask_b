@@ -7,7 +7,7 @@ from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
-from .timer import Timer
+from ontask.apps.django_auth_lti.timer import Timer
 
 logger = logging.getLogger('ontask')
 

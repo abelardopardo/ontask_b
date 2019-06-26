@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
-from dataops.formula.evaluation import get_variables
+from ontask.apps.dataops.formula.evaluation import get_variables
 
 
 def add_columns_to_conditions(apps, schema_editor):

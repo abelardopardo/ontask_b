@@ -5,8 +5,8 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from table import api, views
-from table.views import stats
+from ontask.apps.table import api, views
+from ontask.apps.table.views import stats
 
 app_name = 'table'
 

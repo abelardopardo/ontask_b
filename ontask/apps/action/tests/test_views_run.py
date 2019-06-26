@@ -12,8 +12,8 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from action.payloads import CanvasEmailPayload, EmailPayload, JSONPayload
-from ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask.apps.action.payloads import CanvasEmailPayload, EmailPayload, JSONPayload
+from ontask.apps.ontask_oauth.models import OnTaskOAuthUserTokens
 
 
 class ActionViewRunAction(test.OnTaskTestCase):

@@ -14,9 +14,9 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
-from action.payloads import get_action_payload
+from ontask.apps.action.payloads import get_action_payload
 from ontask.permissions import is_instructor
-from ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask.apps.ontask_oauth.models import OnTaskOAuthUserTokens
 
 return_url_key = 'oauth_return_url'
 oauth_hash_key = 'oauth_hash'

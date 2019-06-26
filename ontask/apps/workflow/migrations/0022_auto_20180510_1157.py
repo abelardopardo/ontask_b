@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
-from dataops.pandas import load_table
+from ontask.apps.dataops.pandas import load_table
 
 
 def forwards(apps, schema_editor):

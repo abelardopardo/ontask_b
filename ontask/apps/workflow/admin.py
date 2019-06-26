@@ -4,7 +4,7 @@
 
 from django.contrib import admin
 
-from workflow.models import Column, Workflow
+from ontask.apps.workflow.models import Column, Workflow
 
 
 class WorkflowAdmin(admin.ModelAdmin):

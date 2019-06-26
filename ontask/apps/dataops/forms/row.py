@@ -4,8 +4,8 @@
 
 from django import forms
 
-from action.forms import column_to_field
-from dataops.forms.upload import FIELD_PREFIX
+from ontask.apps.action.forms import column_to_field
+from ontask.apps.dataops.forms.upload import FIELD_PREFIX
 
 
 class RowForm(forms.Form):

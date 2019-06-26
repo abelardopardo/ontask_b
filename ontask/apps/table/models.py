@@ -7,8 +7,8 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.sql import get_num_rows
-from workflow.models import Column, Workflow
+from ontask.apps.dataops.sql import get_num_rows
+from ontask.apps.workflow.models import Column, Workflow
 
 
 class View(models.Model):

@@ -1,9 +1,9 @@
 from celery import shared_task
 from django.utils.translation import ugettext
 
-from action.payloads import JSONPayload
-from action.send import send_json
-from logs.models import Log
+from ontask.apps.action.payloads import JSONPayload
+from ontask.apps.action.send import send_json
+from ontask.apps.logs.models import Log
 from ontask.tasks.basic import get_execution_items, get_log_item
 
 

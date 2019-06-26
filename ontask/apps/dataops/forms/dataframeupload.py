@@ -8,8 +8,8 @@ import pandas as pd
 from django.conf import settings as ontask_settings
 from smart_open import smart_open
 
-from dataops.models import SQLConnection
-from dataops.pandas import create_db_engine
+from ontask.apps.dataops.models import SQLConnection
+from ontask.apps.dataops.pandas import create_db_engine
 
 
 def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:

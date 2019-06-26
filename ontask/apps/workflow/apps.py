@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class WorkflowConfig(AppConfig):
-    name = 'workflow'
+    name = 'ontask.apps.workflow'
     verbose_name = _('Workflows')
 
     def ready(self):

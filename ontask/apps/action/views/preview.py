@@ -13,14 +13,14 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from action.evaluate import (
+from ontask.apps.action.evaluate import (
     action_condition_evaluation, evaluate_row_action_in,
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
-from action.models import Action
+from ontask.apps.action.models import Action
 from ontask.decorators import ajax_required, get_action
 from ontask.permissions import is_instructor
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 @csrf_exempt

@@ -8,9 +8,9 @@ from celery.utils.log import get_task_logger
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
 
-from action.models import Action
-from logs.models import Log
-from workflow.models import Workflow
+from ontask.apps.action.models import Action
+from ontask.apps.logs.models import Log
+from ontask.apps.workflow.models import Workflow
 
 logger = get_task_logger('celery_execution')
 

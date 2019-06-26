@@ -2,7 +2,7 @@
 
 from django.urls import path
 
-from ontask_oauth import views
+from ontask.apps.ontask_oauth import views
 
 app_name = 'ontask_oauth'
 

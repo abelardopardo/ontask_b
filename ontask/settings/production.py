@@ -110,11 +110,11 @@ LOGGING = {
             'propagate': True,
             'level': 'DEBUG',
         },
-        'django_auth_lti.backends': {
+        'ontask.apps.django_auth_lti.backends': {
             'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },
-        'django_auth_lti.middleware_patched': {
+        'ontask.apps.django_auth_lti.middleware_patched': {
             'handlers': ['ontask_log_file'],
             'level': 'DEBUG',
         },

@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import available_attrs
 
-from django_auth_lti.verification import is_allowed
+from ontask.apps.django_auth_lti.verification import is_allowed
 
 
 def lti_role_required(allowed_roles,

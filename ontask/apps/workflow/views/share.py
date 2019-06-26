@@ -10,11 +10,11 @@ from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from logs.models import Log
+from ontask.apps.logs.models import Log
 from ontask.decorators import ajax_required, get_workflow
 from ontask.permissions import is_instructor
-from workflow.forms import SharedForm
-from workflow.models import Workflow
+from ontask.apps.workflow.forms import SharedForm
+from ontask.apps.workflow.models import Workflow
 
 
 @user_passes_test(is_instructor)

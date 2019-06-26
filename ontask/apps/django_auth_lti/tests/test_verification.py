@@ -3,7 +3,7 @@ from unittest import TestCase
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from mock import MagicMock
 
-from django_auth_lti.verification import is_allowed
+from ontask.apps.django_auth_lti.verification import is_allowed
 
 
 class TestVerification(TestCase):

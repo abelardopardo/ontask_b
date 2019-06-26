@@ -7,8 +7,8 @@ from typing import Dict
 import pandas as pd
 from django.utils.translation import gettext
 
-from dataops.pandas.columns import has_unique_column, is_unique_column
-from dataops.pandas.dataframe import store_dataframe
+from ontask.apps.dataops.pandas.columns import has_unique_column, is_unique_column
+from ontask.apps.dataops.pandas.dataframe import store_dataframe
 
 
 def _perform_non_overlapping_column_merge(

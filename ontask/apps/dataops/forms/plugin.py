@@ -7,7 +7,7 @@ from django import forms
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from dataops.forms.upload import FIELD_PREFIX
+from ontask.apps.dataops.forms.upload import FIELD_PREFIX
 from ontask.forms import date_time_widget_options
 
 STRING_PARAM_MAX_LENGTH = 1024

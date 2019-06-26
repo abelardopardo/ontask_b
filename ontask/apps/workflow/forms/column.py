@@ -7,10 +7,10 @@ from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.pandas import is_unique_column, load_table
+from ontask.apps.dataops.pandas import is_unique_column, load_table
 from ontask import is_legal_name
 from ontask.forms import date_time_widget_options
-from workflow.models import Column
+from ontask.apps.workflow.models import Column
 
 INITIAL_VALUE_LENGTH = 512
 

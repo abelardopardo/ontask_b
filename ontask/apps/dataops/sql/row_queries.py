@@ -8,8 +8,8 @@ from django.db import connection
 from psycopg2 import sql
 from psycopg2.extras import DictCursor
 
-from dataops.formula import EVAL_SQL, evaluate_formula
-from dataops.sql.table_queries import get_boolean_clause, get_select_query
+from ontask.apps.dataops.formula import EVAL_SQL, evaluate_formula
+from ontask.apps.dataops.sql.table_queries import get_boolean_clause, get_select_query
 from ontask import OnTaskDBIdentifier
 
 

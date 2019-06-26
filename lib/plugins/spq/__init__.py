@@ -5,7 +5,7 @@ from builtins import str
 
 import pandas as pd
 
-from dataops.plugin import OnTaskTransformation
+from ontask.apps.dataops.plugin import OnTaskTransformation
 
 class_name = 'SPQEvaluate'
 

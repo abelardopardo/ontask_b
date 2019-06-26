@@ -9,10 +9,10 @@ from test.compare import compare_workflows
 from django.conf import settings
 from rest_framework import status
 
-from action.models import Action, Condition
+from ontask.apps.action.models import Action, Condition
 from ontask import entity_prefix
-from table.models import View
-from workflow.models import Column, Workflow
+from ontask.apps.table.models import View
+from ontask.apps.workflow.models import Column, Workflow
 
 
 class WorkflowTestViewWorkflowCrud(test.OnTaskTestCase):

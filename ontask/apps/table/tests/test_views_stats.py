@@ -8,7 +8,7 @@ import test
 from django.conf import settings
 from rest_framework import status
 
-from dataops.pandas import get_table_row_by_index
+from ontask.apps.dataops.pandas import get_table_row_by_index
 
 
 class TableTestStatView(test.OnTaskTestCase):

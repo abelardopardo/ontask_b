@@ -5,7 +5,7 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
-from dataops.pandas import load_table
+from ontask.apps.dataops.pandas import load_table
 
 # Functions from the following migrations need manual copying.
 # Move them and any dependencies into this file, then update the

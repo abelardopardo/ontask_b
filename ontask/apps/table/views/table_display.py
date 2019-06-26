@@ -18,13 +18,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from pytz import timezone
 
-from core.datatables import DataTablesServerSidePaging
-from dataops.sql import delete_row, search_table
+from ontask.apps.core.datatables import DataTablesServerSidePaging
+from ontask.apps.dataops.sql import delete_row, search_table
 from ontask.decorators import ajax_required, get_view, get_workflow
 from ontask.permissions import is_instructor
-from table.models import View
-from visualizations.plotly import PlotlyHandler
-from workflow.models import Workflow
+from ontask.apps.table.models import View
+from ontask.apps.visualizations.plotly import PlotlyHandler
+from ontask.apps.workflow.models import Workflow
 
 
 def _render_table_display_page(

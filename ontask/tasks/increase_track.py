@@ -3,9 +3,9 @@ from django.contrib.auth import get_user_model
 from django.core import signing
 from django.utils.translation import ugettext
 
-import dataops.sql
-from action.models import Action
-from logs.models import Log
+import ontask.apps.dataops.sql
+from ontask.apps.action.models import Action
+from ontask.apps.logs.models import Log
 from ontask.tasks.basic import logger
 
 
@@ -79,7 +79,7 @@ def increase_track_count(method, get_dict):
     if column_dst:
         try:
             # Increase the relevant cell by one
-            dataops.sql.row_queries.increase_row_integer(
+            ontask.apps.dataops.sql.row_queries.increase_row_integer(
                 action.workflow.get_data_frame_table_name(),
                 column_dst,
                 column_to,

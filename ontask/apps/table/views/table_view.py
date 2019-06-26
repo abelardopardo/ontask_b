@@ -14,15 +14,15 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.formula import get_variables
-from logs.models import Log
+from ontask.apps.dataops.formula import get_variables
+from ontask.apps.logs.models import Log
 from ontask import create_new_name
 from ontask.decorators import ajax_required, get_view, get_workflow
 from ontask.permissions import is_instructor
 from ontask.tables import OperationsColumn
-from table.forms import ViewAddForm
-from table.models import View
-from workflow.models import Workflow
+from ontask.apps.table.forms import ViewAddForm
+from ontask.apps.table.models import View
+from ontask.apps.workflow.models import Workflow
 
 
 class ViewTable(tables.Table):

@@ -11,14 +11,14 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from dataops.forms import FIELD_PREFIX, RowForm
-from dataops.sql import get_row, update_row
-from dataops.sql.row_queries import insert_row
-from logs.models import Log
+from ontask.apps.dataops.forms import FIELD_PREFIX, RowForm
+from ontask.apps.dataops.sql import get_row, update_row
+from ontask.apps.dataops.sql.row_queries import insert_row
+from ontask.apps.logs.models import Log
 from ontask.decorators import get_workflow
 from ontask.permissions import is_instructor
-from workflow.models import Workflow
-from workflow.ops import check_key_columns
+from ontask.apps.workflow.models import Workflow
+from ontask.apps.workflow.ops import check_key_columns
 
 
 @user_passes_test(is_instructor)

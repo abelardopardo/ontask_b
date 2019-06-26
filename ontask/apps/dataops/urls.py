@@ -4,7 +4,7 @@
 
 from django.urls import path
 
-from dataops.views import (
+from ontask.apps.dataops.views import (
     csvupload_start, diagnose, excelupload_start, googlesheetupload_start,
     moreinfo, plugin_invoke, row_create, row_update, s3upload_start,
     sqlconn_add, sqlconn_delete, sqlconnection, sqlconnection_admin_index,

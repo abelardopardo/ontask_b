@@ -17,7 +17,7 @@ import itertools
 
 from psycopg2 import sql
 
-from dataops.formula import operands
+from ontask.apps.dataops.formula import operands
 
 
 def evaluate_formula(node, eval_type, given_variables=None):

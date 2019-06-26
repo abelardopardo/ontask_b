@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from django.urls.base import reverse
 
 from ontask.permissions import is_admin, is_instructor
-from workflow.views.workflow_crud import index
+from ontask.apps.workflow.views.workflow_crud import index
 
 
 def home(request: HttpRequest) -> HttpResponse:

@@ -15,13 +15,13 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from action.forms import ActionImportForm
-from action.models import Action
-from action.serializers import ActionSelfcontainedSerializer
-from logs.models import Log
+from ontask.apps.action.forms import ActionImportForm
+from ontask.apps.action.models import Action
+from ontask.apps.action.serializers import ActionSelfcontainedSerializer
+from ontask.apps.logs.models import Log
 from ontask.decorators import get_action, get_workflow
 from ontask.permissions import is_instructor
-from workflow.models import Workflow
+from ontask.apps.workflow.models import Workflow
 
 
 @user_passes_test(is_instructor)

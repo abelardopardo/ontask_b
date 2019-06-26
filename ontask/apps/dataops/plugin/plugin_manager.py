@@ -16,12 +16,12 @@ from django.contrib import messages
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from dataops import settings
-from dataops.models import Plugin
-from dataops.pandas import load_table, perform_dataframe_upload_merge
-from dataops.plugin import ontask_plugin
-from dataops.plugin.ontask_plugin import OnTaskPluginAbstract
-from logs.models import Log
+from ontask.apps.dataops import settings
+from ontask.apps.dataops.models import Plugin
+from ontask.apps.dataops.pandas import load_table, perform_dataframe_upload_merge
+from ontask.apps.dataops.plugin import ontask_plugin
+from ontask.apps.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
+from ontask.apps.logs.models import Log
 
 type_function = {
     'integer': int,

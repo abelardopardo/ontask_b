@@ -5,7 +5,7 @@ from django import template
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-from django_auth_lti.thread_local import get_current_request
+from ontask.apps.django_auth_lti.thread_local import get_current_request
 
 logger = logging.getLogger('ontask')
 register = template.Library()
