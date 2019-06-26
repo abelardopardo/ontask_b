@@ -14,8 +14,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask.apps.action.models import Action
-from ontask.apps.dataops.pandas import destroy_db_engine
+from ontask.action.models import Action
+from ontask.dataops.pandas import destroy_db_engine
 
 
 class TutorialCaptures(ScreenTests):

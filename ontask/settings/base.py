@@ -212,12 +212,12 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
-                'ontask.context_processors.conf_to_context',
+                'ontask.core.context_processors.conf_to_context',
             ],
             'libraries': {
                 'ontask_tags': 'ontask.templatetags.ontask_tags',
                 'vis_include':
-                    'ontask.apps.visualizations.templatetags.vis_include',
+                    'ontask.visualizations.templatetags.vis_include',
             }
         },
     },
@@ -250,18 +250,18 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_summernote',
     'jquery',
-    'ontask.apps.django_auth_lti',
+    'ontask.django_auth_lti',
 
-    'ontask.apps.accounts',
-    'ontask.apps.core.apps.CoreConfig',
-    'ontask.apps.profiles.apps.ProfileConfig',
-    'ontask.apps.workflow.apps.WorkflowConfig',
-    'ontask.apps.dataops.apps.DataopsConfig',
-    'ontask.apps.table.apps.TableConfig',
-    'ontask.apps.action.apps.ActionConfig',
-    'ontask.apps.logs.apps.LogsConfig',
-    'ontask.apps.scheduler.apps.SchedulerConfig',
-    'ontask.apps.ontask_oauth.apps.OnTaskOauthConfig',
+    'ontask.accounts',
+    'ontask.core.apps.CoreConfig',
+    'ontask.profiles.apps.ProfileConfig',
+    'ontask.workflow.apps.WorkflowConfig',
+    'ontask.dataops.apps.DataopsConfig',
+    'ontask.table.apps.TableConfig',
+    'ontask.action.apps.ActionConfig',
+    'ontask.logs.apps.LogsConfig',
+    'ontask.scheduler.apps.SchedulerConfig',
+    'ontask.ontask_oauth.apps.OnTaskOauthConfig',
 ]
 
 if AWS_ACCESS_KEY_ID:
@@ -274,7 +274,7 @@ MIDDLEWARE = [
     # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'ontask.apps.django_auth_lti.middleware_patched.MultiLTILaunchAuthMiddleware',
+    'ontask.django_auth_lti.middleware_patched.MultiLTILaunchAuthMiddleware',
     'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -291,7 +291,7 @@ PASSWORD_HASHERS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'ontask.apps.django_auth_lti.backends.LTIAuthBackend',
+    'ontask.django_auth_lti.backends.LTIAuthBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
     # 'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend'

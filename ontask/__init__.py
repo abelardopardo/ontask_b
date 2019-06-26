@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
 
-from ontask.celery import app as celery_app
+from ontask.core.celery import app as celery_app
 
 __all__ = [
     'celery_app', 'OnTaskException', 'is_legal_name',

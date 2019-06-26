@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask.apps.dataops.pandas import destroy_db_engine
+from ontask.dataops.pandas import destroy_db_engine
 
 
 class Scenario1Captures(ScreenTests):

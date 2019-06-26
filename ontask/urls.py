@@ -14,20 +14,20 @@ from django.views.decorators.cache import cache_page
 from django.views.i18n import JavaScriptCatalog
 from rest_framework.documentation import include_docs_urls
 
-import accounts.urls
-import ontask.apps.action.urls
-import ontask.apps.dataops.urls
-import ontask.apps.logs.urls
-import ontask.apps.ontask_oauth.urls
-import ontask.apps.profiles.urls
-import ontask.apps.scheduler.urls
-import ontask.apps.table.urls
-import ontask.apps.workflow.urls
-import ontask.apps.workflow.views.home
-from ontask.apps.dataops.pandas import set_engine
-from ontask import views
+import ontask.accounts.urls
+import ontask.action.urls
+import ontask.dataops.urls
+import ontask.logs.urls
+import ontask.ontask_oauth.urls
+import ontask.profiles.urls
+import ontask.scheduler.urls
+import ontask.table.urls
+import ontask.workflow.urls
+import ontask.workflow.views.home
+from ontask.dataops.pandas import set_engine
+from ontask.core import views
 from ontask.templatetags.ontask_tags import ontask_version
-from ontask.apps.workflow.views import home
+from ontask.workflow.views import home
 
 api_description = ugettext(
     'The OnTask API offers functionality to manipulate workflows, tables '
@@ -40,7 +40,7 @@ urlpatterns = [
 
     path('lti_entry', views.lti_entry, name='lti_entry'),
 
-    path('not_authorized', ontask.apps.workflow.views.home, name='not_authorized'),
+    path('not_authorized', ontask.workflow.views.home, name='not_authorized'),
 
     path('about', views.AboutPage.as_view(), name='about'),
 
@@ -49,7 +49,7 @@ urlpatterns = [
         views.under_construction,
         name='under_construction'),
 
-    path('users', include(ontask.apps.profiles.urls, namespace='profiles')),
+    path('users', include(ontask.profiles.urls, namespace='profiles')),
 
     path('ota', admin.site.urls),
 
@@ -57,25 +57,25 @@ urlpatterns = [
 
     path('keep_alive', views.keep_alive, name='keep_alive'),
 
-    path('', include(accounts.urls, namespace='accounts')),
+    path('', include(ontask.accounts.urls, namespace='accounts')),
 
-    path('workflow/', include(ontask.apps.workflow.urls, namespace='workflow')),
+    path('workflow/', include(ontask.workflow.urls, namespace='workflow')),
 
-    path('dataops/', include(ontask.apps.dataops.urls, namespace='dataops')),
+    path('dataops/', include(ontask.dataops.urls, namespace='dataops')),
 
-    path('action/', include(ontask.apps.action.urls, namespace='action')),
+    path('action/', include(ontask.action.urls, namespace='action')),
 
-    path('table/', include(ontask.apps.table.urls, namespace='table')),
+    path('table/', include(ontask.table.urls, namespace='table')),
 
-    path('scheduler/', include(ontask.apps.scheduler.urls, namespace='scheduler')),
+    path('scheduler/', include(ontask.scheduler.urls, namespace='scheduler')),
 
-    path('logs/', include(ontask.apps.logs.urls, namespace='logs')),
+    path('logs/', include(ontask.logs.urls, namespace='logs')),
 
     path('summernote/', include('django_summernote.urls')),
 
     path(
         'ontask_oauth/',
-        include(ontask.apps.ontask_oauth.urls,
+        include(ontask.ontask_oauth.urls,
                 namespace='ontask_oauth')),
 
     path('tobedone', views.ToBeDone.as_view(), name='tobedone'),
@@ -116,10 +116,10 @@ if settings.DEBUG:
         path(r'__debug__/', include(debug_toolbar.urls)),
     ]
 
-handler400 = 'ontask.views.ontask_handler400'
-handler403 = 'ontask.views.ontask_handler403'
-handler404 = 'ontask.views.ontask_handler404'
-handler500 = 'ontask.views.ontask_handler500'
+handler400 = 'ontask.core.views.ontask_handler400'
+handler403 = 'ontask.core.views.ontask_handler403'
+handler404 = 'ontask.core.views.ontask_handler404'
+handler500 = 'ontask.core.views.ontask_handler500'
 
 # Create the DB engine with SQLAlchemy (once!)
 set_engine()

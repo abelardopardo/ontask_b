@@ -5,7 +5,7 @@ from builtins import str
 
 import pandas as pd
 
-from ontask.apps.dataops.plugin import OnTaskTransformation
+from ontask.dataops.plugin import OnTaskTransformation
 
 # The field class_name contains the name of the class to load to execute the
 # plugin.
