@@ -18,6 +18,7 @@ class ActionViewExport(test.OnTaskTestCase):
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'simple_workflow_two_actions.sql',
@@ -62,7 +63,7 @@ class ActionViewExport(test.OnTaskTestCase):
 
         file_obj = open(os.path.join(
             settings.BASE_DIR(),
-            '..',
+            'lib',
             'surveys',
             'spq_survey.gz'),
             'rb')

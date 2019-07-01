@@ -19,6 +19,7 @@ class DataopsViewsRow(test.OnTaskTestCase):
     fixtures = ['test_condition_evaluation']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'dataops',
         'fixtures',
         'test_condition_evaluation.sql',

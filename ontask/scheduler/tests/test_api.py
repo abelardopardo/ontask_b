@@ -18,6 +18,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
     fixtures = ['three_actions']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'scheduler',
         'fixtures',
         'three_actions.sql'

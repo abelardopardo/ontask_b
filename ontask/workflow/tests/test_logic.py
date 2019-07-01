@@ -26,6 +26,7 @@ class WorkflowImportExport(test.OnTaskTestCase):
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'workflow',
         'fixtures',
         'simple_workflow_export.sql'
@@ -67,6 +68,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'workflow',
         'fixtures',
         'simple_workflow_export.sql'
@@ -97,6 +99,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         wname.send_keys('newwf')
         wfile = self.selenium.find_element_by_id('id_wf_file')
         wfile.send_keys(os.path.join(settings.BASE_DIR(),
+                                     'ontask',
                                      'workflow',
                                      'fixtures',
                                      'ontask_workflow.gz'))
@@ -167,7 +170,6 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
 
     gz_filename = os.path.join(
         settings.BASE_DIR(),
-        '..',
         'initial_workflow.gz')
     tmp_filename = os.path.join('tmp')
 

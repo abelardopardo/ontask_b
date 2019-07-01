@@ -20,6 +20,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
     fixtures = ['simple_action']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'simple_action.sql'
@@ -563,6 +564,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'simple_workflow_two_actions.sql'
@@ -653,6 +655,7 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
     fixtures = ['test_personalized_survey']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'test_personalized_survey.sql'
@@ -778,6 +781,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'simple_workflow_two_actions.sql'
@@ -909,6 +913,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'simple_workflow_two_actions.sql'
@@ -996,6 +1001,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
     fixtures = ['simple_action']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'simple_action.sql'
@@ -1084,6 +1090,7 @@ class ActionAllKeyColumns(test.OnTaskLiveTestCase):
     fixtures = ['all_key_columns']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'all_key_columns.sql'

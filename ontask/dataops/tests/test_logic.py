@@ -23,6 +23,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
     fixtures = ['test_merge']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'dataops',
         'fixtures',
         'test_merge.sql'
@@ -610,6 +611,7 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
     fixtures = ['test_condition_evaluation']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'dataops',
         'fixtures',
         'test_condition_evaluation.sql'

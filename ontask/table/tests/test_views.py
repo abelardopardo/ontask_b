@@ -17,6 +17,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'table',
         'fixtures',
         'derived_column.sql'
@@ -339,6 +340,7 @@ class TableViews(test.OnTaskLiveTestCase):
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'table',
         'fixtures',
         'derived_column.sql'
@@ -544,6 +546,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'table',
         'fixtures',
         'derived_column.sql'

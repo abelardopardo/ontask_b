@@ -19,6 +19,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
     fixtures = ['wflow_symbols']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'dataops',
         'fixtures',
         'wflow_symbols.sql'
@@ -398,6 +399,7 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
         # Upload file
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
+                         'ontask',
                          'dataops',
                          'fixtures',
                          'excel_upload.xlsx')
@@ -447,6 +449,7 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
         # Upload the file
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
+                         'ontask',
                          'dataops',
                          'fixtures',
                          'excel_upload.xlsx')
@@ -504,6 +507,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         # Select file and upload
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
+                         'ontask',
                          'dataops',
                          'fixtures',
                          'test_df_merge_update_df1.csv')
@@ -523,6 +527,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         # Select the second file and submit
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
+                         'ontask',
                          'dataops',
                          'fixtures',
                          'test_df_merge_update_df2.csv')
@@ -590,6 +595,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
     fixtures = ['plugin_execution']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'dataops',
         'fixtures',
         'plugin_execution.sql'
@@ -895,12 +901,14 @@ class DataopsMerge(DataopsMergeBasic):
     fixtures = ['test_merge']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'dataops',
         'fixtures',
         'test_merge.sql'
     )
     merge_file = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'dataops',
         'fixtures',
         'test_df_merge_update_df2.csv'
@@ -1012,12 +1020,14 @@ class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
     fixtures = ['test_empty_key_after_merge']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'dataops',
         'fixtures',
         'test_empty_key_after_merge.sql'
     )
     merge_file = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'dataops',
         'fixtures',
         'test_empty_key_after_merge.csv'

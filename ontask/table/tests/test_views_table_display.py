@@ -19,6 +19,7 @@ class TableTestViewTableDisplay(test.OnTaskTestCase):
     fixtures = ['simple_table']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'table',
         'fixtures',
         'simple_table.sql',

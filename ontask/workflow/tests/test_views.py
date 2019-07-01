@@ -46,6 +46,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(
                 settings.BASE_DIR(),
+                'ontask',
                 'workflow',
                 'fixtures',
                 'simple.csv')
@@ -102,6 +103,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
+                'ontask',
                 'workflow',
                 'fixtures',
                 'simple2.csv')
@@ -200,6 +202,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(
                 settings.BASE_DIR(),
+                'ontask',
                 'workflow',
                 'fixtures',
                 'csv_with_prelude_postlude.csv'),
@@ -246,6 +249,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'workflow',
         'fixtures',
         'simple_workflow.sql'
@@ -402,6 +406,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'workflow',
         'fixtures',
         'simple_workflow.sql'
@@ -512,6 +517,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'workflow',
         'fixtures',
         'simple_workflow.sql'

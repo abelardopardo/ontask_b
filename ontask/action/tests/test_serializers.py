@@ -16,6 +16,7 @@ class ActionTestSerializers(test.OnTaskTestCase):
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'simple_workflow_two_actions.sql',
