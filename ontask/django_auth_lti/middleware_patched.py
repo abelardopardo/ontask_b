@@ -43,7 +43,8 @@ class MultiLTILaunchAuthMiddleware:
         return response
 
     def process_request(self, request):
-        logger.debug('inside process_request %s', request.path)
+        if settings.DEBUG:
+            logger.debug('inside process_request %s', request.path)
 
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
@@ -193,7 +194,7 @@ class MultiLTILaunchAuthMiddleware:
         setattr(request, 'LTI',
                 request.session.get('LTI_LAUNCH', {}).get(resource_link_id, {}))
         set_current_request(request)
-        if not request.LTI:
+        if not request.LTI and settings.DEBUG:
             logger.warning("Could not find LTI launch for resource_link_id %s",
                            resource_link_id)
 

@@ -27,7 +27,8 @@ class LTIAuthBackend(ModelBackend):
 
     def authenticate(self, request, username=None, password=None, **kwargs):
 
-        logger.info("about to begin authentication process")
+        if settings.DEBUG:
+            logger.info("about to begin authentication process")
 
         if not request:
             logger.error("No request object in authenticatiton")

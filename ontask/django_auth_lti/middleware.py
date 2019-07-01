@@ -25,7 +25,9 @@ class LTIAuthMiddleware(object):
     """
 
     def process_request(self, request):
-        logger.debug('inside process_request %s' % request.path)
+        if settings.DEBUG:
+            logger.debug('inside process_request %s' % request.path)
+
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
             logger.debug(_('improperly configured: requeset has no user attr'))
@@ -122,7 +124,7 @@ class LTIAuthMiddleware(object):
         # This enables backwards compatibility with consumers of this package who still want to use this
         # single launch version of LTIAuthMiddleware
         setattr(request, 'LTI', request.session.get('LTI_LAUNCH', {}))
-        if not request.LTI:
+        if not request.LTI and settings.DEBUG:
             logger.warning(_("Could not find LTI launch parameters"))
 
     def clean_username(self, username, request):
