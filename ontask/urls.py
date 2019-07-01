@@ -18,7 +18,7 @@ import ontask.accounts.urls
 import ontask.action.urls
 import ontask.dataops.urls
 import ontask.logs.urls
-import ontask.ontask_oauth.urls
+import ontask.oauth.urls
 import ontask.profiles.urls
 import ontask.scheduler.urls
 import ontask.table.urls
@@ -75,7 +75,7 @@ urlpatterns = [
 
     path(
         'ontask_oauth/',
-        include(ontask.ontask_oauth.urls,
+        include(ontask.oauth.urls,
                 namespace='ontask_oauth')),
 
     path('tobedone', views.ToBeDone.as_view(), name='tobedone'),

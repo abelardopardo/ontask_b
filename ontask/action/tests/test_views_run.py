@@ -12,8 +12,10 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from ontask.action.payloads import CanvasEmailPayload, EmailPayload, JSONPayload
-from ontask.ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask.action.payloads import (
+    CanvasEmailPayload, EmailPayload, JSONPayload
+)
+from ontask.oauth.models import OAuthUserToken
 
 
 class ActionViewRunAction(test.OnTaskTestCase):
@@ -158,7 +160,7 @@ class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
     def test_run_canvas_email_done(self):
         """Test last step of sending canvas emails."""
         user = get_user_model().objects.get(email=self.user_email)
-        utoken = OnTaskOAuthUserTokens(
+        OAuthUserToken(
             user=user,
             instance_name='Server one',
             access_token='bogus token',

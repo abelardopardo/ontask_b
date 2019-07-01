@@ -2,9 +2,9 @@
 
 from django.urls import path
 
-from ontask.ontask_oauth import views
+from ontask.oauth import views
 
-app_name = 'ontask_oauth'
+app_name = 'oauth'
 
 urlpatterns = [
     # OAuth call back url (to redirect to another page)

@@ -261,7 +261,6 @@ INSTALLED_APPS = [
     'ontask.action.apps.ActionConfig',
     'ontask.logs.apps.LogsConfig',
     'ontask.scheduler.apps.SchedulerConfig',
-    'ontask.ontask_oauth.apps.OnTaskOauthConfig',
     'ontask.oauth.apps.OauthConfig',
 ]
 
@@ -400,6 +399,7 @@ LANGUAGES = (
     ('es-es', _('Spanish')),
     ('zh-cn', _('Chinese')),
     ('fi', _('Finnish')),
+    ('ru', _('Russian')),
 )
 
 ###############################################################################

@@ -7,7 +7,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-class OnTaskOAuthUserTokens(models.Model):
+class OAuthUserToken(models.Model):
     """Table to store the tokens to authenticate with OAuth.
 
     There must be a one-to-one correspondence with the user, an access token,
@@ -19,7 +19,7 @@ class OnTaskOAuthUserTokens(models.Model):
         db_index=True,
         on_delete=models.CASCADE,
         null=False,
-        related_name='oauth2_token',
+        # related_name='oauth2_token',
         blank=False)
 
     # Instance name taken from the configuration parameters. It allows users

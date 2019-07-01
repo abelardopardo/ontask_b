@@ -9,7 +9,7 @@ from django.views import generic
 from rest_framework.authtoken.models import Token
 
 from ontask.core.permissions import is_instructor
-from ontask.ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask.oauth.models import OAuthUserToken
 
 from . import forms, models
 
@@ -29,7 +29,7 @@ class ShowProfile(LoginRequiredMixin, generic.TemplateView):
         if user == self.request.user:
             kwargs["editable"] = True
         kwargs["show_user"] = user
-        kwargs["tokens"] = OnTaskOAuthUserTokens.objects.filter(
+        kwargs["tokens"] = OAuthUserToken.objects.filter(
             user=user
         )
         return super().get(request, *args, **kwargs)
@@ -102,7 +102,7 @@ def delete_token(request, pk):
     """
 
     # Delete the token
-    OnTaskOAuthUserTokens.objects.get(id=pk).delete()
+    OAuthUserToken.objects.get(id=pk).delete()
 
     # Go back to showing the profile
     return redirect('profiles:show_self')

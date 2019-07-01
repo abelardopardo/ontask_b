@@ -16,8 +16,8 @@ from rest_framework import status
 from ontask.action.evaluate.action import evaluate_action
 from ontask.action.models import Action
 from ontask.logs.models import Log
-from ontask.ontask_oauth.models import OnTaskOAuthUserTokens
-from ontask.ontask_oauth.views import refresh_token
+from ontask.oauth.models import OAuthUserToken
+from ontask.oauth.views import refresh_token
 
 logger = get_task_logger('celery_execution')
 
@@ -54,7 +54,7 @@ def send_canvas_emails(
         raise Exception(_('Unable to find OAuth Information Record'))
 
     # Get the token
-    user_token = OnTaskOAuthUserTokens.objects.filter(
+    user_token = OAuthUserToken.objects.filter(
         user=user,
         instance_name=target_url,
     ).first()

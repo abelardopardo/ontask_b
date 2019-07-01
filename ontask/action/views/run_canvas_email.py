@@ -23,8 +23,8 @@ from ontask.logs.models import Log
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.tasks import send_canvas_email_messages
-from ontask.ontask_oauth.models import OnTaskOAuthUserTokens
-from ontask.ontask_oauth.views import get_initial_token_step1, refresh_token
+from ontask.oauth.models import OAuthUserToken
+from ontask.oauth.views import get_initial_token_step1, refresh_token
 from ontask.workflow.models import Workflow
 
 
@@ -119,7 +119,7 @@ def canvas_get_or_set_oauth_token(
         return redirect('action:index')
 
     # Check if we have the token
-    token = OnTaskOAuthUserTokens.objects.filter(
+    token = OAuthUserToken.objects.filter(
         user=request.user,
         instance_name=oauth_instance_name,
     ).first()

@@ -16,7 +16,7 @@ from rest_framework import status
 
 from ontask.action.payloads import get_action_payload
 from ontask.core.permissions import is_instructor
-from ontask.ontask_oauth.models import OnTaskOAuthUserTokens
+from ontask.oauth.models import OAuthUserToken
 
 return_url_key = 'oauth_return_url'
 oauth_hash_key = 'oauth_hash'
@@ -53,7 +53,7 @@ def get_initial_token_step1(request, oauth_info, return_url):
 
     # Store the callback URL in the session
     request.session[callback_url_key] = request.build_absolute_uri(
-        reverse('ontask_oauth:callback'),
+        reverse('oauth:callback'),
     )
 
     # The parameters for the request are described in:
@@ -99,7 +99,7 @@ def refresh_token(user_token, oauth_info):
             'client_id': oauth_info['client_id'],
             'client_secret': oauth_info['client_secret'],
             'refresh_token': user_token.refresh_token,
-            'redirect_uri': reverse('ontask_oauth:callback'),
+            'redirect_uri': reverse('oauth:callback'),
         },
     )
 
@@ -195,7 +195,7 @@ def callback(request):
     response_data = response.json()
 
     # Create the new token for the user
-    utoken = OnTaskOAuthUserTokens(
+    utoken = OAuthUserToken(
         user=request.user,
         instance_name=oauth_instance,
         access_token=response_data['access_token'],
