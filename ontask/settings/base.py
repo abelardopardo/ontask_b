@@ -76,7 +76,9 @@ env = environ.Env()
 env_file_name = os.environ.get('ENV_FILENAME', 'local.env')
 env_file = join(dirname(__file__), env_file_name)
 if exists(env_file):
-    print('Loading environment file {0}'.format(env_file_name))
+    print('Loading environment file {0} through '.format(
+        env_file_name,
+        os.environ['DJANGO_SETTINGS_MODULE']))
     environ.Env.read_env(str(env_file))
 else:
     print('WARNING: File {0} not found.'.format(env_file))
