@@ -12,12 +12,12 @@ test:
     - python3 -m pip install --user -r requirements.txt
     - python3 manage.py collectstatic --no-input
     - python3 manage.py migrate
-    - coverage run ./manage.py test -v 2 workflow
-    - coverage run -a ./manage.py test -v 2 dataops
-    - coverage run -a ./manage.py test -v 2 table
-    - coverage run -a ./manage.py test -v 2 action
-    - coverage run -a ./manage.py test -v 2 ontask
-    - coverage run -a ./manage.py test -v 2 scheduler
+    - coverage run ./manage.py test -v 2 ontask.workflow
+    - coverage run -a ./manage.py test -v 2 ontask.dataops
+    - coverage run -a ./manage.py test -v 2 ontask.table
+    - coverage run -a ./manage.py test -v 2 ontask.action
+    - coverage run -a ./manage.py test -v 2 ontask.ontask
+    - coverage run -a ./manage.py test -v 2 ontask.scheduler
 
 #variables:
 #  # Configure redis service (https://hub.docker.com/_/redis/)
