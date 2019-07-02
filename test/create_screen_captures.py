@@ -123,7 +123,7 @@ class ScreenTestFixture(ScreenTests):
     fixtures = ['../initial_workflow/initial_workflow.json']
     filename = os.path.join(
         settings.BASE_DIR(),
-        '..',
+        'test',
         'initial_workflow',
         'initial_workflow.sql'
     )

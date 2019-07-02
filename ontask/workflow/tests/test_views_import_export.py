@@ -15,6 +15,7 @@ class WorkflowTestViewImportExport(test.OnTaskTestCase):
     fixtures = ['initial_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'test',
         'initial_workflow',
         'initial_workflow.sql',
     )
