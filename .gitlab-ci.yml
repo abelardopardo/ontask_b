@@ -1,0 +1,13 @@
+services:
+- redis
+
+variables:
+  # Configure redis service (https://hub.docker.com/_/redis/)
+  # Here's nothing to configure :)
+
+connect:
+  # Connect to PostgreSQL database as user postgres, without password
+  image: redis
+  script:
+  - redis-cli -h redis PING
+
