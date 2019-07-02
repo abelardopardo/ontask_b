@@ -8,7 +8,7 @@ stages:
 test:
   stage: test
   script:
-    - pip3 install -r requirements/development.txt
+    - pip3 install -v -r requirements/development.txt
     - python3 manage.py collectstatic --no-input
     - coverage run ./manage.py test -v 2 workflow
     - coverage run -a ./manage.py test -v 2 dataops
