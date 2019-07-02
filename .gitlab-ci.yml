@@ -1,13 +1,41 @@
-services:
-- redis
+stages:
+  - test
 
-variables:
-  # Configure redis service (https://hub.docker.com/_/redis/)
-  # Here's nothing to configure :)
+#services:
+#  - redis
+#  - postgres
 
-connect:
-  # Connect to PostgreSQL database as user postgres, without password
-  image: redis
+test:
+  stage: test
   script:
-  - redis-cli -h redis PING
+    - sudo -H pip3 install -r requirements/development.txt
+    - python3 manage.py collectstatic --no-input
+    - coverage run ./manage.py test -v 2 workflow
+    - coverage run -a ./manage.py test -v 2 dataops
+    - coverage run -a ./manage.py test -v 2 table
+    - coverage run -a ./manage.py test -v 2 action
+    - coverage run -a ./manage.py test -v 2 ontask
+    - coverage run -a ./manage.py test -v 2 scheduler
+
+#variables:
+#  # Configure redis service (https://hub.docker.com/_/redis/)
+#  # Here's nothing to configure :)
+#  # POSTGRES_DB: custom_db
+#  # POSTGRES_USER: custom_user
+#  # POSTGRES_PASSWORD: custom_pass
+#
+#
+#connect:
+#  # Connect to PostgreSQL database as user postgres, without password
+#  image: redis
+#  script:
+#  - redis-cli -h redis PING
+#
+# connect:
+#  image: postgres
+#  script:
+#  # official way to provide password to psql: http://www.postgresql.org/docs/9.3/static/libpq-envars.html
+#  - export PGPASSWORD=$POSTGRES_PASSWORD
+#  - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
+
 
