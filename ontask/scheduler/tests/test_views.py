@@ -21,6 +21,7 @@ class SchedulerForms(test.OnTaskTestCase):
     filename = os.path.join(
         'ontask',
         settings.BASE_DIR(),
+        'ontask',
         'scheduler',
         'fixtures',
         'three_actions.sql',

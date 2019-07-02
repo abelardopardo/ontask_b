@@ -157,7 +157,7 @@ class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
     def test_run_canvas_email_done(self):
         """Test last step of sending canvas emails."""
         user = get_user_model().objects.get(email=self.user_email)
-        OAuthUserToken(
+        utoken = OAuthUserToken(
             user=user,
             instance_name='Server one',
             access_token='bogus token',
@@ -221,6 +221,7 @@ class ActionServeSurvey(test.OnTaskTestCase):
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
         settings.BASE_DIR(),
+        'ontask',
         'action',
         'fixtures',
         'simple_workflow_two_actions.sql',

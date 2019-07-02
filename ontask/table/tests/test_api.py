@@ -9,11 +9,11 @@ from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework.authtoken.models import Token
 
-from ontaskdataops.pandas import check_wf_df, detect_datetime_columns, load_table
-from ontasktable.serializers import string_to_df
-from ontasktable.serializers.pandas import df_to_string
-from ontaskworkflow.models import Workflow
-from ontaskworkflow.ops import workflow_delete_column
+from ontask.dataops.pandas import check_wf_df, detect_datetime_columns, load_table
+from ontask.table.serializers import string_to_df
+from ontask.table.serializers.pandas import df_to_string
+from ontask.workflow.models import Workflow
+from ontask.workflow.ops import workflow_delete_column
 
 
 class TableApiBase(test.OnTaskApiTestCase):

@@ -221,7 +221,7 @@ def get_row_values(
         )
     else:
 
-        row = dataops.sql.row_queries.get_row(
+        row = ontask.dataops.sql.row_queries.get_row(
             action.workflow.get_data_frame_table_name(),
             row_idx[0],
             row_idx[1],
