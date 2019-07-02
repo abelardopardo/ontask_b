@@ -11,7 +11,7 @@ pip-delete-this-directory.txt
 
 # Sphinx docs:
 _build
-/src/static/html
+/static/html
 
 # SQLite3 database files:
 *.db
@@ -73,7 +73,7 @@ Desktop.ini
 .git_OLD
 tmp
 
-/src/media/django-summernote/
+/media/django-summernote/
 
 # Documentation
 /html
@@ -87,11 +87,11 @@ tmp
 docs
 
 # Initial user files (depending on the deployment)
-src/scripts/initial_instructors.csv
-src/scripts/initial_learners.csv
-src/celerybeat-schedule
-src/celerybeat.pid
-src/*/fixtures/*.gz
+scripts/initial_instructors.csv
+scripts/initial_learners.csv
+celerybeat-schedule
+celerybeat.pid
+ontask/*/fixtures/*.gz
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
