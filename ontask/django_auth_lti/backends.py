@@ -1,11 +1,11 @@
 import logging
 from time import time
 
-import oauth2
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.core.exceptions import PermissionDenied
+import oauth2
 
 from ontask.lti.tool_provider import DjangoToolProvider
 
@@ -31,7 +31,7 @@ class LTIAuthBackend(ModelBackend):
             logger.info("about to begin authentication process")
 
         if not request:
-            logger.error("No request object in authenticatiton")
+            logger.error("No request object in authentication")
             return None
 
         request_key = request.POST.get('oauth_consumer_key')
@@ -39,7 +39,7 @@ class LTIAuthBackend(ModelBackend):
         if request_key is None:
             logger.error(
                 "Request doesn't contain an oauth_consumer_key; can't "
-                "continue.")
+                + "continue.")
             return None
 
         if not settings.LTI_OAUTH_CREDENTIALS:
@@ -56,7 +56,7 @@ class LTIAuthBackend(ModelBackend):
 
         logger.debug('using key/secret %s/%s', request_key, secret)
         tool_provider = DjangoToolProvider(request_key, secret,
-                                           request.POST.dict())
+            request.POST.dict())
 
         postparams = request.POST.dict()
 
@@ -75,7 +75,7 @@ class LTIAuthBackend(ModelBackend):
             request_is_valid = tool_provider.is_valid_request(request)
         except oauth2.Error:
             logger.exception('error attempting to validate LTI launch %s',
-                             postparams)
+                postparams)
             request_is_valid = False
 
         if not request_is_valid:
@@ -83,8 +83,9 @@ class LTIAuthBackend(ModelBackend):
             raise PermissionDenied
 
         logger.info("done checking the signature")
-        logger.info("about to check the timestamp: {%s",
-                    int(tool_provider.oauth_timestamp))
+        logger.info(
+            "about to check the timestamp: {%s",
+            int(tool_provider.oauth_timestamp))
 
         if time() - int(tool_provider.oauth_timestamp) > 60 * 60:
             logger.error("OAuth timestamp is too old.")
@@ -103,10 +104,10 @@ class LTIAuthBackend(ModelBackend):
         # Retrieve username from LTI parameter or default to an overridable
         # function return value
         username = tool_provider.lis_person_sourcedid or \
-            self.get_default_username(
-                tool_provider,
-                prefix=self.unknown_user_prefix
-            )
+                   self.get_default_username(
+                       tool_provider,
+                       prefix=self.unknown_user_prefix
+                   )
         username = self.clean_username(username)  # Clean it
 
         email = tool_provider.lis_person_contact_email_primary
@@ -136,7 +137,7 @@ class LTIAuthBackend(ModelBackend):
                     'authenticate created a new user for %s', username)
             else:
                 logger.debug('authenticate found an existing user for %s',
-                             username)
+                    username)
 
         else:
             logger.debug(
