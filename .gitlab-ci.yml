@@ -12,6 +12,8 @@ test:
     - python3 -m pip install --user -r requirements.txt
     - python3 manage.py collectstatic --no-input
     - python3 manage.py migrate
+    - supervisorctl -c supervisor/supervisor.conf shutdown
+    - supervisord -c supervisor/supervisor.conf
     - coverage run ./manage.py test -v 2 ontask.workflow
     - coverage run -a ./manage.py test -v 2 ontask.dataops
     - coverage run -a ./manage.py test -v 2 ontask.table

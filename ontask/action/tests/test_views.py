@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import test
 
 from django.conf import settings
 from django.core import mail
@@ -13,6 +12,7 @@ from ontask.action.models import Action, Condition
 from ontask.dataops.formula import has_variable
 from ontask.dataops.pandas import check_wf_df
 from ontask.workflow.models import Workflow
+import test
 
 
 class ActionActionEdit(test.OnTaskLiveTestCase):
@@ -235,14 +235,14 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # Add condition
         self.select_condition_tab()
         self.create_condition('c1',
-                              'cdesc1',
-                              [('age', 'less or equal', '12.1')])
+            'cdesc1',
+            [('age', 'less or equal', '12.1')])
 
         # Click in the add a second condition
         self.select_condition_tab()
         self.create_condition('c2',
-                              'cdesc2',
-                              [('age', 'greater', '12.1')])
+            'cdesc2',
+            [('age', 'greater', '12.1')])
 
         # Action now has two complementary conditions, add the conditions to
         # the message
@@ -265,6 +265,11 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         self.wait_for_modal_open(
             "//div[@id='modal-item']//div[@id='preview-body']"
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'js-action-preview-nxt')
+            )
         )
 
         # First value should be high age
@@ -420,8 +425,8 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Create condition. Click in the add condition button
         self.create_condition('fname',
-                              'fdesc',
-                              [('age', 'less or equal', '12.1')])
+            'fdesc',
+            [('age', 'less or equal', '12.1')])
 
         self.select_text_tab()
         self.assertIn(
@@ -509,7 +514,6 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.logout()
 
     def test_action_URL(self):
-
         # Login
         self.login('instructor01@bogus.com')
 
@@ -606,7 +610,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         # Select email column as key column
         self.select_parameters_tab()
         self.click_dropdown_option("//div[@id='select-key-column-name']",
-                                   'email')
+            'email')
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
         WebDriverWait(self.selenium, 10).until_not(
@@ -690,9 +694,9 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
 
         # Create two conditions
         self.create_condition('Text 1 is null', '',
-                              [('text1', 'is null', None)])
+            [('text1', 'is null', None)])
         self.create_condition('Text 2 is null', '',
-                              [('text2', 'is null', None)])
+            [('text2', 'is null', None)])
 
         # Go back to the questions
         self.select_questions_tab()
@@ -766,7 +770,7 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
 
         # There should be a "No responses required message"
         self.assertIn('No responses required at this time',
-                      self.selenium.page_source)
+            self.selenium.page_source)
 
         # End of session
         self.logout()
@@ -860,8 +864,8 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
 
         # Change the name of the attribute and submit
         self.edit_attribute('attribute name',
-                            'attribute name new',
-                            'attribute value')
+            'attribute name new',
+            'attribute value')
 
         # Go to the actions and select the edit button of the action out
         self.go_to_actions()
@@ -887,12 +891,12 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         self.assertEqual(condition.name, 'Registered new')
         # Attribute name is the correct one
         self.assertEqual(attributes['attribute name new'],
-                         'attribute value')
+            'attribute value')
         # Column name is present in condition formula
         self.assertFalse(has_variable(condition.formula,
-                                      'registered'))
+            'registered'))
         self.assertTrue(has_variable(condition.formula,
-                                     'registered new'))
+            'registered new'))
         # Column name is present in action_out text
         self.assertTrue('{{ registered new }}' in action_out.text_content)
         # Attribute name is present in action_out text
@@ -945,7 +949,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # The zip should include 2 files
         self.assertIn('A ZIP with 2 files will be created',
-                      self.selenium.page_source)
+            self.selenium.page_source)
 
         # Set column 1
         select = Select(self.selenium.find_element_by_id(
@@ -964,7 +968,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # Anomaly detected
         self.assertIn('The two columns must be different',
-                      self.selenium.page_source)
+            self.selenium.page_source)
 
         # Set column 2
         select = Select(self.selenium.find_element_by_id(
@@ -1043,7 +1047,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         # The action should now flag that one user has all conditions equal to
         # False
         self.assertIn('user has all conditions equal to FALSE',
-                      self.selenium.page_source)
+            self.selenium.page_source)
 
         # insert the action text (not needed, but...)
         self.select_text_tab()
@@ -1059,7 +1063,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         # The preview should now flag that this user has all conditions equal to
         # False
         self.assertIn('All conditions evaluate to FALSE',
-                      self.selenium.page_source)
+            self.selenium.page_source)
 
         # Close the preview
         self.cancel_modal()
@@ -1070,7 +1074,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         # The action should NOT flag that a user has all conditions equal to
         # False
         self.assertNotIn('user has all conditions equal to FALSE',
-                         self.selenium.page_source)
+            self.selenium.page_source)
 
         # Remove the filter
         self.delete_filter()
@@ -1079,7 +1083,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         # The action should NOT flag that a user has all conditions equal to
         # False
         self.assertIn('user has all conditions equal to FALSE',
-                      self.selenium.page_source)
+            self.selenium.page_source)
 
         # End of session
         self.logout()
