@@ -27,6 +27,13 @@ test:
     - coverage run -a ./manage.py test -v 2 ontask.action
     - coverage run -a ./manage.py test -v 2 ontask.tests
     - coverage run -a ./manage.py test -v 2 ontask.scheduler
+    - coverage report
+    - coverage html
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+  artifacts:
+    paths:
+      - htmlcov
+    expire_in: 60 days
 
 #variables:
 #  # Configure redis service (https://hub.docker.com/_/redis/)
