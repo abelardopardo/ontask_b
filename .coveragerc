@@ -4,7 +4,7 @@ omit =
     */tests/*
     */migration*
     ontask/accounts/*
-    ontask/core/manageent/*
+    ontask/core/management/*
     ontask/django_auth_lti/*
     ontask/profiles/*
     ontask/settings/*
@@ -18,7 +18,7 @@ omit =
     */tests/*
     */migration*
     ontask/accounts/*
-    ontask/core/manageent/*
+    ontask/core/management/*
     ontask/django_auth_lti/*
     ontask/profiles/*
     ontask/settings/*
