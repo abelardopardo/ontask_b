@@ -1,0 +1,30 @@
+[run]
+source=ontask
+omit = 
+    */tests/*
+    */migration*
+    accounts/*
+    profiles/*
+    ltilaunch/*
+    test/*
+    ontask/settings/*
+    wsgi.py
+    django_auth_lti/*
+    visualizations/rgraph.py
+    visualizations/vega.py
+
+[report]
+
+omit = 
+    */tests/*
+    */migration*
+    accounts/*
+    profiles/*
+    ltilaunch/*
+    test/*
+    settings/*
+    wsgi.py
+    django_auth_lti/*
+    visualizations/rgraph.py
+    visualizations/vega.py
+
