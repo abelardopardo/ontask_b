@@ -238,7 +238,7 @@ There are four possible merge variants:
 1) **Select only the rows with keys in both existing and new table**.
    It will select only the rows for which values in both key columns are present. Or in other words, any row for which there is no value in either of the key columns **will be dropped**.
 
-   .. figure:: ../../src/media/merge_inner.png
+   .. figure:: ../../media/merge_inner.png
       :align: center
       :width: 50%
 
@@ -246,7 +246,7 @@ There are four possible merge variants:
 
    All rows in both tables will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.
 
-   .. figure:: ../../src/media/merge_outer.png
+   .. figure:: ../../media/merge_outer.png
       :align: center
       :width: 50%
 
@@ -254,7 +254,7 @@ There are four possible merge variants:
 
    Only the rows in the new table with a value in the key column that is present in the existing table will be considered, the rest will be dropped.
 
-   .. figure:: ../../src/media/merge_left.png
+   .. figure:: ../../media/merge_left.png
       :align: center
       :width: 50%
 
@@ -262,7 +262,7 @@ There are four possible merge variants:
 
    Only the rows in the existing table with a value in the key column that is present in the key column from the new table will be considered, the rest will be dropped.
 
-   .. figure:: ../../src/media/merge_right.png
+   .. figure:: ../../media/merge_right.png
       :align: center
       :width: 50%
 

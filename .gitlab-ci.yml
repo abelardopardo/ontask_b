@@ -6,6 +6,7 @@ before_script:
 
 stages:
   - Run tests
+  - Build doc
 
 #services:
 #  - redis
@@ -34,6 +35,14 @@ test:
     paths:
       - htmlcov
     expire_in: 60 days
+
+build_doc:
+  stage: Build doc
+  script:
+    - cd docs_src && make clean html copy_to_docs
+  artifacts:
+    paths:
+      - docs
 
 #variables:
 #  # Configure redis service (https://hub.docker.com/_/redis/)
