@@ -43,7 +43,7 @@ def make_xlat(*args, **kwds):
     adict = dict(*args, **kwds)
     rx = re.compile(r'|'.join(map(re.escape, adict)))
 
-    def one_xlat(match):
+    def one_xlat(match: str) -> str:
         return adict[match.group(0)]
 
     def xlat(text: str) -> str:

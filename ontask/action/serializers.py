@@ -21,6 +21,26 @@ except NameError:
     def profile(x): return x  # noqa E731
 
 
+def _create_condition(validated_data, action):
+    """Create a new condition with the validated data.
+
+    :param validated_data: Dictionary with the data validated by the serializer
+    :param action: Action object to use as parent object.
+    :return: reference to new condition object.
+    """
+    condition_obj = Condition(
+        action=action,
+        name=validated_data['name'],
+        description_text=validated_data['description_text'],
+        formula=validated_data['formula'],
+        n_rows_selected=validated_data.get('n_rows_selected', -1),
+        is_filter=validated_data['is_filter'],
+    )
+    condition_obj.save()
+
+    return condition_obj
+
+
 def _create_columns(new_columns, context):
     """Add new_columns just created to the DB in the given context.
 
@@ -86,9 +106,7 @@ def _process_columns(validated_data, context):
             if citem['is_key']:
                 raise Exception(
                     _('Action contains non-existing key column "{0}"').format(
-                        cname,
-                    )
-                )
+                        cname))
             new_columns.append(citem)
             continue
 
@@ -132,15 +150,9 @@ class ConditionSerializer(serializers.ModelSerializer):
         """
         condition_obj = None
         try:
-            condition_obj = Condition(
-                action=self.context['action'],
-                name=validated_data['name'],
-                description_text=validated_data['description_text'],
-                formula=validated_data['formula'],
-                n_rows_selected=validated_data.get('n_rows_selected', -1),
-                is_filter=validated_data['is_filter'],
-            )
-            condition_obj.save()
+            condition_obj = _create_condition(
+                validated_data,
+                self.context['action'])
 
             # Process columns
             if validated_data.get('columns'):
@@ -251,7 +263,7 @@ class ActionSerializer(serializers.ModelSerializer):
 
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
-    content = serializers.CharField(
+    content = serializers.CharField(  # noqa Z110
         required=False,
         initial='',
         allow_blank=True)
@@ -339,7 +351,7 @@ class ActionSerializer(serializers.ModelSerializer):
                     validated_data.get('text_content'),  # Legacy
                 ),
                 target_url=validated_data.get('target_url', ''),
-                shuffle=validated_data.get('shuffle', False),
+                shuffle=validated_data.get('shuffle', default=False),
             )
             action_obj.save()
 

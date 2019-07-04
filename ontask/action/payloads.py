@@ -230,7 +230,7 @@ def get_action_payload(session: SessionBase) -> Dict:
 
 def set_action_payload(
     session: SessionBase,
-    payload: Optional[Mapping] = None
+    payload: Optional[Mapping] = None,
 ):
     """Set the payload in the current session.
 

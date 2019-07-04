@@ -34,7 +34,7 @@ ACTION_TYPE_LENGTH = 64
 CONDITION_NAME_LENGTH = 512
 
 
-class Action(models.Model):
+class Action(models.Model):  # noqa Z214
     """Object storing an action: content, conditions, filter, etc.
 
     @DynamicAttrs
@@ -346,7 +346,7 @@ class Action(models.Model):
 
         :return: List of column objects
         """
-        column_set = set([])
+        column_set = set()
 
         # Accumulate all columns for all conditions
         for cond in self.conditions.all():
