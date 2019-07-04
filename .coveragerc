@@ -3,28 +3,26 @@ source=ontask
 omit = 
     */tests/*
     */migration*
-    accounts/*
-    profiles/*
-    ltilaunch/*
-    test/*
+    ontask/accounts/*
+    ontask/core/manageent/*
+    ontask/django_auth_lti/*
+    ontask/profiles/*
     ontask/settings/*
-    wsgi.py
-    django_auth_lti/*
-    visualizations/rgraph.py
-    visualizations/vega.py
+    ontask/wsgi.py
+    ontask/visualizations/rgraph.py
+    ontask/visualizations/vega.py
 
 [report]
 
 omit = 
     */tests/*
     */migration*
-    accounts/*
-    profiles/*
-    ltilaunch/*
-    test/*
-    settings/*
-    wsgi.py
-    django_auth_lti/*
-    visualizations/rgraph.py
-    visualizations/vega.py
+    ontask/accounts/*
+    ontask/core/manageent/*
+    ontask/django_auth_lti/*
+    ontask/profiles/*
+    ontask/settings/*
+    ontask/wsgi.py
+    ontask/visualizations/rgraph.py
+    ontask/visualizations/vega.py
 
