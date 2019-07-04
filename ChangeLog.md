@@ -1,3 +1,9 @@
+## 5.1.4 (2019-07-05)
+
+### Changed
+
+- Upgrade django version to avoid vulnerability
+
 ## 5.1.3 (2019-06-16)
 
 ### Fixed
