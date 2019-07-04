@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from dataops.plugin import OnTaskTransformation
+from ontask.dataops.plugin import OnTaskTransformation
 
 # The field class_name contains the name of the class to load to execute the
 # plugin.

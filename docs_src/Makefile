@@ -17,9 +17,9 @@ help:
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
-	@cp ../src/media/merge*.png scaptures
+	@cp ../media/merge*.png scaptures
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 copy_to_docs:
 	rsync -arvzh --delete $(BUILDDIR)/html/ ../docs/
-	rsync -arvzh --delete $(BUILDDIR)/html ../src/static
+	rsync -arvzh --delete $(BUILDDIR)/html ../static
