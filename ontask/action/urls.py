@@ -171,7 +171,7 @@ urlpatterns = [
     #
     # Serve the personalised visualizaton
     #
-    path('<int:wid>/serve_viz/', serve_visualization, name='serve_viz'),
+    path('serve_viz/', serve_visualization, name='serve_viz'),
 
     #
     # Edit action description and name

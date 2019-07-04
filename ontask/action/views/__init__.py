@@ -37,3 +37,4 @@ from ontask.action.views.run_zip import (
     action_zip_export, run_zip_done, zip_action,
 )
 from ontask.action.views.timeline import show_timeline
+from ontask.action.views.serve_visualization import serve_visualization

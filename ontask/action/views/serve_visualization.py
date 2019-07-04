@@ -6,8 +6,9 @@ from django.core import signing
 from django.http import HttpRequest, HttpResponse, Http404
 from django.views.decorators.http import require_http_methods
 
-from dataops.sql import get_row
-from workflow.models import Workflow
+from ontask.dataops.sql import get_row
+from ontask.workflow.models import Workflow, Column
+
 
 def _generate_plotly_image(row):
     """Generate a PNG array of bytes with the data in the row.
@@ -16,35 +17,39 @@ def _generate_plotly_image(row):
 
     :return: object with the binary bytes encoding the image
     """
-
+    # import plotly.plotly as py
+    # import plotly.graph_objs as go
+    # import plotly.io as pio
+    # # data = [go.Histogram()]
+    # fig = go.Figure()
+    # fig.add_histogram(
+    #     x=["FEIT", "FEIT", "FSCI", "SMED", "FSCI", "FSCI", "FEIT", "FASS",
+    #        "FSCI", "FSCI", "FASS", "SMED", "SMED", "FSCI"],
+    #     autobinx=True,
+    #     histnorm="",
+    #     name="Program",
+    #     type="histogram")
+    # pio.write_image(fig, 'xxx.png')
+    #
     return None
 
 
 @require_http_methods(['GET'])
 def serve_visualization(
-    request: HttpRequest,
-    wid: Workflow,
+    request: HttpRequest
 ) -> HttpResponse:
     """Serve a request for a visualization.
 
-    Function that given a request, and a workflow id, extracts from a given
-    encrypted string (v) the key name, key value and column name and returns
-    the corresponding visualization.
+    Function that given a request, extracts from a given encrypted string (v)
+    a json object with user id and column id, creates the visualization
+    (if needed) and returns it as an image.
 
-    The key name, key value and column name are provided as an encrypted string
+    The user id and column id are provided as part of the unique parameter
 
     :param request: HTTP request
 
-    :param workflow: Workflow
-
     :return:
     """
-    # Obtain first the workflow ID, no need to lock the content as it is only a
-    # read operation.
-    workflow = Workflow.objects.filter(id=wid).first()
-    if not workflow:
-        raise Http404
-
     # Extract the encrypted information from the request variable
     viz_info = request.GET.get('v')
     if not viz_info:
@@ -57,27 +62,27 @@ def serve_visualization(
         raise Http404
 
     # Verify that all three keys are in the dictionary
-    if not all(dkey in viz_info for dkey in [
-        'key_name', 'key_value', 'column_name']
-    ):
+    if not all(dkey in viz_info for dkey in ['kname', 'kvalue', 'colid']):
         raise Http404
 
     key_name = viz_info['key_name']
     key_value = viz_info['key_value']
-    column_name = viz_info['column_name']
 
-    # Key name and column name must be correct columns
-    if not all(cname in workflow.columns.all()
-               for cname in [key_name, column_name]
-    ):
+    try:
+        int(viz_info['colid'])
+    except:
+        raise Http404
+
+    column = Column.objects.filter(pk=int(viz_info['colid'])).first()
+    if not column:
         raise Http404
 
     # Get the row from the table
     row = get_row(
-        workflow.get_data_frame_table_name(),
+        column.workflow.get_data_frame_table_name(),
         key_name,
         key_value,
-        column_names=[column_name],
+        column_names=[column.name],
     )
 
     image_bytes = _generate_plotly_image(row)
