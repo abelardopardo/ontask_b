@@ -17,10 +17,12 @@ from django.views.decorators.http import require_http_methods
 
 from ontask.action.forms import ActionDescriptionForm
 from ontask.action.models import Action, ActionColumnConditionTuple, Condition
-from ontask.logs.models import Log
-from ontask.core.decorators import ajax_required, get_action, get_columncondition
+from ontask.core.decorators import (
+    ajax_required, get_action, get_columncondition,
+)
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
+from ontask.logs.models import Log
 from ontask.visualizations.plotly import PlotlyHandler
 from ontask.workflow.models import Workflow
 

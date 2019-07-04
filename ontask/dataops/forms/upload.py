@@ -24,16 +24,14 @@ import pandas as pd
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import OnTaskDataFrameNoKey, ontask_prefs
+from ontask.core.forms import RestrictedFileField
 from ontask.dataops.forms.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
 from ontask.dataops.models import SQLConnection
-from ontask.dataops.pandas import (
-    store_temporary_dataframe, verify_data_frame,
-)
-from ontask import OnTaskDataFrameNoKey, ontask_prefs
-from ontask.core.forms import RestrictedFileField
+from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)

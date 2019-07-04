@@ -14,12 +14,14 @@ from django.urls.base import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.dataops.models import Plugin
-from ontask.dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
-from ontask.logs.models import Log
 from ontask.core.decorators import ajax_required
-from ontask.workflow.access import remove_workflow_from_session
 from ontask.core.permissions import is_admin, is_instructor
+from ontask.dataops.models import Plugin
+from ontask.dataops.plugin.plugin_manager import (
+    load_plugin, refresh_plugin_data,
+)
+from ontask.logs.models import Log
+from ontask.workflow.access import remove_workflow_from_session
 from ontask.workflow.models import Workflow
 
 

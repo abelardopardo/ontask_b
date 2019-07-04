@@ -7,7 +7,7 @@ import os
 import time
 from builtins import map, str, zip
 from datetime import datetime
-from typing import Tuple, List
+from typing import List, Tuple
 
 import pandas as pd
 import pytz

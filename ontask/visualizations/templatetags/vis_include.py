@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.action.evaluate import (
-    action_context_var, tr_item, viz_number_context_var
+    action_context_var, tr_item, viz_number_context_var,
 )
 from ontask.dataops.pandas import get_subframe
 from ontask.visualizations.plotly import PlotlyColumnHistogram

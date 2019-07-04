@@ -13,15 +13,15 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
+from ontask.core.decorators import get_workflow
+from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import SelectColumnUploadForm, SelectKeysForm
 from ontask.dataops.models import SQLConnection
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.pandas.dataframe import store_workflow_table
 from ontask.dataops.sql import table_queries
 from ontask.logs.models import Log
-from ontask.core.decorators import get_workflow
 from ontask.workflow.access import store_workflow_in_session
-from ontask.core.permissions import is_instructor
 from ontask.workflow.models import Workflow
 
 

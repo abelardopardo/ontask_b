@@ -12,13 +12,15 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.action.evaluate import get_action_evaluation_context, get_row_values
+from ontask.action.evaluate import (
+    get_action_evaluation_context, get_row_values,
+)
 from ontask.action.forms import FIELD_PREFIX, EnterActionIn
 from ontask.action.models import Action, ActionColumnConditionTuple
-from ontask.dataops.sql.row_queries import update_row
-from ontask.logs.models import Log
 from ontask.core.permissions import has_access
 from ontask.core.views import ontask_handler404
+from ontask.dataops.sql.row_queries import update_row
+from ontask.logs.models import Log
 
 
 def serve_survey_row(

@@ -3,13 +3,13 @@
 """Test views to run actions."""
 
 import os
+import test
 
 from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
 from ontask.action.views import action_import
-import test
 
 
 class ActionViewExport(test.OnTaskTestCase):

@@ -11,12 +11,12 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.dataops.forms import SQLRequestPassword, load_df_from_sqlconnection
-from ontask.dataops.models import SQLConnection
-from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask import OnTaskDataFrameNoKey
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.dataops.forms import SQLRequestPassword, load_df_from_sqlconnection
+from ontask.dataops.models import SQLConnection
+from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask.workflow.models import Workflow
 
 

@@ -24,9 +24,9 @@ from django.views.decorators.http import require_http_methods
 from ontask.action.models import Action
 from ontask.action.views.serve_survey import serve_survey_row
 from ontask.core import DataTablesServerSidePaging
-from ontask.dataops.sql import search_table
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
+from ontask.dataops.sql import search_table
 from ontask.workflow.models import Column, Workflow
 
 

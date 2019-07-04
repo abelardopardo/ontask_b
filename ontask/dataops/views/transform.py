@@ -16,13 +16,15 @@ from django.urls import resolve
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.dataops.forms import FIELD_PREFIX, PluginInfoForm
-from ontask.dataops.models import Plugin
-from ontask.dataops.plugin.plugin_manager import load_plugin, refresh_plugin_data
-from ontask.logs.models import Log
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.dataops.forms import FIELD_PREFIX, PluginInfoForm
+from ontask.dataops.models import Plugin
+from ontask.dataops.plugin.plugin_manager import (
+    load_plugin, refresh_plugin_data,
+)
+from ontask.logs.models import Log
 from ontask.tasks import run_plugin_task
 from ontask.workflow.models import Workflow
 

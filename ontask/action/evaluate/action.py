@@ -19,8 +19,8 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-import ontask.dataops.sql.row_queries
 import ontask
+import ontask.dataops.sql.row_queries
 from ontask.action.evaluate.template import render_action_template
 from ontask.action.forms import EnterActionIn
 from ontask.action.models import Action

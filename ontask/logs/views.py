@@ -14,11 +14,11 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from ontask.core import DataTablesServerSidePaging
-from ontask.logs.models import Log
 from ontask import simplify_datetime_str
+from ontask.core import DataTablesServerSidePaging
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.logs.models import Log
 from ontask.workflow.models import Workflow
 
 

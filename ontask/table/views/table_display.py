@@ -19,9 +19,9 @@ from django.views.decorators.http import require_http_methods
 from pytz import timezone
 
 from ontask.core import DataTablesServerSidePaging
-from ontask.dataops.sql import delete_row, search_table
 from ontask.core.decorators import ajax_required, get_view, get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.dataops.sql import delete_row, search_table
 from ontask.table.models import View
 from ontask.visualizations.plotly import PlotlyHandler
 from ontask.workflow.models import Workflow

@@ -13,7 +13,7 @@ from django.utils import timezone
 from rest_framework import status
 
 from ontask.action.payloads import (
-    CanvasEmailPayload, EmailPayload, JSONPayload
+    CanvasEmailPayload, EmailPayload, JSONPayload,
 )
 from ontask.oauth.models import OAuthUserToken
 

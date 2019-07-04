@@ -9,9 +9,9 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
-from ontask.logs.models import Log
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.logs.models import Log
 from ontask.workflow.models import Workflow
 
 

@@ -15,14 +15,14 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.action.models import ActionColumnConditionTuple, Condition
+from ontask.core.decorators import ajax_required, get_column, get_workflow
+from ontask.core.permissions import is_instructor
 from ontask.dataops.formula import evaluation
 from ontask.dataops.pandas import (
     load_table, pandas_datatype_names, rename_df_column, store_dataframe,
 )
 from ontask.dataops.sql import add_column_to_db, db_rename_column
 from ontask.logs.models import Log
-from ontask.core.decorators import ajax_required, get_column, get_workflow
-from ontask.core.permissions import is_instructor
 from ontask.workflow.forms import (
     ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
     QuestionRenameForm, RandomColumnAddForm,

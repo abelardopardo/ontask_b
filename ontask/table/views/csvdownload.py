@@ -8,9 +8,9 @@ import pandas as pd
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 
-from ontask.dataops.pandas import get_subframe
 from ontask.core.decorators import get_view, get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.dataops.pandas import get_subframe
 from ontask.table.models import View
 from ontask.workflow.models import Workflow
 

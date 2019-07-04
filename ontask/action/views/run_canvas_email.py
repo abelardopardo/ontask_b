@@ -19,12 +19,12 @@ from ontask.action.models import Action
 from ontask.action.payloads import (
     CanvasEmailPayload, get_or_set_action_info, set_action_payload,
 )
-from ontask.logs.models import Log
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.tasks import send_canvas_email_messages
+from ontask.logs.models import Log
 from ontask.oauth.models import OAuthUserToken
 from ontask.oauth.views import get_initial_token_step1, refresh_token
+from ontask.tasks import send_canvas_email_messages
 from ontask.workflow.models import Workflow
 
 

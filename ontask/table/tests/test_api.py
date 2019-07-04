@@ -9,7 +9,9 @@ from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework.authtoken.models import Token
 
-from ontask.dataops.pandas import check_wf_df, detect_datetime_columns, load_table
+from ontask.dataops.pandas import (
+    check_wf_df, detect_datetime_columns, load_table,
+)
 from ontask.table.serializers import string_to_df
 from ontask.table.serializers.pandas import df_to_string
 from ontask.workflow.models import Workflow

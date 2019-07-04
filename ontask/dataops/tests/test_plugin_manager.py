@@ -3,15 +3,15 @@
 """Test plugin manager functions."""
 
 import os
-
-from ontask.dataops.plugin import OnTaskModel
-from ontask.dataops.plugin.plugin_manager import _verify_plugin
 import test
 
 from django.conf import settings
 from rest_framework import status
 
 from ontask.dataops.models import Plugin
+from ontask.dataops.plugin import OnTaskModel
+from ontask.dataops.plugin.plugin_manager import _verify_plugin
+
 
 class BogusPlugin(object):
     """Bogus class to be used for testing."""

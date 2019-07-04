@@ -12,12 +12,12 @@ from ontask.workflow.views.column_ops import (
 )
 from ontask.workflow.views.home import home
 from ontask.workflow.views.import_export import (
-    export, export_ask, import_workflow
+    export, export_ask, import_workflow,
 )
 from ontask.workflow.views.share import share_create, share_delete
 from ontask.workflow.views.workflow_crud import (
     WorkflowCreateView, clone_workflow, delete, detail, index, update,
 )
 from ontask.workflow.views.workflow_ops import (
-    assign_luser_column, column_ss, flush, operations, star
+    assign_luser_column, column_ss, flush, operations, star,
 )

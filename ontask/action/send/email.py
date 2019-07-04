@@ -8,7 +8,6 @@ from typing import List, Union
 
 import html2text
 import pytz
-from ontask.core.celery import get_task_logger
 from django.conf import settings as ontask_settings
 from django.contrib.sites.models import Site
 from django.core import mail, signing
@@ -18,13 +17,14 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import is_correct_email, simplify_datetime_str
 from ontask.action import settings
 from ontask.action.evaluate.action import evaluate_action
 from ontask.action.models import Action
 from ontask.action.payloads import EmailPayload
+from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.logs.models import Log
-from ontask import is_correct_email, simplify_datetime_str
 from ontask.workflow.models import Column
 
 logger = get_task_logger('celery_execution')

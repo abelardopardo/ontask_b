@@ -12,15 +12,15 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import json
 import os
-from os.path import dirname, exists, join
 import sys
+from os.path import dirname, exists, join
 
+import environ
 from celery.schedules import crontab
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-import environ
 
 import ontask
 

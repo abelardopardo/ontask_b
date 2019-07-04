@@ -12,7 +12,9 @@ from django.shortcuts import redirect, render
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.models import Action
-from ontask.action.payloads import action_session_dictionary, set_action_payload
+from ontask.action.payloads import (
+    action_session_dictionary, set_action_payload,
+)
 from ontask.logs.models import Log
 from ontask.scheduler.forms import EmailScheduleForm, JSONScheduleForm
 from ontask.scheduler.models import ScheduledAction

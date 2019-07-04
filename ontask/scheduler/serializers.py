@@ -11,9 +11,9 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
+from ontask import is_correct_email
 from ontask.action.models import Action
 from ontask.dataops.sql.row_queries import get_rows
-from ontask import is_correct_email
 from ontask.scheduler.models import ScheduledAction
 
 

@@ -15,9 +15,9 @@ from ontask.action.models import Action
 from ontask.action.payloads import (
     JSONPayload, get_or_set_action_info, set_action_payload,
 )
-from ontask.logs.models import Log
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.logs.models import Log
 from ontask.tasks import send_json_objects
 from ontask.workflow.models import Workflow
 

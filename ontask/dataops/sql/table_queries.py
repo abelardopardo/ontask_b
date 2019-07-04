@@ -8,8 +8,8 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 from django.db import connection
 from psycopg2 import sql
 
-from ontask.dataops.formula import EVAL_SQL, evaluate_formula
 from ontask import OnTaskDBIdentifier
+from ontask.dataops.formula import EVAL_SQL, evaluate_formula
 
 logger = logging.getLogger('ontask')
 

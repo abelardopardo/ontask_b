@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import test
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
@@ -8,7 +9,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask.dataops.pandas import db
-import test
 from ontask.workflow.models import Workflow
 
 

@@ -19,18 +19,18 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
-from ontask.action.views.clone import do_clone_action
-from ontask.dataops.pandas import check_wf_df
-from ontask.dataops.sql import clone_table
-from ontask.logs.models import Log
 from ontask import create_new_name
+from ontask.action.views.clone import do_clone_action
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import UserIsInstructor, is_instructor
+from ontask.dataops.pandas import check_wf_df
+from ontask.dataops.sql import clone_table
+from ontask.logs.models import Log
+from ontask.table.views.table_view import do_clone_view
 from ontask.workflow.access import (
     remove_workflow_from_session, store_workflow_in_session,
 )
-from ontask.table.views.table_view import do_clone_view
 from ontask.workflow.forms import WorkflowForm
 from ontask.workflow.models import Workflow
 from ontask.workflow.ops import do_clone_column_only

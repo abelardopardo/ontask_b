@@ -12,13 +12,13 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ontask import OnTaskDataFrameNoKey
+from ontask.core.decorators import get_workflow
+from ontask.core.permissions import UserIsInstructor
 from ontask.dataops.pandas import (
     is_unique_column, load_table, perform_dataframe_upload_merge,
     store_dataframe, verify_data_frame,
 )
-from ontask import OnTaskDataFrameNoKey
-from ontask.core.decorators import get_workflow
-from ontask.core.permissions import UserIsInstructor
 from ontask.table.serializers import (
     DataFrameJSONMergeSerializer, DataFrameJSONSerializer,
     DataFramePandasMergeSerializer, DataFramePandasSerializer,

@@ -10,9 +10,9 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
-from ontask.dataops.forms import UploadGoogleSheetForm
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.dataops.forms import UploadGoogleSheetForm
 from ontask.workflow.models import Workflow
 
 

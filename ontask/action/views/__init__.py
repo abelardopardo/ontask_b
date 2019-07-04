@@ -12,7 +12,7 @@ from ontask.action.views.condition import (
     edit_condition, edit_filter,
 )
 from ontask.action.views.edit_personalized import (
-    action_out_save_content, showurl
+    action_out_save_content, showurl,
 )
 from ontask.action.views.edit_survey import (
     edit_description, select_column_action, select_condition_for_question,
@@ -25,7 +25,7 @@ from ontask.action.views.preview import (
     preview_next_all_false_response, preview_response,
 )
 from ontask.action.views.run import (
-    run_action, run_action_item_filter, serve_action
+    run_action, run_action_item_filter, serve_action,
 )
 from ontask.action.views.run_canvas_email import run_canvas_email_done
 from ontask.action.views.run_email import run_email_done
@@ -34,6 +34,6 @@ from ontask.action.views.run_survey import (
     run_survey_row, run_survey_ss, survey_thanks,
 )
 from ontask.action.views.run_zip import (
-    action_zip_export, run_zip_done, zip_action
+    action_zip_export, run_zip_done, zip_action,
 )
 from ontask.action.views.timeline import show_timeline

@@ -11,10 +11,10 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 
-from ontask.dataops.pandas import get_column_statistics, load_table
-from ontask.dataops.sql.row_queries import get_rows
 from ontask.core.decorators import ajax_required, get_column, get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.dataops.pandas import get_column_statistics, load_table
+from ontask.dataops.sql.row_queries import get_rows
 from ontask.visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 from ontask.workflow.models import Column, Workflow
 

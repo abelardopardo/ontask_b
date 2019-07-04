@@ -75,5 +75,3 @@ class OnTaskTransformation(OnTaskPluginAbstract):
 
 class OnTaskModel(OnTaskPluginAbstract):
     """Abstract class to instantiate to create an OnTask model."""
-
-

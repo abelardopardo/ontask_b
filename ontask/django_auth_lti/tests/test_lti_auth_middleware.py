@@ -5,7 +5,9 @@ from django.contrib.auth import models
 from django.test import RequestFactory
 from mock import patch
 
-from ontask.django_auth_lti.middleware_patched import MultiLTILaunchAuthMiddleware
+from ontask.django_auth_lti.middleware_patched import (
+    MultiLTILaunchAuthMiddleware,
+)
 
 
 @patch('django_auth_lti.middleware.logger')

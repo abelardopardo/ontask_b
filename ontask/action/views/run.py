@@ -24,10 +24,10 @@ from ontask.action.views.run_email import run_email_action
 from ontask.action.views.run_json import run_json_action
 from ontask.action.views.run_survey import run_survey_action
 from ontask.action.views.serve_survey import serve_survey_row
-from ontask.logs.models import Log
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.logs.models import Log
 from ontask.workflow.models import Workflow
 
 fn_distributor = {

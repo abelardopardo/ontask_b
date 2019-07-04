@@ -5,8 +5,7 @@
 from django.urls import path, re_path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from ontask.workflow import api
-from ontask.workflow import views
+from ontask.workflow import api, views
 
 app_name = 'workflow'
 

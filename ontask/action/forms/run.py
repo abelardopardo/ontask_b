@@ -28,13 +28,13 @@ from django import forms
 from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import is_correct_email
 from ontask.action.forms import SUFFIX_LENGTH
 from ontask.action.models import Action
 from ontask.action.payloads import EmailPayload
+from ontask.core.forms import date_time_widget_options
 from ontask.dataops.sql.column_queries import is_column_unique
 from ontask.dataops.sql.row_queries import get_rows
-from ontask import is_correct_email
-from ontask.core.forms import date_time_widget_options
 
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')

@@ -8,13 +8,13 @@ from typing import Dict, Mapping, Tuple
 
 import pytz
 import requests
-from ontask.core.celery import get_task_logger
 from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
 from ontask.action.evaluate.action import evaluate_action
 from ontask.action.models import Action
+from ontask.core.celery import get_task_logger
 from ontask.logs.models import Log
 from ontask.oauth.models import OAuthUserToken
 from ontask.oauth.views import refresh_token

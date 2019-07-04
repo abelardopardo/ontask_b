@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import test
 
 from django.conf import settings
 from django.core import mail
@@ -12,7 +13,6 @@ from ontask.action.models import Action, Condition
 from ontask.dataops.formula import has_variable
 from ontask.dataops.pandas import check_wf_df
 from ontask.workflow.models import Workflow
-import test
 
 
 class ActionActionEdit(test.OnTaskLiveTestCase):

@@ -13,14 +13,14 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import create_new_name
+from ontask.core.decorators import ajax_required
+from ontask.core.permissions import is_admin, is_instructor
+from ontask.core.tables import OperationsColumn
 from ontask.dataops.forms import SQLConnectionForm
 from ontask.dataops.models import SQLConnection
 from ontask.logs.models import Log
-from ontask import create_new_name
-from ontask.core.decorators import ajax_required
 from ontask.workflow.access import remove_workflow_from_session
-from ontask.core.permissions import is_admin, is_instructor
-from ontask.core.tables import OperationsColumn
 
 
 class SQLConnectionTableAdmin(tables.Table):

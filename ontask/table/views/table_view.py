@@ -14,11 +14,11 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.logs.models import Log
 from ontask import create_new_name
 from ontask.core.decorators import ajax_required, get_view, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
+from ontask.logs.models import Log
 from ontask.table.forms import ViewAddForm
 from ontask.table.models import View
 from ontask.workflow.models import Workflow

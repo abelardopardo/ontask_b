@@ -11,10 +11,10 @@ from django.conf import settings
 from django.db import IntegrityError
 
 from ontask.table.serializers import (
-    DataFrameJSONMergeSerializer, ViewSerializer
+    DataFrameJSONMergeSerializer, ViewSerializer,
 )
 from ontask.table.serializers.pandas import (
-    DataFramePandasSerializer, df_to_string
+    DataFramePandasSerializer, df_to_string,
 )
 
 

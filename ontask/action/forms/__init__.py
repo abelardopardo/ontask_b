@@ -7,7 +7,7 @@ from ontask.action.forms.crud import (
     ActionImportForm, ActionUpdateForm, ConditionForm, FilterForm,
 )
 from ontask.action.forms.edit import (
-    EditActionOutForm, EnterActionIn, column_to_field
+    EditActionOutForm, EnterActionIn, column_to_field,
 )
 from ontask.action.forms.run import (
     CanvasEmailActionForm, EmailActionForm, EnableURLForm, JSONActionForm,

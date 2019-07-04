@@ -13,10 +13,10 @@ from django.core.cache import cache
 from django.db import connection
 from django.utils.translation import ugettext as _
 
+from ontask import OnTaskDataFrameNoKey
 from ontask.dataops.pandas.columns import has_unique_column, is_unique_column
 from ontask.dataops.pandas.datatypes import pandas_datatype_names
 from ontask.dataops.sql import get_select_query_txt
-from ontask import OnTaskDataFrameNoKey
 
 logger = logging.getLogger('console')
 

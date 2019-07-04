@@ -16,16 +16,16 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django_tables2 import A
 
+from ontask import simplify_datetime_str
 from ontask.action.forms import ActionForm, ActionUpdateForm
 from ontask.action.models import Action
 from ontask.action.payloads import set_action_payload
 from ontask.action.views.edit_personalized import edit_action_out
 from ontask.action.views.edit_survey import edit_action_in
-from ontask.logs.models import Log
-from ontask import simplify_datetime_str
 from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.core.tables import OperationsColumn
+from ontask.logs.models import Log
 from ontask.workflow.models import Workflow
 
 

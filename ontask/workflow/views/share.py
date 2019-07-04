@@ -10,9 +10,9 @@ from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from ontask.logs.models import Log
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.logs.models import Log
 from ontask.workflow.forms import SharedForm
 from ontask.workflow.models import Workflow
 
