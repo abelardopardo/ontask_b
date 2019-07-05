@@ -1,8 +1,30 @@
-## 5.1.4 (2019-0)
+## 5.2.0 (2019-0)
 
 ### Changed
 
 - Moved admin URL
+
+### Fixed
+
+- Mistake when cloning conditions from another action
+
+- Error in function to search value in table
+
+- Error when cacheing page chunks without the language_code
+
+- Fixed incorrect error reporting when uploading an incorrect file
+
+- Fixed error when using empty/not-empty operator in conditions
+
+- Fixed error in decorator in the case of a locked workflow
+
+- Fixed count of all false rows
+
+## 5.1.4 (2019-07-05)
+
+### Changed
+
+- Upgrade django version to avoid vulnerability
 
 ### Fixed
 
