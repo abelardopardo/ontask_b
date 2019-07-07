@@ -59,11 +59,6 @@ urlpatterns = [
         '<int:pk>/stat_table_view/',
         stats.stat_table_view,
         name='stat_table_view'),
-    path('stat_row/', stats.stat_row_view, name='stat_row'),
-    path(
-        '<int:pk>/stat_row_view/',
-        stats.stat_row_view,
-        name='stat_row_view'),
     path(
         '<int:pk>/stat_column/',
         stats.stat_column,
