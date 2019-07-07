@@ -2,7 +2,7 @@
 
 """Implementation of views providing visualisation and stats."""
 
-from typing import Optional
+from typing import Dict, List, Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -14,21 +14,21 @@ from django.utils.translation import ugettext as _
 from ontask.core.decorators import ajax_required, get_column, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.pandas import get_column_statistics, load_table
-from ontask.dataops.sql.row_queries import get_rows
+from ontask.dataops.sql.row_queries import get_row
 from ontask.visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 from ontask.workflow.models import Column, Workflow
 
-VISUALIZATION_WIDTH = 468
-VISUALIZATION_HEIGHT = 250
+VISUALIZATION_WIDTH = 600
+VISUALIZATION_HEIGHT = 400
 
 
 def _get_column_visualisations(
-    column,
-    col_data,
-    vis_scripts,
-    viz_id='',
-    single_val=None,
-    context=None,
+    column: Column,
+    col_data: List,
+    vis_scripts: List,
+    viz_id: Optional[str] = '',
+    single_val: Optional[str] = None,
+    context: Optional[Dict] = None,
 ):
     """Create a column visualization.
 
@@ -90,10 +90,8 @@ def _get_column_visualisations(
 
 
 def _get_column_visualization_items(
-    workflow,
-    column,
-    max_width=VISUALIZATION_WIDTH,
-    max_height=VISUALIZATION_HEIGHT,
+    workflow: Workflow,
+    column: Column,
 ):
     """Get the visualization items (scripts and HTML) for a column.
 
@@ -101,15 +99,11 @@ def _get_column_visualization_items(
 
     :param column: Column requested
 
-    :param max_width: Maximum width attribute in pixels
-
-    :param max_width: Maximum height attribute in pixels
-
     :return: Tuple stat_data with descriptive stats, visualization scripts and
     visualization HTML
     """
     # Get the dataframe
-    df = load_table(workflow.get_data_frame_table_name())
+    df = load_table(workflow.get_data_frame_table_name(), [column.name])
 
     # Extract the data to show at the top of the page
     stat_data = get_column_statistics(df[column.name])
@@ -120,11 +114,7 @@ def _get_column_visualization_items(
         df[[column.name]],
         vis_scripts,
         context={
-            'style': 'max-width:{0}px; max-height:{1}px;'.format(
-                max_width,
-                max_height,
-            ) + 'display:inline-block;',
-        },
+            'style': 'width:100%; height:100%;' + 'display:inline-block;'},
     )
 
     return stat_data, vis_scripts, visualizations
@@ -188,9 +178,7 @@ def stat_column_json(
 
     stat_data, __, visualizations = _get_column_visualization_items(
         workflow,
-        column,
-        max_height=VISUALIZATION_HEIGHT,
-        max_width=VISUALIZATION_WIDTH)
+        column)
 
     # Create the right key/value pair in the result dictionary
     return JsonResponse({
@@ -204,110 +192,6 @@ def stat_column_json(
             },
             request=request),
     })
-
-
-@user_passes_test(is_instructor)
-@get_workflow(pf_related=['columns', 'views'])
-def stat_row_view(
-    request: HttpRequest,
-    pk: Optional[int] = None,
-    workflow: Optional[Workflow] = None,
-) -> HttpResponse:
-    """Render stats for a row.
-
-    Render the page with stats and visualizations for a row in the table and
-    a view (subset of columns). The request must include key and value to get
-    the right row. In principle, there is a visualisation for each row.
-
-    :param request: HTTP request
-
-    :param pk: View id to use
-
-    :return: Render the page
-    """
-    # If there is no workflow object, go back to the index
-    # Get the pair key,value to fetch the row from the table
-    update_key = request.GET.get('key')
-    update_val = request.GET.get('val')
-
-    if not update_key or not update_val:
-        # Malformed request
-        return render(
-            request,
-            'error.html',
-            {'message': _('Unable to visualize table row')})
-
-    # If a view is given, filter the columns
-    columns_to_view = workflow.columns.all()
-    column_names = workflow.get_column_names()
-    if pk:
-        view = workflow.views.filter(pk=pk).first()
-        if not view:
-            # View not found. Redirect to home
-            return redirect('home')
-        columns_to_view = view.columns.all()
-        column_names = [col.name for col in columns_to_view]
-
-        df = load_table(
-            workflow.get_data_frame_table_name(),
-            column_names,
-            view.formula)
-    else:
-        # No view given, fetch the entire data frame
-        df = load_table(workflow.get_data_frame_table_name())
-
-    # Get the row from the table
-    row = get_row(
-        workflow.get_data_frame_table_name(),
-        update_key,
-        update_val,
-        column_names=column_names,
-    )
-
-    vis_scripts = []
-    visualizations = []
-    context = {'style': 'width:400px; height:225px;'}
-    for idx, column in enumerate(columns_to_view):
-
-        # Skip primary keys (no point to represent any of them)
-        if column.is_key:
-            continue
-
-        # Add the title and surrounding container
-        visualizations.append('<h4>' + column.name + '</h4>')
-        # If all values are empty, no need to proceed
-        if all(not col for col in df[column.name]):
-            visualizations.append(
-                '<p>' + _('No values in this column') + '</p><hr/>')
-            continue
-
-        if row[column.name] is None or row[column.name] == '':
-            visualizations.append(
-                '<p class="alert-warning">'
-                + _('No value for this student in this column')
-                + '</p>',
-            )
-
-        visualizations.append('<div style="display: inline-flex;">')
-
-        col_viz = _get_column_visualisations(
-            column,
-            df[[column.name]],
-            vis_scripts=vis_scripts,
-            viz_id='column_{0}'.format(idx),
-            single_val=row[column.name],
-            context=context)
-
-        visualizations.extend([viz.html_content for viz in col_viz])
-        visualizations.append('</div><hr/>')
-
-    return render(
-        request,
-        'table/stat_row.html',
-        {
-            'value': update_val,
-            'vis_scripts': vis_scripts,
-            'visualizations': visualizations})
 
 
 @user_passes_test(is_instructor)
@@ -349,41 +233,67 @@ def stat_table_view(
     else:
         # No view given, fetch the entire data frame
         columns_to_view = workflow.columns.filter(is_key=False)
-        df = load_table(workflow.get_data_frame_table_name())
+        df = load_table(
+            workflow.get_data_frame_table_name(),
+            [col.name for col in columns_to_view])
+
+    # Get the key/val pair to select the row (return if not consistent)
+    update_key = request.GET.get('key', None)
+    update_val = request.GET.get('val', None)
+    if bool(update_key) != bool(update_val):
+        return render(
+            request,
+            'error.html',
+            {'message': _('Unable to visualize table row')})
+    if bool(update_key):
+        template = 'table/stat_row.html'
+        row = get_row(
+            workflow.get_data_frame_table_name(),
+            update_key,
+            update_val,
+            column_names=[col.name for col in columns_to_view],
+        )
+    else:
+        row = None
+        template = 'table/stat_view.html'
 
     vis_scripts = []
     visualizations = []
-    idx = -1
-    context = {'style': 'width:400px; height:225px;'}
-    for column in columns_to_view:
-        idx += 1
-
-        # Skip primary keys (no point to represent any of them)
-        if column.is_key:
-            continue
+    context = {'style': 'max-width:600px; max-height:400px; margin: auto;'}
+    for idx, column in enumerate(columns_to_view):
 
         # Add the title and surrounding container
-        visualizations.append('<h4>' + column.name + '</h4>')
+        visualizations.append(
+            '<hr/><h4 class="text-center">' + column.name + '</h4>')
         # If all values are empty, no need to proceed
         if all(not col_data for col_data in df[column.name]):
-            visualizations.append('<p>No values in this column</p><hr/>')
+            visualizations.append(
+                '<p>' + _('No values in this column') + '</p>')
             continue
 
-        visualizations.append('<div style="display: inline-flex;">')
+        if row and (row[column.name] is None or row[column.name] == ''):
+            visualizations.append(
+                '<p class="alert-warning">' + _('No value in this column')
+                + '</p>',
+            )
 
         column_viz = _get_column_visualisations(
             column,
             df[[column.name]],
             vis_scripts=vis_scripts,
             viz_id='column_{0}'.format(idx),
+            single_val=row[column.name] if row else None,
             context=context)
 
         visualizations.extend([vis.html_content for vis in column_viz])
-        visualizations.append('</div><hr/>')
 
     return render(
         request,
-        'table/stat_view.html',
-        {'view': view,
-         'vis_scripts': vis_scripts,
-         'visualizations': visualizations})
+        template,
+        {
+            'value': update_val,
+            'view': view,
+            'vis_scripts': vis_scripts,
+            'visualizations': visualizations,
+        },
+    )

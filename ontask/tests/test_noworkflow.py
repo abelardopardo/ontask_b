@@ -72,8 +72,6 @@ class BackToHome(test.OnTaskTestCase):
             # Table
             reverse('table:display_view', kwargs={'pk': 1}),
             reverse('table:view_index'),
-            reverse('table:stat_row'),
-            reverse('table:stat_row_view', kwargs={'pk': 1}),
             reverse('table:stat_column', kwargs={'pk': 1}),
             reverse('table:stat_table'),
             reverse('table:stat_table_view', kwargs={'pk': 1}),

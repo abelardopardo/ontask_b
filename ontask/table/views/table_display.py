@@ -143,10 +143,10 @@ def _render_table_display_data(
         new_element = {}
         if view_id:
             stat_url = reverse(
-                'table:stat_row_view',
+                'table:stat_table_view',
                 kwargs={'pk': view_id})
         else:
-            stat_url = reverse('table:stat_row')
+            stat_url = reverse('table:stat_table')
 
         # Transform key name and key value into escaped strings
         key_value = escape(row[key_idx])

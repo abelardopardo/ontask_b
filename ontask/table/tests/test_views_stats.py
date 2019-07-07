@@ -47,7 +47,7 @@ class TableTestStatView(test.OnTaskTestCase):
         # Get one of the rows
         r_val = get_table_row_by_index(self.workflow, None, 1)
         resp = self.get_response(
-            'table:stat_row',
+            'table:stat_table',
             req_params={
                 'key': 'email',
                 'val': r_val['email']})
@@ -55,7 +55,7 @@ class TableTestStatView(test.OnTaskTestCase):
 
         # Get one of the rows from one of the views
         resp = self.get_response(
-            'table:stat_row_view',
+            'table:stat_table_view',
             {'pk': view.id},
             req_params={
                 'key': 'email',
