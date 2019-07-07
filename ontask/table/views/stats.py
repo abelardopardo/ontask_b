@@ -2,7 +2,7 @@
 
 """Implementation of views providing visualisation and stats."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -10,6 +10,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
+from pandas import DataFrame
 
 from ontask.core.decorators import ajax_required, get_column, get_workflow
 from ontask.core.permissions import is_instructor
@@ -17,9 +18,43 @@ from ontask.dataops.pandas import get_column_statistics, load_table
 from ontask.dataops.sql.row_queries import get_row
 from ontask.visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 from ontask.workflow.models import Column, Workflow
+from table.models import View
 
 VISUALIZATION_WIDTH = 600
 VISUALIZATION_HEIGHT = 400
+
+
+def _get_df_and_columns(
+    workflow: Workflow,
+    pk: int,
+) -> Optional[Tuple[DataFrame, List, View]]:
+    """Get the DF and the columns to process.
+
+    :param workflow: Workflow object
+    :param pk: Optional id for a view
+    :return: Tuple DataFrame, List of columns (None, None if error
+    """
+    # If a view is given, filter the columns
+    view = None
+    if pk:
+        view = workflow.views.filter(pk=pk).first()
+        if not view:
+            # View not found. Redirect to workflow detail
+            return None
+        columns_to_view = view.columns.filter(is_key=False)
+
+        df = load_table(
+            workflow.get_data_frame_table_name(),
+            [col.name for col in columns_to_view],
+            view.formula)
+    else:
+        # No view given, fetch the entire data frame
+        columns_to_view = workflow.columns.filter(is_key=False)
+        df = load_table(
+            workflow.get_data_frame_table_name(),
+            [col.name for col in columns_to_view])
+
+    return df, columns_to_view, view
 
 
 def _get_column_visualisations(
@@ -60,7 +95,6 @@ def _get_column_visualisations(
 
     # Create V1 if data type is integer or real
     if column.data_type == 'integer' or column.data_type == 'double':
-
         # Propagate the id if given
         if viz_id:
             context['id'] = viz_id + '_boxplot'
@@ -217,25 +251,11 @@ def stat_table_view(
             _('Unable to provide visualisation without data.'))
         return redirect('worflow:detail', workflow.id)
 
-    # If a view is given, filter the columns
-    view = None
-    if pk:
-        view = workflow.views.filter(pk=pk).first()
-        if not view:
-            # View not found. Redirect to workflow detail
-            return redirect('home')
-        columns_to_view = view.columns.filter(is_key=False)
-
-        df = load_table(
-            workflow.get_data_frame_table_name(),
-            [col.name for col in columns_to_view],
-            view.formula)
-    else:
-        # No view given, fetch the entire data frame
-        columns_to_view = workflow.columns.filter(is_key=False)
-        df = load_table(
-            workflow.get_data_frame_table_name(),
-            [col.name for col in columns_to_view])
+    # Get the data frame and the columns
+    df_col_view = _get_df_and_columns(workflow, pk)
+    if not df_col_view:
+        return redirect('home')
+    df, columns_to_view, view = df_col_view
 
     # Get the key/val pair to select the row (return if not consistent)
     update_key = request.GET.get('key', None)
@@ -259,7 +279,11 @@ def stat_table_view(
 
     vis_scripts = []
     visualizations = []
-    context = {'style': 'max-width:600px; max-height:400px; margin: auto;'}
+    context = {
+        'style': 'max-width:{0}px; max-height:{1}px; margin: auto;'.format(
+            VISUALIZATION_WIDTH,
+            VISUALIZATION_HEIGHT),
+    }
     for idx, column in enumerate(columns_to_view):
 
         # Add the title and surrounding container
@@ -271,7 +295,7 @@ def stat_table_view(
                 '<p>' + _('No values in this column') + '</p>')
             continue
 
-        if row and (row[column.name] is None or row[column.name] == ''):
+        if row and not row[column.name]:
             visualizations.append(
                 '<p class="alert-warning">' + _('No value in this column')
                 + '</p>',
