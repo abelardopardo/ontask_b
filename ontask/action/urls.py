@@ -14,8 +14,7 @@ from ontask.action.views import (
     run_canvas_email_done, run_email_done, run_json_done, run_survey_row,
     run_survey_ss, run_zip_done, select_column_action,
     select_condition_for_question, serve_action, show_timeline, showurl,
-    shuffle_questions, survey_thanks, unselect_column_action, zip_action,
-    serve_visualization,
+    shuffle_questions, survey_thanks, unselect_column_action, zip_action
 )
 
 app_name = 'action'
@@ -167,11 +166,6 @@ urlpatterns = [
     # Serve the personalised content
     #
     path('<int:action_id>/serve/', serve_action, name='serve'),
-
-    #
-    # Serve the personalised visualizaton
-    #
-    path('serve_viz/', serve_visualization, name='serve_viz'),
 
     #
     # Edit action description and name
