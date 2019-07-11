@@ -130,7 +130,7 @@ def callback(request):
     :return: Redirection to the stored page
     """
     # Get the payload from the session
-    payload = get_action_payload(request)
+    payload = get_action_payload(request.session)
 
     # If there is no payload, something went wrong.
     if payload is None:
