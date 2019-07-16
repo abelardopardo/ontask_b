@@ -556,6 +556,8 @@ EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
 #
 ###############################################################################
 LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS', default={})
+LTI_INSTRUCTOR_GROUP_ROLES = env.list('LTI_INSTRUCTOR_GROUP_ROLES',
+    default=['Instructor'])
 
 ###############################################################################
 #

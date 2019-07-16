@@ -35,7 +35,7 @@ def entry(request: HttpRequest) -> HttpResponse:
 
 @csrf_exempt
 @xframe_options_exempt
-@lti_role_required(['Instructor', 'Student'])
+@lti_role_required(['Instructor', 'Learner'])
 def lti_entry(request: HttpRequest) -> HttpResponse:
     """Enter the application through LTI."""
     return redirect('home')
