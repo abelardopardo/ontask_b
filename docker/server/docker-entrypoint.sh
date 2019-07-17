@@ -10,7 +10,7 @@ touch /data/web/logs/script.log
 touch /data/web/logs/celery.log
 chown -R www-data.www-data /data/web/logs
 
-cd $PROJECT_DIR/src
+cd $PROJECT_DIR
 
 # Apply migrations
 >&2 echo "Migrating"
@@ -18,10 +18,10 @@ python3 manage.py migrate --noinput
 
 # Initial data
 >&2 echo "Creating initial data (instructors)"
-python3 manage.py initialize_db -i $PROJECT_DIR/src/scripts/initial_instructors.csv
+python3 manage.py initialize_db -i $PROJECT_DIR/scripts/initial_instructors.csv
 
 >&2 echo "Creating initial data (learners)"
-python3 manage.py initialize_db $PROJECT_DIR/src/scripts/initial_learners.csv
+python3 manage.py initialize_db $PROJECT_DIR/scripts/initial_learners.csv
 
 >&2 echo "Creating superuser "
 python3 manage.py create_superuser
