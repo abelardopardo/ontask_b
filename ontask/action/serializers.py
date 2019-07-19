@@ -351,7 +351,7 @@ class ActionSerializer(serializers.ModelSerializer):
                     validated_data.get('text_content'),  # Legacy
                 ),
                 target_url=validated_data.get('target_url', ''),
-                shuffle=validated_data.get('shuffle', default=False),
+                shuffle=validated_data.get('shuffle', False),
             )
             action_obj.save()
 
