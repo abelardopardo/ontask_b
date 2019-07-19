@@ -108,7 +108,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//button[@type='Submit']"
         ).click()
-        WebDriverWait(self.selenium, 10).until(
+        WebDriverWait(self.selenium, 20).until(
             EC.presence_of_element_located(
                 (By.XPATH,
                  "//h5[contains(@class, 'card-header') "
