@@ -621,10 +621,6 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def setUp(self):
-        super().setUp()
-        test.pg_restore_table(self.filename)
-
     def tearDown(self):
         test.delete_all_tables()
         super().tearDown()
