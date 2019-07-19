@@ -28,35 +28,7 @@ from ontask.dataops.pandas import get_table_row_by_index
 from ontask.dataops.sql.row_queries import get_row, get_rows
 
 
-def action_condition_evaluation(
-    action: Action,
-    row_values: Mapping,
-) -> Optional[Dict[str, bool]]:
-    """Calculate dictionary with column_name: Boolean evaluations.
-
-    :param action: Action objects to obtain the columns
-    :param row_values: dictionary with (name: value) pairs for one row
-    :return: Dictionary condition_name: True/False or None if anomaly
-    """
-    condition_eval = {}
-    conditions = action.conditions.filter(is_filter=False).values(
-        'name', 'is_filter', 'formula',
-    )
-    for condition in conditions:
-        # Evaluate the condition
-        try:
-            condition_eval[condition['name']] = evaluate_formula(
-                condition['formula'],
-                EVAL_EXP,
-                row_values,
-            )
-        except ontask.OnTaskException:
-            # Something went wrong evaluating a condition. Stop.
-            return None
-    return condition_eval
-
-
-def render_tuple_result(
+def _render_tuple_result(
     action: Action,
     context: Dict[str, Union[str, float, int, datetime]],
     extra_string: str,
@@ -89,6 +61,34 @@ def render_tuple_result(
         partial_result.append(context[column_name])
 
     return partial_result
+
+
+def action_condition_evaluation(
+    action: Action,
+    row_values: Mapping,
+) -> Optional[Dict[str, bool]]:
+    """Calculate dictionary with column_name: Boolean evaluations.
+
+    :param action: Action objects to obtain the columns
+    :param row_values: dictionary with (name: value) pairs for one row
+    :return: Dictionary condition_name: True/False or None if anomaly
+    """
+    condition_eval = {}
+    conditions = action.conditions.filter(is_filter=False).values(
+        'name', 'is_filter', 'formula',
+    )
+    for condition in conditions:
+        # Evaluate the condition
+        try:
+            condition_eval[condition['name']] = evaluate_formula(
+                condition['formula'],
+                EVAL_EXP,
+                row_values,
+            )
+        except ontask.OnTaskException:
+            # Something went wrong evaluating a condition. Stop.
+            return None
+    return condition_eval
 
 
 def get_action_evaluation_context(
@@ -163,7 +163,9 @@ def evaluate_action(
     :param column_name: Column from where to extract the special value (
            typically the email address) and include it in the result.
     :param exclude_values: List of values in the column to exclude
-    :return: list of lists resulting from the evaluation of the action
+    :return: list of lists resulting from the evaluation of the action. Each
+             element in the list contains the HTML body, the extra string (if
+             provided) and the column value.
     """
     # Get the table data
     rows = get_rows(
@@ -181,7 +183,7 @@ def evaluate_action(
 
         # Append result
         list_of_renders.append(
-            render_tuple_result(action, context, extra_string, column_name),
+            _render_tuple_result(action, context, extra_string, column_name),
         )
 
     # Check field n_rows_selected (table may have been modified)

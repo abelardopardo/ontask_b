@@ -30,69 +30,74 @@ from ontask.workflow.models import Column
 logger = get_task_logger('celery_execution')
 
 
-def send_emails(
+def _send_confirmation_message(
     user,
     action: Action,
-    log_item: Log,
-    action_info: EmailPayload,
+    nmsgs: int,
 ) -> None:
-    """Send action content evaluated for each row.
+    """Send the confirmation message.
 
-    Sends the emails for the given action and with the
-    given subject. The subject will be evaluated also with respect to the
-    rows, attributes, and conditions.
-
-    The messages are sent in bursts with a pause in seconds as specified by the
-    configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
-
-    :param user: User object that executed the action
-    :param action: Action from where to take the messages
-    :param log_item: Log object to store results
-    :param action_info: Mapping key, value as defined in EmailPayload
-
-    :return: Send the emails
+    :param user: Destination email
+    :param action: Action being considered
+    :param nmsgs: Number of messages being sent
+    :return:
     """
-    # Evaluate the action string, evaluate the subject, and get the value of
-    # the email column.
-    action_evals = evaluate_action(
-        action,
-        extra_string=action_info['subject'],
-        column_name=action_info['item_column'],
-        exclude_values=action_info['exclude_values'])
+    # Creating the context for the confirmation email
+    now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
+    cfilter = action.get_filter()
+    context = {
+        'user': user,
+        'action': action,
+        'num_messages': nmsgs,
+        'email_sent_datetime': now,
+        'filter_present': cfilter is not None,
+        'num_rows': action.workflow.nrows,
+        'num_selected': action.get_rows_selected(),
+    }
 
-    check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
+    # Create template and render with context
+    try:
+        html_content = Template(
+            str(getattr(settings, 'NOTIFICATION_TEMPLATE')),
+        ).render(Context(context))
+        text_content = strip_tags(html_content)
+    except TemplateSyntaxError as exc:
+        raise Exception(
+            _('Syntax error in notification template ({0})').format(str(exc)),
+        )
 
-    track_col_name = ''
-    if action_info['track_read']:
-        track_col_name = create_track_column(action)
-        # Get the log item payload to store the tracking column
-        log_item.payload['track_column'] = track_col_name
-        log_item.save()
-
-    msgs = create_messages(
+    # Log the event
+    Log.objects.register(
         user,
-        action,
-        action_evals,
-        track_col_name,
-        action_info,
+        Log.ACTION_EMAIL_NOTIFY,
+        action.workflow,
+        {'user': user.id,
+         'action': action.id,
+         'num_messages': nmsgs,
+         'email_sent_datetime': str(now),
+         'filter_present': cfilter is not None,
+         'num_rows': action.workflow.nrows,
+         'subject': str(settings.NOTIFICATION_SUBJECT),
+         'body': text_content,
+         'from_email': str(settings.NOTIFICATION_SENDER),
+         'to_email': [user.email]},
     )
 
-    deliver_msg_burst(msgs)
+    # Send email out
+    try:
+        send_mail(
+            str(settings.NOTIFICATION_SUBJECT),
+            text_content,
+            str(settings.NOTIFICATION_SENDER),
+            [user.email],
+            html_message=html_content)
+    except Exception as exc:
+        raise Exception(
+            _('Error when sending the notification: {0}').format(str(exc)),
+        )
 
-    # Update data in the log item
-    log_item.payload['objects_sent'] = len(action_evals)
-    log_item.payload['filter_present'] = action.get_filter() is not None
-    log_item.payload['datetime'] = str(
-        datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
-    )
-    log_item.save()
 
-    if action_info['send_confirmation']:
-        # Confirmation message requested
-        send_confirmation_message(user, action, len(msgs))
-
-
-def check_cc_lists(cc_email_list: List[str], bcc_email_list: List[str]):
+def _check_cc_lists(cc_email_list: List[str], bcc_email_list: List[str]):
     """Verify that the cc lists are correct.
 
     :param cc_email_list: List of emails to use in CC
@@ -112,7 +117,7 @@ def check_cc_lists(cc_email_list: List[str], bcc_email_list: List[str]):
         raise Exception(_('Invalid email address in bcc email'))
 
 
-def create_track_column(action: Action) -> str:
+def _create_track_column(action: Action) -> str:
     """Create an additional column for email tracking.
 
     :param action: Action to consider
@@ -152,13 +157,12 @@ def create_track_column(action: Action) -> str:
         action.workflow.get_data_frame_table_name(),
         track_col_name,
         'integer',
-        0
-    )
+        0)
 
     return track_col_name
 
 
-def create_single_message(
+def _create_single_message(
     msg_body_sbj_to: str,
     track_str: str,
     from_email: str,
@@ -201,7 +205,7 @@ def create_single_message(
     return msg
 
 
-def create_messages(
+def _create_messages(
     user,
     action: Action,
     action_evals: List,
@@ -253,7 +257,7 @@ def create_messages(
                 ),
             )
 
-        msg = create_single_message(
+        msg = _create_single_message(
             msg_body_sbj_to,
             track_str,
             user.email,
@@ -278,7 +282,9 @@ def create_messages(
     return msgs
 
 
-def deliver_msg_burst(msgs: List[Union[EmailMessage, EmailMultiAlternatives]]):
+def _deliver_msg_burst(
+    msgs: List[Union[EmailMessage, EmailMultiAlternatives]],
+):
     """Deliver the messages in bursts.
 
     :param msgs: List of either EmailMessage or EmailMultiAlternatives
@@ -306,68 +312,63 @@ def deliver_msg_burst(msgs: List[Union[EmailMessage, EmailMultiAlternatives]]):
             sleep(wait_time)
 
 
-def send_confirmation_message(
+def send_emails(
     user,
     action: Action,
-    nmsgs: int,
+    log_item: Log,
+    action_info: EmailPayload,
 ) -> None:
-    """Send the confirmation message.
+    """Send action content evaluated for each row.
 
-    :param user: Destination email
-    :param action: Action being considered
-    :param nmsgs: Number of messages being sent
-    :return:
+    Sends the emails for the given action and with the
+    given subject. The subject will be evaluated also with respect to the
+    rows, attributes, and conditions.
+
+    The messages are sent in bursts with a pause in seconds as specified by the
+    configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
+
+    :param user: User object that executed the action
+    :param action: Action from where to take the messages
+    :param log_item: Log object to store results
+    :param action_info: Mapping key, value as defined in EmailPayload
+
+    :return: Send the emails
     """
-    # Creating the context for the confirmation email
-    now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
-    cfilter = action.get_filter()
-    context = {
-        'user': user,
-        'action': action,
-        'num_messages': nmsgs,
-        'email_sent_datetime': now,
-        'filter_present': cfilter is not None,
-        'num_rows': action.workflow.nrows,
-        'num_selected': action.get_rows_selected(),
-    }
+    # Evaluate the action string, evaluate the subject, and get the value of
+    # the email column.
+    action_evals = evaluate_action(
+        action,
+        extra_string=action_info['subject'],
+        column_name=action_info['item_column'],
+        exclude_values=action_info['exclude_values'])
 
-    # Create template and render with context
-    try:
-        html_content = Template(
-            str(getattr(settings, 'NOTIFICATION_TEMPLATE')),
-        ).render(Context(context))
-        text_content = strip_tags(html_content)
-    except TemplateSyntaxError as exc:
-        raise Exception(
-            _('Syntax error in notification template ({0})').format(str(exc)),
-        )
+    _check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
 
-    # Log the event
-    Log.objects.register(
+    track_col_name = ''
+    if action_info['track_read']:
+        track_col_name = _create_track_column(action)
+        # Get the log item payload to store the tracking column
+        log_item.payload['track_column'] = track_col_name
+        log_item.save()
+
+    msgs = _create_messages(
         user,
-        Log.ACTION_EMAIL_NOTIFY,
-        action.workflow,
-        {'user': user.id,
-         'action': action.id,
-         'num_messages': nmsgs,
-         'email_sent_datetime': str(now),
-         'filter_present': cfilter is not None,
-         'num_rows': action.workflow.nrows,
-         'subject': str(getattr(settings, 'NOTIFICATION_SUBJECT')),
-         'body': text_content,
-         'from_email': str(getattr(settings, 'NOTIFICATION_SENDER')),
-         'to_email': [user.email]},
+        action,
+        action_evals,
+        track_col_name,
+        action_info,
     )
 
-    # Send email out
-    try:
-        send_mail(
-            str(getattr(settings, 'NOTIFICATION_SUBJECT')),
-            text_content,
-            str(getattr(settings, 'NOTIFICATION_SENDER')),
-            [user.email],
-            html_message=html_content)
-    except Exception as exc:
-        raise Exception(
-            _('Error when sending the notification: {0}').format(str(exc)),
-        )
+    _deliver_msg_burst(msgs)
+
+    # Update data in the log item
+    log_item.payload['objects_sent'] = len(action_evals)
+    log_item.payload['filter_present'] = action.get_filter() is not None
+    log_item.payload['datetime'] = str(
+        datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
+    )
+    log_item.save()
+
+    if action_info['send_confirmation']:
+        # Confirmation message requested
+        _send_confirmation_message(user, action, len(msgs))

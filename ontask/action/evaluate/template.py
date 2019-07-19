@@ -179,21 +179,15 @@ def render_action_template(
     structures denoting the use of variables, and a dictionary that matches
     variables to values.
 
-    The processing of the template is done through Django template engine
-    (itself based in Jinja). The syntax for the variables appearing in the
-    template is highly restrictive. It only allows names starting with a
-    letter followed by letter, number or '_'. No other printable symbol is
-    allowed. We want to relax this last restriction.
-
     The solution:
     1) Parse the template and detect the use of all variables.
 
-    2) For each variable use, transform its name into a name that is legal
+    2) For each variable, transform its name into a legal one
        for Jinja (starts with letter followed by letter, number or '_' *)
 
        The transformation is based on:
        - Every non-letter or number is replaced by '_' followed by a
-         letter/number as specified by the dictionary below.
+         letter/number as specified by the global dictionary.
 
        - If the original variable does not start by a letter, insert a prefix.
 
@@ -207,7 +201,7 @@ def render_action_template(
     needed by any other custom template.
     :return: The rendered template
     """
-    # Steps 1 and 2. Apply the tranlation process to all variables that
+    # Steps 1 and 2. Apply the translation process to all variables that
     # appear in the the template text
     new_template_text = template_text
     for rexpr in var_use_res:
