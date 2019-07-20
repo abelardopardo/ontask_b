@@ -9,7 +9,8 @@ import pytz
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
+from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -29,7 +30,7 @@ from ontask.workflow.models import Workflow
 
 
 def run_canvas_email_action(
-    req: HttpRequest,
+    req: WSGIRequest,
     workflow: Workflow,
     action: Action,
 ) -> HttpResponse:
@@ -51,8 +52,8 @@ def run_canvas_email_action(
         initial_values={
             'action_id': action.id,
             'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:email_done')
-        }
+            'post_url': reverse('action:email_done'),
+        },
     )
 
     # Create the form to ask for the email subject and other information
@@ -94,7 +95,7 @@ def run_canvas_email_action(
 
 @user_passes_test(is_instructor)
 def canvas_get_or_set_oauth_token(
-    request: HttpRequest,
+    request: WSGIRequest,
     oauth_instance_name: str,
 ) -> HttpResponse:
     """Check for OAuth token, if not present, request a new one.
@@ -152,7 +153,7 @@ def canvas_get_or_set_oauth_token(
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def run_canvas_email_done(
-    request: HttpRequest,
+    request: WSGIRequest,
     action_info: Optional[CanvasEmailPayload] = None,
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
