@@ -86,7 +86,7 @@ def send_canvas_emails(
         # https://canvas.instructure.com/doc/api/conversations.html
         #
         canvas_email_payload = {
-            'recipients[]': msg_to,
+            'recipients[]': int(msg_to),
             'body': msg_body,
             'subject': msg_subject,
         }

@@ -78,6 +78,7 @@ def run_canvas_email_action(
             return redirect('action:item_filter')
 
         # Go straight to the token request step
+        set_action_payload(req.session, action_info.get_store())
         return canvas_get_or_set_oauth_token(
             req,
             action_info['target_url'])
