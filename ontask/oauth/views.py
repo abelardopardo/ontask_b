@@ -4,10 +4,12 @@
 
 from datetime import timedelta
 
+from django.http import HttpResponse
 import requests
 from django.conf import settings as ontask_settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import redirect, reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
@@ -119,7 +121,7 @@ def refresh_token(user_token, oauth_info):
 
 
 @user_passes_test(is_instructor)
-def callback(request):
+def callback(request: WSGIRequest) -> HttpResponse:
     """Process the call received from the server.
 
     This is supposed to contain the token so it is saved to the database and
@@ -130,7 +132,7 @@ def callback(request):
     :return: Redirection to the stored page
     """
     # Get the payload from the session
-    payload = get_action_payload(request)
+    payload = get_action_payload(request.session)
 
     # If there is no payload, something went wrong.
     if payload is None:
