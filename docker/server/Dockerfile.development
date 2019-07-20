@@ -44,8 +44,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade -r requirements/development.
 
 # Generate the documentation (so that this step is not repeated if restarting)
 WORKDIR $PROJECT_DIR/docs_src
-RUN SECRET_KEY=12345678 DATABASE_URL=postgres://username:password@host:5432/database \
-    make clean html copy_to_docs
+RUN make clean html copy_to_docs
 
 ENTRYPOINT ["/data/web/docker/server/docker-entrypoint.sh"]
 
