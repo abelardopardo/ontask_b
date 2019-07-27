@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import Group
 
 from ontask.lti.tool_provider import DjangoToolProvider
 
@@ -113,6 +114,7 @@ class LTIAuthBackend(ModelBackend):
         email = tool_provider.lis_person_contact_email_primary
         first_name = tool_provider.lis_person_name_given
         last_name = tool_provider.lis_person_name_family
+        roles = tool_provider.roles
 
         # Check that we have an email field at least
         if not email:
@@ -158,6 +160,16 @@ class LTIAuthBackend(ModelBackend):
             user.first_name = first_name
         if last_name:
             user.last_name = last_name
+
+        # check if substring group_role in the user's launch roles
+        should_be_in_instructor_group = any(
+            any(group_role_substring in role for role in roles) \
+            for group_role_substring in settings.LTI_INSTRUCTOR_GROUP_ROLES
+        )
+        if should_be_in_instructor_group and not user.groups.filter(name='instructor').exists():
+            instructor_group = Group.objects.get(name='instructor')
+            user.groups.add(instructor_group)
+
         user.save()
         logger.debug("updated the user record in the database")
 
