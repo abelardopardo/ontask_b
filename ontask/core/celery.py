@@ -25,7 +25,7 @@ logger = get_task_logger('celery_execution')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django app configs.
-app.autodiscover_tasks(['ontask'])
+app.autodiscover_tasks(['ontask.tasks'])
 
 
 @app.task(bind=True)

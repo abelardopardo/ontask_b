@@ -31,6 +31,7 @@ import ontask
 #
 ###############################################################################
 def dump_config():
+    """Print the configuration in the console."""
     print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
     print('BASE_DIR:', BASE_DIR())
     print('CELERY_TASK_ALWAYS_EAGER:', CELERY_TASK_ALWAYS_EAGER)
@@ -490,7 +491,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE = {
     'ontask_scheduler': {
-        'task': 'ontask.tasks.execute_scheduled_actions',
+        'task': 'ontask.tasks.scheduled_actions.execute_scheduled_actions',
         'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
         'args': (DEBUG,),
     },
@@ -556,7 +557,8 @@ EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
 #
 ###############################################################################
 LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS', default={})
-LTI_INSTRUCTOR_GROUP_ROLES = env.list('LTI_INSTRUCTOR_GROUP_ROLES',
+LTI_INSTRUCTOR_GROUP_ROLES = env.list(
+    'LTI_INSTRUCTOR_GROUP_ROLES',
     default=['Instructor'])
 
 ###############################################################################
