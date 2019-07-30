@@ -14,7 +14,6 @@ from ontask.core.permissions import UserIsInstructor
 from ontask.django_auth_lti.decorators import lti_role_required
 from ontask.tasks import increase_track_count
 
-
 class AboutPage(generic.TemplateView):
     """ABout page."""
 
@@ -28,11 +27,6 @@ class ToBeDone(UserIsInstructor, generic.TemplateView):
 
 
 @login_required
-def entry(request: HttpRequest) -> HttpResponse:
-    """Entry point."""
-    return redirect('home')
-
-
 @csrf_exempt
 @xframe_options_exempt
 @lti_role_required(['Instructor', 'Learner'])
@@ -42,7 +36,7 @@ def lti_entry(request: HttpRequest) -> HttpResponse:
 
 
 # No permissions in this URL as it is supposed to be wide open to track email
-#  reads.
+# reads.
 def trck(request: HttpRequest) -> HttpResponse:
     """Receive a request with a token from email read tracking.
 

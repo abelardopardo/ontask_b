@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Home  page view."""
+"""Home page view."""
 
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse

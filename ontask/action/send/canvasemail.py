@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Send personalized emails using Canvas API."""
+
 import datetime
 import json
 from time import sleep
