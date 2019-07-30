@@ -151,15 +151,11 @@ class LTIAuthBackend(ModelBackend):
             except user_model.DoesNotExist:
                 logger.debug('authenticate could not find user %s', username)
 
-        # update the user
-        if email:
-            user.email = email
-        if username:
+        # update user information if given by LTI and not present in user obj.
+        if not user.name and username:
             user.name = username
-        if first_name:
-            user.first_name = first_name
-        if last_name:
-            user.last_name = last_name
+        if not user.name and first_name and last_name:
+            user.name = first_name + ' ' + last_name
 
         # check if substring group_role in the user's launch roles
         should_be_in_instructor_group = any(
