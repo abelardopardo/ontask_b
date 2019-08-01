@@ -543,6 +543,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         self.assertIn('New workflow', self.selenium.page_source)
         self.assertIn('Import workflow', self.selenium.page_source)
 
+        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
+            (By.XPATH, xpath.format(wname))
+        ))
         self.selenium.find_element_by_xpath(xpath.format(wname)).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'action-index'))

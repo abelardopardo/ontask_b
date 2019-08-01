@@ -292,6 +292,10 @@ rst_prolog += """
 .. |fa-database| raw:: html
 
    <span class="fa fa-database"></span>
+
+.. |fa-cogs| raw:: html
+
+   <span class="fa fa-cogs"></span>
 """
 
 def setup(app):

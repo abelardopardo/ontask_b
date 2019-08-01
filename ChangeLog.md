@@ -1,8 +1,14 @@
-## 5.2.0 (2019-0)
+## 5.2.0 (2019-08-01)
+
+### Added
+
+- Role handling configuration for LTI (deciding which role is Instructor)
 
 ### Changed
 
 - Moved admin URL
+
+- Improved HTML rendering for visualizations.
 
 ### Fixed
 
@@ -19,6 +25,12 @@
 - Fixed error in decorator in the case of a locked workflow
 
 - Fixed count of all false rows
+
+- Fixed error when invoking scheduled tasks (Issue #153)
+
+- Fixed error when handling payload management in Oauth2 (Issue #152)
+
+- Fixed inconsistencies in the documentation regarding paths in the tooltips
 
 ## 5.1.4 (2019-07-05)
 
