@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Statistics' %}{% endblock %}
+{% block extrahead %}
+  {% for script_src in vis_scripts %}
+    <script src="{{ script_src|safe }}"></script>
+  {% endfor %}
+{% endblock %}
+{% block scripts %}
+  <script src="{% static 'site/js/sol.js' %}"></script>
+  <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
+{% endblock %}
+{% block container %}
+  <div class="container">
+    <h1 class="text-center">
+      {% if view %}
+        {% blocktrans with n=view.name %}Dashboard for {{ n }}{% endblocktrans %}</h1>
+      {% else %}
+        {% trans 'Dashboard' %}
+      {% endif %}</h1>
+    {% if visualizations %}
+      <div class="text-center my-3">
+        <a href="{{ request.META.HTTP_REFERER }}"
+             class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+      </div>
+    {% endif %}
+    <div class="justify-content-center">
+      {% if visualizations %}
+        {% for vis_item in visualizations %}
+          {{ vis_item|safe }}
+        {% endfor %}
+      {% else %}
+        <p class="lead my-3">{% trans 'There is no data to show in the dashboard' %}</p>
+      {% endif %}
+    </div>
+    <div class="text-center my-3">
+      <a href="{{ request.META.HTTP_REFERER }}"
+           class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+    </div>
+  </div>
+{% endblock container %}

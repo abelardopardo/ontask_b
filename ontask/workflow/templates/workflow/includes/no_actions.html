@@ -1,0 +1,7 @@
+{% load i18n %}
+{% load cache %}
+{% cache 3600 workflow_no_actions LANGUAGE_CODE %}
+  {% url 'action:index' as actionindex %}
+  <p class="lead text-center">{% blocktrans %}<strong>Next Step:</strong> Click in the <a href="{{ actionindex }}">
+  Actions</a> menu at the top bar to create actions to execute with the data in the table.{% endblocktrans %}</p>
+{% endcache %}

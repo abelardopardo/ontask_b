@@ -19,7 +19,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../src'))
+sys.path.insert(0, os.path.abspath('..'))
 import ontask
 
 # -- General configuration ------------------------------------------------
@@ -292,6 +292,10 @@ rst_prolog += """
 .. |fa-database| raw:: html
 
    <span class="fa fa-database"></span>
+
+.. |fa-cogs| raw:: html
+
+   <span class="fa fa-cogs"></span>
 """
 
 def setup(app):

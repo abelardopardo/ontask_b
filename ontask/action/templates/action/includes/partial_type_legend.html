@@ -1,0 +1,9 @@
+{% load cache %}
+{% cache 3600 action_partial_type_legend LANGUAGE_CODE %}
+  <div class="row justify-content-center">
+    <span class="legend-circle action-type-personalized-text"></span>&nbsp;Personalized Text&nbsp;|&nbsp;
+    <span class="legend-circle action-type-personalized-canvas-email"></span>&nbsp;Personalized Canvas Email&nbsp;|&nbsp;
+    <span class="legend-circle action-type-personalized-json"></span>&nbsp;Personalized JSON&nbsp;|&nbsp;
+    <span class="legend-circle action-type-survey"></span>&nbsp;Survey
+  </div>
+{% endcache %}
