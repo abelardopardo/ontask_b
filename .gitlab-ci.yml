@@ -34,6 +34,7 @@ test:
   artifacts:
     paths:
       - htmlcov
+      - .coverage
     expire_in: 60 days
 
 build_doc:
