@@ -65,7 +65,6 @@ class TutorialCaptures(ScreenTests):
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                         '..',
                          'docs_src',
                          'Dataset',
                          'all_data.csv')
@@ -169,7 +168,7 @@ class TutorialCaptures(ScreenTests):
                                                   2,
                                                   'ckrn7263@bogus.com')
         stat_page = element.find_element_by_xpath(
-            'td//a[contains(@href, "stat_row")]'
+            'td//a[contains(@href, "stat_table")]'
         ).get_attribute('href')
         self.selenium.get(stat_page)
         WebDriverWait(self.selenium, 10).until(
@@ -206,7 +205,6 @@ class TutorialCaptures(ScreenTests):
         )
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                         '..',
                          'docs_src',
                          'Dataset',
                          'moodle_grades.csv')

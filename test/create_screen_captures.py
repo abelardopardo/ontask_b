@@ -98,9 +98,7 @@ class ScreenImportTest(ScreenTests):
             self.workflow_name
         )
         self.selenium.find_element_by_id('id_wf_file').send_keys(
-            os.path.join(settings.BASE_DIR(),
-                         '..',
-                         'initial_workflow.gz')
+            os.path.join(settings.BASE_DIR(), 'initial_workflow.gz')
         )
 
         # Picture of the body
@@ -120,7 +118,7 @@ class ScreenImportTest(ScreenTests):
 
 
 class ScreenTestFixture(ScreenTests):
-    fixtures = ['../initial_workflow/initial_workflow.json']
+    fixtures = ['test/initial_workflow/initial_workflow.json']
     filename = os.path.join(
         settings.BASE_DIR(),
         'test',
@@ -315,7 +313,7 @@ class ScreenTestFixture(ScreenTests):
         )
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                         '..',
+                         'test',
                          'initial_workflow',
                          'initial_workflow.csv')
         )
