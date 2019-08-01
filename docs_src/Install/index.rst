@@ -513,6 +513,8 @@ If you have OnTask already configured and running, here are the steps to follow 
 
 - Set the current folder of the interpreter to the main project folder.
 
+- Verify that the :ref:`configuration file <configuration_file>` is in the folder ``ontask/settings``.
+
 - Pull the code for the new version from the repository::
 
     git pull
