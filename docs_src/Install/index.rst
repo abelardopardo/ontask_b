@@ -321,6 +321,8 @@ Here is an example of a minimalistic configuration file (note there is no space 
 
      SECRET_KEY=4o93jf0572094jv...
 
+The configuration file may include additional variables to configure functionality such as :ref:`IMS LTI <ims_lti_config>`, :ref:`LDAP Authentication <ldap_config>`, :ref:`Email configuration <email_config>`, or :ref:`Canvas Email Configuration <canvas_email_config>`.
+
 .. _configuration_script:
 
 Configuration script
@@ -337,7 +339,7 @@ The are some additional configuration variables that directly defined in the mod
 Log directory
 -------------
 
-Create a new folder with name ``logs`` in the OnTask top folder, next to the ``requirements`` folder, or in the location defined in the variable ``LOG_FOLDER``. This folder **is different** from the folder with the same name in the ``src`` folder.
+Create a new folder with name ``logs`` in the OnTask top folder, next to the ``requirements`` folder, or in the location defined in the variable ``LOG_FOLDER``. This folder **is different** from the folder with the same name in the ``ontask`` folder.
 
 
 OnTask Installation
@@ -347,7 +349,7 @@ Once you have OnTask installed and configured and the tools Redis and Postgresql
 
      make clean html copy_to_docs
 
-The documentation is created by the application ``sphinx-doc`` and stored in the directory ``_build`` which is then copied to the ``../docs`` folder. Once the documentation has been created, the next steps configure the database. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`. The following commands have to be execute from the ``src`` folder.
+The documentation is created by the application ``sphinx-doc`` and stored in the directory ``_build`` which is then copied to the ``../docs`` folder. Once the documentation has been created, the next steps configure the database. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`. The following commands have to be execute from the project folder.
 
 1. Execute the following command to create the database internal structure::
 
@@ -400,7 +402,7 @@ The documentation is created by the application ``sphinx-doc`` and stored in the
          os.environ.setdefault("DJANGO_SETTINGS_MODULE",
                           "ontask.settings.development")
 
-   Second, execute the following command from the ``src`` folder::
+   Second, execute the following command from the project folder::
 
      pip3 install -r requirements/development.txt
 
@@ -509,7 +511,7 @@ If you have OnTask already configured and running, here are the steps to follow 
 
 - Open a terminal and use a command interpreter to execute the following commands.
 
-- Place the interpreter in the project folder (the one with the folder ``src`` in it)
+- Set the current folder of the interpreter to the main project folder.
 
 - Pull the code for the new version from the repository::
 
@@ -527,9 +529,9 @@ If you have OnTask already configured and running, here are the steps to follow 
 
     make clean html copy_to_docs
 
-- Go to the sub-folder containing the apps::
+- Go back to the project folder::
 
-    cd ../src
+    cd ..
 
 - Collect all files to be served statically::
 
@@ -553,6 +555,8 @@ If you have OnTask already configured and running, here are the steps to follow 
 
 - Restart the apache web server and check the new version is properly
   installed.
+
+.. _admin_pages:
 
 The Administration Pages
 ************************
@@ -585,6 +589,8 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
 ``REMOTE_USER`` variable, basic authentication, and LDAP. The first three
 (IMS-LTI, ``REMOTE_USER`` and basic authentication) are enabled by default and used in that order whenever an unauthenticated request is received. It follows a brief description of how to configure them.
 
+.. _ims_lti_config:
+
 - `IMS Learning Tools Interoperability (IMS-LTI)
   <http://www.imsglobal.org/activity/learning-tools-interoperability>`__. LTI
   is a standard developed by the IMS Global Learning Consortium to integrate
@@ -607,9 +613,11 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
 
        LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
 
-     If you change the values of this variable, you need to restart the server so that the new credentials are in effect.
+  3) OnTask needs to identify those roles from the external tool mapped to the instructor role. This mapping is provided through a list of those roles in the following configuration variable::
 
-  This authentication has only basic functionality and it is assumed to be used only for learners (not for instructors).
+       LTI_INSTRUCTOR_GROUP_ROLES=Instructor
+
+  If you change the values of these variables, you need to restart the server so that the new values are in effect. This authentication has only basic functionality and it is assumed to be used only for learners (not for instructors).
 
 - ``REMOTE_USER``. The second method uses `the variable REMOTE_USER
   <https://docs.djangoproject.com/en/2.1/howto/auth-remote-user/#authentication-using-remote-user>`__ that is assumed to be defined by an external application. This method is ideal for environments in which users are already authenticated and are redirected to the OnTask pages (for example, using SAML). If OnTask receives a request from a non-existent user through this channel, it automatically and transparently creates a new user in the platform with the user name stored in the ``REMOTE_USER`` variable. OnTask relies on emails to identify different user names, so if you plan to use this authentication method make sure the value of ``REMOTE_USER`` is the email.
@@ -619,6 +627,8 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
 - Basic authentication. If the variable ``REMOTE_USER`` is not set in the internal environment of Django where the web requests are served, OnTask resorts to conventional authentication requiring email and password. These credentials are stored in the internal database managed by OnTask.
 
 The API can be accessed using through token authentication. The token can be generated manually through the user profile page. This type of authentication may need some special configuration in the web server (Apache or similar) so that the ``HTTP_AUTHORIZATION`` header is not removed.
+
+.. _ldap_config:
 
 LDAP Authentication
 ===================
@@ -804,7 +814,7 @@ After defining these variables, restart the application for the values to be con
 Plugins
 *******
 
-OnTask allows also the inclusion of arbitrary Python modules to execute and transform the data stored in a workflow. The Python code in the plugins is executed the same interpreter and execution environment as the rest of the platform. Thus, **use this functionality to execute only code that is fully trusted**. There is nothing preventing a plugin to run malicious code (think ``system.exec('rm -rf /')``, so use at your own risk. To configure the execution of plugins follow these steps:
+OnTask allows also the inclusion of arbitrary Python modules to execute and transform the data stored in a workflow. The Python code in the plugins is executed the same interpreter and execution environment as the rest of the platform. Thus, **use this functionality to execute only code that is fully trusted**. There is nothing preventing a plugin to run malicious code, so use at your own risk. To configure the execution of plugins follow these steps:
 
 1. Create a folder at any location in your instance of OnTask to store the Python modules. OnTask assumes that each directory in that folder contains a Python module (that is, a folder with a file ``__init__.py`` inside).
 

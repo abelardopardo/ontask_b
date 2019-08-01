@@ -9,7 +9,7 @@ Log into the platform and:
 
 - Open an existing workflow without data, click in the button with name *Manage table data* and then in the *Data Upload/Merge* link.
 
-The following page allows you to upload data from three sources:
+The following page allows you to upload data from several sources:
 
 - a CSV (comma separated values) file,
 

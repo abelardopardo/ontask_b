@@ -10,7 +10,7 @@ OnTask assumes that you will be working with one workflow. The first screen (the
 
 .. sidebar:: Superuser
 
-   If your account has *superuser* or *admin* privileges, the top menu will include the additional option with name |fa-database| *SQL Connections*. This functionality allows the administrator to manage a collection of connections to SQL relational databases. These connections are available to instructors as part of the operations to Upload/Merge data into the table.
+   If your account has *superuser* or *admin* privileges, the top menu will include the additional option with name |fa-cogs| *Admin*. This menu provides access to the  pages to manage :ref:`administration tasks <admin_pages>`, :ref:`the connections to SQL relational databases <sql_connection_run>`, and the :ref:`set of installed plugins <plugin_install>`. These connections are available to instructors as part of the operations to Upload/Merge data into the table.
 
 .. include:: /Tutorial/Tasks/include_top_menu.rst
 
