@@ -48,7 +48,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="nav nav-pills mr-auto">
             {% block navbar-left %}
-              {% if user.is_instructor and user.is_authenticated %}
+              {% if user.ontask_info.is_instructor and user.is_authenticated %}
                 <li class="nav-item">
                   <a class="nav-link spin{% if request.path == ONTASK_BASE_URL %} active{% endif %}"
                      href="{% url 'home' %}" id="ontask-base-home"
