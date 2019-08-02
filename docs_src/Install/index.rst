@@ -30,6 +30,15 @@ Are you upgrading from version < 4.3 to 4.3?
 
 The  upgrade to 4.3 or later no longer requires two versions of Python. It only requires Python 3. Make sure the application is only using version 3.
 
+Are you upgrading to version 5.2?
+*********************************
+
+Version 5.2 contains a significant reorganization of the file structure in the tool, and as a consequence there are several files that need to be manually relocated:
+
+- The :ref:`configuration file <configuration_file>` needs to be moved from ``src/ontask/settings`` to ``ontask/settings``.
+
+- The ``media`` folder needs to be moved from ``src/media`` to ``ontask/media``.
+
 Required tools
 **************
 
