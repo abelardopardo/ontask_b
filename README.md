@@ -4,6 +4,7 @@ Current Version: 5.2.1 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 ![Issues](https://img.shields.io/github/issues/abelardopardo/ontask_b.svg?style=flat-square)
 ![License](https://img.shields.io/github/license/abelardopardo/ontask_b.svg?style=flat-square)
+[![Documentation Status](https://readthedocs.org/projects/ontask-version-b/badge/?version=latest)](https://ontask-version-b.readthedocs.io/en/latest/?badge=latest)
 
 ## OnTask in a nutshell
 
