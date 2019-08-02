@@ -15,6 +15,7 @@ from builtins import str
 from datetime import datetime
 from typing import Dict, List, Mapping, Optional, Tuple, Union
 
+from django.conf import settings
 from django.template import Context, Template, TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
@@ -186,13 +187,11 @@ def evaluate_action(
             _render_tuple_result(action, context, extra_string, column_name),
         )
 
-    # Check field n_rows_selected (table may have been modified)
-    action_filter = action.get_filter()
-    if action_filter and action_filter.n_rows_selected != rows.rowcount:
-        # Filter now returns different number of rows. Action conditions need
-        # to be refreshed
-        action_filter.n_rows_selected = rows.rowcount
-        action.update_n_rows_selected(filter_formula=action_filter.formula)
+    if settings.DEBUG:
+        # Check that n_rows_selected is equal to rows.rowcount
+        action_filter = action.get_filter()
+        if action_filter and action_filter.n_rows_selected != rows.rowcount:
+            raise OnTaskException('Inconsisten n_rows_selected')
 
     return list_of_renders
 

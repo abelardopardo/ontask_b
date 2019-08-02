@@ -320,16 +320,14 @@ class Action(models.Model):  # noqa Z214
         :return: All conditions (except the filter) are updated
         """
         start_idx = 0
-
-        if not filter_formula:
-            # Get the filter, if it exists.
-            filter_formula = None
-            conditions = self.conditions.all()
-            if conditions and conditions[0].is_filter:
-                # If there is a filter, update the formula
-                conditions[0].update_n_rows_selected(column=column)
-                filter_formula = conditions[0].formula
-                start_idx = 1
+        # Get the filter, if it exists.
+        filter_formula = None
+        conditions = self.conditions.all()
+        if conditions and conditions[0].is_filter:
+            # If there is a filter, update the formula
+            conditions[0].update_n_rows_selected(column=column)
+            filter_formula = conditions[0].formula
+            start_idx = 1
 
         # Recalculate for the rest of conditions
         for cond in conditions[start_idx:]:
