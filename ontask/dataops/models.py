@@ -77,6 +77,7 @@ class Plugin(models.Model):
     class Meta(object):
         """Define the criteria for ordering."""
 
+        db_table = 'plugin'
         ordering = ['name']
 
 
@@ -174,4 +175,5 @@ class SQLConnection(models.Model):
     class Meta(object):
         """Define the criteria for ordering."""
 
+        db_table = 'sql_connection'
         ordering = ['name']

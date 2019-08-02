@@ -462,6 +462,7 @@ class Workflow(models.Model):
     class Meta(object):
         """Define verbose and unique together."""
 
+        db_table = 'workflow'
         verbose_name = 'workflow'
         verbose_name_plural = 'workflows'
         unique_together = ('user', 'name')
@@ -711,6 +712,7 @@ class Column(models.Model):
     class Meta(object):
         """Define additional fields, unique criteria and ordering."""
 
+        db_table = 'column'
         verbose_name = 'column'
         verbose_name_plural = 'columns'
         unique_together = ('name', 'workflow')

@@ -394,6 +394,7 @@ class Action(models.Model):  # noqa Z214
     class Meta(object):
         """Define uniqueness with name and workflow. Order by name."""
 
+        db_table = 'action'
         unique_together = ('name', 'workflow')
         ordering = ['name']
 
@@ -565,5 +566,6 @@ class ActionColumnConditionTuple(models.Model):
     class Meta(object):
         """Define uniqueness with name in workflow and order by name."""
 
+        db_table = 'condition'
         unique_together = ('action', 'column', 'condition')
         ordering = ['column__position']

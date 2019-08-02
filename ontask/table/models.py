@@ -81,9 +81,8 @@ class View(models.Model):
         return self.nrows
 
     class Meta(object):
-        """
-        Define the criteria of uniqueness with name in workflow and order by
-        name
-        """
+        """Define the criteria of ordering and uniqueness."""
+
+        db_table = 'view'
         unique_together = ('name', 'workflow')
         ordering = ['name', ]
