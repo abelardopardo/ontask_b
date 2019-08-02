@@ -1,3 +1,9 @@
+## 5.2.1 (2019-08-02)
+
+### Changed
+
+- Decoupled documentation building from platform configuration
+
 ## 5.2.0 (2019-08-01)
 
 ### Added
