@@ -64,23 +64,17 @@ Install and Configure PostgreSQL
 
 1. Download and install `postgresql <https://www.postgresql.org/>`_.
 
-#. Create the role ``ontask`` with the command ``createuser``. The role
-   should be able to create new databases but not new roles and you should
-   define a password for the user (use ``createuser --interactive -W``).
+#. Create the role ``ontask`` with the command ``createuser``. The role should be able to create new databases but not new roles and you should define a password for the user (use ``createuser --interactive -W``).
 
-#. Adjust the access configuration in postgresql (in the configuration file
-   ``pg_hba.conf``) to allow the newly created user to access databases locally.
+#. Adjust the access configuration in postgresql (in the configuration file ``pg_hba.conf``) to allow the newly created user to access databases locally.
 
 #. Create a new database with name ``ontask`` with the ``createdb`` command.
 
-#. Use the client application ``psql`` to verify that the user has access
-   the newly created database and can create and delete a new table and run
-   regular queries. Test the connection with the following command::
+#. Use the client application ``psql`` to verify that the user has access the newly created database and can create and delete a new table and run regular queries. Test the connection with the following command::
 
      psql -h 127.0.0.1 -U ontask -W ontask
 
-   If the client does not connect to the database, review your configuration
-   options.
+   If the client does not connect to the database, review your configuration options.
 
 Install Python 3
 ================
