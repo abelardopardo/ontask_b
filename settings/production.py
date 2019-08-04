@@ -2,45 +2,45 @@
 
 import logging.config
 
-from ontask.settings.base import *  # NOQA
+from settings.base import *  # NOQA
 
-# Turn off debug while imported by Celery with a workaround
-# See http://stackoverflow.com/a/4806384
-if "celery" in sys.argv[0]:
-    DEBUG = False
+# Show emails to console
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+################################################################################
+#
+# Security features
+#
+################################################################################
+MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
+if USE_SSL:
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 else:
-    print('Forcing synchronous execution in Celery')
-    CELERY_TASK_ALWAYS_EAGER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = False
+    SECURE_BROWSER_XSS_FILTER = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
 
-# Django Debug Toolbar
-if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
+# Cache the templates in memory for speed-up
+loaders = [
+    ('django.template.loaders.cached.Loader', [
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    ]),
+]
 
-if ONTASK_TESTING:
-    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
-    FIXTURE_DIRS = [os.path.join(BASE_DIR, 'test', 'initial_workflow')]
-else:
-    # Show emails to console in DEBUG mode
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
-        # '...
-    }
-
-# Additional middleware introduced by debug toolbar
-if DEBUG:
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-
-# Show thumbnail generation errors
-THUMBNAIL_DEBUG = True
-
-# Allow internal IPs for debugging
-INTERNAL_IPS = ['127.0.0.1', '0.0.0.1', 'localhost']
+TEMPLATES[0]['OPTIONS'].update({"loaders": loaders})
+TEMPLATES[0].update({"APP_DIRS": False})
 
 # Reset logging
-# (see http://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/)
 LOGGING_CONFIG = None
 LOGGING = {
     'version': 1,
@@ -82,18 +82,18 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
+            'formatter': 'simple'
         }
     },
     'loggers': {
         'django': {
             'handlers': ['django_log_file'],
             'propagate': True,
-            'level': 'DEBUG',
+            'level': 'ERROR',
         },
         'ontask': {
             'handlers': ['ontask_log_file'],
-            'level': 'DEBUG',
+            'level': 'ERROR',
         },
         'scripts': {
             'handlers': ['script_log_file'],
@@ -106,7 +106,7 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'django.security.DisallowedHost': {
-            'handlers': ['django_log_file'],
+            'handlers': ['ontask_log_file'],
             'propagate': True,
             'level': 'DEBUG',
         },
@@ -122,38 +122,3 @@ LOGGING = {
 }
 
 logging.config.dictConfig(LOGGING)
-
-GRAPH_MODELS = {
-    'group_models': True,
-    'all_applications': True,
-    'output': 'data_model.png',
-    'exclude_models': [
-        'TaskResult',
-        'SQLConnection',
-        'Plugin',
-        'Site',
-        'ThumbnailDimensions',
-        'Thumbnail',
-        'Source',
-        'File',
-        'Preference',
-        'PeriodicTask',
-        'PeriodicTasks',
-        'IntervalSchedule',
-        'CrontabSchedule',
-        'SolarSchedule',
-        'Attachment',
-        'AbstractAttachment',
-        'Session',
-        'AbstractBaseSession',
-        'Profile',
-        'BaseProfile',
-        'Token',
-        'LogEntry',
-        'Group',
-        'Permission',
-        'ContentType'
-    ]
-}
-
-dump_config()

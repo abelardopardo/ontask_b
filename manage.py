@@ -3,11 +3,10 @@ import os
 import sys
 
 if __name__ == "__main__":
-    # CHANGED manage.py will use production settings by
-    # default. Change the DJANGO_SETTINGS_MODULE environment variable
+    # Change the DJANGO_SETTINGS_MODULE environment variable
     # for using the environment specific settings file.
     os.environ.setdefault("DJANGO_SETTINGS_MODULE",
-                          "ontask.settings.production")
+                          "settings.production")
 
     from django.core.management import execute_from_command_line
 

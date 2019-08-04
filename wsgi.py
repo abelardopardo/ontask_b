@@ -14,7 +14,7 @@ import os
 from django.conf import settings
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ontask.settings.production')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.production')
 
 application = get_wsgi_application()
 
@@ -25,7 +25,7 @@ if settings.DEBUG:
         from werkzeug.debug import DebuggedApplication
 
         def null_technical_500_response(request, exc_type, exc_value, tb):
-            """Catching the 500 response"""
+            """Catching the 500 response."""
             six.reraise(exc_type, exc_value, tb)
 
         django.views.debug.technical_500_response = null_technical_500_response

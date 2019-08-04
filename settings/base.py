@@ -22,7 +22,18 @@ from django.contrib.messages import constants as message_constants
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
-import ontask
+# Use 12factor inspired environment variables or from a file and define defaults
+env = environ.Env()
+env_file_name = os.environ.get('ENV_FILENAME', 'local.env')
+env_file = join(dirname(__file__), env_file_name)
+if exists(env_file):
+    print('Loading environment file {0} through {1}'.format(
+        env_file_name,
+        os.environ['DJANGO_SETTINGS_MODULE']))
+    environ.Env.read_env(str(env_file))
+else:
+    print('ERROR: File {0} not found.'.format(env_file))
+    sys.exit(1)
 
 
 ###############################################################################
@@ -70,19 +81,6 @@ def get_from_os_or_env(key, env_obj, default_value=''):
 #     GroupOfNamesType,
 #     LDAPGroupQuery
 # )
-
-
-# Use 12factor inspired environment variables or from a file and define defaults
-env = environ.Env()
-env_file_name = os.environ.get('ENV_FILENAME', 'local.env')
-env_file = join(dirname(__file__), env_file_name)
-if exists(env_file):
-    print('Loading environment file {0} through '.format(
-        env_file_name,
-        os.environ['DJANGO_SETTINGS_MODULE']))
-    environ.Env.read_env(str(env_file))
-else:
-    print('WARNING: File {0} not found.'.format(env_file))
 
 ###############################################################################
 #
@@ -156,7 +154,8 @@ USE_SSL = env.bool('USE_SSL', default=False)
 #
 ###############################################################################
 # Path to the src folder
-BASE_DIR = environ.Path(__file__) - 3
+BASE_DIR = environ.Path(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
@@ -253,10 +252,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_summernote',
     'jquery',
-    'ontask.django_auth_lti',
 
+    'ontask',
     'ontask.accounts',
     'ontask.core.apps.CoreConfig',
+    'ontask.django_auth_lti',
     'ontask.profiles.apps.ProfileConfig',
     'ontask.workflow.apps.WorkflowConfig',
     'ontask.dataops.apps.DataopsConfig',
@@ -341,9 +341,9 @@ REST_FRAMEWORK = {
     }
 }
 
-ROOT_URLCONF = 'ontask.urls'
+ROOT_URLCONF = 'urls'
 
-WSGI_APPLICATION = 'ontask.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 if 'RDS_DB_NAME' in os.environ:
     # Cater for AWS-style RDS definition in containers
@@ -456,11 +456,11 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 #
 ###############################################################################
 DISABLED_ACTIONS = [
-    # ontask.PERSONALIZED_JSON,
-    # ontask.PERSONALIZED_CANVAS_EMAIL,
-    # ontask.PERSONALIZED_TEXT,
-    # ontask.SURVEY,
-    ontask.TODO_LIST,
+    # 'ontask.PERSONALIZED_JSON',
+    # 'ontask.PERSONALIZED_CANVAS_EMAIL',
+    # 'ontask.PERSONALIZED_TEXT',
+    # 'ontask.SURVEY',
+    'ontask.TODO_LIST',
 ]
 
 ###############################################################################

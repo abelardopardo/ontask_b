@@ -34,10 +34,7 @@ ACTION_TYPES = [
     (TODO_LIST, _('TODO List'))
 ]
 
-AVAILABLE_ACTION_TYPES = [
-    atype for atype in ACTION_TYPES
-    if atype[0] not in ontask_settings.DISABLED_ACTIONS
-]
+AVAILABLE_ACTION_TYPES = ACTION_TYPES
 
 
 def is_legal_name(val):

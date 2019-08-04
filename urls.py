@@ -134,3 +134,16 @@ except Exception:
     # To bypass the migrate command execution that fails because the Site
     # table is not created yet.
     site = None
+
+# Remove from AVAILABLE_ACTION_TYPES those in DISABLED_ACTIONS
+try:
+    eval_obj = [eval(daction) for daction in settings.DISABLED_ACTIONS]
+    for atype in eval_obj:
+        to_remove = next(
+            afull_type for afull_type in ontask.ACTION_TYPES
+            if afull_type[0] == atype)
+        ontask.AVAILABLE_ACTION_TYPES.remove(to_remove)
+except Exception:
+    raise Exception(
+        'Unable to configure available action types. '
+        + 'Review variable DISABLED_ACTIONS')
