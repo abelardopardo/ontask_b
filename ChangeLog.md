@@ -1,3 +1,9 @@
+## 5.2.2 (2019-08-06)
+
+### Fixed
+
+- Error while invoking email sending functions (Issue #153)
+
 ## 5.2.1 (2019-08-02)
 
 ### Changed
