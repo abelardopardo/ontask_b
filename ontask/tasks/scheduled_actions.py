@@ -10,6 +10,9 @@ from celery import shared_task
 from django.conf import settings as ontask_settings
 
 from ontask.action.models import Action
+from ontask.action.payloads import (
+    EmailPayload, JSONPayload, CanvasEmailPayload
+)
 from ontask.logs.models import Log
 from ontask.scheduler.models import ScheduledAction
 from ontask.tasks.basic import logger
@@ -19,7 +22,7 @@ from ontask.tasks.send_json import send_json_objects
 
 
 @shared_task
-def execute_scheduled_actions(debug):
+def execute_scheduled_actions(debug: bool):
     """
     Function that selects the entries in the DB that are due, and proceed with
     the execution.
@@ -54,11 +57,10 @@ def execute_scheduled_actions(debug):
         # EMAIL ACTION
         #
         if item.action.action_type == Action.personalized_text:
-            subject = item.payload.get('subject', '')
-            cc_email = item.payload.get('cc_email', [])
-            bcc_email = item.payload.get('bcc_email', [])
-            send_confirmation = item.payload.get('send_confirmation', False)
-            track_read = item.payload.get('track_read', False)
+            action_info = EmailPayload(item.payload)
+            action_info['action_id'] = item.action_id
+            action_info['item_column'] = item.item_column.name
+            action_info['exclude_values'] = item.exclude_values
 
             # Log the event
             log_item = Log.objects.register(
@@ -68,16 +70,16 @@ def execute_scheduled_actions(debug):
                 {
                     'action': item.action.name,
                     'action_id': item.action.id,
-                    'bcc_email': bcc_email,
-                    'cc_email': cc_email,
+                    'bcc_email': item.payload.get('bcc_email'),
+                    'cc_email': item.payload.get('cc_email'),
                     'email_column': item.item_column.name,
                     'execute': item.execute.isoformat(),
                     'exclude_values': item.exclude_values,
                     'from_email': item.user.email,
-                    'send_confirmation': send_confirmation,
+                    'send_confirmation': item.payload.get('send_confirmation'),
                     'status': 'Preparing to execute',
-                    'subject': subject,
-                    'track_read': track_read,
+                    'subject': item.payload.get('subject'),
+                    'track_read': item.payload.get('track_read'),
                 }
             )
 
@@ -87,26 +89,23 @@ def execute_scheduled_actions(debug):
 
             result = send_email_messages(
                 item.user.id,
-                item.action.id,
-                subject,
-                item.item_column.name,
-                item.user.email,
-                cc_email,
-                bcc_email,
-                send_confirmation,
-                track_read,
-                item.exclude_values,
-                log_item.id)
+                log_item.id,
+                action_info.get_store()
+            )
 
         #
         # JSON action
         #
         elif item.action.action_type == Action.personalized_json:
-            # Get the information from the payload
-            token = item.payload['token']
+            # Get the information about the keycolum
             key_column = None
             if item.item_column:
                 key_column = item.item_column.name
+
+            action_info = JSONPayload(item.payload)
+            action_info['action_id'] = item.action_id
+            action_info['item_column'] = key_column
+            action_info['exclude_values'] = item.exclude_values
 
             # Log the event
             log_item = Log.objects.register(
@@ -124,18 +123,19 @@ def execute_scheduled_actions(debug):
             # Send the objects
             result = send_json_objects(
                 item.user.id,
-                item.action.id,
-                token,
-                key_column,
-                item.exclude_values,
-                log_item.id)
+                log_item.id,
+                action_info.get_store()
+            )
+
         #
         # Canvas Email Action
         #
         elif item.action.action_type == Action.personalized_canvas_email:
             # Get the information from the payload
-            token = item.payload['token']
-            subject = item.payload.get('subject', '')
+            action_info = CanvasEmailPayload(item.payload)
+            action_info['action_id'] = item.action_id
+            action_info['item_column'] = item.item_column.name
+            action_info['exclude_values'] = item.exclude_values
 
             # Log the event
             log_item = Log.objects.register(
@@ -150,19 +150,15 @@ def execute_scheduled_actions(debug):
                     'exclude_values': item.exclude_values,
                     'from_email': item.user.email,
                     'status': 'Preparing to execute',
-                    'subject': subject,
+                    'subject': item.payload.get('subject', ''),
                 }
             )
 
             result = send_canvas_email_messages(
-                item.user_id,
-                item.action_id,
-                subject,
-                item.item_column_name,
-                item.user.email,
-                token,
-                item.exclude_values,
-                log_item.id)
+                item.user.id,
+                log_item.id,
+                action_info.get_store()
+            )
 
         if result:
             item.status = ScheduledAction.STATUS_DONE
