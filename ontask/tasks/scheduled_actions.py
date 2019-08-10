@@ -83,10 +83,6 @@ def execute_scheduled_actions(debug: bool):
                 }
             )
 
-            # Store the log event in the scheduling item
-            item.last_executed_log = log_item
-            item.save()
-
             result = send_email_messages(
                 item.user.id,
                 log_item.id,
@@ -167,6 +163,9 @@ def execute_scheduled_actions(debug: bool):
 
         if debug:
             logger.info('Status set to {0}'.format(item.status))
+
+        # Store the log event in the scheduling item
+        item.last_executed_log = log_item
 
         # Save the new status in the DB
         item.save()
