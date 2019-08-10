@@ -158,13 +158,8 @@ def _perform_overlap_update(
             # Append only if it is not empty
             overlap_df = overlap_df.append(tmp2, sort=True)
 
-    # Fix bug pandas #25807
-    to_return = overlap_df.reset_index(drop=True)
-    for col in to_return.select_dtypes(include=['datetime64']).columns:
-        to_return[col] = to_return[col].dt.tz_localize('UTC')
-
     # Return result
-    return to_return
+    return overlap_df.reset_index(drop=True)
 
 
 def _update_is_key_field(merge_info: Dict, workflow):
