@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-01 07:22+0930\n"
+"POT-Creation-Date: 2019-08-10 12:15+0930\n"
 "PO-Revision-Date: 2019-05-25 12:45+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -297,7 +297,7 @@ msgstr "密码已更改。请重新登录"
 msgid "Actions, Conditions, Filters, Emails"
 msgstr "操作，条件，筛选标签，邮件"
 
-#: ontask/action/evaluate/action.py:263
+#: ontask/action/evaluate/action.py:262
 msgid "Incorrect type of action"
 msgstr "不正确的操作类型"
 
@@ -495,12 +495,12 @@ msgstr "此工作流没有可用的数据"
 msgid "Incorrect date/time window"
 msgstr "错误的日期/时间窗口"
 
-#: ontask/action/models.py:61 ontask/action/models.py:426
+#: ontask/action/models.py:61 ontask/action/models.py:424
 #: ontask/scheduler/models.py:48
 msgid "name"
 msgstr "名称"
 
-#: ontask/action/models.py:68 ontask/action/models.py:433
+#: ontask/action/models.py:68 ontask/action/models.py:431
 #: ontask/scheduler/models.py:54 ontask/workflow/models.py:498
 msgid "description"
 msgstr "描述"
@@ -521,15 +521,15 @@ msgstr "操作可用直到"
 msgid "Shuffle questions?"
 msgstr "调整问题？"
 
-#: ontask/action/models.py:440
+#: ontask/action/models.py:438
 msgid "formula"
 msgstr "公式"
 
-#: ontask/action/models.py:446
+#: ontask/action/models.py:444
 msgid "Columns present in this condition"
 msgstr "在这种情况下出现的列"
 
-#: ontask/action/models.py:452
+#: ontask/action/models.py:450
 msgid "Number of rows selected"
 msgstr "选定行数"
 
@@ -2041,11 +2041,11 @@ msgstr ""
 "具有唯一值的列。至少一列\n"
 "必须具有唯一值。"
 
-#: ontask/dataops/pandas/merge.py:313
+#: ontask/dataops/pandas/merge.py:308
 msgid "Merge operation produced a result with no rows"
 msgstr "合并操作产生没有行的结果"
 
-#: ontask/dataops/pandas/merge.py:319
+#: ontask/dataops/pandas/merge.py:314
 msgid ""
 "Merge operation produced a result without any key columns. Review the key "
 "columns in the data to upload."
