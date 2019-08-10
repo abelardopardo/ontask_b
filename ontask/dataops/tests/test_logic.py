@@ -32,24 +32,24 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
     table_name = 'DUMP_BOGUS_TABLE'
 
     csv1 = """key,text1,text2,double1,double2,bool1,bool2,date1,date2
-              1.0,"d1_t1_1",,111.0,,True,,1/1/18 01:00:00,
-              2.0,"d2_t1_2",,112.0,,False,,1/1/18 02:00:00,
-              3.0,"",d1_t2_3,,123.0,,False,,1/2/18 03:00:00
-              4.0,,d1_t2_4,,124.0,,True,,1/2/18 04:00:00
-              5.0,"d1_t1_5",,115.0,,False,,1/1/18 05:00:00,
-              6.0,"d1_t1_6",,116.0,,True,,1/1/18 06:00:00,
-              7.0,,d1_t2_7,,126.0,,True,,1/2/18 07:00:00
-              8.0,,d1_t2_8,,127.0,,False,,1/2/18 08:00:00"""
+              1.0,"d1_t1_1",,111.0,,True,,1/1/18 01:00:00+00:00,
+              2.0,"d2_t1_2",,112.0,,False,,1/1/18 02:00:00+00:00,
+              3.0,"",d1_t2_3,,123.0,,False,,1/2/18 03:00:00+00:00
+              4.0,,d1_t2_4,,124.0,,True,,1/2/18 04:00:00+00:00
+              5.0,"d1_t1_5",,115.0,,False,,1/1/18 05:00:00+00:00,
+              6.0,"d1_t1_6",,116.0,,True,,1/1/18 06:00:00+00:00,
+              7.0,,d1_t2_7,,126.0,,True,,1/2/18 07:00:00+00:00
+              8.0,,d1_t2_8,,127.0,,False,,1/2/18 08:00:00+00:00"""
 
     csv2 = """key,text2,text3,double2,double3,bool2,bool3,date2,date3
-              5.0,,d2_t3_5,,235.0,,FALSE,,2/3/18
+              5.0,,d2_t3_5,,235.0,,FALSE,,2/3/18 05:00
               6.0,d2_t2_6,,216.0,,TRUE,,2/2/18 06:00,
-              7.0,,d2_t3_7,,237.0,,TRUE,,2/3/18 07:00
-              8.0,d2_t2_8,,218.0,,FALSE,,2/2/18 08:00,
-              9.0,,d2_t3_9,,239.0,,TRUE,,2/3/18 09:00
-              10.0,d2_t2_10,,2110.0,,FALSE,,2/2/18 10:00,
-              11.0,,d2_t3_11,,2311.0,,FALSE,,2/3/18 11:00
-              12.0,d2_t2_12,,2112.0,,TRUE,,2/2/18 12:00,"""
+              7.0,,d2_t3_7,,237.0,,TRUE,,2/3/18 07:00+00:00
+              8.0,d2_t2_8,,218.0,,FALSE,,2/2/18 08:00+00:00,
+              9.0,,d2_t3_9,,239.0,,TRUE,,2/3/18 09:00+00:00
+              10.0,d2_t2_10,,2110.0,,FALSE,,2/2/18 10:00+00:00,
+              11.0,,d2_t3_11,,2311.0,,FALSE,,2/3/18 11:00+00:00
+              12.0,d2_t2_12,,2112.0,,TRUE,,2/2/18 12:00+00:00,"""
 
     merge_info = {
         'initial_column_names': None,
@@ -85,6 +85,8 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
             io.StringIO(self.csv2),
             0,
             0)
+        store_table(df_src, 'TEMPORARY_TABLE')
+        df_src = load_table('TEMPORARY_TABLE')
 
         # Fix the merge_info fields.
         self.merge_info['initial_column_names'] = list(df_src.columns)
@@ -106,8 +108,19 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
 
         # Load it from the DB
         df_dst = load_table(self.table_name)
-        df_dst['date1'] = df_dst['date1'].dt.tz_convert('Australia/Adelaide')
-        df_dst['date2'] = df_dst['date2'].dt.tz_convert('Australia/Adelaide')
+
+        # NaN in boolean columns are now None
+        df_source['bool1'] = df_source['bool1'].where(
+            pd.notnull(df_source['bool1']),
+            None)
+        df_source['bool2'] = df_source['bool2'].where(
+            pd.notnull(df_source['bool2']),
+            None)
+
+        # Datetime need to be localized to the local timezone
+        df_dst['date1'] = df_dst['date1'].dt.tz_convert(settings.TIME_ZONE)
+        df_dst['date2'] = df_dst['date2'].dt.tz_convert(settings.TIME_ZONE)
+
         # Data frames mut be identical
         assert df_source.equals(df_dst)
 
