@@ -1,8 +1,12 @@
-## 5.2.2 (2019-08-06)
+## 5.2.2 (2019-08-10)
 
 ### Fixed
 
-- Error while invoking email sending functions (Issue #153)
+- Error when invoking scheduled actions (Issue #153)
+
+### Changed
+
+- Upgraded requirements (Django and other libraries)
 
 ## 5.2.1 (2019-08-02)
 
