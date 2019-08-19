@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('authtoken', '0002_auto_20160226_1747'),
         ('authtools', '0003_auto_20160128_0912'),
-        ('profiles', '0001_initial'),
+        ('ontask', '0001_profiles_initial'),
         ('workflow', '0027_auto_20190418_1057'),
         # ('ontask_oauth', '0004_auto_20181208_1306'),
         ('logs', '0017_auto_20190213_1623'),

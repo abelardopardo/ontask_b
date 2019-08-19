@@ -11,7 +11,8 @@ from rest_framework.authtoken.models import Token
 from ontask.core.permissions import is_instructor
 from ontask.oauth.models import OAuthUserToken
 
-from . import forms, models
+from ontask.profiles import forms
+from ontask import models
 
 
 class ShowProfile(LoginRequiredMixin, generic.TemplateView):

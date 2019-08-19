@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
         ('workflow', '0027_auto_20190418_1057'),
         ('authtoken', '0002_auto_20160226_1747'),
         ('authtools', '0003_auto_20160128_0912'),
-        ('profiles', '0001_initial'),
+        ('ontask', '0001_profiles_initial'),
         # ('ontask_oauth', '0004_auto_20181208_1306'),
         ('scheduler', '0035_remove_scheduledaction_deleted'),
         ('admin', '0003_logentry_add_action_flag_choices'),

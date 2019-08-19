@@ -1,11 +1,12 @@
+# -*- coding: utf-8 -*-
 
+"""Profiles models."""
 
 import uuid
 from builtins import object
 
 from django.conf import settings
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext as _
 
 
@@ -27,7 +28,11 @@ class BaseProfile(models.Model):
         abstract = True
 
 
-@python_2_unicode_compatible
 class Profile(BaseProfile):
     def __str__(self):
         return _("{}'s profile").format(self.user)
+
+    class Meta(object):
+        """Define table name"""
+
+        db_table = 'profiles_profile'
