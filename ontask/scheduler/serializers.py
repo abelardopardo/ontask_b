@@ -14,7 +14,7 @@ from rest_framework.exceptions import APIException
 from ontask import is_correct_email
 from ontask.action.models import Action
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.scheduler.models import ScheduledAction
+from ontask.models import ScheduledAction
 
 
 class ScheduledActionSerializer(serializers.ModelSerializer):

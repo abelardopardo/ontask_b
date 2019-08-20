@@ -27,7 +27,7 @@ from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.logs.models import Log
-from ontask.scheduler.models import ScheduledAction
+from ontask.models import ScheduledAction
 from ontask.scheduler.views.save import (
     create_timedelta_string, save_canvas_email_schedule, save_email_schedule,
     save_json_schedule,

@@ -20,7 +20,7 @@ from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.logs.models import Log
 from ontask.table.forms import ViewAddForm
-from ontask.table.models import View
+from ontask.models import View
 from ontask.workflow.models import Workflow
 
 

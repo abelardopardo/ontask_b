@@ -5,7 +5,7 @@ from rest_framework import generics
 
 from ontask.action.models import Action
 from ontask.core.permissions import UserIsInstructor
-from ontask.scheduler.models import ScheduledAction
+from ontask.models import ScheduledAction
 from ontask.scheduler.serializers import (
     ScheduledEmailSerializer, ScheduledJSONSerializer,
 )

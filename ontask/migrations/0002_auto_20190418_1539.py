@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         # ('ontask_oauth', '0004_auto_20181208_1306'),
         ('logs', '0017_auto_20190213_1623'),
         ('admin', '0003_logentry_add_action_flag_choices'),
-        ('scheduler', '0035_remove_scheduledaction_deleted'),
+        ('ontask', '0035_remove_scheduledaction_deleted'),
         ('ontask', '0001_core_initial'),
     ]
 

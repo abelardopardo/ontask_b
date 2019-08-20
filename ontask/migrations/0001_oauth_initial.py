@@ -10,6 +10,7 @@ class Migration(migrations.Migration):
     dependencies = [
         # migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('ontask', '0002_auto_20190521_1710'),
+        ('ontask', '0005_auto_20190430_1922'),
     ]
 
     operations = [

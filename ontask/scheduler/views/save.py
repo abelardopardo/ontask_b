@@ -17,7 +17,7 @@ from ontask.action.payloads import (
 )
 from ontask.logs.models import Log
 from ontask.scheduler.forms import EmailScheduleForm, JSONScheduleForm
-from ontask.scheduler.models import ScheduledAction
+from ontask.models import ScheduledAction
 
 
 def create_timedelta_string(dtime: datetime.datetime) -> str:

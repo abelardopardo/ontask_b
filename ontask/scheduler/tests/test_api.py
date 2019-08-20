@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 
 from ontask.action.models import Action
-from ontask.scheduler.models import ScheduledAction
+from ontask.models import ScheduledAction
 
 
 class ScheduleApiCreate(test.OnTaskApiTestCase):

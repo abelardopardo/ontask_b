@@ -4,7 +4,7 @@
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from ontask.table.models import View
+from ontask.models import View
 from ontask.workflow.serialize_column import ColumnNameSerializer
 
 
