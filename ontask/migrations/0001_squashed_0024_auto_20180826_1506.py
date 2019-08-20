@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('action', '0008_auto_20171209_1808'),
+        ('ontask', '0008_auto_20171209_1808'),
         ('workflow', '0013_auto_20171209_0809'),
         ('workflow', '0023_auto_20180722_1013'),
     ]
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                 ('subject', models.CharField(default='', max_length=2048, verbose_name='Email subject')),
                 ('send_confirmation', models.BooleanField(default=False, verbose_name='Send you a confirmation email')),
                 ('track_read', models.BooleanField(default=False, verbose_name='Track if emails are read?')),
-                ('action', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='action.Action')),
+                ('action', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='ontask.Action')),
                 ('email_column', models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_email_actions', to='workflow.Column', verbose_name='Column to select the elements for the action')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('message', models.TextField(blank=True, verbose_name='Execution message')),

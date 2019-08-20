@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 
 from ontask.action.forms import FIELD_PREFIX
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.core.forms import date_time_widget_options
 
 

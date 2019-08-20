@@ -17,7 +17,7 @@ from ontask.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.forms import ValueExcludeForm
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import get_action_payload
 from ontask.action.views.run_canvas_email import run_canvas_email_action
 from ontask.action.views.run_email import run_email_action

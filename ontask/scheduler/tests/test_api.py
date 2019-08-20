@@ -8,7 +8,7 @@ from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.models import ScheduledAction
 
 

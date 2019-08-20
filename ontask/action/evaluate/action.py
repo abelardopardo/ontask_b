@@ -23,7 +23,7 @@ from django.utils.translation import ugettext_lazy as _
 import ontask
 from ontask.action.evaluate.template import render_action_template
 from ontask.action.forms import EnterActionIn
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.dataops.formula import EVAL_EXP, evaluate_formula
 from ontask.dataops.pandas import get_table_row_by_index
 from ontask.dataops.sql.row_queries import get_row, get_rows

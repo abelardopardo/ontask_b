@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.action.models import ActionColumnConditionTuple, Condition
+from ontask.models import ActionColumnConditionTuple, Condition
 from ontask.core.decorators import ajax_required, get_column, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.formula import evaluation

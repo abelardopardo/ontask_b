@@ -17,7 +17,7 @@ from ontask.action.evaluate import (
     action_condition_evaluation, evaluate_row_action_in,
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
 from ontask.workflow.models import Workflow

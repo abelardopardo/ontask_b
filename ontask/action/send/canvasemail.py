@@ -14,7 +14,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
 from ontask.action.evaluate.action import evaluate_action
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.core.celery import get_task_logger
 from ontask.models import Log
 from ontask.models import OAuthUserToken

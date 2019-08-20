@@ -18,7 +18,7 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
 )

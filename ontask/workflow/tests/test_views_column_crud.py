@@ -8,7 +8,7 @@ import test
 from django.conf import settings
 from rest_framework import status
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.dataops.pandas import load_table
 
 

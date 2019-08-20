@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.forms import EmailActionForm
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import (
     EmailPayload, get_or_set_action_info, set_action_payload,
 )

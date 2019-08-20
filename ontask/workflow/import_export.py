@@ -13,7 +13,7 @@ from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.dataops.pandas import check_wf_df
 from ontask.models import Log
 from ontask.workflow.models import Workflow

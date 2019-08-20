@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from ontask.action.forms import ActionDescriptionForm
-from ontask.action.models import Action, ActionColumnConditionTuple, Condition
+from ontask.models import Action, ActionColumnConditionTuple, Condition
 from ontask.core.decorators import (
     ajax_required, get_action, get_columncondition,
 )

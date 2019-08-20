@@ -15,7 +15,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.evaluate.action import evaluate_action
 from ontask.action.forms import ZipActionForm
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import (
     ZipPayload, get_or_set_action_info, set_action_payload,
 )

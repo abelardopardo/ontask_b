@@ -12,7 +12,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
 from ontask import is_correct_email
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import ScheduledAction
 

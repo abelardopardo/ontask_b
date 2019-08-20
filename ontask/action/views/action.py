@@ -18,7 +18,7 @@ from django_tables2 import A
 
 from ontask import simplify_datetime_str
 from ontask.action.forms import ActionForm, ActionUpdateForm
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import set_action_payload
 from ontask.action.views.edit_personalized import edit_action_out
 from ontask.action.views.edit_survey import edit_action_in

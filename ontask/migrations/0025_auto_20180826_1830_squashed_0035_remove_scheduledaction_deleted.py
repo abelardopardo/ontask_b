@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     replaces = [('ontask', '0025_auto_20180826_1830'), ('ontask', '0026_auto_20180826_1853'), ('ontask', '0027_auto_20180826_1908'), ('ontask', '0028_auto_20180827_2121'), ('ontask', '0029_auto_20180828_1827'), ('ontask', '0030_remove_scheduledaction_type'), ('ontask', '0031_auto_20180829_0938'), ('ontask', '0032_auto_20180829_0939'), ('ontask', '0033_auto_20180829_0940'), ('ontask', '0034_auto_20180829_0943'), ('ontask', '0035_remove_scheduledaction_deleted')]
 
     dependencies = [
-        ('action', '0038_auto_20180826_1505'),
+        ('ontask', '0038_auto_20180826_1505'),
         ('ontask', '0006_auto_20180825_1123'),
         ('ontask', '0024_auto_20180826_1506'),
     ]

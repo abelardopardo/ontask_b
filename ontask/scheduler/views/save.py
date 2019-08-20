@@ -11,7 +11,7 @@ from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
 )

@@ -30,7 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_correct_email
 from ontask.action.forms import SUFFIX_LENGTH
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import EmailPayload
 from ontask.core.forms import date_time_widget_options
 from ontask.dataops.sql.column_queries import is_column_unique

@@ -9,7 +9,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.action.models import Action
+from ontask.models.action import Action
 from ontask.models.logs import Log
 from ontask.workflow.models import Column
 

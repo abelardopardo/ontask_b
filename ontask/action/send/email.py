@@ -20,7 +20,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import is_correct_email, simplify_datetime_str
 from ontask.action import settings
 from ontask.action.evaluate.action import evaluate_action
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import EmailPayload
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db

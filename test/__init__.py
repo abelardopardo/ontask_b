@@ -30,7 +30,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import set_action_payload
 from ontask.dataops.pandas import destroy_db_engine
 from ontask.dataops.pandas.db import engine

@@ -7,7 +7,7 @@ from typing import Optional, Tuple
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.core.celery import get_task_logger
 from ontask.models import Log
 from ontask.workflow.models import Workflow

@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.action.models import ActionColumnConditionTuple, Condition
+from ontask.models import ActionColumnConditionTuple, Condition
 from ontask.models import View
 from ontask.workflow.access import access, store_workflow_in_session
 

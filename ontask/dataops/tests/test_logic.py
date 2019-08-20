@@ -9,7 +9,7 @@ import test
 import pandas as pd
 from django.conf import settings
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.dataops.forms.upload import load_df_from_csvfile
 from ontask.dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
 from ontask.dataops.pandas import (

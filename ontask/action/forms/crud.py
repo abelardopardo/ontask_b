@@ -21,7 +21,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import AVAILABLE_ACTION_TYPES, is_legal_name, ontask_prefs
-from ontask.action.models import ACTION_NAME_LENGTH, Action, Condition
+from ontask.models import ACTION_NAME_LENGTH, Action, Condition
 from ontask.core.forms import RestrictedFileField
 
 SUFFIX_LENGTH = 512

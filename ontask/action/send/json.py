@@ -11,7 +11,7 @@ import requests
 from django.conf import settings as ontask_settings
 
 from ontask.action.evaluate.action import evaluate_action
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.payloads import JSONPayload
 from ontask.core.celery import get_task_logger
 from ontask.models import Log

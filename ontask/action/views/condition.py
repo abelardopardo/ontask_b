@@ -11,7 +11,7 @@ from django.utils.html import escape
 from django.views import generic
 
 from ontask.action.forms import ConditionForm, FilterForm
-from ontask.action.models import Action, Condition
+from ontask.models import Action, Condition
 from ontask.core.decorators import ajax_required, get_action, get_condition
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula, get_variables

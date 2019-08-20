@@ -21,7 +21,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.action.views.serve_survey import serve_survey_row
 from ontask.core import DataTablesServerSidePaging
 from ontask.core.decorators import ajax_required, get_action

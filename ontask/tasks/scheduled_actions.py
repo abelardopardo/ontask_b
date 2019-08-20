@@ -9,7 +9,7 @@ import pytz
 from celery import shared_task
 from django.conf import settings as ontask_settings
 
-from ontask.action.models import Action
+from ontask.models import Action
 from ontask.models import Log
 from ontask.models import ScheduledAction
 from ontask.tasks.basic import logger

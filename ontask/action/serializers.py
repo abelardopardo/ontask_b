@@ -8,7 +8,7 @@ from typing import Optional
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from ontask.action.models import Action, ActionColumnConditionTuple, Condition
+from ontask.models import Action, ActionColumnConditionTuple, Condition
 from ontask.dataops.formula import get_variables
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.workflow.serialize_column import (
