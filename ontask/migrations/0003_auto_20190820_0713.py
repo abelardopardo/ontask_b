@@ -7,6 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('ontask', '0002_auto_20190521_1710'),
+        ('ontask', '0001_squashed_0005_auto_20190419_0738'),
     ]
 
     operations = [

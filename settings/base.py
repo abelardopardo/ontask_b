@@ -254,7 +254,6 @@ INSTALLED_APPS = [
     'jquery',
 
     'ontask',
-    'ontask.core.apps.CoreConfig',
     'ontask.django_auth_lti',
     'ontask.workflow.apps.WorkflowConfig',
     'ontask.dataops.apps.DataopsConfig',

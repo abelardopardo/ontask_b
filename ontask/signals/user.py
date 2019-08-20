@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-"""Create the user extension."""
+"""Create the user profile after user is saved."""
 
 import logging
 
 from django.conf import settings
 from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.core import models
+import ontask.models
 
 logger = logging.getLogger('project')
 
@@ -21,7 +21,7 @@ def create_ontaskuser_handler(sender, instance, created, **kwargs):
         return
 
     # Create the profile object, only if it is newly created
-    ouser = models.OnTaskUser(user=instance)
+    ouser = ontask.models.OnTaskUser(user=instance)
     ouser.save()
     logger.info(
         _('New ontask user profile for {inst} created'),

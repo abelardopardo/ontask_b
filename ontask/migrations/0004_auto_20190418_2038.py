@@ -27,7 +27,7 @@ def reverse_migration(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_auto_20190418_1541'),
+        ('ontask', '0003_auto_20190418_1541'),
     ]
 
     operations = [

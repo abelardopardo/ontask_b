@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         ('logs', '0017_auto_20190213_1623'),
         ('admin', '0003_logentry_add_action_flag_choices'),
         ('scheduler', '0035_remove_scheduledaction_deleted'),
-        ('core', '0001_initial'),
+        ('ontask', '0001_core_initial'),
     ]
 
     operations = [

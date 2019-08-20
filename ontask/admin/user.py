@@ -3,7 +3,7 @@
 
 from django.contrib import admin
 
-from ontask.core.models import OnTaskUser
+from ontask.models import OnTaskUser
 
 
 class OnTaskUserAdmin(admin.ModelAdmin):

@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-
-"""Model extending the information to store in the user."""
-
 from django.contrib.auth import get_user_model
 from django.db import models
 
 from ontask.core.permissions import is_instructor
+
 
 class OnTaskUser(models.Model):
     """Extend the existing authtools.User with additional fields."""
@@ -29,5 +26,6 @@ class OnTaskUser(models.Model):
     class Meta(object):
         """Additional attributes for the model."""
 
+        db_table = 'core_ontaskuser'
         verbose_name = 'ontaskuser'
         verbose_name_plural = 'ontaskusers'
