@@ -28,7 +28,7 @@ from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 fn_distributor = {
     Action.personalized_text: run_email_action,

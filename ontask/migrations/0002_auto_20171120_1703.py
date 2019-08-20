@@ -8,7 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('workflow', '0003_workflow_shared'),
+        ('ontask', '0003_workflow_shared'),
         ('ontask', '0001_dataops_initial'),
     ]
 

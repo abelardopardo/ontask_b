@@ -12,7 +12,7 @@ from ontask.core.decorators import get_view, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.pandas import get_subframe
 from ontask.models import View
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 def _respond_csv(data_frame: pd.DataFrame) -> HttpResponse:

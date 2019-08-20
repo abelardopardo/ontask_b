@@ -10,7 +10,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('workflow', '0001_initial'),
+        ('ontask', '0001_workflow_initial'),
     ]
 
     operations = [
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('n_selected_rows', models.IntegerField(blank=True, verbose_name='Number of rows selected by filter')),
                 ('content', models.TextField(blank=True, default='{% comment %} Your action content here{% endcomment %}')),
                 ('serve_enabled', models.BooleanField(default=False, verbose_name='URL available to users?')),
-                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='actions', to='workflow.Workflow')),
+                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='actions', to='ontask.Workflow')),
             ],
         ),
         migrations.CreateModel(

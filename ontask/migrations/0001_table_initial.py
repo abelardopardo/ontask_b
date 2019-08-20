@@ -10,7 +10,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('workflow', '0013_auto_20171209_0809'),
+        ('ontask', '0013_auto_20171209_0809'),
     ]
 
     operations = [
@@ -23,8 +23,8 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('filter', django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=dict, help_text='Preselect rows satisfying this condition', null=True)),
-                ('columns', models.ManyToManyField(related_name='views', to='workflow.Column')),
-                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='views', to='workflow.Workflow')),
+                ('columns', models.ManyToManyField(related_name='views', to='ontask.Column')),
+                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='views', to='ontask.Workflow')),
             ],
         ),
     ]

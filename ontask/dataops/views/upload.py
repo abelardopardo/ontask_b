@@ -22,7 +22,7 @@ from ontask.dataops.pandas.dataframe import store_workflow_table
 from ontask.dataops.sql import table_queries
 from ontask.models import Log
 from ontask.workflow.access import store_workflow_in_session
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 @user_passes_test(is_instructor)

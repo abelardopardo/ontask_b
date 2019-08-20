@@ -23,7 +23,7 @@ from ontask.table.serializers import (
     DataFrameJSONMergeSerializer, DataFrameJSONSerializer,
     DataFramePandasMergeSerializer, DataFramePandasSerializer,
 )
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class TableBasicOps(APIView):

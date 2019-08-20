@@ -177,11 +177,11 @@ class Migration(migrations.Migration):
     replaces = [('ontask', '0001_action_initial'), ('ontask', '0002_auto_20171111_2226'), ('ontask', '0003_auto_20171116_1543'), ('ontask', '0004_auto_20171122_1540'), ('ontask', '0005_action_is_out'), ('ontask', '0006_action_columns'), ('ontask', '0007_auto_20171206_2221'), ('ontask', '0008_auto_20171209_1808'), ('ontask', '0009_auto_20180428_1425'), ('ontask', '0010_condition_n_selected_rows'), ('ontask', '0011_auto_20180515_2203'), ('ontask', '0012_remove_action_n_selected_rows'), ('ontask', '0013_condition_columns'), ('ontask', '0014_condition_columns_update'), ('ontask', '0015_condition_n_rows_selected_update'), ('ontask', '0016_auto_20180522_2146'), ('ontask', '0017_auto_20180523_1611'), ('ontask', '0018_remove_action_filter'), ('ontask', '0019_action_shuffle'), ('ontask', '0020_remove_action_shuffle'), ('ontask', '0021_action_shuffle'), ('ontask', '0022_auto_20180621_1708'), ('ontask', '0023_set_content_and_columns'), ('ontask', '0024_auto_20180630_1418'), ('ontask', '0025_auto_20180722_1013'), ('ontask', '0026_auto_20180723_1011'), ('ontask', '0027_auto_20180723_1019'), ('ontask', '0025_auto_20180806_0742'), ('ontask', '0028_merge_20180807_1702'), ('ontask', '0029_auto_20180814_1327'), ('ontask', '0029_auto_20180814_1400'), ('ontask', '0030_auto_20180818_1714'), ('ontask', '0031_auto_20180818_1735'), ('ontask', '0032_action_target_url'), ('ontask', '0033_auto_20180818_1800'), ('ontask', '0034_auto_20180819_1645'), ('ontask', '0035_action_last_executed'), ('ontask', '0036_action_last_executed_log'), ('ontask', '0037_remove_action_last_executed'), ('ontask', '0038_auto_20180826_1505'), ('ontask', '0039_merge_20180905_0729'), ('ontask', '0040_auto_20181123_1510'), ('ontask', '0041_auto_20181207_0539'), ('ontask', '0042_auto_20181212_1153'), ('ontask', '0043_auto_20181212_1323'), ('ontask', '0044_auto_20181212_1750'), ('ontask', '0045_columnconditionpair'), ('ontask', '0046_auto_20190228_1928'), ('ontask', '0047_columnconditionpair_action'), ('ontask', '0048_auto_20190228_1952'), ('ontask', '0049_auto_20190228_1953'), ('ontask', '0050_auto_20190228_1953'), ('ontask', '0051_auto_20190228_2005'), ('ontask', '0052_auto_20190228_2006'), ('ontask', '0053_remove_action_columns'), ('ontask', '0054_auto_20190318_2144'), ('ontask', '0055_action_nrows_all_false'), ('ontask', '0056_auto_20190323_1122'), ('ontask', '0057_action_rows_all_false'), ('ontask', '0058_remove_action_nrows_all_false'), ('ontask', '0059_auto_20190323_1336'), ('ontask', '0060_auto_20190430_1507'), ('ontask', '0061_auto_20190430_1922'), ('ontask', '0062_auto_20190521_1802')]
 
     dependencies = [
-        ('workflow', '0024_auto_20180925_1934'),
+        ('ontask', '0024_auto_20180925_1934'),
         ('ontask', '0004_log_modified'),
-        ('workflow', '0006_auto_20171125_2052'),
-        ('workflow', '0001_initial'),
-        ('workflow', '0022_auto_20180510_1157'),
+        ('ontask', '0006_auto_20171125_2052'),
+        ('ontask', '0001_workflow_initial'),
+        ('ontask', '0022_auto_20180510_1157'),
     ]
 
     operations = [
@@ -195,9 +195,9 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('content', models.TextField(blank=True, default='')),
                 ('serve_enabled', models.BooleanField(default=False, verbose_name='URL available to users?')),
-                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='actions', to='workflow.Workflow')),
+                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='actions', to='ontask.Workflow')),
                 ('is_out', models.BooleanField(default=True, verbose_name='Action is provide information')),
-                ('columns', models.ManyToManyField(related_name='actions_in', to='workflow.Column')),
+                ('columns', models.ManyToManyField(related_name='actions_in', to='ontask.Column')),
                 ('filter', django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=dict, help_text='Preselect rows satisfying this condition', null=True)),
                 ('active_from', models.DateTimeField(blank=True, default=None, null=True, verbose_name='Action available from')),
                 ('active_to', models.DateTimeField(blank=True, default=None, null=True, verbose_name='Action available until')),
@@ -219,7 +219,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('n_rows_selected', models.IntegerField(default=-1, verbose_name='Number of rows selected')),
-                ('columns', models.ManyToManyField(related_name='conditions', to='workflow.Column', verbose_name='Columns present in this condition')),
+                ('columns', models.ManyToManyField(related_name='conditions', to='ontask.Column', verbose_name='Columns present in this condition')),
             ],
             options={
                 'unique_together': {('action', 'name', 'is_filter')},
@@ -339,13 +339,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='action',
             name='columns',
-            field=models.ManyToManyField(to='workflow.Column'),
+            field=models.ManyToManyField(to='ontask.Column'),
         ),
         migrations.CreateModel(
             name='ActionColumnConditionTuple',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('column', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='column_condition_pair', to='workflow.Column')),
+                ('column', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='column_condition_pair', to='ontask.Column')),
                 ('condition', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='column_condition_pair', to='ontask.Condition')),
                 ('action', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='columns_TMP', to='ontask.Action')),
             ],

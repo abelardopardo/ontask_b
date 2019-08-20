@@ -17,7 +17,7 @@ from ontask.workflow.forms import WorkflowExportRequestForm, WorkflowImportForm
 from ontask.workflow.import_export import (
     do_export_workflow, do_import_workflow,
 )
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 @user_passes_test(is_instructor)

@@ -10,7 +10,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('workflow', '0001_initial'),
+        ('ontask', '0001_workflow_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=256)),
                 ('payload', models.CharField(default='', max_length=65536)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='workflow.Workflow')),
+                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ontask.Workflow')),
             ],
         ),
     ]

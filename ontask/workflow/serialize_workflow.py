@@ -11,7 +11,7 @@ from rest_framework.exceptions import APIException
 from ontask.action.serializers import ActionSerializer
 from ontask.dataops.pandas import store_table
 from ontask.table.serializers import DataFramePandasField, ViewSerializer
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 from ontask.workflow.serialize_column import ColumnSerializer
 
 try:

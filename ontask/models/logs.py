@@ -10,7 +10,7 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.workflow.models import Workflow
+from ontask.models.workflow import Workflow
 
 FIELD_NAME_LENGH = 256
 

@@ -10,7 +10,7 @@ from django.utils.translation import ugettext
 from ontask.models import Action
 from ontask.core.celery import get_task_logger
 from ontask.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 logger = get_task_logger('celery_execution')
 

@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask.dataops.pandas import db
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class WorkflowInitial(test.OnTaskLiveTestCase):

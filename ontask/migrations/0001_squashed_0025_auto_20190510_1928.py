@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('workflow', '0003_workflow_shared'),
+        ('ontask', '0003_workflow_shared'),
     ]
 
     operations = [

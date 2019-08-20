@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='view',
             name='columns',
-            field=models.ManyToManyField(related_name='views', to='workflow.Column', verbose_name='Subset of columns to show'),
+            field=models.ManyToManyField(related_name='views', to='ontask.Column', verbose_name='Subset of columns to show'),
         ),
         migrations.AlterField(
             model_name='view',

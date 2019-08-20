@@ -12,3 +12,4 @@ from ontask.models.logs import Log
 from ontask.models.action import (
     Action, Condition, ActionColumnConditionTuple, var_use_res,
     ACTION_NAME_LENGTH, ACTION_TYPE_LENGTH)
+from ontask.models.workflow import Workflow, Column

@@ -12,7 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask.dataops.pandas import check_wf_df, load_table
 from ontask.dataops.sql.column_queries import is_column_in_table
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class DataopsSymbols(test.OnTaskLiveTestCase):

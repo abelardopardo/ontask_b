@@ -20,7 +20,7 @@ from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Log
 from ontask.tasks import send_email_messages
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 html_body = """<!DOCTYPE html>
 <html>

@@ -7,7 +7,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('workflow', '0022_auto_20180510_1157'),
+        ('ontask', '0022_auto_20180510_1157'),
         ('ontask', '0012_remove_action_n_selected_rows'),
     ]
 
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             model_name='condition',
             name='columns',
             field=models.ManyToManyField(related_name='conditions',
-                                         to='workflow.Column',
+                                         to='ontask.Column',
                                          verbose_name='Columns present in this condition'),
         ),
     ]

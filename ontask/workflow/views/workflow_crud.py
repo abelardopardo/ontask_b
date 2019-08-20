@@ -32,7 +32,7 @@ from ontask.workflow.access import (
     remove_workflow_from_session, store_workflow_in_session,
 )
 from ontask.workflow.forms import WorkflowForm
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 from ontask.workflow.ops import do_clone_column_only
 
 

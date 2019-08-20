@@ -21,7 +21,7 @@ from ontask.core.tables import OperationsColumn
 from ontask.models import Log
 from ontask.table.forms import ViewAddForm
 from ontask.models import View
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class ViewTable(tables.Table):

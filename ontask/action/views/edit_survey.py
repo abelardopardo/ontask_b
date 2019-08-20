@@ -24,7 +24,7 @@ from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.models import Log
 from ontask.visualizations.plotly import PlotlyHandler
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class ColumnSelectedTable(tables.Table):

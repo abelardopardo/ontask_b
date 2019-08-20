@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import is_legal_name
 from ontask.core.forms import date_time_widget_options
 from ontask.dataops.pandas import is_unique_column, load_table
-from ontask.workflow.models import Column
+from ontask.models import Column
 
 INITIAL_VALUE_LENGTH = 512
 

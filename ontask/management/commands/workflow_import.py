@@ -7,7 +7,7 @@ import argparse
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 from ontask.workflow.import_export import do_import_workflow_parse
 
 

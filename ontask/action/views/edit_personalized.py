@@ -17,7 +17,7 @@ from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
 from ontask.models import Log
 from ontask.visualizations.plotly import PlotlyHandler
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 def text_renders_correctly(

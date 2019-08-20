@@ -10,7 +10,7 @@ from django.shortcuts import reverse
 from ontask.models import Action
 from ontask.action.views.import_export import do_import_action
 from ontask.dataops.pandas import check_wf_df, load_table
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class EmailActionTracking(test.OnTaskTestCase):

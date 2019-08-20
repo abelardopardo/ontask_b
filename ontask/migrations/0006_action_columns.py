@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('workflow', '0006_auto_20171125_2052'),
+        ('ontask', '0006_auto_20171125_2052'),
         ('ontask', '0005_action_is_out'),
     ]
 
@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='action',
             name='columns',
-            field=models.ManyToManyField(related_name='actions_in', to='workflow.Column'),
+            field=models.ManyToManyField(related_name='actions_in', to='ontask.Column'),
         ),
     ]

@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import ontask_prefs
 from ontask.core.forms import RestrictedFileField
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 CHAR_FIELD_LENGTH = 512
 

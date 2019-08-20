@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='action',
             name='columns',
-            field=models.ManyToManyField(to='workflow.Column'),
+            field=models.ManyToManyField(to='ontask.Column'),
         ),
     ]

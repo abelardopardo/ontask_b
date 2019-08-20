@@ -35,7 +35,7 @@ from ontask.action.payloads import set_action_payload
 from ontask.dataops.pandas import destroy_db_engine
 from ontask.dataops.pandas.db import engine
 from ontask.core.permissions import group_names
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 standard_library.install_aliases()
 

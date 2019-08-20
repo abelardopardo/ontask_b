@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('workflow', '0024_auto_20180925_1934'),
+        ('ontask', '0024_auto_20180925_1934'),
         ('ontask', '0047_columnconditionpair_action'),
     ]
 

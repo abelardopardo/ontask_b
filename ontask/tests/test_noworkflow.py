@@ -9,7 +9,7 @@ from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class BackToHome(test.OnTaskTestCase):

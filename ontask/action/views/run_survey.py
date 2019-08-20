@@ -27,7 +27,7 @@ from ontask.core import DataTablesServerSidePaging
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
 from ontask.dataops.sql import search_table
-from ontask.workflow.models import Column, Workflow
+from ontask.models import Column, Workflow
 
 
 def run_survey_action(

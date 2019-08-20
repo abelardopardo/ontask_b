@@ -26,7 +26,7 @@ from ontask.dataops.plugin.plugin_manager import (
 )
 from ontask.models import Log
 from ontask.tasks import run_plugin_task
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class PluginAvailableTable(tables.Table):

@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('workflow', '0013_auto_20171209_0809'),
+        ('ontask', '0013_auto_20171209_0809'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('ontask', '0008_auto_20171209_1808'),
         ('ontask', '0003_auto_20171216_1944'),
@@ -32,9 +32,9 @@ class Migration(migrations.Migration):
                 ('track_read', models.BooleanField(default=False, verbose_name='Track if emails are read?')),
                 ('add_column', models.BooleanField(default=False, verbose_name='Add a column with the number of email reads tracked')),
                 ('action', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='ontask.Action')),
-                ('email_column', models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, to='workflow.Column', verbose_name='Column containing the email address')),
+                ('email_column', models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, to='ontask.Column', verbose_name='Column containing the email address')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='workflow.Workflow')),
+                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='ontask.Workflow')),
             ],
             options={
                 'abstract': False,

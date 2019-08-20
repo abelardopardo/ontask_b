@@ -12,7 +12,7 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from ontask.models import Action, Condition
 from ontask.dataops.formula import has_variable
 from ontask.dataops.pandas import check_wf_df
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class ActionActionEdit(test.OnTaskLiveTestCase):

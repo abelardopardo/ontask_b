@@ -51,8 +51,8 @@ class Migration(migrations.Migration):
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('ontask', '0008_auto_20171209_1808'),
-        ('workflow', '0013_auto_20171209_0809'),
-        ('workflow', '0023_auto_20180722_1013'),
+        ('ontask', '0013_auto_20171209_0809'),
+        ('ontask', '0023_auto_20180722_1013'),
     ]
 
     operations = [
@@ -68,14 +68,14 @@ class Migration(migrations.Migration):
                 ('send_confirmation', models.BooleanField(default=False, verbose_name='Send you a confirmation email')),
                 ('track_read', models.BooleanField(default=False, verbose_name='Track if emails are read?')),
                 ('action', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='ontask.Action')),
-                ('email_column', models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_email_actions', to='workflow.Column', verbose_name='Column to select the elements for the action')),
+                ('email_column', models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_email_actions', to='ontask.Column', verbose_name='Column to select the elements for the action')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('message', models.TextField(blank=True, verbose_name='Execution message')),
                 ('deleted', models.BooleanField(default=False)),
                 ('bcc_email', models.CharField(blank=True, default='', max_length=2048, verbose_name='Comma-separated list of BCC Emails')),
                 ('cc_email', models.CharField(blank=True, default='', max_length=2048, verbose_name='Comma-separated list of CC Emails')),
                 ('exclude_values', django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=list, null=True, verbose_name='payload')),
-                ('item_column', models.ForeignKey(blank=True, db_index=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='workflow.Column', verbose_name='Column to select the elements for the action')),
+                ('item_column', models.ForeignKey(blank=True, db_index=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='ontask.Column', verbose_name='Column to select the elements for the action')),
             ],
             options={
                 'abstract': False,
@@ -89,7 +89,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='scheduledemailaction',
             name='item_column',
-            field=models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='workflow.Column', verbose_name='Column to select the elements for the action'),
+            field=models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='ontask.Column', verbose_name='Column to select the elements for the action'),
         ),
         migrations.AlterField(
             model_name='scheduledemailaction',

@@ -26,7 +26,7 @@ from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class ActionTable(tables.Table):

@@ -10,3 +10,4 @@ from ontask.admin.scheduler import ScheduledEmailActionAdmin
 from ontask.admin.dataops import PluginRegistryAdmin, SQLConnectionAdmin
 from ontask.admin.logs import LogAdmin
 from ontask.admin.action import ActionAdmin, ConditionAdmin
+from ontask.admin.workflow import WorkflowAdmin, ColumnAdmin

@@ -13,7 +13,7 @@ from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Log
 from ontask.workflow.forms import AttributeItemForm
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 def save_attribute_form(

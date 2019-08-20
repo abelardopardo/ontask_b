@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('workflow', '0013_auto_20171209_0809'),
+        ('ontask', '0013_auto_20171209_0809'),
     ]
 
     operations = [
@@ -25,8 +25,8 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('formula', django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=dict, help_text='Preselect rows satisfying this condition', null=True, verbose_name='Subset of rows to show')),
-                ('columns', models.ManyToManyField(related_name='views', to='workflow.Column', verbose_name='Subset of columns to show')),
-                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='views', to='workflow.Workflow')),
+                ('columns', models.ManyToManyField(related_name='views', to='ontask.Column', verbose_name='Subset of columns to show')),
+                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='views', to='ontask.Workflow')),
             ],
             options={
                 'ordering': ['name'],

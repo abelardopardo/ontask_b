@@ -32,7 +32,7 @@ from ontask.scheduler.views.save import (
     create_timedelta_string, save_canvas_email_schedule, save_email_schedule,
     save_json_schedule,
 )
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class ScheduleActionTable(tables.Table):

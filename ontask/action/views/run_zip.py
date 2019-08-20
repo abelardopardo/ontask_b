@@ -24,7 +24,7 @@ from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 @user_passes_test(is_instructor)

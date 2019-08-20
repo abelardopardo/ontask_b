@@ -7,7 +7,7 @@ import shutil
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 from ontask.workflow.import_export import do_export_workflow_parse
 
 

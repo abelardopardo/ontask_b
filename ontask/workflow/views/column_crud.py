@@ -27,7 +27,7 @@ from ontask.workflow.forms import (
     ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
     QuestionRenameForm, RandomColumnAddForm,
 )
-from ontask.workflow.models import Column, Workflow
+from ontask.models import Column, Workflow
 from ontask.workflow.ops import clone_wf_column, workflow_delete_column
 
 # These are the column operands offered through the GUI. They have immediate

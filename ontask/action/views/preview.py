@@ -20,7 +20,7 @@ from ontask.action.evaluate import (
 from ontask.models import Action
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 @csrf_exempt

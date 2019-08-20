@@ -20,6 +20,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='scheduledemailaction',
             name='item_column',
-            field=models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='workflow.Column', verbose_name='Column to select the elements for the action'),
+            field=models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='ontask.Column', verbose_name='Column to select the elements for the action'),
         ),
     ]

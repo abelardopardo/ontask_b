@@ -26,7 +26,7 @@ from ontask.models import Log
 from ontask.models import OAuthUserToken
 from ontask.oauth.views import get_initial_token_step1, refresh_token
 from ontask.tasks import send_canvas_email_messages
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 def run_canvas_email_action(

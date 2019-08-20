@@ -16,7 +16,7 @@ from ontask.dataops.pandas import (
     get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
 from ontask.dataops.sql import get_rows
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class DataopsMatrixManipulation(test.OnTaskTestCase):

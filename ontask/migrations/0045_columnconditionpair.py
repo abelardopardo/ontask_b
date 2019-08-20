@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('workflow', '0024_auto_20180925_1934'),
+        ('ontask', '0024_auto_20180925_1934'),
         ('ontask', '0044_auto_20181212_1750'),
     ]
 
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='ColumnConditionPair',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('column', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='column_condition_pair', to='workflow.Column')),
+                ('column', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='column_condition_pair', to='ontask.Column')),
                 ('condition', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='column_condition_pair', to='ontask.Condition')),
             ],
         ),

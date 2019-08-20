@@ -9,7 +9,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('workflow', '0003_workflow_shared'),
+        ('ontask', '0003_workflow_shared'),
     ]
 
     operations = [
@@ -21,8 +21,8 @@ class Migration(migrations.Migration):
                 ('description_text', models.CharField(blank=True, default='', max_length=2048)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
-                ('columns', models.ManyToManyField(related_name='rowview', to='workflow.Column')),
-                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rowview', to='workflow.Workflow')),
+                ('columns', models.ManyToManyField(related_name='rowview', to='ontask.Column')),
+                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rowview', to='ontask.Workflow')),
             ],
         ),
     ]

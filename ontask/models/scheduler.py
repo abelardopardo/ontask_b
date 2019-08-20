@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.models.action import Action
 from ontask.models.logs import Log
-from ontask.workflow.models import Column
+from ontask.models.workflow import Column
 
 
 class ScheduledAction(models.Model):

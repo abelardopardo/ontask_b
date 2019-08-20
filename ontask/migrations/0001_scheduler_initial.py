@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('workflow', '0013_auto_20171209_0809'),
+        ('ontask', '0013_auto_20171209_0809'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('status', models.IntegerField(choices=[(0, 'pending'), (1, 'running'), (2, 'done')], verbose_name='Execution Status')),
                 ('payload', django.contrib.postgres.fields.jsonb.JSONField(default=dict)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='workflow.Workflow')),
+                ('workflow', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='ontask.Workflow')),
             ],
         ),
     ]

@@ -22,7 +22,7 @@ from ontask.dataops.plugin.plugin_manager import (
 )
 from ontask.models import Log
 from ontask.workflow.access import remove_workflow_from_session
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class PluginAdminTable(tables.Table):

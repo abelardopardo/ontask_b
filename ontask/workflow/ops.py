@@ -17,7 +17,7 @@ from ontask.dataops.sql import (
     is_column_unique,
 )
 from ontask.models import Log
-from ontask.workflow.models import Column, Workflow
+from ontask.models import Column, Workflow
 
 RANDOM_PWD_LENGTH = 50
 

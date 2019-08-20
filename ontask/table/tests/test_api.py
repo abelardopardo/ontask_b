@@ -14,7 +14,7 @@ from ontask.dataops.pandas import (
 )
 from ontask.table.serializers import string_to_df
 from ontask.table.serializers.pandas import df_to_string
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 from ontask.workflow.ops import workflow_delete_column
 
 

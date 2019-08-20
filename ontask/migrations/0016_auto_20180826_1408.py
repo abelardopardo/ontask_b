@@ -9,7 +9,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('workflow', '0023_auto_20180722_1013'),
+        ('ontask', '0023_auto_20180722_1013'),
         ('ontask', '0015_scheduledemailaction_exclude_values'),
     ]
 
@@ -17,11 +17,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scheduledemailaction',
             name='item_column',
-            field=models.ForeignKey(blank=True, db_index=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='workflow.Column', verbose_name='Column to select the elements for the action'),
+            field=models.ForeignKey(blank=True, db_index=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_actions', to='ontask.Column', verbose_name='Column to select the elements for the action'),
         ),
         migrations.AlterField(
             model_name='scheduledemailaction',
             name='email_column',
-            field=models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_email_actions', to='workflow.Column', verbose_name='Column to select the elements for the action'),
+            field=models.ForeignKey(db_index=False, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_email_actions', to='ontask.Column', verbose_name='Column to select the elements for the action'),
         ),
     ]

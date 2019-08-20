@@ -19,7 +19,7 @@ from ontask.dataops.pandas import destroy_db_engine
 from ontask.workflow.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class WorkflowImportExport(test.OnTaskTestCase):

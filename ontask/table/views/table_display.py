@@ -24,7 +24,7 @@ from ontask.core.permissions import is_instructor
 from ontask.dataops.sql import delete_row, search_table
 from ontask.models import View
 from ontask.visualizations.plotly import PlotlyHandler
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 def _render_table_display_page(

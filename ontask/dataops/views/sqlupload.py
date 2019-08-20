@@ -17,7 +17,7 @@ from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import SQLRequestPassword, load_df_from_sqlconnection
 from ontask.models import SQLConnection
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 @user_passes_test(is_instructor)

@@ -17,7 +17,7 @@ from ontask.dataops.forms import FIELD_PREFIX, RowForm
 from ontask.dataops.sql import get_row, update_row
 from ontask.dataops.sql.row_queries import insert_row
 from ontask.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 from ontask.workflow.ops import check_key_columns
 
 

@@ -26,7 +26,7 @@ from ontask.dataops.sql import get_rows, get_text_column_hash
 from ontask.models import Log
 from ontask.tasks import workflow_update_lusers
 from ontask.workflow.access import store_workflow_in_session
-from ontask.workflow.models import Column, Workflow
+from ontask.models import Column, Workflow
 
 
 class AttributeTable(tables.Table):
