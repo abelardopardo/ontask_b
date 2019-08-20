@@ -17,7 +17,7 @@ from ontask.action.evaluate.action import evaluate_action
 from ontask.action.models import Action
 from ontask.core.celery import get_task_logger
 from ontask.logs.models import Log
-from ontask.oauth.models import OAuthUserToken
+from ontask.models import OAuthUserToken
 from ontask.oauth.views import refresh_token
 
 logger = get_task_logger('celery_execution')

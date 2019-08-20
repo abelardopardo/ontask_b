@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from ontask.oauth.models import OAuthUserToken
+from ontask.models import OAuthUserToken
 
 
 class OAuthUserTokenAdmin(admin.ModelAdmin):

@@ -261,7 +261,6 @@ INSTALLED_APPS = [
     'ontask.action.apps.ActionConfig',
     'ontask.logs.apps.LogsConfig',
     'ontask.scheduler.apps.SchedulerConfig',
-    'ontask.oauth.apps.OauthConfig',
 ]
 
 if AWS_ACCESS_KEY_ID:

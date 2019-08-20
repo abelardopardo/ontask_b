@@ -15,7 +15,7 @@ from rest_framework import status
 from ontask.action.payloads import (
     CanvasEmailPayload, EmailPayload, JSONPayload,
 )
-from ontask.oauth.models import OAuthUserToken
+from ontask.models import OAuthUserToken
 
 
 class ActionViewRunAction(test.OnTaskTestCase):

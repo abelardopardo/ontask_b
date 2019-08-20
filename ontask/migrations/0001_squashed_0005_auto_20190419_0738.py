@@ -11,7 +11,7 @@ from django.db import migrations, models
 # core.migrations.0004_auto_20190418_2038
 def create_ontask_user_info(apps, schema_editor):
 
-    OnTaskUser = apps.get_model('core', 'OnTaskUser')
+    OnTaskUser = apps.get_model('ontask', 'OnTaskUser')
     User = apps.get_model('authtools', 'User')
 
     # Get all the existing ontask users first

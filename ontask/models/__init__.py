@@ -4,3 +4,4 @@
 
 from ontask.models.profiles import Profile
 from ontask.models.user import OnTaskUser
+from ontask.models.oauth import OAuthUserToken

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ontask', '0001_profiles_initial'),
+        ('ontask', '0001_squashed_0005_auto_20190419_0738'),
     ]
 
     operations = [

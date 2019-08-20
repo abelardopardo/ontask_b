@@ -18,7 +18,7 @@ from rest_framework import status
 
 from ontask.action.payloads import get_action_payload
 from ontask.core.permissions import is_instructor
-from ontask.oauth.models import OAuthUserToken
+from ontask.models import OAuthUserToken
 
 return_url_key = 'oauth_return_url'
 oauth_hash_key = 'oauth_hash'

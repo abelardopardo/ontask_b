@@ -9,7 +9,7 @@ from django.views import generic
 from rest_framework.authtoken.models import Token
 
 from ontask.core.permissions import is_instructor
-from ontask.oauth.models import OAuthUserToken
+from ontask.models import OAuthUserToken
 
 from ontask.profiles import forms
 from ontask import models

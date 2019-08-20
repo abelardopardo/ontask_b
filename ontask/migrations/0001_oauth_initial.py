@@ -7,10 +7,9 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    initial = True
-
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        # migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('ontask', '0002_auto_20190521_1710'),
     ]
 
     operations = [
