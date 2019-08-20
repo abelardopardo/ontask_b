@@ -53,7 +53,7 @@ master_doc = 'index'
 # built documents.
 #
 # The short X.Y version.
-version = u'B.5.2.1'
+version = u'B.5.2.2'
 # The full version, including alpha/beta/rc tags.
 release = version
 

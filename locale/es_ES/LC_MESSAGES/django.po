@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-01 07:22+0930\n"
+"POT-Creation-Date: 2019-08-10 12:15+0930\n"
 "PO-Revision-Date: 2019-08-01 07:24+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: \n"
@@ -256,7 +256,7 @@ msgstr ""
 msgid "Actions, Conditions, Filters, Emails"
 msgstr "Acciones, condiciones, filtros, emails"
 
-#: ontask/action/evaluate/action.py:263
+#: ontask/action/evaluate/action.py:262
 msgid "Incorrect type of action"
 msgstr "Tipo de acción incorrecta"
 
@@ -447,12 +447,12 @@ msgstr "No hay ningún servicio Canvas disponible para esta acción."
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
-#: ontask/action/models.py:61 ontask/action/models.py:426
+#: ontask/action/models.py:61 ontask/action/models.py:424
 #: ontask/scheduler/models.py:48
 msgid "name"
 msgstr "nombre"
 
-#: ontask/action/models.py:68 ontask/action/models.py:433
+#: ontask/action/models.py:68 ontask/action/models.py:431
 #: ontask/scheduler/models.py:54 ontask/workflow/models.py:498
 msgid "description"
 msgstr "descripción"
@@ -473,15 +473,15 @@ msgstr "Acción disponible hasta"
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
-#: ontask/action/models.py:440
+#: ontask/action/models.py:438
 msgid "formula"
 msgstr "fórmula"
 
-#: ontask/action/models.py:446
+#: ontask/action/models.py:444
 msgid "Columns present in this condition"
 msgstr "Columnas presentes en esta condición"
 
-#: ontask/action/models.py:452
+#: ontask/action/models.py:450
 msgid "Number of rows selected"
 msgstr "Número de filas seleccionadas"
 
@@ -1974,11 +1974,11 @@ msgstr ""
 "Los datos no tienen ninguna columna con valores únicos por cada fila. Al "
 "menos debe haber una columna con valores únicos."
 
-#: ontask/dataops/pandas/merge.py:313
+#: ontask/dataops/pandas/merge.py:308
 msgid "Merge operation produced a result with no rows"
 msgstr "La operación de mecla ha producido un resultado sin filas"
 
-#: ontask/dataops/pandas/merge.py:319
+#: ontask/dataops/pandas/merge.py:314
 msgid ""
 "Merge operation produced a result without any key columns. Review the key "
 "columns in the data to upload."

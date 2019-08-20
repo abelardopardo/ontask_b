@@ -30,6 +30,12 @@ def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
     """
     for column in list(data_frame.columns):
         if data_frame[column].dtype.name == 'object':
+            if all(
+                isinstance(x, bool) or pd.isna(x) for x in data_frame[column]
+            ):
+                # Column contains booleans + NaN, skip
+                continue
+
             # Column is a string! Remove the leading and trailing white
             # space
             data_frame[column] = data_frame[column].str.strip().fillna(
@@ -39,7 +45,8 @@ def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
             try:
                 series = pd.to_datetime(
                     data_frame[column],
-                    infer_datetime_format=True)
+                    infer_datetime_format=True,
+                    utc=True)
             except (ValueError, TypeError):
                 # Datetime failed. Rows with no value may be read as NaN from
                 # the read CSV but will turn into None when looping through the
@@ -49,16 +56,13 @@ def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
                     None)
             else:
                 # Datetime conversion worked!
-                if any(
-                    sitem.tzinfo is None
-                    or sitem.tzinfo.utcoffset(sitem) is None
-                    for sitem in series
-                ):
-                    # If series has no timezone, add the system one
-                    series = series.dt.tz_localize('UTC').dt.tz_convert(
-                        ontask_settings.TIME_ZONE,
-                    )
-                data_frame[column] = series
+                # If the series has not time zone information, locaize it
+                if series.dt.tz is None:
+                    data_frame[column] = series.dt.tz_localize(
+                        'UTC').dt.tz_convert(ontask_settings.TIME_ZONE)
+                # Make sure the series is in local time.
+                data_frame[column] = series.dt.tz_convert(
+                    ontask_settings.TIME_ZONE)
 
     return data_frame
 

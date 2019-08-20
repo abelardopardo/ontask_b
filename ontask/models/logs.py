@@ -246,6 +246,8 @@ class Log(models.Model):
         return self.user.email
 
     class Meta(object):
-        """Define the table name."""
+        """Additional attributes for the model."""
 
         db_table = 'logs_log'
+        verbose_name = 'log'
+        verbose_name_plural = 'logs'
