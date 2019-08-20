@@ -17,7 +17,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.dataops import settings
-from ontask.dataops.models import Plugin
+from ontask.models import Plugin
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.plugin import ontask_plugin
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract

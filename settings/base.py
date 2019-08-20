@@ -256,7 +256,6 @@ INSTALLED_APPS = [
     'ontask',
     'ontask.django_auth_lti',
     'ontask.workflow.apps.WorkflowConfig',
-    'ontask.dataops.apps.DataopsConfig',
     'ontask.action.apps.ActionConfig',
     'ontask.logs.apps.LogsConfig',
 ]

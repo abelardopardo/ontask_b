@@ -7,3 +7,4 @@ from ontask.models.user import OnTaskUser
 from ontask.models.oauth import OAuthUserToken
 from ontask.models.table import View
 from ontask.models.scheduler import ScheduledAction
+from ontask.models.dataops import Plugin, SQLConnection

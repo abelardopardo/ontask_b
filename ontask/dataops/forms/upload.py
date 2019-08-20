@@ -30,7 +30,7 @@ from ontask.dataops.forms.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
-from ontask.dataops.models import SQLConnection
+from ontask.models import SQLConnection
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 
 # Field prefix to use in forms to avoid using column names (they are given by

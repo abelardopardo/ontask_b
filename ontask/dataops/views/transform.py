@@ -20,7 +20,7 @@ from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import FIELD_PREFIX, PluginInfoForm
-from ontask.dataops.models import Plugin
+from ontask.models import Plugin
 from ontask.dataops.plugin.plugin_manager import (
     load_plugin, refresh_plugin_data,
 )

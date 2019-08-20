@@ -18,7 +18,7 @@ from ontask.core.decorators import ajax_required
 from ontask.core.permissions import is_admin, is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.dataops.forms import SQLConnectionForm
-from ontask.dataops.models import SQLConnection
+from ontask.models import SQLConnection
 from ontask.logs.models import Log
 from ontask.workflow.access import remove_workflow_from_session
 

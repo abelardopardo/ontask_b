@@ -5,7 +5,7 @@ import test
 
 from rest_framework import status
 
-from ontask.dataops.models import SQLConnection
+from ontask.models import SQLConnection
 
 
 class DataopsViewSQLConnections(test.OnTaskTestCase):

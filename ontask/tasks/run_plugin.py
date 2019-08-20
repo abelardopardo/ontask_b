@@ -1,7 +1,7 @@
 from celery import shared_task
 from django.utils.translation import ugettext
 
-from ontask.dataops.models import Plugin
+from ontask.models import Plugin
 from ontask.dataops.plugin.plugin_manager import run_plugin
 from ontask.tasks.basic import get_execution_items, get_log_item
 

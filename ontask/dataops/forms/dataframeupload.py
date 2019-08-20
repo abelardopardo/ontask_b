@@ -8,7 +8,7 @@ import pandas as pd
 from django.conf import settings as ontask_settings
 from smart_open import smart_open
 
-from ontask.dataops.models import SQLConnection
+from ontask.models import SQLConnection
 from ontask.dataops.pandas import create_db_engine
 
 

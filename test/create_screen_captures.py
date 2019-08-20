@@ -3,7 +3,7 @@
 
 import os
 
-# from ontask.dataops.models import SQLConnection
+# from ontask.models import SQLConnection
 import test
 from test import ElementHasFullOpacity, ScreenTests
 
