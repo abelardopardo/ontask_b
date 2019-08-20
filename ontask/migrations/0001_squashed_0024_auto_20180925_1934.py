@@ -17,7 +17,7 @@ def forwards(apps, schema_editor):
         return
     # Traverse the workflows and verify that the columns are in the same
     # order than the columns in the workflow
-    Workflow = apps.get_model('workflow', 'Workflow')
+    Workflow = apps.get_model('ontask', 'Workflow')
 
     for w in Workflow.objects.all():
         if not w.is_table_in_db(w):

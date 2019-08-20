@@ -24,7 +24,7 @@ def add_columns_to_conditions(apps, schema_editor):
     if schema_editor.connection.alias != 'default':
         return
 
-    Workflow = apps.get_model('workflow', 'Workflow')
+    Workflow = apps.get_model('ontask', 'Workflow')
     for workflow in Workflow.objects.all():
         for action in workflow.actions.all():
             for condition in action.conditions.all():
