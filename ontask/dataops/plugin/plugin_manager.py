@@ -21,7 +21,7 @@ from ontask.models import Plugin
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.plugin import ontask_plugin
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
-from ontask.logs.models import Log
+from ontask.models import Log
 
 type_function = {
     'integer': int,

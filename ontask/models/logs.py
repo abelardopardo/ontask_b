@@ -244,3 +244,8 @@ class Log(models.Model):
     def log_useremail(self):
         """Return the user email."""
         return self.user.email
+
+    class Meta(object):
+        """Define the table name."""
+
+        db_table = 'logs_log'

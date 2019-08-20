@@ -15,7 +15,7 @@ from ontask.action.forms import EditActionOutForm, EnableURLForm, FilterForm
 from ontask.action.models import Action, Condition
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.visualizations.plotly import PlotlyHandler
 from ontask.workflow.models import Workflow
 

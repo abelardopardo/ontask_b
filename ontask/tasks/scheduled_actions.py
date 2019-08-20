@@ -10,7 +10,7 @@ from celery import shared_task
 from django.conf import settings as ontask_settings
 
 from ontask.action.models import Action
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.models import ScheduledAction
 from ontask.tasks.basic import logger
 from ontask.tasks.send_canvas_email import send_canvas_email_messages

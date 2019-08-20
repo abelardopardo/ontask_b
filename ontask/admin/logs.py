@@ -3,7 +3,7 @@
 
 from django.contrib import admin
 
-from .models import Log
+from ontask.models import Log
 
 
 class LogAdmin(admin.ModelAdmin):

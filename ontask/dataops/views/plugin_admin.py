@@ -20,7 +20,7 @@ from ontask.models import Plugin
 from ontask.dataops.plugin.plugin_manager import (
     load_plugin, refresh_plugin_data,
 )
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.workflow.access import remove_workflow_from_session
 from ontask.workflow.models import Workflow
 

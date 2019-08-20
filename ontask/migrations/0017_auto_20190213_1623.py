@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('logs', '0016_auto_20181219_2214'),
+        ('ontask', '0016_auto_20181219_2214'),
     ]
 
     operations = [

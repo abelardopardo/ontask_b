@@ -25,7 +25,7 @@ from ontask.action.views.edit_survey import edit_action_in
 from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.core.tables import OperationsColumn
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.workflow.models import Workflow
 
 

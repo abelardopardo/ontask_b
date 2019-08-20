@@ -27,7 +27,7 @@ from ontask.action.views.serve_survey import serve_survey_row
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.workflow.models import Workflow
 
 fn_distributor = {

@@ -9,7 +9,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('logs', '0004_log_modified'),
+        ('ontask', '0004_log_modified'),
     ]
 
     operations = [

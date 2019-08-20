@@ -180,7 +180,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('workflow', '0024_auto_20180925_1934'),
-        ('logs', '0004_log_modified'),
+        ('ontask', '0004_log_modified'),
         ('workflow', '0006_auto_20171125_2052'),
         ('workflow', '0001_initial'),
         ('workflow', '0022_auto_20180510_1157'),
@@ -311,7 +311,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='action',
             name='last_executed_log',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='logs.Log'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='ontask.Log'),
         ),
         migrations.AlterField(
             model_name='action',

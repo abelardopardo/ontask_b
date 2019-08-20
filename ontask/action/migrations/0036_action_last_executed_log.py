@@ -9,7 +9,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('logs', '0004_log_modified'),
+        ('ontask', '0004_log_modified'),
         ('action', '0035_action_last_executed'),
     ]
 
@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='action',
             name='last_executed_log',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='logs.Log'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='ontask.Log'),
         ),
     ]

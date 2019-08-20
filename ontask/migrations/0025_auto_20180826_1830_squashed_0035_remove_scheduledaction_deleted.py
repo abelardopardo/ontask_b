@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('action', '0038_auto_20180826_1505'),
-        ('logs', '0006_auto_20180825_1123'),
+        ('ontask', '0006_auto_20180825_1123'),
         ('ontask', '0024_auto_20180826_1506'),
     ]
 
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scheduledaction',
             name='last_executed_log',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='logs.Log'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='ontask.Log'),
         ),
         migrations.AlterField(
             model_name='scheduledaction',

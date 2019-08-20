@@ -18,7 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 import ontask
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula, evaluation
 from ontask.dataops.sql import get_num_rows, select_ids_all_false
-from ontask.logs.models import Log
+from ontask.models.logs import Log
 from ontask.workflow.models import Column, Workflow
 
 # Regular expressions detecting the use of a variable, or the

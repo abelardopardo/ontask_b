@@ -22,7 +22,7 @@ from ontask.action.payloads import (
 )
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.models import OAuthUserToken
 from ontask.oauth.views import get_initial_token_step1, refresh_token
 from ontask.tasks import send_canvas_email_messages

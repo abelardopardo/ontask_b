@@ -5,7 +5,7 @@ from django.utils.translation import ugettext
 
 import ontask.dataops.sql
 from ontask.action.models import Action
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.tasks.basic import logger
 
 

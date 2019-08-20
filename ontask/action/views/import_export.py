@@ -20,7 +20,7 @@ from ontask.action.models import Action
 from ontask.action.serializers import ActionSelfcontainedSerializer
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.workflow.models import Workflow
 
 

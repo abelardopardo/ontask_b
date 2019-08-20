@@ -24,7 +24,7 @@ from ontask.models import Plugin
 from ontask.dataops.plugin.plugin_manager import (
     load_plugin, refresh_plugin_data,
 )
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.tasks import run_plugin_task
 from ontask.workflow.models import Workflow
 

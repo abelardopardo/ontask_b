@@ -6,10 +6,10 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    replaces = [('logs', '0007_auto_20180828_1827'), ('logs', '0008_auto_20180902_1856'), ('logs', '0009_auto_20180906_1802'), ('logs', '0010_auto_20181018_0832'), ('logs', '0011_auto_20181020_2208'), ('logs', '0012_auto_20181124_1847'), ('logs', '0013_auto_20181126_1854'), ('logs', '0011_auto_20181020_2206'), ('logs', '0012_merge_20181111_2142'), ('logs', '0014_merge_20181201_1627'), ('logs', '0015_auto_20181207_0539'), ('logs', '0016_auto_20181219_2214'), ('logs', '0017_auto_20190213_1623')]
+    replaces = [('ontask', '0007_auto_20180828_1827'), ('ontask', '0008_auto_20180902_1856'), ('ontask', '0009_auto_20180906_1802'), ('ontask', '0010_auto_20181018_0832'), ('ontask', '0011_auto_20181020_2208'), ('ontask', '0012_auto_20181124_1847'), ('ontask', '0013_auto_20181126_1854'), ('ontask', '0011_auto_20181020_2206'), ('ontask', '0012_merge_20181111_2142'), ('ontask', '0014_merge_20181201_1627'), ('ontask', '0015_auto_20181207_0539'), ('ontask', '0016_auto_20181219_2214'), ('ontask', '0017_auto_20190213_1623')]
 
     dependencies = [
-        ('logs', '0006_auto_20180825_1123'),
+        ('ontask', '0006_auto_20180825_1123'),
     ]
 
     operations = [

@@ -22,7 +22,7 @@ from ontask.dataops.pandas import (
     load_table, pandas_datatype_names, rename_df_column, store_dataframe,
 )
 from ontask.dataops.sql import add_column_to_db, db_rename_column
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.workflow.forms import (
     ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
     QuestionRenameForm, RandomColumnAddForm,

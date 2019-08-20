@@ -257,7 +257,6 @@ INSTALLED_APPS = [
     'ontask.django_auth_lti',
     'ontask.workflow.apps.WorkflowConfig',
     'ontask.action.apps.ActionConfig',
-    'ontask.logs.apps.LogsConfig',
 ]
 
 if AWS_ACCESS_KEY_ID:

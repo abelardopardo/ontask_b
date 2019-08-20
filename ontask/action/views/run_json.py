@@ -17,7 +17,7 @@ from ontask.action.payloads import (
 )
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.tasks import send_json_objects
 from ontask.workflow.models import Workflow
 

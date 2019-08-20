@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
     replaces = [('ontask', '0001_core_initial'), ('ontask', '0002_auto_20190418_1539'), ('ontask', '0003_auto_20190418_1541'), ('ontask', '0004_auto_20190418_2038'), ('ontask', '0005_auto_20190419_0738')]
 
     dependencies = [
-        ('logs', '0017_auto_20190213_1623'),
+        ('ontask', '0017_auto_20190213_1623'),
         ('workflow', '0027_auto_20190418_1057'),
         ('authtoken', '0002_auto_20160226_1747'),
         ('authtools', '0003_auto_20160128_0912'),

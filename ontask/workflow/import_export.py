@@ -15,7 +15,7 @@ from rest_framework.renderers import JSONRenderer
 
 from ontask.action.models import Action
 from ontask.dataops.pandas import check_wf_df
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.workflow.models import Workflow
 from ontask.workflow.serialize_workflow import (
     WorkflowExportSerializer, WorkflowImportSerializer,

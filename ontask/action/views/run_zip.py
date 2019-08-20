@@ -23,7 +23,7 @@ from ontask.action.views.run_email import html_body
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.workflow.models import Workflow
 
 

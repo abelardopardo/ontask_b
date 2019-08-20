@@ -15,7 +15,7 @@ from ontask.action.models import Action
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
 )
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.scheduler.forms import EmailScheduleForm, JSONScheduleForm
 from ontask.models import ScheduledAction
 

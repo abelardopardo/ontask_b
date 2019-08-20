@@ -3,7 +3,7 @@ from django.utils.translation import ugettext
 
 from ontask.action.payloads import JSONPayload
 from ontask.action.send import send_json
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.tasks.basic import get_execution_items, get_log_item
 
 

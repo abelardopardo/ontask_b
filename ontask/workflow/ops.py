@@ -16,7 +16,7 @@ from ontask.dataops.sql import (
     add_column_to_db, copy_column_in_db, df_drop_column, get_rows,
     is_column_unique,
 )
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.workflow.models import Column, Workflow
 
 RANDOM_PWD_LENGTH = 50

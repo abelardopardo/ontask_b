@@ -22,7 +22,7 @@ from ontask.core.decorators import (
 )
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.visualizations.plotly import PlotlyHandler
 from ontask.workflow.models import Workflow
 

@@ -10,7 +10,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.action.models import Action
-from ontask.logs.models import Log
+from ontask.models.logs import Log
 from ontask.workflow.models import Column
 
 

@@ -14,7 +14,7 @@ from ontask.action.evaluate.action import evaluate_action
 from ontask.action.models import Action
 from ontask.action.payloads import JSONPayload
 from ontask.core.celery import get_task_logger
-from ontask.logs.models import Log
+from ontask.models import Log
 
 logger = get_task_logger('celery_execution')
 

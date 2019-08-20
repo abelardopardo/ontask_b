@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         ('ontask', '0001_profiles_initial'),
         ('workflow', '0027_auto_20190418_1057'),
         # ('ontask_oauth', '0004_auto_20181208_1306'),
-        ('logs', '0017_auto_20190213_1623'),
+        ('ontask', '0017_auto_20190213_1623'),
         ('admin', '0003_logentry_add_action_flag_choices'),
         ('ontask', '0035_remove_scheduledaction_deleted'),
         ('ontask', '0001_core_initial'),

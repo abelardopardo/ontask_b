@@ -24,7 +24,7 @@ from ontask.action.models import Action
 from ontask.action.payloads import EmailPayload
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
-from ontask.logs.models import Log
+from ontask.models import Log
 from ontask.workflow.models import Column
 
 logger = get_task_logger('celery_execution')
