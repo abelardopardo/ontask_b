@@ -249,5 +249,3 @@ class Log(models.Model):
         """Additional attributes for the model."""
 
         db_table = 'logs_log'
-        verbose_name = 'log'
-        verbose_name_plural = 'logs'
