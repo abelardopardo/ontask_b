@@ -13,8 +13,8 @@ from ontask.models import Action
 from ontask.action.payloads import (
     EmailPayload, JSONPayload, CanvasEmailPayload
 )
-from ontask.logs.models import Log
-from ontask.scheduler.models import ScheduledAction
+from ontask.models import Log
+from ontask.models import ScheduledAction
 from ontask.tasks.basic import logger
 from ontask.tasks.send_canvas_email import send_canvas_email_messages
 from ontask.tasks.send_email import send_email_messages
