@@ -98,7 +98,6 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         wfile = self.selenium.find_element_by_id('id_wf_file')
         wfile.send_keys(os.path.join(settings.BASE_DIR(),
                                      'ontask',
-                                     'workflow',
                                      'fixtures',
                                      'ontask_workflow.gz'))
 

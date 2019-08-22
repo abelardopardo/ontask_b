@@ -7,77 +7,77 @@
         "permissions": [
             [
                 "add_action",
-                "action",
+                "ontask",
                 "action"
             ],
             [
                 "change_action",
-                "action",
+                "ontask",
                 "action"
             ],
             [
                 "delete_action",
-                "action",
+                "ontask",
                 "action"
             ],
             [
                 "add_condition",
-                "action",
+                "ontask",
                 "condition"
             ],
             [
                 "change_condition",
-                "action",
+                "ontask",
                 "condition"
             ],
             [
                 "delete_condition",
-                "action",
+                "ontask",
                 "condition"
             ],
             [
                 "add_log",
-                "logs",
+                "ontask",
                 "log"
             ],
             [
                 "change_log",
-                "logs",
+                "ontask",
                 "log"
             ],
             [
                 "delete_log",
-                "logs",
+                "ontask",
                 "log"
             ],
             [
                 "add_column",
-                "workflow",
+                "ontask",
                 "column"
             ],
             [
                 "change_column",
-                "workflow",
+                "ontask",
                 "column"
             ],
             [
                 "delete_column",
-                "workflow",
+                "ontask",
                 "column"
             ],
             [
                 "add_workflow",
-                "workflow",
+                "ontask",
                 "workflow"
             ],
             [
                 "change_workflow",
-                "workflow",
+                "ontask",
                 "workflow"
             ],
             [
                 "delete_workflow",
-                "workflow",
+                "ontask",
                 "workflow"
             ]
         ]
