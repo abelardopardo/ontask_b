@@ -76,6 +76,8 @@ Install and Configure PostgreSQL
 
    If the client does not connect to the database, review your configuration options.
 
+#. The libraries required by OnTask will install some Python packages compiling the soure and one of them uses the development libraries from PostgreSQL. If you are using a linux distribution, make sure you install the package ``postgresql-server-dev-all``.
+
 Install Python 3
 ================
 
@@ -86,6 +88,8 @@ In the following sections we assume that you can open a command line interpreter
 #. Verify that the interpreter can run and has the right version (3) using the command line interpreter (either ``python --version`` or ``python3 --version``).
 
 #. Install `pip <https://pip.pypa.io/en/stable/>`__ (the package may be called ``python3-pip`` for Python 3). This tool will be used to install additional libraries required to execute OnTask.
+
+#. Some python libraries will require compiling source code, so make sure the package python3.7-dev is also installed.
 
 Download, install and configure OnTask
 **************************************
