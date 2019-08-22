@@ -30,6 +30,11 @@ from psycopg2 import sql
 
 def copy_site_preferences(apps, schema_editor):
     with con.cursor() as cursor:
+        table_names = [
+            citem.name for citem in con.introspection.get_table_list(cursor)]
+        if 'siteprefs_preference' not in table_names:
+            return
+
         # Remove left over siteprefs for app email_action
         cursor.execute(
             sql.SQL(
@@ -98,6 +103,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('ontask', '0002_Version_6_UPGRADE'),
+        ('siteprefs', '0001_initial'),
     ]
 
     operations = [
