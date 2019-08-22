@@ -244,8 +244,3 @@ class Log(models.Model):
     def log_useremail(self):
         """Return the user email."""
         return self.user.email
-
-    class Meta(object):
-        """Additional attributes for the model."""
-
-        db_table = 'logs_log'

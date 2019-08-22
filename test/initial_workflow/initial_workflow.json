@@ -455,112 +455,112 @@
     }
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 21,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 11,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 12,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 13,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 14,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 15,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 16,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 17,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 18,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 19,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 20,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 1,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 2,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 3,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 4,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 5,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 6,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 7,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 8,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 9,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 10,
     "fields": {}
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 21,
     "fields": {
         "slug": "b214cf22-612b-4c68-ab8a-53152daf457b",
@@ -570,7 +570,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 11,
     "fields": {
         "slug": "df095b15-a04c-4e6f-a3bd-03f233b7c491",
@@ -580,7 +580,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 12,
     "fields": {
         "slug": "f551bee3-25d5-4485-9763-b1963481c256",
@@ -590,7 +590,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 13,
     "fields": {
         "slug": "36da91bc-6de6-410c-8b7f-30cf13380501",
@@ -600,7 +600,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 14,
     "fields": {
         "slug": "cda10e84-2563-431a-a1e0-08364ededf03",
@@ -610,7 +610,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 15,
     "fields": {
         "slug": "858d5d9b-8422-4649-831d-90f50857cfbb",
@@ -620,7 +620,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 16,
     "fields": {
         "slug": "ea863593-204e-4046-959a-a0b50b3bd6be",
@@ -630,7 +630,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 17,
     "fields": {
         "slug": "f97f3822-7758-4cd2-9873-d2c650f8b2a7",
@@ -640,7 +640,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 18,
     "fields": {
         "slug": "4e23cc69-d4b8-4065-8d49-839de7f48e10",
@@ -650,7 +650,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 19,
     "fields": {
         "slug": "5a615a2b-f8aa-43ac-845d-a374ee16de94",
@@ -660,7 +660,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 20,
     "fields": {
         "slug": "34af80c7-5e4b-42fc-9549-7c4d8a21c234",
@@ -670,7 +670,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 1,
     "fields": {
         "slug": "5a4d9346-b194-40f7-9b26-749f7601ab1e",
@@ -680,7 +680,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 2,
     "fields": {
         "slug": "8c102aa2-af1d-479a-8dab-c6843403565b",
@@ -690,7 +690,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 3,
     "fields": {
         "slug": "a4e0dfbd-5ac6-413b-a627-a3ade270f066",
@@ -700,7 +700,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 4,
     "fields": {
         "slug": "97897060-e97f-4f41-bd3a-8ef7b5a55642",
@@ -710,7 +710,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 5,
     "fields": {
         "slug": "9a08491d-8859-4c2f-aacd-56533129a256",
@@ -720,7 +720,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 6,
     "fields": {
         "slug": "11aa2e70-4c58-4db1-bb20-823e39aed280",
@@ -730,7 +730,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 7,
     "fields": {
         "slug": "e3af4818-1575-48aa-899f-52da3c74cd52",
@@ -740,7 +740,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 8,
     "fields": {
         "slug": "0d97d719-0fa7-48ec-9a79-fb235f53c997",
@@ -750,7 +750,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 9,
     "fields": {
         "slug": "734f49ad-0633-4ab2-bf81-5f97d143c0cf",
@@ -760,7 +760,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 10,
     "fields": {
         "slug": "a508a388-55fb-45cf-a47f-6970425c5f5c",
@@ -770,7 +770,7 @@
     }
 },
 {
-    "model": "workflow.workflow",
+    "model": "ontask.workflow",
     "pk": 1,
     "fields": {
         "user": [
@@ -1211,7 +1211,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 1,
     "fields": {
         "name": "SID",
@@ -1227,7 +1227,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 2,
     "fields": {
         "name": "email",
@@ -1243,7 +1243,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 3,
     "fields": {
         "name": "Surname",
@@ -1259,7 +1259,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 4,
     "fields": {
         "name": "GivenName",
@@ -1275,7 +1275,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 5,
     "fields": {
         "name": "MiddleInitial",
@@ -1291,7 +1291,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 6,
     "fields": {
         "name": "Gender",
@@ -1307,7 +1307,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 7,
     "fields": {
         "name": "UOS Code",
@@ -1323,7 +1323,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 8,
     "fields": {
         "name": "Program",
@@ -1344,7 +1344,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 9,
     "fields": {
         "name": "Enrolment Type",
@@ -1360,7 +1360,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 10,
     "fields": {
         "name": "Attendance",
@@ -1376,7 +1376,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 11,
     "fields": {
         "name": "Difficult Week 1",
@@ -1398,7 +1398,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 12,
     "fields": {
         "name": "Sat W1",
@@ -1419,7 +1419,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 13,
     "fields": {
         "name": "Q01",
@@ -1435,7 +1435,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 14,
     "fields": {
         "name": "Q02",
@@ -1451,7 +1451,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 15,
     "fields": {
         "name": "Q03",
@@ -1467,7 +1467,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 16,
     "fields": {
         "name": "Q04",
@@ -1483,7 +1483,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 17,
     "fields": {
         "name": "Q05",
@@ -1499,7 +1499,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 18,
     "fields": {
         "name": "Q06",
@@ -1515,7 +1515,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 19,
     "fields": {
         "name": "Q07",
@@ -1531,7 +1531,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 20,
     "fields": {
         "name": "Q08",
@@ -1547,7 +1547,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 21,
     "fields": {
         "name": "Q09",
@@ -1563,7 +1563,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 22,
     "fields": {
         "name": "Q10",
@@ -1579,7 +1579,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 23,
     "fields": {
         "name": "Total",
@@ -1595,7 +1595,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 24,
     "fields": {
         "name": "Days online 2",
@@ -1611,7 +1611,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 25,
     "fields": {
         "name": "Views 2",
@@ -1627,7 +1627,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 26,
     "fields": {
         "name": "Contributions 2",
@@ -1643,7 +1643,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 27,
     "fields": {
         "name": "Questions 2",
@@ -1659,7 +1659,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 28,
     "fields": {
         "name": "Days online 3",
@@ -1675,7 +1675,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 29,
     "fields": {
         "name": "Views 3",
@@ -1691,7 +1691,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 30,
     "fields": {
         "name": "Contributions 3",
@@ -1707,7 +1707,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 31,
     "fields": {
         "name": "Questions 3",
@@ -1723,7 +1723,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 32,
     "fields": {
         "name": "Days online 4",
@@ -1739,7 +1739,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 33,
     "fields": {
         "name": "Views 4",
@@ -1755,7 +1755,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 34,
     "fields": {
         "name": "Contributions 4",
@@ -1771,7 +1771,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 35,
     "fields": {
         "name": "Questions 4",
@@ -1787,7 +1787,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 36,
     "fields": {
         "name": "Days online 5",
@@ -1803,7 +1803,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 37,
     "fields": {
         "name": "Views 5",
@@ -1819,7 +1819,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 38,
     "fields": {
         "name": "Contributions 5",
@@ -1835,7 +1835,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 39,
     "fields": {
         "name": "Questions 5",
@@ -1851,7 +1851,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 40,
     "fields": {
         "name": "Days online",
@@ -1867,7 +1867,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 41,
     "fields": {
         "name": "Views",
@@ -1883,7 +1883,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 42,
     "fields": {
         "name": "Contributions",
@@ -1899,7 +1899,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 43,
     "fields": {
         "name": "Questions",
@@ -1915,7 +1915,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 44,
     "fields": {
         "name": "Video_1_W2",
@@ -1931,7 +1931,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 45,
     "fields": {
         "name": "Questions_1_W2",
@@ -1947,7 +1947,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 46,
     "fields": {
         "name": "Correct_1_W2",
@@ -1963,7 +1963,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 47,
     "fields": {
         "name": "Video_2_W2",
@@ -1979,7 +1979,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 48,
     "fields": {
         "name": "Questions_2_W2",
@@ -1995,7 +1995,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 49,
     "fields": {
         "name": "Correct_2_W2",
@@ -2011,7 +2011,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 50,
     "fields": {
         "name": "Video_1_W3",
@@ -2027,7 +2027,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 51,
     "fields": {
         "name": "Questions_1_W3",
@@ -2043,7 +2043,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 52,
     "fields": {
         "name": "Correct_1_W3",
@@ -2059,7 +2059,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 53,
     "fields": {
         "name": "Video_2_W3",
@@ -2075,7 +2075,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 54,
     "fields": {
         "name": "Questions_2_W3",
@@ -2091,7 +2091,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 55,
     "fields": {
         "name": "Correct_2_W3",
@@ -2107,7 +2107,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 56,
     "fields": {
         "name": "Video_1_W4",
@@ -2123,7 +2123,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 57,
     "fields": {
         "name": "Questions_1_W4",
@@ -2139,7 +2139,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 58,
     "fields": {
         "name": "Correct_1_W4",
@@ -2155,7 +2155,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 59,
     "fields": {
         "name": "Video_2_W4",
@@ -2171,7 +2171,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 60,
     "fields": {
         "name": "Questions_2_W4",
@@ -2187,7 +2187,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 61,
     "fields": {
         "name": "Correct_2_W4",
@@ -2203,7 +2203,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 62,
     "fields": {
         "name": "Video_1_W5",
@@ -2219,7 +2219,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 63,
     "fields": {
         "name": "Questions_1_W5",
@@ -2235,7 +2235,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 64,
     "fields": {
         "name": "Correct_1_W5",
@@ -2251,7 +2251,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 65,
     "fields": {
         "name": "Video_2_W5",
@@ -2267,7 +2267,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 66,
     "fields": {
         "name": "Questions_2_W5",
@@ -2283,7 +2283,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 67,
     "fields": {
         "name": "Correct_2_W5",
@@ -2299,7 +2299,7 @@
     }
 },
 {
-    "model": "dataops.plugin",
+    "model": "ontask.plugin",
     "pk": 7,
     "fields": {
         "filename": "linear_model",
@@ -2313,7 +2313,7 @@
     }
 },
 {
-    "model": "dataops.plugin",
+    "model": "ontask.plugin",
     "pk": 8,
     "fields": {
         "filename": "test_plugin_2",
@@ -2326,7 +2326,7 @@
     }
 },
 {
-    "model": "dataops.plugin",
+    "model": "ontask.plugin",
     "pk": 9,
     "fields": {
         "filename": "test_plugin_1",
@@ -2339,7 +2339,7 @@
     }
 },
 {
-    "model": "dataops.sqlconnection",
+    "model": "ontask.sqlconnection",
     "pk": 1,
     "fields": {
         "name": "remote server",
@@ -2355,7 +2355,7 @@
     }
 },
 {
-    "model": "table.view",
+    "model": "ontask.view",
     "pk": 1,
     "fields": {
         "workflow": 1,
@@ -2384,7 +2384,7 @@
     }
 },
 {
-    "model": "table.view",
+    "model": "ontask.view",
     "pk": 2,
     "fields": {
         "workflow": 1,
@@ -2415,7 +2415,7 @@
     }
 },
 {
-    "model": "table.view",
+    "model": "ontask.view",
     "pk": 3,
     "fields": {
         "workflow": 1,
@@ -2443,7 +2443,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 1,
     "fields": {
         "workflow": 1,
@@ -2463,7 +2463,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 2,
     "fields": {
         "workflow": 1,
@@ -2483,7 +2483,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 3,
     "fields": {
         "workflow": 1,
@@ -2503,7 +2503,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 4,
     "fields": {
         "workflow": 1,
@@ -2523,7 +2523,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 5,
     "fields": {
         "workflow": 1,
@@ -2543,7 +2543,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 6,
     "fields": {
         "workflow": 1,
@@ -2563,7 +2563,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 7,
     "fields": {
         "workflow": 1,
@@ -2583,7 +2583,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 1,
     "fields": {
         "action": 1,
@@ -2614,7 +2614,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 2,
     "fields": {
         "action": 1,
@@ -2659,7 +2659,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 3,
     "fields": {
         "action": 1,
@@ -2704,7 +2704,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 4,
     "fields": {
         "action": 1,
@@ -2735,7 +2735,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 5,
     "fields": {
         "action": 2,
@@ -2775,7 +2775,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 6,
     "fields": {
         "action": 2,
@@ -2806,7 +2806,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 7,
     "fields": {
         "action": 2,
@@ -2837,7 +2837,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 8,
     "fields": {
         "action": 3,
@@ -2877,7 +2877,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 9,
     "fields": {
         "action": 3,
@@ -2917,7 +2917,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 10,
     "fields": {
         "action": 3,
@@ -2957,7 +2957,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 11,
     "fields": {
         "action": 3,
@@ -2997,7 +2997,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 12,
     "fields": {
         "action": 3,
@@ -3037,7 +3037,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 13,
     "fields": {
         "action": 3,
@@ -3105,7 +3105,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 14,
     "fields": {
         "action": 3,
@@ -3173,7 +3173,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 15,
     "fields": {
         "action": 3,
@@ -3241,7 +3241,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 16,
     "fields": {
         "action": 3,
@@ -3309,7 +3309,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 17,
     "fields": {
         "action": 3,
@@ -3377,7 +3377,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 18,
     "fields": {
         "action": 3,
@@ -3417,7 +3417,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 19,
     "fields": {
         "action": 3,
@@ -3457,7 +3457,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 20,
     "fields": {
         "action": 3,
@@ -3497,7 +3497,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 21,
     "fields": {
         "action": 3,
@@ -3537,7 +3537,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 22,
     "fields": {
         "action": 3,
@@ -3577,7 +3577,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 23,
     "fields": {
         "action": 4,
@@ -3608,7 +3608,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 24,
     "fields": {
         "action": 4,
@@ -3639,7 +3639,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 25,
     "fields": {
         "action": 6,
@@ -3670,7 +3670,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 26,
     "fields": {
         "action": 4,
@@ -3701,7 +3701,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 27,
     "fields": {
         "action": 7,
@@ -3732,7 +3732,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 28,
     "fields": {
         "action": 7,
@@ -3763,7 +3763,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 29,
     "fields": {
         "action": 7,
@@ -3794,7 +3794,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 30,
     "fields": {
         "action": 7,
@@ -3825,7 +3825,7 @@
     }
 },
 {
-    "model": "action.condition",
+    "model": "ontask.condition",
     "pk": 31,
     "fields": {
         "action": 3,
@@ -3856,7 +3856,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 1,
     "fields": {
         "action": 1,
@@ -3865,7 +3865,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 2,
     "fields": {
         "action": 2,
@@ -3874,7 +3874,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 3,
     "fields": {
         "action": 2,
@@ -3883,7 +3883,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 4,
     "fields": {
         "action": 2,
@@ -3892,7 +3892,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 5,
     "fields": {
         "action": 2,
@@ -3901,7 +3901,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 6,
     "fields": {
         "action": 3,
@@ -3910,7 +3910,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 7,
     "fields": {
         "action": 3,
@@ -3919,7 +3919,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 8,
     "fields": {
         "action": 3,
@@ -3928,7 +3928,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 9,
     "fields": {
         "action": 3,
@@ -3937,7 +3937,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 10,
     "fields": {
         "action": 3,
@@ -3946,7 +3946,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 11,
     "fields": {
         "action": 3,
@@ -3955,7 +3955,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 12,
     "fields": {
         "action": 3,
@@ -3964,7 +3964,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 13,
     "fields": {
         "action": 3,
@@ -3973,7 +3973,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 14,
     "fields": {
         "action": 3,
@@ -3982,7 +3982,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 15,
     "fields": {
         "action": 3,
@@ -3991,7 +3991,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 16,
     "fields": {
         "action": 4,
@@ -4000,7 +4000,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 17,
     "fields": {
         "action": 5,
@@ -4009,7 +4009,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 18,
     "fields": {
         "action": 5,
@@ -4018,7 +4018,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 19,
     "fields": {
         "action": 5,
@@ -4027,7 +4027,7 @@
     }
 },
 {
-    "model": "action.actioncolumnconditiontuple",
+    "model": "ontask.actioncolumnconditiontuple",
     "pk": 20,
     "fields": {
         "action": 7,
@@ -4036,7 +4036,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 1,
     "fields": {
         "user": [
@@ -4053,7 +4053,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 2,
     "fields": {
         "user": [
@@ -4073,7 +4073,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 3,
     "fields": {
         "user": [
@@ -4092,7 +4092,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 4,
     "fields": {
         "user": [
@@ -4112,7 +4112,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 5,
     "fields": {
         "user": [
@@ -4132,7 +4132,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 6,
     "fields": {
         "user": [
@@ -4151,7 +4151,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 7,
     "fields": {
         "user": [
@@ -4171,7 +4171,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 8,
     "fields": {
         "user": [
@@ -4190,7 +4190,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 9,
     "fields": {
         "user": [
@@ -4209,7 +4209,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 10,
     "fields": {
         "user": [
@@ -4228,7 +4228,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 11,
     "fields": {
         "user": [
@@ -4247,7 +4247,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 12,
     "fields": {
         "user": [
@@ -4266,7 +4266,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 13,
     "fields": {
         "user": [
@@ -4285,7 +4285,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 14,
     "fields": {
         "user": [
@@ -4304,7 +4304,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 15,
     "fields": {
         "user": [
@@ -4324,7 +4324,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 16,
     "fields": {
         "user": [
@@ -4344,7 +4344,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 17,
     "fields": {
         "user": [
@@ -4363,7 +4363,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 18,
     "fields": {
         "user": [
@@ -4383,7 +4383,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 19,
     "fields": {
         "user": [
@@ -4407,7 +4407,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 20,
     "fields": {
         "user": [
@@ -4426,7 +4426,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 21,
     "fields": {
         "user": [
@@ -4446,7 +4446,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 22,
     "fields": {
         "user": [
@@ -4466,7 +4466,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 23,
     "fields": {
         "user": [
@@ -4486,7 +4486,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 24,
     "fields": {
         "user": [
@@ -4506,7 +4506,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 25,
     "fields": {
         "user": [
@@ -4536,7 +4536,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 26,
     "fields": {
         "user": [
@@ -4559,7 +4559,7 @@
     }
 },
 {
-    "model": "logs.log",
+    "model": "ontask.log",
     "pk": 27,
     "fields": {
         "user": [
@@ -4582,7 +4582,7 @@
     }
 },
 {
-    "model": "scheduler.scheduledaction",
+    "model": "ontask.scheduledaction",
     "pk": 1,
     "fields": {
         "user": [

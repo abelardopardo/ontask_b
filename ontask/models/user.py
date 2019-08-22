@@ -26,6 +26,5 @@ class OnTaskUser(models.Model):
     class Meta(object):
         """Additional attributes for the model."""
 
-        db_table = 'core_ontaskuser'
         verbose_name = 'ontaskuser'
         verbose_name_plural = 'ontaskusers'

@@ -31,8 +31,3 @@ class BaseProfile(models.Model):
 class Profile(BaseProfile):
     def __str__(self):
         return _("{}'s profile").format(self.user)
-
-    class Meta(object):
-        """Define table name"""
-
-        db_table = 'profiles_profile'

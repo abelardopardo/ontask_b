@@ -117,5 +117,4 @@ class ScheduledAction(models.Model):
     class Meta(object):
         """Define the criteria of uniqueness with name and action."""
 
-        db_table = 'scheduler_scheduledaction'
         unique_together = ('name', 'action')

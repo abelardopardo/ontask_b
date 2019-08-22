@@ -82,6 +82,5 @@ class View(models.Model):
     class Meta(object):
         """Define uniqueness with name in workflow and order by name."""
 
-        db_table = 'table_view'
         unique_together = ('name', 'workflow')
         ordering = ['name', ]

@@ -483,67 +483,67 @@
     }
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 22,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 23,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 18,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 19,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 20,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 21,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 16,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 17,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 13,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 15,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 14,
     "fields": {}
 },
 {
-    "model": "core.ontaskuser",
+    "model": "ontask.ontaskuser",
     "pk": 24,
     "fields": {}
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 22,
     "fields": {
         "slug": "ef52fc5d-2430-404c-908b-fac6e69953a6",
@@ -553,7 +553,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 23,
     "fields": {
         "slug": "c177cedd-cb33-4bb4-918f-ccae281e6d5b",
@@ -563,7 +563,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 18,
     "fields": {
         "slug": "9571cacb-e5d3-40be-bf69-ea74639aba6f",
@@ -573,7 +573,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 19,
     "fields": {
         "slug": "4ece251a-3407-47ca-b7dc-71447fefa4ab",
@@ -583,7 +583,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 20,
     "fields": {
         "slug": "a5453d07-72e1-41c2-824b-f4634473b607",
@@ -593,7 +593,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 21,
     "fields": {
         "slug": "8f24330d-f085-4807-88d1-33e101aba912",
@@ -603,7 +603,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 16,
     "fields": {
         "slug": "567613bf-a742-4b5c-873b-ddc9e6df45b9",
@@ -613,7 +613,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 17,
     "fields": {
         "slug": "620f70db-b00a-4bd5-a15e-7ecec2c2e1b8",
@@ -623,7 +623,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 13,
     "fields": {
         "slug": "0653d7df-bdb8-4cc4-9035-9b80990f63c4",
@@ -633,7 +633,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 15,
     "fields": {
         "slug": "3ba6fe28-5e6e-47fe-ae89-016632bda787",
@@ -643,7 +643,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 14,
     "fields": {
         "slug": "50c4e136-fe7f-4711-9336-68ce59484700",
@@ -653,7 +653,7 @@
     }
 },
 {
-    "model": "profiles.profile",
+    "model": "ontask.profile",
     "pk": 24,
     "fields": {
         "slug": "abe28602-5e04-4693-aa87-dbb0406fc52e",
@@ -663,7 +663,7 @@
     }
 },
 {
-    "model": "workflow.workflow",
+    "model": "ontask.workflow",
     "pk": 1,
     "fields": {
         "user": [
@@ -731,7 +731,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 1,
     "fields": {
         "name": "sid",
@@ -747,7 +747,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 2,
     "fields": {
         "name": "name",
@@ -763,7 +763,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 3,
     "fields": {
         "name": "email",
@@ -779,7 +779,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 4,
     "fields": {
         "name": "age",
@@ -795,7 +795,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 5,
     "fields": {
         "name": "registered",
@@ -811,7 +811,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 6,
     "fields": {
         "name": "when",
@@ -827,7 +827,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 7,
     "fields": {
         "name": "one",
@@ -843,7 +843,7 @@
     }
 },
 {
-    "model": "workflow.column",
+    "model": "ontask.column",
     "pk": 8,
     "fields": {
         "name": "another",
@@ -859,7 +859,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 1,
     "fields": {
         "workflow": 1,
@@ -879,7 +879,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 2,
     "fields": {
         "workflow": 1,
@@ -899,7 +899,7 @@
     }
 },
 {
-    "model": "action.action",
+    "model": "ontask.action",
     "pk": 3,
     "fields": {
         "workflow": 1,
