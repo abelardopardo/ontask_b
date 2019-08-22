@@ -250,7 +250,6 @@ class WorkflowModify(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'workflow',
         'fixtures',
         'simple_workflow.sql'
     )
@@ -407,7 +406,6 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'workflow',
         'fixtures',
         'simple_workflow.sql'
     )
@@ -518,7 +516,6 @@ class WorkflowShare(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'workflow',
         'fixtures',
         'simple_workflow.sql'
     )

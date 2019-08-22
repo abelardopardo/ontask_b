@@ -20,7 +20,6 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'wflow_symbols.sql'
     )
@@ -596,7 +595,6 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'plugin_execution.sql'
     )
@@ -902,7 +900,6 @@ class DataopsMerge(DataopsMergeBasic):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_merge.sql'
     )
@@ -1021,7 +1018,6 @@ class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_empty_key_after_merge.sql'
     )

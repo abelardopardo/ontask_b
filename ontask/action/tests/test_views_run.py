@@ -196,7 +196,6 @@ class ActionServe(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'action',
         'fixtures',
         'simple_action.sql',
     )
@@ -225,7 +224,6 @@ class ActionServeSurvey(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'action',
         'fixtures',
         'simple_workflow_two_actions.sql',
     )

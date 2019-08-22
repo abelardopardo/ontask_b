@@ -18,7 +18,6 @@ class EmailActionTracking(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'action',
         'fixtures',
         'simple_email_action.sql'
     )
@@ -74,7 +73,6 @@ class ActionImport(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'action',
         'fixtures',
         'simple_email_action.sql'
     )

@@ -34,7 +34,6 @@ class DataopsTransform(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'plugin_execution.sql',
     )

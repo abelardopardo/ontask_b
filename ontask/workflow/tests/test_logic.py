@@ -27,7 +27,6 @@ class WorkflowImportExport(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'workflow',
         'fixtures',
         'simple_workflow_export.sql'
     )
@@ -69,7 +68,6 @@ class WorkflowImport(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'workflow',
         'fixtures',
         'simple_workflow_export.sql'
     )
