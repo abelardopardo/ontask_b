@@ -7,14 +7,12 @@ from datetime import datetime, timedelta
 
 import pytz
 from celery import shared_task
-from django.conf import settings as ontask_settings
+from django.conf import settings
 
-from ontask.models import Action
 from ontask.action.payloads import (
-    EmailPayload, JSONPayload, CanvasEmailPayload
+    CanvasEmailPayload, EmailPayload, JSONPayload,
 )
-from ontask.models import Log
-from ontask.models import ScheduledAction
+from ontask.models import Action, Log, ScheduledAction
 from ontask.tasks.basic import logger
 from ontask.tasks.send_canvas_email import send_canvas_email_messages
 from ontask.tasks.send_email import send_email_messages
@@ -30,7 +28,7 @@ def execute_scheduled_actions(debug: bool):
     :return:
     """
     # Get the current date/time
-    now = datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
+    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
 
     # Get all the actions that are pending
     s_items = ScheduledAction.objects.filter(

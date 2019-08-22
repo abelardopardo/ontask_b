@@ -12,15 +12,13 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.forms import EmailActionForm
-from ontask.models import Action
 from ontask.action.payloads import (
     EmailPayload, get_or_set_action_info, set_action_payload,
 )
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log
+from ontask.models import Action, Log, Workflow
 from ontask.tasks import send_email_messages
-from ontask.models import Workflow
 
 html_body = """<!DOCTYPE html>
 <html>

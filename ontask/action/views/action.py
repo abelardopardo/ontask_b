@@ -18,15 +18,13 @@ from django_tables2 import A
 
 from ontask import simplify_datetime_str
 from ontask.action.forms import ActionForm, ActionUpdateForm
-from ontask.models import Action
 from ontask.action.payloads import set_action_payload
 from ontask.action.views.edit_personalized import edit_action_out
 from ontask.action.views.edit_survey import edit_action_in
 from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.core.tables import OperationsColumn
-from ontask.models import Log
-from ontask.models import Workflow
+from ontask.models import Action, Log, Workflow
 
 
 class ActionTable(tables.Table):

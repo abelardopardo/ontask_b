@@ -4,7 +4,7 @@
 import collections
 from typing import Dict, Mapping, Optional
 
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.contrib.sessions.backends.base import SessionBase
 from django.contrib.sessions.models import Session
 
@@ -40,7 +40,7 @@ class ActionPayload(collections.MutableMapping):
         :param key: For lookup
         :return: Value
         """
-        if ontask_settings.DEBUG:
+        if settings.DEBUG:
             if key not in self.fields:
                 raise Exception('Incorrect key: ' + key)
         return self.store[self.__keytransform__(key)]
@@ -52,7 +52,7 @@ class ActionPayload(collections.MutableMapping):
         :param item_value: to be set
         :return: Nothing
         """
-        if ontask_settings.DEBUG:
+        if settings.DEBUG:
             if key not in self.fields:
                 raise Exception('Incorrect key lookup.')
 

@@ -2,9 +2,9 @@
 
 """Migration to transfer data from tables in separated apps to OnTask app."""
 
+from django.db import connection as con, migrations
 from psycopg2 import sql
 
-from django.db import connection as con, migrations
 
 def copy_table_content(apps, schema_editor):
     __table_name_pairs = [

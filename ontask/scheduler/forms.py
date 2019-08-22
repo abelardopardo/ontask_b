@@ -14,8 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import is_correct_email
 from ontask.core.forms import date_time_widget_options
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.models import ScheduledAction
-from ontask.models import Column
+from ontask.models import Column, ScheduledAction
 
 
 class ScheduleForm(forms.ModelForm):

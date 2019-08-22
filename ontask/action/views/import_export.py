@@ -16,12 +16,10 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from ontask.action.forms import ActionImportForm
-from ontask.models import Action
 from ontask.action.serializers import ActionSelfcontainedSerializer
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log
-from ontask.models import Workflow
+from ontask.models import Action, Log, Workflow
 
 
 @user_passes_test(is_instructor)

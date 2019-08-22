@@ -25,16 +25,16 @@ from typing import Dict, List
 
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_correct_email
 from ontask.action.forms import SUFFIX_LENGTH
-from ontask.models import Action
 from ontask.action.payloads import EmailPayload
 from ontask.core.forms import date_time_widget_options
 from ontask.dataops.sql.column_queries import is_column_unique
 from ontask.dataops.sql.row_queries import get_rows
+from ontask.models import Action
 
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')
@@ -442,14 +442,14 @@ class CanvasEmailActionForm(JSONBasicActionForm):
 
         super().__init__(*args, **kargs)
 
-        if len(ontask_settings.CANVAS_INFO_DICT) > 1:
+        if len(settings.CANVAS_INFO_DICT) > 1:
             # Add the target_url field if the system has more than one entry
             # point configured
             self.fields['target_url'] = forms.ChoiceField(
                 initial=self.action_info.get('target_url'),
                 required=True,
                 choices=[('', '---')] + [(key, key) for key in sorted(
-                    ontask_settings.CANVAS_INFO_DICT.keys(),
+                    settings.CANVAS_INFO_DICT.keys(),
                 )],
                 label=_('Canvas Host'),
                 help_text=_('Name of the Canvas host to send the messages'),
@@ -479,7 +479,7 @@ class CanvasEmailActionForm(JSONBasicActionForm):
         self.action_info['target_url'] = form_data.get('target_url')
         if not self.action_info['target_url']:
             self.action_info['target_url'] = next(
-                iter(ontask_settings.CANVAS_INFO_DICT.keys()),
+                iter(settings.CANVAS_INFO_DICT.keys()),
             )
         if not self.action_info['target_url']:
             self.add_error(

@@ -6,13 +6,13 @@ import logging
 from time import time
 from typing import Mapping, Optional
 
+import oauth2
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
-import oauth2
 
 from ontask.lti.tool_provider import DjangoToolProvider
 

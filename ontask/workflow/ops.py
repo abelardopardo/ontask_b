@@ -10,14 +10,12 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask import create_new_name
-from ontask.models import Condition
 from ontask.dataops.pandas import load_table
 from ontask.dataops.sql import (
     add_column_to_db, copy_column_in_db, df_drop_column, get_rows,
     is_column_unique,
 )
-from ontask.models import Log
-from ontask.models import Column, Workflow
+from ontask.models import Column, Condition, Log, Workflow
 
 RANDOM_PWD_LENGTH = 50
 

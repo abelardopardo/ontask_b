@@ -23,10 +23,9 @@ from ontask.core.decorators import ajax_required, get_column, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.dataops.sql import get_rows, get_text_column_hash
-from ontask.models import Log
+from ontask.models import Column, Log, Workflow
 from ontask.tasks import workflow_update_lusers
 from ontask.workflow.access import store_workflow_in_session
-from ontask.models import Column, Workflow
 
 
 class AttributeTable(tables.Table):

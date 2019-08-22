@@ -5,7 +5,7 @@
 import json
 
 import pytz
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
@@ -19,6 +19,8 @@ __all__ = [
 ]
 
 __version__ = 'B.5.2.2'
+
+app_config = 'ontask.apps.ActionConfig'
 
 PERSONALIZED_TEXT = 'personalized_text'
 PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
@@ -96,7 +98,7 @@ def is_json(text):
 
 def simplify_datetime_str(dtime):
     return dtime.astimezone(
-        pytz.timezone(ontask_settings.TIME_ZONE)
+        pytz.timezone(settings.TIME_ZONE)
     ).strftime('%Y-%m-%d %H:%M:%S %z')
 
 

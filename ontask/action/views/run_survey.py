@@ -21,13 +21,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from ontask.models import Action
 from ontask.action.views.serve_survey import serve_survey_row
 from ontask.core import DataTablesServerSidePaging
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
 from ontask.dataops.sql import search_table
-from ontask.models import Column, Workflow
+from ontask.models import Action, Column, Workflow
 
 
 def run_survey_action(

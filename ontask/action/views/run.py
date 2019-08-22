@@ -17,7 +17,6 @@ from ontask.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.forms import ValueExcludeForm
-from ontask.models import Action
 from ontask.action.payloads import get_action_payload
 from ontask.action.views.run_canvas_email import run_canvas_email_action
 from ontask.action.views.run_email import run_email_action
@@ -27,8 +26,7 @@ from ontask.action.views.serve_survey import serve_survey_row
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log
-from ontask.models import Workflow
+from ontask.models import Action, Log, Workflow
 
 fn_distributor = {
     Action.personalized_text: run_email_action,

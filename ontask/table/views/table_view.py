@@ -18,10 +18,8 @@ from ontask import create_new_name
 from ontask.core.decorators import ajax_required, get_view, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
-from ontask.models import Log
+from ontask.models import Log, View, Workflow
 from ontask.table.forms import ViewAddForm
-from ontask.models import View
-from ontask.models import Workflow
 
 
 class ViewTable(tables.Table):

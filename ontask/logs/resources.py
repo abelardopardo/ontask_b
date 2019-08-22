@@ -10,7 +10,6 @@ from import_export import resources
 
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-
 from ontask.models import Log
 
 

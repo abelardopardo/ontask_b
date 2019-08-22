@@ -11,17 +11,16 @@ from typing import List, Tuple
 
 import pandas as pd
 import pytz
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.contrib import messages
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from ontask.dataops import settings
-from ontask.models import Plugin
+import ontask.settings
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.plugin import ontask_plugin
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
-from ontask.models import Log
+from ontask.models import Log, Plugin
 
 type_function = {
     'integer': int,
@@ -60,12 +59,12 @@ _checks = [
 
 
 def _get_plugin_path():
-    plugin_folder = str(getattr(settings, 'PLUGIN_DIRECTORY'))
+    plugin_folder = str(getattr(ontask.settings, 'PLUGIN_DIRECTORY'))
 
     if os.path.isabs(plugin_folder):
         return plugin_folder
 
-    return os.path.join(ontask_settings.BASE_DIR, plugin_folder)
+    return os.path.join(settings.BASE_DIR, plugin_folder)
 
 
 def _verify_plugin(pinobj: Plugin) -> List[Tuple[str, str]]:
@@ -533,7 +532,7 @@ def run_plugin(
 
     # Update execution time in the plugin
     plugin_info.executed = datetime.now(
-        pytz.timezone(ontask_settings.TIME_ZONE),
+        pytz.timezone(settings.TIME_ZONE),
     )
     plugin_info.save()
 

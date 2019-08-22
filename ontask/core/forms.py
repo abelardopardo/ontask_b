@@ -8,7 +8,7 @@ from django.conf import settings
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.ontask_prefs import MAX_UPLOAD_SIZE
+from ontask.settings import MAX_UPLOAD_SIZE
 
 date_time_widget_options = {
     'locale': settings.LANGUAGE_CODE,

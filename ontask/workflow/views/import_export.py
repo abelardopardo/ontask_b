@@ -13,11 +13,11 @@ from django.views.decorators.http import require_http_methods
 
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.models import Workflow
 from ontask.workflow.forms import WorkflowExportRequestForm, WorkflowImportForm
 from ontask.workflow.import_export import (
     do_export_workflow, do_import_workflow,
 )
-from ontask.models import Workflow
 
 
 @user_passes_test(is_instructor)

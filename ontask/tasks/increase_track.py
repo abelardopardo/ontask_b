@@ -4,8 +4,7 @@ from django.core import signing
 from django.utils.translation import ugettext
 
 import ontask.dataops.sql
-from ontask.models import Action
-from ontask.models import Log
+from ontask.models import Action, Log
 from ontask.tasks.basic import logger
 
 

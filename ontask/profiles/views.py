@@ -8,11 +8,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from rest_framework.authtoken.models import Token
 
+from ontask import models
 from ontask.core.permissions import is_instructor
 from ontask.models import OAuthUserToken
-
 from ontask.profiles import forms
-from ontask import models
 
 
 class ShowProfile(LoginRequiredMixin, generic.TemplateView):

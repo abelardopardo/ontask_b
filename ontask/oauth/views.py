@@ -4,12 +4,12 @@
 
 from datetime import timedelta
 
-from django.http import HttpResponse
 import requests
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpResponse
 from django.shortcuts import redirect, reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
@@ -168,7 +168,7 @@ def callback(request: WSGIRequest) -> HttpResponse:
             _('Internal error. Empty OAuth Instance name'))
         return redirect('action:index')
 
-    oauth_info = ontask_settings.CANVAS_INFO_DICT.get(oauth_instance)
+    oauth_info = settings.CANVAS_INFO_DICT.get(oauth_instance)
     if not oauth_info:
         messages.error(
             request,

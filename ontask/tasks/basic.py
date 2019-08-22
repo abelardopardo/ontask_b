@@ -7,10 +7,8 @@ from typing import Optional, Tuple
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
 
-from ontask.models import Action
 from ontask.core.celery import get_task_logger
-from ontask.models import Log
-from ontask.models import Workflow
+from ontask.models import Action, Log, Workflow
 
 logger = get_task_logger('celery_execution')
 

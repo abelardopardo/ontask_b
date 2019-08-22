@@ -9,10 +9,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from ontask.models import Action, Condition
 from ontask.dataops.formula import has_variable
 from ontask.dataops.pandas import check_wf_df
-from ontask.models import Workflow
+from ontask.models import Action, Condition, Workflow
 
 
 class ActionActionEdit(test.OnTaskLiveTestCase):

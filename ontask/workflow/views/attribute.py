@@ -11,9 +11,8 @@ from django.template.loader import render_to_string
 
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log
+from ontask.models import Log, Workflow
 from ontask.workflow.forms import AttributeItemForm
-from ontask.models import Workflow
 
 
 def save_attribute_form(

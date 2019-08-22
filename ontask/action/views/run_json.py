@@ -11,15 +11,13 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.forms import JSONActionForm
-from ontask.models import Action
 from ontask.action.payloads import (
     JSONPayload, get_or_set_action_info, set_action_payload,
 )
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log
+from ontask.models import Action, Log, Workflow
 from ontask.tasks import send_json_objects
-from ontask.models import Workflow
 
 
 def run_json_action(

@@ -24,14 +24,14 @@ import pandas as pd
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import OnTaskDataFrameNoKey, ontask_prefs
+from ontask import OnTaskDataFrameNoKey, settings
 from ontask.core.forms import RestrictedFileField
 from ontask.dataops.forms.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
-from ontask.models import SQLConnection
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
+from ontask.models import SQLConnection
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
@@ -85,8 +85,8 @@ class UploadCSVFileForm(UploadBasic):
     """
 
     data_file = RestrictedFileField(
-        max_upload_size=int(ontask_prefs.MAX_UPLOAD_SIZE),
-        content_types=json.loads(str(ontask_prefs.CONTENT_TYPES)),
+        max_upload_size=int(settings.MAX_UPLOAD_SIZE),
+        content_types=json.loads(str(settings.CONTENT_TYPES)),
         allow_empty_file=False,
         label='',
         help_text=_(
@@ -153,7 +153,7 @@ class UploadExcelFileForm(UploadBasic):
     """Form to read an Excel file."""
 
     data_file = RestrictedFileField(
-        max_upload_size=int(ontask_prefs.MAX_UPLOAD_SIZE),
+        max_upload_size=int(settings.MAX_UPLOAD_SIZE),
         content_types=[
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.'

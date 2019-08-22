@@ -16,8 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from ontask.core.decorators import ajax_required, get_column, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.pandas import load_table
-from ontask.models import Log
-from ontask.models import Column, Workflow
+from ontask.models import Column, Log, Workflow
 from ontask.workflow.ops import workflow_restrict_column
 
 

@@ -12,12 +12,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ontask.action.evaluate import render_action_template
 from ontask.action.forms import EditActionOutForm, EnableURLForm, FilterForm
-from ontask.models import Action, Condition
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
-from ontask.models import Log
+from ontask.models import Action, Condition, Log, Workflow
 from ontask.visualizations.plotly import PlotlyHandler
-from ontask.models import Workflow
 
 
 def text_renders_correctly(

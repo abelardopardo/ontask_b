@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 import pytz
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.handlers.wsgi import WSGIRequest
@@ -16,17 +16,14 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.forms import CanvasEmailActionForm
-from ontask.models import Action
 from ontask.action.payloads import (
     CanvasEmailPayload, get_or_set_action_info, set_action_payload,
 )
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log
-from ontask.models import OAuthUserToken
+from ontask.models import Action, Log, OAuthUserToken, Workflow
 from ontask.oauth.views import get_initial_token_step1, refresh_token
 from ontask.tasks import send_canvas_email_messages
-from ontask.models import Workflow
 
 
 def run_canvas_email_action(
@@ -112,7 +109,7 @@ def canvas_get_or_set_oauth_token(
     :return: Http response
     """
     # Get the information from the payload
-    oauth_info = ontask_settings.CANVAS_INFO_DICT.get(oauth_instance_name)
+    oauth_info = settings.CANVAS_INFO_DICT.get(oauth_instance_name)
     if not oauth_info:
         messages.error(
             request,
@@ -134,9 +131,9 @@ def canvas_get_or_set_oauth_token(
             reverse('action:canvas_email_done'))
 
     # Check if the token is valid
-    now = datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
+    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
     dead = now > token.valid_until - timedelta(
-        seconds=ontask_settings.CANVAS_TOKEN_EXPIRY_SLACK)
+        seconds=settings.CANVAS_TOKEN_EXPIRY_SLACK)
     if dead:
         try:
             refresh_token(token, oauth_info)

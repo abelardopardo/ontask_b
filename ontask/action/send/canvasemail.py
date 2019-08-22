@@ -9,15 +9,13 @@ from typing import Dict, Mapping, Tuple
 
 import pytz
 import requests
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
 from ontask.action.evaluate.action import evaluate_action
-from ontask.models import Action
 from ontask.core.celery import get_task_logger
-from ontask.models import Log
-from ontask.models import OAuthUserToken
+from ontask.models import Action, Log, OAuthUserToken
 from ontask.oauth.views import refresh_token
 
 logger = get_task_logger('celery_execution')
@@ -50,7 +48,7 @@ def send_canvas_emails(
 
     # Get the oauth info
     target_url = action_info['target_url']
-    oauth_info = ontask_settings.CANVAS_INFO_DICT.get(target_url)
+    oauth_info = settings.CANVAS_INFO_DICT.get(target_url)
     if not oauth_info:
         raise Exception(_('Unable to find OAuth Information Record'))
 
@@ -98,7 +96,7 @@ def send_canvas_emails(
         idx += 1
 
         # Send the email
-        if ontask_settings.EXECUTE_ACTION_JSON_TRANSFER:
+        if settings.EXECUTE_ACTION_JSON_TRANSFER:
             result_msg, response_status = send_single_canvas_message(
                 target_url,
                 conversation_url,
@@ -123,7 +121,7 @@ def send_canvas_emails(
         context['status'] = response_status
         context['result'] = result_msg
         context['email_sent_datetime'] = str(
-            datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
+            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
         )
         Log.objects.register(
             user,
@@ -135,7 +133,7 @@ def send_canvas_emails(
     log_item.payload['objects_sent'] = len(action_evals)
     log_item.payload['filter_present'] = action.get_filter() is not None
     log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
-        ontask_settings.TIME_ZONE)))
+        settings.TIME_ZONE)))
     log_item.save()
 
     return None

@@ -15,7 +15,6 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.evaluate.action import evaluate_action
 from ontask.action.forms import ZipActionForm
-from ontask.models import Action
 from ontask.action.payloads import (
     ZipPayload, get_or_set_action_info, set_action_payload,
 )
@@ -23,8 +22,7 @@ from ontask.action.views.run_email import html_body
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.models import Log
-from ontask.models import Workflow
+from ontask.models import Action, Log, Workflow
 
 
 @user_passes_test(is_instructor)

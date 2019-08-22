@@ -9,14 +9,13 @@ import test
 import pandas as pd
 from django.conf import settings
 
-from ontask.models import Action
 from ontask.dataops.forms.upload import load_df_from_csvfile
 from ontask.dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
 from ontask.dataops.pandas import (
     get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
 from ontask.dataops.sql import get_rows
-from ontask.models import Workflow
+from ontask.models import Action, Workflow
 
 
 class DataopsMatrixManipulation(test.OnTaskTestCase):

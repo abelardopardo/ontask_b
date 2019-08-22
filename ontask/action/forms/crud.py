@@ -20,9 +20,10 @@ from builtins import object, str
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import AVAILABLE_ACTION_TYPES, is_legal_name, ontask_prefs
-from ontask.models import ACTION_NAME_LENGTH, Action, Condition
+import ontask.settings
+from ontask import AVAILABLE_ACTION_TYPES, is_legal_name
 from ontask.core.forms import RestrictedFileField
+from ontask.models import ACTION_NAME_LENGTH, Action, Condition
 
 SUFFIX_LENGTH = 512
 
@@ -194,8 +195,8 @@ class ActionImportForm(forms.Form):
     )
 
     upload_file = RestrictedFileField(
-        max_upload_size=int(ontask_prefs.MAX_UPLOAD_SIZE),
-        content_types=json.loads(str(ontask_prefs.CONTENT_TYPES)),
+        max_upload_size=int(ontask.settings.MAX_UPLOAD_SIZE),
+        content_types=json.loads(str(ontask.settings.CONTENT_TYPES)),
         allow_empty_file=False,
         label=_('File'),
         help_text=_('File containing a previously exported action'),

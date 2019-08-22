@@ -16,13 +16,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import is_admin, is_instructor
-from ontask.models import Plugin
 from ontask.dataops.plugin.plugin_manager import (
     load_plugin, refresh_plugin_data,
 )
-from ontask.models import Log
+from ontask.models import Log, Plugin, Workflow
 from ontask.workflow.access import remove_workflow_from_session
-from ontask.models import Workflow
 
 
 class PluginAdminTable(tables.Table):

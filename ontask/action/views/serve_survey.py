@@ -16,11 +16,10 @@ from ontask.action.evaluate import (
     get_action_evaluation_context, get_row_values,
 )
 from ontask.action.forms import FIELD_PREFIX, EnterActionIn
-from ontask.models import Action, ActionColumnConditionTuple
 from ontask.core.permissions import has_access
 from ontask.core.views import ontask_handler404
 from ontask.dataops.sql.row_queries import update_row
-from ontask.models import Log
+from ontask.models import Action, ActionColumnConditionTuple, Log
 
 
 def serve_survey_row(

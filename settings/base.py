@@ -253,7 +253,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'jquery',
 
-    'ontask',
+    'ontask.apps.OnTaskConfig',
     'ontask.django_auth_lti',
 ]
 

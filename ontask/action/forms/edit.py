@@ -12,8 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 
 from ontask.action.forms import FIELD_PREFIX
-from ontask.models import Action
 from ontask.core.forms import date_time_widget_options
+from ontask.models import Action
 
 
 def column_to_field(col, initial=None, required=False, label=None):

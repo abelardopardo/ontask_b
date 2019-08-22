@@ -8,13 +8,12 @@ from typing import Dict, Mapping
 
 import pytz
 import requests
-from django.conf import settings as ontask_settings
+from django.conf import settings
 
 from ontask.action.evaluate.action import evaluate_action
-from ontask.models import Action
 from ontask.action.payloads import JSONPayload
 from ontask.core.celery import get_task_logger
-from ontask.models import Log
+from ontask.models import Action, Log
 
 logger = get_task_logger('celery_execution')
 
@@ -27,7 +26,7 @@ def send_and_log_json(
     context: Dict[str, str],
 ):
     """Send a JSON object to the action URL and LOG event."""
-    if ontask_settings.EXECUTE_ACTION_JSON_TRANSFER:
+    if settings.EXECUTE_ACTION_JSON_TRANSFER:
         http_resp = requests.post(
             url=action.target_url,
             data=json_obj,
@@ -44,7 +43,7 @@ def send_and_log_json(
     context['object'] = json.dumps(json_obj)
     context['status'] = status_val
     context['json_sent_datetime'] = str(
-        datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)))
+        datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
     Log.objects.register(
         user,
         Log.ACTION_JSON_SENT,
@@ -110,5 +109,5 @@ def send_json(
     log_item.payload['objects_sent'] = len(action_evals)
     log_item.payload['filter_present'] = action.get_filter() is not None
     log_item.payload['datetime'] = str(
-        datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)))
+        datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
     log_item.save()

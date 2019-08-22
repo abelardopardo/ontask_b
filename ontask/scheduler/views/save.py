@@ -11,13 +11,11 @@ from django.db import IntegrityError
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from ontask.models import Action
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
 )
-from ontask.models import Log
+from ontask.models import Action, Log, ScheduledAction
 from ontask.scheduler.forms import EmailScheduleForm, JSONScheduleForm
-from ontask.models import ScheduledAction
 
 
 def create_timedelta_string(dtime: datetime.datetime) -> str:

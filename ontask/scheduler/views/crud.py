@@ -18,7 +18,6 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
 
-from ontask.models import Action
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
 )
@@ -26,13 +25,11 @@ from ontask.core.celery import celery_is_up
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
-from ontask.models import Log
-from ontask.models import ScheduledAction
+from ontask.models import Action, Log, ScheduledAction, Workflow
 from ontask.scheduler.views.save import (
     create_timedelta_string, save_canvas_email_schedule, save_email_schedule,
     save_json_schedule,
 )
-from ontask.models import Workflow
 
 
 class ScheduleActionTable(tables.Table):
