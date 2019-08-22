@@ -90,8 +90,6 @@ MAX_LOG_LIST_SIZE = getattr(settings, 'LOGS_MAX_LIST_SIZE', 200)
 ############
 HELP_URL = getattr(settings, 'ONTASK_HELP_URL', '')
 
-MINUTE_STEP = getattr(settings, 'SCHEDULER_MINUTE_STEP', 15)
-
 if 'siteprefs' in settings.INSTALLED_APPS:
     # Respect those users who doesn't have siteprefs installed.
     from siteprefs.toolbox import (
@@ -138,13 +136,13 @@ if 'siteprefs' in settings.INSTALLED_APPS:
         pref_group(
             _('Transformations and Models'),
             (
-            pref(
-                PLUGIN_DIRECTORY,
-                verbose_name=_('Folder where code packages are stored'),
-                static=False,
-                field=models.CharField(max_length=2048, blank=True)),
-            ),
-            static=False),
+                pref(
+                    PLUGIN_DIRECTORY,
+                    verbose_name=_('Folder where code packages are stored'),
+                    static=False,
+                    field=models.CharField(max_length=2048, blank=True)),
+                ),
+                static=False),
         pref_group(
             _('Logs'),
             (
@@ -164,11 +162,6 @@ if 'siteprefs' in settings.INSTALLED_APPS:
                      'URL prefix to access the documentation'),
                  static=False,
                  field=models.CharField(max_length=256, blank=True)),
-                pref(
-                    MINUTE_STEP,
-                    verbose_name=_('Minute interval for scheduled tasks'),
-                    static=False,
-                    field=models.IntegerField(blank=True)),
             ),
             static=False),
     )
