@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Basic configuration options."""
+"""Action configuration options."""
 
 import os
 import sys
@@ -11,33 +11,9 @@ from django.utils.translation import ugettext_lazy as _
 
 ############
 #
-# CORE
+# NOTIFICATION EMAILS
 #
 ############
-CONTENT_TYPES = getattr(
-    settings,
-    'DATAOPS_CONTENT_TYPES',
-    '["text/csv", "application/json", "application/gzip"]')
-
-HELP_URL = getattr(settings, 'ONTASK_HELP_URL', '')
-
-MINUTE_STEP = getattr(settings, 'SCHEDULER_MINUTE_STEP', 15)
-
-############
-#
-# LOGS
-#
-############
-MAX_UPLOAD_SIZE = getattr(settings, 'DATAOPS_MAX_UPLOAD_SIZE', 209715200)
-MAX_LOG_LIST_SIZE = getattr(settings, 'LOGS_MAX_LIST_SIZE', 200)
-
-############
-#
-# ACTION
-#
-############
-LONG_TEXT_FIELD_LENGTH = 65536
-
 NOTIFICATION_TEMPLATE = getattr(
     settings,
     'EMAIL_ACTION_NOTIFICATION_TEMPLATE',
@@ -71,11 +47,21 @@ NOTIFICATION_SENDER = getattr(
     'EMAIL_ACTION_NOTIFICATION_SENDER',
     'ontask@ontasklearning.org')
 
-PIXEL = getattr(settings, 'EMAIL_ACTION_PIXEL', None)
+############
+#
+# UPLOADS
+#
+############
+CONTENT_TYPES = getattr(
+    settings,
+    'DATAOPS_CONTENT_TYPES',
+    '["text/csv", "application/json", "application/gzip"]')
+
+MAX_UPLOAD_SIZE = getattr(settings, 'DATAOPS_MAX_UPLOAD_SIZE', 209715200)
 
 ############
 #
-# DATAOPS
+# TRANSFORMATIONS AND MODELS
 #
 ############
 PLUGIN_DIRECTORY = getattr(
@@ -90,6 +76,22 @@ if not os.path.isabs(plugin_folder):
 if plugin_folder not in sys.path:
     sys.path.insert(0, plugin_folder)
 
+############
+#
+# LOGS
+#
+############
+MAX_LOG_LIST_SIZE = getattr(settings, 'LOGS_MAX_LIST_SIZE', 200)
+
+############
+#
+# MISCELLANEOUS
+#
+############
+HELP_URL = getattr(settings, 'ONTASK_HELP_URL', '')
+
+MINUTE_STEP = getattr(settings, 'SCHEDULER_MINUTE_STEP', 15)
+
 if 'siteprefs' in settings.INSTALLED_APPS:
     # Respect those users who doesn't have siteprefs installed.
     from siteprefs.toolbox import (
@@ -98,67 +100,6 @@ if 'siteprefs' in settings.INSTALLED_APPS:
     patch_locals()  # That's bootstrap.
 
     register_prefs(
-        ############
-        #
-        # Miscelaneous
-        #
-        ############
-        pref_group(
-            _('Miscelaneous'),
-            (
-                pref
-                (HELP_URL,
-                 verbose_name=_(
-                     'URL prefix to access the documentation'),
-                 static=False,
-                 field=models.CharField(max_length=256, blank=True)),
-                pref(
-                    MINUTE_STEP,
-                    verbose_name=_('Minute interval for scheduled tasks'),
-                    static=False,
-                    field=models.IntegerField(blank=True)),
-            ),
-            static=False),
-        ############
-        #
-        # UPLOADS
-        #
-        ############
-        pref_group(
-            _('Uploads'),
-            (
-                pref(
-                    CONTENT_TYPES,
-                    verbose_name=_('Content types allowed in uploads'),
-                    static=False,
-                    field=models.TextField(blank=True)),
-                pref(
-                    MAX_UPLOAD_SIZE,
-                    verbose_name=_('Maximum size allowed in file uplaods'),
-                    static=False,
-                    field=models.IntegerField(blank=True)),
-            ),
-            static=False),
-        ############
-        #
-        # LOGS
-        #
-        ############
-        pref_group(
-            _('Logs'),
-            (
-                pref(
-                    MAX_LOG_LIST_SIZE,
-                    verbose_name=_('Maximum number of logs shown to the user'),
-                    static=False,
-                    field=models.IntegerField(blank=True)),
-            ),
-            static=False),
-        ############
-        #
-        # ACTION
-        #
-        ############
         pref_group(
             _('Notification Emails'),
             (
@@ -179,11 +120,21 @@ if 'siteprefs' in settings.INSTALLED_APPS:
                     field=models.CharField(max_length=1024)),
             ),
             static=False),
-        ############
-        #
-        # DATAOPS
-        #
-        ############
+        pref_group(
+            _('Uploads'),
+            (
+                pref(
+                    CONTENT_TYPES,
+                    verbose_name=_('Content types allowed in uploads'),
+                    static=False,
+                    field=models.TextField(blank=True)),
+                pref(
+                    MAX_UPLOAD_SIZE,
+                    verbose_name=_('Maximum size allowed in file uplaods'),
+                    static=False,
+                    field=models.IntegerField(blank=True)),
+            ),
+            static=False),
         pref_group(
             _('Transformations and Models'),
             (
@@ -192,6 +143,32 @@ if 'siteprefs' in settings.INSTALLED_APPS:
                 verbose_name=_('Folder where code packages are stored'),
                 static=False,
                 field=models.CharField(max_length=2048, blank=True)),
+            ),
+            static=False),
+        pref_group(
+            _('Logs'),
+            (
+                pref(
+                    MAX_LOG_LIST_SIZE,
+                    verbose_name=_('Maximum number of logs shown to the user'),
+                    static=False,
+                    field=models.IntegerField(blank=True)),
+            ),
+            static=False),
+        pref_group(
+            _('Miscellaneous'),
+            (
+                pref
+                (HELP_URL,
+                 verbose_name=_(
+                     'URL prefix to access the documentation'),
+                 static=False,
+                 field=models.CharField(max_length=256, blank=True)),
+                pref(
+                    MINUTE_STEP,
+                    verbose_name=_('Minute interval for scheduled tasks'),
+                    static=False,
+                    field=models.IntegerField(blank=True)),
             ),
             static=False),
     )
