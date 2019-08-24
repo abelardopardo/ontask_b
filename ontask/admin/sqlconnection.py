@@ -1,22 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""Classes for admin application."""
+"""Classes for SQL connection admin."""
 
 from django.contrib import admin
 
-from ontask.models import Plugin, SQLConnection
-
-
-class PluginRegistryAdmin(admin.ModelAdmin):
-    """Admin for the plugin registry."""
-
-    list_display = (
-        'id',
-        'filename',
-        'modified',
-        'name',
-        'description_text',
-        'executed')
+from ontask.models import SQLConnection
 
 
 class SQLConnectionAdmin(admin.ModelAdmin):
@@ -36,5 +24,4 @@ class SQLConnectionAdmin(admin.ModelAdmin):
         'db_table')
 
 
-admin.site.register(Plugin, PluginRegistryAdmin)
 admin.site.register(SQLConnection, SQLConnectionAdmin)

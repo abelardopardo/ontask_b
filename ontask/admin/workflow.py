@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""Admin apps to manage workflows and columns."""
+"""Admin apps to manage workflows."""
 
 from django.contrib import admin
 
-from ontask.models import Column, Workflow
+from ontask.models import Workflow
 
 
 class WorkflowAdmin(admin.ModelAdmin):
@@ -26,17 +26,4 @@ class WorkflowAdmin(admin.ModelAdmin):
     filter_horizontal = ('shared',)
 
 
-class ColumnAdmin(admin.ModelAdmin):
-    """Column Admin app."""
-
-    list_display = (
-        'id',
-        'name',
-        'data_type',
-        'is_key',
-        'categories',
-        'workflow')
-
-
 admin.site.register(Workflow, WorkflowAdmin)
-admin.site.register(Column, ColumnAdmin)

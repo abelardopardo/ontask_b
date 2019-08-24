@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""Admin definitions."""
+"""Admin definitions for action."""
 
 from django.contrib import admin
 
-from ontask.models import Action, Condition
+from ontask.models import Action
 
 
 class ActionAdmin(admin.ModelAdmin):
@@ -22,19 +22,4 @@ class ActionAdmin(admin.ModelAdmin):
     )
 
 
-class ConditionAdmin(admin.ModelAdmin):
-    """Define Condition Admin."""
-
-    list_display = (
-        'id',
-        'name',
-        'action',
-        'description_text',
-        'formula',
-        'n_rows_selected',
-        'is_filter',
-    )
-
-
 admin.site.register(Action, ActionAdmin)
-admin.site.register(Condition, ConditionAdmin)
