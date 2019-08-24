@@ -76,5 +76,3 @@ class Plugin(models.Model):
         """Define the criteria for ordering."""
 
         ordering = ['name']
-
-

@@ -4,15 +4,15 @@
 
 import datetime
 
+import pytz
 from django.conf import settings
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
-import pytz
 
 import ontask.dataops
-from ontask.models import Workflow, CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
+from ontask.models import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, Workflow
 
 
 class Column(models.Model):

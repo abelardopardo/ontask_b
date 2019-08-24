@@ -7,8 +7,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.dataops.sql import get_num_rows
+from ontask.models import CHAR_FIELD_LONG_SIZE, Column
 from ontask.models.workflow import Workflow
-from ontask.models import Column, CHAR_FIELD_LONG_SIZE
 
 
 class View(models.Model):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Models for Actions, Conditions, and pairs (column, condition)."""
+"""Action model."""
 
 import datetime
 import re
@@ -16,11 +16,13 @@ from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
 
 import ontask
-from ontask.dataops.formula import EVAL_TXT, evaluate_formula, evaluation
-from ontask.dataops.sql import get_num_rows, select_ids_all_false
+from ontask.dataops.formula import evaluation
+from ontask.dataops.sql import select_ids_all_false
+from ontask.models import (
+    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, ActionColumnConditionTuple,
+)
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
-from ontask.models import Column, CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
 
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)
@@ -394,174 +396,3 @@ class Action(models.Model):  # noqa Z214
 
         unique_together = ('name', 'workflow')
         ordering = ['name']
-
-
-class Condition(models.Model):
-    """Define object to store mainly a formula.
-
-    The object also encodes:
-    - is filter or not
-    - list of columns in the support of the formula
-    - number of rows for which the formula is true
-
-    @DynamicAttrs
-    """
-
-    action = models.ForeignKey(
-        Action,
-        db_index=True,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False,
-        related_name='conditions',
-    )
-
-    name = models.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
-        blank=True,
-        verbose_name=_('name'),
-    )
-
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True,
-        verbose_name=_('description'),
-    )
-
-    formula = JSONField(
-        default=dict,
-        blank=True,
-        null=True,
-        verbose_name=_('formula'),
-    )
-
-    # Set of columns that appear in this condition
-    columns = models.ManyToManyField(
-        Column,
-        verbose_name=_('Columns present in this condition'),
-        related_name='conditions',
-    )
-
-    # Number or rows selected by the expression
-    n_rows_selected = models.IntegerField(
-        verbose_name=_('Number of rows selected'),
-        default=-1,
-        name='n_rows_selected',
-        blank=False,
-        null=False,
-    )
-
-    # Field to denote if this condition is the filter of an action
-    is_filter = models.BooleanField(default=False)
-
-    created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-
-    modified = models.DateTimeField(auto_now=True, null=False)
-
-    def update_n_rows_selected(self, column=None, filter_formula=None):
-        """Calculate the number of rows for which condition is true.
-
-        Given a condition update the number of rows
-        for which this condition will have true result.
-
-        :param column: Column that has changed value (None when unknown)
-        :param filter_formula: Formula provided by another filter condition
-        and to take the conjunction with the condition formula.
-        :return: Nothing. Effect recorded in DB objects
-        """
-        if column and column not in self.columns.all():
-            # The column is not part of this condition. Nothing to do
-            return
-
-        formula = self.formula
-        if filter_formula:
-            # There is a formula to add to the condition, create a conjunction
-            formula = {
-                'condition': 'AND',
-                'not': False,
-                'rules': [filter_formula, self.formula],
-                'valid': True,
-            }
-
-        new_count = get_num_rows(
-            self.action.workflow.get_data_frame_table_name(),
-            formula,
-        )
-        if new_count != self.n_rows_selected:
-            # Reset the field in the action storing rows with all conditions
-            # false. Needs to be recalculated because there is at least one
-            # condition that has changed its count. Flush the field to None
-            self.action.rows_all_false = None
-            self.action.save()
-
-        self.n_rows_selected = new_count
-        self.save()
-
-    def get_formula_text(self):
-        """Translate the formula to plain text.
-
-        Return the content of the formula in a string that is human readable
-        :return: String
-        """
-        return evaluate_formula(self.formula, EVAL_TXT)
-
-    def __str__(self):
-        """Render string."""
-        return self.name
-
-    class Meta(object):
-        """Define unique criteria and ordering.
-
-        The unique criteria here is within the action, the name and being a
-        filter. We may choose to name a filter and a condition with the same
-        name (no need to restrict it)
-        """
-
-        unique_together = ('action', 'name', 'is_filter')
-        ordering = ['-is_filter', 'name']
-
-
-class ActionColumnConditionTuple(models.Model):
-    """Represent tuples (action, column, condition).
-
-    These objects are to:
-
-    1) Represent the collection of columns attached to a regular action
-
-    2) If the action is a survey, see if the question has a condition attached
-    to it to decide its presence in the survey.
-
-    @DynamicAttrs
-    """
-
-    action = models.ForeignKey(
-        Action,
-        db_index=True,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False,
-        related_name='column_condition_pair',
-    )
-
-    column = models.ForeignKey(
-        Column,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False,
-        related_name='column_condition_pair',
-    )
-
-    condition = models.ForeignKey(
-        Condition,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=False,
-        related_name='column_condition_pair',
-    )
-
-    class Meta(object):
-        """Define uniqueness with name in workflow and order by name."""
-
-        unique_together = ('action', 'column', 'condition')
-        ordering = ['column__position']
