@@ -90,7 +90,6 @@ class ActionImport(test.OnTaskTestCase):
         with open(os.path.join(
             settings.BASE_DIR(),
             'ontask',
-            'action',
             'fixtures',
             'survey_to_import.gz'
         ), 'rb') as file_obj:

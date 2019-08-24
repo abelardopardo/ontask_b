@@ -399,7 +399,6 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'ontask',
-                         'dataops',
                          'fixtures',
                          'excel_upload.xlsx')
         )
@@ -449,7 +448,6 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'ontask',
-                         'dataops',
                          'fixtures',
                          'excel_upload.xlsx')
         )
@@ -507,7 +505,6 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'ontask',
-                         'dataops',
                          'fixtures',
                          'test_df_merge_update_df1.csv')
         )
@@ -527,7 +524,6 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'ontask',
-                         'dataops',
                          'fixtures',
                          'test_df_merge_update_df2.csv')
         )
@@ -906,7 +902,6 @@ class DataopsMerge(DataopsMergeBasic):
     merge_file = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_df_merge_update_df2.csv'
     )
@@ -1024,7 +1019,6 @@ class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
     merge_file = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_empty_key_after_merge.csv'
     )

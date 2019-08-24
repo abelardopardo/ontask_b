@@ -5,7 +5,7 @@
 import json
 
 import pytz
-from django.conf import settings
+import django.conf
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
@@ -98,7 +98,7 @@ def is_json(text):
 
 def simplify_datetime_str(dtime):
     return dtime.astimezone(
-        pytz.timezone(settings.TIME_ZONE)
+        pytz.timezone(django.conf.settings.TIME_ZONE)
     ).strftime('%Y-%m-%d %H:%M:%S %z')
 
 
