@@ -484,13 +484,9 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             '//div[@id = "modal-item"]//div[@class = "modal-footer"]/button'
         ).click()
-        # MODAL WAITING
-        self.wait_for_page(element_id='workflow-detail')
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-attribute-create')
-            )
-        )
+
+        # Wait for modal to close and for table to refresh
+        self.wait_close_modal_refresh_table('attribute-table_previous')
 
         # There should only be a single element
         self.assertEqual(
