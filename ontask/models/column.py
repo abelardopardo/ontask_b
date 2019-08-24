@@ -11,8 +11,8 @@ from django.db import models
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
-import ontask.dataops
-from ontask.models import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, Workflow
+import ontask.dataops.pandas.datatypes
+from ontask.models.const import CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
 
 
 class Column(models.Model):
@@ -46,7 +46,7 @@ class Column(models.Model):
         verbose_name=_('description'))
 
     workflow = models.ForeignKey(
-        Workflow,
+        'Workflow',
         db_index=True,
         editable=False,
         null=False,

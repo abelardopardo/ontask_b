@@ -7,7 +7,7 @@ from builtins import object
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.const import CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
 
 
 class Plugin(models.Model):

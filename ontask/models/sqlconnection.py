@@ -4,7 +4,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models import CHAR_FIELD_LONG_SIZE
+from ontask.models.const import CHAR_FIELD_LONG_SIZE
 
 
 class SQLConnection(models.Model):

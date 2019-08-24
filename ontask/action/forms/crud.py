@@ -23,7 +23,8 @@ from django.utils.translation import ugettext_lazy as _
 import ontask.settings
 from ontask import AVAILABLE_ACTION_TYPES, is_legal_name
 from ontask.core.forms import RestrictedFileField
-from ontask.models import CHAR_FIELD_MID_SIZE, Action, Condition
+from ontask.models import Action, Condition
+from ontask.models.const import CHAR_FIELD_MID_SIZE
 
 SUFFIX_LENGTH = 512
 

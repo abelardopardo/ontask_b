@@ -8,9 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula
 from ontask.dataops.sql import get_num_rows
-from ontask.models import (
-    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, Action, Column,
-)
+from ontask.models.column import Column
+from ontask.models.const import CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
 
 
 class Condition(models.Model):
@@ -25,7 +24,7 @@ class Condition(models.Model):
     """
 
     action = models.ForeignKey(
-        Action,
+        'Action',
         db_index=True,
         on_delete=models.CASCADE,
         null=False,

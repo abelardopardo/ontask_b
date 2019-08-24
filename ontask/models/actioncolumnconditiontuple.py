@@ -4,7 +4,8 @@
 
 from django.db import models
 
-from ontask.models import Action, Column, Condition
+from ontask.models.column import Column
+from ontask.models.condition import Condition
 
 
 class ActionColumnConditionTuple(models.Model):
@@ -21,7 +22,7 @@ class ActionColumnConditionTuple(models.Model):
     """
 
     action = models.ForeignKey(
-        Action,
+        'Action',
         db_index=True,
         on_delete=models.CASCADE,
         null=False,

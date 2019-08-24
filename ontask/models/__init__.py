@@ -12,9 +12,7 @@ from ontask.models.plugin import Plugin
 from ontask.models.profiles import Profile
 from ontask.models.scheduler import ScheduledAction
 from ontask.models.sqlconnection import SQLConnection
-from ontask.models.view import View
 from ontask.models.user import OnTaskUser
+from ontask.models.view import View
 from ontask.models.workflow import Workflow
 
-CHAR_FIELD_MID_SIZE = 512
-CHAR_FIELD_LONG_SIZE = 2048

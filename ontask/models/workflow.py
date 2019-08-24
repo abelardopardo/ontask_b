@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Model description for the Workflow and Column entities."""
+"""Model description for the Workflow."""
 
 import datetime
 import json
@@ -18,7 +18,8 @@ from django.utils.translation import ugettext_lazy as _
 import ontask.dataops.pandas.datatypes
 import ontask.dataops.pandas.db
 from ontask.dataops.sql import delete_table
-from ontask.models import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, Column
+from ontask.models.column import Column
+from ontask.models.const import CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
 
 CHAR_FIELD_MD5_SIZE = 32
 
