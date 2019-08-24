@@ -6,6 +6,7 @@ from django.contrib import admin
 
 from ontask.models import Column
 
+
 class ColumnAdmin(admin.ModelAdmin):
     """Column Admin app."""
 
