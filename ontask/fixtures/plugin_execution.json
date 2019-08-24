@@ -777,7 +777,7 @@
         "filename": "linear_model",
         "modified": "2018-05-28T01:00:42.649Z",
         "name": "Linear Model",
-        "description_txt": "Execute a linear model",
+        "description_text": "Execute a linear model",
         "is_verified": true,
         "is_enabled": true,
         "is_model": true,
@@ -791,7 +791,7 @@
         "filename": "test_plugin_2",
         "modified": "2018-05-28T01:00:42.649Z",
         "name": "Test Plungin 2 Name",
-        "description_txt": "Test Plugin 2 Description Text",
+        "description_text": "Test Plugin 2 Description Text",
         "is_verified": true,
         "is_enabled": true,
         "executed": null
@@ -804,7 +804,7 @@
         "filename": "test_plugin_1",
         "modified": "2018-05-28T01:00:42.598Z",
         "name": "Test Plungin 1 Name",
-        "description_txt": "Test Plugin 1 Description Text",
+        "description_text": "Test Plugin 1 Description Text",
         "is_verified": true,
         "is_enabled": true,
         "executed": null
