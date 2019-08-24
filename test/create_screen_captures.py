@@ -135,7 +135,7 @@ class ScreenTestFixture(ScreenTests):
         # Insert a SQL Connection
         # sqlc = SQLConnection(
         #     name='remote server',
-        #     description_txt='Server with student records',
+        #     description_text='Server with student records',
         #     conn_type='mysql',
         #     conn_driver='',
         #     db_user='remote_db_user',

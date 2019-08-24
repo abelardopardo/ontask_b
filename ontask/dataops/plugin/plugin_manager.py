@@ -36,7 +36,7 @@ _checks = [
     _('Class inherits from OnTaskTransformation or OnTaskModel'),
     _('Class has a non-empty documentation string'),
     _('Class has a non-empty string field with name "name"'),
-    _('Class has a string field with name "description_txt"'),
+    _('Class has a string field with name "description_text"'),
     _(
         'Class has a field with name "input_column_names" storing '
         + 'a (possible empty) list of strings'),
@@ -80,7 +80,7 @@ def _verify_plugin(pinobj: Plugin) -> List[Tuple[str, str]]:
 
     3. Presence of string field "name"
 
-    4. Presence of string field "description_txt
+    4. Presence of string field "description_text
 
     5. Presence of a list of strings (possibly empty) with name
        "input_column_names"
@@ -136,7 +136,7 @@ def _verify_plugin(pinobj: Plugin) -> List[Tuple[str, str]]:
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if pinobj.description_txt and isinstance(pinobj.description_txt, str):
+        if pinobj.description_text and isinstance(pinobj.description_text, str):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect type')
@@ -254,7 +254,7 @@ def _load_plugin_info(plugin_folder, plugin_rego=None):
 
     if plugin_instance:
         plugin_rego.name = plugin_instance.name
-        plugin_rego.description_txt = plugin_instance.description_txt
+        plugin_rego.description_text = plugin_instance.description_text
         try:
             plugin_rego.is_model = plugin_instance.get_is_model()
         except Exception:

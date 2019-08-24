@@ -16,7 +16,7 @@ class LinearRegressionModel(object):
 
     def __init__(self):
         self.name = 'Linear Regression Predictive Model'
-        self.description_txt = """
+        self.description_text = """
         Given a column and the coefficients A and B, it computes the linear 
         model Ax + B, where x is obtained from the input column.
         """

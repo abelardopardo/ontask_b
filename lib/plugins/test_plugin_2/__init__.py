@@ -29,7 +29,7 @@ class OnTaskTestPlugin(OnTaskTransformation):
 
       - name (string): Plugin name show to the users.
 
-      - description_txt (sting): A string with a brief description of what
+      - description_text (sting): A string with a brief description of what
         the plugin does
 
       - input_column_names (list of strings): A potentially empty list of column
@@ -80,7 +80,7 @@ class OnTaskTestPlugin(OnTaskTransformation):
         # Short name shown to the user
         self.name = 'Test Plugin 2 Name'
         # Brief description
-        self.description_txt = \
+        self.description_text = \
             'Create addition and subtraction of the given columns'
         # Input data frame must have two columns
         self.input_column_names = ['A1', 'A2']

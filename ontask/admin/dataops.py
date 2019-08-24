@@ -15,7 +15,7 @@ class PluginRegistryAdmin(admin.ModelAdmin):
         'filename',
         'modified',
         'name',
-        'description_txt',
+        'description_text',
         'executed')
 
 
@@ -25,7 +25,7 @@ class SQLConnectionAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'name',
-        'description_txt',
+        'description_text',
         'conn_type',
         'conn_driver',
         'db_user',

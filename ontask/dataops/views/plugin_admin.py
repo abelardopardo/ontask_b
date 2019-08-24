@@ -26,7 +26,7 @@ from ontask.workflow.access import remove_workflow_from_session
 class PluginAdminTable(tables.Table):
     """Class to render the table with plugins present in the system."""
 
-    description_txt = tables.TemplateColumn(
+    description_text = tables.TemplateColumn(
         verbose_name=_('Description'),
         template_name='dataops/includes/partial_plugin_description.html',
     )
@@ -91,7 +91,7 @@ class PluginAdminTable(tables.Table):
         fields = (
             'filename',
             'name',
-            'description_txt',
+            'description_text',
             'is_model',
             'is_verified',
             'is_enabled')
@@ -99,7 +99,7 @@ class PluginAdminTable(tables.Table):
         sequence = (
             'filename',
             'name',
-            'description_txt',
+            'description_text',
             'is_model',
             'is_verified',
             'is_enabled',

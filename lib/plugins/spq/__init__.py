@@ -78,7 +78,7 @@ class SPQEvaluate(OnTaskTransformation):
         super().__init__()
 
         self.name = 'SPQ Score calculation'
-        self.description_txt = """Plugin to calculate the scores of SPQ
+        self.description_text = """Plugin to calculate the scores of SPQ
         The names of the columns must be SPQ_Q01 to SPQ_Q44."""
         self.input_column_names = [
             'SPQ_Q01', 'SPQ_Q02', 'SPQ_Q03', 'SPQ_Q04', 'SPQ_Q05',

@@ -34,7 +34,7 @@ class PluginAvailableTable(tables.Table):
     customisation.
     """
 
-    description_txt = tables.TemplateColumn(
+    description_text = tables.TemplateColumn(
         verbose_name=_('Description'),
         template_name='dataops/includes/partial_plugin_description.html',
     )
@@ -82,9 +82,9 @@ class PluginAvailableTable(tables.Table):
 
         model = Plugin
 
-        fields = ('name', 'description_txt')
+        fields = ('name', 'description_text')
 
-        sequence = ('name', 'description_txt', 'last_exec')
+        sequence = ('name', 'description_text', 'last_exec')
 
         attrs = {
             'class': 'table table-hover table-bordered shadow',

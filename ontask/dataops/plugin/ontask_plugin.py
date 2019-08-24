@@ -14,7 +14,7 @@ class OnTaskPluginAbstract(object, metaclass=ABCMeta):
     def __init__(self):
         """Initialize the object fields."""
         self.name = ''
-        self.description_txt = ''
+        self.description_text = ''
         self.input_column_names = []
         self.output_column_names = []
         self.output_suffix = ''
@@ -24,9 +24,9 @@ class OnTaskPluginAbstract(object, metaclass=ABCMeta):
         """Access the name."""
         return self.name
 
-    def get_description_txt(self):
+    def get_description_text(self):
         """Access the short description."""
-        return self.description_txt
+        return self.description_text
 
     def get_long_description(self):
         """Access the long description."""

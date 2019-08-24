@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.models.action import Action
 from ontask.models.logs import Log
-from ontask.models.workflow import Column
+from ontask.models import Column, CHAR_FIELD_LONG_SIZE
 
 
 class ScheduledAction(models.Model):
@@ -48,7 +48,7 @@ class ScheduledAction(models.Model):
         verbose_name=_('name'))
 
     description_text = models.CharField(
-        max_length=512,
+        max_length=CHAR_FIELD_LONG_SIZE,
         default='',
         blank=True,
         verbose_name=_('description'))

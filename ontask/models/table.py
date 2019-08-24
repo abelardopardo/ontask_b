@@ -7,7 +7,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.dataops.sql import get_num_rows
-from ontask.models.workflow import Column, Workflow
+from ontask.models.workflow import Workflow
+from ontask.models import Column, CHAR_FIELD_LONG_SIZE
 
 
 class View(models.Model):
@@ -29,7 +30,10 @@ class View(models.Model):
 
     name = models.CharField(max_length=256, blank=False)
 
-    description_text = models.CharField(max_length=512, default='', blank=True)
+    description_text = models.CharField(
+        max_length=CHAR_FIELD_LONG_SIZE,
+        default='',
+        blank=True)
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 

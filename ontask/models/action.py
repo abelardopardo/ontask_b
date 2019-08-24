@@ -19,7 +19,8 @@ import ontask
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula, evaluation
 from ontask.dataops.sql import get_num_rows, select_ids_all_false
 from ontask.models.logs import Log
-from ontask.models.workflow import Column, Workflow
+from ontask.models.workflow import Workflow
+from ontask.models import Column, CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
 
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)
@@ -28,10 +29,7 @@ var_use_res = [
     re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})'),
 ]
 
-ACTION_NAME_LENGTH = 512
 ACTION_TYPE_LENGTH = 64
-
-CONDITION_NAME_LENGTH = 512
 
 
 class Action(models.Model):  # noqa Z214
@@ -56,13 +54,13 @@ class Action(models.Model):  # noqa Z214
     )
 
     name = models.CharField(
-        max_length=ACTION_NAME_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         blank=False,
         verbose_name=_('name'),
     )
 
     description_text = models.CharField(
-        max_length=ACTION_NAME_LENGTH,
+        max_length=CHAR_FIELD_LONG_SIZE,
         default='',
         blank=True,
         verbose_name=_('description'),
@@ -419,13 +417,13 @@ class Condition(models.Model):
     )
 
     name = models.CharField(
-        max_length=CONDITION_NAME_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         blank=True,
         verbose_name=_('name'),
     )
 
     description_text = models.CharField(
-        max_length=CONDITION_NAME_LENGTH,
+        max_length=CHAR_FIELD_LONG_SIZE,
         default='',
         blank=True,
         verbose_name=_('description'),

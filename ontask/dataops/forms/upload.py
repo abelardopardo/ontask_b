@@ -382,7 +382,7 @@ class SQLConnectionForm(forms.ModelForm):
 
         fields = [
             'name',
-            'description_txt',
+            'description_text',
             'conn_type',
             'conn_driver',
             'db_user',

@@ -23,7 +23,7 @@ from django.utils.translation import ugettext_lazy as _
 import ontask.settings
 from ontask import AVAILABLE_ACTION_TYPES, is_legal_name
 from ontask.core.forms import RestrictedFileField
-from ontask.models import ACTION_NAME_LENGTH, Action, Condition
+from ontask.models import CHAR_FIELD_MID_SIZE, Action, Condition
 
 SUFFIX_LENGTH = 512
 
@@ -188,7 +188,7 @@ class ActionImportForm(forms.Form):
 
     # Action name
     name = forms.CharField(
-        max_length=ACTION_NAME_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         strip=True,
         required=True,
         label='Name',
