@@ -10,8 +10,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.models import Column
-from ontask.models.const import CHAR_FIELD_LONG_SIZE
 from ontask.models.action import Action
+from ontask.models.const import CHAR_FIELD_LONG_SIZE
 from ontask.models.logs import Log
 
 

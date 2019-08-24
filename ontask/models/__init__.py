@@ -15,4 +15,3 @@ from ontask.models.sqlconnection import SQLConnection
 from ontask.models.user import OnTaskUser
 from ontask.models.view import View
 from ontask.models.workflow import Workflow
-

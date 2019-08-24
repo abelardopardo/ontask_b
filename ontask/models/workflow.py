@@ -19,7 +19,7 @@ import ontask.dataops.pandas.datatypes
 import ontask.dataops.pandas.db
 from ontask.dataops.sql import delete_table
 from ontask.models.column import Column
-from ontask.models.const import CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
+from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
 CHAR_FIELD_MD5_SIZE = 32
 
