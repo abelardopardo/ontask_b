@@ -6,8 +6,6 @@ import datetime
 from time import sleep
 from typing import List, Union
 
-import html2text
-import pytz
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core import mail, signing
@@ -16,14 +14,20 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
+import html2text
+import pytz
 
-import ontask.settings
 from ontask import is_correct_email, simplify_datetime_str
-from ontask.action.evaluate.action import evaluate_action
-from ontask.action.payloads import EmailPayload
+from ontask.action.evaluate.action import (
+    evaluate_action,
+    evaluate_row_action_out,
+    get_action_evaluation_context,
+)
+from ontask.action.payloads import EmailPayload, SendListPayload
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.models import Action, Column, Log
+import ontask.settings
 
 logger = get_task_logger('celery_execution')
 
@@ -161,7 +165,7 @@ def _create_track_column(action: Action) -> str:
 
 
 def _create_single_message(
-    msg_body_sbj_to: str,
+    msg_body_sbj_to: List,
     track_str: str,
     from_email: str,
     cc_email_list: List[str],
@@ -169,7 +173,7 @@ def _create_single_message(
 ) -> Union[EmailMessage, EmailMultiAlternatives]:
     """Create either an EmailMessage or EmailMultiAlternatives object.
 
-    :param msg_body_sbj_to: Tuple with body, subject, to
+    :param msg_body_sbj_to: List with body, subject, to
     :param track_str: String to add to track
     :param from_email: From email
     :param cc_email_list: CC list
@@ -242,7 +246,7 @@ def _create_messages(
                 + ' style="position:absolute; visibility:hidden"/>'
             ).format(
                 Site.objects.get_current().domain,
-settings.BASE_URL,
+                settings.BASE_URL,
                 reverse('trck'),
                 signing.dumps(
                     {
@@ -370,3 +374,67 @@ def send_emails(
     if action_info['send_confirmation']:
         # Confirmation message requested
         _send_confirmation_message(user, action, len(msgs))
+
+
+def send_list_email(
+    user,
+    action: Action,
+    log_item: Log,
+    action_info: SendListPayload,
+) -> None:
+    """Send action content evaluated once to include lists.
+
+    Sends a single email for the given action with the lists expanded and with
+    the given subject evaluated also with respect to the attributes.
+
+    :param user: User object that executed the action
+    :param action: Action from where to take the messages
+    :param log_item: Log object to store results
+    :param action_info: Mapping key, value as defined in EmailPayload
+
+    :return: Send the emails
+    """
+    # Evaluate the action string, evaluate the subject, and get the value of
+    # the email column.
+    action_text = evaluate_row_action_out(
+        action,
+        get_action_evaluation_context(action, {}))
+
+    _check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
+
+    # Context to log the events
+    msg = _create_single_message(
+        [action_text, action_info['subject'], action_info['email_to']],
+        '',
+        user.email,
+        action_info['cc_email'],
+        action_info['bcc_email'],
+    )
+
+    try:
+        # Send email out
+        mail.get_connection().send_messages([msg])
+    except Exception as exc:
+        raise Exception(
+            _('Error when sending the list email: {0}').format(str(exc)),
+        )
+
+    # Log the event
+    Log.objects.register(
+        user,
+        Log.ACTION_LIST_EMAIL_SENT,
+        action.workflow,
+        {
+            'user': user.id,
+            'action': action.id,
+            'action_name': action.name,
+            'email_sent_datetime': str(
+                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            ),
+            'subject': msg.subject,
+            'body': msg.body,
+            'from_email': msg.from_email,
+            'to_email': msg.to[0]
+        }
+    )
+

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Classes capturing the payloads used when running actions."""
+
 import collections
 from typing import Dict, Mapping, Optional
 
@@ -121,6 +122,31 @@ class EmailPayload(ActionPayload):
     ]
 
 
+class SendListPayload(ActionPayload):
+    """Objects to store the information required for send list execution.
+
+    Object to package the items required to carry out the execution of an
+    action of type send list. The object has the following fields:
+
+    - action id: PK for the action being executed
+    - subject: email subject
+    - email_to: Destination email
+    - cc_email: List of emails to include in the cc
+    - bcc_email: List of emails to include in the bcc
+    - export_wf: Boolean encoding if the workflow needs to be exported
+    """
+
+    fields = [
+        'action_id',
+        'subject',
+        'email_to',
+        'cc_email',
+        'bcc_email',
+        'prev_url',
+        'post_url',
+        'export_wf',
+    ]
+
 class CanvasEmailPayload(ActionPayload):
     """Objects to store the information required for Canvas Email execution.
 
@@ -150,7 +176,6 @@ class CanvasEmailPayload(ActionPayload):
         'valuerange',
         'step',
     ]
-
 
 class JSONPayload(ActionPayload):
     """Objects to store the information required for JSON execution.
@@ -184,7 +209,6 @@ class JSONPayload(ActionPayload):
         'step',
     ]
 
-
 class ZipPayload(ActionPayload):
     """Objects to store the information required for JSON execution.
 
@@ -217,7 +241,6 @@ class ZipPayload(ActionPayload):
         'step',
     ]
 
-
 def get_action_payload(session: SessionBase) -> Dict:
     """Get the payload from the current session.
 
@@ -226,7 +249,6 @@ def get_action_payload(session: SessionBase) -> Dict:
     :return: request.session[session_dictionary_name] or None
     """
     return session.get(action_session_dictionary)
-
 
 def set_action_payload(
     session: SessionBase,
@@ -239,7 +261,6 @@ def set_action_payload(
     :param payload: Dictionary to store
     """
     session[action_session_dictionary] = payload
-
 
 def get_or_set_action_info(
     session: Session,

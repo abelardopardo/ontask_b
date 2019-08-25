@@ -19,6 +19,7 @@ from ontask.action.evaluate import (
 from ontask.action.forms import ValueExcludeForm
 from ontask.action.payloads import get_action_payload
 from ontask.action.views.run_canvas_email import run_canvas_email_action
+from ontask.action.views.run_send_list import run_send_list_action
 from ontask.action.views.run_email import run_email_action
 from ontask.action.views.run_json import run_json_action
 from ontask.action.views.run_survey import run_survey_action
@@ -33,6 +34,7 @@ fn_distributor = {
     Action.personalized_canvas_email: run_canvas_email_action,
     Action.personalized_json: run_json_action,
     Action.survey: run_survey_action,
+    Action.send_list: run_send_list_action,
 }
 
 
@@ -64,6 +66,9 @@ def run_action(
 
     if action.action_type not in fn_distributor:
         # Incorrect type of action.
+        messages.error(
+            request,
+            _('Execution for this action is not allowed.'))
         return redirect(reverse('action:index'))
 
     return fn_distributor[action.action_type](request, workflow, action)

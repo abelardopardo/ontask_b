@@ -45,17 +45,6 @@ def _get_navigation_index(idx: int, n_items: int) -> Tuple[int, int, int]:
     return prv, idx, nxt
 
 
-def _create_single_preview_response(action: Action, page_context: Dict):
-    """Create a single response without any row data (send_list action)."""
-    # Obtain the evaluation context (no row values, no condition evaluation)
-    eval_context = get_action_evaluation_context(action, {})
-
-    page_context['action_content'] = evaluate_row_action_out(
-        action,
-        eval_context)
-
-    return
-
 def _create_row_preview_response(
     action: Action,
     idx: int,
@@ -242,7 +231,11 @@ def preview_response(
     }
 
     if action.action_type == action.send_list:
-        _create_single_preview_response(action, context)
+        # Obtain the evaluation context (no row values, no condition evaluation)
+        context['action_content'] = evaluate_row_action_out(
+            action,
+            get_action_evaluation_context(action, {}))
+
     else:
         _create_row_preview_response(
             action,

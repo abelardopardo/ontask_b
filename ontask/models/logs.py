@@ -63,6 +63,7 @@ class Log(models.Model):
     ACTION_DELETE = 'action_delete'
     ACTION_CLONE = 'action_clone'
     ACTION_EMAIL_SENT = 'action_email_sent'
+    ACTION_LIST_EMAIL_SENT = 'action_list_email_sent'
     ACTION_CANVAS_EMAIL_SENT = 'action_canvas_email_sent'
     ACTION_EMAIL_NOTIFY = 'action_email_notify'
     ACTION_EMAIL_READ = 'action_email_read'
@@ -132,6 +133,7 @@ class Log(models.Model):
         (ACTION_DELETE, _('Action deleted')),
         (ACTION_CLONE, _('Action cloned')),
         (ACTION_EMAIL_SENT, _('Emails sent')),
+        (ACTION_LIST_EMAIL_SENT, _('Email with data list sent')),
         (ACTION_CANVAS_EMAIL_SENT, _('Canvas Emails sent')),
         (ACTION_EMAIL_NOTIFY, _('Notification email sent')),
         (ACTION_EMAIL_READ, _('Email read')),

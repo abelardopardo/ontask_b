@@ -10,6 +10,6 @@ from ontask.action.forms.edit import (
     EditActionOutForm, EnterActionIn, column_to_field,
 )
 from ontask.action.forms.run import (
-    CanvasEmailActionForm, EmailActionForm, EnableURLForm, JSONActionForm,
-    JSONBasicActionForm, ValueExcludeForm, ZipActionForm,
+    CanvasEmailActionForm, EmailActionForm, SendListActionForm, EnableURLForm,
+    JSONActionForm, JSONBasicActionForm, ValueExcludeForm, ZipActionForm,
 )

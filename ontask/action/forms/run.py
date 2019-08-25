@@ -39,20 +39,14 @@ from ontask.models import Action
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')
 
-
-class EmailActionForm(forms.Form):
-    """Form to edit the Send Email action."""
+class BasicEmailForm(forms.Form):
+    """Basic form fields to run an action."""
 
     subject = forms.CharField(
         max_length=1024,
         strip=True,
         required=True,
         label=_('Email subject'),
-    )
-
-    email_column = forms.ChoiceField(
-        label=_('Column to use for target email address'),
-        required=True,
     )
 
     cc_email = forms.CharField(
@@ -64,24 +58,6 @@ class EmailActionForm(forms.Form):
         required=False,
     )
 
-    confirm_items = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Check/exclude email addresses before sending?'),
-    )
-
-    send_confirmation = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Send you a summary message?'),
-    )
-
-    track_read = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Track email reading in an extra column?'),
-    )
-
     export_wf = forms.BooleanField(
         initial=False,
         required=False,
@@ -90,67 +66,23 @@ class EmailActionForm(forms.Form):
     )
 
     def __init__(self, *args, **kargs):
-        """Store column names, action, payload, and adjust initial values."""
-        self.column_names: List[str] = kargs.pop('column_names')
         self.action: Action = kargs.pop('action')
         self.action_info: EmailPayload = kargs.pop('action_info')
 
         super().__init__(*args, **kargs)
 
-        email_column_name = self.fields['email_column'].initial
-        if email_column_name is None:
-            # Try to guess if there is an "email" column
-            email_column_name = next(
-                (cname for cname in self.column_names
-                 if cname.lower() == 'email'),
-                None,
-            )
-
-        if email_column_name is None:
-            email_column_name = ('', '---')
-        else:
-            email_column_name = (email_column_name, email_column_name)
-
-        self.fields['email_column'].initial = email_column_name
-        self.fields['email_column'].choices = [
-            (cname, cname) for cname in self.column_names]
-
     def clean(self):
         """Verify email values."""
         form_data = super().clean()
 
-        # Move data to the payload so that is ready to be used
         self.action_info['subject'] = form_data['subject']
-        self.action_info['item_column'] = form_data['email_column']
         self.action_info['cc_email'] = [
             email.strip()
             for email in form_data['cc_email'].split(',') if email]
         self.action_info['bcc_email'] = [
             email.strip()
             for email in form_data['bcc_email'].split(',') if email]
-        self.action_info['confirm_items'] = form_data['confirm_items']
-        self.action_info['send_confirmation'] = form_data[
-            'send_confirmation'
-        ]
-        self.action_info['track_read'] = form_data['track_read']
         self.action_info['export_wf'] = form_data['export_wf']
-
-        # Check if the values in the email column are correct emails
-        try:
-            column_data = get_rows(
-                self.action.workflow.get_data_frame_table_name(),
-                column_names=[self.action_info['item_column']])
-            if not all(is_correct_email(iname[0]) for iname in column_data):
-                # column has incorrect email addresses
-                self.add_error(
-                    'email_column',
-                    _('The column with email addresses has incorrect values.'),
-                )
-        except TypeError:
-            self.add_error(
-                'email_column',
-                _('The column with email addresses has incorrect values.'),
-            )
 
         all_correct = all(
             is_correct_email(email) for email in self.action_info['cc_email']
@@ -172,10 +104,132 @@ class EmailActionForm(forms.Form):
 
         return form_data
 
+class EmailActionForm(BasicEmailForm):
+    """Form to edit the Send Email action."""
+
+    email_column = forms.ChoiceField(
+        label=_('Column to use for target email address'),
+        required=True,
+    )
+
+    confirm_items = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude email addresses before sending?'),
+    )
+
+    send_confirmation = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Send you a summary message?'),
+    )
+
+    track_read = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Track email reading in an extra column?'),
+    )
+
+    def __init__(self, *args, **kargs):
+        """Store column names and adjust initial values."""
+        self.column_names: List[str] = kargs.pop('column_names')
+
+        super().__init__(*args, **kargs)
+
+        email_column_name = self.fields['email_column'].initial
+        if email_column_name is None:
+            # Try to guess if there is an "email" column
+            email_column_name = next(
+                (cname for cname in self.column_names
+                 if cname.lower() == 'email'),
+                None,
+            )
+
+        if email_column_name is None:
+            email_column_name = ('', '---')
+        else:
+            email_column_name = (email_column_name, email_column_name)
+
+        self.fields['email_column'].initial = email_column_name
+        self.fields['email_column'].choices = [
+            (cname, cname) for cname in self.column_names]
+
+        self.order_fields([
+            'subject',
+            'email_column',
+            'cc_email',
+            'bcc_email',
+            'confirm_items',
+            'send_confirmation',
+            'track_read',
+            'export_wf'])
+
+
+    def clean(self):
+        """Verify email values."""
+        form_data = super().clean()
+
+        # Move data to the payload so that is ready to be used
+        self.action_info['item_column'] = form_data['email_column']
+        self.action_info['confirm_items'] = form_data['confirm_items']
+        self.action_info['send_confirmation'] = form_data[
+            'send_confirmation'
+        ]
+        self.action_info['track_read'] = form_data['track_read']
+
+        # Check if the values in the email column are correct emails
+        try:
+            column_data = get_rows(
+                self.action.workflow.get_data_frame_table_name(),
+                column_names=[self.action_info['item_column']])
+            if not all(is_correct_email(iname[0]) for iname in column_data):
+                # column has incorrect email addresses
+                self.add_error(
+                    'email_column',
+                    _('The column with email addresses has incorrect values.'),
+                )
+        except TypeError:
+            self.add_error(
+                'email_column',
+                _('The column with email addresses has incorrect values.'),
+            )
+
+        return form_data
+
     class Meta(object):
         """Redefine size of the subject field."""
 
         widgets = {'subject': forms.TextInput(attrs={'size': 256})}
+
+
+class SendListActionForm(BasicEmailForm):
+    """Form to edit the Send Email action."""
+
+    email_to = forms.CharField(label=_('Recipient'), required=True)
+
+    def __init__(self, *args, **kargs):
+        """Sort the fields."""
+        super().__init__(*args, **kargs)
+
+        self.order_fields([
+            'email_to',
+            'subject',
+            'cc_email',
+            'bcc_email',
+            'export_wf'])
+
+    def clean(self):
+        """Verify recipient email value"""
+        form_data = super().clean()
+
+        self.action_info['email_to'] = form_data['email_to']
+        if not is_correct_email(form_data['email_to']):
+            self.add_error(
+                'email_to',
+                _('Field needs a valid email address.'),
+            )
+
+        return form_data
 
 
 class ZipActionForm(forms.Form):

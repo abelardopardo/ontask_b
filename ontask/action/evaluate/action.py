@@ -191,7 +191,7 @@ def evaluate_action(
         # Check that n_rows_selected is equal to rows.rowcount
         action_filter = action.get_filter()
         if action_filter and action_filter.n_rows_selected != rows.rowcount:
-            raise OnTaskException('Inconsisten n_rows_selected')
+            raise ontask.OnTaskException('Inconsisten n_rows_selected')
 
     return list_of_renders
 

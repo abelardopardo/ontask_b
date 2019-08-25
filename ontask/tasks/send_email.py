@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
+
+"""Tasks to send emails from a regular action, or email from send list."""
+
 from celery import shared_task
 from django.utils.translation import ugettext
 
-from ontask.action.payloads import EmailPayload
-from ontask.action.send import send_emails
+from ontask.action.payloads import EmailPayload, SendListPayload
+from ontask.action.send import send_emails, send_list_email
 from ontask.tasks.basic import get_execution_items, get_log_item
 
 
@@ -38,6 +42,55 @@ def send_email_messages(
         log_item.save()
 
         send_emails(
+            user,
+            action,
+            log_item,
+            action_info)
+
+        # Reflect status in the log event
+        log_item.payload['status'] = 'Execution finished successfully'
+        log_item.save()
+    except Exception as e:
+        log_item.payload['status'] = \
+            ugettext('Error: {0}').format(e)
+        log_item.save()
+        return False
+
+    return True
+
+
+@shared_task
+def send_list_email_message(
+    user_id: int,
+    log_id: int,
+    action_info: SendListPayload
+) -> bool:
+    """Task to invoke send_list_message for send_list action.
+
+    This function invokes send_list_messageand records the appropriate events.
+
+    :param user_id: Id of User object that is executing the action
+    :param log_id: Id of the log object where the status has to be reflected
+    :param action_info: SendListPayload object with the required pairs key,
+    value
+
+    :return: bool stating if execution has been correct
+    """
+    # First get the log item to make sure we can record diagnostics
+    log_item = get_log_item(log_id)
+    if not log_item:
+        return False
+
+    try:
+        user, __, action = get_execution_items(
+            user_id=user_id,
+            action_id=action_info['action_id'])
+
+        # Set the status to "executing" before calling the function
+        log_item.payload['status'] = 'Executing'
+        log_item.save()
+
+        send_list_email(
             user,
             action,
             log_item,
