@@ -82,7 +82,10 @@ class EditActionOutForm(forms.ModelForm):
         super().__init__(*args, **kargs)
 
         # Personalized text, canvas email
-        if self.instance.action_type == Action.personalized_text:
+        if (
+            self.instance.action_type == Action.personalized_text
+            or self.instance.action_type == Action.send_list
+        ):
             self.fields['text_content'].widget = SummernoteInplaceWidget()
 
         # Add the Target URL field

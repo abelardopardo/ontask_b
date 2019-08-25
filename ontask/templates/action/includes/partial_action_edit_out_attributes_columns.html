@@ -4,12 +4,22 @@
     <div class="dropdown btn-group">
       <button type="button" class="btn btn-outline-dark dropdown-toggle"
               data-toggle="dropdown">
-        {% trans 'Insert Column Value' %}
+        {% if is_send_list %}
+          {% trans 'Insert Column List' %}
+        {% else %}
+          {% trans 'Insert Column Value' %}
+        {% endif %}
       </button>
       <div class="shadow dropdown-menu">
-        {% for column in columns %}
-          <button type="button" class="dropdown-item js-insert-column-name">{{ column.name }}</button>
-        {% endfor %}
+        {% if is_send_list %}
+          {% for column in columns %}
+            <button type="button" class="dropdown-item js-insert-column-list">{{ column.name }}</button>
+          {% endfor %}
+        {% else %}
+          {% for column in columns %}
+            <button type="button" class="dropdown-item js-insert-column-name">{{ column.name }}</button>
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
     {% if conditions|length %}

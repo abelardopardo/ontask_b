@@ -25,6 +25,7 @@ app_config = 'ontask.apps.ActionConfig'
 PERSONALIZED_TEXT = 'personalized_text'
 PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
 PERSONALIZED_JSON = 'personalized_json'
+SEND_LIST = 'send_list'
 SURVEY = 'survey'
 TODO_LIST = 'todo_list'
 
@@ -33,6 +34,7 @@ ACTION_TYPES = [
     (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
     (SURVEY, _('Survey')),
     (PERSONALIZED_JSON, _('Personalized JSON')),
+    (SEND_LIST, _('Send List')),
     (TODO_LIST, _('TODO List'))
 ]
 

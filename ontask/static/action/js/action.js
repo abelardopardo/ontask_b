@@ -47,6 +47,17 @@ let insertAttributeInContent = function() {
   insertText('id_text_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
+let insertColumnListInContent = function() {
+  let val = $(this).text();
+  if (val == '') {
+    return;
+  }
+  if (typeof $('#id_text_content').summernote != 'undefined') {
+    $("#id_text_content").summernote('createRange');
+  }
+  insertText('id_text_content', "{% ot_insert_columm_list '" + val + "' %}");
+  $(this).val(this.defaultSelected);
+}
 let ajax_post = function(url, data, req_type) {
   $.ajax({
     url: url,
@@ -177,8 +188,10 @@ $(function () {
   $("#condition-set").on("click", ".js-condition-delete", loadForm);
   $("#modal-item").on("submit", ".js-condition-delete-form", saveForm);
 
-  // Insert attribute column in content
+  // Insert column name in content
   $("#insert-elements-in-editor").on("click", ".js-insert-column-name", insertAttributeInContent);
+  // Insert column LIST in content
+  $("#insert-elements-in-editor").on("click", ".js-insert-column-list", insertColumnListInContent);
   // Insert condition blurb in the editor
   $("#insert-elements-in-editor").on("click", ".js-insert-condition-name", insertConditionInContent);
   // Insert attribute in content

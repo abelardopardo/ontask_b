@@ -42,6 +42,7 @@ class Action(models.Model):  # noqa Z214
     personalized_text = ontask.PERSONALIZED_TEXT
     personalized_canvas_email = ontask.PERSONALIZED_CANVAS_EMAIL
     personalized_json = ontask.PERSONALIZED_JSON
+    send_list = ontask.SEND_LIST
     survey = ontask.SURVEY
     todo_list = ontask.TODO_LIST
 
@@ -163,6 +164,7 @@ class Action(models.Model):  # noqa Z214
         """
         for_out = (
             self.action_type == Action.personalized_text
+            or self.action_type == Action.send_list
             or (self.action_type == Action.personalized_canvas_email
                 and settings.CANVAS_INFO_DICT is not None)
         )

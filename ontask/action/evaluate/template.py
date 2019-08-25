@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.models import Action, var_use_res
 
-# Variable name to store the workflow ID in the context used to render a
+# Variable name to store the action ID in the context used to render a
 # template
 action_context_var = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
 viz_number_context_var = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
@@ -24,6 +24,9 @@ white_space_res = [
     (re.compile(r'\n[ \t\r\f\v]*{% if '), '{% if '),
     (re.compile(r'{% endif %}[ \t\r\f\v]*\n'), '{% endif %}'),
 ]
+
+# Template prelude to load the ontask_tags
+_ontask_template_prelude = '{% load ontask_tags %}'
 
 
 def make_xlat(*args, **kwds):
@@ -95,7 +98,7 @@ tr_item = make_xlat(
 )
 
 
-def change_vname(match) -> str:
+def _change_vname(match) -> str:
     """Change variable name using the match object from re.
 
     :param match:
@@ -104,12 +107,12 @@ def change_vname(match) -> str:
     """
     return (
         match.group('mup_pre')
-        + translate(match.group('vname'))
+        + _translate(match.group('vname'))
         + match.group('mup_post')
     )
 
 
-def translate(varname: str) -> str:
+def _translate(varname: str) -> str:
     """Apply several translations to the value of a variable.
 
     Function that given a string representing a variable name applies a
@@ -139,7 +142,7 @@ def translate(varname: str) -> str:
     return tr_item(varname)
 
 
-def clean_whitespace(template_text: str) -> str:
+def _clean_whitespace(template_text: str) -> str:
     """Remove whitespace before and after conditionals.
 
     Function to detect new lines before and after the conditional template
@@ -205,16 +208,16 @@ def render_action_template(
     # appear in the the template text
     new_template_text = template_text
     for rexpr in var_use_res:
-        new_template_text = rexpr.sub(change_vname, new_template_text)
+        new_template_text = rexpr.sub(_change_vname, new_template_text)
 
     # Step 2.2 Remove pre-and post white space from the {% if %} and
     # {% endif %} conditions (to reduce white space when using non HTML
     # content.
-    new_template_text = clean_whitespace(new_template_text)
+    new_template_text = _clean_whitespace(new_template_text)
 
     # Step 3. Apply the translation process to the context keys
     new_context = {
-        translate(escape(key)): str_val
+        _translate(escape(key)): str_val
         for key, str_val in list(context_dict.items())
     }
 
@@ -233,4 +236,6 @@ def render_action_template(
     new_context[viz_number_context_var] = 0
 
     # Step 4. Return the redering of the new elements
-    return Template(new_template_text).render(Context(new_context))
+    return Template(
+        _ontask_template_prelude + new_template_text,
+    ).render(Context(new_context))

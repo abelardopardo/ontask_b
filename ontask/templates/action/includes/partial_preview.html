@@ -1,39 +1,45 @@
 {% load i18n %}
 <div class="js-action-preview-form">
   <div class="modal-header">
-    <h4 class="modal-title">{% blocktrans %}Preview {{ index }} of {{ n_items }}{% endblocktrans %}</h4>
+    {% if n_items %}
+      <h4 class="modal-title">{% blocktrans %}Preview {{ index }} of {{ n_items }}{% endblocktrans %}</h4>
+    {% else %}
+      <h4 class="modal-title">{% trans 'Preview' %}</h4>
+    {% endif %}
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body text-center">
-    <button type="button"
-            class="shadow btn btn-outline-primary js-action-preview-prv"
-            data-url="{% url 'action:preview' action.id prv %}"
-            data-toggle="tooltip"
-            title="{% trans 'Preview previous message' %}">
-      <span class="fa fa-angle-left"></span>  {% trans 'Previous' %}
-    </button>
-    <button type="button" class="shadow btn btn-outline-primary js-action-preview-nxt"
-            data-url="{% url 'action:preview' action.id nxt %}"
-            data-toggle="tooltip"
-            title="{% trans 'Preview next message' %}">
-      {% trans 'Next' %} <span class="fa fa-angle-right"></span>
-    </button>
-    {% if action.rows_all_false|length %}
-      <button type="button" class="shadow btn btn-outline-danger js-action-preview-nxt"
-              data-url="{% url 'action:preview_all_false' action.id index %}"
+  {% if show_navigation %}
+    <div class="modal-body text-center">
+      <button type="button"
+              class="shadow btn btn-outline-primary js-action-preview-prv"
+              data-url="{% url 'action:preview' action.id prv %}"
               data-toggle="tooltip"
-              title="{% trans 'Preview next message with all conditions false' %}">
-        <span class="fa fa-angle-double-right"></span> {% trans 'Next with anomaly' %}
+              title="{% trans 'Preview previous message' %}">
+        <span class="fa fa-angle-left"></span>  {% trans 'Previous' %}
       </button>
-    {% endif %}
-  </div>
+      <button type="button" class="shadow btn btn-outline-primary js-action-preview-nxt"
+              data-url="{% url 'action:preview' action.id nxt %}"
+              data-toggle="tooltip"
+              title="{% trans 'Preview next message' %}">
+        {% trans 'Next' %} <span class="fa fa-angle-right"></span>
+      </button>
+      {% if action.rows_all_false|length %}
+        <button type="button" class="shadow btn btn-outline-danger js-action-preview-nxt"
+                data-url="{% url 'action:preview_all_false' action.id index %}"
+                data-toggle="tooltip"
+                title="{% trans 'Preview next message with all conditions false' %}">
+          <span class="fa fa-angle-double-right"></span> {% trans 'Next with anomaly' %}
+        </button>
+      {% endif %}
+    </div>
+  {% endif %}
   <div class="mx-3 my-3">
     {% if all_false %}
       <p class="alert-danger text-center"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'All conditions evaluate to FALSE' %}</p>
     {% endif %}
-    {% if not correct_json %}
+    {% if incorrect_json %}
       <p class="alert-danger text-center">{% trans 'Incorrect JSON object. Check action text' %}</p>
     {% endif %}
     {% if prelude %}

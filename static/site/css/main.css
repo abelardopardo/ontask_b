@@ -86,6 +86,10 @@ body {
 [data-backcolor='survey'] {
   background: #aed2f0;
 }
+.action-type-send-list ,
+[data-backcolor='send_list'] {
+  background: #c46a71;
+}
 .action-type-todo-list ,
 [data-backcolor='todo_list'] {
   background: #c46a71;

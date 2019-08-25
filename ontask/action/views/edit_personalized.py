@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-"""Views to edit actions."""
+"""Views to edit actions that send personalized information."""
+
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
@@ -18,7 +19,7 @@ from ontask.models import Action, Condition, Log, Workflow
 from ontask.visualizations.plotly import PlotlyHandler
 
 
-def text_renders_correctly(
+def _text_renders_correctly(
     text_content: str,
     action: Action,
     form: EditActionOutForm,
@@ -102,7 +103,7 @@ def edit_action_out(
         text_content = form.cleaned_data.get('text_content')
 
         # Render the content as a template and catch potential problems.
-        if text_renders_correctly(text_content, action, form):
+        if _text_renders_correctly(text_content, action, form):
             # Log the event
             Log.objects.register(
                 request.user,
@@ -137,7 +138,10 @@ def edit_action_out(
     context = {
         'filter_condition': filter_condition,
         'action': action,
-        'load_summernote': action.action_type == Action.personalized_text,
+        'load_summernote': (
+            action.action_type == Action.personalized_text
+            or action.action_type == Action.send_list
+        ),
         'conditions': action.conditions.filter(is_filter=False),
         'other_conditions': Condition.objects.filter(
             action__workflow=workflow, is_filter=False,
@@ -152,6 +156,7 @@ def edit_action_out(
             filter_condition.n_rows_selected
             if filter_condition else -1,
         'has_data': action.workflow.has_table(),
+        'is_send_list': action.action_type == Action.send_list,
         'all_false_conditions': any(
             cond.n_rows_selected == 0
             for cond in action.conditions.all()),

@@ -449,6 +449,7 @@ DISABLED_ACTIONS = [
     # 'ontask.PERSONALIZED_JSON',
     # 'ontask.PERSONALIZED_CANVAS_EMAIL',
     # 'ontask.PERSONALIZED_TEXT',
+    # 'ontask.SEND_LIST',
     # 'ontask.SURVEY',
     'ontask.TODO_LIST',
 ]

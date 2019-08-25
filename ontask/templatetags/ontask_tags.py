@@ -7,6 +7,7 @@ from django.conf import settings
 from django.utils.html import format_html
 
 import ontask
+from ontask.dataops.sql.row_queries import get_rows
 
 register = template.Library()
 
@@ -125,3 +126,14 @@ def ontask_datetimepicker_css():
 def ontask_datetimepicker_js():
     """Provide the datetime picker JS URL."""
     return format_html(datetimepicker_js)
+
+
+@register.simple_tag(takes_context=True)
+def ot_insert_columm_list(context, column_name):
+    """Insert in the text a column list."""
+    action = context['ONTASK_ACTION_CONTEXT_VARIABLE___']
+    column_values = get_rows(
+        action.workflow.get_data_frame_table_name(),
+        column_names=[column_name],
+        filter_formula=action.get_filter_formula())
+    return ', '.join([str(citem[0]) for citem in column_values])
