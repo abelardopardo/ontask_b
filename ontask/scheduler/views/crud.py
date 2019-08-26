@@ -46,7 +46,6 @@ class ScheduleActionTable(tables.Table):
                 'data-toggle': 'tooltip',
                 'title': _('Edit the action scheduled for execution'),
             },
-            'td': {'data-backcolor': lambda record: record.action.action_type},
         },
     )
 

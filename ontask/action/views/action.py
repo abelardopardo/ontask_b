@@ -40,13 +40,7 @@ class ActionTable(tables.Table):
 
     action_type = tables.TemplateColumn(
         template_name='action/includes/partial_action_type.html',
-        verbose_name=_('Type'),
-        attrs={
-            'td': {
-                'data-backcolor': lambda record: record.action_type,
-            },
-        },
-    )
+        verbose_name=_('Type'))
 
     last_executed_log = tables.LinkColumn(
         verbose_name=_('Last executed'),
