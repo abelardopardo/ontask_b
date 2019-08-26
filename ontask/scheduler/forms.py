@@ -167,6 +167,99 @@ class EmailScheduleForm(ScheduleForm):
         return form_data
 
 
+class SendListScheduleForm(forms.ModelForm):
+    """Form to create/edit objects of the ScheduleAction of type send list."""
+
+    email_to = forms.CharField(label=_('Recipient'), required=True)
+
+    subject = forms.CharField(
+        initial='',
+        label=_('Email subject'),
+        strip=True,
+        required=True)
+
+    cc_email = forms.CharField(
+        initial='',
+        label=_('Comma-separated list of CC Emails'),
+        strip=True,
+        required=False)
+
+    bcc_email = forms.CharField(
+        initial='',
+        label=_('Comma-separated list of BCC Emails'),
+        strip=True,
+        required=False)
+
+    def __init__(self, form_data, *args, **kwargs):
+        """Set additional field items."""
+        self.action = kwargs.pop('action')
+
+        # Call the parent constructor
+        super().__init__(form_data, *args, **kwargs)
+
+        # If there is an instance, push the values in the payload to the form
+        if self.instance:
+            payload = self.instance.payload
+            self.fields['email_to'].initial = payload.get('email_to')
+            self.fields['subject'].initial = payload.get('subject')
+            self.fields['cc_email'].initial = ', '.join(
+                payload.get('cc_email', []))
+            self.fields['bcc_email'].initial = ', '.join(
+                payload.get('bcc_email', []))
+
+        self.order_fields([
+            'name',
+            'description_text',
+            'execute',
+            'email_to',
+            'subject',
+            'cc_email',
+            'bcc_email'])
+
+    def clean(self):
+        """Process errors and add them to the form."""
+        form_data = super().clean()
+
+        # The executed time must be in the future
+        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        when_data = self.cleaned_data.get('execute')
+        if when_data and when_data <= now:
+            self.add_error(
+                'execute',
+                _('Date/time must be in the future'))
+
+        if not all(
+            is_correct_email(email)
+            for email in form_data['cc_email'].split(',') if email
+        ):
+            self.add_error(
+                ('cc_email',
+                 _('This field must be a comma-separated list of emails.')),
+            )
+
+        if not all(
+            is_correct_email(email)
+            for email in form_data['bcc_email'].split(',') if email
+        ):
+            self.add_error(
+                ('bcc_email',
+                 _('This field must be a comma-separated list of emails.')),
+            )
+
+        return form_data
+
+    class Meta(object):
+        """Define model, fields and widgets."""
+
+        model = ScheduledAction
+
+        fields = ('name', 'description_text', 'execute')
+
+        widgets = {
+            'execute': DateTimePickerInput(options=date_time_widget_options),
+        }
+
+
 class JSONScheduleForm(ScheduleForm):
     """Form to create/edit objects of the ScheduleAction of type email.
 

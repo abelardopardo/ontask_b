@@ -15,7 +15,8 @@ from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
 )
 from ontask.models import Action, Log, ScheduledAction
-from ontask.scheduler.forms import EmailScheduleForm, JSONScheduleForm
+from ontask.scheduler.forms import (
+    EmailScheduleForm, JSONScheduleForm, SendListScheduleForm)
 
 
 def create_timedelta_string(dtime: datetime.datetime) -> str:
@@ -123,6 +124,89 @@ def save_email_schedule(request, action, schedule_item, op_payload):
             set_action_payload(request.session, op_payload)
 
             return redirect('action:item_filter')
+
+        # If there is not item_column, the exclude values should be empty.
+        s_item.exclude_values = []
+        s_item.save()
+
+        # Go straight to the final step
+        return finish_scheduling(request, s_item, op_payload)
+
+    # Render the form
+    return render(
+        request,
+        'scheduler/edit.html',
+        {
+            'action': action,
+            'form': form,
+            'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'valuerange': range(2),
+        },
+    )
+
+
+def save_send_list_schedule(request, action, schedule_item, op_payload):
+    """Handle the creation and edition of send list items.
+
+    :param request: Http request being processed
+
+    :param action: Action item related to the schedule
+
+    :param schedule_item: Schedule item or None if it is new
+
+    :param op_payload: dictionary to carry over the request to the next step
+
+    :return:
+    """
+    # Create the form to ask for the email subject and other information
+    form = SendListScheduleForm(
+        form_data=request.POST or None,
+        action=action,
+        instance=schedule_item)
+
+    # Processing a valid POST request
+    if request.method == 'POST' and form.is_valid():
+
+        # Save the schedule item object
+        s_item = form.save(commit=False)
+
+        # Assign additional fields and save
+        s_item.user = request.user
+        s_item.action = action
+        s_item.status = ScheduledAction.STATUS_CREATING
+        s_item.payload = {
+            'email_to': form.cleaned_data['email_to'],
+            'subject': form.cleaned_data['subject'],
+            'cc_email': [
+                email for email in form.cleaned_data['cc_email'].split(',')
+                if email],
+            'bcc_email': [
+                email for email in form.cleaned_data['bcc_email'].split(',')
+                if email]}
+
+        # Verify that that action does comply with the name uniqueness
+        # property (only with respec to other actions)
+        try:
+            s_item.save()
+        except IntegrityError:
+            # There is an action with this name already
+            form.add_error(
+                'name',
+                _('A scheduled execution of this action with this name '
+                  + 'already exists'))
+            return render(
+                request,
+                'scheduler/edit.html',
+                {
+                    'action': action,
+                    'form': form,
+                    'now': datetime.datetime.now(pytz.timezone(
+                        settings.TIME_ZONE)),
+                },
+            )
+
+        # Upload information to the op_payload
+        op_payload['schedule_id'] = s_item.id
 
         # If there is not item_column, the exclude values should be empty.
         s_item.exclude_values = []
@@ -297,6 +381,13 @@ def finish_scheduling(request, schedule_item=None, payload=None):
             'track_read': schedule_item.payload.get('track_read', False),
         })
         log_type = Log.SCHEDULE_EMAIL_EDIT
+    elif schedule_item.action.action_type == Action.send_list:
+        log_payload.update({
+            'email_to': schedule_item.payload.get('email_to'),
+            'subject': schedule_item.payload.get('subject'),
+            'cc_email': schedule_item.payload.get('cc_email', []),
+            'bcc_email': schedule_item.payload.get('bcc_email', [])})
+        log_type = Log.SCHEDULE_SEND_LIST_EDIT
     elif schedule_item.action.action_type == Action.personalized_json:
         ivalue = None
         if schedule_item.item_column:
@@ -315,7 +406,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
             'token': schedule_item.payload.get('subject'),
             'subject': schedule_item.payload.get('subject'),
         })
-        log_type = Log.SCHEDULE_CANVAS_EMAIL_EXECUTE
+        log_type = Log.SCHEDULE_CANVAS_EMAIL_EDIT
     else:
         messages.error(
             request,

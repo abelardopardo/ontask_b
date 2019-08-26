@@ -28,7 +28,7 @@ from ontask.core.tables import OperationsColumn
 from ontask.models import Action, Log, ScheduledAction, Workflow
 from ontask.scheduler.views.save import (
     create_timedelta_string, save_canvas_email_schedule, save_email_schedule,
-    save_json_schedule,
+    save_json_schedule, save_send_list_schedule
 )
 
 
@@ -230,6 +230,8 @@ def edit(
 
     if action.action_type == Action.personalized_text:
         return save_email_schedule(request, action, s_item, op_payload)
+    elif action.action_type == Action.send_list:
+        return save_send_list_schedule(request, action, s_item, op_payload)
     elif action.action_type == Action.personalized_canvas_email:
         return save_canvas_email_schedule(
             request,
@@ -281,6 +283,8 @@ def delete(
     log_type = None
     if s_item.action.action_type == Action.personalized_text:
         log_type = Log.SCHEDULE_EMAIL_DELETE
+    elif s_item.action.action_type == Action.send_list:
+        log_type = Log.SCHEDULE_SEND_LIST_DELETE
     elif s_item.action.action_type == Action.personalized_json:
         log_type = Log.SCHEDULE_JSON_DELETE
     elif s_item.action.action_type == Action.personalized_canvas_email:
@@ -301,15 +305,7 @@ def delete(
             'action_id': s_item.action.id,
             'execute': s_item.execute.isoformat(),
             'item_column': item_column_name,
-            'subject': s_item.payload.get('subject'),
-            'cc_email': s_item.payload.get('cc_email', []),
-            'bcc_email': s_item.payload.get('bcc_email', []),
-            'send_confirmation': s_item.payload.get(
-                'send_confirmation',
-                False),
-            'track_read': s_item.payload.get('track_read', False),
-        },
-    )
+            'payload': s_item.payload})
 
     # Perform the delete operation
     s_item.delete()

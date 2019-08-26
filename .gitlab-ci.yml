@@ -29,6 +29,7 @@ test:
     - coverage run -a ./manage.py test -v 2 ontask.action
     - coverage run -a ./manage.py test -v 2 ontask.tests
     - coverage run -a ./manage.py test -v 2 ontask.scheduler
+    - coverage run -a ./manage.py test -v 2 ontask.tasks
     - coverage report
     - coverage html
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'

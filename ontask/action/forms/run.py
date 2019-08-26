@@ -50,11 +50,11 @@ class BasicEmailForm(forms.Form):
     )
 
     cc_email = forms.CharField(
-        label=_('Comma separated list of CC emails'),
+        label=_('Comma-separated list of CC emails'),
         required=False,
     )
     bcc_email = forms.CharField(
-        label=_('Comma separated list of BCC emails'),
+        label=_('Comma-separated list of BCC emails'),
         required=False,
     )
 

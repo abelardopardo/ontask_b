@@ -10,13 +10,15 @@ from celery import shared_task
 from django.conf import settings
 
 from ontask.action.payloads import (
-    CanvasEmailPayload, EmailPayload, JSONPayload,
+    CanvasEmailPayload, EmailPayload, JSONPayload, SendListPayload
 )
 from ontask.models import Action, Log, ScheduledAction
 from ontask.tasks.basic import logger
 from ontask.tasks.send_canvas_email import send_canvas_email_messages
-from ontask.tasks.send_email import send_email_messages
+from ontask.tasks.send_email import (
+    send_email_messages, send_list_email_message)
 from ontask.tasks.send_json import send_json_objects
+
 
 
 @shared_task
@@ -82,6 +84,35 @@ def execute_scheduled_actions(debug: bool):
             )
 
             result = send_email_messages(
+                item.user.id,
+                log_item.id,
+                action_info.get_store()
+            )
+
+        #
+        # SEND LIST ACTION
+        #
+        if item.action.action_type == Action.send_list:
+            action_info = SendListPayload(item.payload)
+            action_info['action_id'] = item.action_id
+
+            # Log the event
+            log_item = Log.objects.register(
+                item.user,
+                Log.SCHEDULE_SEND_LIST_EXECUTE,
+                item.action.workflow,
+                {
+                    'action': item.action.name,
+                    'action_id': item.action.id,
+                    'from_email': item.user.email,
+                    'email_to': item.payload.get('email_to'),
+                    'subject': item.payload.get('subject'),
+                    'bcc_email': item.payload.get('bcc_email'),
+                    'cc_email': item.payload.get('cc_email'),
+                    'execute': item.execute.isoformat(),
+                    'status': 'Preparing to execute'})
+
+            result = send_list_email_message(
                 item.user.id,
                 log_item.id,
                 action_info.get_store()
