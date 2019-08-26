@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import io
 import math
 import os
@@ -951,7 +952,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             )
         )
 
-    def create_new_personalized_text_action(self, aname, adesc=''):
+    def create_new_action_out_basic(self, aname, action_type, adesc=''):
         # click in the create action button
         self.selenium.find_element_by_class_name('js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
@@ -962,69 +963,40 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_text)
+        select.select_by_value(action_type)
         desc.send_keys(adesc)
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
         # clickable
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, '//*[@id="action-out-editor"]')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+
+    def create_new_personalized_text_action(self, aname, adesc=''):
+        self.create_new_action_out_basic(
+            aname,
+            Action.personalized_text,
+            adesc)
 
     def create_new_json_action(self, aname, adesc=''):
-        # click in the create action button
-        self.selenium.find_element_by_class_name('js-create-action').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_name')))
-
-        # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys(aname)
-        desc = self.selenium.find_element_by_id('id_description_text')
-        # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_json)
-        desc.send_keys(adesc)
-        desc.send_keys(Keys.RETURN)
-        # Wait for the spinner to disappear, and then for the button to be
-        # clickable
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//*[@id="action-out-editor"]')
-            )
-        )
+        self.create_new_action_out_basic(
+            aname,
+            Action.personalized_json,
+            adesc)
 
     def create_new_personalized_canvas_email_action(self, aname, adesc=''):
-        # click in the create action button
-        self.selenium.find_element_by_class_name('js-create-action').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_name')))
+        self.create_new_action_out_basic(
+            aname,
+            Action.personalized_canvas_email,
+            adesc)
 
-        # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys(aname)
-        desc = self.selenium.find_element_by_id('id_description_text')
-        # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_canvas_email)
-        desc.send_keys(adesc)
-        desc.send_keys(Keys.RETURN)
-        # Wait for the spinner to disappear, and then for the button to be
-        # clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//h4[@id="filter-set"]/div/button')
-            )
-        )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+    def create_new_send_list_action(self, aname, adesc=''):
+        self.create_new_action_out_basic(aname, Action.send_list, adesc)
 
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog
