@@ -6,6 +6,8 @@ import datetime
 from time import sleep
 from typing import List, Union
 
+import html2text
+import pytz
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core import mail, signing
@@ -14,20 +16,16 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
-import html2text
-import pytz
 
+import ontask.settings
 from ontask import is_correct_email, simplify_datetime_str
 from ontask.action.evaluate.action import (
-    evaluate_action,
-    evaluate_row_action_out,
-    get_action_evaluation_context,
+    evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
 from ontask.action.payloads import EmailPayload, SendListPayload
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.models import Action, Column, Log
-import ontask.settings
 
 logger = get_task_logger('celery_execution')
 
@@ -437,4 +435,3 @@ def send_list_email(
             'to_email': msg.to[0]
         }
     )
-

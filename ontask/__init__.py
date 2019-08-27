@@ -4,8 +4,8 @@
 
 import json
 
-import pytz
 import django.conf
+import pytz
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
@@ -26,6 +26,7 @@ PERSONALIZED_TEXT = 'personalized_text'
 PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
 PERSONALIZED_JSON = 'personalized_json'
 SEND_LIST = 'send_list'
+SEND_LIST_JSON = 'send_list_json'
 SURVEY = 'survey'
 TODO_LIST = 'todo_list'
 
@@ -35,6 +36,7 @@ ACTION_TYPES = [
     (SURVEY, _('Survey')),
     (PERSONALIZED_JSON, _('Personalized JSON')),
     (SEND_LIST, _('Send List')),
+    (SEND_LIST_JSON, _('Send List as JSON')),
     (TODO_LIST, _('TODO List'))
 ]
 

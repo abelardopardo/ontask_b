@@ -7,8 +7,9 @@ from django.shortcuts import render
 
 from ontask.action.forms import SendListActionForm
 from ontask.action.payloads import SendListPayload
+from ontask.action.send import send_list_email
 from ontask.models import Action, Log, Workflow
-from ontask.tasks import send_list_email_message
+from ontask.tasks import run_task
 
 html_body = """<!DOCTYPE html>
 <html>
@@ -47,7 +48,6 @@ def run_send_list_action(
 
     # Request is a POST and is valid
     if req.method == 'POST' and form.is_valid():
-        # Invoke the send operation
         # Log the event
         log_item = Log.objects.register(
             req.user,
@@ -69,7 +69,8 @@ def run_send_list_action(
         action.save()
 
         # Send the emails!
-        send_list_email_message.delay(
+        run_task.delay(
+            send_list_email,
             req.user.id,
             log_item.id,
             action_info.get_store())

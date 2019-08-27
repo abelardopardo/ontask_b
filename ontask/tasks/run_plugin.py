@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+"""Function to run a plugin asynchronously."""
+
 from celery import shared_task
 from django.utils.translation import ugettext
 

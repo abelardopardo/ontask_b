@@ -118,7 +118,11 @@ def edit_action_out(
             # Text is good. Update the content of the action
             action.set_text_content(text_content)
 
-            if action.action_type == Action.personalized_json:
+            # If it is a JSON action, store the target_url
+            if (
+                action.action_type == Action.personalized_json
+                or action.action_type == Action.send_list_json
+            ):
                 # Update the target_url field
                 action.target_url = form.cleaned_data['target_url']
 
@@ -156,7 +160,9 @@ def edit_action_out(
             filter_condition.n_rows_selected
             if filter_condition else -1,
         'has_data': action.workflow.has_table(),
-        'is_send_list': action.action_type == Action.send_list,
+        'is_send_list': (
+            action.action_type == Action.send_list
+            or action.action_type == Action.send_list_json),
         'all_false_conditions': any(
             cond.n_rows_selected == 0
             for cond in action.conditions.all()),

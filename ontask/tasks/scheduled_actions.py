@@ -10,19 +10,17 @@ from celery import shared_task
 from django.conf import settings
 
 from ontask.action.payloads import (
-    CanvasEmailPayload, EmailPayload, JSONPayload, SendListPayload
+    CanvasEmailPayload, EmailPayload, JSONPayload, SendListPayload,
+)
+from ontask.action.send import (
+    send_canvas_emails, send_emails, send_json, send_list_email,
 )
 from ontask.models import Action, Log, ScheduledAction
-from ontask.tasks.basic import logger
-from ontask.tasks.send_canvas_email import send_canvas_email_messages
-from ontask.tasks.send_email import (
-    send_email_messages, send_list_email_message)
-from ontask.tasks.send_json import send_json_objects
-
+from ontask.tasks.basic import logger, run_task
 
 
 @shared_task
-def execute_scheduled_actions(debug: bool):
+def execute_scheduled_actions_task(debug: bool):
     """
     Function that selects the entries in the DB that are due, and proceed with
     the execution.
@@ -83,7 +81,8 @@ def execute_scheduled_actions(debug: bool):
                 }
             )
 
-            result = send_email_messages(
+            run_task(
+                send_emails,
                 item.user.id,
                 log_item.id,
                 action_info.get_store()
@@ -112,11 +111,11 @@ def execute_scheduled_actions(debug: bool):
                     'execute': item.execute.isoformat(),
                     'status': 'Preparing to execute'})
 
-            result = send_list_email_message(
+            result = run_task(
+                send_list_email,
                 item.user.id,
                 log_item.id,
-                action_info.get_store()
-            )
+                action_info.get_store())
 
         #
         # JSON action
@@ -146,11 +145,11 @@ def execute_scheduled_actions(debug: bool):
                     'target_url': item.action.target_url})
 
             # Send the objects
-            result = send_json_objects(
+            result = run_task.delay(
+                send_json,
                 item.user.id,
                 log_item.id,
-                action_info.get_store()
-            )
+                action_info.get_store())
 
         #
         # Canvas Email Action
@@ -179,11 +178,11 @@ def execute_scheduled_actions(debug: bool):
                 }
             )
 
-            result = send_canvas_email_messages(
+            result = run_task(
+                send_canvas_emails,
                 item.user.id,
                 log_item.id,
-                action_info.get_store()
-            )
+                action_info.get_store())
 
         if result:
             item.status = ScheduledAction.STATUS_DONE

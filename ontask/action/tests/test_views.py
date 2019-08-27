@@ -1226,4 +1226,3 @@ class ActionSendListActionCreate(test.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
-

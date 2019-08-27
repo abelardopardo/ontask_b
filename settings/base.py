@@ -446,10 +446,11 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 #
 ###############################################################################
 DISABLED_ACTIONS = [
+    # 'ontask.PERSONALIZED_TEXT',
     # 'ontask.PERSONALIZED_JSON',
     # 'ontask.PERSONALIZED_CANVAS_EMAIL',
-    # 'ontask.PERSONALIZED_TEXT',
     # 'ontask.SEND_LIST',
+    # 'ontask.SEND_LIST_JSON',
     # 'ontask.SURVEY',
     'ontask.TODO_LIST',
 ]

@@ -2,7 +2,11 @@
 
 """Forms to process action execution.
 
+BasicEmailForm: Base form for the rest of email forms
+
 EmailActionForm: Form to process information to send email
+
+SendListActionForm: Form to send a single email with list values.
 
 ZipActionForm: Form to process information to create a zip form
 
@@ -38,6 +42,8 @@ from ontask.models import Action
 
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')
+
+SUBJECT_FIELD_LENGTH = 512
 
 class BasicEmailForm(forms.Form):
     """Basic form fields to run an action."""
@@ -199,7 +205,8 @@ class EmailActionForm(BasicEmailForm):
     class Meta(object):
         """Redefine size of the subject field."""
 
-        widgets = {'subject': forms.TextInput(attrs={'size': 256})}
+        widgets = {'subject': forms.TextInput(
+            attrs={'size': SUBJECT_FIELD_LENGTH})}
 
 
 class SendListActionForm(BasicEmailForm):
@@ -386,17 +393,8 @@ class ValueExcludeForm(forms.Form):
         self.fields['exclude_values'].initial = self.exclude_init
 
 
-class JSONBasicActionForm(forms.Form):
-    """Form to process Basic JSON information."""
-
-    # Column with unique key to select objects/send email
-    key_column = forms.ChoiceField(required=True)
-
-    confirm_items = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Check/exclude items before sending?'),
-    )
+class JSONBasicForm(forms.Form):
+    """Form with a token field to run a JSON action."""
 
     export_wf = forms.BooleanField(
         initial=False,
@@ -405,24 +403,14 @@ class JSONBasicActionForm(forms.Form):
         help_text=_('A zip file is useful to review the action.'),
     )
 
-    def __init__(self, *args, **kargs):
-        """Store column names, payload and modify key_column and confirm."""
-        self.column_names: List = kargs.pop('column_names')
-        self.action_info: Dict = kargs.pop('action_info')
+    # Field to store a dictionary with action information
+    action_info = {}
 
+    def __init__(self, *args, **kargs):
+        """Store the action item"""
         super().__init__(*args, **kargs)
 
-        # Handle the key column setting the initial value if given and
-        # selecting the choices
-        key_column = self.action_info.get('item_column')
-        if key_column is None:
-            key_column = ('', '---')
-        else:
-            key_column = (key_column, key_column)
-
-        self.fields['key_column'].initial = key_column
-        self.fields['key_column'].choices = [
-            (cname, cname) for cname in self.column_names]
+        self.action_info: Dict = kargs.pop('action_info')
 
     def clean(self):
         """Verify form values."""
@@ -433,8 +421,8 @@ class JSONBasicActionForm(forms.Form):
         return form_data
 
 
-class JSONActionForm(JSONBasicActionForm):
-    """Form to edit information to run a JSON action."""
+class JSONTokenForm(forms.Form):
+    """Form to include a token field."""
 
     # Token to use when sending the JSON request
     token = forms.CharField(
@@ -454,33 +442,59 @@ class JSONActionForm(JSONBasicActionForm):
         """Modify the fields with the adequate information."""
         super().__init__(*args, **kargs)
 
-        self.fields['key_column'].label = _(
-            'Column to exclude objects to send (empty to skip step)',
-        )
-
         self.fields['token'].help_text = _(
             'Authentication token provided by the external platform.',
         )
-
-        self.order_fields([
-            'key_column',
-            'token',
-            'confirm_items',
-            'export_wf'])
 
     def clean(self):
         """Verify form values."""
         form_data = super().clean()
 
-        # Move data to the payload so that is ready to be used
         self.action_info['token'] = form_data['token']
+
+
+class JSONKeyForm(forms.Form):
+    """Form to process Basic JSON information."""
+
+    # Column with unique key to select objects/send email
+    key_column = forms.ChoiceField(required=True)
+
+    confirm_items = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude items before sending?'),
+    )
+
+    action_info = None
+
+    def __init__(self, *args, **kargs):
+        """Store column names, payload and modify key_column and confirm."""
+        self.column_names: List = kargs.pop('column_names')
+
+        super().__init__(*args, **kargs)
+
+        # Handle the key column setting the initial value if given and
+        # selecting the choices
+        key_column = self.action_info.get('item_column')
+        if key_column is None:
+            key_column = ('', '---')
+        else:
+            key_column = (key_column, key_column)
+
+        self.fields['key_column'].initial = key_column
+        self.fields['key_column'].choices = [
+            (cname, cname) for cname in self.column_names]
+
+    def clean(self):
+        """Verify email values."""
+        form_data = super().clean()
         self.action_info['item_column'] = form_data['key_column']
         self.action_info['confirm_items'] = form_data['confirm_items']
 
         return form_data
 
 
-class CanvasEmailActionForm(JSONBasicActionForm):
+class CanvasEmailActionForm(JSONKeyForm, JSONBasicForm):
     """Form to process information to run a Canvas Email action."""
 
     subject = forms.CharField(
@@ -492,7 +506,6 @@ class CanvasEmailActionForm(JSONBasicActionForm):
 
     def __init__(self, *args, **kargs):
         """Store the action and modify certain field data."""
-        self.action: Action = kargs.pop('action')
 
         super().__init__(*args, **kargs)
 
@@ -509,6 +522,7 @@ class CanvasEmailActionForm(JSONBasicActionForm):
                 help_text=_('Name of the Canvas host to send the messages'),
             )
 
+        # Rename field labels
         self.fields['key_column'].label = _('Column with the Canvas ID')
         self.fields['confirm_items'].label = _(
             'Check/Exclude Canvas IDs before sending?',
@@ -528,8 +542,6 @@ class CanvasEmailActionForm(JSONBasicActionForm):
 
         # Move data to the payload so that is ready to be used
         self.action_info['subject'] = form_data['subject']
-        self.action_info['item_column'] = form_data['key_column']
-        self.action_info['confirm_items'] = form_data['confirm_items']
         self.action_info['target_url'] = form_data.get('target_url')
         if not self.action_info['target_url']:
             self.action_info['target_url'] = next(
@@ -543,10 +555,33 @@ class CanvasEmailActionForm(JSONBasicActionForm):
 
         return form_data
 
-    class Meta(JSONBasicActionForm):
+    class Meta(object):
         """Set the size for the subject field."""
 
-        widgets = {'subject': forms.TextInput(attrs={'size': 256})}
+        widgets = {'subject': forms.TextInput(
+            attrs={'size': SUBJECT_FIELD_LENGTH})}
+
+
+class JSONActionForm(JSONTokenForm, JSONKeyForm, JSONBasicForm):
+    """Form to edit information to run a JSON action."""
+
+    def __init__(self, *args, **kargs):
+        """Modify the fields with the adequate information."""
+        super().__init__(*args, **kargs)
+
+        self.fields['key_column'].label = _(
+            'Column to exclude objects to send (empty to skip step)',
+        )
+
+        self.order_fields([
+            'key_column',
+            'token',
+            'confirm_items',
+            'export_wf'])
+
+
+class JSONListActionForm(JSONTokenForm, JSONBasicForm):
+    """Form to edit information to run JSON List action"""
 
 
 class EnableURLForm(forms.ModelForm):

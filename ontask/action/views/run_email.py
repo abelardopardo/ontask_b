@@ -15,10 +15,11 @@ from ontask.action.forms import EmailActionForm
 from ontask.action.payloads import (
     EmailPayload, get_or_set_action_info, set_action_payload,
 )
+from ontask.action.send import send_emails
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
-from ontask.tasks import send_email_messages
+from ontask.tasks import run_task
 
 html_body = """<!DOCTYPE html>
 <html>
@@ -145,7 +146,8 @@ def run_email_done(
     action.save()
 
     # Send the emails!
-    send_email_messages.delay(
+    run_task.delay(
+        send_emails,
         request.user.id,
         log_item.id,
         action_info.get_store())

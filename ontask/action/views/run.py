@@ -19,9 +19,10 @@ from ontask.action.evaluate import (
 from ontask.action.forms import ValueExcludeForm
 from ontask.action.payloads import get_action_payload
 from ontask.action.views.run_canvas_email import run_canvas_email_action
-from ontask.action.views.run_send_list import run_send_list_action
 from ontask.action.views.run_email import run_email_action
 from ontask.action.views.run_json import run_json_action
+from ontask.action.views.run_json_list import run_json_list_action
+from ontask.action.views.run_send_list import run_send_list_action
 from ontask.action.views.run_survey import run_survey_action
 from ontask.action.views.serve_survey import serve_survey_row
 from ontask.core.celery import celery_is_up
@@ -35,6 +36,7 @@ fn_distributor = {
     Action.personalized_json: run_json_action,
     Action.survey: run_survey_action,
     Action.send_list: run_send_list_action,
+    Action.send_list_json: run_json_list_action,
 }
 
 

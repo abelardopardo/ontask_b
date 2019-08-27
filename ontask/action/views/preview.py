@@ -3,7 +3,8 @@
 """Views to preview resulting text in the action."""
 
 import json
-from typing import Optional, Tuple, Dict
+from json.decoder import JSONDecodeError
+from typing import Dict, Optional, Tuple
 
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, JsonResponse
@@ -20,6 +21,17 @@ from ontask.action.evaluate import (
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Workflow
+
+
+def _check_json_is_correct(text_content: str) -> bool:
+    """Check the given string is a correct JSON object.
+    :param text_content: String to consider
+    :return: Boolean stating correctness"""
+    try:
+        json.loads(text_content)
+    except JSONDecodeError:
+        return False
+    return True
 
 
 def _get_navigation_index(idx: int, n_items: int) -> Tuple[int, int, int]:
@@ -93,10 +105,7 @@ def _create_row_preview_response(
     if action.is_out:
         action_content = evaluate_row_action_out(action, eval_context)
         if action.action_type == Action.personalized_json:
-            try:
-                json.loads(action_content)
-            except Exception:
-                incorrect_json = True
+            incorrect_json = not _check_json_is_correct(action_content)
     else:
         action_content = evaluate_row_action_in(action, eval_context)
     if action_content is None:
@@ -230,12 +239,18 @@ def preview_response(
         'index': idx,
     }
 
-    if action.action_type == action.send_list:
-        # Obtain the evaluation context (no row values, no condition evaluation)
-        context['action_content'] = evaluate_row_action_out(
+    if (
+        action.action_type == action.send_list
+        or action.action_type == action.send_list_json
+    ):
+        # Obtain the evaluation context (no condition evaluation)
+        action_final_text = evaluate_row_action_out(
             action,
             get_action_evaluation_context(action, {}))
-
+        context['action_content'] = action_final_text
+        if action.action_type == Action.send_list_json:
+            incorrect_json = not _check_json_is_correct(action_final_text)
+            context['incorrect_json'] = incorrect_json
     else:
         _create_row_preview_response(
             action,

@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+"""Function to increase the tracking column in a workflow."""
+
 from celery import shared_task
 from django.contrib.auth import get_user_model
 from django.core import signing
@@ -9,7 +13,7 @@ from ontask.tasks.basic import logger
 
 
 @shared_task
-def increase_track_count(method, get_dict):
+def increase_track_count_task(method, get_dict):
     """
     Function to process track requests asynchronously.
 

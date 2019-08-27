@@ -2,7 +2,7 @@
 
 """Wrappers around asynchronous task executions."""
 
-from typing import Optional, Tuple
+from typing import Any, Callable, Dict, Mapping, Optional, Tuple
 
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
@@ -81,3 +81,38 @@ def get_execution_items(
             )
 
     return user, workflow, action
+
+
+def run_task(
+    task_function: Callable[[Any, Action, Log, Dict], None],
+    user_id: int,
+    log_id: int,
+    action_info: Mapping,
+) -> bool:
+    """"Run the given task."""
+    # First get the log item to make sure we can record diagnostics
+    log_item = get_log_item(log_id)
+    if not log_item:
+        return False
+
+    try:
+        user, __, action = get_execution_items(
+            user_id=user_id,
+            action_id=action_info['action_id'])
+
+        # Set the status to "executing" before calling the function
+        log_item.payload['status'] = 'Executing'
+        log_item.save()
+
+        task_function(user, action, log_item, action_info)
+
+        # Reflect status in the log event
+        log_item.payload['status'] = 'Execution finished successfully'
+        log_item.save()
+    except Exception as e:
+        log_item.payload['status'] = \
+            ugettext('Error: {0}').format(e)
+        log_item.save()
+        return False
+
+    return True

@@ -14,10 +14,11 @@ from ontask.action.forms import JSONActionForm
 from ontask.action.payloads import (
     JSONPayload, get_or_set_action_info, set_action_payload,
 )
+from ontask.action.send import send_json
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
-from ontask.tasks import send_json_objects
+from ontask.tasks import run_task
 
 
 def run_json_action(
@@ -129,7 +130,8 @@ def run_json_done(
     action.save()
 
     # Send the objects
-    send_json_objects.delay(
+    run_task.delay(
+        send_json,
         request.user.id,
         log_item.id,
         action_info.get_store())

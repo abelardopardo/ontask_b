@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+"""Task to update the users connected to a workflow (luser field)."""
+
 from celery import shared_task
 from django.utils.translation import ugettext
 
@@ -6,7 +10,7 @@ from ontask.tasks.basic import get_execution_items, get_log_item
 
 
 @shared_task
-def workflow_update_lusers(user_id, workflow_id, log_id):
+def workflow_update_lusers_task(user_id, workflow_id, log_id):
     """
     Recalculate the elements in field lusers of the workflow based on the fields
     luser_email_column and luser_email_column_MD5

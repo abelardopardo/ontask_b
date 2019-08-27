@@ -142,8 +142,6 @@ class SendListPayload(ActionPayload):
         'email_to',
         'cc_email',
         'bcc_email',
-        'prev_url',
-        'post_url',
         'export_wf',
     ]
 
@@ -207,6 +205,29 @@ class JSONPayload(ActionPayload):
         'button_label',
         'valuerange',
         'step',
+    ]
+
+class JSONListPayload(ActionPayload):
+    """Object to store the information required for JSON List execution.
+
+    Object to package the items required to carry out the execution of a JSON
+    list action. The object has the following fields:
+
+    - action id: PK for the action being executed
+    - token: for identification when making the request
+    - prev_url: URL to go back to the previous step in the process
+    - post_url: URL to go next in the process
+    - button_label: To use the right button label in the web page
+    - valuerange: Range of steps considered
+    - step: current step on that range
+
+    """
+
+    fields = [
+        'action_id',
+        'token',
+        'item_column',
+        'export_wf',
     ]
 
 class ZipPayload(ActionPayload):

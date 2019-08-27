@@ -66,7 +66,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_actions(True)
+        tasks.execute_scheduled_actions_task(True)
 
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == ScheduledAction.STATUS_DONE
@@ -94,7 +94,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_actions(True)
+        tasks.execute_scheduled_actions_task(True)
 
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == ScheduledAction.STATUS_DONE_ERROR
@@ -122,7 +122,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_actions(True)
+        tasks.execute_scheduled_actions_task(True)
 
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == ScheduledAction.STATUS_DONE

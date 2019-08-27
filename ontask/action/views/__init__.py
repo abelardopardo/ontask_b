@@ -4,7 +4,7 @@
 
 from ontask.action.views.action import (
     ActionCreateView, ActionUpdateView, action_index, delete_action,
-    edit_action
+    edit_action,
 )
 from ontask.action.views.clone import clone_action, clone_condition
 from ontask.action.views.condition import (
@@ -12,11 +12,11 @@ from ontask.action.views.condition import (
     edit_condition, edit_filter,
 )
 from ontask.action.views.edit_personalized import (
-    action_out_save_content, showurl, edit_action_out
+    action_out_save_content, edit_action_out, showurl,
 )
 from ontask.action.views.edit_survey import (
-    edit_description, select_column_action, select_condition_for_question,
-    shuffle_questions, unselect_column_action, edit_action_in
+    edit_action_in, edit_description, select_column_action,
+    select_condition_for_question, shuffle_questions, unselect_column_action,
 )
 from ontask.action.views.import_export import (
     action_import, export_ask, export_done, export_download,

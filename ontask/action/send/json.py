@@ -10,15 +10,17 @@ import pytz
 import requests
 from django.conf import settings
 
-from ontask.action.evaluate.action import evaluate_action
-from ontask.action.payloads import JSONPayload
+from ontask.action.evaluate.action import (
+    evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
+)
+from ontask.action.payloads import JSONListPayload, JSONPayload
 from ontask.core.celery import get_task_logger
 from ontask.models import Action, Log
 
 logger = get_task_logger('celery_execution')
 
 
-def send_and_log_json(
+def _send_and_log_json(
     user,
     action: Action,
     json_obj: str,
@@ -97,7 +99,7 @@ def send_json(
     # Iterate over all json objects to create the strings and check for
     # correctness
     for json_string in action_evals:
-        send_and_log_json(
+        _send_and_log_json(
             user,
             action,
             json.loads(json_string[0]),
@@ -107,6 +109,48 @@ def send_json(
 
         # Update data in the overall log item
     log_item.payload['objects_sent'] = len(action_evals)
+    log_item.payload['filter_present'] = action.get_filter() is not None
+    log_item.payload['datetime'] = str(
+        datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
+    log_item.save()
+
+
+def send_json_list(
+    user,
+    action: Action,
+    log_item: Log,
+    action_info: JSONListPayload,
+):
+    """Send single json object to target URL.
+
+    Sends a single json object to the URL in the action
+
+    :param user: User object that executed the action
+
+    :param action: Action from where to take the messages
+
+    :param log_item: Log object to store results
+
+    :param action_info: Object with the additional parameters
+
+    :return: Nothing
+    """
+    # Evaluate the action string and obtain the list of list of JSON objects
+    action_text = evaluate_row_action_out(
+        action,
+        get_action_evaluation_context(action, {}))
+
+    _send_and_log_json(
+        user,
+        action,
+        json.loads(action_text),
+        {
+            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Authorization': 'Bearer {0}'.format(action_info['token']),
+        },
+        {'user': user.id, 'action': action.id})
+
+        # Update data in the overall log item
     log_item.payload['filter_present'] = action.get_filter() is not None
     log_item.payload['datetime'] = str(
         datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))

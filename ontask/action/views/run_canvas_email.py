@@ -19,11 +19,12 @@ from ontask.action.forms import CanvasEmailActionForm
 from ontask.action.payloads import (
     CanvasEmailPayload, get_or_set_action_info, set_action_payload,
 )
+from ontask.action.send import send_canvas_emails
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, OAuthUserToken, Workflow
 from ontask.oauth.views import get_initial_token_step1, refresh_token
-from ontask.tasks import send_canvas_email_messages
+from ontask.tasks import run_task
 
 
 def run_canvas_email_action(
@@ -200,7 +201,8 @@ def run_canvas_email_done(
     action.save()
 
     # Send the emails!
-    send_canvas_email_messages.delay(
+    run_task.delay(
+        send_canvas_emails,
         request.user.id,
         log_item.id,
         action_info.get_store())
