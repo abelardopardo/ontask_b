@@ -146,11 +146,7 @@ def run_email_done(
     action.save()
 
     # Send the emails!
-    run_task.delay(
-        send_emails,
-        request.user.id,
-        log_item.id,
-        action_info.get_store())
+    run_task.delay(request.user.id, log_item.id, action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     set_action_payload(request.session)

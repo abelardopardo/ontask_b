@@ -871,7 +871,7 @@
         "active_from": null,
         "active_to": null,
         "rows_all_false": null,
-        "text_content": "<p>Dear madam/sir</p><p>Here is the list of students: {% ot_insert_columm_list 'email' %}<br></p>",
+        "text_content": "<p>Dear madam/sir</p><p>Here is the list of students: {% ot_insert_column_list 'email' %}<br></p>",
         "target_url": "",
         "shuffle": false
     }

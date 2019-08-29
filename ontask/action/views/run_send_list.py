@@ -69,11 +69,7 @@ def run_send_list_action(
         action.save()
 
         # Send the emails!
-        run_task.delay(
-            send_list_email,
-            req.user.id,
-            log_item.id,
-            action_info.get_store())
+        run_task.delay( req.user.id, log_item.id, action_info.get_store())
 
         # Successful processing.
         return render(

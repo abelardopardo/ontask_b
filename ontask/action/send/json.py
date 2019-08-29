@@ -13,7 +13,6 @@ from django.conf import settings
 from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
-from ontask.action.payloads import JSONListPayload, JSONPayload
 from ontask.core.celery import get_task_logger
 from ontask.models import Action, Log
 
@@ -57,7 +56,7 @@ def send_json(
     user,
     action: Action,
     log_item: Log,
-    action_info: JSONPayload,
+    action_info: Mapping,
 ):
     """Send json objects to target URL.
 
@@ -119,7 +118,7 @@ def send_json_list(
     user,
     action: Action,
     log_item: Log,
-    action_info: JSONListPayload,
+    action_info: Mapping,
 ):
     """Send single json object to target URL.
 

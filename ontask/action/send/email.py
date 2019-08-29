@@ -4,7 +4,7 @@
 
 import datetime
 from time import sleep
-from typing import List, Union
+from typing import List, Union, Mapping
 
 import html2text
 import pytz
@@ -22,7 +22,6 @@ from ontask import is_correct_email, simplify_datetime_str
 from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
-from ontask.action.payloads import EmailPayload, SendListPayload
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.models import Action, Column, Log
@@ -210,7 +209,7 @@ def _create_messages(
     action: Action,
     action_evals: List,
     track_col_name: str,
-    action_info: EmailPayload,
+    action_info: Mapping,
 ) -> List[Union[EmailMessage, EmailMultiAlternatives]]:
     """Create the email messages to send and the tracking ids.
 
@@ -316,7 +315,7 @@ def send_emails(
     user,
     action: Action,
     log_item: Log,
-    action_info: EmailPayload,
+    action_info: Mapping,
 ) -> None:
     """Send action content evaluated for each row.
 
@@ -378,7 +377,7 @@ def send_list_email(
     user,
     action: Action,
     log_item: Log,
-    action_info: SendListPayload,
+    action_info: Mapping,
 ) -> None:
     """Send action content evaluated once to include lists.
 

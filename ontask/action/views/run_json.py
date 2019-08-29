@@ -130,11 +130,7 @@ def run_json_done(
     action.save()
 
     # Send the objects
-    run_task.delay(
-        send_json,
-        request.user.id,
-        log_item.id,
-        action_info.get_store())
+    run_task.delay(request.user.id, log_item.id, action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     set_action_payload(request.session)

@@ -2,14 +2,18 @@
 
 """Wrappers around asynchronous task executions."""
 
-from typing import Any, Callable, Dict, Mapping, Optional, Tuple
+from typing import Mapping, Optional, Tuple
 
+from celery import shared_task
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
 
 from ontask.core.celery import get_task_logger
 from ontask.models import Action, Log, Workflow
-
+from ontask.action.send import (
+    send_emails, send_canvas_emails, send_list_email, send_json_list,
+    send_json
+)
 logger = get_task_logger('celery_execution')
 
 
@@ -83,8 +87,8 @@ def get_execution_items(
     return user, workflow, action
 
 
+@shared_task
 def run_task(
-    task_function: Callable[[Any, Action, Log, Dict], None],
     user_id: int,
     log_id: int,
     action_info: Mapping,
@@ -104,7 +108,16 @@ def run_task(
         log_item.payload['status'] = 'Executing'
         log_item.save()
 
-        task_function(user, action, log_item, action_info)
+        if action.action_type == Action.personalized_text:
+            send_canvas_emails(user, action, log_item, action_info)
+        elif action.action_type == Action.send_list:
+            send_list_email(user, action, log_item, action_info)
+        elif action.action_type == Action.personalized_canvas_email:
+            send_emails(user, action, log_item, action_info)
+        elif action.action_type == Action.personalized_json:
+            send_json(user, action, log_item, action_info)
+        elif action.action_type == Action.send_list_json:
+            send_json_list(user, action, log_item, action_info)
 
         # Reflect status in the log event
         log_item.payload['status'] = 'Execution finished successfully'

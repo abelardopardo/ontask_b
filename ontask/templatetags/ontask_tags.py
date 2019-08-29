@@ -133,7 +133,7 @@ def ontask_datetimepicker_js():
 
 
 @register.simple_tag(takes_context=True)
-def ot_insert_columm_list(context, column_name):
+def ot_insert_column_list(context, column_name):
     """Insert in the text a column list."""
     action = context['ONTASK_ACTION_CONTEXT_VARIABLE___']
     column_values = [

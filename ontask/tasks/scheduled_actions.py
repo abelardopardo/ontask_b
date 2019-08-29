@@ -81,12 +81,7 @@ def execute_scheduled_actions_task(debug: bool):
                 }
             )
 
-            run_task(
-                send_emails,
-                item.user.id,
-                log_item.id,
-                action_info.get_store()
-            )
+            run_task(item.user.id, log_item.id, action_info.get_store())
 
         #
         # SEND LIST ACTION
@@ -112,7 +107,6 @@ def execute_scheduled_actions_task(debug: bool):
                     'status': 'Preparing to execute'})
 
             result = run_task(
-                send_list_email,
                 item.user.id,
                 log_item.id,
                 action_info.get_store())
@@ -145,8 +139,7 @@ def execute_scheduled_actions_task(debug: bool):
                     'target_url': item.action.target_url})
 
             # Send the objects
-            result = run_task.delay(
-                send_json,
+            result = run_task(
                 item.user.id,
                 log_item.id,
                 action_info.get_store())
@@ -179,7 +172,6 @@ def execute_scheduled_actions_task(debug: bool):
             )
 
             result = run_task(
-                send_canvas_emails,
                 item.user.id,
                 log_item.id,
                 action_info.get_store())

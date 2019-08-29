@@ -1124,8 +1124,8 @@ class ActionAllKeyColumns(test.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+
 class ActionSendListActionCreate(test.OnTaskLiveTestCase):
-    action_name = 'simple action'
     fixtures = ['simple_action']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -1223,6 +1223,98 @@ class ActionSendListActionCreate(test.OnTaskLiveTestCase):
         assert len(mail.outbox) == 1
         assert (
             'student01@bogus.com, student03@bogus.com' in mail.outbox[0].body)
+
+        # End of session
+        self.logout()
+
+
+class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
+    fixtures = ['simple_action']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'ontask',
+        'fixtures',
+        'simple_action.sql'
+    )
+
+    wflow_name = 'wflow1'
+    wflow_desc = 'description text for workflow 1'
+
+    action_name = 'JSON LIST'
+    action_text = '{ "student_list": {% ot_insert_column_list "email" %} }'
+
+    def setUp(self):
+        """Set up and restore the PG table."""
+        super().setUp()
+        test.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        """Delete the PG table."""
+        test.delete_all_tables()
+        super().tearDown()
+
+    # Test action rename
+    def test_send_list_action_create_edit(self):
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        self.create_new_send_list_action(self.action_name, '')
+
+        # insert the action text
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//div[contains(@class, "note-editable")]')
+            )
+        )
+        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.execute_script(
+            """$('#id_text_content').summernote('editor.insertText', 
+            "{0}");""".format(self.action_text)
+        )
+
+        # Insert the reference to the column
+        self.click_dropdown_option('//div[@id="column-selector"]', 'email')
+
+        # Create filter
+        self.create_filter("The filter", [('another', 'equal', 'bbb')])
+
+        # There should be 2 of three learners selected
+        self.assertIn('2 learners of 3', self.selenium.page_source)
+
+        # Click in the preview
+        self.open_browse_preview(close=False)
+
+        self.assertIn(
+            'student01@bogus.com, student03@bogus.com',
+            self.selenium.page_source)
+
+        # Close the preview
+        self.cancel_modal()
+
+        self.selenium.find_element_by_xpath(
+            '//div[@id="action-preview-done"]/button[3]').click()
+        self.wait_for_datatable('action-table_previous')
+
+        # Run the action
+        self.open_action_run(self.action_name)
+
+        self.selenium.find_element_by_id('token').send_keys(
+            'bogus_token')
+        # Click in the next button to go to the filter email screen
+        self.selenium.find_element_by_xpath(
+            '//button[@name="Submit"]'
+        ).click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, '//body/div/h1'),
+                'Action scheduled for execution')
+        )
 
         # End of session
         self.logout()

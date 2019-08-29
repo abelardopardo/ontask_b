@@ -3,7 +3,9 @@
 """Functions to save the different types of scheduled actions."""
 
 import datetime
+from typing import Dict
 
+from django.http import HttpRequest, HttpResponse
 import pytz
 from django.conf import settings
 from django.contrib import messages
@@ -17,6 +19,7 @@ from ontask.action.payloads import (
 from ontask.models import Action, Log, ScheduledAction
 from ontask.scheduler.forms import (
     EmailScheduleForm, JSONScheduleForm, SendListScheduleForm,
+    JSONListScheduleForm
 )
 
 
@@ -319,6 +322,86 @@ def save_json_schedule(request, action, schedule_item, op_payload):
     )
 
 
+def save_send_list_json_schedule(
+    request: HttpRequest,
+    action: Action,
+    schedule_item: ScheduledAction,
+    op_payload: Dict,
+) -> HttpResponse:
+    """Save a scheduled action of type json list.
+
+    :param request: Http requested received
+    :param action: Action object
+    :param schedule_item: Scheduled item
+    :param op_payload: Payload for the scheduled item.
+    :return:
+    """
+    # Create the form to ask for the email subject and other information
+    form = JSONListScheduleForm(
+        form_data=request.POST or None,
+        action=action,
+        instance=schedule_item)
+
+    # Processing a valid POST request
+    if request.method == 'POST' and form.is_valid():
+
+        # Save the schedule item object
+        s_item = form.save(commit=False)
+
+        # Assign additional fields and save
+        s_item.user = request.user
+        s_item.action = action
+        s_item.status = ScheduledAction.STATUS_CREATING
+        s_item.payload = {'token': form.cleaned_data['token']}
+        s_item.save()
+
+        # Upload information to the op_payload
+        op_payload['schedule_id'] = s_item.id
+
+        # Verify that that action does comply with the name uniqueness
+        # property (only with respec to other actions)
+        try:
+            s_item.save()
+        except IntegrityError:
+            # There is an action with this name already
+            form.add_error(
+                'name',
+                _('A scheduled execution of this action with this name '
+                  + 'already exists'))
+            return render(
+                request,
+                'scheduler/edit.html',
+                {
+                    'action': action,
+                    'form': form,
+                    'now': datetime.datetime.now(pytz.timezone(
+                        settings.TIME_ZONE)),
+                },
+            )
+
+        # Upload information to the op_payload
+        op_payload['schedule_id'] = s_item.id
+
+        # If there is not item_column, the exclude values should be empty.
+        s_item.exclude_values = []
+        s_item.save()
+
+        # Go straight to the final step
+        return finish_scheduling(request, s_item, op_payload)
+
+    # Render the form
+    return render(
+        request,
+        'scheduler/edit.html',
+        {
+            'action': action,
+            'form': form,
+            'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'valuerange': range(2),
+        },
+    )
+
+
 def finish_scheduling(request, schedule_item=None, payload=None):
     """Finalize the creation of a scheduled action.
 
@@ -398,6 +481,8 @@ def finish_scheduling(request, schedule_item=None, payload=None):
             'token': schedule_item.payload.get('subject'),
         })
         log_type = Log.SCHEDULE_JSON_EDIT
+    elif schedule_item.action.action_type == Action.send_list_json:
+        log_type = Log.SCHEDULE_JSON_LIST_EDIT
     elif schedule_item.action.action_type == Action.personalized_canvas_email:
         ivalue = None
         if schedule_item.item_column:

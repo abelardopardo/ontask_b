@@ -96,6 +96,9 @@ class Log(models.Model):
     SCHEDULE_EMAIL_EDIT = 'schedule_email_edit'
     SCHEDULE_EMAIL_DELETE = 'schedule_email_delete'
     SCHEDULE_EMAIL_EXECUTE = 'schedule_email_execute'
+    SCHEDULE_JSON_LIST_EDIT = 'schedule_send_list_edit'
+    SCHEDULE_JSON_LIST_DELETE = 'schedule_send_list_delete'
+    SCHEDULE_JSON_LIST_EXECUTE = 'schedule_send_list_execute'
     SCHEDULE_SEND_LIST_EDIT = 'schedule_send_list_edit'
     SCHEDULE_SEND_LIST_DELETE = 'schedule_send_list_delete'
     SCHEDULE_SEND_LIST_EXECUTE = 'schedule_send_list_execute'
@@ -172,6 +175,9 @@ class Log(models.Model):
         (SCHEDULE_SEND_LIST_EDIT, _('Edit scheduled send list action')),
         (SCHEDULE_SEND_LIST_DELETE, _('Delete scheduled send list action')),
         (SCHEDULE_SEND_LIST_EXECUTE, _('Execute scheduled send list action')),
+        (SCHEDULE_JSON_LIST_EDIT, _('Edit scheduled JSON list action')),
+        (SCHEDULE_JSON_LIST_DELETE, _('Delete scheduled JSON list action')),
+        (SCHEDULE_JSON_LIST_EXECUTE, _('Execute scheduled JSON list action')),
         (SCHEDULE_CANVAS_EMAIL_EDIT,
          _('Edit scheduled canvas email action')),
         (SCHEDULE_CANVAS_EMAIL_EXECUTE,

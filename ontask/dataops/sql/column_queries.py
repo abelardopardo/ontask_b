@@ -67,7 +67,7 @@ def copy_column_in_db(
 
     :param table_name: Table to process
 
-    :param col_from: Source columm
+    :param col_from: Source column
 
     :param col_to: Destination column
 

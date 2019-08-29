@@ -49,11 +49,7 @@ def run_json_list_action(
         action.save()
 
         # Send the objects
-        run_task.delay(
-            send_json_list,
-            req.user.id,
-            log_item.id,
-            action_info.get_store())
+        run_task.delay(req.user.id, log_item.id, action_info.get_store())
 
         # Reset object to carry action info throughout dialogs
         set_action_payload(req.session)

@@ -28,7 +28,7 @@ from ontask.core.tables import OperationsColumn
 from ontask.models import Action, Log, ScheduledAction, Workflow
 from ontask.scheduler.views.save import (
     create_timedelta_string, save_canvas_email_schedule, save_email_schedule,
-    save_json_schedule, save_send_list_schedule,
+    save_json_schedule, save_send_list_schedule, save_send_list_json_schedule
 )
 
 
@@ -231,6 +231,12 @@ def edit(
         return save_email_schedule(request, action, s_item, op_payload)
     elif action.action_type == Action.send_list:
         return save_send_list_schedule(request, action, s_item, op_payload)
+    elif action.action_type == Action.send_list_json:
+        return save_send_list_json_schedule(
+            request,
+            action,
+            s_item,
+            op_payload)
     elif action.action_type == Action.personalized_canvas_email:
         return save_canvas_email_schedule(
             request,

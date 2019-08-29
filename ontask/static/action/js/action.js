@@ -55,7 +55,7 @@ let insertColumnListInContent = function() {
   if (typeof $('#id_text_content').summernote != 'undefined') {
     $("#id_text_content").summernote('createRange');
   }
-  insertText('id_text_content', "{% ot_insert_columm_list '" + val + "' %}");
+  insertText('id_text_content', '{% ot_insert_column_list "' + val + '" %}');
   $(this).val(this.defaultSelected);
 }
 let ajax_post = function(url, data, req_type) {

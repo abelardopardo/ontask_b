@@ -408,9 +408,8 @@ class JSONBasicForm(forms.Form):
 
     def __init__(self, *args, **kargs):
         """Store the action item"""
-        super().__init__(*args, **kargs)
-
         self.action_info: Dict = kargs.pop('action_info')
+        super().__init__(*args, **kargs)
 
     def clean(self):
         """Verify form values."""
