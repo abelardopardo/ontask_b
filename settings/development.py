@@ -92,21 +92,21 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'ontask': {
-            'handlers': ['ontask_log_file'],
+            'handlers': ['console'],
             'level': 'DEBUG',
         },
         'scripts': {
-            'handlers': ['script_log_file'],
+            'handlers': ['console'],
             'propagate': True,
             'level': 'DEBUG',
         },
         'celery_execution': {
-            'handlers': ['celery_log_file'],
+            'handlers': ['console'],
             'propagate': True,
             'level': 'DEBUG',
         },
         'django.security.DisallowedHost': {
-            'handlers': ['django_log_file'],
+            'handlers': ['console'],
             'propagate': True,
             'level': 'DEBUG',
         },
