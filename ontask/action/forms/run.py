@@ -408,7 +408,6 @@ class JSONBasicForm(forms.Form):
 
     def __init__(self, *args, **kargs):
         """Store the action item"""
-        self.action: Action = kargs.pop('action')
         self.action_info: Dict = kargs.pop('action_info')
         super().__init__(*args, **kargs)
 
@@ -506,6 +505,7 @@ class CanvasEmailActionForm(JSONKeyForm, JSONBasicForm):
 
     def __init__(self, *args, **kargs):
         """Store the action and modify certain field data."""
+        self.action: Action = kargs.pop('action')
 
         super().__init__(*args, **kargs)
 
