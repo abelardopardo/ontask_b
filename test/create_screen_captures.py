@@ -690,8 +690,9 @@ class ScreenTestFixture(ScreenTests):
         )
 
         self.select_filter_tab()
-        self.create_filter('No activity in Week 2',
-                           [('Days online 2', 'equal', '0')])
+        self.create_filter(
+            'No activity in Week 2',
+            [('Days online 2', 'equal', '0')])
 
         # Create one condition
         self.select_condition_tab()

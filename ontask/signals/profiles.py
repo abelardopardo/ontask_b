@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 
-
-import logging
-
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
 
 from ontask.models import Profile
-
-logger = logging.getLogger('ontask')
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -20,4 +14,3 @@ def create_profile_handler(sender, instance, created, **kwargs):
     # Create the profile object, only if it is newly created
     profile = Profile(user=instance)
     profile.save()
-    logger.info(_('New user profile for {0} created').format(instance))

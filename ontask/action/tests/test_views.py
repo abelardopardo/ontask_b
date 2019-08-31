@@ -598,7 +598,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         self.create_new_survey_action('new action in', '')
 
         # Click in the add rule button (the filter is initially empty)
-        self.create_filter('', [('registered', None, False)])
+        self.create_filter('', [('registered', 'equals', 'No')])
         self.wait_close_modal_refresh_table('column-selected-table_previous')
 
         # Check that the filter is working properly

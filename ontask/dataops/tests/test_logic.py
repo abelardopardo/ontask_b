@@ -278,10 +278,10 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', '{0}equal', 'double', '0.3', 0.3, None)
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'abb')
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'None')
-        self.do_operand('text', '{0}equal', 'boolean', True, True, False)
-        self.do_operand('text', '{0}equal', 'boolean', True, None, None)
-        self.do_operand('text', '{0}equal', 'boolean', False, False, True)
-        self.do_operand('text', '{0}equal', 'boolean', False, None, None)
+        self.do_operand('text', '{0}equal', 'boolean', 'Yes', True, False)
+        self.do_operand('text', '{0}equal', 'boolean', 'Yes', None, None)
+        self.do_operand('text', '{0}equal', 'boolean', 'No', False, True)
+        self.do_operand('text', '{0}equal', 'boolean', 'No', None, None)
         self.do_operand('text',
             '{0}equal',
             'datetime',
@@ -507,7 +507,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         self.do_sql_txt_operand('number', '{0}equal', 'integer', '1')
         self.do_sql_txt_operand('number', '{0}equal', 'double', '2.0')
-        self.do_sql_txt_operand('number', '{0}equal', 'boolean', 1)
+        self.do_sql_txt_operand('number', '{0}equal', 'boolean', 'Yes')
         self.do_sql_txt_operand('text', '{0}equal', 'string', 'xxx')
         self.do_sql_txt_operand('text',
             '{0}equal',
