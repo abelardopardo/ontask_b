@@ -29,35 +29,37 @@ class Condition(models.Model):
         on_delete=models.CASCADE,
         null=False,
         blank=False,
-        related_name='conditions',
-    )
+        related_name='conditions')
 
     name = models.CharField(
         max_length=CHAR_FIELD_MID_SIZE,
         blank=True,
-        verbose_name=_('name'),
-    )
+        verbose_name=_('name'))
 
     description_text = models.CharField(
         max_length=CHAR_FIELD_LONG_SIZE,
         default='',
         blank=True,
-        verbose_name=_('description'),
-    )
+        verbose_name=_('description'))
 
     formula = JSONField(
         default=dict,
         blank=True,
         null=True,
-        verbose_name=_('formula'),
-    )
+        verbose_name=_('formula'))
+
+    formula_text =  models.CharField(
+        max_length=CHAR_FIELD_LONG_SIZE,
+        default='',
+        blank=True,
+        null=True,
+        verbose_name=_('formula text'))
 
     # Set of columns that appear in this condition
     columns = models.ManyToManyField(
         Column,
         verbose_name=_('Columns present in this condition'),
-        related_name='conditions',
-    )
+        related_name='conditions')
 
     # Number or rows selected by the expression
     n_rows_selected = models.IntegerField(
@@ -65,8 +67,7 @@ class Condition(models.Model):
         default=-1,
         name='n_rows_selected',
         blank=False,
-        null=False,
-    )
+        null=False)
 
     # Field to denote if this condition is the filter of an action
     is_filter = models.BooleanField(default=False)
@@ -120,7 +121,10 @@ class Condition(models.Model):
         Return the content of the formula in a string that is human readable
         :return: String
         """
-        return evaluate_formula(self.formula, EVAL_TXT)
+        if not self.formula_text:
+            self.formula_text = evaluate_formula(self.formula, EVAL_TXT)
+            self.save()
+        return self.formula_text
 
     def __str__(self):
         """Render string."""

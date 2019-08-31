@@ -52,6 +52,7 @@ def save_condition_form(
 
         # Update fields and save the condition
         condition = form.save(commit=False)
+        condition.formula_text = None
         condition.action = action
         condition.is_filter = is_filter
         condition.save()
@@ -87,7 +88,7 @@ def save_condition_form(
                 'id': condition.id,
                 'name': condition.name,
                 'selected_rows': condition.n_rows_selected,
-                'formula': evaluate_formula(condition.formula, EVAL_TXT),
+                'formula': condition.get_formula_text(),
             })
 
         return JsonResponse({'html_redirect': ''})
@@ -208,7 +209,7 @@ def delete_filter(
         condition.action.save()
 
     # Log the event
-    formula = evaluate_formula(condition.formula, EVAL_TXT)
+    formula = condition.get_formula_text()
 
     Log.objects.register(
         request.user,
@@ -298,7 +299,7 @@ def delete_condition(
             condition.action.set_text_content(action_content)
             condition.action.save()
 
-        formula = evaluate_formula(condition.formula, EVAL_TXT)
+        formula = condition.get_formula_text()
 
         Log.objects.register(
             request.user,
