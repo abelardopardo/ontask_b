@@ -702,7 +702,7 @@
             },
             {
                 "id": "took_mt",
-                "type": "text",
+                "type": "string",
                 "input": "select",
                 "values": [
                     "true",
@@ -1341,7 +1341,7 @@
             "rules": [
                 {
                     "id": "took_mt",
-                    "type": "text",
+                    "type": "string",
                     "field": "took_mt",
                     "input": "select",
                     "value": "true",
