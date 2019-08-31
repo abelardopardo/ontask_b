@@ -188,9 +188,7 @@ def edit(
         kwargs={'pk': pk}))
 
     if new_item:
-        action = workflow.actions.filter(
-            pk=pk,
-        ).filter(
+        action = workflow.actions.filter(pk=pk).filter(
             Q(workflow__user=request.user)
             | Q(workflow__shared=request.user),
         ).first()
