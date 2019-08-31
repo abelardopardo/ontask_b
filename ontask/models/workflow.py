@@ -228,10 +228,13 @@ class Workflow(models.Model):
 
             # Deal first with the Boolean columns
             if column.data_type == 'boolean':
-                # Boolean will only use EQUAL and Yes/No as choices
-                op_item['input'] = 'radio'
-                op_item['values'] = {True: 'Yes', False: 'No'}
-                op_item['operators'] = ['equal', 'is_null', 'is_not_null']
+                op_item['input'] = 'select'
+                op_item['values'] = ['Yes', 'No']
+                op_item['operators'] = [
+                    'equal',
+                    'not_equal',
+                    'is_null',
+                    'is_not_null']
                 json_value.append(op_item)
                 continue
 
