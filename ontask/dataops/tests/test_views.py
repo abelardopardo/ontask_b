@@ -566,9 +566,9 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
 
         # Create three conditions
         self.select_condition_tab()
-        self.create_condition("bool1 cond", '', [('bool1', 'equal', 'Yes')])
-        self.create_condition("bool 2 cond", '', [('bool2', 'equal', 'Yes')])
-        self.create_condition('bool3 cond', '', [('bool3', 'equal', 'Yes')])
+        self.create_condition("bool1 cond", '', [('bool1', 'equal', 'true')])
+        self.create_condition("bool 2 cond", '', [('bool2', 'equal', 'true')])
+        self.create_condition('bool3 cond', '', [('bool3', 'equal', 'true')])
 
         # insert the action text
         self.select_text_tab()

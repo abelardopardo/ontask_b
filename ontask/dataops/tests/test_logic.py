@@ -171,7 +171,10 @@ class FormulaEvaluation(test.OnTaskTestCase):
             self.skel['rules'][0]['id'] = vname
         self.skel['rules'][0]['input'] = input_value
         self.skel['rules'][0]['operator'] = op_value
-        self.skel['rules'][0]['type'] = type_value
+        if type_value == 'boolean':
+            self.skel['rules'][0]['type'] = 'string'
+        else:
+            self.skel['rules'][0]['type'] = type_value
         self.skel['rules'][0]['value'] = value
         return self.skel
 
@@ -278,10 +281,10 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', '{0}equal', 'double', '0.3', 0.3, None)
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'abb')
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'None')
-        self.do_operand('text', '{0}equal', 'boolean', 'Yes', True, False)
-        self.do_operand('text', '{0}equal', 'boolean', 'Yes', None, None)
-        self.do_operand('text', '{0}equal', 'boolean', 'No', False, True)
-        self.do_operand('text', '{0}equal', 'boolean', 'No', None, None)
+        self.do_operand('select', '{0}equal', 'boolean', 'true', 'true', 'false')
+        self.do_operand('select', '{0}equal', 'boolean', 'true', None, None)
+        self.do_operand('select', '{0}equal', 'boolean', 'false', 'false', 'true')
+        self.do_operand('select', '{0}equal', 'boolean', 'false', None, None)
         self.do_operand('text',
             '{0}equal',
             'datetime',
@@ -482,8 +485,8 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', 'is_{0}null', 'integer', None, None, 1)
         self.do_operand('number', 'is_{0}null', 'double', None, None, 1.0)
         self.do_operand('text', 'is_{0}null', 'string', None, None, 'aaa')
-        self.do_operand('text', 'is_{0}null', 'boolean', None, None, True)
-        self.do_operand('text', 'is_{0}null', 'boolean', None, None, False)
+        self.do_operand('select', 'is_{0}null', 'boolean', None, None, True)
+        self.do_operand('select', 'is_{0}null', 'boolean', None, None, False)
         self.do_operand('text',
             'is_{0}null',
             'datetime',
@@ -507,7 +510,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         self.do_sql_txt_operand('number', '{0}equal', 'integer', '1')
         self.do_sql_txt_operand('number', '{0}equal', 'double', '2.0')
-        self.do_sql_txt_operand('number', '{0}equal', 'boolean', 'Yes')
+        self.do_sql_txt_operand('select', '{0}equal', 'boolean', 'true')
         self.do_sql_txt_operand('text', '{0}equal', 'string', 'xxx')
         self.do_sql_txt_operand('text',
             '{0}equal',
@@ -547,7 +550,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         self.do_sql_txt_operand('number', 'is_{0}null', 'integer', None)
         self.do_sql_txt_operand('number', 'is_{0}null', 'double', None)
-        self.do_sql_txt_operand('number', 'is_{0}null', 'boolean', None)
+        self.do_sql_txt_operand('select', 'is_{0}null', 'boolean', None)
         self.do_sql_txt_operand('text', 'is_{0}null', 'string', None)
         self.do_sql_txt_operand('text', 'is_{0}null', 'datetime', None)
 

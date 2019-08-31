@@ -228,8 +228,9 @@ class Workflow(models.Model):
 
             # Deal first with the Boolean columns
             if column.data_type == 'boolean':
+                op_item['type'] = 'string'
                 op_item['input'] = 'select'
-                op_item['values'] = ['Yes', 'No']
+                op_item['values'] = ['true', 'false']
                 op_item['operators'] = [
                     'equal',
                     'not_equal',
