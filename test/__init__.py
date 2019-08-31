@@ -1457,6 +1457,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.ID, 'text-tab')
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1470,6 +1473,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.ID, 'text-tab')
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1482,6 +1488,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'text-tab')
             )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
@@ -1497,9 +1506,10 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         :return:
         """
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'filter-tab')
-            )
+            EC.element_to_be_clickable((By.ID, 'filter-tab'))
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.selenium.find_element_by_id('filter-tab').click()
         WebDriverWait(self.selenium, 10).until(
@@ -1519,6 +1529,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.ID, 'conditions-tab')
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_id('conditions-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1532,6 +1545,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.ID, 'share-tab')
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_id('share-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create'))
@@ -1542,6 +1558,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'questions-tab')
             )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.selenium.find_element_by_id('questions-tab').click()
         WebDriverWait(self.selenium, 10).until(
