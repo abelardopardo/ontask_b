@@ -49,6 +49,12 @@ body {
   min-height: 100px;
 }
 
+.scrollable-menu {
+    height: auto;
+    max-height: 500px;
+    overflow-x: hidden;
+}
+
 .legend-circle {
   width: .75em;
   height: .75em;

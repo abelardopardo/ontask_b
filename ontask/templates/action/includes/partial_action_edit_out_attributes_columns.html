@@ -10,7 +10,7 @@
           {% trans 'Insert Column Value' %}
         {% endif %}
       </button>
-      <div class="shadow dropdown-menu">
+      <div class="shadow dropdown-menu scrollable-menu">
         {% if is_send_list %}
           {% for column in columns %}
             <button type="button" class="dropdown-item js-insert-column-list">{{ column.name }}</button>
@@ -33,7 +33,7 @@
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{ header }}
         </button>
-        <div class="shadow dropdown-menu" aria-labelledby="condition-selector">
+        <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="condition-selector">
           {% for cond_name in conditions %}
             <button type="button" class="dropdown-item js-insert-condition-name">{{ cond_name }}</button>
           {% endfor %}
@@ -46,7 +46,7 @@
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {% trans 'Insert Attribute' %}
         </button>
-        <div class="shadow dropdown-menu" aria-labelledby="attribute-selector">
+        <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="attribute-selector">
           {% for attr in attribute_names %}
             <button type="button" class="dropdown-item js-insert-attribute-name">{{ attr }}</button>
           {% endfor %}
