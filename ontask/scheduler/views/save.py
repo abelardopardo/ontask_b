@@ -289,8 +289,9 @@ def save_json_schedule(request, action, schedule_item, op_payload):
 
         # Upload information to the op_payload
         op_payload['schedule_id'] = s_item.id
+        op_payload['confirm_items'] = form.cleaned_data['confirm_items']
 
-        if s_item.item_column:
+        if op_payload['confirm_items']:
             # Create a dictionary in the session to carry over all the
             # information to execute the next steps
             op_payload['item_column'] = s_item.item_column.name
