@@ -12,9 +12,6 @@ from django.conf import settings
 from ontask.action.payloads import (
     CanvasEmailPayload, EmailPayload, JSONPayload, SendListPayload,
 )
-from ontask.action.send import (
-    send_canvas_emails, send_emails, send_json, send_list_email,
-)
 from ontask.models import Action, Log, ScheduledAction
 from ontask.tasks.basic import logger, run_task
 
@@ -50,7 +47,7 @@ def execute_scheduled_actions_task(debug: bool):
         item.save()
 
         result = None
-
+        log_item = None
         #
         # EMAIL ACTION
         #
@@ -81,12 +78,15 @@ def execute_scheduled_actions_task(debug: bool):
                 }
             )
 
-            run_task(item.user.id, log_item.id, action_info.get_store())
+            result = run_task(
+                item.user.id,
+                log_item.id,
+                action_info.get_store())
 
         #
         # SEND LIST ACTION
         #
-        if item.action.action_type == Action.send_list:
+        elif item.action.action_type == Action.send_list:
             action_info = SendListPayload(item.payload)
             action_info['action_id'] = item.action_id
 
@@ -145,6 +145,35 @@ def execute_scheduled_actions_task(debug: bool):
                 action_info.get_store())
 
         #
+        # JSON LIST action
+        #
+        elif item.action.action_type == Action.send_list_json:
+            # Get the information about the keycolum
+            key_column = None
+            if item.item_column:
+                key_column = item.item_column.name
+
+            action_info = JSONPayload(item.payload)
+            action_info['action_id'] = item.action_id
+
+            # Log the event
+            log_item = Log.objects.register(
+                item.user,
+                Log.SCHEDULE_JSON_EXECUTE,
+                item.action.workflow,
+                {
+                    'action': item.action.name,
+                    'action_id': item.action.id,
+                    'status': 'Preparing to execute',
+                    'target_url': item.action.target_url})
+
+            # Send the objects
+            result = run_task(
+                item.user.id,
+                log_item.id,
+                action_info.get_store())
+
+        #
         # Canvas Email Action
         #
         elif item.action.action_type == Action.personalized_canvas_email:
@@ -175,6 +204,10 @@ def execute_scheduled_actions_task(debug: bool):
                 item.user.id,
                 log_item.id,
                 action_info.get_store())
+        else:
+            logger.error(
+                'Execution of action type "{0}" not implemented'.format(
+                    item.action.action_type))
 
         if result:
             item.status = ScheduledAction.STATUS_DONE
@@ -184,8 +217,9 @@ def execute_scheduled_actions_task(debug: bool):
         if debug:
             logger.info('Status set to {0}'.format(item.status))
 
-        # Store the log event in the scheduling item
-        item.last_executed_log = log_item
+        if log_item:
+            # Store the log event in the scheduling item
+            item.last_executed_log = log_item
 
         # Save the new status in the DB
         item.save()

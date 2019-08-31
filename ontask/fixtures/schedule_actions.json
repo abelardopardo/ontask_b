@@ -148,7 +148,7 @@
     "pk": 4,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$SWp6cUxjdU9VWTRF$NuyZlmzXYsLMWaJY4J/0PQ",
-        "last_login": "2019-08-26T09:40:18.683Z",
+        "last_login": "2019-08-30T07:35:32.158Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -772,6 +772,37 @@
     }
 },
 {
+    "model": "ontask.condition",
+    "pk": 1040,
+    "fields": {
+        "action": 257,
+        "name": "",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "boolean",
+                    "field": "registered",
+                    "input": "radio",
+                    "value": true,
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "n_rows_selected": 2,
+        "is_filter": true,
+        "created": "2019-08-30T07:36:23.571Z",
+        "modified": "2019-08-30T07:36:23.605Z",
+        "columns": [
+            2929
+        ]
+    }
+},
+{
     "model": "ontask.workflow",
     "pk": 108,
     "fields": {
@@ -781,7 +812,7 @@
         "name": "wflow2",
         "description_text": "Simple workflow structure with two type of actions",
         "created": "2017-12-08T01:25:32.160Z",
-        "modified": "2019-08-26T09:40:22.418Z",
+        "modified": "2019-08-30T07:35:37.407Z",
         "nrows": 3,
         "ncols": 6,
         "attributes": {
@@ -825,7 +856,7 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_108",
-        "session_key": "leyvf81hj03wyfx18r164sfw5tf6obj5",
+        "session_key": "drj6irr5f8e42nqc2bv2na46pe7c4eft",
         "luser_email_column": null,
         "luser_email_column_md5": "",
         "lusers_is_outdated": false,
@@ -893,6 +924,26 @@
         "rows_all_false": null,
         "text_content": "{\r\n  \"field1\": \"{{ age }}\",\r\n  \"field2\": \"{{ email }}\",\r\n  \"field3\": \"{{ when }}\"\r\n}",
         "target_url": "http://bogus.com",
+        "shuffle": false
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 257,
+    "fields": {
+        "workflow": 108,
+        "name": "send json list",
+        "description_text": "",
+        "created": "2019-08-30T07:35:53.133Z",
+        "modified": "2019-08-30T07:36:41.475Z",
+        "last_executed_log": null,
+        "action_type": "send_list_json",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "{\r\n    \"students\": {% ot_insert_column_list \"email\" %}\r\n}",
+        "target_url": "",
         "shuffle": false
     }
 },

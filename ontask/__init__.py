@@ -15,7 +15,8 @@ from ontask.core.celery import app as celery_app
 __all__ = [
     'celery_app', 'OnTaskException', 'is_legal_name',
     'OnTaskDataFrameNoKey', 'simplify_datetime_str', 'is_correct_email',
-    'OnTaskEmptyWorkflow', 'OnTaskDBIdentifier', 'create_new_name'
+    'OnTaskEmptyWorkflow', 'OnTaskDBIdentifier', 'create_new_name',
+    'OnTaskSharedState'
 ]
 
 __version__ = 'B.5.2.2'
@@ -129,6 +130,13 @@ class OnTaskDBIdentifier(sql.Identifier):
             raise TypeError("Identifier cannot be empty")
 
         super().__init__(*[val.replace('%', '%%') for val in strings])
+
+
+class OnTaskSharedState:
+    __shared_state = {}
+
+    def __init__(self):
+        self.__dict__ = self.__shared_state
 
 
 class OnTaskException(Exception):

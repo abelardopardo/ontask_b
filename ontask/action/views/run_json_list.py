@@ -64,7 +64,7 @@ def run_json_list_action(
     # Render the form
     return render(
         req,
-        'action/request_json_data.html',
+        'action/request_json_list_data.html',
         {'action': action,
          'num_msgs': action.get_rows_selected(),
          'form': form,

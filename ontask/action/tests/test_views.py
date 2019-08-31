@@ -1264,22 +1264,17 @@ class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.create_new_send_list_action(self.action_name, '')
+        self.create_new_JSON_list_action(self.action_name, '')
 
         # insert the action text
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, '//div[contains(@class, "note-editable")]')
-            )
+            EC.element_to_be_clickable((By.ID, 'id_text_content'))
         )
-        self.selenium.find_element_by_class_name('note-editable').click()
-        self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "{0}");""".format(self.action_text)
-        )
-
-        # Insert the reference to the column
-        self.click_dropdown_option('//div[@id="column-selector"]', 'email')
+        self.selenium.find_element_by_id('id_text_content').send_keys(
+            self.action_text)
 
         # Create filter
         self.create_filter("The filter", [('another', 'equal', 'bbb')])
@@ -1291,7 +1286,7 @@ class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
         self.open_browse_preview(close=False)
 
         self.assertIn(
-            'student01@bogus.com, student03@bogus.com',
+            '"student01@bogus.com", "student03@bogus.com"',
             self.selenium.page_source)
 
         # Close the preview
@@ -1304,9 +1299,9 @@ class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
         # Run the action
         self.open_action_run(self.action_name)
 
-        self.selenium.find_element_by_id('token').send_keys(
+        self.selenium.find_element_by_id('id_token').send_keys(
             'bogus_token')
-        # Click in the next button to go to the filter email screen
+        # Click in the submit
         self.selenium.find_element_by_xpath(
             '//button[@name="Submit"]'
         ).click()

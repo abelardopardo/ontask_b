@@ -12,10 +12,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 
-from ontask import tasks
+from ontask import tasks, OnTaskSharedState
 from ontask.core.celery import app
 from ontask.models import Action, ScheduledAction
-
 
 class ScheduledActionTaskTestCase(test.OnTaskTestCase):
     """Test the functions to execute through celery."""
@@ -76,6 +75,10 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
 
     def test_scheduled_json_action(self):
         """Create a scheduled send list action and execute it."""
+        token = 'fake token'
+
+        OnTaskSharedState.json_outbox = []
+        settings.EXECUTE_ACTION_JSON_TRANSFER = False
 
         user = get_user_model().objects.get(email='instructor01@bogus.com')
 
@@ -90,14 +93,19 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)),
             status=ScheduledAction.STATUS_PENDING,
             item_column=action.workflow.columns.get(name='email'),
-            payload={})
+            payload={'token': token})
         scheduled_item.save()
 
         # Execute the scheduler
         tasks.execute_scheduled_actions_task(True)
 
         scheduled_item.refresh_from_db()
-        assert scheduled_item.status == ScheduledAction.STATUS_DONE_ERROR
+        json_outbox = OnTaskSharedState.json_outbox
+        assert scheduled_item.status == ScheduledAction.STATUS_DONE
+        assert len(json_outbox) == 3
+        assert all(item['target'] == action.target_url for item in json_outbox)
+        assert all(token in item['auth'] for item in json_outbox)
+
 
     def test_scheduled_send_list_action(self):
         """Create a scheduled send list action and execute it."""
@@ -129,3 +137,35 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         assert len(mail.outbox) == 1
         assert (
             'student01@bogus.com, student03@bogus.com' in mail.outbox[0].body)
+
+    def test_scheduled_json_list_action(self):
+        """Create a scheduled send list action and execute it."""
+
+        token = 'false token'
+        settings.EXECUTE_ACTION_JSON_TRANSFER = False
+        OnTaskSharedState.json_outbox = []
+
+        user = get_user_model().objects.get(email='instructor01@bogus.com')
+
+        # User must exist
+        self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
+        action = Action.objects.get(name='send json list')
+
+        scheduled_item = ScheduledAction(
+            user=user,
+            name='JSON List scheduled action',
+            action=action,
+            execute=datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            status=ScheduledAction.STATUS_PENDING,
+            payload={'token': token})
+        scheduled_item.save()
+
+        # Execute the scheduler
+        tasks.execute_scheduled_actions_task(True)
+
+        json_outbox = OnTaskSharedState.json_outbox
+        scheduled_item.refresh_from_db()
+        assert scheduled_item.status == ScheduledAction.STATUS_DONE
+        assert len(json_outbox) == 1
+        assert all(token in item['auth'] for item in json_outbox)
+

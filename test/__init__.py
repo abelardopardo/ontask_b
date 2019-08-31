@@ -277,7 +277,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     viewport_width = 1024
     device_pixel_ratio = 1
     max_image_height = 1440
-    headless = True
+    headless = False
 
     class_and_text_xpath = \
         '//{0}[contains(@class, "{1}") and normalize-space(text()) = "{2}"]'
@@ -998,6 +998,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def create_new_send_list_action(self, aname, adesc=''):
         self.create_new_action_out_basic(aname, Action.send_list, adesc)
 
+    def create_new_JSON_list_action(self, aname, adesc=''):
+        self.create_new_action_out_basic(aname, Action.send_list_json, adesc)
+
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog
         self.selenium.find_element_by_class_name('js-attribute-create').click()
@@ -1062,6 +1065,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'filter-set-header')
             )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
     def create_condition(self, cname, cdesc, rule_tuples):

@@ -17,7 +17,7 @@ from ontask.action.send import (
 logger = get_task_logger('celery_execution')
 
 
-def get_log_item(log_id):
+def get_log_item(log_id: int) -> Optional[Log]:
     """Get the log object.
 
     Given a log_id, fetch it from the Logs table. This is the object used to
@@ -48,9 +48,9 @@ def get_execution_items(
 
     :param user_id: User id
 
-    :param action_id: Action id (to be executed)
+    :param workflow_id: Workflow ID (being manipulated)
 
-    :param log_id: Log id (to store execution report)
+    :param action_id: Action id (to be executed)
 
     :return: (user, action, log)
     """
@@ -109,11 +109,11 @@ def run_task(
         log_item.save()
 
         if action.action_type == Action.personalized_text:
-            send_canvas_emails(user, action, log_item, action_info)
+            send_emails(user, action, log_item, action_info)
         elif action.action_type == Action.send_list:
             send_list_email(user, action, log_item, action_info)
         elif action.action_type == Action.personalized_canvas_email:
-            send_emails(user, action, log_item, action_info)
+            send_canvas_emails(user, action, log_item, action_info)
         elif action.action_type == Action.personalized_json:
             send_json(user, action, log_item, action_info)
         elif action.action_type == Action.send_list_json:

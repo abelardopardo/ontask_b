@@ -10,6 +10,7 @@ import pytz
 import requests
 from django.conf import settings
 
+from ontask import OnTaskSharedState
 from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
@@ -34,10 +35,15 @@ def _send_and_log_json(
             headers=headers)
         status_val = http_resp.status_code
     else:
-        logger.info(
-            'SEND JSON({tgt}): {txt}',
-            extra={'tgt': action.target_url, 'txt': json.dumps(json_obj)},
-        )
+        payload = {
+            'target': action.target_url,
+            'text': json.dumps(json_obj),
+            'auth': headers['Authorization']}
+        logger.info('SEND JSON({target}): {text}', extra=payload)
+        if hasattr(OnTaskSharedState, 'json_outbox'):
+            OnTaskSharedState.json_outbox.append(payload)
+        else:
+            OnTaskSharedState.json_outbox = [payload]
         status_val = 200
 
     # Log seng object
