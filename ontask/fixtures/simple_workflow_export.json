@@ -636,14 +636,17 @@
             },
             {
                 "id": "induction",
-                "type": "boolean",
-                "input": "radio",
-                "values": {
-                    "0": "No",
-                    "1": "Yes"
-                },
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
                 "operators": [
-                    "equal"
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
                 ]
             },
             {
@@ -699,14 +702,17 @@
             },
             {
                 "id": "took_mt",
-                "type": "boolean",
-                "input": "radio",
-                "values": {
-                    "0": "No",
-                    "1": "Yes"
-                },
+                "type": "text",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false",
+                ],
                 "operators": [
-                    "equal"
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null",
                 ]
             },
             {
@@ -1335,10 +1341,10 @@
             "rules": [
                 {
                     "id": "took_mt",
-                    "type": "boolean",
+                    "type": "text",
                     "field": "took_mt",
-                    "input": "radio",
-                    "value": "1",
+                    "input": "select",
+                    "value": "true",
                     "operator": "equal"
                 }
             ],

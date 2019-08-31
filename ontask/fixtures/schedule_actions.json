@@ -723,10 +723,10 @@
             "rules": [
                 {
                     "id": "registered",
-                    "type": "boolean",
+                    "type": "string",
                     "field": "registered",
-                    "input": "radio",
-                    "value": "1",
+                    "input": "select",
+                    "value": "true",
                     "operator": "equal"
                 }
             ],
@@ -752,10 +752,10 @@
             "rules": [
                 {
                     "id": "registered",
-                    "type": "boolean",
+                    "type": "string",
                     "field": "registered",
-                    "input": "radio",
-                    "value": true,
+                    "input": "select",
+                    "value": "true",
                     "operator": "equal"
                 }
             ],
@@ -783,10 +783,10 @@
             "rules": [
                 {
                     "id": "registered",
-                    "type": "boolean",
+                    "type": "string",
                     "field": "registered",
-                    "input": "radio",
-                    "value": true,
+                    "input": "select",
+                    "value": "true",
                     "operator": "equal"
                 }
             ],
@@ -840,14 +840,17 @@
             },
             {
                 "id": "registered",
-                "type": "boolean",
-                "input": "radio",
-                "values": {
-                    "0": "No",
-                    "1": "Yes"
-                },
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
                 "operators": [
-                    "equal"
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
                 ]
             },
             {

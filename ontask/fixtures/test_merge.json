@@ -710,26 +710,32 @@
             },
             {
                 "id": "bool1",
-                "type": "boolean",
-                "input": "radio",
-                "values": {
-                    "0": "No",
-                    "1": "Yes"
-                },
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
                 "operators": [
-                    "equal"
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
                 ]
             },
             {
                 "id": "bool2",
-                "type": "boolean",
-                "input": "radio",
-                "values": {
-                    "0": "No",
-                    "1": "Yes"
-                },
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
                 "operators": [
-                    "equal"
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
                 ]
             },
             {
