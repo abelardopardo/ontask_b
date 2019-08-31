@@ -151,6 +151,8 @@ def view(
 
     # Get the values and remove the ones that are not needed
     item_values = model_to_dict(sch_obj)
+    item_values['item_column'] = str(sch_obj.item_column)
+    item_values['action'] = str(sch_obj.action)
     item_values.pop('id')
     item_values.pop('user')
     item_values['payload'] = json.dumps(item_values['payload'], indent=2)
