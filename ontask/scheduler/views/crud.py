@@ -185,11 +185,11 @@ def edit(
     :return: HTTP response
     """
     # Distinguish between creating a new element or editing an existing one
-    new_item = request.path.endswith(reverse(
+    is_a_new_item = request.path.endswith(reverse(
         'scheduler:create',
         kwargs={'pk': pk}))
 
-    if new_item:
+    if is_a_new_item:
         action = workflow.actions.filter(pk=pk).filter(
             Q(workflow__user=request.user)
             | Q(workflow__shared=request.user),

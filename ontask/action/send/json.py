@@ -72,12 +72,6 @@ def send_json(
 
     :param action: Action from where to take the messages
 
-    :param token: String to include as authorisation token
-
-    :param key_column: Key column name to use to exclude elements (if needed)
-
-    :param exclude_values: List of values to exclude from the mailing
-
     :param log_item: Log object to store results
 
     :return: Nothing
