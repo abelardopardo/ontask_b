@@ -307,7 +307,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Set the email column
         select = Select(self.selenium.find_element_by_id(
-            'id_email_column'))
+            'id_item_column'))
         select.select_by_value('email')
 
         # Tick the track email
