@@ -51,7 +51,12 @@ def create_timedelta_string(dtime: datetime.datetime) -> str:
     return ', '.join(delta_string)
 
 
-def save_email_schedule(request, action, schedule_item, op_payload):
+def save_email_schedule(
+    request: HttpRequest,
+    action: Action,
+    schedule_item: ScheduledAction,
+    op_payload: Dict
+) -> HttpResponse:
     """Handle the creation and edition of email items.
 
     :param request: Http request being processed
@@ -62,7 +67,7 @@ def save_email_schedule(request, action, schedule_item, op_payload):
 
     :param op_payload: dictionary to carry over the request to the next step
 
-    :return:
+    :return: Http response with the rendered page
     """
     # Create the form to ask for the email subject and other information
     form = EmailScheduleForm(
@@ -253,7 +258,12 @@ def save_canvas_email_schedule(
     return render(request, 'under_construction.html', {})
 
 
-def save_json_schedule(request, action, schedule_item, op_payload):
+def save_json_schedule(
+    request: HttpRequest,
+    action: Action,
+    schedule_item: ScheduledAction,
+    op_payload: Dict
+) -> HttpResponse:
     """Create and edit scheduled json actions.
 
     :param request: Http request being processed
@@ -264,7 +274,7 @@ def save_json_schedule(request, action, schedule_item, op_payload):
 
     :param op_payload: dictionary to carry over the request to the next step
 
-    :return:
+    :return: Http response with the rendered page
     """
     # Create the form to ask for the email subject and other information
     form = JSONScheduleForm(
@@ -456,7 +466,7 @@ def finish_scheduling(request, schedule_item=None, payload=None):
     }
     if schedule_item.action.action_type == Action.personalized_text:
         log_payload.update({
-            'email_column': schedule_item.item_column.name,
+            'item_column': schedule_item.item_column.name,
             'subject': schedule_item.payload.get('subject'),
             'cc_email': schedule_item.payload.get('cc_email', []),
             'bcc_email': schedule_item.payload.get('bcc_email', []),

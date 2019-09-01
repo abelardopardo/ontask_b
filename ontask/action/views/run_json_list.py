@@ -30,7 +30,7 @@ def run_json_list_action(
     action_info = JSONListPayload({'action_id': action.id})
 
     # Create the form to ask for the email subject and other information
-    form = JSONListActionForm(req.POST or None, action_info=action_info)
+    form = JSONListActionForm(req.POST or None, form_info=action_info)
 
     if req.method == 'POST' and form.is_valid():
         # Log the event

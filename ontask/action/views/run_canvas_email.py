@@ -50,7 +50,7 @@ def run_canvas_email_action(
         initial_values={
             'action_id': action.id,
             'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:email_done'),
+            'post_url': reverse('action:canvas_email_done'),
         },
     )
 
@@ -60,7 +60,7 @@ def run_canvas_email_action(
         column_names=[
             col.name for col in workflow.columns.filter(is_key=True)],
         action=action,
-        action_info=action_info)
+        form_info=action_info)
 
     if req.method == 'POST' and form.is_valid():
         # Request is a POST and is valid
@@ -72,14 +72,15 @@ def run_canvas_email_action(
             action_info['valuerange'] = 2
             action_info['step'] = 2
             set_action_payload(req.session, action_info.get_store())
+            continue_url = 'action:item_filter'
+        else:
+            continue_url = 'action:canvas_email_done'
 
-            return redirect('action:item_filter')
-
-        # Go straight to the token request step
-        set_action_payload(req.session, action_info.get_store())
+        # Check for the CANVAS token and proceed to the continue_url
         return canvas_get_or_set_oauth_token(
             req,
-            action_info['target_url'])
+            action_info['target_url'],
+            continue_url)
 
     # Render the form
     return render(
@@ -96,6 +97,7 @@ def run_canvas_email_action(
 def canvas_get_or_set_oauth_token(
     request: WSGIRequest,
     oauth_instance_name: str,
+    continue_url: str,
 ) -> HttpResponse:
     """Check for OAuth token, if not present, request a new one.
 
@@ -106,6 +108,8 @@ def canvas_get_or_set_oauth_token(
     :param request: Request object to process
 
     :param oauth_instance_name: Locator for the OAuth instance in OnTask
+
+    :param continue_url: URL to continue if the token exists and is valid
 
     :return: Http response
     """
@@ -129,7 +133,7 @@ def canvas_get_or_set_oauth_token(
         return get_initial_token_step1(
             request,
             oauth_info,
-            reverse('action:canvas_email_done'))
+            reverse(continue_url))
 
     # Check if the token is valid
     now = datetime.now(pytz.timezone(settings.TIME_ZONE))
@@ -146,7 +150,7 @@ def canvas_get_or_set_oauth_token(
             )
             return redirect('action:index')
 
-    return redirect('action:canvas_email_done')
+    return redirect(continue_url)
 
 
 @user_passes_test(is_instructor)
@@ -191,7 +195,7 @@ def run_canvas_email_done(
             'from_email': request.user.email,
             'subject': action_info['subject'],
             'exclude_values': action_info['exclude_values'],
-            'email_column': action_info['item_column'],
+            'item_column': action_info['item_column'],
             'target_url': action_info['target_url'],
             'status': 'Preparing to execute',
         })

@@ -28,7 +28,7 @@ def run_json_action(
 ) -> HttpResponse:
     """Request data to send JSON objects.
 
-    Form asking for token, key_column and if an item confirmation step is
+    Form asking for token, item_column and if an item confirmation step is
     needed
 
     :param req: HTTP request (GET)
@@ -52,7 +52,7 @@ def run_json_action(
         req.POST or None,
         column_names=[
             col.name for col in workflow.columns.filter(is_key=True)],
-        action_info=action_info)
+        form_info=action_info)
 
     if req.method == 'POST' and form.is_valid():
         if action_info['confirm_items']:
@@ -120,7 +120,7 @@ def run_json_done(
         {'action': action.name,
          'action_id': action.id,
          'exclude_values': action_info['exclude_values'],
-         'key_column': action_info['item_column'],
+         'item_column': action_info['item_column'],
          'exported_workflow': action_info['export_wf'],
          'status': 'Preparing to execute',
          'target_url': action.target_url})

@@ -40,7 +40,7 @@ class ActionViewRunZIP(test.OnTaskTestCase):
             {'pk': action.id},
             method='POST',
             req_params={
-                'participant_column': 'SID',
+                'item_column': 'SID',
                 'user_fname_column': 'email',
                 'confirm_items': False,
                 'zip_for_moodle': False,

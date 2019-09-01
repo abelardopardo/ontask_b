@@ -947,7 +947,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
         # Set column 1
         select = Select(self.selenium.find_element_by_id(
-            'id_participant_column'))
+            'id_item_column'))
         select.select_by_value('age')
 
         # Set column 2

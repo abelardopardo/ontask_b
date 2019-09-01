@@ -4,7 +4,7 @@
 
 import datetime
 from time import sleep
-from typing import List, Union, Mapping
+from typing import List, Union, Dict
 
 import html2text
 import pytz
@@ -209,7 +209,7 @@ def _create_messages(
     action: Action,
     action_evals: List,
     track_col_name: str,
-    action_info: Mapping,
+    action_info: Dict,
 ) -> List[Union[EmailMessage, EmailMultiAlternatives]]:
     """Create the email messages to send and the tracking ids.
 
@@ -217,7 +217,7 @@ def _create_messages(
     :param action: Action to process
     :param action_evals: Action content already evaluated
     :param track_col_name: column name to track
-    :param action_info: EmailPayload Mapping with the required fields
+    :param action_info: Dictionary with the required fields
     :return:
     """
     # Context to log the events (one per email)
@@ -315,7 +315,7 @@ def send_emails(
     user,
     action: Action,
     log_item: Log,
-    action_info: Mapping,
+    action_info: Dict,
 ) -> None:
     """Send action content evaluated for each row.
 
@@ -329,7 +329,7 @@ def send_emails(
     :param user: User object that executed the action
     :param action: Action from where to take the messages
     :param log_item: Log object to store results
-    :param action_info: Mapping key, value as defined in EmailPayload
+    :param action_info: Dictionary key, value as defined in EmailPayload
 
     :return: Send the emails
     """
@@ -340,6 +340,10 @@ def send_emails(
         extra_string=action_info['subject'],
         column_name=action_info['item_column'],
         exclude_values=action_info['exclude_values'])
+
+    # Turn cc_email and bcc email into lists
+    action_info['cc_email'] = action_info['cc_email'].split()
+    action_info['bcc_email'] = action_info['bcc_email'].split()
 
     _check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
 
@@ -377,7 +381,7 @@ def send_list_email(
     user,
     action: Action,
     log_item: Log,
-    action_info: Mapping,
+    action_info: Dict,
 ) -> None:
     """Send action content evaluated once to include lists.
 
@@ -387,7 +391,7 @@ def send_list_email(
     :param user: User object that executed the action
     :param action: Action from where to take the messages
     :param log_item: Log object to store results
-    :param action_info: Mapping key, value as defined in EmailPayload
+    :param action_info: Dictionary key, value as defined in EmailPayload
 
     :return: Send the emails
     """
@@ -396,6 +400,10 @@ def send_list_email(
     action_text = evaluate_row_action_out(
         action,
         get_action_evaluation_context(action, {}))
+
+    # Turn cc_email and bcc email into lists
+    action_info['cc_email'] = action_info['cc_email'].split()
+    action_info['bcc_email'] = action_info['bcc_email'].split()
 
     _check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
 

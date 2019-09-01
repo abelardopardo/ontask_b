@@ -63,7 +63,7 @@ def run_email_action(
         column_names=[
             col.name for col in workflow.columns.filter(is_key=True)],
         action=action,
-        action_info=action_info)
+        form_info=action_info)
 
     # Request is a POST and is valid
     if req.method == 'POST' and form.is_valid():
@@ -137,7 +137,7 @@ def run_email_done(
             'track_read': action_info['track_read'],
             'exported_workflow': action_info['export_wf'],
             'exclude_values': action_info['exclude_values'],
-            'email_column': action_info['item_column'],
+            'item_column': action_info['item_column'],
             'status': 'Preparing to execute',
         })
 

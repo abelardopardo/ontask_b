@@ -44,7 +44,7 @@ def run_send_list_action(
     form = SendListActionForm(
         req.POST or None,
         action=action,
-        action_info=action_info)
+        form_info=action_info)
 
     # Request is a POST and is valid
     if req.method == 'POST' and form.is_valid():

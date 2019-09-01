@@ -67,7 +67,7 @@ def execute_scheduled_actions_task(debug: bool):
                     'action_id': item.action.id,
                     'bcc_email': item.payload.get('bcc_email'),
                     'cc_email': item.payload.get('cc_email'),
-                    'email_column': item.item_column.name,
+                    'item_column': item.item_column.name,
                     'execute': item.execute.isoformat(),
                     'exclude_values': item.exclude_values,
                     'from_email': item.user.email,
@@ -116,13 +116,13 @@ def execute_scheduled_actions_task(debug: bool):
         #
         elif item.action.action_type == Action.personalized_json:
             # Get the information about the keycolum
-            key_column = None
+            item_column = None
             if item.item_column:
-                key_column = item.item_column.name
+                item_column = item.item_column.name
 
             action_info = JSONPayload(item.payload)
             action_info['action_id'] = item.action_id
-            action_info['item_column'] = key_column
+            action_info['item_column'] = item_column
             action_info['exclude_values'] = item.exclude_values
 
             # Log the event
@@ -134,7 +134,7 @@ def execute_scheduled_actions_task(debug: bool):
                     'action': item.action.name,
                     'action_id': item.action.id,
                     'exclude_values': item.exclude_values,
-                    'key_column': key_column,
+                    'item_column': item_column,
                     'status': 'Preparing to execute',
                     'target_url': item.action.target_url})
 
@@ -149,9 +149,9 @@ def execute_scheduled_actions_task(debug: bool):
         #
         elif item.action.action_type == Action.send_list_json:
             # Get the information about the keycolum
-            key_column = None
+            item_column = None
             if item.item_column:
-                key_column = item.item_column.name
+                item_column = item.item_column.name
 
             action_info = JSONPayload(item.payload)
             action_info['action_id'] = item.action_id
@@ -191,7 +191,7 @@ def execute_scheduled_actions_task(debug: bool):
                 {
                     'action': item.action.name,
                     'action_id': item.action.id,
-                    'email_column': item.item_column.name,
+                    'item_column': item.item_column.name,
                     'execute': item.execute.isoformat(),
                     'exclude_values': item.exclude_values,
                     'from_email': item.user.email,

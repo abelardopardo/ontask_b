@@ -17,7 +17,7 @@ from ontask.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.forms import ValueExcludeForm
-from ontask.action.payloads import get_action_payload
+from ontask.action.payloads import get_action_payload, set_action_payload
 from ontask.action.views.run_canvas_email import run_canvas_email_action
 from ontask.action.views.run_email import run_email_action
 from ontask.action.views.run_json import run_json_action
@@ -222,8 +222,8 @@ def run_action_item_filter(
         request.POST or None,
         action=action,
         column_name=action_info['item_column'],
-        exclude_values=action_info['exclude_values'],
-    )
+        form_info=action_info)
+
     context = {
         'form': form,
         'action': action,
@@ -233,11 +233,12 @@ def run_action_item_filter(
         'prev_step': action_info['prev_url'],
     }
 
-    # Process the initial loading of the form and return
-    if request.method != 'POST' or not form.is_valid():
-        return render(request, 'action/item_filter.html', context)
+    # The post is correct
+    if request.method == 'POST' and form.is_valid():
+        # Updating the payload in the session
+        set_action_payload(request.session, action_info)
 
-    # Updating the content of the exclude_values in the payload
-    action_info['exclude_values'] = form.cleaned_data['exclude_values']
+        return redirect(action_info['post_url'])
 
-    return redirect(action_info['post_url'])
+    return render(request, 'action/item_filter.html', context)
+

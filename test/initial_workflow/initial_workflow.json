@@ -4401,7 +4401,7 @@
             "action_id": 2,
             "bcc_email": [],
             "track_read": false,
-            "email_column": "email",
+            "item_column": "email",
             "send_confirmation": false
         }
     }
@@ -4526,7 +4526,7 @@
             "bcc_email": [],
             "from_email": "instructor01@bogus.com",
             "track_read": false,
-            "email_column": "email",
+            "item_column": "email",
             "objects_sent": 2,
             "exclude_values": [],
             "filter_present": true,

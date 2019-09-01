@@ -409,7 +409,7 @@ class TutorialCaptures(ScreenTests):
             'Connecting your program with this course'
         )
         select = Select(self.selenium.find_element_by_id(
-            'id_email_column'))
+            'id_item_column'))
         select.select_by_value('email')
         self.selenium.find_element_by_id('id_cc_email').send_keys(
             'tutor1@example.com, tutor2@example.com'
@@ -476,7 +476,7 @@ class TutorialCaptures(ScreenTests):
 
         # Select the key column
         select = Select(self.selenium.find_element_by_id(
-            'id_participant_column')
+            'id_item_column')
         )
         select.select_by_value('Identifier')
         select = Select(self.selenium.find_element_by_id(
