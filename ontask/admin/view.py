@@ -7,7 +7,7 @@ from django.contrib import admin
 from ontask.models import View
 
 
-@admin.regster(View)
+@admin.register(View)
 class ViewAdmin(admin.ModelAdmin):
     """Class to admin the views."""
 

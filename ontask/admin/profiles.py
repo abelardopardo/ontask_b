@@ -17,7 +17,7 @@ class UserProfileInline(admin.StackedInline):
     model = Profile
 
 
-@admin.regster(User)
+@admin.register(User)
 class NewUserAdmin(NamedUserAdmin):
     inlines = [UserProfileInline]
     list_display = ('is_active', 'email', 'name', 'permalink',
