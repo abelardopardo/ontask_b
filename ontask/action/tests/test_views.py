@@ -1206,7 +1206,7 @@ class ActionSendListActionCreate(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id('id_subject').send_keys(
             'Send List Email Subject')
         self.selenium.find_element_by_id('id_cc_email').send_keys(
-            'tutor1@example.com, tutor2@example.com')
+            'tutor1@example.com tutor2@example.com')
         self.selenium.find_element_by_id('id_bcc_email').send_keys(
             'coursecoordinator@bogus.com')
         # Click in the next button to go to the filter email screen
