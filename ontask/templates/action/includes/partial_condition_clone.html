@@ -4,7 +4,7 @@
     <button type="button" class="btn btn-outline-dark dropdown-toggle"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <span class="fa fa-clone"></span> {% trans 'Clone other conditions' %}</button>
-    <div class="shadow dropdown-menu" aria-labelledby="condition-clone">
+    <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="condition-clone">
       {% for condition in other_conditions %}
         <button type="button" class="dropdown-item js-condition-clone"
                 data-url="{% url 'action:clone_condition' condition.id action.id %}">{{ condition.name }}</button>

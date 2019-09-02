@@ -21,7 +21,7 @@
         {{ workflow.luser_email_column.name }}
       {% endif %}
     </button>
-    <div class="shadow dropdown-menu">
+    <div class="shadow dropdown-menu scrollable-menu">
       {% if workflow.luser_email_column %}
         <button type="button" class="dropdown-item js-select-key-column-name"
                 data-url="{% url 'workflow:assign_luser_column' %}">{% trans 'No access' %}</button>

@@ -4,7 +4,7 @@
     <button type="button" class="btn btn-outline-dark dropdown-toggle"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <span class="fa fa-bar-chart"></span> {% trans 'Column statistics' %}</button>
-    <div class="shadow dropdown-menu" aria-labelledby="column-stat-selector">
+    <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="column-stat-selector">
       {% for column in stat_columns %}
         <button type="button" class="dropdown-item js-show-stats"
                 data-url="{% url 'table:stat_column_JSON' column.id %}">{{ column.name }}</button>

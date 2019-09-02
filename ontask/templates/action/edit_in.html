@@ -135,7 +135,7 @@
                   {{ key_selected.column.name }}
                 {% endif %}
               </button>
-              <div class="shadow dropdown-menu">
+              <div class="shadow dropdown-menu scrollable-menu">
                 {% if key_selected %}
                   <button type="button" class="dropdown-item js-select-key-column-name"
                           data-url="{% url 'action:unselect_key_column_action' action.id %}">-- {% trans 'Unset key column' %} --</button>
@@ -169,7 +169,7 @@
                       data-toggle="dropdown">
                 {% trans 'Insert existing question' %}
               </button>
-              <div class="shadow dropdown-menu">
+              <div class="shadow dropdown-menu scrollable-menu">
                 {% for column in columns_to_insert %}
                   <button type="button" class="dropdown-item js-insert-question"
                           data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
