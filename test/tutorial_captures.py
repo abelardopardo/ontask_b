@@ -2,10 +2,9 @@
 
 
 import os
-from time import sleep
-
 import test
 from test import ElementHasFullOpacity, ScreenTests
+from time import sleep
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
@@ -14,8 +13,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask.models import Action
 from ontask.dataops.pandas import destroy_db_engine
+from ontask.models import Action
 
 
 class TutorialCaptures(ScreenTests):

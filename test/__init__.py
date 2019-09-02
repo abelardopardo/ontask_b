@@ -31,12 +31,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ontask.models import Action
 from ontask.action.payloads import set_action_payload
+from ontask.core.permissions import group_names
 from ontask.dataops.pandas import destroy_db_engine
 from ontask.dataops.pandas.db import engine
-from ontask.core.permissions import group_names
-from ontask.models import Workflow
+from ontask.models import Action, Workflow
 
 standard_library.install_aliases()
 

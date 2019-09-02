@@ -2,7 +2,6 @@
 
 
 import os
-
 # from ontask.models import SQLConnection
 import test
 from test import ElementHasFullOpacity, ScreenTests
@@ -15,8 +14,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask.models import Action
 from ontask.dataops.pandas import destroy_db_engine
+from ontask.models import Action
 
 standard_library.install_aliases()
 
