@@ -243,8 +243,8 @@ def search_table(
         query = query + sql.SQL(' ORDER BY {0}').format(
             OnTaskDBIdentifier(order_col_name))
 
-    if not order_asc:
-        query = query + sql.SQL(' DESC')
+        if not order_asc:
+            query = query + sql.SQL(' DESC')
 
     # Execute the query
     with connection.connection.cursor() as cursor:

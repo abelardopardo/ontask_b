@@ -156,7 +156,7 @@ def _create_initial_qs(
     """
     # See if an order column has been given.
     order_col_name = None
-    if dt_page.order_col:
+    if dt_page.order_col is not None:
         order_col_name = columns[dt_page.order_col].name
 
     # Get the query set (including the filter in the action)
