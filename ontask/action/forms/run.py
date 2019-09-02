@@ -25,7 +25,7 @@ EnableURLForm: Form to process the enable, from and to fields of an action
 """
 
 import re
-from typing import Dict, List
+from typing import List
 
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
@@ -34,8 +34,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_correct_email
 from ontask.action.forms import SUFFIX_LENGTH
-from ontask.action.payloads import EmailPayload
-from ontask.core.forms import date_time_widget_options
+from ontask.core.forms import date_time_widget_options, FormWithPayload
 from ontask.dataops.sql.column_queries import is_column_unique
 from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import Action
@@ -44,52 +43,6 @@ from ontask.models import Action
 participant_re = re.compile(r'^Participant \d+$')
 
 SUBJECT_FIELD_LENGTH = 512
-
-
-class FormWithPayload(forms.Form):
-    """Form that has a method to initialize fields based on a Dict."""
-
-    def set_field_from_dict(self, field_name):
-        """Initialize the field with the value in __form_info it it exists.
-
-    :param form: Form object containing all the fields
-
-    :param field_name: Field to be initialized
-
-    :return: Effect reflected in the field within the form.
-    """
-        if field_name in self.__form_info:
-            self.fields[field_name].initial = self.__form_info[field_name]
-
-    def set_fields_from_dict(self, field_names):
-        """Set the list of field_names as values in fields
-
-        :param field_names: List of field_names to use
-        """
-        for field_name in field_names:
-            self.set_field_from_dict(field_name)
-
-    def store_field_in_dict(self, field_name, field_value=None):
-        """Store the value of a field in the dictionary."""
-        if field_name not in self.fields:
-            return
-
-        if field_value:
-            self.__form_info[field_name] = field_value
-        else:
-            self.__form_info[field_name] = self.cleaned_data[field_name]
-
-    def store_fields_in_dict(self, field_pairs):
-        """Store the list of (field_name, field_value=None) in the dict.
-
-        :param field_pairs: List of field names to store in the dictionary.
-        """
-        for field_name, field_default in field_pairs:
-            self.store_field_in_dict(field_name, field_default)
-
-    def __init__(self, *args, **kargs):
-        self.__form_info: Dict = kargs.pop('form_info', {})
-        super().__init__(*args, **kargs)
 
 
 class BasicEmailForm(FormWithPayload):
@@ -146,13 +99,10 @@ class BasicEmailForm(FormWithPayload):
                     for email in form_data['bcc_email'].split() if email
                 ])
             ),
-            ('export_wf', None)
-        ])
+            ('export_wf', None)])
 
         all_correct = all(
-            is_correct_email(email)
-            for email in form_data['cc_email'].split()
-        )
+            is_correct_email(email) for email in form_data['cc_email'].split())
         if not all_correct:
             self.add_error(
                 'cc_email',

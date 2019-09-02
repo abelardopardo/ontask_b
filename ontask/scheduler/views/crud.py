@@ -111,6 +111,10 @@ def index(
     :param request: Request object
     :return: HTTP response with the table.
     """
+    # Reset object to carry action info throughout dialogs
+    set_action_payload(request.session)
+    request.session.save()
+
     # Get the actions
     s_items = ScheduledAction.objects.filter(action__workflow=workflow.id)
 
@@ -215,6 +219,8 @@ def edit(
             'post_url': reverse(
                 'scheduler:finish_scheduling'),
         }
+        if s_item:
+            op_payload.update(s_item.payload)
         set_action_payload(request.session, op_payload)
         request.session.save()
 
@@ -226,6 +232,9 @@ def edit(
                 'Unable to schedule actions due to a misconfiguration. '
                 + 'Ask your system administrator to enable queueing.'))
         return redirect(reverse('action:index'))
+
+    if s_item:
+        op_payload['schedule_id'] = s_item.id
 
     if action.action_type == Action.personalized_text:
         return save_email_schedule(request, action, s_item, op_payload)
@@ -292,6 +301,8 @@ def delete(
         log_type = Log.SCHEDULE_SEND_LIST_DELETE
     elif s_item.action.action_type == Action.personalized_json:
         log_type = Log.SCHEDULE_JSON_DELETE
+    elif s_item.action.action_type == Action.send_list_json:
+        log_type = Log.SCHEDULE_JSON_LIST_DELETE
     elif s_item.action.action_type == Action.personalized_canvas_email:
         log_type = Log.SCHEDULE_CANVAS_EMAIL_DELETE
 
