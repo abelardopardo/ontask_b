@@ -24,8 +24,8 @@ import ontask.scheduler.urls
 import ontask.table.urls
 import ontask.workflow.urls
 import ontask.workflow.views.home
-from ontask.dataops.pandas import set_engine
 from ontask.core import views
+from ontask.dataops.pandas import set_engine
 from ontask.templatetags.ontask_tags import ontask_version
 from ontask.workflow.views import home
 
