@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+
+from ontask import OnTaskSharedState
 import test
 
 from django.conf import settings
@@ -8,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from ontask.dataops.pandas import db
+from ontask.dataops.pandas import database
 from ontask.models import Workflow
 
 
@@ -173,7 +175,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.logout()
 
         # Close the db_engine
-        db.destroy_db_engine(db.engine)
+        database.destroy_db_engine(OnTaskSharedState.engine)
 
     def test_02_workflow_create_upload_with_prelude(self):
         """
@@ -299,7 +301,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
-            db.check_wf_df(Workflow.objects.get(id=1))
+            database.check_wf_df(Workflow.objects.get(id=1))
             idx += 1
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)

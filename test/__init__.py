@@ -4,6 +4,8 @@ import io
 import math
 import os
 import subprocess
+
+from ontask import OnTaskSharedState
 import test
 from builtins import object, range, str
 from typing import Mapping, Optional
@@ -34,7 +36,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from ontask.action.payloads import set_action_payload
 from ontask.core.permissions import group_names
 from ontask.dataops.pandas import destroy_db_engine
-from ontask.dataops.pandas.db import engine
 from ontask.models import Action, Workflow
 
 standard_library.install_aliases()
@@ -126,7 +127,7 @@ class OnTaskTestCase(TransactionTestCase):
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine(OnTaskSharedState.engine)
         super().tearDownClass()
 
     @classmethod
@@ -223,7 +224,7 @@ class OnTaskApiTestCase(APITransactionTestCase):
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine(OnTaskSharedState.engine)
         super().tearDownClass()
 
     def compare_wflows(self, jwflow, workflow):
@@ -316,7 +317,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
-        destroy_db_engine(engine)
+        destroy_db_engine(OnTaskSharedState.engine)
         super().tearDownClass()
 
     def open(self, url):

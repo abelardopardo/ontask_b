@@ -15,8 +15,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+import ontask.dataops.pandas.database
 import ontask.dataops.pandas.datatypes
-import ontask.dataops.pandas.db
 from ontask.dataops.sql import delete_table
 from ontask.models.column import Column
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
@@ -147,7 +147,7 @@ class Workflow(models.Model):
 
     def data_frame(self):
         """Access the data frame by the serializer."""
-        return ontask.dataops.pandas.db.load_table(self.get_data_frame_table_name())
+        return ontask.dataops.pandas.database.load_table(self.get_data_frame_table_name())
 
     def get_data_frame_table_name(self):
         """Get the table name containing the data frame.
@@ -176,7 +176,7 @@ class Workflow(models.Model):
         Boolean stating if there is a table storing a data frame
         :return: True if the workflow has a table storing the data frame
         """
-        return ontask.dataops.pandas.db.is_table_in_db(
+        return ontask.dataops.pandas.database.is_table_in_db(
             self.get_data_frame_table_name())
 
     def get_column_info(self):
@@ -275,7 +275,7 @@ class Workflow(models.Model):
 
         :return: If the workflow has a dataframe
         """
-        return ontask.dataops.pandas.db.is_table_in_db(
+        return ontask.dataops.pandas.database.is_table_in_db(
             self.get_data_frame_table_name())
 
     def is_locked(self):

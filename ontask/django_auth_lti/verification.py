@@ -9,7 +9,7 @@ def is_allowed(request, allowed_roles, raise_exception):
     else:
         allowed = allowed_roles
 
-    if not hasattr(request, 'LTI'):
+    if not getattr(request, 'LTI', None):
         raise PermissionDenied
 
     user_roles = request.LTI.get('roles', [])

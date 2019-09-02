@@ -13,7 +13,7 @@ from django.utils.translation import gettext, ugettext_lazy as _
 from ontask.dataops.formula import evaluation
 from ontask.dataops.pandas import are_unique_columns, is_unique_column
 from ontask.dataops.pandas.datatypes import pandas_datatype_names
-from ontask.dataops.pandas.db import store_table
+from ontask.dataops.pandas.database import store_table
 from ontask.dataops.sql import (
     db_rename_column, delete_table, df_drop_column, get_num_rows, rename_table,
 )
@@ -136,7 +136,7 @@ def store_temporary_dataframe(
     table_name = workflow.get_data_frame_upload_table_name()
 
     if settings.DEBUG:
-        logger.debug('Storing table {tbl}', extra={'tbl': table_name})
+        logger.debug('Storing table {tbl}', tbl=table_name)
 
     # Get the if the columns have unique values per row
     column_unique = are_unique_columns(data_frame)

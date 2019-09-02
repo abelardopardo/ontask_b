@@ -39,8 +39,8 @@ def _send_and_log_json(
             'target': action.target_url,
             'text': json.dumps(json_obj),
             'auth': headers['Authorization']}
-        logger.info('SEND JSON({target}): {text}', extra=payload)
-        if hasattr(OnTaskSharedState, 'json_outbox'):
+        logger.info('SEND JSON(%s): %s', action.target_url, payload['text'])
+        if getattr(OnTaskSharedState, 'json_outbox', None):
             OnTaskSharedState.json_outbox.append(payload)
         else:
             OnTaskSharedState.json_outbox = [payload]
@@ -149,7 +149,7 @@ def send_json_list(
         },
         {'user': user.id, 'action': action.id})
 
-        # Update data in the overall log item
+    # Update data in the overall log item
     log_item.payload['filter_present'] = action.get_filter() is not None
     log_item.payload['datetime'] = str(
         datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))

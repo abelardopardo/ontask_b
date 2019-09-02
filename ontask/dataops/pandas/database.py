@@ -13,7 +13,7 @@ from django.core.cache import cache
 from django.db import connection
 from django.utils.translation import ugettext as _
 
-from ontask import OnTaskDataFrameNoKey
+from ontask import OnTaskDataFrameNoKey, OnTaskSharedState
 from ontask.dataops.pandas.columns import has_unique_column, is_unique_column
 from ontask.dataops.pandas.datatypes import pandas_datatype_names
 from ontask.dataops.sql import get_select_query_txt
@@ -29,18 +29,13 @@ ontask_to_sqlalchemy = {
     'datetime': sqlalchemy.DateTime(timezone=True),
 }
 
-# SQLAlchemy DB Engine to use with Pandas (required by to_sql, from_sql
-engine: Optional[sqlalchemy.engine.Engine] = None
-
 
 def set_engine():
     """Create a persistent SQLAlchemy connection to the DB."""
-    global engine
-
-    if engine:
+    if getattr(OnTaskSharedState, 'engine', None):
         return
 
-    engine = create_db_engine(
+    OnTaskSharedState.engine = create_db_engine(
         'postgresql',
         '+psycopg2',
         settings.DATABASES['default']['USER'],
@@ -106,12 +101,11 @@ def destroy_db_engine(db_engine=None):
 
     :return: Nothing
     """
-    global engine
-
     if db_engine:
         db_engine.dispose()
     else:
-        engine.dispose()
+        if getattr(OnTaskSharedState, 'engine', None):
+            OnTaskSharedState.engine.dispose()
 
 
 def load_table(
@@ -133,7 +127,7 @@ def load_table(
         return None
 
     if settings.DEBUG:
-        logger.debug('Loading table {tbl}', extra={'tbl': table_name})
+        logger.debug('Loading table {tbl}', tbl=table_name)
 
     if columns or filter_exp:
         # A list of columns or a filter exp is given
@@ -141,10 +135,13 @@ def load_table(
             table_name,
             column_names=columns,
             filter_formula=filter_exp)
-        return pd.read_sql_query(query, engine, params=query_fields)
+        return pd.read_sql_query(
+            query,
+            OnTaskSharedState.engine,
+            params=query_fields)
 
     # No special fields given, load the whole thing
-    return pd.read_sql_table(table_name, engine)
+    return pd.read_sql_table(table_name, OnTaskSharedState.engine)
 
 
 def store_table(
@@ -186,7 +183,7 @@ def store_table(
         # We ovewrite the content and do not create an index
         data_frame.to_sql(
             table_name,
-            engine,
+            OnTaskSharedState.engine,
             if_exists='replace',
             index=False,
             dtype={
