@@ -10,12 +10,14 @@ from django.urls import reverse
 from ontask.models import Profile
 
 User = get_user_model()
+admin.site.unregister(User)
 
 
 class UserProfileInline(admin.StackedInline):
     model = Profile
 
 
+@admin.regster(User)
 class NewUserAdmin(NamedUserAdmin):
     inlines = [UserProfileInline]
     list_display = ('is_active', 'email', 'name', 'permalink',
@@ -31,6 +33,3 @@ class NewUserAdmin(NamedUserAdmin):
         return '<a href="{}">{}</a>'.format(url, '\xb6')
     permalink.allow_tags = True
 
-
-admin.site.unregister(User)
-admin.site.register(User, NewUserAdmin)

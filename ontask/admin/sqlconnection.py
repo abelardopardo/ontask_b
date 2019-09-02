@@ -7,6 +7,7 @@ from django.contrib import admin
 from ontask.models import SQLConnection
 
 
+@admin.register(SQLConnection)
 class SQLConnectionAdmin(admin.ModelAdmin):
     """Admin for the SQL Connections."""
 
@@ -23,5 +24,3 @@ class SQLConnectionAdmin(admin.ModelAdmin):
         'db_name',
         'db_table')
 
-
-admin.site.register(SQLConnection, SQLConnectionAdmin)

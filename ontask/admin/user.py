@@ -6,8 +6,7 @@ from django.contrib import admin
 from ontask.models import OnTaskUser
 
 
+@admin.register(OnTaskUser)
 class OnTaskUserAdmin(admin.ModelAdmin):
     pass
 
-
-admin.site.register(OnTaskUser, OnTaskUserAdmin)

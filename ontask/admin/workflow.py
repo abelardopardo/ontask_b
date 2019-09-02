@@ -7,6 +7,7 @@ from django.contrib import admin
 from ontask.models import Workflow
 
 
+@admin.register(Workflow)
 class WorkflowAdmin(admin.ModelAdmin):
     """Workflow admin app."""
 
@@ -24,6 +25,3 @@ class WorkflowAdmin(admin.ModelAdmin):
         'session_key')
 
     filter_horizontal = ('shared',)
-
-
-admin.site.register(Workflow, WorkflowAdmin)

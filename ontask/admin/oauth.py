@@ -5,6 +5,7 @@ from django.contrib import admin
 from ontask.models import OAuthUserToken
 
 
+@admin.register(OAuthUserToken)
 class OAuthUserTokenAdmin(admin.ModelAdmin):
     list_display = (
         'user',
@@ -15,5 +16,3 @@ class OAuthUserTokenAdmin(admin.ModelAdmin):
         'modified',
         'valid_until')
 
-
-admin.site.register(OAuthUserToken, OAuthUserTokenAdmin)

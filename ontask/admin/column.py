@@ -7,6 +7,7 @@ from django.contrib import admin
 from ontask.models import Column
 
 
+@admin.register(Column)
 class ColumnAdmin(admin.ModelAdmin):
     """Column Admin app."""
 
@@ -18,5 +19,3 @@ class ColumnAdmin(admin.ModelAdmin):
         'categories',
         'workflow')
 
-
-admin.site.register(Column, ColumnAdmin)

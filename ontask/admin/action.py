@@ -7,6 +7,7 @@ from django.contrib import admin
 from ontask.models import Action
 
 
+@admin.register(Action)
 class ActionAdmin(admin.ModelAdmin):
     """Define Action Admin."""
 
@@ -21,5 +22,3 @@ class ActionAdmin(admin.ModelAdmin):
         'serve_enabled',
     )
 
-
-admin.site.register(Action, ActionAdmin)

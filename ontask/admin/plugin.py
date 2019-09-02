@@ -7,6 +7,7 @@ from django.contrib import admin
 from ontask.models import Plugin
 
 
+@admin.register(Plugin)
 class PluginRegistryAdmin(admin.ModelAdmin):
     """Admin for the plugin registry."""
 
@@ -18,5 +19,3 @@ class PluginRegistryAdmin(admin.ModelAdmin):
         'description_text',
         'executed')
 
-
-admin.site.register(Plugin, PluginRegistryAdmin)

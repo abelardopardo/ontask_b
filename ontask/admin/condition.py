@@ -7,6 +7,7 @@ from django.contrib import admin
 from ontask.models import Condition
 
 
+@admin.register(Condition)
 class ConditionAdmin(admin.ModelAdmin):
     """Define Condition Admin."""
 
@@ -19,6 +20,3 @@ class ConditionAdmin(admin.ModelAdmin):
         'n_rows_selected',
         'is_filter',
     )
-
-
-admin.site.register(Condition, ConditionAdmin)
