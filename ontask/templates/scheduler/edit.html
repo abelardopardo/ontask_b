@@ -10,6 +10,7 @@
   {% ontask_datetimepicker_js %}
 {% endblock extrahead %}
 {% block scripts %}
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   <script src="{% static 'scheduler/js/scheduler.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}
