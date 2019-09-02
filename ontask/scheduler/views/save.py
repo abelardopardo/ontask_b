@@ -5,22 +5,22 @@
 import datetime
 from typing import Dict
 
-from django.http import HttpRequest, HttpResponse
 import pytz
 from django.conf import settings
 from django.contrib import messages
 from django.db import IntegrityError
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from django.utils.translation import ugettext, ugettext_lazy as _
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
 )
 from ontask.models import Action, Log, ScheduledAction
 from ontask.scheduler.forms import (
-    EmailScheduleForm, JSONScheduleForm, SendListScheduleForm,
-    JSONListScheduleForm
+    EmailScheduleForm, JSONListScheduleForm, JSONScheduleForm,
+    SendListScheduleForm,
 )
 
 

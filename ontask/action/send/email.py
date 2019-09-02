@@ -4,7 +4,7 @@
 
 import datetime
 from time import sleep
-from typing import List, Union, Dict
+from typing import Dict, List, Union
 
 import html2text
 import pytz

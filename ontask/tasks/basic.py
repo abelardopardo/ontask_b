@@ -8,12 +8,13 @@ from celery import shared_task
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
 
+from ontask.action.send import (
+    send_canvas_emails, send_emails, send_json, send_json_list,
+    send_list_email,
+)
 from ontask.core.celery import get_task_logger
 from ontask.models import Action, Log, Workflow
-from ontask.action.send import (
-    send_emails, send_canvas_emails, send_list_email, send_json_list,
-    send_json
-)
+
 logger = get_task_logger('celery_execution')
 
 

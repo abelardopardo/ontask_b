@@ -32,4 +32,3 @@ class NewUserAdmin(NamedUserAdmin):
         # Unicode hex b6 is the Pilcrow sign
         return '<a href="{}">{}</a>'.format(url, '\xb6')
     permalink.allow_tags = True
-

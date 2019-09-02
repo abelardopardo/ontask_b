@@ -241,4 +241,3 @@ def run_action_item_filter(
         return redirect(action_info['post_url'])
 
     return render(request, 'action/item_filter.html', context)
-

@@ -23,4 +23,3 @@ class SQLConnectionAdmin(admin.ModelAdmin):
         'db_port',
         'db_name',
         'db_table')
-

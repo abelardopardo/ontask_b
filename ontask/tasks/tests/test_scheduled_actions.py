@@ -12,9 +12,10 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 
-from ontask import tasks, OnTaskSharedState
+from ontask import OnTaskSharedState, tasks
 from ontask.core.celery import app
 from ontask.models import Action, ScheduledAction
+
 
 class ScheduledActionTaskTestCase(test.OnTaskTestCase):
     """Test the functions to execute through celery."""
@@ -168,4 +169,3 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         assert scheduled_item.status == ScheduledAction.STATUS_DONE
         assert len(json_outbox) == 1
         assert all(token in item['auth'] for item in json_outbox)
-

@@ -19,4 +19,3 @@ class ViewAdmin(admin.ModelAdmin):
         'created',
         'modified',
         'formula')
-

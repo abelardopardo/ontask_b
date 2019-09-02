@@ -4,6 +4,7 @@ from django.db import migrations
 
 from ontask.models import Workflow
 
+
 def _adjust_boolean_operand(node):
     """Traverse the structure recursively and adjust boolean operand."""
     if 'condition' not in node:

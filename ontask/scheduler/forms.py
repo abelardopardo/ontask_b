@@ -9,11 +9,11 @@ import pytz
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_correct_email
-from ontask.core.forms import date_time_widget_options, FormWithPayload
+from ontask.core.forms import FormWithPayload, date_time_widget_options
 from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import Column, ScheduledAction
 

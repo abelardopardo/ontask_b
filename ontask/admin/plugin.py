@@ -18,4 +18,3 @@ class PluginRegistryAdmin(admin.ModelAdmin):
         'name',
         'description_text',
         'executed')
-

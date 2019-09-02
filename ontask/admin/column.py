@@ -18,4 +18,3 @@ class ColumnAdmin(admin.ModelAdmin):
         'is_key',
         'categories',
         'workflow')
-

@@ -21,4 +21,3 @@ class ActionAdmin(admin.ModelAdmin):
         'text_content',
         'serve_enabled',
     )
-

@@ -9,4 +9,3 @@ from ontask.models import OnTaskUser
 @admin.register(OnTaskUser)
 class OnTaskUserAdmin(admin.ModelAdmin):
     pass
-

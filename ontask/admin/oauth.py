@@ -15,4 +15,3 @@ class OAuthUserTokenAdmin(admin.ModelAdmin):
         'created',
         'modified',
         'valid_until')
-
