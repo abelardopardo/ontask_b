@@ -94,19 +94,21 @@ class Workflow(models.Model):
     # users, and many users can have this workflow as available to them.
     shared = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        related_name='workflows_shared')
+        related_name='workflows_shared',
+        blank=True)
 
     # Some workflows are marked with a star to appear on top of the collection
     star = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        related_name='workflows_star')
+        related_name='workflows_star',
+        blank=True)
 
     # Column stipulating where are the learner email values (or empty)
     luser_email_column = models.ForeignKey(
         'Column',
         on_delete=models.CASCADE,
         null=True,
-        blank=False,
+        blank=True,
         related_name='luser_email_column')
 
     # MD5 to detect changes in the previous column
@@ -117,6 +119,7 @@ class Workflow(models.Model):
 
     lusers = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
+        blank=True,
         default=None,
         related_name='workflows_luser')
 
