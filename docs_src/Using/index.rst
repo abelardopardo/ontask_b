@@ -661,20 +661,20 @@ Send Column data as List in JSON
 
 This type of action sends a JSON object with data in some of the columns in the workflow to a pre-defined third party platform through a URL. Creating these actions is almost identical to creating a :ref:`Personalized JSON content <personalized_json>`, action with the difference it is not possible to use conditions (there is a single object sent), and including a column in the object means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
 
-.. figure:: /scaptures/action_send_list_create.png
+.. figure:: /scaptures/action_json_list_create.png
    :align: center
    :width: 60%
 
 The page to edit this action is similar to the one to edit a :ref:`Personalized JSON content <personalized_json>` but only two tabs are present: *Text* and *Select Learners*.
  In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the object. The following figure shows the resulting object with the inclusion of the data in the *email* column.
 
-.. figure:: /scaptures/action_send_list_edit.png
+.. figure:: /scaptures/action_json_list_edit.png
    :align: center
    :width: 100%
 
 Using the *Preview* button shows how the object is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
 
-.. figure:: /scaptures/action_send_list_preview.png
+.. figure:: /scaptures/action_json_list_preview.png
    :align: center
    :width: 100%
 
@@ -891,7 +891,7 @@ Scheduled Actions
    -- Jimmy Wales
 
 
-The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>` and :ref:`personalized JSON object <personalized_json>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click in icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
+The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref`send list through email <send_list_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON list <json_list_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click in icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
 
 .. _schedule_email:
 

@@ -588,7 +588,7 @@ Survey Questions
 
   As with other tables in OnTask, if the number of elements (in this case questions) is too large, they will be divided into pages with a link to access each page, and the content of the questions is searchable.
 
-Filter Learners
+Select Learners
   This tab is identical to :ref:`the filter in the personalized text action <personalized_text_filter>`. The tab allows to include an expression to decide if a learner is included or not in the survey. This survey has no filter defined.
 
 Conditions
@@ -618,7 +618,7 @@ The tabs have the same functionality than in the case of :ref:`personalized text
 Text
   This tab contains a plain text editor to describe the structure of the object and :ref:`insert column values, attribute values or use conditions to control the presence of elements in the object <using_values_attributes_conditions>`.
 
-Filter Learners
+Select Learners
   This tab allows the definition of an expression to select a subset of rows in the table for processing.
 
 Text Conditions
@@ -629,6 +629,54 @@ The text shown in the previous figure defines a JSON object with three fields ``
 The field *Target URL* is to introduce the URL where the object will be sent.
 
 The preview button in the personalized JSON action shows the resulting object after verifying that the structure after evaluating the corresponding expressions is a valid JSON object.
+
+.. _send_list_action:
+
+Send Column data as List in Email
+=================================
+
+This type of action sends a single email including data in some of the columns in the workflow. Creating these actions is almost identical to creating a :ref:`Personalized Text <personalized_content>`, action with the difference it is not possible to use conditions (there is a single email), and including a column in the text means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
+
+.. figure:: /scaptures/action_send_list_create.png
+   :align: center
+   :width: 60%
+
+The page to edit this action is similar to the one to edit a :ref:`Personalized Text action <personalized_content>` but only two tabs are present: *Text* and *Select Learners*.
+ In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the text. The following figure shows the resulting text with the inclusion of the data in the *email* column.
+
+.. figure:: /scaptures/action_send_list_edit.png
+   :align: center
+   :width: 100%
+
+Using the *Preview* button shows how the message is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
+
+.. figure:: /scaptures/action_send_list_preview.png
+   :align: center
+   :width: 100%
+
+.. _json_list_action:
+
+Send Column data as List in JSON
+================================
+
+This type of action sends a JSON object with data in some of the columns in the workflow to a pre-defined third party platform through a URL. Creating these actions is almost identical to creating a :ref:`Personalized JSON content <personalized_json>`, action with the difference it is not possible to use conditions (there is a single object sent), and including a column in the object means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
+
+.. figure:: /scaptures/action_json_list_create.png
+   :align: center
+   :width: 60%
+
+The page to edit this action is similar to the one to edit a :ref:`Personalized JSON content <personalized_json>` but only two tabs are present: *Text* and *Select Learners*.
+ In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the object. The following figure shows the resulting object with the inclusion of the data in the *email* column.
+
+.. figure:: /scaptures/action_json_list_edit.png
+   :align: center
+   :width: 100%
+
+Using the *Preview* button shows how the object is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
+
+.. figure:: /scaptures/action_json_list_preview.png
+   :align: center
+   :width: 100%
 
 .. _personalized_canvas_email:
 
@@ -647,7 +695,7 @@ The page to edit this action is almost identical to the one to edit a :ref:`Pers
    :align: center
    :width: 100%
 
-It contains three tabs: *Personalized Canvas Email*, *Text Conditions* and *Filter Learners*. The last two, :ref:`Conditions <personalized_text_conditions>` and :ref:`Filter Learners <personalized_text_filter>` offer the same functionality. The *Personalized Canvas Email* allows the creation of a plain text message (no HTML markup is allowed).
+It contains three tabs: *Personalized Canvas Email*, *Text Conditions* and *Select Learners*. The last two, :ref:`Conditions <personalized_text_conditions>` and :ref:`Select Learners <personalized_text_filter>` offer the same functionality. The *Personalized Canvas Email* allows the creation of a plain text message (no HTML markup is allowed).
 
 .. _running_actions:
 
@@ -843,7 +891,7 @@ Scheduled Actions
    -- Jimmy Wales
 
 
-The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>` and :ref:`personalized JSON object <personalized_json>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click in icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
+The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref`send list through email <send_list_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON list <json_list_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click in icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
 
 .. _schedule_email:
 
