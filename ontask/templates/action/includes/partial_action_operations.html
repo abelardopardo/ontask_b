@@ -8,7 +8,7 @@
     <button class="btn btn-light btn-sm" type="button" id="actionMoreOperations"
             data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
     <div class="shadow dropdown-menu dropdown-menu-right" aria-labelledby="actionMoreOperations">
-      {% if action_tval == 'personalized_text' or action_tval == 'personalized_canvas_email' %}
+      {% if action_tval == 'personalized_text' or action_tval == 'personalized_canvas_email' or action_tval == 'survey' %}
         <button type="button"
                 class="dropdown-item js-action-showurl"
                 data-url="{% url 'action:showurl' id %}"
