@@ -1314,7 +1314,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def open_action_url(self, name, txt='URL On'):
         xpath_str = \
             '//table[@id="action-table"]' \
-            '//tr/td[2][normalize-space() = "{0}"]/' \
+            '//tr/td[2][contains(normalize-space(), "{0}")]/' \
             '../td[5]/div/div/button'.format(name)
         self.click_dropdown_option_and_wait(xpath_str, txt)
 

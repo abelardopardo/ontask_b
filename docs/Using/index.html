@@ -91,39 +91,43 @@
 <li><p><a class="reference internal" href="#surveys" id="id26">Surveys</a></p></li>
 <li><p><a class="reference internal" href="#personalized-json-object" id="id27">Personalized JSON Object</a></p></li>
 <li><p><a class="reference internal" href="#personalized-canvas-email" id="id28">Personalized Canvas Email</a></p></li>
+</ul>
+</li>
 <li><p><a class="reference internal" href="#running-actions" id="id29">Running actions</a></p>
 <ul>
 <li><p><a class="reference internal" href="#sending-personalized-emails-personalized-text-actions" id="id30">Sending personalized emails (Personalized Text Actions)</a></p></li>
 <li><p><a class="reference internal" href="#making-personalized-content-available-to-learners" id="id31">Making personalized content available to learners</a></p></li>
-<li><p><a class="reference internal" href="#running-a-survey" id="id32">Running a survey</a></p></li>
-<li><p><a class="reference internal" href="#sending-personalized-emails-in-canvas" id="id33">Sending personalized emails in Canvas</a></p></li>
-<li><p><a class="reference internal" href="#sending-personalized-json-objects-to-another-platform" id="id34">Sending personalized JSON objects to another platform</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#creating-a-zip-file-with-the-personalized-text" id="id35">Creating a ZIP file with the personalized text</a></p>
+<li><p><a class="reference internal" href="#running-a-survey" id="id32">Running a survey</a></p>
 <ul>
-<li><p><a class="reference internal" href="#uploading-feedback-files-for-a-moodle-assignment" id="id36">Uploading feedback files for a Moodle Assignment</a></p></li>
+<li><p><a class="reference internal" href="#making-the-survey-available-to-the-learners" id="id33">Making the survey available to the learners</a></p></li>
 </ul>
 </li>
+<li><p><a class="reference internal" href="#sending-personalized-emails-in-canvas" id="id34">Sending personalized emails in Canvas</a></p></li>
+<li><p><a class="reference internal" href="#sending-personalized-json-objects-to-another-platform" id="id35">Sending personalized JSON objects to another platform</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#additional-workflow-operations" id="id37">Additional Workflow Operations</a></p>
+<li><p><a class="reference internal" href="#creating-a-zip-file-with-the-personalized-text-for-moodle" id="id36">Creating a ZIP file with the personalized text (for Moodle)</a></p>
 <ul>
-<li><p><a class="reference internal" href="#workflow-operations" id="id38">Workflow Operations</a></p></li>
-<li><p><a class="reference internal" href="#column-operations" id="id39">Column Operations</a></p></li>
-<li><p><a class="reference internal" href="#scheduled-actions" id="id40">Scheduled Actions</a></p>
-<ul>
-<li><p><a class="reference internal" href="#scheduling-a-personalized-text-action" id="id41">Scheduling a Personalized Text Action</a></p></li>
-<li><p><a class="reference internal" href="#scheduling-a-personalized-json-action" id="id42">Scheduling a Personalized JSON Action</a></p></li>
-<li><p><a class="reference internal" href="#table-with-scheduled-actions" id="id43">Table with Scheduled Actions</a></p></li>
+<li><p><a class="reference internal" href="#uploading-feedback-files-for-a-moodle-assignment" id="id37">Uploading feedback files for a Moodle Assignment</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#view-logs" id="id44">View logs</a></p></li>
+<li><p><a class="reference internal" href="#additional-workflow-operations" id="id38">Additional Workflow Operations</a></p>
+<ul>
+<li><p><a class="reference internal" href="#workflow-operations" id="id39">Workflow Operations</a></p></li>
+<li><p><a class="reference internal" href="#column-operations" id="id40">Column Operations</a></p></li>
+<li><p><a class="reference internal" href="#scheduled-actions" id="id41">Scheduled Actions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#scheduling-a-personalized-text-action" id="id42">Scheduling a Personalized Text Action</a></p></li>
+<li><p><a class="reference internal" href="#scheduling-a-personalized-json-action" id="id43">Scheduling a Personalized JSON Action</a></p></li>
+<li><p><a class="reference internal" href="#table-with-scheduled-actions" id="id44">Table with Scheduled Actions</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#transforming-the-data-with-your-own-code" id="id45">Transforming the data with your own code</a></p>
+<li><p><a class="reference internal" href="#view-logs" id="id45">View logs</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#transforming-the-data-with-your-own-code" id="id46">Transforming the data with your own code</a></p>
 <ul>
-<li><p><a class="reference internal" href="#transformation-requirements" id="id46">Transformation requirements</a></p></li>
+<li><p><a class="reference internal" href="#transformation-requirements" id="id47">Transformation requirements</a></p></li>
 </ul>
 </li>
 </ul>
@@ -135,7 +139,7 @@
 <p>Imagine a learning experience in which you want to provide three personalized messages to the learners. In the first week, you want to send a welcome email and personalize slightly the text of this message based on the student background (courses taken before this one). The second week you want to send some comments and suggestions about the participation in the forum and the text will depend on the measures of engagement obtained from the platform. The third personalized email will vary depending on the level of engagement with the videos in the course. The idea of these messages is that you want to change the text in the message for each learner based on the information stored in the table.</p>
 <p>OnTasks allows instructors to manage a set of <strong>workflows</strong>. A <a class="reference internal" href="#workflow"><span class="std std-ref">workflow</span></a> contains a <strong>table</strong> with data about the learners and a set of <strong>actions</strong>. After creating and opening a workflow you need to populate the table with data extracted from the learning environment. We assume that there several data sources (coming from the use of technology, self-reported by the students, or observed and reported by the instructors). These data sources are combined and stored in the <strong>table</strong>. Think of the table as a conventional excel sheet storing the information about the learners (one learner per row and a set of features about each learner as columns).</p>
 <p>The other relevant entity in OnTask is the <strong>action</strong> that is either a set of questions to collect information from the learner or a text with elements that are selected or ignored based on <strong>conditions</strong> that are evaluated with respect to the learner student features stored in the table. This text can be included in an email, made available through a web page, or forwarded to another system for further processing.</p>
-<p>The rest of the material in this section will use an <a class="reference download internal" download="" href="../_downloads/3f296252720ca5cd234946310996f00b/initial_workflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">initial</span> <span class="pre">workflow</span></code></a> that can be downloaded and imported to your collection of workflows in OnTask.</p>
+<p>The rest of the material in this section will use an <a class="reference download internal" download="" href="../_downloads/73ca6f57df6a7b69193a65fb3c231291/initial_workflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">initial</span> <span class="pre">workflow</span></code></a> that can be downloaded and imported to your collection of workflows in OnTask.</p>
 <div class="section" id="workflow">
 <span id="id1"></span><h2>3.1. Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h2>
 <blockquote>
@@ -640,11 +644,12 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </div>
 <p>It contains three tabs: <em>Personalized Canvas Email</em>, <em>Text Conditions</em> and <em>Filter Learners</em>. The last two, <a class="reference internal" href="#personalized-text-conditions"><span class="std std-ref">Conditions</span></a> and <a class="reference internal" href="#personalized-text-filter"><span class="std std-ref">Filter Learners</span></a> offer the same functionality. The <em>Personalized Canvas Email</em> allows the creation of a plain text message (no HTML markup is allowed).</p>
 </div>
+</div>
 <div class="section" id="running-actions">
-<span id="id8"></span><h3>3.4.5. Running actions<a class="headerlink" href="#running-actions" title="Permalink to this headline">¶</a></h3>
+<span id="id8"></span><h2>3.5. Running actions<a class="headerlink" href="#running-actions" title="Permalink to this headline">¶</a></h2>
 <p>Once an action has been created, it can be <em>run</em>. The meaning of this term is different for the various types of actions supported in OnTask.</p>
 <div class="section" id="sending-personalized-emails-personalized-text-actions">
-<span id="personalized-emails"></span><h4>3.4.5.1. Sending personalized emails (Personalized Text Actions)<a class="headerlink" href="#sending-personalized-emails-personalized-text-actions" title="Permalink to this headline">¶</a></h4>
+<span id="personalized-emails"></span><h3>3.5.1. Sending personalized emails (Personalized Text Actions)<a class="headerlink" href="#sending-personalized-emails-personalized-text-actions" title="Permalink to this headline">¶</a></h3>
 <p>Once you created a personalized text action and verified its content using the <em>Preview</em> button, save its content. The right-most column has a button with name <em>Run</em>.</p>
 <div class="figure align-center">
 <img alt="../_images/action_action_ops.png" src="../_images/action_action_ops.png" />
@@ -675,7 +680,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <p>If the option to <em>Check/exclude emails</em> has been selected, clicking in the <em>Next</em> button leads to a page where the list of emails is shown and the user can select some of them to remove from the operation. If this option is not selected, the operation to send the emails is sent to a queue for processing. The browser will show the record that contains the information about the status of this request.</p>
 </div>
 <div class="section" id="making-personalized-content-available-to-learners">
-<h4>3.4.5.2. Making personalized content available to learners<a class="headerlink" href="#making-personalized-content-available-to-learners" title="Permalink to this headline">¶</a></h4>
+<h3>3.5.2. Making personalized content available to learners<a class="headerlink" href="#making-personalized-content-available-to-learners" title="Permalink to this headline">¶</a></h3>
 <p>Sending a personalized text is just one possible way to make this content available to learner. Another one is to offer the content through a URL that can be given to the learners. To enable such URL click in the icon with three dots in the right most corner of a personalized text action.</p>
 <div class="figure align-center">
 <img alt="../_images/action_action_ops.png" src="../_images/action_action_ops.png" />
@@ -687,7 +692,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <p>In order for the learners to be able to view their personalized content, they have to be users of the OnTask platform and their ID present in the data table. This functionality is conceived for a context in which OnTask authenticates users either through a corporate Single-sign on layer, or learners access the OnTask through the Learning Management System with a LTI interface (see <a class="reference internal" href="../Install/index.html#authentication"><span class="std std-ref">Authentication</span></a>).</p>
 </div>
 <div class="section" id="running-a-survey">
-<h4>3.4.5.3. Running a survey<a class="headerlink" href="#running-a-survey" title="Permalink to this headline">¶</a></h4>
+<h3>3.5.3. Running a survey<a class="headerlink" href="#running-a-survey" title="Permalink to this headline">¶</a></h3>
 <p>After creating a <a class="reference internal" href="#surveys"><span class="std std-ref">survey action</span></a> it can be used in two modalities: run by the instructor, or given to the learners to fill out the data. The first modality is used as a mechanism to capture instructor observations. For example, surveys run by the instructor can be used as an attendance capturing mechanism (if the instructor has a device or procedure to capture who is in attendance). If the <em>Run</em> operation is selected, OnTask shows a table with the learners selected for the action, and the values for the survey collected so far.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_run_action_in.png"><img alt="../_images/action_run_action_in.png" src="../_images/action_run_action_in.png" style="width: 100%;" /></a>
@@ -698,7 +703,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </div>
 <p>After entering the information the list of students for which the data entry is still allowed.</p>
 <div class="section" id="making-the-survey-available-to-the-learners">
-<h5>3.4.5.3.1. Making the survey available to the learners<a class="headerlink" href="#making-the-survey-available-to-the-learners" title="Permalink to this headline">¶</a></h5>
+<h4>3.5.3.1. Making the survey available to the learners<a class="headerlink" href="#making-the-survey-available-to-the-learners" title="Permalink to this headline">¶</a></h4>
 <p>The second operation available for <em>survey</em> actions is to make available the URL to learners so that they individually enter the information themselves. The right-most column of the action table contains an icon with three dots that if selected shows a set of additional operations, and one of them has the text <em>URL</em>. If selected OnTask shows the URL for the survey, the possibility of enable/disable it, or even provide a date/time window for its availability.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_action_in_URL.png"><img alt="../_images/action_action_in_URL.png" src="../_images/action_action_in_URL.png" style="width: 60%;" /></a>
@@ -708,7 +713,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </div>
 </div>
 <div class="section" id="sending-personalized-emails-in-canvas">
-<span id="send-personalized-canvas-emails"></span><h4>3.4.5.4. Sending personalized emails in Canvas<a class="headerlink" href="#sending-personalized-emails-in-canvas" title="Permalink to this headline">¶</a></h4>
+<span id="send-personalized-canvas-emails"></span><h3>3.5.4. Sending personalized emails in Canvas<a class="headerlink" href="#sending-personalized-emails-in-canvas" title="Permalink to this headline">¶</a></h3>
 <p>The execution of a <a class="reference internal" href="#personalized-canvas-email"><span class="std std-ref">Personalized Canvas Email</span></a> action requires additional information as shown in the following figure:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_personalized_canvas_email_run.png"><img alt="../_images/action_personalized_canvas_email_run.png" src="../_images/action_personalized_canvas_email_run.png" style="width: 100%;" /></a>
@@ -728,7 +733,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <p>After introducing this data, OnTask will check if it has credentials for the user to access Canvas through its API. If not, the user will be redirected to a page in the Canvas Learning Management System to 1) authenticate, and 2) authorize OnTask to access the platform. If these steps are successful, the user is redirected back to OnTask and the messages are delivered. The credentials retrieved from Canvas will be reused for future executions of this action.</p>
 </div>
 <div class="section" id="sending-personalized-json-objects-to-another-platform">
-<h4>3.4.5.5. Sending personalized JSON objects to another platform<a class="headerlink" href="#sending-personalized-json-objects-to-another-platform" title="Permalink to this headline">¶</a></h4>
+<h3>3.5.5. Sending personalized JSON objects to another platform<a class="headerlink" href="#sending-personalized-json-objects-to-another-platform" title="Permalink to this headline">¶</a></h3>
 <p>The operation to <em>Run</em> a personalized JSON action sends the objects resulting from the personalization to the given URL. The page to collect the information to run these actions is shown in the next figure:</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_json_run_request_data.png"><img alt="../_images/action_json_run_request_data.png" src="../_images/action_json_run_request_data.png" style="width: 100%;" /></a>
@@ -737,15 +742,15 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <p>Similarly to the email actions, once these fields are provided, the operation to send the JSON objects to the target URL is queued in a batch system for processing. The browser shows the record where the status of this request is reflected.</p>
 </div>
 </div>
-<div class="section" id="creating-a-zip-file-with-the-personalized-text">
-<h3>3.4.6. Creating a ZIP file with the personalized text<a class="headerlink" href="#creating-a-zip-file-with-the-personalized-text" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="creating-a-zip-file-with-the-personalized-text-for-moodle">
+<h2>3.6. Creating a ZIP file with the personalized text (for Moodle)<a class="headerlink" href="#creating-a-zip-file-with-the-personalized-text-for-moodle" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text actions</span></a> offer the possibility of creating a ZIP file containing one HTML file with the personalized text for every learner. The execution of this operation requires the use of two columns in the table and a suffix to create the file names. The operation is available clicking in the icon with three dots in the right-most column of an action in the action page. The additional information is requested through the form shown in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_zip_request_data.png"><img alt="../_images/action_zip_request_data.png" src="../_images/action_zip_request_data.png" style="width: 100%;" /></a>
 </div>
 <p>The first part of the file name is taken from the values of a key column. The second part of the file name is taken from a second column (optional). Additionally, the user may include a third suffix to be used for the last part of the file name (if none is given the default suffix is <code class="docutils literal notranslate"><span class="pre">feedback.html</span></code>. For example if the first column has the values <code class="docutils literal notranslate"><span class="pre">submission</span> <span class="pre">01,</span> <span class="pre">submission</span> <span class="pre">02,</span> <span class="pre">submission</span> <span class="pre">03</span></code>, the second column has the names <code class="docutils literal notranslate"><span class="pre">John,</span> <span class="pre">Paul,</span> <span class="pre">Mary</span></code>, and the file suffix is empty, the ZIP file will be created with three HTML files with names <code class="docutils literal notranslate"><span class="pre">submission</span> <span class="pre">01_John_feedback.html</span></code>, <code class="docutils literal notranslate"><span class="pre">submission</span> <span class="pre">02_Paul_feedback.html</span></code> and <code class="docutils literal notranslate"><span class="pre">submission</span> <span class="pre">03_Mary_feedback.html</span></code>.</p>
 <div class="section" id="uploading-feedback-files-for-a-moodle-assignment">
-<span id="upload-feedback-to-moodle"></span><h4>3.4.6.1. Uploading feedback files for a Moodle Assignment<a class="headerlink" href="#uploading-feedback-files-for-a-moodle-assignment" title="Permalink to this headline">¶</a></h4>
+<span id="upload-feedback-to-moodle"></span><h3>3.6.1. Uploading feedback files for a Moodle Assignment<a class="headerlink" href="#uploading-feedback-files-for-a-moodle-assignment" title="Permalink to this headline">¶</a></h3>
 <p>One of the potential uses of the ZIP file generated from a personalized text action is to upload each file as personalized feedback of an assignment in a Moodle course. However, there are some requirements in the file names so that they are uploaded each to the appropriate location, namely:</p>
 <ol class="arabic simple">
 <li><p>The table must have column named <code class="docutils literal notranslate"><span class="pre">Identifier</span></code> with values starting with the word <code class="docutils literal notranslate"><span class="pre">Participant</span></code> followed by a white space and a unique number. This column can be extracted from a Moodle Assignment by downloading the <em>grading worksheet</em>:</p></li>
@@ -770,12 +775,11 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </ol>
 </div>
 </div>
-</div>
 <div class="section" id="additional-workflow-operations">
-<span id="workflow-settings"></span><h2>3.5. Additional Workflow Operations<a class="headerlink" href="#additional-workflow-operations" title="Permalink to this headline">¶</a></h2>
+<span id="workflow-settings"></span><h2>3.7. Additional Workflow Operations<a class="headerlink" href="#additional-workflow-operations" title="Permalink to this headline">¶</a></h2>
 <p>In addition to the operations described in the previous sections to upload and merge data, create actions, and run these actions, there are additional operations for the workflow that can be accessed through the <span class="fa fa-cog"></span> More pull-down menu in the top-bar menu. The settings pages offer information about: workflow operations (export, rename, clone, etc.), column operations (change column type, rename, clone, etc.), scheduled actions, and view logs.</p>
 <div class="section" id="workflow-operations">
-<span id="details"></span><h3>3.5.1. Workflow Operations<a class="headerlink" href="#workflow-operations" title="Permalink to this headline">¶</a></h3>
+<span id="details"></span><h3>3.7.1. Workflow Operations<a class="headerlink" href="#workflow-operations" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>“The details are not the details. They make the design”
 – Charles Eames</p>
@@ -839,7 +843,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </dl>
 </div>
 <div class="section" id="column-operations">
-<span id="columns"></span><h3>3.5.2. Column Operations<a class="headerlink" href="#column-operations" title="Permalink to this headline">¶</a></h3>
+<span id="columns"></span><h3>3.7.2. Column Operations<a class="headerlink" href="#column-operations" title="Permalink to this headline">¶</a></h3>
 <p>The <em>Column Operations</em> page is available through the <span class="fa fa-cog"></span> <em>More</em> link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.</p>
 <div class="figure align-center">
 <img alt="../_images/workflow_details.png" src="../_images/workflow_details.png" />
@@ -918,14 +922,14 @@ created the current values of the other columns. The column is not refreshed if 
 <p>The position of the columns can also be changed by dragging by the number (left-most column) and dropping them in the new position.</p>
 </div>
 <div class="section" id="scheduled-actions">
-<span id="scheduler"></span><h3>3.5.3. Scheduled Actions<a class="headerlink" href="#scheduled-actions" title="Permalink to this headline">¶</a></h3>
+<span id="scheduler"></span><h3>3.7.3. Scheduled Actions<a class="headerlink" href="#scheduled-actions" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><p>“I have no regular schedule. I get up whenever I can.”
 – Jimmy Wales</p>
 </div></blockquote>
 <p>The <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>, <a class="reference internal" href="#personalized-canvas-email"><span class="std std-ref">personalized canvas email</span></a> and <a class="reference internal" href="#personalized-json"><span class="std std-ref">personalized JSON object</span></a> actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the <span class="fa fa-comments"></span> <em>Actions</em> page from the top menu, click in icon with three dots in the right-most column of the action and select the operation <span class="fa fa-calendar"></span> <em>Schedule</em>.</p>
 <div class="section" id="scheduling-a-personalized-text-action">
-<span id="schedule-email"></span><h4>3.5.3.1. Scheduling a Personalized Text Action<a class="headerlink" href="#scheduling-a-personalized-text-action" title="Permalink to this headline">¶</a></h4>
+<span id="schedule-email"></span><h4>3.7.3.1. Scheduling a Personalized Text Action<a class="headerlink" href="#scheduling-a-personalized-text-action" title="Permalink to this headline">¶</a></h4>
 <p>The following figure shows the information requested to schedule the execution of a personalized text action (sending emails to learners):</p>
 <div class="figure align-center">
 <img alt="../_images/schedule_action_email.png" src="../_images/schedule_action_email.png" />
@@ -955,7 +959,7 @@ created the current values of the other columns. The column is not refreshed if 
 </dl>
 </div>
 <div class="section" id="scheduling-a-personalized-json-action">
-<span id="schedule-json"></span><h4>3.5.3.2. Scheduling a Personalized JSON Action<a class="headerlink" href="#scheduling-a-personalized-json-action" title="Permalink to this headline">¶</a></h4>
+<span id="schedule-json"></span><h4>3.7.3.2. Scheduling a Personalized JSON Action<a class="headerlink" href="#scheduling-a-personalized-json-action" title="Permalink to this headline">¶</a></h4>
 <p>The following figure shows the information requested to schedule the execution of a personalized JSON action (sending JSON object to another platform):</p>
 <div class="figure align-center">
 <img alt="../_images/schedule_action_json.png" src="../_images/schedule_action_json.png" />
@@ -973,7 +977,7 @@ created the current values of the other columns. The column is not refreshed if 
 </dl>
 <span class="target" id="schedule-canvas"></span></div>
 <div class="section" id="table-with-scheduled-actions">
-<span id="scheduler-menu"></span><h4>3.5.3.3. Table with Scheduled Actions<a class="headerlink" href="#table-with-scheduled-actions" title="Permalink to this headline">¶</a></h4>
+<span id="scheduler-menu"></span><h4>3.7.3.3. Table with Scheduled Actions<a class="headerlink" href="#table-with-scheduled-actions" title="Permalink to this headline">¶</a></h4>
 <p>The table showing all the action scheduling operations can be access through the <span class="fa fa-cog"></span> <em>More</em> link in the top-bar menu selecting the <span class="fa fa-calendar"></span> <em>Scheduled actions</em> link. The list of scheduled actions is shown as illustrated in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/schedule.png"><img alt="../_images/schedule.png" src="../_images/schedule.png" style="width: 100%;" /></a>
@@ -996,7 +1000,7 @@ created the current values of the other columns. The column is not refreshed if 
 </div>
 </div>
 <div class="section" id="view-logs">
-<span id="logs"></span><h3>3.5.4. View logs<a class="headerlink" href="#view-logs" title="Permalink to this headline">¶</a></h3>
+<span id="logs"></span><h3>3.7.4. View logs<a class="headerlink" href="#view-logs" title="Permalink to this headline">¶</a></h3>
 <p>The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the <em>View Logs</em> link in the <span class="fa fa-cog"></span> <em>More</em> pull down menu at the top-bar menu. The page shows information about the records in tabular form. The following figure shows an example.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/logs.png"><img alt="../_images/logs.png" src="../_images/logs.png" style="width: 100%;" /></a>
@@ -1005,7 +1009,7 @@ created the current values of the other columns. The column is not refreshed if 
 </div>
 </div>
 <div class="section" id="transforming-the-data-with-your-own-code">
-<span id="plugin-run"></span><h2>3.6. Transforming the data with your own code<a class="headerlink" href="#transforming-the-data-with-your-own-code" title="Permalink to this headline">¶</a></h2>
+<span id="plugin-run"></span><h2>3.8. Transforming the data with your own code<a class="headerlink" href="#transforming-the-data-with-your-own-code" title="Permalink to this headline">¶</a></h2>
 <p>The additional method offered by OnTask to manipulate the data in a workflow table is to execute arbitrary Python code encapsulated as a Python module and placed in a predefined folder in the computer hosting the server. These Python modules are called either <strong>Transformations</strong> or <strong>Models</strong> and require some <a class="reference internal" href="../Install/index.html#plugin-install"><span class="std std-ref">previous configuration</span></a> by the system administrator, namely, the Python module must be installed in a specific folder.</p>
 <p>The purpose of these transformations and models is to allow arbitrary processing of the data attached to a workflow such as machine learning algorithms, predictive models, etc. The list of transformations available for execution can be accessed through the links <em>Run Transformation</em> and <em>Run Model</em> in the <em>Table</em> button of the top menu. The modules available for execution are shown in a table like the one in the next figure.</p>
 <div class="figure align-center">
@@ -1028,7 +1032,7 @@ created the current values of the other columns. The column is not refreshed if 
 </dl>
 <p>Once the data is filled, the program is executed by clicking in the <span class="fa fa-rocket"></span> <em>Run</em> button. The execution is done in the background (it may take some tie), and a link to the log including the report is shown.</p>
 <div class="section" id="transformation-requirements">
-<span id="plugin-requirements"></span><h3>3.6.1. Transformation requirements<a class="headerlink" href="#transformation-requirements" title="Permalink to this headline">¶</a></h3>
+<span id="plugin-requirements"></span><h3>3.8.1. Transformation requirements<a class="headerlink" href="#transformation-requirements" title="Permalink to this headline">¶</a></h3>
 <p>The information in this section is for those users that want to write a Python module. The modules installed in the predefined folder need to satisfy several requirements to be considered for execution within OnTask. More precisely, each module must be stored in its own folder (as a Python module). The file <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> in the module must contain:</p>
 <ol class="arabic">
 <li><p>Module variable <code class="docutils literal notranslate"><span class="pre">class_name</span></code> with the name of the class in the file that contains the required definitions.</p></li>
@@ -1125,8 +1129,10 @@ merged with the existing data.</p>
 <li class="toctree-l2"><a class="reference internal" href="#data">3.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#table">3.3. Table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#actions">3.4. Actions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#additional-workflow-operations">3.5. Additional Workflow Operations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#transforming-the-data-with-your-own-code">3.6. Transforming the data with your own code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-actions">3.5. Running actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-zip-file-with-the-personalized-text-for-moodle">3.6. Creating a ZIP file with the personalized text (for Moodle)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-workflow-operations">3.7. Additional Workflow Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transforming-the-data-with-your-own-code">3.8. Transforming the data with your own code</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">4. Use Scenarios</a></li>
