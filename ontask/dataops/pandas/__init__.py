@@ -12,7 +12,7 @@ from ontask.dataops.pandas.dataframe import (
 )
 from ontask.dataops.pandas.datatypes import pandas_datatype_names
 from ontask.dataops.pandas.database import (
-    check_wf_df, create_db_engine, destroy_db_engine, engine, load_table,
+    check_wf_df, create_db_engine, destroy_db_engine, load_table,
     set_engine, store_table, verify_data_frame,
 )
 from ontask.dataops.pandas.merge import perform_dataframe_upload_merge

@@ -270,5 +270,4 @@ def delete_table(table_name: str):
     except Exception as exc:
         logger.error(
             'Error when dropping table {tname}: {excmsg}',
-            extra={'tname': table_name, 'excmsg': str(exc)},
-        )
+            tname=table_name, excmsg=str(exc))

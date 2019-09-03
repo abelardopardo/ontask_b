@@ -32,8 +32,7 @@ def get_log_item(log_id: int) -> Optional[Log]:
         # Not much can be done here. Call has no place to report error...
         logger.error(
             ugettext('Incorrect execution request with log_id {lid}'),
-            extras={'lid': log_id},
-        )
+            lid=log_id)
 
     return log_item
 

@@ -82,9 +82,7 @@ def create_db_engine(
     )
 
     if settings.DEBUG:
-        logger.debug(
-            'Creating engine: {db_url}',
-            extra={'db_url': database_url})
+        logger.debug('Creating engine: {db_url}', db_url=database_url)
 
     return sqlalchemy.create_engine(
         database_url,

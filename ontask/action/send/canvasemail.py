@@ -108,11 +108,8 @@ def send_canvas_emails(
             # Print the JSON that would be sent through the logger
             logger.info(
                 'SEND JSON({target}): {obj}',
-                extra={
-                    'target': target_url,
-                    'obj': json.dumps(canvas_email_payload),
-                },
-            )
+                target=target_url,
+                obj=json.dumps(canvas_email_payload))
             result_msg = 'SENT TO LOGGER'
             response_status = 200
 
@@ -190,8 +187,7 @@ def do_burst_pause(burst: int, burst_pause: int, idx: int):
         # Burst exists and the limit has been reached
         logger.info(
             'Burst ({burst}) reached. Waiting for {pause} secs',
-            extra={'burst': burst, 'pause': burst_pause},
-        )
+            burst=burst, pause=burst_pause)
         sleep(burst_pause)
 
 

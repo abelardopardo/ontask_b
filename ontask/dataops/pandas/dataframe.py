@@ -169,7 +169,7 @@ def store_dataframe(
     if settings.DEBUG:
         logger.debug(
             'Storing dataframe {tbl}',
-            extra={'tbl': workflow.get_data_frame_upload_table_name()})
+            tbl=workflow.get_data_frame_upload_table_name())
 
     _verify_dataframe_columns(workflow, data_frame)
 

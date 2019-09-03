@@ -25,4 +25,4 @@ def create_ontaskuser_handler(sender, instance, created, **kwargs):
     ouser.save()
     logger.info(
         _('New ontask user profile for {inst} created'),
-        extra={'inst': instance})
+        inst=instance)

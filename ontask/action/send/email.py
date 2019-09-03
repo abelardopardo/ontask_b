@@ -306,8 +306,8 @@ def _deliver_msg_burst(
         if idx != len(msg_chunks) - 1:
             logger.info(
                 'Email Burst ({n}) reached. Waiting for {t} secs',
-                extra={'n': len(msg_chunk), 't': wait_time},
-            )
+                n=len(msg_chunk),
+                t=wait_time)
             sleep(wait_time)
 
 
