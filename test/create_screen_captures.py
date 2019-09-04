@@ -74,6 +74,10 @@ class ScreenImportTest(ScreenTests):
         super().setUp()
         test.create_users()
 
+    def tearDown(self):
+        test.delete_all_tables()
+        super().tearDown()
+
     def test_ss_01(self):
         """
         Create a workflow, upload data and merge

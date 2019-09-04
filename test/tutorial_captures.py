@@ -411,7 +411,7 @@ class TutorialCaptures(ScreenTests):
             'id_item_column'))
         select.select_by_value('email')
         self.selenium.find_element_by_id('id_cc_email').send_keys(
-            'tutor1@example.com, tutor2@example.com'
+            'tutor1@example.com tutor2@example.com'
         )
         self.selenium.find_element_by_id('id_bcc_email').send_keys(
             'coursecoordinator@bogus.com'
