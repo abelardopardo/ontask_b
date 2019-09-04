@@ -892,6 +892,9 @@ class ScreenTestFixture(ScreenTests):
         self.selenium.find_element_by_id('id_name').send_keys(
             'Send JSON object in Week 5'
         )
+        Select(self.selenium.find_element_by_id(
+            'id_item_column')
+        ).select_by_visible_text('email')
         dt_widget = self.selenium.find_element_by_xpath(
             "//input[@id='id_execute']"
         )
