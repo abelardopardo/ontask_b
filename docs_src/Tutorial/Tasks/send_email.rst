@@ -20,7 +20,7 @@ Column to use as email address
   address to use in the *To* field of the email.
 
 Comma separated list of CC emails
-  This is useful when you want to send the emails with copy to other users. The CC emails must be separated by commas (e.g. *user1@bogus.com, user2@bogus.com*)
+  This is useful when you want to send the emails with copy to other users. The CC emails must be separated by spaces (e.g. *user1@bogus.com user2@bogus.com*)
 
 Comma separated list of BCC emails
   Field analogous to the previous one except that the values are used in the blind copy of the email.
