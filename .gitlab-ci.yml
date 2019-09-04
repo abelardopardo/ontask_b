@@ -42,9 +42,20 @@ test:
 build_doc:
   stage: Build doc
   script:
+    - python3 manage.py collectstatic --no-input
+    - coverage run -a ./manage.py test --failfast test.create_screen_captures
+    - coverage run -a ./manage.py test --failfast test.scenario_01_captures
+    - coverage run -a ./manage.py test --failfast test.scenario_02_captures
+    - coverage run -a ./manage.py test --failfast test.scenario_03_captures
+    - coverage run -a ./manage.py test --failfast test.tutorial_captures
+    - cd test/images
+    - bash push.sh
+    - cd ../..
     - cd docs_src && make clean html copy_to_docs
   artifacts:
     paths:
+      - htmlcov
+      - .coverage
       - docs
 
 #variables:
