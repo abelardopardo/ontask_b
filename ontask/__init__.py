@@ -19,7 +19,7 @@ __all__ = [
     'OnTaskSharedState'
 ]
 
-__version__ = 'B.5.2.2'
+__version__ = 'B.6.0'
 
 app_config = 'ontask.apps.ActionConfig'
 
