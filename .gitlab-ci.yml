@@ -43,11 +43,11 @@ build_doc:
   stage: Build doc
   script:
     - python3 manage.py collectstatic --no-input
-    - coverage run -a ./manage.py test --failfast test.create_screen_captures
-    - coverage run -a ./manage.py test --failfast test.scenario_01_captures
-    - coverage run -a ./manage.py test --failfast test.scenario_02_captures
-    - coverage run -a ./manage.py test --failfast test.scenario_03_captures
-    - coverage run -a ./manage.py test --failfast test.tutorial_captures
+    - coverage run -a ./manage.py test -v 2 test.create_screen_captures
+    - coverage run -a ./manage.py test -v 2 test.scenario_01_captures
+    - coverage run -a ./manage.py test -v 2 test.scenario_02_captures
+    - coverage run -a ./manage.py test -v 2 test.scenario_03_captures
+    - coverage run -a ./manage.py test -v 2 test.tutorial_captures
     - cd test/images
     - bash push.sh
     - cd ../..
