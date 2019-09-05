@@ -16,10 +16,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask.dataops.pandas import destroy_db_engine
+from ontask.models import Workflow
 from ontask.workflow.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
-from ontask.workflow.models import Workflow
 
 
 class WorkflowImportExport(test.OnTaskTestCase):
@@ -27,7 +27,6 @@ class WorkflowImportExport(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'workflow',
         'fixtures',
         'simple_workflow_export.sql'
     )
@@ -69,7 +68,6 @@ class WorkflowImport(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'workflow',
         'fixtures',
         'simple_workflow_export.sql'
     )
@@ -100,7 +98,6 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         wfile = self.selenium.find_element_by_id('id_wf_file')
         wfile.send_keys(os.path.join(settings.BASE_DIR(),
                                      'ontask',
-                                     'workflow',
                                      'fixtures',
                                      'ontask_workflow.gz'))
 

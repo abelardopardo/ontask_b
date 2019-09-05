@@ -18,8 +18,7 @@ from ontask.core.decorators import ajax_required
 from ontask.core.permissions import is_admin, is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.dataops.forms import SQLConnectionForm
-from ontask.dataops.models import SQLConnection
-from ontask.logs.models import Log
+from ontask.models import Log, SQLConnection
 from ontask.workflow.access import remove_workflow_from_session
 
 
@@ -45,9 +44,9 @@ class SQLConnectionTableAdmin(tables.Table):
 
         model = SQLConnection
 
-        fields = ('name', 'description_txt')
+        fields = ('name', 'description_text')
 
-        sequence = ('name', 'description_txt', 'operations')
+        sequence = ('name', 'description_text', 'operations')
 
         attrs = {
             'class': 'table table-hover table-bordered shadow',
@@ -78,9 +77,9 @@ class SQLConnectionTableRun(tables.Table):
 
         model = SQLConnection
 
-        fields = ('name', 'description_txt')
+        fields = ('name', 'description_text')
 
-        sequence = ('name', 'description_txt', 'operations')
+        sequence = ('name', 'description_text', 'operations')
 
         attrs = {
             'class': 'table table-hover table-bordered shadow',
@@ -127,7 +126,7 @@ def _save_conn_form(
             None,
             {
                 'name': conn.name,
-                'description': conn.description_txt,
+                'description': conn.description_text,
                 'conn_type': conn.conn_type,
                 'conn_driver': conn.conn_driver,
                 'db_user': conn.db_user,
@@ -172,7 +171,7 @@ def sqlconnection_admin_index(request: HttpRequest) -> HttpResponse:
                 SQLConnection.objects.values(
                     'id',
                     'name',
-                    'description_txt'),
+                    'description_text'),
                 orderable=False)},
     )
 
@@ -193,7 +192,7 @@ def sqlconnection_instructor_index(request: HttpRequest) -> HttpResponse:
                 SQLConnection.objects.values(
                     'id',
                     'name',
-                    'description_txt'),
+                    'description_text'),
                 orderable=False,
             ),
         },
@@ -317,7 +316,7 @@ def sqlconn_clone(request: HttpRequest, pk: int) -> JsonResponse:
         None,
         {
             'name': conn.name,
-            'description': conn.description_txt,
+            'description': conn.description_text,
             'conn_type': conn.conn_type,
             'conn_driver': conn.conn_driver,
             'db_user': conn.db_user,
@@ -353,7 +352,7 @@ def sqlconn_delete(request: HttpRequest, pk: int) -> JsonResponse:
             Log.SQL_CONNECTION_DELETE,
             None,
             {'name': conn.name,
-             'description': conn.description_txt,
+             'description': conn.description_text,
              'conn_type': conn.conn_type,
              'conn_driver': conn.conn_driver,
              'db_user': conn.db_user,

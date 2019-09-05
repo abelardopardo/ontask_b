@@ -5,11 +5,11 @@ from typing import Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 import pandas as pd
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from smart_open import smart_open
 
-from ontask.dataops.models import SQLConnection
 from ontask.dataops.pandas import create_db_engine
+from ontask.models import SQLConnection
 
 
 def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
@@ -59,10 +59,10 @@ def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
                 # If the series has not time zone information, locaize it
                 if series.dt.tz is None:
                     data_frame[column] = series.dt.tz_localize(
-                        'UTC').dt.tz_convert(ontask_settings.TIME_ZONE)
+                        'UTC').dt.tz_convert(settings.TIME_ZONE)
                 # Make sure the series is in local time.
                 data_frame[column] = series.dt.tz_convert(
-                    ontask_settings.TIME_ZONE)
+                    settings.TIME_ZONE)
 
     return data_frame
 

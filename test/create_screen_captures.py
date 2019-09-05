@@ -2,8 +2,7 @@
 
 
 import os
-
-# from ontask.dataops.models import SQLConnection
+# from ontask.models import SQLConnection
 import test
 from test import ElementHasFullOpacity, ScreenTests
 
@@ -15,8 +14,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask.action.models import Action
 from ontask.dataops.pandas import destroy_db_engine
+from ontask.models import Action
 
 standard_library.install_aliases()
 
@@ -74,6 +73,10 @@ class ScreenImportTest(ScreenTests):
     def setUp(self):
         super().setUp()
         test.create_users()
+
+    def tearDown(self):
+        test.delete_all_tables()
+        super().tearDown()
 
     def test_ss_01(self):
         """
@@ -135,7 +138,7 @@ class ScreenTestFixture(ScreenTests):
         # Insert a SQL Connection
         # sqlc = SQLConnection(
         #     name='remote server',
-        #     description_txt='Server with student records',
+        #     description_text='Server with student records',
         #     conn_type='mysql',
         #     conn_driver='',
         #     db_user='remote_db_user',
@@ -669,48 +672,22 @@ class ScreenTestFixture(ScreenTests):
 
         # Set the name, description and type of the action
         self.selenium.find_element_by_id('id_name').send_keys(
-            'Send Canvas reminder'
+            'Initial motivation'
         )
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
         select.select_by_value(Action.personalized_canvas_email)
-        desc.send_keys('Week 3 reminder to review material')
+        desc.send_keys('Motivating message depending on the program enrolled')
 
         self.modal_ss('action_personalized_canvas_email_create.png')
 
-        desc.send_keys(Keys.RETURN)
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.ID, "action-out-editor")
-            )
-        )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        # Cancel creation
+        self.cancel_modal()
 
-        self.select_filter_tab()
-        self.create_filter('No activity in Week 2',
-                           [('Days online 2', 'equal', '0')])
+        # Open the action
+        self.open_action_edit('Initial motivation')
 
-        # Create one condition
-        self.select_condition_tab()
-        self.create_condition(
-            'Full time',
-            '',
-            [('Attendance', 'equal', 'Full Time')]
-        )
-
-        self.select_canvas_text_tab()
-        self.selenium.find_element_by_id('id_text_content').send_keys(
-            """Dear {{ GivenName }}
-
-We recommend that you review the discussions in the online forum about the topics we are going to cover this week
-
-Regards
-
-John Doe
-Course Coordinator""")
         self.body_ss('action_personalized_canvas_email_edit.png')
 
         # Save action and back to action index
@@ -720,9 +697,77 @@ Course Coordinator""")
         self.wait_for_datatable('action-table_previous')
 
         #
-        # Back to the table of actions
+        # SEND LIST action
         #
-        self.go_to_actions()
+        # click in the create action button and create an action
+        self.selenium.find_element_by_class_name('js-create-action').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name')))
+
+        # Set the name, description and type of the action
+        self.selenium.find_element_by_id('id_name').send_keys(
+            'Send Email with list'
+        )
+        desc = self.selenium.find_element_by_id('id_description_text')
+        # Select the action type
+        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select.select_by_value(Action.send_list)
+        desc.send_keys('Send email with column values as list')
+
+        self.modal_ss('action_send_list_create.png')
+
+        # Cancel creation
+        self.cancel_modal()
+
+        # Open the action
+        self.open_action_edit('Send Email with list')
+        self.body_ss('action_send_list_edit.png')
+        self.open_preview()
+        self.modal_ss('action_send_list_preview.png')
+        self.cancel_modal()
+
+        # Save action and back to action index
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Close']"
+        ).click()
+        self.wait_for_datatable('action-table_previous')
+
+        #
+        # SEND JSON LIST action
+        #
+        # click in the create action button and create an action
+        self.selenium.find_element_by_class_name('js-create-action').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name')))
+
+        # Set the name, description and type of the action
+        self.selenium.find_element_by_id('id_name').send_keys(
+            'Send list through JSON'
+        )
+        desc = self.selenium.find_element_by_id('id_description_text')
+        # Select the action type
+        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select.select_by_value(Action.send_list_json)
+        desc.send_keys('Send the list of inactive students in week 2 to another platform')
+
+        self.modal_ss('action_json_list_create.png')
+
+        # Cancel creation
+        self.cancel_modal()
+
+        # Open the action
+        self.open_action_edit('Send list through JSON')
+        self.body_ss('action_json_list_edit.png')
+        self.open_preview()
+        self.modal_ss('action_json_list_preview.png')
+        self.cancel_modal()
+
+        # Save action and back to action index
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Close']"
+        ).click()
+        self.wait_for_datatable('action-table_previous')
+
 
         # Picture of Canvas scheduling
         # self.open_action_schedule('Send Canvas reminder')
@@ -739,13 +784,13 @@ Course Coordinator""")
         #
         # Send emails
         #
-        self.open_action_canvas_email('Midterm comments')
+        self.open_action_email('Midterm comments')
 
         # Picture of the body
         self.body_ss('action_email_request_data.png')
 
         self.go_to_actions()
-        self.open_action_canvas_email('Send Canvas reminder')
+        self.open_action_canvas_email('Initial motivation')
 
         # Picture of the body
         self.body_ss('action_personalized_canvas_email_run.png')
@@ -765,18 +810,24 @@ Course Coordinator""")
         self.go_to_actions()
         self.open_action_edit('Send JSON to remote server')
         self.body_ss('action_personalized_json_edit.png')
+        # Save action and back to action index
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Close']"
+        ).click()
+        self.wait_for_datatable('action-table_previous')
 
         #
         # JSON RUN
         #
-        self.go_to_actions()
         self.open_action_json_run('Send JSON to remote server')
         self.body_ss('action_json_run_request_data.png')
+        # Save action and back to action index
+        self.selenium.find_element_by_link_text('Cancel').click()
+        self.wait_for_datatable('action-table_previous')
 
         #
         # Action URL
         #
-        self.go_to_actions()
         self.open_action_url('Midterm comments', 'URL Off')
 
         # Take picture of the modal
@@ -845,6 +896,9 @@ Course Coordinator""")
         self.selenium.find_element_by_id('id_name').send_keys(
             'Send JSON object in Week 5'
         )
+        Select(self.selenium.find_element_by_id(
+            'id_item_column')
+        ).select_by_visible_text('email')
         dt_widget = self.selenium.find_element_by_xpath(
             "//input[@id='id_execute']"
         )

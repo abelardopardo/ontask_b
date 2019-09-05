@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+
 import io
 import math
 import os
 import subprocess
+
+from ontask import OnTaskSharedState
 import test
 from builtins import object, range, str
 from typing import Mapping, Optional
@@ -30,12 +33,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ontask.action.models import Action
 from ontask.action.payloads import set_action_payload
-from ontask.dataops.pandas import destroy_db_engine
-from ontask.dataops.pandas.db import engine
 from ontask.core.permissions import group_names
-from ontask.workflow.models import Workflow
+from ontask.dataops.pandas import destroy_db_engine
+from ontask.models import Action, Workflow
 
 standard_library.install_aliases()
 
@@ -126,7 +127,7 @@ class OnTaskTestCase(TransactionTestCase):
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine(OnTaskSharedState.engine)
         super().tearDownClass()
 
     @classmethod
@@ -223,7 +224,7 @@ class OnTaskApiTestCase(APITransactionTestCase):
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
-        destroy_db_engine(engine)
+        destroy_db_engine(OnTaskSharedState.engine)
         super().tearDownClass()
 
     def compare_wflows(self, jwflow, workflow):
@@ -316,7 +317,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
-        destroy_db_engine(engine)
+        destroy_db_engine(OnTaskSharedState.engine)
         super().tearDownClass()
 
     def open(self, url):
@@ -951,7 +952,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             )
         )
 
-    def create_new_personalized_text_action(self, aname, adesc=''):
+    def create_new_action_out_basic(self, aname, action_type, adesc=''):
         # click in the create action button
         self.selenium.find_element_by_class_name('js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
@@ -962,69 +963,43 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_text)
+        select.select_by_value(action_type)
         desc.send_keys(adesc)
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
         # clickable
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, '//*[@id="action-out-editor"]')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+
+    def create_new_personalized_text_action(self, aname, adesc=''):
+        self.create_new_action_out_basic(
+            aname,
+            Action.personalized_text,
+            adesc)
 
     def create_new_json_action(self, aname, adesc=''):
-        # click in the create action button
-        self.selenium.find_element_by_class_name('js-create-action').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_name')))
-
-        # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys(aname)
-        desc = self.selenium.find_element_by_id('id_description_text')
-        # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_json)
-        desc.send_keys(adesc)
-        desc.send_keys(Keys.RETURN)
-        # Wait for the spinner to disappear, and then for the button to be
-        # clickable
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//*[@id="action-out-editor"]')
-            )
-        )
+        self.create_new_action_out_basic(
+            aname,
+            Action.personalized_json,
+            adesc)
 
     def create_new_personalized_canvas_email_action(self, aname, adesc=''):
-        # click in the create action button
-        self.selenium.find_element_by_class_name('js-create-action').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_name')))
+        self.create_new_action_out_basic(
+            aname,
+            Action.personalized_canvas_email,
+            adesc)
 
-        # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys(aname)
-        desc = self.selenium.find_element_by_id('id_description_text')
-        # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_canvas_email)
-        desc.send_keys(adesc)
-        desc.send_keys(Keys.RETURN)
-        # Wait for the spinner to disappear, and then for the button to be
-        # clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//h4[@id="filter-set"]/div/button')
-            )
-        )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+    def create_new_send_list_action(self, aname, adesc=''):
+        self.create_new_action_out_basic(aname, Action.send_list, adesc)
+
+    def create_new_JSON_list_action(self, aname, adesc=''):
+        self.create_new_action_out_basic(aname, Action.send_list_json, adesc)
 
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog
@@ -1090,6 +1065,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'filter-set-header')
             )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
     def create_condition(self, cname, cdesc, rule_tuples):
@@ -1336,7 +1314,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def open_action_url(self, name, txt='URL On'):
         xpath_str = \
             '//table[@id="action-table"]' \
-            '//tr/td[2][normalize-space() = "{0}"]/' \
+            '//tr/td[2][contains(normalize-space(), "{0}")]/' \
             '../td[5]/div/div/button'.format(name)
         self.click_dropdown_option_and_wait(xpath_str, txt)
 
@@ -1479,6 +1457,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.ID, 'text-tab')
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1492,6 +1473,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.ID, 'text-tab')
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1504,6 +1488,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'text-tab')
             )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
@@ -1519,9 +1506,10 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         :return:
         """
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'filter-tab')
-            )
+            EC.element_to_be_clickable((By.ID, 'filter-tab'))
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.selenium.find_element_by_id('filter-tab').click()
         WebDriverWait(self.selenium, 10).until(
@@ -1541,6 +1529,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.ID, 'conditions-tab')
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_id('conditions-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1554,6 +1545,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
                 (By.ID, 'share-tab')
             )
         )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         self.selenium.find_element_by_id('share-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create'))
@@ -1564,6 +1558,9 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'questions-tab')
             )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.selenium.find_element_by_id('questions-tab').click()
         WebDriverWait(self.selenium, 10).until(

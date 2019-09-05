@@ -16,9 +16,8 @@ from ontask.core.decorators import ajax_required, get_column, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.pandas import get_column_statistics, load_table
 from ontask.dataops.sql.row_queries import get_row
-from ontask.table.models import View
+from ontask.models import Column, View, Workflow
 from ontask.visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
-from ontask.workflow.models import Column, Workflow
 
 VISUALIZATION_WIDTH = 600
 VISUALIZATION_HEIGHT = 400

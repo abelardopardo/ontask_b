@@ -82,7 +82,7 @@ class MSLQEvaluate(OnTaskTransformation):
         super().__init__()
 
         self.name = 'MSLQ Score calculation'
-        self.description_txt = """Plugin to calculate the scores of MSLQ 
+        self.description_text = """Plugin to calculate the scores of MSLQ 
         The names of the columns must be MSLQ_Q01 to MSLQ_Q44."""
         self.input_column_names = [
             'MSLQ_Q01', 'MSLQ_Q02', 'MSLQ_Q03', 'MSLQ_Q04', 'MSLQ_Q05',

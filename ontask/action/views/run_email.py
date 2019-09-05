@@ -12,15 +12,14 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.forms import EmailActionForm
-from ontask.action.models import Action
 from ontask.action.payloads import (
     EmailPayload, get_or_set_action_info, set_action_payload,
 )
+from ontask.action.send import send_emails
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
-from ontask.tasks import send_email_messages
-from ontask.workflow.models import Workflow
+from ontask.models import Action, Log, Workflow
+from ontask.tasks import run_task
 
 html_body = """<!DOCTYPE html>
 <html>
@@ -64,7 +63,7 @@ def run_email_action(
         column_names=[
             col.name for col in workflow.columns.filter(is_key=True)],
         action=action,
-        action_info=action_info)
+        form_info=action_info)
 
     # Request is a POST and is valid
     if req.method == 'POST' and form.is_valid():
@@ -138,7 +137,7 @@ def run_email_done(
             'track_read': action_info['track_read'],
             'exported_workflow': action_info['export_wf'],
             'exclude_values': action_info['exclude_values'],
-            'email_column': action_info['item_column'],
+            'item_column': action_info['item_column'],
             'status': 'Preparing to execute',
         })
 
@@ -147,10 +146,7 @@ def run_email_done(
     action.save()
 
     # Send the emails!
-    send_email_messages.delay(
-        request.user.id,
-        log_item.id,
-        action_info.get_store())
+    run_task.delay(request.user.id, log_item.id, action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     set_action_payload(request.session)

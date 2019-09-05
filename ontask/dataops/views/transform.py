@@ -20,13 +20,11 @@ from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import FIELD_PREFIX, PluginInfoForm
-from ontask.dataops.models import Plugin
 from ontask.dataops.plugin.plugin_manager import (
     load_plugin, refresh_plugin_data,
 )
-from ontask.logs.models import Log
+from ontask.models import Log, Plugin, Workflow
 from ontask.tasks import run_plugin_task
-from ontask.workflow.models import Workflow
 
 
 class PluginAvailableTable(tables.Table):
@@ -36,7 +34,7 @@ class PluginAvailableTable(tables.Table):
     customisation.
     """
 
-    description_txt = tables.TemplateColumn(
+    description_text = tables.TemplateColumn(
         verbose_name=_('Description'),
         template_name='dataops/includes/partial_plugin_description.html',
     )
@@ -84,9 +82,9 @@ class PluginAvailableTable(tables.Table):
 
         model = Plugin
 
-        fields = ('name', 'description_txt')
+        fields = ('name', 'description_text')
 
-        sequence = ('name', 'description_txt', 'last_exec')
+        sequence = ('name', 'description_text', 'last_exec')
 
         attrs = {
             'class': 'table table-hover table-bordered shadow',

@@ -4,11 +4,11 @@
 
 import datetime
 from time import sleep
-from typing import List, Union
+from typing import Dict, List, Union
 
 import html2text
 import pytz
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core import mail, signing
 from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
@@ -17,15 +17,14 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
+import ontask.settings
 from ontask import is_correct_email, simplify_datetime_str
-from ontask.action import settings
-from ontask.action.evaluate.action import evaluate_action
-from ontask.action.models import Action
-from ontask.action.payloads import EmailPayload
+from ontask.action.evaluate.action import (
+    evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
+)
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
-from ontask.logs.models import Log
-from ontask.workflow.models import Column
+from ontask.models import Action, Column, Log
 
 logger = get_task_logger('celery_execution')
 
@@ -43,7 +42,7 @@ def _send_confirmation_message(
     :return:
     """
     # Creating the context for the confirmation email
-    now = datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
+    now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
     cfilter = action.get_filter()
     context = {
         'user': user,
@@ -58,7 +57,7 @@ def _send_confirmation_message(
     # Create template and render with context
     try:
         html_content = Template(
-            str(getattr(settings, 'NOTIFICATION_TEMPLATE')),
+            str(getattr(ontask.settings, 'NOTIFICATION_TEMPLATE')),
         ).render(Context(context))
         text_content = strip_tags(html_content)
     except TemplateSyntaxError as exc:
@@ -77,18 +76,18 @@ def _send_confirmation_message(
          'email_sent_datetime': str(now),
          'filter_present': cfilter is not None,
          'num_rows': action.workflow.nrows,
-         'subject': str(settings.NOTIFICATION_SUBJECT),
+         'subject': str(ontask.settings.NOTIFICATION_SUBJECT),
          'body': text_content,
-         'from_email': str(settings.NOTIFICATION_SENDER),
+         'from_email': str(ontask.settings.NOTIFICATION_SENDER),
          'to_email': [user.email]},
     )
 
     # Send email out
     try:
         send_mail(
-            str(settings.NOTIFICATION_SUBJECT),
+            str(ontask.settings.NOTIFICATION_SUBJECT),
             text_content,
-            str(settings.NOTIFICATION_SENDER),
+            str(ontask.settings.NOTIFICATION_SENDER),
             [user.email],
             html_message=html_content)
     except Exception as exc:
@@ -139,7 +138,7 @@ def _create_track_column(action: Action) -> str:
         description_text='Emails sent with action {0} on {1}'.format(
             action.name,
             simplify_datetime_str(datetime.datetime.now(pytz.timezone(
-                ontask_settings.TIME_ZONE))),
+                settings.TIME_ZONE))),
         ),
         workflow=action.workflow,
         data_type='integer',
@@ -163,7 +162,7 @@ def _create_track_column(action: Action) -> str:
 
 
 def _create_single_message(
-    msg_body_sbj_to: str,
+    msg_body_sbj_to: List,
     track_str: str,
     from_email: str,
     cc_email_list: List[str],
@@ -171,7 +170,7 @@ def _create_single_message(
 ) -> Union[EmailMessage, EmailMultiAlternatives]:
     """Create either an EmailMessage or EmailMultiAlternatives object.
 
-    :param msg_body_sbj_to: Tuple with body, subject, to
+    :param msg_body_sbj_to: List with body, subject, to
     :param track_str: String to add to track
     :param from_email: From email
     :param cc_email_list: CC list
@@ -179,7 +178,7 @@ def _create_single_message(
 
     :return: Either EmailMessage or EmailMultiAlternatives
     """
-    if ontask_settings.EMAIL_HTML_ONLY:
+    if settings.EMAIL_HTML_ONLY:
         # Message only has the HTML text
         msg = EmailMessage(
             msg_body_sbj_to[1],
@@ -210,7 +209,7 @@ def _create_messages(
     action: Action,
     action_evals: List,
     track_col_name: str,
-    action_info: EmailPayload,
+    action_info: Dict,
 ) -> List[Union[EmailMessage, EmailMultiAlternatives]]:
     """Create the email messages to send and the tracking ids.
 
@@ -218,7 +217,7 @@ def _create_messages(
     :param action: Action to process
     :param action_evals: Action content already evaluated
     :param track_col_name: column name to track
-    :param action_info: EmailPayload Mapping with the required fields
+    :param action_info: Dictionary with the required fields
     :return:
     """
     # Context to log the events (one per email)
@@ -227,7 +226,7 @@ def _create_messages(
         'action': action.id,
         'action_name': action.name,
         'email_sent_datetime': str(
-            datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
+            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
         ),
     }
 
@@ -244,7 +243,7 @@ def _create_messages(
                 + ' style="position:absolute; visibility:hidden"/>'
             ).format(
                 Site.objects.get_current().domain,
-                ontask_settings.BASE_URL,
+                settings.BASE_URL,
                 reverse('trck'),
                 signing.dumps(
                     {
@@ -293,9 +292,9 @@ def _deliver_msg_burst(
     # Partition the list of emails into chunks as per the value of EMAIL_BURST
     chunk_size = len(msgs)
     wait_time = 0
-    if ontask_settings.EMAIL_BURST:
-        chunk_size = ontask_settings.EMAIL_BURST
-        wait_time = ontask_settings.EMAIL_BURST_PAUSE
+    if settings.EMAIL_BURST:
+        chunk_size = settings.EMAIL_BURST
+        wait_time = settings.EMAIL_BURST_PAUSE
     msg_chunks = [
         msgs[idx:idx + chunk_size]
         for idx in range(0, len(msgs), chunk_size)
@@ -306,9 +305,9 @@ def _deliver_msg_burst(
 
         if idx != len(msg_chunks) - 1:
             logger.info(
-                'Email Burst ({n}) reached. Waiting for {t} secs',
-                extra={'n': len(msg_chunk), 't': wait_time},
-            )
+                'Email Burst (%s) reached. Waiting for %s secs',
+                str(len(msg_chunk)),
+                str(wait_time))
             sleep(wait_time)
 
 
@@ -316,7 +315,7 @@ def send_emails(
     user,
     action: Action,
     log_item: Log,
-    action_info: EmailPayload,
+    action_info: Dict,
 ) -> None:
     """Send action content evaluated for each row.
 
@@ -330,7 +329,7 @@ def send_emails(
     :param user: User object that executed the action
     :param action: Action from where to take the messages
     :param log_item: Log object to store results
-    :param action_info: Mapping key, value as defined in EmailPayload
+    :param action_info: Dictionary key, value as defined in EmailPayload
 
     :return: Send the emails
     """
@@ -341,6 +340,10 @@ def send_emails(
         extra_string=action_info['subject'],
         column_name=action_info['item_column'],
         exclude_values=action_info['exclude_values'])
+
+    # Turn cc_email and bcc email into lists
+    action_info['cc_email'] = action_info['cc_email'].split()
+    action_info['bcc_email'] = action_info['bcc_email'].split()
 
     _check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
 
@@ -365,10 +368,77 @@ def send_emails(
     log_item.payload['objects_sent'] = len(action_evals)
     log_item.payload['filter_present'] = action.get_filter() is not None
     log_item.payload['datetime'] = str(
-        datetime.datetime.now(pytz.timezone(ontask_settings.TIME_ZONE)),
+        datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
     )
     log_item.save()
 
     if action_info['send_confirmation']:
         # Confirmation message requested
         _send_confirmation_message(user, action, len(msgs))
+
+
+def send_list_email(
+    user,
+    action: Action,
+    log_item: Log,
+    action_info: Dict,
+) -> None:
+    """Send action content evaluated once to include lists.
+
+    Sends a single email for the given action with the lists expanded and with
+    the given subject evaluated also with respect to the attributes.
+
+    :param user: User object that executed the action
+    :param action: Action from where to take the messages
+    :param log_item: Log object to store results
+    :param action_info: Dictionary key, value as defined in EmailPayload
+
+    :return: Send the emails
+    """
+    # Evaluate the action string, evaluate the subject, and get the value of
+    # the email column.
+    action_text = evaluate_row_action_out(
+        action,
+        get_action_evaluation_context(action, {}))
+
+    # Turn cc_email and bcc email into lists
+    action_info['cc_email'] = action_info['cc_email'].split()
+    action_info['bcc_email'] = action_info['bcc_email'].split()
+
+    _check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
+
+    # Context to log the events
+    msg = _create_single_message(
+        [action_text, action_info['subject'], action_info['email_to']],
+        '',
+        user.email,
+        action_info['cc_email'],
+        action_info['bcc_email'],
+    )
+
+    try:
+        # Send email out
+        mail.get_connection().send_messages([msg])
+    except Exception as exc:
+        raise Exception(
+            _('Error when sending the list email: {0}').format(str(exc)),
+        )
+
+    # Log the event
+    Log.objects.register(
+        user,
+        Log.ACTION_LIST_EMAIL_SENT,
+        action.workflow,
+        {
+            'user': user.id,
+            'action': action.id,
+            'action_name': action.name,
+            'email_sent_datetime': str(
+                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            ),
+            'subject': msg.subject,
+            'body': msg.body,
+            'from_email': msg.from_email,
+            'to_email': msg.to[0]
+        }
+    )

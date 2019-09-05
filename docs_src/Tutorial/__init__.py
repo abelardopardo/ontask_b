@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function
 
 import pandas as pd
 
@@ -16,7 +15,7 @@ class LinearRegressionModel(object):
 
     def __init__(self):
         self.name = 'Linear Regression Predictive Model'
-        self.description_txt = """
+        self.description_text = """
         Given a column and the coefficients A and B, it computes the linear 
         model Ax + B, where x is obtained from the input column.
         """

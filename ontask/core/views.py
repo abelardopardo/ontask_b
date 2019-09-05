@@ -12,7 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import UserIsInstructor
 from ontask.django_auth_lti.decorators import lti_role_required
-from ontask.tasks import increase_track_count
+from ontask.tasks import increase_track_count_task
+
 
 class AboutPage(generic.TemplateView):
     """ABout page."""
@@ -46,7 +47,7 @@ def trck(request: HttpRequest) -> HttpResponse:
     table of the workflow
     """
     # Push the tracking to the asynchronous queue
-    increase_track_count.delay(request.method, request.GET)
+    increase_track_count_task.delay(request.method, request.GET)
 
     return HttpResponse(status=200)
 

@@ -11,15 +11,14 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.forms import JSONActionForm
-from ontask.action.models import Action
 from ontask.action.payloads import (
     JSONPayload, get_or_set_action_info, set_action_payload,
 )
+from ontask.action.send import send_json
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
-from ontask.tasks import send_json_objects
-from ontask.workflow.models import Workflow
+from ontask.models import Action, Log, Workflow
+from ontask.tasks import run_task
 
 
 def run_json_action(
@@ -29,7 +28,7 @@ def run_json_action(
 ) -> HttpResponse:
     """Request data to send JSON objects.
 
-    Form asking for token, key_column and if an item confirmation step is
+    Form asking for token, item_column and if an item confirmation step is
     needed
 
     :param req: HTTP request (GET)
@@ -53,7 +52,7 @@ def run_json_action(
         req.POST or None,
         column_names=[
             col.name for col in workflow.columns.filter(is_key=True)],
-        action_info=action_info)
+        form_info=action_info)
 
     if req.method == 'POST' and form.is_valid():
         if action_info['confirm_items']:
@@ -121,7 +120,7 @@ def run_json_done(
         {'action': action.name,
          'action_id': action.id,
          'exclude_values': action_info['exclude_values'],
-         'key_column': action_info['item_column'],
+         'item_column': action_info['item_column'],
          'exported_workflow': action_info['export_wf'],
          'status': 'Preparing to execute',
          'target_url': action.target_url})
@@ -131,10 +130,7 @@ def run_json_done(
     action.save()
 
     # Send the objects
-    send_json_objects.delay(
-        request.user.id,
-        log_item.id,
-        action_info.get_store())
+    run_task.delay(request.user.id, log_item.id, action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     set_action_payload(request.session)

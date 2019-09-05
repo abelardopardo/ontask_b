@@ -4,8 +4,8 @@
 
 import json
 
+import django.conf
 import pytz
-from django.conf import settings as ontask_settings
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
@@ -15,14 +15,19 @@ from ontask.core.celery import app as celery_app
 __all__ = [
     'celery_app', 'OnTaskException', 'is_legal_name',
     'OnTaskDataFrameNoKey', 'simplify_datetime_str', 'is_correct_email',
-    'OnTaskEmptyWorkflow', 'OnTaskDBIdentifier', 'create_new_name'
+    'OnTaskEmptyWorkflow', 'OnTaskDBIdentifier', 'create_new_name',
+    'OnTaskSharedState'
 ]
 
-__version__ = 'B.5.2.2'
+__version__ = 'B.6.0'
+
+app_config = 'ontask.apps.ActionConfig'
 
 PERSONALIZED_TEXT = 'personalized_text'
 PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
 PERSONALIZED_JSON = 'personalized_json'
+SEND_LIST = 'send_list'
+SEND_LIST_JSON = 'send_list_json'
 SURVEY = 'survey'
 TODO_LIST = 'todo_list'
 
@@ -31,13 +36,12 @@ ACTION_TYPES = [
     (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
     (SURVEY, _('Survey')),
     (PERSONALIZED_JSON, _('Personalized JSON')),
+    (SEND_LIST, _('Send List')),
+    (SEND_LIST_JSON, _('Send List as JSON')),
     (TODO_LIST, _('TODO List'))
 ]
 
-AVAILABLE_ACTION_TYPES = [
-    atype for atype in ACTION_TYPES
-    if atype[0] not in ontask_settings.DISABLED_ACTIONS
-]
+AVAILABLE_ACTION_TYPES = ACTION_TYPES[:]
 
 
 def is_legal_name(val):
@@ -99,7 +103,7 @@ def is_json(text):
 
 def simplify_datetime_str(dtime):
     return dtime.astimezone(
-        pytz.timezone(ontask_settings.TIME_ZONE)
+        pytz.timezone(django.conf.settings.TIME_ZONE)
     ).strftime('%Y-%m-%d %H:%M:%S %z')
 
 
@@ -126,6 +130,13 @@ class OnTaskDBIdentifier(sql.Identifier):
             raise TypeError("Identifier cannot be empty")
 
         super().__init__(*[val.replace('%', '%%') for val in strings])
+
+
+class OnTaskSharedState:
+    __shared_state = {}
+
+    def __init__(self):
+        self.__dict__ = self.__shared_state
 
 
 class OnTaskException(Exception):

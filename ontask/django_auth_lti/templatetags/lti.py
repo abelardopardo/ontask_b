@@ -20,9 +20,9 @@ class ResourceLinkIdNode(template.Node):
                 return format_html("<input type='hidden' name='resource_link_id' value='{}' />", rli)
             else:
                 logger.warning(
-                    _("Failed to find resource_link_id in request context "
-                      "{0}").format(json.dumps(request.LTI, indent=4))
-                )
+                    _('Failed to find resource_link_id '
+                      + 'in request context %s'),
+                    json.dumps(request.LTI, indent=4))
         else:
             logger.warning(
                 _("Failed to get current request from thread_local"))

@@ -1,0 +1,29 @@
+{% load i18n %}
+<div class="modal-header" style="border-bottom: unset;">
+  <h4 class="modal-title">{% trans 'Scheduled action' %}</h4>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p class="lead">{% blocktrans with t=timedelta %}Action will execute in {{ t }}{% endblocktrans %}</p>
+  <table class="table" width="100%">
+    {% for s_key, s_val in s_vals.items %}
+      <tr>
+        <td>{{ s_key }}</td>
+        <td>
+          {% if s_key == 'payload' %}
+            <pre>{{ s_val }}</pre>
+          {% else %}
+            {{ s_val }}
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+<div class="modal-footer">
+  <a href="{% url 'scheduler:edit' id %}" class="btn btn-outline-primary spin"
+          data-toggle="tooltip" title="{% trans 'Edit this scheduled action execution' %}.">
+    <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
+</div>

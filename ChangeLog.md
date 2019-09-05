@@ -1,3 +1,41 @@
+## 6.0 (2019-09-06)
+
+### Added
+
+- Two new action types to send emails or JSON objects containing the content of a selected column  (Issue #158)
+
+- Major architectural rewrite to consolidate the tool into a single app instead of handling several apps. Tables are now under a single application.
+
+- Additional test suites for the new actions.
+
+### Changed
+
+- Updated localization files
+
+- Re-enabled URL to access surveys through LTI
+
+- Email lists are now space separated instead of comma separated.
+
+- Scheduling forms so that they can robustly go back and forth from item selection page
+
+- Rewriting of the run action forms to make them more robust when canceling operations.
+
+- Caching the formula in text mode in conditions to improve response time
+
+- Booleans are now manipulated as text with (True, False) as values to allow for null detection
+
+- Use console for messages under development
+
+### Fixed
+
+- Error when using extra parameters with the loggers
+
+- Added scrollable dropdown menus (Issue #159)
+
+- Attribute "shared" can no be manipulated through the Admin menu (Issue #17)
+
+- Error when selecting the first column to sort the data in a table
+
 ## 5.2.2 (2019-08-10)
 
 ### Fixed

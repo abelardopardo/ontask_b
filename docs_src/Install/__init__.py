@@ -14,7 +14,7 @@ class OntaskTestPlugin(OnTaskTransformation):
 
     1. Field name: Plugin name show to the users.
 
-    2. Field description_txt: A string with the detailed description of what the
+    2. Field description_text: A string with the detailed description of what the
     plugin does
 
     3. Field input_column_names: A potentially empty list of column names 
@@ -64,7 +64,7 @@ class OntaskTestPlugin(OnTaskTransformation):
         super().__init__()
 
         self.name = 'Plugin Template'
-        self.description_txt = 'Example of plugin description'
+        self.description_text = 'Example of plugin description'
         self.output_column_names = ['RESULT 1', 'RESULT 2']
         self.parameters = [
             ('param string', 'string', ['v1', 'v2'], 'v1', 'help param string'),

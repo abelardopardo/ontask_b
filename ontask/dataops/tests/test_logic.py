@@ -9,14 +9,13 @@ import test
 import pandas as pd
 from django.conf import settings
 
-from ontask.action.models import Action
 from ontask.dataops.forms.upload import load_df_from_csvfile
 from ontask.dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
 from ontask.dataops.pandas import (
     get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
 from ontask.dataops.sql import get_rows
-from ontask.workflow.models import Workflow
+from ontask.models import Action, Workflow
 
 
 class DataopsMatrixManipulation(test.OnTaskTestCase):
@@ -24,7 +23,6 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_merge.sql'
     )
@@ -173,7 +171,10 @@ class FormulaEvaluation(test.OnTaskTestCase):
             self.skel['rules'][0]['id'] = vname
         self.skel['rules'][0]['input'] = input_value
         self.skel['rules'][0]['operator'] = op_value
-        self.skel['rules'][0]['type'] = type_value
+        if type_value == 'boolean':
+            self.skel['rules'][0]['type'] = 'string'
+        else:
+            self.skel['rules'][0]['type'] = type_value
         self.skel['rules'][0]['value'] = value
         return self.skel
 
@@ -280,10 +281,10 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', '{0}equal', 'double', '0.3', 0.3, None)
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'abb')
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'None')
-        self.do_operand('text', '{0}equal', 'boolean', True, True, False)
-        self.do_operand('text', '{0}equal', 'boolean', True, None, None)
-        self.do_operand('text', '{0}equal', 'boolean', False, False, True)
-        self.do_operand('text', '{0}equal', 'boolean', False, None, None)
+        self.do_operand('select', '{0}equal', 'boolean', 'true', 'true', 'false')
+        self.do_operand('select', '{0}equal', 'boolean', 'true', None, None)
+        self.do_operand('select', '{0}equal', 'boolean', 'false', 'false', 'true')
+        self.do_operand('select', '{0}equal', 'boolean', 'false', None, None)
         self.do_operand('text',
             '{0}equal',
             'datetime',
@@ -484,8 +485,8 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', 'is_{0}null', 'integer', None, None, 1)
         self.do_operand('number', 'is_{0}null', 'double', None, None, 1.0)
         self.do_operand('text', 'is_{0}null', 'string', None, None, 'aaa')
-        self.do_operand('text', 'is_{0}null', 'boolean', None, None, True)
-        self.do_operand('text', 'is_{0}null', 'boolean', None, None, False)
+        self.do_operand('select', 'is_{0}null', 'boolean', None, None, True)
+        self.do_operand('select', 'is_{0}null', 'boolean', None, None, False)
         self.do_operand('text',
             'is_{0}null',
             'datetime',
@@ -509,7 +510,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         self.do_sql_txt_operand('number', '{0}equal', 'integer', '1')
         self.do_sql_txt_operand('number', '{0}equal', 'double', '2.0')
-        self.do_sql_txt_operand('number', '{0}equal', 'boolean', 1)
+        self.do_sql_txt_operand('select', '{0}equal', 'boolean', 'true')
         self.do_sql_txt_operand('text', '{0}equal', 'string', 'xxx')
         self.do_sql_txt_operand('text',
             '{0}equal',
@@ -549,7 +550,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         self.do_sql_txt_operand('number', 'is_{0}null', 'integer', None)
         self.do_sql_txt_operand('number', 'is_{0}null', 'double', None)
-        self.do_sql_txt_operand('number', 'is_{0}null', 'boolean', None)
+        self.do_sql_txt_operand('select', 'is_{0}null', 'boolean', None)
         self.do_sql_txt_operand('text', 'is_{0}null', 'string', None)
         self.do_sql_txt_operand('text', 'is_{0}null', 'datetime', None)
 
@@ -625,7 +626,6 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_condition_evaluation.sql'
     )

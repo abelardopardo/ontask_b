@@ -15,7 +15,6 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.evaluate.action import evaluate_action
 from ontask.action.forms import ZipActionForm
-from ontask.action.models import Action
 from ontask.action.payloads import (
     ZipPayload, get_or_set_action_info, set_action_payload,
 )
@@ -23,8 +22,7 @@ from ontask.action.views.run_email import html_body
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.logs.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import Action, Log, Workflow
 
 
 @user_passes_test(is_instructor)
@@ -50,7 +48,7 @@ def zip_action(
         ZipPayload,
         initial_values={
             'action_id': action.id,
-            'prev_url': reverse('action:run', kwargs={'pk': action.id}),
+            'prev_url': reverse('action:zip_action', kwargs={'pk': action.id}),
             'post_url': reverse('action:zip_done'),
         }
     )
@@ -60,7 +58,7 @@ def zip_action(
         req.POST or None,
         column_names=[col.name for col in workflow.columns.all()],
         action=action,
-        action_info=action_info,
+        form_info=action_info,
     )
 
     if req.method == 'POST' and form.is_valid():
@@ -127,7 +125,7 @@ def run_zip_done(
             'action': action.name,
             'action_id': action.id,
             'user_fname_column': action_info['user_fname_column'],
-            'participant_column': action_info['item_column'],
+            'item_column': action_info['item_column'],
             'file_suffix': action_info['file_suffix'],
             'zip_for_moodle': action_info['zip_for_moodle'],
             'exclude_values': action_info['exclude_values'],
@@ -199,14 +197,14 @@ def action_zip_export(
 
 def create_eval_data_tuple(
     action: Action,
-    participant_column: str,
+    item_column: str,
     exclude_values: List,
     user_fname_column: Optional[str],
 ) -> List[Tuple[str, str, str]]:
     """Evaluate text and create list of tuples [filename, part id, text].
 
     Evaluate the conditions in the actions based on the given
-    participant_column excluding the values in exclude_values. This returns a
+    item_column excluding the values in exclude_values. This returns a
     list with tuples [action text, None, participant column value]. Process
     that list to insert as second element of the tuple the corresponding
     value in user_fname_column (if given).
@@ -219,7 +217,7 @@ def create_eval_data_tuple(
 
     :param action: Action being processed
 
-    :param participant_column: The
+    :param item_column: The column used to iterate
 
     :param exclude_values: List of values to exclude from evaluation
 
@@ -230,7 +228,7 @@ def create_eval_data_tuple(
     # Obtain the personalised text
     action_evals = evaluate_action(
         action,
-        column_name=participant_column,
+        column_name=item_column,
         exclude_values=exclude_values)
 
     if user_fname_column:

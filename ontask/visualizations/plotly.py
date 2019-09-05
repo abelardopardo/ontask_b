@@ -3,8 +3,8 @@
 Implementation of visualizations using the Plotly JS library
 """
 
-from builtins import str
 import json
+from builtins import str
 
 from django.utils.translation import ugettext as _
 

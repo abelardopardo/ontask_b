@@ -11,5 +11,5 @@ from ontask.action.forms.edit import (
 )
 from ontask.action.forms.run import (
     CanvasEmailActionForm, EmailActionForm, EnableURLForm, JSONActionForm,
-    JSONBasicActionForm, ValueExcludeForm, ZipActionForm,
+    JSONListActionForm, SendListActionForm, ValueExcludeForm, ZipActionForm,
 )

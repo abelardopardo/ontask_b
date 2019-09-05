@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask.dataops.pandas import load_table
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class TableDerivedColumns(test.OnTaskLiveTestCase):
@@ -18,7 +18,6 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'table',
         'fixtures',
         'derived_column.sql'
     )
@@ -341,7 +340,6 @@ class TableViews(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'table',
         'fixtures',
         'derived_column.sql'
     )
@@ -547,7 +545,6 @@ class TableInsertRow(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'table',
         'fixtures',
         'derived_column.sql'
     )

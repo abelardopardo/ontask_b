@@ -15,7 +15,7 @@ from rest_framework import status
 from ontask.action.payloads import (
     CanvasEmailPayload, EmailPayload, JSONPayload,
 )
-from ontask.oauth.models import OAuthUserToken
+from ontask.models import OAuthUserToken
 
 
 class ActionViewRunAction(test.OnTaskTestCase):
@@ -95,7 +95,7 @@ class ActionViewRunJSONAction(test.OnTaskTestCase):
             url_params={'pk': action.id},
             method='POST',
             req_params={
-                'key_column': 'email',
+                'item_column': 'email',
                 'token': 'xxx',
                 'confirm_items': True},
             session_payload=payload.get_store())
@@ -108,7 +108,7 @@ class ActionViewRunJSONAction(test.OnTaskTestCase):
             url_params={'pk': action.id},
             method='POST',
             req_params={
-                'key_column': 'email',
+                'item_column': 'email',
                 'token': 'xxx'},
             session_payload=payload.get_store())
         self.assertTrue(status.is_success(resp.status_code))
@@ -151,7 +151,7 @@ class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
             method='POST',
             req_params={
                 'subject': 'Email subject',
-                'key_column': 'email',
+                'item_column': 'email',
                 'target_url': 'Server one',
             },
             session_payload=payload.get_store())
@@ -196,7 +196,6 @@ class ActionServe(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'action',
         'fixtures',
         'simple_action.sql',
     )
@@ -225,7 +224,6 @@ class ActionServeSurvey(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'action',
         'fixtures',
         'simple_workflow_two_actions.sql',
     )

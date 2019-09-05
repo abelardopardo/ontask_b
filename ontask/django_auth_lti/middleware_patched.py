@@ -47,7 +47,7 @@ class MultiLTILaunchAuthMiddleware:
             logger.debug('inside process_request %s', request.path)
 
         # AuthenticationMiddleware is required so that request.user exists.
-        if not hasattr(request, 'user'):
+        if not getattr(request, 'user', None):
             logger.debug('improperly configured: request has no user attr')
             raise ImproperlyConfigured(
                 "The Django LTI auth middleware requires the"
@@ -158,7 +158,7 @@ class MultiLTILaunchAuthMiddleware:
                 }
                 # If a custom role key is defined in project, merge into
                 # existing role list
-                if hasattr(settings, 'LTI_CUSTOM_ROLE_KEY'):
+                if getattr(settings, 'LTI_CUSTOM_ROLE_KEY', None):
                     custom_roles = request.POST.get(
                         settings.LTI_CUSTOM_ROLE_KEY, '').split(',')
                     lti_launch['roles'] += [_f for _f in custom_roles if

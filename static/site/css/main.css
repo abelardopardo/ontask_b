@@ -49,6 +49,12 @@ body {
   min-height: 100px;
 }
 
+.scrollable-menu {
+    height: auto;
+    max-height: 500px;
+    overflow-x: hidden;
+}
+
 .legend-circle {
   width: .75em;
   height: .75em;
@@ -70,26 +76,6 @@ body {
   background: #a5dcbf;
 }
 
-.action-type-personalized-text,
-[data-backcolor='personalized_text'] {
-  background: #d1eebe;
-}
-.action-type-personalized-canvas-email,
-[data-backcolor='personalized_canvas_email']  {
-  background: #faf6c7;
-}
-.action-type-personalized-json ,
-[data-backcolor='personalized_json'] {
-  background: #f7d9bd;
-}
-.action-type-survey ,
-[data-backcolor='survey'] {
-  background: #aed2f0;
-}
-.action-type-todo-list ,
-[data-backcolor='todo_list'] {
-  background: #c46a71;
-}
 
 #preview-variables {
   background-color: rgba(0,0,0,.125);

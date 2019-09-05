@@ -19,11 +19,11 @@ from ontask.dataops.pandas import (
     is_unique_column, load_table, perform_dataframe_upload_merge,
     store_dataframe, verify_data_frame,
 )
+from ontask.models import Workflow
 from ontask.table.serializers import (
     DataFrameJSONMergeSerializer, DataFrameJSONSerializer,
     DataFramePandasMergeSerializer, DataFramePandasSerializer,
 )
-from ontask.workflow.models import Workflow
 
 
 class TableBasicOps(APIView):

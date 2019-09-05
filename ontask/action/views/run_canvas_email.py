@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 import pytz
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.handlers.wsgi import WSGIRequest
@@ -16,17 +16,15 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.forms import CanvasEmailActionForm
-from ontask.action.models import Action
 from ontask.action.payloads import (
     CanvasEmailPayload, get_or_set_action_info, set_action_payload,
 )
+from ontask.action.send import send_canvas_emails
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
-from ontask.oauth.models import OAuthUserToken
+from ontask.models import Action, Log, OAuthUserToken, Workflow
 from ontask.oauth.views import get_initial_token_step1, refresh_token
-from ontask.tasks import send_canvas_email_messages
-from ontask.workflow.models import Workflow
+from ontask.tasks import run_task
 
 
 def run_canvas_email_action(
@@ -52,7 +50,7 @@ def run_canvas_email_action(
         initial_values={
             'action_id': action.id,
             'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:email_done'),
+            'post_url': reverse('action:canvas_email_done'),
         },
     )
 
@@ -62,7 +60,7 @@ def run_canvas_email_action(
         column_names=[
             col.name for col in workflow.columns.filter(is_key=True)],
         action=action,
-        action_info=action_info)
+        form_info=action_info)
 
     if req.method == 'POST' and form.is_valid():
         # Request is a POST and is valid
@@ -74,14 +72,15 @@ def run_canvas_email_action(
             action_info['valuerange'] = 2
             action_info['step'] = 2
             set_action_payload(req.session, action_info.get_store())
+            continue_url = 'action:item_filter'
+        else:
+            continue_url = 'action:canvas_email_done'
 
-            return redirect('action:item_filter')
-
-        # Go straight to the token request step
-        set_action_payload(req.session, action_info.get_store())
+        # Check for the CANVAS token and proceed to the continue_url
         return canvas_get_or_set_oauth_token(
             req,
-            action_info['target_url'])
+            action_info['target_url'],
+            continue_url)
 
     # Render the form
     return render(
@@ -98,6 +97,7 @@ def run_canvas_email_action(
 def canvas_get_or_set_oauth_token(
     request: WSGIRequest,
     oauth_instance_name: str,
+    continue_url: str,
 ) -> HttpResponse:
     """Check for OAuth token, if not present, request a new one.
 
@@ -109,10 +109,12 @@ def canvas_get_or_set_oauth_token(
 
     :param oauth_instance_name: Locator for the OAuth instance in OnTask
 
+    :param continue_url: URL to continue if the token exists and is valid
+
     :return: Http response
     """
     # Get the information from the payload
-    oauth_info = ontask_settings.CANVAS_INFO_DICT.get(oauth_instance_name)
+    oauth_info = settings.CANVAS_INFO_DICT.get(oauth_instance_name)
     if not oauth_info:
         messages.error(
             request,
@@ -131,12 +133,12 @@ def canvas_get_or_set_oauth_token(
         return get_initial_token_step1(
             request,
             oauth_info,
-            reverse('action:canvas_email_done'))
+            reverse(continue_url))
 
     # Check if the token is valid
-    now = datetime.now(pytz.timezone(ontask_settings.TIME_ZONE))
+    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
     dead = now > token.valid_until - timedelta(
-        seconds=ontask_settings.CANVAS_TOKEN_EXPIRY_SLACK)
+        seconds=settings.CANVAS_TOKEN_EXPIRY_SLACK)
     if dead:
         try:
             refresh_token(token, oauth_info)
@@ -148,7 +150,7 @@ def canvas_get_or_set_oauth_token(
             )
             return redirect('action:index')
 
-    return redirect('action:canvas_email_done')
+    return redirect(continue_url)
 
 
 @user_passes_test(is_instructor)
@@ -193,7 +195,7 @@ def run_canvas_email_done(
             'from_email': request.user.email,
             'subject': action_info['subject'],
             'exclude_values': action_info['exclude_values'],
-            'email_column': action_info['item_column'],
+            'item_column': action_info['item_column'],
             'target_url': action_info['target_url'],
             'status': 'Preparing to execute',
         })
@@ -203,10 +205,7 @@ def run_canvas_email_done(
     action.save()
 
     # Send the emails!
-    send_canvas_email_messages.delay(
-        request.user.id,
-        log_item.id,
-        action_info.get_store())
+    run_task.delay(request.user.id, log_item.id, action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     set_action_payload(request.session)

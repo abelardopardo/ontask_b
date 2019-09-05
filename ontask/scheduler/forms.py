@@ -9,50 +9,41 @@ import pytz
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.conf import settings
+from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_correct_email
-from ontask.core.forms import date_time_widget_options
+from ontask.core.forms import FormWithPayload, date_time_widget_options
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.scheduler.models import ScheduledAction
-from ontask.workflow.models import Column
+from ontask.models import Column, ScheduledAction
 
 
-class ScheduleForm(forms.ModelForm):
+class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
     """Form to create/edit objects of the ScheduleAction.
 
     To be used for the various types of actions.
-
-    There is an additional field to allow for an extra step to review and
-    filter elements (item_column).
     """
-
-    # This field is needed because it has to consider only a subset of the
-    # columns, those that are "key".
-
-    item_column = forms.ModelChoiceField(queryset=Column.objects.none())
-
-    confirm_items = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Check/exclude email addresses before scheduling?'),
-    )
+    action = None
 
     def __init__(self, form_data, *args, **kwargs):
         """Set item_column values."""
         self.action = kwargs.pop('action')
-        columns = kwargs.pop('columns')
-        confirm_items = kwargs.pop('confirm_items')
 
         # Call the parent constructor
         super().__init__(form_data, *args, **kwargs)
 
-        self.fields['item_column'].queryset = columns
-        self.fields['confirm_items'].initial = confirm_items
+        self.set_fields_from_dict(['name', 'description_text'])
+        self.fields['execute'].initial = parse_datetime(
+                self._FormWithPayload__form_info.get('execute', ''))
 
     def clean(self):
-        """Verify that the date is correct."""
+        """Verify that the date is corre    ct."""
         form_data = super().clean()
+
+        self.store_fields_in_dict([
+            ('name', None),
+            ('description_text', None),
+            ('execute', str(form_data['execute']))])
 
         # The executed time must be in the future
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
@@ -68,117 +59,150 @@ class ScheduleForm(forms.ModelForm):
         """Define model, fields and widgets."""
 
         model = ScheduledAction
-
-        fields = ('name', 'description_text', 'item_column', 'execute')
-
+        fields = ('name', 'description_text', 'execute')
         widgets = {
             'execute': DateTimePickerInput(options=date_time_widget_options),
         }
 
 
-class EmailScheduleForm(ScheduleForm):
-    """Form to create/edit objects of the ScheduleAction of type email.
-
-    One of the fields is a reference to a key column, which is a subset of
-    the columns attached to the action. The subset is passed as the name
-    arguments "columns" (list of key columns).
-
-    There is an additional field to allow for an extra step to review and
-    filter email addresses.
-    """
-
+class ScheduleMailSubjectForm(FormWithPayload):
     subject = forms.CharField(
         initial='',
         label=_('Email subject'),
         strip=True,
         required=True)
 
+    def __init__(self, form_data, *args, **kwargs):
+        """Set subject value."""
+        # Call the parent constructor
+        super().__init__(form_data, *args, **kwargs)
+
+        self.set_field_from_dict('subject')
+
+    def clean(self):
+        form_data = super().clean()
+        self.store_field_in_dict('subject')
+        return form_data
+
+class ScheduleMailCCForm(FormWithPayload):
     cc_email = forms.CharField(
         initial='',
-        label=_('Comma-separated list of CC Emails'),
+        label=_('CC Emails (separated by spaces)'),
         strip=True,
         required=False)
 
     bcc_email = forms.CharField(
         initial='',
-        label=_('Comma-separated list of BCC Emails'),
+        label=_('List of BCC Emails (separated by spaces)'),
         strip=True,
         required=False)
 
-    send_confirmation = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Send you a confirmation email'))
-
-    track_read = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_('Track if emails are read?'))
+    instance = None
 
     def __init__(self, form_data, *args, **kwargs):
-        """Set additional field items."""
+        """Set cc and bcc data."""
         # Call the parent constructor
         super().__init__(form_data, *args, **kwargs)
 
-        self.fields['item_column'].label = _(
-            'Column in the table containing the email')
-
-        # If there is an instance, push the values in the payload to the form
-        if self.instance:
-            payload = self.instance.payload
-            self.fields['subject'].initial = payload.get('subject')
-            self.fields['cc_email'].initial = ', '.join(
-                payload.get('cc_email', []))
-            self.fields['bcc_email'].initial = ', '.join(
-                payload.get('bcc_email', []))
-            self.fields['send_confirmation'].initial = payload.get(
-                'send_confirmation', False)
-            self.fields['track_read'].initial = payload.get(
-                'track_read',
-                False,
-            )
-            self.fields['confirm_items'].initial = bool(
-                self.instance.exclude_values)
-
-        self.order_fields([
-            'name',
-            'description_text',
-            'execute',
-            'item_column',
-            'subject',
-            'cc_email',
-            'bcc_email',
-            'confirm_items',
-            'send_confirmation',
-            'track_read'])
+        self.set_fields_from_dict(['cc_email', 'bcc_email'])
 
     def clean(self):
-        """Process errors and add them to the form."""
+        """Verify that the date is correct."""
         form_data = super().clean()
 
-        errors = scheduled_email_action_data_is_correct(
-            self.action,
-            self.cleaned_data,
-        )
+        self.store_fields_in_dict([
+            (
+                'cc_email',
+                (' ').join([
+                    email.strip()
+                    for email in form_data['cc_email'].split() if email
+                ])
+            ),
+            (
+                'bcc_email',
+                (' ').join([
+                    email.strip()
+                    for email in form_data['bcc_email'].split() if email
+                ])
+            )])
 
-        # Pass the errors to the form
-        for field, txt in errors:
-            self.add_error(field, txt)
+        if not all(
+            is_correct_email(email) for email in form_data['cc_email'].split()
+        ):
+            self.add_error(
+                'cc_email',
+                _('This field must be a comma-separated list of emails.'))
+
+        if not all(
+            is_correct_email(email) for email in form_data['bcc_email'].split()
+        ):
+            self.add_error(
+                'bcc_email',
+                _('This field must be a comma-separated list of emails.'))
 
         return form_data
 
 
-class JSONScheduleForm(ScheduleForm):
-    """Form to create/edit objects of the ScheduleAction of type email.
+class ScheduleItemsForm(ScheduleBasicForm):
+    """Form to handle item_column and confirm_items fields."""
+    item_column = forms.ModelChoiceField(queryset=Column.objects.none())
 
-    One of the fields is a reference to a key column, which is a subset of
-    the columns attached to the action. The subset is passed as the name
-    arguments "columns" (list of key columns).
+    confirm_items = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Check/exclude email addresses before scheduling?'),
+    )
 
-    There is an additional field to allow for an extra step to review and
-    filter email addresses.
-    """
+    def __init__(self, form_data, *args, **kwargs):
+        """Set item_column values."""
+        columns = kwargs.pop('columns')
 
+        # Call the parent constructor
+        super().__init__(form_data, *args, **kwargs)
+
+        self.set_field_from_dict('confirm_items')
+        # Special case: get the column from the name
+        self.fields['item_column'].queryset = columns
+        column_name = self._FormWithPayload__form_info.get('item_column')
+        if column_name:
+            column = self.action.workflow.columns.get(name=column_name)
+            self.fields['item_column'].initial = column.pk
+
+    def clean(self):
+        form_data = super().clean()
+
+        self.store_fields_in_dict([
+            ('item_column', form_data['item_column'].name),
+            ('confirm_items', None)])
+
+        item_column = self.cleaned_data['item_column']
+
+        # Check if the values in the email column are correct emails
+        try:
+            column_data = get_rows(
+                self.action.workflow.get_data_frame_table_name(),
+                column_names=[item_column.name])
+            if not all(
+                is_correct_email(row[item_column.name]) for row in column_data
+            ):
+                # column has incorrect email addresses
+                self.add_error(
+                    'item_column',
+                    _('The column with email addresses has incorrect values.'))
+        except TypeError:
+            self.add_error(
+                'item_column',
+                _('The column with email addresses has incorrect values.'))
+
+        return form_data
+
+    class Meta(ScheduleBasicForm.Meta):
+        """Define model, fields and widgets."""
+
+        fields = ('name', 'description_text', 'item_column', 'execute')
+
+
+class ScheduleTokenForm(FormWithPayload):
     # Token to use when sending the JSON request
     token = forms.CharField(
         initial='',
@@ -195,65 +219,146 @@ class JSONScheduleForm(ScheduleForm):
             }),
     )
 
+    instance = None
+
     def __init__(self, form_data, *args, **kwargs):
         """Set label and required for the item_column field."""
         # Call the parent constructor
         super().__init__(form_data, *args, **kwargs)
 
-        self.fields['item_column'].label = _(
-            'Column to pick elements to ignore (empty to skip)')
-        self.fields['item_column'].required = False
-        # No longer needed, item column does the same
-        self.fields.pop('confirm_items')
-
-        # If there is an instance, push the values in the payload to the form
-        if self.instance:
-            payload = self.instance.payload
-            self.fields['token'].initial = payload.get('token')
+        self.set_field_from_dict('token')
 
     def clean(self):
-        """Clean the form data."""
+        """Store the values in the form info."""
+        form_data = super().clean()
+        self.store_field_in_dict('token', None)
+        return form_data
+
+
+class EmailScheduleForm(
+    ScheduleMailSubjectForm,
+    ScheduleMailCCForm,
+    ScheduleItemsForm,
+):
+    """Form to create/edit objects of the ScheduleAction of type email.
+
+    One of the fields is a reference to a key column, which is a subset of
+    the columns attached to the action. The subset is passed as the name
+    arguments "columns" (list of key columns).
+
+    There is an additional field to allow for an extra step to review and
+    filter email addresses.
+    """
+
+    send_confirmation = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Send you a confirmation email'))
+
+    track_read = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_('Track if emails are read?'))
+
+    def __init__(self, form_data, *args, **kwargs):
+        """Set additional field items."""
+        # Call the parent constructor
+        super().__init__(form_data, *args, **kwargs)
+
+        self.set_fields_from_dict(['send_confirmation', 'track_read'])
+        self.fields['item_column'].label = _(
+            'Column in the table containing the email')
+
+        self.order_fields([
+            'name',
+            'description_text',
+            'execute',
+            'item_column',
+            'subject',
+            'cc_email',
+            'bcc_email',
+            'confirm_items',
+            'send_confirmation',
+            'track_read'])
+
+    def clean(self):
+        """Store the values in the form info."""
+        form_data = super().clean()
+        self.store_fields_in_dict([
+            ('send_confirmation', None),
+            ('track_read', None)
+        ])
+        return form_data
+
+
+class SendListScheduleForm(
+    ScheduleMailSubjectForm, ScheduleMailCCForm, ScheduleBasicForm
+):
+    """Form to create/edit objects of the ScheduleAction of type send list."""
+
+    email_to = forms.CharField(label=_('Recipient'), required=True)
+
+    def __init__(self, form_data, *args, **kwargs):
+        """Set additional field items."""
+
+        # Call the parent constructor
+        super().__init__(form_data, *args, **kwargs)
+
+        self.set_field_from_dict('email_to')
+
+        self.order_fields([
+            'name',
+            'description_text',
+            'execute',
+            'email_to',
+            'subject',
+            'cc_email',
+            'bcc_email'])
+
+    def clean(self):
+        """Process errors and add them to the form."""
         form_data = super().clean()
 
-        errors = scheduled_json_action_data_is_correct(
-            self.action,
-            self.cleaned_data,
-        )
+        self.store_field_in_dict('email_to')
 
-        # Pass the errors to the form
-        for field, txt in errors:
-            self.add_error(field, txt)
+        if not is_correct_email(form_data['email_to']):
+            self.add_error(
+                'email_to',
+                _('This field must be a valid email address.'))
 
         return form_data
 
-    class Meta(ScheduleForm.Meta):
+
+class JSONScheduleForm(ScheduleTokenForm, ScheduleItemsForm):
+    """Form to edit ScheduleAction of types JSON and JSON List."""
+
+    class Meta(ScheduleItemsForm.Meta):
         """Redefine the order."""
 
         fields = (
             'name',
             'description_text',
+            'execute',
             'item_column',
             'confirm_items',
+            'token')
+
+
+class JSONListScheduleForm(ScheduleTokenForm, ScheduleBasicForm):
+    """Form to edit ScheduleAction of types JSON List."""
+
+    class Meta(ScheduleBasicForm.Meta):
+        """Redefine the order."""
+
+        fields = (
+            'name',
+            'description_text',
             'execute',
             'token')
 
 
-class CanvasEmailScheduleForm(JSONScheduleForm):
-    """Form to create/edit objects of the ScheduleAction of type canvas email.
-
-    One of the fields is the canvas ID key column, which is a subset of the
-    columns attached to the action. The subset is passed as the name
-    arguments "columns" (list of key columns).
-
-    There is an additional field to allow for an extra step to review and
-    filter canvas IDs.
-    """
-
-    subject = forms.CharField(
-        initial='',
-        label=_('Email subject'),
-        strip=True,
-        required=True)
+class CanvasEmailScheduleForm(ScheduleMailSubjectForm, ScheduleItemsForm):
+    """Form to create/edit ScheduleAction of type canvas email."""
 
     def __init__(self, form_data, *args, **kwargs):
         """Assign item_column field."""
@@ -263,12 +368,7 @@ class CanvasEmailScheduleForm(JSONScheduleForm):
         self.fields['item_column'].label = _(
             'Column in the table containing the Canvas ID')
 
-        # If there is an instance, push the values in the payload to the form
-        if self.instance:
-            payload = self.instance.payload
-            self.fields['subject'].initial = payload.get('subject')
-
-    class Meta(JSONScheduleForm.Meta):
+    class Meta(ScheduleItemsForm.Meta):
         """Field order."""
 
         fields = (
@@ -277,99 +377,4 @@ class CanvasEmailScheduleForm(JSONScheduleForm):
             'item_column',
             'confirm_items',
             'subject',
-            'execute',
-            'token')
-
-
-def scheduled_action_data_is_correct(cleaned_data):
-    """Verify the correctness of the object.
-
-    Verify the integrity of a ScheduledAction object with a Personalised_text
-    type. The function returns a list of pairs (field name, message) with the
-    errors, or [] if no error has been found.
-
-    :param cleaned_data: Data to be verified.
-
-    :return: List of pairs (field name, error) or [] if correct
-    """
-    pair_list = []
-
-    # The executed time must be in the future
-    now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-    when_data = cleaned_data.get('execute')
-    if when_data and when_data <= now:
-        pair_list.append(
-            ('execute', _('Date/time must be in the future')))
-
-    return pair_list
-
-
-def scheduled_email_action_data_is_correct(action, cleaned_data):
-    """Verify email action data.
-
-    Verify the integrity of a ScheduledAction object with a Personalised_text
-    type. The function returns a list of pairs (field name, message) with the
-    errors, or [] if no error has been found.
-
-    :param action: Action object to use for scheduling
-
-    :param cleaned_data:
-
-    :return: List of pairs (field name, error) or [] if correct
-    """
-    pair_list = []
-    item_column = cleaned_data['item_column']
-
-    # Verify the correct time
-    pair_list.extend(scheduled_action_data_is_correct(cleaned_data))
-
-    # Check if the values in the email column are correct emails
-    try:
-        column_data = get_rows(
-            action.workflow.get_data_frame_table_name(),
-            column_names=[item_column.name])
-        if not all(is_correct_email(row['email']) for row in column_data):
-            # column has incorrect email addresses
-            pair_list.append(
-                ('item_column',
-                 _('The column with email addresses has incorrect values.')),
-            )
-    except TypeError:
-        pair_list.append(
-            ('item_column',
-             _('The column with email addresses has incorrect values.')),
-        )
-
-    if not all(
-        is_correct_email(email)
-        for email in cleaned_data['cc_email'].split(',') if email
-    ):
-        pair_list.append(
-            ('cc_email',
-             _('This field must be a comma-separated list of emails.')),
-        )
-
-    if not all(
-        is_correct_email(email)
-        for email in cleaned_data['bcc_email'].split(',') if email
-    ):
-        pair_list.append(
-            ('bcc_email',
-             _('This field must be a comma-separated list of emails.')),
-        )
-
-    return pair_list
-
-
-def scheduled_json_action_data_is_correct(action, cleaned_data):
-    """Verify json data.
-
-    Function to impose extra correct conditions in the JSON schedule data.
-
-    :param action: Action used for the verification
-
-    :param cleaned_data: Data just collected by the form
-
-    :return: List of (string, form element) to attach errors.
-    """
-    return scheduled_action_data_is_correct(cleaned_data)
+            'execute')

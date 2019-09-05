@@ -10,9 +10,7 @@ from django.conf import settings
 from rest_framework import status
 
 from ontask import entity_prefix
-from ontask.action.models import Action, Condition
-from ontask.table.models import View
-from ontask.workflow.models import Column, Workflow
+from ontask.models import Action, Column, Condition, View, Workflow
 
 
 class WorkflowTestViewWorkflowCrud(test.OnTaskTestCase):

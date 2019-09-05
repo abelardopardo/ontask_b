@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import UploadS3FileForm
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 @user_passes_test(is_instructor)

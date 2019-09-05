@@ -15,12 +15,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from ontask import create_new_name
-from ontask.action.models import Action, ActionColumnConditionTuple, Condition
 from ontask.core.decorators import ajax_required, get_action, get_condition
 from ontask.core.permissions import is_instructor
 from ontask.dataops.formula import get_variables
-from ontask.logs.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import (
+    Action, ActionColumnConditionTuple, Condition, Log, Workflow,
+)
 
 
 def do_clone_condition(

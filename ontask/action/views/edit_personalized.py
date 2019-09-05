@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-"""Views to edit actions."""
+"""Views to edit actions that send personalized information."""
+
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
@@ -12,15 +13,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ontask.action.evaluate import render_action_template
 from ontask.action.forms import EditActionOutForm, EnableURLForm, FilterForm
-from ontask.action.models import Action, Condition
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
+from ontask.models import Action, Condition, Log, Workflow
 from ontask.visualizations.plotly import PlotlyHandler
-from ontask.workflow.models import Workflow
 
 
-def text_renders_correctly(
+def _text_renders_correctly(
     text_content: str,
     action: Action,
     form: EditActionOutForm,
@@ -104,7 +103,7 @@ def edit_action_out(
         text_content = form.cleaned_data.get('text_content')
 
         # Render the content as a template and catch potential problems.
-        if text_renders_correctly(text_content, action, form):
+        if _text_renders_correctly(text_content, action, form):
             # Log the event
             Log.objects.register(
                 request.user,
@@ -119,7 +118,11 @@ def edit_action_out(
             # Text is good. Update the content of the action
             action.set_text_content(text_content)
 
-            if action.action_type == Action.personalized_json:
+            # If it is a JSON action, store the target_url
+            if (
+                action.action_type == Action.personalized_json
+                or action.action_type == Action.send_list_json
+            ):
                 # Update the target_url field
                 action.target_url = form.cleaned_data['target_url']
 
@@ -139,7 +142,10 @@ def edit_action_out(
     context = {
         'filter_condition': filter_condition,
         'action': action,
-        'load_summernote': action.action_type == Action.personalized_text,
+        'load_summernote': (
+            action.action_type == Action.personalized_text
+            or action.action_type == Action.send_list
+        ),
         'conditions': action.conditions.filter(is_filter=False),
         'other_conditions': Condition.objects.filter(
             action__workflow=workflow, is_filter=False,
@@ -154,6 +160,9 @@ def edit_action_out(
             filter_condition.n_rows_selected
             if filter_condition else -1,
         'has_data': action.workflow.has_table(),
+        'is_send_list': (
+            action.action_type == Action.send_list
+            or action.action_type == Action.send_list_json),
         'all_false_conditions': any(
             cond.n_rows_selected == 0
             for cond in action.conditions.all()),
@@ -208,7 +217,8 @@ def showurl(
         return JsonResponse({'html_redirect': None})
 
     # Create the text for the action
-    url_text = reverse('action:serve', kwargs={'action_id': action.id})
+    # url_text = reverse('action:serve', kwargs={'action_id': action.id})
+    url_text = reverse('action:serve_lti') + '?id=' + str(action.id)
 
     # Render the page with the abolute URI
     return JsonResponse({

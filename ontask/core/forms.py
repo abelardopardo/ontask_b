@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Generic forms to be used in various placdes in the platform."""
+from typing import Dict
 
 import pytz
 from django import forms
@@ -8,7 +9,7 @@ from django.conf import settings
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.ontask_prefs import MAX_UPLOAD_SIZE
+from ontask.settings import MAX_UPLOAD_SIZE
 
 date_time_widget_options = {
     'locale': settings.LANGUAGE_CODE,
@@ -64,3 +65,49 @@ class RestrictedFileField(forms.FileField):
             return form_data
 
         return form_data
+
+
+class FormWithPayload(forms.Form):
+    """Form that has a method to initialize fields based on a Dict."""
+
+    def __init__(self, *args, **kargs):
+        self.__form_info: Dict = kargs.pop('form_info', {})
+        super().__init__(*args, **kargs)
+
+    def set_field_from_dict(self, field_name):
+        """Initialize the field with the value in __form_info it it exists.
+
+    :param form: Form object containing all the fields
+
+    :param field_name: Field to be initialized
+
+    :return: Effect reflected in the field within the form.
+    """
+        if field_name in self.__form_info:
+            self.fields[field_name].initial = self.__form_info[field_name]
+
+    def set_fields_from_dict(self, field_names):
+        """Set the list of field_names as values in fields
+
+        :param field_names: List of field_names to use
+        """
+        for field_name in field_names:
+            self.set_field_from_dict(field_name)
+
+    def store_field_in_dict(self, field_name, field_value=None):
+        """Store the value of a field in the dictionary."""
+        if field_name not in self.fields:
+            return
+
+        if field_value:
+            self.__form_info[field_name] = field_value
+        else:
+            self.__form_info[field_name] = self.cleaned_data[field_name]
+
+    def store_fields_in_dict(self, field_pairs):
+        """Store the list of (field_name, field_value=None) in the dict.
+
+        :param field_pairs: List of field names to store in the dictionary.
+        """
+        for field_name, field_default in field_pairs:
+            self.store_field_in_dict(field_name, field_default)

@@ -29,7 +29,7 @@ class LTIAuthMiddleware(object):
             logger.debug('inside process_request %s' % request.path)
 
         # AuthenticationMiddleware is required so that request.user exists.
-        if not hasattr(request, 'user'):
+        if not getattr(request, 'user', None):
             logger.debug(_('improperly configured: requeset has no user attr'))
             raise ImproperlyConfigured(
                 _("The Django LTI auth middleware requires the"
@@ -104,7 +104,7 @@ class LTIAuthMiddleware(object):
                     'user_image': request.POST.get('user_image'),
                 }
                 # If a custom role key is defined in project, merge into existing role list
-                if hasattr(settings, 'LTI_CUSTOM_ROLE_KEY'):
+                if getattr(settings, 'LTI_CUSTOM_ROLE_KEY', None):
                     custom_roles = request.POST.get(
                         settings.LTI_CUSTOM_ROLE_KEY, '').split(',')
                     # Filter out any empty roles
@@ -136,12 +136,11 @@ class LTIAuthMiddleware(object):
         backend = auth.load_backend(backend_str)
         try:
             logger.debug(
-                _('calling the backend {0} clean_username with {1}').format(
-                    backend, username
-                )
-            )
+                _('calling the backend {0} clean_username with {1}'),
+                backend,
+                username)
             username = backend.clean_username(username)
-            logger.debug(_('cleaned username is {0}').format(username))
+            logger.debug(_('cleaned username is {0}'), username)
         except AttributeError:  # Backend has no clean_username method.
             pass
         return username

@@ -4,9 +4,8 @@
 from rest_framework import generics
 
 from ontask.core.permissions import UserIsInstructor
-
-from .models import Log
-from .serializers import LogSerializer
+from ontask.logs.serializers import LogSerializer
+from ontask.models import Log
 
 
 class LogAPIList(generics.ListAPIView):

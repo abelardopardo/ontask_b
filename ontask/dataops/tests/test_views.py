@@ -12,7 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask.dataops.pandas import check_wf_df, load_table
 from ontask.dataops.sql.column_queries import is_column_in_table
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 class DataopsSymbols(test.OnTaskLiveTestCase):
@@ -20,7 +20,6 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'wflow_symbols.sql'
     )
@@ -400,7 +399,6 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'ontask',
-                         'dataops',
                          'fixtures',
                          'excel_upload.xlsx')
         )
@@ -450,7 +448,6 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'ontask',
-                         'dataops',
                          'fixtures',
                          'excel_upload.xlsx')
         )
@@ -508,7 +505,6 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'ontask',
-                         'dataops',
                          'fixtures',
                          'test_df_merge_update_df1.csv')
         )
@@ -528,7 +524,6 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
                          'ontask',
-                         'dataops',
                          'fixtures',
                          'test_df_merge_update_df2.csv')
         )
@@ -571,9 +566,9 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
 
         # Create three conditions
         self.select_condition_tab()
-        self.create_condition("bool1 cond", '', [('bool1', None, True)])
-        self.create_condition("bool 2 cond", '', [('bool2', None, True)])
-        self.create_condition('bool3 cond', '', [('bool3', None, True)])
+        self.create_condition("bool1 cond", '', [('bool1', 'equal', 'true')])
+        self.create_condition("bool 2 cond", '', [('bool2', 'equal', 'true')])
+        self.create_condition('bool3 cond', '', [('bool3', 'equal', 'true')])
 
         # insert the action text
         self.select_text_tab()
@@ -596,7 +591,6 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'plugin_execution.sql'
     )
@@ -902,14 +896,12 @@ class DataopsMerge(DataopsMergeBasic):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_merge.sql'
     )
     merge_file = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_df_merge_update_df2.csv'
     )
@@ -1021,14 +1013,12 @@ class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_empty_key_after_merge.sql'
     )
     merge_file = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_empty_key_after_merge.csv'
     )

@@ -10,9 +10,7 @@ from celery.utils.log import get_task_logger
 from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault(
-    'DJANGO_SETTINGS_MODULE',
-    'ontask.settings.production')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.production')
 
 app = Celery('ontask')
 
@@ -36,7 +34,7 @@ def debug_task(self):
     else:
         logger.debug('Celery running in production mode.')
 
-    logger.debug('Request: {info}', extras={'info': self.request})
+    logger.debug('Request: %s', str(self.request))
 
 
 def celery_is_up():

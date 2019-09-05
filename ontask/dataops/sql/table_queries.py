@@ -243,8 +243,8 @@ def search_table(
         query = query + sql.SQL(' ORDER BY {0}').format(
             OnTaskDBIdentifier(order_col_name))
 
-    if not order_asc:
-        query = query + sql.SQL(' DESC')
+        if not order_asc:
+            query = query + sql.SQL(' DESC')
 
     # Execute the query
     with connection.connection.cursor() as cursor:
@@ -266,9 +266,5 @@ def delete_table(table_name: str):
     try:
         with connection.connection.cursor() as cursor:
             cursor.execute(query)
-            connection.commit()
     except Exception as exc:
-        logger.error(
-            'Error when dropping table {tname}: {excmsg}',
-            extra={'tname': table_name, 'excmsg': str(exc)},
-        )
+        logger.error('Error when dropping table %s: %s', table_name, str(exc))

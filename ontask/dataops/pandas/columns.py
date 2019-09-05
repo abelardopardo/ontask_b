@@ -10,7 +10,7 @@ from ontask.dataops.pandas.datatypes import pandas_datatype_names
 
 
 def get_column_statistics(df_column):
-    """Calculate a set of statistics or a DataFrame columm.
+    """Calculate a set of statistics or a DataFrame column.
 
     Given a data frame with a single column, return a set of statistics
     depending on its type.

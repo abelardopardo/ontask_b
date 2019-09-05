@@ -11,17 +11,16 @@ from typing import List, Tuple
 
 import pandas as pd
 import pytz
-from django.conf import settings as ontask_settings
+from django.conf import settings
 from django.contrib import messages
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from ontask.dataops import settings
-from ontask.dataops.models import Plugin
+import ontask.settings
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.plugin import ontask_plugin
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
-from ontask.logs.models import Log
+from ontask.models import Log, Plugin
 
 type_function = {
     'integer': int,
@@ -37,7 +36,7 @@ _checks = [
     _('Class inherits from OnTaskTransformation or OnTaskModel'),
     _('Class has a non-empty documentation string'),
     _('Class has a non-empty string field with name "name"'),
-    _('Class has a string field with name "description_txt"'),
+    _('Class has a string field with name "description_text"'),
     _(
         'Class has a field with name "input_column_names" storing '
         + 'a (possible empty) list of strings'),
@@ -60,12 +59,12 @@ _checks = [
 
 
 def _get_plugin_path():
-    plugin_folder = str(getattr(settings, 'PLUGIN_DIRECTORY'))
+    plugin_folder = str(getattr(ontask.settings, 'PLUGIN_DIRECTORY'))
 
     if os.path.isabs(plugin_folder):
         return plugin_folder
 
-    return os.path.join(ontask_settings.BASE_DIR, plugin_folder)
+    return os.path.join(settings.BASE_DIR, plugin_folder)
 
 
 def _verify_plugin(pinobj: Plugin) -> List[Tuple[str, str]]:
@@ -81,7 +80,7 @@ def _verify_plugin(pinobj: Plugin) -> List[Tuple[str, str]]:
 
     3. Presence of string field "name"
 
-    4. Presence of string field "description_txt
+    4. Presence of string field "description_text
 
     5. Presence of a list of strings (possibly empty) with name
        "input_column_names"
@@ -137,7 +136,7 @@ def _verify_plugin(pinobj: Plugin) -> List[Tuple[str, str]]:
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if pinobj.description_txt and isinstance(pinobj.description_txt, str):
+        if pinobj.description_text and isinstance(pinobj.description_text, str):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect type')
@@ -255,7 +254,7 @@ def _load_plugin_info(plugin_folder, plugin_rego=None):
 
     if plugin_instance:
         plugin_rego.name = plugin_instance.name
-        plugin_rego.description_txt = plugin_instance.description_txt
+        plugin_rego.description_text = plugin_instance.description_text
         try:
             plugin_rego.is_model = plugin_instance.get_is_model()
         except Exception:
@@ -533,7 +532,7 @@ def run_plugin(
 
     # Update execution time in the plugin
     plugin_info.executed = datetime.now(
-        pytz.timezone(ontask_settings.TIME_ZONE),
+        pytz.timezone(settings.TIME_ZONE),
     )
     plugin_info.save()
 

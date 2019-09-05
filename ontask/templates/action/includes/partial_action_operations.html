@@ -1,0 +1,66 @@
+{% load i18n %}
+<div class=" btn-group" role="group">
+  <a href="{% url 'action:run' id %}"
+     class="btn btn-light btn-sm spin {% if not is_executable %}disabled{% endif %}"
+     data-toggle="tooltip"
+     title="{% if action_tval == 'survey' or action_tval == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action_tval == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span> {% trans 'Run' %}</a>
+  <div class="dropdown">
+    <button class="btn btn-light btn-sm" type="button" id="actionMoreOperations"
+            data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
+    <div class="shadow dropdown-menu dropdown-menu-right" aria-labelledby="actionMoreOperations">
+      {% if action_tval == 'personalized_text' or action_tval == 'personalized_canvas_email' or action_tval == 'survey' %}
+        <button type="button"
+                class="dropdown-item js-action-showurl"
+                data-url="{% url 'action:showurl' id %}"
+                data-toggle="tooltip"
+                {% if is_out %}
+                  title="{% trans 'URL for learners to access the personalised text' %}"
+                {% else %}
+                  title="{% trans 'URL for learners to introduce data' %}"
+                {% endif %}>
+          <span class="fa fa-link"></span> {% trans 'URL' %}
+          {% if serve_enabled %}<span class="badge  badge-pill badge-dark">On</span>
+          {% else %}<span class="badge badge-pill badge-light">Off</span>{% endif %}
+        </button>
+      {% endif %}
+      {% if action_tval == 'personalized_text' %}
+        <a href="{% url 'action:zip_action' id %}"
+           class="spin dropdown-item"
+            data-toggle="tooltip"
+            title="{% trans 'Create a ZIP with each personalised text in a file' %}">
+          <span class="fa fa-file-archive-o"></span> {% trans 'ZIP' %}</a>
+      {% endif %}
+      <a href="{% url 'action:timeline' id %}" class="spin dropdown-item"
+         data-toggle="tooltip"
+         title="{% trans 'See when this action was executed' %}">
+        <span class="fa fa-clock-o"></span> {% trans 'Timeline' %}</a>
+      {% if is_out %}
+        <a href="{% url 'scheduler:create' id %}" class="spin dropdown-item"
+           data-toggle="tooltip"
+           title="{% trans 'Schedule the execution of the action' %}">
+          <span class="fa fa-calendar"></span> {% trans 'Schedule' %}</a>
+      {% endif %}
+      <button type="button" class="js-action-update dropdown-item"
+              data-url="{% url 'action:update' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Change name and/or description' %}">
+          <span class="fa fa-pencil"></span> {% trans 'Rename' %}
+      </button>
+      <button type="button" class="js-action-clone dropdown-item"
+              data-url="{% url 'action:clone_action' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Create an identical action' %}">
+        <span class="fa fa-clone"></span> {% trans 'Clone' %}
+      </button>
+      <a href="{% url 'action:export_ask' id %}" class="spin dropdown-item"
+         data-toggle="tooltip"
+         title="{% trans 'Export the content of this action' %}">
+        <span class="fa fa-download"></span> {% trans 'Export' %}</a>
+      <button type="button" class="js-action-delete dropdown-item"
+              data-url="{% url 'action:delete' id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Delete the action' %}">
+        <span class="fa fa-trash"></span> {% trans 'Delete' %}</button>
+    </div>
+  </div>
+</div>

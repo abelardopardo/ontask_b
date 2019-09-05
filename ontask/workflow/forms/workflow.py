@@ -7,9 +7,9 @@ import json
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import ontask_prefs
+import ontask.settings
 from ontask.core.forms import RestrictedFileField
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 CHAR_FIELD_LENGTH = 512
 
@@ -65,8 +65,8 @@ class WorkflowImportForm(forms.Form):
         label='Name (leave empty to take the name stored in the file)')
 
     wf_file = RestrictedFileField(
-        max_upload_size=int(ontask_prefs.MAX_UPLOAD_SIZE),
-        content_types=json.loads(str(ontask_prefs.CONTENT_TYPES)),
+        max_upload_size=int(ontask.settings.MAX_UPLOAD_SIZE),
+        content_types=json.loads(str(ontask.settings.CONTENT_TYPES)),
         allow_empty_file=False,
         label=_('File'),
         help_text=_('File containing a previously exported workflow'))

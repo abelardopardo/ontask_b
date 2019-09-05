@@ -1,13 +1,21 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 5.2.2 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 6.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/abelardopardo/ontask_b)
 ![Issues](https://img.shields.io/github/issues/abelardopardo/ontask_b.svg?style=flat-square)
 ![License](https://img.shields.io/github/license/abelardopardo/ontask_b.svg?style=flat-square)
+[![Documentation Status](https://readthedocs.org/projects/ontask-version-b/badge/?version=latest)](https://ontask-version-b.readthedocs.io/en/latest/?badge=latest)
+[![Python](https://img.shields.io/pypi/pyversions/django)](https://pypi.python.org/)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/abelardopardo/ontask_b)
+![GitHub followers](https://img.shields.io/github/followers/abelardopardo?label=Follow&style=social)
+![Twitter Follow](https://img.shields.io/twitter/follow/ontasklearning?label=Follow&style=social)
 
 ## OnTask in a nutshell
 
-- Data upload through CSV, Excel files or SQL connections
+- ***NEW** Action to send data columns through email or JSON objects
+
+- Data upload through CSV, Excel files, S3 Buckets or SQL connections
 
 - Actions such as personalised email, personalised web page
 
@@ -32,9 +40,9 @@ Current Version: 5.2.2 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - Authentication through LTI, LDAP, Shibboleth
 
-- **NEW** Creation of ZIP file to upload feedback files in Moodle assessment
+- Creation of ZIP file to upload feedback files in Moodle assessment
 
-- **NEW** Support for internationalization (initial versions for Spanish, Chinese and Finnish)
+- Support for internationalization (initial versions for Spanish, Chinese and Finnish)
 
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.

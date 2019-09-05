@@ -17,7 +17,7 @@ class LinearModel(OnTaskModel):
         """Initialize all the fields."""
         super().__init__()
         self.name = 'Linear Model'
-        self.description_txt = "Obtain a prediction of the final exam score."
+        self.description_text = "Obtain a prediction of the final exam score."
         self.input_column_names = ['Contribution']
         self.output_column_names = ['Final Exam Predict']
 

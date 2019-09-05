@@ -2,10 +2,9 @@
 
 
 import os
-from time import sleep
-
 import test
 from test import ElementHasFullOpacity, ScreenTests
+from time import sleep
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
@@ -14,8 +13,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask.action.models import Action
 from ontask.dataops.pandas import destroy_db_engine
+from ontask.models import Action
 
 
 class TutorialCaptures(ScreenTests):
@@ -409,10 +408,10 @@ class TutorialCaptures(ScreenTests):
             'Connecting your program with this course'
         )
         select = Select(self.selenium.find_element_by_id(
-            'id_email_column'))
+            'id_item_column'))
         select.select_by_value('email')
         self.selenium.find_element_by_id('id_cc_email').send_keys(
-            'tutor1@example.com, tutor2@example.com'
+            'tutor1@example.com tutor2@example.com'
         )
         self.selenium.find_element_by_id('id_bcc_email').send_keys(
             'coursecoordinator@bogus.com'
@@ -476,7 +475,7 @@ class TutorialCaptures(ScreenTests):
 
         # Select the key column
         select = Select(self.selenium.find_element_by_id(
-            'id_participant_column')
+            'id_item_column')
         )
         select.select_by_value('Identifier')
         select = Select(self.selenium.find_element_by_id(

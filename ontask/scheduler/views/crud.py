@@ -18,7 +18,6 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
 
-from ontask.action.models import Action
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
 )
@@ -26,13 +25,11 @@ from ontask.core.celery import celery_is_up
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
-from ontask.logs.models import Log
-from ontask.scheduler.models import ScheduledAction
+from ontask.models import Action, Log, ScheduledAction, Workflow
 from ontask.scheduler.views.save import (
     create_timedelta_string, save_canvas_email_schedule, save_email_schedule,
-    save_json_schedule,
+    save_json_schedule, save_send_list_json_schedule, save_send_list_schedule,
 )
-from ontask.workflow.models import Workflow
 
 
 class ScheduleActionTable(tables.Table):
@@ -49,7 +46,6 @@ class ScheduleActionTable(tables.Table):
                 'data-toggle': 'tooltip',
                 'title': _('Edit the action scheduled for execution'),
             },
-            'td': {'data-backcolor': lambda record: record.action.action_type},
         },
     )
 
@@ -115,6 +111,10 @@ def index(
     :param request: Request object
     :return: HTTP response with the table.
     """
+    # Reset object to carry action info throughout dialogs
+    set_action_payload(request.session)
+    request.session.save()
+
     # Get the actions
     s_items = ScheduledAction.objects.filter(action__workflow=workflow.id)
 
@@ -155,6 +155,8 @@ def view(
 
     # Get the values and remove the ones that are not needed
     item_values = model_to_dict(sch_obj)
+    item_values['item_column'] = str(sch_obj.item_column)
+    item_values['action'] = str(sch_obj.action)
     item_values.pop('id')
     item_values.pop('user')
     item_values['payload'] = json.dumps(item_values['payload'], indent=2)
@@ -187,14 +189,12 @@ def edit(
     :return: HTTP response
     """
     # Distinguish between creating a new element or editing an existing one
-    new_item = request.path.endswith(reverse(
+    is_a_new_item = request.path.endswith(reverse(
         'scheduler:create',
         kwargs={'pk': pk}))
 
-    if new_item:
-        action = workflow.actions.filter(
-            pk=pk,
-        ).filter(
+    if is_a_new_item:
+        action = workflow.actions.filter(pk=pk).filter(
             Q(workflow__user=request.user)
             | Q(workflow__shared=request.user),
         ).first()
@@ -219,6 +219,8 @@ def edit(
             'post_url': reverse(
                 'scheduler:finish_scheduling'),
         }
+        if s_item:
+            op_payload.update(s_item.payload)
         set_action_payload(request.session, op_payload)
         request.session.save()
 
@@ -231,8 +233,19 @@ def edit(
                 + 'Ask your system administrator to enable queueing.'))
         return redirect(reverse('action:index'))
 
+    if s_item:
+        op_payload['schedule_id'] = s_item.id
+
     if action.action_type == Action.personalized_text:
         return save_email_schedule(request, action, s_item, op_payload)
+    elif action.action_type == Action.send_list:
+        return save_send_list_schedule(request, action, s_item, op_payload)
+    elif action.action_type == Action.send_list_json:
+        return save_send_list_json_schedule(
+            request,
+            action,
+            s_item,
+            op_payload)
     elif action.action_type == Action.personalized_canvas_email:
         return save_canvas_email_schedule(
             request,
@@ -284,8 +297,12 @@ def delete(
     log_type = None
     if s_item.action.action_type == Action.personalized_text:
         log_type = Log.SCHEDULE_EMAIL_DELETE
+    elif s_item.action.action_type == Action.send_list:
+        log_type = Log.SCHEDULE_SEND_LIST_DELETE
     elif s_item.action.action_type == Action.personalized_json:
         log_type = Log.SCHEDULE_JSON_DELETE
+    elif s_item.action.action_type == Action.send_list_json:
+        log_type = Log.SCHEDULE_JSON_LIST_DELETE
     elif s_item.action.action_type == Action.personalized_canvas_email:
         log_type = Log.SCHEDULE_CANVAS_EMAIL_DELETE
 
@@ -304,15 +321,7 @@ def delete(
             'action_id': s_item.action.id,
             'execute': s_item.execute.isoformat(),
             'item_column': item_column_name,
-            'subject': s_item.payload.get('subject'),
-            'cc_email': s_item.payload.get('cc_email', []),
-            'bcc_email': s_item.payload.get('bcc_email', []),
-            'send_confirmation': s_item.payload.get(
-                'send_confirmation',
-                False),
-            'track_read': s_item.payload.get('track_read', False),
-        },
-    )
+            'payload': s_item.payload})
 
     # Perform the delete operation
     s_item.delete()

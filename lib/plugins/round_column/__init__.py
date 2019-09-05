@@ -23,7 +23,7 @@ class RoundColumn(OnTaskTransformation):
         super().__init__()
 
         self.name = 'Round column'
-        self.description_txt = "Round the values in pre-selected columns."
+        self.description_text = "Round the values in pre-selected columns."
         self.parameters = [
             ('Decimal places',
              'integer',

@@ -1,0 +1,1053 @@
+[
+{
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+        "name": "instructor",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+        "name": "ainstructor",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+        "name": "idesigner",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+        "name": "aidesigner",
+        "permissions": []
+    }
+},
+{
+    "model": "sites.site",
+    "pk": 1,
+    "fields": {
+        "domain": "127.0.0.1",
+        "name": "127.0.0.1"
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$n34q6KM9uw3J$KqTx4Bc8X1mwZVRZjnTdUfrZ5xC0jN6JYlQ6sWY2yU4=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student01@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.681Z",
+        "name": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$1dlrxKGpgqOn$+REnnduyx2hgZpqX1q3mhVd6ZDIHTFFT3DvJmsnIfkc=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "student02@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.718Z",
+        "name": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 3,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Y25uQ3NERU1LVVlr$Y0ZqAnyp83/Hcu6cwcylyA",
+        "last_login": "2019-05-25T01:23:45.004Z",
+        "is_superuser": false,
+        "email": "instructor01@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.755Z",
+        "name": "",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 4,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$NGl3ajVHSjhQZ3Nr$79XIrHR5gXyQZh6ak7oktg",
+        "last_login": "2019-05-25T01:48:11.400Z",
+        "is_superuser": false,
+        "email": "instructor02@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.797Z",
+        "name": "",
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$0ReTsxa1X4e3$8rU3YEnKnSPSzcQToiLSoUWHHa/47Y0ooXb3/lWGsqw=",
+        "last_login": "2017-11-04T05:34:00.513Z",
+        "is_superuser": false,
+        "email": "ainstructor01@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.842Z",
+        "name": "",
+        "groups": [
+            [
+                "ainstructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 6,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$Iha3zjN1yT0C$4UCn675ps9GJ6n0ZX2zz39+kyNH8GSraI2ro1gVcy2g=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "ainstructor02@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.884Z",
+        "name": "",
+        "groups": [
+            [
+                "ainstructor"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 7,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$W4iOQiWpAkYL$JPhTL5CT8EAO3K8mFAI0FSzrU5oOc+UjuMbVFlM+WNo=",
+        "last_login": "2017-11-06T20:55:12.519Z",
+        "is_superuser": false,
+        "email": "idesigner1@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.926Z",
+        "name": "",
+        "groups": [
+            [
+                "idesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 8,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$dx0WImNuuA6F$M+UcZ3wVCf2c8U50thQQRAiSPbOvJSycHBa1NU00wMw=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "idesigner2@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:54.966Z",
+        "name": "",
+        "groups": [
+            [
+                "idesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 9,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$kq3aJWuTXYLz$TquGH/auppPSIFyPLoyBxRE7P2fJmccAQtYhv3F+Xec=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "aidesigner1@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:55.006Z",
+        "name": "",
+        "groups": [
+            [
+                "aidesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 10,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$APNp57FOFoiE$ldjo87XU3PNr8jigrPDIcmim7kS7BJJH7kW4RzIVD18=",
+        "last_login": null,
+        "is_superuser": false,
+        "email": "aideisgner2@bogus.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:55.047Z",
+        "name": "",
+        "groups": [
+            [
+                "aidesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "authtools.user",
+    "pk": 11,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$iFdns1aqcJM0$5+m3cVcvTRtdpuAMlQ/M0xlxm9P+ZRpXjsDSBR11w3Y=",
+        "last_login": "2017-11-06T05:02:24.430Z",
+        "is_superuser": true,
+        "email": "superuser@bogus.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-11-04T05:32:55.086Z",
+        "name": "Super User",
+        "groups": [
+            [
+                "instructor"
+            ],
+            [
+                "ainstructor"
+            ],
+            [
+                "idesigner"
+            ],
+            [
+                "aidesigner"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 2,
+    "fields": {
+        "app": "email_action",
+        "name": "email_host",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 3,
+    "fields": {
+        "app": "email_action",
+        "name": "email_port",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 4,
+    "fields": {
+        "app": "email_action",
+        "name": "email_host_user",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 5,
+    "fields": {
+        "app": "email_action",
+        "name": "email_host_password",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 6,
+    "fields": {
+        "app": "email_action",
+        "name": "email_use_tls",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 7,
+    "fields": {
+        "app": "email_action",
+        "name": "email_use_ssl",
+        "text": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 8,
+    "fields": {
+        "app": "email_action",
+        "name": "notification_template",
+        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }} a total of \n{{ num_messages }} emails were sent after the user {{ user.email }} executed \nthe action with name  \"{{ action.name }}\".</p> \n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from \n{{ num_rows }} to {{ num_selected }}.</p> \n{% else %}\n<p>All the data rows stored in the workflow were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body>\n</html>\n"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 9,
+    "fields": {
+        "app": "email_action",
+        "name": "notification_subject",
+        "text": "OnTask: Action executed"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 10,
+    "fields": {
+        "app": "email_action",
+        "name": "notification_sender",
+        "text": "ontask@ontasklearning.org"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 11,
+    "fields": {
+        "app": "logs",
+        "name": "max_list_size",
+        "text": "200"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 12,
+    "fields": {
+        "app": "core",
+        "name": "help_url",
+        "text": "html/index.html"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 13,
+    "fields": {
+        "app": "core",
+        "name": "minute_step",
+        "text": "15"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 14,
+    "fields": {
+        "app": "dataops",
+        "name": "plugin_directory",
+        "text": "/Users/pardosa/ontask_b/src/plugins"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 15,
+    "fields": {
+        "app": "action",
+        "name": "notification_template",
+        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }}\n{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent\nresulting from the execution of the action with name \"{{ action.name }}\".</p>\n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from\n{{ num_rows }} to {{ num_selected }}.</p>\n{% else %}\n<p>All the data rows stored in the workflow table were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body></html>"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 16,
+    "fields": {
+        "app": "action",
+        "name": "notification_subject",
+        "text": "OnTask: Action executed"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 17,
+    "fields": {
+        "app": "action",
+        "name": "notification_sender",
+        "text": "ontask@ontasklearning.org"
+    }
+},
+{
+    "model": "authtoken.token",
+    "pk": "8001cacfac70def66a9137e66a3101eee55bc0ec",
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2017-11-08T00:12:05.824Z"
+    }
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 10,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 9,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 5,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 6,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 7,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 8,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 3,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 4,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 1,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 2,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 11,
+    "fields": {}
+},
+{
+    "model": "ontask.profile",
+    "pk": 10,
+    "fields": {
+        "slug": "3776b8ea-cbd4-4aab-8a70-494783f846ad",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 9,
+    "fields": {
+        "slug": "7ca4994e-34a6-40a2-b584-18d7a7f8e4a9",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 5,
+    "fields": {
+        "slug": "4f5b0f2a-d4c2-4d22-82ed-1481510571a5",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 6,
+    "fields": {
+        "slug": "bddb639d-f3f0-464b-8da0-35a29df20d99",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 7,
+    "fields": {
+        "slug": "18e838fb-f8d9-4f0c-b979-fa8d0cbc9d14",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 8,
+    "fields": {
+        "slug": "ece37e9a-ef20-4c12-8a4b-cab668564e14",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 3,
+    "fields": {
+        "slug": "74432d3f-044b-43b2-9ae7-c7456ce4e09e",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 4,
+    "fields": {
+        "slug": "fcfcf019-3d1c-4e28-905d-cfd774011fb0",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 1,
+    "fields": {
+        "slug": "5dd3f343-8d73-4720-af1c-c79a4e05d1f9",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 2,
+    "fields": {
+        "slug": "710f3cc1-4460-42c6-9703-62d07df185da",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 11,
+    "fields": {
+        "slug": "859d0e9a-0d1e-4bb5-85af-5bcd9008d5f0",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.workflow",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "name": "wflow1",
+        "description_text": "description text for workflow 1",
+        "created": "2017-11-06T05:30:28.050Z",
+        "modified": "2019-05-25T01:23:47.497Z",
+        "nrows": 3,
+        "ncols": 8,
+        "attributes": {},
+        "query_builder_ops": [
+            {
+                "id": "age",
+                "type": "double",
+                "validation": {
+                    "step": "any"
+                }
+            },
+            {
+                "id": "email",
+                "type": "string"
+            },
+            {
+                "id": "sid",
+                "type": "integer"
+            },
+            {
+                "id": "another",
+                "type": "string"
+            },
+            {
+                "id": "name",
+                "type": "string"
+            },
+            {
+                "id": "one",
+                "type": "string"
+            },
+            {
+                "id": "registered",
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
+                "operators": [
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
+                ]
+            },
+            {
+                "id": "when",
+                "type": "datetime"
+            }
+        ],
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_5",
+        "session_key": "bp3zolmfqzivdvtkkei9hveuldhyuqru",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "lusers": []
+    }
+},
+{
+    "model": "ontask.workflow",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "instructor02@bogus.com"
+        ],
+        "name": "user2 workflow",
+        "description_text": "",
+        "created": "2019-05-25T01:48:42.193Z",
+        "modified": "2019-05-25T01:48:59.302Z",
+        "nrows": 3,
+        "ncols": 6,
+        "attributes": {},
+        "query_builder_ops": [
+            {
+                "id": "sid",
+                "type": "integer"
+            },
+            {
+                "id": "name",
+                "type": "string"
+            },
+            {
+                "id": "email",
+                "type": "string"
+            },
+            {
+                "id": "age",
+                "type": "double",
+                "validation": {
+                    "step": "any"
+                }
+            },
+            {
+                "id": "registered",
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
+                "operators": [
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
+                ]
+            },
+            {
+                "id": "when",
+                "type": "datetime"
+            }
+        ],
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_6",
+        "session_key": "y7mnvnq4we01jf9przwlsaa3waan0gnm",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "lusers": []
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 260,
+    "fields": {
+        "name": "sid",
+        "description_text": "",
+        "workflow": 5,
+        "data_type": "integer",
+        "is_key": true,
+        "position": 3,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 261,
+    "fields": {
+        "name": "name",
+        "description_text": "",
+        "workflow": 5,
+        "data_type": "string",
+        "is_key": false,
+        "position": 5,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 262,
+    "fields": {
+        "name": "email",
+        "description_text": "",
+        "workflow": 5,
+        "data_type": "string",
+        "is_key": true,
+        "position": 2,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 263,
+    "fields": {
+        "name": "age",
+        "description_text": "",
+        "workflow": 5,
+        "data_type": "double",
+        "is_key": true,
+        "position": 1,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 264,
+    "fields": {
+        "name": "registered",
+        "description_text": "",
+        "workflow": 5,
+        "data_type": "boolean",
+        "is_key": false,
+        "position": 7,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 265,
+    "fields": {
+        "name": "when",
+        "description_text": "",
+        "workflow": 5,
+        "data_type": "datetime",
+        "is_key": false,
+        "position": 8,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 266,
+    "fields": {
+        "name": "one",
+        "description_text": "",
+        "workflow": 5,
+        "data_type": "string",
+        "is_key": false,
+        "position": 6,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 267,
+    "fields": {
+        "name": "another",
+        "description_text": "",
+        "workflow": 5,
+        "data_type": "string",
+        "is_key": false,
+        "position": 4,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 268,
+    "fields": {
+        "name": "sid",
+        "description_text": "",
+        "workflow": 6,
+        "data_type": "integer",
+        "is_key": true,
+        "position": 1,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 269,
+    "fields": {
+        "name": "name",
+        "description_text": "",
+        "workflow": 6,
+        "data_type": "string",
+        "is_key": false,
+        "position": 2,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 270,
+    "fields": {
+        "name": "email",
+        "description_text": "",
+        "workflow": 6,
+        "data_type": "string",
+        "is_key": true,
+        "position": 3,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 271,
+    "fields": {
+        "name": "age",
+        "description_text": "",
+        "workflow": 6,
+        "data_type": "double",
+        "is_key": true,
+        "position": 4,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 272,
+    "fields": {
+        "name": "registered",
+        "description_text": "",
+        "workflow": 6,
+        "data_type": "boolean",
+        "is_key": false,
+        "position": 5,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 273,
+    "fields": {
+        "name": "when",
+        "description_text": "",
+        "workflow": 6,
+        "data_type": "datetime",
+        "is_key": false,
+        "position": 6,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 2,
+    "fields": {
+        "workflow": 5,
+        "name": "simple action",
+        "description_text": "action description text",
+        "created": "2017-11-06T22:15:41.165Z",
+        "modified": "2019-04-24T07:14:21.394Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": [
+            2
+        ],
+        "text_content": "{% comment %}Your action content here{% endcomment %}",
+        "target_url": "",
+        "shuffle": false
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 4,
+    "fields": {
+        "workflow": 5,
+        "name": "json action",
+        "description_text": "",
+        "created": "2019-05-25T01:25:28.144Z",
+        "modified": "2019-05-25T01:28:50.832Z",
+        "last_executed_log": null,
+        "action_type": "personalized_json",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "{\r\n  \"field1\": \"value1\",\r\n  \"field2\": 2\r\n}",
+        "target_url": "http://127.0.0.1/trck",
+        "shuffle": false
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 5,
+    "fields": {
+        "workflow": 5,
+        "name": "canvas action",
+        "description_text": "",
+        "created": "2019-05-25T01:29:05.331Z",
+        "modified": "2019-05-25T01:30:20.702Z",
+        "last_executed_log": null,
+        "action_type": "personalized_canvas_email",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "Hi {{ name }}\r\n\r\nThis is a canvas action.",
+        "target_url": "",
+        "shuffle": false
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 6,
+    "fields": {
+        "workflow": 6,
+        "name": "email action",
+        "description_text": "",
+        "created": "2019-05-25T01:49:11.935Z",
+        "modified": "2019-05-25T01:49:15.382Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "",
+        "target_url": "",
+        "shuffle": false
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1,
+    "fields": {
+        "action": 2,
+        "name": "bbb",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "another",
+                    "type": "string",
+                    "field": "another",
+                    "input": "text",
+                    "value": "bbb",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "n_rows_selected": 2,
+        "is_filter": false,
+        "created": "2019-04-24T07:14:20.855Z",
+        "modified": "2019-04-24T07:14:20.932Z",
+        "columns": [
+            267
+        ]
+    }
+}
+]

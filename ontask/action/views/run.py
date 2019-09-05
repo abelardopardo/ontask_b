@@ -17,24 +17,26 @@ from ontask.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.forms import ValueExcludeForm
-from ontask.action.models import Action
-from ontask.action.payloads import get_action_payload
+from ontask.action.payloads import get_action_payload, set_action_payload
 from ontask.action.views.run_canvas_email import run_canvas_email_action
 from ontask.action.views.run_email import run_email_action
 from ontask.action.views.run_json import run_json_action
+from ontask.action.views.run_json_list import run_json_list_action
+from ontask.action.views.run_send_list import run_send_list_action
 from ontask.action.views.run_survey import run_survey_action
 from ontask.action.views.serve_survey import serve_survey_row
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.logs.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import Action, Log, Workflow
 
 fn_distributor = {
     Action.personalized_text: run_email_action,
     Action.personalized_canvas_email: run_canvas_email_action,
     Action.personalized_json: run_json_action,
     Action.survey: run_survey_action,
+    Action.send_list: run_send_list_action,
+    Action.send_list_json: run_json_list_action,
 }
 
 
@@ -66,9 +68,25 @@ def run_action(
 
     if action.action_type not in fn_distributor:
         # Incorrect type of action.
+        messages.error(
+            request,
+            _('Execution for this action is not allowed.'))
         return redirect(reverse('action:index'))
 
     return fn_distributor[action.action_type](request, workflow, action)
+
+
+@csrf_exempt
+@xframe_options_exempt
+@login_required
+def serve_action_lti(request: HttpRequest) -> HttpResponse:
+    """Serve an action accessed through LTI."""
+    try:
+        action_id = int(request.GET.get('id'))
+    except Exception:
+        raise Http404
+
+    return serve_action(request, action_id)
 
 
 @csrf_exempt
@@ -98,15 +116,7 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
     action = Action.objects.filter(pk=int(action_id)).prefetch_related(
         'conditions',
     ).first()
-    if not action:
-        raise Http404
-
-    # If it is not enabled, reject the request
-    if not action.serve_enabled:
-        raise Http404
-
-    # If it is enabled but not active (date/time)
-    if not action.is_active:
+    if not action or (not action.serve_enabled) or (not action.is_active):
         raise Http404
 
     if user_attribute_name not in action.workflow.get_column_names():
@@ -217,8 +227,8 @@ def run_action_item_filter(
         request.POST or None,
         action=action,
         column_name=action_info['item_column'],
-        exclude_values=action_info['exclude_values'],
-    )
+        form_info=action_info)
+
     context = {
         'form': form,
         'action': action,
@@ -228,11 +238,11 @@ def run_action_item_filter(
         'prev_step': action_info['prev_url'],
     }
 
-    # Process the initial loading of the form and return
-    if request.method != 'POST' or not form.is_valid():
-        return render(request, 'action/item_filter.html', context)
+    # The post is correct
+    if request.method == 'POST' and form.is_valid():
+        # Updating the payload in the session
+        set_action_payload(request.session, action_info)
 
-    # Updating the content of the exclude_values in the payload
-    action_info['exclude_values'] = form.cleaned_data['exclude_values']
+        return redirect(action_info['post_url'])
 
-    return redirect(action_info['post_url'])
+    return render(request, 'action/item_filter.html', context)

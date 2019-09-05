@@ -16,19 +16,17 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import is_admin, is_instructor
-from ontask.dataops.models import Plugin
 from ontask.dataops.plugin.plugin_manager import (
     load_plugin, refresh_plugin_data,
 )
-from ontask.logs.models import Log
+from ontask.models import Log, Plugin, Workflow
 from ontask.workflow.access import remove_workflow_from_session
-from ontask.workflow.models import Workflow
 
 
 class PluginAdminTable(tables.Table):
     """Class to render the table with plugins present in the system."""
 
-    description_txt = tables.TemplateColumn(
+    description_text = tables.TemplateColumn(
         verbose_name=_('Description'),
         template_name='dataops/includes/partial_plugin_description.html',
     )
@@ -93,7 +91,7 @@ class PluginAdminTable(tables.Table):
         fields = (
             'filename',
             'name',
-            'description_txt',
+            'description_text',
             'is_model',
             'is_verified',
             'is_enabled')
@@ -101,7 +99,7 @@ class PluginAdminTable(tables.Table):
         sequence = (
             'filename',
             'name',
-            'description_txt',
+            'description_text',
             'is_model',
             'is_verified',
             'is_enabled',

@@ -141,7 +141,7 @@ class LaunchParamsMixin(object):
         for key in self.ext_params:
             ext_params[key] = self.ext_params[key]
         for key in LAUNCH_DATA_PARAMETERS:
-            if hasattr(self, key):
+            if getattr(self, key, None):
                 params[key] = getattr(self, key)
         params.update(custom_params)
         params.update(ext_params)

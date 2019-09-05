@@ -17,7 +17,7 @@ EVAL_TXT = 2
 GET_CONSTANT = {
     'integer': lambda operand: int(operand),
     'double': lambda operand: float(operand),
-    'boolean': lambda operand: True if operand else False,
+    'boolean': lambda operand: operand == 'true',
     'string': lambda operand: str(operand),
     'datetime': lambda operand: parse_datetime(operand),
 }

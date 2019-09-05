@@ -9,7 +9,7 @@ Click on the button to create a *New Action*, provide a name, a description (opt
    :align: center
    :width: 60%
 
-The next screen is the *personalized text action editor*. The functions in this page are divided into three areas represented by the tabs: Personalized Text, Filter Learners and Text Conditions. The following figure shows and example of this page.
+The next screen is the *personalized text action editor*. The functions in this page are divided into three areas represented by the tabs: Personalized Text, Select Learners and Text Conditions. The following figure shows and example of this page.
 
 .. figure:: /scaptures/tutorial_personalized_text_editor.png
    :align: center
@@ -17,7 +17,7 @@ The next screen is the *personalized text action editor*. The functions in this 
 Text
   This area is the HTML text editor to write the content to personalize. It contains pull-down menus to insert column values and attributes.
 
-Filter Learners
+Select Learners
   This section allows to define a *filter*, or a condition to select a subset of the learners for which this action will be considered.
 
 Text Conditions

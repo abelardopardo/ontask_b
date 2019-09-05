@@ -8,8 +8,7 @@ from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from ontask.action.models import Action
-from ontask.scheduler.models import ScheduledAction
+from ontask.models import Action, ScheduledAction
 
 
 class ScheduleApiCreate(test.OnTaskApiTestCase):
@@ -19,7 +18,6 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'scheduler',
         'fixtures',
         'three_actions.sql'
     )

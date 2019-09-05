@@ -20,13 +20,12 @@ class DataopsViewsRow(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'test_condition_evaluation.sql',
     )
-
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
+
 
     workflow_name = 'Testing Eval Conditions'
 

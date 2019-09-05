@@ -8,7 +8,7 @@ import test
 from django.conf import settings
 from rest_framework import status
 
-from ontask.scheduler.models import ScheduledAction
+from ontask.models import ScheduledAction
 
 
 class SchedulerForms(test.OnTaskTestCase):
@@ -19,10 +19,8 @@ class SchedulerForms(test.OnTaskTestCase):
 
     fixtures = ['three_actions']
     filename = os.path.join(
-        'ontask',
         settings.BASE_DIR(),
         'ontask',
-        'scheduler',
         'fixtures',
         'three_actions.sql',
     )
@@ -142,6 +140,7 @@ class SchedulerForms(test.OnTaskTestCase):
             req_params={
                 'name': 'First scheduling round',
                 'execute': '05/31/2119 14:35',
+                'item_column': str(self.workflow.columns.get(name='email').id),
                 'token': 'faketoken',
             })
         self.assertTrue(status.is_success(resp.status_code))
@@ -155,6 +154,7 @@ class SchedulerForms(test.OnTaskTestCase):
             method='POST',
             req_params={
                 'name': 'First scheduling round2',
+                'item_column': str(self.workflow.columns.get(name='email').id),
                 'execute': '05/31/2119 14:35',
                 'token': 'faketoken',
             })
@@ -173,6 +173,7 @@ class SchedulerForms(test.OnTaskTestCase):
             req_params={
                 'name': 'First scheduling round3',
                 'item_column': str(self.workflow.columns.get(name='email').id),
+                'confirm_items': True,
                 'execute': '05/31/2119 14:35',
                 'token': 'faketoken',
             })

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Send JSON List action' %}{% endblock %}
+{% block scripts %}
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+{% endblock scripts %}
+{% block container %}
+  <div class="container" id="json-action-request-data">
+    <h1 class="text-center">{% trans 'Send single JSON object' %}</h1>
+    {% include 'action/includes/partial_action_edit_out_warning.html' %}
+    <div class="row justify-content-center">
+      <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="text-center">
+          <a type="button" class="shadow btn btn-outline-dark"
+             href="{% url 'action:index' %}"> {% trans 'Cancel' %}</a>
+          <button type="button" class="shadow btn btn-outline-info js-action-preview"
+                  data-url="{% url 'action:preview' action.id 1 %}">
+            <span class="fa fa fa-eye"></span> {% trans 'Preview' %}</button>
+          <button type="Submit" name="Submit" value="Submit"
+                  class="shadow btn btn-outline-primary btn-space spin">
+            <span class="fa fa-angle-right"></span> {% trans 'Send' %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}

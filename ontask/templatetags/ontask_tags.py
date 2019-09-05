@@ -2,11 +2,16 @@
 
 """Tags to include URLS and other auxiliary HTML resources."""
 
+import json
+
 from django import template
 from django.conf import settings
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 import ontask
+from ontask.dataops.sql.row_queries import get_rows
+from ontask.models import Action
 
 register = template.Library()
 
@@ -125,3 +130,18 @@ def ontask_datetimepicker_css():
 def ontask_datetimepicker_js():
     """Provide the datetime picker JS URL."""
     return format_html(datetimepicker_js)
+
+
+@register.simple_tag(takes_context=True)
+def ot_insert_column_list(context, column_name):
+    """Insert in the text a column list."""
+    action = context['ONTASK_ACTION_CONTEXT_VARIABLE___']
+    column_values = [
+        str(citem[0]) for citem in get_rows(
+        action.workflow.get_data_frame_table_name(),
+        column_names=[column_name],
+        filter_formula=action.get_filter_formula())]
+    if action.action_type == Action.send_list_json:
+        return mark_safe(json.dumps(column_values))
+
+    return ', '.join(column_values)

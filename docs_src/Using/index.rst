@@ -588,7 +588,7 @@ Survey Questions
 
   As with other tables in OnTask, if the number of elements (in this case questions) is too large, they will be divided into pages with a link to access each page, and the content of the questions is searchable.
 
-Filter Learners
+Select Learners
   This tab is identical to :ref:`the filter in the personalized text action <personalized_text_filter>`. The tab allows to include an expression to decide if a learner is included or not in the survey. This survey has no filter defined.
 
 Conditions
@@ -618,7 +618,7 @@ The tabs have the same functionality than in the case of :ref:`personalized text
 Text
   This tab contains a plain text editor to describe the structure of the object and :ref:`insert column values, attribute values or use conditions to control the presence of elements in the object <using_values_attributes_conditions>`.
 
-Filter Learners
+Select Learners
   This tab allows the definition of an expression to select a subset of rows in the table for processing.
 
 Text Conditions
@@ -629,6 +629,54 @@ The text shown in the previous figure defines a JSON object with three fields ``
 The field *Target URL* is to introduce the URL where the object will be sent.
 
 The preview button in the personalized JSON action shows the resulting object after verifying that the structure after evaluating the corresponding expressions is a valid JSON object.
+
+.. _send_list_action:
+
+Send Column data as List in Email
+=================================
+
+This type of action sends a single email including data in some of the columns in the workflow. Creating these actions is almost identical to creating a :ref:`Personalized Text <personalized_content>`, action with the difference it is not possible to use conditions (there is a single email), and including a column in the text means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
+
+.. figure:: /scaptures/action_send_list_create.png
+   :align: center
+   :width: 60%
+
+The page to edit this action is similar to the one to edit a :ref:`Personalized Text action <personalized_content>` but only two tabs are present: *Text* and *Select Learners*.
+ In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the text. The following figure shows the resulting text with the inclusion of the data in the *email* column.
+
+.. figure:: /scaptures/action_send_list_edit.png
+   :align: center
+   :width: 100%
+
+Using the *Preview* button shows how the message is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
+
+.. figure:: /scaptures/action_send_list_preview.png
+   :align: center
+   :width: 100%
+
+.. _json_list_action:
+
+Send Column data as List in JSON
+================================
+
+This type of action sends a JSON object with data in some of the columns in the workflow to a pre-defined third party platform through a URL. Creating these actions is almost identical to creating a :ref:`Personalized JSON content <personalized_json>`, action with the difference it is not possible to use conditions (there is a single object sent), and including a column in the object means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
+
+.. figure:: /scaptures/action_json_list_create.png
+   :align: center
+   :width: 60%
+
+The page to edit this action is similar to the one to edit a :ref:`Personalized JSON content <personalized_json>` but only two tabs are present: *Text* and *Select Learners*.
+ In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the object. The following figure shows the resulting object with the inclusion of the data in the *email* column.
+
+.. figure:: /scaptures/action_json_list_edit.png
+   :align: center
+   :width: 100%
+
+Using the *Preview* button shows how the object is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
+
+.. figure:: /scaptures/action_json_list_preview.png
+   :align: center
+   :width: 100%
 
 .. _personalized_canvas_email:
 
@@ -647,19 +695,19 @@ The page to edit this action is almost identical to the one to edit a :ref:`Pers
    :align: center
    :width: 100%
 
-It contains three tabs: *Personalized Canvas Email*, *Text Conditions* and *Filter Learners*. The last two, :ref:`Conditions <personalized_text_conditions>` and :ref:`Filter Learners <personalized_text_filter>` offer the same functionality. The *Personalized Canvas Email* allows the creation of a plain text message (no HTML markup is allowed).
+It contains three tabs: *Personalized Canvas Email*, *Text Conditions* and *Select Learners*. The last two, :ref:`Conditions <personalized_text_conditions>` and :ref:`Select Learners <personalized_text_filter>` offer the same functionality. The *Personalized Canvas Email* allows the creation of a plain text message (no HTML markup is allowed).
 
 .. _running_actions:
 
 Running actions
-===============
+***************
 
 Once an action has been created, it can be *run*. The meaning of this term is different for the various types of actions supported in OnTask.
 
 .. _personalized_emails:
 
 Sending personalized emails (Personalized Text Actions)
--------------------------------------------------------
+=======================================================
 
 Once you created a personalized text action and verified its content using the *Preview* button, save its content. The right-most column has a button with name *Run*.
 
@@ -700,7 +748,7 @@ Snapshot of the workflow
 If the option to *Check/exclude emails* has been selected, clicking in the *Next* button leads to a page where the list of emails is shown and the user can select some of them to remove from the operation. If this option is not selected, the operation to send the emails is sent to a queue for processing. The browser will show the record that contains the information about the status of this request.
 
 Making personalized content available to learners
--------------------------------------------------
+=================================================
 
 Sending a personalized text is just one possible way to make this content available to learner. Another one is to offer the content through a URL that can be given to the learners. To enable such URL click in the icon with three dots in the right most corner of a personalized text action.
 
@@ -716,7 +764,7 @@ You will see an operation labeled ``URL`` followed by either the word ``(Off)`` 
 In order for the learners to be able to view their personalized content, they have to be users of the OnTask platform and their ID present in the data table. This functionality is conceived for a context in which OnTask authenticates users either through a corporate Single-sign on layer, or learners access the OnTask through the Learning Management System with a LTI interface (see :ref:`authentication`).
 
 Running a survey
-----------------
+================
 
 After creating a :ref:`survey action <surveys>` it can be used in two modalities: run by the instructor, or given to the learners to fill out the data. The first modality is used as a mechanism to capture instructor observations. For example, surveys run by the instructor can be used as an attendance capturing mechanism (if the instructor has a device or procedure to capture who is in attendance). If the *Run* operation is selected, OnTask shows a table with the learners selected for the action, and the values for the survey collected so far.
 
@@ -733,7 +781,7 @@ Each row contains the identifier of the student (in the previous table, the emai
 After entering the information the list of students for which the data entry is still allowed.
 
 Making the survey available to the learners
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------------------
 
 The second operation available for *survey* actions is to make available the URL to learners so that they individually enter the information themselves. The right-most column of the action table contains an icon with three dots that if selected shows a set of additional operations, and one of them has the text *URL*. If selected OnTask shows the URL for the survey, the possibility of enable/disable it, or even provide a date/time window for its availability.
 
@@ -748,7 +796,7 @@ These two survey actions are ideal to collect information about any aspect of a 
 .. _send_personalized_canvas_emails:
 
 Sending personalized emails in Canvas
--------------------------------------
+=====================================
 
 The execution of a :ref:`Personalized Canvas Email <personalized_canvas_email>` action requires additional information as shown in the following figure:
 
@@ -774,7 +822,7 @@ Download a snapshot of the workflow
 After introducing this data, OnTask will check if it has credentials for the user to access Canvas through its API. If not, the user will be redirected to a page in the Canvas Learning Management System to 1) authenticate, and 2) authorize OnTask to access the platform. If these steps are successful, the user is redirected back to OnTask and the messages are delivered. The credentials retrieved from Canvas will be reused for future executions of this action.
 
 Sending personalized JSON objects to another platform
------------------------------------------------------
+=====================================================
 
 The operation to *Run* a personalized JSON action sends the objects resulting from the personalization to the given URL. The page to collect the information to run these actions is shown in the next figure:
 
@@ -787,8 +835,8 @@ The first field is the column to perform a last review of the elements to send a
 Similarly to the email actions, once these fields are provided, the operation to send the JSON objects to the target URL is queued in a batch system for processing. The browser shows the record where the status of this request is reflected.
 
 
-Creating a ZIP file with the personalized text
-==============================================
+Creating a ZIP file with the personalized text (for Moodle)
+***********************************************************
 
 The :ref:`personalized text actions <personalized_content>` offer the possibility of creating a ZIP file containing one HTML file with the personalized text for every learner. The execution of this operation requires the use of two columns in the table and a suffix to create the file names. The operation is available clicking in the icon with three dots in the right-most column of an action in the action page. The additional information is requested through the form shown in the following figure.
 
@@ -801,7 +849,7 @@ The first part of the file name is taken from the values of a key column. The se
 .. _upload_feedback_to_moodle:
 
 Uploading feedback files for a Moodle Assignment
-------------------------------------------------
+================================================
 
 One of the potential uses of the ZIP file generated from a personalized text action is to upload each file as personalized feedback of an assignment in a Moodle course. However, there are some requirements in the file names so that they are uploaded each to the appropriate location, namely:
 
@@ -843,7 +891,7 @@ Scheduled Actions
    -- Jimmy Wales
 
 
-The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>` and :ref:`personalized JSON object <personalized_json>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click in icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
+The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref`send list through email <send_list_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON list <json_list_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click in icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
 
 .. _schedule_email:
 

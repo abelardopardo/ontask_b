@@ -7,10 +7,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 
-from ontask.action.models import Action
 from ontask.action.views.import_export import do_import_action
 from ontask.dataops.pandas import check_wf_df, load_table
-from ontask.workflow.models import Workflow
+from ontask.models import Action, Workflow
 
 
 class EmailActionTracking(test.OnTaskTestCase):
@@ -18,7 +17,6 @@ class EmailActionTracking(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'action',
         'fixtures',
         'simple_email_action.sql'
     )
@@ -74,7 +72,6 @@ class ActionImport(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'action',
         'fixtures',
         'simple_email_action.sql'
     )
@@ -93,7 +90,6 @@ class ActionImport(test.OnTaskTestCase):
         with open(os.path.join(
             settings.BASE_DIR(),
             'ontask',
-            'action',
             'fixtures',
             'survey_to_import.gz'
         ), 'rb') as file_obj:

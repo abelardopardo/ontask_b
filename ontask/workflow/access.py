@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskException
-from ontask.workflow.models import Workflow
+from ontask.models import Workflow
 
 
 def access(

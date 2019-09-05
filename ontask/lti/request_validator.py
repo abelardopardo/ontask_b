@@ -25,7 +25,7 @@ class RequestValidatorMixin:
         try:
             # Set the parameters to be what we were passed earlier
             # if we didn't get any passed to us now
-            if not parameters and hasattr(self, 'params'):
+            if not parameters and getattr(self, 'params', None):
                 parameters = self.params
 
             method, url, headers, parameters = self.parse_request(

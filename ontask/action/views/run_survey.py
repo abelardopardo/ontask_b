@@ -21,13 +21,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from ontask.action.models import Action
 from ontask.action.views.serve_survey import serve_survey_row
 from ontask.core import DataTablesServerSidePaging
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
 from ontask.dataops.sql import search_table
-from ontask.workflow.models import Column, Workflow
+from ontask.models import Action, Column, Workflow
 
 
 def run_survey_action(
@@ -157,7 +156,7 @@ def _create_initial_qs(
     """
     # See if an order column has been given.
     order_col_name = None
-    if dt_page.order_col:
+    if dt_page.order_col is not None:
         order_col_name = columns[dt_page.order_col].name
 
     # Get the query set (including the filter in the action)

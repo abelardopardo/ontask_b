@@ -2,20 +2,23 @@
 
 """Wrappers around asynchronous task executions."""
 
-from typing import Optional, Tuple
+from typing import Mapping, Optional, Tuple
 
+from celery import shared_task
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
 
-from ontask.action.models import Action
+from ontask.action.send import (
+    send_canvas_emails, send_emails, send_json, send_json_list,
+    send_list_email,
+)
 from ontask.core.celery import get_task_logger
-from ontask.logs.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import Action, Log, Workflow
 
 logger = get_task_logger('celery_execution')
 
 
-def get_log_item(log_id):
+def get_log_item(log_id: int) -> Optional[Log]:
     """Get the log object.
 
     Given a log_id, fetch it from the Logs table. This is the object used to
@@ -28,9 +31,8 @@ def get_log_item(log_id):
     if not log_item:
         # Not much can be done here. Call has no place to report error...
         logger.error(
-            ugettext('Incorrect execution request with log_id {lid}'),
-            extras={'lid': log_id},
-        )
+            ugettext('Incorrect execution request with log_id %s'),
+            str(log_id))
 
     return log_item
 
@@ -46,9 +48,9 @@ def get_execution_items(
 
     :param user_id: User id
 
-    :param action_id: Action id (to be executed)
+    :param workflow_id: Workflow ID (being manipulated)
 
-    :param log_id: Log id (to store execution report)
+    :param action_id: Action id (to be executed)
 
     :return: (user, action, log)
     """
@@ -83,3 +85,47 @@ def get_execution_items(
             )
 
     return user, workflow, action
+
+
+@shared_task
+def run_task(
+    user_id: int,
+    log_id: int,
+    action_info: Mapping,
+) -> bool:
+    """"Run the given task."""
+    # First get the log item to make sure we can record diagnostics
+    log_item = get_log_item(log_id)
+    if not log_item:
+        return False
+
+    try:
+        user, __, action = get_execution_items(
+            user_id=user_id,
+            action_id=action_info['action_id'])
+
+        # Set the status to "executing" before calling the function
+        log_item.payload['status'] = 'Executing'
+        log_item.save()
+
+        if action.action_type == Action.personalized_text:
+            send_emails(user, action, log_item, action_info)
+        elif action.action_type == Action.send_list:
+            send_list_email(user, action, log_item, action_info)
+        elif action.action_type == Action.personalized_canvas_email:
+            send_canvas_emails(user, action, log_item, action_info)
+        elif action.action_type == Action.personalized_json:
+            send_json(user, action, log_item, action_info)
+        elif action.action_type == Action.send_list_json:
+            send_json_list(user, action, log_item, action_info)
+
+        # Reflect status in the log event
+        log_item.payload['status'] = 'Execution finished successfully'
+        log_item.save()
+    except Exception as e:
+        log_item.payload['status'] = \
+            ugettext('Error: {0}').format(e)
+        log_item.save()
+        return False
+
+    return True

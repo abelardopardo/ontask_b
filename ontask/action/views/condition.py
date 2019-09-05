@@ -11,12 +11,10 @@ from django.utils.html import escape
 from django.views import generic
 
 from ontask.action.forms import ConditionForm, FilterForm
-from ontask.action.models import Action, Condition
 from ontask.core.decorators import ajax_required, get_action, get_condition
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula, get_variables
-from ontask.logs.models import Log
-from ontask.workflow.models import Workflow
+from ontask.models import Action, Condition, Log, Workflow
 
 
 def save_condition_form(
@@ -54,6 +52,7 @@ def save_condition_form(
 
         # Update fields and save the condition
         condition = form.save(commit=False)
+        condition.formula_text = None
         condition.action = action
         condition.is_filter = is_filter
         condition.save()
@@ -89,7 +88,7 @@ def save_condition_form(
                 'id': condition.id,
                 'name': condition.name,
                 'selected_rows': condition.n_rows_selected,
-                'formula': evaluate_formula(condition.formula, EVAL_TXT),
+                'formula': condition.get_formula_text(),
             })
 
         return JsonResponse({'html_redirect': ''})
@@ -210,7 +209,7 @@ def delete_filter(
         condition.action.save()
 
     # Log the event
-    formula = evaluate_formula(condition.formula, EVAL_TXT)
+    formula = condition.get_formula_text()
 
     Log.objects.register(
         request.user,
@@ -300,7 +299,7 @@ def delete_condition(
             condition.action.set_text_content(action_content)
             condition.action.save()
 
-        formula = evaluate_formula(condition.formula, EVAL_TXT)
+        formula = condition.get_formula_text()
 
         Log.objects.register(
             request.user,

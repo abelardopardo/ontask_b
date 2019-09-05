@@ -8,9 +8,9 @@ import test
 from django.conf import settings
 from rest_framework import status
 
-from ontask.dataops.models import Plugin
 from ontask.dataops.plugin import OnTaskModel
 from ontask.dataops.plugin.plugin_manager import _verify_plugin
+from ontask.models import Plugin
 
 
 class BogusPlugin(object):
@@ -34,7 +34,6 @@ class DataopsTransform(test.OnTaskTestCase):
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
-        'dataops',
         'fixtures',
         'plugin_execution.sql',
     )
