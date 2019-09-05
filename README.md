@@ -13,7 +13,9 @@ Current Version: 6.0 ([documentation](http://ontask-version-b.readthedocs.io/en/
 
 ## OnTask in a nutshell
 
-- Data upload through CSV, Excel files or SQL connections
+- ***NEW** Action to send data columns through email or JSON objects
+
+- Data upload through CSV, Excel files, S3 Buckets or SQL connections
 
 - Actions such as personalised email, personalised web page
 
@@ -38,9 +40,9 @@ Current Version: 6.0 ([documentation](http://ontask-version-b.readthedocs.io/en/
 
 - Authentication through LTI, LDAP, Shibboleth
 
-- **NEW** Creation of ZIP file to upload feedback files in Moodle assessment
+- Creation of ZIP file to upload feedback files in Moodle assessment
 
-- **NEW** Support for internationalization (initial versions for Spanish, Chinese and Finnish)
+- Support for internationalization (initial versions for Spanish, Chinese and Finnish)
 
 **For a detailed description of the tool, how to install it, and how to use it
 check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b)**.

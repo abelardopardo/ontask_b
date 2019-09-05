@@ -1,10 +1,10 @@
-## 6.0 (2019-09-04)
+## 6.0 (2019-09-06)
 
 ### Added
 
-- Major architectural rewrite to consolidate the tool into a single app instead of handling several apps. Tables are now under a single application.
-
 - Two new action types to send emails or JSON objects containing the content of a selected column  (Issue #158)
+
+- Major architectural rewrite to consolidate the tool into a single app instead of handling several apps. Tables are now under a single application.
 
 - Additional test suites for the new actions.
 
