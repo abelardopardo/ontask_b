@@ -47,13 +47,13 @@ def increase_track_count_task(method, get_dict):
     # Get the objects related to the ping
     user = get_user_model().objects.filter(email=track_id['sender']).first()
     if not user:
-        logger.error(ugettext('Incorrect user email {0}'), track_id['sender'])
+        logger.error(ugettext('Incorrect user email %s'), track_id['sender'])
         return False
 
     action = Action.objects.filter(pk=track_id['action']).first()
     if not action:
         logger.error(
-            ugettext('Incorrect action id {0}'),
+            ugettext('Incorrect action id %s'),
             track_id['action'])
         return False
 
@@ -65,7 +65,7 @@ def increase_track_count_task(method, get_dict):
     column = action.workflow.columns.filter(name=column_dst).first()
     if not column:
         # If the column does not exist, we are done
-        logger.error(ugettext('Column {0} does not exist'), column_dst)
+        logger.error(ugettext('Column %s does not exist'), column_dst)
         return False
 
     log_payload = {'to': msg_to,

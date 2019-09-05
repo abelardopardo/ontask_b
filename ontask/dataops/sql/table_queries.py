@@ -268,6 +268,4 @@ def delete_table(table_name: str):
             cursor.execute(query)
             connection.commit()
     except Exception as exc:
-        logger.error(
-            'Error when dropping table {tname}: {excmsg}',
-            tname=table_name, excmsg=str(exc))
+        logger.error('Error when dropping table %s: %s', table_name, str(exc))

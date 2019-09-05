@@ -34,7 +34,7 @@ def debug_task(self):
     else:
         logger.debug('Celery running in production mode.')
 
-    logger.debug('Request: {info}', info=self.request)
+    logger.debug('Request: %s', str(self.request))
 
 
 def celery_is_up():

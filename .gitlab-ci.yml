@@ -51,7 +51,8 @@ build_doc:
     - cd test/images
     - bash push.sh
     - cd ../..
-    - cd docs_src && make clean html copy_to_docs
+    - cd docs_src && make clean html copy_to_docs && cd ..
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
   artifacts:
     paths:
       - htmlcov

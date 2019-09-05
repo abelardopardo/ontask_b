@@ -82,7 +82,7 @@ def create_db_engine(
     )
 
     if settings.DEBUG:
-        logger.debug('Creating engine: {db_url}', db_url=database_url)
+        logger.debug('Creating engine: %s', database_url)
 
     return sqlalchemy.create_engine(
         database_url,
@@ -125,7 +125,7 @@ def load_table(
         return None
 
     if settings.DEBUG:
-        logger.debug('Loading table {tbl}', tbl=table_name)
+        logger.debug('Loading table %s', table_name)
 
     if columns or filter_exp:
         # A list of columns or a filter exp is given

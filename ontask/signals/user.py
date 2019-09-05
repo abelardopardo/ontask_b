@@ -24,5 +24,5 @@ def create_ontaskuser_handler(sender, instance, created, **kwargs):
     ouser = ontask.models.OnTaskUser(user=instance)
     ouser.save()
     logger.info(
-        _('New ontask user profile for {inst} created'),
-        inst=instance)
+        _('New ontask user profile for %s created'),
+        str(instance))

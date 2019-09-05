@@ -21,7 +21,7 @@ class ResourceLinkIdNode(template.Node):
             else:
                 logger.warning(
                     _('Failed to find resource_link_id '
-                      + 'in request context {0}'),
+                      + 'in request context %s'),
                     json.dumps(request.LTI, indent=4))
         else:
             logger.warning(

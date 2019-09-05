@@ -28,7 +28,7 @@ def execute_scheduled_actions_task(debug: bool):
     s_items = ScheduledAction.objects.filter(
         status=ScheduledAction.STATUS_PENDING,
         execute__lt=now + timedelta(minutes=1))
-    logger.info('{0} actions pending execution', s_items.count())
+    logger.info('%s actions pending execution', s_items.count())
 
     # If the number of tasks to execute is zero, we are done.
     if s_items.count() == 0:
@@ -36,7 +36,7 @@ def execute_scheduled_actions_task(debug: bool):
 
     for s_item in s_items:
         if debug:
-            logger.info('Starting execution of task {0}', str(s_item.id))
+            logger.info('Starting execution of task %s', str(s_item.id))
 
         # Set item to running
         s_item.status = ScheduledAction.STATUS_EXECUTING
@@ -199,7 +199,7 @@ def execute_scheduled_actions_task(debug: bool):
                 action_info.get_store())
         else:
             logger.error(
-                'Execution of action type "{0}" not implemented',
+                'Execution of action type "%s" not implemented',
                 s_item.action.action_type)
 
         if run_result:
@@ -208,7 +208,7 @@ def execute_scheduled_actions_task(debug: bool):
             s_item.status = ScheduledAction.STATUS_DONE_ERROR
 
         if debug:
-            logger.info('Status set to {0}', s_item.status)
+            logger.info('Status set to %s', s_item.status)
 
         if log_item:
             # Store the log event in the scheduling item

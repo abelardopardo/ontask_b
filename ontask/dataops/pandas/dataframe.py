@@ -136,7 +136,7 @@ def store_temporary_dataframe(
     table_name = workflow.get_data_frame_upload_table_name()
 
     if settings.DEBUG:
-        logger.debug('Storing table {tbl}', tbl=table_name)
+        logger.debug('Storing table %s', table_name)
 
     # Get the if the columns have unique values per row
     column_unique = are_unique_columns(data_frame)
@@ -168,8 +168,8 @@ def store_dataframe(
     """
     if settings.DEBUG:
         logger.debug(
-            'Storing dataframe {tbl}',
-            tbl=workflow.get_data_frame_upload_table_name())
+            'Storing dataframe %s',
+            workflow.get_data_frame_upload_table_name())
 
     _verify_dataframe_columns(workflow, data_frame)
 
