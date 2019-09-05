@@ -217,7 +217,8 @@ def showurl(
         return JsonResponse({'html_redirect': None})
 
     # Create the text for the action
-    url_text = reverse('action:serve', kwargs={'action_id': action.id})
+    # url_text = reverse('action:serve', kwargs={'action_id': action.id})
+    url_text = reverse('action:serve_lti') + '?id=' + str(action.id)
 
     # Render the page with the abolute URI
     return JsonResponse({

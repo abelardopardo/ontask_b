@@ -79,6 +79,19 @@ def run_action(
 @csrf_exempt
 @xframe_options_exempt
 @login_required
+def serve_action_lti(request: HttpRequest) -> HttpResponse:
+    """Serve an action accessed through LTI."""
+    try:
+        action_id = int(request.GET.get('id'))
+    except Exception:
+        raise Http404
+
+    return serve_action(request, action_id)
+
+
+@csrf_exempt
+@xframe_options_exempt
+@login_required
 def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
     """Serve the rendering of an action in a workflow for a given user.
 
@@ -103,15 +116,7 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
     action = Action.objects.filter(pk=int(action_id)).prefetch_related(
         'conditions',
     ).first()
-    if not action:
-        raise Http404
-
-    # If it is not enabled, reject the request
-    if not action.serve_enabled:
-        raise Http404
-
-    # If it is enabled but not active (date/time)
-    if not action.is_active:
+    if not action or (not action.serve_enabled) or (not action.is_active):
         raise Http404
 
     if user_attribute_name not in action.workflow.get_column_names():
