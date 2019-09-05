@@ -17,7 +17,7 @@ coreschema==0.0.4
 decorator==4.4.0
 defusedxml==0.5.0
 diff-match-patch==20181111
-django[argon2]==2.2.4
+django[argon2]==2.2.5
 django-authtools==1.7.0
 django-bootstrap-datepicker-plus==3.0.5
 django-braces==1.13.0
