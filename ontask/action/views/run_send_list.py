@@ -64,12 +64,8 @@ def run_send_list_action(
                 'status': 'Preparing to execute',
             })
 
-        # Update the last_execution_log
-        action.last_executed_log = log_item
-        action.save()
-
         # Send the emails!
-        run_task.delay( req.user.id, log_item.id, action_info.get_store())
+        run_task.delay(req.user.id, log_item.id, action_info.get_store())
 
         # Successful processing.
         return render(

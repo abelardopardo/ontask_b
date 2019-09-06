@@ -104,6 +104,10 @@ def run_task(
             user_id=user_id,
             action_id=action_info['action_id'])
 
+        # Update the last_execution_log
+        action.last_executed_log = log_item
+        action.save()
+
         # Set the status to "executing" before calling the function
         log_item.payload['status'] = 'Executing'
         log_item.save()

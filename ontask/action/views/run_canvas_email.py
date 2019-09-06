@@ -200,10 +200,6 @@ def run_canvas_email_done(
             'status': 'Preparing to execute',
         })
 
-    # Update the last_execution_log
-    action.last_executed_log = log_item
-    action.save()
-
     # Send the emails!
     run_task.delay(request.user.id, log_item.id, action_info.get_store())
 
