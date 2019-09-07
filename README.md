@@ -293,9 +293,6 @@ licenses:
 
 - [Redis](https://redis.io) BSD
 
-- [searchable-option-list](https://github.com/pbauerochse/searchable-option-list) 
-  MIT License
-
 - [Sphinx](https://pypi.python.org/pypi/Sphinx) BSD
 
 - [SQLAlchemy](https://pypi.python.org/pypi/SQLAlchemy/1.2.0) MIT
