@@ -2,17 +2,17 @@
 
 """Functions to save the different types of scheduled actions."""
 
-import datetime
-from typing import Dict
+from datetime import datetime
+from typing import Dict, Optional, Tuple
 
-import pytz
+from croniter import croniter
 from django.conf import settings
 from django.contrib import messages
-from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
+import pytz
 
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
@@ -23,40 +23,72 @@ from ontask.scheduler.forms import (
     SendListScheduleForm,
 )
 
+LOG_TYPE_DICT = {
+    Action.personalized_text: Log.SCHEDULE_EMAIL_EDIT,
+    Action.send_list: Log.SCHEDULE_SEND_LIST_EDIT,
+    Action.personalized_json: Log.SCHEDULE_JSON_EDIT,
+    Action.send_list_json: Log.SCHEDULE_JSON_LIST_EDIT,
+    Action.personalized_canvas_email: Log.SCHEDULE_CANVAS_EMAIL_EDIT}
 
-def create_timedelta_string(dtime: datetime.datetime) -> str:
+DAYS_IN_YEAR = 365
+SECONDS_IN_HOUR = 3600
+
+
+def create_timedelta_string(
+    ftime: datetime,
+    utime: Optional[datetime] = None,
+) -> Tuple[bool, str]:
     """Create a string rendering a time delta between now and the given one.
 
     The rendering proceeds gradually to see if the words days, hours, minutes
     etc. are needed.
 
-    :param dtime: datetime object
+    :param ftime: datetime object (may be in the past)
+
+    :param utime: until datetime object
 
     :return: String rendering
     """
-    tdelta = dtime - datetime.datetime.now(
-        pytz.timezone(settings.TIME_ZONE))
+    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+
+    if utime and utime < now:
+        return False, ''
+
+    if ftime < now and not utime:
+        return False, ''
+
+    dtime = ftime
+    is_executing = False
     delta_string = []
-    if tdelta.days // 365 >= 1:
-        delta_string.append(ugettext('{0} years').format(tdelta.days // 365))
-    days = tdelta.days % 365
+    if ftime < now:
+        is_executing = True
+        ctab = str(
+            settings.CELERY_BEAT_SCHEDULE['ontask_scheduler']['schedule'])
+        citer = croniter(' '.join(ctab.split()[1:6]), now)
+        dtime = citer.get_next(datetime)
+
+    tdelta = dtime - now
+    if tdelta.days // DAYS_IN_YEAR >= 1:
+        delta_string.append(
+            ugettext('{0} years').format(tdelta.days // DAYS_IN_YEAR))
+    days = tdelta.days % DAYS_IN_YEAR
     if days != 0:
         delta_string.append(ugettext('{0} days').format(days))
-    hours = tdelta.seconds // 3600
+    hours = tdelta.seconds // SECONDS_IN_HOUR
     if hours != 0:
         delta_string.append(ugettext('{0} hours').format(hours))
-    minutes = (tdelta.seconds % 3600) // 60
+    minutes = (tdelta.seconds % SECONDS_IN_HOUR) // 60
     if minutes != 0:
         delta_string.append(ugettext('{0} minutes').format(minutes))
 
-    return ', '.join(delta_string)
+    return is_executing, ', '.join(delta_string)
 
 
 def save_email_schedule(
     request: HttpRequest,
     action: Action,
     schedule_item: ScheduledAction,
-    op_payload: Dict
+    op_payload: Dict,
 ) -> HttpResponse:
     """Handle the creation and edition of email items.
 
@@ -99,7 +131,7 @@ def save_email_schedule(
         {
             'action': action,
             'form': form,
-            'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
             'valuerange': range(2),
         },
     )
@@ -109,7 +141,7 @@ def save_send_list_schedule(
     request: HttpRequest,
     action: Action,
     schedule_item: ScheduledAction,
-    op_payload: Dict
+    op_payload: Dict,
 ) -> HttpResponse:
     """Handle the creation and edition of send list items.
 
@@ -142,7 +174,7 @@ def save_send_list_schedule(
         {
             'action': action,
             'form': form,
-            'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
             'valuerange': range(2),
         },
     )
@@ -152,7 +184,7 @@ def save_json_schedule(
     request: HttpRequest,
     action: Action,
     schedule_item: ScheduledAction,
-    op_payload: Dict
+    op_payload: Dict,
 ) -> HttpResponse:
     """Create and edit scheduled json actions.
 
@@ -196,7 +228,7 @@ def save_json_schedule(
         {
             'action': action,
             'form': form,
-            'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
             'valuerange': range(2),
         },
     )
@@ -235,7 +267,7 @@ def save_send_list_json_schedule(
         {
             'action': action,
             'form': form,
-            'now': datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
             'valuerange': range(2),
         },
     )
@@ -244,7 +276,7 @@ def save_send_list_json_schedule(
 def finish_scheduling(
     request: HttpRequest,
     schedule_item: ScheduledAction = None,
-    payload: Dict = None
+    payload: Dict = None,
 ):
     """Finalize the creation of a scheduled action.
 
@@ -284,22 +316,17 @@ def finish_scheduling(
     payload = {
         key: payload[key]
         for key in payload if key not in [
-            'button_label', 'valuerange', 'step', 'prev_url', 'post_url',
+            'button_label',
+            'valuerange',
+            'step',
+            'prev_url',
+            'post_url',
             'confirm_items']}
 
     # Create the payload to record the event in the log
     log_payload = payload.copy()
 
-    if not s_item_id:
-        schedule_item = ScheduledAction(
-            user=request.user,
-            action=action,
-            name=payload.pop('name'),
-            description_text=payload.pop('description_text'),
-            item_column=column,
-            execute=parse_datetime(payload.pop('execute')),
-            exclude_values=payload.pop('exclude_values', []))
-    else:
+    if s_item_id:
         # Get the item being processed
         if not schedule_item:
             schedule_item = ScheduledAction.objects.filter(
@@ -313,7 +340,19 @@ def finish_scheduling(
         schedule_item.description_text = payload.pop('description_text')
         schedule_item.item_column = column
         schedule_item.execute = parse_datetime(payload.pop('execute'))
+        schedule_item.execute_until = parse_datetime(
+            payload.pop('execute_until'))
         schedule_item.exclude_values = payload.pop('exclude_values', [])
+    else:
+        schedule_item = ScheduledAction(
+            user=request.user,
+            action=action,
+            name=payload.pop('name'),
+            description_text=payload.pop('description_text'),
+            item_column=column,
+            execute=parse_datetime(payload.pop('execute')),
+            execute_until=parse_datetime(payload.pop('execute_until')),
+            exclude_values=payload.pop('exclude_values', []))
 
     # Check for exclude
     schedule_item.status = ScheduledAction.STATUS_PENDING
@@ -321,23 +360,8 @@ def finish_scheduling(
     schedule_item.save()
 
     # Create the payload to record the event in the log
-    if schedule_item.action.action_type == Action.personalized_text:
-        log_type = Log.SCHEDULE_EMAIL_EDIT
-    elif schedule_item.action.action_type == Action.send_list:
-        log_type = Log.SCHEDULE_SEND_LIST_EDIT
-    elif schedule_item.action.action_type == Action.personalized_json:
-        ivalue = None
-        if schedule_item.item_column:
-            ivalue = schedule_item.item_column.name
-        log_type = Log.SCHEDULE_JSON_EDIT
-    elif schedule_item.action.action_type == Action.send_list_json:
-        log_type = Log.SCHEDULE_JSON_LIST_EDIT
-    elif schedule_item.action.action_type == Action.personalized_canvas_email:
-        ivalue = None
-        if schedule_item.item_column:
-            ivalue = schedule_item.item_column.name
-        log_type = Log.SCHEDULE_CANVAS_EMAIL_EDIT
-    else:
+    log_type = LOG_TYPE_DICT.get(schedule_item.action.action_type)
+    if not log_type:
         messages.error(
             request,
             _('This type of actions cannot be scheduled'))
@@ -355,11 +379,15 @@ def finish_scheduling(
     request.session.save()
 
     # Successful processing.
+    is_executing, tdelta = create_timedelta_string(
+        schedule_item.execute,
+        schedule_item.execute_until)
     return render(
         request,
         'scheduler/schedule_done.html',
         {
-            'tdelta': create_timedelta_string(schedule_item.execute),
+            'is_executing': is_executing,
+            'tdelta': tdelta,
             's_item': schedule_item})
 
 
@@ -381,4 +409,5 @@ def save_canvas_email_schedule(
 
     :return:
     """
+    del action, schedule_item, op_payload
     return render(request, 'under_construction.html', {})

@@ -72,6 +72,12 @@ class ScheduledAction(models.Model):
         blank=False,
         verbose_name=_('When to execute this action'))
 
+    # Time to finish the execution
+    execute_until = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('End of execution period (if executing multiple times)'))
+
     # Status of the entry (pending, running or done)
     status = models.CharField(
         name='status',

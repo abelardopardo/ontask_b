@@ -3,6 +3,8 @@
 """Test the views for the scheduler pages."""
 
 import os
+from datetime import datetime, timedelta
+import pytz
 import test
 
 from django.conf import settings
@@ -15,7 +17,7 @@ class SchedulerForms(test.OnTaskTestCase):
     """Test schedule creation through forms."""
 
     user_email = 'instructor01@bogus.com'
-    user_pwd = 'boguspwd'
+    user_pwd = 'boguspwd'  # noqa: S105
 
     fixtures = ['three_actions']
     filename = os.path.join(
@@ -199,3 +201,85 @@ class SchedulerForms(test.OnTaskTestCase):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(ScheduledAction.objects.count(), 0)
+
+    def test_schedule_times_in_forms(self):
+        """Test the date_time when scheduling actions"""
+        # Index of all scheduled actions
+        resp = self.get_response('scheduler:index')
+        self.assertTrue(status.is_success(resp.status_code))
+
+        # Get the email action object
+        action = self.workflow.actions.get(name='simple action')
+
+        # Get the form to schedule this action
+        resp = self.get_response('scheduler:create', {'pk': action.id})
+        self.assertTrue(status.is_success(resp.status_code))
+
+        # POST the form to schedule this action with wrong dates
+        resp = self.get_response(
+            'scheduler:create',
+            {'pk': action.id},
+            method='POST',
+            req_params={
+                'name': 'Second scheduling round',
+                'item_column': str(self.workflow.columns.get(name='email').id),
+                'execute': '05/31/2119 14:35',
+                'execute_until': '05/31/2119 14:30',
+                'subject': 'Subject text',
+            })
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertEqual(ScheduledAction.objects.count(), 0)
+
+        # POST the form to schedule this action
+        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        execute = now - timedelta(minutes=5)
+        execute_until = now - timedelta(minutes=1)
+        resp = self.get_response(
+            'scheduler:create',
+            {'pk': action.id},
+            method='POST',
+            req_params={
+                'name': 'Second scheduling round',
+                'item_column': str(self.workflow.columns.get(name='email').id),
+                'execute': execute.strftime('%m/%d/%Y %H:%m'),
+                'execute_until': execute_until.strftime('%m/%d/%Y %H:%m'),
+                'subject': 'Subject text',
+            })
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertEqual(ScheduledAction.objects.count(), 0)
+
+        # POST the form to schedule this action
+        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        execute = now - timedelta(minutes=5)
+        execute_until = now + timedelta(days=1)
+        resp = self.get_response(
+            'scheduler:create',
+            {'pk': action.id},
+            method='POST',
+            req_params={
+                'name': 'Second scheduling round',
+                'item_column': str(self.workflow.columns.get(name='email').id),
+                'execute': execute.strftime('%m/%d/%Y %H:%m'),
+                'execute_until': execute_until.strftime('%m/%d/%Y %H:%m'),
+                'subject': 'Subject text',
+            })
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertEqual(ScheduledAction.objects.count(), 1)
+
+        # POST the form to schedule this action
+        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        execute = now + timedelta(minutes=5)
+        execute_until = now + timedelta(days=15)
+        resp = self.get_response(
+            'scheduler:create',
+            {'pk': action.id},
+            method='POST',
+            req_params={
+                'name': 'Third scheduling round',
+                'item_column': str(self.workflow.columns.get(name='email').id),
+                'execute': execute.strftime('%m/%d/%Y %H:%m'),
+                'execute_until': execute_until.strftime('%m/%d/%Y %H:%m'),
+                'subject': 'Subject text',
+            })
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertEqual(ScheduledAction.objects.count(), 2)

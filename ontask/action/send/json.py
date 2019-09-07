@@ -4,7 +4,7 @@
 
 import datetime
 import json
-from typing import Dict, Mapping
+from typing import Dict, Mapping, Optional
 
 import pytz
 import requests
@@ -61,8 +61,8 @@ def _send_and_log_json(
 def send_json(
     user,
     action: Action,
-    log_item: Log,
     action_info: Mapping,
+    log_item: Optional[Log] = None,
 ):
     """Send json objects to target URL.
 
@@ -74,7 +74,7 @@ def send_json(
 
     :param log_item: Log object to store results
 
-    :return: Nothing
+    :return: List of column values used to select the objects
     """
     # Evaluate the action string and obtain the list of list of JSON objects
     action_evals = evaluate_action(
@@ -106,19 +106,14 @@ def send_json(
             context,
         )
 
-        # Update data in the overall log item
-    log_item.payload['objects_sent'] = len(action_evals)
-    log_item.payload['filter_present'] = action.get_filter() is not None
-    log_item.payload['datetime'] = str(
-        datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
-    log_item.save()
+    return [column_value for _, column_value in action_evals]
 
 
 def send_json_list(
     user,
     action: Action,
-    log_item: Log,
     action_info: Mapping,
+    log_item: Optional[Log] = None,
 ):
     """Send single json object to target URL.
 
@@ -132,7 +127,7 @@ def send_json_list(
 
     :param action_info: Object with the additional parameters
 
-    :return: Nothing
+    :return: Empty list (there are no column values for multiple sends)
     """
     # Evaluate the action string and obtain the list of list of JSON objects
     action_text = evaluate_row_action_out(
@@ -149,8 +144,4 @@ def send_json_list(
         },
         {'user': user.id, 'action': action.id})
 
-    # Update data in the overall log item
-    log_item.payload['filter_present'] = action.get_filter() is not None
-    log_item.payload['datetime'] = str(
-        datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
-    log_item.save()
+    return []

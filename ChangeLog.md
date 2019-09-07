@@ -1,3 +1,17 @@
+## 6.1 ()
+
+### Added
+
+- New functionality to execute actions incrementally over a time window (Issue #160)
+
+- Link to the table views in the top menu
+
+### Fixed
+
+- Scheduled action editing now remembers those items selected for exclusion
+
+- Scheduled executions are now properly reflected in the last_executed (Issue #157)
+
 ## 6.0 (2019-09-06)
 
 ### Added

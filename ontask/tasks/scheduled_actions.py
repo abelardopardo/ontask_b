@@ -2,18 +2,51 @@
 
 """Process the scheduled actions."""
 
-from datetime import datetime, timedelta
-from typing import Tuple
+from datetime import datetime
+from typing import Tuple, List
 
 import pytz
 from celery import shared_task
 from django.conf import settings
+from django.core.cache import cache
 
 from ontask.action.payloads import (
     CanvasEmailPayload, EmailPayload, JSONPayload, SendListPayload,
 )
 from ontask.models import Action, Log, ScheduledAction
 from ontask.tasks.basic import logger, run_task
+
+cache_lock_format = '__ontask_scheduled_item_{0}'
+
+
+def _update_item_status(
+    s_item: ScheduledAction,
+    run_result: List[str],
+    debug: bool,
+):
+    """Update the status of the scheduled item.
+
+    :param s_item: Scheduled item
+
+    :return: Nothing
+    """
+    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+    if run_result is None:
+        s_item.status = ScheduledAction.STATUS_DONE_ERROR
+    else:
+        if s_item.execute_until and s_item.execute_until > now:
+            # There is a second date/time and is not passed yet!
+            s_item.status = ScheduledAction.STATUS_PENDING
+            # Update exclude values
+            s_item.exclude_values.extend(run_result)
+        else:
+            s_item.status = ScheduledAction.STATUS_DONE
+
+    # Save the new status in the DB
+    s_item.save()
+
+    if debug:
+        logger.info('Status set to %s', s_item.status)
 
 
 def _get_pending_items():
@@ -27,7 +60,7 @@ def _get_pending_items():
     # Get all the actions that are pending
     s_items = ScheduledAction.objects.filter(
         status=ScheduledAction.STATUS_PENDING,
-        execute__lt=now + timedelta(minutes=1))
+        execute__lt=now)
     logger.info('%s actions pending execution', s_items.count())
 
     return s_items
@@ -215,36 +248,39 @@ def execute_scheduled_actions_task(debug: bool):
         if debug:
             logger.info('Starting execution of task %s', str(s_item.id))
 
-        # Set item to running
-        s_item.status = ScheduledAction.STATUS_EXECUTING
-        s_item.save()
+        with cache.lock(cache_lock_format.format(s_item.id)):
+            # Item is now locked by the cache mechanism
+            s_item.refresh_from_db()
+            if s_item.status != ScheduledAction.STATUS_PENDING:
+                continue
 
-        run_result = None
-        log_item = None
-        action_info = None
+            try:
+                # Set item to running
+                s_item.status = ScheduledAction.STATUS_EXECUTING
+                s_item.save()
 
-        # Get action info and log item
-        if s_item.action.action_type in _function_distributor:
-            action_info, log_item = _function_distributor[
-                s_item.action.action_type](s_item)
+                run_result = None
+                log_item = None
+                action_info = None
 
-        if log_item:
-            run_result = run_task(
-                s_item.user.id,
-                log_item.id,
-                action_info.get_store())
-            s_item.last_executed_log = log_item
-        else:
-            logger.error(
-                'Execution of action type "%s" not implemented',
-                s_item.action.action_type)
+                # Get action info and log item
+                if s_item.action.action_type in _function_distributor:
+                    action_info, log_item = _function_distributor[
+                        s_item.action.action_type](s_item)
 
-        if run_result:
-            s_item.status = ScheduledAction.STATUS_DONE
-        else:
-            s_item.status = ScheduledAction.STATUS_DONE_ERROR
-        # Save the new status in the DB
-        s_item.save()
+                if log_item:
+                    run_result = run_task(
+                        s_item.user.id,
+                        log_item.id,
+                        action_info.get_store())
+                    s_item.last_executed_log = log_item
+                else:
+                    logger.error(
+                        'Execution of action type "%s" not implemented',
+                        s_item.action.action_type)
 
-        if debug:
-            logger.info('Status set to %s', s_item.status)
+                _update_item_status(s_item, run_result, debug)
+            except Exception as exc:
+                logger.error(
+                    'Error while processing scheduled action: {0}'.format(
+                        str(exc)))

@@ -148,7 +148,7 @@
     "pk": 4,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$SWp6cUxjdU9VWTRF$NuyZlmzXYsLMWaJY4J/0PQ",
-        "last_login": "2019-08-30T07:35:32.158Z",
+        "last_login": "2019-09-07T05:44:35.224Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -704,10 +704,11 @@
             "valid": true,
             "condition": "AND"
         },
+        "formula_text": "age &gt; 12.0 and not empty",
         "n_rows_selected": 2,
         "is_filter": true,
         "created": "2017-12-08T01:29:51.431Z",
-        "modified": "2017-12-08T01:30:04.937Z",
+        "modified": "2019-09-07T05:44:52.336Z",
         "columns": []
     }
 },
@@ -733,10 +734,11 @@
             "valid": true,
             "condition": "AND"
         },
+        "formula_text": "registered &equals; true and not empty",
         "n_rows_selected": 1,
         "is_filter": false,
         "created": "2017-12-08T01:33:21.687Z",
-        "modified": "2017-12-08T01:33:21.687Z",
+        "modified": "2019-09-07T05:44:52.540Z",
         "columns": []
     }
 },
@@ -762,6 +764,7 @@
             "valid": true,
             "condition": "AND"
         },
+        "formula_text": "",
         "n_rows_selected": 2,
         "is_filter": true,
         "created": "2019-08-26T09:42:30.643Z",
@@ -793,10 +796,43 @@
             "valid": true,
             "condition": "AND"
         },
+        "formula_text": "",
         "n_rows_selected": 2,
         "is_filter": true,
         "created": "2019-08-30T07:36:23.571Z",
         "modified": "2019-08-30T07:36:23.605Z",
+        "columns": [
+            2929
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1041,
+    "fields": {
+        "action": 258,
+        "name": "old",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "registered &equals; true and not empty",
+        "n_rows_selected": 2,
+        "is_filter": true,
+        "created": "2019-09-07T05:46:22.629Z",
+        "modified": "2019-09-07T05:47:21.033Z",
         "columns": [
             2929
         ]
@@ -812,7 +848,7 @@
         "name": "wflow2",
         "description_text": "Simple workflow structure with two type of actions",
         "created": "2017-12-08T01:25:32.160Z",
-        "modified": "2019-08-30T07:35:37.407Z",
+        "modified": "2019-09-07T05:56:02.561Z",
         "nrows": 3,
         "ncols": 6,
         "attributes": {
@@ -859,7 +895,7 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_108",
-        "session_key": "drj6irr5f8e42nqc2bv2na46pe7c4eft",
+        "session_key": "",
         "luser_email_column": null,
         "luser_email_column_md5": "",
         "lusers_is_outdated": false,
@@ -876,7 +912,7 @@
         "name": "send email",
         "description_text": "",
         "created": "2017-12-08T01:29:40.524Z",
-        "modified": "2019-08-26T09:40:23.187Z",
+        "modified": "2019-09-07T05:46:03.293Z",
         "last_executed_log": null,
         "action_type": "personalized_text",
         "serve_enabled": false,
@@ -885,7 +921,7 @@
         "rows_all_false": [
             2
         ],
-        "text_content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
+        "text_content": "<p>Hi {{ name }}</p><p>ATT:\u00a0{{ attribute name }}</p><p>COL:\u00a0{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
         "target_url": "",
         "shuffle": false
     }
@@ -946,6 +982,26 @@
         "active_to": null,
         "rows_all_false": null,
         "text_content": "{\r\n    \"students\": {% ot_insert_column_list \"email\" %}\r\n}",
+        "target_url": "",
+        "shuffle": false
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 258,
+    "fields": {
+        "workflow": 108,
+        "name": "send email incrementally",
+        "description_text": "To test incremental scheduled execution",
+        "created": "2019-09-07T05:46:22.613Z",
+        "modified": "2019-09-07T05:55:50.800Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "<p>Hi {{ name }}</p><p>Welcome to the course!<br></p><p>ATT:&nbsp;{{ attribute name }}</p><p>Registered:&nbsp;{{ registered }}</p><p>When: {{ when }}<br></p>",
         "target_url": "",
         "shuffle": false
     }

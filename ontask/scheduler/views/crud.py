@@ -61,6 +61,9 @@ class ScheduleActionTable(tables.Table):
     execute = tables.DateTimeColumn(
         verbose_name=_('Scheduled'))
 
+    execute_until = tables.DateTimeColumn(
+        verbose_name=_('Until'))
+
     status = tables.Column(
         verbose_name=_('Status'),
         accessor=A('get_status_display'))
@@ -90,9 +93,15 @@ class ScheduleActionTable(tables.Table):
 
         model = ScheduledAction
 
-        fields = ('name', 'action', 'execute', 'status')
+        fields = ('name', 'action', 'execute', 'execute_until', 'status')
 
-        sequence = ('name', 'action', 'execute', 'status', 'operations')
+        sequence = (
+            'name',
+            'action',
+            'execute',
+            'execute_until',
+            'status',
+            'operations')
 
         attrs = {
             'class': 'table table-hover table-bordered shadow',
@@ -161,13 +170,17 @@ def view(
     item_values.pop('user')
     item_values['payload'] = json.dumps(item_values['payload'], indent=2)
 
+    is_executing, tdelta = create_timedelta_string(
+        sch_obj.execute,
+        sch_obj.execute_until)
     return JsonResponse({
         'html_form': render_to_string(
             'scheduler/includes/partial_show_schedule_action.html',
             {
                 's_vals': item_values,
                 'id': sch_obj.id,
-                'timedelta': create_timedelta_string(sch_obj.execute),
+                'is_executing': is_executing,
+                'timedelta': tdelta,
             },
         ),
     })

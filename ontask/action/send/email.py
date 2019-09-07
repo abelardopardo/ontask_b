@@ -4,7 +4,7 @@
 
 import datetime
 from time import sleep
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 import html2text
 import pytz
@@ -162,7 +162,7 @@ def _create_track_column(action: Action) -> str:
 
 
 def _create_single_message(
-    msg_body_sbj_to: List,
+    msg_body_sbj_to: List[str],
     track_str: str,
     from_email: str,
     cc_email_list: List[str],
@@ -289,6 +289,10 @@ def _deliver_msg_burst(
     :param msgs: List of either EmailMessage or EmailMultiAlternatives
     :return: Nothing.
     """
+    if len(msgs) == 0:
+        # bypass trivial case, no list given
+        return
+
     # Partition the list of emails into chunks as per the value of EMAIL_BURST
     chunk_size = len(msgs)
     wait_time = 0
@@ -314,9 +318,9 @@ def _deliver_msg_burst(
 def send_emails(
     user,
     action: Action,
-    log_item: Log,
     action_info: Dict,
-) -> None:
+    log_item: Optional[Log] = None,
+) -> List[str]:
     """Send action content evaluated for each row.
 
     Sends the emails for the given action and with the
@@ -331,7 +335,7 @@ def send_emails(
     :param log_item: Log object to store results
     :param action_info: Dictionary key, value as defined in EmailPayload
 
-    :return: Send the emails
+    :return: List of strings with the "to" fields used.
     """
     # Evaluate the action string, evaluate the subject, and get the value of
     # the email column.
@@ -364,25 +368,19 @@ def send_emails(
 
     _deliver_msg_burst(msgs)
 
-    # Update data in the log item
-    log_item.payload['objects_sent'] = len(action_evals)
-    log_item.payload['filter_present'] = action.get_filter() is not None
-    log_item.payload['datetime'] = str(
-        datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
-    )
-    log_item.save()
-
     if action_info['send_confirmation']:
         # Confirmation message requested
         _send_confirmation_message(user, action, len(msgs))
+
+    return [msg.to[0] for msg in msgs]
 
 
 def send_list_email(
     user,
     action: Action,
-    log_item: Log,
     action_info: Dict,
-) -> None:
+    log_item: Optional[Log] = None,
+) -> List[str]:
     """Send action content evaluated once to include lists.
 
     Sends a single email for the given action with the lists expanded and with
@@ -393,7 +391,7 @@ def send_list_email(
     :param log_item: Log object to store results
     :param action_info: Dictionary key, value as defined in EmailPayload
 
-    :return: Send the emails
+    :return: Empty list (because it is a single email sent)
     """
     # Evaluate the action string, evaluate the subject, and get the value of
     # the email column.
@@ -442,3 +440,5 @@ def send_list_email(
             'to_email': msg.to[0]
         }
     )
+
+    return []
