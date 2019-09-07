@@ -161,6 +161,9 @@ class ScheduleItemsForm(ScheduleBasicForm):
         super().__init__(form_data, *args, **kwargs)
 
         self.set_field_from_dict('confirm_items')
+        if self.instance and self.instance.exclude_values:
+            self.fields['confirm_items'].initial = True
+
         # Special case: get the column from the name
         self.fields['item_column'].queryset = columns
         column_name = self._FormWithPayload__form_info.get('item_column')
@@ -193,6 +196,10 @@ class ScheduleItemsForm(ScheduleBasicForm):
             self.add_error(
                 'item_column',
                 _('The column with email addresses has incorrect values.'))
+
+        if self.instance and not form_data['confirm_items']:
+            self.instance.exclude_values = []
+            self.instance.save()
 
         return form_data
 

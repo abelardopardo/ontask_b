@@ -201,12 +201,14 @@ def edit(
         if not action:
             return redirect('home')
         s_item = None
+        exclude_values = []
     else:
         # Get the scheduled action from the parameter in the URL
         s_item = ScheduledAction.objects.filter(pk=pk).first()
         if not s_item:
             return redirect('home')
         action = s_item.action
+        exclude_values = s_item.exclude_values
 
     # Get the payload from the session, and if not, use the given one
     op_payload = request.session.get(action_session_dictionary)
@@ -218,7 +220,7 @@ def edit(
                 kwargs={'pk': action.id}),
             'post_url': reverse(
                 'scheduler:finish_scheduling'),
-        }
+            'exclude_values': exclude_values}
         if s_item:
             op_payload.update(s_item.payload)
         set_action_payload(request.session, op_payload)

@@ -411,11 +411,11 @@ class ValueExcludeForm(FormWithPayload):
 
         super().__init__(form_data, *args, **kwargs)
 
-        self.set_field_from_dict('exclude_values')
         self.fields['exclude_values'].choices = get_rows(
             self.action.workflow.get_data_frame_table_name(),
             column_names=[self.column_name, self.column_name],
             filter_formula=self.action.get_filter_formula()).fetchall()
+        self.set_field_from_dict('exclude_values')
 
     def clean(self):
         """Store the values in the field in the dictionary."""
