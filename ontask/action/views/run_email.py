@@ -15,7 +15,6 @@ from ontask.action.forms import EmailActionForm
 from ontask.action.payloads import (
     EmailPayload, get_or_set_action_info, set_action_payload,
 )
-from ontask.action.send import send_emails
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
@@ -53,9 +52,7 @@ def run_email_action(
         initial_values={
             'action_id': action.id,
             'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:email_done')
-        }
-    )
+            'post_url': reverse('action:email_done')})
 
     # Create the form to ask for the email subject and other information
     form = EmailActionForm(

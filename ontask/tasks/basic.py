@@ -70,9 +70,7 @@ def get_execution_items(
         if not workflow:
             raise Exception(
                 ugettext('Unable to find workflow with id {0}').format(
-                    workflow_id,
-                ),
-            )
+                    workflow_id))
 
     action = None
     if action_id:
@@ -83,9 +81,7 @@ def get_execution_items(
         if not action:
             raise Exception(
                 ugettext('Unable to find action with id {0}').format(
-                    action_id,
-                ),
-            )
+                    action_id))
 
     return user, workflow, action
 

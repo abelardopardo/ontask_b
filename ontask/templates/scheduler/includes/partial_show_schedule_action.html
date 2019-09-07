@@ -6,7 +6,9 @@
   </button>
 </div>
 <div class="modal-body">
-  <p class="lead">{% blocktrans with t=timedelta %}Action will execute in {{ t }}{% endblocktrans %}</p>
+  {% if timedelta %}
+    <p class="lead">{% blocktrans with t=timedelta %}Action will execute in {{ t }}{% endblocktrans %}</p>
+  {% endif %}
   <table class="table" width="100%">
     {% for s_key, s_val in s_vals.items %}
       <tr>

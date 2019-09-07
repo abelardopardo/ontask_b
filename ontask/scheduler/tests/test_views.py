@@ -33,7 +33,7 @@ class SchedulerForms(test.OnTaskTestCase):
     s_desc = 'First JSON intervention'
     s_execute = '2119-05-03 12:32:18+10:30'
 
-    def test_views_email(self):
+    def test_schedule_forms(self):
         """Test the use of forms in to schedule actions."""
         # Index of all scheduled actions
         resp = self.get_response('scheduler:index')
@@ -121,8 +121,8 @@ class SchedulerForms(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(ScheduledAction.objects.count(), 0)
 
-    def test_views_json(self):
-        """Test the use of forms in to schedule actions."""
+    def test_schedule_json_action(self):
+        """Test creation of a scheduled execution of json action."""
         # Index of all scheduled actions
         resp = self.get_response('scheduler:index')
         self.assertTrue(status.is_success(resp.status_code))

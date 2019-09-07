@@ -58,7 +58,6 @@ def run_action(
     :param pk: Action id. It is assumed to be an action In
     :return: HttpResponse
     """
-
     if not celery_is_up():
         messages.error(
             request,
@@ -84,7 +83,7 @@ def serve_action_lti(request: HttpRequest) -> HttpResponse:
     try:
         action_id = int(request.GET.get('id'))
     except Exception:
-        raise Http404
+        raise Http404()
 
     return serve_action(request, action_id)
 
@@ -124,11 +123,16 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
 
     try:
         if action.is_out:
-            return serve_action_out(request.user, action, user_attribute_name)
-
-        return serve_survey_row(request, action, user_attribute_name)
+            response = serve_action_out(
+                request.user,
+                action,
+                user_attribute_name)
+        else:
+            response = serve_survey_row(request, action, user_attribute_name)
     except Exception:
-        raise Http404
+        raise Http404()
+
+    return response
 
 
 def serve_action_out(
@@ -235,8 +239,7 @@ def run_action_item_filter(
         'button_label': action_info['button_label'],
         'valuerange': range(action_info['valuerange']),
         'step': action_info['step'],
-        'prev_step': action_info['prev_url'],
-    }
+        'prev_step': action_info['prev_url']}
 
     # The post is correct
     if request.method == 'POST' and form.is_valid():

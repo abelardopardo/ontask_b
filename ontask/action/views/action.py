@@ -164,8 +164,8 @@ def save_action_form(
             {
                 'id': action_item.id,
                 'name': action_item.name,
-                'workflow_id': workflow.id,
-                'workflow_name': workflow.name},
+                'workflow_id': action_item.workflow.id,
+                'workflow_name': action_item.workflow.name},
         )
 
         # Request is correct

@@ -97,11 +97,11 @@ def send_json(
 
     # Iterate over all json objects to create the strings and check for
     # correctness
-    for json_string in action_evals:
+    for json_string, _ in action_evals:
         _send_and_log_json(
             user,
             action,
-            json.loads(json_string[0]),
+            json.loads(json_string),
             headers,
             context,
         )
