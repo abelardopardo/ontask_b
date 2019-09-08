@@ -14,7 +14,7 @@ class LogSerializer(serializers.ModelSerializer):
 
     useremail = serializers.ReadOnlyField()
 
-    class Meta(object):
+    class Meta:
         """Choose the model, fields and read_only."""
         model = Log
 

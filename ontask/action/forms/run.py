@@ -218,7 +218,7 @@ class EmailActionForm(BasicEmailForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Redefine size of the subject field."""
 
         widgets = {'subject': forms.TextInput(
@@ -590,7 +590,7 @@ class CanvasEmailActionForm(JSONKeyForm, JSONBasicForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Set the size for the subject field."""
 
         widgets = {'subject': forms.TextInput(
@@ -641,7 +641,7 @@ class EnableURLForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Define fields and datetime picker widget."""
 
         model = Action

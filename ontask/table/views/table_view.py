@@ -48,7 +48,7 @@ class ViewTable(tables.Table):
             record['name'],
         )
 
-    class Meta(object):
+    class Meta:
         """Select the model and specify fields, sequence and attributes."""
 
         model = View

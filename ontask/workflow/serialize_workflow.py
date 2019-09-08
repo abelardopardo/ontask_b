@@ -55,7 +55,7 @@ class WorkflowListSerializer(serializers.ModelSerializer):
 
         return workflow_obj
 
-    class Meta(object):
+    class Meta:
         """Select model and fields to consider."""
 
         model = Workflow
@@ -211,7 +211,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
         return workflow_obj
 
-    class Meta(object):
+    class Meta:
         """Select model and fields to exclude."""
 
         model = Workflow

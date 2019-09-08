@@ -25,7 +25,7 @@ from ontask.models.workflow import Workflow
 
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)
-var_use_res = [
+VAR_USE_RES = [
     re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
     re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})'),
 ]
@@ -235,7 +235,7 @@ class Action(models.Model):  # noqa Z214
         :return: List of condition names
         """
         cond_names = []
-        for rexpr in var_use_res:
+        for rexpr in VAR_USE_RES:
             cond_names += [
                 match.group('vname')
                 for match in rexpr.finditer(self.text_content)
@@ -293,7 +293,7 @@ class Action(models.Model):  # noqa Z214
         """
         if self.text_content:
             # Need to change name appearances in content
-            self.text_content = var_use_res[0].sub(
+            self.text_content = VAR_USE_RES[0].sub(
                 lambda match: '{{ ' + (
                     new_name if match.group('vname') == html.escape(old_name)
                     else match.group('vname')
@@ -394,7 +394,7 @@ class Action(models.Model):  # noqa Z214
 
         return self.rows_all_false
 
-    class Meta(object):
+    class Meta:
         """Define uniqueness with name and workflow. Order by name."""
 
         unique_together = ('name', 'workflow')

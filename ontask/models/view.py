@@ -84,7 +84,7 @@ class View(models.Model):
 
         return self.nrows
 
-    class Meta(object):
+    class Meta:
         """Define uniqueness with name in workflow and order by name."""
 
         unique_together = ('name', 'workflow')

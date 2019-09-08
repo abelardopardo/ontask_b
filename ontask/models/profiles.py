@@ -24,7 +24,7 @@ class BaseProfile(models.Model):
     bio = models.CharField("Short Bio", max_length=200, blank=True, default='')
     email_verified = models.BooleanField(_("Email verified"), default=False)
 
-    class Meta(object):
+    class Meta:
         abstract = True
 
 

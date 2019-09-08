@@ -57,7 +57,7 @@ class ActionUpdateForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Select Action and the two fields."""
 
         model = Action
@@ -91,7 +91,7 @@ class ActionForm(ActionUpdateForm):
 class ActionDescriptionForm(forms.ModelForm):
     """Form to edit the description of an action."""
 
-    class Meta(object):
+    class Meta:
         """Select model and the description field."""
 
         model = Action
@@ -117,7 +117,7 @@ class FilterForm(forms.ModelForm):
         # Filter should be hidden.
         self.fields['formula'].widget = forms.HiddenInput()
 
-    class Meta(object):
+    class Meta:
         """Select model and fields."""
 
         model = Condition

@@ -256,7 +256,7 @@ class Column(models.Model):
         """Render as unicode."""
         return self.name
 
-    class Meta(object):
+    class Meta:
         """Define additional fields, unique criteria and ordering."""
 
         verbose_name = 'column'
