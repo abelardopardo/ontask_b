@@ -19,6 +19,7 @@ from ontask.workflow.import_export import (
 
 
 class WorkflowImportExport(test.OnTaskTestCase):
+    """Test import export functionality."""
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -28,6 +29,7 @@ class WorkflowImportExport(test.OnTaskTestCase):
     )
 
     def test_export(self):
+        """Test the export functionality."""
         # Get the only workflow
         workflow = Workflow.objects.get(name='wflow1')
 
@@ -171,8 +173,10 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
             tuple1 = a1.column_condition_pair.all()
             tuple2 = a2.column_condition_pair.all()
             self.assertEqual(tuple1.count(), tuple2.count())
-            for t1, t2 in zip(tuple1, tuple2):
-                self.assertEqual(t1.action.name, t2.action.name)
-                self.assertEqual(t1.column.name, t2.column.name)
-                if t1.condition:
-                    self.assertEqual(t1.condition.name, t2.condition.name)
+            for titem1, titem2 in zip(tuple1, tuple2):
+                self.assertEqual(titem1.action.name, titem2.action.name)
+                self.assertEqual(titem1.column.name, titem2.column.name)
+                if titem1.condition:
+                    self.assertEqual(
+                        titem1.condition.name,
+                        titem2.condition.name)
