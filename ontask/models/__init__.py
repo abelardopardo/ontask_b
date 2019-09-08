@@ -2,7 +2,7 @@
 
 """Package with the OnTask models."""
 
-from ontask.models.action import Action, var_use_res
+from ontask.models.action import Action, VAR_USE_RES
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
 from ontask.models.column import Column
 from ontask.models.condition import Condition

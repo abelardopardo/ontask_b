@@ -463,7 +463,7 @@ class Workflow(models.Model):
         """Render as unicode."""
         return self.name
 
-    class Meta(object):
+    class Meta:
         """Define verbose and unique together."""
 
         verbose_name = 'workflow'

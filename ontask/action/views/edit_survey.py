@@ -72,7 +72,7 @@ class ColumnSelectedTable(tables.Table):
             },
         )
 
-    class Meta(object):
+    class Meta:
         """Define fields, sequence, attrs and row attrs."""
 
         fields = (

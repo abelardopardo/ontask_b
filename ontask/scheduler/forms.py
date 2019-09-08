@@ -70,7 +70,7 @@ class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Define model, fields and widgets."""
 
         model = ScheduledAction

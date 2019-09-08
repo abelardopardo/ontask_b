@@ -72,7 +72,7 @@ class Plugin(models.Model):
         """Render name with field."""
         return self.name
 
-    class Meta(object):
+    class Meta:
         """Define the criteria for ordering."""
 
         ordering = ['name']

@@ -121,7 +121,7 @@ class ScheduledAction(models.Model):
         """Column name or None."""
         return self.item_column.name if self.item_column else None
 
-    class Meta(object):
+    class Meta:
         """Define the criteria of uniqueness with name and action."""
 
         unique_together = ('name', 'action')

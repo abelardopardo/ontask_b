@@ -55,7 +55,7 @@ class AttributeTable(tables.Table):
             record['name'],
         )
 
-    class Meta(object):
+    class Meta:
         """Select fields and attributes."""
 
         fields = ('name', 'value', 'operations')
@@ -79,7 +79,7 @@ class WorkflowShareTable(tables.Table):
         attrs={'td': {'class': 'dt-body-center'}},
     )
 
-    class Meta(object):
+    class Meta:
         """Fields, sequence and attributes."""
 
         fields = ('email', 'id')

@@ -375,7 +375,7 @@ class SQLConnectionForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Define the model and the fields to manipulate."""
 
         model = SQLConnection

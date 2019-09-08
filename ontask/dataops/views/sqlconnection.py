@@ -39,7 +39,7 @@ class SQLConnectionTableAdmin(tables.Table):
             record['name'],
         )
 
-    class Meta(object):
+    class Meta:
         """Define model, fields, sequence and attributes."""
 
         model = SQLConnection
@@ -72,7 +72,7 @@ class SQLConnectionTableRun(tables.Table):
             record['name'],
         )
 
-    class Meta(object):
+    class Meta:
         """Define models, fields, sequence and attributes."""
 
         model = SQLConnection

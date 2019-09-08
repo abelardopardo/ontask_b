@@ -72,7 +72,7 @@ class ViewAddForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Define models and fields to consider."""
 
         model = View

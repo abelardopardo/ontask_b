@@ -11,7 +11,7 @@ from django.template import Context, Template
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models import Action, var_use_res
+from ontask.models import Action, VAR_USE_RES
 
 # Variable name to store the action ID in the context used to render a
 # template
@@ -207,7 +207,7 @@ def render_action_template(
     # Steps 1 and 2. Apply the translation process to all variables that
     # appear in the the template text
     new_template_text = template_text
-    for rexpr in var_use_res:
+    for rexpr in VAR_USE_RES:
         new_template_text = rexpr.sub(_change_vname, new_template_text)
 
     # Step 2.2 Remove pre-and post white space from the {% if %} and
