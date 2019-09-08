@@ -83,15 +83,15 @@ class EditActionOutForm(forms.ModelForm):
 
         # Personalized text, canvas email
         if (
-            self.instance.action_type == Action.personalized_text
-            or self.instance.action_type == Action.send_list
+            self.instance.action_type == Action.PERSONALIZED_TEXT
+            or self.instance.action_type == Action.SEND_LIST
         ):
             self.fields['text_content'].widget = SummernoteInplaceWidget()
 
         # Add the Target URL field
         if (
-            self.instance.action_type == Action.personalized_json
-            or self.instance.action_type == Action.send_list_json
+            self.instance.action_type == Action.PERSONALIZED_JSON
+            or self.instance.action_type == Action.SEND_LIST_JSON
         ):
             # Add the target_url field
             self.fields['target_url'] = forms.CharField(
@@ -117,7 +117,7 @@ class EditActionOutForm(forms.ModelForm):
                 },
             )
 
-        if self.instance.action_type == Action.personalized_canvas_email:
+        if self.instance.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
             # Modify the content field so that it uses the TextArea
             self.fields['text_content'].widget = forms.Textarea(
                 attrs={

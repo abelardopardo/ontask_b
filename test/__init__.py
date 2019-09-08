@@ -980,26 +980,26 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def create_new_personalized_text_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.personalized_text,
+            Action.PERSONALIZED_TEXT,
             adesc)
 
     def create_new_json_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.personalized_json,
+            Action.PERSONALIZED_JSON,
             adesc)
 
     def create_new_personalized_canvas_email_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.personalized_canvas_email,
+            Action.PERSONALIZED_CANVAS_EMAIL,
             adesc)
 
     def create_new_send_list_action(self, aname, adesc=''):
-        self.create_new_action_out_basic(aname, Action.send_list, adesc)
+        self.create_new_action_out_basic(aname, Action.SEND_LIST, adesc)
 
     def create_new_JSON_list_action(self, aname, adesc=''):
-        self.create_new_action_out_basic(aname, Action.send_list_json, adesc)
+        self.create_new_action_out_basic(aname, Action.SEND_LIST_JSON, adesc)
 
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog
@@ -1037,7 +1037,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.survey)
+        select.select_by_value(Action.SURVEY)
         desc.send_keys(adesc)
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be

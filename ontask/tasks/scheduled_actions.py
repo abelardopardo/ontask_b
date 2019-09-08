@@ -224,11 +224,11 @@ def _prepare_canvas_email(
 
 
 _function_distributor = {
-    Action.personalized_text: _prepare_personalized_text,
-    Action.send_list: _prepare_send_list,
-    Action.personalized_json: _prepare_personalized_json,
-    Action.send_list_json: _prepare_send_list_json,
-    Action.personalized_canvas_email: _prepare_canvas_email}
+    Action.PERSONALIZED_TEXT: _prepare_personalized_text,
+    Action.SEND_LIST: _prepare_send_list,
+    Action.PERSONALIZED_JSON: _prepare_personalized_json,
+    Action.SEND_LIST_JSON: _prepare_send_list_json,
+    Action.PERSONALIZED_CANVAS_EMAIL: _prepare_canvas_email}
 
 
 @shared_task

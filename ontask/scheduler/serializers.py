@@ -198,7 +198,7 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
         act, execute, column, exclude, payload = super().extra_validation(
             validated_data)
 
-        if act.action_type != Action.personalized_text:
+        if act.action_type != Action.PERSONALIZED_TEXT:
             raise APIException(_('Incorrect type of action to schedule.'))
 
         subject = payload.get('subject')
@@ -257,7 +257,7 @@ class ScheduledJSONSerializer(ScheduledActionSerializer):
         act, execute, column, exclude, pload = super().extra_validation(
             validated_data)
 
-        if act.action_type != Action.personalized_json:
+        if act.action_type != Action.PERSONALIZED_JSON:
             raise APIException(_('Incorrect type of action to schedule.'))
 
         if not pload.get('token'):

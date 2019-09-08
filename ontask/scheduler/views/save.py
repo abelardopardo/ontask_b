@@ -24,11 +24,11 @@ from ontask.scheduler.forms import (
 )
 
 LOG_TYPE_DICT = {
-    Action.personalized_text: Log.SCHEDULE_EMAIL_EDIT,
-    Action.send_list: Log.SCHEDULE_SEND_LIST_EDIT,
-    Action.personalized_json: Log.SCHEDULE_JSON_EDIT,
-    Action.send_list_json: Log.SCHEDULE_JSON_LIST_EDIT,
-    Action.personalized_canvas_email: Log.SCHEDULE_CANVAS_EMAIL_EDIT}
+    Action.PERSONALIZED_TEXT: Log.SCHEDULE_EMAIL_EDIT,
+    Action.SEND_LIST: Log.SCHEDULE_SEND_LIST_EDIT,
+    Action.PERSONALIZED_JSON: Log.SCHEDULE_JSON_EDIT,
+    Action.SEND_LIST_JSON: Log.SCHEDULE_JSON_LIST_EDIT,
+    Action.PERSONALIZED_CANVAS_EMAIL: Log.SCHEDULE_CANVAS_EMAIL_EDIT}
 
 DAYS_IN_YEAR = 365
 SECONDS_IN_HOUR = 3600

@@ -120,8 +120,8 @@ def edit_action_out(
 
             # If it is a JSON action, store the target_url
             if (
-                action.action_type == Action.personalized_json
-                or action.action_type == Action.send_list_json
+                action.action_type == Action.PERSONALIZED_JSON
+                or action.action_type == Action.SEND_LIST_JSON
             ):
                 # Update the target_url field
                 action.target_url = form.cleaned_data['target_url']
@@ -143,8 +143,8 @@ def edit_action_out(
         'filter_condition': filter_condition,
         'action': action,
         'load_summernote': (
-            action.action_type == Action.personalized_text
-            or action.action_type == Action.send_list
+            action.action_type == Action.PERSONALIZED_TEXT
+            or action.action_type == Action.SEND_LIST
         ),
         'conditions': action.conditions.filter(is_filter=False),
         'other_conditions': Condition.objects.filter(
@@ -161,8 +161,8 @@ def edit_action_out(
             if filter_condition else -1,
         'has_data': action.workflow.has_table(),
         'is_send_list': (
-            action.action_type == Action.send_list
-            or action.action_type == Action.send_list_json),
+            action.action_type == Action.SEND_LIST
+            or action.action_type == Action.SEND_LIST_JSON),
         'all_false_conditions': any(
             cond.n_rows_selected == 0
             for cond in action.conditions.all()),

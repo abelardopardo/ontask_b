@@ -112,27 +112,27 @@ def run_task(
         log_item.payload['status'] = 'Executing'
         log_item.save()
 
-        if action.action_type == Action.personalized_text:
+        if action.action_type == Action.PERSONALIZED_TEXT:
             items_processed = send_emails(user, action, action_info, log_item)
-        elif action.action_type == Action.send_list:
+        elif action.action_type == Action.SEND_LIST:
             items_processed = send_list_email(
                 user,
                 action,
                 action_info,
                 log_item)
-        elif action.action_type == Action.personalized_canvas_email:
+        elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
             items_processed = send_canvas_emails(
                 user,
                 action,
                 action_info,
                 log_item)
-        elif action.action_type == Action.personalized_json:
+        elif action.action_type == Action.PERSONALIZED_JSON:
             items_processed = send_json(
                 user,
                 action,
                 action_info,
                 log_item)
-        elif action.action_type == Action.send_list_json:
+        elif action.action_type == Action.SEND_LIST_JSON:
             items_processed = send_json_list(
                 user,
                 action,

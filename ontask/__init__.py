@@ -23,26 +23,6 @@ __version__ = 'B.6.0'
 
 app_config = 'ontask.apps.ActionConfig'
 
-PERSONALIZED_TEXT = 'personalized_text'
-PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
-PERSONALIZED_JSON = 'personalized_json'
-SEND_LIST = 'send_list'
-SEND_LIST_JSON = 'send_list_json'
-SURVEY = 'survey'
-TODO_LIST = 'todo_list'
-
-ACTION_TYPES = [
-    (PERSONALIZED_TEXT, _('Personalized text')),
-    (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
-    (SURVEY, _('Survey')),
-    (PERSONALIZED_JSON, _('Personalized JSON')),
-    (SEND_LIST, _('Send List')),
-    (SEND_LIST_JSON, _('Send List as JSON')),
-    (TODO_LIST, _('TODO List'))
-]
-
-AVAILABLE_ACTION_TYPES = ACTION_TYPES[:]
-
 
 def is_legal_name(val):
     """Check if a string is a valid column, attribute or condition name.

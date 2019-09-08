@@ -334,9 +334,9 @@ class ActionSerializer(serializers.ModelSerializer):
             action_type = validated_data.get('action_type')
             if not action_type:
                 if validated_data['is_out']:
-                    action_type = Action.personalized_text
+                    action_type = Action.PERSONALIZED_TEXT
                 else:
-                    action_type = Action.survey
+                    action_type = Action.SURVEY
 
             action_obj = Action(
                 workflow=self.context['workflow'],

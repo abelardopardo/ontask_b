@@ -104,7 +104,7 @@ def _create_row_preview_response(
     incorrect_json = False
     if action.is_out:
         action_content = evaluate_row_action_out(action, eval_context)
-        if action.action_type == Action.personalized_json:
+        if action.action_type == Action.PERSONALIZED_JSON:
             incorrect_json = not _check_json_is_correct(action_content)
     else:
         action_content = evaluate_row_action_in(action, eval_context)
@@ -131,8 +131,8 @@ def _create_row_preview_response(
         )
 
     uses_plain_text = (
-        action.action_type == Action.personalized_canvas_email
-        or action.action_type == Action.personalized_json
+        action.action_type == Action.PERSONALIZED_CANVAS_EMAIL
+        or action.action_type == Action.PERSONALIZED_JSON
     )
     if uses_plain_text:
         action_content = escape(action_content)
@@ -248,7 +248,7 @@ def preview_response(
             action,
             get_action_evaluation_context(action, {}))
         context['action_content'] = action_final_text
-        if action.action_type == Action.send_list_json:
+        if action.action_type == Action.SEND_LIST_JSON:
             incorrect_json = not _check_json_is_correct(action_final_text)
             context['incorrect_json'] = incorrect_json
     else:

@@ -141,7 +141,7 @@ def ot_insert_column_list(context, column_name):
         action.workflow.get_data_frame_table_name(),
         column_names=[column_name],
         filter_formula=action.get_filter_formula())]
-    if action.action_type == Action.send_list_json:
+    if action.action_type == Action.SEND_LIST_JSON:
         return mark_safe(json.dumps(column_values))
 
     return ', '.join(column_values)
