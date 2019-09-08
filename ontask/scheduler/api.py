@@ -85,14 +85,14 @@ class ScheduledActionEmailAPIListCreate(ScheduledActionAPIListCreate):
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return ScheduledAction.objects.filter(
-                action__action_type=Action.personalized_text
+                action__action_type=Action.PERSONALIZED_TEXT
             )
 
         return ScheduledAction.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.personalized_text
+            action__action_type=Action.PERSONALIZED_TEXT
         ).distinct()
 
 
@@ -112,14 +112,14 @@ class ScheduledActionJSONAPIListCreate(ScheduledActionAPIListCreate):
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return ScheduledAction.objects.filter(
-                action__action_type=Action.personalized_json
+                action__action_type=Action.PERSONALIZED_JSON
             )
 
         return ScheduledAction.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.personalized_json
+            action__action_type=Action.PERSONALIZED_JSON
         ).distinct()
 
 
@@ -145,14 +145,14 @@ class ScheduledEmailAPIRetrieveUpdateDestroy(
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return ScheduledAction.objects.filter(
-                action__action_type=Action.personalized_text
+                action__action_type=Action.PERSONALIZED_TEXT
             )
 
         return ScheduledAction.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.personalized_text
+            action__action_type=Action.PERSONALIZED_TEXT
         ).distinct()
 
 
@@ -178,12 +178,12 @@ class ScheduledJSONAPIRetrieveUpdateDestroy(
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return ScheduledAction.objects.filter(
-                action__action_type=Action.personalized_json
+                action__action_type=Action.PERSONALIZED_JSON
             )
 
         return ScheduledAction.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.personalized_json
+            action__action_type=Action.PERSONALIZED_JSON
         ).distinct()

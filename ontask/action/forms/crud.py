@@ -15,13 +15,13 @@ ConditionForm: Form to process condition elements
 """
 
 import json
-from builtins import object, str
+from builtins import str
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.settings
-from ontask import AVAILABLE_ACTION_TYPES, is_legal_name
+from ontask import is_legal_name
 from ontask.core.forms import RestrictedFileField
 from ontask.models import Action, Condition
 from ontask.models.const import CHAR_FIELD_MID_SIZE
@@ -72,13 +72,13 @@ class ActionForm(ActionUpdateForm):
         super().__init__(*args, **kargs)
 
         at_field = self.fields['action_type']
-        at_field.widget.choices = AVAILABLE_ACTION_TYPES
+        at_field.widget.choices = Action.AVAILABLE_ACTION_TYPES
 
-        if len(AVAILABLE_ACTION_TYPES) == 1:
+        if len(Action.AVAILABLE_ACTION_TYPES) == 1:
             # There is only one type of action. No need to generate the field.
             # Set to value and hide
             at_field.widget = forms.HiddenInput()
-            at_field.initial = AVAILABLE_ACTION_TYPES[0][0]
+            at_field.initial = Action.AVAILABLE_ACTION_TYPES[0][0]
 
     class Meta(ActionUpdateForm.Meta):
         """Select action and the three fields."""

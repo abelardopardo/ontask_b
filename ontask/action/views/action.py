@@ -136,7 +136,7 @@ def save_action_form(
         if not form.has_changed():
             return JsonResponse({'html_redirect': None})
 
-        if Action.todo_list == form.cleaned_data.get('action_type'):
+        if Action.TODO_LIST == form.cleaned_data.get('action_type'):
             # To be implemented
             return JsonResponse(
                 {'html_redirect': reverse('under_construction')})
@@ -303,7 +303,7 @@ def edit_action(
     :param pk: Action PK
     :return: HTML response
     """
-    if action.action_type == Action.todo_list:
+    if action.action_type == Action.TODO_LIST:
         return redirect(reverse('under_construction'), {})
 
     if action.is_out:

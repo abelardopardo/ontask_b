@@ -251,23 +251,23 @@ def edit(
     if s_item:
         op_payload['schedule_id'] = s_item.id
 
-    if action.action_type == Action.personalized_text:
+    if action.action_type == Action.PERSONALIZED_TEXT:
         return save_email_schedule(request, action, s_item, op_payload)
-    elif action.action_type == Action.send_list:
+    elif action.action_type == Action.SEND_LIST:
         return save_send_list_schedule(request, action, s_item, op_payload)
-    elif action.action_type == Action.send_list_json:
+    elif action.action_type == Action.SEND_LIST_JSON:
         return save_send_list_json_schedule(
             request,
             action,
             s_item,
             op_payload)
-    elif action.action_type == Action.personalized_canvas_email:
+    elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
         return save_canvas_email_schedule(
             request,
             action,
             s_item,
             op_payload)
-    elif action.action_type == Action.personalized_json:
+    elif action.action_type == Action.PERSONALIZED_JSON:
         return save_json_schedule(request, action, s_item, op_payload)
 
     # Action type not found, so return to the main table view
@@ -310,15 +310,15 @@ def delete(
         })
 
     log_type = None
-    if s_item.action.action_type == Action.personalized_text:
+    if s_item.action.action_type == Action.PERSONALIZED_TEXT:
         log_type = Log.SCHEDULE_EMAIL_DELETE
-    elif s_item.action.action_type == Action.send_list:
+    elif s_item.action.action_type == Action.SEND_LIST:
         log_type = Log.SCHEDULE_SEND_LIST_DELETE
-    elif s_item.action.action_type == Action.personalized_json:
+    elif s_item.action.action_type == Action.PERSONALIZED_JSON:
         log_type = Log.SCHEDULE_JSON_DELETE
-    elif s_item.action.action_type == Action.send_list_json:
+    elif s_item.action.action_type == Action.SEND_LIST_JSON:
         log_type = Log.SCHEDULE_JSON_LIST_DELETE
-    elif s_item.action.action_type == Action.personalized_canvas_email:
+    elif s_item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
         log_type = Log.SCHEDULE_CANVAS_EMAIL_DELETE
 
     # Log the event

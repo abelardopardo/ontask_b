@@ -32,20 +32,31 @@ VAR_USE_RES = [
 
 ACTION_TYPE_LENGTH = 64
 
-
 class Action(models.Model):  # noqa Z214
     """Object storing an action: content, conditions, filter, etc.
 
     @DynamicAttrs
     """
 
-    personalized_text = ontask.PERSONALIZED_TEXT
-    personalized_canvas_email = ontask.PERSONALIZED_CANVAS_EMAIL
-    personalized_json = ontask.PERSONALIZED_JSON
-    send_list = ontask.SEND_LIST
-    send_list_json = ontask.SEND_LIST_JSON
-    survey = ontask.SURVEY
-    todo_list = ontask.TODO_LIST
+    PERSONALIZED_TEXT = 'personalized_text'
+    PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
+    PERSONALIZED_JSON = 'personalized_json'
+    SEND_LIST = 'send_list'
+    SEND_LIST_JSON = 'send_list_json'
+    SURVEY = 'survey'
+    TODO_LIST = 'todo_list'
+
+    ACTION_TYPES = [
+        (PERSONALIZED_TEXT, _('Personalized text')),
+        (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
+        (SURVEY, _('Survey')),
+        (PERSONALIZED_JSON, _('Personalized JSON')),
+        (SEND_LIST, _('Send List')),
+        (SEND_LIST_JSON, _('Send List as JSON')),
+        (TODO_LIST, _('TODO List'))
+    ]
+
+    AVAILABLE_ACTION_TYPES = ACTION_TYPES[:]
 
     workflow = models.ForeignKey(
         Workflow,
@@ -84,8 +95,8 @@ class Action(models.Model):  # noqa Z214
     # Action type
     action_type = models.CharField(
         max_length=ACTION_TYPE_LENGTH,
-        choices=ontask.ACTION_TYPES,
-        default=personalized_text,
+        choices=ACTION_TYPES,
+        default=PERSONALIZED_TEXT,
     )
 
     # Boolean that enables the URL to be visible ot the outside.
@@ -164,16 +175,16 @@ class Action(models.Model):  # noqa Z214
         :return: Boolean stating correctness
         """
         for_out = (
-            self.action_type == Action.personalized_text
-            or self.action_type == Action.send_list
-            or self.action_type == Action.send_list_json
-            or (self.action_type == Action.personalized_canvas_email
+            self.action_type == Action.PERSONALIZED_TEXT
+            or self.action_type == Action.SEND_LIST
+            or self.action_type == Action.SEND_LIST_JSON
+            or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
                 and settings.CANVAS_INFO_DICT is not None)
         )
         if for_out:
             return True
 
-        if self.action_type == Action.personalized_json:
+        if self.action_type == Action.PERSONALIZED_JSON:
             # Validate the URL
             valid_url = True
             try:
@@ -200,8 +211,8 @@ class Action(models.Model):  # noqa Z214
     def is_in(self):
         """Get bool stating if action is Survey or similar."""
         return (
-            self.action_type == Action.survey
-            or self.action_type == Action.todo_list
+            self.action_type == Action.SURVEY
+            or self.action_type == Action.TODO_LIST
         )
 
     @functional.cached_property

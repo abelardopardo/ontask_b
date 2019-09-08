@@ -677,7 +677,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_canvas_email)
+        select.select_by_value(Action.PERSONALIZED_CANVAS_EMAIL)
         desc.send_keys('Motivating message depending on the program enrolled')
 
         self.modal_ss('action_personalized_canvas_email_create.png')
@@ -711,7 +711,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.send_list)
+        select.select_by_value(Action.SEND_LIST)
         desc.send_keys('Send email with column values as list')
 
         self.modal_ss('action_send_list_create.png')
@@ -747,7 +747,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.send_list_json)
+        select.select_by_value(Action.SEND_LIST_JSON)
         desc.send_keys('Send the list of inactive students in week 2 to another platform')
 
         self.modal_ss('action_json_list_create.png')

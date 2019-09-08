@@ -31,12 +31,12 @@ from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
 
 fn_distributor = {
-    Action.personalized_text: run_email_action,
-    Action.personalized_canvas_email: run_canvas_email_action,
-    Action.personalized_json: run_json_action,
-    Action.survey: run_survey_action,
-    Action.send_list: run_send_list_action,
-    Action.send_list_json: run_json_list_action,
+    Action.PERSONALIZED_TEXT: run_email_action,
+    Action.PERSONALIZED_CANVAS_EMAIL: run_canvas_email_action,
+    Action.PERSONALIZED_JSON: run_json_action,
+    Action.SURVEY: run_survey_action,
+    Action.SEND_LIST: run_send_list_action,
+    Action.SEND_LIST_JSON: run_json_list_action,
 }
 
 

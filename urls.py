@@ -26,6 +26,7 @@ import ontask.workflow.urls
 import ontask.workflow.views.home
 from ontask.core import views
 from ontask.dataops.pandas import set_engine
+from ontask.models import Action
 from ontask.templatetags.ontask_tags import ontask_version
 from ontask.workflow.views import home
 
@@ -140,10 +141,10 @@ try:
     eval_obj = [eval(daction) for daction in settings.DISABLED_ACTIONS]
     for atype in eval_obj:
         to_remove = next(
-            afull_type for afull_type in ontask.ACTION_TYPES
+            afull_type for afull_type in Action.ACTION_TYPES
             if afull_type[0] == atype)
-        ontask.AVAILABLE_ACTION_TYPES.remove(to_remove)
-except Exception:
+        Action.AVAILABLE_ACTION_TYPES.remove(to_remove)
+except Exception as exc:
     raise Exception(
         'Unable to configure available action types. '
         + 'Review variable DISABLED_ACTIONS')
