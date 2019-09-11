@@ -240,8 +240,8 @@ def preview_response(
     }
 
     if (
-        action.action_type == action.send_list
-        or action.action_type == action.send_list_json
+        action.action_type == Action.SEND_LIST
+        or action.action_type == Action.SEND_LIST_JSON
     ):
         # Obtain the evaluation context (no condition evaluation)
         action_final_text = evaluate_row_action_out(
