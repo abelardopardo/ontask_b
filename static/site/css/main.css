@@ -278,9 +278,7 @@ body>.navbar-transparent {
 }
 
 th.dt-body-center,
-td.dt-body-center {
-    text-align: center;
-    }
+td.dt-body-center { text-align: center; }
 
 table td,
 #actioninrun-data td,
@@ -289,6 +287,7 @@ table td,
 #column-selected-table td,
 #column-table td,
 #log-table td,
+#rubric-table td,
 #scheduler-table td,
 #sqlconn-instructor-table td,
 #sqlconn-admin-table td,
