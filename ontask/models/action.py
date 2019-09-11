@@ -41,6 +41,7 @@ class Action(models.Model):  # noqa Z214
     PERSONALIZED_TEXT = 'personalized_text'
     PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
     PERSONALIZED_JSON = 'personalized_json'
+    RUBRIC_TEXT = 'rubric_text'
     SEND_LIST = 'send_list'
     SEND_LIST_JSON = 'send_list_json'
     SURVEY = 'survey'
@@ -51,10 +52,33 @@ class Action(models.Model):  # noqa Z214
         (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
         (SURVEY, _('Survey')),
         (PERSONALIZED_JSON, _('Personalized JSON')),
+        (RUBRIC_TEXT, _('Rubric feedback')),
         (SEND_LIST, _('Send List')),
         (SEND_LIST_JSON, _('Send List as JSON')),
         (TODO_LIST, _('TODO List'))
     ]
+
+    ACTION_IS_DATA_IN = {
+        PERSONALIZED_TEXT: False,
+        PERSONALIZED_CANVAS_EMAIL: False,
+        PERSONALIZED_JSON: False,
+        RUBRIC_TEXT: False,
+        SEND_LIST: False,
+        SEND_LIST_JSON: False,
+        SURVEY: True,
+        TODO_LIST: True,
+    }
+
+    LOAD_SUMMERNOTE = {
+        PERSONALIZED_TEXT: True,
+        PERSONALIZED_CANVAS_EMAIL: False,
+        PERSONALIZED_JSON: False,
+        RUBRIC_TEXT: True,
+        SEND_LIST: True,
+        SEND_LIST_JSON: False,
+        SURVEY: False,
+        TODO_LIST: False,
+    }
 
     AVAILABLE_ACTION_TYPES = ACTION_TYPES[:]
 
@@ -176,6 +200,7 @@ class Action(models.Model):  # noqa Z214
         """
         for_out = (
             self.action_type == Action.PERSONALIZED_TEXT
+            or self.action_type == Action.RUBRIC_TEXT
             or self.action_type == Action.SEND_LIST
             or self.action_type == Action.SEND_LIST_JSON
             or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
@@ -208,15 +233,12 @@ class Action(models.Model):  # noqa Z214
         )
 
     @functional.cached_property
-    def is_in(self):
+    def is_in(self) -> bool:
         """Get bool stating if action is Survey or similar."""
-        return (
-            self.action_type == Action.SURVEY
-            or self.action_type == Action.TODO_LIST
-        )
+        return self.ACTION_IS_DATA_IN[self.action_type]
 
     @functional.cached_property
-    def is_out(self):
+    def is_out(self) -> bool:
         """Get bool stating if action is OUT."""
         return not self.is_in
 

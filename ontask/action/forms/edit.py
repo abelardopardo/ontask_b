@@ -84,6 +84,7 @@ class EditActionOutForm(forms.ModelForm):
         # Personalized text, canvas email
         if (
             self.instance.action_type == Action.PERSONALIZED_TEXT
+            or self.instance.action_type == Action.RUBRIC_TEXT
             or self.instance.action_type == Action.SEND_LIST
         ):
             self.fields['text_content'].widget = SummernoteInplaceWidget()

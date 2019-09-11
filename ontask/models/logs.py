@@ -52,6 +52,7 @@ class Log(models.Model):
     WORKFLOW_STAR = 'workflow_star'
     COLUMN_ADD = 'column_add'
     QUESTION_ADD = 'question_add'
+    CRITERION_ADD = 'criterion_add'
     COLUMN_ADD_FORMULA = 'column_add_formula'
     COLUMN_ADD_RANDOM = 'column_add_random'
     COLUMN_RENAME = 'column_rename'
@@ -127,6 +128,8 @@ class Log(models.Model):
         (WORKFLOW_CLONE, _('Workflow cloned')),
         (WORKFLOW_UPDATE_LUSERS, _('Update list of workflow users')),
         (WORKFLOW_STAR, _('Toggle workflow star')),
+        (QUESTION_ADD, _('Question added')),
+        (CRITERION_ADD, _('Criterion added')),
         (COLUMN_ADD, _('Column added')),
         (COLUMN_ADD_FORMULA, _('Column with formula created')),
         (COLUMN_ADD_RANDOM, _('Column with random values created')),

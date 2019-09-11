@@ -146,44 +146,6 @@ class ColumnBasicForm(forms.ModelForm):
         }
 
 
-class QuestionAddForm(ColumnBasicForm):
-    """Form to add a question."""
-
-    def __init__(self, *args, **kwargs):
-        """Set the appropriate labels."""
-        super().__init__(*args, **kwargs)
-
-        self.fields['name'].label = _('Question name')
-        self.fields['description_text'].label = _(
-            'Description (shown to the learners)')
-        self.fields['position'].label = _(
-            'Question position (zero to insert last)')
-        self.fields['active_from'].label = _('Question active from')
-        self.fields['active_to'].label = _('Question active until')
-
-    def clean(self):
-        """Validate the position field."""
-        form_data = super().clean()
-
-        # Check and force a correct column index
-        ncols = self.workflow.columns.count()
-        if form_data['position'] < 1 or form_data['position'] > ncols:
-            form_data['position'] = ncols + 1
-
-        return form_data
-
-    class Meta(ColumnBasicForm.Meta):
-        """Set the fields."""
-
-        fields = [
-            'name',
-            'description_text',
-            'data_type',
-            'position',
-            'active_from',
-            'active_to']
-
-
 class ColumnAddForm(ColumnBasicForm):
     """Form to add a regular column."""
 
@@ -244,11 +206,11 @@ class ColumnAddForm(ColumnBasicForm):
             'active_to']
 
 
-class QuestionRenameForm(ColumnBasicForm):
-    """Rename a question (a column) in a survey."""
+class QuestionForm(ColumnBasicForm):
+    """Form to add a question."""
 
     def __init__(self, *args, **kwargs):
-        """Adjust the field descriptions for this form."""
+        """Set the appropriate labels."""
         super().__init__(*args, **kwargs)
 
         self.fields['name'].label = _('Question name')
@@ -259,21 +221,22 @@ class QuestionRenameForm(ColumnBasicForm):
         self.fields['active_from'].label = _('Question active from')
         self.fields['active_to'].label = _('Question active until')
 
-        self.fields['data_type'].disabled = True
+        if self.instance.id is not None:
+            self.fields['data_type'].disabled = True
 
     def clean(self):
-        """Verify that the position is corect."""
+        """Validate the position field."""
         form_data = super().clean()
 
         # Check and force a correct column index
         ncols = self.workflow.columns.count()
         if form_data['position'] < 1 or form_data['position'] > ncols:
-            form_data['position'] = ncols
+            form_data['position'] = ncols + 1
 
         return form_data
 
     class Meta(ColumnBasicForm.Meta):
-        """List the fields."""
+        """Set the fields."""
 
         fields = [
             'name',
@@ -282,6 +245,61 @@ class QuestionRenameForm(ColumnBasicForm):
             'position',
             'active_from',
             'active_to']
+
+
+class CriterionForm(ColumnBasicForm):
+    """Form to add a question."""
+
+    def __init__(self, *args, **kwargs):
+        """Adjust fieldss."""
+        self.other_criterion = kwargs.pop('other_criterion')
+        if self.other_criterion:
+            self.other_criterion = self.other_criterion.column
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['name'].label = _('Criterion name')
+        self.fields['description_text'].label = _(
+            'Criterion Description')
+        self.fields['raw_categories'].label = _(
+            'Comma-separated list of levels of attainment')
+
+        if self.other_criterion:
+            # Set and hide fields that have been defined.
+            self.fields['raw_categories'].initial = \
+                self.other_criterion.categories
+            self.fields['raw_categories'].widget = forms.HiddenInput()
+            self.fields['data_type'].initial = self.other_criterion.data_type
+            self.fields['data_type'].widget = forms.HiddenInput()
+
+    def clean(self):
+        """Validate the position field."""
+        form_data = super().clean()
+
+        # Check and force a correct column index
+        ncols = self.workflow.columns.count()
+        if form_data['position'] < 1 or form_data['position'] > ncols:
+            form_data['position'] = ncols + 1
+
+        # Prevent categories being empty
+
+        if not form_data['raw_categories']:
+            self.add_error(
+                'raw_categories',
+                _('The criterion needs a non-empty set of values')
+            )
+
+        return form_data
+
+    class Meta(ColumnBasicForm.Meta):
+        """Set the fields."""
+
+        fields = [
+            'name',
+            'description_text',
+            'data_type',
+            'position',
+            'raw_categories']
 
 
 class ColumnRenameForm(ColumnBasicForm):

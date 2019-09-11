@@ -34,6 +34,7 @@ fn_distributor = {
     Action.PERSONALIZED_TEXT: run_email_action,
     Action.PERSONALIZED_CANVAS_EMAIL: run_canvas_email_action,
     Action.PERSONALIZED_JSON: run_json_action,
+    Action.RUBRIC_TEXT: None,
     Action.SURVEY: run_survey_action,
     Action.SEND_LIST: run_send_list_action,
     Action.SEND_LIST_JSON: run_json_list_action,

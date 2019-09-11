@@ -67,7 +67,7 @@ def _render_table_display_page(
             col.data_type for col in columns])
         context['columns_datatables'] = [{'data': 'Operations'}] + [
             {'data': col.name.replace('.', '\\.')} for col in columns]
-        context['stat_columns'] = workflow.columns.filter(is_key=False)
+        context['columns_show_stat'] = workflow.columns.filter(is_key=False)
     else:
         context['columns'] = None
         context['columns_datatables'] = []
@@ -150,7 +150,7 @@ def _render_table_display_data(
         # Transform key name and key value into escaped strings
         key_value = escape(row[key_idx])
         ops_string = render_to_string(
-            'table/includes/partial_table_ops.html',
+            'table/includes/partial_row_ops.html',
             {
                 'stat_url': stat_url + '?{0}'.format(urlencode(
                     {'key': key_name, 'val': key_value},

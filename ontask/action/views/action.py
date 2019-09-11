@@ -2,28 +2,28 @@
 
 """Views to render the list of actions."""
 
-from builtins import object
 from typing import Optional, Union
 
-import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
-from django_tables2 import A
+import django_tables2 as tables
 
 from ontask import simplify_datetime_str
 from ontask.action.forms import ActionForm, ActionUpdateForm
 from ontask.action.payloads import set_action_payload
 from ontask.action.views.edit_personalized import edit_action_out
+from ontask.action.views.edit_rubric import edit_action_rubric
 from ontask.action.views.edit_survey import edit_action_in
 from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.core.tables import OperationsColumn
+from ontask.core.views import under_construction
 from ontask.models import Action, Log, Workflow
 
 
@@ -48,7 +48,7 @@ class ActionTable(tables.Table):
         viewname='logs:view',
         text=lambda record: simplify_datetime_str(
             record.last_executed_log.modified),
-        kwargs={'pk': A('last_executed_log.id')},
+        kwargs={'pk': tables.A('last_executed_log.id')},
         attrs={'a': {'class': 'spin'}},
     )
 
@@ -303,15 +303,18 @@ def edit_action(
     :param pk: Action PK
     :return: HTML response
     """
-    if action.action_type == Action.TODO_LIST:
-        return redirect(reverse('under_construction'), {})
+    edit_function_dict = {
+        Action.PERSONALIZED_TEXT: edit_action_out,
+        Action.PERSONALIZED_CANVAS_EMAIL: edit_action_out,
+        Action.PERSONALIZED_JSON: edit_action_out,
+        Action.RUBRIC_TEXT: edit_action_rubric,
+        Action.SEND_LIST: edit_action_out,
+        Action.SEND_LIST_JSON: edit_action_out,
+        Action.SURVEY: edit_action_in,
+        Action.TODO_LIST: under_construction,
+    }
 
-    if action.is_out:
-        response = edit_action_out(request, workflow, action)
-    else:
-        response = edit_action_in(request, workflow, action)
-
-    return response
+    return edit_function_dict[action.action_type](request, workflow, action)
 
 
 @user_passes_test(is_instructor)

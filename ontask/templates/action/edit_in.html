@@ -3,7 +3,6 @@
 {% load ontask_tags %}
 {% load static %}
 {% load widget_tweaks %}
-{% load django_tables2 %}
 {% block title %}{{ block.super }}{% trans 'Edit Survey' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
@@ -94,19 +93,9 @@
         <a class="nav-link active border border-dark border-bottom-0"
            id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
       </li>
-      <li class="nav-item pr-1">
-        <a class="nav-link border border-dark border-bottom-0"
-           id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">Survey Questions</a>
-      </li>
-      <li class="nav-item pr-1">
-        <a class="nav-link border border-dark border-bottom-0"
-           id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">Select Learners
-          {% if not filter_condition %}(Empty){% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link border border-dark border-bottom-0" id="conditions-tab" data-toggle="tab" href="#conditions" role="tab" aria-controls="conditions" aria-selected="false">{% trans 'Conditions' %} ({{ conditions|length }})</a>
-      </li>
+      {% include 'action/includes/partial_questions_tab_li.html' %}
+      {% include 'action/includes/partial_filter_tab_li.html' %}
+      {% include 'action/includes/partial_condition_tab_li.html' %}
     </ul>
     <div class="tab-content" id="edit-survey-tab-content">
       <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
@@ -160,43 +149,9 @@
           </h5>
         </div>
       </div>
-      <div class="shadow rounded tab-pane px-3 fade show border border-dark"
-           id="questions" role="tabpanel" aria-labelledby="questions-tab">
-        <div id="insert-questions" class="text-center mt-3">
-          <div id="column-selector">
-            <div class="dropdown btn-group">
-              <button type="button" class="btn btn-outline-dark dropdown-toggle"
-                      data-toggle="dropdown">
-                {% trans 'Insert existing question' %}
-              </button>
-              <div class="shadow dropdown-menu scrollable-menu">
-                {% for column in columns_to_insert %}
-                  <button type="button" class="dropdown-item js-insert-question"
-                          data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
-                {% endfor %}
-              </div>
-            </div>
-            <button type="button"
-                    class="btn btn-outline-dark js-workflow-question-add"
-                    data-url="{% url 'workflow:question_add' action.id %}"
-                    data-toggle="tooltip"
-                    title="{% trans 'Add a new question to the action' %}">
-              <span class="fa fa-plus"></span> {% trans 'Create question' %}
-            </button>
-          </div>
-        </div>
-        <div class="justify-content-center mb-3">
-          {% render_table column_selected_table %}
-        </div>
-      </div>
-      <div class="shadow rounded tab-pane px-3 fade show border border-dark"
-           id="filter" role="tabpanel" aria-labelledby="filter-tab">
-        {% include 'action/includes/partial_filter_tab.html' %}
-      </div>
-      <div class="shadow rounded tab-pane px-3 fade show border border-dark"
-           id="conditions" role="tabpanel" aria-labelledby="conditions-tab">
-        {% include 'action/includes/partial_condition_tab.html' %}
-      </div>
+      {% include 'action/includes/partial_questions_tab_body.html' %}
+      {% include 'action/includes/partial_filter_tab_body.html' %}
+      {% include 'action/includes/partial_condition_tab_body.html' %}
     </div>
   </div>
   {% include 'modal.html' %}

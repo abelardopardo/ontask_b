@@ -68,6 +68,8 @@ urlpatterns = [
     # Column manipulation
     path('column_add/', views.column_add, name='column_add'),
     path('<int:pk>/question_add/', views.column_add, name='question_add'),
+    path('<int:pk>/criterion_add/', views.criterion_add, name='criterion_add'),
+
     path(
         'formula_column_add',
         views.formula_column_add,
@@ -85,6 +87,10 @@ urlpatterns = [
         '<int:pk>/question_edit/',
         views.column_edit,
         name='question_edit'),
+    path(
+        '<int:pk>/<int:cid>/criterion_edit/',
+        views.criterion_edit,
+        name='criterion_edit'),
     path(
         '<int:pk>/column_clone/',
         views.column_clone,

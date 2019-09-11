@@ -211,6 +211,7 @@ $(function () {
 
   // Show stats
   $("#column-stat-selector").on("click", ".js-show-stats", loadForm);
+  $("#rubric").on("click", ".js-show-stats", loadForm);
 
   // Preview
   $("#action-preview-done").on("click", ".js-action-preview", loadFormPost);
@@ -231,7 +232,9 @@ $(function () {
 
   // Column Add
   $("#edit-survey-tab-content").on("click", ".js-workflow-question-add", loadForm);
+  $("#insert-criterion").on("click", ".js-workflow-criterion-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-question-add-form", saveForm);
+  $("#modal-item").on("submit", ".js-workflow-criterion-add-form", saveForm);
 
   // Column Selected Edit
   $("#column-selected-table").on("click",
@@ -239,8 +242,12 @@ $(function () {
     loadForm);
   $("#modal-item").on("submit", ".js-question-edit-form", saveForm);
 
+  // Criteria edit
+  $("#rubric").on("click", ".js-criterion-edit", loadForm);
+
   // Delete column
   $("#column-selected-table").on("click", ".js-column-delete", loadForm);
+  $("#rubric").on("click", ".js-column-delete", loadForm);
   $("#modal-item").on("submit", ".js-column-delete-form", saveForm);
 
   // Clone column

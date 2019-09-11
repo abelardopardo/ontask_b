@@ -25,8 +25,8 @@ from ontask.models import (
     ActionColumnConditionTuple, Column, Condition, Log, Workflow,
 )
 from ontask.workflow.forms import (
-    ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
-    QuestionRenameForm, RandomColumnAddForm,
+    ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionForm,
+    RandomColumnAddForm,
 )
 from ontask.workflow.ops import clone_wf_column, workflow_delete_column
 
@@ -140,7 +140,7 @@ def column_add(
 
     # Form to read/process data
     if is_question:
-        form = QuestionAddForm(request.POST or None, workflow=workflow)
+        form = QuestionForm(request.POST or None, workflow=workflow)
     else:
         form = ColumnAddForm(request.POST or None, workflow=workflow)
 
@@ -510,7 +510,7 @@ def column_edit(
     is_question = 'question_edit' in request.path_info
     # Form to read/process data
     if is_question:
-        form = QuestionRenameForm(
+        form = QuestionForm(
             request.POST or None,
             workflow=workflow,
             instance=column)

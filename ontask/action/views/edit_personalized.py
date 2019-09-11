@@ -19,7 +19,7 @@ from ontask.models import Action, Condition, Log, Workflow
 from ontask.visualizations.plotly import PlotlyHandler
 
 
-def _text_renders_correctly(
+def text_renders_correctly(
     text_content: str,
     action: Action,
     form: EditActionOutForm,

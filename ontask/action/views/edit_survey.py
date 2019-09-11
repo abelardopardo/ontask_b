@@ -137,7 +137,7 @@ def edit_action_in(
         ),
         # Column elements
         'key_columns': all_columns.filter(is_key=True),
-        'stat_columns': all_columns.filter(is_key=False),
+        'columns_show_stat': all_columns.filter(is_key=False),
         'key_selected': tuples.filter(column__is_key=True).first(),
         'has_no_key': tuples.filter(column__is_key=False).exists(),
         'any_empty_description': tuples.filter(
@@ -173,7 +173,7 @@ def edit_action_in(
         'filter_condition': filter_condition,
         'conditions': all_conditions,
         'vis_scripts': PlotlyHandler.get_engine_scripts(),
-        'other_conditions': Condition.objects.filter(
+        'conditions_to_clone': Condition.objects.filter(
             action__workflow=workflow, is_filter=False,
         ).exclude(action=action),
     }

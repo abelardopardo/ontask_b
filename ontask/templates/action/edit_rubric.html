@@ -3,10 +3,11 @@
 {% load ontask_tags %}
 {% load static %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{% trans 'Edit Action' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Edit Rubric' %}{% endblock %}
 {% block extrahead %}
   <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
   {% ontask_datetimepicker_css %}
+  {% ontask_datatables_bootstrap_css %}
   {{ form.media.css }}
 {% endblock extrahead %}
 {% block scripts %}
@@ -17,6 +18,8 @@
     <script src="{% static 'site/js/query-builder.'|add:country|add:'.js' %}"></script>
   {% endwith %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
     {% with js_var='qbuilder_options' allow_empty='false' %}
       {% include 'qbuilder_options.js' %}
@@ -33,8 +36,28 @@
         document.execCommand('insertText', false, bufferText);
       });
     {% endif %}
+    $(document).ready(function() {
+      $('#rubric-table').DataTable({
+        "autoWidth": false,
+        "search": {
+          "caseInsensitive": true,
+        },
+        stateSave: true,
+        stateSaveParams: function (settings, data) {
+          delete data.search;
+        },
+        "language": {
+          "url": location.protocol + getLanguage()
+        },
+        "columnDefs": [
+          {"searchable": false, "targets": "_all"},
+        ],
+        colReorder: false,
+        rowReorder: false,
+      });
+    });
   </script>
-  {% if vis_scripts %}
+  {% if vis_scripts and not is_rubric_cell %}
     {% for script_src in vis_scripts %}
       <script src="{{ script_src|safe }}"></script>
     {% endfor %}
@@ -52,16 +75,12 @@
             id="edit-personalized-text-tabs" role="tablist">
           {% include 'action/includes/partial_text_summernote_tab_li.html' %}
           {% include 'action/includes/partial_filter_tab_li.html' %}
-          {% if not is_send_list %}
-            {% include 'action/includes/partial_condition_tab_li.html' %}
-          {% endif %}
+          {% include 'action/includes/partial_rubric_tab_li.html' %}
         </ul>
         <div class="tab-content" id="edit-personalized-text-tab-content">
           {% include 'action/includes/partial_text_summernote_tab_body.html' %}
           {% include 'action/includes/partial_filter_tab_body.html' %}
-          {% if not is_send_list %}
-            {% include 'action/includes/partial_condition_tab_body.html' %}
-          {% endif %}
+          {% include 'action/includes/partial_rubric_tab_body.html' %}
         </div>
       </div>
     </form>

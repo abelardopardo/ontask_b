@@ -79,3 +79,4 @@ class RubricCell(models.Model):
         """
 
         unique_together = ('action', 'column', 'category')
+        ordering = ['column__position']
