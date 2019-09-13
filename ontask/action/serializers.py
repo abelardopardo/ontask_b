@@ -338,18 +338,16 @@ class ActionSerializer(serializers.ModelSerializer):
             else:
                 raise Exception(_('Invalid column data'))
 
-        field_data = validated_data.get('column_condition_pair', [])
-        if field_data:
-            # Parse the column_condition_pair
-            column_condition_pairs = ColumnConditionNameSerializer(
-                data=field_data,
-                many=True,
-                context={'action': action_obj})
+        # Parse the column_condition_pair
+        column_condition_pairs = ColumnConditionNameSerializer(
+            data=validated_data.get('column_condition_pair', []),
+            many=True,
+            context={'action': action_obj})
 
-            if column_condition_pairs.is_valid():
-                column_condition_pairs.save()
-            else:
-                raise Exception(_('Invalid column condition pair data'))
+        if column_condition_pairs.is_valid():
+            column_condition_pairs.save()
+        else:
+            raise Exception(_('Invalid column condition pair data'))
 
         # Parse the rubric_cell
         rubric_cells = RubricCellSerializer(
