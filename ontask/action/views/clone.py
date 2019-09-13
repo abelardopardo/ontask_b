@@ -20,6 +20,7 @@ from ontask.core.permissions import is_instructor
 from ontask.dataops.formula import get_variables
 from ontask.models import (
     Action, ActionColumnConditionTuple, Condition, Log, Workflow,
+    RubricCell,
 )
 
 
@@ -115,6 +116,16 @@ def do_clone_action(
                     name=acc_tuple.column.name),
                 condition=new_action.conditions.filter(name=cname).first(),
             )
+
+        # Clone the rubric cells if any
+        for rubric_cell in action.rubric_cells.all():
+            RubricCell.objects.create(
+                action=new_action,
+                column=new_action.workflow.columns.get(
+                    name=rubric_cell.column.name),
+                loa_position=rubric_cell.loa_position,
+                description_text=rubric_cell.description_text,
+                feedback_text=rubric_cell.feedback_text)
 
         # Clone the conditions
         for condition in action.conditions.all():
