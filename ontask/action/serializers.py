@@ -10,7 +10,10 @@ from rest_framework import serializers
 
 from ontask.dataops.formula import get_variables
 from ontask.dataops.sql.column_queries import add_column_to_db
-from ontask.models import Action, ActionColumnConditionTuple, Condition
+from ontask.models import (
+    Action, ActionColumnConditionTuple, Condition,
+    RubricCell,
+)
 from ontask.workflow.serialize_column import (
     ColumnNameSerializer, ColumnSerializer,
 )
@@ -238,6 +241,30 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
         fields = ('column', 'condition')
 
 
+class RubricCellSerializer(serializers.ModelSerializer):
+    """Serialize Rubric Cells."""
+
+    column = ColumnNameSerializer(required=True, many=False)
+
+    def create(self, validated_data, **kwargs):
+        """Create the tuple object with column, condition, action."""
+        action = self.context['action']
+
+        return RubricCell.objects.get_or_create(
+            action=action,
+            column=action.workflow.columns.get(
+                name=validated_data['column']['name']),
+            loa_position=validated_data['loa_position'],
+            description_text=validated_data['description_text'],
+            feedback_text=validated_data['feedback_text'])
+
+    class Meta:
+        """Define the model and select fields to seralize."""
+
+        model = RubricCell
+        fields = ('column', 'loa_position', 'description_text', 'feedback_text')
+
+
 class ActionSerializer(serializers.ModelSerializer):
     """Action serializer recursively traversing conditions but not columns.
 
@@ -260,6 +287,9 @@ class ActionSerializer(serializers.ModelSerializer):
     column_condition_pair = ColumnConditionNameSerializer(
         many=True,
         required=False)
+
+    # Include the RubricCell objects
+    rubric_cells = RubricCellSerializer(many=True, required=False)
 
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
@@ -320,6 +350,17 @@ class ActionSerializer(serializers.ModelSerializer):
                 column_condition_pairs.save()
             else:
                 raise Exception(_('Invalid column condition pair data'))
+
+        # Parse the rubric_cell
+        rubric_cells = RubricCellSerializer(
+            data=validated_data.get('rubric_cells', []),
+            many=True,
+            context={'action': action_obj})
+
+        if rubric_cells.is_valid():
+            rubric_cells.save()
+        else:
+            raise Exception(_('Invalid rubric cell data'))
 
     @profile
     def create(self, validated_data, **kwargs):
