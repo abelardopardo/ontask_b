@@ -21,4 +21,5 @@ from ontask.workflow.views.workflow_crud import (
 from ontask.workflow.views.workflow_ops import (
     assign_luser_column, column_ss, flush, operations, star,
 )
-from ontask.workflow.views.criterion_crud import criterion_add, criterion_edit
+from ontask.workflow.views.criterion_crud import (
+    criterion_create, criterion_edit, criterion_remove, criterion_insert)

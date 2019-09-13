@@ -12,19 +12,28 @@
           </button>
           <div class="shadow dropdown-menu scrollable-menu">
             {% for column in columns_to_insert %}
-              <button type="button" class="dropdown-item js-insert-criterion"
-                      data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
+              <button type="button" class="dropdown-item js-workflow-criterion-insert"
+                      data-url="{% url 'workflow:criterion_insert' action.id column.id %}">{{ column.name }}</button>
             {% endfor %}
           </div>
         </div>
       {% endif %}
       <button type="button"
               class="btn btn-outline-dark js-workflow-criterion-add"
-              data-url="{% url 'workflow:criterion_add' action.id %}"
+              data-url="{% url 'workflow:criterion_create' action.id %}"
               data-toggle="tooltip"
               title="{% trans 'Add a new criterion to the rubric' %}">
         <span class="fa fa-plus"></span> {% trans 'Create criterion/column' %}
       </button>
+      {% if rubric_table %}
+        <button type="button"
+                class="btn btn-outline-dark js-rubric-loas-edit"
+                data-url="{% url 'action:rubric_loas_edit' action.id %}"
+                data-toggle="tooltip"
+                title="{% trans 'Modify the levels of attainment (top row) of the rubric' %}">
+          <span class="fa fa-pencil"></span> {% trans 'Edit levels of attainment' %}
+        </button>
+      {% endif %}
     </div>
   </div>
   {% if rubric_table %}

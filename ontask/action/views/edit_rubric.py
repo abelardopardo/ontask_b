@@ -3,9 +3,11 @@
 """View to edit rubric actions."""
 
 from collections import OrderedDict
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
+from django.db import transaction
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -13,58 +15,56 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
-from ontask.action.forms import EditActionOutForm, FilterForm
+from ontask.action.forms import (
+    EditActionOutForm, FilterForm, RubricCellForm, RubricLOAForm)
 from ontask.action.views.edit_personalized import text_renders_correctly
-from ontask.models import Action, Column, Log, RubricCell, Workflow
+from ontask.core.decorators import ajax_required, get_action
+from ontask.core.permissions import is_instructor
+from ontask.models import (
+    Action, ActionColumnConditionTuple, Log, RubricCell, Workflow,
+)
 
-EDIT_CELL_LINK = """<a class="btn btn-sm btn-light" href="{% url 'workflow:criterion_edit' criterion.id column.id %}"
-     title="{% trans 'Edit this cell' %}">
-    <span class="fa fa-pencil"></span></a>"""
 
 class RubricTable(tables.Table):
     """Table to represent the rubric."""
 
     criterion = tables.Column(verbose_name=_('Criterion'))
 
-    def __init__(self, *args, **kwargs):
-        """Store the levels of attainment"""
-        super().__init__(*args, **kwargs)
-
     class Meta:
         """Define fields, sequence, attrs, etc."""
 
-        fields = ('criterion', 'loa_0', 'loa_1')
+        fields = ('criterion',)
 
-        sequence = ('criterion', 'loa_0', 'loa_1')
+        sequence = ('criterion',)
 
         attrs = {
-            'class': 'table table-hover table-bordered shadow',
+            'class': 'table table-bordered shadow',
             'style': 'width: 100%;',
             'id': 'rubric-table',
         }
 
 
-def _verify_criteria_loas(criteria: List[Column]) -> bool:
+def _verify_criteria_loas(criteria: List[ActionColumnConditionTuple]) -> bool:
     """Verify that all columns have all categories identical."""
     if not criteria:
         return True
 
-    loas = set(criteria[0].categories)
-    if any(loas != set(criterion.categories) for criterion in criteria[1:]):
-        return False
-    return True
+    loas = set(criteria[0].column.categories)
+    return all(
+        loas == set(criterion.column.categories)
+        for criterion in criteria[1:]
+    )
 
 
-def _update_rubric_context(
+def _create_rubric_table(
     request: HttpRequest,
     action: Action,
-    criteria: List[Column],
+    criteria: List[ActionColumnConditionTuple],
     context: Dict
 ):
-    # Create the rubric table
+    # Create the extra columns in the table with the categories
     extra_columns = []
-
-    loas = criteria[0].categories
+    loas = criteria[0].column.categories
     # Get the extra columns for the rubric
     for idx, loa in enumerate(loas):
         extra_columns.append((
@@ -72,28 +72,41 @@ def _update_rubric_context(
             tables.Column(verbose_name=loa)
         ))
 
-    # Create the table
+    # Create the table data
     table_data = []
+    cell_ctx = {'action_id': action.id}
     for criterion in criteria:
-        rubric_row = OrderedDict(
-            [('criterion', criterion.name)]
-            + [(loa, ('', '')) for loa in loas]
-        )
+        cell_ctx['column_id'] = criterion.column.id
+        rubric_row = OrderedDict([(
+            'criterion',
+            render_to_string(
+                'workflow/includes/partial_criterion_cell.html',
+                context={'criterion': criterion, 'action': action},
+                request=request))])
 
-        rubric_row['criterion'] = render_to_string(
-            'workflow/includes/partial_criterion_cell.html',
-            context={'criterion': criterion, 'action': action},
-            request=request)
+        cels = RubricCell.objects.filter(
+            action=action,
+            column=criterion.column)
+        for idx in range(len(loas)):
+            cell = cels.filter(loa_position=idx).first()
+            loa_str = 'loa_{0}'.format(idx)
+            cell_ctx['loa_idx'] = idx
+            if cell:
+                cell_ctx['description_text'] = cell.description_text
+                cell_ctx['feedback_text'] = cell.feedback_text
+            else:
+                cell_ctx['description_text'] = ''
+                cell_ctx['feedback_text'] = ''
 
-        cels = RubricCell.objects.filter(action=action, column=criterion)
-        for cel in cels:
-            rubric_row[cel.category] = (
-                cel.descriptino_text,
-                cel.feedback_text)
+            rubric_row[loa_str] = render_to_string(
+                'action/includes/partial_rubriccell.html',
+                cell_ctx
+            )
         table_data.append(rubric_row)
 
     context['rubric_table'] = RubricTable(
         table_data,
+        orderable=False,
         extra_columns=extra_columns)
 
 
@@ -148,6 +161,33 @@ def edit_action_rubric(
     # Get the filter or None
     filter_condition = action.get_filter()
 
+    criteria = action.column_condition_pair.all()
+
+    if not _verify_criteria_loas(criteria):
+        messages.error(
+            request,
+            _('Inconsistent LOA in rubric criteria')
+        )
+        return redirect(reverse('action:index'))
+
+    columns_to_insert_qs = action.workflow.columns.exclude(
+            column_condition_pair__action=action,
+        ).exclude(
+            is_key=True,
+        ).distinct().order_by('position')
+    if criteria:
+        columns_to_insert = [
+            column
+            for column in columns_to_insert_qs
+            if set(column.categories) == set(criteria[0].column.categories)
+        ]
+    else:
+        columns_to_insert = [
+            column
+            for column in columns_to_insert_qs
+            if column.categories == []
+        ]
+
     # This is a GET request or a faulty POST request
     context = {
         'form': form,
@@ -172,30 +212,141 @@ def edit_action_rubric(
         'rows_all_false': action.get_row_all_false_count(),
         'total_rows': action.workflow.nrows,
         'all_false_conditions': False,
-        'columns_to_insert': action.workflow.columns.exclude(
-            column_condition_pair__action=action,
-        ).exclude(
-            is_key=True,
-        ).exclude(
-            categories=[]
-        ).distinct().order_by('position'),
-    }
-
-    criteria = [
-        ccp.column
-        for ccp in action.column_condition_pair.all()
-        if ccp.action == action]
-
-    if not _verify_criteria_loas(criteria):
-        messages.error(
-            request,
-            _('Inconsistent LOA in rubric criteria')
-        )
-        return JsonResponse({'html_redirect': reverse('action:index')})
+        'columns_to_insert': columns_to_insert}
 
     # Get additional context to render the page depending on the action type
     if criteria:
-        _update_rubric_context(request, action, criteria, context)
+        _create_rubric_table(request, action, criteria, context)
 
     # Return the same form in the same page
     return render(request, 'action/edit_rubric.html', context=context)
+
+
+@user_passes_test(is_instructor)
+@ajax_required
+@get_action(pf_related=['columns'])
+def edit_rubric_cell(
+    request: HttpRequest,
+    pk: int,
+    cid: int,
+    loa_pos: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> JsonResponse:
+    """Edit a cell in a rubric.
+
+    :param request:
+
+    :param pk: Action ID
+
+    :param cid: Column id
+
+    :param loa_pos: Level of attainment position in the column categories
+
+    :return: JSON Response
+    """
+    form = RubricCellForm(
+        request.POST or None,
+        instance=action.rubric_cells.filter(
+            column=cid,
+            loa_position=loa_pos).first())
+
+    if request.method == 'POST' and form.is_valid():
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+
+        cell = form.save(commit=False)
+        if cell.id is None:
+            # New cell in the rubric
+            cell.action = action
+            cell.column = action.workflow.columns.get(pk=cid)
+            cell.loa_position = loa_pos
+        cell.save()
+
+        # Log the event
+        Log.objects.register(
+            request.user,
+            Log.ACTION_RUBRIC_CELL_EDIT,
+            workflow,
+            {
+                'workflow_id': workflow.id,
+                'workflow': workflow.name,
+                'action_id': cell.action.id,
+                'action': cell.action.name,
+                'column_id': cell.column.id,
+                'column': cell.column.name,
+                'loa_position': loa_pos,
+                'description': cell.description_text,
+                'feedback': cell.feedback_text})
+        # Done processing the correct POST request
+        return JsonResponse({'html_redirect': ''})
+
+    return JsonResponse({
+        'html_form': render_to_string(
+            'action/includes/partial_rubriccell_edit.html',
+            {'form': form,
+             'pk': pk,
+             'cid': cid,
+             'loa_pos': loa_pos},
+            request=request)})
+
+@user_passes_test(is_instructor)
+@ajax_required
+@get_action(pf_related=['columns'])
+def edit_rubric_loas(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> JsonResponse:
+    """Edit a cell in a rubric.
+
+    :param request:
+
+    :param pk: Action ID
+
+    :return: JSON Response
+    """
+    form = RubricLOAForm(
+        request.POST or None,
+        criteria=[acc.column for acc in action.column_condition_pair.all()])
+
+    if request.method == 'POST' and form.is_valid():
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+
+        loas = [
+            loa.strip()
+            for loa in form.cleaned_data['levels_of_attainment'].split(',')]
+
+        # Update all columns
+        try:
+            with transaction.atomic():
+                for acc in action.column_condition_pair.all():
+                    acc.column.set_categories(loas, True)
+                    acc.column.save()
+        except Exception as exc:
+            messages.error(
+                request,
+                _('Incorrect level of attainment values ({0}).').format(
+                    str(exc)))
+
+        # Log the event
+        Log.objects.register(
+            request.user,
+            Log.ACTION_RUBRIC_CELL_EDIT,
+            workflow,
+            {
+                'workflow_id': workflow.id,
+                'workflow': workflow.name,
+                'action_id': action.id,
+                'action': action.name,
+                'new_loas': loas})
+        # Done processing the correct POST request
+        return JsonResponse({'html_redirect': ''})
+
+    return JsonResponse({
+        'html_form': render_to_string(
+            'action/includes/partial_rubric_loas_edit.html',
+            {'form': form, 'pk': pk},
+            request=request)})

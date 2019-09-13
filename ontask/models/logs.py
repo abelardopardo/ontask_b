@@ -51,26 +51,30 @@ class Log(models.Model):
     WORKFLOW_UPDATE_LUSERS = 'workflow_update_lusers'
     WORKFLOW_STAR = 'workflow_star'
     COLUMN_ADD = 'column_add'
-    QUESTION_ADD = 'question_add'
-    CRITERION_ADD = 'criterion_add'
     COLUMN_ADD_FORMULA = 'column_add_formula'
     COLUMN_ADD_RANDOM = 'column_add_random'
     COLUMN_RENAME = 'column_rename'
     COLUMN_DELETE = 'column_delete'
     COLUMN_CLONE = 'column_clone'
     COLUMN_RESTRICT = 'column_restrict'
+    ACTION_CANVAS_EMAIL_SENT = 'action_canvas_email_sent'
     ACTION_CREATE = 'action_create'
+    ACTION_CRITERION_CREATE = 'criterion_create'
+    ACTION_CRITERION_DELETE = 'criterion_delete'
+    ACTION_CRITERION_INSERT = 'criterion_insert'
     ACTION_UPDATE = 'action_update'
     ACTION_DELETE = 'action_delete'
     ACTION_CLONE = 'action_clone'
     ACTION_EMAIL_SENT = 'action_email_sent'
     ACTION_LIST_EMAIL_SENT = 'action_list_email_sent'
-    ACTION_CANVAS_EMAIL_SENT = 'action_canvas_email_sent'
+    ACTION_IMPORT = 'action_import'
     ACTION_EMAIL_NOTIFY = 'action_email_notify'
     ACTION_EMAIL_READ = 'action_email_read'
+    ACTION_QUESTION_ADD = 'question_add'
+    ACTION_RUBRIC_CELL_EDIT = 'action_rubriccell_edit'
+    ACTION_RUBRIC_LOA_EDIT = 'action_rubric_loa_edit'
     ACTION_SERVE_TOGGLED = 'action_serve_toggled'
     ACTION_SERVED_EXECUTE = 'action_served_execute'
-    ACTION_IMPORT = 'action_import'
     ACTION_JSON_SENT = 'action_json_sent'
     CONDITION_CREATE = 'condition_create'
     CONDITION_UPDATE = 'condition_update'
@@ -128,8 +132,10 @@ class Log(models.Model):
         (WORKFLOW_CLONE, _('Workflow cloned')),
         (WORKFLOW_UPDATE_LUSERS, _('Update list of workflow users')),
         (WORKFLOW_STAR, _('Toggle workflow star')),
-        (QUESTION_ADD, _('Question added')),
-        (CRITERION_ADD, _('Criterion added')),
+        (ACTION_QUESTION_ADD, _('Question added')),
+        (ACTION_CRITERION_CREATE, _('Criterion created')),
+        (ACTION_CRITERION_DELETE, _('Criterion deleted')),
+        (ACTION_CRITERION_INSERT, _('Criterion insert')),
         (COLUMN_ADD, _('Column added')),
         (COLUMN_ADD_FORMULA, _('Column with formula created')),
         (COLUMN_ADD_RANDOM, _('Column with random values created')),
@@ -146,6 +152,8 @@ class Log(models.Model):
         (ACTION_CANVAS_EMAIL_SENT, _('Canvas Emails sent')),
         (ACTION_EMAIL_NOTIFY, _('Notification email sent')),
         (ACTION_EMAIL_READ, _('Email read')),
+        (ACTION_RUBRIC_CELL_EDIT, _('Rubric cell edit')),
+        (ACTION_RUBRIC_LOA_EDIT, _('Rubric level of attainment edit')),
         (ACTION_SERVE_TOGGLED, _('Action URL toggled')),
         (ACTION_SERVED_EXECUTE, _('Action served')),
         (ACTION_IMPORT, _('Action imported')),

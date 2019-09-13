@@ -34,7 +34,7 @@ fn_distributor = {
     Action.PERSONALIZED_TEXT: run_email_action,
     Action.PERSONALIZED_CANVAS_EMAIL: run_canvas_email_action,
     Action.PERSONALIZED_JSON: run_json_action,
-    Action.RUBRIC_TEXT: None,
+    Action.RUBRIC_TEXT: run_email_action,
     Action.SURVEY: run_survey_action,
     Action.SEND_LIST: run_send_list_action,
     Action.SEND_LIST_JSON: run_json_list_action,
@@ -57,6 +57,8 @@ def run_action(
 
     :param request: HttpRequest
     :param pk: Action id. It is assumed to be an action In
+    :param workflow: Workflow object to be assigned by the decorators
+    :param action: Action object to be assigned by the decorators
     :return: HttpResponse
     """
     if not celery_is_up():

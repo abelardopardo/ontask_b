@@ -47,6 +47,13 @@ let insertAttributeInContent = function() {
   insertText('id_text_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
+let insertRubricTextInContent = function() {
+  if (typeof $('#id_text_content').summernote != 'undefined') {
+    $("#id_text_content").summernote('createRange');
+  }
+  insertText('id_text_content', "{% ot_insert_rubric_feedback %}");
+  $(this).val(this.defaultSelected);
+}
 let insertColumnListInContent = function() {
   let val = $(this).text();
   if (val == '') {
@@ -196,6 +203,9 @@ $(function () {
   $("#insert-elements-in-editor").on("click", ".js-insert-condition-name", insertConditionInContent);
   // Insert attribute in content
   $("#insert-elements-in-editor").on("click", ".js-insert-attribute-name", insertAttributeInContent);
+  // Insert rubric feedback text in content
+  $("#insert-elements-in-editor").on("click", ".js-insert-rubric-text", insertRubricTextInContent);
+
 
   // Insert columns in action in
   $("#insert-questions").on("click", ".js-insert-question", assignColumn);
@@ -232,6 +242,7 @@ $(function () {
 
   // Column Add
   $("#edit-survey-tab-content").on("click", ".js-workflow-question-add", loadForm);
+  $("#insert-criterion").on("click", ".js-workflow-criterion-insert", assignColumn);
   $("#insert-criterion").on("click", ".js-workflow-criterion-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-question-add-form", saveForm);
   $("#modal-item").on("submit", ".js-workflow-criterion-add-form", saveForm);
@@ -242,13 +253,18 @@ $(function () {
     loadForm);
   $("#modal-item").on("submit", ".js-question-edit-form", saveForm);
 
-  // Criteria edit
+  // Rubric operations
   $("#rubric").on("click", ".js-criterion-edit", loadForm);
+  $("#modal-item").on("submit", ".js-criterion-edit-form", saveForm);
+  $("#rubric").on("click", ".js-criterion-remove", loadForm);
+  $("#modal-item").on("submit", ".js-criterion-remove-form", saveForm);
+  $("#rubric").on("click", ".js-rubric-cell-edit", loadForm);
+  $("#modal-item").on("submit", ".js-rubriccell-create-form", saveForm);
+  $("#rubric").on("click", ".js-rubric-loas-edit", loadForm);
+  $("#modal-item").on("submit", ".js-rubric-loas-edit-form", saveForm);
 
   // Delete column
   $("#column-selected-table").on("click", ".js-column-delete", loadForm);
-  $("#rubric").on("click", ".js-column-delete", loadForm);
-  $("#modal-item").on("submit", ".js-column-delete-form", saveForm);
 
   // Clone column
   $("#column-selected-table").on("click", ".js-column-clone", loadForm);

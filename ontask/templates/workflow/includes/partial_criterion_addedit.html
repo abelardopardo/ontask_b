@@ -3,10 +3,10 @@
 {% load widget_tweaks %}
 <form method="post" 
   {% if add %}
-    action="{% url 'workflow:criterion_add' action_id %}"
+    action="{% url 'workflow:criterion_create' action_id %}"
     class="js-workflow-criterion-add-form">
   {% else %}
-    action="{% url 'workflow:criterion_edit' action_id pk %}"
+    action="{% url 'workflow:criterion_edit' pk %}"
     class="js-criterion-edit-form">
   {% endif %}
   {% csrf_token %}

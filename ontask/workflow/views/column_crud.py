@@ -196,7 +196,7 @@ def column_add(
 
         # Log the event
         if is_question:
-            event_type = Log.QUESTION_ADD
+            event_type = Log.ACTION_QUESTION_ADD
         else:
             event_type = Log.COLUMN_ADD
         Log.objects.register(
@@ -557,7 +557,7 @@ def column_edit(
 
         # Log the event
         if is_question:
-            event_type = Log.QUESTION_ADD
+            event_type = Log.ACTION_QUESTION_ADD
         else:
             event_type = Log.COLUMN_ADD
         Log.objects.register(

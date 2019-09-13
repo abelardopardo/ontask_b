@@ -23,7 +23,7 @@ from django.utils.translation import ugettext_lazy as _
 import ontask.settings
 from ontask import is_legal_name
 from ontask.core.forms import RestrictedFileField
-from ontask.models import Action, Condition
+from ontask.models import Action, Condition, RubricCell
 from ontask.models.const import CHAR_FIELD_MID_SIZE
 
 SUFFIX_LENGTH = 512
@@ -219,5 +219,50 @@ class ActionImportForm(forms.Form):
             self.add_error(
                 'name',
                 _('An action with this name already exists'))
+
+        return form_data
+
+
+class RubricCellForm(forms.ModelForm):
+    """Edit the content of a RubricCellForm."""
+
+    class Meta:
+        """Select Action and the two fields."""
+
+        model = RubricCell
+        fields = ('description_text', 'feedback_text')
+
+
+class RubricLOAForm(forms.Form):
+    """Edit the levels of attainment of a rubric."""
+
+    levels_of_attainment = forms.CharField(
+        strip=True,
+        required=True,
+        label=_('Comma separated list of levels of attainment'))
+
+    def __init__(self, *args, **kwargs):
+        """Store the criteria."""
+        self.criteria = kwargs.pop('criteria')
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['levels_of_attainment'].initial = ', '.join(
+            self.criteria[0].categories)
+
+    def clean(self):
+        """Check that the number of LOAs didn't change."""
+        form_data = super().clean()
+
+        current_n_loas = [
+            loa
+            for loa in form_data['levels_of_attainment'].split(',')
+            if loa]
+
+        if len(current_n_loas) != len(self.criteria[0].categories):
+            self.add_error(
+                'levels_of_attainment',
+                _('The number of levels cannot change.')
+            )
 
         return form_data

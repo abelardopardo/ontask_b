@@ -42,18 +42,15 @@
         "search": {
           "caseInsensitive": true,
         },
-        stateSave: true,
-        stateSaveParams: function (settings, data) {
+        "stateSave": true,
+        "stateSaveParams": function (settings, data) {
           delete data.search;
         },
         "language": {
           "url": location.protocol + getLanguage()
         },
-        "columnDefs": [
-          {"searchable": false, "targets": "_all"},
-        ],
-        colReorder: false,
-        rowReorder: false,
+        "colReorder": false,
+        "rowReorder": false,
       });
     });
   </script>

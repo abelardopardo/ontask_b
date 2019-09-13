@@ -15,7 +15,7 @@ from ontask.action.views import (
     run_survey_ss, run_zip_done, select_column_action,
     select_condition_for_question, serve_action, show_timeline, showurl,
     shuffle_questions, survey_thanks, unselect_column_action, zip_action,
-    serve_action_lti
+    serve_action_lti, edit_rubric_cell, edit_rubric_loas
 )
 
 app_name = 'action'
@@ -131,6 +131,16 @@ urlpatterns = [
         '<int:tpk>/select_condition/',
         select_condition_for_question,
         name='edit_in_select_condition'),
+
+    # Rubric URLs
+    path(
+        '<int:pk>/<int:cid>/<int:loa_pos>/rubriccell_edit',
+        edit_rubric_cell,
+        name='rubriccell_edit'),
+    path(
+        '<int:pk>/rubric_loas_edit',
+        edit_rubric_loas,
+        name='rubric_loas_edit'),
 
     #
     # RUN SURVEY

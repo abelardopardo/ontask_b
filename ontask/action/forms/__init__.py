@@ -5,6 +5,7 @@
 from ontask.action.forms.crud import (
     FIELD_PREFIX, SUFFIX_LENGTH, ActionDescriptionForm, ActionForm,
     ActionImportForm, ActionUpdateForm, ConditionForm, FilterForm,
+    RubricCellForm, RubricLOAForm
 )
 from ontask.action.forms.edit import (
     EditActionOutForm, EnterActionIn, column_to_field,

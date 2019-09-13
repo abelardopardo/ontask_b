@@ -18,7 +18,9 @@ from ontask.action.views.edit_survey import (
     edit_action_in, edit_description, select_column_action,
     select_condition_for_question, shuffle_questions, unselect_column_action,
 )
-from ontask.action.views.edit_rubric import edit_action_rubric
+from ontask.action.views.edit_rubric import (
+    edit_action_rubric, edit_rubric_cell, edit_rubric_loas
+)
 from ontask.action.views.import_export import (
     action_import, export_ask, export_done, export_download,
 )

@@ -22,8 +22,7 @@ class RubricCell(models.Model):
 
     - A reference to a column (the criteria)
 
-    - A text category (which must be one of the possible values allowed in the
-      column category) which is the level of attainment.
+    - A integer with the position of the level of attainment in the column
 
     - A description text (to define the level of attainment)
 
@@ -48,27 +47,25 @@ class RubricCell(models.Model):
         blank=False,
         related_name='rubric_cells')
 
-    category = models.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+    # Position of the level of attainment
+    loa_position = models.IntegerField(
+        verbose_name=_('level of attainment'),
         null=False,
-        blank=False,
-        verbose_name=_('level of attainment'))
+        blank=False)
 
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
+    description_text = models.TextField(
         default='',
         blank=True,
         verbose_name=_('description'))
 
-    feedback_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
+    feedback_text = models.TextField(
         default='',
         blank=True,
         verbose_name=_('feedback'))
 
     def __str__(self):
         """Render string."""
-        return self.name
+        return self.column.name
 
     class Meta:
         """Define unique criteria and ordering.
@@ -78,5 +75,5 @@ class RubricCell(models.Model):
         name (no need to restrict it)
         """
 
-        unique_together = ('action', 'column', 'category')
+        unique_together = ('action', 'column', 'loa_position')
         ordering = ['column__position']

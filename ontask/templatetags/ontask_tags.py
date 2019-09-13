@@ -6,6 +6,7 @@ import json
 
 from django import template
 from django.conf import settings
+from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -145,3 +146,26 @@ def ot_insert_column_list(context, column_name):
         return mark_safe(json.dumps(column_values))
 
     return ', '.join(column_values)
+
+@register.simple_tag(takes_context=True)
+def ot_insert_rubric_feedback(context):
+    """Insert in the text the rubric feedback."""
+    action = context['ONTASK_ACTION_CONTEXT_VARIABLE___']
+    criteria = [acc.column for acc in action.column_condition_pair.all()]
+    cells = action.rubric_cells.all()
+    text_sources = []
+
+    for criterion in criteria:
+        if not context.get(criterion.name):
+            # Skip criteria with no values
+            continue
+
+        value_idx = criterion.categories.index(context[criterion.name])
+        cell = cells.filter(column=criterion, loa_position=value_idx).first()
+        if not cell:
+            continue
+        text_sources.append([criterion.name, cell.feedback_text])
+
+    return render_to_string(
+        'action/includes/partial_rubric_message.html',
+        context={'text_sources': text_sources})

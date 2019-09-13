@@ -23,7 +23,7 @@
           "caseInsensitive": true,
         },
         "stateSave": true,
-        stateSaveParams: function (settings, data) {
+        "stateSaveParams": function (settings, data) {
           delete data.search;
         },
         "language": {
@@ -34,8 +34,8 @@
           {"orderable": false, "targets": 4},
           {"searchable": false, "targets": 4},
         ],
-        colReorder: false,
-        rowReorder: false,
+        "colReorder": false,
+        "rowReorder": false,
       });
       action_table.columns().iterator('column', function (ctx, idx) {
         $(action_table.column(idx).header()).append('<span class="sort-icon"/>');

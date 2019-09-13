@@ -251,7 +251,7 @@ class CriterionForm(ColumnBasicForm):
     """Form to add a question."""
 
     def __init__(self, *args, **kwargs):
-        """Adjust fieldss."""
+        """Adjust fields."""
         self.other_criterion = kwargs.pop('other_criterion')
         if self.other_criterion:
             self.other_criterion = self.other_criterion.column
@@ -261,16 +261,15 @@ class CriterionForm(ColumnBasicForm):
         self.fields['name'].label = _('Criterion name')
         self.fields['description_text'].label = _(
             'Criterion Description')
-        self.fields['raw_categories'].label = _(
-            'Comma-separated list of levels of attainment')
 
         if self.other_criterion:
             # Set and hide fields that have been defined.
-            self.fields['raw_categories'].initial = \
-                self.other_criterion.categories
             self.fields['raw_categories'].widget = forms.HiddenInput()
             self.fields['data_type'].initial = self.other_criterion.data_type
             self.fields['data_type'].widget = forms.HiddenInput()
+        else:
+            self.fields['raw_categories'].label = _(
+                'Comma-separated list of levels of attainment')
 
     def clean(self):
         """Validate the position field."""
@@ -281,9 +280,10 @@ class CriterionForm(ColumnBasicForm):
         if form_data['position'] < 1 or form_data['position'] > ncols:
             form_data['position'] = ncols + 1
 
-        # Prevent categories being empty
-
-        if not form_data['raw_categories']:
+        # Transfer categories from other column, or prevent being empty
+        if self.other_criterion:
+            self.instance.categories = self.other_criterion.categories
+        elif not form_data['raw_categories']:
             self.add_error(
                 'raw_categories',
                 _('The criterion needs a non-empty set of values')

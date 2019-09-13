@@ -8,14 +8,17 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
-from ontask.core.decorators import ajax_required, get_action, get_column
+from ontask.core.decorators import (
+    ajax_required, get_action, get_workflow,
+)
 from ontask.core.permissions import is_instructor
 from ontask.dataops.pandas import rename_df_column
 from ontask.dataops.sql import add_column_to_db, db_rename_column
 from ontask.models import (
     Action, ActionColumnConditionTuple, Log, Workflow,
-    Column,
 )
 from ontask.workflow.forms import CriterionForm
 
@@ -23,7 +26,7 @@ from ontask.workflow.forms import CriterionForm
 @user_passes_test(is_instructor)
 @ajax_required
 @get_action(pf_related=['columns'])
-def criterion_add(
+def criterion_create(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
@@ -115,7 +118,7 @@ def criterion_add(
         # Log the event
         Log.objects.register(
             request.user,
-            Log.CRITERION_ADD,
+            Log.ACTION_CRITERION_ADD,
             workflow,
             {
                 'id': workflow.id,
@@ -139,25 +142,30 @@ def criterion_add(
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_action(pf_related=['columns'])
+@get_workflow(pf_related=['columns'])
 def criterion_edit(
     request: HttpRequest,
     pk: int,
-    cid: int,
     workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
 ) -> JsonResponse:
     """Edit a criterion in a rubric.
 
     :param request:
 
-    :param pk: For the action object
-
-    :param cid: Column ID
+    :param pk: For the Action/Column/condition triplet
 
     :return: JSON Response
     """
-    column = action.workflow.columns.get(pk=cid)
+    triplet = ActionColumnConditionTuple.objects.filter(pk=pk).first()
+    if not triplet:
+        messages.error(
+            request,
+            _('Incorrect invocation of criterion edit function')
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    action = triplet.action
+    column = triplet.column
     form = CriterionForm(
         request.POST or None,
         workflow=workflow,
@@ -204,12 +212,15 @@ def criterion_edit(
         # Log the event
         Log.objects.register(
             request.user,
-            Log.CRITERION_ADD,
+            Log.ACTION_CRITERION_ADD,
             workflow,
             {
                 'id': workflow.id,
                 'name': workflow.name,
-                'column_name': column.name})
+                'action_id': action.id,
+                'action_name': action.name,
+                'column_name': column.name,
+                'column_type': column.data_type})
 
         # Done processing the correct POST request
         return JsonResponse({'html_redirect': ''})
@@ -222,3 +233,101 @@ def criterion_edit(
              'pk': pk},
             request=request),
     })
+
+
+@user_passes_test(is_instructor)
+@ajax_required
+@get_workflow(pf_related=['columns'])
+def criterion_remove(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
+    """Remove the criterion from the rubric. Does not remove the column.
+
+    :param request:
+
+    :param pk: For the Action/Column/condition triplet
+
+    :return: JSON Response
+    """
+    triplet = ActionColumnConditionTuple.objects.filter(pk=pk).first()
+    if not triplet:
+        messages.error(
+            request,
+            _('Incorrect invocation of criterion delete function')
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    if request.method == 'POST':
+
+        # Log the event
+        Log.objects.register(
+            request.user,
+            Log.COLUMN_DELETE,
+            workflow,
+            {
+                'id': workflow.id,
+                'name': workflow.name,
+                'action_id': triplet.action.id,
+                'action_name': triplet.action.name,
+                'column_name': triplet.column.name,
+                'column_type': triplet.column.data_type})
+        triplet.delete()
+
+        return JsonResponse({'html_redirect': ''})
+
+    return JsonResponse({
+        'html_form': render_to_string(
+            'workflow/includes/partial_criterion_remove.html',
+            {'pk': pk, 'cname': triplet.column.name},
+            request=request)})
+
+@user_passes_test(is_instructor)
+@csrf_exempt
+@ajax_required
+@require_http_methods(['POST'])
+@get_action(pf_related=['columns', 'actions'])
+def criterion_insert(
+    request: HttpRequest,
+    pk: int,
+    cpk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> JsonResponse:
+    """Operation to add a column to action in.
+
+    :param request: Request object
+
+    :param pk: Action PK
+
+    :param cpk: column PK.
+
+    :param key: The columns is a key column
+
+    :return: JSON response
+    """
+    criteria = action.column_condition_pair.filter(action_id=pk)
+    column = workflow.columns.filter(pk=cpk).first()
+    if not column or criteria.filter(column=column).exists():
+        messages.error(
+            request,
+            _('Incorrect invocation of criterion insert operation.')
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    if set(column.categories) != set(criteria[0].column.categories):
+        messages.error(
+            request,
+            _('Criterion does not have the correct levels of attainment')
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    ActionColumnConditionTuple.objects.create(
+        action=action,
+        column=column,
+        condition=None)
+
+    # Refresh the page to show the column in the list.
+    return JsonResponse({'html_redirect': ''})
+

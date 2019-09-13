@@ -68,7 +68,14 @@ urlpatterns = [
     # Column manipulation
     path('column_add/', views.column_add, name='column_add'),
     path('<int:pk>/question_add/', views.column_add, name='question_add'),
-    path('<int:pk>/criterion_add/', views.criterion_add, name='criterion_add'),
+    path(
+        '<int:pk>/criterion_create/',
+        views.criterion_create,
+        name='criterion_create'),
+    path(
+        '<int:pk>/criterion_remove',
+        views.criterion_remove,
+        name='criterion_remove'),
 
     path(
         'formula_column_add',
@@ -88,9 +95,13 @@ urlpatterns = [
         views.column_edit,
         name='question_edit'),
     path(
-        '<int:pk>/<int:cid>/criterion_edit/',
+        '<int:pk>/criterion_edit/',
         views.criterion_edit,
         name='criterion_edit'),
+    path(
+        '<int:pk>/<int:cpk>/criterion_insert/',
+        views.criterion_insert,
+        name='criterion_insert'),
     path(
         '<int:pk>/column_clone/',
         views.column_clone,
