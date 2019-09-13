@@ -189,9 +189,9 @@ def edit_action_in(
 def select_column_action(
     request: HttpRequest,
     pk: int,
+    cpk: Optional[int] = -1,
     workflow: Optional[Workflow] = None,
     action: Optional[Action] = None,
-    cpk: Optional[int] = -1,
     key: Optional[bool] = None,
 ) -> JsonResponse:
     """Operation to add a column to action in.
