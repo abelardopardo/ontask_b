@@ -62,10 +62,6 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
         super().__init__(*args, **kwargs)
         self.workflow = None
 
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     def parse_data_frames(self):
         # Parse the two CSV strings and return as data frames
 

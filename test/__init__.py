@@ -122,7 +122,7 @@ class OnTaskTestCase(TransactionTestCase):
     user_pwd = None
     workflow_name = None
     workflow = None
-    
+
     fixtures = []
     filename = None
 
