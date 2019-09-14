@@ -8,5 +8,5 @@ from ontask.action.evaluate.action import (
 )
 from ontask.action.evaluate.template import (
     action_context_var, render_action_template, tr_item,
-    viz_number_context_var,
+    viz_number_context_var, render_rubric_criteria
 )

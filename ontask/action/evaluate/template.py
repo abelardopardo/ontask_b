@@ -5,7 +5,7 @@
 import re
 import string
 from builtins import map, str
-from typing import Mapping
+from typing import Mapping, Tuple, List
 
 from django.template import Context, Template
 from django.utils.html import escape
@@ -113,7 +113,7 @@ def _change_vname(match) -> str:
 
 
 def _translate(varname: str) -> str:
-    """Apply several translations to the value of a variable.
+    """Apply several translations to a variable name.
 
     Function that given a string representing a variable name applies a
     translation to each of the non alphanumeric characters in that name.
@@ -156,6 +156,26 @@ def _clean_whitespace(template_text: str) -> str:
         template_text = rexp.sub(replace, template_text)
 
     return template_text
+
+
+def render_rubric_criteria(action: Action, context) -> List[Tuple[str, str]]:
+    criteria = [acc.column for acc in action.column_condition_pair.all()]
+    cells = action.rubric_cells.all()
+    text_sources = []
+
+    for criterion in criteria:
+        c_value = context.get(_translate(escape(criterion.name)))
+        if not c_value:
+            # Skip criteria with no values
+            continue
+
+        value_idx = criterion.categories.index(c_value)
+        cell = cells.filter(column=criterion, loa_position=value_idx).first()
+        if not cell:
+            continue
+        text_sources.append([criterion.name, cell.feedback_text])
+
+    return text_sources
 
 
 def render_action_template(

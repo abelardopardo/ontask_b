@@ -13,6 +13,7 @@ from django.utils.safestring import mark_safe
 import ontask
 from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import Action
+from ontask.action.evaluate import render_rubric_criteria
 
 register = template.Library()
 
@@ -150,22 +151,8 @@ def ot_insert_column_list(context, column_name):
 @register.simple_tag(takes_context=True)
 def ot_insert_rubric_feedback(context):
     """Insert in the text the rubric feedback."""
-    action = context['ONTASK_ACTION_CONTEXT_VARIABLE___']
-    criteria = [acc.column for acc in action.column_condition_pair.all()]
-    cells = action.rubric_cells.all()
-    text_sources = []
-
-    for criterion in criteria:
-        if not context.get(criterion.name):
-            # Skip criteria with no values
-            continue
-
-        value_idx = criterion.categories.index(context[criterion.name])
-        cell = cells.filter(column=criterion, loa_position=value_idx).first()
-        if not cell:
-            continue
-        text_sources.append([criterion.name, cell.feedback_text])
-
     return render_to_string(
         'action/includes/partial_rubric_message.html',
-        context={'text_sources': text_sources})
+        context={
+            'text_sources': render_rubric_criteria(
+                context['ONTASK_ACTION_CONTEXT_VARIABLE___'], context)})
