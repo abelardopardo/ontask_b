@@ -103,7 +103,7 @@ def edit_action_out(
         text_content = form.cleaned_data.get('text_content')
 
         # Render the content as a template and catch potential problems.
-        if _text_renders_correctly(text_content, action, form):
+        if text_renders_correctly(text_content, action, form):
             # Log the event
             Log.objects.register(
                 request.user,
