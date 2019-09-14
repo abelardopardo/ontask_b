@@ -121,6 +121,7 @@ class OnTaskTestCase(TransactionTestCase):
     user_email = None
     user_pwd = None
     workflow_name = None
+    workflow = None
 
     fixtures = []
     filename = None

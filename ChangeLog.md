@@ -12,6 +12,16 @@
 
 - Scheduled executions are now properly reflected in the last_executed (Issue #157)
 
+## 6.0.1 (2019-09-14)
+
+### Fixed
+
+- Error when inserting random and formula columns
+
+### Changed
+
+- Updated Chinese localization
+
 ## 6.0 (2019-09-06)
 
 ### Added
