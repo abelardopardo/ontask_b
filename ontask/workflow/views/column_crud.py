@@ -320,7 +320,11 @@ def formula_column_add(
             messages.error(
                 request,
                 _('Unable to clone column: {0}').format(str(exc)))
+            column.delete()
             return JsonResponse({'html_redirect': ''})
+
+        workflow.ncols = workflow.columns.count()
+        workflow.save()
 
         # Log the event
         Log.objects.register(
@@ -464,7 +468,11 @@ def random_column_add(
             messages.error(
                 request,
                 _('Unable to add the column: {0}').format(str(exc)))
+            column.delete()
             return JsonResponse({'html_redirect': ''})
+
+        workflow.ncols = workflow.columns.count()
+        workflow.save()
 
         # Log the event
         Log.objects.register(
