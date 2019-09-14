@@ -158,7 +158,8 @@ def _clean_whitespace(template_text: str) -> str:
     return template_text
 
 
-def render_rubric_criteria(action: Action, context) -> List[Tuple[str, str]]:
+def render_rubric_criteria(action: Action, context) -> List[List]:
+    """Calculate the list of elements [criteria, feedback] for action."""
     criteria = [acc.column for acc in action.column_condition_pair.all()]
     cells = action.rubric_cells.all()
     text_sources = []
