@@ -11,9 +11,9 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 import ontask
+from ontask.action.evaluate import render_rubric_criteria
 from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import Action
-from ontask.action.evaluate import render_rubric_criteria
 
 register = template.Library()
 
@@ -51,12 +51,15 @@ datatables_bootstrap_js = \
 #
 datetimepicker_css = \
     """<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" type="text/css" media="all" rel="stylesheet">
-    <link href="{0}bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">""".format(settings.STATIC_URL)
+    <link href="{0}bootstrap_datepicker_plus/css/datepicker-widget.css" type="text/css" media="all" rel="stylesheet">""".format(
+        settings.STATIC_URL)
 
 datetimepicker_js = \
-    '<script type="text/javascript" src="{0}site/js/moment-with-locales.js"></script>'.format(settings.STATIC_URL) \
+    '<script type="text/javascript" src="{0}site/js/moment-with-locales.js"></script>'.format(
+        settings.STATIC_URL) \
     + """<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="{0}bootstrap_datepicker_plus/js/datepicker-widget.js"></script>""".format(settings.STATIC_URL)
+<script type="text/javascript" src="{0}bootstrap_datepicker_plus/js/datepicker-widget.js"></script>""".format(
+        settings.STATIC_URL)
 
 #
 # Auxiliary
@@ -67,89 +70,91 @@ shim_and_respond = \
   <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 <![endif]-->"""
 
+
 # Tag to get ontask_version
 @register.simple_tag
-def ontask_version():
+def ontask_version() -> str:
     """Return ontask version."""
     return ontask.__version__
 
 
 @register.filter
-def country(country_code):
+def country(country_code) -> str:
     """Extract the country from the given variable."""
     return country_code[0:country_code.find('-')]
 
 
 @register.simple_tag
-def ontask_jquery():
+def ontask_jquery() -> str:
     """Provide the JQuery URL."""
     return format_html(jquery)
 
 
 @register.simple_tag
-def ontask_bootstrap_css():
+def ontask_bootstrap_css() -> str:
     """Provide bootstrap CSS."""
     return format_html(bootstrap_css)
 
 
 @register.simple_tag
-def ontask_bootstrap_js():
+def ontask_bootstrap_js() -> str:
     """Provide the bootstrap JS."""
     return format_html(bootstrap_js)
 
 
 @register.simple_tag
-def ontask_shim_respond():
+def ontask_shim_respond() -> str:
     """Provide additional JS URLs."""
     return format_html(shim_and_respond)
 
 
 @register.simple_tag
-def ontask_datatables_jquery_js():
+def ontask_datatables_jquery_js() -> str:
     """Provide the datatables JQuery JS URL."""
     return format_html(datatables_jquery_js)
 
 
 @register.simple_tag
-def ontask_datatables_bootstrap_css():
+def ontask_datatables_bootstrap_css() -> str:
     """Provide the datatables bootstrap CSS URL."""
     return format_html(datatables_bootstrap_css)
 
 
 @register.simple_tag
-def ontask_datatables_bootstrap_js():
+def ontask_datatables_bootstrap_js() -> str:
     """Provide the datatables bootstrap JS URL."""
     return format_html(datatables_bootstrap_js)
 
 
 @register.simple_tag
-def ontask_datetimepicker_css():
+def ontask_datetimepicker_css() -> str:
     """Provide the datetime picker CSS URL."""
     return format_html(datetimepicker_css)
 
 
 @register.simple_tag
-def ontask_datetimepicker_js():
+def ontask_datetimepicker_js() -> str:
     """Provide the datetime picker JS URL."""
     return format_html(datetimepicker_js)
 
 
 @register.simple_tag(takes_context=True)
-def ot_insert_column_list(context, column_name):
+def ot_insert_column_list(context, column_name) -> str:
     """Insert in the text a column list."""
     action = context['ONTASK_ACTION_CONTEXT_VARIABLE___']
     column_values = [
         str(citem[0]) for citem in get_rows(
-        action.workflow.get_data_frame_table_name(),
-        column_names=[column_name],
-        filter_formula=action.get_filter_formula())]
+            action.workflow.get_data_frame_table_name(),
+            column_names=[column_name],
+            filter_formula=action.get_filter_formula())]
     if action.action_type == Action.SEND_LIST_JSON:
         return mark_safe(json.dumps(column_values))
 
     return ', '.join(column_values)
 
+
 @register.simple_tag(takes_context=True)
-def ot_insert_rubric_feedback(context):
+def ot_insert_rubric_feedback(context) -> str:
     """Insert in the text the rubric feedback."""
     return render_to_string(
         'action/includes/partial_rubric_message.html',
