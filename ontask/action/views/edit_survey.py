@@ -139,7 +139,7 @@ def edit_action_in(
         'key_columns': all_columns.filter(is_key=True),
         'columns_show_stat': all_columns.filter(is_key=False),
         'key_selected': tuples.filter(column__is_key=True).first(),
-        'has_no_key': tuples.filter(column__is_key=False).exists(),
+        'not_has_no_key': not tuples.filter(column__is_key=False).exists(),
         'any_empty_description': tuples.filter(
             column__description_text='',
             column__is_key=False,
