@@ -4,6 +4,9 @@ import gzip
 import os
 import shutil
 import tempfile
+
+from rest_framework import status
+
 import test
 from test.compare import compare_workflows
 
@@ -279,3 +282,31 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
                 self.assertEqual(t1.column.name, t2.column.name)
                 if t1.condition:
                     self.assertEqual(t1.condition.name, t2.condition.name)
+
+
+class WorkflowDelete(test.OnTaskTestCase):
+    fixtures = ['test_merge']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'ontask',
+        'fixtures',
+        'test_merge.sql'
+    )
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    def test_delete(self):
+        """Test invokation of delete table"""
+        # Get the workflow first
+        self.workflow = Workflow.objects.all().first()
+
+        # JSON POST request for workflow delete
+        resp = self.get_response(
+            'workflow:delete',
+            method='POST',
+            url_params={'wid': self.workflow.id},
+            is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertTrue(Workflow.objects.count() == 0)
+        self.workflow = None

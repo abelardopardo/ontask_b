@@ -62,10 +62,6 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
         super().__init__(*args, **kwargs)
         self.workflow = None
 
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     def parse_data_frames(self):
         # Parse the two CSV strings and return as data frames
 
@@ -85,8 +81,8 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
             0)
         store_table(df_src, 'TEMPORARY_TABLE')
         df_src = load_table('TEMPORARY_TABLE')
-
         # Fix the merge_info fields.
+
         self.merge_info['initial_column_names'] = list(df_src.columns)
         self.merge_info['rename_column_names'] = list(df_src.columns)
         self.merge_info['columns_to_upload'] = list(df_src.columns)

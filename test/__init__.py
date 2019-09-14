@@ -36,6 +36,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from ontask.action.payloads import set_action_payload
 from ontask.core.permissions import group_names
 from ontask.dataops.pandas import destroy_db_engine
+from ontask.dataops.pandas import check_wf_df
 from ontask.models import Action, Workflow
 
 standard_library.install_aliases()
@@ -120,6 +121,7 @@ class OnTaskTestCase(TransactionTestCase):
     user_email = None
     user_pwd = None
     workflow_name = None
+    workflow = None
 
     fixtures = []
     filename = None
@@ -154,6 +156,12 @@ class OnTaskTestCase(TransactionTestCase):
             self.client.login(email=self.user_email, password=self.user_pwd)
         if self.workflow_name:
             self.workflow = Workflow.objects.get(name=self.workflow_name)
+
+    def tearDown(self) -> None:
+        if self.workflow:
+            self.workflow.refresh_from_db()
+            check_wf_df(self.workflow)
+        super().tearDown()
 
     def add_middleware(self, request: HttpRequest) -> HttpRequest:
         request.user = self.user

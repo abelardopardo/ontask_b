@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-04 18:12+0930\n"
-"PO-Revision-Date: 2019-05-25 12:45+0800\n"
+"PO-Revision-Date: 2019-09-14 19:37+0930\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh\n"
@@ -16,15 +16,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: ontask/__init__.py:35
 msgid "Personalized text"
 msgstr "个性化文本"
 
 #: ontask/__init__.py:36
-#, fuzzy
-#| msgid "Personalized text"
 msgid "Personalized Canvas Email"
 msgstr "个性化的Canvas邮件"
 
@@ -37,40 +35,32 @@ msgid "Personalized JSON"
 msgstr "个性化的JSON"
 
 #: ontask/__init__.py:39
-#, fuzzy
-#| msgid "Send"
 msgid "Send List"
-msgstr "发送"
+msgstr "发送列表"
 
 #: ontask/__init__.py:40
-#, fuzzy
-#| msgid "Send personalised JSONs"
 msgid "Send List as JSON"
-msgstr "发送个性化JSONs"
+msgstr "通过JSON形式发送列表"
 
 #: ontask/__init__.py:41
 msgid "TODO List"
 msgstr "待办事件列表"
 
 #: ontask/__init__.py:71
-#, fuzzy
-#| msgid "The symbol ' cannot be used in the column name."
 msgid "The symbol ' cannot be used in the name."
-msgstr "' 符号不能在列名中使用。"
+msgstr "'  符号不能在名称中使用。"
 
 #: ontask/__init__.py:74
-#, fuzzy
-#| msgid "The symbol \" cannot be used in the column name."
 msgid "The symbol \" cannot be used in the name."
-msgstr "\" 符号不能在列名中使用。"
+msgstr "\"  符号不能在名称中使用。"
 
 #: ontask/__init__.py:77
 msgid "The name cannot start with \"__\""
-msgstr ""
+msgstr "名称不能以”__”符号开头"
 
 #: ontask/__init__.py:84
 msgid "Copy of "
-msgstr ""
+msgstr "副本 "
 
 #: ontask/accounts/forms.py:20
 msgid "Email address"
@@ -105,26 +95,20 @@ msgid "Name {0} is reserved."
 msgstr "名称{0}已保存。"
 
 #: ontask/action/forms/crud.py:55
-#, fuzzy
-#| msgid "There is a column already with this name"
 msgid "There is already an action with this name."
-msgstr "已存在以此命名的列"
+msgstr "已存在以此命名的操作。"
 
 #: ontask/action/forms/crud.py:148
 msgid "Name cannot be empty"
 msgstr "名称不能为空"
 
 #: ontask/action/forms/crud.py:162
-#, fuzzy
-#| msgid "There is a condition already with this name."
 msgid "There is already a condition with this name."
 msgstr "已存在以此命名的条件。"
 
 #: ontask/action/forms/crud.py:169
-#, fuzzy
-#| msgid "The workflow has an attribute with this name."
 msgid "The workflow has a column with this name."
-msgstr "工作流中含有以此命名的属性。"
+msgstr "工作流中含有以此命名的列。"
 
 #: ontask/action/forms/crud.py:176
 msgid "The workflow has an attribute with this name."
@@ -147,8 +131,6 @@ msgid "Target URL"
 msgstr "目标网址"
 
 #: ontask/action/forms/edit.py:106
-#, fuzzy
-#| msgid "URL to send the personalized JSON"
 msgid "URL to send the JSON object"
 msgstr "用来发送个性化JSON的网址"
 
@@ -166,14 +148,10 @@ msgid "Email subject"
 msgstr "邮件主题"
 
 #: ontask/action/forms/run.py:59
-#, fuzzy
-#| msgid "Comma separated list of CC emails"
 msgid "Space-separated list of CC emails"
 msgstr "抄送邮件的逗号分隔列表"
 
 #: ontask/action/forms/run.py:63
-#, fuzzy
-#| msgid "Comma separated list of BCC emails"
 msgid "Space-separated list of BCC emails"
 msgstr "密件抄送邮件的逗号分隔列表"
 
@@ -182,14 +160,10 @@ msgid "Download a snapshot of the workflow?"
 msgstr "是否下载工作流程快照?"
 
 #: ontask/action/forms/run.py:71
-#, fuzzy
-#| msgid "A zip file useful to review the emails sent."
 msgid "A zip file is useful to review the emails sent."
 msgstr "用于查看发送的电子邮件的压缩文件。"
 
 #: ontask/action/forms/run.py:109 ontask/action/forms/run.py:119
-#, fuzzy
-#| msgid "Field needs a comma-separated list of emails."
 msgid "Field needs a space-separated list of emails."
 msgstr "字段需要一个逗号分隔的电子邮件列表。"
 
@@ -217,13 +191,11 @@ msgstr "具有电子邮件地址的列含有不正确的值。"
 
 #: ontask/action/forms/run.py:231 ontask/scheduler/forms.py:299
 msgid "Recipient"
-msgstr ""
+msgstr "收信人"
 
 #: ontask/action/forms/run.py:254
-#, fuzzy
-#| msgid "Field needs a comma-separated list of emails."
 msgid "Field needs a valid email address."
-msgstr "字段需要一个逗号分隔的电子邮件列表。"
+msgstr "字段需要一个有效的电子邮件地址。"
 
 #: ontask/action/forms/run.py:265
 msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
@@ -262,8 +234,6 @@ msgid "Values to exclude"
 msgstr "排除值"
 
 #: ontask/action/forms/run.py:434
-#, fuzzy
-#| msgid "A zip file useful to review the emails sent."
 msgid "A zip file is useful to review the action."
 msgstr "用于查看发送的电子邮件的压缩文件。"
 
@@ -296,10 +266,8 @@ msgid "Check/Exclude Canvas IDs before sending?"
 msgstr "在发送前检查/排除Canvas账户？"
 
 #: ontask/action/forms/run.py:588
-#, fuzzy
-#| msgid "No data available for this workflow"
 msgid "No Canvas Service available for this action."
-msgstr "此工作流没有可用的数据"
+msgstr "此操作没有可用的Canvas服务。"
 
 #: ontask/action/forms/run.py:608
 msgid "Column to exclude objects to send (empty to skip step)"
@@ -332,14 +300,12 @@ msgid "Unable to deliver message (code {0})"
 msgstr "无法传递信息（code{0}）"
 
 #: ontask/action/send/email.py:65
-#, fuzzy, python-brace-format
-#| msgid "Syntax error detected in OnTask notification template ({0})"
+#, python-brace-format
 msgid "Syntax error in notification template ({0})"
-msgstr "在OnTask通知模板中检测到的语法错误 ({0}）"
+msgstr "通知模板({0}中包含语法错误"
 
 #: ontask/action/send/email.py:95
-#, fuzzy, python-brace-format
-#| msgid "An error occurred when sending your notification: {0}"
+#, python-brace-format
 msgid "Error when sending the notification: {0}"
 msgstr "发送通知时发生错误：{0}"
 
@@ -352,10 +318,9 @@ msgid "Invalid email address in bcc email"
 msgstr "密件抄送电子邮件中的无效电子邮件地址"
 
 #: ontask/action/send/email.py:424
-#, fuzzy, python-brace-format
-#| msgid "An error occurred when sending your notification: {0}"
+#, python-brace-format
 msgid "Error when sending the list email: {0}"
-msgstr "发送通知时发生错误：{0}"
+msgstr "发送邮件列表{0}时发生错误"
 
 #: ontask/action/serializers.py:64
 msgid "Unable to create column data"
@@ -367,8 +332,7 @@ msgid "Incorrect column name {0}."
 msgstr "无效列名{0}。"
 
 #: ontask/action/serializers.py:108
-#, fuzzy, python-brace-format
-#| msgid "New action cannot have non-existing key column {0}"
+#, python-brace-format
 msgid "Action contains non-existing key column \"{0}\""
 msgstr "新操作不能有不存在的键列 {0}"
 
@@ -386,20 +350,16 @@ msgid "Invalid column data"
 msgstr "无效列数据"
 
 #: ontask/action/serializers.py:322
-#, fuzzy
-#| msgid "Invalid condition data"
 msgid "Invalid column condition pair data"
-msgstr "无效条件数据"
+msgstr "无效列条件配对数据"
 
 #: ontask/action/serializers.py:366
 msgid "Invalid condition data"
 msgstr "无效条件数据"
 
 #: ontask/action/serializers.py:407
-#, fuzzy
-#| msgid "Action cannot be imported with and empty data table"
 msgid "Unable to import action  in a workflow with and empty data table"
-msgstr "不能用空数据表导入操作"
+msgstr "不能用空数据表导入操作进入工作流"
 
 #: ontask/action/views/action.py:37 ontask/action/views/edit_survey.py:33
 #: ontask/models/sqlconnection.py:29 ontask/scheduler/views/crud.py:59
@@ -433,16 +393,12 @@ msgid "Last executed"
 msgstr "上次执行的"
 
 #: ontask/action/views/clone.py:176
-#, fuzzy
-#| msgid "Condition successfully cloned."
 msgid "Action successfully cloned."
-msgstr "条件被成功克隆。"
+msgstr "操作被成功克隆。"
 
 #: ontask/action/views/clone.py:205
-#, fuzzy
-#| msgid "Incorrect column name {0}."
 msgid "Incorrect action id."
-msgstr "无效列名{0}。"
+msgstr "无效操作ID{0}。"
 
 #: ontask/action/views/clone.py:234
 msgid "Condition successfully cloned."
@@ -462,22 +418,17 @@ msgid "Edit the question"
 msgstr "编辑问题"
 
 #: ontask/action/views/import_export.py:137
-#, fuzzy
-#| msgid "Incorrect form request (it is not multipart)"
 msgid "Incorrect form (it does not have a file attached)"
-msgstr "错误的表单请求(此非多部分的)"
+msgstr "表格错误(没有附件)"
 
 #: ontask/action/views/import_export.py:151
-#, fuzzy
-#| msgid "Unable to create columns field"
 msgid "Unable to import file. Incorrect fields."
-msgstr "无法创建列字段"
+msgstr "无法输入文件。不正确的字段。"
 
 #: ontask/action/views/import_export.py:157
-#, fuzzy, python-brace-format
-#| msgid "Unable to import action: {0}"
+#, python-brace-format
 msgid "Unable to import file: {0}"
-msgstr "无法导入操作：{0}"
+msgstr "无法导入文件：{0}"
 
 #: ontask/action/views/import_export.py:188
 #: ontask/workflow/import_export.py:103
@@ -495,20 +446,14 @@ msgid "Error while retrieving content for student {0}"
 msgstr "检索学生{0}内容时出错"
 
 #: ontask/action/views/run.py:65
-#, fuzzy
-#| msgid ""
-#| "Unable to schedule actions due to a misconfiguration. Ask your system "
-#| "administrator to enable queueing."
 msgid ""
 "Unable to execute actions due to a misconfiguration. Ask your system "
 "administrator to enable message queueing."
-msgstr ""
-"由于错误配置，无法安排操作。请系统管理员\n"
-"启用队列。"
+msgstr "由于错误配置，无法安排操作。请系统管理员启用队列。"
 
 #: ontask/action/views/run.py:73
 msgid "Execution for this action is not allowed."
-msgstr ""
+msgstr "不允许执行此操作。"
 
 #: ontask/action/views/run.py:155
 #, python-brace-format
@@ -518,7 +463,7 @@ msgstr "评估用户条件时出错 {0}"
 #: ontask/action/views/run.py:176
 #, python-brace-format
 msgid "Action not enabled for user {0}"
-msgstr "用户未启用的操作{0}"
+msgstr "用户{0}没有权限启用操作"
 
 #: ontask/action/views/run.py:215
 msgid "Incorrect item filter invocation."
@@ -535,23 +480,21 @@ msgid "Send"
 msgstr "发送"
 
 #: ontask/action/views/run_canvas_email.py:121
-#, fuzzy
-#| msgid "Unable to find OAuth Information Record"
 msgid "Unable to obtain Canvas OAuth information"
-msgstr "找不到OAUTH信息记录"
+msgstr "无法获取Canvas OAUTH信息"
 
 #: ontask/action/views/run_canvas_email.py:149
 #, python-brace-format
 msgid "Error when invoking Canvas API: {0}."
-msgstr ""
+msgstr "调用Canvas API时出错：{0}。"
 
 #: ontask/action/views/run_canvas_email.py:179
 msgid "Incorrect canvas email action invocation."
-msgstr "不正确的canvas电子邮件处理程序调动。"
+msgstr "错误的canvas电子邮件处操作调动。"
 
 #: ontask/action/views/run_email.py:116
 msgid "Incorrect email action invocation."
-msgstr "不正确的电子邮件操作调动。"
+msgstr "错误的电子邮件操作调动。"
 
 #: ontask/action/views/run_json.py:107
 msgid "Incorrect JSON action invocation."
@@ -575,10 +518,8 @@ msgid "Data not found in the table"
 msgstr "表中未找到数据"
 
 #: ontask/apps.py:9
-#, fuzzy
-#| msgid "OnTask Login"
 msgid "OnTask"
-msgstr "OnTask登陆"
+msgstr "OnTask"
 
 #: ontask/core/decorators.py:106 ontask/core/decorators.py:166
 #: ontask/core/decorators.py:227 ontask/core/decorators.py:291
@@ -592,14 +533,13 @@ msgid "File size must be under %(max)s. Current file size is %(current)s."
 msgstr "文件大小必须小于%(max)s。当前文件大小为%(current)s。"
 
 #: ontask/core/forms.py:61
-#, fuzzy, python-brace-format
-#| msgid "File type (%s) is not supported."
+#, python-brace-format
 msgid "File type ({0}) is not supported."
-msgstr "不支持文件类型 (%s)"
+msgstr "不支持文件类型({0})"
 
 #: ontask/dataops/forms/plugin.py:21
 msgid "Input Columns (to read data)"
-msgstr "输入列 (读取数据)"
+msgstr "输入列 (用来读取数据)"
 
 #: ontask/dataops/forms/plugin.py:24
 msgid "To select a subset of the table to pass to the plugin"
@@ -623,15 +563,13 @@ msgstr ""
 "保留多个执行的结果。"
 
 #: ontask/dataops/forms/plugin.py:127 ontask/dataops/forms/plugin.py:129
-#, fuzzy
-#| msgid "Step 2: Select Columns"
 msgid "Select column"
 msgstr "选择列"
 
 #: ontask/dataops/forms/plugin.py:130
 #, python-brace-format
 msgid "Column for input {0}"
-msgstr ""
+msgstr "用来输入({0})的列"
 
 #: ontask/dataops/forms/plugin.py:142
 msgid "Key column for merging"
@@ -748,10 +686,9 @@ msgid "Sheet within the excelsheet to upload"
 msgstr "Excel表单内上传的表单"
 
 #: ontask/dataops/forms/upload.py:187 ontask/dataops/forms/upload.py:253
-#, fuzzy, python-brace-format
-#| msgid "File could not be processed ({0})"
+#, python-brace-format
 msgid "File could not be processed: {0}"
-msgstr "无法处理文件({0})"
+msgstr "无法处理文件：{0}"
 
 #: ontask/dataops/forms/upload.py:209
 #: ontask/templates/action/includes/partial_action_operations.html:21
@@ -779,16 +716,13 @@ msgid "AWS S3 Bucket file path"
 msgstr "AWS S3存储桶文件路径"
 
 #: ontask/dataops/forms/upload.py:343
-#, fuzzy, python-brace-format
-#| msgid "File could not be processed ({0})"
+#, python-brace-format
 msgid "S3 bucket file could not be processed: {0}"
-msgstr "S3存储桶文件无法处理({0})"
+msgstr "S3存储桶文件无法处理：{0}"
 
 #: ontask/dataops/forms/upload.py:373
-#, fuzzy
-#| msgid "There is a condition already with this name."
 msgid "There is already a connection with this name."
-msgstr "已存在以此命名的条件。"
+msgstr "已存在以此命名的链接。"
 
 #: ontask/dataops/forms/upload.py:404
 msgid "Password to authenticate the database connection"
@@ -858,13 +792,11 @@ msgstr "列{0}中的新值不在类别{1}中。"
 #: ontask/dataops/pandas/dataframe.py:229
 #: ontask/dataops/pandas/dataframe.py:231
 msgid "Internal error while processing database."
-msgstr ""
+msgstr "处理数据库时内部错误。"
 
 #: ontask/dataops/pandas/dataframe.py:255
-#, fuzzy
-#| msgid "Invalid column data"
 msgid "Invalid column drop operation."
-msgstr "无效列数据"
+msgstr "列移除操作无效。"
 
 #: ontask/dataops/pandas/dataframe.py:352
 #, python-brace-format
@@ -887,55 +819,34 @@ msgstr "这个方法应该实现！"
 
 #: ontask/dataops/plugin/plugin_manager.py:36
 msgid "Class inherits from OnTaskTransformation or OnTaskModel"
-msgstr ""
+msgstr "类继承自OnTaskTransformation或OnTaskModel"
 
 #: ontask/dataops/plugin/plugin_manager.py:37
 msgid "Class has a non-empty documentation string"
-msgstr ""
+msgstr "类具有非空文档字符串"
 
 #: ontask/dataops/plugin/plugin_manager.py:38
-#, fuzzy
-#| msgid "Presence of a string field with name \"name\""
 msgid "Class has a non-empty string field with name \"name\""
-msgstr "存在名为\"名称\"的字符串字段"
+msgstr "类有一个非空字符串字段，名称为“name”"
 
 #: ontask/dataops/plugin/plugin_manager.py:39
-#, fuzzy
-#| msgid "Presence of a string field with name \"description_txt\""
 msgid "Class has a string field with name \"description_text\""
-msgstr "一个名为\"description_txt\"字符串字段存在"
+msgstr "类有一个名为“description_text”的字符串字段"
 
 #: ontask/dataops/plugin/plugin_manager.py:41
-#, fuzzy
-#| msgid ""
-#| "Presence of a field with name \"input_column_names\" storing a (possible "
-#| "empty) list of strings"
 msgid ""
 "Class has a field with name \"input_column_names\" storing a (possible "
 "empty) list of strings"
-msgstr ""
-"存在一个名为\"input_column_names\"储存着一个 \n"
-"(可能为空)字符串列表"
+msgstr "类具有名称为“input_column_names”的字段，其存储（可能为空的）字符串列表"
 
 #: ontask/dataops/plugin/plugin_manager.py:44
-#, fuzzy
-#| msgid ""
-#| "Presence of a field with name \"output_column_names\" storing a (possibly "
-#| "empty) list of strings"
 msgid ""
 "Class has a field with name \"output_column_names\" storing a (possibly "
 "empty) list of strings"
-msgstr "存在一个名为\"input_column_names\"储存着一个(可能为空)字符串列表"
+msgstr ""
+"类具有一个名为“output_column_names”的字段，用于存储（可能为空）字符串列表"
 
 #: ontask/dataops/plugin/plugin_manager.py:47
-#, fuzzy
-#| msgid ""
-#| "Presence of a (possible empty) list of tuples with name \"parameters\". "
-#| "The tuples must have six elements: name (a string), type (one of \"double"
-#| "\", \"integer\", \"string\", \"boolean\", or \"datetime\"), (possible "
-#| "empty) list of allowed values of the corresponding type, an initial value "
-#| "of the right type or None, and a help string to be shown when requesting "
-#| "this parameter."
 msgid ""
 "Class has a (possible empty) list of tuples with name \"parameters\". The "
 "tuples must have six elements: name (a string), type (one of \"double\", "
@@ -943,18 +854,16 @@ msgid ""
 "list of allowed values of corresponding type, an initial value of the right "
 "type or None, and a help string to be shown when requesting this parameter."
 msgstr ""
-"存在一个名称为\"参数\"的元组列表\n"
-"(可能是空的)。该元组必须有\n"
-"六个元素：名称(字符串)，类型(\"双数\"、\"整数\"、\"字符串\"、\"布尔值\"或"
-"\"DATETIME\"之一),(可能为空)\n"
-"对应类型的允许值列表，正确类型或None的初始值，\n"
-"以及请求此参数时显示的帮助字符串。"
+"类具有（可能为空的）元组列表，其名称为“parameters”。该元组必须有六个元素：名"
+"称(字符串)，类型(\"双数\"、\"整数\"、\"字符串\"、\"布尔值”或”日期”之一),(可能"
+"为空)对应类型的允许值列表，正确类型或None的初始值，以及请求此参数时显示的帮助"
+"字符串。"
 
 #: ontask/dataops/plugin/plugin_manager.py:56
 msgid ""
 "Class has a method with name run receiving a data frame and a dictionary "
 "with parameters."
-msgstr ""
+msgstr "类有一个名为运行的方法，接收数据帧和带参数的字典。"
 
 #: ontask/dataops/plugin/plugin_manager.py:117
 #: ontask/dataops/plugin/plugin_manager.py:125
@@ -969,14 +878,12 @@ msgid "Ok"
 msgstr "好"
 
 #: ontask/dataops/plugin/plugin_manager.py:119
-#, fuzzy
-#| msgid "Incorrect type"
 msgid "Incorrect parent class"
-msgstr "不正确的类型"
+msgstr "父类不正确"
 
 #: ontask/dataops/plugin/plugin_manager.py:127
 msgid "Class is not documented"
-msgstr ""
+msgstr "类没有记录"
 
 #: ontask/dataops/plugin/plugin_manager.py:131
 #: ontask/dataops/plugin/plugin_manager.py:138
@@ -1051,65 +958,53 @@ msgid "Unable to instantiate plugin \"{0}\""
 msgstr "无法实例化插件\"{0}\""
 
 #: ontask/dataops/plugin/plugin_manager.py:425
-#, fuzzy, python-brace-format
-#| msgid "Inconsisten inputs when invoking plugin \"{0}\""
+#, python-brace-format
 msgid "Inconsistent number of inputs when invoking plugin \"{0}\""
-msgstr "调用插件\"{0}\"时输入不一致"
+msgstr "调用插件\"{0}\"时输入的数量不一致"
 
 #: ontask/dataops/plugin/plugin_manager.py:438
-#, fuzzy, python-brace-format
-#| msgid "Inconsisten inputs when invoking plugin \"{0}\""
+#, python-brace-format
 msgid "Inconsistent number of outputs when invoking plugin \"{0}\""
-msgstr "调用插件\"{0}\"时输入不一致"
+msgstr "调用插件\"{0}\"时输出的数量不一致"
 
 #: ontask/dataops/plugin/plugin_manager.py:448
-#, fuzzy, python-brace-format
-#| msgid "Exception while retrieving the data frame"
+#, python-brace-format
 msgid "Exception when retrieving the data frame from workflow: {0}"
-msgstr "检索数据帧时发生异常"
+msgstr "从工作流检索数据框时出现异常：{0}"
 
 #: ontask/dataops/plugin/plugin_manager.py:466
-#, fuzzy, python-brace-format
-#| msgid "Error while retrieving content for student {0}"
+#, python-brace-format
 msgid "Error when creating data frame for plugin: {0}"
-msgstr "执行插件{0}时出错"
+msgstr "为插件创建数据框时出错：{0}"
 
 #: ontask/dataops/plugin/plugin_manager.py:474
-#, fuzzy, python-brace-format
-#| msgid "Error while retrieving content for student {0}"
+#, python-brace-format
 msgid "Error while executing plugin: {0}"
-msgstr "执行插件{0}时出错"
+msgstr "执行插件：{0}时出错"
 
 #: ontask/dataops/plugin/plugin_manager.py:481
-#, fuzzy
-#| msgid "Result is not a pandas data frame."
 msgid "Plugin executed but did not return a pandas data frame."
-msgstr "插件已执行，但是并没有返回pandas数据结构。"
+msgstr "插件已执行，但是并没有返回pandas数据框。"
 
 #: ontask/dataops/plugin/plugin_manager.py:490
-#, fuzzy, python-brace-format
-#| msgid "Incorrect number of rows in result data frame."
+#, python-brace-format
 msgid "Incorrect number of rows ({0}) in result data frame."
-msgstr "结果数据帧中的行数不正确。"
+msgstr "结果数据框中的行数（{0}）不正确。"
 
 #: ontask/dataops/plugin/plugin_manager.py:498
-#, fuzzy, python-brace-format
-#| msgid "column {0} not found in data frame"
+#, python-brace-format
 msgid "Column name {0} cannot be in the result data frame."
-msgstr "数据帧中未找到列{0}"
+msgstr "列名{0}不能位于结果数据框中。"
 
 #: ontask/dataops/plugin/plugin_manager.py:504
-#, fuzzy
-#| msgid "Incorrect number of rows in result data frame."
 msgid "Incorrect columns in result data frame."
-msgstr "结果数据帧中的列数不正确。"
+msgstr "结果数据框中的列不正确。"
 
 #: ontask/dataops/plugin/plugin_manager.py:526
 #: ontask/dataops/plugin/plugin_manager.py:531
-#, fuzzy, python-brace-format
-#| msgid "Error while merging result ({0})."
+#, python-brace-format
 msgid "Error while merging result: {0}."
-msgstr "检索学生{0}内容时出错。"
+msgstr "合并结果时出错：{0}。"
 
 #: ontask/dataops/views/csvupload.py:51
 msgid "CSV upload form is not multiform"
@@ -1133,18 +1028,14 @@ msgid "Folder"
 msgstr "文件夹"
 
 #: ontask/dataops/views/plugin_admin.py:39
-#, fuzzy
-#| msgid "Executing"
 msgid "Executions"
-msgstr "正在执行"
+msgstr "执行"
 
 #: ontask/dataops/views/row.py:121
 msgid "Unable to update table row"
 msgstr "无法更新表格行"
 
 #: ontask/dataops/views/s3upload.py:68
-#, fuzzy
-#| msgid "CSV file"
 msgid "S3 CSV file"
 msgstr "S3 CSV文件"
 
@@ -1166,10 +1057,8 @@ msgid "Unable to obtain data: {0}"
 msgstr "无法获取数据：{0}"
 
 #: ontask/dataops/views/sqlupload.py:103
-#, fuzzy
-#| msgid "Sorry. The data from this connection cannot be processed."
 msgid "The data from this connection cannot be processed."
-msgstr "对不起。无法处理来自此连接的数据。"
+msgstr "无法处理此连接中的数据。"
 
 #: ontask/dataops/views/transform.py:58
 #: ontask/templates/dataops/plugin_info_for_run.html:35
@@ -1183,10 +1072,9 @@ msgid ""
 msgstr "由于错误配置，无法运行插件。请系统管理员启用队列。"
 
 #: ontask/dataops/views/upload.py:184
-#, fuzzy, python-brace-format
-#| msgid "Unable to obtain data: {0}"
+#, python-brace-format
 msgid "Unable to upload the data: {0}"
-msgstr "无法获取数据：{0}"
+msgstr "无法上传数据：{0}"
 
 #: ontask/dataops/views/upload.py:219
 msgid "Finish"
@@ -1194,7 +1082,7 @@ msgstr "完成"
 
 #: ontask/dataops/views/upload.py:398
 msgid "Exception while loading data frame"
-msgstr "加载数据帧时异常"
+msgstr "加载数据框时异常"
 
 #: ontask/dataops/views/upload.py:427
 msgid "Merge operation failed. "
@@ -1347,10 +1235,8 @@ msgid "formula"
 msgstr "公式"
 
 #: ontask/models/condition.py:56
-#, fuzzy
-#| msgid "formula"
 msgid "formula text"
-msgstr "公式"
+msgstr "公式文本"
 
 #: ontask/models/condition.py:61
 msgid "Columns present in this condition"
@@ -1419,16 +1305,12 @@ msgid "Workflow cloned"
 msgstr "工作流已克隆"
 
 #: ontask/models/logs.py:128
-#, fuzzy
-#| msgid "Unable to clone workflow"
 msgid "Update list of workflow users"
-msgstr "无法克隆工作流"
+msgstr "更新工作流用户列表"
 
 #: ontask/models/logs.py:129
-#, fuzzy
-#| msgid "Flush workflow data"
 msgid "Toggle workflow star"
-msgstr "刷新工作流数据"
+msgstr "切换工作流程明星"
 
 #: ontask/models/logs.py:130
 msgid "Column added"
@@ -1479,16 +1361,12 @@ msgid "Emails sent"
 msgstr "电子邮件已发送"
 
 #: ontask/models/logs.py:142
-#, fuzzy
-#| msgid "Emails sent"
 msgid "Email with data list sent"
-msgstr "电子邮件已发送"
+msgstr "包含数据列表的电子邮件已发送"
 
 #: ontask/models/logs.py:143
-#, fuzzy
-#| msgid "Emails sent"
 msgid "Canvas Emails sent"
-msgstr "Canvas电子邮件已发送"
+msgstr "Canvas 电子邮件已发送"
 
 #: ontask/models/logs.py:144
 msgid "Notification email sent"
@@ -1536,7 +1414,7 @@ msgstr "表行已创建"
 
 #: ontask/models/logs.py:156
 msgid "Survey data input"
-msgstr ""
+msgstr "调查数据输入"
 
 #: ontask/models/logs.py:157
 msgid "Table view created"
@@ -1611,46 +1489,32 @@ msgid "Execute scheduled email action"
 msgstr "执行已排程的电子邮件行动"
 
 #: ontask/models/logs.py:175
-#, fuzzy
-#| msgid "Edit scheduled email action"
 msgid "Edit scheduled send list action"
-msgstr "编辑已排程的电子邮件操作"
+msgstr "编辑预定发送列表操作"
 
 #: ontask/models/logs.py:176
-#, fuzzy
-#| msgid "Delete scheduled email action"
 msgid "Delete scheduled send list action"
-msgstr "删除已排程的电子邮件行动操作"
+msgstr "删除预定发送列表操作"
 
 #: ontask/models/logs.py:177
-#, fuzzy
-#| msgid "Execute scheduled email action"
 msgid "Execute scheduled send list action"
-msgstr "执行已排程的电子邮件行动"
+msgstr "执行预定发送的电子邮件行动"
 
 #: ontask/models/logs.py:178
-#, fuzzy
-#| msgid "Edit scheduled JSON action"
 msgid "Edit scheduled JSON list action"
-msgstr "编辑已排程的JSON行动"
+msgstr "编辑预定发送的JSON列表操作"
 
 #: ontask/models/logs.py:179
-#, fuzzy
-#| msgid "Delete scheduled JSON action"
 msgid "Delete scheduled JSON list action"
-msgstr "删除已排程的JSON行动"
+msgstr "删除预定发送的JSON列表操作"
 
 #: ontask/models/logs.py:180
-#, fuzzy
-#| msgid "Execute scheduled JSON action"
 msgid "Execute scheduled JSON list action"
-msgstr "执行已排程的JSON行动"
+msgstr "执行预定发送的JSON列表操作"
 
 #: ontask/models/logs.py:182
-#, fuzzy
-#| msgid "Execute scheduled canvas email action"
 msgid "Edit scheduled canvas email action"
-msgstr "执行已排程的canvas电子邮件操作"
+msgstr "编辑预定的Canvas 电子邮件操作"
 
 #: ontask/models/logs.py:184
 msgid "Execute scheduled canvas email action"
@@ -1681,26 +1545,20 @@ msgid "payload"
 msgstr "有效载荷"
 
 #: ontask/models/oauth.py:42
-#, fuzzy
-#| msgid "Action available until"
 msgid "Token valid until"
-msgstr "令牌有效期至"
+msgstr "令牌有效，直到"
 
 #: ontask/models/plugin.py:42
-#, fuzzy
-#| msgid "Plugin deleted"
 msgid "Is a model"
-msgstr "插件已删除"
+msgstr "是一个模型"
 
 #: ontask/models/plugin.py:50
 msgid "Ready to run"
 msgstr "准备运行"
 
 #: ontask/models/plugin.py:58
-#, fuzzy
-#| msgid "Disabled"
 msgid "Enabled"
-msgstr "停用"
+msgstr "启用"
 
 #: ontask/models/plugin.py:65
 msgid "Last verified"
@@ -1812,14 +1670,10 @@ msgid "number of columns"
 msgstr "列数"
 
 #: ontask/oauth/views.py:109
-#, fuzzy
-#| msgid "Unable to access the workflow"
 msgid "Unable to refresh OAuth token."
-msgstr "无法从OAuth刷新访问令牌"
+msgstr "无法刷新OAuth令牌。"
 
 #: ontask/oauth/views.py:142
-#, fuzzy
-#| msgid "Incorrect email action invocation."
 msgid "Incorrect Canvas callback invocation."
 msgstr "Canvas回调调用不正确。"
 
@@ -1841,8 +1695,6 @@ msgid "Internal error. Invalid OAuth Dict element"
 msgstr "内部错误。无效的OAuth Dict元素"
 
 #: ontask/oauth/views.py:193
-#, fuzzy
-#| msgid "Unable to access the workflow"
 msgid "Unable to obtain access token from OAuth"
 msgstr "无法从OAuth获取访问令牌"
 
@@ -1860,11 +1712,11 @@ msgstr "日期/时间必须设为将来"
 
 #: ontask/scheduler/forms.py:90
 msgid "CC Emails (separated by spaces)"
-msgstr ""
+msgstr "CC电子邮件（以空格分隔"
 
 #: ontask/scheduler/forms.py:96
 msgid "List of BCC Emails (separated by spaces)"
-msgstr ""
+msgstr "BCC电子邮件列表（以空格分隔"
 
 #: ontask/scheduler/forms.py:134 ontask/scheduler/forms.py:141
 msgid "This field must be a comma-separated list of emails."
@@ -1891,16 +1743,12 @@ msgid "Column in the table containing the email"
 msgstr "包含电子邮件的表列"
 
 #: ontask/scheduler/forms.py:327
-#, fuzzy
-#| msgid "This field must be a comma-separated list of emails."
 msgid "This field must be a valid email address."
-msgstr "此字段必须是逗号分隔的电子邮件列表。"
+msgstr "此字段必须是有效的电子邮件地址。"
 
 #: ontask/scheduler/forms.py:369
-#, fuzzy
-#| msgid "Column in the table containing the email"
 msgid "Column in the table containing the Canvas ID"
-msgstr "包含Canvas账户的表列"
+msgstr "包含Canvas账户的表中的列"
 
 #: ontask/scheduler/serializers.py:99
 msgid "Incorrect permission to manipulate action."
@@ -1945,10 +1793,8 @@ msgid "Personalized text needs a subject."
 msgstr "个性化的文本需要一个主题。"
 
 #: ontask/scheduler/serializers.py:209
-#, fuzzy
-#| msgid "Personalized text needs a item_column"
 msgid "Personalized text needs an item_column"
-msgstr "个性化的文本需要一个item_column"
+msgstr "个性化的文本需要一个 item_column"
 
 #: ontask/scheduler/serializers.py:233 ontask/scheduler/serializers.py:236
 msgid "cc_email must be a comma-separated list of emails."
@@ -1969,14 +1815,12 @@ msgid "Action"
 msgstr "操作"
 
 #: ontask/scheduler/views/crud.py:47
-#, fuzzy
-#| msgid "Action scheduled for execution"
 msgid "Edit the action scheduled for execution"
-msgstr "编辑计划执行的操作"
+msgstr "编辑已预订执行的操作"
 
 #: ontask/scheduler/views/crud.py:62
 msgid "Scheduled"
-msgstr "已排程"
+msgstr "已预订"
 
 #: ontask/scheduler/views/crud.py:65
 #: ontask/templates/dataops/includes/partial_diagnostics.html:13
@@ -1985,10 +1829,8 @@ msgstr "状态"
 
 #: ontask/scheduler/views/crud.py:73
 #: ontask/templates/scheduler/includes/partial_show_schedule_action.html:27
-#, fuzzy
-#| msgid "Edit scheduled email action"
 msgid "Edit this scheduled action execution"
-msgstr "编辑此计划的操作执行"
+msgstr "编辑这个已预订的执行操作"
 
 #: ontask/scheduler/views/crud.py:232
 msgid ""
@@ -2003,10 +1845,9 @@ msgid "This action does not support scheduling"
 msgstr "该操作不支持排程"
 
 #: ontask/scheduler/views/save.py:41
-#, fuzzy, python-brace-format
-#| msgid "{0} days"
+#, python-brace-format
 msgid "{0} years"
-msgstr "{0}天"
+msgstr "{0} 年"
 
 #: ontask/scheduler/views/save.py:44
 #, python-brace-format
@@ -2014,38 +1855,32 @@ msgid "{0} days"
 msgstr "{0}天"
 
 #: ontask/scheduler/views/save.py:47
-#, fuzzy, python-brace-format
-#| msgid ", {0} hours"
+#, python-brace-format
 msgid "{0} hours"
-msgstr "{0}小时"
+msgstr "{0} 小时"
 
 #: ontask/scheduler/views/save.py:50
-#, fuzzy, python-brace-format
-#| msgid ", {0} minutes"
+#, python-brace-format
 msgid "{0} minutes"
-msgstr "{0}分钟"
+msgstr "{0} 分钟"
 
 #: ontask/scheduler/views/save.py:85 ontask/scheduler/views/save.py:182
 #: ontask/templates/action/includes/partial_action_operations.html:41
 #: ontask/templates/scheduler/edit.html:40
 msgid "Schedule"
-msgstr "安排"
+msgstr "预定"
 
 #: ontask/scheduler/views/save.py:272
 msgid "Incorrect action scheduling invocation."
 msgstr "不正确的操作排程调用。"
 
 #: ontask/scheduler/views/save.py:310
-#, fuzzy
-#| msgid "Incorrect parameters in action scheduling"
 msgid "Incorrect request in action scheduling"
-msgstr "操作排程中的错误参数"
+msgstr "行动调度中的请求不正确"
 
 #: ontask/scheduler/views/save.py:343
-#, fuzzy
-#| msgid "Incorrect type of action to schedule."
 msgid "This type of actions cannot be scheduled"
-msgstr "无法编排此类操作"
+msgstr "此类操作无法被预定"
 
 #: ontask/settings.py:43 settings/base.py:540
 msgid "OnTask: Action executed"
@@ -2064,16 +1899,12 @@ msgid "Subject line for notification messages"
 msgstr "通知消息主题行"
 
 #: ontask/settings.py:116
-#, fuzzy
-#| msgid "To: field in notification emails"
 msgid "\"From:\" field in notification emails"
-msgstr "发送：通知电子邮件中的字段"
+msgstr "通知电子邮件中的“发件人：”字段"
 
 #: ontask/settings.py:122
-#, fuzzy
-#| msgid "payload"
 msgid "Uploads"
-msgstr "有效载荷"
+msgstr "上传"
 
 #: ontask/settings.py:126
 msgid "Content types allowed in uploads"
@@ -2084,16 +1915,12 @@ msgid "Maximum size allowed in file uplaods"
 msgstr "允许上传的最大文件尺寸"
 
 #: ontask/settings.py:137
-#, fuzzy
-#| msgid "Transformations"
 msgid "Transformations and Models"
-msgstr "转换"
+msgstr "转型与模型"
 
 #: ontask/settings.py:141
-#, fuzzy
-#| msgid "Folder where plugins are stored"
 msgid "Folder where code packages are stored"
-msgstr "存储插件的文件夹"
+msgstr "存储代码包的文件夹"
 
 #: ontask/settings.py:147
 msgid "Logs"
@@ -2105,19 +1932,16 @@ msgstr "向用户显示的日志的最大数量"
 
 #: ontask/settings.py:157
 msgid "Miscellaneous"
-msgstr ""
+msgstr "杂"
 
 #: ontask/settings.py:162
-#, fuzzy
-#| msgid "URL prefix to access the documentation in the static area"
 msgid "URL prefix to access the documentation"
-msgstr "访问静态区域中文档的网址前缀"
+msgstr "用于访问文档的URL前缀"
 
 #: ontask/signals/user.py:27
-#, fuzzy, python-brace-format
-#| msgid "New user profile for {0} created"
+#, python-brace-format
 msgid "New ontask user profile for {inst} created"
-msgstr "已为{0}创建新用户个人信息资料"
+msgstr "已为{inst}创建 ontask 新用户个人信息资料"
 
 #: ontask/table/api.py:109
 msgid "Post request requires workflow without a table"
@@ -2138,10 +1962,9 @@ msgid "column {0} not found in data frame"
 msgstr "数据帧中未找到列{0}"
 
 #: ontask/table/api.py:314
-#, fuzzy, python-brace-format
-#| msgid "Unable to perform merge operation"
+#, python-brace-format
 msgid "Unable to perform merge operation: {0}"
-msgstr "无法执行合并操作"
+msgstr "无法执行合并操作 {0}"
 
 #: ontask/table/forms.py:26
 msgid "View name"
@@ -2164,10 +1987,8 @@ msgid "There needs to be at least one key column"
 msgstr "需要至少有一个键列"
 
 #: ontask/table/forms.py:70
-#, fuzzy
-#| msgid "There is a column already with this name"
 msgid "There is already a view with this name."
-msgstr "已存在以此命名的列"
+msgstr "已存在以此命名的视图。"
 
 #: ontask/table/serializers/json.py:15
 msgid "JSON string encoding a pandas data frame"
@@ -2182,16 +2003,12 @@ msgid "ID of the column in destination data frame with unique key"
 msgstr "具有唯一密钥的目的地数据帧中的列ID"
 
 #: ontask/table/serializers/merge.py:57
-#, fuzzy
-#| msgid "ID of the column in the source data frame with the unique key"
 msgid "ID of column in source data frame with unique key"
-msgstr "具有唯一密钥的源数据帧中的列ID"
+msgstr "具有唯一键的源数据框中的列的ID"
 
 #: ontask/table/serializers/merge.py:65
-#, fuzzy
-#| msgid "This field must be the JSON string encoding a pandas data frame"
 msgid "Field must be a JSON string encoding a pandas data frame"
-msgstr "此字段必须是JSON字符串编码一个pandas数据帧"
+msgstr "字段必须是编码pandas数据帧的JSON字符串"
 
 #: ontask/table/serializers/merge.py:74
 #: ontask/workflow/serialize_workflow.py:81
@@ -2222,8 +2039,6 @@ msgid "No values in this column"
 msgstr "此列中没有值"
 
 #: ontask/table/views/stats.py:299
-#, fuzzy
-#| msgid "No values in this column"
 msgid "No value in this column"
 msgstr "此列中没有值"
 
@@ -2236,8 +2051,6 @@ msgid "Incorrect URL invoked to delete a row"
 msgstr "调用不正确的网址来删除行"
 
 #: ontask/table/views/table_view.py:47
-#, fuzzy
-#| msgid "Change elements in view"
 msgid "Change the columns present in the view"
 msgstr "更改视图中的列"
 
@@ -2246,10 +2059,9 @@ msgid "Cannot add a view to a workflow without data"
 msgstr "无法在没有数据的情况下向工作流添加视图"
 
 #: ontask/tasks/basic.py:34
-#, fuzzy, python-brace-format
-#| msgid "Incorrect execution request with log_id {0}"
+#, python-brace-format
 msgid "Incorrect execution request with log_id {lid}"
-msgstr "错误的log_id {0}的执行请求"
+msgstr "log_id {lid} 的执行请求不正确"
 
 #: ontask/tasks/basic.py:61
 #, python-brace-format
@@ -2262,39 +2074,37 @@ msgid "Unable to find workflow with id {0}"
 msgstr "使用id{0}无法找到工作流"
 
 #: ontask/tasks/basic.py:82
-#, fuzzy, python-brace-format
-#| msgid "Unable to find user with id {0}"
+#, python-brace-format
 msgid "Unable to find action with id {0}"
 msgstr "使用id{0}无法找到用户"
 
 #: ontask/tasks/basic.py:127 ontask/tasks/run_plugin.py:77
 #: ontask/tasks/workflow_update_luser.py:42
-#, fuzzy, python-brace-format
-#| msgid "Error"
+#, python-brace-format
 msgid "Error: {0}"
-msgstr "错误"
+msgstr "错误 {0}"
 
 #: ontask/tasks/increase_track.py:27
 msgid "Non-GET request received in Track URL"
-msgstr ""
+msgstr "跟踪网址中收到非GET请求"
 
 #: ontask/tasks/increase_track.py:33
 msgid "No track_id found in request"
 msgstr ""
+"Learn to pronounce\n"
+"请求中找不到track_id"
 
 #: ontask/tasks/increase_track.py:41
 msgid "Bad signature in track_id"
-msgstr ""
+msgstr "track_id中的签名错误"
 
 #: ontask/tasks/increase_track.py:50
-#, fuzzy, python-brace-format
-#| msgid "Incorrect column name {0}."
+#, python-brace-format
 msgid "Incorrect user email {0}"
 msgstr "无效列名{0}。"
 
 #: ontask/tasks/increase_track.py:56
-#, fuzzy, python-brace-format
-#| msgid "Incorrect column name {0}."
+#, python-brace-format
 msgid "Incorrect action id {0}"
 msgstr "无效列名{0}。"
 
@@ -2305,10 +2115,9 @@ msgid "Column {0} does not exist"
 msgstr "列{0}不存在"
 
 #: ontask/tasks/run_plugin.py:55
-#, fuzzy, python-brace-format
-#| msgid "Unable to load plugin with id {0}"
+#, python-brace-format
 msgid "Unable to load plugin with id {pid}"
-msgstr "使用id{0}无法加载插件"
+msgstr "使用id{pid}无法加载插件"
 
 #: ontask/templates/accounts/auth_base.html:8
 msgid "OnTask Login"
@@ -2324,8 +2133,6 @@ msgid ""
 msgstr "你好！你收到本邮件是因为你要求重置你的用户账户%(site_name)s的密码。"
 
 #: ontask/templates/accounts/emails/password-reset-email.html:6
-#, fuzzy
-#| msgid "Please go to the following page and choose a new password:"
 msgid "Please click in the following link and choose a new password:"
 msgstr "请到以下页面选择一个新密码:"
 
@@ -2338,14 +2145,12 @@ msgid "Regards"
 msgstr "祝好"
 
 #: ontask/templates/accounts/emails/password-reset-email.html:14
-#, fuzzy, python-format
-#| msgid "The %(site_name)s team"
+#, python-format
 msgid "The team behind %(site_name)s"
 msgstr "%(site_name)s团队"
 
 #: ontask/templates/accounts/emails/password-reset-subject.txt:1
-#, fuzzy, python-format
-#| msgid "Password reset confirmation"
+#, python-format
 msgid "Password reset on %(site_name)s"
 msgstr "%(site_name)s密码重置"
 
@@ -2358,21 +2163,6 @@ msgid "The importance of personalisation"
 msgstr "个性化的重要性"
 
 #: ontask/templates/accounts/login.html:14
-#, fuzzy
-#| msgid ""
-#| "Learners are more likely to have an effective\n"
-#| "        experience\n"
-#| "        when their environment is personalised. Resources, comments,\n"
-#| "        suggestions and feedback that take into account the reality of "
-#| "each\n"
-#| "        learner are much more effective than those addressing an entire\n"
-#| "        cohort. But personalisation has traditionally been based on "
-#| "highly\n"
-#| "        detailed pre-conceived models of learner behaviour. OnTask offers "
-#| "an\n"
-#| "        environment to personalise resources based on data collected from "
-#| "any\n"
-#| "        learning environment."
 msgid ""
 "Learners are more likely to have an effective\n"
 "          experience\n"
@@ -2400,17 +2190,6 @@ msgid "The importance of feedback"
 msgstr "反馈的重要性"
 
 #: ontask/templates/accounts/login.html:27
-#, fuzzy
-#| msgid ""
-#| "Feedback is more effective when framed as a\n"
-#| "        dialogue. But such\n"
-#| "        dialogue will be highly dependent on the personal situation of "
-#| "each\n"
-#| "        learner. How can we combine knowledge about the learners with "
-#| "the\n"
-#| "        need to have personalised interaction? OnTask will help "
-#| "instructors\n"
-#| "        and learners to initiate this dialogue."
 msgid ""
 "Feedback is more effective when framed as a\n"
 "          dialogue. But such\n"
@@ -2431,18 +2210,6 @@ msgid "The importance of data"
 msgstr "数据的重要性"
 
 #: ontask/templates/accounts/login.html:36
-#, fuzzy
-#| msgid ""
-#| "In the era of technology-mediated learning, data is\n"
-#| "        ubiquitous. But instead of providing instantaneous benefits,\n"
-#| "        this abundance brings a serious challenge to tranform data into\n"
-#| "      actionable knowledge. It is not enough to have data, it is "
-#| "essential\n"
-#| "        to use data to support a clearly identified objective in the\n"
-#| "        learning environment. How can this support be articulated?\n"
-#| "        How can it be used in multiple environments? OnTask\n"
-#| "      establishes this connection between data and its use to provide a\n"
-#| "        scalable solution to learning personalisation."
 msgid ""
 "In the era of technology-mediated learning, data is\n"
 "          ubiquitous. But instead of providing instantaneous benefits,\n"
@@ -2481,8 +2248,6 @@ msgid "Password Reset Done"
 msgstr "密码重置完成"
 
 #: ontask/templates/accounts/password-reset-done.html:5
-#, fuzzy
-#| msgid "Password Reset Email Sent"
 msgid "Password reset email sent"
 msgstr "重置密码邮件已发送"
 
@@ -2717,8 +2482,6 @@ msgid_plural "(%(n)s learners of %(tot)s)"
 msgstr[0] "%(tot)s) 中有(%(n)s 学习者"
 
 #: ontask/templates/action/edit_in.html:108
-#, fuzzy
-#| msgid "Condition"
 msgid "Conditions"
 msgstr "条件"
 
@@ -2744,11 +2507,8 @@ msgid "Please, select Key column"
 msgstr "请选择键列"
 
 #: ontask/templates/action/edit_in.html:141
-#, fuzzy
-#| msgid "%(num)s Key column"
-#| msgid_plural "%(num)s Key columns"
 msgid "Unset key column"
-msgstr "%(num)s键列"
+msgstr "撤销键列"
 
 #: ontask/templates/action/edit_in.html:170
 msgid "Insert existing question"
@@ -2763,18 +2523,14 @@ msgid "Create question"
 msgstr "创建问题"
 
 #: ontask/templates/action/edit_out.html:7
-#, fuzzy
-#| msgid "Edit Action In"
 msgid "Edit Action"
-msgstr "编辑操作在"
+msgstr "编辑操作"
 
 #: ontask/templates/action/edit_out.html:57
 msgid "Text"
-msgstr ""
+msgstr "文本"
 
 #: ontask/templates/action/edit_out.html:61
-#, fuzzy
-#| msgid "Filter Learners"
 msgid "Select Learners"
 msgstr "筛选学习者"
 
@@ -2892,10 +2648,8 @@ msgid "Update"
 msgstr "更新"
 
 #: ontask/templates/action/includes/partial_action_edit_out_attributes_columns.html:8
-#, fuzzy
-#| msgid "Insert Column Value"
 msgid "Insert Column as List"
-msgstr "插入列值"
+msgstr "插入列作为列表"
 
 #: ontask/templates/action/includes/partial_action_edit_out_attributes_columns.html:10
 msgid "Insert Column Value"
@@ -2928,16 +2682,12 @@ msgid_plural "%(n)s users have all conditions equal to FALSE"
 msgstr[0] "%(n)s用户具备所有相当于FALSE的情况"
 
 #: ontask/templates/action/includes/partial_action_name.html:3
-#, fuzzy
-#| msgid "Edit the question"
 msgid "Edit the action"
-msgstr "编辑问题"
+msgstr "编辑操作"
 
 #: ontask/templates/action/includes/partial_action_name.html:6
-#, fuzzy
-#| msgid "Incorrect type of action to schedule."
 msgid "The action cannot be executed"
-msgstr "无法编排此类操作"
+msgstr "操作无法被执行"
 
 #: ontask/templates/action/includes/partial_action_operations.html:6
 msgid "Enter data manually"
@@ -2974,17 +2724,15 @@ msgid "ZIP"
 msgstr "压缩文件"
 
 #: ontask/templates/action/includes/partial_action_operations.html:35
-#, fuzzy
-#| msgid "OnTask: Action executed"
 msgid "See when this action was executed"
-msgstr "OnTask:操作已执行"
+msgstr "查看操作执行时间"
 
 #: ontask/templates/action/includes/partial_action_operations.html:36
 #: ontask/templates/action/index.html:70
 #: ontask/templates/action/timeline.html:4
 #: ontask/templates/action/timeline.html:7
 msgid "Timeline"
-msgstr ""
+msgstr "时间线"
 
 #: ontask/templates/action/includes/partial_action_operations.html:40
 msgid "Schedule the execution of the action"
@@ -3084,7 +2832,7 @@ msgstr "更新操作"
 #: ontask/templates/action/includes/partial_column_selected_condition.html:9
 #: ontask/templates/action/includes/partial_column_selected_condition.html:16
 msgid "Always shown"
-msgstr ""
+msgstr "总是显示"
 
 #: ontask/templates/action/includes/partial_column_selected_operations.html:4
 msgid "Create an exact duplicate of this question"
@@ -3132,10 +2880,8 @@ msgid "Delete condition"
 msgstr "删除条件"
 
 #: ontask/templates/action/includes/partial_condition_tab.html:7
-#, fuzzy
-#| msgid "Define a text condition to insert in the text body below."
 msgid "Define a condition to use in this action."
-msgstr "定义要插入到正文文中的文本条件。"
+msgstr "定义要在此操作中使用的条件。"
 
 #: ontask/templates/action/includes/partial_condition_tab.html:17
 #, python-format
@@ -3171,10 +2917,8 @@ msgid "Create filter"
 msgstr "创建筛选标签"
 
 #: ontask/templates/action/includes/partial_filter_addedit.html:13
-#, fuzzy
-#| msgid "Create filter"
 msgid "Update filter"
-msgstr "创建筛选标签"
+msgstr "更新筛选标签"
 
 #: ontask/templates/action/includes/partial_filter_addedit.html:20
 msgid "The learner will be selected if"
@@ -3224,10 +2968,8 @@ msgid "Preview previous message"
 msgstr "预览之前的信息"
 
 #: ontask/templates/action/includes/partial_preview.html:20
-#, fuzzy
-#| msgid "Preview"
 msgid "Previous"
-msgstr "预览"
+msgstr "先前的"
 
 #: ontask/templates/action/includes/partial_preview.html:25
 msgid "Preview next message"
@@ -3239,7 +2981,7 @@ msgstr "预览下一条信息，所有条件错误"
 
 #: ontask/templates/action/includes/partial_preview.html:33
 msgid "Next with anomaly"
-msgstr ""
+msgstr "异常，下一个"
 
 #: ontask/templates/action/includes/partial_preview.html:40
 msgid "All conditions evaluate to FALSE"
@@ -3261,10 +3003,7 @@ msgstr "数值："
 msgid ""
 "This preview could not be produced\n"
 "because the row in the table does not have values in the following variables:"
-msgstr ""
-"无法预览此预览\n"
-"因为表中的行在下面的变量中\n"
-"没有值："
+msgstr "无法预览此预览，因为表中的行在下面的变量中没有值："
 
 #: ontask/templates/action/incorrect_preview.html:11
 msgid ""
@@ -3295,10 +3034,8 @@ msgid "Import action previously exported"
 msgstr "文件包含先前导出的操作"
 
 #: ontask/templates/action/index.html:69
-#, fuzzy
-#| msgid "Select the actions to export:"
 msgid "See when the actions were executed"
-msgstr "选择即将导出的操作："
+msgstr "该操作被执行时允许查看"
 
 #: ontask/templates/action/item_filter.html:7
 msgid "Exclude items from action"
@@ -3353,26 +3090,20 @@ msgid "%(n)s JSON objects will be sent."
 msgstr "%(n)sJSON目标将被发送。"
 
 #: ontask/templates/action/request_json_list_data.html:7
-#, fuzzy
-#| msgid "JSON action"
 msgid "Send JSON List action"
-msgstr "JSON操作"
+msgstr "发送JSON列表操作"
 
 #: ontask/templates/action/request_json_list_data.html:13
-#, fuzzy
-#| msgid "Personalized JSON Object"
 msgid "Send single JSON object"
-msgstr "个性化的JSON对象"
+msgstr "发送单个JSON对象"
 
 #: ontask/templates/action/request_send_list_data.html:7
-#, fuzzy
-#| msgid "Edit the question"
 msgid "Send List action"
-msgstr "编辑问题"
+msgstr "发送列表操作"
 
 #: ontask/templates/action/request_send_list_data.html:13
 msgid "Send List by Email"
-msgstr ""
+msgstr "通过邮件发送列表"
 
 #: ontask/templates/action/run_survey.html:8
 msgid "Run Action In"
@@ -3384,17 +3115,14 @@ msgstr "输入数据"
 
 #: ontask/templates/action/run_survey_row.html:19
 msgid "No responses required at this time"
-msgstr ""
+msgstr "此时不需要响应"
 
 #: ontask/templates/action/syntax_error.html:2
 msgid ""
 "This preview could not be produced because there\n"
 "  is a syntax error in the text of the action. See if the following\n"
 "  message is helpful to locate the problem."
-msgstr ""
-"无法预览，因为操作文本中有\n"
-"语法错误。看看以下信息能否\n"
-"帮助你找到问题。"
+msgstr "无法预览，因为操作文本中有语法错误。看看以下信息能否帮助你找到问题。"
 
 #: ontask/templates/dataops/includes/partial_diagnostics.html:4
 #: ontask/templates/dataops/transform_model.html:50
@@ -3406,8 +3134,6 @@ msgid "Requirements"
 msgstr "要求"
 
 #: ontask/templates/dataops/includes/partial_plugin_description.html:5
-#, fuzzy
-#| msgid "More Information"
 msgid "More information"
 msgstr "更多信息"
 
@@ -3462,10 +3188,8 @@ msgid "Are you sure you want to clone connection <strong>%(n)s</strong>?"
 msgstr "是否确定克隆连接<strong>%(n)s</strong>?"
 
 #: ontask/templates/dataops/includes/partial_sqlconn_clone.html:12
-#, fuzzy
-#| msgid "A new connection with the prefix \"Copy_of_\" will be created"
 msgid "A new connection with the prefix \"Copy of \" will be created"
-msgstr "将创建一个前缀是\"Copy_of_\"的连接"
+msgstr "将创建一个前缀是\"Copy_of_\"的新连接"
 
 #: ontask/templates/dataops/includes/partial_sqlconn_clone.html:16
 msgid "Clone connection"
@@ -3489,14 +3213,12 @@ msgid "Obtain the data from the SQL connection"
 msgstr "从SQL连接中获取数据"
 
 #: ontask/templates/dataops/plugin_admin.html:8
-#, fuzzy
-#| msgid "Plugin Execution"
 msgid "Plugin Admin"
-msgstr "插件执行"
+msgstr "插件管理"
 
 #: ontask/templates/dataops/plugin_admin.html:43 templates/base.html:148
 msgid "Plugins"
-msgstr ""
+msgstr "插件"
 
 #: ontask/templates/dataops/plugin_execution_report.html:6
 msgid "Plugin Execution"
@@ -3524,13 +3246,11 @@ msgstr "运行转换"
 
 #: ontask/templates/dataops/plugin_info_for_run.html:21 templates/base.html:92
 msgid "Run Model"
-msgstr ""
+msgstr "运行模型"
 
 #: ontask/templates/dataops/plugin_info_for_run.html:44
-#, fuzzy
-#| msgid "Columns to pass to the transformation"
 msgid "Input columns to transformation"
-msgstr "传递给转换的列"
+msgstr "输入列进行转换"
 
 #: ontask/templates/dataops/plugin_info_for_run.html:50
 msgid "Columns to store the result"
@@ -3550,13 +3270,11 @@ msgstr "执行参数"
 
 #: ontask/templates/dataops/plugin_info_for_run.html:117
 msgid "No parameters required"
-msgstr ""
+msgstr "无需参数"
 
 #: ontask/templates/dataops/plugin_info_for_run.html:125
-#, fuzzy
-#| msgid "No sql connections available."
 msgid "No description available"
-msgstr "没有可用的SQL连接。"
+msgstr "没有描述"
 
 #: ontask/templates/dataops/row_create.html:8
 #: ontask/templates/dataops/row_create.html:17
@@ -3613,10 +3331,9 @@ msgid "Upload/Merge %(n)s"
 msgstr "上传/合并%(n)s"
 
 #: ontask/templates/dataops/sqlupload_start.html:14
-#, fuzzy, python-format
-#| msgid "Step 1: Establish a %(n)s"
+#, python-format
 msgid "Establish a %(n)s"
-msgstr "步骤1：建立一个 %(n)s"
+msgstr "建立一个 %(n)s"
 
 #: ontask/templates/dataops/sqlupload_start.html:16
 msgid "The data will be accessed with the following parameters:"
@@ -3676,21 +3393,17 @@ msgid "Transform"
 msgstr "转换"
 
 #: ontask/templates/dataops/transform_model.html:44
-#, fuzzy
-#| msgid "Folder where plugins are stored"
 msgid "Folders with incorrect plugins"
-msgstr "存储插件的文件夹"
+msgstr "存储错误插件的文件夹"
 
 #: ontask/templates/dataops/transform_model.html:73
 #: ontask/templates/dataops/transform_model.html:88
 msgid "Models"
-msgstr ""
+msgstr "模型"
 
 #: ontask/templates/dataops/transform_model.html:78 templates/base.html:86
-#, fuzzy
-#| msgid "Add a new question to the action"
 msgid "Apply a transformation to the data"
-msgstr "向该动作添加新问题"
+msgstr "对数据进行转换"
 
 #: ontask/templates/dataops/transform_model.html:79
 #: ontask/templates/dataops/transform_model.html:82
@@ -3698,10 +3411,8 @@ msgid "Transformations"
 msgstr "转换"
 
 #: ontask/templates/dataops/transform_model.html:87 templates/base.html:91
-#, fuzzy
-#| msgid "1) Select all rows in both the existing and new table"
 msgid "Execute a model with the existing data"
-msgstr "1)在现有表和新表中选择所有行"
+msgstr "用现有数据执行模型"
 
 #: ontask/templates/dataops/upload1.html:7
 #: ontask/templates/dataops/upload_s3.html:7
@@ -3709,8 +3420,6 @@ msgid "Upload/Merge"
 msgstr "上传/合并"
 
 #: ontask/templates/dataops/upload1.html:14
-#, fuzzy
-#| msgid "Step 1: Select"
 msgid "Select"
 msgstr "选择"
 
@@ -3719,8 +3428,6 @@ msgid "Upload/Merge CSV"
 msgstr "上传/合并 CSV"
 
 #: ontask/templates/dataops/upload_s2.html:14
-#, fuzzy
-#| msgid "Step 2: Select Columns"
 msgid "Select Columns"
 msgstr "选择列"
 
@@ -3745,8 +3452,6 @@ msgid "Keep?"
 msgstr "是否保留？"
 
 #: ontask/templates/dataops/upload_s3.html:14
-#, fuzzy
-#| msgid "Step 3: Select Keys and Merge Option"
 msgid "Select Keys and Merge Option"
 msgstr "选择键并合并选项"
 
@@ -3835,8 +3540,6 @@ msgid "Review Operation"
 msgstr "审查操作"
 
 #: ontask/templates/dataops/upload_s4.html:14
-#, fuzzy
-#| msgid "Step 4: Review and confirm"
 msgid "Review and confirm"
 msgstr "检查并确认"
 
@@ -3854,7 +3557,7 @@ msgstr "数据上传/合并"
 
 #: ontask/templates/dataops/uploadmerge.html:11
 msgid "Select the type of data source"
-msgstr "选择要包含在输出中的操作："
+msgstr "选择数据资源类型"
 
 #: ontask/templates/dataops/uploadmerge.html:16
 msgid "Operation"
@@ -3930,8 +3633,6 @@ msgstr ""
 "以便可以匹配行。 "
 
 #: ontask/templates/dataops/uploadmerge.html:64
-#, fuzzy
-#| msgid "Google Sheet URL"
 msgid "Google Sheet"
 msgstr "谷歌工作表网址"
 
@@ -3972,18 +3673,10 @@ msgid "S3 Bucket CSV"
 msgstr "S3 存储桶 CSV"
 
 #: ontask/templates/dataops/uploadmerge.html:89
-#, fuzzy
-#| msgid "Upload data from a Google Sheet file."
 msgid "Upload data from a CSV file in a S3 Bucket."
 msgstr "从S3存储桶中上传一个CSV文件中的数据。"
 
 #: ontask/templates/dataops/uploadmerge.html:90
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "            Given the URL pointing to a publicly available Google Sheet "
-#| "upload or merge its content.\n"
-#| "            "
 msgid ""
 "\n"
 "            Given the key, secret, bucket name and file path to a CSV file,\n"
@@ -3991,9 +3684,7 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"给定钥匙，密钥，存储桶名称以及文件路径指向的CSV文件，\n"
-"上传或合并其内容的URL。\n"
-" "
+"给定键，密钥，存储桶名称以及文件路径指向的CSV文件，上传或合并其内容的URL。"
 
 #: ontask/templates/dataops/uploadmerge.html:106
 msgid "SQL Connection"
@@ -4020,8 +3711,6 @@ msgstr "编辑个人信息资料"
 
 #: ontask/templates/profiles/edit_profile.html:15
 #: ontask/templates/profiles/show_profile.html:16
-#, fuzzy
-#| msgid "Profile picture"
 msgid "profile picture"
 msgstr "个人信息图片"
 
@@ -4078,8 +3767,6 @@ msgid "Create"
 msgstr "创建"
 
 #: ontask/templates/profiles/show_profile.html:66
-#, fuzzy
-#| msgid "API Auth token"
 msgid "Auth token for"
 msgstr "Auth身份验证令牌对应于"
 
@@ -4103,54 +3790,35 @@ msgid ""
 "Are you sure\n"
 "      you want to delete this scheduled operation\n"
 "      for action <strong>%(n)s</strong>?"
-msgstr ""
-"是否确定\n"
-"删除已排程的操作<strong>%(n)s</strong>吗？"
+msgstr "是否确定删除已排程的操作<strong>%(n)s</strong>吗？"
 
 #: ontask/templates/scheduler/includes/partial_scheduler_operations.html:4
-#, fuzzy
-#| msgid "Obtain the data from the SQL connection"
 msgid "View the details of this scheduled action"
-msgstr "查看已排程的操作的细节"
+msgstr "查看已预定的操作的细节"
 
 #: ontask/templates/scheduler/includes/partial_scheduler_operations.html:8
-#, fuzzy
-#| msgid "Delete scheduled JSON action"
 msgid "Delete this scheduled action"
-msgstr "删除这个已排程的操作"
+msgstr "删除这个已预定的操作"
 
 #: ontask/templates/scheduler/includes/partial_show_schedule_action.html:3
-#, fuzzy
-#| msgid "Scheduled operations"
 msgid "Scheduled action"
-msgstr "已排程的操作"
+msgstr "预定的操作"
 
 #: ontask/templates/scheduler/includes/partial_show_schedule_action.html:9
-#, fuzzy, python-format
-#| msgid "The action will execute in %(n)s"
+#, python-format
 msgid "Action will execute in %(t)s"
-msgstr "该操作将在%(n)s执行"
+msgstr "该操作将在%(t)s执行"
 
 #: ontask/templates/scheduler/index.html:8
 msgid "Scheduled operations"
 msgstr "已排程的操作"
 
 #: ontask/templates/scheduler/index.html:43
-#, fuzzy
-#| msgid "Scheduled operations"
 msgid "Scheduled Actions"
-msgstr "已排程的操作"
+msgstr "已yud的操作"
 
 #: ontask/templates/scheduler/index.html:55
-#, fuzzy, python-format
-#| msgid ""
-#| "<strong><super>*</super></strong>The execution of some of\n"
-#| "    the actions can be scheduled for a time in the future. This page "
-#| "shows those planned executions. To schedule the\n"
-#| "    execution of one action, go to the <a href=\"%(actionindex)s"
-#| "\">Actions</a> menu and select the operation <i>Schedule\n"
-#| "    </i> for an\n"
-#| "    action."
+#, python-format
 msgid ""
 "The execution of some of\n"
 "      the actions can be scheduled for a time in the future. This page shows "
@@ -4190,8 +3858,6 @@ msgid "Views"
 msgstr "视图"
 
 #: ontask/templates/table/display.html:142
-#, fuzzy
-#| msgid "Table"
 msgid "Full table"
 msgstr "全表格"
 
@@ -4238,14 +3904,11 @@ msgid "Column has no data"
 msgstr "列没有数据"
 
 #: ontask/templates/table/includes/partial_column_stats_modal.html:4
-#, fuzzy, python-format
-#| msgid "Stats for %(value)s"
+#, python-format
 msgid "Statistics for %(cn)s"
-msgstr "%(value)s的统计表"
+msgstr "%(cn)s的统计表"
 
 #: ontask/templates/table/includes/partial_column_stats_selector.html:6
-#, fuzzy
-#| msgid "Statistics"
 msgid "Column statistics"
 msgstr "统计表"
 
@@ -4262,14 +3925,10 @@ msgid "Delete row"
 msgstr "删除行"
 
 #: ontask/templates/table/includes/partial_table_ops.html:3
-#, fuzzy
-#| msgid "Edit the data in this row"
 msgid "Edit the values in this row"
 msgstr "编辑此行的值"
 
 #: ontask/templates/table/includes/partial_table_ops.html:6
-#, fuzzy
-#| msgid "4) Select only the rows with keys in the new table"
 msgid "Compare values in the row with the rest of the table"
 msgstr "将行中的值与表中的其余值进行比较"
 
@@ -4297,8 +3956,6 @@ msgid "Are you sure you want to clone view <strong>%(n)s</strong>?"
 msgstr "是否确定克隆视图<strong>%(n)s</strong>?"
 
 #: ontask/templates/table/includes/partial_view_clone.html:12
-#, fuzzy
-#| msgid "A new view with the prefix \"Copy_of_\" will be created"
 msgid "A new view with the prefix \"Copy of \" will be created"
 msgstr "一个前缀是\"Copy_of_\"的新视图将被创建"
 
@@ -4353,10 +4010,8 @@ msgid "Dashboard for %(n)s"
 msgstr "%(n)s的仪表板"
 
 #: ontask/templates/table/stat_view.html:38
-#, fuzzy
-#| msgid "There is no data in the table"
 msgid "There is no data to show in the dashboard"
-msgstr "表格中没有数据"
+msgstr "仪表板中没有要显示的数据"
 
 #: ontask/templates/table/view_index.html:8
 #: ontask/templates/table/view_index.html:55
@@ -4364,18 +4019,14 @@ msgid "Table Views"
 msgstr "表视图"
 
 #: ontask/templates/table/view_index.html:58
-#, fuzzy
-#| msgid "Table"
 msgid "Full Table"
-msgstr "全表格"
+msgstr "全表"
 
 #: ontask/templates/table/view_index.html:62
 msgid "New view for the table"
 msgstr "本表的新视图"
 
 #: ontask/templates/table/view_index.html:63
-#, fuzzy
-#| msgid "Views"
 msgid "View"
 msgstr "视图"
 
@@ -4391,8 +4042,6 @@ msgid "Details"
 msgstr "详细信息"
 
 #: ontask/templates/workflow/detail.html:80
-#, fuzzy
-#| msgid "Operations"
 msgid "Column Operations"
 msgstr "列操作"
 
@@ -4429,8 +4078,6 @@ msgid "All"
 msgstr "全部"
 
 #: ontask/templates/workflow/export_done.html:4
-#, fuzzy
-#| msgid "Export action"
 msgid "Export Done"
 msgstr "导出完成"
 
@@ -4475,13 +4122,6 @@ msgid "Attribute"
 msgstr "属性"
 
 #: ontask/templates/workflow/includes/attributes.html:15
-#, fuzzy
-#| msgid ""
-#| "Attributes are pairs <code>(name, value)</code>.\n"
-#| "      Define a pair\n"
-#| "      when you need to use a value in various places and that value may "
-#| "change over\n"
-#| "      time."
 msgid ""
 "Attributes are pairs <code>(name, value)</code>.\n"
 "    Define a pair\n"
@@ -4489,13 +4129,10 @@ msgid ""
 "over\n"
 "    time."
 msgstr ""
-"属性是成对的<code>(名称, 值)</code> \n"
-"。当需要在不同的地方使用一个值时定义一对，\n"
-"并且该值可能随着时间的推移而改变。"
+"属性是成对的<code>(名称, 值)</code>。当需要在不同的地方使用一个值时定义一对，"
+"并且该对的值可能随着时间的推移而改变。"
 
 #: ontask/templates/workflow/includes/learners.html:2
-#, fuzzy
-#| msgid "Users with access to this workflow"
 msgid "Learners with access to this workflow"
 msgstr "具备访问此工作流权限的学生"
 
@@ -4509,21 +4146,16 @@ msgstr ""
 "的权限则选择\"无权限”。"
 
 #: ontask/templates/workflow/includes/learners.html:8
-#, fuzzy
-#| msgid "Users with access to this workflow"
 msgid "Learners do not have access to the content in this workflow"
 msgstr "学生没有访问此工作流内容的权限"
 
 #: ontask/templates/workflow/includes/learners.html:10
-#, fuzzy, python-format
-#| msgid "Users with access to this workflow"
+#, python-format
 msgid "%(n)s learner has access to the workflow"
 msgid_plural "%(n)s learners have access to the workflow"
 msgstr[0] "%(n)s学生可以访问此工作流"
 
 #: ontask/templates/workflow/includes/learners.html:14
-#, fuzzy
-#| msgid "Key column to match the user id"
 msgid "Key column with the learners' email"
 msgstr "匹配学生邮箱的键列"
 
@@ -4544,28 +4176,17 @@ msgid "Refresh learner list"
 msgstr "刷新学生列表"
 
 #: ontask/templates/workflow/includes/no_actions.html:5
-#, fuzzy, python-format
-#| msgid ""
-#| "<strong>Next Step:</strong> Click in the <a href=\"%(actionindex)s\">\n"
-#| "Actions</a> menu at the top bar to create actions to execute with the "
-#| "data in the table."
+#, python-format
 msgid ""
 "<strong>Next Step:</strong> Click in the <a href=\"%(actionindex)s\">\n"
 "  Actions</a> menu at the top bar to create actions to execute with the data "
 "in the table."
 msgstr ""
 "<strong>下一步:</strong>点击<a href=\"%(actionindex)s\">\n"
-"操作</a> 顶部栏菜单\n"
-"创建与表中的数据一起执行的操作。"
+"操作</a> 顶部栏菜单创建与表中的数据一起执行的操作。"
 
 #: ontask/templates/workflow/includes/no_data.html:5
-#, fuzzy, python-format
-#| msgid ""
-#| "<strong>Next Step:</strong> The workflow data table is empty. Click in "
-#| "the\n"
-#| "<i>Manage table data</i> button below and select the option to <a href="
-#| "\"%(uploadmerge)s\">upload data to the\n"
-#| "table</a>."
+#, python-format
 msgid ""
 "<strong>Next Step:</strong> The workflow data table is empty. Click in the "
 "<i>Table</i> link in the top menu and select the option to <a href="
@@ -4603,10 +4224,8 @@ msgid "Update attribute"
 msgstr "更新属性"
 
 #: ontask/templates/workflow/includes/partial_attribute_operations.html:6
-#, fuzzy
-#| msgid "Delete this pair name/value"
 msgid "Delete pair name/value"
-msgstr "删除这一对名称/数值"
+msgstr "删除对名称/数值"
 
 #: ontask/templates/workflow/includes/partial_column_addedit.html:16
 #: ontask/templates/workflow/includes/partial_column_addedit.html:29
@@ -4628,10 +4247,8 @@ msgid "Are you sure you want to clone column <strong>%(n)s</strong>?"
 msgstr "是否确定克隆列<strong>%(n)s</strong>？"
 
 #: ontask/templates/workflow/includes/partial_column_clone.html:12
-#, fuzzy
-#| msgid "A new column with the prefix \"Copy_of_\" will be created"
 msgid "A new column with the prefix \"Copy of \" will be created"
-msgstr "将创建一个带有前缀\"Copy_Of_\"的新列"
+msgstr "将创建一个带有前缀\"Copy of\"的新列"
 
 #: ontask/templates/workflow/includes/partial_column_clone.html:16
 msgid "Clone column"
@@ -4721,12 +4338,10 @@ msgstr[0] "%(counter)s行，"
 #, python-format
 msgid "%(counter)s column,"
 msgid_plural "%(counter)s columns,"
-msgstr[0] "%(counter)s列，"
+msgstr[0] "%(counter)s列， "
 
 #: ontask/templates/workflow/includes/partial_workflow_card.html:9
-#, fuzzy, python-format
-#| msgid "%(num)s action"
-#| msgid_plural "%(num)s actions,"
+#, python-format
 msgid "%(counter)s action"
 msgid_plural "%(counter)s actions"
 msgstr[0] "%(counter)s操作"
@@ -4765,10 +4380,8 @@ msgid "Delete this workflow"
 msgstr "删除此工作流"
 
 #: ontask/templates/workflow/includes/partial_workflow_card.html:47
-#, fuzzy
-#| msgid "No workflows available"
 msgid "Mark workflow as favourite"
-msgstr "没有可用的工作流"
+msgstr "收藏工作流"
 
 #: ontask/templates/workflow/includes/partial_workflow_clone.html:5
 msgid "Confirm workflow cloning"
@@ -4861,18 +4474,12 @@ msgid "Instructors that can manage this workflow"
 msgstr "老师可以管理这个工作流"
 
 #: ontask/templates/workflow/includes/share.html:5
-#, fuzzy
-#| msgid ""
-#| "Click in the <i>Add User</i> button below and provide the email for the "
-#| "user\n"
-#| "      with whom you want to share the workflow."
 msgid ""
 "Click in the <i>Add Intructor</i> button below and provide the email for the "
 "user\n"
 "    with whom you want to share the workflow."
 msgstr ""
-"单击下面的<i>添加用户</i>按钮，\n"
-"并为希望与之共享工作流的用户提供电子邮件。"
+"单击下面的<i>添加用户</i>按钮，并为希望与之共享工作流的用户提供电子邮件。"
 
 #: ontask/templates/workflow/includes/share.html:12
 msgid "Instructor"
@@ -4897,8 +4504,6 @@ msgid "Statistics about this column"
 msgstr "关于本列的统计表"
 
 #: ontask/templates/workflow/includes/workflow_column_operations.html:25
-#, fuzzy
-#| msgid "Restrict the values allowed in the column"
 msgid "Restrict the use of values to the ones already in the column"
 msgstr "将值的使用限制为列中已有的值"
 
@@ -4907,16 +4512,12 @@ msgid "Restrict values"
 msgstr "限制值"
 
 #: ontask/templates/workflow/includes/workflow_column_operations.html:41
-#, fuzzy
-#| msgid "Restrict column"
 msgid "Make first column"
 msgstr "生成第一列"
 
 #: ontask/templates/workflow/includes/workflow_column_operations.html:45
-#, fuzzy
-#| msgid "Delete column"
 msgid "Make last column"
-msgstr "设为最后一列"
+msgstr "生成最后一列"
 
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:5
 msgid "Export the workflow and its actions"
@@ -4946,7 +4547,7 @@ msgstr "导入一个OnTask工作流文件"
 
 #: ontask/templates/workflow/index.html:47
 msgid "Favourites"
-msgstr ""
+msgstr "收藏夹"
 
 #: ontask/templates/workflow/index.html:59
 msgid ""
@@ -4980,8 +4581,6 @@ msgstr ""
 "发送给学习者，通过HTML地址显示，或者发送到另一台机器。"
 
 #: ontask/templates/workflow/operations.html:47
-#, fuzzy
-#| msgid "More workflow operations"
 msgid "Workflow Operations"
 msgstr "工作流操作"
 
@@ -4991,7 +4590,7 @@ msgstr "属性"
 
 #: ontask/templates/workflow/operations.html:65
 msgid "Share with Instructors"
-msgstr ""
+msgstr "分享给教师"
 
 #: ontask/templates/workflow/operations.html:70
 msgid "Learners"
@@ -4999,7 +4598,7 @@ msgstr "学生"
 
 #: ontask/visualizations/plotly.py:93 ontask/visualizations/plotly.py:100
 msgid "Your value"
-msgstr ""
+msgstr "你的价值"
 
 #: ontask/visualizations/templatetags/vis_include.py:23
 msgid "Action object not found when processing tag"
@@ -5031,8 +4630,6 @@ msgid "User not found"
 msgstr "未找到用户"
 
 #: ontask/workflow/forms/attribute_shared.py:121
-#, fuzzy
-#| msgid "You don't need to add yourself to the share list"
 msgid "You do not need to add yourself to the share list"
 msgstr "无需将自己添加到共享列表中"
 
@@ -5109,10 +4706,8 @@ msgid "Number (values from 1 to N) or comma separated list of values."
 msgstr "数值(从1到n的值)或逗号分隔的值列表。"
 
 #: ontask/workflow/forms/workflow.py:32
-#, fuzzy
-#| msgid "Type the name of the workflow:"
 msgid "You need to provide a name for the workflow."
-msgstr "输入此工作流的名称："
+msgstr "为此工作流的命名："
 
 #: ontask/workflow/forms/workflow.py:44 ontask/workflow/forms/workflow.py:97
 msgid "A workflow with this name already exists"
@@ -5127,26 +4722,23 @@ msgid "Incorrect form request (it is not multipart)"
 msgstr "错误的表单请求(此非多部分的)"
 
 #: ontask/workflow/import_export.py:105
-#, fuzzy, python-brace-format
-#| msgid "Unable to import workflow (Exception: {0})"
+#, python-brace-format
 msgid "Unable to import workflow. Exception: {0}"
-msgstr "无法导入工作流(Exception: {0})"
+msgstr "无法导入工作流。排除： {0}"
 
 #: ontask/workflow/import_export.py:107
-#, fuzzy, python-brace-format
-#| msgid "Unable to import workflow due to a validation error"
+#, python-brace-format
 msgid "Unable to import workflow. Validation error: {0}"
-msgstr "由于验证错误无法导入工作流"
+msgstr "无法导入工作流。验证错误：{0}"
 
 #: ontask/workflow/import_export.py:111
 msgid "Workflow data with incorrect structure."
 msgstr "具有不正确结构的工作流数据。"
 
 #: ontask/workflow/import_export.py:113
-#, fuzzy, python-brace-format
-#| msgid "Unable to import workflow (Exception: {0})"
+#, python-brace-format
 msgid "Unable to import workflow: {0}"
-msgstr "无法导入工作流(Exception: {0})"
+msgstr "无法导入工作流：{0}"
 
 #: ontask/workflow/ops.py:103
 msgid "Column has no meaningful values"
@@ -5159,7 +4751,7 @@ msgstr "学生邮件已成功更新。"
 #: ontask/workflow/ops.py:255
 #, python-brace-format
 msgid "The new data does not preserve the key property of column \"{0}\""
-msgstr ""
+msgstr "新数据不保留列“{0}”的键属性"
 
 #: ontask/workflow/serialize_column.py:32
 #, python-brace-format
@@ -5189,15 +4781,13 @@ msgstr "保证可压缩性"
 
 #: ontask/workflow/serialize_workflow.py:122
 msgid "Unexpected empty workflow name."
-msgstr ""
+msgstr "意外的空工作流名称。"
 
 #: ontask/workflow/serialize_workflow.py:129
-#, fuzzy
-#| msgid "There is a column with this name. Please change."
 msgid ""
 "There is a workflow with this name. Please provide a workflow name in the "
 "import page."
-msgstr "已存在以此命名的列。请更换。"
+msgstr "已有一个同名的工作流。请在导入页中提供工作流名称。"
 
 #: ontask/workflow/serialize_workflow.py:155
 #: ontask/workflow/serialize_workflow.py:193
@@ -5256,10 +4846,9 @@ msgid "Cannot find action to add question."
 msgstr "无法找到添加问题的操作。"
 
 #: ontask/workflow/views/column_crud.py:187
-#, fuzzy, python-brace-format
-#| msgid "Unable to create column data"
+#, python-brace-format
 msgid "Unable to add column: {0}"
-msgstr "无法创建列数据"
+msgstr "无法添加列： {0}"
 
 #: ontask/workflow/views/column_crud.py:270
 #: ontask/workflow/views/column_crud.py:382
@@ -5268,17 +4857,15 @@ msgstr "具有该名称的列已经存在"
 
 #: ontask/workflow/views/column_crud.py:293
 #: ontask/workflow/views/column_crud.py:466
-#, fuzzy, python-brace-format
-#| msgid "Unable to create column data"
+#, python-brace-format
 msgid "Unable to add the column: {0}"
-msgstr "无法创建列数据"
+msgstr "无法添加列： {0}"
 
 #: ontask/workflow/views/column_crud.py:322
 #: ontask/workflow/views/column_crud.py:693
-#, fuzzy, python-brace-format
-#| msgid "Unable to create column data"
+#, python-brace-format
 msgid "Unable to clone column: {0}"
-msgstr "无法创建列数据"
+msgstr "无法克隆列： {0}"
 
 #: ontask/workflow/views/column_crud.py:406
 msgid "The integer value has to be larger than 1"
@@ -5306,10 +4893,9 @@ msgid "You can only rename workflows you created."
 msgstr "只能重命名你自己创建的工作流。"
 
 #: ontask/workflow/views/workflow_crud.py:381
-#, fuzzy, python-brace-format
-#| msgid "Unable to clone workflow"
+#, python-brace-format
 msgid "Unable to clone workflow: {0}"
-msgstr "无法克隆工作流"
+msgstr "无法克隆工作流： {0}"
 
 #: ontask/workflow/views/workflow_crud.py:398
 msgid "Workflow successfully cloned."
@@ -5320,20 +4906,14 @@ msgid "Value"
 msgstr "数值"
 
 #: ontask/workflow/views/workflow_ops.py:54
-#, fuzzy
-#| msgid "Edit attribute"
 msgid "Edit the attribute"
 msgstr "编辑属性"
 
 #: ontask/workflow/views/workflow_ops.py:266
-#, fuzzy
-#| msgid "Edit the data in this row"
 msgid "Edit the parameters of this column"
-msgstr "编辑此行的参数"
+msgstr "编辑此列的参数"
 
 #: ontask/workflow/views/workflow_ops.py:334
-#, fuzzy
-#| msgid "column {0} does not contain a unique key."
 msgid "The selected column does not contain email addresses."
 msgstr "选中的列不包含邮箱地址。"
 
@@ -5354,14 +4934,12 @@ msgid "Chinese"
 msgstr "中文"
 
 #: settings/base.py:394
-#, fuzzy
-#| msgid "Finish"
 msgid "Finnish"
 msgstr "芬兰语"
 
 #: settings/base.py:395
 msgid "Russian"
-msgstr ""
+msgstr "俄语"
 
 #: templates/400.html:4
 msgid "OnTask Bad request"
@@ -5427,26 +5005,20 @@ msgid "Switch to Site"
 msgstr "切换到网站"
 
 #: templates/base.html:55
-#, fuzzy
-#| msgid "Import workflows"
 msgid "Your workflows"
-msgstr "导入工作流"
+msgstr "你的工作流"
 
 #: templates/base.html:64
 msgid "Messages and Surveys"
 msgstr "信息与调查"
 
 #: templates/base.html:76
-#, fuzzy
-#| msgid "New view for the table"
 msgid "View the complete table"
-msgstr "本表的新视图"
+msgstr "查看全表"
 
 #: templates/base.html:77
-#, fuzzy
-#| msgid "Clone view"
 msgid "Full view"
-msgstr "克隆视图"
+msgstr "全视图"
 
 #: templates/base.html:81
 msgid "Upload or merge data into the workflow table"
@@ -5461,62 +5033,44 @@ msgid "More"
 msgstr "更多信息"
 
 #: templates/base.html:109
-#, fuzzy
-#| msgid "More workflow operations"
 msgid "Workflow operations"
 msgstr "工作流操作"
 
 #: templates/base.html:110
-#, fuzzy
-#| msgid "Operations"
 msgid "Column operations"
 msgstr "列操作"
 
 #: templates/base.html:111
-#, fuzzy
-#| msgid "Scheduled operations"
 msgid "Scheduled actions"
-msgstr "已排程的操作"
+msgstr "已预定的操作"
 
 #: templates/base.html:112
-#, fuzzy
-#| msgid "Views"
 msgid "View logs"
-msgstr "视图日志"
+msgstr "查看日志"
 
 #: templates/base.html:132
-#, fuzzy
-#| msgid "Execution parameters"
 msgid "Change platform configuration parameters"
-msgstr "执行参数"
+msgstr "更改平台配置参数"
 
 #: templates/base.html:133
-#, fuzzy
-#| msgid "Creating"
 msgid "Settings"
 msgstr "设置"
 
 #: templates/base.html:137
-#, fuzzy
-#| msgid "Manage table data"
 msgid "Manage the platform database"
-msgstr "管理表数据"
+msgstr "管理平台数据库"
 
 #: templates/base.html:138
-#, fuzzy
-#| msgid "Admin"
 msgid "DB Admin"
-msgstr "管理员"
+msgstr "数据库管理员"
 
 #: templates/base.html:142
 msgid "Connections to SQL databases"
 msgstr "连接SQL数据库"
 
 #: templates/base.html:147
-#, fuzzy
-#| msgid "Action available until"
 msgid "Available Plugins"
-msgstr "操作可用直到"
+msgstr "可用插件"
 
 #: templates/base.html:158 templates/base.html:247
 msgid "Logout"
@@ -5540,7 +5094,7 @@ msgstr "你的操作即将到期"
 
 #: templates/base.html:213
 msgid "Your session will expire in"
-msgstr "你的操作还有(）到期"
+msgstr "你的操作还有（）到期"
 
 #: templates/base.html:214
 msgid "seconds."
@@ -5575,10 +5129,6 @@ msgid "Oops. We have detected an internal error."
 msgstr "哎呀。我们检测到一个内部错误。"
 
 #: templates/critical_error.html:14
-#, fuzzy
-#| msgid ""
-#| "The following message is trying to explain what\n"
-#| "      happened."
 msgid ""
 "The following message is trying to explain what\n"
 "        happened."
@@ -5736,17 +5286,11 @@ msgid "This functionality is under construction."
 msgstr "此项功能正在建设中。"
 
 #: urls.py:33
-#, fuzzy
-#| msgid ""
-#| "The OnTask API offers functionality to manipulate \n"
-#| "workflows, tables and logs. The interface provides CRUD operations over \n"
-#| "these objects."
 msgid ""
 "The OnTask API offers functionality to manipulate workflows, tables and "
 "logs. The interface provides CRUD operations over these objects."
 msgstr ""
-"OnTask API提供操作\n"
-"工作流、表和日志的功能。该接口提供对这些对象的CRUD操作。"
+"OnTask API提供操作工作流、表和日志的功能。该接口提供对这些对象的CRUD操作。"
 
 #~ msgid "Actions, Conditions, Filters, Emails"
 #~ msgstr "操作，条件，筛选标签，邮件"
