@@ -6,7 +6,8 @@ Current Version: 6.0.1 ([documentation](http://ontask-version-b.readthedocs.io/e
 ![Issues](https://img.shields.io/github/issues/abelardopardo/ontask_b.svg?style=flat-square)
 ![License](https://img.shields.io/github/license/abelardopardo/ontask_b.svg?style=flat-square)
 [![Documentation Status](https://readthedocs.org/projects/ontask-version-b/badge/?version=latest)](https://ontask-version-b.readthedocs.io/en/latest/?badge=latest)
-[![Python](https://img.shields.io/pypi/pyversions/django)](https://pypi.python.org/)
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-37/)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/abelardopardo/ontask_b)
 ![GitHub followers](https://img.shields.io/github/followers/abelardopardo?label=Follow&style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/ontasklearning?label=Follow&style=social)
 
