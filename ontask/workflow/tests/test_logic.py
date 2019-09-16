@@ -181,7 +181,8 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
                 self.assertEqual(titem1.column.name, titem2.column.name)
                 if titem1.condition:
                     self.assertEqual(
-
+                        titem1.condition.name,
+                        titem2.condition.name)
 
 class WorkflowDelete(test.OnTaskTestCase):
     fixtures = ['test_merge']
