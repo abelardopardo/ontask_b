@@ -185,8 +185,7 @@ def edit_action_rubric(
         columns_to_insert = [
             column
             for column in columns_to_insert_qs
-            if column.categories == []
-        ]
+            if column.categories]
 
     # This is a GET request or a faulty POST request
     context = {
@@ -245,6 +244,12 @@ def edit_rubric_cell(
 
     :return: JSON Response
     """
+    # If the request has the 'action_content', update the action
+    action_content = request.POST.get('action_content')
+    if action_content:
+        action.set_text_content(action_content)
+        action.save()
+
     form = RubricCellForm(
         request.POST or None,
         instance=action.rubric_cells.filter(
@@ -307,6 +312,12 @@ def edit_rubric_loas(
 
     :return: JSON Response
     """
+    # If the request has the 'action_content', update the action
+    action_content = request.POST.get('action_content')
+    if action_content:
+        action.set_text_content(action_content)
+        action.save()
+
     form = RubricLOAForm(
         request.POST or None,
         criteria=[acc.column for acc in action.column_condition_pair.all()])

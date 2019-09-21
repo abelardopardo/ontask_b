@@ -60,6 +60,12 @@ def criterion_create(
         )
         return JsonResponse({'html_redirect': ''})
 
+    # If the request has the 'action_content', update the action
+    action_content = request.POST.get('action_content')
+    if action_content:
+        action.set_text_content(action_content)
+        action.save()
+
     # Form to read/process data
     form = CriterionForm(
         request.POST or None,
@@ -307,6 +313,12 @@ def criterion_insert(
 
     :return: JSON response
     """
+    # If the request has the 'action_content', update the action
+    action_content = request.POST.get('action_content')
+    if action_content:
+        action.set_text_content(action_content)
+        action.save()
+
     criteria = action.column_condition_pair.filter(action_id=pk)
     column = workflow.columns.filter(pk=cpk).first()
     if not column or criteria.filter(column=column).exists():
@@ -316,10 +328,18 @@ def criterion_insert(
         )
         return JsonResponse({'html_redirect': ''})
 
-    if set(column.categories) != set(criteria[0].column.categories):
+    if criteria and set(column.categories) != set(
+        criteria[0].column.categories):
         messages.error(
             request,
             _('Criterion does not have the correct levels of attainment')
+        )
+        return JsonResponse({'html_redirect': ''})
+
+    if not criteria and len(column.categories) == 0:
+        messages.error(
+            request,
+            _('The column needs to have a fixed set of possible values')
         )
         return JsonResponse({'html_redirect': ''})
 

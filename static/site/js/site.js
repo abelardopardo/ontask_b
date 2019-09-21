@@ -143,9 +143,15 @@ let setDateTimePickers = function() {
 };
 let assignColumn = function () {
   $('#div-spinner').show();
+  let data = []
+  if (document.getElementById("id_text_content") != null) {
+    value = get_id_text_content();
+    data.push({"name": "action_content", "value": value});
+  }
   $.ajax({
     url: $(this).attr('data-url'),
     type: 'post',
+    data: data,
     dataType: 'json',
     success: function (data) {
       if (typeof data.html_redirect != 'undefined') {
