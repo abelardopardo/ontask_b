@@ -60,6 +60,7 @@ class Log(models.Model):
     ACTION_CANVAS_EMAIL_SENT = 'action_canvas_email_sent'
     ACTION_CREATE = 'action_create'
     ACTION_CRITERION_CREATE = 'criterion_create'
+    ACTION_CRITERION_ADD = 'criterion_add'
     ACTION_CRITERION_DELETE = 'criterion_delete'
     ACTION_CRITERION_INSERT = 'criterion_insert'
     ACTION_UPDATE = 'action_update'
@@ -134,6 +135,7 @@ class Log(models.Model):
         (WORKFLOW_STAR, _('Toggle workflow star')),
         (ACTION_QUESTION_ADD, _('Question added')),
         (ACTION_CRITERION_CREATE, _('Criterion created')),
+        (ACTION_CRITERION_ADD, _('Criterion added')),
         (ACTION_CRITERION_DELETE, _('Criterion deleted')),
         (ACTION_CRITERION_INSERT, _('Criterion insert')),
         (COLUMN_ADD, _('Column added')),
