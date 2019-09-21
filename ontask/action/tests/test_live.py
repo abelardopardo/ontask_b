@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask.dataops.formula import has_variable
 from ontask.dataops.pandas import check_wf_df
-from ontask.models import Action, Condition, Workflow
+from ontask.models import Action, Condition, Workflow, Column
 
 
 class ActionActionEdit(test.OnTaskLiveTestCase):
@@ -448,7 +448,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.assertIn(
             "cmark2",
             self.selenium.execute_script(
-                """return $("#id_text_content").summernote('code')"""
+                """return $("#id_text_content").summernote("code")"""
             )
         )
 
@@ -1360,3 +1360,135 @@ class ActionServeLongSurvey(test.OnTaskLiveTestCase):
         self.assertEqual(len(pages), 4)
 
         self.logout()
+
+
+class ActionCreateRubric(test.OnTaskLiveTestCase):
+    """Test the view to serve a survey."""
+    fixtures = ['test_rubric']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'ontask',
+        'fixtures',
+        'test_rubric.sql',
+    )
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    workflow_name = 'test rubric'
+    action_name = 'survey'
+
+    def setUp(self):
+        """Set up and restore the PG table."""
+        super().setUp()
+        test.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        """Delete the PG table."""
+        test.delete_all_tables()
+        super().tearDown()
+
+    def test_create_rubric_action(self):
+        """Test the creation of a rubric action."""
+        # Login
+        self.login('instructor01@bogus.com')
+
+        workflow = Workflow.objects.get(name=self.workflow_name)
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.workflow_name)
+
+        # Create new action
+        self.create_new_rubric_action(self.action_name)
+
+        # insert the text
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//div[contains(@class, "note-editable")]')
+            )
+        )
+        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element_by_class_name('note-editable').send_keys(
+            'Dear {{ GivenName }}\n'
+            + 'Here are some suggestions based on the project rubric.\n'
+            + '{% ot_insert_rubric_feedback %}\n'
+            + 'Regards\n'
+            + 'Chris Doe\n'
+            + 'Course Coordinator')
+
+        self.select_rubric_tab()
+        self.click_dropdown_option(
+            '//div[@id="insert-criterion"]',
+            'Structure')
+        self.wait_for_datatable('rubric-table_previous')
+
+        # Insert an extra criterion
+        self.selenium.find_element_by_class_name(
+            'js-workflow-criterion-add').click()
+        self.wait_for_modal_open()
+        self.selenium.find_element_by_id('id_name').send_keys('CRIT 2')
+        element = self.selenium.find_element_by_id('id_description_text')
+        element.click()
+        element.clear()
+        element.send_keys('CRIT 2 description text')
+        # click in the Add criterion
+        self.selenium.find_element_by_xpath(
+            '//div[@id="modal-item"]//button[@type="submit"]'
+        ).click()
+        self.wait_for_modal_close()
+        self.wait_for_datatable('rubric-table_previous')
+
+        column = Column.objects.get(name='Structure')
+        loas = column.categories[:]
+        for index in range(2 * len(column.categories)):
+            items = self.selenium.find_elements_by_class_name(
+                'js-rubric-cell-edit')
+            items[index].click()
+            self.wait_for_modal_open()
+            self.selenium.find_element_by_id('id_description_text').send_keys(
+                'DESC {0}'.format(index))
+            self.selenium.find_element_by_id('id_feedback_text').send_keys(
+                'FEEDBACK {0}'.format(index))
+            # click in the DONE button
+            self.selenium.find_element_by_xpath(
+                '//div[@id="modal-item"]//button[@type="submit"]'
+            ).click()
+            self.wait_for_modal_close()
+            self.wait_for_datatable('rubric-table_previous')
+
+        # Loop over the number of rows
+        self.open_browse_preview(workflow.nrows)
+
+        # Change the LOAS
+        self.selenium.find_element_by_class_name('js-rubric-loas-edit').click()
+        self.wait_for_modal_open()
+        elem = self.selenium.find_element_by_id('id_levels_of_attainment')
+        elem.clear()
+        elem.send_keys(', '.join([loa + '2' for loa in loas]))
+        self.selenium.find_element_by_xpath(
+            '//div[@id="modal-item"]//button[@type="submit"]'
+        ).click()
+        self.wait_for_modal_close()
+        self.wait_for_datatable('rubric-table_previous')
+
+        # Close the action and back to table of actions
+        self.selenium.find_element_by_xpath(
+            '//div[@id="action-preview-done"]/button[3]').click()
+        self.wait_for_datatable('action-table_previous')
+
+        # Assertions
+        action = workflow.actions.get(name=self.action_name)
+        self.assertEqual(action.column_condition_pair.count(), 2)
+        self.assertEqual(action.rubric_cells.count(), 6)
+        for idx, rubric_cell in enumerate(action.rubric_cells.all()):
+            self.assertEqual(
+                rubric_cell.description_text,
+                'DESC {0}'.format(idx))
+            self.assertEqual(
+                rubric_cell.feedback_text,
+                'FEEDBACK {0}'.format(idx))
+
+        column.refresh_from_db()
+        self.assertEqual(column.categories, [loa + '2' for loa in loas])
+
+
+

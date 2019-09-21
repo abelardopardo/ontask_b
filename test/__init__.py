@@ -285,7 +285,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     viewport_width = 1024
     device_pixel_ratio = 1
     max_image_height = 1440
-    headless = True
+    headless = False
 
     class_and_text_xpath = \
         '//{0}[contains(@class, "{1}") and normalize-space(text()) = "{2}"]'
@@ -991,6 +991,12 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             Action.PERSONALIZED_TEXT,
             adesc)
 
+    def create_new_rubric_action(self, aname, adesc=''):
+        self.create_new_action_out_basic(
+            aname,
+            Action.RUBRIC_TEXT,
+            adesc)
+
     def create_new_json_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
@@ -1612,6 +1618,27 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME,
                                         'js-description-edit'))
+        )
+
+    def select_rubric_tab(self):
+        """
+        Assuming we are in the action edit page, click in the link to open the
+        rubric tab
+        :return:
+        """
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'rubric-tab')
+            )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+        self.selenium.find_element_by_id('rubric-tab').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'js-workflow-criterion-add')
+            )
         )
 
     def select_plugin_input_tab(self):
