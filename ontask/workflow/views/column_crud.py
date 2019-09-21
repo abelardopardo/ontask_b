@@ -2,8 +2,8 @@
 
 """Views for create/rename/update/delete columns."""
 
-import random
 from builtins import range
+import random
 from typing import Optional
 
 from django.contrib import messages
@@ -369,12 +369,15 @@ def random_column_add(
         return JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
-    form = RandomColumnAddForm(data=request.POST or None)
+    form = RandomColumnAddForm(
+        data=request.POST or None,
+        workflow=workflow,
+        allow_interval_as_initial=True)
 
     if request.method == 'POST' and form.is_valid():
 
         # Save the column object attached to the form and add additional fields
-        column = form.save(commit=False)
+        column: Column = form.save(commit=False)
         column.workflow = workflow
         column.is_key = False
 
@@ -391,16 +394,12 @@ def random_column_add(
                     request=request),
             })
 
-        # Update the data frame
-        df = load_table(workflow.get_data_frame_table_name())
-
-        # Get the values and interpret its meaning
-        column_values = form.cleaned_data['column_values']
-        # First, try to see if the field is a valid integer
+        # Detect the case of a single integer as initial value so that it is
+        # expanded
         try:
-            int_value = int(column_values)
-        except ValueError:
-            int_value = None
+            int_value: int = int(column.categories)
+        except (ValueError, TypeError):
+            int_value: Optional[str] = None
 
         if int_value:
             # At this point the field is an integer
@@ -415,55 +414,32 @@ def random_column_add(
                         request=request),
                 })
 
-            intvals = [idx + 1 for idx in range(int_value)]
-        else:
-            # At this point the field is a string and the values are the comma
-            # separated strings.
-            intvals = [
-                valstr.strip() for valstr in column_values.strip().split(',')
-                if valstr
-            ]
-            if not intvals:
-                form.add_error(
-                    'values',
-                    _('The value has to be a comma-separated list'),
-                )
-                return JsonResponse({
-                    'html_form': render_to_string(
-                        'workflow/includes/partial_random_column_add.html',
-                        {'form': form},
-                        request=request),
-                })
+            column.set_categories([idx + 1 for idx in range(int_value)])
+
+        column.save()
 
         # Empty new column
         new_column = [None] * workflow.nrows
         # Create the random partitions
         partitions = _partition(
             [idx for idx in range(workflow.nrows)],
-            len(intvals))
+            len(column.categories))
 
         # Assign values to partitions
         for idx, indexes in enumerate(partitions):
             for col_idx in indexes:
-                new_column[col_idx] = intvals[idx]
+                new_column[col_idx] = column.categories[idx]
 
         # Assign the new column to the data frame
-        df[column.name] = new_column
-
-        # Populate the column type
-        column.data_type = pandas_datatype_names.get(
-            df[column.name].dtype.name,
-        )
+        form.data_frame[column.name] = new_column
 
         # Update the positions of the appropriate columns
         workflow.reposition_columns(workflow.ncols + 1, column.position)
-
-        column.save()
         workflow.refresh_from_db()
 
         # Store the df to DB
         try:
-            store_dataframe(df, workflow)
+            store_dataframe(form.data_frame, workflow)
         except Exception as exc:
             messages.error(
                 request,
@@ -483,7 +459,7 @@ def random_column_add(
              'name': workflow.name,
              'column_name': column.name,
              'column_type': column.data_type,
-             'value': column_values})
+             'values': column.categories})
 
         # The form has been successfully processed
         return JsonResponse({'html_redirect': ''})
