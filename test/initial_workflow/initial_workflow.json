@@ -19,15 +19,19 @@
     "model": "authtools.user",
     "pk": 1,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$WktaTFdidmpOY3FP$RRYwFAL2ptwAT5fWCD1t2w",
-        "last_login": null,
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VlpTV3RVZUU5dkh1$iFEi/ej6nCIXpLiOgRLdVA",
+        "last_login": "2019-09-21T06:43:33.416Z",
         "is_superuser": false,
-        "email": "student01@bogus.com",
+        "email": "instructor01@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.640Z",
+        "date_joined": "2019-09-21T06:41:06.771Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -35,15 +39,19 @@
     "model": "authtools.user",
     "pk": 2,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$eU9KR1ZQeWNUc0ZW$M0/8lLXsHzXJ5QbGtsVvUg",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$NGhTbTVHZkxNZk85$oKvjCjqK/Si2dP8PJ46BUA",
         "last_login": null,
         "is_superuser": false,
-        "email": "student02@bogus.com",
+        "email": "instructor02@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.761Z",
+        "date_joined": "2019-09-21T06:41:06.891Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -51,15 +59,19 @@
     "model": "authtools.user",
     "pk": 3,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$YU5nQWNSMG5pcmZn$vDIdZd1CRGnZVkl2TjnZMQ",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Ymk0NlRtN215aWVz$kOv6vR1I3GQkuJgDHP7vBQ",
         "last_login": null,
         "is_superuser": false,
-        "email": "student03@bogus.com",
+        "email": "instructor03@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.768Z",
+        "date_joined": "2019-09-21T06:41:06.948Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -67,15 +79,19 @@
     "model": "authtools.user",
     "pk": 4,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$UHhObThUYzB3czdn$ANuMWnPsdGiofluZWdPT+A",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$UmNYNmhQcjhKVmN5$XzrEpF1l7va2RFUw/THvGQ",
         "last_login": null,
         "is_superuser": false,
-        "email": "student04@bogus.com",
+        "email": "instructor04@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.775Z",
+        "date_joined": "2019-09-21T06:41:06.961Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -83,15 +99,19 @@
     "model": "authtools.user",
     "pk": 5,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$UnpCMENOdWFHbVN5$vkElKpzLsOsP/MbZjMSayA",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$N0JnOG1iM0NoNWZl$uPvehhgSue+uBCkqW5zvoA",
         "last_login": null,
         "is_superuser": false,
-        "email": "student05@bogus.com",
+        "email": "instructor05@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.782Z",
+        "date_joined": "2019-09-21T06:41:06.974Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -99,15 +119,19 @@
     "model": "authtools.user",
     "pk": 6,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$MmF0VXBMcmpsUmRL$saaF8R1E/y4ImhUpJ2UM6w",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$dnFDeVlYOXJjeVhT$TL76B/TqoYn37OFn73Phow",
         "last_login": null,
         "is_superuser": false,
-        "email": "student06@bogus.com",
+        "email": "instructor06@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.788Z",
+        "date_joined": "2019-09-21T06:41:06.990Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -115,15 +139,19 @@
     "model": "authtools.user",
     "pk": 7,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$NWRWRGJORlhyT2F5$CfxwApT2pC0oqAI9xftnWw",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$aW1DdndvWTl5d3Q5$+DQce8dM/rGliN9dV6dfEw",
         "last_login": null,
         "is_superuser": false,
-        "email": "student07@bogus.com",
+        "email": "instructor07@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.794Z",
+        "date_joined": "2019-09-21T06:41:07.048Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -131,15 +159,19 @@
     "model": "authtools.user",
     "pk": 8,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$STBENUppWXdDNFZL$TMBn4+XyAD9v58HaQZs1Dg",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$NHdIYk5XUklwNlll$WNn1d4PxKq6BXc/Ik0A7NQ",
         "last_login": null,
         "is_superuser": false,
-        "email": "student08@bogus.com",
+        "email": "instructor08@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.802Z",
+        "date_joined": "2019-09-21T06:41:07.061Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -147,15 +179,19 @@
     "model": "authtools.user",
     "pk": 9,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$RGxuZmVDQkZHWnlr$UVlQ9OdvttQNzeX2lWLGzA",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$dW9CSzVwTHJnSTFJ$TmOC15+hF4vBxevnZTi+5Q",
         "last_login": null,
         "is_superuser": false,
-        "email": "student09@bogus.com",
+        "email": "instructor09@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.808Z",
+        "date_joined": "2019-09-21T06:41:07.072Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -163,15 +199,19 @@
     "model": "authtools.user",
     "pk": 10,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$SmJ2cGpaMFhickdx$H9Yb2VVVUzsFqsjvPhmVFQ",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$OUtvSU1PTE5Lb3FH$2gTYI921IUCUSJYFJNmKZg",
         "last_login": null,
         "is_superuser": false,
-        "email": "student10@bogus.com",
+        "email": "instructor10@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:55:58.815Z",
+        "date_joined": "2019-09-21T06:41:07.084Z",
         "name": "User Name",
-        "groups": [],
+        "groups": [
+            [
+                "instructor"
+            ]
+        ],
         "user_permissions": []
     }
 },
@@ -179,19 +219,15 @@
     "model": "authtools.user",
     "pk": 11,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$aDI4Nmd2RUNxek9x$jiE6PTRib/+LSOqvEBCkcQ",
-        "last_login": "2019-09-03T10:39:53.784Z",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$eE9jckxFbnBRUUxZ$wfTMcSjhk8rUmVnxSqfG9A",
+        "last_login": null,
         "is_superuser": false,
-        "email": "instructor01@bogus.com",
+        "email": "student01@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.148Z",
+        "date_joined": "2019-09-21T06:41:10.143Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -199,19 +235,15 @@
     "model": "authtools.user",
     "pk": 12,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$RTg1bVF6TzQ1UDJV$tTRk1jE6+Jc3IMoGQAYO/w",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VXB5UFFiSDV5MmRW$DwxquQT+q64xD9aEIbHNPA",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor02@bogus.com",
+        "email": "student02@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.336Z",
+        "date_joined": "2019-09-21T06:41:10.204Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -219,19 +251,15 @@
     "model": "authtools.user",
     "pk": 13,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$UGFHVGt6WWpyMmNS$uOduVBh3oxpzgzDj7lVmHw",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$alZEajQ1VEJNaHdz$pt7BEipZTbp+BF6iNqKSHQ",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor03@bogus.com",
+        "email": "student03@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.350Z",
+        "date_joined": "2019-09-21T06:41:10.212Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -239,19 +267,15 @@
     "model": "authtools.user",
     "pk": 14,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$SlNxVU10dUJoUG1q$fSkYnG+1Ea0jNR6UIGGzXg",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$bEV6azVqSzE0SWk5$7aXzQZR+dvlMiK9vscgyxw",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor04@bogus.com",
+        "email": "student04@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.363Z",
+        "date_joined": "2019-09-21T06:41:10.220Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -259,19 +283,15 @@
     "model": "authtools.user",
     "pk": 15,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$aTJpeWQ3S0ZMaW9y$7wpyhXw6By1OkLtmXlx/Yg",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$TTVMdzFqWUdBSlhZ$M6Hv52hV3Gq7gSzrpnsDGQ",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor05@bogus.com",
+        "email": "student05@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.378Z",
+        "date_joined": "2019-09-21T06:41:10.228Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -279,19 +299,15 @@
     "model": "authtools.user",
     "pk": 16,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$ZzZmVnNDSHFCYloz$xVq0M/sVceBut8f7ce7X1g",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$OTI3MEVkY3FOdkgx$Jlw3RbWdbhykPkcLePjIIw",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor06@bogus.com",
+        "email": "student06@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.390Z",
+        "date_joined": "2019-09-21T06:41:10.235Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -299,19 +315,15 @@
     "model": "authtools.user",
     "pk": 17,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$cW9wb1JQV2w2dU82$eUV0Vf2V+40436o+z6/zaA",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$ZExuaVRxMkFqS0NG$tn4MlVeN6A1dh9sJPFcqew",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor07@bogus.com",
+        "email": "student07@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.400Z",
+        "date_joined": "2019-09-21T06:41:10.242Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -319,19 +331,15 @@
     "model": "authtools.user",
     "pk": 18,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Zko3N1JuY3pvaUVa$acoZUFmLThN0fd/UrOP+RQ",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$ZnBjTGVVWjhOeFBJ$qTPLFSxvQ05SVS6DJFsHnA",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor08@bogus.com",
+        "email": "student08@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.412Z",
+        "date_joined": "2019-09-21T06:41:10.251Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -339,19 +347,15 @@
     "model": "authtools.user",
     "pk": 19,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$c2s3Q2k3V3ViejVl$iQcCZbylx4pfrGID54rmhw",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$bWZCeE9qanVFVlBF$3JINVdGm/YsWvC4gh/5slw",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor09@bogus.com",
+        "email": "student09@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.422Z",
+        "date_joined": "2019-09-21T06:41:10.262Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -359,19 +363,15 @@
     "model": "authtools.user",
     "pk": 20,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$M3JSS0hjYzh4dEZi$LIhRtOy+aateZ+JscfBa5g",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$cVFYYUlkZFNnR2Z6$pF7GPf7vGH2tcmZAbJmmog",
         "last_login": null,
         "is_superuser": false,
-        "email": "instructor10@bogus.com",
+        "email": "student10@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:07.435Z",
+        "date_joined": "2019-09-21T06:41:10.269Z",
         "name": "User Name",
-        "groups": [
-            [
-                "instructor"
-            ]
-        ],
+        "groups": [],
         "user_permissions": []
     }
 },
@@ -379,13 +379,13 @@
     "model": "authtools.user",
     "pk": 21,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$UWZvbXJ4TTdKOVd0$z7Lq5s1CyGb7Cuw+hLDQUg",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$STBhcmlYNGIweGtn$SDlxz/4KX/mP5TrzHUTVwQ",
         "last_login": null,
         "is_superuser": true,
         "email": "superuser@bogus.com",
         "is_staff": true,
         "is_active": true,
-        "date_joined": "2019-04-15T21:56:15.769Z",
+        "date_joined": "2019-09-21T06:42:14.164Z",
         "name": "Super User",
         "groups": [],
         "user_permissions": []
@@ -395,86 +395,23 @@
     "model": "siteprefs.preference",
     "pk": 1,
     "fields": {
-        "app": "core",
-        "name": "help_url",
-        "text": "html/index.html"
+        "app": "ontask",
+        "name": "notification_template",
+        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }}\n{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent\nresulting from the execution of the action with name \"{{ action.name }}\".</p>\n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from\n{{ num_rows }} to {{ num_selected }}.</p>\n{% else %}\n<p>All the data rows stored in the workflow table were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body></html>"
     }
 },
 {
     "model": "siteprefs.preference",
     "pk": 2,
     "fields": {
-        "app": "core",
-        "name": "minute_step",
-        "text": "15"
+        "app": "ontask",
+        "name": "notification_subject",
+        "text": "OnTask: Action executed"
     }
 },
 {
     "model": "siteprefs.preference",
     "pk": 3,
-    "fields": {
-        "app": "dataops",
-        "name": "plugin_directory",
-        "text": "/Users/pardosa/ontask_b/src/plugins"
-    }
-},
-{
-    "model": "siteprefs.preference",
-    "pk": 4,
-    "fields": {
-        "app": "action",
-        "name": "notification_template",
-        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }}\n{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent\nresulting from the execution of the action with name \"{{ action.name }}\".</p>\n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from\n{{ num_rows }} to {{ num_selected }}.</p>\n{% else %}\n<p>All the data rows stored in the workflow table were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body></html>"
-    }
-},
-{
-    "model": "siteprefs.preference",
-    "pk": 5,
-    "fields": {
-        "app": "action",
-        "name": "notification_subject",
-        "text": "OnTask: Action executed"
-    }
-},
-{
-    "model": "siteprefs.preference",
-    "pk": 6,
-    "fields": {
-        "app": "action",
-        "name": "notification_sender",
-        "text": ""
-    }
-},
-{
-    "model": "siteprefs.preference",
-    "pk": 7,
-    "fields": {
-        "app": "logs",
-        "name": "max_list_size",
-        "text": "200"
-    }
-},
-{
-    "model": "siteprefs.preference",
-    "pk": 8,
-    "fields": {
-        "app": "ontask",
-        "name": "notification_template",
-        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }}\n{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent\nresulting from the execution of the action with name \"{{ action.name }}\".</p>\n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from\n{{ num_rows }} to {{ num_selected }}.</p>\n{% else %}\n<p>All the data rows stored in the workflow table were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body></html>"
-    }
-},
-{
-    "model": "siteprefs.preference",
-    "pk": 9,
-    "fields": {
-        "app": "ontask",
-        "name": "notification_subject",
-        "text": "OnTask: Action executed"
-    }
-},
-{
-    "model": "siteprefs.preference",
-    "pk": 10,
     "fields": {
         "app": "ontask",
         "name": "notification_sender",
@@ -483,7 +420,7 @@
 },
 {
     "model": "siteprefs.preference",
-    "pk": 11,
+    "pk": 4,
     "fields": {
         "app": "ontask",
         "name": "content_types",
@@ -492,7 +429,7 @@
 },
 {
     "model": "siteprefs.preference",
-    "pk": 12,
+    "pk": 5,
     "fields": {
         "app": "ontask",
         "name": "max_upload_size",
@@ -501,7 +438,7 @@
 },
 {
     "model": "siteprefs.preference",
-    "pk": 13,
+    "pk": 6,
     "fields": {
         "app": "ontask",
         "name": "plugin_directory",
@@ -510,7 +447,7 @@
 },
 {
     "model": "siteprefs.preference",
-    "pk": 14,
+    "pk": 7,
     "fields": {
         "app": "ontask",
         "name": "max_log_list_size",
@@ -519,7 +456,7 @@
 },
 {
     "model": "siteprefs.preference",
-    "pk": 15,
+    "pk": 8,
     "fields": {
         "app": "ontask",
         "name": "help_url",
@@ -1615,12 +1552,52 @@
     }
 },
 {
+    "model": "ontask.column",
+    "pk": 68,
+    "fields": {
+        "name": "Presentation",
+        "description_text": "Presentation must have a problem description, methodology, results and conclusions. Must be clearly presented, and within the allotted time.",
+        "workflow": 1,
+        "data_type": "string",
+        "is_key": false,
+        "position": 68,
+        "in_viz": true,
+        "categories": [
+            "High",
+            "Medium",
+            "Poor"
+        ],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 69,
+    "fields": {
+        "name": "Structure",
+        "description_text": "The project must contain an introduction session where the problem is described with respect to its context, a methodology where the steps to get the results are presented, the obtained results, and then the conclusions of the study.",
+        "workflow": 1,
+        "data_type": "string",
+        "is_key": false,
+        "position": 69,
+        "in_viz": true,
+        "categories": [
+            "High",
+            "Medium",
+            "Poor"
+        ],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
     "model": "ontask.condition",
     "pk": 1,
     "fields": {
         "action": 1,
-        "name": "No_videos",
-        "description_text": "No video activity",
+        "name": "High engagement",
+        "description_text": "High engagement with Video 1 in Week 2",
         "formula": {
             "not": false,
             "rules": [
@@ -1629,18 +1606,18 @@
                     "type": "double",
                     "field": "Video_1_W2",
                     "input": "number",
-                    "value": "0",
-                    "operator": "equal"
+                    "value": "75",
+                    "operator": "greater"
                 }
             ],
             "valid": true,
             "condition": "AND"
         },
         "formula_text": "",
-        "n_rows_selected": 2,
+        "n_rows_selected": 6,
         "is_filter": false,
-        "created": "2019-04-15T21:59:04.775Z",
-        "modified": "2019-05-24T09:02:44.912Z",
+        "created": "2019-09-21T06:43:58.726Z",
+        "modified": "2019-09-21T06:50:09.072Z",
         "columns": [
             44
         ]
@@ -1685,8 +1662,8 @@
         "formula_text": "",
         "n_rows_selected": 1,
         "is_filter": false,
-        "created": "2019-04-15T21:59:05.426Z",
-        "modified": "2019-05-24T09:02:44.832Z",
+        "created": "2019-09-21T06:43:59.115Z",
+        "modified": "2019-09-21T06:50:09.127Z",
         "columns": [
             44
         ]
@@ -1731,8 +1708,8 @@
         "formula_text": "",
         "n_rows_selected": 5,
         "is_filter": false,
-        "created": "2019-04-15T21:59:05.860Z",
-        "modified": "2019-05-24T09:02:44.873Z",
+        "created": "2019-09-21T06:43:59.407Z",
+        "modified": "2019-09-21T06:50:09.165Z",
         "columns": [
             44
         ]
@@ -1743,8 +1720,8 @@
     "pk": 4,
     "fields": {
         "action": 1,
-        "name": "High engagement",
-        "description_text": "High engagement with Video 1 in Week 2",
+        "name": "No_videos",
+        "description_text": "No video activity",
         "formula": {
             "not": false,
             "rules": [
@@ -1753,18 +1730,18 @@
                     "type": "double",
                     "field": "Video_1_W2",
                     "input": "number",
-                    "value": "75",
-                    "operator": "greater"
+                    "value": "0",
+                    "operator": "equal"
                 }
             ],
             "valid": true,
             "condition": "AND"
         },
         "formula_text": "",
-        "n_rows_selected": 6,
+        "n_rows_selected": 2,
         "is_filter": false,
-        "created": "2019-04-15T21:59:06.244Z",
-        "modified": "2019-05-24T09:02:44.783Z",
+        "created": "2019-09-21T06:43:59.679Z",
+        "modified": "2019-09-21T06:50:09.219Z",
         "columns": [
             44
         ]
@@ -1803,8 +1780,8 @@
         "formula_text": "",
         "n_rows_selected": 3,
         "is_filter": true,
-        "created": "2019-04-15T21:59:06.782Z",
-        "modified": "2019-05-24T09:02:44.986Z",
+        "created": "2019-09-21T06:44:00.554Z",
+        "modified": "2019-09-21T06:50:09.297Z",
         "columns": [
             56,
             59
@@ -1836,8 +1813,8 @@
         "formula_text": "",
         "n_rows_selected": 1,
         "is_filter": false,
-        "created": "2019-04-15T21:59:06.981Z",
-        "modified": "2019-05-24T09:02:45.023Z",
+        "created": "2019-09-21T06:44:01.086Z",
+        "modified": "2019-09-21T06:50:09.338Z",
         "columns": [
             58
         ]
@@ -1868,8 +1845,8 @@
         "formula_text": "",
         "n_rows_selected": 3,
         "is_filter": false,
-        "created": "2019-04-15T21:59:07.203Z",
-        "modified": "2019-05-24T09:02:45.274Z",
+        "created": "2019-09-21T06:44:01.402Z",
+        "modified": "2019-09-21T06:50:09.376Z",
         "columns": [
             59
         ]
@@ -1880,6 +1857,207 @@
     "pk": 8,
     "fields": {
         "action": 3,
+        "name": "Enrolled in FASS",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Program",
+                    "type": "string",
+                    "field": "Program",
+                    "input": "text",
+                    "value": "FASS",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:02.434Z",
+        "modified": "2019-09-21T06:50:09.468Z",
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 9,
+    "fields": {
+        "action": 3,
+        "name": "Enrolled in FEIT",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Program",
+                    "type": "string",
+                    "field": "Program",
+                    "input": "text",
+                    "value": "FEIT",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:02.996Z",
+        "modified": "2019-09-21T06:50:09.514Z",
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 10,
+    "fields": {
+        "action": 3,
+        "name": "Enrolled in FSCI",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Program",
+                    "type": "string",
+                    "field": "Program",
+                    "input": "text",
+                    "value": "FSCI",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 6,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:03.374Z",
+        "modified": "2019-09-21T06:50:09.564Z",
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 11,
+    "fields": {
+        "action": 3,
+        "name": "Enrolled in SMED",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Program",
+                    "type": "string",
+                    "field": "Program",
+                    "input": "text",
+                    "value": "SMED",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:03.618Z",
+        "modified": "2019-09-21T06:50:09.594Z",
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 12,
+    "fields": {
+        "action": 4,
+        "name": "",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q01",
+                    "type": "double",
+                    "field": "Q01",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_not_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 12,
+        "is_filter": true,
+        "created": "2019-09-21T06:44:04.091Z",
+        "modified": "2019-09-21T06:50:09.672Z",
+        "columns": [
+            13
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 13,
+    "fields": {
+        "action": 4,
+        "name": "T1_HIGH",
+        "description_text": "High score in topic 1",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q01",
+                    "type": "double",
+                    "field": "Q01",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q02",
+                    "type": "double",
+                    "field": "Q02",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:04.538Z",
+        "modified": "2019-09-21T06:50:09.723Z",
+        "columns": [
+            13,
+            14
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 14,
+    "fields": {
+        "action": 4,
         "name": "T1_LOW",
         "description_text": "Low score in topic 1",
         "formula": {
@@ -1908,8 +2086,8 @@
         "formula_text": "",
         "n_rows_selected": 2,
         "is_filter": false,
-        "created": "2019-04-15T21:59:08.109Z",
-        "modified": "2019-05-24T09:02:45.447Z",
+        "created": "2019-09-21T06:44:05.055Z",
+        "modified": "2019-09-21T06:50:09.760Z",
         "columns": [
             13,
             14
@@ -1918,173 +2096,9 @@
 },
 {
     "model": "ontask.condition",
-    "pk": 9,
+    "pk": 15,
     "fields": {
-        "action": 3,
-        "name": "T2_LOW",
-        "description_text": "Low score in topic 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q03",
-                    "type": "double",
-                    "field": "Q03",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q04",
-                    "type": "double",
-                    "field": "Q04",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:08.500Z",
-        "modified": "2019-05-24T09:02:45.502Z",
-        "columns": [
-            15,
-            16
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 10,
-    "fields": {
-        "action": 3,
-        "name": "T3_LOW",
-        "description_text": "Low score in topic 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q05",
-                    "type": "double",
-                    "field": "Q05",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q06",
-                    "type": "double",
-                    "field": "Q06",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:08.813Z",
-        "modified": "2019-05-24T09:02:45.556Z",
-        "columns": [
-            17,
-            18
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 11,
-    "fields": {
-        "action": 3,
-        "name": "T4_LOW",
-        "description_text": "Low score in topic 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q07",
-                    "type": "double",
-                    "field": "Q07",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q08",
-                    "type": "double",
-                    "field": "Q08",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:08.996Z",
-        "modified": "2019-05-24T09:02:45.609Z",
-        "columns": [
-            19,
-            20
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 12,
-    "fields": {
-        "action": 3,
-        "name": "T5_LOW",
-        "description_text": "Low score in topic 5",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q09",
-                    "type": "double",
-                    "field": "Q09",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q10",
-                    "type": "double",
-                    "field": "Q10",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:09.198Z",
-        "modified": "2019-05-24T09:02:45.663Z",
-        "columns": [
-            21,
-            22
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 13,
-    "fields": {
-        "action": 3,
+        "action": 4,
         "name": "T1_MID",
         "description_text": "One answer was correctly answered for topic 1",
         "formula": {
@@ -2141,8 +2155,8 @@
         "formula_text": "",
         "n_rows_selected": 6,
         "is_filter": false,
-        "created": "2019-04-15T21:59:09.438Z",
-        "modified": "2019-05-24T09:02:45.465Z",
+        "created": "2019-09-21T06:44:05.436Z",
+        "modified": "2019-09-21T06:50:09.820Z",
         "columns": [
             13,
             14
@@ -2151,9 +2165,91 @@
 },
 {
     "model": "ontask.condition",
-    "pk": 14,
+    "pk": 16,
     "fields": {
-        "action": 3,
+        "action": 4,
+        "name": "T2_HIGH",
+        "description_text": "High score in topic 2",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q03",
+                    "type": "double",
+                    "field": "Q03",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q04",
+                    "type": "double",
+                    "field": "Q04",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 6,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:05.687Z",
+        "modified": "2019-09-21T06:50:09.870Z",
+        "columns": [
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 17,
+    "fields": {
+        "action": 4,
+        "name": "T2_LOW",
+        "description_text": "Low score in topic 2",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q03",
+                    "type": "double",
+                    "field": "Q03",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q04",
+                    "type": "double",
+                    "field": "Q04",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:05.925Z",
+        "modified": "2019-09-21T06:50:09.929Z",
+        "columns": [
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 18,
+    "fields": {
+        "action": 4,
         "name": "T2_MID",
         "description_text": "One answer was correctly answered for topic 2",
         "formula": {
@@ -2210,8 +2306,8 @@
         "formula_text": "",
         "n_rows_selected": 3,
         "is_filter": false,
-        "created": "2019-04-15T21:59:09.656Z",
-        "modified": "2019-05-24T09:02:45.520Z",
+        "created": "2019-09-21T06:44:06.214Z",
+        "modified": "2019-09-21T06:50:10.078Z",
         "columns": [
             15,
             16
@@ -2220,9 +2316,91 @@
 },
 {
     "model": "ontask.condition",
-    "pk": 15,
+    "pk": 19,
     "fields": {
-        "action": 3,
+        "action": 4,
+        "name": "T3_HIGH",
+        "description_text": "High score in topic 3",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q05",
+                    "type": "double",
+                    "field": "Q05",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q06",
+                    "type": "double",
+                    "field": "Q06",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 7,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:06.686Z",
+        "modified": "2019-09-21T06:50:10.187Z",
+        "columns": [
+            17,
+            18
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 20,
+    "fields": {
+        "action": 4,
+        "name": "T3_LOW",
+        "description_text": "Low score in topic 3",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q05",
+                    "type": "double",
+                    "field": "Q05",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q06",
+                    "type": "double",
+                    "field": "Q06",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:07.251Z",
+        "modified": "2019-09-21T06:50:10.289Z",
+        "columns": [
+            17,
+            18
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 21,
+    "fields": {
+        "action": 4,
         "name": "T3_MID",
         "description_text": "One answer was correctly answered for topic 3",
         "formula": {
@@ -2279,8 +2457,8 @@
         "formula_text": "",
         "n_rows_selected": 3,
         "is_filter": false,
-        "created": "2019-04-15T21:59:10.035Z",
-        "modified": "2019-05-24T09:02:45.574Z",
+        "created": "2019-09-21T06:44:07.603Z",
+        "modified": "2019-09-21T06:50:10.374Z",
         "columns": [
             17,
             18
@@ -2289,9 +2467,91 @@
 },
 {
     "model": "ontask.condition",
-    "pk": 16,
+    "pk": 22,
     "fields": {
-        "action": 3,
+        "action": 4,
+        "name": "T4_HIGH",
+        "description_text": "High score in topic 4",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q07",
+                    "type": "double",
+                    "field": "Q07",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q08",
+                    "type": "double",
+                    "field": "Q08",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 7,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:07.851Z",
+        "modified": "2019-09-21T06:50:10.452Z",
+        "columns": [
+            19,
+            20
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 23,
+    "fields": {
+        "action": 4,
+        "name": "T4_LOW",
+        "description_text": "Low score in topic 4",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q07",
+                    "type": "double",
+                    "field": "Q07",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q08",
+                    "type": "double",
+                    "field": "Q08",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:08.106Z",
+        "modified": "2019-09-21T06:50:10.526Z",
+        "columns": [
+            19,
+            20
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 24,
+    "fields": {
+        "action": 4,
         "name": "T4_MID",
         "description_text": "One answer was correctly answered for topic 4",
         "formula": {
@@ -2348,8 +2608,8 @@
         "formula_text": "",
         "n_rows_selected": 3,
         "is_filter": false,
-        "created": "2019-04-15T21:59:10.388Z",
-        "modified": "2019-05-24T09:02:45.627Z",
+        "created": "2019-09-21T06:44:08.381Z",
+        "modified": "2019-09-21T06:50:10.604Z",
         "columns": [
             19,
             20
@@ -2358,9 +2618,91 @@
 },
 {
     "model": "ontask.condition",
-    "pk": 17,
+    "pk": 25,
     "fields": {
-        "action": 3,
+        "action": 4,
+        "name": "T5_HIGH",
+        "description_text": "High score in topic 5",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q09",
+                    "type": "double",
+                    "field": "Q09",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q10",
+                    "type": "double",
+                    "field": "Q10",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:08.935Z",
+        "modified": "2019-09-21T06:50:10.669Z",
+        "columns": [
+            21,
+            22
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 26,
+    "fields": {
+        "action": 4,
+        "name": "T5_LOW",
+        "description_text": "Low score in topic 5",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q09",
+                    "type": "double",
+                    "field": "Q09",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q10",
+                    "type": "double",
+                    "field": "Q10",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "created": "2019-09-21T06:44:09.414Z",
+        "modified": "2019-09-21T06:50:10.754Z",
+        "columns": [
+            21,
+            22
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 27,
+    "fields": {
+        "action": 4,
         "name": "T5_MID",
         "description_text": "One answer was correctly answered for topic 5",
         "formula": {
@@ -2417,8 +2759,8 @@
         "formula_text": "",
         "n_rows_selected": 4,
         "is_filter": false,
-        "created": "2019-04-15T21:59:10.779Z",
-        "modified": "2019-05-24T09:02:45.681Z",
+        "created": "2019-09-21T06:44:09.785Z",
+        "modified": "2019-09-21T06:50:10.837Z",
         "columns": [
             21,
             22
@@ -2427,310 +2769,9 @@
 },
 {
     "model": "ontask.condition",
-    "pk": 18,
+    "pk": 28,
     "fields": {
-        "action": 3,
-        "name": "T1_HIGH",
-        "description_text": "High score in topic 1",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q01",
-                    "type": "double",
-                    "field": "Q01",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q02",
-                    "type": "double",
-                    "field": "Q02",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:10.980Z",
-        "modified": "2019-05-24T09:02:45.429Z",
-        "columns": [
-            13,
-            14
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 19,
-    "fields": {
-        "action": 3,
-        "name": "T2_HIGH",
-        "description_text": "High score in topic 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q03",
-                    "type": "double",
-                    "field": "Q03",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q04",
-                    "type": "double",
-                    "field": "Q04",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 6,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:11.179Z",
-        "modified": "2019-05-24T09:02:45.484Z",
-        "columns": [
-            15,
-            16
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 20,
-    "fields": {
-        "action": 3,
-        "name": "T3_HIGH",
-        "description_text": "High score in topic 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q05",
-                    "type": "double",
-                    "field": "Q05",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q06",
-                    "type": "double",
-                    "field": "Q06",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 7,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:11.404Z",
-        "modified": "2019-05-24T09:02:45.538Z",
-        "columns": [
-            17,
-            18
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 21,
-    "fields": {
-        "action": 3,
-        "name": "T4_HIGH",
-        "description_text": "High score in topic 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q07",
-                    "type": "double",
-                    "field": "Q07",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q08",
-                    "type": "double",
-                    "field": "Q08",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 7,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:11.609Z",
-        "modified": "2019-05-24T09:02:45.591Z",
-        "columns": [
-            19,
-            20
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 22,
-    "fields": {
-        "action": 3,
-        "name": "T5_HIGH",
-        "description_text": "High score in topic 5",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q09",
-                    "type": "double",
-                    "field": "Q09",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q10",
-                    "type": "double",
-                    "field": "Q10",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:11.795Z",
-        "modified": "2019-05-24T09:02:45.645Z",
-        "columns": [
-            21,
-            22
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 23,
-    "fields": {
-        "action": 4,
-        "name": "Less than 50 in the midterm",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Total",
-                    "type": "double",
-                    "field": "Total",
-                    "input": "number",
-                    "value": "50",
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:13.518Z",
-        "modified": "2019-05-24T09:02:45.732Z",
-        "columns": [
-            23
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 24,
-    "fields": {
-        "action": 4,
-        "name": "More or equal to 50 in midterm",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Total",
-                    "type": "double",
-                    "field": "Total",
-                    "input": "number",
-                    "value": "50",
-                    "operator": "greater_or_equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 10,
-        "is_filter": false,
-        "created": "2019-04-15T21:59:13.715Z",
-        "modified": "2019-05-24T09:02:45.750Z",
-        "columns": [
-            23
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 25,
-    "fields": {
-        "action": 6,
-        "name": "Students with days online <= 7",
-        "description_text": "These are the students that haven't connected to the discussion forum yet.",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Days online",
-                    "type": "integer",
-                    "field": "Days online",
-                    "input": "number",
-                    "value": "7",
-                    "operator": "less_or_equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "created": "2019-04-15T21:59:14.811Z",
-        "modified": "2019-05-24T09:02:45.799Z",
-        "columns": [
-            40
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 26,
-    "fields": {
-        "action": 4,
+        "action": 5,
         "name": "",
         "description_text": "There is an exam score",
         "formula": {
@@ -2751,8 +2792,8 @@
         "formula_text": "",
         "n_rows_selected": 12,
         "is_filter": true,
-        "created": "2019-04-15T22:00:36.803Z",
-        "modified": "2019-05-24T09:02:45.715Z",
+        "created": "2019-09-21T06:44:11.929Z",
+        "modified": "2019-09-21T06:50:10.984Z",
         "columns": [
             23
         ]
@@ -2760,21 +2801,21 @@
 },
 {
     "model": "ontask.condition",
-    "pk": 27,
+    "pk": 29,
     "fields": {
-        "action": 7,
-        "name": "Enrolled in FASS",
+        "action": 5,
+        "name": "Less than 50 in the midterm",
         "description_text": "",
         "formula": {
             "not": false,
             "rules": [
                 {
-                    "id": "Program",
-                    "type": "string",
-                    "field": "Program",
-                    "input": "text",
-                    "value": "FASS",
-                    "operator": "equal"
+                    "id": "Total",
+                    "type": "double",
+                    "field": "Total",
+                    "input": "number",
+                    "value": "50",
+                    "operator": "less"
                 }
             ],
             "valid": true,
@@ -2783,74 +2824,10 @@
         "formula_text": "",
         "n_rows_selected": 2,
         "is_filter": false,
-        "created": "2019-04-15T22:10:31.640Z",
-        "modified": "2019-05-24T09:02:45.319Z",
+        "created": "2019-09-21T06:44:12.131Z",
+        "modified": "2019-09-21T06:50:11.055Z",
         "columns": [
-            8
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 28,
-    "fields": {
-        "action": 7,
-        "name": "Enrolled in FEIT",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Program",
-                    "type": "string",
-                    "field": "Program",
-                    "input": "text",
-                    "value": "FEIT",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "created": "2019-04-15T22:10:37.936Z",
-        "modified": "2019-05-24T09:02:45.337Z",
-        "columns": [
-            8
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 29,
-    "fields": {
-        "action": 7,
-        "name": "Enrolled in SMED",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Program",
-                    "type": "string",
-                    "field": "Program",
-                    "input": "text",
-                    "value": "SMED",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "created": "2019-04-15T22:10:44.355Z",
-        "modified": "2019-05-24T09:02:45.373Z",
-        "columns": [
-            8
+            23
         ]
     }
 },
@@ -2858,31 +2835,31 @@
     "model": "ontask.condition",
     "pk": 30,
     "fields": {
-        "action": 7,
-        "name": "Enrolled in FSCI",
+        "action": 5,
+        "name": "More or equal to 50 in midterm",
         "description_text": "",
         "formula": {
             "not": false,
             "rules": [
                 {
-                    "id": "Program",
-                    "type": "string",
-                    "field": "Program",
-                    "input": "text",
-                    "value": "FSCI",
-                    "operator": "equal"
+                    "id": "Total",
+                    "type": "double",
+                    "field": "Total",
+                    "input": "number",
+                    "value": "50",
+                    "operator": "greater_or_equal"
                 }
             ],
             "valid": true,
             "condition": "AND"
         },
         "formula_text": "",
-        "n_rows_selected": 6,
+        "n_rows_selected": 10,
         "is_filter": false,
-        "created": "2019-04-15T22:10:49.358Z",
-        "modified": "2019-05-24T09:02:45.355Z",
+        "created": "2019-09-21T06:44:12.387Z",
+        "modified": "2019-09-21T06:50:11.100Z",
         "columns": [
-            8
+            23
         ]
     }
 },
@@ -2890,63 +2867,31 @@
     "model": "ontask.condition",
     "pk": 31,
     "fields": {
-        "action": 3,
-        "name": "",
-        "description_text": "",
+        "action": 7,
+        "name": "Students with days online <= 7",
+        "description_text": "These are the students that haven't connected to the discussion forum yet.",
         "formula": {
             "not": false,
             "rules": [
                 {
-                    "id": "Q01",
-                    "type": "double",
-                    "field": "Q01",
+                    "id": "Days online",
+                    "type": "integer",
+                    "field": "Days online",
                     "input": "number",
-                    "value": null,
-                    "operator": "is_not_null"
+                    "value": "7",
+                    "operator": "less_or_equal"
                 }
             ],
             "valid": true,
             "condition": "AND"
         },
         "formula_text": "",
-        "n_rows_selected": 12,
+        "n_rows_selected": 2,
         "is_filter": true,
-        "created": "2019-05-24T08:59:52.560Z",
-        "modified": "2019-05-24T09:02:45.411Z",
+        "created": "2019-09-21T06:44:14.057Z",
+        "modified": "2019-09-21T06:50:11.211Z",
         "columns": [
-            13
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 32,
-    "fields": {
-        "action": 9,
-        "name": "",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Days online 3",
-                    "type": "integer",
-                    "field": "Days online 3",
-                    "input": "number",
-                    "value": 2,
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "Days online 3 &lt; 2 and not empty",
-        "n_rows_selected": 8,
-        "is_filter": true,
-        "created": "2019-09-03T10:41:50.048Z",
-        "modified": "2019-09-03T10:41:50.085Z",
-        "columns": [
-            28
+            40
         ]
     }
 },
@@ -3000,7 +2945,7 @@
     "pk": 6,
     "fields": {
         "action": 3,
-        "column": 13,
+        "column": 8,
         "condition": null
     }
 },
@@ -3008,8 +2953,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 7,
     "fields": {
-        "action": 3,
-        "column": 14,
+        "action": 4,
+        "column": 13,
         "condition": null
     }
 },
@@ -3017,8 +2962,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 8,
     "fields": {
-        "action": 3,
-        "column": 15,
+        "action": 4,
+        "column": 14,
         "condition": null
     }
 },
@@ -3026,8 +2971,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 9,
     "fields": {
-        "action": 3,
-        "column": 16,
+        "action": 4,
+        "column": 15,
         "condition": null
     }
 },
@@ -3035,8 +2980,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 10,
     "fields": {
-        "action": 3,
-        "column": 17,
+        "action": 4,
+        "column": 16,
         "condition": null
     }
 },
@@ -3044,8 +2989,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 11,
     "fields": {
-        "action": 3,
-        "column": 18,
+        "action": 4,
+        "column": 17,
         "condition": null
     }
 },
@@ -3053,8 +2998,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 12,
     "fields": {
-        "action": 3,
-        "column": 19,
+        "action": 4,
+        "column": 18,
         "condition": null
     }
 },
@@ -3062,8 +3007,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 13,
     "fields": {
-        "action": 3,
-        "column": 20,
+        "action": 4,
+        "column": 19,
         "condition": null
     }
 },
@@ -3071,8 +3016,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 14,
     "fields": {
-        "action": 3,
-        "column": 21,
+        "action": 4,
+        "column": 20,
         "condition": null
     }
 },
@@ -3080,8 +3025,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 15,
     "fields": {
-        "action": 3,
-        "column": 22,
+        "action": 4,
+        "column": 21,
         "condition": null
     }
 },
@@ -3090,7 +3035,7 @@
     "pk": 16,
     "fields": {
         "action": 4,
-        "column": 23,
+        "column": 22,
         "condition": null
     }
 },
@@ -3099,7 +3044,7 @@
     "pk": 17,
     "fields": {
         "action": 5,
-        "column": 2,
+        "column": 23,
         "condition": null
     }
 },
@@ -3107,8 +3052,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 18,
     "fields": {
-        "action": 5,
-        "column": 11,
+        "action": 6,
+        "column": 2,
         "condition": null
     }
 },
@@ -3116,8 +3061,8 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 19,
     "fields": {
-        "action": 5,
-        "column": 12,
+        "action": 6,
+        "column": 11,
         "condition": null
     }
 },
@@ -3125,8 +3070,26 @@
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 20,
     "fields": {
-        "action": 7,
-        "column": 8,
+        "action": 6,
+        "column": 12,
+        "condition": null
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 23,
+    "fields": {
+        "action": 8,
+        "column": 68,
+        "condition": null
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 24,
+    "fields": {
+        "action": 8,
+        "column": 69,
         "condition": null
     }
 },
@@ -3139,10 +3102,10 @@
         ],
         "name": "BIOL1011",
         "description_text": "Course on Cell Biology",
-        "created": "2019-04-15T21:59:00.066Z",
-        "modified": "2019-09-03T10:40:00.950Z",
+        "created": "2019-09-21T06:43:52.474Z",
+        "modified": "2019-09-21T07:16:26.283Z",
         "nrows": 14,
-        "ncols": 67,
+        "ncols": 69,
         "attributes": {
             "Course name": "Cell Biology",
             "Coordinator name": "Sarah Jones -- Course coordinator"
@@ -3560,10 +3523,42 @@
                 "validation": {
                     "step": "any"
                 }
+            },
+            {
+                "id": "Presentation",
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "High",
+                    "Medium",
+                    "Poor"
+                ],
+                "operators": [
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
+                ]
+            },
+            {
+                "id": "Structure",
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "High",
+                    "Medium",
+                    "Poor"
+                ],
+                "operators": [
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
+                ]
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "tdcmo6xam5bcydv4ex2oxe1c87w67iei",
+        "session_key": "1qvgc736gbuberz7sttp5fb9ts64kig6",
         "luser_email_column": null,
         "luser_email_column_md5": "",
         "lusers_is_outdated": false,
@@ -3579,8 +3574,8 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T21:59:18.260Z",
-        "modified": "2019-04-15T21:59:18.260Z",
+        "created": "2019-09-21T06:44:15.517Z",
+        "modified": "2019-09-21T06:44:15.517Z",
         "name": "workflow_import",
         "workflow": 1,
         "payload": {
@@ -3596,16 +3591,228 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T21:59:58.747Z",
-        "modified": "2019-04-15T21:59:58.748Z",
-        "name": "action_update",
+        "created": "2019-09-21T06:50:11.292Z",
+        "modified": "2019-09-21T06:50:11.292Z",
+        "name": "workflow_data_merge",
         "workflow": 1,
         "payload": {
-            "id": 3,
-            "name": "Midterm comments",
-            "content": "<p>Dear\u00a0{{ first_name }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Nutrition, Metabolism & Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is\u00a0{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p><div><br></div>",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
+            "id": 1,
+            "name": "BIOL1011",
+            "num_cols": 69,
+            "num_rows": 14,
+            "column_names": [
+                "SID",
+                "email",
+                "Surname",
+                "GivenName",
+                "MiddleInitial",
+                "Gender",
+                "UOS Code",
+                "Program",
+                "Enrolment Type",
+                "Attendance",
+                "Difficult Week 1",
+                "Sat W1",
+                "Q01",
+                "Q02",
+                "Q03",
+                "Q04",
+                "Q05",
+                "Q06",
+                "Q07",
+                "Q08",
+                "Q09",
+                "Q10",
+                "Total",
+                "Days online 2",
+                "Views 2",
+                "Contributions 2",
+                "Questions 2",
+                "Days online 3",
+                "Views 3",
+                "Contributions 3",
+                "Questions 3",
+                "Days online 4",
+                "Views 4",
+                "Contributions 4",
+                "Questions 4",
+                "Days online 5",
+                "Views 5",
+                "Contributions 5",
+                "Questions 5",
+                "Days online",
+                "Views",
+                "Contributions",
+                "Questions",
+                "Video_1_W2",
+                "Questions_1_W2",
+                "Correct_1_W2",
+                "Video_2_W2",
+                "Questions_2_W2",
+                "Correct_2_W2",
+                "Video_1_W3",
+                "Questions_1_W3",
+                "Correct_1_W3",
+                "Video_2_W3",
+                "Questions_2_W3",
+                "Correct_2_W3",
+                "Video_1_W4",
+                "Questions_1_W4",
+                "Correct_1_W4",
+                "Video_2_W4",
+                "Questions_2_W4",
+                "Correct_2_W4",
+                "Video_1_W5",
+                "Questions_1_W5",
+                "Correct_1_W5",
+                "Video_2_W5",
+                "Questions_2_W5",
+                "Correct_2_W5",
+                "Presentation",
+                "Structure"
+            ],
+            "column_types": [
+                "integer",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "string",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "integer",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "double",
+                "string",
+                "string"
+            ],
+            "column_unique": [
+                true,
+                true,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+            ]
         }
     }
 },
@@ -3616,15 +3823,15 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:00:36.837Z",
-        "modified": "2019-04-15T22:00:36.837Z",
-        "name": "filter_create",
+        "created": "2019-09-21T06:50:54.030Z",
+        "modified": "2019-09-21T06:50:54.030Z",
+        "name": "view_create",
         "workflow": 1,
         "payload": {
-            "id": 26,
-            "name": "",
-            "formula": "(((\"Total\" is not null)))",
-            "selected_rows": 12
+            "id": 4,
+            "name": "Project rubric",
+            "workflow_id": 1,
+            "workflow_name": "BIOL1011"
         }
     }
 },
@@ -3635,14 +3842,13 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:00:50.059Z",
-        "modified": "2019-04-15T22:00:50.059Z",
-        "name": "action_update",
+        "created": "2019-09-21T06:52:22.621Z",
+        "modified": "2019-09-21T06:52:22.621Z",
+        "name": "action_create",
         "workflow": 1,
         "payload": {
-            "id": 4,
-            "name": "Send JSON to remote server",
-            "content": "{\r\n  \"sid\": {{ SID }},\r\n  \"midterm_total\": {{ Total }},\r\n  \"msg\":\r\n     {% if Less than 50 in the midterm %}\"Message number 1\"{% endif %}\r\n    {% if More or equal to 50 in midterm %}\"Message number 2\"{% endif %}\r\n}",
+            "id": 8,
+            "name": "Project feedback",
             "workflow_id": 1,
             "workflow_name": "BIOL1011"
         }
@@ -3655,14 +3861,14 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:01:54.604Z",
-        "modified": "2019-04-15T22:01:54.604Z",
+        "created": "2019-09-21T06:53:28.532Z",
+        "modified": "2019-09-21T06:53:28.532Z",
         "name": "action_update",
         "workflow": 1,
         "payload": {
-            "id": 6,
-            "name": "Suggestions about the forum",
-            "content": "<p>Dear\u00a0{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
+            "id": 8,
+            "name": "Project feedback",
+            "content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
             "workflow_id": 1,
             "workflow_name": "BIOL1011"
         }
@@ -3675,15 +3881,17 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:04:23.397Z",
-        "modified": "2019-04-15T22:04:23.398Z",
-        "name": "action_create",
+        "created": "2019-09-21T07:01:00.547Z",
+        "modified": "2019-09-21T07:01:00.547Z",
+        "name": "column_delete",
         "workflow": 1,
         "payload": {
-            "id": 7,
-            "name": "Initial motivation",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
+            "id": 1,
+            "name": "BIOL1011",
+            "action_id": 8,
+            "action_name": "Project feedback",
+            "column_name": "Presentation",
+            "column_type": "string"
         }
     }
 },
@@ -3694,16 +3902,17 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:08:57.052Z",
-        "modified": "2019-04-15T22:08:57.052Z",
-        "name": "action_update",
+        "created": "2019-09-21T07:01:54.323Z",
+        "modified": "2019-09-21T07:01:54.323Z",
+        "name": "column_delete",
         "workflow": 1,
         "payload": {
-            "id": 7,
-            "name": "Initial motivation",
-            "content": "Dear {{ GivenName }}\r\n\r\nWe are just starting this course and I thought it would be good to share with you how this course will help you acquire the skills that are required for professionals in your area.",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
+            "id": 1,
+            "name": "BIOL1011",
+            "action_id": 8,
+            "action_name": "Project feedback",
+            "column_name": "Presentation",
+            "column_type": "string"
         }
     }
 },
@@ -3714,15 +3923,16 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:10:31.664Z",
-        "modified": "2019-04-15T22:10:31.664Z",
-        "name": "condition_create",
+        "created": "2019-09-21T07:04:03.056Z",
+        "modified": "2019-09-21T07:04:03.056Z",
+        "name": "action_update",
         "workflow": 1,
         "payload": {
-            "id": 27,
-            "name": "Enrolled in FASS",
-            "formula": "(((\"Program\" = %s) AND (\"Program\" is not null)))",
-            "selected_rows": 2
+            "id": 8,
+            "name": "Project feedback",
+            "content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
+            "workflow_id": 1,
+            "workflow_name": "BIOL1011"
         }
     }
 },
@@ -3733,15 +3943,20 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:10:37.959Z",
-        "modified": "2019-04-15T22:10:37.959Z",
-        "name": "condition_clone",
+        "created": "2019-09-21T07:10:44.693Z",
+        "modified": "2019-09-21T07:10:44.693Z",
+        "name": "action_rubriccell_edit",
         "workflow": 1,
         "payload": {
-            "id_new": 28,
-            "id_old": 27,
-            "name_new": "Copy of Enrolled in FASS",
-            "name_old": "Enrolled in FASS"
+            "action": "Project feedback",
+            "column": "Presentation",
+            "feedback": "Good job with the presentation. You included the expected blocks (problem description, methodology, results and conclusions) and it was delivered clearly and in the allotted time.",
+            "workflow": "BIOL1011",
+            "action_id": 8,
+            "column_id": 68,
+            "description": "The presentation had a clearly defined structure: setting the problem, describing the methodology, results and conclusion. It was delivered clearly and in the allotted time.",
+            "workflow_id": 1,
+            "loa_position": 0
         }
     }
 },
@@ -3752,15 +3967,20 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:10:44.358Z",
-        "modified": "2019-04-15T22:10:44.358Z",
-        "name": "condition_clone",
+        "created": "2019-09-21T07:12:57.215Z",
+        "modified": "2019-09-21T07:12:57.215Z",
+        "name": "action_rubriccell_edit",
         "workflow": 1,
         "payload": {
-            "id_new": 29,
-            "id_old": 28,
-            "name_new": "Copy of Copy of Enrolled in FASS",
-            "name_old": "Copy of Enrolled in FASS"
+            "action": "Project feedback",
+            "column": "Presentation",
+            "feedback": "Think about the three requirements for this presentation: structure (introduce the problem, present the methodology, results, and conclusions), deliver it clearly, and in the allotted time. There were some aspects of it that needed improvement. For future presentations, review your material to make sure you cover all the required blocks and practice to make sure it is clearly delivered and within the allotted time.",
+            "workflow": "BIOL1011",
+            "action_id": 8,
+            "column_id": 68,
+            "description": "The presentation either had an incomplete structure, was not clearly delivered, or it was not finished in the allotted time.",
+            "workflow_id": 1,
+            "loa_position": 1
         }
     }
 },
@@ -3771,15 +3991,20 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:10:49.362Z",
-        "modified": "2019-04-15T22:10:49.362Z",
-        "name": "condition_clone",
+        "created": "2019-09-21T07:14:53.173Z",
+        "modified": "2019-09-21T07:14:53.173Z",
+        "name": "action_rubriccell_edit",
         "workflow": 1,
         "payload": {
-            "id_new": 30,
-            "id_old": 29,
-            "name_new": "Copy of Copy of Copy of Enrolled in FASS",
-            "name_old": "Copy of Copy of Enrolled in FASS"
+            "action": "Project feedback",
+            "column": "Presentation",
+            "feedback": "The presentation could be significantly improved. Make sure you review the structure again and verify that the problem is clearly stated, then the method, followed by the results and then the conclusions. The presentation needs to be clear and understandable, and it must fit in the allotted time. For future presentations, make sure you rehearse it paying attention to these requirements.",
+            "workflow": "BIOL1011",
+            "action_id": 8,
+            "column_id": 68,
+            "description": "The presentation has some substantial room or improvement. The structure is far from complete, it was not delivered clearly, or the time allotted was not respected.",
+            "workflow_id": 1,
+            "loa_position": 2
         }
     }
 },
@@ -3790,15 +4015,20 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:11:04.679Z",
-        "modified": "2019-04-15T22:11:04.679Z",
-        "name": "condition_update",
+        "created": "2019-09-21T07:19:46.298Z",
+        "modified": "2019-09-21T07:19:46.298Z",
+        "name": "action_rubriccell_edit",
         "workflow": 1,
         "payload": {
-            "id": 28,
-            "name": "Enrolled in FEIT",
-            "formula": "(((\"Program\" = %s) AND (\"Program\" is not null)))",
-            "selected_rows": 3
+            "action": "Project feedback",
+            "column": "Structure",
+            "feedback": "Good work with the document. The sections have the right content and are coherently written.",
+            "workflow": "BIOL1011",
+            "action_id": 8,
+            "column_id": 69,
+            "description": "The project is well written with the expected sections and the right content. An introduction with the description of the problem, a methodology describing the steps to obtain the results, a result section, and a conclusion section connecting the results with the problem.",
+            "workflow_id": 1,
+            "loa_position": 0
         }
     }
 },
@@ -3809,15 +4039,20 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:11:22.216Z",
-        "modified": "2019-04-15T22:11:22.216Z",
-        "name": "condition_update",
+        "created": "2019-09-21T07:25:24.466Z",
+        "modified": "2019-09-21T07:25:24.466Z",
+        "name": "action_rubriccell_edit",
         "workflow": 1,
         "payload": {
-            "id": 29,
-            "name": "Enrolled in SMED",
-            "formula": "(((\"Program\" = %s) AND (\"Program\" is not null)))",
-            "selected_rows": 3
+            "action": "Project feedback",
+            "column": "Structure",
+            "feedback": "Review the document again and make sure that the introduction describes the problem, then the methodology section describes the steps to get the results, the result section just describes the information collected, and the conclusions connect the results with the problem.",
+            "workflow": "BIOL1011",
+            "action_id": 8,
+            "column_id": 69,
+            "description": "The structure of the document needs some improvement. Some of the sections do not contain the right information or not in the right format.",
+            "workflow_id": 1,
+            "loa_position": 1
         }
     }
 },
@@ -3828,15 +4063,20 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:11:53.299Z",
-        "modified": "2019-04-15T22:11:53.299Z",
-        "name": "condition_update",
+        "created": "2019-09-21T07:28:09.601Z",
+        "modified": "2019-09-21T07:28:09.601Z",
+        "name": "action_rubriccell_edit",
         "workflow": 1,
         "payload": {
-            "id": 30,
-            "name": "Enrolled in FSCI",
-            "formula": "(((\"Program\" = %s) AND (\"Program\" is not null)))",
-            "selected_rows": 6
+            "action": "Project feedback",
+            "column": "Structure",
+            "feedback": "The document needs a significant revision. Remember that the introduction section needs to presents the problem and its context, the methodology focuses on the steps you have taken to collect the results, the result section presents the data you obtained, and the conclusions connect the data with the problem. Give the document another review to make sure its structure follows these guidelines.",
+            "workflow": "BIOL1011",
+            "action_id": 8,
+            "column_id": 69,
+            "description": "The structure of the document has several deficiencies. Either the introduction fails to situate the problem, or the methodology does not include a clear description of the steps to obtain the results, or the results are not clearly expected, or the conclusions are not properly written.",
+            "workflow_id": 1,
+            "loa_position": 2
         }
     }
 },
@@ -3847,369 +4087,14 @@
         "user": [
             "instructor01@bogus.com"
         ],
-        "created": "2019-04-15T22:13:51.787Z",
-        "modified": "2019-04-15T22:13:51.787Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 7,
-            "name": "Initial motivation",
-            "content": "Dear {{ GivenName }}\r\n\r\nWe are just starting this course and I thought it would be good to share with you how this course will help you acquire the skills that are required for professionals in your area.\r\n\r\n{% if Enrolled in FASS %}Text for the students that are enrolled in FASS.{% endif %}\r\n\r\n{% if Enrolled in FEIT %}Text for the students that are enrolled in FEIT.{% endif %}\r\n\r\n{% if Enrolled in SMED %}Text for the students that are enrolled in SMED.{% endif %}\r\n\r\n{% if Enrolled in FSCI %}Text for the students that are enrolled in FSCI.{% endif %}\r\n\r\nIf you want additional information, do not hesitate to contact me.\r\n\r\n{{ Coordinator name }}\r\n\r\n{{ Course name }}",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 16,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-04-15T22:14:35.775Z",
-        "modified": "2019-04-15T22:14:35.775Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 7,
-            "name": "Initial motivation",
-            "content": "Dear {{ GivenName }}\r\n\r\nWe are just starting this course and I thought it would be good to share with you how this course will help you acquire the skills that are required for professionals in your area.\r\n\r\n\r\n{% if Enrolled in FASS %}Text for the students that are enrolled in FASS.{% endif %}\r\n\r\n{% if Enrolled in FEIT %}Text for the students that are enrolled in FEIT.{% endif %}\r\n\r\n{% if Enrolled in SMED %}Text for the students that are enrolled in SMED.{% endif %}\r\n\r\n{% if Enrolled in FSCI %}Text for the students that are enrolled in FSCI.{% endif %}\r\n\r\n\r\nIf you want additional information, do not hesitate to contact me.\r\n\r\n{{ Coordinator name }}\r\n\r\n{{ Course name }}",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 17,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-04-15T22:15:06.708Z",
-        "modified": "2019-04-15T22:15:06.708Z",
-        "name": "workflow_attribute_create",
-        "workflow": 1,
-        "payload": {
-            "id": 1,
-            "name": "BIOL1011",
-            "attr_key": "Coordinator name",
-            "attr_val": "Sarah Jones -- Course coordinator"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 18,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-04-15T22:16:06.478Z",
-        "modified": "2019-04-15T22:16:06.478Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 7,
-            "name": "Initial motivation",
-            "content": "Dear {{ GivenName }}\r\n\r\nWe are just starting this course and I thought it would be good to share with you how this course will help you acquire the skills that are required for professionals in your area.\r\n\r\n\r\n{% if Enrolled in FASS %}Text for the students that are enrolled in FASS.{% endif %}\r\n\r\n{% if Enrolled in FEIT %}Text for the students that are enrolled in FEIT.{% endif %}\r\n\r\n{% if Enrolled in SMED %}Text for the students that are enrolled in SMED.{% endif %}\r\n\r\n{% if Enrolled in FSCI %}Text for the students that are enrolled in FSCI.{% endif %}\r\n\r\n\r\nIf you want additional information, do not hesitate to contact me.\r\n\r\n{{ Coordinator name }}\r\n\r\n{{ Course name }}",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 19,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-04-15T22:46:25.789Z",
-        "modified": "2019-04-15T22:46:25.789Z",
-        "name": "schedule_email_edit",
-        "workflow": 1,
-        "payload": {
-            "action": "Comments about how to prepare the lecture (Week 4)",
-            "execute": "2121-10-01T08:14:00+10:30",
-            "subject": "How is this course connected with your career",
-            "cc_email": [],
-            "action_id": 2,
-            "bcc_email": [],
-            "track_read": false,
-            "item_column": "email",
-            "send_confirmation": false
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 20,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-05-24T08:59:52.639Z",
-        "modified": "2019-05-24T08:59:52.639Z",
-        "name": "filter_create",
-        "workflow": 1,
-        "payload": {
-            "id": 31,
-            "name": "",
-            "formula": "Q01 is not null",
-            "selected_rows": 12
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 21,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-05-24T09:01:16.375Z",
-        "modified": "2019-05-24T09:01:16.375Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 3,
-            "name": "Midterm comments",
-            "content": "<p>Dear\u00a0{{ first_name }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Nutrition, Metabolism & Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is\u00a0{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p><div><br></div>",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 22,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-05-24T09:01:53.720Z",
-        "modified": "2019-05-24T09:01:53.720Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 4,
-            "name": "Send JSON to remote server",
-            "content": "{\r\n  \"sid\": {{ SID }},\r\n  \"midterm_total\": {{ Total }},\r\n  \"msg\":\r\n     {% if Less than 50 in the midterm %}\"Message number 1\"{% endif %}\r\n    {% if More or equal to 50 in midterm %}\"Message number 2\"{% endif %}\r\n}",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 23,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-05-24T09:02:17.695Z",
-        "modified": "2019-05-24T09:02:17.695Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 6,
-            "name": "Suggestions about the forum",
-            "content": "<p>Dear\u00a0{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 24,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-05-24T09:02:45.818Z",
-        "modified": "2019-05-24T09:02:45.818Z",
-        "name": "survey_input",
-        "workflow": 1,
-        "payload": {
-            "id": 1,
-            "name": "BIOL1011",
-            "action": "Student comments Week 1",
-            "action_id": 5,
-            "new_values": "[[\"Difficult Week 1\", \"Concept 1\"], [\"Sat W1\", \"Metabolism\"]]"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 25,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-05-24T09:03:19.133Z",
-        "modified": "2019-05-24T09:03:19.840Z",
-        "name": "schedule_email_execute",
-        "workflow": 1,
-        "payload": {
-            "action": "Suggestions about the forum",
-            "status": "Execution finished successfully",
-            "subject": "Forum activity",
-            "cc_email": [],
-            "datetime": "2019-05-24 18:33:19.813465+09:30",
-            "action_id": 6,
-            "bcc_email": [],
-            "from_email": "instructor01@bogus.com",
-            "track_read": false,
-            "item_column": "email",
-            "objects_sent": 2,
-            "exclude_values": [],
-            "filter_present": true,
-            "exported_workflow": false,
-            "send_confirmation": false
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 26,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-05-24T09:03:19.593Z",
-        "modified": "2019-05-24T09:03:19.593Z",
-        "name": "action_email_sent",
-        "workflow": 1,
-        "payload": {
-            "body": "<p>Dear\u00a0</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>Sarah Jones -- Course coordinator</p><p>Cell Biology</p>",
-            "user": 11,
-            "action": 6,
-            "subject": "Forum activity",
-            "to_email": "ucdx8510@bogus.com",
-            "from_email": "instructor01@bogus.com",
-            "action_name": "Suggestions about the forum",
-            "email_sent_datetime": "2019-05-24 18:33:19.593167+09:30"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 27,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-05-24T09:03:19.623Z",
-        "modified": "2019-05-24T09:03:19.623Z",
-        "name": "action_email_sent",
-        "workflow": 1,
-        "payload": {
-            "body": "<p>Dear\u00a0</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>Sarah Jones -- Course coordinator</p><p>Cell Biology</p>",
-            "user": 11,
-            "action": 6,
-            "subject": "Forum activity",
-            "to_email": "ctfh9946@bogus.com",
-            "from_email": "instructor01@bogus.com",
-            "action_name": "Suggestions about the forum",
-            "email_sent_datetime": "2019-05-24 18:33:19.593167+09:30"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 28,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-03T09:49:08.384Z",
-        "modified": "2019-09-03T09:49:08.384Z",
-        "name": "action_create",
-        "workflow": 1,
-        "payload": {
-            "id": 8,
-            "name": "Send Email with list",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 29,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-03T09:50:05.419Z",
-        "modified": "2019-09-03T09:50:05.419Z",
+        "created": "2019-09-21T07:30:16.029Z",
+        "modified": "2019-09-21T07:30:16.029Z",
         "name": "action_update",
         "workflow": 1,
         "payload": {
             "id": 8,
-            "name": "Send Email with list",
-            "content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_column_list \"email\" %}</p><p>Regards</p><p>Josh<br></p>",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 30,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-03T10:41:07.393Z",
-        "modified": "2019-09-03T10:41:07.393Z",
-        "name": "action_create",
-        "workflow": 1,
-        "payload": {
-            "id": 9,
-            "name": "Send list through JSON",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 31,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-03T10:41:50.088Z",
-        "modified": "2019-09-03T10:41:50.088Z",
-        "name": "filter_create",
-        "workflow": 1,
-        "payload": {
-            "id": 32,
-            "name": "",
-            "formula": "Days online 3 &lt; 2 and not empty",
-            "selected_rows": 8
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 32,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-03T10:42:39.350Z",
-        "modified": "2019-09-03T10:42:39.350Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 9,
-            "name": "Send list through JSON",
-            "content": "{\r\n    \"inactive_students\": {% ot_insert_column_list \"email\" %}\r\n}",
+            "name": "Project feedback",
+            "content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
             "workflow_id": 1,
             "workflow_name": "BIOL1011"
         }
@@ -4222,8 +4107,8 @@
         "workflow": 1,
         "name": "Badges",
         "description_text": "A badge reflecting the activity with respect to the videos",
-        "created": "2019-04-15T21:59:04.686Z",
-        "modified": "2019-04-15T22:47:00.085Z",
+        "created": "2019-09-21T06:43:58.635Z",
+        "modified": "2019-09-21T06:44:22.584Z",
         "last_executed_log": null,
         "action_type": "personalized_text",
         "serve_enabled": true,
@@ -4242,14 +4127,18 @@
         "workflow": 1,
         "name": "Comments about how to prepare the lecture (Week 4)",
         "description_text": "A message commenting on the videos they watched for Week 4",
-        "created": "2019-04-15T21:59:06.738Z",
-        "modified": "2019-04-15T22:47:00.469Z",
+        "created": "2019-09-21T06:44:00.454Z",
+        "modified": "2019-09-21T06:44:22.870Z",
         "last_executed_log": null,
         "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "rows_all_false": [],
+        "rows_all_false": [
+            2,
+            10,
+            11
+        ],
         "text_content": "<p>Dear {{ GivenName }}<br></p><p>Here are some comments about the preparation videos for this week.</p><p style=\"\">{% if No Video 1 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Genes and Proteins Activity</h4><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{% endif %}</p><p>{% if No Video 2 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p>Regards<br><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Coordinator name }}</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Course name }}<br></p>",
         "target_url": "",
         "shuffle": false
@@ -4260,90 +4149,10 @@
     "pk": 3,
     "fields": {
         "workflow": 1,
-        "name": "Midterm comments",
-        "description_text": "Comment the midterm scores divided by topic",
-        "created": "2019-04-15T21:59:08.038Z",
-        "modified": "2019-05-24T09:01:16.424Z",
-        "last_executed_log": null,
-        "action_type": "personalized_text",
-        "serve_enabled": false,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [],
-        "text_content": "<p>Dear\u00a0{{ first_name }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Nutrition, Metabolism & Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is\u00a0{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p><div><br></div>",
-        "target_url": "",
-        "shuffle": false
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 4,
-    "fields": {
-        "workflow": 1,
-        "name": "Send JSON to remote server",
-        "description_text": "Send a JSON object to a remote server (outside this platform)",
-        "created": "2019-04-15T21:59:13.477Z",
-        "modified": "2019-05-24T09:01:53.763Z",
-        "last_executed_log": null,
-        "action_type": "personalized_json",
-        "serve_enabled": false,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [],
-        "text_content": "{\r\n  \"sid\": {{ SID }},\r\n  \"midterm_total\": {{ Total }},\r\n  \"msg\":\r\n     {% if Less than 50 in the midterm %}\"Message number 1\"{% endif %}\r\n    {% if More or equal to 50 in midterm %}\"Message number 2\"{% endif %}\r\n}",
-        "target_url": "http://127.0.0.1",
-        "shuffle": false
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 5,
-    "fields": {
-        "workflow": 1,
-        "name": "Student comments Week 1",
-        "description_text": "Feedback about today's lecture",
-        "created": "2019-04-15T21:59:14.143Z",
-        "modified": "2019-05-24T09:02:45.838Z",
-        "last_executed_log": 24,
-        "action_type": "survey",
-        "serve_enabled": true,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "text_content": "{% comment %}Your action content here{% endcomment %}",
-        "target_url": "",
-        "shuffle": false
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 6,
-    "fields": {
-        "workflow": 1,
-        "name": "Suggestions about the forum",
-        "description_text": "Message to remind those students that haven't visited the forum to do so.",
-        "created": "2019-04-15T21:59:14.759Z",
-        "modified": "2019-05-24T09:03:19.152Z",
-        "last_executed_log": 25,
-        "action_type": "personalized_text",
-        "serve_enabled": false,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "text_content": "<p>Dear\u00a0{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
-        "target_url": "",
-        "shuffle": false
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 7,
-    "fields": {
-        "workflow": 1,
         "name": "Initial motivation",
-        "description_text": "Motivating message depending on the program enrolled",
-        "created": "2019-04-15T22:04:23.354Z",
-        "modified": "2019-04-15T22:47:00.746Z",
+        "description_text": "Motivating message depending on the program enrolled. This action sends email using the CANVAS platform",
+        "created": "2019-09-21T06:44:02.347Z",
+        "modified": "2019-09-21T06:44:23.145Z",
         "last_executed_log": null,
         "action_type": "personalized_canvas_email",
         "serve_enabled": false,
@@ -4357,390 +4166,317 @@
 },
 {
     "model": "ontask.action",
-    "pk": 8,
+    "pk": 4,
     "fields": {
         "workflow": 1,
-        "name": "Send Email with list",
-        "description_text": "Send email with column values as list",
-        "created": "2019-09-03T09:49:08.382Z",
-        "modified": "2019-09-03T09:50:05.509Z",
+        "name": "Midterm comments",
+        "description_text": "Comment the midterm scores divided by topic",
+        "created": "2019-09-21T06:44:04.025Z",
+        "modified": "2019-09-21T06:44:23.670Z",
         "last_executed_log": null,
-        "action_type": "send_list",
+        "action_type": "personalized_text",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "rows_all_false": null,
-        "text_content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_column_list \"email\" %}</p><p>Regards</p><p>Josh<br></p>",
+        "rows_all_false": [],
+        "text_content": "<p>Dear\u00a0{{ first_name }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Nutrition, Metabolism & Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is\u00a0{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p><div><br></div>",
         "target_url": "",
         "shuffle": false
     }
 },
 {
     "model": "ontask.action",
-    "pk": 9,
+    "pk": 5,
     "fields": {
         "workflow": 1,
-        "name": "Send list through JSON",
-        "description_text": "Send the list of inactive students in week 2 to another platform",
-        "created": "2019-09-03T10:41:07.348Z",
-        "modified": "2019-09-03T10:42:39.438Z",
+        "name": "Send JSON to remote server",
+        "description_text": "Send a JSON object to a remote server (outside this platform)",
+        "created": "2019-09-21T06:44:11.891Z",
+        "modified": "2019-09-21T06:44:24.110Z",
         "last_executed_log": null,
-        "action_type": "send_list_json",
+        "action_type": "personalized_json",
         "serve_enabled": false,
         "active_from": null,
         "active_to": null,
-        "rows_all_false": null,
-        "text_content": "{\r\n    \"inactive_students\": {% ot_insert_column_list \"email\" %}\r\n}",
-        "target_url": "https://anotherinternalserver.yourinstution.edu",
+        "rows_all_false": [],
+        "text_content": "{\r\n  \"sid\": {{ SID }},\r\n  \"midterm_total\": {{ Total }},\r\n  \"msg\":\r\n     {% if Less than 50 in the midterm %}\"Message number 1\"{% endif %}\r\n    {% if More or equal to 50 in midterm %}\"Message number 2\"{% endif %}\r\n}",
+        "target_url": "http://127.0.0.1",
         "shuffle": false
     }
 },
 {
-    "model": "ontask.plugin",
-    "pk": 7,
-    "fields": {
-        "filename": "linear_model",
-        "modified": "2018-05-28T01:00:42.649Z",
-        "name": "Linear Model",
-        "description_text": "Execute a linear model",
-        "is_model": true,
-        "is_verified": true,
-        "is_enabled": true,
-        "executed": null
-    }
-},
-{
-    "model": "ontask.plugin",
-    "pk": 8,
-    "fields": {
-        "filename": "test_plugin_2",
-        "modified": "2018-05-28T01:00:42.649Z",
-        "name": "Test Plungin 2 Name",
-        "description_text": "Test Plugin 2 Description Text",
-        "is_model": null,
-        "is_verified": true,
-        "is_enabled": true,
-        "executed": null
-    }
-},
-{
-    "model": "ontask.plugin",
-    "pk": 9,
-    "fields": {
-        "filename": "test_plugin_1",
-        "modified": "2018-05-28T01:00:42.598Z",
-        "name": "Test Plungin 1 Name",
-        "description_text": "Test Plugin 1 Description Text",
-        "is_model": null,
-        "is_verified": true,
-        "is_enabled": true,
-        "executed": null
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 21,
-    "fields": {
-        "slug": "b214cf22-612b-4c68-ab8a-53152daf457b",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 11,
-    "fields": {
-        "slug": "df095b15-a04c-4e6f-a3bd-03f233b7c491",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 12,
-    "fields": {
-        "slug": "f551bee3-25d5-4485-9763-b1963481c256",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 13,
-    "fields": {
-        "slug": "36da91bc-6de6-410c-8b7f-30cf13380501",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 14,
-    "fields": {
-        "slug": "cda10e84-2563-431a-a1e0-08364ededf03",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 15,
-    "fields": {
-        "slug": "858d5d9b-8422-4649-831d-90f50857cfbb",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 16,
-    "fields": {
-        "slug": "ea863593-204e-4046-959a-a0b50b3bd6be",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 17,
-    "fields": {
-        "slug": "f97f3822-7758-4cd2-9873-d2c650f8b2a7",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 18,
-    "fields": {
-        "slug": "4e23cc69-d4b8-4065-8d49-839de7f48e10",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 19,
-    "fields": {
-        "slug": "5a615a2b-f8aa-43ac-845d-a374ee16de94",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 20,
-    "fields": {
-        "slug": "34af80c7-5e4b-42fc-9549-7c4d8a21c234",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 1,
-    "fields": {
-        "slug": "5a4d9346-b194-40f7-9b26-749f7601ab1e",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 2,
-    "fields": {
-        "slug": "8c102aa2-af1d-479a-8dab-c6843403565b",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 3,
-    "fields": {
-        "slug": "a4e0dfbd-5ac6-413b-a627-a3ade270f066",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 4,
-    "fields": {
-        "slug": "97897060-e97f-4f41-bd3a-8ef7b5a55642",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 5,
-    "fields": {
-        "slug": "9a08491d-8859-4c2f-aacd-56533129a256",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
+    "model": "ontask.action",
     "pk": 6,
     "fields": {
-        "slug": "11aa2e70-4c58-4db1-bb20-823e39aed280",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 7,
-    "fields": {
-        "slug": "e3af4818-1575-48aa-899f-52da3c74cd52",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 8,
-    "fields": {
-        "slug": "0d97d719-0fa7-48ec-9a79-fb235f53c997",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 9,
-    "fields": {
-        "slug": "734f49ad-0633-4ab2-bf81-5f97d143c0cf",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 10,
-    "fields": {
-        "slug": "a508a388-55fb-45cf-a47f-6970425c5f5c",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.scheduledaction",
-    "pk": 1,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "name": "Week 2 motivation message",
-        "description_text": "Send the motivation message to all students depending on their program",
-        "action": 2,
-        "created": "2019-04-15T22:46:25.569Z",
-        "execute": "2121-09-30T21:44:00Z",
-        "status": "pending",
-        "item_column": 2,
-        "exclude_values": [],
+        "workflow": 1,
+        "name": "Student comments Week 1",
+        "description_text": "Feedback about today's lecture",
+        "created": "2019-09-21T06:44:12.978Z",
+        "modified": "2019-09-21T06:44:12.979Z",
         "last_executed_log": null,
-        "payload": {
-            "subject": "How is this course connected with your career",
-            "cc_email": [],
-            "bcc_email": [],
-            "track_read": false,
-            "send_confirmation": false
-        }
+        "action_type": "survey",
+        "serve_enabled": true,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "{% comment %}Your action content here{% endcomment %}",
+        "target_url": "",
+        "shuffle": false
     }
 },
 {
-    "model": "ontask.sqlconnection",
+    "model": "ontask.action",
+    "pk": 7,
+    "fields": {
+        "workflow": 1,
+        "name": "Suggestions about the forum",
+        "description_text": "Message to remind those students that haven't visited the forum to do so.",
+        "created": "2019-09-21T06:44:14.005Z",
+        "modified": "2019-09-21T06:44:14.005Z",
+        "last_executed_log": null,
+        "action_type": "personalized_text",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "<p>Dear\u00a0{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
+        "target_url": "",
+        "shuffle": false
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 8,
+    "fields": {
+        "workflow": 1,
+        "name": "Project feedback",
+        "description_text": "Provide feedback about the project using the results from the rubric",
+        "created": "2019-09-21T06:52:22.617Z",
+        "modified": "2019-09-21T07:30:16.181Z",
+        "last_executed_log": null,
+        "action_type": "rubric_text",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
+        "target_url": "",
+        "shuffle": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 21,
+    "fields": {
+        "slug": "650f0852-47ce-41da-8bf2-168e7966fc42",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
     "pk": 1,
     "fields": {
-        "name": "remote server",
-        "description_text": "Server with student records",
-        "conn_type": "mysql",
-        "conn_driver": "",
-        "db_user": "remote_db_user",
-        "db_password": true,
-        "db_host": "dbserver.bogus.com",
-        "db_port": null,
-        "db_name": "demographics",
-        "db_table": "s_records"
+        "slug": "a6f89b0c-a945-483e-8be0-b6cb03b6e3de",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 2,
+    "fields": {
+        "slug": "b70c0db8-1b75-4427-9614-5b7afce40471",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 3,
+    "fields": {
+        "slug": "01bf13f2-6fc2-4b97-92b7-41a9f4977524",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 4,
+    "fields": {
+        "slug": "c5503648-3825-4af6-b318-652c35810013",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 5,
+    "fields": {
+        "slug": "8dca34f4-ce1c-4686-8bcf-8d82bd338a0e",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 6,
+    "fields": {
+        "slug": "43a24a90-db16-4312-aa37-39e086477fae",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 7,
+    "fields": {
+        "slug": "ea03714d-da91-4cc6-81fb-61c78f0c777f",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 8,
+    "fields": {
+        "slug": "cb56b32f-a7bc-4a2a-ba09-c57004aa57e0",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 9,
+    "fields": {
+        "slug": "976e7f98-921a-4b3a-8132-94728724cca6",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 10,
+    "fields": {
+        "slug": "7113ba21-332d-42bc-9408-c59c3faaace4",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 11,
+    "fields": {
+        "slug": "a5dd3003-cfd3-4fc5-94ff-4d2dabb7d4f5",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 12,
+    "fields": {
+        "slug": "07ae7655-600b-48e7-aece-947c506a4e06",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 13,
+    "fields": {
+        "slug": "a0230101-ddf1-4a2a-b8d7-1ddfb4ee4024",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 14,
+    "fields": {
+        "slug": "7aa6c374-98d4-4a7b-9a05-ba41fc295591",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 15,
+    "fields": {
+        "slug": "9ed816d5-ea17-4d43-ae0c-a7f8545fc7a1",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 16,
+    "fields": {
+        "slug": "88a9ef8d-0e17-4d7d-b10c-12aca20ddeaf",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 17,
+    "fields": {
+        "slug": "99d91acb-5f16-4ec9-b48b-430fe75b2405",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 18,
+    "fields": {
+        "slug": "a4a0eaff-08b4-4256-bd87-8c4bab1ee639",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 19,
+    "fields": {
+        "slug": "608efb01-ce75-4eb7-873b-18a8254c2b2d",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 20,
+    "fields": {
+        "slug": "40222b49-7a5d-47bc-8d4c-91652a1cd5da",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
     }
 },
 {
     "model": "ontask.ontaskuser",
     "pk": 21,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 11,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 12,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 13,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 14,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 15,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 16,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 17,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 18,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 19,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 20,
     "fields": {}
 },
 {
@@ -4791,6 +4527,56 @@
 {
     "model": "ontask.ontaskuser",
     "pk": 10,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 11,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 12,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 13,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 14,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 15,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 16,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 17,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 18,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 19,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 20,
     "fields": {}
 },
 {
@@ -4800,8 +4586,8 @@
         "workflow": 1,
         "name": "Low forum sessions",
         "description_text": "",
-        "created": "2019-04-15T21:59:15.075Z",
-        "modified": "2019-04-15T21:59:15.221Z",
+        "created": "2019-09-21T06:44:14.318Z",
+        "modified": "2019-09-21T06:44:14.531Z",
         "formula": {
             "not": false,
             "rules": [
@@ -4829,8 +4615,8 @@
         "workflow": 1,
         "name": "Midterm",
         "description_text": "",
-        "created": "2019-04-15T21:59:15.249Z",
-        "modified": "2019-04-15T21:59:16.846Z",
+        "created": "2019-09-21T06:44:14.591Z",
+        "modified": "2019-09-21T06:44:14.765Z",
         "formula": {
             "not": false,
             "rules": [],
@@ -4860,8 +4646,8 @@
         "workflow": 1,
         "name": "Videos",
         "description_text": "",
-        "created": "2019-04-15T21:59:16.879Z",
-        "modified": "2019-04-15T21:59:17.854Z",
+        "created": "2019-09-21T06:44:14.801Z",
+        "modified": "2019-09-21T06:44:14.963Z",
         "formula": {
             "not": false,
             "rules": [],
@@ -4879,6 +4665,95 @@
             62,
             65
         ]
+    }
+},
+{
+    "model": "ontask.view",
+    "pk": 4,
+    "fields": {
+        "workflow": 1,
+        "name": "Project rubric",
+        "description_text": "",
+        "created": "2019-09-21T06:50:54.016Z",
+        "modified": "2019-09-21T06:50:54.016Z",
+        "formula": {
+            "not": false,
+            "rules": [],
+            "valid": true,
+            "condition": "AND"
+        },
+        "columns": [
+            1,
+            2,
+            68,
+            69
+        ]
+    }
+},
+{
+    "model": "ontask.rubriccell",
+    "pk": 1,
+    "fields": {
+        "action": 8,
+        "column": 68,
+        "loa_position": 0,
+        "description_text": "The presentation had a clearly defined structure: setting the problem, describing the methodology, results and conclusion. It was delivered clearly and in the allotted time.",
+        "feedback_text": "Good job with the presentation. You included the expected blocks (problem description, methodology, results and conclusions) and it was delivered clearly and in the allotted time."
+    }
+},
+{
+    "model": "ontask.rubriccell",
+    "pk": 2,
+    "fields": {
+        "action": 8,
+        "column": 68,
+        "loa_position": 1,
+        "description_text": "The presentation either had an incomplete structure, was not clearly delivered, or it was not finished in the allotted time.",
+        "feedback_text": "Think about the three requirements for this presentation: structure (introduce the problem, present the methodology, results, and conclusions), deliver it clearly, and in the allotted time. There were some aspects of it that needed improvement. For future presentations, review your material to make sure you cover all the required blocks and practice to make sure it is clearly delivered and within the allotted time."
+    }
+},
+{
+    "model": "ontask.rubriccell",
+    "pk": 3,
+    "fields": {
+        "action": 8,
+        "column": 68,
+        "loa_position": 2,
+        "description_text": "The presentation has some substantial room or improvement. The structure is far from complete, it was not delivered clearly, or the time allotted was not respected.",
+        "feedback_text": "The presentation could be significantly improved. Make sure you review the structure again and verify that the problem is clearly stated, then the method, followed by the results and then the conclusions. The presentation needs to be clear and understandable, and it must fit in the allotted time. For future presentations, make sure you rehearse it paying attention to these requirements."
+    }
+},
+{
+    "model": "ontask.rubriccell",
+    "pk": 4,
+    "fields": {
+        "action": 8,
+        "column": 69,
+        "loa_position": 0,
+        "description_text": "The project is well written with the expected sections and the right content. An introduction with the description of the problem, a methodology describing the steps to obtain the results, a result section, and a conclusion section connecting the results with the problem.",
+        "feedback_text": "Good work with the document. The sections have the right content and are coherently written."
+    }
+},
+{
+    "model": "ontask.rubriccell",
+    "pk": 5,
+    "fields": {
+        "action": 8,
+        "column": 69,
+        "loa_position": 1,
+        "description_text": "The structure of the document needs some improvement. Some of the sections do not contain the right information or not in the right format.",
+        "feedback_text": "Review the document again and make sure that the introduction describes the problem, then the methodology section describes the steps to get the results, the result section just describes the information collected, and the conclusions connect the results with the problem."
+    }
+},
+{
+    "model": "ontask.rubriccell",
+    "pk": 6,
+    "fields": {
+        "action": 8,
+        "column": 69,
+        "loa_position": 2,
+        "description_text": "The structure of the document has several deficiencies. Either the introduction fails to situate the problem, or the methodology does not include a clear description of the steps to obtain the results, or the results are not clearly expected, or the conclusions are not properly written.",
+        "feedback_text": "The document needs a significant revision. Remember that the introduction section needs to presents the problem and its context, the methodology focuses on the steps you have taken to collect the results, the result section presents the data you obtained, and the conclusions connect the data with the problem. Give the document another review to make sure its structure follows these guidelines."
     }
 }
 ]
