@@ -1313,3 +1313,50 @@ class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
+
+
+class ActionServeLongSurvey(test.OnTaskLiveTestCase):
+    """Test the view to serve a survey."""
+    fixtures = ['long_survey']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'ontask',
+        'fixtures',
+        'long_survey.sql',
+    )
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    workflow_name = 'Test survey run pages'
+    action_name = 'survey'
+
+    def setUp(self):
+        """Set up and restore the PG table."""
+        super().setUp()
+        test.pg_restore_table(self.filename)
+
+    def tearDown(self):
+        """Delete the PG table."""
+        test.delete_all_tables()
+        super().tearDown()
+
+    def test_serve_long_survey(self):
+        """Test the serve_action view with a long number of entries."""
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.workflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Open action name
+        self.open_action_run(self.action_name, is_action_in=True)
+
+        pages = self.selenium.find_elements_by_xpath(
+            '//li[contains(@class, "paginate_button")]')
+        self.assertEqual(len(pages), 4)
+
+        self.logout()
