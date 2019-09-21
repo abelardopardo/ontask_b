@@ -8,7 +8,9 @@ from __future__ import print_function
 import random
 import string
 import sys
+
 import pandas as pd
+from numpy.random import choice
 
 # Initial file fields
 #
@@ -108,6 +110,9 @@ forum_fields = ['SID',
                 'Contributions',
                 'Questions']
 
+project_name = 'project_rubric.csv'
+project_fields = ['SID', 'Structure', 'Presentation']
+
 blended_name = 'blended_participation.csv'
 blended_fields = ['SID',
                   'Video_1_W2',
@@ -188,8 +193,8 @@ def read_initial_file(file_name, num_students=500):
     if num_students < max_l:
         # Trim the result
         all_students = all_students.drop(random.sample(range(len(all_students)),
-                                                       max_l - num_students),
-                                         axis=0)
+            max_l - num_students),
+            axis=0)
 
     all_students['Full name'] = all_students['GivenName'] + ' ' \
                                 + all_students['Surname']
@@ -233,7 +238,7 @@ def create_midterm_data(all_students):
         for enrolment, rate in midterm_dropout_rates:
             # print random.random(), rate
             if student_info['Enrolment Type'] == enrolment and \
-                    random.random() <= rate:
+                random.random() <= rate:
                 skip = True
         if skip:
             continue
@@ -278,29 +283,28 @@ def create_midterm_data(all_students):
             midterm_score[field[1:]] = score
 
         midterm_answers = midterm_answers.append(midterm_score,
-                                                 ignore_index=True)
+            ignore_index=True)
 
     return midterm_answers
 
 
-#
-# Data for the forum
-#
-# Fields:
-#    - Days on line
-#    - Views
-#    - Contributions
-#    - questions
-#    - answers
-#
-# All these fields are replicated from week 2 to week 5 (four weeks)
-#
-# Rules:
-#    - International students have less participation, but higher views.
-#    - Part time attendance has way bigger in contributions
-#    - Number of answers correlates with midterm score!!!
-#
 def create_forum_data(all_students):
+    """Create the data for the forum.
+
+    Fields:
+       - Days on line
+       - Views
+       - Contributions
+       - questions
+       - answers
+
+    All these fields are replicated from week 2 to week 5 (four weeks)
+
+    Rules:
+       - International students have less participation, but higher views.
+       - Part time attendance has way bigger in contributions
+       - Number of answers correlates with midterm score!!!
+    """
     forum_participation = pd.DataFrame()
 
     # Number of contributions in the forum
@@ -325,7 +329,7 @@ def create_forum_data(all_students):
             # International or part time have many days online
             #
             if student_info['Enrolment Type'] == 'International' or \
-                    student_info['Attendance'] == 'Part Time':
+                student_info['Attendance'] == 'Part Time':
                 days_online = \
                     int(round(random.normalvariate(midterm_score * 7 / 10,
                                                    6 - week_n)))
@@ -442,16 +446,54 @@ def create_forum_data(all_students):
             # Accumulate for the final field
             views_acc += views
 
-
         forum_student_data['Days online'] = days_online_acc
         forum_student_data['Views'] = views_acc
         forum_student_data['Contributions'] = contributions_acc
         forum_student_data['Questions'] = questions_acc
 
         forum_participation = forum_participation.append(forum_student_data,
-                                                         ignore_index=True)
+            ignore_index=True)
 
     return forum_participation
+
+
+def create_project_data(all_students):
+    """Create the data for the project (rubric).
+
+    Fields:
+       - Structure
+       - Presentation
+
+    Rules:
+    """
+    project_rubric = pd.DataFrame()
+    levels_of_attainment = ['High', 'Medium', 'Poor']
+
+    # Loop for all the students
+    for idx, student_info in all_students.iterrows():
+        project_student_data = {'SID': student_info['SID']}
+
+        if student_info['Enrolment Type'] == 'International':
+            p_weights_structure = [.7,.2,.1]
+            p_weights_prez = [.2,.5,.3]
+        else:
+            p_weights_structure = [.6,.3,.1]
+            p_weights_prez = [.7,.2,.1]
+
+        project_student_data['Structure'] = str(choice(
+            levels_of_attainment,
+            1,
+            p=p_weights_structure)[0])
+        project_student_data['Presentation'] = str(choice(
+            levels_of_attainment,
+            1,
+            p=p_weights_prez)[0])
+
+        project_rubric = project_rubric.append(
+            project_student_data,
+            ignore_index=True)
+
+    return project_rubric
 
 
 def create_blended_file(all_students):
@@ -582,9 +624,9 @@ def main(file_name=None, num_students=500):
         print('Step', step_num, 'Adding column', column_name)
         step_num += 1
         add_column(all_students,
-                   column_name,
-                   values,
-                   weights)
+            column_name,
+            values,
+            weights)
         student_list_fields.append(column_name)
 
     # Filter the undesired columns
@@ -608,13 +650,14 @@ def main(file_name=None, num_students=500):
         result_fields[x] = result_fields[x][1:]
 
     # Update all data
-    all_students = pd.merge(all_students,
-                            midterm_answers[1:][result_fields].drop(
-                                ['email', 'Last Name', 'First Name'],
-                                axis=1
-                            ),
-                            how='left',
-                            on='SID')
+    all_students = pd.merge(
+        all_students,
+        midterm_answers[1:][result_fields].drop(
+            ['email', 'Last Name', 'First Name'],
+            axis=1
+        ),
+        how='left',
+        on='SID')
 
     #
     # Creating forum data
@@ -625,9 +668,22 @@ def main(file_name=None, num_students=500):
 
     # Update all data
     all_students = pd.merge(all_students,
-                            forum_participation[forum_fields],
-                            how='left',
-                            on='SID')
+        forum_participation[forum_fields],
+        how='left',
+        on='SID')
+
+    #
+    # Creating project data
+    #
+    print('Step', step_num, 'Creating', project_name)
+    step_num += 1
+    project_rubric = create_project_data(all_students)
+
+    # Update all data
+    all_students = pd.merge(all_students,
+        project_rubric[project_fields],
+        how='left',
+        on='SID')
 
     #
     # Creating blended information
@@ -638,9 +694,9 @@ def main(file_name=None, num_students=500):
 
     # Update all data
     all_students = pd.merge(all_students,
-                            blended_indicators[blended_fields],
-                            how='left',
-                            on='SID')
+        blended_indicators[blended_fields],
+        how='left',
+        on='SID')
 
     print('Step', step_num, 'Creating CSV files')
     step_num += 1
@@ -650,20 +706,23 @@ def main(file_name=None, num_students=500):
 
     # Student info file
     generate_csv_file(all_students,
-                      student_list_name,
-                      student_list_fields,
-                      'Surname')
+        student_list_name,
+        student_list_fields,
+        'Surname')
 
     # Midterm answers
     generate_csv_file(midterm_answers, midterm_answers_name,
-                      midterm_answers_fields, 'SID')
+        midterm_answers_fields, 'SID')
 
     # Midterm results
     generate_csv_file(midterm_answers[1:], midterm_results_name,
-                      result_fields, 'SID')
+        result_fields, 'SID')
 
     # Forum data
     generate_csv_file(forum_participation, forum_name, forum_fields, 'SID')
+
+    # Project data
+    generate_csv_file(project_rubric, project_name, project_fields, 'SID')
 
     # Blended data
     generate_csv_file(blended_indicators, blended_name, blended_fields, 'SID')
