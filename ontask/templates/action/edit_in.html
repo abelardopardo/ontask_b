@@ -27,6 +27,7 @@
     if (document.getElementById("column-selected-table") != null) {
       $(document).ready(function() {
         $('#column-selected-table').DataTable({
+          "ordering": false,
           "autoWidth": false,
           "search": {
             "caseInsensitive": true,
@@ -41,7 +42,6 @@
           },
           "columnDefs": [
             {"className": "dt-center", "targets": [0, 2, 3]},
-            {"orderable": false, "targets": 3},
             {"searchable": false, "targets": 3},
           ],
           colReorder: false,
