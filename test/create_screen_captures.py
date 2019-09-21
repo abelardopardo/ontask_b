@@ -953,3 +953,48 @@ class ScreenTestFixture(ScreenTests):
 
         # Close the db_engine
         destroy_db_engine()
+
+    def test_rubric(self):
+        action_name = 'Project feedback'
+        # Login
+        self.login('instructor01@bogus.com')
+
+        self.access_workflow_from_home_page(self.workflow_name)
+
+        self.go_to_actions()
+
+        # click in the create action button
+        self.selenium.find_element_by_class_name('js-create-action').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name')))
+
+        # Set the name, description and type of the action
+        self.selenium.find_element_by_id('id_name').send_keys(action_name)
+        desc = self.selenium.find_element_by_id('id_description_text')
+        desc.send_keys(
+            'Provide feedback about the project using the results '
+            + 'from the rubric')
+        # Select the action type
+        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select.select_by_value(Action.RUBRIC_TEXT)
+        self.modal_ss('rubric_create.png')
+        self.cancel_modal()
+
+        # Open the action
+        self.open_action_edit(action_name)
+        self.body_ss('rubric_edit_text.png')
+
+        # Go to the rubric tab
+        self.select_rubric_tab()
+        self.body_ss('rubric_edit_table_tab.png')
+
+        # Preview
+        self.open_preview()
+        self.modal_ss('rubric_preview.png')
+        self.cancel_modal()
+
+        # End of session
+        self.logout()
+
+        # Close the db_engine
+        destroy_db_engine()
