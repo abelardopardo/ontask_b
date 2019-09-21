@@ -527,17 +527,17 @@ def create_blended_file(all_students):
 
             # Generate random percentages
             perc = [random.normalvariate(midterm_score,
-                                         20 - (midterm_score * 1.0) / 10)
+                20 - (midterm_score * 1.0) / 10)
                     for _ in range(0, 4)]
             perc = [100 if x > 100 else x for x in perc]
             perc = [0 if x < 0 else x for x in perc]
 
-            perc[0] = int(perc[0] * 100)/100.0
-            perc[1] = int(perc[1] * 100)/100.0
+            perc[0] = int(perc[0] * 100) / 100.0
+            perc[1] = int(perc[1] * 100) / 100.0
             blended_student['Video_1_W' + str(week_n)] = perc[0]
             blended_student['Video_2_W' + str(week_n)] = perc[1]
-            q1 = round(perc[2]/20)
-            q2 = round(perc[3]/20)
+            q1 = round(perc[2] / 20)
+            q2 = round(perc[3] / 20)
             blended_student['Questions_1_W' + str(week_n)] = q1
             blended_student['Questions_2_W' + str(week_n)] = q2
 
@@ -547,7 +547,7 @@ def create_blended_file(all_students):
                 value = 0
             if value > 100:
                 value = 100
-            value = round(value/20)
+            value = round(value / 20)
             if value > q1:
                 value = q1
             blended_student['Correct_1_W' + str(week_n)] = value
@@ -557,22 +557,24 @@ def create_blended_file(all_students):
                 value = 0
             if value > 100:
                 value = 100
-            value = round(value/20)
+            value = round(value / 20)
             if value > q2:
                 value = q2
             blended_student['Correct_2_W' + str(week_n)] = value
 
-        blended_indicators = blended_indicators.append(blended_student,
-                                                       ignore_index=True)
+        blended_indicators = blended_indicators.append(
+            blended_student,
+            ignore_index=True)
 
     return blended_indicators
 
 
 def main(file_name=None, num_students=500):
     if file_name is None:
-        print('Scrip needs the name of a file with the ',
-              end=' ',
-              file=sys.stderr)
+        print(
+            'Scrip needs the name of a file with the ',
+            end=' ',
+            file=sys.stderr)
         print('initial data set to process', file=sys.stderr)
         sys.exit(1)
 
