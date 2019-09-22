@@ -397,8 +397,8 @@ def random_column_add(
         # Detect the case of a single integer as initial value so that it is
         # expanded
         try:
-            int_value: int = int(column.categories)
-        except (ValueError, TypeError):
+            int_value: int = int(column.categories[0])
+        except (ValueError, TypeError, IndexError):
             int_value: Optional[str] = None
 
         if int_value:
