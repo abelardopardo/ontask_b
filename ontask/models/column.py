@@ -135,8 +135,7 @@ class Column(models.Model):
         if validate:
             to_store = self.validate_column_values(
                 self.data_type,
-                [cat_value.strip() for cat_value in cat_values],
-            )
+                [cat_value.strip() for cat_value in cat_values])
         else:
             to_store = cat_values
 
