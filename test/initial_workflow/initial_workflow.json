@@ -4475,6 +4475,22 @@
     }
 },
 {
+    "model": "ontask.sqlconnection",
+    "pk": 1,
+    "fields": {
+        "name": "remote server",
+        "description_text": "Server with student records",
+        "conn_type": "mysql",
+        "conn_driver": "",
+        "db_user": "remote_db_user",
+        "db_password": true,
+        "db_host": "dbserver.bogus.com",
+        "db_port": null,
+        "db_name": "demographics",
+        "db_table": "s_records"
+    }
+},
+{
     "model": "ontask.ontaskuser",
     "pk": 21,
     "fields": {}
