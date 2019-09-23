@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class="shadow rounded tab-pane px-3 fade show border border-dark"
      id="conditions" role="tabpanel" aria-labelledby="conditions-tab">
-<  <div id="condition-set-header" class="text-center my-3">
+  <div id="condition-set-header" class="text-center my-3">
     <button type="button"
             class="btn btn-outline-dark js-condition-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'action:create_condition' action.id %}"

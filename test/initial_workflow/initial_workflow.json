@@ -4265,6 +4265,46 @@
     }
 },
 {
+    "model": "ontask.action",
+    "pk": 9,
+    "fields": {
+        "workflow": 1,
+        "name": "Send Email with list",
+        "description_text": "Send email with column values as list",
+        "created": "2019-09-03T09:49:08.382Z",
+        "modified": "2019-09-03T09:50:05.509Z",
+        "last_executed_log": null,
+        "action_type": "send_list",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_column_list \"email\" %}</p><p>Regards</p><p>Josh<br></p>",
+        "target_url": "",
+        "shuffle": false
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 10,
+    "fields": {
+        "workflow": 1,
+        "name": "Send list through JSON",
+        "description_text": "Send the list of inactive students in week 2 to another platform",
+        "created": "2019-09-03T10:41:07.348Z",
+        "modified": "2019-09-03T10:42:39.438Z",
+        "last_executed_log": null,
+        "action_type": "send_list_json",
+        "serve_enabled": false,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "text_content": "{\r\n    \"inactive_students\": {% ot_insert_column_list \"email\" %}\r\n}",
+        "target_url": "https://anotherinternalserver.yourinstution.edu",
+        "shuffle": false
+    }
+},
+{
     "model": "ontask.profile",
     "pk": 21,
     "fields": {
@@ -4472,6 +4512,31 @@
         "picture": "",
         "bio": "",
         "email_verified": false
+    }
+},
+{
+    "model": "ontask.scheduledaction",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "name": "Week 2 motivation message",
+        "description_text": "Send the motivation message to all students depending on their program",
+        "action": 2,
+        "created": "2019-04-15T22:46:25.569Z",
+        "execute": "2121-09-30T21:44:00Z",
+        "status": "pending",
+        "item_column": 2,
+        "exclude_values": [],
+        "last_executed_log": null,
+        "payload": {
+            "subject": "How is this course connected with your career",
+            "cc_email": [],
+            "bcc_email": [],
+            "track_read": false,
+            "send_confirmation": false
+        }
     }
 },
 {
