@@ -982,6 +982,11 @@ class ScreenTestFixture(ScreenTests):
 
         # Open the action
         self.open_action_edit(action_name)
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//div[contains(@class, "note-editable")]')
+            )
+        )
         self.body_ss('rubric_edit_text.png')
 
         # Go to the rubric tab
