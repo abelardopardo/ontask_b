@@ -338,10 +338,10 @@ class ScreenTestFixture(ScreenTests):
             )
         )
         # Uncheck the columns that won't be keys
-        for k_num in [2, 3, 40, 45, 46, 47, 49, 50, 51, 59, 61, 64]:
-            self.selenium.find_element_by_id(
-                'id_make_key_{0}'.format(k_num)
-            ).click()
+        col_checks = self.selenium.find_elements_by_xpath(
+            '//input[contains(@id, "id_make_key_")]')
+        for col_check in col_checks[1:]:
+            col_check.click()
         self.selenium.execute_script("window.scroll(0,0);")
 
         # Picture of the body
