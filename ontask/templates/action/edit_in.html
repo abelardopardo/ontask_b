@@ -41,8 +41,8 @@
             "url": location.protocol + getLanguage()
           },
           "columnDefs": [
-            {"className": "dt-center", "targets": [0, 2, 3]},
-            {"searchable": false, "targets": 3},
+            {"className": "dt-center", "targets": [0, 2, 3, 4]},
+            {"searchable": false, "targets": [2, 3, 4]},
           ],
           colReorder: false,
           rowReorder: false,
@@ -142,7 +142,7 @@
           </h5>
           <h5 class="text-center">{% trans 'Shuffle questions?' %}
             <small>
-              <input id="shuffle-questions"
+              <input id="toggle-checkbox"
                      {% if action.shuffle %}checked{% endif %}
                      data-toggle="toggle"
                      data-url="{% url 'action:shuffle_questions' action.id %}"

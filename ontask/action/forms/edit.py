@@ -170,7 +170,7 @@ class EnterActionIn(forms.Form):
             )
             self.fields[field_name] = the_field
 
-            if cc_item.column.is_key:
+            if cc_item.column.is_key or not cc_item.changes_allowed:
                 the_field.widget.attrs['readonly'] = 'readonly'
                 the_field.disabled = True
             else:

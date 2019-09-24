@@ -217,7 +217,7 @@ $(function () {
   $("#edit-survey-tab-content").on("click", ".js-select-condition", assignColumn);
 
   // Toggle shuffle question
-  $("#action-in-editor").on("change", "#shuffle-questions", toggleCheckBox);
+  $("#action-in-editor").on("change", "#toggle-checkbox", toggleCheckBox);
 
   // Show stats
   $("#column-stat-selector").on("click", ".js-show-stats", loadForm);

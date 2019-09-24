@@ -232,13 +232,14 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
             action=action,
             column=action.workflow.columns.get(
                 name=validated_data['column']['name']),
-            condition=condition_obj)
+            condition=condition_obj,
+            changes_allowed=validated_data['changes_allowed'])
 
     class Meta:
         """Define the model and select only column and condition elements."""
 
         model = ActionColumnConditionTuple
-        fields = ('column', 'condition')
+        fields = ('column', 'condition', 'changes_allowed')
 
 
 class RubricCellSerializer(serializers.ModelSerializer):

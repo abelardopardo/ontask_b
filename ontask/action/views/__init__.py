@@ -17,6 +17,7 @@ from ontask.action.views.edit_personalized import (
 from ontask.action.views.edit_survey import (
     edit_action_in, edit_description, select_column_action,
     select_condition_for_question, shuffle_questions, unselect_column_action,
+    toggle_question_change
 )
 from ontask.action.views.edit_rubric import (
     edit_action_rubric, edit_rubric_cell, edit_rubric_loas

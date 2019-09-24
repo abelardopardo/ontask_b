@@ -15,8 +15,8 @@ from ontask.action.views import (
     run_survey_ss, run_zip_done, select_column_action,
     select_condition_for_question, serve_action, show_timeline, showurl,
     shuffle_questions, survey_thanks, unselect_column_action, zip_action,
-    serve_action_lti, edit_rubric_cell, edit_rubric_loas
-)
+    serve_action_lti, edit_rubric_cell, edit_rubric_loas,
+    toggle_question_change)
 
 app_name = 'action'
 
@@ -121,6 +121,12 @@ urlpatterns = [
         '<int:pk>/shuffle_questions/',
         shuffle_questions,
         name='shuffle_questions'),
+
+    # Toggle question changes
+    path(
+        '<int:pk>/toggle_question_change/',
+        toggle_question_change,
+        name='toggle_question_change'),
 
     # Select condition for a column/question
     path(

@@ -4,6 +4,7 @@
 
 from typing import Optional
 
+from django.contrib import messages
 import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -18,6 +19,7 @@ from django.views.decorators.http import require_http_methods
 from ontask.action.forms import ActionDescriptionForm
 from ontask.core.decorators import (
     ajax_required, get_action, get_columncondition,
+    get_workflow,
 )
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
@@ -35,6 +37,9 @@ class ColumnSelectedTable(tables.Table):
         verbose_name=_('Description (shown to learners)'),
         default='',
     )
+    changes_allowed = tables.BooleanColumn(
+        verbose_name=_('Allow change?'),
+        default=True)
     condition = tables.Column(  # noqa: Z116
         verbose_name=_('Condition'),
         empty_values=[-1],
@@ -69,8 +74,16 @@ class ColumnSelectedTable(tables.Table):
                 'id': record['id'],
                 'cond_selected': record['condition__name'],
                 'conditions': self.condition_list,
-            },
-        )
+            })
+
+    def render_changes_allowed(self, record):
+        """Render the boolean to allow changes."""
+        return render_to_string(
+            'action/includes/partial_question_changes_allowed.html',
+            {
+                'id': record['id'],
+                'changes_allowed': record['changes_allowed'],
+            })
 
     class Meta:
         """Define fields, sequence, attrs and row attrs."""
@@ -79,12 +92,14 @@ class ColumnSelectedTable(tables.Table):
             'column__id',
             'column__name',
             'column__description_text',
+            'changes_allowed',
             'condition',
             'operations')
 
         sequence = (
             'column__name',
             'column__description_text',
+            'changes_allowed',
             'condition',
             'operations')
 
@@ -156,7 +171,7 @@ def edit_action_in(
                 'column__name',
                 'column__description_text',
                 'condition__name',
-            ),
+                'changes_allowed'),
             orderable=False,
             extra_columns=[(
                 'operations',
@@ -316,6 +331,40 @@ def shuffle_questions(
     action.save()
 
     return JsonResponse({'is_checked': action.shuffle})
+
+
+@user_passes_test(is_instructor)
+@ajax_required
+@get_workflow(pf_related='actions')
+def toggle_question_change(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
+    """Enable/Disable changes in the question.
+
+    :param request: Request object
+    :param pk: Action/Question/Condition PK
+    :return: HTML response
+    """
+    # Check if the workflow is locked
+    acc_item = ActionColumnConditionTuple.objects.filter(pk=pk).first()
+    if not acc_item:
+        messages.error(
+            request,
+            _('Incorrect invocation of toggle question change function.'))
+        return JsonResponse({}, status=404)
+
+    if acc_item.action.workflow != workflow:
+        messages.error(
+            request,
+            _('Incorrect invocation of toggle question change function.'))
+        return JsonResponse({}, status=404)
+
+    acc_item.changes_allowed = not acc_item.changes_allowed
+    acc_item.save()
+
+    return JsonResponse({'is_checked': acc_item.changes_allowed})
 
 
 @user_passes_test(is_instructor)
