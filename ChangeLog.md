@@ -4,6 +4,8 @@
 
 - New functionality to execute actions incrementally over a time window (Issue #160)
 
+- New action type: personalized rubric. Write a rubric, extend each cell with a feedback paragraph, collect data about the level of attainment and create a personalized email with the appropriate messages for each student.
+
 - Link to the table views in the top menu
 
 ### Fixed
