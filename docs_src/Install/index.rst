@@ -35,7 +35,7 @@ Are you upgrading to version 5.2?
 
 Version 5.2 contains a significant reorganization of the file structure in the tool, and as a consequence there are several files that need to be manually relocated:
 
-- The :ref:`configuration file <configuration_file>` needs to be moved from ``src/ontask/settings`` to ``ontask/settings``.
+- The :ref:`configuration file <configuration_file>` needs to be moved from ``src/ontask/settings`` to ``settings``.
 
 - The the files in the ``media`` folder need to be moved to ``ontask/media``.
 
@@ -122,7 +122,7 @@ Environment variables (*env* level)
 
 Configuration file (*conf* level)
 
-  The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file and kept within the system file readable by the application (in the ``ontask/settings`` folder). This variables can store strings, booleans, basic lists and dictionaries.
+  The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file and kept within the system file readable by the application (in the ``settings`` folder). This variables can store strings, booleans, basic lists and dictionaries.
 
 Configuration script (*script* level)
 
@@ -179,9 +179,9 @@ The following variables, if defined in the environment, are considered by OnTask
   Default: `plugins`
 
 ``DJANGO_SETTINGS_MODULE``
-  Python expression pointing to the configuration script or initial module (python file) to execute on start up. Two of these modules are provided in the folder ``ontask/settings``. The file ``development.py`` provides definitions recommended for a development environment. The file ``production.py`` provides the suggested definitions for a production deployment. Both scripts load the definitions in the module ``base.py``. These scripts contain configuration definitions described in :ref:`configuration_script`.
+  Python expression pointing to the configuration script or initial module (python file) to execute on start up. Two of these modules are provided in the folder ``settings``. The file ``development.py`` provides definitions recommended for a development environment. The file ``production.py`` provides the suggested definitions for a production deployment. Both scripts load the definitions in the module ``base.py``. These scripts contain configuration definitions described in :ref:`configuration_script`.
 
-  Default: ``ontask.settings.production``
+  Default: ``settings.production``
 
 ``DOMAIN_NAME``
   Host name used to serve the application.
@@ -189,7 +189,7 @@ The following variables, if defined in the environment, are considered by OnTask
   Default: ``localhost``
 
 ``ENV_FILENAME``
-  Name for the configuration file. It must be in the folder ``ontask/settings``
+  Name for the configuration file. It must be in the folder ``settings``
 
   Default: ``local.env``
 
@@ -242,7 +242,7 @@ Remember that if any of these variables is undefined in the execution environmen
 Configuration file
 ------------------
 
-Using a plain text editor create a file with name ``local.env`` in folder ``ontask/settings`` (or a file with the name assigned to the environment variable ``ENV_FILENAME`` as described in :ref:`configuration_environment`). Include in this file either:
+Using a plain text editor create a file with name ``local.env`` in folder ``settings`` (or a file with the name assigned to the environment variable ``ENV_FILENAME`` as described in :ref:`configuration_environment`). Include in this file either:
 
 - the assignment of a variable from those described in :ref:`configuration_environment` that has no environment definition, or
 
@@ -335,7 +335,7 @@ The configuration file may include additional variables to configure functionali
 Configuration script
 --------------------
 
-The are some additional configuration variables that directly defined in the modules ``base.py``, ``development.py`` and ``production.py`` in the folder ``ontask/settings``. Modify the python code to perform additional configuration considering:
+The are some additional configuration variables that directly defined in the modules ``base.py``, ``development.py`` and ``production.py`` in the folder ``settings``. Modify the python code to perform additional configuration considering:
 
 1) The script ``base.py`` is always executed first
 
@@ -406,8 +406,7 @@ The documentation is created by the application ``sphinx-doc`` and stored in the
    ``127.0.0.1:8000`` you have to perform two more steps. First, edit the file
    ``manage.py`` and change these three lines to look like::
 
-         os.environ.setdefault("DJANGO_SETTINGS_MODULE",
-                          "ontask.settings.development")
+         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.development")
 
    Second, execute the following command from the project folder::
 
@@ -520,7 +519,7 @@ If you have OnTask already configured and running, here are the steps to follow 
 
 - Set the current folder of the interpreter to the main project folder.
 
-- Verify that the :ref:`configuration file <configuration_file>` is in the folder ``ontask/settings``.
+- Verify that the :ref:`configuration file <configuration_file>` is in the folder ``settings``.
 
 - Pull the code for the new version from the repository::
 
@@ -618,7 +617,7 @@ OnTask comes with the following authentication mechanisms: IMS-LTI,
   1) A tool consumer that can be configured to connect with OnTask. This type
      of configuration is beyond the scope of this manual.
 
-  2) A set of pairs key,value in OnTask to be given to the tool consumers so that together with the URL, they are ready to send the requests. The key/value pairs need to be included as an additional variables in the file ``local.env`` in the folder ``ontask/settings`` together with other local configuration variables. For example, ::
+  2) A set of pairs key,value in OnTask to be given to the tool consumers so that together with the URL, they are ready to send the requests. The key/value pairs need to be included as an additional variables in the file ``local.env`` in the folder ``settings`` together with other local configuration variables. For example, ::
 
        LTI_OAUTH_CREDENTIALS=key1=secret1,key2=secret2
 
@@ -669,9 +668,9 @@ the `documentation of the django-auth-ldap module
     AUTH_LDAP_SERVER_URI=[uri pointing to your ldap server]
     AUTH_LDAP_PASSWORD=[Password to connect to the server]
 
-- Edit the  file ``ontask/settings/base.py`` and uncomment the lines that import the ``ldap`` library (``import ldap``) and the lines that import three methods from the ``django_auth_ldap.config`` module (``LDAPSearch``, ``GroupOfNamesType`` and ``LDAPGroupQuery``)
+- Edit the  file ``settings/base.py`` and uncomment the lines that import the ``ldap`` library (``import ldap``) and the lines that import three methods from the ``django_auth_ldap.config`` module (``LDAPSearch``, ``GroupOfNamesType`` and ``LDAPGroupQuery``)
 
-- Locate the section in the file ``ontask/settings/base.py`` that contains the variables to configure *LDAP AUTHENTICATION*.
+- Locate the section in the file ``settings/base.py`` that contains the variables to configure *LDAP AUTHENTICATION*.
 
 - Uncomment the ones needed for your configuration. Make sure all the information is included to connect to the server, perform the binding, search, and if needed, assign fields to user and group attributes.
 
