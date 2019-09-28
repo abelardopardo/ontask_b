@@ -151,7 +151,7 @@ def do_export_workflow_parse(
 
 def do_export_workflow(
     workflow: Workflow,
-    selected_actions: Optional[List[Action]] = None,
+    selected_actions: Optional[List[int]] = None,
 ) -> HttpResponse:
     """Proceed with the workflow export.
 
