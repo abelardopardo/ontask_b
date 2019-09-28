@@ -6,6 +6,8 @@
 
 - New action type: personalized rubric. Write a rubric, extend each cell with a feedback paragraph, collect data about the level of attainment and create a personalized email with the appropriate messages for each student.
 
+- New button to export a subset of actions from a workflow in a single step.
+
 - Link to the table views in the top menu
 
 ### Fixed

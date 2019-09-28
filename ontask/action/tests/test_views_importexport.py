@@ -36,13 +36,16 @@ class ActionViewExport(test.OnTaskTestCase):
             'workflow:export_list_ask',
             {'wid': action.workflow.id})
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertTrue('{{ registered }}' in str(resp.content))
+        self.assertTrue(action.name in str(resp.content))
 
         # Get export done
         # BROKEN!!!
         resp = self.get_response(
             'workflow:export_list_ask',
-            {'wid': action.workflow.id})
+            {'wid': action.workflow.id},
+            method='POST',
+            req_params={'select_0': True})
+
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue('Your download will start ' in str(resp.content))
 

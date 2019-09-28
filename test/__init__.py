@@ -1587,13 +1587,13 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         element = self.selenium.find_element_by_xpath(
             '//table[@id="column-selected-table"]'
             '//td[1][normalize-space() = "{0}"]/'
-            '../td[3]/div/button'.format(qname))
+            '../td[4]/div/button'.format(qname))
         element.click()
         # Click in the condition name
         self.selenium.find_element_by_xpath(
             '//table[@id="column-selected-table"]'
             '//td[1][normalize-space() = "{0}"]/'
-            '../td[3]/div/div/button[normalize-space() = "{1}"]'.format(
+            '../td[4]/div/div/button[normalize-space() = "{1}"]'.format(
                 qname,
                 cname
             )

@@ -93,7 +93,7 @@ class ActionImport(test.OnTaskTestCase):
             'fixtures',
             'survey_to_import.gz'
         ), 'rb') as file_obj:
-            do_import_action(user, wflow, 'a1', file_obj)
+            do_import_action(user, workflow=wflow, file_item=file_obj)
 
-        Action.objects.get(name='a1')
+        Action.objects.get(name='Initial survey')
         self.assertTrue(check_wf_df(wflow))

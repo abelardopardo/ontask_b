@@ -111,12 +111,14 @@ def action_import(
                 request,
                 _('Unable to import file. Incorrect fields.').format(str(exc)),
             )
+            return redirect('action:index')
         except Exception as exc:
             # Attach the exception to the request
             messages.error(
                 request,
                 _('Unable to import file: {0}').format(str(exc)),
             )
+            return redirect('action:index')
 
         messages.success(
             request,
