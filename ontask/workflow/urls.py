@@ -27,18 +27,18 @@ urlpatterns = [
         '<int:wid>/export_ask/',
         views.export_ask,
         name='export_ask'),
-    path('export/', views.export, name='export_empty'),
+    path(
+        '<int:wid>/export_list_ask/',
+        views.export_list_ask,
+        name='export_list_ask'),
     re_path(
-        r'(?P<page_data>\d+((,\d+)*))/export/',
+        r'(?P<page_data>(\d+,)*\d*)/export/',
         views.export,
         name='export'),
     path('import/', views.import_workflow, name='import'),
 
     # Attributes
-    path(
-        'attribute_create/',
-        views.attribute_create,
-        name='attribute_create'),
+    path('attribute_create/', views.attribute_create, name='attribute_create'),
     path(
         '<int:pk>/attribute_edit/',
         views.attribute_edit,

@@ -224,6 +224,10 @@ rst_prolog += """
 
    <span class="fa fa-download"></span>
 
+.. |fa-clock-o| raw:: html
+
+   <span class="fa fa-clock-o"></span>
+
 .. |fa-upload| raw:: html
 
    <span class="fa fa-upload"></span>

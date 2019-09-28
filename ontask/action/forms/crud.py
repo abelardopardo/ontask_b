@@ -187,40 +187,13 @@ class ConditionForm(FilterForm):
 class ActionImportForm(forms.Form):
     """Form to edit information to import an action."""
 
-    # Action name
-    name = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
-        strip=True,
-        required=True,
-        label='Name',
-    )
-
     upload_file = RestrictedFileField(
         max_upload_size=int(ontask.settings.MAX_UPLOAD_SIZE),
         content_types=json.loads(str(ontask.settings.CONTENT_TYPES)),
         allow_empty_file=False,
-        label=_('File'),
+        label=_('File with previously exported OnTask actions'),
         help_text=_('File containing a previously exported action'),
     )
-
-    def __init__(self, form_data, *args, **kwargs):
-        """Store workflow and user parameters."""
-        self.workflow = kwargs.pop('workflow')
-        self.user = kwargs.pop('user')
-
-        super().__init__(form_data, *args, **kwargs)
-
-    def clean(self):
-        """Verify that the name of the action is not present already."""
-        form_data = super().clean()
-
-        if self.workflow.actions.filter(name=form_data['name']).exists():
-            # There is an action with this name. Return error.
-            self.add_error(
-                'name',
-                _('An action with this name already exists'))
-
-        return form_data
 
 
 class RubricCellForm(forms.ModelForm):

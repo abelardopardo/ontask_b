@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from ontask.core.decorators import get_workflow
@@ -22,10 +23,27 @@ from ontask.workflow.import_export import (
 
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
+def export_list_ask(
+    request: HttpRequest,
+    wid,
+    workflow: Optional[Workflow] = None,
+    only_action_list: Optional[bool] = False,
+) -> HttpResponse:
+    """Request the list of actions to export (without data)."""
+    return export_ask(
+        request,
+        wid=wid,
+        workflow=workflow,
+        only_action_list=True)
+
+
+@user_passes_test(is_instructor)
+@get_workflow(pf_related='actions')
 def export_ask(
     request: HttpRequest,
     wid,
     workflow: Optional[Workflow] = None,
+    only_action_list: Optional[bool] = False,
 ) -> HttpResponse:
     """Request additional information for the export."""
     form = WorkflowExportRequestForm(
@@ -36,11 +54,13 @@ def export_ask(
     context = {
         'form': form,
         'name': workflow.name,
-        'nrows': workflow.nrows,
-        'ncols': workflow.ncols,
-        'nactions': workflow.actions.count(),
         'wid': workflow.id,
-    }
+        'nactions': workflow.actions.count(),
+        'only_action_list': only_action_list}
+
+    if not only_action_list:
+        context['nrows'] = workflow.nrows
+        context['ncols'] = workflow.ncols
 
     if request.method == 'POST' and form.is_valid():
         to_include = []
@@ -49,11 +69,16 @@ def export_ask(
         ):
             if form.cleaned_data['select_%s' % idx]:
                 to_include.append(str(a_id))
+
+        if not to_include and only_action_list:
+            return redirect(reverse('action:index'))
+
         return render(
             request,
             'workflow/export_done.html',
             {'include': ','.join(to_include),
-             'wid': workflow.id})
+             'wid': workflow.id,
+             'only_action_list': only_action_list})
 
     # GET request, simply render the form
     return render(request, 'workflow/export.html', context)
@@ -64,7 +89,7 @@ def export_ask(
 @get_workflow(pf_related='actions')
 def export(
     request: HttpRequest,
-    page_data = '0',
+    page_data: Optional[str] = '',
     workflow: Optional[Workflow] = None,
 ) -> HttpResponse:
     """Render the view to export a workflow.
@@ -81,15 +106,11 @@ def export(
 
     :return:
     """
-    # Get the param encoding which elements to include in the export.
-    if page_data == '0':
-        action_ids = [action.id for action in workflow.actions.all()]
-    else:
-        # Data has at least one integer
-        try:
-            action_ids = [int(a_idx) for a_idx in page_data.split(',')]
-        except ValueError:
-            return redirect('home')
+    try:
+        action_ids = [
+            int(a_idx) for a_idx in page_data.split(',') if a_idx]
+    except ValueError:
+        return redirect('home')
 
     response = do_export_workflow(workflow, action_ids)
 

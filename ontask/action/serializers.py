@@ -2,7 +2,6 @@
 
 """Classes to serialize Actions and Conditions."""
 
-from builtins import object
 from typing import Optional
 
 from django.utils.translation import ugettext_lazy as _
@@ -233,7 +232,7 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
             column=action.workflow.columns.get(
                 name=validated_data['column']['name']),
             condition=condition_obj,
-            changes_allowed=validated_data['changes_allowed'])
+            changes_allowed=validated_data.get('changes_allowed', False))
 
     class Meta:
         """Define the model and select only column and condition elements."""
@@ -442,7 +441,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
     def create(self, validated_data, **kwargs):
         """Create the Action object with the validated data."""
         if not self.context['workflow'].has_data_frame():
-            # Cannot create columns with an empty workflow
+            # Cannot create actions with an empty workflow
             raise Exception(_(
                 'Unable to import action '
                 + ' in a workflow with and empty data table'))

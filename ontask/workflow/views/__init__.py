@@ -12,7 +12,7 @@ from ontask.workflow.views.column_ops import (
 )
 from ontask.workflow.views.home import home
 from ontask.workflow.views.import_export import (
-    export, export_ask, import_workflow,
+    export, export_ask, import_workflow, export_list_ask
 )
 from ontask.workflow.views.share import share_create, share_delete
 from ontask.workflow.views.workflow_crud import (

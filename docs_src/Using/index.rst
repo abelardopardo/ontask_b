@@ -379,8 +379,14 @@ The buttons at the top of the page offer the following operations:
 |fa-plus| Action
   Create a new action in the workflow. The form requires a name (unique for the current workflow), a description (optional), and the type of action. OnTask offers the following types of actions: personalized text, personalized Canvas email, personalized JSON, and surveys.
 
-|fa-upload| Import action
+|fa-upload| Import actions
   Upload an action previously downloaded from another workflow.
+
+|fa-download| Export actions
+  Download a file with any of the actions in the workflow.
+
+|fa-clock-o| Timeline
+  Display the time line showing when the actions in the workflow have been executed.
 
 The actions in the workflow are shown in a tabular format. For each action the following main operations are offered:
 
