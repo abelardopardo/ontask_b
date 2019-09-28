@@ -54,9 +54,7 @@
               data-url="{% url 'dataops:sqlconn_add' %}"
               data-toggle="tooltip"
               title="{% trans 'Add a new SQL database connection' %}">
-        <span class="fa fa-plus"></span>
-          {% trans 'New SQL connection' %}
-      </button>
+        <span class="fa fa-plus"></span> {% trans 'SQL connection' %}</button>
     </div>
     <div class="justify-content-center">
       {% render_table table %}
