@@ -74,8 +74,7 @@ class ActionViewExport(test.OnTaskTestCase):
         # Post request
         req = self.factory.post(
             reverse('action:import'),
-            {'name': 'new action name', 'upload_file': file_obj},
-        )
+            {'upload_file': file_obj})
         req.META['HTTP_ACCEPT_ENCODING'] = 'gzip, deflate'
         req.FILES['upload_file'].content_type = 'application/x-gzip'
         req = self.add_middleware(req)
@@ -83,4 +82,4 @@ class ActionViewExport(test.OnTaskTestCase):
 
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         # Fails if the action is not there
-        self.workflow.actions.get(name='new action name')
+        self.workflow.actions.get(name='SPQ')
