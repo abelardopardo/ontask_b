@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """SQL Connection model."""
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 

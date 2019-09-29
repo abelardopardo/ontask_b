@@ -14,6 +14,11 @@ from ontask.dataops.views.sqlconnection import (
     sqlconn_add, sqlconn_clone, sqlconn_delete, sqlconn_edit, sqlconn_view,
     sqlconnection_admin_index, sqlconnection_instructor_index,
 )
+from ontask.dataops.views.athenaconnection import (
+    athenaconn_add, athenaconn_clone, athenaconn_delete, athenaconn_edit,
+    athenaconn_view,
+    athenaconnection_admin_index, athenaconnection_instructor_index,
+)
 from ontask.dataops.views.sqlupload import sqlupload_start
 from ontask.dataops.views.transform import plugin_invoke, transform_model
 from ontask.dataops.views.upload import (

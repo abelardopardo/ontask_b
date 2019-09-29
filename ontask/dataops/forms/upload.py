@@ -31,13 +31,13 @@ from ontask.dataops.forms.dataframeupload import (
     load_df_from_s3,
 )
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
-from ontask.models import SQLConnection
+from ontask.models import SQLConnection, AthenaConnection
+from ontask.models.const import CHAR_FIELD_MID_SIZE
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
 
 FIELD_PREFIX = '___ontask___upload_'
-CHAR_FIELD_LENGTH = 512
 URL_FIELD_LENGTH = 1024
 
 
@@ -164,7 +164,7 @@ class UploadExcelFileForm(UploadBasic):
         help_text=_('File in Excel format (.xls or .xlsx)'))
 
     sheet = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('Sheet within the excelsheet to upload'))
@@ -270,25 +270,25 @@ class UploadS3FileForm(UploadBasic):
     """
 
     aws_access_key = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=False,
         initial='',
         help_text=_('AWS S3 Bucket access key'))
 
     aws_secret_access_key = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=False,
         initial='',
         help_text=_('AWS S3 Bucket secret access key'))
 
     aws_bucket_name = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('AWS S3 Bucket name'))
 
     aws_file_key = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('AWS S3 Bucket file path'))
@@ -398,7 +398,46 @@ class SQLRequestPassword(forms.Form):
     """Form to ask for a password for a SQL connection execution."""
 
     password = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         widget=forms.PasswordInput,
         required=True,
         help_text=_('Password to authenticate the database connection'))
+
+
+class AthenaConnectionForm(forms.ModelForm):
+    """Form to read data from SQL.
+
+    We collect information to open a connection to an Athena instance
+    """
+
+    def clean(self):
+        """Validate the initial value."""
+        form_data = super().clean()
+
+        # Check if the name already exists
+        name_exists = AthenaConnection.objects.filter(
+            name=self.cleaned_data['name'],
+        ).exclude(id=self.instance.id).exists()
+        if name_exists:
+            self.add_error(
+                'name',
+                _('There is already a connection with this name.'),
+            )
+
+        return form_data
+
+    class Meta:
+        """Define the model and the fields to manipulate."""
+
+        model = AthenaConnection
+
+        fields = [
+            'name',
+            'description_text',
+            'aws_access_key',
+            'aws_secret_access_key',
+            'aws_bucket_name',
+            'aws_file_path',
+            'aws_region_name']
+
+

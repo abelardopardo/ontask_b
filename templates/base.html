@@ -146,6 +146,11 @@
                          data-toggle="tooltip"
                          title="{% trans 'Connections to SQL databases' %}">
                         {% trans 'SQL Connections' %}</a>
+                      <a href="{% url 'dataops:athenaconns_admin_index' %}"
+                         class="btn dropdown-item spin"
+                         data-toggle="tooltip"
+                         title="{% trans 'Connections to Athena databases' %}">
+                        {% trans 'Athena Connections' %}</a>
                       <a href="{% url 'dataops:plugin_admin' %}"
                          class="btn dropdown-item spin"
                          data-toggle="tooltip"

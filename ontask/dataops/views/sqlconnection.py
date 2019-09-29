@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Classes and functions to view SQL connections."""
+"""Classes and functions to manage SQL connections."""
 
 from builtins import object
 

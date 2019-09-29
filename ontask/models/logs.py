@@ -99,6 +99,10 @@ class Log(models.Model):
     SQL_CONNECTION_EDIT = 'sql_connection_edit'
     SQL_CONNECTION_DELETE = 'sql_connection_delete'
     SQL_CONNECTION_CLONE = 'sql_connection_clone'
+    ATHENA_CONNECTION_CREATE = 'athena_connection_create'
+    ATHENA_CONNECTION_EDIT = 'athena_connection_edit'
+    ATHENA_CONNECTION_DELETE = 'athena_connection_delete'
+    ATHENA_CONNECTION_CLONE = 'athena_connection_clone'
     SCHEDULE_EMAIL_EDIT = 'schedule_email_edit'
     SCHEDULE_EMAIL_DELETE = 'schedule_email_delete'
     SCHEDULE_EMAIL_EXECUTE = 'schedule_email_execute'
@@ -182,6 +186,10 @@ class Log(models.Model):
         (SQL_CONNECTION_EDIT, _('SQL connection updated')),
         (SQL_CONNECTION_DELETE, _('SQL connection deleted')),
         (SQL_CONNECTION_CLONE, _('SQL connection cloned')),
+        (ATHENA_CONNECTION_CREATE, _('ATHENA connection created')),
+        (ATHENA_CONNECTION_EDIT, _('ATHENA connection updated')),
+        (ATHENA_CONNECTION_DELETE, _('ATHENA connection deleted')),
+        (ATHENA_CONNECTION_CLONE, _('ATHENA connection cloned')),
         (SCHEDULE_EMAIL_EDIT, _('Edit scheduled email action')),
         (SCHEDULE_EMAIL_DELETE, _('Delete scheduled email action')),
         (SCHEDULE_EMAIL_EXECUTE, _('Execute scheduled email action')),

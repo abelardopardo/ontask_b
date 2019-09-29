@@ -700,6 +700,18 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
+    def go_to_athena_connections(self):
+        # Click in the admin dropdown menu and then in the option
+        self.click_dropdown_option(
+            '//*[@id="ontask-base-admin"]',
+            'Athena Connections')
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'athenaconn-admin-table'))
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+
     def go_to_upload_merge(self):
         # Click in the top menu
         self.selenium.find_element_by_id('ontask-base-table').click()

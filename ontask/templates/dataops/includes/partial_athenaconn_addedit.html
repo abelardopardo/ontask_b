@@ -1,0 +1,31 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+<form method="post" 
+  {% if add %}
+    action="{% url 'dataops:athenaconn_add' %}"
+    class="js-athenaconn-add-form"
+  {% else %}
+    action="{% url 'dataops:athenaconn_edit' id %}"
+    class="js-athenaconn-edit-form"
+  {% endif %}>
+  {% csrf_token %}
+  <div class="modal-header">
+  {% if add %}
+    <h4 class="modal-title">{% trans 'Add Athena connection' %}</h4>
+  {% else %}
+    <h4 class="modal-title">{% blocktrans with n=cname %}Edit Athena connection <strong>{{ n }}</strong>{% endblocktrans %}</h4>
+  {% endif %}
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{ form|crispy }}
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-primary">
+       <span class="fa fa-check"></span> {% if add %}{% trans 'Add connection' %}{% else %}{% trans 'Update' %}{% endif %}
+    </button>
+  </div>
+</form>

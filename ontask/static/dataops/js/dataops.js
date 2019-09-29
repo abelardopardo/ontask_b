@@ -58,6 +58,21 @@ $(function () {
   $("#sqlconn-admin-table, #modal-item").on("click", ".js-sqlconn-clone", loadForm);
   $("#modal-item").on("submit", ".js-sqlconn-clone-form", saveForm);
 
+  // Athena connection add, edit, delete and clone
+  $("#athena-connections").on("click", ".js-athenaconn-view", loadForm);
+
+  $("#athena-connections").on("click", ".js-athenaconn-add", loadForm);
+  $("#modal-item").on("submit", ".js-athenaconn-add-form", saveForm);
+
+  $("#athenaconn-admin-table").on("click", ".js-athenaconn-edit", loadForm);
+  $("#modal-item").on("submit", ".js-athenaconn-edit-form", saveForm);
+
+  $("#athenaconn-admin-table, #modal-item").on("click", ".js-athenaconn-delete", loadForm);
+  $("#modal-item").on("submit", ".js-athenaconn-delete-form", saveForm);
+
+  $("#athenaconn-admin-table, #modal-item").on("click", ".js-athenaconn-clone", loadForm);
+  $("#modal-item").on("submit", ".js-athenaconn-clone-form", saveForm);
+
   // Toggle plugin is_enabled
   $("#plugin-admin-table").on("change", ".plugin-toggle", toggleCheckBox);
 });
