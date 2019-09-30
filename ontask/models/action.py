@@ -427,6 +427,27 @@ class Action(models.Model):  # noqa Z214
 
         return self.rows_all_false
 
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'type': self.action_type,
+            'workflow_id': self.workflow.id}
+
+        if self.text_content:
+            payload['content'] = self.text_content
+
+        if self.target_url:
+            payload['target_url'] = self.target_url
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.workflow,
+            payload)
+
     class Meta:
         """Define uniqueness with name and workflow. Order by name."""
 
