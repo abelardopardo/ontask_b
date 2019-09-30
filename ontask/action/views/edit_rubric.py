@@ -139,15 +139,7 @@ def edit_action_rubric(
         # Render the content as a template and catch potential problems.
         if text_renders_correctly(text_content, action, form):
             # Log the event
-            Log.objects.register(
-                request.user,
-                Log.ACTION_UPDATE,
-                action.workflow,
-                {'id': action.id,
-                 'name': action.name,
-                 'workflow_id': workflow.id,
-                 'workflow_name': workflow.name,
-                 'content': text_content})
+            action.log(request.user, Log.ACTION_UPDATE)
 
             # Text is good. Update the content of the action
             action.set_text_content(text_content)
@@ -267,23 +259,7 @@ def edit_rubric_cell(
             cell.column = action.workflow.columns.get(pk=cid)
             cell.loa_position = loa_pos
         cell.save()
-
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.ACTION_RUBRIC_CELL_EDIT,
-            workflow,
-            {
-                'workflow_id': workflow.id,
-                'workflow': workflow.name,
-                'action_id': cell.action.id,
-                'action': cell.action.name,
-                'column_id': cell.column.id,
-                'column': cell.column.name,
-                'loa_position': loa_pos,
-                'description': cell.description_text,
-                'feedback': cell.feedback_text})
-        # Done processing the correct POST request
+        cell.log(request.user, Log.ACTION_RUBRIC_CELL_EDIT)
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({
@@ -343,16 +319,8 @@ def edit_rubric_loas(
                     str(exc)))
 
         # Log the event
-        Log.objects.register(
-            request.user,
-            Log.ACTION_RUBRIC_CELL_EDIT,
-            workflow,
-            {
-                'workflow_id': workflow.id,
-                'workflow': workflow.name,
-                'action_id': action.id,
-                'action': action.name,
-                'new_loas': loas})
+        action.log(request.user, Log.ACTION_RUBRIC_LOA_EDIT, new_loas=loas)
+
         # Done processing the correct POST request
         return JsonResponse({'html_redirect': ''})
 

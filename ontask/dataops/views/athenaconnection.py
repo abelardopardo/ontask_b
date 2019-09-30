@@ -102,33 +102,20 @@ def _save_conn_form(
     :return: AJAX response
     """
     # Type of event to record
-    if form.instance.id:
-        event_type = Log.ATHENA_CONNECTION_EDIT
-        is_add = False
-    else:
-        event_type = Log.ATHENA_CONNECTION_CREATE
-        is_add = True
+    is_add = form.instance.id is None
 
     # If it is a POST and it is correct
     if request.method == 'POST' and form.is_valid():
-
         if not form.has_changed():
             return JsonResponse({'html_redirect': None})
 
         conn = form.save()
 
-        # Log the event
-        Log.objects.register(
-            request.user,
-            event_type,
-            None,
-            {
-                'name': conn.name,
-                'description': conn.description_text,
-                'aws_access_key': conn.aws_access_key,
-                'aws_bucket_name': conn.aws_bucket_name,
-                'aws_file_path': conn.aws_file_path,
-                'aws_region_name': conn.aws_region_name})
+        if form.instance.id:
+            event_type = Log.ATHENA_CONNECTION_EDIT
+        else:
+            event_type = Log.ATHENA_CONNECTION_CREATE
+        conn.log(request.user, event_type)
 
         return JsonResponse({'html_redirect': ''})
 
@@ -294,17 +281,7 @@ def athenaconn_clone(request: HttpRequest, pk: int) -> JsonResponse:
     conn.save()
 
     # Log the event
-    Log.objects.register(
-        request.user,
-        Log.ATHENA_CONNECTION_CLONE,
-        None,
-        {
-            'name': conn.name,
-            'description': conn.description_text,
-            'aws_access_key': conn.aws_access_key,
-            'aws_bucket_name': conn.aws_bucket_name,
-            'aws_file_path': conn.aws_file_path,
-            'aws_region_name': conn.aws_region_name})
+    conn.log(request.user, Log.ATHENA_CONNECTION_CLONE)
 
     return JsonResponse({'html_redirect': ''})
 
@@ -326,22 +303,8 @@ def athenaconn_delete(request: HttpRequest, pk: int) -> JsonResponse:
         return JsonResponse({'html_redirect': reverse('home')})
 
     if request.method == 'POST':
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.ATHENA_CONNECTION_DELETE,
-            None,
-            {'name': conn.name,
-             'description': conn.description_text,
-             'aws_access_key': conn.aws_access_key,
-             'aws_bucket_name': conn.aws_bucket_name,
-             'aws_file_path': conn.aws_file_path,
-             'aws_region_name': conn.aws_region_name})
-
-        # Perform the delete operation
+        conn.log(request.user, Log.ATHENA_CONNECTION_DELETE)
         conn.delete()
-
-        # In this case, the form is valid anyway
         return JsonResponse({'html_redirect': reverse('home')})
 
     # This is a GET request

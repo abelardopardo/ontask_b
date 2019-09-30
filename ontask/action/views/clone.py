@@ -175,14 +175,11 @@ def clone_action(
         new_name=create_new_name(action.name, workflow.actions))
 
     # Log event
-    log_payload['id_new'] = action.id
-    log_payload['name_new'] = action.name
-    Log.objects.register(
+    action.log(
         request.user,
         Log.ACTION_CLONE,
-        workflow,
-        log_payload,
-    )
+        id_old=id_old,
+        name_old=name_old)
 
     messages.success(request, _('Action successfully cloned.'))
 
@@ -224,25 +221,16 @@ def clone_condition(
         condition.action.set_text_content(action_content)
         condition.action.save()
 
-    log_context = {
-        'id_old': condition.id,
-        'name_old': condition.name}
-
+    id_old = condition.id
+    name_old = condition.name
     condition = do_clone_condition(
         condition,
         new_action=action,
         new_name=create_new_name(condition.name, action.conditions))
-
-    # Log event
-    log_context['id_new'] = condition.id
-    log_context['name_new'] = condition.name
-    Log.objects.register(
+    condition.log(
         request.user,
         Log.CONDITION_CLONE,
-        condition.action.workflow,
-        log_context)
-
+        id_old=id_old,
+        name_old=name_old)
     messages.success(request, _('Condition successfully cloned.'))
-
-    # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})

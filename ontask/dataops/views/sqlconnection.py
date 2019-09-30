@@ -2,22 +2,21 @@
 
 """Classes and functions to manage SQL connections."""
 
-from builtins import object
-
-import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
 
 from ontask import create_new_name
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import is_admin, is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.dataops.forms import SQLConnectionForm
+from ontask.dataops.views.connection import (
+    ConnectionTableAdmin, ConnectionTableRun, conn_view,
+)
 from ontask.models import Log, SQLConnection
 from ontask.workflow.access import remove_workflow_from_session
 
@@ -104,40 +103,16 @@ def _save_conn_form(
     :return: AJAX response
     """
     # Type of event to record
-    if form.instance.id:
-        event_type = Log.SQL_CONNECTION_EDIT
-        is_add = False
-    else:
-        event_type = Log.SQL_CONNECTION_CREATE
-        is_add = True
-
+    is_add = form.instance.id is None
     # If it is a POST and it is correct
     if request.method == 'POST' and form.is_valid():
-
         if not form.has_changed():
             return JsonResponse({'html_redirect': None})
 
         conn = form.save()
-
-        # Log the event
-        Log.objects.register(
+        conn.log(
             request.user,
-            event_type,
-            None,
-            {
-                'name': conn.name,
-                'description': conn.description_text,
-                'conn_type': conn.conn_type,
-                'conn_driver': conn.conn_driver,
-                'db_user': conn.db_user,
-                'db_passwd': _('<PROTECTED>') if conn.db_password else '',
-                'db_host': conn.db_host,
-                'db_port': conn.db_port,
-                'db_name': conn.db_name,
-                'db_table': conn.db_table,
-            },
-        )
-
+            Log.SQL_CONNECTION_EDIT if is_add else Log.SQL_CONNECTION_CREATE)
         return JsonResponse({'html_redirect': ''})
 
     # Request is a GET
@@ -283,49 +258,30 @@ def sqlconn_clone(request: HttpRequest, pk: int) -> JsonResponse:
 
     :return: AJAX response
     """
-    context = {'pk': pk}  # For rendering
-
     # Get the connection
     conn = SQLConnection.objects.filter(pk=pk).first()
     if not conn:
         # The view is not there. Redirect to workflow detail
         return JsonResponse({'html_redirect': reverse('home')})
 
-    # Get the name of the connection to clone
-    context['cname'] = conn.name
-
     if request.method == 'GET':
         return JsonResponse({
             'html_form': render_to_string(
                 'dataops/includes/partial_sqlconn_clone.html',
-                context,
-                request=request),
-        })
-
-    # POST REQUEST
+                {'pk': pk, 'cname': conn.name},
+                request=request)})
 
     # Proceed to clone the connection
+    id_old = conn.id
+    name_old = conn.name
     conn.id = None
     conn.name = create_new_name(conn.name, SQLConnection.objects)
     conn.save()
-
-    # Log the event
-    Log.objects.register(
+    conn.log(
         request.user,
         Log.SQL_CONNECTION_CLONE,
-        None,
-        {
-            'name': conn.name,
-            'description': conn.description_text,
-            'conn_type': conn.conn_type,
-            'conn_driver': conn.conn_driver,
-            'db_user': conn.db_user,
-            'db_passwd': _('<PROTECTED>') if conn.db_password else '',
-            'db_host': conn.db_host,
-            'db_port': conn.db_port,
-            'db_name': conn.db_name,
-            'db_table': conn.db_table})
-
+        id_old=id_old,
+        name_old=name_old)
     return JsonResponse({'html_redirect': ''})
 
 
@@ -346,33 +302,12 @@ def sqlconn_delete(request: HttpRequest, pk: int) -> JsonResponse:
         return JsonResponse({'html_redirect': reverse('home')})
 
     if request.method == 'POST':
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.SQL_CONNECTION_DELETE,
-            None,
-            {'name': conn.name,
-             'description': conn.description_text,
-             'conn_type': conn.conn_type,
-             'conn_driver': conn.conn_driver,
-             'db_user': conn.db_user,
-             'db_passwd': _('<PROTECTED>') if conn.db_password else '',
-             'db_host': conn.db_host,
-             'db_port': conn.db_port,
-             'db_name': conn.db_name,
-             'db_table': conn.db_table},
-        )
-
-        # Perform the delete operation
+        conn.log(request.user, Log.SQL_CONNECTION_DELETE)
         conn.delete()
-
-        # In this case, the form is valid anyway
         return JsonResponse({'html_redirect': reverse('home')})
 
-    # This is a GET request
     return JsonResponse({
         'html_form': render_to_string(
             'dataops/includes/partial_sqlconn_delete.html',
             {'sqlconn': conn},
-            request=request),
-    })
+            request=request)})

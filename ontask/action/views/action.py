@@ -156,18 +156,8 @@ def save_action_form(
             log_type = Log.ACTION_UPDATE
             return_url = reverse('action:index')
 
-        # Log the event
-        Log.objects.register(
-            request.user,
-            log_type,
-            action_item.workflow,
-            {
-                'id': action_item.id,
-                'name': action_item.name,
-                'workflow_id': action_item.workflow.id,
-                'workflow_name': action_item.workflow.name},
-        )
-
+        action_item.save()
+        action_item.log(request.user, log_type)
         # Request is correct
         return JsonResponse({'html_redirect': return_url})
 
@@ -337,20 +327,8 @@ def delete_action(
     # JSON response object
     # Get the appropriate action object
     if request.method == 'POST':
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.ACTION_DELETE,
-            action.workflow,
-            {
-                'id': action.id,
-                'name': action.name,
-                'workflow_name': action.workflow.name,
-                'workflow_id': action.workflow.id})
-
-        # Perform the delete operation
+        action.log(request.user, Log.ACTION_DELETE)
         action.delete()
-
         return JsonResponse({'html_redirect': reverse('action:index')})
 
     return JsonResponse({

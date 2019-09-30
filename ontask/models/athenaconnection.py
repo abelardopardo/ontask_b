@@ -5,6 +5,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from ontask.models.logs import Log
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
 
@@ -93,6 +94,22 @@ class AthenaConnection(models.Model):
     def __str__(self):
         """Render with name field."""
         return self.name
+
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'aws_access_key': self.aws_access_key,
+            'aws_bucket_name': self.aws_bucket_name,
+            'aws_file_path': self.aws_file_path,
+            'aws_region_name': self.aws_region_name}
+
+        if self.text_content:
+            payload['content'] = self.text_content
+
+        payload.update(kwargs)
+        return Log.objects.register(user, operation_type, None, payload)
 
     class Meta:
         """Define the criteria for ordering."""

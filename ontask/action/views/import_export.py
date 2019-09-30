@@ -66,12 +66,8 @@ def do_import_action(
     actions = action_data.save(user=user)
 
     # Success, log the event
-    Log.objects.register(
-        user,
-        Log.ACTION_IMPORT,
-        workflow,
-        {'ids': str([action.id for action in actions]),
-         'names': [action.name for action in actions]})
+    for action in actions:
+        action.log(user, Log.ACTION_IMPORT)
 
     return actions
 

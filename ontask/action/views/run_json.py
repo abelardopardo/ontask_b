@@ -14,7 +14,6 @@ from ontask.action.forms import JSONActionForm
 from ontask.action.payloads import (
     JSONPayload, get_or_set_action_info, set_action_payload,
 )
-from ontask.action.send import send_json
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
@@ -113,17 +112,13 @@ def run_json_done(
         return redirect('home')
 
     # Log the event
-    log_item = Log.objects.register(
+    log_item = action.log(
         request.user,
-        Log.SCHEDULE_JSON_EXECUTE,
-        action.workflow,
-        {'action': action.name,
-         'action_id': action.id,
-         'exclude_values': action_info['exclude_values'],
-         'item_column': action_info['item_column'],
-         'exported_workflow': action_info['export_wf'],
-         'status': 'Preparing to execute',
-         'target_url': action.target_url})
+        Log.ACTION_RUN_JSON,
+        **{
+            'exclude_values': action_info['exclude_values'],
+            'item_column': action_info['item_column'],
+            'exported_workflow': action_info['export_wf']})
 
     # Send the objects
     run_task.delay(request.user.id, log_item.id, action_info.get_store())

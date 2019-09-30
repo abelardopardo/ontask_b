@@ -2,7 +2,7 @@
 
 """Model is to store process to execute in the platform at a certain time."""
 
-from builtins import object
+import json
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
@@ -120,6 +120,30 @@ class ScheduledAction(models.Model):
     def item_column_name(self):
         """Column name or None."""
         return self.item_column.name if self.item_column else None
+
+    def log(self, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'action': self.action.name,
+            'action_id': self.action.id,
+            'execute': self.execute,
+            'execute_until': self.execute_until,
+            'item_column': self.item_column.name,
+            'status': self.status,
+            'exclude_values': self.exclude_values,
+            'payload': json.dumps(self.payload)}
+
+        if self.text_content:
+            payload['content'] = self.text_content
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            self.user,
+            operation_type,
+            self.action.workflow,
+            payload)
 
     class Meta:
         """Define the criteria of uniqueness with name and action."""

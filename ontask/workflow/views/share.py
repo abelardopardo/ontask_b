@@ -39,17 +39,10 @@ def share_create(
         # proceed with the update
         workflow.shared.add(form.user_obj)
         workflow.save()
-
-        # Log the event
-        Log.objects.register(
+        workflow.log(
             request.user,
             Log.WORKFLOW_SHARE_ADD,
-            workflow,
-            {
-                'id': workflow.id,
-                'name': workflow.name,
-                'user_email': form.user_obj.email})
-
+            share_email=form.user_obj.email)
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({
@@ -84,17 +77,10 @@ def share_delete(
     if request.method == 'POST':
         workflow.shared.remove(user)
         workflow.save()
-
-        # Log the event
-        Log.objects.register(
+        workflow.log(
             request.user,
             Log.WORKFLOW_SHARE_DELETE,
-            workflow,
-            {
-                'id': workflow.id,
-                'name': workflow.name,
-                'user_email': user.email})
-
+            share_email=user.email)
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({

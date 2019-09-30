@@ -185,13 +185,11 @@ def run_canvas_email_done(
         return redirect('home')
 
     # Log the event
-    log_item = Log.objects.register(
+    log_item = action.log(
         request.user,
-        Log.SCHEDULE_CANVAS_EMAIL_EXECUTE,
+        Log.ACTION_RUN_CANVAS_EMAIL,
         action.workflow,
-        {
-            'action': action.name,
-            'action_id': action.id,
+        **{
             'from_email': request.user.email,
             'subject': action_info['subject'],
             'exclude_values': action_info['exclude_values'],

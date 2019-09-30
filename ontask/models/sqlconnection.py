@@ -5,6 +5,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from ontask.models.logs import Log
 from ontask.models.const import CHAR_FIELD_LONG_SIZE
 
 
@@ -98,6 +99,24 @@ class SQLConnection(models.Model):
     def __str__(self):
         """Render with name field."""
         return self.name
+
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'conn_type': self.conn_type,
+            'conn_driver': self.conn_driver,
+            'db_host': self.db_host,
+            'db_port': self.db_port,
+            'db_name': self.db_name,
+            'db_user': self.db_user,
+            'db_password': 'SECRET' if self.db_user else '',
+            'db_table': self.db_table,
+        }
+
+        payload.update(kwargs)
+        return Log.objects.register(user, operation_type, None, payload)
 
     class Meta:
         """Define the criteria for ordering."""

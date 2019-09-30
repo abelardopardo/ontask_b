@@ -209,7 +209,7 @@ def select_column_action(
     action: Optional[Action] = None,
     key: Optional[bool] = None,
 ) -> JsonResponse:
-    """Operation to add a column to action in.
+    """Operation to add a column to a survey.
 
     :param request: Request object
 
@@ -238,10 +238,12 @@ def select_column_action(
 
     if key != 0:
         # Insert the column in the pairs
-        ActionColumnConditionTuple.objects.get_or_create(
+        acc = ActionColumnConditionTuple.objects.get_or_create(
             action=action,
             column=column,
             condition=None)
+
+        acc.log(request.user, Log.ACTION_QUESTION_ADD)
 
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
@@ -363,6 +365,7 @@ def toggle_question_change(
 
     acc_item.changes_allowed = not acc_item.changes_allowed
     acc_item.save()
+    acc_item.log(request.user, Log.ACTION_QUESTION_TOGGLE_CHANGES)
 
     return JsonResponse({'is_checked': acc_item.changes_allowed})
 
@@ -395,15 +398,7 @@ def edit_description(
 
         action.save()
 
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.ACTION_UPDATE,
-            action.workflow,
-            {'id': action.id,
-             'name': action.name,
-             'workflow_id': workflow.id,
-             'workflow_name': workflow.name})
+        action.log(request.user, 'update')
 
         # Request is correct
         return JsonResponse({'html_redirect': ''})

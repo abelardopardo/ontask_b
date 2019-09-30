@@ -116,23 +116,13 @@ def criterion_create(
             return JsonResponse({'html_redirect': ''})
 
         # Add the criterion to the action
-        ActionColumnConditionTuple.objects.get_or_create(
+        acc = ActionColumnConditionTuple.objects.get_or_create(
             action=action,
             column=column,
             condition=None)
 
         # Log the event
-        Log.objects.register(
-            request.user,
-            Log.ACTION_CRITERION_ADD,
-            workflow,
-            {
-                'id': workflow.id,
-                'name': workflow.name,
-                'action_id': action.id,
-                'action_name': action.name,
-                'column_name': column.name,
-                'column_type': column.data_type})
+        acc.log(request.user, Log.ACTION_RUBRIC_CRITERION_ADD)
 
         return JsonResponse({'html_redirect': ''})
 
@@ -216,17 +206,7 @@ def criterion_edit(
         workflow.save()
 
         # Log the event
-        Log.objects.register(
-            request.user,
-            Log.ACTION_CRITERION_ADD,
-            workflow,
-            {
-                'id': workflow.id,
-                'name': workflow.name,
-                'action_id': action.id,
-                'action_name': action.name,
-                'column_name': column.name,
-                'column_type': column.data_type})
+        triplet.log(request.user, Log.ACTION_RUBRIC_CRITERION_EDIT)
 
         # Done processing the correct POST request
         return JsonResponse({'html_redirect': ''})
@@ -266,21 +246,8 @@ def criterion_remove(
         return JsonResponse({'html_redirect': ''})
 
     if request.method == 'POST':
-
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.COLUMN_DELETE,
-            workflow,
-            {
-                'id': workflow.id,
-                'name': workflow.name,
-                'action_id': triplet.action.id,
-                'action_name': triplet.action.name,
-                'column_name': triplet.column.name,
-                'column_type': triplet.column.data_type})
+        triplet.log(request.user, Log.ACTION_RUBRIC_CRITERION_DELETE)
         triplet.delete()
-
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({
@@ -301,7 +268,7 @@ def criterion_insert(
     workflow: Optional[Workflow] = None,
     action: Optional[Action] = None,
 ) -> JsonResponse:
-    """Operation to add a column to action in.
+    """Operation to add a criterion to a rubric.
 
     :param request: Request object
 
@@ -343,10 +310,12 @@ def criterion_insert(
         )
         return JsonResponse({'html_redirect': ''})
 
-    ActionColumnConditionTuple.objects.create(
+    acc = ActionColumnConditionTuple.objects.create(
         action=action,
         column=column,
         condition=None)
+
+    acc.log(request.user, Log.ACTION_RUBRIC_CRITERION_ADD)
 
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})

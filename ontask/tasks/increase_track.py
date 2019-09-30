@@ -95,9 +95,6 @@ def increase_track_count_task(method, get_dict):
                 action.update_n_rows_selected(track_col)
 
     # Record the event
-    Log.objects.register(user,
-                         Log.ACTION_EMAIL_READ,
-                         action.workflow,
-                         log_payload)
+    action.log(user, Log.ACTION_EMAIL_READ, **log_payload)
 
     return True

@@ -152,15 +152,7 @@ def flush(
         workflow.refresh_from_db()
         # update the request object with the new number of rows
         store_workflow_in_session(request, workflow)
-
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.WORKFLOW_DATA_FLUSH,
-            workflow,
-            {'id': workflow.id, 'name': workflow.name})
-
-        # In this case, the form is valid
+        workflow.log(request.user, Log.WORKFLOW_DATA_FLUSH)
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({
@@ -184,19 +176,10 @@ def star(
     stars = request.user.workflows_star.all()
     if workflow in stars:
         workflow.star.remove(request.user)
-        has_star = False
     else:
         workflow.star.add(request.user)
-        has_star = True
 
-    # Log the event
-    Log.objects.register(
-        request.user,
-        Log.WORKFLOW_STAR,
-        workflow,
-        {'id': workflow.id, 'name': workflow.name, 'star': has_star})
-
-    # In this case, the form is valid
+    workflow.log(request.user, Log.WORKFLOW_STAR)
     return JsonResponse({})
 
 
@@ -347,14 +330,7 @@ def assign_luser_column(
         workflow.luser_email_column_md5 = md5_hash
 
         # Log the event with the status "preparing updating"
-        log_item = Log.objects.register(
-            request.user,
-            Log.WORKFLOW_UPDATE_LUSERS,
-            workflow,
-            {'id': workflow.id,
-             'column': column.name,
-             'status': 'preparing updating'},
-        )
+        log_item = workflow.log(request.user, Log.WORKFLOW_UPDATE_LUSERS)
 
         # Push the update of lusers to batch processing
         workflow_update_lusers_task.delay(

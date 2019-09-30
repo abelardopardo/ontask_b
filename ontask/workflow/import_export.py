@@ -112,12 +112,7 @@ def do_import_workflow(user, name, file_item):
     except Exception as exc:
         return _('Unable to import workflow: {0}').format(exc)
 
-    # Log the event
-    Log.objects.register(
-        user,
-        Log.WORKFLOW_IMPORT,
-        workflow,
-        {'id': workflow.id, 'name': workflow.name})
+    workflow.log(user, Log.WORKFLOW_IMPORT)
     return None
 
 

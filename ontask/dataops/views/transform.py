@@ -252,13 +252,11 @@ def plugin_invoke(
             form)
 
         # Log the event with the status "preparing invocation"
-        log_item = Log.objects.register(
+
+        log_item = plugin_info.log(
             request.user,
             Log.PLUGIN_EXECUTE,
-            workflow,
-            {
-                'id': plugin_info.id,
-                'name': plugin_info.name,
+            **{
                 'input_column_names': in_cols,
                 'output_column_names': out_cols,
                 'parameters': json.dumps(exec_params, default=str),

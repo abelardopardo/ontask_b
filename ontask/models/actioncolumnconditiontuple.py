@@ -4,6 +4,7 @@
 
 from django.db import models
 
+from ontask.models.logs import Log
 from ontask.models.column import Column
 from ontask.models.condition import Condition
 from django.utils.translation import ugettext_lazy as _
@@ -56,6 +57,22 @@ class ActionColumnConditionTuple(models.Model):
         null=False,
         blank=False,
     )
+
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'action_name': self.action.name,
+            'action_type': self.action.action_type,
+            'column_name': self.column.name,
+            'workflow_id': self.workflow.id,
+            'changes_allowed': self.changes_allowed}
+
+        if self.condition:
+            payload['condition'] = self.condition.name
+
+        payload.update(kwargs)
+        return Log.objects.register(user, operation_type, self.workflow, payload)
 
     class Meta:
         """Define uniqueness with name in workflow and order by name."""

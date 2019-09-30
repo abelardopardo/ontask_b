@@ -78,27 +78,10 @@ def _prepare_personalized_text(
     action_info['action_id'] = s_item.action_id
     action_info['item_column'] = s_item.item_column.name
     action_info['exclude_values'] = s_item.exclude_values
-
-    # Log the event
-    log_item = Log.objects.register(
+    log_item = s_item.action.log(
         s_item.user,
-        Log.SCHEDULE_EMAIL_EXECUTE,
-        s_item.action.workflow,
-        {
-            'action': s_item.action.name,
-            'action_id': s_item.action.id,
-            'bcc_email': s_item.payload.get('bcc_email'),
-            'cc_email': s_item.payload.get('cc_email'),
-            'item_column': s_item.item_column.name,
-            'execute': s_item.execute.isoformat(),
-            'exclude_values': s_item.exclude_values,
-            'from_email': s_item.user.email,
-            'send_confirmation': s_item.payload.get(
-                'send_confirmation'),
-            'status': 'Preparing to execute',
-            'subject': s_item.payload.get('subject'),
-            'track_read': s_item.payload.get('track_read')})
-
+        Log.ACTION_RUN_EMAIL,
+        **action_info)
     return action_info, log_item
 
 
@@ -112,23 +95,10 @@ def _prepare_send_list(
     """
     action_info = SendListPayload(s_item.payload)
     action_info['action_id'] = s_item.action_id
-
-    # Log the event
-    log_item = Log.objects.register(
+    log_item = s_item.action.log(
         s_item.user,
-        Log.SCHEDULE_SEND_LIST_EXECUTE,
-        s_item.action.workflow,
-        {
-            'action': s_item.action.name,
-            'action_id': s_item.action.id,
-            'from_email': s_item.user.email,
-            'email_to': s_item.payload.get('email_to'),
-            'subject': s_item.payload.get('subject'),
-            'bcc_email': s_item.payload.get('bcc_email'),
-            'cc_email': s_item.payload.get('cc_email'),
-            'execute': s_item.execute.isoformat(),
-            'status': 'Preparing to execute'})
-
+        Log.ACTION_RUN_SEND_LIST,
+        **action_info)
     return action_info, log_item
 
 
@@ -151,18 +121,10 @@ def _prepare_personalized_json(
     action_info['exclude_values'] = s_item.exclude_values
 
     # Log the event
-    log_item = Log.objects.register(
+    log_item = s_item.action.log(
         s_item.user,
-        Log.SCHEDULE_JSON_EXECUTE,
-        s_item.action.workflow,
-        {
-            'action': s_item.action.name,
-            'action_id': s_item.action.id,
-            'exclude_values': s_item.exclude_values,
-            'item_column': item_column,
-            'status': 'Preparing to execute',
-            'target_url': s_item.action.target_url})
-
+        Log.ACTION_RUN_JSON,
+        **action_info)
     return action_info, log_item
 
 
@@ -178,16 +140,10 @@ def _prepare_send_list_json(
     action_info['action_id'] = s_item.action_id
 
     # Log the event
-    log_item = Log.objects.register(
+    log_item = s_item.action.log(
         s_item.user,
-        Log.SCHEDULE_JSON_EXECUTE,
-        s_item.action.workflow,
-        {
-            'action': s_item.action.name,
-            'action_id': s_item.action.id,
-            'status': 'Preparing to execute',
-            'target_url': s_item.action.target_url})
-
+        Log.ACTION_RUN_JSON_LIST,
+        **action_info)
     return action_info, log_item
 
 
@@ -204,22 +160,10 @@ def _prepare_canvas_email(
     action_info['action_id'] = s_item.action_id
     action_info['item_column'] = s_item.item_column.name
     action_info['exclude_values'] = s_item.exclude_values
-
-    # Log the event
-    log_item = Log.objects.register(
+    log_item = s_item.action.log(
         s_item.user,
-        Log.SCHEDULE_EMAIL_EXECUTE,
-        s_item.action.workflow,
-        {
-            'action': s_item.action.name,
-            'action_id': s_item.action.id,
-            'item_column': s_item.item_column.name,
-            'execute': s_item.execute.isoformat(),
-            'exclude_values': s_item.exclude_values,
-            'from_email': s_item.user.email,
-            'status': 'Preparing to execute',
-            'subject': s_item.payload.get('subject', '')})
-
+        Log.ACTION_RUN_CANVAS_EMAIL,
+        **action_info)
     return action_info, log_item
 
 

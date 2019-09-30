@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula
 from ontask.dataops.sql import get_num_rows
+from ontask.models.logs import Log
 from ontask.models.column import Column
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
@@ -129,6 +130,27 @@ class Condition(models.Model):
     def __str__(self):
         """Render string."""
         return self.name
+
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'action': self.action.name,
+            'formula': self.get_formula_text(),
+            'n_rows_selected': self.n_rows_selected,
+            'is_filter': self.is_filter,
+            'workflow_id': self.workflow.id}
+
+        if self.text_content:
+            payload['content'] = self.text_content
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.workflow,
+            payload)
 
     class Meta:
         """Define unique criteria and ordering.

@@ -69,28 +69,10 @@ def save_condition_form(
 
         # Store the type of event to log
         if is_new:
-            if is_filter:
-                log_type = Log.FILTER_CREATE
-            else:
-                log_type = Log.CONDITION_CREATE
+            log_type = Log.CONDITION_CREATE
         else:
-            if is_filter:
-                log_type = Log.FILTER_UPDATE
-            else:
-                log_type = Log.CONDITION_UPDATE
-
-        # Log the event
-        Log.objects.register(
-            request.user,
-            log_type,
-            action.workflow,
-            {
-                'id': condition.id,
-                'name': condition.name,
-                'selected_rows': condition.n_rows_selected,
-                'formula': condition.get_formula_text(),
-            })
-
+            log_type = Log.CONDITION_UPDATE
+        condition.log(request.user, log_type)
         return JsonResponse({'html_redirect': ''})
 
     # GET request or invalid form
@@ -208,33 +190,12 @@ def delete_filter(
         condition.action.set_text_content(action_content)
         condition.action.save()
 
-    # Log the event
-    formula = condition.get_formula_text()
-
-    Log.objects.register(
-        request.user,
-        Log.FILTER_DELETE,
-        condition.action.workflow,
-        {
-            'id': condition.id,
-            'name': condition.name,
-            'selected_rows': condition.n_rows_selected,
-            'formula': formula,
-        },
-    )
-
-    # Get the action object for further processing
+    condition.log(request.user, Log.CONDITION_DELETE)
     action = condition.action
-
-    # Perform the delete operation
     condition.delete()
-
-    # Number of selected rows now needs to be updated in all remaining
-    # conditions
     action.update_n_rows_selected()
     action.rows_all_false = None
     action.save()
-
     return JsonResponse({'html_redirect': ''})
 
 
@@ -242,7 +203,6 @@ class ConditionCreateView(ConditionFilterCreateView):
     """Handle AJAX requests to create a non-filter condition."""
 
     form_class = ConditionForm
-
     template_name = 'action/includes/partial_condition_addedit.html'
 
 
@@ -293,29 +253,17 @@ def delete_condition(
     """
     # Treat the two types of requests
     if request.method == 'POST':
+        action = condition.action
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content:
-            condition.action.set_text_content(action_content)
-            condition.action.save()
+            action.set_text_content(action_content)
+            action.save()
 
-        formula = condition.get_formula_text()
-
-        Log.objects.register(
-            request.user,
-            Log.CONDITION_DELETE,
-            condition.action.workflow,
-            {'id': condition.id,
-             'name': condition.name,
-             'formula': formula})
-
-        # Perform the delete operation
+        condition.log(request.user, Log.CONDITION_DELETE)
         condition.delete()
-
-        # Reset the count of number of rows with all conditions false
-        condition.action.rows_all_false = None
-        condition.action.save()
-
+        action.rows_all_false = None
+        action.save()
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({

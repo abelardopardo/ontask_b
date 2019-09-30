@@ -34,15 +34,10 @@ def run_json_list_action(
 
     if req.method == 'POST' and form.is_valid():
         # Log the event
-        log_item = Log.objects.register(
+        log_item = action.log(
             req.user,
-            Log.SCHEDULE_JSON_EXECUTE,
-            action.workflow,
-            {'action': action.name,
-             'action_id': action.id,
-             'exported_workflow': action_info['export_wf'],
-             'status': 'Preparing to execute',
-             'target_url': action.target_url})
+            Log.ACTION_RUN_JSON_LIST,
+            exported_workflow=action_info['export_wf'])
 
         # Send the objects
         run_task.delay(req.user.id, log_item.id, action_info.get_store())

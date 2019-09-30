@@ -56,21 +56,12 @@ def save_attribute_form(
         # Update value
         wf_attributes[form.cleaned_data['key']] = form.cleaned_data[
             'attr_value']
-
         workflow.attributes = wf_attributes
         workflow.save()
-
-        # Log the event
-        Log.objects.register(
+        workflow.log(
             request.user,
             Log.WORKFLOW_ATTRIBUTE_CREATE,
-            workflow,
-            {
-                'id': workflow.id,
-                'name': workflow.name,
-                'attr_key': form.cleaned_data['key'],
-                'attr_val': form.cleaned_data['attr_value']})
-
+            **wf_attributes)
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({
@@ -154,9 +145,8 @@ def attribute_delete(
     :param pk: number of the attribute with respect to the sorted list of
     items.
 
-    :return:
+    :return: JSON REsponse
     """
-    # Get the key
     wf_attributes = workflow.attributes
     key = sorted(wf_attributes.keys())[int(pk)]
 
@@ -164,23 +154,13 @@ def attribute_delete(
         # Pop the attribute
         # Hack, the pk has to be divided by two because it names the elements
         # in itesm (key and value).
-        attr_val = wf_attributes.pop(key, None)
+        wf_attributes.pop(key, None)
         workflow.attributes = wf_attributes
-
-        # Log the event
-        Log.objects.register(
+        workflow.log(
             request.user,
             Log.WORKFLOW_ATTRIBUTE_DELETE,
-            workflow,
-            {
-                'id': workflow.id,
-                'attr_key': key,
-                'attr_val': attr_val,
-            },
-        )
-
+            **wf_attributes)
         workflow.save()
-
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({

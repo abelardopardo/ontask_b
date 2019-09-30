@@ -140,17 +140,7 @@ def column_restrict_values(
             # Something went wrong. Show it
             messages.error(request, error_txt)
 
-            # Log the event
-            Log.objects.register(
-                request.user,
-                Log.COLUMN_RESTRICT,
-                workflow,
-                {
-                    'id': workflow.id,
-                    'name': workflow.name,
-                    'column_name': column.name,
-                    'values': context['values']})
-
+        column.log(request.user, Log.COLUMN_RESTRICT)
         return JsonResponse({'html_redirect': reverse('workflow:detail')})
 
     return JsonResponse({

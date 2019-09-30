@@ -12,6 +12,7 @@ column) a category string, a description string, and a feedback string.
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from ontask.models.logs import Log
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
 
@@ -66,6 +67,23 @@ class RubricCell(models.Model):
     def __str__(self):
         """Render string."""
         return self.column.name
+
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'column': self.column.name,
+            'column_id': self.column.id,
+            'loa_position': self.loa_position,
+            'description': self.description_text,
+            'feedback': self.feedback_text}
+
+        if self.text_content:
+            payload['content'] = self.text_content
+
+        payload.update(kwargs)
+        return Log.objects.register(user, operation_type, None, payload)
 
     class Meta:
         """Define unique criteria and ordering.

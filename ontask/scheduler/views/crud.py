@@ -320,25 +320,6 @@ def delete(
         log_type = Log.SCHEDULE_JSON_LIST_DELETE
     elif s_item.action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
         log_type = Log.SCHEDULE_CANVAS_EMAIL_DELETE
-
-    # Log the event
-    if s_item.item_column:
-        item_column_name = s_item.item_column.name
-    else:
-        item_column_name = None
-
-    Log.objects.register(
-        request.user,
-        log_type,
-        s_item.action.workflow,
-        {
-            'action': s_item.action.name,
-            'action_id': s_item.action.id,
-            'execute': s_item.execute.isoformat(),
-            'item_column': item_column_name,
-            'payload': s_item.payload})
-
-    # Perform the delete operation
+    s_item.log(log_type)
     s_item.delete()
-
     return JsonResponse({'html_redirect': reverse('scheduler:index')})

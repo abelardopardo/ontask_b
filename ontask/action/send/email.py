@@ -66,21 +66,16 @@ def _send_confirmation_message(
         )
 
     # Log the event
-    Log.objects.register(
-        user,
-        Log.ACTION_EMAIL_NOTIFY,
-        action.workflow,
-        {'user': user.id,
-         'action': action.id,
-         'num_messages': nmsgs,
-         'email_sent_datetime': str(now),
-         'filter_present': cfilter is not None,
-         'num_rows': action.workflow.nrows,
-         'subject': str(ontask.settings.NOTIFICATION_SUBJECT),
-         'body': text_content,
-         'from_email': str(ontask.settings.NOTIFICATION_SENDER),
-         'to_email': [user.email]},
-    )
+    context = {
+        'num_messages': nmsgs,
+        'email_sent_datetime': str(now),
+        'filter_present': cfilter is not None,
+        'num_rows': action.workflow.nrows,
+        'subject': str(ontask.settings.NOTIFICATION_SUBJECT),
+        'body': text_content,
+        'from_email': str(ontask.settings.NOTIFICATION_SENDER),
+        'to_email': [user.email]}
+    action.log(user, Log.ACTION_EMAIL_NOTIFY, **context)
 
     # Send email out
     try:
@@ -272,11 +267,7 @@ def _create_messages(
         context['to_email'] = msg.to[0]
         if track_str:
             context['track_id'] = track_str
-        Log.objects.register(
-            user,
-            Log.ACTION_EMAIL_SENT,
-            action.workflow,
-            context)
+        action.log(user, Log.ACTION_CANVAS_EMAIL_SENT, **context)
 
     return msgs
 
@@ -423,22 +414,14 @@ def send_list_email(
         )
 
     # Log the event
-    Log.objects.register(
-        user,
-        Log.ACTION_LIST_EMAIL_SENT,
-        action.workflow,
-        {
-            'user': user.id,
-            'action': action.id,
-            'action_name': action.name,
-            'email_sent_datetime': str(
-                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
-            ),
-            'subject': msg.subject,
-            'body': msg.body,
-            'from_email': msg.from_email,
-            'to_email': msg.to[0]
-        }
-    )
+    context = {
+        'email_sent_datetime': str(
+            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+        ),
+        'subject': msg.subject,
+        'body': msg.body,
+        'from_email': msg.from_email,
+        'to_email': msg.to[0]}
+    action.log(user, Log.ACTION_CANVAS_EMAIL_SENT, **context)
 
     return []

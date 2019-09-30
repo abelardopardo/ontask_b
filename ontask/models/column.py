@@ -12,6 +12,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.dataops.pandas.datatypes
+from ontask.models.logs import Log
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
 
@@ -254,6 +255,29 @@ class Column(models.Model):
     def __unicode__(self):
         """Render as unicode."""
         return self.name
+
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'type': self.data_type,
+            'is_key': self.is_key,
+            'position': self.position,
+            'categories': self.categories,
+            'active_from': self.active_from,
+            'active_to': self.active_to,
+            'workflow_id': self.workflow.id}
+
+        if self.text_content:
+            payload['content'] = self.text_content
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.workflow,
+            payload)
 
     class Meta:
         """Define additional fields, unique criteria and ordering."""

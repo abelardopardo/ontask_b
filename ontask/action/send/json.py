@@ -6,9 +6,9 @@ import datetime
 import json
 from typing import Dict, Mapping, Optional
 
+from django.conf import settings
 import pytz
 import requests
-from django.conf import settings
 
 from ontask import OnTaskSharedState
 from ontask.action.evaluate.action import (
@@ -47,15 +47,13 @@ def _send_and_log_json(
         status_val = 200
 
     # Log seng object
-    context['object'] = json.dumps(json_obj)
-    context['status'] = status_val
-    context['json_sent_datetime'] = str(
-        datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
-    Log.objects.register(
+    action.log(
         user,
         Log.ACTION_JSON_SENT,
-        action.workflow,
-        context)
+        object=json.dumps(json_obj),
+        status=status_val,
+        json_sent_datetime=str(datetime.datetime.now(pytz.timezone(
+            settings.TIME_ZONE))))
 
 
 def send_json(

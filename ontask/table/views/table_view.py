@@ -210,21 +210,8 @@ def view_delete(
     :return: AJAX response to handle the form.
     """
     if request.method == 'POST':
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.VIEW_DELETE,
-            view.workflow,
-            {
-                'id': view.id,
-                'name': view.name,
-                'workflow_name': view.workflow.name,
-                'workflow_id': view.workflow.id})
-
-        # Perform the delete operation
+        view.log(request.user, Log.VIEW_DELETE)
         view.delete()
-
-        # In this case, the form is valid anyway
         return JsonResponse({'html_redirect': reverse('table:view_index')})
 
     return JsonResponse({
@@ -260,25 +247,18 @@ def view_clone(
                 request=request),
         })
 
-    # POST REQUEST
-    old_name = view.name
+    id_old = view.id
+    name_old = view.name
     view = do_clone_view(
         view,
         new_workflow=None,
         new_name=create_new_name(view.name, workflow.views)
     )
-    # Proceed to clone the view
-
-    # Log the event
-    Log.objects.register(
+    view.log(
         request.user,
         Log.VIEW_CLONE,
-        workflow,
-        {'id': workflow.id,
-         'name': workflow.name,
-         'old_view_name': old_name,
-         'new_view_name': view.name})
-
+        id_old=id_old,
+        name_old=name_old)
     return JsonResponse({'html_redirect': ''})
 
 
@@ -298,35 +278,17 @@ def save_view_form(
     :return: AJAX Response
     """
     if request.method == 'POST' and form.is_valid():
-
         if not form.has_changed():
             return JsonResponse({'html_redirect': None})
 
         # Correct POST submission
         view = form.save(commit=False)
         view.workflow = form.workflow
-
-        # Type of event to be recorded (before object is saved and ID is set)
-        if form.instance.id:
-            event_type = Log.VIEW_EDIT
-        else:
-            event_type = Log.VIEW_CREATE
-
         view.save()
         form.save_m2m()  # Needed to propagate the save effect to M2M relations
-
-        # Log the event
-        Log.objects.register(
+        view.log(
             request.user,
-            event_type,
-            view.workflow,
-            {
-                'id': view.id,
-                'name': view.name,
-                'workflow_name': view.workflow.name,
-                'workflow_id': view.workflow.id})
-
-        return JsonResponse({'html_redirect': ''})
+            Log.VIEW_EDIT if form.instance.id else Log.VIEW_CREATE)
 
     return JsonResponse({
         'html_form': render_to_string(

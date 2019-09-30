@@ -73,20 +73,12 @@ def row_create(
         # Recompute all the values of the conditions in each of the actions
         # TODO: Explore how to do this asynchronously (or lazy)
         map(lambda act: act.update_n_rows_selected(), workflow.actions.all())
-
-        # Log the event
-        Log.objects.register(
+        workflow.log(
             request.user,
-            Log.TABLEROW_CREATE,
-            workflow,
-            {'id': workflow.id,
-             'name': workflow.name,
-             'new_values': list(zip(
-                 column_names,
-                 [str(rval) for rval in row_values])),
-             })
-
-        # Done. Back to the table view
+            Log.WORKFLOW_DATA_ROW_CREATE,
+            new_values=list(
+                zip(column_names,
+                    [str(rval) for rval in row_values])))
         return redirect('table:display')
 
     return render(
@@ -163,18 +155,12 @@ def row_update(
         # Recompute all the values of the conditions in each of the actions
         # TODO: Explore how to do this asynchronously (or lazy)
         map(lambda act: act.update_n_rows_selected(), workflow.actions.all())
-
-        # Log the event
-        Log.objects.register(
+        workflow.log(
             request.user,
-            Log.TABLEROW_UPDATE,
-            workflow,
-            {'id': workflow.id,
-             'name': workflow.name,
-             'new_values': list(zip(
-                 column_names,
-                 [str(rval) for rval in row_values]))})
-
+            Log.WORKFLOW_DATA_ROW_UPDATE,
+            new_values=list(zip(
+                column_names,
+                [str(rval) for rval in row_values])))
         return redirect('table:display')
 
     return render(

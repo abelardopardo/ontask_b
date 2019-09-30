@@ -105,15 +105,7 @@ def edit_action_out(
         # Render the content as a template and catch potential problems.
         if text_renders_correctly(text_content, action, form):
             # Log the event
-            Log.objects.register(
-                request.user,
-                Log.ACTION_UPDATE,
-                action.workflow,
-                {'id': action.id,
-                 'name': action.name,
-                 'workflow_id': workflow.id,
-                 'workflow_name': workflow.name,
-                 'content': text_content})
+            action.log(request.user, Log.ACTION_UPDATE)
 
             # Text is good. Update the content of the action
             action.set_text_content(text_content)
@@ -205,13 +197,11 @@ def showurl(
             form.save()
 
             # Recording the event
-            Log.objects.register(
+            action.log(
                 request.user,
                 Log.ACTION_SERVE_TOGGLED,
-                action.workflow,
-                {'id': action.id,
-                 'name': action.name,
-                 'serve_enabled': action.serve_enabled})
+                served_enabled=action.serve_enabled)
+
             return JsonResponse({'html_redirect': reverse('action:index')})
 
         return JsonResponse({'html_redirect': None})

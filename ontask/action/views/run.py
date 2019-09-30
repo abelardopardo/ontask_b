@@ -162,18 +162,15 @@ def serve_action_out(
     # Get the dictionary containing column names, attributes and condition
     # valuations:
     context = get_action_evaluation_context(action, row_values)
+    error = ''
     if context is None:
-        payload['error'] = (
-            _('Error when evaluating conditions for user {0}').format(
-                user.email,
-            )
-        )
         # Log the event
-        Log.objects.register(
+        action.log(
             user,
             Log.ACTION_SERVED_EXECUTE,
-            workflow=action.workflow,
-            payload=payload)
+            error=_('Error when evaluating conditions for user {0}').format(
+                user.email))
+
         return HttpResponse(render_to_string(
             'action/action_unavailable.html',
             {}))
@@ -185,16 +182,14 @@ def serve_action_out(
     response = action_content
     if action_content is None:
         response = render_to_string('action/action_unavailable.html', {})
-        payload['error'] = _('Action not enabled for user {0}').format(
-            user.email,
-        )
+        error = _('Action not enabled for user {0}').format(user.email)
 
     # Log the event
-    Log.objects.register(
+    action.log(
         user,
         Log.ACTION_SERVED_EXECUTE,
-        workflow=action.workflow,
-        payload=payload)
+        error=_('Error when evaluating conditions for user {0}').format(
+            user.email))
 
     # Respond the whole thing
     return HttpResponse(response)

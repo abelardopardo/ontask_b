@@ -366,13 +366,7 @@ def finish_scheduling(
             request,
             _('This type of actions cannot be scheduled'))
         return redirect('action:index')
-
-    # Create the log
-    Log.objects.register(
-        request.user,
-        log_type,
-        schedule_item.action.workflow,
-        log_payload)
+    schedule_item.log(log_type)
 
     # Reset object to carry action info throughout dialogs
     set_action_payload(request.session)

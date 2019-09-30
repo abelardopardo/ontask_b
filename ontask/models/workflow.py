@@ -18,6 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 import ontask.dataops.pandas.database
 import ontask.dataops.pandas.datatypes
 from ontask.dataops.sql import delete_table
+from ontask.models.logs import Log
 from ontask.models.column import Column
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
@@ -462,6 +463,17 @@ class Workflow(models.Model):
     def __unicode__(self):
         """Render as unicode."""
         return self.name
+
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'name': self.name,
+            'ncols': self.ncols,
+            'nrows': self.nrows,
+            'star': self.star}
+
+        payload.update(kwargs)
+        return Log.objects.register(user, operation_type, self, payload)
 
     class Meta:
         """Define verbose and unique together."""

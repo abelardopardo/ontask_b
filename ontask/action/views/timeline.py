@@ -39,14 +39,18 @@ def show_timeline(
         logs = workflow.logs
 
     event_names = [
-        Log.SCHEDULE_EMAIL_EXECUTE,
-        Log.DOWNLOAD_ZIP_ACTION,
-        Log.SCHEDULE_JSON_EXECUTE,
-        Log.SCHEDULE_CANVAS_EMAIL_EXECUTE,
+        Log.ACTION_DOWNLOAD,
+        Log.ACTION_RUN_CANVAS_EMAIL,
+        Log.ACTION_RUN_EMAIL,
+        Log.ACTION_RUN_JSON,
+        Log.ACTION_RUN_JSON_LIST,
+        Log.ACTION_RUN_SEND_LIST,
+        Log.ACTION_SURVEY_INPUT,
+        Log.SCHEDULE_CANVAS_EMAIL_EDIT,
         Log.SCHEDULE_EMAIL_EDIT,
         Log.SCHEDULE_JSON_EDIT,
-        Log.SCHEDULE_CANVAS_EMAIL_EXECUTE,
-        Log.SURVEY_INPUT,
+        Log.SCHEDULE_JSON_LIST_EDIT,
+        Log.SCHEDULE_SEND_LIST_EDIT,
     ]
 
     # Filter the logs to display and transform into values (process the json

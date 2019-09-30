@@ -117,13 +117,10 @@ def run_zip_done(
         return redirect('home')
 
     # Log the event
-    log_item = Log.objects.register(
+    action.log(
         request.user,
-        Log.DOWNLOAD_ZIP_ACTION,
-        action.workflow,
-        {
-            'action': action.name,
-            'action_id': action.id,
+        Log.ACTION_DOWNLOAD,
+        **{
             'user_fname_column': action_info['user_fname_column'],
             'item_column': action_info['item_column'],
             'file_suffix': action_info['file_suffix'],

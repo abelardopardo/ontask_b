@@ -122,12 +122,7 @@ def send_canvas_emails(
         context['email_sent_datetime'] = str(
             datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
         )
-        Log.objects.register(
-            user,
-            Log.ACTION_CANVAS_EMAIL_SENT,
-            action.workflow,
-            context)
-
+        action.log(user, Log.ACTION_CANVAS_EMAIL_SENT, **context)
         to_emails.append(msg_to)
 
     return to_emails
