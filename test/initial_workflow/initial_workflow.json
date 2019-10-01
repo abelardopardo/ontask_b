@@ -2901,7 +2901,8 @@
     "fields": {
         "action": 1,
         "column": 44,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2910,7 +2911,8 @@
     "fields": {
         "action": 2,
         "column": 44,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2919,7 +2921,8 @@
     "fields": {
         "action": 2,
         "column": 47,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2928,7 +2931,8 @@
     "fields": {
         "action": 2,
         "column": 58,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2937,7 +2941,8 @@
     "fields": {
         "action": 2,
         "column": 59,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2946,7 +2951,8 @@
     "fields": {
         "action": 3,
         "column": 8,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2955,7 +2961,8 @@
     "fields": {
         "action": 4,
         "column": 13,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2964,7 +2971,8 @@
     "fields": {
         "action": 4,
         "column": 14,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2973,7 +2981,8 @@
     "fields": {
         "action": 4,
         "column": 15,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2982,7 +2991,8 @@
     "fields": {
         "action": 4,
         "column": 16,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -2991,7 +3001,8 @@
     "fields": {
         "action": 4,
         "column": 17,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3000,7 +3011,8 @@
     "fields": {
         "action": 4,
         "column": 18,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3009,7 +3021,8 @@
     "fields": {
         "action": 4,
         "column": 19,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3018,7 +3031,8 @@
     "fields": {
         "action": 4,
         "column": 20,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3027,7 +3041,8 @@
     "fields": {
         "action": 4,
         "column": 21,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3036,7 +3051,8 @@
     "fields": {
         "action": 4,
         "column": 22,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3045,7 +3061,8 @@
     "fields": {
         "action": 5,
         "column": 23,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3054,7 +3071,8 @@
     "fields": {
         "action": 6,
         "column": 2,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3063,7 +3081,8 @@
     "fields": {
         "action": 6,
         "column": 11,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3072,7 +3091,8 @@
     "fields": {
         "action": 6,
         "column": 12,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3081,7 +3101,8 @@
     "fields": {
         "action": 8,
         "column": 68,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3090,7 +3111,8 @@
     "fields": {
         "action": 8,
         "column": 69,
-        "condition": null
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {
@@ -3568,539 +3590,6 @@
     }
 },
 {
-    "model": "ontask.log",
-    "pk": 1,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T06:44:15.517Z",
-        "modified": "2019-09-21T06:44:15.517Z",
-        "name": "workflow_import",
-        "workflow": 1,
-        "payload": {
-            "id": 1,
-            "name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 2,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T06:50:11.292Z",
-        "modified": "2019-09-21T06:50:11.292Z",
-        "name": "workflow_data_merge",
-        "workflow": 1,
-        "payload": {
-            "id": 1,
-            "name": "BIOL1011",
-            "num_cols": 69,
-            "num_rows": 14,
-            "column_names": [
-                "SID",
-                "email",
-                "Surname",
-                "GivenName",
-                "MiddleInitial",
-                "Gender",
-                "UOS Code",
-                "Program",
-                "Enrolment Type",
-                "Attendance",
-                "Difficult Week 1",
-                "Sat W1",
-                "Q01",
-                "Q02",
-                "Q03",
-                "Q04",
-                "Q05",
-                "Q06",
-                "Q07",
-                "Q08",
-                "Q09",
-                "Q10",
-                "Total",
-                "Days online 2",
-                "Views 2",
-                "Contributions 2",
-                "Questions 2",
-                "Days online 3",
-                "Views 3",
-                "Contributions 3",
-                "Questions 3",
-                "Days online 4",
-                "Views 4",
-                "Contributions 4",
-                "Questions 4",
-                "Days online 5",
-                "Views 5",
-                "Contributions 5",
-                "Questions 5",
-                "Days online",
-                "Views",
-                "Contributions",
-                "Questions",
-                "Video_1_W2",
-                "Questions_1_W2",
-                "Correct_1_W2",
-                "Video_2_W2",
-                "Questions_2_W2",
-                "Correct_2_W2",
-                "Video_1_W3",
-                "Questions_1_W3",
-                "Correct_1_W3",
-                "Video_2_W3",
-                "Questions_2_W3",
-                "Correct_2_W3",
-                "Video_1_W4",
-                "Questions_1_W4",
-                "Correct_1_W4",
-                "Video_2_W4",
-                "Questions_2_W4",
-                "Correct_2_W4",
-                "Video_1_W5",
-                "Questions_1_W5",
-                "Correct_1_W5",
-                "Video_2_W5",
-                "Questions_2_W5",
-                "Correct_2_W5",
-                "Presentation",
-                "Structure"
-            ],
-            "column_types": [
-                "integer",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "string",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "integer",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "double",
-                "string",
-                "string"
-            ],
-            "column_unique": [
-                true,
-                true,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false
-            ]
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 3,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T06:50:54.030Z",
-        "modified": "2019-09-21T06:50:54.030Z",
-        "name": "view_create",
-        "workflow": 1,
-        "payload": {
-            "id": 4,
-            "name": "Project rubric",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 4,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T06:52:22.621Z",
-        "modified": "2019-09-21T06:52:22.621Z",
-        "name": "action_create",
-        "workflow": 1,
-        "payload": {
-            "id": 8,
-            "name": "Project feedback",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 5,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T06:53:28.532Z",
-        "modified": "2019-09-21T06:53:28.532Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 8,
-            "name": "Project feedback",
-            "content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 6,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:01:00.547Z",
-        "modified": "2019-09-21T07:01:00.547Z",
-        "name": "column_delete",
-        "workflow": 1,
-        "payload": {
-            "id": 1,
-            "name": "BIOL1011",
-            "action_id": 8,
-            "action_name": "Project feedback",
-            "column_name": "Presentation",
-            "column_type": "string"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 7,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:01:54.323Z",
-        "modified": "2019-09-21T07:01:54.323Z",
-        "name": "column_delete",
-        "workflow": 1,
-        "payload": {
-            "id": 1,
-            "name": "BIOL1011",
-            "action_id": 8,
-            "action_name": "Project feedback",
-            "column_name": "Presentation",
-            "column_type": "string"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 8,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:04:03.056Z",
-        "modified": "2019-09-21T07:04:03.056Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 8,
-            "name": "Project feedback",
-            "content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 9,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:10:44.693Z",
-        "modified": "2019-09-21T07:10:44.693Z",
-        "name": "action_rubriccell_edit",
-        "workflow": 1,
-        "payload": {
-            "action": "Project feedback",
-            "column": "Presentation",
-            "feedback": "Good job with the presentation. You included the expected blocks (problem description, methodology, results and conclusions) and it was delivered clearly and in the allotted time.",
-            "workflow": "BIOL1011",
-            "action_id": 8,
-            "column_id": 68,
-            "description": "The presentation had a clearly defined structure: setting the problem, describing the methodology, results and conclusion. It was delivered clearly and in the allotted time.",
-            "workflow_id": 1,
-            "loa_position": 0
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 10,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:12:57.215Z",
-        "modified": "2019-09-21T07:12:57.215Z",
-        "name": "action_rubriccell_edit",
-        "workflow": 1,
-        "payload": {
-            "action": "Project feedback",
-            "column": "Presentation",
-            "feedback": "Think about the three requirements for this presentation: structure (introduce the problem, present the methodology, results, and conclusions), deliver it clearly, and in the allotted time. There were some aspects of it that needed improvement. For future presentations, review your material to make sure you cover all the required blocks and practice to make sure it is clearly delivered and within the allotted time.",
-            "workflow": "BIOL1011",
-            "action_id": 8,
-            "column_id": 68,
-            "description": "The presentation either had an incomplete structure, was not clearly delivered, or it was not finished in the allotted time.",
-            "workflow_id": 1,
-            "loa_position": 1
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 11,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:14:53.173Z",
-        "modified": "2019-09-21T07:14:53.173Z",
-        "name": "action_rubriccell_edit",
-        "workflow": 1,
-        "payload": {
-            "action": "Project feedback",
-            "column": "Presentation",
-            "feedback": "The presentation could be significantly improved. Make sure you review the structure again and verify that the problem is clearly stated, then the method, followed by the results and then the conclusions. The presentation needs to be clear and understandable, and it must fit in the allotted time. For future presentations, make sure you rehearse it paying attention to these requirements.",
-            "workflow": "BIOL1011",
-            "action_id": 8,
-            "column_id": 68,
-            "description": "The presentation has some substantial room or improvement. The structure is far from complete, it was not delivered clearly, or the time allotted was not respected.",
-            "workflow_id": 1,
-            "loa_position": 2
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 12,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:19:46.298Z",
-        "modified": "2019-09-21T07:19:46.298Z",
-        "name": "action_rubriccell_edit",
-        "workflow": 1,
-        "payload": {
-            "action": "Project feedback",
-            "column": "Structure",
-            "feedback": "Good work with the document. The sections have the right content and are coherently written.",
-            "workflow": "BIOL1011",
-            "action_id": 8,
-            "column_id": 69,
-            "description": "The project is well written with the expected sections and the right content. An introduction with the description of the problem, a methodology describing the steps to obtain the results, a result section, and a conclusion section connecting the results with the problem.",
-            "workflow_id": 1,
-            "loa_position": 0
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 13,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:25:24.466Z",
-        "modified": "2019-09-21T07:25:24.466Z",
-        "name": "action_rubriccell_edit",
-        "workflow": 1,
-        "payload": {
-            "action": "Project feedback",
-            "column": "Structure",
-            "feedback": "Review the document again and make sure that the introduction describes the problem, then the methodology section describes the steps to get the results, the result section just describes the information collected, and the conclusions connect the results with the problem.",
-            "workflow": "BIOL1011",
-            "action_id": 8,
-            "column_id": 69,
-            "description": "The structure of the document needs some improvement. Some of the sections do not contain the right information or not in the right format.",
-            "workflow_id": 1,
-            "loa_position": 1
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 14,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:28:09.601Z",
-        "modified": "2019-09-21T07:28:09.601Z",
-        "name": "action_rubriccell_edit",
-        "workflow": 1,
-        "payload": {
-            "action": "Project feedback",
-            "column": "Structure",
-            "feedback": "The document needs a significant revision. Remember that the introduction section needs to presents the problem and its context, the methodology focuses on the steps you have taken to collect the results, the result section presents the data you obtained, and the conclusions connect the data with the problem. Give the document another review to make sure its structure follows these guidelines.",
-            "workflow": "BIOL1011",
-            "action_id": 8,
-            "column_id": 69,
-            "description": "The structure of the document has several deficiencies. Either the introduction fails to situate the problem, or the methodology does not include a clear description of the steps to obtain the results, or the results are not clearly expected, or the conclusions are not properly written.",
-            "workflow_id": 1,
-            "loa_position": 2
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 15,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2019-09-21T07:30:16.029Z",
-        "modified": "2019-09-21T07:30:16.029Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 8,
-            "name": "Project feedback",
-            "content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
-            "workflow_id": 1,
-            "workflow_name": "BIOL1011"
-        }
-    }
-},
-{
     "model": "ontask.action",
     "pk": 1,
     "fields": {
@@ -4568,6 +4057,7 @@
         "action": 2,
         "created": "2019-04-15T22:46:25.569Z",
         "execute": "2121-09-30T21:44:00Z",
+        "execute_until": null,
         "status": "pending",
         "item_column": 2,
         "exclude_values": [],
@@ -4877,6 +4367,20 @@
         "loa_position": 2,
         "description_text": "The structure of the document has several deficiencies. Either the introduction fails to situate the problem, or the methodology does not include a clear description of the steps to obtain the results, or the results are not clearly expected, or the conclusions are not properly written.",
         "feedback_text": "The document needs a significant revision. Remember that the introduction section needs to presents the problem and its context, the methodology focuses on the steps you have taken to collect the results, the result section presents the data you obtained, and the conclusions connect the data with the problem. Give the document another review to make sure its structure follows these guidelines."
+    }
+},
+{
+    "model": "ontask.athenaconnection",
+    "pk": 1,
+    "fields": {
+        "name": "athena connection",
+        "description_text": "Connection to amazon athena server",
+        "aws_access_key": "[YOUR AWS ACCESS KEY HERE]",
+        "aws_secret_access_key": "[YOUR AWS SECRET ACCESS KEY HERE]",
+        "aws_bucket_name": "[S3 BUCKET NAME HERE]",
+        "aws_file_path": "[FILE PATH WITHIN BUCKET HERE]",
+        "aws_region_name": "[AWS REGION NAME HERE]",
+        "table_name": ""
     }
 }
 ]

@@ -4,6 +4,7 @@
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from fernet_fields import EncryptedCharField
 
 from ontask.models.logs import Log
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
@@ -16,18 +17,24 @@ class AthenaConnection(models.Model):
 
     The parameters for the connection are those required to execute:
 
-    conn = connect(aws_access_key_id='YOUR_ACCESS_KEY_ID',
+    cursor = connect(aws_access_key_id='YOUR_ACCESS_KEY_ID',
                aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
-               region_name='us-west-2')
-    df = pd.read_sql("SELECT * FROM many_rows", conn)
+               region_name='us-west-2',
+               cursor_class=PandasCursor).cursor()
+
+    df = cursor.execute("SELECT * FROM many_rows").as_pandas()
+    print(df.describe())
+    print(df.head())
 
     AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY
     AWS_S3_BUCKET_NAME
     AWS_S3_BUCKET_FILE_PATH
     AWS_REGION_NAME
-    Table_name: The whole table is loaded.
+
+    No table name is stored to leave the possibility of choosing it at load
+    time.
     """
 
     # Connection name
@@ -53,7 +60,7 @@ class AthenaConnection(models.Model):
         blank=False)
 
     # Secret access key
-    aws_secret_access_key = models.CharField(
+    aws_secret_access_key = EncryptedCharField(
         verbose_name=_('AWS secret access key'),
         max_length=CHAR_FIELD_MID_SIZE,
         default='',
@@ -84,12 +91,13 @@ class AthenaConnection(models.Model):
         null=False,
         blank=False)
 
-    # DB table name
-    table = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
+    # DB table (optional
+    table_name = models.CharField(
         verbose_name=_('Table name'),
+        max_length=CHAR_FIELD_MID_SIZE,
         default='',
-        blank=False)
+        null=True,
+        blank=True)
 
     def __str__(self):
         """Render with name field."""

@@ -139,8 +139,8 @@ urlpatterns = [
         views.athenaconn_delete,
         name='athenaconn_delete'),
 
-    # path(
-    #     '<int:pk>/athenaupload_start/',
-    #     views.athenaupload_start,
-    #     name='athenaupload_start'),
+    path(
+        '<int:pk>/athenaupload_start/',
+        views.athenaupload_start,
+        name='athenaupload_start'),
 ]

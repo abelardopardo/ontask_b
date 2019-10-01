@@ -21,7 +21,7 @@ from ontask.models import Log, SQLConnection
 from ontask.workflow.access import remove_workflow_from_session
 
 
-class SQLConnectionTableAdmin(tables.Table):
+class SQLConnectionTableAdmin(ConnectionTableAdmin):
     """Table to render the SQL admin items."""
 
     operations = OperationsColumn(
@@ -38,23 +38,12 @@ class SQLConnectionTableAdmin(tables.Table):
             record['name'],
         )
 
-    class Meta:
-        """Define model, fields, sequence and attributes."""
-
+    class Meta(ConnectionTableAdmin.Meta):
+        """Define model."""
         model = SQLConnection
 
-        fields = ('name', 'description_text')
 
-        sequence = ('name', 'description_text', 'operations')
-
-        attrs = {
-            'class': 'table table-hover table-bordered shadow',
-            'style': 'width: 100%;',
-            'id': 'sqlconn-admin-table',
-        }
-
-
-class SQLConnectionTableRun(tables.Table):
+class SQLConnectionTableRun(ConnectionTableRun):
     """Class to render the table of SQL connections."""
 
     operations = OperationsColumn(
@@ -75,16 +64,6 @@ class SQLConnectionTableRun(tables.Table):
         """Define models, fields, sequence and attributes."""
 
         model = SQLConnection
-
-        fields = ('name', 'description_text')
-
-        sequence = ('name', 'description_text', 'operations')
-
-        attrs = {
-            'class': 'table table-hover table-bordered shadow',
-            'style': 'width: 100%;',
-            'id': 'sqlconn-instructor-table',
-        }
 
 
 def _save_conn_form(
@@ -119,13 +98,8 @@ def _save_conn_form(
     return JsonResponse({
         'html_form': render_to_string(
             template_name,
-            {
-                'form': form,
-                'id': form.instance.id,
-                'add': is_add},
-            request=request,
-        ),
-    })
+            {'form': form, 'id': form.instance.id, 'add': is_add},
+            request=request)})
 
 
 @user_passes_test(is_admin)
@@ -143,12 +117,8 @@ def sqlconnection_admin_index(request: HttpRequest) -> HttpResponse:
         'dataops/sql_connections_admin.html',
         {
             'table': SQLConnectionTableAdmin(
-                SQLConnection.objects.values(
-                    'id',
-                    'name',
-                    'description_text'),
-                orderable=False)},
-    )
+                SQLConnection.objects.values('id', 'name', 'description_text'),
+                orderable=False)})
 
 
 @user_passes_test(is_instructor)
@@ -164,14 +134,8 @@ def sqlconnection_instructor_index(request: HttpRequest) -> HttpResponse:
         'dataops/sql_connections.html',
         {
             'table': SQLConnectionTableRun(
-                SQLConnection.objects.values(
-                    'id',
-                    'name',
-                    'description_text'),
-                orderable=False,
-            ),
-        },
-    )
+                SQLConnection.objects.values('id', 'name', 'description_text'),
+                orderable=False)})
 
 
 @user_passes_test(is_instructor)
@@ -186,22 +150,17 @@ def sqlconn_view(request: HttpRequest, pk: int) -> JsonResponse:
     :return: AJAX response
     """
     # Get the connection object
-    c_obj = SQLConnection.objects.filter(pk=pk)
+    c_obj = SQLConnection.objects.filter(pk=pk).values().first()
     if not c_obj:
         # Connection object not found, go to table of sql connections
         return JsonResponse(
             {'html_redirect': reverse('dataops:sqlconns_admin_index')})
 
-    return JsonResponse({
-        'html_form': render_to_string(
-            'dataops/includes/partial_show_sql_connection.html',
-            {
-                'c_vals': c_obj.values()[0],
-                'id': c_obj[0].id,
-                'request': request,
-            },
-        ),
-    })
+    return conn_view(
+        request,
+        c_obj,
+        SQLConnection._meta,
+        'dataops/includes/partial_show_sql_connection.html')
 
 
 @user_passes_test(is_admin)

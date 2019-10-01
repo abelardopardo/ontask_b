@@ -14,10 +14,10 @@
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
-    if (document.getElementById("athenaconn-admin-table") != null) {
+    if (document.getElementById("conn-admin-table") != null) {
       // Required for DataTables
       $(document).ready(function() {
-        var athenaconn_admin_table = $('#athenaconn-admin-table').DataTable({
+        var athenaconn_admin_table = $('#conn-admin-table').DataTable({
           "autoWidth": false,
           "search": {
             "caseInsensitive": true,

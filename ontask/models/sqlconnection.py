@@ -4,6 +4,7 @@
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from fernet_fields import EncryptedCharField
 
 from ontask.models.logs import Log
 from ontask.models.const import CHAR_FIELD_LONG_SIZE
@@ -63,11 +64,12 @@ class SQLConnection(models.Model):
         blank=True)
 
     # db_password is required (will be asked in run time, but not stored here)
-    db_password = models.BooleanField(
+    db_password = EncryptedCharField(
         default=False,
-        verbose_name=_('Requires password?'),
-        null=False,
-        blank=False)
+        max_length=CHAR_FIELD_LONG_SIZE,
+        verbose_name=_('Password (leave empty to enter when executing)'),
+        null=True,
+        blank=True)
 
     # DB host
     db_host = models.CharField(

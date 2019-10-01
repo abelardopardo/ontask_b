@@ -351,7 +351,12 @@ class UploadS3FileForm(UploadBasic):
         return resp_data
 
 
-class SQLConnectionForm(forms.ModelForm):
+class ConnectionForm(forms.ModelForm):
+    """Base class for connection forms."""
+    pass
+
+
+class SQLConnectionForm(ConnectionForm):
     """Form to read data from SQL.
 
     We collect information to create a Database URI to be used by SQLAlchemy:
@@ -404,7 +409,7 @@ class SQLRequestPassword(forms.Form):
         help_text=_('Password to authenticate the database connection'))
 
 
-class AthenaConnectionForm(forms.ModelForm):
+class AthenaConnectionForm(ConnectionForm):
     """Form to read data from SQL.
 
     We collect information to open a connection to an Athena instance
@@ -441,3 +446,10 @@ class AthenaConnectionForm(forms.ModelForm):
             'aws_region_name']
 
 
+class AthenaRequestTable(forms.Form):
+    """Form to ask for a password for a SQL connection execution."""
+
+    table_name = forms.CharField(
+        max_length=CHAR_FIELD_MID_SIZE,
+        required=True,
+        help_text=_('Table to load the data'))

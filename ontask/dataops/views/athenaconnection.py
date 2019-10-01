@@ -16,11 +16,13 @@ from ontask.core.decorators import ajax_required
 from ontask.core.permissions import is_admin, is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.dataops.forms import AthenaConnectionForm
+from ontask.dataops.views.connection import (
+    conn_view, ConnectionTableAdmin, ConnectionTableRun)
 from ontask.models import Log, AthenaConnection
 from ontask.workflow.access import remove_workflow_from_session
 
 
-class AthenaConnectionTableAdmin(tables.Table):
+class AthenaConnectionTableAdmin(ConnectionTableAdmin):
     """Table to render the Athena admin items."""
 
     operations = OperationsColumn(
@@ -37,23 +39,12 @@ class AthenaConnectionTableAdmin(tables.Table):
             record['name'],
         )
 
-    class Meta:
+    class Meta(ConnectionTableAdmin.Meta):
         """Define model, fields, sequence and attributes."""
-
         model = AthenaConnection
 
-        fields = ('name', 'description_text')
 
-        sequence = ('name', 'description_text', 'operations')
-
-        attrs = {
-            'class': 'table table-hover table-bordered shadow',
-            'style': 'width: 100%;',
-            'id': 'athenaconn-admin-table',
-        }
-
-
-class AthenaConnectionTableRun(tables.Table):
+class AthenaConnectionTableRun(ConnectionTableRun):
     """Class to render the table of Athena connections."""
 
     operations = OperationsColumn(
@@ -70,20 +61,9 @@ class AthenaConnectionTableRun(tables.Table):
             record['name'],
         )
 
-    class Meta:
+    class Meta(ConnectionTableRun.Meta):
         """Define models, fields, sequence and attributes."""
-
         model = AthenaConnection
-
-        fields = ('name', 'description_text')
-
-        sequence = ('name', 'description_text', 'operations')
-
-        attrs = {
-            'class': 'table table-hover table-bordered shadow',
-            'style': 'width: 100%;',
-            'id': 'athenaconn-instructor-table',
-        }
 
 
 def _save_conn_form(
@@ -182,22 +162,17 @@ def athenaconn_view(request: HttpRequest, pk: int) -> JsonResponse:
     :return: AJAX response
     """
     # Get the connection object
-    c_obj = AthenaConnection.objects.filter(pk=pk)
+    c_obj = AthenaConnection.objects.filter(pk=pk).values().first()
     if not c_obj:
         # Connection object not found, go to table of Athena connections
         return JsonResponse(
             {'html_redirect': reverse('dataops:athenaconns_admin_index')})
 
-    return JsonResponse({
-        'html_form': render_to_string(
-            'dataops/includes/partial_show_athena_connection.html',
-            {
-                'c_vals': c_obj.values()[0],
-                'id': c_obj[0].id,
-                'request': request,
-            },
-        ),
-    })
+    return conn_view(
+        request,
+        c_obj,
+        AthenaConnection._meta,
+        'dataops/includes/partial_show_athena_connection.html')
 
 
 @user_passes_test(is_admin)

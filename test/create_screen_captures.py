@@ -2,7 +2,6 @@
 
 
 import os
-# from ontask.models import SQLConnection
 import test
 from test import ElementHasFullOpacity, ScreenTests
 
@@ -15,6 +14,8 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask.dataops.pandas import destroy_db_engine
+# from ontask.models import SQLConnection
+# from ontask.models import AthenaConnection
 from ontask.models import Action
 
 standard_library.install_aliases()
@@ -150,6 +151,18 @@ class ScreenTestFixture(ScreenTests):
         # )
         # sqlc.save()
 
+        # Insert an Amazon Athena Connection
+        # athenac = AthenaConnection(
+        #     name='athena connection',
+        #     description_text='Connection to amazon athena server',
+        #     aws_access_key='[YOUR AWS ACCESS KEY HERE]',
+        #     aws_secret_access_key='[YOUR AWS SECRET ACCESS KEY HERE]',
+        #     aws_bucket_name='[S3 BUCKET NAME HERE]',
+        #     aws_file_path='[FILE PATH WITHIN BUCKET HERE]',
+        #     aws_region_name='[AWS REGION NAME HERE]',
+        # )
+        # athenac.save()
+
     def tearDown(self):
         test.delete_all_tables()
         super().tearDown()
@@ -167,13 +180,42 @@ class ScreenTestFixture(ScreenTests):
 
         # click in the edit element
         self.selenium.find_element_by_xpath(
-            "//table[@id='sqlconn-admin-table']"
+            "//table[@id='conn-admin-table']"
             "//tr/td[1][normalize-space() = 'remote server']"
         ).click()
         self.wait_for_modal_open()
 
         # Take picture of the modal
         self.modal_ss('workflow_superuser_sql_edit.png')
+
+        # Click in the cancel button
+        self.cancel_modal()
+
+        # End of session
+        self.logout()
+
+        # Close the db_engine
+        destroy_db_engine()
+
+    def test_athena_admin(self):
+        # Login
+        self.login('superuser@bogus.com')
+
+        #
+        # Open Athena Connection
+        #
+        self.go_to_athena_connections()
+        self.body_ss('workflow_athena_connections_index.png')
+
+        # click in the edit element
+        self.selenium.find_element_by_xpath(
+            "//table[@id='conn-admin-table']"
+            "//tr/td[1][normalize-space() = 'athena connection']"
+        ).click()
+        self.wait_for_modal_open()
+
+        # Take picture of the modal
+        self.modal_ss('workflow_superuser_athena_edit.png')
 
         # Click in the cancel button
         self.cancel_modal()
@@ -425,6 +467,20 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the RUN menu in SQL
         self.body_ss('dataops_SQL_run.png')
+        self.go_to_table()
+
+        #
+        # Dataops/Merge Athena Connection
+        #
+        self.go_to_athena_upload_merge()
+        self.body_ss('dataops_athena_available.png')
+
+        # Click on the link RUN
+        self.selenium.find_element_by_link_text('Run').click()
+        self.wait_for_page(None, 'athena-load-step1')
+
+        # Picture of the RUN menu in Athena
+        self.body_ss('dataops_athena_run.png')
 
         # Go back to details
         self.go_to_details()
