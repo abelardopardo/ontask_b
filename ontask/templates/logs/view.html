@@ -5,8 +5,11 @@
 {% block container %}
 <div class="container">
   <h1 class="text-center">{% trans 'Log' %} {{ log_item.id }}: {{ log_item.name }}</h1>
+  {% if log_item.workflow %}
+    <h4 class="text-center">{% trans 'Workflow' %}: {{ log_item.workflow.name }}</h4>
+  {% endif %}
   <p class="text-center">{% trans 'Last modified' %}: {{ log_item.modified }}</p>
-  <h4 class="text-center">{% trans 'Payload:' %}</h4>
+  <p class="text-center">{% trans 'Payload:' %}</p>
   <pre class="shadow border border-dark">{{ json_pretty }}</pre>
   <div class="text-center">
   <a href="{{request.META.HTTP_REFERER}}"

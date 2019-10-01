@@ -164,10 +164,8 @@ def clone_action(
         })
 
     # POST REQUEST!
-    log_payload = {
-        'id_old': action.id,
-        'name_old': action.name,
-    }
+    id_old = action.id,
+    name_old = action.name,
 
     action = do_clone_action(
         action,

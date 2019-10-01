@@ -68,10 +68,10 @@ def increase_track_count_task(method, get_dict):
         logger.error(ugettext('Column %s does not exist'), column_dst)
         return False
 
-    log_payload = {'to': msg_to,
-                   'email_column': column_to,
-                   'column_dst': column_dst
-                   }
+    log_payload = {
+        'to': msg_to,
+        'email_column': column_to,
+        'column_dst': column_dst}
 
     # If the track comes with column_dst, the event needs to be reflected
     # back in the data frame

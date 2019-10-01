@@ -16,7 +16,8 @@ from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
 from ontask.action.forms import (
-    EditActionOutForm, FilterForm, RubricCellForm, RubricLOAForm)
+    EditActionOutForm, FilterForm, RubricCellForm, RubricLOAForm,
+)
 from ontask.action.views.edit_personalized import text_renders_correctly
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
@@ -163,10 +164,10 @@ def edit_action_rubric(
         return redirect(reverse('action:index'))
 
     columns_to_insert_qs = action.workflow.columns.exclude(
-            column_condition_pair__action=action,
-        ).exclude(
-            is_key=True,
-        ).distinct().order_by('position')
+        column_condition_pair__action=action,
+    ).exclude(
+        is_key=True,
+    ).distinct().order_by('position')
     if criteria:
         columns_to_insert = [
             column
@@ -270,6 +271,7 @@ def edit_rubric_cell(
              'cid': cid,
              'loa_pos': loa_pos},
             request=request)})
+
 
 @user_passes_test(is_instructor)
 @ajax_required
