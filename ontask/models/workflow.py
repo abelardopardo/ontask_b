@@ -470,7 +470,7 @@ class Workflow(models.Model):
             'name': self.name,
             'ncols': self.ncols,
             'nrows': self.nrows,
-            'star': self.star}
+            'star': self.user in self.star.all()}
 
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, self, payload)
