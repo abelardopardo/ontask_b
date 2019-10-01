@@ -206,8 +206,8 @@ def save_workflow_form(
             workflow_item = form.save()
         else:
             # This is a new instance!
+            form.instance.user = request.user
             workflow_item = form.save()
-            workflow_item.user = request.user
             workflow_item.nrows = 0
             workflow_item.ncols = 0
             log_type = Log.WORKFLOW_CREATE
