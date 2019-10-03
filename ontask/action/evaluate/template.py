@@ -287,3 +287,4 @@ def render_action_template(
     return Template(
         _ontask_template_prelude + new_template_text,
     ).render(Context(new_context))
+
