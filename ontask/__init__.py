@@ -73,14 +73,6 @@ def is_correct_email(email_txt):
     return True
 
 
-def is_json(text):
-    try:
-        _ = json.loads(text)
-    except ValueError:
-        return False
-    return True
-
-
 def simplify_datetime_str(dtime):
     return dtime.astimezone(
         pytz.timezone(django.conf.settings.TIME_ZONE)

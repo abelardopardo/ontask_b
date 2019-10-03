@@ -235,7 +235,7 @@ def evaluate_row_action_out(
     action: Action,
     context: Mapping,
     text: str = None,
-):
+) -> Optional[str]:
     """Evaluate the text in an action out based on the values in a context.
 
     Given an action object and a row index:
