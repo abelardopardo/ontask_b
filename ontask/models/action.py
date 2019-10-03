@@ -4,16 +4,15 @@
 
 import datetime
 import re
-from builtins import object
 from typing import List
 
-import pytz
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.core.validators import URLValidator
 from django.db import models
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
+import pytz
 
 import ontask
 from ontask.dataops.formula import evaluation
@@ -31,6 +30,7 @@ VAR_USE_RES = [
 ]
 
 ACTION_TYPE_LENGTH = 64
+
 
 class Action(models.Model):  # noqa Z214
     """Object storing an action: content, conditions, filter, etc.
@@ -232,6 +232,14 @@ class Action(models.Model):  # noqa Z214
             ),
         )
 
+    @property
+    def has_html_text(self) -> bool:
+        return (
+            self.text_content
+            and (
+                self.action_type == Action.PERSONALIZED_TEXT
+                or self.action_type == Action.SEND_LIST))
+
     @functional.cached_property
     def is_in(self) -> bool:
         """Get bool stating if action is Survey or similar."""
@@ -273,6 +281,17 @@ class Action(models.Model):  # noqa Z214
                 match.group('vname')
                 for match in rexpr.finditer(self.text_content)
             ]
+
+        if self.has_html_text:
+            cond_names = [
+                name.replace(
+                    '&amp;', '&').replace(
+                    '&lt;', '<').replace(
+                    '&gt;', '>').replace(
+                    '&quot;', '"').replace(
+                    '&#39;', "'")
+                for name in cond_names]
+
         return cond_names
 
     def set_text_content(self, text_content: str):
