@@ -168,6 +168,8 @@ def athenaconn_view(request: HttpRequest, pk: int) -> JsonResponse:
         return JsonResponse(
             {'html_redirect': reverse('dataops:athenaconns_admin_index')})
 
+    if 'aws_secret_access_key' in c_obj:
+        c_obj['aws_secret_access_key'] = '--REMOVED--'
     return conn_view(
         request,
         c_obj,

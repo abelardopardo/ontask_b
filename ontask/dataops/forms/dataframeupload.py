@@ -237,6 +237,7 @@ def load_df_from_googlesheet(
 def load_df_from_sqlconnection(
     conn_item: SQLConnection,
     password: Optional[str] = None,
+    db_table: Optional[str] = None,
 ) -> pd.DataFrame:
     """Load a DF from a SQL connection.
 
@@ -256,7 +257,7 @@ def load_df_from_sqlconnection(
         conn_item.db_name)
 
     # Try to fetch the data
-    data_frame = pd.read_sql_table(conn_item.db_table, db_engine)
+    data_frame = pd.read_sql_table(db_table, db_engine)
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
@@ -265,6 +266,7 @@ def load_df_from_sqlconnection(
 
 def load_df_from_athenaconnection(
     conn_item: AthenaConnection,
+    aws_secret_access_key: Optional[str] = None,
     table_name: Optional[str] = None,
 ) -> pd.DataFrame:
     """Load a DF from an Athena connection.

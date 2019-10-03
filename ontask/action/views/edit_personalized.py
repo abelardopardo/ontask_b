@@ -139,7 +139,7 @@ def edit_action_out(
             or action.action_type == Action.SEND_LIST
         ),
         'conditions': action.conditions.filter(is_filter=False),
-        'other_conditions': Condition.objects.filter(
+        'conditions_to_clone': Condition.objects.filter(
             action__workflow=workflow, is_filter=False,
         ).exclude(action=action),
         'query_builder_ops': workflow.get_query_builder_ops_as_str(),
@@ -147,7 +147,7 @@ def edit_action_out(
             attr for attr in list(workflow.attributes.keys())
         ],
         'columns': workflow.columns.all(),
-        'stat_columns': workflow.columns.filter(is_key=False),
+        'columns_show_stat': workflow.columns.filter(is_key=False),
         'selected_rows':
             filter_condition.n_rows_selected
             if filter_condition else -1,

@@ -60,7 +60,7 @@ class SQLConnectionTableRun(ConnectionTableRun):
             record['name'],
         )
 
-    class Meta:
+    class Meta(ConnectionTableRun.Meta):
         """Define models, fields, sequence and attributes."""
 
         model = SQLConnection
@@ -156,6 +156,8 @@ def sqlconn_view(request: HttpRequest, pk: int) -> JsonResponse:
         return JsonResponse(
             {'html_redirect': reverse('dataops:sqlconns_admin_index')})
 
+    if 'db_password' in c_obj:
+        c_obj['db_password'] = '--REMOVED--'
     return conn_view(
         request,
         c_obj,

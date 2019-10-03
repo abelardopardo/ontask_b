@@ -15,14 +15,14 @@ The currently supported formats are:
 - SQL connection to a remote DB
 """
 
-import json
 from builtins import str
 from io import TextIOWrapper
+import json
 from typing import Optional
 
-import pandas as pd
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+import pandas as pd
 
 from ontask import OnTaskDataFrameNoKey, settings
 from ontask.core.forms import RestrictedFileField
@@ -31,8 +31,8 @@ from ontask.dataops.forms.dataframeupload import (
     load_df_from_s3,
 )
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
-from ontask.models import SQLConnection, AthenaConnection
-from ontask.models.const import CHAR_FIELD_MID_SIZE
+from ontask.models import AthenaConnection, SQLConnection
+from ontask.models.const import CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
@@ -399,14 +399,26 @@ class SQLConnectionForm(ConnectionForm):
         ]
 
 
-class SQLRequestPassword(forms.Form):
+class SQLRequestConnectionParam(forms.Form):
     """Form to ask for a password for a SQL connection execution."""
 
-    password = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
-        widget=forms.PasswordInput,
-        required=True,
-        help_text=_('Password to authenticate the database connection'))
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance')
+
+        super().__init__(*args, **kwargs)
+
+        if not self.instance.db_password:
+            self.fields['password'] = forms.CharField(
+                max_length=CHAR_FIELD_MID_SIZE,
+                widget=forms.PasswordInput,
+                required=True,
+                help_text=_('Authentication for the database connection'))
+
+        if not self.instance.db_table:
+            self.fields['table_name'] = forms.CharField(
+                max_length=CHAR_FIELD_MID_SIZE,
+                required=True,
+                help_text=_('Table to load'))
 
 
 class AthenaConnectionForm(ConnectionForm):
@@ -443,13 +455,27 @@ class AthenaConnectionForm(ConnectionForm):
             'aws_secret_access_key',
             'aws_bucket_name',
             'aws_file_path',
-            'aws_region_name']
+            'aws_region_name',
+            'table_name']
 
 
-class AthenaRequestTable(forms.Form):
+class AthenaRequestConnectionParam(forms.Form):
     """Form to ask for a password for a SQL connection execution."""
 
-    table_name = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
-        required=True,
-        help_text=_('Table to load the data'))
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance')
+
+        super().__init__(*args, **kwargs)
+
+        if not self.instance.aws_secret_access_key:
+            self.fields['aws_secret_access_key'] = forms.CharField(
+                max_length=CHAR_FIELD_LONG_SIZE,
+                required=True,
+                help_text=_('Authentication for the connection'))
+
+        if not self.instance.table_name:
+            self.fields['table_name'] = forms.CharField(
+                max_length=CHAR_FIELD_MID_SIZE,
+                required=True,
+                help_text=_('Table to load'))
+

@@ -67,7 +67,7 @@ class SQLConnection(models.Model):
     db_password = EncryptedCharField(
         default=False,
         max_length=CHAR_FIELD_LONG_SIZE,
-        verbose_name=_('Password (leave empty to enter when executing)'),
+        verbose_name=_('Password (leave empty to enter at execution)'),
         null=True,
         blank=True)
 
@@ -87,16 +87,17 @@ class SQLConnection(models.Model):
     # DB name
     db_name = models.CharField(
         max_length=CHAR_FIELD_LONG_SIZE,
-        verbose_name=_('DB name'),
+        verbose_name=_('Database name'),
         default='',
         blank=False)
 
     # DB table name
     db_table = models.CharField(
         max_length=CHAR_FIELD_LONG_SIZE,
-        verbose_name=_('Table'),
+        verbose_name=_('Database table'),
         default='',
-        blank=False)
+        null=True,
+        blank=True)
 
     def __str__(self):
         """Render with name field."""
@@ -113,7 +114,7 @@ class SQLConnection(models.Model):
             'db_port': self.db_port,
             'db_name': self.db_name,
             'db_user': self.db_user,
-            'db_password': 'SECRET' if self.db_user else '',
+            'db_password': 'SECRET' if self.db_password else '',
             'db_table': self.db_table,
         }
 

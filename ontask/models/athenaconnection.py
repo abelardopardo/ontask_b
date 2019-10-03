@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Amazon Athena Connection model."""
+from typing import Mapping
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -64,8 +65,9 @@ class AthenaConnection(models.Model):
         verbose_name=_('AWS secret access key'),
         max_length=CHAR_FIELD_MID_SIZE,
         default='',
-        null=False,
-        blank=False)
+        null=True,
+        blank=True,
+        help_text=_('Leave blank to provide at execution'))
 
     # Bucket name
     aws_bucket_name = models.CharField(
@@ -97,7 +99,8 @@ class AthenaConnection(models.Model):
         max_length=CHAR_FIELD_MID_SIZE,
         default='',
         null=True,
-        blank=True)
+        blank=True,
+        help_text=_('Leave blank to provide at execution'))
 
     def __str__(self):
         """Render with name field."""
@@ -111,10 +114,8 @@ class AthenaConnection(models.Model):
             'aws_access_key': self.aws_access_key,
             'aws_bucket_name': self.aws_bucket_name,
             'aws_file_path': self.aws_file_path,
-            'aws_region_name': self.aws_region_name}
-
-        if self.text_content:
-            payload['content'] = self.text_content
+            'aws_region_name': self.aws_region_name,
+            'table_name': self.table_name}
 
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, None, payload)

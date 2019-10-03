@@ -15,7 +15,7 @@ from ontask import OnTaskDataFrameNoKey
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import (
-    AthenaRequestTable, load_df_from_athenaconnection)
+    AthenaRequestConnectionParam, load_df_from_athenaconnection)
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask.models import AthenaConnection, Workflow
 
@@ -52,10 +52,12 @@ def athenaupload_start(
             'dataops:athenaconns_instructor_index_instructor_index')
 
     form = None
-    table_name = conn.table_name
-    if not table_name:
+    missing_field = not conn.aws_secret_access_key or not conn.table_name
+    if missing_field:
         # The connection needs a table (not given upon definition)
-        form = AthenaRequestTable(request.POST or None)
+        form = AthenaRequestConnectionParam(
+            request.POST or None,
+            instance=conn)
 
     context = {
         'form': form,
@@ -63,17 +65,23 @@ def athenaupload_start(
         'dtype': 'Athena',
         'dtype_select': _('Athena connection'),
         'connection': conn,
-        'table_name': table_name,
         'valuerange': range(5) if workflow.has_table() else range(3),
         'prev_step': reverse('dataops:athenaconns_instructor_index')}
 
-    if request.method == 'POST' and (not form or form.is_valid()):
+    if request.method == 'POST' and (not missing_field or form.is_valid()):
+        aws_secret_access_key = conn.aws_secret_access_key
+        table_name = conn.table_name
+        if not aws_secret_access_key:
+            aws_secret_access_key = form.cleaned_data['aws_secret_access_key']
         if not table_name:
             table_name = form.cleaned_data['table_name']
 
         # Process Athena connection using pandas
         try:
-            data_frame = load_df_from_athenaconnection(conn, table_name)
+            data_frame = load_df_from_athenaconnection(
+                conn,
+                aws_secret_access_key,
+                table_name)
             # Verify the data frame
             verify_data_frame(data_frame)
         except OnTaskDataFrameNoKey as exc:

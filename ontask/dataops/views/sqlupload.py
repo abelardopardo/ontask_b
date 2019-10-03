@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import OnTaskDataFrameNoKey
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.dataops.forms import SQLRequestPassword, load_df_from_sqlconnection
+from ontask.dataops.forms import SQLRequestConnectionParam, load_df_from_sqlconnection
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask.models import SQLConnection, Workflow
 
@@ -50,10 +50,10 @@ def sqlupload_start(
         return redirect('dataops:sqlconns_instructor_index_instructor_index')
 
     form = None
-    password = conn.db_password
-    if not password:
+    missing_field = not conn.db_password or not conn.db_table
+    if missing_field:
         # The connection needs a password  to operate
-        form = SQLRequestPassword(request.POST or None)
+        form = SQLRequestConnectionParam(request.POST or None, instance=conn)
 
     context = {
         'form': form,
@@ -65,21 +65,26 @@ def sqlupload_start(
         'conn_type': conn.conn_type,
         'conn_driver': conn.conn_driver,
         'db_user': conn.db_user,
-        'db_passwd': _('<PROTECTED>') if password else '',
+        'db_passwd': _('<PROTECTED>') if conn.db_password else '',
         'db_host': conn.db_host,
         'db_port': conn.db_port,
         'db_name': conn.db_name,
         'db_table': conn.db_table}
 
-    if request.method == 'POST' and (not form or form.is_valid()):
-        if form:
+    if request.method == 'POST' and (not missing_field or form.is_valid()):
+        password = conn.db_password
+        table_name = conn.db_table
+        if not password:
             password = form.cleaned_data['password']
+        if not table_name:
+            table_name = form.cleaned_data['table_name']
 
         # Process SQL connection using pandas
         try:
             data_frame = load_df_from_sqlconnection(
                 conn,
-                password)
+                password,
+                table_name)
             # Verify the data frame
             verify_data_frame(data_frame)
         except OnTaskDataFrameNoKey as exc:

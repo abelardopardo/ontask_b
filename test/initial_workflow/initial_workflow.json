@@ -4080,7 +4080,6 @@
         "conn_type": "mysql",
         "conn_driver": "",
         "db_user": "remote_db_user",
-        "db_password": true,
         "db_host": "dbserver.bogus.com",
         "db_port": null,
         "db_name": "demographics",

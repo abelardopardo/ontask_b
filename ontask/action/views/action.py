@@ -147,16 +147,15 @@ def save_action_form(
         if action_item.pk is None:
             # Action is New. Update certain vars
             action_item.workflow = workflow
+            action_item.save()
             log_type = Log.ACTION_CREATE
             return_url = reverse('action:edit', kwargs={'pk': action_item.id})
         else:
+            action_item.save()
             log_type = Log.ACTION_UPDATE
             return_url = reverse('action:index')
 
-        action_item.save()
         action_item.log(request.user, log_type)
-        # Request is correct
-
         return JsonResponse({'html_redirect': return_url})
 
     return JsonResponse({
