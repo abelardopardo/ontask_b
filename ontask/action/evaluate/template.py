@@ -112,6 +112,26 @@ def _change_vname(match) -> str:
     )
 
 
+def _change_unescape_vname(match) -> str:
+    """Change unscaped variable name using the match object from re.
+
+    :param match:
+
+    :return: String with the variable name translated
+    """
+    var_name = match.group('vname').replace(
+        '&amp;', '&').replace(
+        '&lt;', '<').replace(
+        '&gt;', '>').replace(
+        '&quot;', '"').replace(
+        '&#39;', "'")
+    return (
+        match.group('mup_pre')
+        + _translate(var_name)
+        + match.group('mup_post')
+    )
+
+
 def _translate(varname: str) -> str:
     """Apply several translations to the value of a variable.
 
@@ -208,7 +228,14 @@ def render_action_template(
     # appear in the the template text
     new_template_text = template_text
     for rexpr in var_use_res:
-        new_template_text = rexpr.sub(_change_vname, new_template_text)
+        if action and action.has_html_text:
+            new_template_text = rexpr.sub(
+                _change_unescape_vname,
+                new_template_text)
+        else:
+            new_template_text = rexpr.sub(
+                _change_vname,
+                new_template_text)
 
     # Step 2.2 Remove pre-and post white space from the {% if %} and
     # {% endif %} conditions (to reduce white space when using non HTML
@@ -217,7 +244,7 @@ def render_action_template(
 
     # Step 3. Apply the translation process to the context keys
     new_context = {
-        _translate(escape(key)): str_val
+        _translate(key): str_val
         for key, str_val in list(context_dict.items())
     }
 

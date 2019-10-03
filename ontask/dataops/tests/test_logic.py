@@ -4,10 +4,14 @@
 import datetime
 import io
 import os
+
+from django.contrib.auth import get_user_model
+
 import test
 
 import pandas as pd
 from django.conf import settings
+from rest_framework import status
 
 from ontask.dataops.forms.upload import load_df_from_csvfile
 from ontask.dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
@@ -627,9 +631,6 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
     )
     action_name = 'Test action'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def tearDown(self):
         test.delete_all_tables()
         super().tearDown()
@@ -672,3 +673,49 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
                           for x in conditions]
 
             assert cond_eval1 == cond_eval2
+
+
+class ConditionNameWithSymbols(test.OnTaskTestCase):
+    fixtures = ['symbols_in_condition_name']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'ontask',
+        'fixtures',
+        'symbols_in_condition_name.sql'
+    )
+    action_name1 = 'bug 1'
+    action_name2 = 'bug 2'
+
+    def test_action_1_preview(self):
+        """Test that first action renders correctly."""
+        self.workflow = Workflow.objects.all().first()
+        self.user = get_user_model().objects.filter(
+            email='instructor01@bogus.com'
+        ).first()
+        attribute_value = list(self.workflow.attributes.values())[0]
+        df = load_table(self.workflow.get_data_frame_table_name())
+
+        for action_name in [self.action_name1, self.action_name2]:
+            action = self.workflow.actions.get(name=action_name)
+            for index, row in df.iterrows():
+                condition_value = row['!#$%&()*+,-./\:;<=>?@[]^_`{|}~ 1'] < 12.5
+                # JSON request to obtain preview
+                resp = self.get_response(
+                    'action:preview',
+                    url_params={'pk': action.id, 'idx': index + 1},
+                    is_ajax=True)
+                self.assertTrue(status.is_success(resp.status_code))
+                self.assertTrue(attribute_value in str(resp.content))
+                self.assertEquals(
+                    'Condition 1' in str(resp.content),
+                    condition_value)
+                self.assertEquals(
+                    'Condition 2' in str(resp.content),
+                    condition_value)
+                self.assertEquals(
+                    'Condition 3' in str(resp.content),
+                    condition_value)
+                self.assertEquals(
+                    'Condition 4' in str(resp.content),
+                    condition_value)
+

@@ -1,3 +1,9 @@
+## 6.0.2 (2019-10-8)
+
+### Fixed
+
+- Error when condition names contain symbols
+
 ## 6.0.1 (2019-09-14)
 
 ### Fixed
