@@ -5,7 +5,7 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{% trans 'Athena Connections' %}{% endblock %}
+{% block title %}{{ block.super }}{{ title }}{% endblock %}
 {% block extrahead %}
   {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
@@ -17,7 +17,7 @@
     if (document.getElementById("conn-instructor-table") != null) {
       // Required for DataTables
       $(document).ready(function() {
-        var athenaconn_table = $('#conn-instructor-table').DataTable({
+        var conn_table = $('#conn-instructor-table').DataTable({
           "autoWidth": false,
           "search": {
             "caseInsensitive": true,
@@ -39,29 +39,33 @@
           rowReorder: false,
           "responsive": false,
         });
-        athenaconn_table.columns().iterator('column', function (ctx, idx) {
-          $(athenaconn_table.column(idx).header()).append('<span class="sort-icon"/>');
+        conn_table.columns().iterator('column', function (ctx, idx) {
+          $(conn_table.column(idx).header()).append('<span class="sort-icon"/>');
         });
       });
     }
   </script>
 {% endblock %}
 {% block container %}
-  <div class="container" id="athena-connections">
-    <h1 class="text-center">{% trans 'Athena Connections' %}</h1>
+  <div class="container" id="connection-instructor">
+    <h1 class="text-center">{{ title }}</h1>
     {% if table.data|length %}
-      <div class="justify-content-center" id="athenaconn-area">
+      <div class="justify-content-center">
         {% render_table table %}
       </div>
     {% else %}
-      <p class="text-center">{% blocktrans %}In this page you will find the available Athena connections to
-    access data stored in external relational databases. The connections can only
-      be created by the system administrator.{% endblocktrans %}</p>
+      {% if is_athena %}
+        <p class="text-center">{% blocktrans %}In this page you will find the available Athena connections to
+      access data stored in external relational databases. The connections can only
+        be created by the system administrator.{% endblocktrans %}</p>
+      {% endif %}
+      {% if is_sql %}
+        <p class="text-center">{% blocktrans %}In this page you will find the available SQL connections to
+      access data stored in external relational databases. The connections can only
+        be created by the system administrator.{% endblocktrans %}</p>
+      {% endif %}
     {% endif %}
   </div>
   {% include 'modal.html' %}
 {% endblock container %}
-
-
-
 

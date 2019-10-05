@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
 """Amazon Athena Connection model."""
-from typing import Mapping
+from typing import Dict
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from fernet_fields import EncryptedCharField
 
+from ontask.models.connection import Connection
 from ontask.models.logs import Log
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.const import CHAR_FIELD_MID_SIZE
 
 
-class AthenaConnection(models.Model):
-    """Model representing a connection to an Amazon Athena data reposltory.
+class AthenaConnection(Connection):
+    """Model representing a connection to an Amazon Athena data repository.
 
     @DynamicAttrs
 
@@ -37,20 +38,6 @@ class AthenaConnection(models.Model):
     No table name is stored to leave the possibility of choosing it at load
     time.
     """
-
-    # Connection name
-    name = models.CharField(
-        verbose_name=_('Name'),
-        max_length=CHAR_FIELD_LONG_SIZE,
-        blank=False,
-        unique=True)
-
-    # Description
-    description_text = models.CharField(
-        verbose_name=_('Description'),
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True)
 
     # Access key
     aws_access_key = models.CharField(
@@ -102,9 +89,24 @@ class AthenaConnection(models.Model):
         blank=True,
         help_text=_('Leave blank to provide at execution'))
 
-    def __str__(self):
-        """Render with name field."""
-        return self.name
+    clone_event = Log.ATHENA_CONNECTION_CLONE
+    create_event = Log.ATHENA_CONNECTION_CREATE
+    delete_event = Log.ATHENA_CONNECTION_DELETE
+    edit_event = Log.ATHENA_CONNECTION_EDIT
+
+    @classmethod
+    def get(cls, pk):
+        """Get the object with the given PK."""
+        return AthenaConnection.objects.get(pk=pk)
+
+    def get_display_dict(self) -> Dict:
+        """Create dictionary with (verbose_name, value)"""
+        d_dict = super().get_display_dict()
+        remove_title = self._meta.get_field(
+            'aws_secret_access_key').verbose_name.title()
+        if remove_title in d_dict:
+            d_dict[remove_title] = _('REMOVED')
+        return d_dict
 
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""
@@ -119,8 +121,3 @@ class AthenaConnection(models.Model):
 
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, None, payload)
-
-    class Meta:
-        """Define the criteria for ordering."""
-
-        ordering = ['name']

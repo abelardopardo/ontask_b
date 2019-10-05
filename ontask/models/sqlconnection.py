@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """SQL Connection model."""
+from typing import Dict
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from fernet_fields import EncryptedCharField
 
+from ontask.models.connection import Connection
 from ontask.models.logs import Log
 from ontask.models.const import CHAR_FIELD_LONG_SIZE
 
 
-class SQLConnection(models.Model):
+class SQLConnection(Connection):
     """Model representing a SQL connection with SQLAlchemy.
 
     @DynamicAttrs
@@ -26,20 +28,6 @@ class SQLConnection(models.Model):
     db_name
     db_table
     """
-
-    # Connection name
-    name = models.CharField(
-        verbose_name=_('Name'),
-        max_length=CHAR_FIELD_LONG_SIZE,
-        blank=False,
-        unique=True)
-
-    # Description
-    description_text = models.CharField(
-        verbose_name=_('Description'),
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True)
 
     # Connection type: postgresql, mysql, etc.
     conn_type = models.CharField(
@@ -65,11 +53,13 @@ class SQLConnection(models.Model):
 
     # db_password is required (will be asked in run time, but not stored here)
     db_password = EncryptedCharField(
-        default=False,
+        default='',
         max_length=CHAR_FIELD_LONG_SIZE,
-        verbose_name=_('Password (leave empty to enter at execution)'),
+        verbose_name=_('Password'),
         null=True,
-        blank=True)
+        blank=True,
+        help_text=_('Leave empty to enter at execution')
+    )
 
     # DB host
     db_host = models.CharField(
@@ -99,11 +89,25 @@ class SQLConnection(models.Model):
         null=True,
         blank=True)
 
-    def __str__(self):
-        """Render with name field."""
-        return self.name
+    clone_event = Log.SQL_CONNECTION_CLONE
+    create_event = Log.SQL_CONNECTION_CREATE
+    delete_event = Log.SQL_CONNECTION_DELETE
+    edit_event = Log.SQL_CONNECTION_EDIT
 
-    def log(self, user, operation_type: str, **kwargs):
+    @classmethod
+    def get(cls, pk):
+        """Get the object with the given PK."""
+        return SQLConnection.objects.get(pk=pk)
+
+    def get_display_dict(self) -> Dict:
+        """Create dictionary with (verbose_name, value)"""
+        d_dict = super().get_display_dict()
+        remove_title = self._meta.get_field('db_password').verbose_name.title()
+        if remove_title in d_dict:
+            d_dict[remove_title] = _('REMOVED')
+        return d_dict
+
+    def log(self, user, operation_type: str, **kwargs) -> int:
         """Log the operation with the object."""
         payload = {
             'id': self.id,
@@ -120,8 +124,3 @@ class SQLConnection(models.Model):
 
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, None, payload)
-
-    class Meta:
-        """Define the criteria for ordering."""
-
-        ordering = ['name']

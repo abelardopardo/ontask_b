@@ -180,7 +180,7 @@ class ScreenTestFixture(ScreenTests):
 
         # click in the edit element
         self.selenium.find_element_by_xpath(
-            "//table[@id='conn-admin-table']"
+            "//table[@id='connection-admin-table']"
             "//tr/td[1][normalize-space() = 'remote server']"
         ).click()
         self.wait_for_modal_open()
@@ -209,7 +209,7 @@ class ScreenTestFixture(ScreenTests):
 
         # click in the edit element
         self.selenium.find_element_by_xpath(
-            "//table[@id='conn-admin-table']"
+            "//table[@id='connection-admin-table']"
             "//tr/td[1][normalize-space() = 'athena connection']"
         ).click()
         self.wait_for_modal_open()

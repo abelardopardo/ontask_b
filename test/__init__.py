@@ -694,7 +694,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             '//*[@id="ontask-base-admin"]',
             'SQL Connections')
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'conn-admin-table'))
+            EC.presence_of_element_located((By.ID, 'connection-admin-table'))
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
@@ -706,7 +706,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             '//*[@id="ontask-base-admin"]',
             'Athena Connections')
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'conn-admin-table'))
+            EC.presence_of_element_located((By.ID, 'connection-admin-table'))
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
@@ -796,13 +796,13 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def go_to_athena_upload_merge(self):
         self.go_to_upload_merge()
 
-        # Goto SQL option
+        # Goto Athena option
         self.selenium.find_element_by_xpath(
             '//table[@id="dataops-table"]//a[normalize-space()="Athena '
             'Connection"]').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, '//div[@id = "athena-connections"]')
+                (By.XPATH, '//div[@id = "connection-instructor"]')
             )
         )
 

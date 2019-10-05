@@ -11,9 +11,10 @@ from ontask.models.oauth import OAuthUserToken
 from ontask.models.plugin import Plugin
 from ontask.models.profiles import Profile
 from ontask.models.scheduler import ScheduledAction
-from ontask.models.sqlconnection import SQLConnection
 from ontask.models.user import OnTaskUser
 from ontask.models.view import View
 from ontask.models.workflow import Workflow
 from ontask.models.rubriccell import RubricCell
+from ontask.models.connection import Connection
+from ontask.models.sqlconnection import SQLConnection
 from ontask.models.athenaconnection import AthenaConnection

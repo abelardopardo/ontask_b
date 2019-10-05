@@ -1,0 +1,15 @@
+{% load i18n %}
+<button type="button" class="btn btn-sm btn-light js-connection-view"
+        data-url="{{ view_url }}" data-toggle="tooltip"
+        title="{% trans 'View details' %}">
+  <span class="fa fa fa-eye"></span></button>
+<button type="button" class="btn btn-sm btn-light js-connection-clone"
+        data-url="{{ clone_url }}" data-toggle="tooltip"
+        data-toggle="tooltip"
+        title="{% trans 'Create an exact duplicate' %}">
+  <span class="fa fa fa-clone"></span></button>
+<button type="button" class="btn btn-sm btn-light js-connection-delete"
+        data-url="{{ delete_url }}" data-toggle="tooltip"
+        data-toggle="tooltip"
+        title="{% trans 'Delete' %}">
+  <span class="fa fa-trash"></span></button>

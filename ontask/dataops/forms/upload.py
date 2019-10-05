@@ -380,7 +380,7 @@ class SQLConnectionForm(ConnectionForm):
 
         return form_data
 
-    class Meta:
+    class Meta(ConnectionForm):
         """Define the model and the fields to manipulate."""
 
         model = SQLConnection
@@ -443,7 +443,7 @@ class AthenaConnectionForm(ConnectionForm):
 
         return form_data
 
-    class Meta:
+    class Meta(ConnectionForm):
         """Define the model and the fields to manipulate."""
 
         model = AthenaConnection
