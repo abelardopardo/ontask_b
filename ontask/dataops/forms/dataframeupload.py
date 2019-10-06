@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Upload DataFrames from Files."""
-from typing import Optional
+from typing import Optional, Dict
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 import pandas as pd
@@ -236,8 +236,7 @@ def load_df_from_googlesheet(
 
 def load_df_from_sqlconnection(
     conn_item: SQLConnection,
-    password: Optional[str] = None,
-    db_table: Optional[str] = None,
+    run_params: Dict,
 ) -> pd.DataFrame:
     """Load a DF from a SQL connection.
 
@@ -252,12 +251,12 @@ def load_df_from_sqlconnection(
         conn_item.conn_type,
         conn_item.conn_driver,
         conn_item.db_user,
-        password,
+        run_params['password'],
         conn_item.db_host,
         conn_item.db_name)
 
     # Try to fetch the data
-    data_frame = pd.read_sql_table(db_table, db_engine)
+    data_frame = pd.read_sql_table(run_params['db_table'], db_engine)
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
@@ -266,16 +265,21 @@ def load_df_from_sqlconnection(
 
 def load_df_from_athenaconnection(
     conn_item: AthenaConnection,
-    aws_secret_access_key: Optional[str] = None,
-    table_name: Optional[str] = None,
+    run_params: Dict,
 ) -> pd.DataFrame:
     """Load a DF from an Athena connection.
+
+    run_params has:
+    aws_secret_access_key: Optional[str] = None,
+    aws_session_token: Optional[str] = None,
+    table_name: Optional[str] = None
 
     from pyathena import connect
     from pyathena.pandas_cursor import PandasCursor
 
     cursor = connect(aws_access_key_id='YOUR_ACCESS_KEY_ID',
                aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
+               aws_session_token='YOUR_SESSION_TOKEN',
                s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
                region_name='us-west-2',
                cursor_class=PandasCursor).cursor()

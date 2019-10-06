@@ -50,7 +50,7 @@ def sqlupload_start(
         return redirect('dataops:sqlconns_instructor_index_instructor_index')
 
     form = None
-    missing_field = not conn.db_password or not conn.db_table
+    missing_field = conn.has_missing_fields()
     if missing_field:
         # The connection needs a password  to operate
         form = SQLRequestConnectionParam(request.POST or None, instance=conn)
@@ -72,19 +72,11 @@ def sqlupload_start(
         'db_table': conn.db_table}
 
     if request.method == 'POST' and (not missing_field or form.is_valid()):
-        password = conn.db_password
-        table_name = conn.db_table
-        if not password:
-            password = form.cleaned_data['password']
-        if not table_name:
-            table_name = form.cleaned_data['table_name']
+        run_params = conn.get_missing_fields(form.cleaned_data)
 
         # Process SQL connection using pandas
         try:
-            data_frame = load_df_from_sqlconnection(
-                conn,
-                password,
-                table_name)
+            data_frame = load_df_from_sqlconnection(conn, run_params)
             # Verify the data frame
             verify_data_frame(data_frame)
         except OnTaskDataFrameNoKey as exc:

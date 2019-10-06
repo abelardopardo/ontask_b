@@ -30,6 +30,8 @@ class Connection(models.Model):
         default='',
         blank=True)
 
+    optional_fields = []
+
     @classmethod
     def get(cls, pk):
         """Get the object with the given PK. Must be overwritten."""
@@ -38,6 +40,21 @@ class Connection(models.Model):
     def __str__(self):
         """Render with name field."""
         return self.name
+
+    def has_missing_fields(self) -> bool:
+        """Check if the connection has any parameter missing"""
+        return any(
+            not bool(getattr(self, field_name))
+            for field_name in self.optional_fields)
+
+    def get_missing_fields(self, form_values: Dict) -> Dict:
+        """Get the missing fields from the given form"""
+        to_return = {}
+        for fname in self.optional_fields:
+            to_return[fname] = getattr(self, fname)
+            if not to_return[fname]:
+                to_return[fname] = form_values[fname]
+        return to_return
 
     def get_display_dict(self) -> Dict:
         """Create dictionary with (verbose_name, value)"""
@@ -49,9 +66,12 @@ class Connection(models.Model):
 
     def log(self, user, operation_type: str, **kwargs) -> int:
         """Function to register an event."""
-        payload = {}
-        payload.upate(kwargs)
-        return Log.objects.register(self, user, operation_type, None, payload)
+        return Log.objects.register(
+            self,
+            user,
+            operation_type,
+            None,
+            kwargs)
 
     class Meta:
         """Define as abstract and the ordering criteria."""

@@ -3,9 +3,11 @@
 """Basic functions and definitions used all over the platform."""
 
 import json
+from typing import Optional
 
 import django.conf
 import pytz
+from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
@@ -24,7 +26,7 @@ __version__ = 'B.6.0.1'
 app_config = 'ontask.apps.ActionConfig'
 
 
-def is_legal_name(val):
+def is_legal_name(val: str) -> Optional[str]:
     """Check if a string is a valid column, attribute or condition name.
 
     These are the characters that have been found to be problematic with
@@ -59,12 +61,13 @@ def is_legal_name(val):
     return None
 
 
-def entity_prefix():
+def entity_prefix() -> str:
     """Return the prefix to use when cloning objects."""
     return _('Copy of ')
 
 
-def is_correct_email(email_txt):
+def is_correct_email(email_txt: str) -> bool:
+    """Check if string is a correct email address"""
     try:
         validate_email(email_txt)
     except (ValueError, AttributeError):
@@ -73,7 +76,10 @@ def is_correct_email(email_txt):
     return True
 
 
-def simplify_datetime_str(dtime):
+def simplify_datetime_str(dtime: datetime) -> str:
+    """Transform datetime object into string"""
+    if dtime is None:
+        return ''
     return dtime.astimezone(
         pytz.timezone(django.conf.settings.TIME_ZONE)
     ).strftime('%Y-%m-%d %H:%M:%S %z')
@@ -105,6 +111,7 @@ class OnTaskDBIdentifier(sql.Identifier):
 
 
 class OnTaskSharedState:
+    """Global dictionary"""
     __shared_state = {}
 
     def __init__(self):
@@ -112,9 +119,7 @@ class OnTaskSharedState:
 
 
 class OnTaskException(Exception):
-    """
-    Generic class in OnTask for our own exception
-    """
+    """Generic class in OnTask for exceptions"""
 
     def __init__(self, msg, value=0):
         self.msg = msg
