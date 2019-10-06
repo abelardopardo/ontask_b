@@ -16,6 +16,8 @@
 
 - Revamped the logs created by the platform so that they have a uniform structure
 
+- Revamped how data connections are administered and added an enable/disable switch
+
 ### Fixed
 
 - Scheduled action editing now remembers those items selected for exclusion

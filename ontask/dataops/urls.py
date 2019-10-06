@@ -101,6 +101,11 @@ urlpatterns = [
         views.sqlupload_start,
         name='sqlupload_start'),
 
+    path(
+        '<int:pk>/sqlconn_toggle/',
+        views.sqlconn_toggle,
+        name='sqlconn_toggle'),
+
     # Athena Connections
     path(
         'athenaconns_admin',
@@ -141,4 +146,9 @@ urlpatterns = [
         '<int:pk>/athenaupload_start/',
         views.athenaupload_start,
         name='athenaupload_start'),
+
+    path(
+        '<int:pk>/athenaconn_toggle/',
+        views.athenaconn_toggle,
+        name='athenaconn_toggle'),
 ]

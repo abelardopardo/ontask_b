@@ -43,8 +43,8 @@ def uploadmerge(
         'dataops/uploadmerge.html',
         {
             'valuerange': range(5) if workflow.has_table() else range(3),
-            'sql_enabled': SQLConnection.objects.count() > 0,
-            'athena_enabled': AthenaConnection.objects.count() > 0})
+            'sql_enabled': SQLConnection.objects.filter(enabled=True).count() > 0,
+            'athena_enabled': AthenaConnection.objects.filter(enabled=True).count() > 0})
 
 
 @user_passes_test(is_instructor)

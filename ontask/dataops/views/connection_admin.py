@@ -4,6 +4,7 @@
 
 from typing import Optional, Type
 
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -20,18 +21,20 @@ from ontask.core.tables import OperationsColumn
 from ontask.dataops.forms import (
     AthenaConnectionForm, ConnectionForm, SQLConnectionForm,
 )
-from ontask.models import AthenaConnection, SQLConnection, Connection
+from ontask.models import AthenaConnection, Connection, SQLConnection
 from ontask.workflow.access import remove_workflow_from_session
 
 
 class ConnectionTableAdmin(tables.Table):
     """Base class for those used to render connection admin items."""
 
+    enabled = tables.BooleanColumn(verbose_name=_('Enabled?'))
+
     class Meta:
         """Define model, fields, sequence and attributes."""
 
-        fields = ('name', 'description_text')
-        sequence = ('name', 'description_text', 'operations')
+        fields = ('name', 'description_text', 'enabled')
+        sequence = ('name', 'description_text', 'enabled', 'operations')
         attrs = {
             'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
@@ -50,6 +53,17 @@ class SQLConnectionTableAdmin(ConnectionTableAdmin):
             record['name'],
         )
 
+    def render_enabled(self, record):
+        """Render the boolean to allow changes."""
+        return render_to_string(
+            'dataops/includes/partial_connection_enable.html',
+            {
+                'id': record['id'],
+                'enabled': record['enabled'],
+                'toggle_url': reverse(
+                    'dataops:sqlconn_toggle',
+                    kwargs={'pk': record['id']})})
+
     class Meta(ConnectionTableAdmin.Meta):
         """Define model."""
         model = SQLConnection
@@ -65,6 +79,17 @@ class AthenaConnectionTableAdmin(ConnectionTableAdmin):
             reverse('dataops:athenaconn_edit', kwargs={'pk': record['id']}),
             record['name'],
         )
+
+    def render_enabled(self, record):
+        """Render the boolean to allow changes."""
+        return render_to_string(
+            'dataops/includes/partial_connection_enable.html',
+            {
+                'id': record['id'],
+                'enabled': record['enabled'],
+                'toggle_url': reverse(
+                    'dataops:athenaconn_toggle',
+                    kwargs={'pk': record['id']})})
 
     class Meta(ConnectionTableAdmin.Meta):
         """Define model, fields, sequence and attributes."""
@@ -172,6 +197,23 @@ def _do_delete(
             request=request),
     })
 
+def _do_toggle(
+    request: HttpRequest,
+    conn: Type[Connection],
+    toggle_url: str,
+) -> JsonResponse:
+    """Toggle the enable field in the given connection."""
+    if not conn:
+        messages.error(
+            request,
+            _('Incorrect invocation of toggle question change function.'))
+        return JsonResponse({}, status=404)
+
+    conn.enabled = not conn.enabled
+    conn.save()
+    conn.log(request.user, conn.toggle_event, enabled=conn.enabled)
+    return JsonResponse({'is_checked': conn.enabled, 'toggle_url': toggle_url})
+
 
 @user_passes_test(is_admin)
 def sql_connection_admin_index(request: HttpRequest) -> HttpResponse:
@@ -198,7 +240,11 @@ def sql_connection_admin_index(request: HttpRequest) -> HttpResponse:
                 'dataops:sqlconn_delete',
                 kwargs={'pk': record['id']})})
     table = SQLConnectionTableAdmin(
-        SQLConnection.objects.values('id', 'name', 'description_text'),
+        SQLConnection.objects.values(
+            'id',
+            'name',
+            'description_text',
+            'enabled'),
         orderable=False,
         extra_columns=[(
             'operations', op_column)])
@@ -237,7 +283,11 @@ def athena_connection_admin_index(request: HttpRequest) -> HttpResponse:
                 'dataops:athenaconn_delete',
                 kwargs={'pk': record['id']})})
     table = AthenaConnectionTableAdmin(
-        AthenaConnection.objects.values('id', 'name', 'description_text'),
+        AthenaConnection.objects.values(
+            'id',
+            'name',
+            'description_text',
+            'enabled'),
         orderable=False,
         extra_columns=[('operations', op_column)])
 
@@ -455,3 +505,43 @@ def athena_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
         request,
         conn,
         reverse('dataops:athenaconn_delete', kwargs={'pk': conn.id}))
+
+
+@user_passes_test(is_instructor)
+@ajax_required
+def sqlconn_toggle(
+    request: HttpRequest,
+    pk: int,
+) -> JsonResponse:
+    """Enable/Disable an SQL connection
+
+    :param request: Request object
+    :param pk: Connection PK
+    :return: HTML response
+    """
+    # Check if the workflow is locked
+    conn = SQLConnection.objects.filter(pk=pk).first()
+    return _do_toggle(
+        request,
+        conn,
+        reverse('dataops:sqlconn_toggle', kwargs={'pk': conn.id}))
+
+
+@user_passes_test(is_instructor)
+@ajax_required
+def athenaconn_toggle(
+    request: HttpRequest,
+    pk: int,
+) -> JsonResponse:
+    """Enable/Disable an Athena connection
+
+    :param request: Request object
+    :param pk: Connection PK
+    :return: HTML response
+    """
+    # Check if the workflow is locked
+    conn = AthenaConnection.objects.filter(pk=pk).first()
+    return _do_toggle(
+        request,
+        conn,
+        reverse('dataops:athenaconn_toggle', kwargs={'pk': conn.id}))

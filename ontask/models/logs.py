@@ -63,6 +63,7 @@ class Log(models.Model):
     ATHENA_CONNECTION_EDIT = 'athena_connection_edit'
     ATHENA_CONNECTION_DELETE = 'athena_connection_delete'
     ATHENA_CONNECTION_CLONE = 'athena_connection_clone'
+    ATHENA_CONNECTION_TOGGLE = 'athena_connection_toggle'
     COLUMN_ADD = 'column_add'
     COLUMN_ADD_FORMULA = 'column_add_formula'
     COLUMN_ADD_RANDOM = 'column_add_random'
@@ -88,10 +89,11 @@ class Log(models.Model):
     SCHEDULE_CANVAS_EMAIL_DELETE = 'schedule_canvas_email_delete'
     SCHEDULE_JSON_EDIT = 'schedule_json_edit'
     SCHEDULE_JSON_DELETE = 'schedule_json_delete'
-    SQL_CONNECTION_CREATE = 'sql_connection_create'
-    SQL_CONNECTION_EDIT = 'sql_connection_edit'
-    SQL_CONNECTION_DELETE = 'sql_connection_delete'
     SQL_CONNECTION_CLONE = 'sql_connection_clone'
+    SQL_CONNECTION_CREATE = 'sql_connection_create'
+    SQL_CONNECTION_DELETE = 'sql_connection_delete'
+    SQL_CONNECTION_EDIT = 'sql_connection_edit'
+    SQL_CONNECTION_TOGGLE = 'sql_connection_toggle'
     VIEW_CLONE = 'view_clone'
     VIEW_CREATE = 'view_create'
     VIEW_DELETE = 'view_delete'
@@ -147,6 +149,7 @@ class Log(models.Model):
         (ATHENA_CONNECTION_CREATE, _('Athena connection created')),
         (ATHENA_CONNECTION_DELETE, _('Athena connection deleted')),
         (ATHENA_CONNECTION_EDIT, _('Athena connection updated')),
+        (ATHENA_CONNECTION_TOGGLE, _('SQL connection toggled')),
         (COLUMN_ADD, _('Column added')),
         (COLUMN_ADD_FORMULA, _('Column with formula created')),
         (COLUMN_ADD_RANDOM, _('Column with random values created')),
@@ -174,10 +177,11 @@ class Log(models.Model):
         (SCHEDULE_JSON_LIST_DELETE, _('Delete scheduled JSON list action')),
         (SCHEDULE_SEND_LIST_EDIT, _('Edit scheduled send list action')),
         (SCHEDULE_SEND_LIST_DELETE, _('Delete scheduled send list action')),
-        (SQL_CONNECTION_CREATE, _('SQL connection created')),
-        (SQL_CONNECTION_EDIT, _('SQL connection updated')),
-        (SQL_CONNECTION_DELETE, _('SQL connection deleted')),
         (SQL_CONNECTION_CLONE, _('SQL connection cloned')),
+        (SQL_CONNECTION_CREATE, _('SQL connection created')),
+        (SQL_CONNECTION_DELETE, _('SQL connection deleted')),
+        (SQL_CONNECTION_EDIT, _('SQL connection updated')),
+        (SQL_CONNECTION_TOGGLE, _('SQL connection toggled')),
         (VIEW_CREATE, _('Table view created')),
         (VIEW_EDIT, _('Table view edited')),
         (VIEW_DELETE, _('Table view deleted')),

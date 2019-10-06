@@ -219,6 +219,9 @@ $(function () {
   // Toggle shuffle question
   $("#action-in-editor").on("change", "#toggle-checkbox", toggleCheckBox);
 
+  // Changes allowed in quewtion
+  $("#action-in-editor").on("change", ".toggle-checkbox", toggleCheckBox);
+
   // Show stats
   $("#column-stat-selector").on("click", ".js-show-stats", loadForm);
   $("#rubric").on("click", ".js-show-stats", loadForm);

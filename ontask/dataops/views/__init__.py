@@ -15,7 +15,8 @@ from ontask.dataops.views.connection_admin import (
     sql_connection_view, athena_connection_view,
     sql_connection_edit, athena_connection_edit,
     sql_connection_clone, athena_connection_clone,
-    sql_connection_delete, athena_connection_delete)
+    sql_connection_delete, athena_connection_delete,
+    sqlconn_toggle, athenaconn_toggle)
 from ontask.dataops.views.connection_instructor import (
     sql_connection_instructor_index, athena_connection_instructor_index)
 from ontask.dataops.views.sqlupload import sqlupload_start

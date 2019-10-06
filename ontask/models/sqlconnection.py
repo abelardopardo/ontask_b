@@ -93,6 +93,7 @@ class SQLConnection(Connection):
     create_event = Log.SQL_CONNECTION_CREATE
     delete_event = Log.SQL_CONNECTION_DELETE
     edit_event = Log.SQL_CONNECTION_EDIT
+    toggle_event = Log.SQL_CONNECTION_TOGGLE
 
     @classmethod
     def get(cls, pk):

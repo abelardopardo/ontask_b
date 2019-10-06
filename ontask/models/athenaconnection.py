@@ -103,6 +103,7 @@ class AthenaConnection(Connection):
     create_event = Log.ATHENA_CONNECTION_CREATE
     delete_event = Log.ATHENA_CONNECTION_DELETE
     edit_event = Log.ATHENA_CONNECTION_EDIT
+    toggle_event = Log.ATHENA_CONNECTION_TOGGLE
 
     optional_fields = [
         'aws_secret_access_key',

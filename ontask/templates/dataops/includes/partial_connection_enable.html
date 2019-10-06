@@ -1,9 +1,9 @@
 {% load i18n %}
 <small>
   <input class="toggle-checkbox"
-         {% if changes_allowed %}checked{% endif %}
+         {% if enabled %}checked{% endif %}
          data-toggle="toggle"
-         data-url="{% url 'action:toggle_question_change' id %}"
+         data-url="{{ toggle_url }}"
          type="checkbox"/>
 </small>
 

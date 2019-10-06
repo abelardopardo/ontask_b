@@ -30,6 +30,14 @@ class Connection(models.Model):
         default='',
         blank=True)
 
+    # Boolean that enables the use of this connection to other users.
+    enabled = models.BooleanField(
+        default=False,
+        verbose_name=_('Available to users?'),
+        null=False,
+        blank=False,
+    )
+
     optional_fields = []
 
     @classmethod

@@ -45,7 +45,9 @@ def sqlupload_start(
     :param pk: primary key of the SQL conn used
     :return: Creates the upload_data dictionary in the session
     """
-    conn = SQLConnection.objects.filter(pk=pk).first()
+    conn = SQLConnection.objects.filter(
+        pk=pk
+    ).filter(enabled=True).first()
     if not conn:
         return redirect('dataops:sqlconns_instructor_index_instructor_index')
 

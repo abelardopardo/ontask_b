@@ -55,6 +55,8 @@ $(function () {
 
   // Toggle plugin is_enabled
   $("#plugin-admin-table").on("change", ".plugin-toggle", toggleCheckBox);
+  // Toggle enable connections
+  $("#connection-admin-table").on("change", ".toggle-checkbox", toggleCheckBox);
 });
 
 window.onload = function(){

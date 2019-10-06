@@ -46,7 +46,9 @@ def athenaupload_start(
     :param pk: primary key of the Athena conn used
     :return: Creates the upload_data dictionary in the session
     """
-    conn = AthenaConnection.objects.filter(pk=pk).first()
+    conn = AthenaConnection.objects.filter(
+        pk=pk
+    ).filter(enabled=True).first()
     if not conn:
         return redirect(
             'dataops:athenaconns_instructor_index_instructor_index')

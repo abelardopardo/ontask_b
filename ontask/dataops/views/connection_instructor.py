@@ -87,7 +87,7 @@ def sql_connection_instructor_index(
                 'dataops:sqlupload_start',
                 kwargs={'pk': record['id']})})
     table = SQLConnectionTableRun(
-        SQLConnection.objects.values(
+        SQLConnection.objects.filter(enabled=True).values(
             'id',
             'name',
             'description_text'),
@@ -125,7 +125,7 @@ def athena_connection_instructor_index(
                 'dataops:athenaupload_start',
                 kwargs={'pk': record['id']})})
     table = AthenaConnectionTableRun(
-        AthenaConnection.objects.values(
+        AthenaConnection.objects.filter(enabled=True).values(
             'id',
             'name',
             'description_text'),
