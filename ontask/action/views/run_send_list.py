@@ -52,12 +52,11 @@ def run_send_list_action(
         log_item = action.log(
             req.user,
             Log.ACTION_RUN_SEND_LIST,
-            **{
-                'from_email': req.user.email,
-                'recipient_email': action_info['email_to'] ,
-                'subject': action_info['subject'],
-                'cc_email': action_info['cc_email'],
-                'bcc_email': action_info['bcc_email']})
+            from_email=req.user.email,
+            recipient_email=action_info['email_to'] ,
+            subject=action_info['subject'],
+            cc_email=action_info['cc_email'],
+            bcc_email=action_info['bcc_email'])
 
         # Send the emails!
         run_task.delay(req.user.id, log_item.id, action_info.get_store())

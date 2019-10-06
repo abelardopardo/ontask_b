@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Classes and functions to show connections to regular users."""
+from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
@@ -10,9 +11,10 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext as _
 import django_tables2 as tables
 
+from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
-from ontask.models import AthenaConnection, SQLConnection
+from ontask.models import AthenaConnection, SQLConnection, Workflow
 
 
 class ConnectionTableRun(tables.Table):
@@ -64,13 +66,18 @@ class SQLConnectionTableRun(ConnectionTableRun):
 
 
 @user_passes_test(is_instructor)
-def sql_connection_instructor_index(request: HttpRequest) -> HttpResponse:
+@get_workflow()
+def sql_connection_instructor_index(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
     """Render a page showing a table with the available SQL connections.
 
     :param request: HTML request
 
     :return: HTML response
     """
+    del workflow
     operation_column = OperationsColumn(
         verbose_name='',
         template_file='dataops/includes/partial_connection_run.html',
@@ -97,13 +104,18 @@ def sql_connection_instructor_index(request: HttpRequest) -> HttpResponse:
 
 
 @user_passes_test(is_instructor)
-def athena_connection_instructor_index(request: HttpRequest) -> HttpResponse:
+@get_workflow()
+def athena_connection_instructor_index(
+    request: HttpRequest,
+    workflow: Optional[Workflow],
+) -> HttpResponse:
     """Render a page showing a table with the available Athena connections.
 
     :param request: HTML request
 
     :return: HTML response
     """
+    del workflow
     operation_column = OperationsColumn(
         verbose_name='',
         template_file='dataops/includes/partial_athenaconn_runop.html',

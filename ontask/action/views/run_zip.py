@@ -120,13 +120,11 @@ def run_zip_done(
     action.log(
         request.user,
         Log.ACTION_DOWNLOAD,
-        **{
-            'user_fname_column': action_info['user_fname_column'],
-            'item_column': action_info['item_column'],
-            'file_suffix': action_info['file_suffix'],
-            'zip_for_moodle': action_info['zip_for_moodle'],
-            'exclude_values': action_info['exclude_values'],
-        })
+        user_fname_column=action_info['user_fname_column'],
+        item_column=action_info['item_column'],
+        file_suffix=action_info['file_suffix'],
+        zip_for_moodle=action_info['zip_for_moodle'],
+        exclude_values=action_info['exclude_values'])
 
     # Store the payload in the session for the download part
     set_action_payload(request.session, action_info.get_store())

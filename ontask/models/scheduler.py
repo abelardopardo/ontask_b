@@ -9,6 +9,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import simplify_datetime_str
 from ontask.models import Column
 from ontask.models.action import Action
 from ontask.models.const import CHAR_FIELD_LONG_SIZE
@@ -128,15 +129,12 @@ class ScheduledAction(models.Model):
             'name': self.name,
             'action': self.action.name,
             'action_id': self.action.id,
-            'execute': self.execute,
-            'execute_until': self.execute_until,
+            'execute': simplify_datetime_str(self.execute),
+            'execute_until': simplify_datetime_str(self.execute_until),
             'item_column': self.item_column.name,
             'status': self.status,
             'exclude_values': self.exclude_values,
             'payload': json.dumps(self.payload)}
-
-        if self.text_content:
-            payload['content'] = self.text_content
 
         payload.update(kwargs)
         return Log.objects.register(

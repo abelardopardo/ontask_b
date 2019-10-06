@@ -789,7 +789,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             'Connection"]').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, '//div[@id = "sql-connections"]')
+                (By.XPATH, '//div[@id = "connection-instructor"]')
             )
         )
 

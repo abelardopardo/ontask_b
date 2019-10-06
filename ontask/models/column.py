@@ -269,9 +269,6 @@ class Column(models.Model):
             'active_to': self.active_to,
             'workflow_id': self.workflow.id}
 
-        if self.text_content:
-            payload['content'] = self.text_content
-
         payload.update(kwargs)
         return Log.objects.register(
             user,

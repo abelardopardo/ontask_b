@@ -217,9 +217,6 @@ def _create_messages(
     """
     # Context to log the events (one per email)
     context = {
-        'user': user.id,
-        'action': action.id,
-        'action_name': action.name,
         'email_sent_datetime': str(
             datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
         ),
@@ -267,7 +264,7 @@ def _create_messages(
         context['to_email'] = msg.to[0]
         if track_str:
             context['track_id'] = track_str
-        action.log(user, Log.ACTION_CANVAS_EMAIL_SENT, **context)
+        action.log(user, Log.ACTION_EMAIL_SENT, **context)
 
     return msgs
 
@@ -422,6 +419,6 @@ def send_list_email(
         'body': msg.body,
         'from_email': msg.from_email,
         'to_email': msg.to[0]}
-    action.log(user, Log.ACTION_CANVAS_EMAIL_SENT, **context)
+    action.log(user, Log.ACTION_EMAIL_SENT, **context)
 
     return []

@@ -122,16 +122,15 @@ def run_email_done(
     log_item = action.log(
         request.user,
         Log.ACTION_RUN_EMAIL,
-        **{
-            'from_email': request.user.email,
-            'subject': action_info['subject'],
-            'cc_email': action_info['cc_email'],
-            'bcc_email': action_info['bcc_email'],
-            'send_confirmation': action_info['send_confirmation'],
-            'track_read': action_info['track_read'],
-            'exported_workflow': action_info['export_wf'],
-            'exclude_values': action_info['exclude_values'],
-            'item_column': action_info['item_column']})
+        from_email=request.user.email,
+        subject=action_info['subject'],
+        cc_email=action_info['cc_email'],
+        bcc_email=action_info['bcc_email'],
+        send_confirmation=action_info['send_confirmation'],
+        track_read=action_info['track_read'],
+        exported_workflow=action_info['export_wf'],
+        exclude_values=action_info['exclude_values'],
+        item_column=action_info['item_column'])
 
     # Send the emails!
     run_task.delay(request.user.id, log_item.id, action_info.get_store())

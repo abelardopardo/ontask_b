@@ -1075,7 +1075,8 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         # Message show now appear
         # The action should NOT flag that a user has all conditions equal to
         # False
-        self.assertIn('user has all conditions equal to FALSE',
+        self.assertIn(
+            'user has all conditions equal to FALSE',
             self.selenium.page_source)
 
         # End of session

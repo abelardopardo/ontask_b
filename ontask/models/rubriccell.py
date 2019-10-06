@@ -79,9 +79,6 @@ class RubricCell(models.Model):
             'description': self.description_text,
             'feedback': self.feedback_text}
 
-        if self.text_content:
-            payload['content'] = self.text_content
-
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, None, payload)
 

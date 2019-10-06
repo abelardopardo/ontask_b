@@ -188,15 +188,12 @@ def run_canvas_email_done(
     log_item = action.log(
         request.user,
         Log.ACTION_RUN_CANVAS_EMAIL,
-        action.workflow,
-        **{
-            'from_email': request.user.email,
-            'subject': action_info['subject'],
-            'exclude_values': action_info['exclude_values'],
-            'item_column': action_info['item_column'],
-            'target_url': action_info['target_url'],
-            'status': 'Preparing to execute',
-        })
+        from_email=request.user.email,
+        subject=action_info['subject'],
+        exclude_values=action_info['exclude_values'],
+        item_column=action_info['item_column'],
+        target_url=action_info['target_url'],
+        status='Preparing to execute')
 
     # Send the emails!
     run_task.delay(request.user.id, log_item.id, action_info.get_store())

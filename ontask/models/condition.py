@@ -140,16 +140,13 @@ class Condition(models.Model):
             'formula': self.get_formula_text(),
             'n_rows_selected': self.n_rows_selected,
             'is_filter': self.is_filter,
-            'workflow_id': self.workflow.id}
-
-        if self.text_content:
-            payload['content'] = self.text_content
+            'workflow_id': self.action.workflow.id}
 
         payload.update(kwargs)
         return Log.objects.register(
             user,
             operation_type,
-            self.workflow,
+            self.action.workflow,
             payload)
 
     class Meta:

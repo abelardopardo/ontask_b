@@ -187,7 +187,7 @@ def column_add(
 
         # If the column is a question, add it to the action
         if is_question:
-            acc = ActionColumnConditionTuple.objects.get_or_create(
+            acc, __ = ActionColumnConditionTuple.objects.get_or_create(
                 action=action,
                 column=column,
                 condition=None)
@@ -197,7 +197,7 @@ def column_add(
             'column_type': column.data_type}
         # Log the event
         if is_question:
-            acc.log(request.user, Log.ACTION_QUESTION_ADD, context)
+            acc.log(request.user, Log.ACTION_QUESTION_ADD, **context)
         else:
             column.log(request.user, Log.COLUMN_ADD)
 

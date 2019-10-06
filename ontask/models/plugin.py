@@ -83,9 +83,6 @@ class Plugin(models.Model):
             'is_verified': self.is_verified,
             'enabled': self.is_enabled}
 
-        if self.text_content:
-            payload['content'] = self.text_content
-
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, None, payload)
 

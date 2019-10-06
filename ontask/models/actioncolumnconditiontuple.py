@@ -65,14 +65,18 @@ class ActionColumnConditionTuple(models.Model):
             'action_name': self.action.name,
             'action_type': self.action.action_type,
             'column_name': self.column.name,
-            'workflow_id': self.workflow.id,
+            'workflow_id': self.action.workflow.id,
             'changes_allowed': self.changes_allowed}
 
         if self.condition:
             payload['condition'] = self.condition.name
 
         payload.update(kwargs)
-        return Log.objects.register(user, operation_type, self.workflow, payload)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.action.workflow,
+            payload)
 
     class Meta:
         """Define uniqueness with name in workflow and order by name."""

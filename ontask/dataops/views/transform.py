@@ -256,11 +256,10 @@ def plugin_invoke(
         log_item = plugin_info.log(
             request.user,
             Log.PLUGIN_EXECUTE,
-            **{
-                'input_column_names': in_cols,
-                'output_column_names': out_cols,
-                'parameters': json.dumps(exec_params, default=str),
-                'status': 'preparing execution'})
+            input_column_names=in_cols,
+            output_column_names=out_cols,
+            parameters=json.dumps(exec_params, default=str),
+            status='preparing execution')
 
         run_plugin_task.apply_async(
             (

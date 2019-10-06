@@ -185,7 +185,7 @@ def sql_connection_admin_index(request: HttpRequest) -> HttpResponse:
 
     op_column = OperationsColumn(
         verbose_name='',
-        template_file='dataops/includes/partial_athenaconn_adminop.html',
+        template_file='dataops/includes/partial_connection_adminop.html',
         template_context=lambda record: {
             'id': record['id'],
             'view_url': reverse(
@@ -425,15 +425,14 @@ def sql_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
     :return: AJAX response to handle the form
     """
     conn = SQLConnection.objects.filter(pk=pk).first()
-    delete_url = reverse(
-        'dataops:deleteconn_clone',
-        kwargs={'pk': conn.id})
-
     if not conn:
         # The view is not there. Redirect to workflow detail
         return JsonResponse({'html_redirect': reverse('home')})
 
-    return _do_delete(request, conn, delete_url)
+    return _do_delete(
+        request,
+        conn,
+        reverse('dataops:sqlconn_delete', kwargs={'pk': conn.id}))
 
 
 @user_passes_test(is_admin)
@@ -448,12 +447,11 @@ def athena_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
     :return: AJAX response to handle the form
     """
     conn = AthenaConnection.objects.filter(pk=pk).first()
-    delete_url = reverse(
-        'dataops:athenaconn_delete',
-        kwargs={'pk': conn.id})
-
     if not conn:
         # The view is not there. Redirect to workflow detail
         return JsonResponse({'html_redirect': reverse('home')})
 
-    return _do_delete(request, conn, delete_url)
+    return _do_delete(
+        request,
+        conn,
+        reverse('dataops:athenaconn_delete', kwargs={'pk': conn.id}))
