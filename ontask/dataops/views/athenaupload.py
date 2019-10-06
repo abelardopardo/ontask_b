@@ -52,7 +52,7 @@ def athenaupload_start(
             'dataops:athenaconns_instructor_index_instructor_index')
 
     form = None
-    missing_field = not conn.aws_secret_access_key or not conn.table_name
+    missing_field = conn.has_missing_fields()
     if missing_field:
         # The connection needs a table (not given upon definition)
         form = AthenaRequestConnectionParam(
@@ -69,19 +69,12 @@ def athenaupload_start(
         'prev_step': reverse('dataops:athenaconns_instructor_index')}
 
     if request.method == 'POST' and (not missing_field or form.is_valid()):
-        aws_secret_access_key = conn.aws_secret_access_key
-        table_name = conn.table_name
-        if not aws_secret_access_key:
-            aws_secret_access_key = form.cleaned_data['aws_secret_access_key']
-        if not table_name:
-            table_name = form.cleaned_data['table_name']
+        run_params = conn.get_missing_fields(form.cleaned_data)
 
         # Process Athena connection using pandas
         try:
-            data_frame = load_df_from_athenaconnection(
-                conn,
-                aws_secret_access_key,
-                table_name)
+            data_frame = load_df_from_athenaconnection(conn, run_params)
+
             # Verify the data frame
             verify_data_frame(data_frame)
         except OnTaskDataFrameNoKey as exc:

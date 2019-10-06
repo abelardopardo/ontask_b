@@ -32,7 +32,7 @@ from ontask.dataops.forms.dataframeupload import (
 )
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask.models import AthenaConnection, SQLConnection
-from ontask.models.const import CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE
+from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
@@ -453,6 +453,7 @@ class AthenaConnectionForm(ConnectionForm):
             'description_text',
             'aws_access_key',
             'aws_secret_access_key',
+            'aws_session_token',
             'aws_bucket_name',
             'aws_file_path',
             'aws_region_name',
@@ -473,9 +474,15 @@ class AthenaRequestConnectionParam(forms.Form):
                 required=True,
                 help_text=_('Authentication for the connection'))
 
+        if not self.instance.aws_session_token:
+            self.fields['aws_session_token'] = forms.CharField(
+                max_length=CHAR_FIELD_LONG_SIZE,
+                required=False,
+                widget=forms.Textarea,
+                help_text=_('Authentication for the session'))
+
         if not self.instance.table_name:
             self.fields['table_name'] = forms.CharField(
                 max_length=CHAR_FIELD_MID_SIZE,
                 required=True,
                 help_text=_('Table to load'))
-
