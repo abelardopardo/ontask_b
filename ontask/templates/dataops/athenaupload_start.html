@@ -41,6 +41,7 @@
       <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
+        {% include 'dataops/merge_help.html' %}
         <div class="text-center">
           {% include 'dataops/includes/upload_buttons.html' %}
         </div>
