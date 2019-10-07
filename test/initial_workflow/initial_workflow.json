@@ -4077,6 +4077,7 @@
     "fields": {
         "name": "remote server",
         "description_text": "Server with student records",
+	"enabled": true,
         "conn_type": "mysql",
         "conn_driver": "",
         "db_user": "remote_db_user",
@@ -4374,6 +4375,7 @@
     "fields": {
         "name": "athena connection",
         "description_text": "Connection to amazon athena server",
+	"enabled": true,
         "aws_access_key": "[YOUR AWS ACCESS KEY HERE]",
         "aws_secret_access_key": "[YOUR AWS SECRET ACCESS KEY HERE]",
         "aws_bucket_name": "[S3 BUCKET NAME HERE]",
