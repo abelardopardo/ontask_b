@@ -16,6 +16,9 @@ from ontask.models.const import CHAR_FIELD_LONG_SIZE
 from ontask.models.logs import Log
 
 
+class ScheduledItem(models.Model):
+    """Abstract class for the scheduled models"""
+
 class ScheduledAction(models.Model):
     """Objects encoding the scheduling of a send email action.
 
