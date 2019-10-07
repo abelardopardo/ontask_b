@@ -188,7 +188,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_link_text('Import actions').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, '//input[@id="id_name"]')
+                (By.XPATH, '//input[@id="id_upload_file"]')
             )
         )
         self.body_ss('tutorial_action_import.png')

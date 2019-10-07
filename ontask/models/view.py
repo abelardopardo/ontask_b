@@ -6,6 +6,7 @@ from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from ontask.dataops.formula import evaluate_formula, EVAL_TXT
 from ontask.dataops.sql import get_num_rows
 from ontask.models.logs import Log
 from ontask.models.column import Column
@@ -91,7 +92,7 @@ class View(models.Model):
             'id': self.id,
             'name': self.name,
             'columns': [col.name for col in self.columns.all()],
-            'formula': self.get_formula_text(),
+            'formula': evaluate_formula(self.formula, EVAL_TXT),
             'nrows': self.nrows}
 
         payload.update(kwargs)
