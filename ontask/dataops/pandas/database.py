@@ -245,12 +245,11 @@ def check_wf_df(workflow):
     return True
 
 
-def verify_data_frame(data_frame: pd.DataFrame) -> None:
+def verify_data_frame(data_frame: pd.DataFrame):
     """Verify consistency properties in a DF.
 
-    Verify that the data frame complies with two properties:
-    1) The names of the columns are all different
-    2) There is at least one key column
+    Verify that the data frame complies with the properties:
+    1) There is at least one key column
 
     :param data_frame: Data frame to verify
 
@@ -265,7 +264,7 @@ def verify_data_frame(data_frame: pd.DataFrame) -> None:
             + 'At least one column must have unique values.'),
         )
 
-    return None
+    return
 
 
 def is_table_in_db(table_name: str) -> bool:
