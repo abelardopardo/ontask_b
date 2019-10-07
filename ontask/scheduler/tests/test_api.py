@@ -8,7 +8,7 @@ from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from ontask.models import Action, ScheduledAction
+from ontask.models import Action, ScheduledOperation
 
 
 class ScheduleApiCreate(test.OnTaskApiTestCase):
@@ -73,7 +73,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Element has been scheduled
         self.assertEqual(response.status_code, 201)
 
-        sch_item = ScheduledAction.objects.get(action=action)
+        sch_item = ScheduledOperation.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name)
         self.assertEqual(sch_item.description_text, self.s_desc)
         self.assertEqual(sch_item.action, action)
@@ -102,7 +102,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Element has been scheduled
         self.assertTrue(status.is_success(response.status_code))
 
-        sch_item = ScheduledAction.objects.get(action=action)
+        sch_item = ScheduledOperation.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name + '2')
 
         # Delete the element
@@ -145,7 +145,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Element has been created
         self.assertEqual(response.status_code, 201)
 
-        sch_item = ScheduledAction.objects.get(action=action)
+        sch_item = ScheduledOperation.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name)
         self.assertEqual(sch_item.description_text, self.s_desc)
         self.assertEqual(sch_item.action, action)
@@ -171,7 +171,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Element has been scheduled
         self.assertTrue(status.is_success(response.status_code))
 
-        sch_item = ScheduledAction.objects.get(action=action)
+        sch_item = ScheduledOperation.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name + '2')
 
         # Delete the element

@@ -6,7 +6,7 @@ from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from ontask.scheduler import api
-from ontask.scheduler.views import delete, edit, finish_scheduling, index, view
+from ontask.scheduler.views import delete, edit_action_run, finish_scheduling, index, view
 
 app_name = 'scheduler'
 
@@ -16,10 +16,13 @@ urlpatterns = [
     path('', index, name='index'),
 
     # Create scheduled email action
-    path('<int:pk>/create/', edit, name='create'),
+    path(
+        '<int:pk>/create_action_run/',
+        edit_action_run,
+        name='create_action_run'),
 
     # Edit scheduled email action
-    path('<int:pk>/edit/', edit, name='edit'),
+    path('<int:pk>/edit_action_run/', edit_action_run, name='edit_action_run'),
 
     # View the details of a scheduled action
     path('<int:pk>/view/', view, name='view'),

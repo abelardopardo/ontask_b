@@ -10,7 +10,7 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
-FIELD_NAME_LENGH = 256
+from ontask.models.const import CHAR_FIELD_MID_SIZE
 
 
 class LogManager(models.Manager):
@@ -219,7 +219,7 @@ class Log(models.Model):
 
     # Type of event logged see above
     name = models.CharField(
-        max_length=FIELD_NAME_LENGH,
+        max_length=CHAR_FIELD_MID_SIZE,
         blank=False,
         choices=LOG_TYPES)
 

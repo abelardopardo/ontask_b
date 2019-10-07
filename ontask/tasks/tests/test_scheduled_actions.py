@@ -16,7 +16,7 @@ from psycopg2 import sql
 
 from ontask import OnTaskSharedState, tasks
 from ontask.core.celery import app
-from ontask.models import Action, ScheduledAction, Workflow
+from ontask.models import Action, ScheduledOperation, Workflow
 
 
 class ScheduledActionTaskTestCase(test.OnTaskTestCase):
@@ -51,13 +51,13 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
         action = Action.objects.get(name='send email')
 
-        scheduled_item = ScheduledAction(
+        scheduled_item = ScheduledOperation(
             user=user,
             name='send email action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
                 second=0),
-            status=ScheduledAction.STATUS_PENDING,
+            status=ScheduledOperation.STATUS_PENDING,
             item_column=action.workflow.columns.get(name='email'),
             payload={
                 'subject': 'Email subject',
@@ -72,7 +72,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         tasks.execute_scheduled_actions_task(True)
 
         scheduled_item.refresh_from_db()
-        assert scheduled_item.status == ScheduledAction.STATUS_DONE
+        assert scheduled_item.status == ScheduledOperation.STATUS_DONE
         assert len(mail.outbox) == 2
         assert 'Hi Student Two' in mail.outbox[0].body
         assert 'Hi Student Three' in mail.outbox[1].body
@@ -90,13 +90,13 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
         action = Action.objects.get(name='send json')
 
-        scheduled_item = ScheduledAction(
+        scheduled_item = ScheduledOperation(
             user=user,
             name='JSON scheduled action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
                 second=0),
-            status=ScheduledAction.STATUS_PENDING,
+            status=ScheduledOperation.STATUS_PENDING,
             item_column=action.workflow.columns.get(name='email'),
             payload={'token': token})
         scheduled_item.save()
@@ -106,7 +106,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
 
         scheduled_item.refresh_from_db()
         json_outbox = OnTaskSharedState.json_outbox
-        assert scheduled_item.status == ScheduledAction.STATUS_DONE
+        assert scheduled_item.status == ScheduledOperation.STATUS_DONE
         assert len(json_outbox) == 3
         assert all(item['target'] == action.target_url for item in json_outbox)
         assert all(token in item['auth'] for item in json_outbox)
@@ -121,13 +121,13 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
         action = Action.objects.get(name='send list')
 
-        scheduled_item = ScheduledAction(
+        scheduled_item = ScheduledOperation(
             user=user,
             name='send list scheduled action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
                 second=0),
-            status=ScheduledAction.STATUS_PENDING,
+            status=ScheduledOperation.STATUS_PENDING,
             payload={
                 'email_to': 'recipient@bogus.com',
                 'subject': 'Action subject',
@@ -139,7 +139,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         tasks.execute_scheduled_actions_task(True)
 
         scheduled_item.refresh_from_db()
-        assert scheduled_item.status == ScheduledAction.STATUS_DONE
+        assert scheduled_item.status == ScheduledOperation.STATUS_DONE
         assert len(mail.outbox) == 1
         assert (
             'student01@bogus.com, student03@bogus.com' in mail.outbox[0].body)
@@ -157,13 +157,13 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
         action = Action.objects.get(name='send json list')
 
-        scheduled_item = ScheduledAction(
+        scheduled_item = ScheduledOperation(
             user=user,
             name='JSON List scheduled action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
                 second=0),
-            status=ScheduledAction.STATUS_PENDING,
+            status=ScheduledOperation.STATUS_PENDING,
             payload={'token': token})
         scheduled_item.save()
 
@@ -172,7 +172,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
 
         json_outbox = OnTaskSharedState.json_outbox
         scheduled_item.refresh_from_db()
-        assert scheduled_item.status == ScheduledAction.STATUS_DONE
+        assert scheduled_item.status == ScheduledOperation.STATUS_DONE
         assert len(json_outbox) == 1
         assert all(token in item['auth'] for item in json_outbox)
 
@@ -194,13 +194,13 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
         action = Action.objects.get(name='send email incrementally')
 
         now = datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(second=0)
-        scheduled_item = ScheduledAction(
+        scheduled_item = ScheduledOperation(
             user=user,
             name='send email action incrementally',
             action=action,
             execute=now,
             execute_until=now + timedelta(hours=1),
-            status=ScheduledAction.STATUS_PENDING,
+            status=ScheduledOperation.STATUS_PENDING,
             item_column=action.workflow.columns.get(name='email'),
             payload={
                 'subject': 'Email subject',
@@ -215,7 +215,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
-        assert scheduled_item.status == ScheduledAction.STATUS_PENDING
+        assert scheduled_item.status == ScheduledOperation.STATUS_PENDING
         assert scheduled_item.exclude_values == []
 
         # Modify one of the values in the matrix
@@ -233,7 +233,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
-        assert scheduled_item.status == ScheduledAction.STATUS_PENDING
+        assert scheduled_item.status == ScheduledOperation.STATUS_PENDING
         assert scheduled_item.exclude_values == ['student01@bogus.com']
 
         # Modify one of the values in the matrix
@@ -251,7 +251,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
-        assert scheduled_item.status == ScheduledAction.STATUS_PENDING
+        assert scheduled_item.status == ScheduledOperation.STATUS_PENDING
         assert scheduled_item.exclude_values == [
             'student01@bogus.com',
             'student02@bogus.com']
@@ -271,7 +271,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
-        assert scheduled_item.status == ScheduledAction.STATUS_PENDING
+        assert scheduled_item.status == ScheduledOperation.STATUS_PENDING
         assert scheduled_item.exclude_values == [
             'student01@bogus.com',
             'student02@bogus.com',
@@ -282,7 +282,7 @@ class ScheduledActionTaskTestCase(test.OnTaskTestCase):
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
-        assert scheduled_item.status == ScheduledAction.STATUS_PENDING
+        assert scheduled_item.status == ScheduledOperation.STATUS_PENDING
         assert scheduled_item.exclude_values == [
             'student01@bogus.com',
             'student02@bogus.com',

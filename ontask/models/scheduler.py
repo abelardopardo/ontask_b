@@ -11,12 +11,13 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import simplify_datetime_str
 from ontask.models import Column
+from ontask.models.workflow import Workflow
 from ontask.models.action import Action
-from ontask.models.const import CHAR_FIELD_LONG_SIZE
+from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
 
 
-class ScheduledAction(models.Model):
+class ScheduledOperation(models.Model):
     """Objects encoding the scheduling of a send email action.
 
     @DynamicAttrs
@@ -34,6 +35,12 @@ class ScheduledAction(models.Model):
         (STATUS_EXECUTING, _('Executing')),
         (STATUS_DONE, _('Finished')),
         (STATUS_DONE_ERROR, _('Finished with error')),
+    ]
+
+    ACTION_RUN = 'action_run'
+
+    OPERATION_TYPES = [
+        (ACTION_RUN, _('Run action')),
     ]
 
     user = models.ForeignKey(
@@ -55,14 +62,12 @@ class ScheduledAction(models.Model):
         blank=True,
         verbose_name=_('description'))
 
-    # The action used in the scheduling
-    action = models.ForeignKey(
-        Action,
-        db_index=True,
+    # Type of event logged see above
+    operation_type = models.CharField(
+        max_length=CHAR_FIELD_MID_SIZE,
         null=False,
         blank=False,
-        on_delete=models.CASCADE,
-        related_name='scheduled_actions')
+        choices=OPERATION_TYPES)
 
     # Time of creation
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
@@ -87,6 +92,31 @@ class ScheduledAction(models.Model):
         choices=SCHEDULED_STATUS,
         verbose_name=_('Execution Status'))
 
+    # Reference to the record of the last execution
+    last_executed_log = models.ForeignKey(
+        Log,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True)
+
+    # The action used in the scheduling
+    workflow = models.ForeignKey(
+        Workflow,
+        db_index=True,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='scheduled_actions')
+
+    # The action used in the scheduling
+    action = models.ForeignKey(
+        Action,
+        db_index=True,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='scheduled_actions')
+
     # Column object denoting the one used to differentiate elements
     item_column = models.ForeignKey(
         Column,
@@ -103,13 +133,6 @@ class ScheduledAction(models.Model):
         blank=True,
         null=True,
         verbose_name=_('exclude values'))
-
-    # Reference to the record of the last execution
-    last_executed_log = models.ForeignKey(
-        Log,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True)
 
     # JSON element with additional information
     payload = JSONField(

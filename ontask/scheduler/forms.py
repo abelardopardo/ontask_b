@@ -15,7 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import is_correct_email
 from ontask.core.forms import FormWithPayload, date_time_widget_options
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.models import Column, ScheduledAction
+from ontask.models import Column, ScheduledOperation
 
 
 class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
@@ -73,7 +73,7 @@ class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
     class Meta:
         """Define model, fields and widgets."""
 
-        model = ScheduledAction
+        model = ScheduledOperation
         fields = ('name', 'description_text', 'execute', 'execute_until')
         widgets = {
             'execute': DateTimePickerInput(options=date_time_widget_options),

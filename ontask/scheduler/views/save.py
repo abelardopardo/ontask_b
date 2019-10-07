@@ -17,7 +17,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,
 )
-from ontask.models import Action, Log, ScheduledAction
+from ontask.models import Action, Log, ScheduledOperation
 from ontask.scheduler.forms import (
     EmailScheduleForm, JSONListScheduleForm, JSONScheduleForm,
     SendListScheduleForm,
@@ -87,7 +87,7 @@ def create_timedelta_string(
 def save_email_schedule(
     request: HttpRequest,
     action: Action,
-    schedule_item: ScheduledAction,
+    schedule_item: ScheduledOperation,
     op_payload: Dict,
 ) -> HttpResponse:
     """Handle the creation and edition of email items.
@@ -140,7 +140,7 @@ def save_email_schedule(
 def save_send_list_schedule(
     request: HttpRequest,
     action: Action,
-    schedule_item: ScheduledAction,
+    schedule_item: ScheduledOperation,
     op_payload: Dict,
 ) -> HttpResponse:
     """Handle the creation and edition of send list items.
@@ -183,7 +183,7 @@ def save_send_list_schedule(
 def save_json_schedule(
     request: HttpRequest,
     action: Action,
-    schedule_item: ScheduledAction,
+    schedule_item: ScheduledOperation,
     op_payload: Dict,
 ) -> HttpResponse:
     """Create and edit scheduled json actions.
@@ -237,7 +237,7 @@ def save_json_schedule(
 def save_send_list_json_schedule(
     request: HttpRequest,
     action: Action,
-    schedule_item: ScheduledAction,
+    schedule_item: ScheduledOperation,
     op_payload: Dict,
 ) -> HttpResponse:
     """Save a scheduled action of type json list.
@@ -275,7 +275,7 @@ def save_send_list_json_schedule(
 
 def finish_scheduling(
     request: HttpRequest,
-    schedule_item: ScheduledAction = None,
+    schedule_item: ScheduledOperation = None,
     payload: Dict = None,
 ):
     """Finalize the creation of a scheduled action.
@@ -284,7 +284,7 @@ def finish_scheduling(
 
     :param request: Request object received
 
-    :param schedule_item: ScheduledAction item being processed. If None,
+    :param schedule_item: ScheduledOperation item being processed. If None,
     it has to be extracted from the information in the payload.
 
     :param payload: Dictionary with all the required data coming from
@@ -329,7 +329,7 @@ def finish_scheduling(
     if s_item_id:
         # Get the item being processed
         if not schedule_item:
-            schedule_item = ScheduledAction.objects.filter(
+            schedule_item = ScheduledOperation.objects.filter(
                 id=s_item_id).first()
         if not schedule_item:
             messages.error(
@@ -344,18 +344,19 @@ def finish_scheduling(
             payload.pop('execute_until'))
         schedule_item.exclude_values = payload.pop('exclude_values', [])
     else:
-        schedule_item = ScheduledAction(
+        schedule_item = ScheduledOperation(
             user=request.user,
             action=action,
             name=payload.pop('name'),
             description_text=payload.pop('description_text'),
+            operation_type=ScheduledOperation.ACTION_RUN,
             item_column=column,
             execute=parse_datetime(payload.pop('execute')),
             execute_until=parse_datetime(payload.pop('execute_until')),
             exclude_values=payload.pop('exclude_values', []))
 
     # Check for exclude
-    schedule_item.status = ScheduledAction.STATUS_PENDING
+    schedule_item.status = ScheduledOperation.STATUS_PENDING
     schedule_item.payload = payload
     schedule_item.save()
 

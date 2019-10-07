@@ -13,7 +13,7 @@ from ontask.models.oauth import OAuthUserToken
 from ontask.models.plugin import Plugin
 from ontask.models.profiles import Profile
 from ontask.models.rubriccell import RubricCell
-from ontask.models.scheduler import ScheduledAction
+from ontask.models.scheduler import ScheduledOperation
 from ontask.models.sqlconnection import SQLConnection
 from ontask.models.user import OnTaskUser
 from ontask.models.view import View

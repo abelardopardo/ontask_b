@@ -10,7 +10,7 @@ import pytz
 from django.conf import settings
 from rest_framework import status
 
-from ontask.models import ScheduledAction
+from ontask.models import ScheduledOperation
 
 
 class SchedulerForms(test.OnTaskTestCase):
@@ -43,12 +43,12 @@ class SchedulerForms(test.OnTaskTestCase):
         action = self.workflow.actions.get(name='simple action')
 
         # Get the form to schedule this action
-        resp = self.get_response('scheduler:create', {'pk': action.id})
+        resp = self.get_response('scheduler:create_action_run', {'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the form to schedule this action
         resp = self.get_response(
-            'scheduler:create',
+            'scheduler:create_action_run',
             {'pk': action.id},
             method='POST',
             req_params={
@@ -58,12 +58,12 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 1)
+        self.assertEqual(ScheduledOperation.objects.count(), 1)
 
         # Change the name of the scheduled item
-        sc_item = ScheduledAction.objects.first()
+        sc_item = ScheduledOperation.objects.first()
         resp = self.get_response(
-            'scheduler:edit',
+            'scheduler:edit_action_run',
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -73,15 +73,15 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 1)
+        self.assertEqual(ScheduledOperation.objects.count(), 1)
         sc_item.refresh_from_db()
 
         self.assertEqual(sc_item.name, 'First scheduling round2')
 
         # Select the confirm items
-        sc_item = ScheduledAction.objects.first()
+        sc_item = ScheduledOperation.objects.first()
         resp = self.get_response(
-            'scheduler:edit',
+            'scheduler:edit_action_run',
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -92,7 +92,7 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(ScheduledAction.objects.count(), 1)
+        self.assertEqual(ScheduledOperation.objects.count(), 1)
 
         # Index of all scheduled actions (to execute the table render)
         resp = self.get_response('scheduler:index')
@@ -119,7 +119,7 @@ class SchedulerForms(test.OnTaskTestCase):
             method='POST',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 0)
+        self.assertEqual(ScheduledOperation.objects.count(), 0)
 
     def test_schedule_json_action(self):
         """Test creation of a scheduled execution of json action."""
@@ -131,12 +131,12 @@ class SchedulerForms(test.OnTaskTestCase):
         action = self.workflow.actions.get(name='json action')
 
         # Get the form to schedule this action
-        resp = self.get_response('scheduler:create', {'pk': action.id})
+        resp = self.get_response('scheduler:create_action_run', {'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the form to schedule this action
         resp = self.get_response(
-            'scheduler:create',
+            'scheduler:create_action_run',
             {'pk': action.id},
             method='POST',
             req_params={
@@ -146,12 +146,12 @@ class SchedulerForms(test.OnTaskTestCase):
                 'token': 'faketoken',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 1)
+        self.assertEqual(ScheduledOperation.objects.count(), 1)
 
         # Change the name of the scheduled item
-        sc_item = ScheduledAction.objects.first()
+        sc_item = ScheduledOperation.objects.first()
         resp = self.get_response(
-            'scheduler:edit',
+            'scheduler:edit_action_run',
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -161,15 +161,15 @@ class SchedulerForms(test.OnTaskTestCase):
                 'token': 'faketoken',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 1)
+        self.assertEqual(ScheduledOperation.objects.count(), 1)
         sc_item.refresh_from_db()
 
         self.assertEqual(sc_item.name, 'First scheduling round2')
 
         # Select the item_column for confirmation
-        sc_item = ScheduledAction.objects.first()
+        sc_item = ScheduledOperation.objects.first()
         resp = self.get_response(
-            'scheduler:edit',
+            'scheduler:edit_action_run',
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -180,7 +180,7 @@ class SchedulerForms(test.OnTaskTestCase):
                 'token': 'faketoken',
             })
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(ScheduledAction.objects.count(), 1)
+        self.assertEqual(ScheduledOperation.objects.count(), 1)
 
         # Index of all scheduled actions (to execute the table render)
         resp = self.get_response('scheduler:index')
@@ -200,7 +200,7 @@ class SchedulerForms(test.OnTaskTestCase):
             method='POST',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 0)
+        self.assertEqual(ScheduledOperation.objects.count(), 0)
 
     def test_schedule_times_in_forms(self):
         """Test the date_time when scheduling actions"""
@@ -212,12 +212,12 @@ class SchedulerForms(test.OnTaskTestCase):
         action = self.workflow.actions.get(name='simple action')
 
         # Get the form to schedule this action
-        resp = self.get_response('scheduler:create', {'pk': action.id})
+        resp = self.get_response('scheduler:create_action_run', {'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the form to schedule this action with wrong dates
         resp = self.get_response(
-            'scheduler:create',
+            'scheduler:create_action_run',
             {'pk': action.id},
             method='POST',
             req_params={
@@ -228,14 +228,14 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 0)
+        self.assertEqual(ScheduledOperation.objects.count(), 0)
 
         # POST the form to schedule this action
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
         execute = now - timedelta(minutes=5)
         execute_until = now - timedelta(minutes=1)
         resp = self.get_response(
-            'scheduler:create',
+            'scheduler:create_action_run',
             {'pk': action.id},
             method='POST',
             req_params={
@@ -246,14 +246,14 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 0)
+        self.assertEqual(ScheduledOperation.objects.count(), 0)
 
         # POST the form to schedule this action
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
         execute = now - timedelta(minutes=5)
         execute_until = now + timedelta(days=1)
         resp = self.get_response(
-            'scheduler:create',
+            'scheduler:create_action_run',
             {'pk': action.id},
             method='POST',
             req_params={
@@ -264,14 +264,14 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 1)
+        self.assertEqual(ScheduledOperation.objects.count(), 1)
 
         # POST the form to schedule this action
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
         execute = now + timedelta(minutes=5)
         execute_until = now + timedelta(days=15)
         resp = self.get_response(
-            'scheduler:create',
+            'scheduler:create_action_run',
             {'pk': action.id},
             method='POST',
             req_params={
@@ -282,4 +282,4 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledAction.objects.count(), 2)
+        self.assertEqual(ScheduledOperation.objects.count(), 2)

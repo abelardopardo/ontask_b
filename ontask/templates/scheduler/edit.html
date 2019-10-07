@@ -4,7 +4,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{% trans 'Schedule Action Execution' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Scheduled Execution' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
   {% ontask_datetimepicker_js %}
@@ -18,7 +18,7 @@
     <div id="step_sequence" hidden>
       {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
     </div>
-    <h1 class="text-center">{% trans 'Schedule Action Execution' %}</h1>
+    <h1 class="text-center">{% trans 'Schedule Operation Execution' %}</h1>
     {% include 'action/includes/partial_action_edit_out_warning.html' %}
     <p class="text-center">{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
     <p class="lead text-center">{{ action.name }}</p>

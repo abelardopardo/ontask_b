@@ -4,7 +4,7 @@ from django.db.models import Q
 from rest_framework import generics
 
 from ontask.core.permissions import UserIsInstructor
-from ontask.models import Action, ScheduledAction
+from ontask.models import Action, ScheduledOperation
 from ontask.scheduler.serializers import (
     ScheduledEmailSerializer, ScheduledJSONSerializer,
 )
@@ -26,9 +26,9 @@ class ScheduledActionAPIListCreate(generics.ListCreateAPIView):
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledAction.objects.all()
+            return ScheduledOperation.objects.all()
 
-        return ScheduledAction.objects.filter(
+        return ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).distinct()
@@ -84,11 +84,11 @@ class ScheduledActionEmailAPIListCreate(ScheduledActionAPIListCreate):
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledAction.objects.filter(
+            return ScheduledOperation.objects.filter(
                 action__action_type=Action.PERSONALIZED_TEXT
             )
 
-        return ScheduledAction.objects.filter(
+        return ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
@@ -111,11 +111,11 @@ class ScheduledActionJSONAPIListCreate(ScheduledActionAPIListCreate):
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledAction.objects.filter(
+            return ScheduledOperation.objects.filter(
                 action__action_type=Action.PERSONALIZED_JSON
             )
 
-        return ScheduledAction.objects.filter(
+        return ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
@@ -144,11 +144,11 @@ class ScheduledEmailAPIRetrieveUpdateDestroy(
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledAction.objects.filter(
+            return ScheduledOperation.objects.filter(
                 action__action_type=Action.PERSONALIZED_TEXT
             )
 
-        return ScheduledAction.objects.filter(
+        return ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
@@ -177,11 +177,11 @@ class ScheduledJSONAPIRetrieveUpdateDestroy(
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledAction.objects.filter(
+            return ScheduledOperation.objects.filter(
                 action__action_type=Action.PERSONALIZED_JSON
             )
 
-        return ScheduledAction.objects.filter(
+        return ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(

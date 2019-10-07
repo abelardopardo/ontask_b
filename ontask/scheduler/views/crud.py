@@ -25,7 +25,7 @@ from ontask.core.celery import celery_is_up
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
-from ontask.models import Action, Log, ScheduledAction, Workflow
+from ontask.models import Action, Log, ScheduledOperation, Workflow
 from ontask.scheduler.views.save import (
     create_timedelta_string, save_canvas_email_schedule, save_email_schedule,
     save_json_schedule, save_send_list_json_schedule, save_send_list_schedule,
@@ -72,7 +72,7 @@ class ScheduleActionTable(tables.Table):
         """Render name as link."""
         return format_html(
             '<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>',
-            reverse('scheduler:edit', kwargs={'pk': record.id}),
+            reverse('scheduler:edit_action_run', kwargs={'pk': record.id}),
             _('Edit this scheduled action execution'),
             record.name)
 
@@ -91,7 +91,7 @@ class ScheduleActionTable(tables.Table):
     class Meta:
         """Choose model, fields and sequence in the table."""
 
-        model = ScheduledAction
+        model = ScheduledOperation
 
         fields = ('name', 'action', 'execute', 'execute_until', 'status')
 
@@ -125,7 +125,7 @@ def index(
     request.session.save()
 
     # Get the actions
-    s_items = ScheduledAction.objects.filter(action__workflow=workflow.id)
+    s_items = ScheduledOperation.objects.filter(action__workflow=workflow.id)
 
     return render(
         request,
@@ -154,7 +154,7 @@ def view(
     :return: HTTP response
     """
     # Get the scheduled action
-    sch_obj = ScheduledAction.objects.filter(
+    sch_obj = ScheduledOperation.objects.filter(
         action__workflow=workflow,
         pk=pk).first()
 
@@ -188,7 +188,7 @@ def view(
 
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
-def edit(
+def edit_action_run(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
@@ -203,7 +203,7 @@ def edit(
     """
     # Distinguish between creating a new element or editing an existing one
     is_a_new_item = request.path.endswith(reverse(
-        'scheduler:create',
+        'scheduler:create_action_run',
         kwargs={'pk': pk}))
 
     if is_a_new_item:
@@ -217,7 +217,7 @@ def edit(
         exclude_values = []
     else:
         # Get the scheduled action from the parameter in the URL
-        s_item = ScheduledAction.objects.filter(pk=pk).first()
+        s_item = ScheduledOperation.objects.filter(pk=pk).first()
         if not s_item:
             return redirect('home')
         action = s_item.action
@@ -229,7 +229,7 @@ def edit(
         op_payload = {
             'action_id': action.id,
             'prev_url': reverse(
-                'scheduler:create',
+                'scheduler:create_action_run',
                 kwargs={'pk': action.id}),
             'post_url': reverse(
                 'scheduler:finish_scheduling'),
@@ -294,7 +294,7 @@ def delete(
     :return:
     """
     # Get the appropriate scheduled action
-    s_item = ScheduledAction.objects.filter(
+    s_item = ScheduledOperation.objects.filter(
         action__workflow=workflow,
         pk=pk,
     ).first()

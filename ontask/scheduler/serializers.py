@@ -13,7 +13,7 @@ from rest_framework.exceptions import APIException
 
 from ontask import is_correct_email
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.models import Action, ScheduledAction
+from ontask.models import Action, ScheduledOperation
 
 
 class ScheduledActionSerializer(serializers.ModelSerializer):
@@ -33,10 +33,10 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
         payload,
         scheduled_obj=None,
     ):
-        """Instantiate or update the object of class ScheduledAction.
+        """Instantiate or update the object of class ScheduledOperation.
 
         Given the validated data and a set of parameters that have been
-        validated, instantiate or update the object of class ScheduledAction.
+        validated, instantiate or update the object of class ScheduledOperation.
 
         :param validated_data: Data obtained by the serializer
 
@@ -55,7 +55,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
         :return: instantiated object
         """
         if not scheduled_obj:
-            scheduled_obj = ScheduledAction()
+            scheduled_obj = ScheduledOperation()
 
         scheduled_obj.user = self.context['request'].user
         scheduled_obj.name = validated_data['name']
@@ -65,7 +65,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
         scheduled_obj.item_column = item_column
         scheduled_obj.exclude_values = exclude_values
         scheduled_obj.payload = payload
-        scheduled_obj.status = ScheduledAction.STATUS_PENDING
+        scheduled_obj.status = ScheduledOperation.STATUS_PENDING
 
         scheduled_obj.save()
         return scheduled_obj
@@ -177,7 +177,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
     class Meta:
         """Select  model and define fields."""
 
-        model = ScheduledAction
+        model = ScheduledOperation
 
         fields = (
             'id',
