@@ -70,11 +70,14 @@ class ScheduleActionTable(tables.Table):
 
     def render_name(self, record):
         """Render name as link."""
-        return format_html(
-            '<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>',
-            reverse('scheduler:edit_action_run', kwargs={'pk': record.id}),
-            _('Edit this scheduled action execution'),
-            record.name)
+        if record.operation_type == ScheduledOperation.ACTION_RUN:
+            return format_html(
+                '<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>',
+                reverse('scheduler:edit_action_run', kwargs={'pk': record.id}),
+                _('Edit this scheduled action execution'),
+                record.name)
+
+        return 'REVIEW ScheduleActionTable'
 
     def render_status(self, record):
         """Render status as a link."""
@@ -93,10 +96,17 @@ class ScheduleActionTable(tables.Table):
 
         model = ScheduledOperation
 
-        fields = ('name', 'action', 'execute', 'execute_until', 'status')
+        fields = (
+            'name',
+            'workflow',
+            'action',
+            'execute',
+            'execute_until',
+            'status')
 
         sequence = (
             'name',
+            'workflow',
             'action',
             'execute',
             'execute_until',
