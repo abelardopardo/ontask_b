@@ -14,17 +14,15 @@ from ontask.action.views.condition import (
 from ontask.action.views.edit_personalized import (
     action_out_save_content, edit_action_out, showurl,
 )
+from ontask.action.views.edit_rubric import (
+    edit_action_rubric, edit_rubric_cell, edit_rubric_loas,
+)
 from ontask.action.views.edit_survey import (
     edit_action_in, edit_description, select_column_action,
-    select_condition_for_question, shuffle_questions, unselect_column_action,
-    toggle_question_change
+    select_condition_for_question, shuffle_questions, toggle_question_change,
+    unselect_column_action,
 )
-from ontask.action.views.edit_rubric import (
-    edit_action_rubric, edit_rubric_cell, edit_rubric_loas
-)
-from ontask.action.views.import_export import (
-    action_import, export,
-)
+from ontask.action.views.import_export import action_import, export
 from ontask.action.views.preview import (
     preview_next_all_false_response, preview_response,
 )

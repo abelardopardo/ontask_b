@@ -8,8 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 from fernet_fields import EncryptedCharField
 
 from ontask.models.connection import Connection
-from ontask.models.logs import Log
 from ontask.models.const import CHAR_FIELD_LONG_SIZE
+from ontask.models.logs import Log
 
 
 class SQLConnection(Connection):

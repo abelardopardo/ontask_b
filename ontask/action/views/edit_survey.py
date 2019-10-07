@@ -4,8 +4,8 @@
 
 from typing import Optional
 
-from django.contrib import messages
 import django_tables2 as tables
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -18,8 +18,7 @@ from django.views.decorators.http import require_http_methods
 
 from ontask.action.forms import ActionDescriptionForm
 from ontask.core.decorators import (
-    ajax_required, get_action, get_columncondition,
-    get_workflow,
+    ajax_required, get_action, get_columncondition, get_workflow,
 )
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn

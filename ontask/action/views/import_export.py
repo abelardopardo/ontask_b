@@ -5,7 +5,7 @@
 import datetime
 import gzip
 from io import BytesIO
-from typing import Optional, List
+from typing import List, Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -17,9 +17,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from ontask.action.forms import ActionImportForm
-from ontask.action.serializers import (
-    ActionSelfcontainedSerializer,
-)
+from ontask.action.serializers import ActionSelfcontainedSerializer
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow

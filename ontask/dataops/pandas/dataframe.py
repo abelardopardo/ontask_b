@@ -12,8 +12,8 @@ from django.utils.translation import gettext, ugettext_lazy as _
 
 from ontask.dataops.formula import evaluation
 from ontask.dataops.pandas import are_unique_columns, is_unique_column
-from ontask.dataops.pandas.datatypes import pandas_datatype_names
 from ontask.dataops.pandas.database import store_table
+from ontask.dataops.pandas.datatypes import pandas_datatype_names
 from ontask.dataops.sql import (
     db_rename_column, delete_table, df_drop_column, get_num_rows, rename_table,
 )

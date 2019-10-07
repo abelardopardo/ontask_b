@@ -3,7 +3,7 @@
 """Process the scheduled actions."""
 
 from datetime import datetime
-from typing import Tuple, List
+from typing import List, Tuple
 
 import pytz
 from celery import shared_task

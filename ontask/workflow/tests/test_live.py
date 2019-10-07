@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import os
-
-from selenium.webdriver.support.wait import WebDriverWait
-
-from ontask import OnTaskSharedState
 import test
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 
+from ontask import OnTaskSharedState
 from ontask.dataops.pandas import database, destroy_db_engine
 from ontask.models import Workflow
 

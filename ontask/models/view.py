@@ -6,11 +6,11 @@ from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.dataops.formula import evaluate_formula, EVAL_TXT
+from ontask.dataops.formula import EVAL_TXT, evaluate_formula
 from ontask.dataops.sql import get_num_rows
-from ontask.models.logs import Log
 from ontask.models.column import Column
 from ontask.models.const import CHAR_FIELD_LONG_SIZE
+from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 
 

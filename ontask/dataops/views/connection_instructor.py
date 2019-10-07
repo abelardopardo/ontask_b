@@ -3,13 +3,13 @@
 """Classes and functions to show connections to regular users."""
 from typing import Optional
 
+import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext as _
-import django_tables2 as tables
 
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor

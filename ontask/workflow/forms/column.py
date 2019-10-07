@@ -4,10 +4,10 @@
 
 import re
 
+import pandas as pd
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-import pandas as pd
 
 from ontask import is_legal_name
 from ontask.core.forms import date_time_widget_options

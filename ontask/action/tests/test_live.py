@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask.dataops.formula import has_variable
 from ontask.dataops.pandas import check_wf_df
-from ontask.models import Action, Condition, Workflow, Column
+from ontask.models import Action, Column, Condition, Workflow
 
 
 class ActionActionEdit(test.OnTaskLiveTestCase):
@@ -1490,6 +1490,3 @@ class ActionCreateRubric(test.OnTaskLiveTestCase):
 
         column.refresh_from_db()
         self.assertEqual(column.categories, [loa + '2' for loa in loas])
-
-
-

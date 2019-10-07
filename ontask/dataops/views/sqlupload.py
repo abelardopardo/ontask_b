@@ -14,7 +14,9 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import OnTaskDataFrameNoKey
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.dataops.forms import SQLRequestConnectionParam, load_df_from_sqlconnection
+from ontask.dataops.forms import (
+    SQLRequestConnectionParam, load_df_from_sqlconnection,
+)
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask.models import SQLConnection, Workflow
 

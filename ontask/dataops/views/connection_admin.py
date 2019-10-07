@@ -4,6 +4,7 @@
 
 from typing import Optional, Type
 
+import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -12,7 +13,6 @@ from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
-import django_tables2 as tables
 
 from ontask import create_new_name
 from ontask.core.decorators import ajax_required

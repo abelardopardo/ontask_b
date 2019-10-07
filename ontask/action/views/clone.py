@@ -19,8 +19,7 @@ from ontask.core.decorators import ajax_required, get_action, get_condition
 from ontask.core.permissions import is_instructor
 from ontask.dataops.formula import get_variables
 from ontask.models import (
-    Action, ActionColumnConditionTuple, Condition, Log, Workflow,
-    RubricCell,
+    Action, ActionColumnConditionTuple, Condition, Log, RubricCell, Workflow,
 )
 
 

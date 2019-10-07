@@ -4,15 +4,13 @@ import gzip
 import os
 import shutil
 import tempfile
-
-from rest_framework import status
-
 import test
 from test.compare import compare_workflows
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.six import BytesIO
+from rest_framework import status
 from rest_framework.parsers import JSONParser
 
 from ontask.models import Workflow

@@ -5,6 +5,7 @@
 from collections import OrderedDict
 from typing import Dict, List, Optional
 
+import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
@@ -13,7 +14,6 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-import django_tables2 as tables
 
 from ontask.action.forms import (
     EditActionOutForm, FilterForm, RubricCellForm, RubricLOAForm,

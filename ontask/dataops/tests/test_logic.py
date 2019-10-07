@@ -4,13 +4,11 @@
 import datetime
 import io
 import os
-
-from django.contrib.auth import get_user_model
-
 import test
 
 import pandas as pd
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from rest_framework import status
 
 from ontask.dataops.forms.upload import load_df_from_csvfile
@@ -718,4 +716,3 @@ class ConditionNameWithSymbols(test.OnTaskTestCase):
                 self.assertEquals(
                     'Condition 4' in str(resp.content),
                     condition_value)
-

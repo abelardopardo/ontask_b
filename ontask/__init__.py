@@ -3,11 +3,11 @@
 """Basic functions and definitions used all over the platform."""
 
 import json
+from datetime import datetime
 from typing import Optional
 
 import django.conf
 import pytz
-from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql

@@ -7,6 +7,6 @@ from ontask.action.evaluate.action import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.evaluate.template import (
-    action_context_var, render_action_template, tr_item,
-    viz_number_context_var, render_rubric_criteria
+    action_context_var, render_action_template, render_rubric_criteria,
+    tr_item, viz_number_context_var,
 )

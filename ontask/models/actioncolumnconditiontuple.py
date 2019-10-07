@@ -3,11 +3,11 @@
 """Models for a tuple Action/Column/Condition."""
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
-from ontask.models.logs import Log
 from ontask.models.column import Column
 from ontask.models.condition import Condition
-from django.utils.translation import ugettext_lazy as _
+from ontask.models.logs import Log
 
 
 class ActionColumnConditionTuple(models.Model):

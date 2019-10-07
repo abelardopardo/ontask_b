@@ -4,10 +4,10 @@
 
 import datetime
 
+import pytz
 from celery import shared_task
 from django.conf import settings
 from django.utils.translation import ugettext
-import pytz
 
 import ontask.dataops.forms
 from ontask.models import AthenaConnection

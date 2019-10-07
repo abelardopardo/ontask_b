@@ -5,13 +5,13 @@
 import re
 import string
 from builtins import map, str
-from typing import Mapping, Tuple, List
+from typing import List, Mapping, Tuple
 
 from django.template import Context, Template
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models import Action, VAR_USE_RES
+from ontask.models import VAR_USE_RES, Action
 
 # Variable name to store the action ID in the context used to render a
 # template

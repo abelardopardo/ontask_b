@@ -18,9 +18,9 @@ from django.utils.translation import ugettext_lazy as _
 import ontask.dataops.pandas.database
 import ontask.dataops.pandas.datatypes
 from ontask.dataops.sql import delete_table
-from ontask.models.logs import Log
 from ontask.models.column import Column
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.logs import Log
 
 CHAR_FIELD_MD5_SIZE = 32
 

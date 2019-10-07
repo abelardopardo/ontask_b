@@ -3,6 +3,7 @@
 """URL to manipulate actions."""
 
 from django.urls import path, re_path
+
 from ontask.action import views
 
 app_name = 'action'

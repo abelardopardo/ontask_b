@@ -15,22 +15,22 @@ The currently supported formats are:
 - SQL connection to a remote DB
 """
 
+import json
 from builtins import str
 from io import TextIOWrapper
-import json
 from typing import Optional
 
+import pandas as pd
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-import pandas as pd
 
 from ontask import OnTaskDataFrameNoKey, settings
 from ontask.core.forms import RestrictedFileField
-from ontask.dataops.forms.select import MergeForm, SelectKeysForm
 from ontask.dataops.forms.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
+from ontask.dataops.forms.select import MergeForm, SelectKeysForm
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask.models import AthenaConnection, SQLConnection
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
@@ -526,4 +526,3 @@ class AthenaRequestConnectionParam(forms.Form):
             to_return['merge_method'] = self.cleaned_data['how_merge']
 
         return to_return
-

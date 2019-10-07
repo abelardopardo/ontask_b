@@ -6,9 +6,9 @@ import datetime
 import json
 from typing import Dict, Mapping, Optional
 
-from django.conf import settings
 import pytz
 import requests
+from django.conf import settings
 
 from ontask import OnTaskSharedState
 from ontask.action.evaluate.action import (

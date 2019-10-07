@@ -3,10 +3,10 @@
 """Test the views for the scheduler pages."""
 
 import os
-from datetime import datetime, timedelta
-import pytz
 import test
+from datetime import datetime, timedelta
 
+import pytz
 from django.conf import settings
 from rest_framework import status
 

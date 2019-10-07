@@ -11,15 +11,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from ontask.core.decorators import (
-    ajax_required, get_action, get_workflow,
-)
+from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.pandas import rename_df_column
 from ontask.dataops.sql import add_column_to_db, db_rename_column
-from ontask.models import (
-    Action, ActionColumnConditionTuple, Log, Workflow,
-)
+from ontask.models import Action, ActionColumnConditionTuple, Log, Workflow
 from ontask.workflow.forms import CriterionForm
 
 
@@ -319,4 +315,3 @@ def criterion_insert(
 
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
-

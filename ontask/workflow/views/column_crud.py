@@ -2,8 +2,8 @@
 
 """Views for create/rename/update/delete columns."""
 
-from builtins import range
 import random
+from builtins import range
 from typing import Optional
 
 from django.contrib import messages

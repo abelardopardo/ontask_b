@@ -5,6 +5,7 @@
 from datetime import datetime
 from typing import Dict, Optional, Tuple
 
+import pytz
 from croniter import croniter
 from django.conf import settings
 from django.contrib import messages
@@ -12,7 +13,6 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
-import pytz
 
 from ontask.action.payloads import (
     action_session_dictionary, set_action_payload,

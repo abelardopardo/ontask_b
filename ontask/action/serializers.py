@@ -10,8 +10,7 @@ from rest_framework import serializers
 from ontask.dataops.formula import get_variables
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.models import (
-    Action, ActionColumnConditionTuple, Condition,
-    RubricCell,
+    Action, ActionColumnConditionTuple, Condition, RubricCell,
 )
 from ontask.workflow.serialize_column import (
     ColumnNameSerializer, ColumnSerializer,

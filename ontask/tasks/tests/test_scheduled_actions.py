@@ -5,7 +5,6 @@
 import os
 import test
 from datetime import datetime, timedelta
-from psycopg2 import sql
 
 import pytz
 from celery.contrib.testing.worker import start_worker
@@ -13,6 +12,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.db import connection
+from psycopg2 import sql
 
 from ontask import OnTaskSharedState, tasks
 from ontask.core.celery import app
