@@ -17,8 +17,8 @@ from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import (
     AthenaRequestConnectionParam, load_df_from_athenaconnection)
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
-from ontask.models import AthenaConnection, Workflow
-
+from ontask.models import AthenaConnection, Workflow, Log
+from ontask.tasks import athena_dataupload_task
 
 @user_passes_test(is_instructor)
 @get_workflow()
@@ -29,22 +29,12 @@ def athenaupload_start(
 ) -> HttpResponse:
     """Load a data frame using an Athena connection.
 
-    The four step process will populate the following dictionary with name
-    upload_data (divided by steps in which they are set
-
-    STEP 1:
-
-    initial_column_names: List of column names in the initial file.
-
-    column_types: List of column types as detected by pandas
-
-    src_is_key_column: Boolean list with src columns that are unique
-
-    step_1: URL name of the first step
+    The parameters are obtained and if valid, an operation is scheduled for
+    execution.
 
     :param request: Web request
     :param pk: primary key of the Athena conn used
-    :return: Creates the upload_data dictionary in the session
+    :return: A page showing the low go view for status.
     """
     conn = AthenaConnection.objects.filter(
         pk=pk
@@ -53,13 +43,10 @@ def athenaupload_start(
         return redirect(
             'dataops:athenaconns_instructor_index_instructor_index')
 
-    form = None
-    missing_field = conn.has_missing_fields()
-    if missing_field:
-        # The connection needs a table (not given upon definition)
-        form = AthenaRequestConnectionParam(
-            request.POST or None,
-            instance=conn)
+    form = AthenaRequestConnectionParam(
+        request.POST or None,
+        workflow=workflow,
+        instance=conn)
 
     context = {
         'form': form,
@@ -70,48 +57,27 @@ def athenaupload_start(
         'valuerange': range(5) if workflow.has_table() else range(3),
         'prev_step': reverse('dataops:athenaconns_instructor_index')}
 
-    if request.method == 'POST' and (not missing_field or form.is_valid()):
-        run_params = conn.get_missing_fields(form.cleaned_data)
+    if request.method == 'POST' and form.is_valid():
+        run_params = form.get_field_dict()
+        log_item = workflow.log(
+            request.user,
+            Log.WORKFLOW_DATA_MERGE,
+            connection=conn.name,
+            status='Preparing to execute'
+        )
 
-        # Process Athena connection using pandas
-        try:
-            data_frame = load_df_from_athenaconnection(conn, run_params)
+        # Batch execution
+        athena_dataupload_task.delay(
+            request.user.id,
+            workflow.id,
+            conn.id,
+            run_params,
+            log_item.id)
 
-            # Verify the data frame
-            verify_data_frame(data_frame)
-        except OnTaskDataFrameNoKey as exc:
-            messages.error(request, str(exc))
-            return render(request, 'dataops/athenaupload_start.html', context)
-        except Exception as exc:
-            messages.error(
-                request,
-                _('Unable to obtain data: {0}').format(str(exc)))
-            return render(request, 'dataops/athenaupload_start.html', context)
-
-        # Store the data frame in the DB.
-        try:
-            # Get frame info with three lists: names, types and is_key
-            frame_info = store_temporary_dataframe(
-                data_frame,
-                workflow)
-        except Exception:
-            form.add_error(
-                None,
-                _('The data from this connection cannot be processed.'),
-            )
-            return render(request, 'dataops/athenaupload_start.html', context)
-
-        # Dictionary to populate gradually throughout the sequence of steps. It
-        # is stored in the session.
-        request.session['upload_data'] = {
-            'initial_column_names': frame_info[0],
-            'column_types': frame_info[1],
-            'src_is_key_column': frame_info[2],
-            'step_1': reverse(
-                'dataops:athenaupload_start',
-                kwargs={'pk': conn.id}),
-        }
-
-        return redirect('dataops:upload_s2')
+        # Show log execution
+        return render(
+            request,
+            'dataops/operation_done.html',
+            {'log_id': log_item.id, 'back_url': reverse('table:display')})
 
     return render(request, 'dataops/athenaupload_start.html', context)

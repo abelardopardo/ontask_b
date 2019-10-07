@@ -26,6 +26,7 @@ import pandas as pd
 
 from ontask import OnTaskDataFrameNoKey, settings
 from ontask.core.forms import RestrictedFileField
+from ontask.dataops.forms.select import MergeForm, SelectKeysForm
 from ontask.dataops.forms.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
@@ -465,6 +466,7 @@ class AthenaRequestConnectionParam(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance')
+        self.workflow = kwargs.pop('workflow')
 
         super().__init__(*args, **kwargs)
 
@@ -486,3 +488,42 @@ class AthenaRequestConnectionParam(forms.Form):
                 max_length=CHAR_FIELD_MID_SIZE,
                 required=True,
                 help_text=_('Table to load'))
+
+        if self.workflow.has_data_frame():
+            if self.workflow.columns.filter(is_key=True).count() > 1:
+                merge_choices = [
+                    (skey, skey)
+                    for skey in self.workflow.columns.filter(is_key=True)
+                ]
+                # Insert field to choose unique key
+                self.fields['merge_key'] = forms.ChoiceField(
+                    initial=None,
+                    choices=merge_choices,
+                    required=True,
+                    label=_('Key Column in Existing Table'),
+                    help_text=SelectKeysForm.dst_help)
+
+            self.fields['how_merge'] = forms.ChoiceField(
+                initial=None,
+                choices=MergeForm.how_merge_choices,
+                required=True,
+                label=_('Method to select rows to merge/update'),
+                help_text=MergeForm.merge_help)
+
+
+    def get_field_dict(self):
+        """Return a dictionary with the resulting fields"""
+        conn = self.instance
+        to_return = self.instance.get_missing_fields(self.cleaned_data)
+
+        if self.workflow.has_data_frame():
+            if self.workflow.columns.filter(is_key=True).count() == 1:
+                to_return['merge_key'] = self.workflow.columns.filter(
+                    is_key=True).first().name
+            else:
+                to_return['merge_key'] = self.cleaned_data['merge_key']
+
+            to_return['merge_method'] = self.cleaned_data['how_merge']
+
+        return to_return
+

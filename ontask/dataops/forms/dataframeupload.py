@@ -1,15 +1,23 @@
 # -*- coding: utf-8 -*-
 
 """Upload DataFrames from Files."""
-from typing import Optional, Dict
+
+from typing import Dict, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
-import pandas as pd
 from django.conf import settings
+from django.utils.translation import ugettext as _
+import pandas as pd
+from pyathena import connect
 from smart_open import smart_open
 
-from ontask.dataops.pandas import create_db_engine
-from ontask.models import SQLConnection, AthenaConnection
+from ontask.dataops.pandas import (
+    create_db_engine, load_table, perform_dataframe_upload_merge,
+    store_temporary_dataframe, verify_data_frame,
+)
+from ontask.dataops.pandas.dataframe import store_workflow_table
+from ontask.dataops.sql import table_queries
+from ontask.models import AthenaConnection, Log, SQLConnection, Workflow
 
 
 def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
@@ -300,3 +308,126 @@ def load_df_from_athenaconnection(
     # Strip white space from all string columns and try to convert to
     # datetime just in case
     return _process_object_column(data_frame)
+
+
+def batch_load_df_from_athenaconnection(
+    workflow: Workflow,
+    conn: AthenaConnection,
+    run_params: Dict,
+    log_item: Log
+):
+    """Batch load a DF from an Athena connection.
+
+    run_params has:
+    aws_secret_access_key: Optional[str] = None,
+    aws_session_token: Optional[str] = None,
+    table_name: Optional[str] = None
+    key_column_name[str] = None
+    merge_method[str] = None
+
+    from pyathena import connect
+    from pyathena.pandas_cursor import PandasCursor
+
+    cursor = connect(
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,
+        aws_session_token=aws_session_token,
+        s3_staging_dir=staging_dir,
+        region_name=region_name)
+
+    df = pd.read_sql('SELECT * FROM given_table_name', cursor)
+    print(df.describe())
+    print(df.head())
+
+    :param workflow: Workflow to store the new ata
+
+    :param conn: AthenaConnection object with the connection parameters.
+
+    :param run_params: Dictionary with additional connection parameters
+
+    :param log_item: Log object to reflect the status of the execution
+
+    :return: Nothing.
+    """
+    staging_dir = 's3://{0}'.format(conn.aws_bucket_name)
+    if conn.aws_file_path:
+        staging_dir = staging_dir + '/' + conn.aws_file_path
+
+    cursor = connect(
+        aws_access_key_id=conn.aws_access_key,
+        aws_secret_access_key=run_params['aws_secret_access_key'],
+        aws_session_token=run_params['aws_session_token'],
+        s3_staging_dir=staging_dir,
+        region_name=conn.aws_region_name)
+
+    data_frame = pd.read_sql(
+        'SELECT * FROM {0}'.format(run_params['table_name']),
+        cursor)
+
+    # Strip white space from all string columns and try to convert to
+    # datetime just in case
+    data_frame = _process_object_column(data_frame)
+
+    verify_data_frame(data_frame)
+
+    column_names, column_types, is_key_column = store_temporary_dataframe(
+        data_frame,
+        workflow)
+
+    upload_data = {
+        'initial_column_names': column_names,
+        'column_types': column_types,
+        'src_is_key_column': is_key_column,
+        'rename_column_names': column_names[:],
+        'columns_to_upload': [True] * len(column_names),
+        'keep_key_column': is_key_column[:]
+    }
+
+    if not workflow.has_data_frame():
+        # Regular load operation
+        store_workflow_table(workflow, upload_data)
+        log_item.payload['column_names'] = column_names,
+        log_item.payload['column_types'] = column_types,
+        log_item.payload['column_unique'] = is_key_column
+        log_item.payload['num_rows'] = workflow.nrows
+        log_item.payload['num_cols'] = workflow.ncols
+        log_item.save()
+
+    # Merge operation
+    upload_data['dst_column_names'] = workflow.get_column_names()
+    upload_data['dst_is_unique_column'] = workflow.get_column_unique()
+    upload_data['dst_unique_col_names'] = [
+        cname for idx, cname in enumerate(upload_data['dst_column_names'])
+        if upload_data['dst_column_names'][idx]]
+    upload_data['src_selected_key'] = run_params['merge_key']
+    upload_data['dst_selected_key'] = run_params['merge_key']
+    upload_data['how_merge'] = run_params['merge_method']
+
+    dst_df = load_table(
+        workflow.get_data_frame_table_name(),
+    )
+    src_df = load_table(
+        workflow.get_data_frame_upload_table_name(),
+    )
+
+    try:
+        perform_dataframe_upload_merge(
+            workflow,
+            dst_df,
+            src_df,
+            upload_data)
+    except Exception as exc:
+        # Nuke the temporary table
+        table_queries.delete_table(
+            workflow.get_data_frame_upload_table_name(),
+        )
+        raise Exception(_('Unable to perform merge operation: {0}').format(
+            str(exc)))
+
+    column_names, column_types, is_key_column = workflow.get_column_info()
+    log_item.payload['column_names'] = column_names,
+    log_item.payload['column_types'] = column_types,
+    log_item.payload['column_unique'] = is_key_column
+    log_item.payload['num_rows'] = workflow.nrows
+    log_item.payload['num_cols'] = workflow.ncols
+    log_item.save()

@@ -6,6 +6,39 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 
+class MergeForm(forms.Form):
+    """Form to choose the merge method for data frames."""
+
+    how_merge_choices = [
+        ('', _('- Choose row selection method -')),
+        ('outer', _('1) Select all rows in both the existing and new table')),
+        ('inner', _(
+            '2) Select only the rows with keys present in both the '
+            + 'existing and new table')),
+        ('left', _('3) Select only the rows with keys in the existing table')),
+        ('right', _('4) Select only the rows with keys in the new table')),
+    ]
+
+    merge_help = _('Select one method to see detailed information')
+
+    how_merge_initial = None
+    def __init__(self, *args, **kargs):
+        """Adjust the choices for the select fields."""
+        self.how_merge_initial = next((
+            mrg for mrg in self.how_merge_choices
+            if kargs.pop('how_merge', None) == mrg[0]),
+            None)
+
+        super().__init__(*args, **kargs)
+
+        self.fields['how_merge'] = forms.ChoiceField(
+            initial=self.how_merge_initial,
+            choices=self.how_merge_choices,
+            required=True,
+            label=_('Method to select rows to merge/update'),
+            help_text=self.merge_help)
+
+
 class SelectColumnUploadForm(forms.Form):
     """Form to handle the seelction of columns when uploading."""
 
@@ -75,26 +108,14 @@ class SelectColumnUploadForm(forms.Form):
         return cleaned_data
 
 
-class SelectKeysForm(forms.Form):
-    """Form to choose the merge method for data frames."""
-
-    how_merge_choices = [
-        ('', _('- Choose row selection method -')),
-        ('outer', _('1) Select all rows in both the existing and new table')),
-        ('inner', _(
-            '2) Select only the rows with keys present in both the '
-            + 'existing and new table')),
-        ('left', _('3) Select only the rows with keys in the existing table')),
-        ('right', _('4) Select only the rows with keys in the new table')),
-    ]
+class SelectKeysForm(MergeForm):
+    """Form to select the keys for merging."""
 
     dst_help = _(
         'Key column in the existing table to match with the new table.')
 
     src_help = _(
         'Key column in the new table to match with the existing table.')
-
-    merge_help = _('Select one method to see detailed information')
 
     def __init__(self, *args, **kargs):
         """Adjust the choices for the select fields."""
@@ -114,11 +135,6 @@ class SelectKeysForm(forms.Form):
             if selected_key == skey[0]),
             ('', _('- Select merge option -')))
 
-        how_merge_initial = next((
-            mrg for mrg in self.how_merge_choices
-            if kargs.pop('how_merge', None) == mrg[0]),
-            None)
-
         super().__init__(*args, **kargs)
 
         self.fields['dst_key'] = forms.ChoiceField(
@@ -134,10 +150,3 @@ class SelectKeysForm(forms.Form):
             required=True,
             label=_('Key Column in New Table'),
             help_text=self.src_help)
-
-        self.fields['how_merge'] = forms.ChoiceField(
-            initial=how_merge_initial,
-            choices=self.how_merge_choices,
-            required=True,
-            label=_('Method to select rows to merge/update'),
-            help_text=self.merge_help)
