@@ -290,6 +290,8 @@ def save_view_form(
             request.user,
             Log.VIEW_EDIT if form.instance.id else Log.VIEW_CREATE)
 
+        return JsonResponse({'html_redirect': ''})
+
     return JsonResponse({
         'html_form': render_to_string(
             template_name,
