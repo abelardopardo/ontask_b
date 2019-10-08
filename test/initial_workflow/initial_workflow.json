@@ -4046,7 +4046,7 @@
     }
 },
 {
-    "model": "ontask.scheduledaction",
+    "model": "ontask.scheduledoperation",
     "pk": 1,
     "fields": {
         "user": [
