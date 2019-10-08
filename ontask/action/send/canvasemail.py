@@ -89,6 +89,7 @@ def send_canvas_emails(
             'recipients[]': int(msg_to),
             'body': msg_body,
             'subject': msg_subject,
+            'force_new': True,
         }
 
         # Manage the bursts
