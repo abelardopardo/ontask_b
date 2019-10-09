@@ -4,11 +4,14 @@
 import datetime
 import io
 import os
+
+from django.contrib.auth import get_user_model
+
 import test
 
 import pandas as pd
 from django.conf import settings
-from django.contrib.auth import get_user_model
+sfrom django.contrib.auth import get_user_model
 from rest_framework import status
 
 from ontask.dataops.forms.upload import load_df_from_csvfile
@@ -279,9 +282,9 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', '{0}equal', 'double', '0.3', 0.3, None)
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'abb')
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'None')
-        self.do_operand('select', '{0}equal', 'boolean', 'true', 'true', 'false')
+        self.do_operand('select', '{0}equal', 'boolean', 'true', True, False)
         self.do_operand('select', '{0}equal', 'boolean', 'true', None, None)
-        self.do_operand('select', '{0}equal', 'boolean', 'false', 'false', 'true')
+        self.do_operand('select', '{0}equal', 'boolean', 'false', False, True)
         self.do_operand('select', '{0}equal', 'boolean', 'false', None, None)
         self.do_operand('text',
             '{0}equal',
@@ -716,3 +719,4 @@ class ConditionNameWithSymbols(test.OnTaskTestCase):
                 self.assertEquals(
                     'Condition 4' in str(resp.content),
                     condition_value)
+

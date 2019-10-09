@@ -24,6 +24,12 @@
 
 - Scheduled executions are now properly reflected in the last_executed (Issue #157)
 
+## 6.0.3 (2019-10-9)
+
+### Fixed
+
+- Error when processing formulas with boolean values
+
 ## 6.0.2 (2019-10-8)
 
 ### Fixed
