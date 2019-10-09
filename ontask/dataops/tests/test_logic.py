@@ -11,7 +11,7 @@ import test
 
 import pandas as pd
 from django.conf import settings
-sfrom django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 from rest_framework import status
 
 from ontask.dataops.forms.upload import load_df_from_csvfile
