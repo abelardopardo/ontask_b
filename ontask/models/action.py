@@ -237,8 +237,8 @@ class Action(models.Model):  # noqa Z214
         return (
             self.text_content
             and (
-                self.action_type == Action.personalized_text
-                or self.action_type == Action.send_list))
+                self.action_type == Action.PERSONALIZED_TEXT
+                or self.action_type == Action.SEND_LIST))
 
     @functional.cached_property
     def is_in(self) -> bool:
