@@ -52,6 +52,8 @@ def get_value(node, given_variables):
             )
 
         varvalue = given_variables.get(varname)
+        if isinstance(varvalue, bool):
+            varvalue = str(varvalue).lower()
 
     return varvalue
 

@@ -281,9 +281,9 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', '{0}equal', 'double', '0.3', 0.3, None)
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'abb')
         self.do_operand('text', '{0}equal', 'string', 'aaa', 'aaa', 'None')
-        self.do_operand('select', '{0}equal', 'boolean', 'true', 'true', 'false')
+        self.do_operand('select', '{0}equal', 'boolean', 'true', True, False)
         self.do_operand('select', '{0}equal', 'boolean', 'true', None, None)
-        self.do_operand('select', '{0}equal', 'boolean', 'false', 'false', 'true')
+        self.do_operand('select', '{0}equal', 'boolean', 'false', False, True)
         self.do_operand('select', '{0}equal', 'boolean', 'false', None, None)
         self.do_operand('text',
             '{0}equal',
