@@ -670,7 +670,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
-        self.assertIn('Scheduled Actions', self.selenium.page_source)
+        self.assertIn('Scheduled Operations', self.selenium.page_source)
 
     def go_to_logs(self):
         self.selenium.find_element_by_id('ontask-base-settings').click()

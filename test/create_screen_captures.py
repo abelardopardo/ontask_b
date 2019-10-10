@@ -936,7 +936,7 @@ class ScreenTestFixture(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//button[@id='next-step-off']"
         ).click()
-        self.wait_for_page(title='OnTask :: Action scheduled')
+        self.wait_for_page(title='OnTask :: Operation scheduled')
 
         #
         # Actions
@@ -973,7 +973,7 @@ class ScreenTestFixture(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//button[@id='next-step-off']"
         ).click()
-        self.wait_for_page(title='OnTask :: Action scheduled')
+        self.wait_for_page(title='OnTask :: Operation scheduled')
 
         #
         # Scheduler
