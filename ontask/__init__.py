@@ -23,7 +23,7 @@ __all__ = [
 
 __version__ = 'B.6.1'
 
-app_config = 'ontask.apps.ActionConfig'
+app_config = 'ontask.apps.OnTaskConfig'
 
 
 def is_legal_name(val: str) -> Optional[str]:
