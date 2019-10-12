@@ -6,33 +6,42 @@ from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from ontask.scheduler import api
-from ontask.scheduler.views import delete, edit_action_run, finish_scheduling, index, view
+from ontask.scheduler import views
 
 app_name = 'scheduler'
 
 urlpatterns = [
 
     # List all schedule actions
-    path('', index, name='index'),
+    path('', views.index, name='index'),
 
-    # Create scheduled email action
+    # Create scheduled action
     path(
         '<int:pk>/create_action_run/',
-        edit_action_run,
+        views.create_action_run,
         name='create_action_run'),
 
-    # Edit scheduled email action
-    path('<int:pk>/edit_action_run/', edit_action_run, name='edit_action_run'),
+    # # Create scheduled workflow op
+    # path(
+    #     'create_workflow_op/',
+    #     views.create_workflow_op,
+    #     name='create_workflow_op'),
 
-    # View the details of a scheduled action
-    path('<int:pk>/view/', view, name='view'),
+    # Edit scheduled operation
+    path(
+        '<int:pk>/edit_scheduled_operation/',
+        views.edit_scheduled_operation,
+        name='edit_scheduled_operation'),
+
+    # View the details of a scheduled operation
+    path('<int:pk>/view/', views.view, name='view'),
 
     # Delete scheduled email action
-    path('<int:pk>/delete/', delete, name='delete'),
+    path('<int:pk>/delete/', views.delete, name='delete'),
 
     path(
         'finish_scheduling/',
-        finish_scheduling,
+        views.finish_scheduling,
         name='finish_scheduling'),
 
     # API

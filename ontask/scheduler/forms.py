@@ -3,7 +3,6 @@
 """Forms for scheduling actions."""
 
 import datetime
-from builtins import object
 
 import pytz
 from bootstrap_datepicker_plus import DateTimePickerInput

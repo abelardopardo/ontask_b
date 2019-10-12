@@ -46,6 +46,11 @@
     {% elif not workflow.actions.all.count %}
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
+    {% comment %}
+    <div class="text-center mb-3">
+      {% include 'scheduler/includes/add_op_menu.html' %}
+    </div>
+    {% endcomment %}
     {% if table.data|length %}
       <div class="justify-content-center">
         {% render_table table %}

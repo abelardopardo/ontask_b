@@ -63,7 +63,7 @@ class SchedulerForms(test.OnTaskTestCase):
         # Change the name of the scheduled item
         sc_item = ScheduledOperation.objects.first()
         resp = self.get_response(
-            'scheduler:edit_action_run',
+            'scheduler:edit_scheduled_operation',
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -81,7 +81,7 @@ class SchedulerForms(test.OnTaskTestCase):
         # Select the confirm items
         sc_item = ScheduledOperation.objects.first()
         resp = self.get_response(
-            'scheduler:edit_action_run',
+            'scheduler:edit_scheduled_operation',
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -151,7 +151,7 @@ class SchedulerForms(test.OnTaskTestCase):
         # Change the name of the scheduled item
         sc_item = ScheduledOperation.objects.first()
         resp = self.get_response(
-            'scheduler:edit_action_run',
+            'scheduler:edit_scheduled_operation',
             {'pk': sc_item.id},
             method='POST',
             req_params={
@@ -169,7 +169,7 @@ class SchedulerForms(test.OnTaskTestCase):
         # Select the item_column for confirmation
         sc_item = ScheduledOperation.objects.first()
         resp = self.get_response(
-            'scheduler:edit_action_run',
+            'scheduler:edit_scheduled_operation',
             {'pk': sc_item.id},
             method='POST',
             req_params={
