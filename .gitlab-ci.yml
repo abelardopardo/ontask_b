@@ -1,4 +1,5 @@
 before_script:
+  - rm -f geckodriver.log
   - python3 -m pip install --upgrade --user pip
   - python3 -m pip install coverage
   - python3 -m pip install --user -r requirements.txt
