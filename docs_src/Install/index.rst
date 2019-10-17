@@ -37,7 +37,7 @@ Version 5.2 contains a significant reorganization of the file structure in the t
 
 - The :ref:`configuration file <configuration_file>` needs to be moved from ``src/ontask/settings`` to ``settings``.
 
-- The the files in the ``media`` folder need to be moved to ``ontask/media``.
+- The files in the ``media`` folder need to be moved to ``ontask/media``.
 
 Required tools
 **************
