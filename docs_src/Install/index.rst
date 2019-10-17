@@ -808,6 +808,8 @@ OnTask allows to send personalized emails to users's inbox in an instance of a `
                "aux_params": {"burst": 10, "pause": 5}}
        }
 
+  Make sure you include this informtion **all in a single line in the configuration file**.
+
   Default: ``{}`` (Empty dictionary)
 
 ``CANVAS_TOKEN_EXPIRY_SLACK``
