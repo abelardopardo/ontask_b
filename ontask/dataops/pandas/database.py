@@ -17,6 +17,7 @@ from ontask import OnTaskDataFrameNoKey, OnTaskSharedState
 from ontask.dataops.pandas.columns import has_unique_column, is_unique_column
 from ontask.dataops.pandas.datatypes import pandas_datatype_names
 from ontask.dataops.sql import get_select_query_txt
+from ontask.models.const import COLUMN_NAME_SIZE
 
 logger = logging.getLogger('console')
 
@@ -174,6 +175,12 @@ def store_table(
 
     :return: Nothing. Side effect in the DB
     """
+    # Check the length of the column names
+    if any(len(cname) > COLUMN_NAME_SIZE for cname in data_frame.columns):
+        raise Exception(
+            _('Column name is longer than {0} characters').format(
+                COLUMN_NAME_SIZE))
+
     if dtype is None:
         dtype = {}
 
@@ -249,7 +256,10 @@ def verify_data_frame(data_frame: pd.DataFrame):
     """Verify consistency properties in a DF.
 
     Verify that the data frame complies with the properties:
+
     1) There is at least one key column
+
+    2) All column names are below the maximum size
 
     :param data_frame: Data frame to verify
 
@@ -263,6 +273,11 @@ def verify_data_frame(data_frame: pd.DataFrame):
             'The data has no column with unique values per row. '
             + 'At least one column must have unique values.'),
         )
+
+    if any(len(cname) > COLUMN_NAME_SIZE for cname in data_frame.columns):
+        raise Exception(
+            _('Column name is longer than {0} characters').format(
+                COLUMN_NAME_SIZE))
 
     return
 

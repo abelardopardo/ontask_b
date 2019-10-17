@@ -12,7 +12,10 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.dataops.pandas.datatypes
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.const import (
+    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE,
+    COLUMN_NAME_SIZE,
+)
 from ontask.models.logs import Log
 
 
@@ -36,7 +39,7 @@ class Column(models.Model):
 
     # Column name
     name = models.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=COLUMN_NAME_SIZE,
         blank=False,
         verbose_name=_('column name'))
 
