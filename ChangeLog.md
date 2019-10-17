@@ -1,12 +1,10 @@
-## 6.1 ()
+## 6.1 (2019-10-)
 
 ### Added
 
-- New functionality to upload/merge data using an Amazon Athena connection (Issue #166)
+- New action type: personalized rubric. Write a rubric, extend each cell with a feedback paragraph, collect data about the level of attainment and create a personalized email with the appropriate messages for each student.
 
 - New functionality to execute actions incrementally over a time window (Issue #160)
-
-- New action type: personalized rubric. Write a rubric, extend each cell with a feedback paragraph, collect data about the level of attainment and create a personalized email with the appropriate messages for each student.
 
 - New button to export a subset of actions from a workflow in a single step.
 
@@ -20,9 +18,11 @@
 
 ### Fixed
 
+- Enforce a limit of 63 characters or column numbers (Issue #170)
+
 - Scheduled action editing now remembers those items selected for exclusion
 
-- Scheduled executions are now properly reflected in the last_executed (Issue #157)
+- Incorrect last executed time (Issue #157)
 
 ## 6.0.3 (2019-10-9)
 
