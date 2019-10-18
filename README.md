@@ -169,6 +169,10 @@ Q18. **This seems like a complex tool to install** OnTask is a web platform and
 Q19. **Where do I find the details on how to install it and some more 
      information?** Check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b).   
      
+## Roadmap
+
+Where is this project heading? Check the [Roadmap page](https://github.com/abelardopardo/ontask_b/projects/1) for more information about where this is heading and the history of what it has been done so far (starting with version 6.1)
+
 ## Contributing
 
 Check out our [Governance structure](https://github.com/abelardopardo/ontask_b/blob/master/GOVERNANCE.md) for a detailed description of the process to contribute to the project.
