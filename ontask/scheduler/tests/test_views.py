@@ -241,8 +241,8 @@ class SchedulerForms(test.OnTaskTestCase):
             req_params={
                 'name': 'Second scheduling round',
                 'item_column': str(self.workflow.columns.get(name='email').id),
-                'execute': execute.strftime('%m/%d/%Y %H:%m'),
-                'execute_until': execute_until.strftime('%m/%d/%Y %H:%m'),
+                'execute': execute.strftime('%m/%d/%Y %H:%M:%S'),
+                'execute_until': execute_until.strftime('%m/%d/%Y %H:%M:%S'),
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
