@@ -35,7 +35,7 @@ def column_to_field(col, initial=None, required=False, label=None):
         # Column has a finite set of prefixed values
         choices = [(value_cat, value_cat) for value_cat in col.categories]
         initial = next(
-            (choice for choice in choices if initial == choice),
+            (choice for choice in choices if initial == choice[0]),
             ('', '---'))
 
         # If the column is of type string, allow always the empty value
