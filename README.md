@@ -1,18 +1,27 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 6.0.3 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 6.1 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/abelardopardo/ontask_b)
 ![Issues](https://img.shields.io/github/issues/abelardopardo/ontask_b.svg?style=flat-square)
 ![License](https://img.shields.io/github/license/abelardopardo/ontask_b.svg?style=flat-square)
 [![Documentation Status](https://readthedocs.org/projects/ontask-version-b/badge/?version=latest)](https://ontask-version-b.readthedocs.io/en/latest/?badge=latest)
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-37/)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/abelardopardo/ontask_b)
 ![GitHub followers](https://img.shields.io/github/followers/abelardopardo?label=Follow&style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/ontasklearning?label=Follow&style=social)
 
 ## OnTask in a nutshell
 
-- ***NEW** Action to send data columns through email or JSON objects
+- **NEW** Data upload/merge through an Amazon Athena connection
+
+- **NEW** Functionality to export a set of actions from a single request.
+
+- **NEW** Action to write a rubric with a feedback paragraph for each criteria and level of attainment and create a personalized message to each student.
+
+- **NEW** Actions can now be trigger incrementally. Execution can now be scheduled over a time window, and at ever execution, only those new learners that have not been considered before are processed. This action execution is **ideal** to implement triggers that send messages whenever a change in data is detected (requires data to be refreshed frequently)
+ 
+- **NEW** Action to send data columns through email or JSON objects
 
 - Data upload through CSV, Excel files, S3 Buckets or SQL connections
 
@@ -160,6 +169,10 @@ Q18. **This seems like a complex tool to install** OnTask is a web platform and
 Q19. **Where do I find the details on how to install it and some more 
      information?** Check the [OnTask Documentation](https://abelardopardo.github.io/ontask_b).   
      
+## Roadmap
+
+Where is this project heading? Check the [Roadmap page](https://github.com/abelardopardo/ontask_b/projects/1) for more information about where this is heading and the history of what it has been done so far (starting with version 6.1)
+
 ## Contributing
 
 Check out our [Governance structure](https://github.com/abelardopardo/ontask_b/blob/master/GOVERNANCE.md) for a detailed description of the process to contribute to the project.
@@ -291,9 +304,6 @@ licenses:
 - [pytz](https://pypi.python.org/pypi/pytz) MIT
 
 - [Redis](https://redis.io) BSD
-
-- [searchable-option-list](https://github.com/pbauerochse/searchable-option-list) 
-  MIT License
 
 - [Sphinx](https://pypi.python.org/pypi/Sphinx) BSD
 

@@ -77,7 +77,7 @@ class PluginAvailableTable(tables.Table):
             return '--'
         return log_item.created
 
-    class Meta(object):
+    class Meta:
         """Choose fields, sequence and attributes."""
 
         model = Plugin
@@ -252,17 +252,14 @@ def plugin_invoke(
             form)
 
         # Log the event with the status "preparing invocation"
-        log_item = Log.objects.register(
+
+        log_item = plugin_info.log(
             request.user,
             Log.PLUGIN_EXECUTE,
-            workflow,
-            {
-                'id': plugin_info.id,
-                'name': plugin_info.name,
-                'input_column_names': in_cols,
-                'output_column_names': out_cols,
-                'parameters': json.dumps(exec_params, default=str),
-                'status': 'preparing execution'})
+            input_column_names=in_cols,
+            output_column_names=out_cols,
+            parameters=json.dumps(exec_params, default=str),
+            status='preparing execution')
 
         run_plugin_task.apply_async(
             (

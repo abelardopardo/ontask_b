@@ -33,22 +33,26 @@ class ActionViewExport(test.OnTaskTestCase):
         action = self.workflow.actions.get(name='Detecting age')
 
         resp = self.get_response(
-            'action:export_ask',
-            {'pk': action.id})
+            'workflow:export_list_ask',
+            {'wid': action.workflow.id})
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertTrue('{{ registered }}' in str(resp.content))
+        self.assertTrue(action.name in str(resp.content))
 
         # Get export done
+        # BROKEN!!!
         resp = self.get_response(
-            'action:export_done',
-            {'pk': action.id})
+            'workflow:export_list_ask',
+            {'wid': action.workflow.id},
+            method='POST',
+            req_params={'select_0': True})
+
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue('Your download will start ' in str(resp.content))
 
         # Get export download
         resp = self.get_response(
-            'action:export_download',
-            {'pk': action.id})
+            'action:export',
+            {'pklist': str(action.id)})
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(resp['Content-Type'], 'application/octet-stream')
 
@@ -70,8 +74,7 @@ class ActionViewExport(test.OnTaskTestCase):
         # Post request
         req = self.factory.post(
             reverse('action:import'),
-            {'name': 'new action name', 'upload_file': file_obj},
-        )
+            {'upload_file': file_obj})
         req.META['HTTP_ACCEPT_ENCODING'] = 'gzip, deflate'
         req.FILES['upload_file'].content_type = 'application/x-gzip'
         req = self.add_middleware(req)
@@ -79,4 +82,4 @@ class ActionViewExport(test.OnTaskTestCase):
 
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         # Fails if the action is not there
-        self.workflow.actions.get(name='new action name')
+        self.workflow.actions.get(name='SPQ')

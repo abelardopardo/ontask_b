@@ -97,15 +97,10 @@ def serve_survey_row(
             context)
 
         # Log the event and update its content in the action
-        log_item = Log.objects.register(
+        log_item = action.log(
             request.user,
-            Log.SURVEY_INPUT,
-            action.workflow,
-            {'id': action.workflow.id,
-             'name': action.workflow.name,
-             'action': action.name,
-             'action_id': action.id,
-             'new_values': json.dumps(dict(zip(row_keys, row_values)))})
+            Log.ACTION_SURVEY_INPUT,
+            new_values=json.dumps(dict(zip(row_keys, row_values))))
 
         # Modify the time of execution for the action
         action.last_executed_log = log_item

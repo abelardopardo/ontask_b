@@ -2,20 +2,22 @@
 
 """Model is to store process to execute in the platform at a certain time."""
 
-from builtins import object
+import json
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import simplify_datetime_str
 from ontask.models import Column
+from ontask.models.workflow import Workflow
 from ontask.models.action import Action
-from ontask.models.const import CHAR_FIELD_LONG_SIZE
+from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
 
 
-class ScheduledAction(models.Model):
+class ScheduledOperation(models.Model):
     """Objects encoding the scheduling of a send email action.
 
     @DynamicAttrs
@@ -33,6 +35,12 @@ class ScheduledAction(models.Model):
         (STATUS_EXECUTING, _('Executing')),
         (STATUS_DONE, _('Finished')),
         (STATUS_DONE_ERROR, _('Finished with error')),
+    ]
+
+    ACTION_RUN = 'action_run'
+
+    OPERATION_TYPES = [
+        (ACTION_RUN, _('Run action')),
     ]
 
     user = models.ForeignKey(
@@ -54,14 +62,12 @@ class ScheduledAction(models.Model):
         blank=True,
         verbose_name=_('description'))
 
-    # The action used in the scheduling
-    action = models.ForeignKey(
-        Action,
-        db_index=True,
+    # Type of event logged see above
+    operation_type = models.CharField(
+        max_length=CHAR_FIELD_MID_SIZE,
         null=False,
         blank=False,
-        on_delete=models.CASCADE,
-        related_name='scheduled_actions')
+        choices=OPERATION_TYPES)
 
     # Time of creation
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
@@ -72,6 +78,12 @@ class ScheduledAction(models.Model):
         blank=False,
         verbose_name=_('When to execute this action'))
 
+    # Time to finish the execution
+    execute_until = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('End of execution period (if executing multiple times)'))
+
     # Status of the entry (pending, running or done)
     status = models.CharField(
         name='status',
@@ -79,6 +91,31 @@ class ScheduledAction(models.Model):
         blank=False,
         choices=SCHEDULED_STATUS,
         verbose_name=_('Execution Status'))
+
+    # Reference to the record of the last execution
+    last_executed_log = models.ForeignKey(
+        Log,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True)
+
+    # The action used in the scheduling
+    workflow = models.ForeignKey(
+        Workflow,
+        db_index=True,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='scheduled_actions')
+
+    # The action used in the scheduling
+    action = models.ForeignKey(
+        Action,
+        db_index=True,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='scheduled_actions')
 
     # Column object denoting the one used to differentiate elements
     item_column = models.ForeignKey(
@@ -97,13 +134,6 @@ class ScheduledAction(models.Model):
         null=True,
         verbose_name=_('exclude values'))
 
-    # Reference to the record of the last execution
-    last_executed_log = models.ForeignKey(
-        Log,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True)
-
     # JSON element with additional information
     payload = JSONField(
         default=dict,
@@ -115,7 +145,28 @@ class ScheduledAction(models.Model):
         """Column name or None."""
         return self.item_column.name if self.item_column else None
 
-    class Meta(object):
+    def log(self, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'action': self.action.name,
+            'action_id': self.action.id,
+            'execute': simplify_datetime_str(self.execute),
+            'execute_until': simplify_datetime_str(self.execute_until),
+            'item_column': self.item_column.name,
+            'status': self.status,
+            'exclude_values': self.exclude_values,
+            'payload': json.dumps(self.payload)}
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            self.user,
+            operation_type,
+            self.action.workflow,
+            payload)
+
+    class Meta:
         """Define the criteria of uniqueness with name and action."""
 
         unique_together = ('name', 'action')

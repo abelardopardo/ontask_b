@@ -1,3 +1,29 @@
+## 6.1 (2019-10-)
+
+### Added
+
+- New action type: personalized rubric. Write a rubric, extend each cell with a feedback paragraph, collect data about the level of attainment and create a personalized email with the appropriate messages for each student.
+
+- New functionality to execute actions incrementally over a time window (Issue #160)
+
+- New button to export a subset of actions from a workflow in a single step.
+
+- Link to the table views in the top menu
+
+### Changed
+
+- Revamped the logs created by the platform so that they have a uniform structure
+
+- Revamped how data connections are administered and added an enable/disable switch
+
+### Fixed
+
+- Enforce a limit of 63 characters or column numbers (Issue #170)
+
+- Scheduled action editing now remembers those items selected for exclusion
+
+- Incorrect last executed time (Issue #157)
+
 ## 6.0.3 (2019-10-9)
 
 ### Fixed

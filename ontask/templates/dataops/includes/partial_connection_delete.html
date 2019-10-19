@@ -1,0 +1,17 @@
+{% load i18n %}
+<form method="post" action="{{ delete_url }}" class="js-connection-delete-form">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h4 class="modal-title">{% trans 'Confirm connection deletion' %}</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="lead">{% blocktrans with n=name %}Are you sure you want to delete the connection <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-danger">
+      <span class="fa fa-trash"></span> {% trans 'Delete connection' %}</button>
+  </div>
+</form>

@@ -15,7 +15,6 @@ from ontask.action.forms import EmailActionForm
 from ontask.action.payloads import (
     EmailPayload, get_or_set_action_info, set_action_payload,
 )
-from ontask.action.send import send_emails
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
@@ -53,9 +52,7 @@ def run_email_action(
         initial_values={
             'action_id': action.id,
             'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:email_done')
-        }
-    )
+            'post_url': reverse('action:email_done')})
 
     # Create the form to ask for the email subject and other information
     form = EmailActionForm(
@@ -122,28 +119,18 @@ def run_email_done(
         return redirect('home')
 
     # Log the event
-    log_item = Log.objects.register(
+    log_item = action.log(
         request.user,
-        Log.SCHEDULE_EMAIL_EXECUTE,
-        action.workflow,
-        {
-            'action': action.name,
-            'action_id': action.id,
-            'from_email': request.user.email,
-            'subject': action_info['subject'],
-            'cc_email': action_info['cc_email'],
-            'bcc_email': action_info['bcc_email'],
-            'send_confirmation': action_info['send_confirmation'],
-            'track_read': action_info['track_read'],
-            'exported_workflow': action_info['export_wf'],
-            'exclude_values': action_info['exclude_values'],
-            'item_column': action_info['item_column'],
-            'status': 'Preparing to execute',
-        })
-
-    # Update the last_execution_log
-    action.last_executed_log = log_item
-    action.save()
+        Log.ACTION_RUN_EMAIL,
+        from_email=request.user.email,
+        subject=action_info['subject'],
+        cc_email=action_info['cc_email'],
+        bcc_email=action_info['bcc_email'],
+        send_confirmation=action_info['send_confirmation'],
+        track_read=action_info['track_read'],
+        exported_workflow=action_info['export_wf'],
+        exclude_values=action_info['exclude_values'],
+        item_column=action_info['item_column'])
 
     # Send the emails!
     run_task.delay(request.user.id, log_item.id, action_info.get_store())

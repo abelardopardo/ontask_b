@@ -44,7 +44,7 @@ class OAuthUserToken(models.Model):
         null=False,
         default=None)
 
-    class Meta(object):
+    class Meta:
         """Define uniqueness and table name."""
 
         unique_together = ('user', 'instance_name')

@@ -4,18 +4,18 @@
 {% block title %}{% trans 'Export Done' %}{% endblock %}
 {% block scripts %}
   <script>
-    {% if include %}
-      $(window).on('load', function(){ location.href="{% url 'workflow:export' include %}"; });
+    {% if only_action_list %}
+      $(window).on('load', function(){ location.href="{% url 'action:export' include %}"; });
     {% else %}
-      $(window).on('load', function(){ location.href="{% url 'workflow:export_empty' %}"; });
+      $(window).on('load', function(){ location.href="{% url 'workflow:export' include %}"; });
     {% endif %}
   </script>
 {% endblock scripts %}
 {% block container %}
   <div class="container" style="text-align:center;">
-    <h1 class="text-center">{% trans 'Workflow export' %}</h1>
+    <h1 class="text-center">{% if only_action_list %}{% trans 'Action Export' %}{% else %}{% trans 'Workflow export' %}{% endif %}</h1>
     <p class="text-center">{% trans 'Your download will start shortly' %}</p>
     <a class="shadow btn btn-outline-dark spin"
-       href="{% url 'workflow:operations' %}">{% trans 'Back' %}</a>
+       href="{% if only_action_list %}{% url 'action:index' %}{% else %}{% url 'workflow:operations' %}{% endif %}">{% trans 'Back' %}</a>
   </div>
 {% endblock container %}

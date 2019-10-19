@@ -6,9 +6,11 @@ from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from ontask.dataops.formula import EVAL_TXT, evaluate_formula
 from ontask.dataops.sql import get_num_rows
-from ontask.models import Column
+from ontask.models.column import Column
 from ontask.models.const import CHAR_FIELD_LONG_SIZE
+from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 
 
@@ -84,7 +86,23 @@ class View(models.Model):
 
         return self.nrows
 
-    class Meta(object):
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'columns': [col.name for col in self.columns.all()],
+            'formula': evaluate_formula(self.formula, EVAL_TXT),
+            'nrows': self.nrows}
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.workflow,
+            payload)
+
+    class Meta:
         """Define uniqueness with name in workflow and order by name."""
 
         unique_together = ('name', 'workflow')

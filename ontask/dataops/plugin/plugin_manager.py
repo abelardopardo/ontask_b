@@ -325,26 +325,14 @@ def refresh_plugin_data(request, workflow = None):
         i_file = os.path.join(plugin_folder, rpin.filename, '__init__.py')
         if rpin.filename not in pfolders or not os.path.exists(i_file):
             # A plugin has vanished. Delete
-            # Log the event
-            Log.objects.register(
-                request.user,
-                Log.PLUGIN_DELETE,
-                workflow,
-                {'id': rpin.id, 'name': rpin.filename})
+            rpin.log(request.user, Log.PLUGIN_DELETE)
             rpin.delete()
             continue
 
         if os.stat(i_file).st_mtime > time.mktime(rpin.modified.timetuple()):
             # A plugin has changed
             _load_plugin_info(rpin.filename, rpin)
-
-            # Log the event
-            Log.objects.register(
-                request.user,
-                Log.PLUGIN_UPDATE,
-                workflow,
-                {'id': rpin.id,
-                 'name': rpin.filename})
+            rpin.log(request.user, Log.PLUGIN_UPDATE)
 
         pfolders.remove(rpin.filename)
 
@@ -360,19 +348,12 @@ def refresh_plugin_data(request, workflow = None):
 
         # Load the plugin info in a new record.
         rpin = _load_plugin_info(fname)
-
         if not rpin:
             messages.error(
                 request,
                 _('Unable to load plugin in folder "{0}".').format(fname))
             continue
-
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.PLUGIN_CREATE,
-            workflow,
-            {'id': rpin.id, 'name': rpin.filename})
+        rpin.log(request.user, Log.PLUGIN_CREATE)
 
 
 def run_plugin(

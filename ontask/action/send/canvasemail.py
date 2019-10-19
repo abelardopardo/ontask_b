@@ -5,7 +5,7 @@
 import datetime
 import json
 from time import sleep
-from typing import Dict, Mapping, Tuple
+from typing import Dict, Mapping, Optional, Tuple
 
 import pytz
 import requests
@@ -24,8 +24,8 @@ logger = get_task_logger('celery_execution')
 def send_canvas_emails(
     user,
     action: Action,
-    log_item: Log,
     action_info: Mapping,
+    log_item: Optional[Log] = None,
 ):
     """Send CANVAS emails with the action content evaluated for each row.
 
@@ -36,7 +36,7 @@ def send_canvas_emails(
     :param action: Action from where to take the messages
     :param log_item: Log object to store results
     :param action_info: Mapping key, value as defined in CanvasEmailPayload
-    :return: Send the emails
+    :return: List of field values used as "to" in emails
     """
     # Evaluate the action string, evaluate the subject, and get the value of
     # the email column.
@@ -79,6 +79,7 @@ def send_canvas_emails(
     burst_pause = oauth_info['aux_params'].get('pause', 0)
     domain = oauth_info['domain_port']
     conversation_url = oauth_info['conversation_url'].format(domain)
+    to_emails = []
     for msg_body, msg_subject, msg_to in action_evals:
         #
         # JSON object to send. Taken from method.conversations.create in
@@ -88,6 +89,7 @@ def send_canvas_emails(
             'recipients[]': int(msg_to),
             'body': msg_body,
             'subject': msg_subject,
+            'force_new': True,
         }
 
         # Manage the bursts
@@ -120,20 +122,10 @@ def send_canvas_emails(
         context['email_sent_datetime'] = str(
             datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
         )
-        Log.objects.register(
-            user,
-            Log.ACTION_CANVAS_EMAIL_SENT,
-            action.workflow,
-            context)
+        action.log(user, Log.ACTION_CANVAS_EMAIL_SENT, **context)
+        to_emails.append(msg_to)
 
-    # Update data in the overall log item
-    log_item.payload['objects_sent'] = len(action_evals)
-    log_item.payload['filter_present'] = action.get_filter() is not None
-    log_item.payload['datetime'] = str(datetime.datetime.now(pytz.timezone(
-        settings.TIME_ZONE)))
-    log_item.save()
-
-    return None
+    return to_emails
 
 
 def refresh_and_retry_send(

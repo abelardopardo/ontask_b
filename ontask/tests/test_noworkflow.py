@@ -38,9 +38,7 @@ class BackToHome(test.OnTaskTestCase):
             reverse('action:timeline'),
             reverse('action:timeline', kwargs={'pk': 1}),
             reverse('action:edit', kwargs={'pk': 1}),
-            reverse('action:export_ask', kwargs={'pk': 1}),
-            reverse('action:export_done', kwargs={'pk': 1}),
-            reverse('action:export_download', kwargs={'pk': 1}),
+            reverse('action:export', kwargs={'pklist': '1'}),
             reverse('action:import'),
             reverse('action:item_filter'),
             reverse('action:run', kwargs={'pk': 1}),
@@ -67,6 +65,10 @@ class BackToHome(test.OnTaskTestCase):
             reverse('dataops:upload_s2'),
             reverse('dataops:upload_s3'),
             reverse('dataops:upload_s4'),
+            reverse('dataops:sqlconns_instructor_index'),
+            # reverse('dataops:athenaconns_instructor_index'),
+            reverse('dataops:sqlupload_start', kwargs={'pk': 1}),
+            # reverse('dataops:athenaupload_start', kwargs={'pk': 1}),
             # Logs
             reverse('logs:view', kwargs={'pk': 1}),
             # Table
@@ -130,6 +132,8 @@ class BackToHome(test.OnTaskTestCase):
             # Dataops
             reverse('dataops:plugin_diagnose', kwargs={'pk': 1}),
             reverse('dataops:plugin_moreinfo', kwargs={'pk': 1}),
+            reverse('dataops:sqlconn_view', kwargs={'pk': 1}),
+            # reverse('dataops:athenaconn_view', kwargs={'pk': 1}),
             # Logs
             reverse('logs:display_ss'),
             # Table

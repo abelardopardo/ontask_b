@@ -185,12 +185,9 @@ class TutorialCaptures(ScreenTests):
         self.body_ss('tutorial_action_index.png')
 
         # Go to the import action page
-        self.selenium.find_element_by_link_text('Import action').click()
+        self.selenium.find_element_by_link_text('Import actions').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, '//input[@id="id_name"]')
-            )
-        )
+            EC.element_to_be_clickable((By.XPATH, '//button[@name="Submit"]')))
         self.body_ss('tutorial_action_import.png')
         self.go_to_actions()
 
@@ -291,7 +288,7 @@ class TutorialCaptures(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_text)
+        select.select_by_value(Action.PERSONALIZED_TEXT)
         desc.send_keys('')
 
         self.modal_ss('tutorial_personalized_text_create.png')
@@ -511,7 +508,7 @@ class TutorialCaptures(ScreenTests):
         )
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_json)
+        select.select_by_value(Action.PERSONALIZED_JSON)
         desc.send_keys('')
 
         self.modal_ss('tutorial_personalized_json_create.png')
@@ -579,7 +576,7 @@ class TutorialCaptures(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.survey)
+        select.select_by_value(Action.SURVEY)
         desc.send_keys('Survey description for the learners')
 
         self.modal_ss('tutorial_survey_create.png')

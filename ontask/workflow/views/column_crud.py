@@ -25,8 +25,8 @@ from ontask.models import (
     ActionColumnConditionTuple, Column, Condition, Log, Workflow,
 )
 from ontask.workflow.forms import (
-    ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionAddForm,
-    QuestionRenameForm, RandomColumnAddForm,
+    ColumnAddForm, ColumnRenameForm, FormulaColumnAddForm, QuestionForm,
+    RandomColumnAddForm,
 )
 from ontask.workflow.ops import clone_wf_column, workflow_delete_column
 
@@ -100,7 +100,7 @@ def column_add(
     pk: Optional[int] = None,
     workflow: Optional[Workflow] = None,
 ) -> JsonResponse:
-    """Add column.
+    """Add a column.
 
     :param request: Http Request
 
@@ -140,14 +140,12 @@ def column_add(
 
     # Form to read/process data
     if is_question:
-        form = QuestionAddForm(request.POST or None, workflow=workflow)
+        form = QuestionForm(request.POST or None, workflow=workflow)
     else:
         form = ColumnAddForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
-
         # Processing now a valid POST request
-        # Access the updated information
         column_initial_value = form.initial_valid_value
 
         # Save the column object attached to the form
@@ -189,25 +187,19 @@ def column_add(
 
         # If the column is a question, add it to the action
         if is_question:
-            ActionColumnConditionTuple.objects.get_or_create(
+            acc, __ = ActionColumnConditionTuple.objects.get_or_create(
                 action=action,
                 column=column,
                 condition=None)
 
+        context = {
+            'column_name': column.name,
+            'column_type': column.data_type}
         # Log the event
         if is_question:
-            event_type = Log.QUESTION_ADD
+            acc.log(request.user, Log.ACTION_QUESTION_ADD, **context)
         else:
-            event_type = Log.COLUMN_ADD
-        Log.objects.register(
-            request.user,
-            event_type,
-            workflow,
-            {
-                'id': workflow.id,
-                'name': workflow.name,
-                'column_name': column.name,
-                'column_type': column.data_type})
+            column.log(request.user, Log.COLUMN_ADD)
 
         return JsonResponse({'html_redirect': ''})
 
@@ -284,16 +276,12 @@ def formula_column_add(
             cnames = [col.name for col in form.selected_columns]
             df[column.name] = _op_distrib[operation](df[cnames])
         except Exception as exc:
-            # Something went wrong in pandas, we need to remove the column
             column.delete()
 
             # Notify in the form
             form.add_error(
                 None,
-                _('Unable to add the column: {0}').format(
-                    exc,
-                ),
-            )
+                _('Unable to add the column: {0}').format(exc))
             return JsonResponse({
                 'html_form': render_to_string(
                     'workflow/includes/partial_formula_column_add.html',
@@ -308,8 +296,6 @@ def formula_column_add(
 
         # Update the positions of the appropriate columns
         workflow.reposition_columns(workflow.ncols + 1, column.position)
-
-        # Save column and refresh the prefetched related in the workflow
         column.save()
         workflow.refresh_from_db()
 
@@ -325,18 +311,7 @@ def formula_column_add(
 
         workflow.ncols = workflow.columns.count()
         workflow.save()
-
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.COLUMN_ADD_FORMULA,
-            workflow,
-            {'id': workflow.id,
-             'name': workflow.name,
-             'column_name': column.name,
-             'column_type': column.data_type})
-
-        # The form has been successfully processed
+        column.log(request.user, Log.COLUMN_ADD_FORMULA)
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({
@@ -369,12 +344,15 @@ def random_column_add(
         return JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
-    form = RandomColumnAddForm(data=request.POST or None)
+    form = RandomColumnAddForm(
+        data=request.POST or None,
+        workflow=workflow,
+        allow_interval_as_initial=True)
 
     if request.method == 'POST' and form.is_valid():
 
         # Save the column object attached to the form and add additional fields
-        column = form.save(commit=False)
+        column: Column = form.save(commit=False)
         column.workflow = workflow
         column.is_key = False
 
@@ -391,16 +369,12 @@ def random_column_add(
                     request=request),
             })
 
-        # Update the data frame
-        df = load_table(workflow.get_data_frame_table_name())
-
-        # Get the values and interpret its meaning
-        column_values = form.cleaned_data['column_values']
-        # First, try to see if the field is a valid integer
+        # Detect the case of a single integer as initial value so that it is
+        # expanded
         try:
-            int_value = int(column_values)
-        except ValueError:
-            int_value = None
+            int_value: int = int(column.categories[0])
+        except (ValueError, TypeError, IndexError):
+            int_value: Optional[str] = None
 
         if int_value:
             # At this point the field is an integer
@@ -415,55 +389,32 @@ def random_column_add(
                         request=request),
                 })
 
-            intvals = [idx + 1 for idx in range(int_value)]
-        else:
-            # At this point the field is a string and the values are the comma
-            # separated strings.
-            intvals = [
-                valstr.strip() for valstr in column_values.strip().split(',')
-                if valstr
-            ]
-            if not intvals:
-                form.add_error(
-                    'values',
-                    _('The value has to be a comma-separated list'),
-                )
-                return JsonResponse({
-                    'html_form': render_to_string(
-                        'workflow/includes/partial_random_column_add.html',
-                        {'form': form},
-                        request=request),
-                })
+            column.set_categories([idx + 1 for idx in range(int_value)])
+
+        column.save()
 
         # Empty new column
         new_column = [None] * workflow.nrows
         # Create the random partitions
         partitions = _partition(
             [idx for idx in range(workflow.nrows)],
-            len(intvals))
+            len(column.categories))
 
         # Assign values to partitions
         for idx, indexes in enumerate(partitions):
             for col_idx in indexes:
-                new_column[col_idx] = intvals[idx]
+                new_column[col_idx] = column.categories[idx]
 
         # Assign the new column to the data frame
-        df[column.name] = new_column
-
-        # Populate the column type
-        column.data_type = pandas_datatype_names.get(
-            df[column.name].dtype.name,
-        )
+        form.data_frame[column.name] = new_column
 
         # Update the positions of the appropriate columns
         workflow.reposition_columns(workflow.ncols + 1, column.position)
-
-        column.save()
         workflow.refresh_from_db()
 
         # Store the df to DB
         try:
-            store_dataframe(df, workflow)
+            store_dataframe(form.data_frame, workflow)
         except Exception as exc:
             messages.error(
                 request,
@@ -475,15 +426,7 @@ def random_column_add(
         workflow.save()
 
         # Log the event
-        Log.objects.register(
-            request.user,
-            Log.COLUMN_ADD_RANDOM,
-            workflow,
-            {'id': workflow.id,
-             'name': workflow.name,
-             'column_name': column.name,
-             'column_type': column.data_type,
-             'value': column_values})
+        column.log(request.user, Log.COLUMN_ADD_RANDOM)
 
         # The form has been successfully processed
         return JsonResponse({'html_redirect': ''})
@@ -518,7 +461,7 @@ def column_edit(
     is_question = 'question_edit' in request.path_info
     # Form to read/process data
     if is_question:
-        form = QuestionRenameForm(
+        form = QuestionForm(
             request.POST or None,
             workflow=workflow,
             instance=column)
@@ -564,18 +507,7 @@ def column_edit(
         workflow.save()
 
         # Log the event
-        if is_question:
-            event_type = Log.QUESTION_ADD
-        else:
-            event_type = Log.COLUMN_ADD
-        Log.objects.register(
-            request.user,
-            event_type,
-            workflow,
-            {
-                'id': workflow.id,
-                'name': workflow.name,
-                'column_name': column.name})
+        column.log(request.user, Log.COLUMN_EDIT)
 
         # Done processing the correct POST request
         return JsonResponse({'html_redirect': ''})
@@ -633,18 +565,8 @@ def column_delete(
     context['cond_to_delete'] = cond_to_delete
 
     if request.method == 'POST':
-        # Proceed deleting the column
+        column.log(request.user, Log.COLUMN_DELETE)
         workflow_delete_column(workflow, column, cond_to_delete)
-
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.COLUMN_DELETE,
-            workflow,
-            {
-                'id': workflow.id,
-                'name': workflow.name,
-                'column_name': column.name})
 
         # There are various points of return
         from_url = request.META['HTTP_REFERER']
@@ -690,8 +612,6 @@ def column_clone(
                 request=request),
         })
 
-    # POST REQUEST
-
     # Proceed to clone the column
     try:
         new_column = clone_wf_column(column)
@@ -701,15 +621,5 @@ def column_clone(
             _('Unable to clone column: {0}').format(str(exc)))
         return JsonResponse({'html_redirect': ''})
 
-    # Log the event
-    Log.objects.register(
-        request.user,
-        Log.COLUMN_CLONE,
-        workflow,
-        {
-            'id': workflow.id,
-            'name': workflow.name,
-            'old_column_name': column.name,
-            'new_column_name': new_column.name})
-
+    column.log(request.user, Log.COLUMN_CLONE)
     return JsonResponse({'html_redirect': ''})

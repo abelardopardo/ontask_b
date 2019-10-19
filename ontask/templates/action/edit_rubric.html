@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Edit Rubric' %}{% endblock %}
+{% block extrahead %}
+  <link href="{% static 'css/query-builder.default.min.css' %}" rel="stylesheet">
+  {% ontask_datetimepicker_css %}
+  {% ontask_datatables_bootstrap_css %}
+  {{ form.media.css }}
+{% endblock extrahead %}
+{% block scripts %}
+  {% ontask_datetimepicker_js %}
+  {{ form.media.js }}
+  <script src="{% static 'js/query-builder.standalone.min.js' %}"></script>
+  {% with country=LANGUAGE_CODE|country %}
+    <script src="{% static 'js/query-builder.'|add:country|add:'.js' %}"></script>
+  {% endwith %}
+  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
+  <script type="text/javascript">
+    {% with js_var='qbuilder_options' allow_empty='false' %}
+      {% include 'qbuilder_options.js' %}
+    {% endwith %}
+    {% if load_summernote %}
+      $(document).ready(function() {
+        if (document.getElementById("id_text_content") != null) {
+          initSummernote();
+        }
+      });
+      $("#id_text_content").on("summernote.paste",function(e,ne) {
+        var bufferText = ((ne.originalEvent || ne).clipboardData || window.clipboardData).getData('Text');
+        ne.preventDefault();
+        document.execCommand('insertText', false, bufferText);
+      });
+    {% endif %}
+    $(document).ready(function() {
+      $('#rubric-table').DataTable({
+        "autoWidth": false,
+        "ordering": false,
+        "search": {
+          "caseInsensitive": true,
+        },
+        "stateSave": true,
+        "stateSaveParams": function (settings, data) {
+          delete data.search;
+        },
+        "language": {
+          "url": location.protocol + getLanguage()
+        },
+        "colReorder": false,
+        "rowReorder": false,
+      });
+    });
+  </script>
+  {% if vis_scripts and not is_rubric_cell %}
+    {% for script_src in vis_scripts %}
+      <script src="{{ script_src|safe }}"></script>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
+{% block container %}
+  <div class="container" id="action-out-editor">
+    <h1 class="text-center">{{ action.name }}</h1>
+    <form action="" enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      {% include 'action/includes/partial_action_preview_done_buttons.html' %}
+      {% include 'action/includes/partial_action_edit_out_warning.html' %}
+      <div class="my-3">
+        <ul class="nav nav-tabs border-0 justify-content-center"
+            id="edit-personalized-text-tabs" role="tablist">
+          {% include 'action/includes/partial_text_summernote_tab_li.html' %}
+          {% include 'action/includes/partial_filter_tab_li.html' %}
+          {% include 'action/includes/partial_rubric_tab_li.html' %}
+        </ul>
+        <div class="tab-content" id="edit-personalized-text-tab-content">
+          {% include 'action/includes/partial_text_summernote_tab_body.html' %}
+          {% include 'action/includes/partial_filter_tab_body.html' %}
+          {% include 'action/includes/partial_rubric_tab_body.html' %}
+        </div>
+      </div>
+    </form>
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}
+

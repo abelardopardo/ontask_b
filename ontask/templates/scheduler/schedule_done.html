@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{{ block.super }}{% trans 'Action scheduled' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Operation scheduled' %}{% endblock %}
 {% block container %}
   <div class="container">
-    <h1 class="text-center">{% trans 'Action scheduled for execution' %}</h1>
-
-    <p class="text-center">{% blocktrans with n=tdelta %}The action will execute in {{ n }}{% endblocktrans %}</p>
+    {% if tdelta %}
+      <h1 class="text-center">{% trans 'Operation scheduled for execution' %}</h1>
+      <p class="text-center">{% blocktrans with n=tdelta %}The operation will start executing in {{ n }}{% endblocktrans %}</p>
+    {% endif %}
     <div class="text-center">
       <a class="shadow btn btn-outline-dark" href="{% url 'scheduler:index' %}">{% trans 'Back' %}</a>
-      <a href="{% url 'scheduler:edit' s_item.id %}"
+      <a href="{% url 'scheduler:edit_scheduled_operation' s_item.id %}"
          class="shadow btn btn-outline-primary">
       <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>
     </div>

@@ -670,7 +670,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
-        self.assertIn('Scheduled Actions', self.selenium.page_source)
+        self.assertIn('Scheduled Operations', self.selenium.page_source)
 
     def go_to_logs(self):
         self.selenium.find_element_by_id('ontask-base-settings').click()
@@ -694,7 +694,19 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             '//*[@id="ontask-base-admin"]',
             'SQL Connections')
         WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'sqlconn-admin-table'))
+            EC.presence_of_element_located((By.ID, 'connection-admin-table'))
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+
+    def go_to_athena_connections(self):
+        # Click in the admin dropdown menu and then in the option
+        self.click_dropdown_option(
+            '//*[@id="ontask-base-admin"]',
+            'Athena Connections')
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'connection-admin-table'))
         )
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
@@ -777,7 +789,20 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             'Connection"]').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, '//div[@id = "sql-connections"]')
+                (By.XPATH, '//div[@id = "connection-instructor"]')
+            )
+        )
+
+    def go_to_athena_upload_merge(self):
+        self.go_to_upload_merge()
+
+        # Goto Athena option
+        self.selenium.find_element_by_xpath(
+            '//table[@id="dataops-table"]//a[normalize-space()="Athena '
+            'Connection"]').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, '//div[@id = "connection-instructor"]')
             )
         )
 
@@ -988,26 +1013,32 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def create_new_personalized_text_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.personalized_text,
+            Action.PERSONALIZED_TEXT,
+            adesc)
+
+    def create_new_rubric_action(self, aname, adesc=''):
+        self.create_new_action_out_basic(
+            aname,
+            Action.RUBRIC_TEXT,
             adesc)
 
     def create_new_json_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.personalized_json,
+            Action.PERSONALIZED_JSON,
             adesc)
 
     def create_new_personalized_canvas_email_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.personalized_canvas_email,
+            Action.PERSONALIZED_CANVAS_EMAIL,
             adesc)
 
     def create_new_send_list_action(self, aname, adesc=''):
-        self.create_new_action_out_basic(aname, Action.send_list, adesc)
+        self.create_new_action_out_basic(aname, Action.SEND_LIST, adesc)
 
     def create_new_JSON_list_action(self, aname, adesc=''):
-        self.create_new_action_out_basic(aname, Action.send_list_json, adesc)
+        self.create_new_action_out_basic(aname, Action.SEND_LIST_JSON, adesc)
 
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog
@@ -1045,7 +1076,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.survey)
+        select.select_by_value(Action.SURVEY)
         desc.send_keys(adesc)
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
@@ -1581,13 +1612,13 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         element = self.selenium.find_element_by_xpath(
             '//table[@id="column-selected-table"]'
             '//td[1][normalize-space() = "{0}"]/'
-            '../td[3]/div/button'.format(qname))
+            '../td[4]/div/button'.format(qname))
         element.click()
         # Click in the condition name
         self.selenium.find_element_by_xpath(
             '//table[@id="column-selected-table"]'
             '//td[1][normalize-space() = "{0}"]/'
-            '../td[3]/div/div/button[normalize-space() = "{1}"]'.format(
+            '../td[4]/div/div/button[normalize-space() = "{1}"]'.format(
                 qname,
                 cname
             )
@@ -1612,6 +1643,27 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME,
                                         'js-description-edit'))
+        )
+
+    def select_rubric_tab(self):
+        """
+        Assuming we are in the action edit page, click in the link to open the
+        rubric tab
+        :return:
+        """
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'rubric-tab')
+            )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+        self.selenium.find_element_by_id('rubric-tab').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'js-workflow-criterion-add')
+            )
         )
 
     def select_plugin_input_tab(self):

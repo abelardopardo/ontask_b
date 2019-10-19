@@ -1,10 +1,10 @@
 {% load i18n %}
 <button type="button"
    data-url="{% url 'scheduler:view' id %}" data-toggle="tooltip"
-   title="{% trans 'View the details of this scheduled action' %}"
+   title="{% trans 'View the details of this scheduled operation' %}"
    class="btn btn-sm btn-light js-scheduler-view">
   <span class="fa fa-eye"></span></button>
 <button type="button" class="btn btn-sm btn-light js-scheduler-delete"
-        data-toggle="tooltip" title="{% trans 'Delete this scheduled action' %}"
+        data-toggle="tooltip" title="{% trans 'Delete this scheduled operation' %}"
         data-url="{% url 'scheduler:delete' id %}">
   <span class="fa fa-trash"></span></button>

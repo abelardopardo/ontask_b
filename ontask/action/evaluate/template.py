@@ -5,13 +5,13 @@
 import re
 import string
 from builtins import map, str
-from typing import Mapping
+from typing import List, Mapping, Tuple
 
 from django.template import Context, Template
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models import Action, var_use_res
+from ontask.models import VAR_USE_RES, Action
 
 # Variable name to store the action ID in the context used to render a
 # template
@@ -133,7 +133,7 @@ def _change_unescape_vname(match) -> str:
 
 
 def _translate(varname: str) -> str:
-    """Apply several translations to the value of a variable.
+    """Apply several translations to a variable name.
 
     Function that given a string representing a variable name applies a
     translation to each of the non alphanumeric characters in that name.
@@ -176,6 +176,27 @@ def _clean_whitespace(template_text: str) -> str:
         template_text = rexp.sub(replace, template_text)
 
     return template_text
+
+
+def render_rubric_criteria(action: Action, context) -> List[List]:
+    """Calculate the list of elements [criteria, feedback] for action."""
+    criteria = [acc.column for acc in action.column_condition_pair.all()]
+    cells = action.rubric_cells.all()
+    text_sources = []
+
+    for criterion in criteria:
+        c_value = context.get(_translate(escape(criterion.name)))
+        if not c_value:
+            # Skip criteria with no values
+            continue
+
+        value_idx = criterion.categories.index(c_value)
+        cell = cells.filter(column=criterion, loa_position=value_idx).first()
+        if not cell:
+            continue
+        text_sources.append([criterion.name, cell.feedback_text])
+
+    return text_sources
 
 
 def render_action_template(
@@ -227,7 +248,7 @@ def render_action_template(
     # Steps 1 and 2. Apply the translation process to all variables that
     # appear in the the template text
     new_template_text = template_text
-    for rexpr in var_use_res:
+    for rexpr in VAR_USE_RES:
         if action and action.has_html_text:
             new_template_text = rexpr.sub(
                 _change_unescape_vname,

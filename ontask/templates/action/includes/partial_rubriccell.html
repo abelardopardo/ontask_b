@@ -1,0 +1,13 @@
+{% load i18n %}
+<p class="text-center"><strong>{% trans 'Description' %}</strong></p>
+<p>{{ description_text }}</p>
+<hr/>
+<p class="text-center"><strong>{% trans 'Feedback' %}</strong></p>
+<p>{{ feedback_text }}</p>
+<hr/>
+<button type="button"
+          class="btn btn-sm btn-light js-rubric-cell-edit"
+          data-url="{% url 'action:rubriccell_edit' action_id column_id loa_idx %}"
+          data-toggle="tooltip"
+          title="{% trans 'Edit this cell' %}">
+    <span class="fa fa-pencil"></span></button>

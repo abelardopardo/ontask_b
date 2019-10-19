@@ -5,6 +5,7 @@
 from typing import Optional
 
 import django_tables2 as tables
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -17,7 +18,7 @@ from django.views.decorators.http import require_http_methods
 
 from ontask.action.forms import ActionDescriptionForm
 from ontask.core.decorators import (
-    ajax_required, get_action, get_columncondition,
+    ajax_required, get_action, get_columncondition, get_workflow,
 )
 from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
@@ -35,6 +36,9 @@ class ColumnSelectedTable(tables.Table):
         verbose_name=_('Description (shown to learners)'),
         default='',
     )
+    changes_allowed = tables.BooleanColumn(
+        verbose_name=_('Allow change?'),
+        default=True)
     condition = tables.Column(  # noqa: Z116
         verbose_name=_('Condition'),
         empty_values=[-1],
@@ -69,22 +73,32 @@ class ColumnSelectedTable(tables.Table):
                 'id': record['id'],
                 'cond_selected': record['condition__name'],
                 'conditions': self.condition_list,
-            },
-        )
+            })
 
-    class Meta(object):
+    def render_changes_allowed(self, record):
+        """Render the boolean to allow changes."""
+        return render_to_string(
+            'action/includes/partial_question_changes_allowed.html',
+            {
+                'id': record['id'],
+                'changes_allowed': record['changes_allowed'],
+            })
+
+    class Meta:
         """Define fields, sequence, attrs and row attrs."""
 
         fields = (
             'column__id',
             'column__name',
             'column__description_text',
+            'changes_allowed',
             'condition',
             'operations')
 
         sequence = (
             'column__name',
             'column__description_text',
+            'changes_allowed',
             'condition',
             'operations')
 
@@ -137,9 +151,9 @@ def edit_action_in(
         ),
         # Column elements
         'key_columns': all_columns.filter(is_key=True),
-        'stat_columns': all_columns.filter(is_key=False),
+        'columns_show_stat': all_columns.filter(is_key=False),
         'key_selected': tuples.filter(column__is_key=True).first(),
-        'has_no_key': tuples.filter(column__is_key=False).exists(),
+        'not_has_no_key': not tuples.filter(column__is_key=False).exists(),
         'any_empty_description': tuples.filter(
             column__description_text='',
             column__is_key=False,
@@ -156,7 +170,7 @@ def edit_action_in(
                 'column__name',
                 'column__description_text',
                 'condition__name',
-            ),
+                'changes_allowed'),
             orderable=False,
             extra_columns=[(
                 'operations',
@@ -173,7 +187,7 @@ def edit_action_in(
         'filter_condition': filter_condition,
         'conditions': all_conditions,
         'vis_scripts': PlotlyHandler.get_engine_scripts(),
-        'other_conditions': Condition.objects.filter(
+        'conditions_to_clone': Condition.objects.filter(
             action__workflow=workflow, is_filter=False,
         ).exclude(action=action),
     }
@@ -189,12 +203,12 @@ def edit_action_in(
 def select_column_action(
     request: HttpRequest,
     pk: int,
+    cpk: Optional[int] = -1,
     workflow: Optional[Workflow] = None,
     action: Optional[Action] = None,
-    cpk: Optional[int] = -1,
     key: Optional[bool] = None,
 ) -> JsonResponse:
-    """Operation to add a column to action in.
+    """Operation to add a column to a survey.
 
     :param request: Request object
 
@@ -223,10 +237,12 @@ def select_column_action(
 
     if key != 0:
         # Insert the column in the pairs
-        ActionColumnConditionTuple.objects.get_or_create(
+        acc = ActionColumnConditionTuple.objects.get_or_create(
             action=action,
             column=column,
             condition=None)
+
+        acc.log(request.user, Log.ACTION_QUESTION_ADD)
 
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
@@ -320,6 +336,41 @@ def shuffle_questions(
 
 @user_passes_test(is_instructor)
 @ajax_required
+@get_workflow(pf_related='actions')
+def toggle_question_change(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+) -> JsonResponse:
+    """Enable/Disable changes in the question.
+
+    :param request: Request object
+    :param pk: Action/Question/Condition PK
+    :return: HTML response
+    """
+    # Check if the workflow is locked
+    acc_item = ActionColumnConditionTuple.objects.filter(pk=pk).first()
+    if not acc_item:
+        messages.error(
+            request,
+            _('Incorrect invocation of toggle question change function.'))
+        return JsonResponse({}, status=404)
+
+    if acc_item.action.workflow != workflow:
+        messages.error(
+            request,
+            _('Incorrect invocation of toggle question change function.'))
+        return JsonResponse({}, status=404)
+
+    acc_item.changes_allowed = not acc_item.changes_allowed
+    acc_item.save()
+    acc_item.log(request.user, Log.ACTION_QUESTION_TOGGLE_CHANGES)
+
+    return JsonResponse({'is_checked': acc_item.changes_allowed})
+
+
+@user_passes_test(is_instructor)
+@ajax_required
 @get_action(pf_related='actions')
 def edit_description(
     request: HttpRequest,
@@ -346,15 +397,7 @@ def edit_description(
 
         action.save()
 
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.ACTION_UPDATE,
-            action.workflow,
-            {'id': action.id,
-             'name': action.name,
-             'workflow_id': workflow.id,
-             'workflow_name': workflow.name})
+        action.log(request.user, 'update')
 
         # Request is correct
         return JsonResponse({'html_redirect': ''})

@@ -60,7 +60,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
     def test_question_add(self):
         """Test adding a question to a survey."""
         # Get the survey action
-        survey = self.workflow.actions.get(action_type=Action.survey)
+        survey = self.workflow.actions.get(action_type=Action.SURVEY)
 
         # GET the form
         resp = self.get_response(
@@ -86,7 +86,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
     def test_question_rename(self):
         """Test renaming a question in a survey."""
         # Get the survey action and the first of the columns
-        survey = self.workflow.actions.get(action_type=Action.survey)
+        survey = self.workflow.actions.get(action_type=Action.SURVEY)
         column = survey.column_condition_pair.first().column
         old_name = column.name
         # GET the form
@@ -152,7 +152,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
                 'description_text': 'RANDOM COLUMN DESC',
                 'data_type': 'integer',
                 'position': '0',
-                'column_values': '12'},
+                'raw_categories': '12'},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 

@@ -23,7 +23,7 @@
           "caseInsensitive": true,
         },
         "stateSave": true,
-        stateSaveParams: function (settings, data) {
+        "stateSaveParams": function (settings, data) {
           delete data.search;
         },
         "language": {
@@ -34,8 +34,8 @@
           {"orderable": false, "targets": 4},
           {"searchable": false, "targets": 4},
         ],
-        colReorder: false,
-        rowReorder: false,
+        "colReorder": false,
+        "rowReorder": false,
       });
       action_table.columns().iterator('column', function (ctx, idx) {
         $(action_table.column(idx).header()).append('<span class="sort-icon"/>');
@@ -61,9 +61,13 @@
       </button>
       {% if workflow.nrows %}
         <a href="{% url 'action:import' %}"
-           class="shadow btn btn-outline-dark"
+           class="shadow spin btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'Import action previously exported' %}">
-          <span class="fa fa-upload"></span> {% trans 'Import action' %}</a>
+          <span class="fa fa-upload"></span> {% trans 'Import actions' %}</a>
+        <a href="{% url 'workflow:export_list_ask' workflow.id %}"
+           class="shadow spin btn btn-outline-dark"
+           data-toggle="tooltip" title="{% trans 'Choose and export actions' %}">
+          <span class="fa fa-download"></span> {% trans 'Export actions' %}</a>
         <a href="{% url 'action:timeline' %}"
            class="shadow btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'See when the actions were executed' %}">

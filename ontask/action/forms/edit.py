@@ -35,7 +35,7 @@ def column_to_field(col, initial=None, required=False, label=None):
         # Column has a finite set of prefixed values
         choices = [(value_cat, value_cat) for value_cat in col.categories]
         initial = next(
-            (choice for choice in choices if initial == choice),
+            (choice for choice in choices if initial == choice[0]),
             ('', '---'))
 
         # If the column is of type string, allow always the empty value
@@ -83,15 +83,16 @@ class EditActionOutForm(forms.ModelForm):
 
         # Personalized text, canvas email
         if (
-            self.instance.action_type == Action.personalized_text
-            or self.instance.action_type == Action.send_list
+            self.instance.action_type == Action.PERSONALIZED_TEXT
+            or self.instance.action_type == Action.RUBRIC_TEXT
+            or self.instance.action_type == Action.SEND_LIST
         ):
             self.fields['text_content'].widget = SummernoteInplaceWidget()
 
         # Add the Target URL field
         if (
-            self.instance.action_type == Action.personalized_json
-            or self.instance.action_type == Action.send_list_json
+            self.instance.action_type == Action.PERSONALIZED_JSON
+            or self.instance.action_type == Action.SEND_LIST_JSON
         ):
             # Add the target_url field
             self.fields['target_url'] = forms.CharField(
@@ -117,7 +118,7 @@ class EditActionOutForm(forms.ModelForm):
                 },
             )
 
-        if self.instance.action_type == Action.personalized_canvas_email:
+        if self.instance.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
             # Modify the content field so that it uses the TextArea
             self.fields['text_content'].widget = forms.Textarea(
                 attrs={
@@ -127,7 +128,7 @@ class EditActionOutForm(forms.ModelForm):
                 },
             )
 
-    class Meta(object):
+    class Meta:
         """Select action and the content field only."""
 
         model = Action
@@ -169,7 +170,7 @@ class EnterActionIn(forms.Form):
             )
             self.fields[field_name] = the_field
 
-            if cc_item.column.is_key:
+            if cc_item.column.is_key or not cc_item.changes_allowed:
                 the_field.widget.attrs['readonly'] = 'readonly'
                 the_field.disabled = True
             else:

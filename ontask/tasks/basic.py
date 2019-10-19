@@ -2,9 +2,12 @@
 
 """Wrappers around asynchronous task executions."""
 
-from typing import Mapping, Optional, Tuple
+import datetime
+from typing import Dict, List, Optional, Tuple
 
+import pytz
 from celery import shared_task
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
 
@@ -67,9 +70,7 @@ def get_execution_items(
         if not workflow:
             raise Exception(
                 ugettext('Unable to find workflow with id {0}').format(
-                    workflow_id,
-                ),
-            )
+                    workflow_id))
 
     action = None
     if action_id:
@@ -80,9 +81,7 @@ def get_execution_items(
         if not action:
             raise Exception(
                 ugettext('Unable to find action with id {0}').format(
-                    action_id,
-                ),
-            )
+                    action_id))
 
     return user, workflow, action
 
@@ -91,41 +90,64 @@ def get_execution_items(
 def run_task(
     user_id: int,
     log_id: int,
-    action_info: Mapping,
-) -> bool:
-    """"Run the given task."""
+    action_info: Dict,
+) -> Optional[List]:
+    """Run the given task."""
     # First get the log item to make sure we can record diagnostics
     log_item = get_log_item(log_id)
     if not log_item:
-        return False
+        return None
 
+    items_processed = None
     try:
         user, __, action = get_execution_items(
             user_id=user_id,
             action_id=action_info['action_id'])
 
+        # Update the last_execution_log
+        action.last_executed_log = log_item
+        action.save()
+
         # Set the status to "executing" before calling the function
         log_item.payload['status'] = 'Executing'
         log_item.save()
 
-        if action.action_type == Action.personalized_text:
-            send_emails(user, action, log_item, action_info)
-        elif action.action_type == Action.send_list:
-            send_list_email(user, action, log_item, action_info)
-        elif action.action_type == Action.personalized_canvas_email:
-            send_canvas_emails(user, action, log_item, action_info)
-        elif action.action_type == Action.personalized_json:
-            send_json(user, action, log_item, action_info)
-        elif action.action_type == Action.send_list_json:
-            send_json_list(user, action, log_item, action_info)
+        if action.action_type == Action.PERSONALIZED_TEXT:
+            items_processed = send_emails(user, action, action_info, log_item)
+        elif action.action_type == Action.SEND_LIST:
+            items_processed = send_list_email(
+                user,
+                action,
+                action_info,
+                log_item)
+        elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+            items_processed = send_canvas_emails(
+                user,
+                action,
+                action_info,
+                log_item)
+        elif action.action_type == Action.PERSONALIZED_JSON:
+            items_processed = send_json(
+                user,
+                action,
+                action_info,
+                log_item)
+        elif action.action_type == Action.SEND_LIST_JSON:
+            items_processed = send_json_list(
+                user,
+                action,
+                action_info,
+                log_item)
 
         # Reflect status in the log event
         log_item.payload['status'] = 'Execution finished successfully'
+        log_item.payload['objects_sent'] = len(items_processed)
+        log_item.payload['filter_present'] = action.get_filter() is not None
+        log_item.payload['datetime'] = str(
+            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
         log_item.save()
-    except Exception as e:
-        log_item.payload['status'] = \
-            ugettext('Error: {0}').format(e)
+    except Exception as exc:
+        log_item.payload['status'] = ugettext('Error: {0}').format(exc)
         log_item.save()
-        return False
 
-    return True
+    return items_processed

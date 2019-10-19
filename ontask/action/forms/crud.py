@@ -15,15 +15,15 @@ ConditionForm: Form to process condition elements
 """
 
 import json
-from builtins import object, str
+from builtins import str
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.settings
-from ontask import AVAILABLE_ACTION_TYPES, is_legal_name
+from ontask import is_legal_name
 from ontask.core.forms import RestrictedFileField
-from ontask.models import Action, Condition
+from ontask.models import Action, Condition, RubricCell
 from ontask.models.const import CHAR_FIELD_MID_SIZE
 
 SUFFIX_LENGTH = 512
@@ -57,7 +57,7 @@ class ActionUpdateForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Select Action and the two fields."""
 
         model = Action
@@ -72,13 +72,13 @@ class ActionForm(ActionUpdateForm):
         super().__init__(*args, **kargs)
 
         at_field = self.fields['action_type']
-        at_field.widget.choices = AVAILABLE_ACTION_TYPES
+        at_field.widget.choices = Action.AVAILABLE_ACTION_TYPES
 
-        if len(AVAILABLE_ACTION_TYPES) == 1:
+        if len(Action.AVAILABLE_ACTION_TYPES) == 1:
             # There is only one type of action. No need to generate the field.
             # Set to value and hide
             at_field.widget = forms.HiddenInput()
-            at_field.initial = AVAILABLE_ACTION_TYPES[0][0]
+            at_field.initial = Action.AVAILABLE_ACTION_TYPES[0][0]
 
     class Meta(ActionUpdateForm.Meta):
         """Select action and the three fields."""
@@ -91,7 +91,7 @@ class ActionForm(ActionUpdateForm):
 class ActionDescriptionForm(forms.ModelForm):
     """Form to edit the description of an action."""
 
-    class Meta(object):
+    class Meta:
         """Select model and the description field."""
 
         model = Action
@@ -117,7 +117,7 @@ class FilterForm(forms.ModelForm):
         # Filter should be hidden.
         self.fields['formula'].widget = forms.HiddenInput()
 
-    class Meta(object):
+    class Meta:
         """Select model and fields."""
 
         model = Condition
@@ -187,37 +187,55 @@ class ConditionForm(FilterForm):
 class ActionImportForm(forms.Form):
     """Form to edit information to import an action."""
 
-    # Action name
-    name = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
-        strip=True,
-        required=True,
-        label='Name',
-    )
-
     upload_file = RestrictedFileField(
         max_upload_size=int(ontask.settings.MAX_UPLOAD_SIZE),
         content_types=json.loads(str(ontask.settings.CONTENT_TYPES)),
         allow_empty_file=False,
-        label=_('File'),
+        label=_('File with previously exported OnTask actions'),
         help_text=_('File containing a previously exported action'),
     )
 
-    def __init__(self, form_data, *args, **kwargs):
-        """Store workflow and user parameters."""
-        self.workflow = kwargs.pop('workflow')
-        self.user = kwargs.pop('user')
 
-        super().__init__(form_data, *args, **kwargs)
+class RubricCellForm(forms.ModelForm):
+    """Edit the content of a RubricCellForm."""
+
+    class Meta:
+        """Select Action and the two fields."""
+
+        model = RubricCell
+        fields = ('description_text', 'feedback_text')
+
+
+class RubricLOAForm(forms.Form):
+    """Edit the levels of attainment of a rubric."""
+
+    levels_of_attainment = forms.CharField(
+        strip=True,
+        required=True,
+        label=_('Comma separated list of levels of attainment'))
+
+    def __init__(self, *args, **kwargs):
+        """Store the criteria."""
+        self.criteria = kwargs.pop('criteria')
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['levels_of_attainment'].initial = ', '.join(
+            self.criteria[0].categories)
 
     def clean(self):
-        """Verify that the name of the action is not present already."""
+        """Check that the number of LOAs didn't change."""
         form_data = super().clean()
 
-        if self.workflow.actions.filter(name=form_data['name']).exists():
-            # There is an action with this name. Return error.
+        current_n_loas = [
+            loa
+            for loa in form_data['levels_of_attainment'].split(',')
+            if loa]
+
+        if len(current_n_loas) != len(self.criteria[0].categories):
             self.add_error(
-                'name',
-                _('An action with this name already exists'))
+                'levels_of_attainment',
+                _('The number of levels cannot change.')
+            )
 
         return form_data

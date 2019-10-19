@@ -7,10 +7,12 @@ import os
 
 from django.contrib.auth import get_user_model
 
+from ontask.models.const import COLUMN_NAME_SIZE
 import test
 
 import pandas as pd
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from rest_framework import status
 
 from ontask.dataops.forms.upload import load_df_from_csvfile
@@ -719,3 +721,30 @@ class ConditionNameWithSymbols(test.OnTaskTestCase):
                     'Condition 4' in str(resp.content),
                     condition_value)
 
+
+class ColumnNameTooLarge(test.OnTaskTestCase):
+    """Test the storage of a dataframe with column that are too large."""
+
+    csv = """key,text1,text2,double1,double2,bool1,bool2,date1,date2
+              1.0,"d1_t1_1",,111.0,,True,,1/1/18 01:00:00+00:00,
+              2.0,"d2_t1_2",,112.0,,False,,1/1/18 02:00:00+00:00,
+              3.0,"",d1_t2_3,,123.0,,False,,1/2/18 03:00:00+00:00
+              4.0,,d1_t2_4,,124.0,,True,,1/2/18 04:00:00+00:00
+              5.0,"d1_t1_5",,115.0,,False,,1/1/18 05:00:00+00:00,
+              6.0,"d1_t1_6",,116.0,,True,,1/1/18 06:00:00+00:00,
+              7.0,,d1_t2_7,,126.0,,True,,1/2/18 07:00:00+00:00
+              8.0,,d1_t2_8,,127.0,,False,,1/2/18 08:00:00+00:00"""
+
+    def upload_column_name_too_long(self):
+        """Use the table store to detect column names that are too long."""
+        data_frame = load_df_from_csvfile( io.StringIO(self.csv), 0, 0)
+
+        self.assertTrue(
+            any(len(cname) > COLUMN_NAME_SIZE for cname in data_frame.columns))
+
+        try:
+            store_table(data_frame, 'TABLE_NAME')
+        except Exception as exc:
+            self.assertTrue('Column name is longer than' in str(exc))
+        else:
+            raise Exception('Column with long name is not detected')

@@ -1,0 +1,7 @@
+{% if text_sources %}
+  <ul>
+    {% for list_pair in text_sources %}
+      <li><strong>{{ list_pair.0 }}</strong>: {{ list_pair.1 }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

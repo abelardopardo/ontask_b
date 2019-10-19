@@ -1,0 +1,44 @@
+{% load i18n %}
+{% load django_tables2 %}
+<div class="shadow rounded tab-pane px-3 fade show border border-dark"
+     id="rubric" role="tabpanel" aria-labelledby="rubric-tab">
+  <div id="rubric-set-header" class="text-center my-3">
+    <div id="insert-criterion">
+      {% if columns_to_insert %}
+        <div class="dropdown btn-group">
+          <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                  data-toggle="dropdown">
+            {% trans 'Insert existing criterion/column' %}
+          </button>
+          <div class="shadow dropdown-menu scrollable-menu">
+            {% for column in columns_to_insert %}
+              <button type="button" class="dropdown-item js-workflow-criterion-insert"
+                      data-url="{% url 'workflow:criterion_insert' action.id column.id %}">{{ column.name }}</button>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      <button type="button"
+              class="btn btn-outline-dark js-workflow-criterion-add"
+              data-url="{% url 'workflow:criterion_create' action.id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Add a new criterion to the rubric' %}">
+        <span class="fa fa-plus"></span> {% trans 'Create criterion/column' %}
+      </button>
+      {% if rubric_table %}
+        <button type="button"
+                class="btn btn-outline-dark js-rubric-loas-edit"
+                data-url="{% url 'action:rubric_loas_edit' action.id %}"
+                data-toggle="tooltip"
+                title="{% trans 'Modify the levels of attainment (top row) of the rubric' %}">
+          <span class="fa fa-pencil"></span> {% trans 'Edit levels of attainment' %}
+        </button>
+      {% endif %}
+    </div>
+  </div>
+  {% if rubric_table %}
+    <div class="justify-content-center mb-3">
+      {% render_table rubric_table %}
+    </div>
+  {% endif %}
+</div>

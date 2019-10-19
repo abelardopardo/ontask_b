@@ -43,7 +43,7 @@ def _render_tuple_result(
     :param context: Dictionary with name: value
     :param extra_string: Optional string to render
     :param column_name: Column name to include its value
-    :return: [action content render, extra string redered (optional),
+    :return: [action content render, extra string rendered (optional),
               column value (optional)]
     """
     # Run the template with the given context
@@ -191,7 +191,7 @@ def evaluate_action(
         # Check that n_rows_selected is equal to rows.rowcount
         action_filter = action.get_filter()
         if action_filter and action_filter.n_rows_selected != rows.rowcount:
-            raise ontask.OnTaskException('Inconsisten n_rows_selected')
+            raise ontask.OnTaskException('Inconsistent n_rows_selected')
 
     return list_of_renders
 

@@ -93,6 +93,8 @@ def run_survey_ss(
         dt_page,
     )
 
+    filtered = len(query_set)
+
     # Get the subset of the qs to show in the table
     query_set = _create_table_qsdata(
         action.id,
@@ -105,7 +107,7 @@ def run_survey_ss(
     return JsonResponse({
         'draw': dt_page.draw,
         'recordsTotal': workflow.nrows,
-        'recordsFiltered': len(query_set),
+        'recordsFiltered': filtered,
         'data': query_set,
     })
 

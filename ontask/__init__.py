@@ -3,6 +3,8 @@
 """Basic functions and definitions used all over the platform."""
 
 import json
+from datetime import datetime
+from typing import Optional
 
 import django.conf
 import pytz
@@ -19,32 +21,12 @@ __all__ = [
     'OnTaskSharedState'
 ]
 
-__version__ = 'B.6.0.3'
+__version__ = 'B.6.1'
 
-app_config = 'ontask.apps.ActionConfig'
-
-PERSONALIZED_TEXT = 'personalized_text'
-PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
-PERSONALIZED_JSON = 'personalized_json'
-SEND_LIST = 'send_list'
-SEND_LIST_JSON = 'send_list_json'
-SURVEY = 'survey'
-TODO_LIST = 'todo_list'
-
-ACTION_TYPES = [
-    (PERSONALIZED_TEXT, _('Personalized text')),
-    (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
-    (SURVEY, _('Survey')),
-    (PERSONALIZED_JSON, _('Personalized JSON')),
-    (SEND_LIST, _('Send List')),
-    (SEND_LIST_JSON, _('Send List as JSON')),
-    (TODO_LIST, _('TODO List'))
-]
-
-AVAILABLE_ACTION_TYPES = ACTION_TYPES[:]
+app_config = 'ontask.apps.OnTaskConfig'
 
 
-def is_legal_name(val):
+def is_legal_name(val: str) -> Optional[str]:
     """Check if a string is a valid column, attribute or condition name.
 
     These are the characters that have been found to be problematic with
@@ -79,12 +61,13 @@ def is_legal_name(val):
     return None
 
 
-def entity_prefix():
+def entity_prefix() -> str:
     """Return the prefix to use when cloning objects."""
     return _('Copy of ')
 
 
-def is_correct_email(email_txt):
+def is_correct_email(email_txt: str) -> bool:
+    """Check if string is a correct email address"""
     try:
         validate_email(email_txt)
     except (ValueError, AttributeError):
@@ -93,7 +76,10 @@ def is_correct_email(email_txt):
     return True
 
 
-def simplify_datetime_str(dtime):
+def simplify_datetime_str(dtime: datetime) -> str:
+    """Transform datetime object into string"""
+    if dtime is None:
+        return ''
     return dtime.astimezone(
         pytz.timezone(django.conf.settings.TIME_ZONE)
     ).strftime('%Y-%m-%d %H:%M:%S %z')
@@ -125,6 +111,7 @@ class OnTaskDBIdentifier(sql.Identifier):
 
 
 class OnTaskSharedState:
+    """Global dictionary"""
     __shared_state = {}
 
     def __init__(self):
@@ -132,9 +119,7 @@ class OnTaskSharedState:
 
 
 class OnTaskException(Exception):
-    """
-    Generic class in OnTask for our own exception
-    """
+    """Generic class in OnTask for exceptions"""
 
     def __init__(self, msg, value=0):
         self.msg = msg

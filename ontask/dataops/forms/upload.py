@@ -30,14 +30,15 @@ from ontask.dataops.forms.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
+from ontask.dataops.forms.select import MergeForm, SelectKeysForm
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
-from ontask.models import SQLConnection
+from ontask.models import AthenaConnection, SQLConnection
+from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
 
 FIELD_PREFIX = '___ontask___upload_'
-CHAR_FIELD_LENGTH = 512
 URL_FIELD_LENGTH = 1024
 
 
@@ -164,7 +165,7 @@ class UploadExcelFileForm(UploadBasic):
         help_text=_('File in Excel format (.xls or .xlsx)'))
 
     sheet = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('Sheet within the excelsheet to upload'))
@@ -270,25 +271,25 @@ class UploadS3FileForm(UploadBasic):
     """
 
     aws_access_key = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=False,
         initial='',
         help_text=_('AWS S3 Bucket access key'))
 
     aws_secret_access_key = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=False,
         initial='',
         help_text=_('AWS S3 Bucket secret access key'))
 
     aws_bucket_name = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('AWS S3 Bucket name'))
 
     aws_file_key = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('AWS S3 Bucket file path'))
@@ -351,7 +352,12 @@ class UploadS3FileForm(UploadBasic):
         return resp_data
 
 
-class SQLConnectionForm(forms.ModelForm):
+class ConnectionForm(forms.ModelForm):
+    """Base class for connection forms."""
+    pass
+
+
+class SQLConnectionForm(ConnectionForm):
     """Form to read data from SQL.
 
     We collect information to create a Database URI to be used by SQLAlchemy:
@@ -375,7 +381,7 @@ class SQLConnectionForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta(ConnectionForm):
         """Define the model and the fields to manipulate."""
 
         model = SQLConnection
@@ -394,11 +400,129 @@ class SQLConnectionForm(forms.ModelForm):
         ]
 
 
-class SQLRequestPassword(forms.Form):
+class SQLRequestConnectionParam(forms.Form):
     """Form to ask for a password for a SQL connection execution."""
 
-    password = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
-        widget=forms.PasswordInput,
-        required=True,
-        help_text=_('Password to authenticate the database connection'))
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance')
+
+        super().__init__(*args, **kwargs)
+
+        if not self.instance.db_password:
+            self.fields['password'] = forms.CharField(
+                max_length=CHAR_FIELD_MID_SIZE,
+                widget=forms.PasswordInput,
+                required=True,
+                help_text=_('Authentication for the database connection'))
+
+        if not self.instance.db_table:
+            self.fields['table_name'] = forms.CharField(
+                max_length=CHAR_FIELD_MID_SIZE,
+                required=True,
+                help_text=_('Table to load'))
+
+
+class AthenaConnectionForm(ConnectionForm):
+    """Form to read data from SQL.
+
+    We collect information to open a connection to an Athena instance
+    """
+
+    def clean(self):
+        """Validate the initial value."""
+        form_data = super().clean()
+
+        # Check if the name already exists
+        name_exists = AthenaConnection.objects.filter(
+            name=self.cleaned_data['name'],
+        ).exclude(id=self.instance.id).exists()
+        if name_exists:
+            self.add_error(
+                'name',
+                _('There is already a connection with this name.'),
+            )
+
+        return form_data
+
+    class Meta(ConnectionForm):
+        """Define the model and the fields to manipulate."""
+
+        model = AthenaConnection
+
+        fields = [
+            'name',
+            'description_text',
+            'aws_access_key',
+            'aws_secret_access_key',
+            'aws_session_token',
+            'aws_bucket_name',
+            'aws_file_path',
+            'aws_region_name',
+            'table_name']
+
+
+class AthenaRequestConnectionParam(forms.Form):
+    """Form to ask for a password for a SQL connection execution."""
+
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance')
+        self.workflow = kwargs.pop('workflow')
+
+        super().__init__(*args, **kwargs)
+
+        if not self.instance.aws_secret_access_key:
+            self.fields['aws_secret_access_key'] = forms.CharField(
+                max_length=CHAR_FIELD_LONG_SIZE,
+                required=True,
+                help_text=_('Authentication for the connection'))
+
+        if not self.instance.aws_session_token:
+            self.fields['aws_session_token'] = forms.CharField(
+                max_length=CHAR_FIELD_LONG_SIZE,
+                required=False,
+                widget=forms.Textarea,
+                help_text=_('Authentication for the session'))
+
+        if not self.instance.table_name:
+            self.fields['table_name'] = forms.CharField(
+                max_length=CHAR_FIELD_MID_SIZE,
+                required=True,
+                help_text=_('Table to load'))
+
+        if self.workflow.has_data_frame():
+            if self.workflow.columns.filter(is_key=True).count() > 1:
+                merge_choices = [
+                    (skey, skey)
+                    for skey in self.workflow.columns.filter(is_key=True)
+                ]
+                # Insert field to choose unique key
+                self.fields['merge_key'] = forms.ChoiceField(
+                    initial=None,
+                    choices=merge_choices,
+                    required=True,
+                    label=_('Key Column in Existing Table'),
+                    help_text=SelectKeysForm.dst_help)
+
+            self.fields['how_merge'] = forms.ChoiceField(
+                initial=None,
+                choices=MergeForm.how_merge_choices,
+                required=True,
+                label=_('Method to select rows to merge/update'),
+                help_text=MergeForm.merge_help)
+
+
+    def get_field_dict(self):
+        """Return a dictionary with the resulting fields"""
+        conn = self.instance
+        to_return = self.instance.get_missing_fields(self.cleaned_data)
+
+        if self.workflow.has_data_frame():
+            if self.workflow.columns.filter(is_key=True).count() == 1:
+                to_return['merge_key'] = self.workflow.columns.filter(
+                    is_key=True).first().name
+            else:
+                to_return['merge_key'] = self.cleaned_data['merge_key']
+
+            to_return['merge_method'] = self.cleaned_data['how_merge']
+
+        return to_return

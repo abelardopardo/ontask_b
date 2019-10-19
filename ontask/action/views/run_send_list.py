@@ -49,27 +49,17 @@ def run_send_list_action(
     # Request is a POST and is valid
     if req.method == 'POST' and form.is_valid():
         # Log the event
-        log_item = Log.objects.register(
+        log_item = action.log(
             req.user,
-            Log.SCHEDULE_EMAIL_EXECUTE,
-            action.workflow,
-            {
-                'action': action.name,
-                'action_id': action.id,
-                'from_email': req.user.email,
-                'recipient_email': action_info['email_to'] ,
-                'subject': action_info['subject'],
-                'cc_email': action_info['cc_email'],
-                'bcc_email': action_info['bcc_email'],
-                'status': 'Preparing to execute',
-            })
-
-        # Update the last_execution_log
-        action.last_executed_log = log_item
-        action.save()
+            Log.ACTION_RUN_SEND_LIST,
+            from_email=req.user.email,
+            recipient_email=action_info['email_to'] ,
+            subject=action_info['subject'],
+            cc_email=action_info['cc_email'],
+            bcc_email=action_info['bcc_email'])
 
         # Send the emails!
-        run_task.delay( req.user.id, log_item.id, action_info.get_store())
+        run_task.delay(req.user.id, log_item.id, action_info.get_store())
 
         # Successful processing.
         return render(

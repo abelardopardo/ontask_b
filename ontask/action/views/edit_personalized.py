@@ -19,7 +19,7 @@ from ontask.models import Action, Condition, Log, Workflow
 from ontask.visualizations.plotly import PlotlyHandler
 
 
-def _text_renders_correctly(
+def text_renders_correctly(
     text_content: str,
     action: Action,
     form: EditActionOutForm,
@@ -103,25 +103,17 @@ def edit_action_out(
         text_content = form.cleaned_data.get('text_content')
 
         # Render the content as a template and catch potential problems.
-        if _text_renders_correctly(text_content, action, form):
+        if text_renders_correctly(text_content, action, form):
             # Log the event
-            Log.objects.register(
-                request.user,
-                Log.ACTION_UPDATE,
-                action.workflow,
-                {'id': action.id,
-                 'name': action.name,
-                 'workflow_id': workflow.id,
-                 'workflow_name': workflow.name,
-                 'content': text_content})
+            action.log(request.user, Log.ACTION_UPDATE)
 
             # Text is good. Update the content of the action
             action.set_text_content(text_content)
 
             # If it is a JSON action, store the target_url
             if (
-                action.action_type == Action.personalized_json
-                or action.action_type == Action.send_list_json
+                action.action_type == Action.PERSONALIZED_JSON
+                or action.action_type == Action.SEND_LIST_JSON
             ):
                 # Update the target_url field
                 action.target_url = form.cleaned_data['target_url']
@@ -143,11 +135,11 @@ def edit_action_out(
         'filter_condition': filter_condition,
         'action': action,
         'load_summernote': (
-            action.action_type == Action.personalized_text
-            or action.action_type == Action.send_list
+            action.action_type == Action.PERSONALIZED_TEXT
+            or action.action_type == Action.SEND_LIST
         ),
         'conditions': action.conditions.filter(is_filter=False),
-        'other_conditions': Condition.objects.filter(
+        'conditions_to_clone': Condition.objects.filter(
             action__workflow=workflow, is_filter=False,
         ).exclude(action=action),
         'query_builder_ops': workflow.get_query_builder_ops_as_str(),
@@ -155,14 +147,14 @@ def edit_action_out(
             attr for attr in list(workflow.attributes.keys())
         ],
         'columns': workflow.columns.all(),
-        'stat_columns': workflow.columns.filter(is_key=False),
+        'columns_show_stat': workflow.columns.filter(is_key=False),
         'selected_rows':
             filter_condition.n_rows_selected
             if filter_condition else -1,
         'has_data': action.workflow.has_table(),
         'is_send_list': (
-            action.action_type == Action.send_list
-            or action.action_type == Action.send_list_json),
+            action.action_type == Action.SEND_LIST
+            or action.action_type == Action.SEND_LIST_JSON),
         'all_false_conditions': any(
             cond.n_rows_selected == 0
             for cond in action.conditions.all()),
@@ -205,13 +197,11 @@ def showurl(
             form.save()
 
             # Recording the event
-            Log.objects.register(
+            action.log(
                 request.user,
                 Log.ACTION_SERVE_TOGGLED,
-                action.workflow,
-                {'id': action.id,
-                 'name': action.name,
-                 'serve_enabled': action.serve_enabled})
+                served_enabled=action.serve_enabled)
+
             return JsonResponse({'html_redirect': reverse('action:index')})
 
         return JsonResponse({'html_redirect': None})

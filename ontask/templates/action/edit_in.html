@@ -3,21 +3,20 @@
 {% load ontask_tags %}
 {% load static %}
 {% load widget_tweaks %}
-{% load django_tables2 %}
 {% block title %}{{ block.super }}{% trans 'Edit Survey' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
-  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
-  <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/sol.css' %}" rel="stylesheet">
+  <link href="{% static 'css/query-builder.default.min.css' %}" rel="stylesheet">
   {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
 {% block scripts %}
   {% ontask_datetimepicker_js %}
-  <script src="{% static 'site/js/query-builder.standalone.min.js' %}" ></script>
+  <script src="{% static 'js/query-builder.standalone.min.js' %}" ></script>
   {% with country=LANGUAGE_CODE|country %}
-    <script src="{% static 'site/js/query-builder.'|add:country|add:'.js' %}"></script>
+    <script src="{% static 'js/query-builder.'|add:country|add:'.js' %}"></script>
   {% endwith %}
-  <script src="{% static 'site/js/sol.js' %}"></script>
+  <script src="{% static 'js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
@@ -28,6 +27,7 @@
     if (document.getElementById("column-selected-table") != null) {
       $(document).ready(function() {
         $('#column-selected-table').DataTable({
+          "ordering": false,
           "autoWidth": false,
           "search": {
             "caseInsensitive": true,
@@ -41,9 +41,8 @@
             "url": location.protocol + getLanguage()
           },
           "columnDefs": [
-            {"className": "dt-center", "targets": [0, 2, 3]},
-            {"orderable": false, "targets": 3},
-            {"searchable": false, "targets": 3},
+            {"className": "dt-center", "targets": [0, 2, 3, 4]},
+            {"searchable": false, "targets": [2, 3, 4]},
           ],
           colReorder: false,
           rowReorder: false,
@@ -62,7 +61,7 @@
     <h1 class="text-center">{{ action.name }}</h1>
     <div class="text-center my-3">
       <button type="button"
-              class="shadow btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
+              class="shadow btn btn-outline-info js-action-preview {% if not key_selected or not_has_no_key or selected_rows == 0 %} disabled{% endif %}"
               data-url="{% url 'action:preview' action.id 1 %}"
               data-toggle="tooltip"
               title="{% trans 'See the content as shown to each learner' %}">
@@ -76,11 +75,12 @@
         <span class="fa fa-check"></span> {% trans 'Done' %}</a>
     </div>
     {% include 'action/includes/partial_action_edit_out_warning.html' %}
-    {% if not has_no_key %}
-      <p class="shadow alert-danger text-center">{% trans 'There must be at least one question (non-key column) in the survey.' %}</p>
+    <div class="alert-danger">
+    {% if not_has_no_key %}
+      <p class="text-center">{% trans 'There must be at least one question (non-key column) in the survey.' %}</p>
     {% endif %}
     {% if any_empty_description %}
-      <p class="shadow alert-danger text-center"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'All questions should have non-empty descriptions.' %}</p>
+      <p class="text-center">{% trans 'All questions should have non-empty descriptions.' %}</p>
     {% endif %}
     {% if not action.description_text %}
       <p class="shadow text-center alert-danger"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'No description text provided in Survey Parameters' %}</p>
@@ -88,25 +88,16 @@
     {% if not key_selected %}
       <p class="shadow alert-danger text-center" style="margin-top:1ex;"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'You need to specify a key column in Survey Parameters' %}</p>
     {% endif %}
+    </div>
     <ul class="nav nav-tabs border-0 justify-content-center"
         id="edit-personalized-text-tabs" role="tablist">
       <li class="nav-item pr-1">
         <a class="nav-link active border border-dark border-bottom-0"
            id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
       </li>
-      <li class="nav-item pr-1">
-        <a class="nav-link border border-dark border-bottom-0"
-           id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">Survey Questions</a>
-      </li>
-      <li class="nav-item pr-1">
-        <a class="nav-link border border-dark border-bottom-0"
-           id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">Select Learners
-          {% if not filter_condition %}(Empty){% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link border border-dark border-bottom-0" id="conditions-tab" data-toggle="tab" href="#conditions" role="tab" aria-controls="conditions" aria-selected="false">{% trans 'Conditions' %} ({{ conditions|length }})</a>
-      </li>
+      {% include 'action/includes/partial_questions_tab_li.html' %}
+      {% include 'action/includes/partial_filter_tab_li.html' %}
+      {% include 'action/includes/partial_condition_tab_li.html' %}
     </ul>
     <div class="tab-content" id="edit-survey-tab-content">
       <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
@@ -151,7 +142,7 @@
           </h5>
           <h5 class="text-center">{% trans 'Shuffle questions?' %}
             <small>
-              <input id="shuffle-questions"
+              <input id="toggle-checkbox"
                      {% if action.shuffle %}checked{% endif %}
                      data-toggle="toggle"
                      data-url="{% url 'action:shuffle_questions' action.id %}"
@@ -160,43 +151,9 @@
           </h5>
         </div>
       </div>
-      <div class="shadow rounded tab-pane px-3 fade show border border-dark"
-           id="questions" role="tabpanel" aria-labelledby="questions-tab">
-        <div id="insert-questions" class="text-center mt-3">
-          <div id="column-selector">
-            <div class="dropdown btn-group">
-              <button type="button" class="btn btn-outline-dark dropdown-toggle"
-                      data-toggle="dropdown">
-                {% trans 'Insert existing question' %}
-              </button>
-              <div class="shadow dropdown-menu scrollable-menu">
-                {% for column in columns_to_insert %}
-                  <button type="button" class="dropdown-item js-insert-question"
-                          data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
-                {% endfor %}
-              </div>
-            </div>
-            <button type="button"
-                    class="btn btn-outline-dark js-workflow-question-add"
-                    data-url="{% url 'workflow:question_add' action.id %}"
-                    data-toggle="tooltip"
-                    title="{% trans 'Add a new question to the action' %}">
-              <span class="fa fa-plus"></span> {% trans 'Create question' %}
-            </button>
-          </div>
-        </div>
-        <div class="justify-content-center mb-3">
-          {% render_table column_selected_table %}
-        </div>
-      </div>
-      <div class="shadow rounded tab-pane px-3 fade show border border-dark"
-           id="filter" role="tabpanel" aria-labelledby="filter-tab">
-        {% include 'action/includes/partial_filter_tab.html' %}
-      </div>
-      <div class="shadow rounded tab-pane px-3 fade show border border-dark"
-           id="conditions" role="tabpanel" aria-labelledby="conditions-tab">
-        {% include 'action/includes/partial_condition_tab.html' %}
-      </div>
+      {% include 'action/includes/partial_questions_tab_body.html' %}
+      {% include 'action/includes/partial_filter_tab_body.html' %}
+      {% include 'action/includes/partial_condition_tab_body.html' %}
     </div>
   </div>
   {% include 'modal.html' %}

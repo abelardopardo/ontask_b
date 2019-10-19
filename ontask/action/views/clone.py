@@ -19,7 +19,7 @@ from ontask.core.decorators import ajax_required, get_action, get_condition
 from ontask.core.permissions import is_instructor
 from ontask.dataops.formula import get_variables
 from ontask.models import (
-    Action, ActionColumnConditionTuple, Condition, Log, Workflow,
+    Action, ActionColumnConditionTuple, Condition, Log, RubricCell, Workflow,
 )
 
 
@@ -116,6 +116,16 @@ def do_clone_action(
                 condition=new_action.conditions.filter(name=cname).first(),
             )
 
+        # Clone the rubric cells if any
+        for rubric_cell in action.rubric_cells.all():
+            RubricCell.objects.create(
+                action=new_action,
+                column=new_action.workflow.columns.get(
+                    name=rubric_cell.column.name),
+                loa_position=rubric_cell.loa_position,
+                description_text=rubric_cell.description_text,
+                feedback_text=rubric_cell.feedback_text)
+
         # Clone the conditions
         for condition in action.conditions.all():
             do_clone_condition(condition, new_action)
@@ -153,10 +163,8 @@ def clone_action(
         })
 
     # POST REQUEST!
-    log_payload = {
-        'id_old': action.id,
-        'name_old': action.name,
-    }
+    id_old = action.id,
+    name_old = action.name,
 
     action = do_clone_action(
         action,
@@ -164,14 +172,11 @@ def clone_action(
         new_name=create_new_name(action.name, workflow.actions))
 
     # Log event
-    log_payload['id_new'] = action.id
-    log_payload['name_new'] = action.name
-    Log.objects.register(
+    action.log(
         request.user,
         Log.ACTION_CLONE,
-        workflow,
-        log_payload,
-    )
+        id_old=id_old,
+        name_old=name_old)
 
     messages.success(request, _('Action successfully cloned.'))
 
@@ -213,25 +218,16 @@ def clone_condition(
         condition.action.set_text_content(action_content)
         condition.action.save()
 
-    log_context = {
-        'id_old': condition.id,
-        'name_old': condition.name}
-
+    id_old = condition.id
+    name_old = condition.name
     condition = do_clone_condition(
         condition,
         new_action=action,
         new_name=create_new_name(condition.name, action.conditions))
-
-    # Log event
-    log_context['id_new'] = condition.id
-    log_context['name_new'] = condition.name
-    Log.objects.register(
+    condition.log(
         request.user,
         Log.CONDITION_CLONE,
-        condition.action.workflow,
-        log_context)
-
+        id_old=id_old,
+        name_old=name_old)
     messages.success(request, _('Condition successfully cloned.'))
-
-    # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{{ title }}{% endblock %}
+{% block extrahead %}
+  {% ontask_datatables_bootstrap_css %}
+{% endblock extrahead %}
+{% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
+  <script type="text/javascript">
+    if (document.getElementById("connection-admin-table") != null) {
+      // Required for DataTables
+      $(document).ready(function() {
+        var conn_admin_table = $('#connection-admin-table').DataTable({
+          "autoWidth": false,
+          "search": {
+            "caseInsensitive": true,
+          },
+          "stateSave": true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
+          "order": [[0  , "asc"]],
+          "language": {
+            "url": location.protocol + getLanguage()
+          },
+          "columnDefs": [
+            {"className": "dt-center", "targets": [0, 2, 3]},
+            {"orderable": false, "targets": 3},
+            {"searchable": false, "targets": [2, 3]},
+          ],
+          colReorder: false,
+          rowReorder: false,
+          "responsive": false,
+        });
+        conn_admin_table.columns().iterator('column', function (ctx, idx) {
+          $(conn_admin_table.column(idx).header()).append('<span class="sort-icon"/>');
+        });
+      });
+    }
+  </script>
+{% endblock %}
+{% block container %}
+  <div id="connection-admin" class="container">
+    <h1 class="text-center">{{ title }}</h1>
+    <div class="text-center mb-3">
+      <button type="button" class="shadow btn btn-outline-dark js-connection-addedit"
+              data-url="{{ data_url }}"
+              data-toggle="tooltip"
+              title="{% trans 'Add a new connection' %}">
+        <span class="fa fa-plus"></span> {% trans 'Connection' %}</button>
+    </div>
+    <div class="justify-content-center">
+      {% render_table table %}
+    </div>
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}

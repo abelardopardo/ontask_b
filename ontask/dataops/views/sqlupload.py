@@ -14,7 +14,9 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import OnTaskDataFrameNoKey
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.dataops.forms import SQLRequestPassword, load_df_from_sqlconnection
+from ontask.dataops.forms import (
+    SQLRequestConnectionParam, load_df_from_sqlconnection,
+)
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask.models import SQLConnection, Workflow
 
@@ -45,14 +47,17 @@ def sqlupload_start(
     :param pk: primary key of the SQL conn used
     :return: Creates the upload_data dictionary in the session
     """
-    conn = SQLConnection.objects.filter(pk=pk).first()
+    conn = SQLConnection.objects.filter(
+        pk=pk
+    ).filter(enabled=True).first()
     if not conn:
         return redirect('dataops:sqlconns_instructor_index_instructor_index')
 
     form = None
-    if conn.db_password:
+    missing_field = conn.has_missing_fields()
+    if missing_field:
         # The connection needs a password  to operate
-        form = SQLRequestPassword(request.POST or None)
+        form = SQLRequestConnectionParam(request.POST or None, instance=conn)
 
     context = {
         'form': form,
@@ -70,16 +75,12 @@ def sqlupload_start(
         'db_name': conn.db_name,
         'db_table': conn.db_table}
 
-    if request.method == 'POST' and (not form or form.is_valid()):
-        read_pwd = None
-        if form:
-            read_pwd = form.cleaned_data['password']
+    if request.method == 'POST' and (not missing_field or form.is_valid()):
+        run_params = conn.get_missing_fields(form.cleaned_data)
 
         # Process SQL connection using pandas
         try:
-            data_frame = load_df_from_sqlconnection(
-                conn,
-                read_pwd)
+            data_frame = load_df_from_sqlconnection(conn, run_params)
             # Verify the data frame
             verify_data_frame(data_frame)
         except OnTaskDataFrameNoKey as exc:

@@ -2,6 +2,8 @@
 
 """Forms to manipulate the columns."""
 
+import re
+
 import pandas as pd
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
@@ -13,6 +15,8 @@ from ontask.dataops.pandas import is_unique_column, load_table
 from ontask.models import Column
 
 INITIAL_VALUE_LENGTH = 512
+
+INTERVAL_PATTERN = '-?(?P<from>\d+)\s-\s-?(?P<to>\d+)'
 
 
 class ColumnBasicForm(forms.ModelForm):
@@ -35,6 +39,9 @@ class ColumnBasicForm(forms.ModelForm):
         """Store the workflow and data frame."""
         self.workflow = kwargs.pop('workflow', None)
         self.data_frame = None
+        self.allow_interval_as_initial = kwargs.pop(
+            'allow_interval_as_initial',
+            False)
 
         super().__init__(*args, **kwargs)
 
@@ -84,9 +91,25 @@ class ColumnBasicForm(forms.ModelForm):
         if 'raw_categories' in self.changed_data:
             if form_data['raw_categories']:
                 # Condition 1: Values must be valid for the type of the column
-                category_values = [
-                    cat.strip()
-                    for cat in form_data['raw_categories'].split(',')]
+                if self.allow_interval_as_initial and re.search(
+                    INTERVAL_PATTERN,
+                    form_data['raw_categories']
+                ):
+                    match = re.search(
+                        INTERVAL_PATTERN,
+                        form_data['raw_categories'])
+                    from_val = int(match.group('from'))
+                    to_val = int(match.group('to'))
+                    if from_val > to_val:
+                        tmp = from_val
+                        from_val = to_val
+                        to_val = tmp
+                    category_values = [
+                        str(val) for val in range(from_val, to_val + 1)]
+                else:
+                    category_values = [
+                        cat.strip()
+                        for cat in form_data['raw_categories'].split(',')]
                 try:
                     valid_values = Column.validate_column_values(
                         form_data['data_type'],
@@ -123,9 +146,14 @@ class ColumnBasicForm(forms.ModelForm):
             self.add_error('active_from', _('Incorrect date/time window'))
             self.add_error('active_to', _('Incorrect date/time window'))
 
+        # Check and force a correct column index
+        ncols = self.workflow.columns.count()
+        if form_data['position'] < 1 or form_data['position'] > ncols:
+            form_data['position'] = ncols + 1
+
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Select model, fields and widget to consider."""
 
         model = Column
@@ -144,44 +172,6 @@ class ColumnBasicForm(forms.ModelForm):
                 options=date_time_widget_options),
             'active_to': DateTimePickerInput(options=date_time_widget_options),
         }
-
-
-class QuestionAddForm(ColumnBasicForm):
-    """Form to add a question."""
-
-    def __init__(self, *args, **kwargs):
-        """Set the appropriate labels."""
-        super().__init__(*args, **kwargs)
-
-        self.fields['name'].label = _('Question name')
-        self.fields['description_text'].label = _(
-            'Description (shown to the learners)')
-        self.fields['position'].label = _(
-            'Question position (zero to insert last)')
-        self.fields['active_from'].label = _('Question active from')
-        self.fields['active_to'].label = _('Question active until')
-
-    def clean(self):
-        """Validate the position field."""
-        form_data = super().clean()
-
-        # Check and force a correct column index
-        ncols = self.workflow.columns.count()
-        if form_data['position'] < 1 or form_data['position'] > ncols:
-            form_data['position'] = ncols + 1
-
-        return form_data
-
-    class Meta(ColumnBasicForm.Meta):
-        """Set the fields."""
-
-        fields = [
-            'name',
-            'description_text',
-            'data_type',
-            'position',
-            'active_from',
-            'active_to']
 
 
 class ColumnAddForm(ColumnBasicForm):
@@ -225,11 +215,6 @@ class ColumnAddForm(ColumnBasicForm):
                     _('This value is not in the list of allowed values'),
                 )
 
-        # Check and force a correct column index
-        ncols = self.workflow.columns.count()
-        if form_data['position'] < 1 or form_data['position'] > ncols:
-            form_data['position'] = ncols + 1
-
         return form_data
 
     class Meta(ColumnBasicForm.Meta):
@@ -244,11 +229,11 @@ class ColumnAddForm(ColumnBasicForm):
             'active_to']
 
 
-class QuestionRenameForm(ColumnBasicForm):
-    """Rename a question (a column) in a survey."""
+class QuestionForm(ColumnBasicForm):
+    """Form to add a question."""
 
     def __init__(self, *args, **kwargs):
-        """Adjust the field descriptions for this form."""
+        """Set the appropriate labels."""
         super().__init__(*args, **kwargs)
 
         self.fields['name'].label = _('Question name')
@@ -259,21 +244,11 @@ class QuestionRenameForm(ColumnBasicForm):
         self.fields['active_from'].label = _('Question active from')
         self.fields['active_to'].label = _('Question active until')
 
-        self.fields['data_type'].disabled = True
-
-    def clean(self):
-        """Verify that the position is corect."""
-        form_data = super().clean()
-
-        # Check and force a correct column index
-        ncols = self.workflow.columns.count()
-        if form_data['position'] < 1 or form_data['position'] > ncols:
-            form_data['position'] = ncols
-
-        return form_data
+        if self.instance.id is not None:
+            self.fields['data_type'].disabled = True
 
     class Meta(ColumnBasicForm.Meta):
-        """List the fields."""
+        """Set the fields."""
 
         fields = [
             'name',
@@ -282,6 +257,61 @@ class QuestionRenameForm(ColumnBasicForm):
             'position',
             'active_from',
             'active_to']
+
+
+class CriterionForm(ColumnBasicForm):
+    """Form to add a question."""
+
+    def __init__(self, *args, **kwargs):
+        """Adjust fields."""
+        self.other_criterion = kwargs.pop('other_criterion')
+        if self.other_criterion:
+            self.other_criterion = self.other_criterion.column
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['name'].label = _('Criterion name')
+        self.fields['description_text'].label = _(
+            'Criterion Description')
+
+        if self.other_criterion:
+            # Set and hide fields that have been defined.
+            self.fields['raw_categories'].widget = forms.HiddenInput()
+            self.fields['data_type'].initial = self.other_criterion.data_type
+            self.fields['data_type'].widget = forms.HiddenInput()
+        else:
+            self.fields['raw_categories'].label = _(
+                'Comma-separated list of levels of attainment')
+
+    def clean(self):
+        """Validate the position field."""
+        form_data = super().clean()
+
+        # Check and force a correct column index
+        ncols = self.workflow.columns.count()
+        if form_data['position'] < 1 or form_data['position'] > ncols:
+            form_data['position'] = ncols + 1
+
+        # Transfer categories from other column, or prevent being empty
+        if self.other_criterion:
+            self.instance.categories = self.other_criterion.categories
+        elif not form_data['raw_categories']:
+            self.add_error(
+                'raw_categories',
+                _('The criterion needs a non-empty set of values')
+            )
+
+        return form_data
+
+    class Meta(ColumnBasicForm.Meta):
+        """Set the fields."""
+
+        fields = [
+            'name',
+            'description_text',
+            'data_type',
+            'position',
+            'raw_categories']
 
 
 class ColumnRenameForm(ColumnBasicForm):
@@ -429,22 +459,13 @@ class FormulaColumnAddForm(forms.ModelForm):
             'active_to']
 
 
-class RandomColumnAddForm(forms.ModelForm):
+class RandomColumnAddForm(ColumnBasicForm):
     """Form to create a column with random values."""
 
-    column_values = forms.CharField(
-        strip=True,
-        required=True,
-        label=_(
-            'Number (values from 1 to N) or comma separated list of values.'),
-    )
+    def __init__(self, *args, **kwargs):
+        """Modify the label of the raw_categories"""
+        super().__init__(*args, **kwargs)
 
-    class Meta(ColumnBasicForm.Meta):
-        """Set the fields to include in the form."""
-
-        fields = [
-            'name',
-            'description_text',
-            'position',
-            'active_from',
-            'active_to']
+        self.fields['raw_categories'].label = _(
+            'Number (values from 1 to N, interval m - n) '
+            + 'or comma separated list of values.')

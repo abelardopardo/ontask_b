@@ -20,6 +20,7 @@ import ontask.dataops.pandas.datatypes
 from ontask.dataops.sql import delete_table
 from ontask.models.column import Column
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.logs import Log
 
 CHAR_FIELD_MD5_SIZE = 32
 
@@ -463,7 +464,18 @@ class Workflow(models.Model):
         """Render as unicode."""
         return self.name
 
-    class Meta(object):
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'name': self.name,
+            'ncols': self.ncols,
+            'nrows': self.nrows,
+            'star': self.user in self.star.all()}
+
+        payload.update(kwargs)
+        return Log.objects.register(user, operation_type, self, payload)
+
+    class Meta:
         """Define verbose and unique together."""
 
         verbose_name = 'workflow'

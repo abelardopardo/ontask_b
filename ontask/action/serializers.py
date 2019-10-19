@@ -2,7 +2,6 @@
 
 """Classes to serialize Actions and Conditions."""
 
-from builtins import object
 from typing import Optional
 
 from django.utils.translation import ugettext_lazy as _
@@ -10,7 +9,9 @@ from rest_framework import serializers
 
 from ontask.dataops.formula import get_variables
 from ontask.dataops.sql.column_queries import add_column_to_db
-from ontask.models import Action, ActionColumnConditionTuple, Condition
+from ontask.models import (
+    Action, ActionColumnConditionTuple, Condition, RubricCell,
+)
 from ontask.workflow.serialize_column import (
     ColumnNameSerializer, ColumnSerializer,
 )
@@ -188,7 +189,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
         return condition_obj
 
-    class Meta(object):
+    class Meta:
         """Define object condition and select fields to serialize."""
 
         model = Condition
@@ -198,7 +199,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 class ConditionNameSerializer(serializers.ModelSerializer):
     """Trivial serializer to dump only the name of the column."""
 
-    class Meta(object):
+    class Meta:
         """Select the model and the only field required."""
 
         model = Condition
@@ -229,13 +230,38 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
             action=action,
             column=action.workflow.columns.get(
                 name=validated_data['column']['name']),
-            condition=condition_obj)
+            condition=condition_obj,
+            changes_allowed=validated_data.get('changes_allowed', False))
 
-    class Meta(object):
+    class Meta:
         """Define the model and select only column and condition elements."""
 
         model = ActionColumnConditionTuple
-        fields = ('column', 'condition')
+        fields = ('column', 'condition', 'changes_allowed')
+
+
+class RubricCellSerializer(serializers.ModelSerializer):
+    """Serialize Rubric Cells."""
+
+    column = ColumnNameSerializer(required=True, many=False)
+
+    def create(self, validated_data, **kwargs):
+        """Create the tuple object with column, condition, action."""
+        action = self.context['action']
+
+        return RubricCell.objects.get_or_create(
+            action=action,
+            column=action.workflow.columns.get(
+                name=validated_data['column']['name']),
+            loa_position=validated_data['loa_position'],
+            description_text=validated_data['description_text'],
+            feedback_text=validated_data['feedback_text'])
+
+    class Meta:
+        """Define the model and select fields to seralize."""
+
+        model = RubricCell
+        fields = ('column', 'loa_position', 'description_text', 'feedback_text')
 
 
 class ActionSerializer(serializers.ModelSerializer):
@@ -260,6 +286,9 @@ class ActionSerializer(serializers.ModelSerializer):
     column_condition_pair = ColumnConditionNameSerializer(
         many=True,
         required=False)
+
+    # Include the RubricCell objects
+    rubric_cells = RubricCellSerializer(many=True, required=False)
 
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
@@ -308,18 +337,27 @@ class ActionSerializer(serializers.ModelSerializer):
             else:
                 raise Exception(_('Invalid column data'))
 
-        field_data = validated_data.get('column_condition_pair', [])
-        if field_data:
-            # Parse the column_condition_pair
-            column_condition_pairs = ColumnConditionNameSerializer(
-                data=field_data,
-                many=True,
-                context={'action': action_obj})
+        # Parse the column_condition_pair
+        column_condition_pairs = ColumnConditionNameSerializer(
+            data=validated_data.get('column_condition_pair', []),
+            many=True,
+            context={'action': action_obj})
 
-            if column_condition_pairs.is_valid():
-                column_condition_pairs.save()
-            else:
-                raise Exception(_('Invalid column condition pair data'))
+        if column_condition_pairs.is_valid():
+            column_condition_pairs.save()
+        else:
+            raise Exception(_('Invalid column condition pair data'))
+
+        # Parse the rubric_cell
+        rubric_cells = RubricCellSerializer(
+            data=validated_data.get('rubric_cells', []),
+            many=True,
+            context={'action': action_obj})
+
+        if rubric_cells.is_valid():
+            rubric_cells.save()
+        else:
+            raise Exception(_('Invalid rubric cell data'))
 
     @profile
     def create(self, validated_data, **kwargs):
@@ -334,9 +372,9 @@ class ActionSerializer(serializers.ModelSerializer):
             action_type = validated_data.get('action_type')
             if not action_type:
                 if validated_data['is_out']:
-                    action_type = Action.personalized_text
+                    action_type = Action.PERSONALIZED_TEXT
                 else:
-                    action_type = Action.survey
+                    action_type = Action.SURVEY
 
             action_obj = Action(
                 workflow=self.context['workflow'],
@@ -381,7 +419,7 @@ class ActionSerializer(serializers.ModelSerializer):
 
         return action_obj
 
-    class Meta(object):
+    class Meta:
         """Model definition, and exclude fields, instead of include."""
 
         model = Action
@@ -402,7 +440,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
     def create(self, validated_data, **kwargs):
         """Create the Action object with the validated data."""
         if not self.context['workflow'].has_data_frame():
-            # Cannot create columns with an empty workflow
+            # Cannot create actions with an empty workflow
             raise Exception(_(
                 'Unable to import action '
                 + ' in a workflow with and empty data table'))
@@ -423,7 +461,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
 
         return action_obj
 
-    class Meta(object):
+    class Meta:
         """Define the model and the field to exclude."""
 
         model = Action

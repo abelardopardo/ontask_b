@@ -218,7 +218,7 @@ class EmailActionForm(BasicEmailForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Redefine size of the subject field."""
 
         widgets = {'subject': forms.TextInput(
@@ -411,11 +411,11 @@ class ValueExcludeForm(FormWithPayload):
 
         super().__init__(form_data, *args, **kwargs)
 
-        self.set_field_from_dict('exclude_values')
         self.fields['exclude_values'].choices = get_rows(
             self.action.workflow.get_data_frame_table_name(),
             column_names=[self.column_name, self.column_name],
             filter_formula=self.action.get_filter_formula()).fetchall()
+        self.set_field_from_dict('exclude_values')
 
     def clean(self):
         """Store the values in the field in the dictionary."""
@@ -590,7 +590,7 @@ class CanvasEmailActionForm(JSONKeyForm, JSONBasicForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Set the size for the subject field."""
 
         widgets = {'subject': forms.TextInput(
@@ -641,7 +641,7 @@ class EnableURLForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Define fields and datetime picker widget."""
 
         model = Action

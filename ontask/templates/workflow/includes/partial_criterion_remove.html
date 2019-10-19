@@ -1,0 +1,19 @@
+{% load i18n %}
+<form method="post" action="{% url 'workflow:criterion_remove' pk %}"
+      class="js-criterion-remove-form">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h4 class="modal-title">{% trans 'Confirm criterion deletion' %}</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p class="lead">{% blocktrans with n=cname %}Are you sure you want to remove criterion <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-danger">
+      <span class="fa fa-trash"></span> {% trans 'Remove criterion' %}</button>
+  </div>
+</form>
+

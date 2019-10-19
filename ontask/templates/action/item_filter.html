@@ -6,10 +6,10 @@
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Exclude items from action' %}{% endblock %}
 {% block extrahead %}
-  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
+  <link href="{% static 'css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'site/js/sol.js' %}"></script>
+  <script src="{% static 'js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
 {% endblock scripts %}
 {% block container %}

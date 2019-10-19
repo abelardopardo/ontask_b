@@ -5,9 +5,11 @@
 from typing import List
 
 from django.db import connection
+from django.utils.translation import ugettext_lazy as _
 from psycopg2 import sql
 
 from ontask import OnTaskDBIdentifier
+from ontask.models.const import COLUMN_NAME_SIZE
 
 sql_to_ontask_datatype_names = {
     # Translation between SQL data type names, and those handled in OnTask
@@ -149,6 +151,11 @@ def db_rename_column(table: str, old_name: str, new_name: str):
 
     :return: Nothing. Change reflected in the database table
     """
+    if len(new_name) > COLUMN_NAME_SIZE:
+        raise Exception(
+            _('Column name is longer than {0} characters').format(
+                COLUMN_NAME_SIZE))
+
     with connection.connection.cursor() as cursor:
         cursor.execute(sql.SQL('ALTER TABLE {0} RENAME {1} TO {2}').format(
             sql.Identifier(table),

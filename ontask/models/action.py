@@ -24,7 +24,7 @@ from ontask.models.workflow import Workflow
 
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)
-var_use_res = [
+VAR_USE_RES = [
     re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
     re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})'),
 ]
@@ -38,13 +38,49 @@ class Action(models.Model):  # noqa Z214
     @DynamicAttrs
     """
 
-    personalized_text = ontask.PERSONALIZED_TEXT
-    personalized_canvas_email = ontask.PERSONALIZED_CANVAS_EMAIL
-    personalized_json = ontask.PERSONALIZED_JSON
-    send_list = ontask.SEND_LIST
-    send_list_json = ontask.SEND_LIST_JSON
-    survey = ontask.SURVEY
-    todo_list = ontask.TODO_LIST
+    PERSONALIZED_TEXT = 'personalized_text'
+    PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
+    PERSONALIZED_JSON = 'personalized_json'
+    RUBRIC_TEXT = 'rubric_text'
+    SEND_LIST = 'send_list'
+    SEND_LIST_JSON = 'send_list_json'
+    SURVEY = 'survey'
+    TODO_LIST = 'todo_list'
+
+    ACTION_TYPES = [
+        (PERSONALIZED_TEXT, _('Personalized text')),
+        (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
+        (SURVEY, _('Survey')),
+        (PERSONALIZED_JSON, _('Personalized JSON')),
+        (RUBRIC_TEXT, _('Rubric feedback')),
+        (SEND_LIST, _('Send List')),
+        (SEND_LIST_JSON, _('Send List as JSON')),
+        (TODO_LIST, _('TODO List'))
+    ]
+
+    ACTION_IS_DATA_IN = {
+        PERSONALIZED_TEXT: False,
+        PERSONALIZED_CANVAS_EMAIL: False,
+        PERSONALIZED_JSON: False,
+        RUBRIC_TEXT: False,
+        SEND_LIST: False,
+        SEND_LIST_JSON: False,
+        SURVEY: True,
+        TODO_LIST: True,
+    }
+
+    LOAD_SUMMERNOTE = {
+        PERSONALIZED_TEXT: True,
+        PERSONALIZED_CANVAS_EMAIL: False,
+        PERSONALIZED_JSON: False,
+        RUBRIC_TEXT: True,
+        SEND_LIST: True,
+        SEND_LIST_JSON: False,
+        SURVEY: False,
+        TODO_LIST: False,
+    }
+
+    AVAILABLE_ACTION_TYPES = ACTION_TYPES[:]
 
     workflow = models.ForeignKey(
         Workflow,
@@ -83,8 +119,8 @@ class Action(models.Model):  # noqa Z214
     # Action type
     action_type = models.CharField(
         max_length=ACTION_TYPE_LENGTH,
-        choices=ontask.ACTION_TYPES,
-        default=personalized_text,
+        choices=ACTION_TYPES,
+        default=PERSONALIZED_TEXT,
     )
 
     # Boolean that enables the URL to be visible ot the outside.
@@ -163,16 +199,17 @@ class Action(models.Model):  # noqa Z214
         :return: Boolean stating correctness
         """
         for_out = (
-            self.action_type == Action.personalized_text
-            or self.action_type == Action.send_list
-            or self.action_type == Action.send_list_json
-            or (self.action_type == Action.personalized_canvas_email
+            self.action_type == Action.PERSONALIZED_TEXT
+            or self.action_type == Action.RUBRIC_TEXT
+            or self.action_type == Action.SEND_LIST
+            or self.action_type == Action.SEND_LIST_JSON
+            or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
                 and settings.CANVAS_INFO_DICT is not None)
         )
         if for_out:
             return True
 
-        if self.action_type == Action.personalized_json:
+        if self.action_type == Action.PERSONALIZED_JSON:
             # Validate the URL
             valid_url = True
             try:
@@ -200,19 +237,16 @@ class Action(models.Model):  # noqa Z214
         return (
             self.text_content
             and (
-                self.action_type == Action.personalized_text
-                or self.action_type == Action.send_list))
+                self.action_type == Action.PERSONALIZED_TEXT
+                or self.action_type == Action.SEND_LIST))
 
     @functional.cached_property
-    def is_in(self):
+    def is_in(self) -> bool:
         """Get bool stating if action is Survey or similar."""
-        return (
-            self.action_type == Action.survey
-            or self.action_type == Action.todo_list
-        )
+        return self.ACTION_IS_DATA_IN[self.action_type]
 
     @functional.cached_property
-    def is_out(self):
+    def is_out(self) -> bool:
         """Get bool stating if action is OUT."""
         return not self.is_in
 
@@ -242,7 +276,7 @@ class Action(models.Model):  # noqa Z214
         :return: List of condition names
         """
         cond_names = []
-        for rexpr in var_use_res:
+        for rexpr in VAR_USE_RES:
             cond_names += [
                 match.group('vname')
                 for match in rexpr.finditer(self.text_content)
@@ -311,7 +345,7 @@ class Action(models.Model):  # noqa Z214
         """
         if self.text_content:
             # Need to change name appearances in content
-            self.text_content = var_use_res[0].sub(
+            self.text_content = VAR_USE_RES[0].sub(
                 lambda match: '{{ ' + (
                     new_name if match.group('vname') == html.escape(old_name)
                     else match.group('vname')
@@ -412,7 +446,28 @@ class Action(models.Model):  # noqa Z214
 
         return self.rows_all_false
 
-    class Meta(object):
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'type': self.action_type,
+            'workflow_id': self.workflow.id}
+
+        if self.text_content:
+            payload['content'] = self.text_content
+
+        if self.target_url:
+            payload['target_url'] = self.target_url
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.workflow,
+            payload)
+
+    class Meta:
         """Define uniqueness with name and workflow. Order by name."""
 
         unique_together = ('name', 'workflow')

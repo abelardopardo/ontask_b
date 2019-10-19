@@ -16,7 +16,7 @@ services:
       - ontask_postgres
       - ontask_redis
     # Needed to get the DATABASE URL (Used in docker-entrypoint)
-    env_file: ./ontask/settings/docker_dev.env
+    env_file: ./settings/docker_dev.env
     environment:
       # OnTask configuration is on a separate env file (different REDIS, DATABASE)
       - ENV_FILENAME=docker_dev.env
@@ -55,7 +55,7 @@ services:
     volumes:
       - ./docker/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - pgdata:/var/lib/postgresql/data
-    env_file: ./ontask/settings/docker_dev.env
+    env_file: ./settings/docker_dev.env
 
   ontask_redis:
     restart: always

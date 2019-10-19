@@ -77,6 +77,9 @@ def evaluate_formula(node, eval_type, given_variables=None):
         return result_query, result_fields
 
     # Text evaluation
+    if not sub_clauses:
+        return ''
+
     if len(sub_clauses) > 1:
         result_txt = '(' + join_str.join(
             [sub_c for sub_c in sub_clauses],

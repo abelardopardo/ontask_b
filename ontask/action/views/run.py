@@ -31,12 +31,13 @@ from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
 
 fn_distributor = {
-    Action.personalized_text: run_email_action,
-    Action.personalized_canvas_email: run_canvas_email_action,
-    Action.personalized_json: run_json_action,
-    Action.survey: run_survey_action,
-    Action.send_list: run_send_list_action,
-    Action.send_list_json: run_json_list_action,
+    Action.PERSONALIZED_TEXT: run_email_action,
+    Action.PERSONALIZED_CANVAS_EMAIL: run_canvas_email_action,
+    Action.PERSONALIZED_JSON: run_json_action,
+    Action.RUBRIC_TEXT: run_email_action,
+    Action.SURVEY: run_survey_action,
+    Action.SEND_LIST: run_send_list_action,
+    Action.SEND_LIST_JSON: run_json_list_action,
 }
 
 
@@ -56,9 +57,10 @@ def run_action(
 
     :param request: HttpRequest
     :param pk: Action id. It is assumed to be an action In
+    :param workflow: Workflow object to be assigned by the decorators
+    :param action: Action object to be assigned by the decorators
     :return: HttpResponse
     """
-
     if not celery_is_up():
         messages.error(
             request,
@@ -84,7 +86,7 @@ def serve_action_lti(request: HttpRequest) -> HttpResponse:
     try:
         action_id = int(request.GET.get('id'))
     except Exception:
-        raise Http404
+        raise Http404()
 
     return serve_action(request, action_id)
 
@@ -124,11 +126,16 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
 
     try:
         if action.is_out:
-            return serve_action_out(request.user, action, user_attribute_name)
-
-        return serve_survey_row(request, action, user_attribute_name)
+            response = serve_action_out(
+                request.user,
+                action,
+                user_attribute_name)
+        else:
+            response = serve_survey_row(request, action, user_attribute_name)
     except Exception:
-        raise Http404
+        raise Http404()
+
+    return response
 
 
 def serve_action_out(
@@ -155,18 +162,15 @@ def serve_action_out(
     # Get the dictionary containing column names, attributes and condition
     # valuations:
     context = get_action_evaluation_context(action, row_values)
+    error = ''
     if context is None:
-        payload['error'] = (
-            _('Error when evaluating conditions for user {0}').format(
-                user.email,
-            )
-        )
         # Log the event
-        Log.objects.register(
+        action.log(
             user,
             Log.ACTION_SERVED_EXECUTE,
-            workflow=action.workflow,
-            payload=payload)
+            error=_('Error when evaluating conditions for user {0}').format(
+                user.email))
+
         return HttpResponse(render_to_string(
             'action/action_unavailable.html',
             {}))
@@ -178,16 +182,14 @@ def serve_action_out(
     response = action_content
     if action_content is None:
         response = render_to_string('action/action_unavailable.html', {})
-        payload['error'] = _('Action not enabled for user {0}').format(
-            user.email,
-        )
+        error = _('Action not enabled for user {0}').format(user.email)
 
     # Log the event
-    Log.objects.register(
+    action.log(
         user,
         Log.ACTION_SERVED_EXECUTE,
-        workflow=action.workflow,
-        payload=payload)
+        error=_('Error when evaluating conditions for user {0}').format(
+            user.email))
 
     # Respond the whole thing
     return HttpResponse(response)
@@ -235,8 +237,7 @@ def run_action_item_filter(
         'button_label': action_info['button_label'],
         'valuerange': range(action_info['valuerange']),
         'step': action_info['step'],
-        'prev_step': action_info['prev_url'],
-    }
+        'prev_step': action_info['prev_url']}
 
     # The post is correct
     if request.method == 'POST' and form.is_valid():

@@ -1,0 +1,20 @@
+{% load i18n %}
+<div class="text-center font-weight-bold my-2">{{ criterion.column.name }}</div>
+<div class="text-center my-2">{{ criterion.column.description_text }}</div>
+<div class="text-center">
+  <button type="button" class="btn btn-sm btn-light js-criterion-edit"
+          data-url="{% url 'workflow:criterion_edit' criterion.id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Edit this criterion' %}">
+    <span class="fa fa-pencil"></span></button>
+  <button type="button" class="btn btn-sm btn-light js-show-stats"
+          data-url="{% url 'table:stat_column_JSON' criterion.column.id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Show stats about this criteria' %}">
+    <span class="fa fa-bar-chart"></span></button>
+  <button type="button" class="btn btn-sm btn-light  js-criterion-remove"
+          data-url="{% url 'workflow:criterion_remove' criterion.id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Remove this criterion' %}">
+    <span class="fa fa-trash"></span></button>
+</div>

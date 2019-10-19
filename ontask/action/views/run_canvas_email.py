@@ -185,24 +185,15 @@ def run_canvas_email_done(
         return redirect('home')
 
     # Log the event
-    log_item = Log.objects.register(
+    log_item = action.log(
         request.user,
-        Log.SCHEDULE_CANVAS_EMAIL_EXECUTE,
-        action.workflow,
-        {
-            'action': action.name,
-            'action_id': action.id,
-            'from_email': request.user.email,
-            'subject': action_info['subject'],
-            'exclude_values': action_info['exclude_values'],
-            'item_column': action_info['item_column'],
-            'target_url': action_info['target_url'],
-            'status': 'Preparing to execute',
-        })
-
-    # Update the last_execution_log
-    action.last_executed_log = log_item
-    action.save()
+        Log.ACTION_RUN_CANVAS_EMAIL,
+        from_email=request.user.email,
+        subject=action_info['subject'],
+        exclude_values=action_info['exclude_values'],
+        item_column=action_info['item_column'],
+        target_url=action_info['target_url'],
+        status='Preparing to execute')
 
     # Send the emails!
     run_task.delay(request.user.id, log_item.id, action_info.get_store())

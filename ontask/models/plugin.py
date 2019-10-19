@@ -8,6 +8,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.logs import Log
 
 
 class Plugin(models.Model):
@@ -72,7 +73,20 @@ class Plugin(models.Model):
         """Render name with field."""
         return self.name
 
-    class Meta(object):
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'filename': self.filename,
+            'is_model': self.is_model,
+            'is_verified': self.is_verified,
+            'enabled': self.is_enabled}
+
+        payload.update(kwargs)
+        return Log.objects.register(user, operation_type, None, payload)
+
+    class Meta:
         """Define the criteria for ordering."""
 
         ordering = ['name']

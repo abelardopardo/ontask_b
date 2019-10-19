@@ -2,7 +2,6 @@
 
 
 import os
-# from ontask.models import SQLConnection
 import test
 from test import ElementHasFullOpacity, ScreenTests
 
@@ -15,6 +14,8 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask.dataops.pandas import destroy_db_engine
+# from ontask.models import SQLConnection
+# from ontask.models import AthenaConnection
 from ontask.models import Action
 
 standard_library.install_aliases()
@@ -150,6 +151,18 @@ class ScreenTestFixture(ScreenTests):
         # )
         # sqlc.save()
 
+        # Insert an Amazon Athena Connection
+        # athenac = AthenaConnection(
+        #     name='athena connection',
+        #     description_text='Connection to amazon athena server',
+        #     aws_access_key='[YOUR AWS ACCESS KEY HERE]',
+        #     aws_secret_access_key='[YOUR AWS SECRET ACCESS KEY HERE]',
+        #     aws_bucket_name='[S3 BUCKET NAME HERE]',
+        #     aws_file_path='[FILE PATH WITHIN BUCKET HERE]',
+        #     aws_region_name='[AWS REGION NAME HERE]',
+        # )
+        # athenac.save()
+
     def tearDown(self):
         test.delete_all_tables()
         super().tearDown()
@@ -167,7 +180,7 @@ class ScreenTestFixture(ScreenTests):
 
         # click in the edit element
         self.selenium.find_element_by_xpath(
-            "//table[@id='sqlconn-admin-table']"
+            "//table[@id='connection-admin-table']"
             "//tr/td[1][normalize-space() = 'remote server']"
         ).click()
         self.wait_for_modal_open()
@@ -183,6 +196,35 @@ class ScreenTestFixture(ScreenTests):
 
         # Close the db_engine
         destroy_db_engine()
+
+    # def test_athena_admin(self):
+    #     # Login
+    #     self.login('superuser@bogus.com')
+    #
+    #     #
+    #     # Open Athena Connection
+    #     #
+    #     self.go_to_athena_connections()
+    #     self.body_ss('workflow_athena_connections_index.png')
+    #
+    #     # click in the edit element
+    #     self.selenium.find_element_by_xpath(
+    #         "//table[@id='connection-admin-table']"
+    #         "//tr/td[1][normalize-space() = 'athena connection']"
+    #     ).click()
+    #     self.wait_for_modal_open()
+    #
+    #     # Take picture of the modal
+    #     self.modal_ss('workflow_superuser_athena_edit.png')
+    #
+    #     # Click in the cancel button
+    #     self.cancel_modal()
+    #
+    #     # End of session
+    #     self.logout()
+    #
+    #     # Close the db_engine
+    #     destroy_db_engine()
 
     def test_ss_workflow(self):
         # Login
@@ -338,10 +380,10 @@ class ScreenTestFixture(ScreenTests):
             )
         )
         # Uncheck the columns that won't be keys
-        for k_num in [2, 3, 40, 45, 46, 47, 49, 50, 51, 59, 61, 64]:
-            self.selenium.find_element_by_id(
-                'id_make_key_{0}'.format(k_num)
-            ).click()
+        col_checks = self.selenium.find_elements_by_xpath(
+            '//input[contains(@id, "id_make_key_")]')
+        for col_check in col_checks[1:]:
+            col_check.click()
         self.selenium.execute_script("window.scroll(0,0);")
 
         # Picture of the body
@@ -425,6 +467,20 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the RUN menu in SQL
         self.body_ss('dataops_SQL_run.png')
+        self.go_to_table()
+
+        #
+        # Dataops/Merge Athena Connection
+        #
+        # self.go_to_athena_upload_merge()
+        # self.body_ss('dataops_athena_available.png')
+        #
+        # # Click on the link RUN
+        # self.selenium.find_element_by_link_text('Run').click()
+        # self.wait_for_page(None, 'athena-load-step1')
+        #
+        # # Picture of the RUN menu in Athena
+        # self.body_ss('dataops_athena_run.png')
 
         # Go back to details
         self.go_to_details()
@@ -677,7 +733,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.personalized_canvas_email)
+        select.select_by_value(Action.PERSONALIZED_CANVAS_EMAIL)
         desc.send_keys('Motivating message depending on the program enrolled')
 
         self.modal_ss('action_personalized_canvas_email_create.png')
@@ -711,7 +767,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.send_list)
+        select.select_by_value(Action.SEND_LIST)
         desc.send_keys('Send email with column values as list')
 
         self.modal_ss('action_send_list_create.png')
@@ -747,7 +803,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.send_list_json)
+        select.select_by_value(Action.SEND_LIST_JSON)
         desc.send_keys('Send the list of inactive students in week 2 to another platform')
 
         self.modal_ss('action_json_list_create.png')
@@ -880,7 +936,7 @@ class ScreenTestFixture(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//button[@id='next-step-off']"
         ).click()
-        self.wait_for_page(title='OnTask :: Action scheduled')
+        self.wait_for_page(title='OnTask :: Operation scheduled')
 
         #
         # Actions
@@ -917,7 +973,7 @@ class ScreenTestFixture(ScreenTests):
         self.selenium.find_element_by_xpath(
             "//button[@id='next-step-off']"
         ).click()
-        self.wait_for_page(title='OnTask :: Action scheduled')
+        self.wait_for_page(title='OnTask :: Operation scheduled')
 
         #
         # Scheduler
@@ -947,6 +1003,56 @@ class ScreenTestFixture(ScreenTests):
 
         # Take picture of the body
         self.body_ss('logs.png')
+
+        # End of session
+        self.logout()
+
+        # Close the db_engine
+        destroy_db_engine()
+
+    def test_rubric(self):
+        action_name = 'Project feedback'
+        # Login
+        self.login('instructor01@bogus.com')
+
+        self.access_workflow_from_home_page(self.workflow_name)
+
+        self.go_to_actions()
+
+        # click in the create action button
+        self.selenium.find_element_by_class_name('js-create-action').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name')))
+
+        # Set the name, description and type of the action
+        self.selenium.find_element_by_id('id_name').send_keys(action_name)
+        desc = self.selenium.find_element_by_id('id_description_text')
+        desc.send_keys(
+            'Provide feedback about the project using the results '
+            + 'from the rubric')
+        # Select the action type
+        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select.select_by_value(Action.RUBRIC_TEXT)
+        self.modal_ss('rubric_create.png')
+        self.cancel_modal()
+
+        # Open the action
+        self.open_action_edit(action_name)
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//div[contains(@class, "note-editable")]')
+            )
+        )
+        self.body_ss('rubric_edit_text.png')
+
+        # Go to the rubric tab
+        self.select_rubric_tab()
+        self.body_ss('rubric_edit_table_tab.png')
+
+        # Preview
+        self.open_preview()
+        self.modal_ss('rubric_preview.png')
+        self.cancel_modal()
 
         # End of session
         self.logout()

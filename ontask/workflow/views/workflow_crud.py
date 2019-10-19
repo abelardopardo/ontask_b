@@ -207,23 +207,16 @@ def save_workflow_form(
         else:
             # This is a new instance!
             form.instance.user = request.user
-            form.instance.nrows = 0
-            form.instance.ncols = 0
+            workflow_item = form.save()
+            workflow_item.nrows = 0
+            workflow_item.ncols = 0
             log_type = Log.WORKFLOW_CREATE
             redirect_url = reverse('dataops:uploadmerge')
 
-            # Save the instance
-            workflow_item = form.save()
+            # Store in session
             store_workflow_in_session(request, workflow_item)
 
-        # Log event
-        Log.objects.register(
-            request.user,
-            log_type,
-            workflow_item,
-            {'id': workflow_item.id, 'name': workflow_item.name})
-
-        # Here we can say that the form processing is done.
+        workflow_item.log(request.user, log_type)
         return JsonResponse({'html_redirect': redirect_url})
 
     return JsonResponse({
@@ -317,24 +310,8 @@ def delete(
 ) -> JsonResponse:
     """Delete a workflow."""
     if request.method == 'POST':
-        # Log the event
-        Log.objects.register(
-            request.user,
-            Log.WORKFLOW_DELETE,
-            None,
-            {
-                'id': workflow.id,
-                'name': workflow.name})
-
-        # Nuke the logs pointing to the workflow
-        for litem in workflow.logs.all():
-            litem.workflow = None
-            litem.save()
-
-        # Perform the delete operation
+        workflow.log(request.user, Log.WORKFLOW_DELETE)
         workflow.delete()
-
-        # In this case, the form is valid anyway
         return JsonResponse({'html_redirect': reverse('home')})
 
     return JsonResponse({
@@ -382,16 +359,11 @@ def clone_workflow(
         )
         return JsonResponse({'html_redirect': ''})
 
-    # Log event
-    Log.objects.register(
+    workflow.log(
         request.user,
         Log.WORKFLOW_CLONE,
-        workflow_new,
-        {
-            'id_old': workflow_new.id,
-            'id_new': workflow.id,
-            'name_old': workflow_new.name,
-            'name_new': workflow.name})
+        id_old=workflow.id,
+        name_old=workflow.name)
 
     messages.success(
         request,

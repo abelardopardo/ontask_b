@@ -19,7 +19,7 @@ from ontask.dataops.forms import SelectColumnUploadForm, SelectKeysForm
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.pandas.dataframe import store_workflow_table
 from ontask.dataops.sql import table_queries
-from ontask.models import Log, SQLConnection, Workflow
+from ontask.models import AthenaConnection, Log, SQLConnection, Workflow
 from ontask.workflow.access import store_workflow_in_session
 
 
@@ -43,8 +43,8 @@ def uploadmerge(
         'dataops/uploadmerge.html',
         {
             'valuerange': range(5) if workflow.has_table() else range(3),
-            'sql_enabled': SQLConnection.objects.count() > 0
-         })
+            'sql_enabled': SQLConnection.objects.filter(enabled=True).count() > 0,
+            'athena_enabled': AthenaConnection.objects.filter(enabled=True).count() > 0})
 
 
 @user_passes_test(is_instructor)
@@ -190,19 +190,12 @@ def upload_s2(
 
         # Log the event
         col_info = workflow.get_column_info()
-        Log.objects.register(
+        workflow.log(
             request.user,
             Log.WORKFLOW_DATA_UPLOAD,
-            workflow,
-            {'id': workflow.id,
-             'name': workflow.name,
-             'num_rows': workflow.nrows,
-             'num_cols': workflow.ncols,
-             'column_names': col_info[0],
-             'column_types': col_info[1],
-             'column_unique': col_info[2]})
-
-        # Go back to show the workflow detail
+            column_names=col_info[0],
+            column_types=col_info[1],
+            column_unique=col_info[2])
         return redirect(reverse('table:display'))
 
     # Update the dictionary with the session information
@@ -397,7 +390,6 @@ def upload_s4(
                 'error.html',
                 {'message': _('Exception while loading data frame')})
 
-        # Performing the merge
         try:
             perform_dataframe_upload_merge(
                 workflow,
@@ -409,49 +401,29 @@ def upload_s4(
             table_queries.delete_table(
                 workflow.get_data_frame_upload_table_name(),
             )
-
             col_info = workflow.get_column_info()
-            Log.objects.register(
+            workflow.log(
                 request.user,
                 Log.WORKFLOW_DATA_FAILEDMERGE,
-                workflow,
-                {'id': workflow.id,
-                 'name': workflow.name,
-                 'num_rows': workflow.nrows,
-                 'num_cols': workflow.ncols,
-                 'column_names': col_info[0],
-                 'column_types': col_info[1],
-                 'column_unique': col_info[2],
-                 'error_msg': str(exc)})
-
+                column_names=col_info[0],
+                column_types=col_info[1],
+                column_unique=col_info[2],
+                error_message=str(exc))
             messages.error(request, _('Merge operation failed. ') + str(exc))
             return redirect(reverse('table:display'))
 
-        # Log the event
         col_info = workflow.get_column_info()
-        Log.objects.register(
+        workflow.log(
             request.user,
             Log.WORKFLOW_DATA_MERGE,
-            workflow,
-            {'id': workflow.id,
-             'name': workflow.name,
-             'num_rows': workflow.nrows,
-             'num_cols': workflow.ncols,
-             'column_names': col_info[0],
-             'column_types': col_info[1],
-             'column_unique': col_info[2]})
-
-        # Update the session information
+            column_names=col_info[0],
+            column_types=col_info[1],
+            column_unique=col_info[2])
         store_workflow_in_session(request, workflow)
-
-        # Remove the csvupload from the session object
         request.session.pop('upload_data', None)
-
         return redirect(reverse('table:display'))
 
     # We are processing a GET request
-
-    # Create the information to include in the final report table
     dst_column_names = upload_data['dst_column_names']
     dst_selected_key = upload_data['dst_selected_key']
     src_selected_key = upload_data['src_selected_key']

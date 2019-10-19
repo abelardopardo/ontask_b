@@ -12,7 +12,11 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.dataops.pandas.datatypes
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.const import (
+    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE,
+    COLUMN_NAME_SIZE,
+)
+from ontask.models.logs import Log
 
 
 class Column(models.Model):
@@ -35,7 +39,7 @@ class Column(models.Model):
 
     # Column name
     name = models.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=COLUMN_NAME_SIZE,
         blank=False,
         verbose_name=_('column name'))
 
@@ -135,8 +139,7 @@ class Column(models.Model):
         if validate:
             to_store = self.validate_column_values(
                 self.data_type,
-                [cat_value.strip() for cat_value in cat_values],
-            )
+                [cat_value.strip() for cat_value in cat_values])
         else:
             to_store = cat_values
 
@@ -256,7 +259,27 @@ class Column(models.Model):
         """Render as unicode."""
         return self.name
 
-    class Meta(object):
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'type': self.data_type,
+            'is_key': self.is_key,
+            'position': self.position,
+            'categories': self.categories,
+            'active_from': self.active_from,
+            'active_to': self.active_to,
+            'workflow_id': self.workflow.id}
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.workflow,
+            payload)
+
+    class Meta:
         """Define additional fields, unique criteria and ordering."""
 
         verbose_name = 'column'

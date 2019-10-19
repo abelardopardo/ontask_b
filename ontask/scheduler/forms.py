@@ -3,7 +3,6 @@
 """Forms for scheduling actions."""
 
 import datetime
-from builtins import object
 
 import pytz
 from bootstrap_datepicker_plus import DateTimePickerInput
@@ -15,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import is_correct_email
 from ontask.core.forms import FormWithPayload, date_time_widget_options
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.models import Column, ScheduledAction
+from ontask.models import Column, ScheduledOperation
 
 
 class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
@@ -35,6 +34,8 @@ class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
         self.set_fields_from_dict(['name', 'description_text'])
         self.fields['execute'].initial = parse_datetime(
                 self._FormWithPayload__form_info.get('execute', ''))
+        self.fields['execute_until'].initial = parse_datetime(
+                self._FormWithPayload__form_info.get('execute_until', ''))
 
     def clean(self):
         """Verify that the date is corre    ct."""
@@ -43,26 +44,40 @@ class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
         self.store_fields_in_dict([
             ('name', None),
             ('description_text', None),
-            ('execute', str(form_data['execute']))])
+            ('execute', str(form_data['execute'])),
+            ('execute_until', str(form_data['execute_until']))])
 
         # The executed time must be in the future
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
         when_data = self.cleaned_data.get('execute')
-        if when_data and when_data <= now:
+        until_data = self.cleaned_data.get('execute_until')
+        if when_data and not until_data and when_data <= now:
             self.add_error(
                 'execute',
                 _('Date/time must be in the future'))
 
+        if until_data:
+            if until_data <= when_data:
+                self.add_error(
+                    'execute_until',
+                    _('Final execution date/time must be after '
+                      + 'the previous one'))
+            elif until_data <= now:
+                self.add_error(
+                    'execute_until',
+                    _('Final execution date/time must be in the future'))
+
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Define model, fields and widgets."""
 
-        model = ScheduledAction
-        fields = ('name', 'description_text', 'execute')
+        model = ScheduledOperation
+        fields = ('name', 'description_text', 'execute', 'execute_until')
         widgets = {
             'execute': DateTimePickerInput(options=date_time_widget_options),
-        }
+            'execute_until':
+                DateTimePickerInput(options=date_time_widget_options)}
 
 
 class ScheduleMailSubjectForm(FormWithPayload):
@@ -161,6 +176,9 @@ class ScheduleItemsForm(ScheduleBasicForm):
         super().__init__(form_data, *args, **kwargs)
 
         self.set_field_from_dict('confirm_items')
+        if self.instance and self.instance.exclude_values:
+            self.fields['confirm_items'].initial = True
+
         # Special case: get the column from the name
         self.fields['item_column'].queryset = columns
         column_name = self._FormWithPayload__form_info.get('item_column')
@@ -194,12 +212,20 @@ class ScheduleItemsForm(ScheduleBasicForm):
                 'item_column',
                 _('The column with email addresses has incorrect values.'))
 
+        if self.instance and not form_data['confirm_items']:
+            self.instance.exclude_values = []
+
         return form_data
 
     class Meta(ScheduleBasicForm.Meta):
         """Define model, fields and widgets."""
 
-        fields = ('name', 'description_text', 'item_column', 'execute')
+        fields = (
+            'name',
+            'description_text',
+            'item_column',
+            'execute',
+            'execute_until')
 
 
 class ScheduleTokenForm(FormWithPayload):
@@ -273,6 +299,7 @@ class EmailScheduleForm(
             'name',
             'description_text',
             'execute',
+            'execute_until',
             'item_column',
             'subject',
             'cc_email',
@@ -310,6 +337,7 @@ class SendListScheduleForm(
             'name',
             'description_text',
             'execute',
+            'execute_until',
             'email_to',
             'subject',
             'cc_email',
@@ -339,6 +367,7 @@ class JSONScheduleForm(ScheduleTokenForm, ScheduleItemsForm):
             'name',
             'description_text',
             'execute',
+            'execute_until',
             'item_column',
             'confirm_items',
             'token')
@@ -354,6 +383,7 @@ class JSONListScheduleForm(ScheduleTokenForm, ScheduleBasicForm):
             'name',
             'description_text',
             'execute',
+            'execute_until',
             'token')
 
 
@@ -377,4 +407,5 @@ class CanvasEmailScheduleForm(ScheduleMailSubjectForm, ScheduleItemsForm):
             'item_column',
             'confirm_items',
             'subject',
-            'execute')
+            'execute',
+            'execute_until')

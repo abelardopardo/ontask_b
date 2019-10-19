@@ -142,10 +142,7 @@ class LTIAuthBackend(ModelBackend):
         # instead we use get_or_create when creating unknown users since it has
         # built-in safeguards for multiple threads.
         if self.create_unknown_user:
-            user, created = user_model.objects.get_or_create(**{
-                # user_model.USERNAME_FIELD: username,
-                'email': email,
-            })
+            user, created = user_model.objects.get_or_create(email=email)
 
             if created:
                 logger.debug(

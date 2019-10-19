@@ -35,7 +35,7 @@
          title="{% trans 'See when this action was executed' %}">
         <span class="fa fa-clock-o"></span> {% trans 'Timeline' %}</a>
       {% if is_out %}
-        <a href="{% url 'scheduler:create' id %}" class="spin dropdown-item"
+        <a href="{% url 'scheduler:create_action_run' id %}" class="spin dropdown-item"
            data-toggle="tooltip"
            title="{% trans 'Schedule the execution of the action' %}">
           <span class="fa fa-calendar"></span> {% trans 'Schedule' %}</a>
@@ -52,7 +52,7 @@
               title="{% trans 'Create an identical action' %}">
         <span class="fa fa-clone"></span> {% trans 'Clone' %}
       </button>
-      <a href="{% url 'action:export_ask' id %}" class="spin dropdown-item"
+      <a href="{% url 'action:export' id %}" class="dropdown-item"
          data-toggle="tooltip"
          title="{% trans 'Export the content of this action' %}">
         <span class="fa fa-download"></span> {% trans 'Export' %}</a>

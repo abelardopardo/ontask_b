@@ -10,6 +10,7 @@ from ontask.dataops.formula import EVAL_TXT, evaluate_formula
 from ontask.dataops.sql import get_num_rows
 from ontask.models.column import Column
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.logs import Log
 
 
 class Condition(models.Model):
@@ -130,7 +131,25 @@ class Condition(models.Model):
         """Render string."""
         return self.name
 
-    class Meta(object):
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'name': self.name,
+            'action': self.action.name,
+            'formula': self.get_formula_text(),
+            'n_rows_selected': self.n_rows_selected,
+            'is_filter': self.is_filter,
+            'workflow_id': self.action.workflow.id}
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.action.workflow,
+            payload)
+
+    class Meta:
         """Define unique criteria and ordering.
 
         The unique criteria here is within the action, the name and being a

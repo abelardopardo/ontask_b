@@ -26,7 +26,6 @@ class DataopsViewsRow(test.OnTaskTestCase):
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-
     workflow_name = 'Testing Eval Conditions'
 
     def test_row_create(self):
@@ -85,11 +84,8 @@ class DataopsViewsRow(test.OnTaskTestCase):
         self.assertEqual(row_val['double1'], 22)
         self.assertEqual(row_val['double2'], 23)
 
-
     def test_row_edit(self):
         """Test the view to filter items."""
-        nrows = self.workflow.nrows
-
         # Row edit (GET)
         resp = self.get_response(
             'dataops:rowupdate',
