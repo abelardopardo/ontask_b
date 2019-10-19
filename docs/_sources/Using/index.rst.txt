@@ -379,8 +379,14 @@ The buttons at the top of the page offer the following operations:
 |fa-plus| Action
   Create a new action in the workflow. The form requires a name (unique for the current workflow), a description (optional), and the type of action. OnTask offers the following types of actions: personalized text, personalized Canvas email, personalized JSON, and surveys.
 
-|fa-upload| Import action
+|fa-upload| Import actions
   Upload an action previously downloaded from another workflow.
+
+|fa-download| Export actions
+  Download a file with any of the actions in the workflow.
+
+|fa-clock-o| Timeline
+  Display the time line showing when the actions in the workflow have been executed.
 
 The actions in the workflow are shown in a tabular format. For each action the following main operations are offered:
 
@@ -550,6 +556,41 @@ Conditional text
   .. figure:: /scaptures/Ontask____howtocreatetext.gif
      :align: center
      :width: 100%
+
+.. _personalized_rubric:
+
+Personalized Rubric Feedback
+============================
+
+These actions are a special case of the :ref:`personalized text <personalized_content>` where an email template is combined with a `rubric <https://en.wikipedia.org/wiki/Rubric_(academic)>`__ to provide learners with a set of comments based on the obtained scores. A rubric is a two dimensional table. Each row is a *criterion* used for assessment (for example, when using a rubric to grade a presentation, one criterion could be the clarith with which concepts have been presented. The columns of the table are *levels of attainment* that specify how well was the criterion addressed. In each cell of this two-dimensional table there is a paragraph describing the elements of the corresponding criterion and level of attainment.
+
+OnTask extends the structure of each cell and complements the description with an additional text that is called the *feedback*. Once the table has been populated (multiple criteria and multiple levels of attainment), an email template can be created in which the appropriate feedback elements are selected based on the values of each criteria for each learner.
+
+The first step to create a personalized rubric feedback action is, as with the previous action, to click in he button to add an action and select the option *Rubric feedback*.
+
+.. figure:: /scaptures/rubric_create.png
+   :align: center
+   :width: 100%
+
+The personalized rubric feedback action is created and modified using the screen shown in the following figure:
+
+.. figure:: /scaptures/rubric_edit_text.png
+   :align: center
+   :width: 100%
+
+Three tabs are available in this screen. From left to right, the first one is the ref:`personalized text editor <personalizez_text_editor>`. It offers the same functionality as described for the `personalized text action <personalized_content>` with the difference that the only personalized content allowed is the comments extracted from the rubric. Place the cursor in the location in the email and click the buttom *Insert rubric text* to insert the mark that will be replaced by the rubric text.
+
+The second tab is identical to the one in the ref:`personalized text action <personalized_content>` to select a subset of learners to consider for this action. The right-most tab is where the rubric table is manipulated. The criteria in the rubric are either already existing columns with a common set of pre-defined values, or you can create the criteria specifying these values. The following figure shows an example of rubric with two criteria (*Presentation* and *Structure*) and each of them with three levels of attainment (*High*, *Medium* and *Poor*).
+
+.. figure:: /scaptures/rubric_edit_table_tab.png
+   :align: center
+   :width: 100%
+
+As it can be seen in the figure, each criterion (row) has a left-most cell explaining what is considered, and then three additional cells (one per level of attainment) with the description of what is expected for that level, and the text to be provided as feedback. The buttons at the top of the rubric allow you to create new criteria (or columns within your workflow) or to edit the text used for the level of attainment.
+
+The *Preview* button at the top of the page allows you to see the different messages generated when the rubric is evaluated based on the values of the criteria for each student. This is the text as it will be included in an email message, or made available through an URL.
+
+Once you have *selected* a set of columns as criteria in the rubric with identical pre-defined values, these should not change, otherwise, the content of rubric becomes inconsistent and cannot be used.
 
 .. _surveys:
 
