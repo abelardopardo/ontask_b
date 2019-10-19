@@ -4,7 +4,7 @@ from django.db import migrations, models
 from collections import Counter
 
 from ontask.dataops.sql import db_rename_column
-
+from ontask.models import Workflow
 
 def _make_unique_new_names(name_list):
     """Create a list if new names that are unique
@@ -42,17 +42,16 @@ def _make_unique_new_names(name_list):
 
 def trim_column_names(apps, schema_editor):
     """
-    Traverse all workshops and trim column names to 64 characters.
+    Traverse all workshops and trim column names to 63 characters.
 
     :param apps:
     :param schema_editor:
     :return:
     """
-    Workflow = apps.get_model('ontask', 'Workflow')
     for wflow in Workflow.objects.all():
         rename_cols = []
         for column in wflow.columns.all():
-            if len(column.name) <= 64:
+            if len(column.name) <= 63:
                 continue
             rename_cols.append(column)
 
@@ -60,15 +59,15 @@ def trim_column_names(apps, schema_editor):
             continue
 
         new_names = _make_unique_new_names(
-            [col.name[:64] for col in rename_cols])
+            [col.name[:63] for col in rename_cols])
 
-        for col, new_name in zip(wflow.columns.al(), new_names):
-            if col.name == new_name:
+        for col, new_name in zip(rename_cols, new_names):
+            if col.name[:63] == new_name:
                 continue
 
             db_rename_column(
-                wflow.get_data_frame_table(),
-                col.name,
+                wflow.get_data_frame_table_name(),
+                col.name[:63],
                 new_name)
 
             col.name = new_name
