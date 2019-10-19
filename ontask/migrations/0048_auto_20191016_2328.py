@@ -62,7 +62,7 @@ def trim_column_names(apps, schema_editor):
         new_names = _make_unique_new_names(
             [col.name[:64] for col in rename_cols])
 
-        for col, new_name in zip(wflow.columns.al(), new_names):
+        for col, new_name in zip(wflow.columns.all(), new_names):
             if col.name == new_name:
                 continue
 
