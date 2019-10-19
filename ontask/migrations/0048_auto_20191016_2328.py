@@ -67,7 +67,7 @@ def trim_column_names(apps, schema_editor):
                 continue
 
             db_rename_column(
-                wflow.get_data_frame_table(),
+                wflow.get_data_frame_table_name(),
                 col.name,
                 new_name)
 
