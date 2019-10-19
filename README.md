@@ -13,8 +13,6 @@ Current Version: 6.1 ([documentation](http://ontask-version-b.readthedocs.io/en/
 
 ## OnTask in a nutshell
 
-- **NEW** Data upload/merge through an Amazon Athena connection
-
 - **NEW** Functionality to export a set of actions from a single request.
 
 - **NEW** Action to write a rubric with a feedback paragraph for each criteria and level of attainment and create a personalized message to each student.
