@@ -154,7 +154,8 @@ def row_update(
 
         # Recompute all the values of the conditions in each of the actions
         # TODO: Explore how to do this asynchronously (or lazy)
-        map(lambda act: act.update_n_rows_selected(), workflow.actions.all())
+        for act in workflow.actions.all():
+            act.update_n_rows_selected()
         workflow.log(
             request.user,
             Log.WORKFLOW_DATA_ROW_UPDATE,

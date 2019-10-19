@@ -37,7 +37,7 @@ Version 5.2 contains a significant reorganization of the file structure in the t
 
 - The :ref:`configuration file <configuration_file>` needs to be moved from ``src/ontask/settings`` to ``settings``.
 
-- The the files in the ``media`` folder need to be moved to ``ontask/media``.
+- The files in the ``media`` folder need to be moved to ``ontask/media``.
 
 Required tools
 **************
@@ -379,6 +379,8 @@ The documentation is created by the application ``sphinx-doc`` and stored in the
 #. Execute the following command to collect and install the static content::
 
      python3 manage.py collectstatic
+
+   The static files are collected from the folder in the main project older with the name stored in the variable ``STATIC_URL_SUFFIX`` and placed, together with the static content from the folder ``ontask/static`` in the folder  ``<base_dir>/site/static``. This last folder is the only one that contains all the required files to be served statically by the application. Following the suggestions given in the Django project, the content in this folder should be served directly by the web server and not through the WSGI interface. The typical approach for this is to *synchronize* the content of this folder with the location from where the server takes the files. Make sure you do not make any changes to the folders ``<base_dir>/static`` or ``<base_dir>/ontask/static`` as they only contain a subset of the files.
 
 #. If you are running a production instance, execute the following command to check the status of the platform::
 
@@ -805,6 +807,8 @@ OnTask allows to send personalized emails to users's inbox in an instance of a `
                "conversation_url": "http://{0}/api/v1/conversations",
                "aux_params": {"burst": 10, "pause": 5}}
        }
+
+  Make sure you include this informtion **all in a single line in the configuration file**.
 
   Default: ``{}`` (Empty dictionary)
 

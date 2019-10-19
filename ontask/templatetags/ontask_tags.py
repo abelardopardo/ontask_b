@@ -55,7 +55,7 @@ datetimepicker_css = \
         settings.STATIC_URL)
 
 datetimepicker_js = \
-    '<script type="text/javascript" src="{0}site/js/moment-with-locales.js"></script>'.format(
+    '<script type="text/javascript" src="{0}js/moment-with-locales.js"></script>'.format(
         settings.STATIC_URL) \
     + """<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="{0}bootstrap_datepicker_plus/js/datepicker-widget.js"></script>""".format(

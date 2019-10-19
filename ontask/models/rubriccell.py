@@ -72,7 +72,8 @@ class RubricCell(models.Model):
         """Log the operation with the object."""
         payload = {
             'id': self.id,
-            'name': self.name,
+            'action': self.action.name,
+            'action_id': self.action.id,
             'column': self.column.name,
             'column_id': self.column.id,
             'loa_position': self.loa_position,

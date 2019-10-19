@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>2. Installation process &#8212; OnTask (B.6.0.2) B.6.0.2 documentation</title>
+    <title>2. Installation process &#8212; OnTask (B.6.1) B.6.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -78,8 +78,8 @@
 <h2>2.4. Are you upgrading to version 5.2?<a class="headerlink" href="#are-you-upgrading-to-version-5-2" title="Permalink to this headline">¶</a></h2>
 <p>Version 5.2 contains a significant reorganization of the file structure in the tool, and as a consequence there are several files that need to be manually relocated:</p>
 <ul class="simple">
-<li><p>The <a class="reference internal" href="#configuration-file"><span class="std std-ref">configuration file</span></a> needs to be moved from <code class="docutils literal notranslate"><span class="pre">src/ontask/settings</span></code> to <code class="docutils literal notranslate"><span class="pre">ontask/settings</span></code>.</p></li>
-<li><p>The the files in the <code class="docutils literal notranslate"><span class="pre">media</span></code> folder need to be moved to <code class="docutils literal notranslate"><span class="pre">ontask/media</span></code>.</p></li>
+<li><p>The <a class="reference internal" href="#configuration-file"><span class="std std-ref">configuration file</span></a> needs to be moved from <code class="docutils literal notranslate"><span class="pre">src/ontask/settings</span></code> to <code class="docutils literal notranslate"><span class="pre">settings</span></code>.</p></li>
+<li><p>The files in the <code class="docutils literal notranslate"><span class="pre">media</span></code> folder need to be moved to <code class="docutils literal notranslate"><span class="pre">ontask/media</span></code>.</p></li>
 </ul>
 </div>
 <div class="section" id="required-tools">
@@ -149,7 +149,7 @@ part of the python libraries in the system.</p>
 </div></blockquote>
 <p>Configuration file (<em>conf</em> level)</p>
 <blockquote>
-<div><p>The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file and kept within the system file readable by the application (in the <code class="docutils literal notranslate"><span class="pre">ontask/settings</span></code> folder). This variables can store strings, booleans, basic lists and dictionaries.</p>
+<div><p>The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file and kept within the system file readable by the application (in the <code class="docutils literal notranslate"><span class="pre">settings</span></code> folder). This variables can store strings, booleans, basic lists and dictionaries.</p>
 </div></blockquote>
 <p>Configuration script (<em>script</em> level)</p>
 <blockquote>
@@ -186,13 +186,13 @@ part of the python libraries in the system.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">DATAOPS_PLUGIN_DIRECTORY</span></code></dt><dd><p>Folder in the local file system containing the OnTask plugins.</p>
 <p>Default: <cite>plugins</cite></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code></dt><dd><p>Python expression pointing to the configuration script or initial module (python file) to execute on start up. Two of these modules are provided in the folder <code class="docutils literal notranslate"><span class="pre">ontask/settings</span></code>. The file <code class="docutils literal notranslate"><span class="pre">development.py</span></code> provides definitions recommended for a development environment. The file <code class="docutils literal notranslate"><span class="pre">production.py</span></code> provides the suggested definitions for a production deployment. Both scripts load the definitions in the module <code class="docutils literal notranslate"><span class="pre">base.py</span></code>. These scripts contain configuration definitions described in <a class="reference internal" href="#configuration-script"><span class="std std-ref">Configuration script</span></a>.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">ontask.settings.production</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code></dt><dd><p>Python expression pointing to the configuration script or initial module (python file) to execute on start up. Two of these modules are provided in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>. The file <code class="docutils literal notranslate"><span class="pre">development.py</span></code> provides definitions recommended for a development environment. The file <code class="docutils literal notranslate"><span class="pre">production.py</span></code> provides the suggested definitions for a production deployment. Both scripts load the definitions in the module <code class="docutils literal notranslate"><span class="pre">base.py</span></code>. These scripts contain configuration definitions described in <a class="reference internal" href="#configuration-script"><span class="std std-ref">Configuration script</span></a>.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">settings.production</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME</span></code></dt><dd><p>Host name used to serve the application.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">localhost</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code></dt><dd><p>Name for the configuration file. It must be in the folder <code class="docutils literal notranslate"><span class="pre">ontask/settings</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code></dt><dd><p>Name for the configuration file. It must be in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code></p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">local.env</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">LANGUAGE_CODE</span></code></dt><dd><p>Official ISO 639-1 language code to use in the platform. Check the available languages in the file base.py.</p>
@@ -227,7 +227,7 @@ part of the python libraries in the system.</p>
 </div>
 <div class="section" id="configuration-file">
 <span id="id1"></span><h4>2.6.1.2. Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h4>
-<p>Using a plain text editor create a file with name <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in folder <code class="docutils literal notranslate"><span class="pre">ontask/settings</span></code> (or a file with the name assigned to the environment variable <code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code> as described in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>). Include in this file either:</p>
+<p>Using a plain text editor create a file with name <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in folder <code class="docutils literal notranslate"><span class="pre">settings</span></code> (or a file with the name assigned to the environment variable <code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code> as described in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>). Include in this file either:</p>
 <ul class="simple">
 <li><p>the assignment of a variable from those described in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a> that has no environment definition, or</p></li>
 <li><p>the assignment of any of the following variables for which you want a value different than the default.</p></li>
@@ -300,7 +300,7 @@ different content after the equal sign):</p>
 </div>
 <div class="section" id="configuration-script">
 <span id="id2"></span><h4>2.6.1.3. Configuration script<a class="headerlink" href="#configuration-script" title="Permalink to this headline">¶</a></h4>
-<p>The are some additional configuration variables that directly defined in the modules <code class="docutils literal notranslate"><span class="pre">base.py</span></code>, <code class="docutils literal notranslate"><span class="pre">development.py</span></code> and <code class="docutils literal notranslate"><span class="pre">production.py</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">ontask/settings</span></code>. Modify the python code to perform additional configuration considering:</p>
+<p>The are some additional configuration variables that directly defined in the modules <code class="docutils literal notranslate"><span class="pre">base.py</span></code>, <code class="docutils literal notranslate"><span class="pre">development.py</span></code> and <code class="docutils literal notranslate"><span class="pre">production.py</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>. Modify the python code to perform additional configuration considering:</p>
 <ol class="arabic simple">
 <li><p>The script <code class="docutils literal notranslate"><span class="pre">base.py</span></code> is always executed first</p></li>
 <li><p>The choice between <code class="docutils literal notranslate"><span class="pre">develoment.py</span></code> or <code class="docutils literal notranslate"><span class="pre">production.py</span></code> is decided based on the environment variable <code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code> and the default value is <code class="docutils literal notranslate"><span class="pre">production.py</span></code></p></li>
@@ -341,6 +341,7 @@ different content after the equal sign):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
 </pre></div>
 </div>
+<p>The static files are collected from the folder in the main project older with the name stored in the variable <code class="docutils literal notranslate"><span class="pre">STATIC_URL_SUFFIX</span></code> and placed, together with the static content from the folder <code class="docutils literal notranslate"><span class="pre">ontask/static</span></code> in the folder  <code class="docutils literal notranslate"><span class="pre">&lt;base_dir&gt;/site/static</span></code>. This last folder is the only one that contains all the required files to be served statically by the application. Following the suggestions given in the Django project, the content in this folder should be served directly by the web server and not through the WSGI interface. The typical approach for this is to <em>synchronize</em> the content of this folder with the location from where the server takes the files. Make sure you do not make any changes to the folders <code class="docutils literal notranslate"><span class="pre">&lt;base_dir&gt;/static</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;base_dir&gt;/ontask/static</span></code> as they only contain a subset of the files.</p>
 </li>
 <li><p>If you are running a production instance, execute the following command to check the status of the platform:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="o">--</span><span class="n">deploy</span>
@@ -366,8 +367,7 @@ stop the application and configure the web server accordingly.</p></li>
 <li><p>If you want to use the server in development mode through the URL
 <code class="docutils literal notranslate"><span class="pre">127.0.0.1:8000</span></code> you have to perform two more steps. First, edit the file
 <code class="docutils literal notranslate"><span class="pre">manage.py</span></code> and change these three lines to look like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span>
-                 <span class="s2">&quot;ontask.settings.development&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span> <span class="s2">&quot;settings.development&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Second, execute the following command from the project folder:</p>
@@ -476,7 +476,7 @@ script <code class="docutils literal notranslate"><span class="pre">scheduler_sc
 <li><p>Stop the apache web server.</p></li>
 <li><p>Open a terminal and use a command interpreter to execute the following commands.</p></li>
 <li><p>Set the current folder of the interpreter to the main project folder.</p></li>
-<li><p>Verify that the <a class="reference internal" href="#configuration-file"><span class="std std-ref">configuration file</span></a> is in the folder <code class="docutils literal notranslate"><span class="pre">ontask/settings</span></code>.</p></li>
+<li><p>Verify that the <a class="reference internal" href="#configuration-file"><span class="std std-ref">configuration file</span></a> is in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>.</p></li>
 <li><p>Pull the code for the new version from the repository:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">pull</span>
 </pre></div>
@@ -569,7 +569,7 @@ through the <code class="docutils literal notranslate"><span class="pre">Actions
 <ol class="arabic">
 <li><p>A tool consumer that can be configured to connect with OnTask. This type
 of configuration is beyond the scope of this manual.</p></li>
-<li><p>A set of pairs key,value in OnTask to be given to the tool consumers so that together with the URL, they are ready to send the requests. The key/value pairs need to be included as an additional variables in the file <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">ontask/settings</span></code> together with other local configuration variables. For example,</p>
+<li><p>A set of pairs key,value in OnTask to be given to the tool consumers so that together with the URL, they are ready to send the requests. The key/value pairs need to be included as an additional variables in the file <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code> together with other local configuration variables. For example,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LTI_OAUTH_CREDENTIALS</span><span class="o">=</span><span class="n">key1</span><span class="o">=</span><span class="n">secret1</span><span class="p">,</span><span class="n">key2</span><span class="o">=</span><span class="n">secret2</span>
 </pre></div>
 </div>
@@ -615,8 +615,8 @@ Debian/Ubuntu, the required packages are:</p>
 </pre></div>
 </div>
 </li>
-<li><p>Edit the  file <code class="docutils literal notranslate"><span class="pre">ontask/settings/base.py</span></code> and uncomment the lines that import the <code class="docutils literal notranslate"><span class="pre">ldap</span></code> library (<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">ldap</span></code>) and the lines that import three methods from the <code class="docutils literal notranslate"><span class="pre">django_auth_ldap.config</span></code> module (<code class="docutils literal notranslate"><span class="pre">LDAPSearch</span></code>, <code class="docutils literal notranslate"><span class="pre">GroupOfNamesType</span></code> and <code class="docutils literal notranslate"><span class="pre">LDAPGroupQuery</span></code>)</p></li>
-<li><p>Locate the section in the file <code class="docutils literal notranslate"><span class="pre">ontask/settings/base.py</span></code> that contains the variables to configure <em>LDAP AUTHENTICATION</em>.</p></li>
+<li><p>Edit the  file <code class="docutils literal notranslate"><span class="pre">settings/base.py</span></code> and uncomment the lines that import the <code class="docutils literal notranslate"><span class="pre">ldap</span></code> library (<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">ldap</span></code>) and the lines that import three methods from the <code class="docutils literal notranslate"><span class="pre">django_auth_ldap.config</span></code> module (<code class="docutils literal notranslate"><span class="pre">LDAPSearch</span></code>, <code class="docutils literal notranslate"><span class="pre">GroupOfNamesType</span></code> and <code class="docutils literal notranslate"><span class="pre">LDAPGroupQuery</span></code>)</p></li>
+<li><p>Locate the section in the file <code class="docutils literal notranslate"><span class="pre">settings/base.py</span></code> that contains the variables to configure <em>LDAP AUTHENTICATION</em>.</p></li>
 <li><p>Uncomment the ones needed for your configuration. Make sure all the information is included to connect to the server, perform the binding, search, and if needed, assign fields to user and group attributes.</p></li>
 <li><p>Locate the variable <code class="docutils literal notranslate"><span class="pre">AUTHENTICATION_BACKENDS</span></code> in the same file.</p></li>
 <li><p>Comment the lines referring to the back-ends <code class="docutils literal notranslate"><span class="pre">LTIAuthBackend</span></code> and
@@ -721,6 +721,7 @@ before starting the application. Make sure the server is running <strong>in prod
 </div>
 </li>
 </ul>
+<p>Make sure you include this informtion <strong>all in a single line in the configuration file</strong>.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">{}</span></code> (Empty dictionary)</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">CANVAS_TOKEN_EXPIRY_SLACK</span></code></dt><dd><p>The number of seconds to renew a token before it expires. For example, if the variable is 300, any API call performed with a token five minutes before it expires will prompt a token refresh. Here is an example of such definition in <code class="docutils literal notranslate"><span class="pre">local.env</span></code>:</p>

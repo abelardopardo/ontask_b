@@ -8,12 +8,12 @@
 {% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datatables_bootstrap_css %}
-  <link href="{% static 'site/css/sol.css' %}" rel="stylesheet">
+  <link href="{% static 'css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
   {% if workflow %}
     {% ontask_datetimepicker_js %}
-    <script src="{% static 'site/js/sol.js' %}"></script>
+    <script src="{% static 'js/sol.js' %}"></script>
     <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
     <script src="{% static 'workflow/js/column_move.js' %}?v={% ontask_version %}"></script>
     {% ontask_datatables_jquery_js %}

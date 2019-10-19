@@ -197,34 +197,34 @@ class ScreenTestFixture(ScreenTests):
         # Close the db_engine
         destroy_db_engine()
 
-    def test_athena_admin(self):
-        # Login
-        self.login('superuser@bogus.com')
-
-        #
-        # Open Athena Connection
-        #
-        self.go_to_athena_connections()
-        self.body_ss('workflow_athena_connections_index.png')
-
-        # click in the edit element
-        self.selenium.find_element_by_xpath(
-            "//table[@id='connection-admin-table']"
-            "//tr/td[1][normalize-space() = 'athena connection']"
-        ).click()
-        self.wait_for_modal_open()
-
-        # Take picture of the modal
-        self.modal_ss('workflow_superuser_athena_edit.png')
-
-        # Click in the cancel button
-        self.cancel_modal()
-
-        # End of session
-        self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()
+    # def test_athena_admin(self):
+    #     # Login
+    #     self.login('superuser@bogus.com')
+    #
+    #     #
+    #     # Open Athena Connection
+    #     #
+    #     self.go_to_athena_connections()
+    #     self.body_ss('workflow_athena_connections_index.png')
+    #
+    #     # click in the edit element
+    #     self.selenium.find_element_by_xpath(
+    #         "//table[@id='connection-admin-table']"
+    #         "//tr/td[1][normalize-space() = 'athena connection']"
+    #     ).click()
+    #     self.wait_for_modal_open()
+    #
+    #     # Take picture of the modal
+    #     self.modal_ss('workflow_superuser_athena_edit.png')
+    #
+    #     # Click in the cancel button
+    #     self.cancel_modal()
+    #
+    #     # End of session
+    #     self.logout()
+    #
+    #     # Close the db_engine
+    #     destroy_db_engine()
 
     def test_ss_workflow(self):
         # Login
@@ -472,15 +472,15 @@ class ScreenTestFixture(ScreenTests):
         #
         # Dataops/Merge Athena Connection
         #
-        self.go_to_athena_upload_merge()
-        self.body_ss('dataops_athena_available.png')
-
-        # Click on the link RUN
-        self.selenium.find_element_by_link_text('Run').click()
-        self.wait_for_page(None, 'athena-load-step1')
-
-        # Picture of the RUN menu in Athena
-        self.body_ss('dataops_athena_run.png')
+        # self.go_to_athena_upload_merge()
+        # self.body_ss('dataops_athena_available.png')
+        #
+        # # Click on the link RUN
+        # self.selenium.find_element_by_link_text('Run').click()
+        # self.wait_for_page(None, 'athena-load-step1')
+        #
+        # # Picture of the RUN menu in Athena
+        # self.body_ss('dataops_athena_run.png')
 
         # Go back to details
         self.go_to_details()

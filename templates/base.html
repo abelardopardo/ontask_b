@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="{% block description %}{% endblock description %}">
-    <link rel="shortcut icon" type="image/png" href="{% static 'site/ico/favicon.ico' %}" type="favicon/ico">
+    <link rel="shortcut icon" type="image/png" href="{% static 'ico/favicon.ico' %}" type="favicon/ico">
     <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
     <!-- Bootstrap core  -->
     {% ontask_bootstrap_css %}
@@ -20,13 +20,13 @@
     {% ontask_jquery %}
     <!-- Custom tags for the head tag -->
     {% block extrahead %}{% endblock extrahead %}
-    <link href="{% static 'site/css/main.css' %}?v={% ontask_version %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}?v={% ontask_version %}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     {% ontask_shim_respond %}
   </head>
   <body style="">
     <div id="div-spinner">
-      <img id="img-spinner" src="{% static 'site/img/loading.gif' %}"
+      <img id="img-spinner" src="{% static 'img/loading.gif' %}"
            alt="Loading..."/>
     </div>
     {% block navbar %}
@@ -34,7 +34,7 @@
       {% block navbar-brand %}
         {% cache 3600 site-navbar-brand LANGUAGE_CODE %}
           <a class="navbar-brand" href="#">
-            <img src="{% static 'site/img/logo.png' %}" height="30" alt="logo">
+            <img src="{% static 'img/logo.png' %}" height="30" alt="logo">
           </a>
         {% endcache %}
       {% endblock %}
@@ -243,15 +243,15 @@
         </nav>
       {% endcache %}
     {% endblock %}
-    <script type="text/javascript" src="{% static 'site/js/initial.js' %}?v={% ontask_version %}"></script>
+    <script type="text/javascript" src="{% static 'js/initial.js' %}?v={% ontask_version %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     {% ontask_bootstrap_js %}
-    <script type="text/javascript" src="{% static 'site/js/site.js' %}?v={% ontask_version %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}?v={% ontask_version %}"></script>
     {% block scripts %}
     {% endblock scripts %}
     {% if user.is_authenticated %}
       <script type="text/javascript"
-              src="{% static 'site/js/bootstrap-session-timeout.min.js' %}"></script>
+              src="{% static 'js/bootstrap-session-timeout.min.js' %}"></script>
       <script type="text/javascript">
         $.sessionTimeout({
           title: 'OnTask',

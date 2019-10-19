@@ -5,7 +5,7 @@
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Edit Rubric' %}{% endblock %}
 {% block extrahead %}
-  <link href="{% static 'site/css/query-builder.default.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/query-builder.default.min.css' %}" rel="stylesheet">
   {% ontask_datetimepicker_css %}
   {% ontask_datatables_bootstrap_css %}
   {{ form.media.css }}
@@ -13,9 +13,9 @@
 {% block scripts %}
   {% ontask_datetimepicker_js %}
   {{ form.media.js }}
-  <script src="{% static 'site/js/query-builder.standalone.min.js' %}"></script>
+  <script src="{% static 'js/query-builder.standalone.min.js' %}"></script>
   {% with country=LANGUAGE_CODE|country %}
-    <script src="{% static 'site/js/query-builder.'|add:country|add:'.js' %}"></script>
+    <script src="{% static 'js/query-builder.'|add:country|add:'.js' %}"></script>
   {% endwith %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   {% ontask_datatables_jquery_js %}
