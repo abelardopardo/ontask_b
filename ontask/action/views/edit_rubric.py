@@ -24,6 +24,7 @@ from ontask.core.permissions import is_instructor
 from ontask.models import (
     Action, ActionColumnConditionTuple, Log, RubricCell, Workflow,
 )
+from ontask.visualizations.plotly import PlotlyHandler
 
 
 class RubricTable(tables.Table):
@@ -204,7 +205,8 @@ def edit_action_rubric(
         'rows_all_false': action.get_row_all_false_count(),
         'total_rows': action.workflow.nrows,
         'all_false_conditions': False,
-        'columns_to_insert': columns_to_insert}
+        'columns_to_insert': columns_to_insert,
+        'vis_scripts': PlotlyHandler.get_engine_scripts()}
 
     # Get additional context to render the page depending on the action type
     if criteria:
