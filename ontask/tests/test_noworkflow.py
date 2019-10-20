@@ -149,8 +149,6 @@ class BackToHome(test.OnTaskTestCase):
 
         self.client.login(email='instructor01@bogus.com', password='boguspwd')
 
-        wflow = Workflow.objects.first()
-
         resp = self.client.get(reverse('home'))
         self.assertTrue(status.is_success(resp.status_code))
 

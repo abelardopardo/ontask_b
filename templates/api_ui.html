@@ -1,0 +1,12 @@
+{% extends 'drf-yasg/swagger-ui.html' %}
+{% load staticfiles %}
+{% block favicon %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'ico/favicon.ico' %}" type="favicon/ico">
+{% endblock %}
+{% block extra_scripts %}
+  <script type="text/javascript">
+    window.addEventListener('load', function () {
+        document.querySelector('.topbar .link img').setAttribute('src', '{% static 'img/logo.png' %}');
+    });
+  </script>
+{% endblock %}

@@ -107,7 +107,7 @@ urlpatterns = [
     path(
         r'apidoc/',
         schema_view.with_ui('swagger', cache_timeout=0),
-        name='schema-swagger-ui'),
+        name='ontask-api-doc'),
 ]
 
 # User-uploaded files like profile pics need to be served in development

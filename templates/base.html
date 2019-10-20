@@ -176,11 +176,13 @@
                   {% trans 'Contact' %}</a></li>
               {% endif %}
               <li class="nav-item">
-                <a href="{% static ONTASK_HELP_URL %}" class="nav-link spin"
-                   data-toggle="tooltip"
-                   data-placement="bottom"
-                   title="{% trans 'Read the manual' %}">
-                  <span class="fa fa-book"></span></a>
+                  <a href="#" class="nav-link dropdown-toggle help-menu" data-toggle="dropdown">
+                    <span class="fa fa-book"></span></a>
+                  <div class="shadow dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item spin" href="{% static ONTASK_HELP_URL %}">{% trans 'Manual' %}</a>
+                    <a class="dropdown-item spin" href="{% url 'ontask-api-doc' %}">{% trans 'API Docs' %}</a>
+
+                  </div>
               </li>
             {% endblock %}
           </ul>
