@@ -60,7 +60,7 @@ def dump_config():
     print('USE_SSL:', USE_SSL)
 
 
-def get_from_os_or_env(key, env_obj, default_value=''):
+def get_from_os_or_env(key: str, env_obj, default_value=''):
     """
     Given a key, search for its value first in the os environment, then in the
     given environment and if not present, return the default
@@ -238,6 +238,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'bootstrap_datepicker_plus',
+    'drf_yasg',
     # 'corsheaders',
 
     'authtools',
@@ -329,6 +330,14 @@ REST_FRAMEWORK = {
         'anon': '100/minute',
         'user': '1000/minute'
     }
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
 }
 
 ROOT_URLCONF = 'urls'

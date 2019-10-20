@@ -169,7 +169,8 @@ class OnTaskTestCase(TransactionTestCase):
         SessionMiddleware().process_request(request)
         # adding messages
         setattr(request, '_messages', FallbackStorage(request))
-        self.store_workflow_in_session(request.session, self.workflow)
+        if self.workflow:
+            self.store_workflow_in_session(request.session, self.workflow)
         request.session.save()
 
         return request

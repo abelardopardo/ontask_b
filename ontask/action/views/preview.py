@@ -122,6 +122,11 @@ def _create_row_preview_response(
                 for cond in action.conditions.filter(name__in=act_cond)
             ],
         )
+
+        act_vars = act_vars.union(set([
+            triplet.column
+            for triplet in action.column_condition_pair.all()]))
+
         # Sort the variables/columns  by position and get the name
         show_values = ', '.join(
             [

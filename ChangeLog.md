@@ -1,4 +1,12 @@
-## 6.1 (2019-10-)
+## 6.1.1 (2019-10-21)
+
+### Fixed
+
+- Missing plotting information for the rubric rows
+
+- Error in migration to 6.1 to enforce column name length
+
+## 6.1 (2019-10-19)
 
 ### Added
 

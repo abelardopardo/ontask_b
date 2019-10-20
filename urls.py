@@ -8,11 +8,14 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
-from django.urls import path
+from django.urls import path, re_path
 from django.utils.translation import ugettext
 from django.views.decorators.cache import cache_page
 from django.views.i18n import JavaScriptCatalog
-from rest_framework.documentation import include_docs_urls
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from drf_yasg.renderers import SwaggerUIRenderer
 
 import ontask.accounts.urls
 import ontask.action.urls
@@ -34,6 +37,16 @@ api_description = ugettext(
     'The OnTask API offers functionality to manipulate workflows, tables '
     + 'and logs. The interface provides CRUD operations over these '
     + 'objects.')
+
+SwaggerUIRenderer.template = 'api_ui.html'
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="OnTask API",
+      default_version=ontask.__version__,
+      description=api_description),
+   public=True,
+   permission_classes=(permissions.AllowAny,))
 
 urlpatterns = [
     # Home Page!
@@ -81,18 +94,20 @@ urlpatterns = [
 
     path('tobedone', views.ToBeDone.as_view(), name='tobedone'),
 
-    # API AUTH and DOC
+    # API AUTH
     path(
         'api-auth/',
         include('rest_framework.urls', namespace='rest_framework')),
 
+    # API Doc
+    re_path(
+        r'apidoc(?P<format>\.json|\.yaml)',
+        schema_view.without_ui(cache_timeout=0),
+        name='schema-json'),
     path(
-        'apidoc/',
-        include_docs_urls(
-            title='OnTask API',
-            description=api_description,
-            public=False),
-    ),
+        r'apidoc/',
+        schema_view.with_ui('swagger', cache_timeout=0),
+        name='ontask-api-doc'),
 ]
 
 # User-uploaded files like profile pics need to be served in development
