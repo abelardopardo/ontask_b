@@ -9,11 +9,12 @@ from django.utils.translation import ugettext_lazy as _
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula
 from ontask.dataops.sql import get_num_rows
 from ontask.models.column import Column
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.basic import NameAndDescription, CreateModifyFields
+from ontask.models.const import CHAR_FIELD_LONG_SIZE
 from ontask.models.logs import Log
 
 
-class Condition(models.Model):
+class Condition(NameAndDescription, CreateModifyFields):
     """Define object to store mainly a formula.
 
     The object also encodes:
@@ -31,17 +32,6 @@ class Condition(models.Model):
         null=False,
         blank=False,
         related_name='conditions')
-
-    name = models.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
-        blank=True,
-        verbose_name=_('name'))
-
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True,
-        verbose_name=_('description'))
 
     formula = JSONField(
         default=dict,
@@ -72,10 +62,6 @@ class Condition(models.Model):
 
     # Field to denote if this condition is the filter of an action
     is_filter = models.BooleanField(default=False)
-
-    created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-
-    modified = models.DateTimeField(auto_now=True, null=False)
 
     def update_n_rows_selected(self, column=None, filter_formula=None):
         """Calculate the number of rows for which condition is true.

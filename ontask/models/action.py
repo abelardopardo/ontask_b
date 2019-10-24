@@ -16,10 +16,10 @@ from django.utils.translation import ugettext_lazy as _
 import pytz
 
 import ontask
+from ontask.models.basic import NameAndDescription, CreateModifyFields
 from ontask.dataops.formula import evaluation
 from ontask.dataops.sql import select_ids_all_false
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 

@@ -13,11 +13,12 @@ from ontask import simplify_datetime_str
 from ontask.models import Column
 from ontask.models.workflow import Workflow
 from ontask.models.action import Action
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.basic import NameAndDescription, CreateModifyFields
+from ontask.models.const import CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
 
 
-class ScheduledOperation(models.Model):
+class ScheduledOperation(NameAndDescription, CreateModifyFields):
     """Objects encoding the scheduling of a send email action.
 
     @DynamicAttrs
@@ -50,27 +51,12 @@ class ScheduledOperation(models.Model):
         null=False,
         blank=False)
 
-    name = models.CharField(
-        max_length=256,
-        blank=False,
-        null=False,
-        verbose_name=_('name'))
-
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True,
-        verbose_name=_('description'))
-
     # Type of event logged see above
     operation_type = models.CharField(
         max_length=CHAR_FIELD_MID_SIZE,
         null=False,
         blank=False,
         choices=OPERATION_TYPES)
-
-    # Time of creation
-    created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
     # Time of execution
     execute = models.DateTimeField(

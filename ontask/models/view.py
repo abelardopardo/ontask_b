@@ -9,12 +9,12 @@ from django.utils.translation import ugettext_lazy as _
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula
 from ontask.dataops.sql import get_num_rows
 from ontask.models.column import Column
-from ontask.models.const import CHAR_FIELD_LONG_SIZE
+from ontask.models.basic import NameAndDescription, CreateModifyFields
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 
 
-class View(models.Model):
+class View(NameAndDescription, CreateModifyFields):
     """
     Class to represent different views of the table attached to a workflow.
     It only contains (aside from the basic fields) a formula to filter
@@ -30,17 +30,6 @@ class View(models.Model):
         blank=False,
         on_delete=models.CASCADE,
         related_name='views')
-
-    name = models.CharField(max_length=256, blank=False)
-
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True)
-
-    created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-
-    modified = models.DateTimeField(auto_now=True, null=False)
 
     # Set of columns for the personalised action IN (subset of the matrix
     # columns
