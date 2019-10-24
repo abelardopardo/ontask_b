@@ -6,29 +6,15 @@ from typing import Dict
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models.const import CHAR_FIELD_LONG_SIZE
+from ontask.models.basic import NameAndDescription
 from ontask.models.logs import Log
 
 
-class Connection(models.Model):
+class Connection(NameAndDescription):
     """Model representing a connection to a data source.
 
     @DynamicAttrs
     """
-
-    # Connection name
-    name = models.CharField(
-        verbose_name=_('Name'),
-        max_length=CHAR_FIELD_LONG_SIZE,
-        blank=False,
-        unique=True)
-
-    # Description
-    description_text = models.CharField(
-        verbose_name=_('Description'),
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True)
 
     # Boolean that enables the use of this connection to other users.
     enabled = models.BooleanField(

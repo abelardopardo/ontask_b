@@ -12,14 +12,12 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 import ontask.dataops.pandas.datatypes
-from ontask.models.const import (
-    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE,
-    COLUMN_NAME_SIZE,
-)
+from ontask.models.basic import NameAndDescription
+from ontask.models.const import CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
 
 
-class Column(models.Model):
+class Column(NameAndDescription):
     """Column object.
 
     Contains information that should be at all times consistent with the
@@ -36,18 +34,6 @@ class Column(models.Model):
 
     @DynamicAttrs
     """
-
-    # Column name
-    name = models.CharField(
-        max_length=COLUMN_NAME_SIZE,
-        blank=False,
-        verbose_name=_('column name'))
-
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True,
-        verbose_name=_('description'))
 
     workflow = models.ForeignKey(
         'Workflow',

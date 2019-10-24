@@ -18,14 +18,14 @@ from django.utils.translation import ugettext_lazy as _
 import ontask.dataops.pandas.database
 import ontask.dataops.pandas.datatypes
 from ontask.dataops.sql import delete_table
+from ontask.models.basic import NameAndDescription, CreateModifyFields
 from ontask.models.column import Column
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
 
 CHAR_FIELD_MD5_SIZE = 32
 
 
-class Workflow(models.Model):
+class Workflow(NameAndDescription, CreateModifyFields):
     """Workflow model.
 
     Model for a workflow, that is, a table, set of column descriptions and
@@ -46,17 +46,6 @@ class Workflow(models.Model):
         null=False,
         blank=False,
         related_name='workflows_owner')
-
-    name = models.CharField(max_length=CHAR_FIELD_MID_SIZE, null=False, blank=False)
-
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True)
-
-    created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-
-    modified = models.DateTimeField(auto_now=True, null=False)
 
     # Storing the number of rows currently in the data_frame
     nrows = models.IntegerField(

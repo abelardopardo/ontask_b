@@ -7,11 +7,12 @@ from builtins import object
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.models.basic import NameAndDescription, CreateModifyFields
+from ontask.models.const import CHAR_FIELD_LONG_SIZE
 from ontask.models.logs import Log
 
 
-class Plugin(models.Model):
+class Plugin(NameAndDescription, CreateModifyFields):
     """Model to store the plugins in the system.
 
     @DynamicAttrs
@@ -22,19 +23,6 @@ class Plugin(models.Model):
         max_length=CHAR_FIELD_LONG_SIZE,
         blank=False,
         unique=True,
-    )
-
-    # Last time the file was checked (to detect changes)
-    modified = models.DateTimeField(auto_now=True, null=False)
-
-    # Name provided by the plugin
-    name = models.CharField(max_length=CHAR_FIELD_MID_SIZE, blank=False)
-
-    # Description text
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True,
     )
 
     # Boolean stating if the plugin is a model or a transformation
