@@ -74,7 +74,8 @@ def workflow_delete_column(
     # Traverse the actions for which the filter has been deleted and reassess
     #  all their conditions
     # TODO: Explore how to do this asynchronously (or lazy)
-    map(lambda act: act.update_n_rows_selected(), actions_without_filters)
+    for act in actions_without_filters:
+        act.update_n_rows_selected()
 
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.
