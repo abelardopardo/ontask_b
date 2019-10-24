@@ -8,6 +8,7 @@ from typing import List
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
+from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import models
 from django.utils import functional, html
@@ -32,8 +33,8 @@ VAR_USE_RES = [
 ACTION_TYPE_LENGTH = 64
 
 
-class Action(models.Model):  # noqa Z214
-    """Object storing an action: content, conditions, filter, etc.
+class ActionBase(NameAndDescription, CreateModifyFields):
+    """Base abstract class for actions.
 
     @DynamicAttrs
     """
@@ -91,31 +92,6 @@ class Action(models.Model):  # noqa Z214
         related_name='actions',
     )
 
-    name = models.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
-        blank=False,
-        verbose_name=_('name'),
-    )
-
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True,
-        verbose_name=_('description'),
-    )
-
-    created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-
-    modified = models.DateTimeField(auto_now=True, null=False)
-
-    # Reference to the record of the last execution
-    last_executed_log = models.ForeignKey(
-        Log,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-
     # Action type
     action_type = models.CharField(
         max_length=ACTION_TYPE_LENGTH,
@@ -123,12 +99,12 @@ class Action(models.Model):  # noqa Z214
         default=PERSONALIZED_TEXT,
     )
 
-    # Boolean that enables the URL to be visible ot the outside.
-    serve_enabled = models.BooleanField(
-        default=False,
-        verbose_name=_('URL available to users?'),
-        null=False,
-        blank=False,
+    # Reference to the record of the last execution
+    last_executed_log = models.ForeignKey(
+        Log,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
 
     # Validity window for URL availability
@@ -153,30 +129,15 @@ class Action(models.Model):  # noqa Z214
         null=True,
     )
 
-    #
-    # Field for actions PERSONALIZED_TEXT, PERSONALIZED_CAVNAS_EMAIL and
-    # PERSONALIZED_JSON
-    #
-    # Text to be personalised for action OUT
-    text_content = models.TextField(default='', blank=True)
+    @functional.cached_property
+    def is_in(self) -> bool:
+        """Get bool stating if action is Survey or similar."""
+        return self.ACTION_IS_DATA_IN[self.action_type]
 
-    # URL for PERSONALIZED_JSON actions
-    target_url = models.TextField(default='', blank=True)
-
-    #
-    # Fields for action SURVEY and TODO_LIST
-    #
-    # Shuffle column order when creating the page to serve
-    shuffle = models.BooleanField(
-        default=False,
-        verbose_name=_('Shuffle questions?'),
-        null=False,
-        blank=False,
-    )
-
-    def __str__(self):
-        """Render the name."""
-        return self.name
+    @functional.cached_property
+    def is_out(self) -> bool:
+        """Get bool stating if action is outputting data."""
+        return not self.is_in
 
     @property
     def is_active(self) -> bool:
@@ -191,64 +152,6 @@ class Action(models.Model):  # noqa Z214
             (self.active_from and now < self.active_from)
             or (self.active_to and self.active_to < now)
         )
-
-    @functional.cached_property
-    def is_executable(self) -> bool:
-        """Answer if an action is ready to execute.
-
-        :return: Boolean stating correctness
-        """
-        for_out = (
-            self.action_type == Action.PERSONALIZED_TEXT
-            or self.action_type == Action.RUBRIC_TEXT
-            or self.action_type == Action.SEND_LIST
-            or self.action_type == Action.SEND_LIST_JSON
-            or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
-                and settings.CANVAS_INFO_DICT is not None)
-        )
-        if for_out:
-            return True
-
-        if self.action_type == Action.PERSONALIZED_JSON:
-            # Validate the URL
-            valid_url = True
-            try:
-                URLValidator()(self.target_url)
-            except Exception:
-                valid_url = False
-
-            return self.target_url and valid_url
-
-        if self.is_in:
-            cc_pairs = self.column_condition_pair
-            return (
-                cc_pairs.filter(column__is_key=True).exists()
-                and cc_pairs.filter(column__is_key=False).exists()
-            )
-
-        raise Exception(
-            'Function is_executable not implemented for action {0}'.format(
-                self.get_action_type_display(),
-            ),
-        )
-
-    @property
-    def has_html_text(self) -> bool:
-        return (
-            self.text_content
-            and (
-                self.action_type == Action.PERSONALIZED_TEXT
-                or self.action_type == Action.SEND_LIST))
-
-    @functional.cached_property
-    def is_in(self) -> bool:
-        """Get bool stating if action is Survey or similar."""
-        return self.ACTION_IS_DATA_IN[self.action_type]
-
-    @functional.cached_property
-    def is_out(self) -> bool:
-        """Get bool stating if action is OUT."""
-        return not self.is_in
 
     def get_filter(self):
         """Get filter condition."""
@@ -266,6 +169,155 @@ class Action(models.Model):  # noqa Z214
             return self.workflow.nrows
 
         return action_filter.n_rows_selected
+
+    def get_row_all_false_count(self):
+        """Extract the rows for which  all conditions are false.
+
+        Given a table and a list of conditions return the number of rows in
+        which all the conditions are false. :return: Number of rows that have
+        all conditions equal to false
+        """
+        if self.rows_all_false is None:
+            if not self.workflow.has_data_frame():
+                # Workflow does not have a dataframe
+                raise ontask.OnTaskException(
+                    'Workflow without DF in get_table_row_count_all_false',
+                )
+
+            # Separate filter from conditions
+            filter_item = self.conditions.filter(is_filter=True).first()
+            cond_list = self.conditions.filter(is_filter=False)
+
+            if not cond_list:
+                # Condition list is either None or empty. No restrictions.
+                return 0
+
+            # Workflow has a data frame and condition list is non empty
+
+            # Get the list of indeces
+            self.rows_all_false = select_ids_all_false(
+                self.workflow.get_data_frame_table_name(),
+                filter_item.formula if filter_item else None,
+                cond_list.values_list('formula', flat=True),
+            )
+
+            self.save()
+
+        return self.rows_all_false
+
+    def update_n_rows_selected(self, column=None):
+        """Reset the field n_rows_selected in all conditions.
+
+        If the column argument is present, select only those conditions that
+        have column as part of their variables.
+
+        :param column: Optional column name to process only those conditions
+        that use this column
+
+        :return: All conditions (except the filter) are updated
+        """
+        start_idx = 0
+        # Get the filter, if it exists.
+        filter_formula = None
+        conditions = self.conditions.all()
+        if conditions and conditions[0].is_filter:
+            # If there is a filter, update the formula
+            conditions[0].update_n_rows_selected(column=column)
+            filter_formula = conditions[0].formula
+            start_idx = 1
+
+        # Recalculate for the rest of conditions
+        for cond in conditions[start_idx:]:
+            cond.update_n_rows_selected(
+                column=column,
+                filter_formula=filter_formula,
+            )
+
+    def used_columns(self):
+        """List of column used in the action.
+
+        These are those that are used in any condition + those used
+        in the columns field.
+
+        :return: List of column objects
+        """
+        column_set = set()
+
+        # Accumulate all columns for all conditions
+        for cond in self.conditions.all():
+            column_set = column_set.union(set(cond.columns.all()))
+
+        # Accumulate now those in the field columns
+        for ccpair in self.column_condition_pair.all():
+            column_set.add(ccpair.column)
+
+        return list(column_set)
+
+    def __str__(self):
+        """Render the name."""
+        return self.name
+
+    class Meta:
+        """Make the class abstract."""
+
+        abstract = True
+
+
+class ActionDataOut(ActionBase):  # noqa Z214
+    """Action representing a personalized message to send out"""
+
+    # Boolean that enables the URL to be visible ot the outside.
+    serve_enabled = models.BooleanField(
+        default=False,
+        verbose_name=_('URL available to users?'),
+        null=False,
+        blank=False,
+    )
+
+    # Text to be personalised
+    text_content = models.TextField(default='', blank=True)
+
+    # URL for PERSONALIZED_JSON actions
+    target_url = models.TextField(default='', blank=True)
+
+    @property
+    def has_html_text(self) -> bool:
+        """Check if the action has HTML text."""
+        return (
+            self.text_content
+            and (
+                self.action_type == self.PERSONALIZED_TEXT
+                or self.action_type == self.SEND_LIST))
+
+    def rename_variable(
+        self,
+        old_name: str,
+        new_name: str,
+    ) -> None:
+        """Rename a variable present in the action content.
+
+        Two steps are performed. Rename the variable in the text_content, and
+        rename the varaible in all the conditions.
+        :param old_name: Old name of the variable
+        :param new_name: New name of the variable
+        :return: Updates the current object
+        """
+        if self.text_content:
+            # Need to change name appearances in content
+            self.text_content = VAR_USE_RES[0].sub(
+                lambda match: '{{ ' + (
+                    new_name if match.group('vname') == html.escape(old_name)
+                    else match.group('vname')
+                ) + ' }}',
+                self.text_content,
+            )
+            self.save()
+
+        # Rename the variable in all conditions
+        for cond in self.conditions.all():
+            cond.formula = evaluation.rename_variable(
+                cond.formula, old_name, new_name)
+            cond.save()
 
     def get_used_conditions(self) -> List[str]:
         """Get list of conditions that are used in the text_content.
@@ -330,121 +382,71 @@ class Action(models.Model):  # noqa Z214
                 condition=None,
             )
 
-    def rename_variable(
-        self,
-        old_name: str,
-        new_name: str,
-    ) -> None:
-        """Rename a variable present in the action content.
+    class Meta:
+        """Make this class abstract."""
 
-        Two steps are performed. Rename the variable in the text_content, and
-        rename the varaible in all the conditions.
-        :param old_name: Old name of the variable
-        :param new_name: New name of the variable
-        :return: Updates the current object
+        abstract = True
+
+
+class ActionDataIn(models.Model):  # noqa Z214
+    """Action representing a survey or "data-in" action."""
+
+    # Shuffle questions when creating the learner page
+    shuffle = models.BooleanField(
+        default=False,
+        verbose_name=_('Shuffle questions?'),
+        null=False,
+        blank=False,
+    )
+
+    class Meta:
+        """Make this class abstract."""
+
+        abstract = True
+
+
+class Action(ActionDataOut, ActionDataIn):
+    """Object storing an action: content, conditions, filter, etc."""
+
+    @functional.cached_property
+    def is_executable(self) -> bool:
+        """Answer if an action is ready to execute.
+
+        :return: Boolean stating correctness
         """
-        if self.text_content:
-            # Need to change name appearances in content
-            self.text_content = VAR_USE_RES[0].sub(
-                lambda match: '{{ ' + (
-                    new_name if match.group('vname') == html.escape(old_name)
-                    else match.group('vname')
-                ) + ' }}',
-                self.text_content,
-            )
-            self.save()
+        for_out = (
+            self.action_type == Action.PERSONALIZED_TEXT
+            or self.action_type == Action.RUBRIC_TEXT
+            or self.action_type == Action.SEND_LIST
+            or self.action_type == Action.SEND_LIST_JSON
+            or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
+                and settings.CANVAS_INFO_DICT is not None)
+        )
+        if for_out:
+            return True
 
-        # Rename the variable in all conditions
-        for cond in self.conditions.all():
-            cond.formula = evaluation.rename_variable(
-                cond.formula, old_name, new_name)
-            cond.save()
+        if self.action_type == Action.PERSONALIZED_JSON:
+            # Validate the URL
+            valid_url = True
+            try:
+                URLValidator()(self.target_url)
+            except ValidationError:
+                valid_url = False
 
-    def update_n_rows_selected(self, filter_formula=None, column=None):
-        """Reset the field n_rows_selected in all conditions.
+            return self.target_url and valid_url
 
-        If the column argument is present, select only those conditions that
-        have column as part of their variables.
-
-        :param filter_formula: If given, the evaluation of the filter
-        condition is bypassed.
-
-        :param column: Optional column name to process only those conditions
-        that use this column
-
-        :return: All conditions (except the filter) are updated
-        """
-        start_idx = 0
-        # Get the filter, if it exists.
-        filter_formula = None
-        conditions = self.conditions.all()
-        if conditions and conditions[0].is_filter:
-            # If there is a filter, update the formula
-            conditions[0].update_n_rows_selected(column=column)
-            filter_formula = conditions[0].formula
-            start_idx = 1
-
-        # Recalculate for the rest of conditions
-        for cond in conditions[start_idx:]:
-            cond.update_n_rows_selected(
-                column=column,
-                filter_formula=filter_formula,
-            )
-
-    def used_columns(self):
-        """Lis of column used in the action.
-
-        These are those that are used in any condition + those used
-        in the columns field.
-
-        :return: List of column objects
-        """
-        column_set = set()
-
-        # Accumulate all columns for all conditions
-        for cond in self.conditions.all():
-            column_set = column_set.union(set(cond.columns.all()))
-
-        # Accumulate now those in the field columns
-        for ccpair in self.column_condition_pair.all():
-            column_set.add(ccpair.column)
-
-        return list(column_set)
-
-    def get_row_all_false_count(self):
-        """Extract the rows for which  all conditions are false.
-
-        Given a table and a list of conditions return the number of rows in
-        which all the conditions are false. :return: Number of rows that have
-        all conditions equal to false
-        """
-        if self.rows_all_false is None:
-            if not self.workflow.has_data_frame():
-                # Workflow does not have a dataframe
-                raise ontask.OnTaskException(
-                    'Workflow without DF in get_table_row_count_all_false',
-                )
-
-            # Separate filter from conditions
-            filter_item = self.conditions.filter(is_filter=True).first()
-            cond_list = self.conditions.filter(is_filter=False)
-
-            if not cond_list:
-                # Condition list is either None or empty. No restrictions.
-                return 0
-
-            # Workflow has a data frame and condition list is non empty
-
-            # Get the list of indeces
-            self.rows_all_false = select_ids_all_false(
-                self.workflow.get_data_frame_table_name(),
-                filter_item.formula if filter_item else None,
-                cond_list.values_list('formula', flat=True),
+        if self.is_in:
+            cc_pairs = self.column_condition_pair
+            return (
+                cc_pairs.filter(column__is_key=True).exists()
+                and cc_pairs.filter(column__is_key=False).exists()
             )
 
-            self.save()
-
-        return self.rows_all_false
+        raise Exception(
+            'Function is_executable not implemented for action {0}'.format(
+                self.get_action_type_display(),
+            ),
+        )
 
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""
