@@ -271,45 +271,6 @@ def load_df_from_sqlconnection(
     return _process_object_column(data_frame)
 
 
-def load_df_from_athenaconnection(
-    conn_item: AthenaConnection,
-    run_params: Dict,
-) -> pd.DataFrame:
-    """Load a DF from an Athena connection.
-
-    run_params has:
-    aws_secret_access_key: Optional[str] = None,
-    aws_session_token: Optional[str] = None,
-    table_name: Optional[str] = None
-
-    from pyathena import connect
-    from pyathena.pandas_cursor import PandasCursor
-
-    cursor = connect(aws_access_key_id='YOUR_ACCESS_KEY_ID',
-               aws_secret_access_key='YOUR_SECRET_ACCESS_KEY',
-               aws_session_token='YOUR_SESSION_TOKEN',
-               s3_staging_dir='s3://YOUR_S3_BUCKET/path/to/',
-               region_name='us-west-2',
-               cursor_class=PandasCursor).cursor()
-
-    df = cursor.execute("SELECT * FROM many_rows").as_pandas()
-    print(df.describe())
-    print(df.head())
-
-    :param conn_item: AthenaConnection object with the connection parameters.
-
-    :param table_name: table name
-
-    :return: Data frame or raise an exception.
-    """
-    # TODO: Implement this function
-    data_frame = pd.DataFrame()
-
-    # Strip white space from all string columns and try to convert to
-    # datetime just in case
-    return _process_object_column(data_frame)
-
-
 def batch_load_df_from_athenaconnection(
     workflow: Workflow,
     conn: AthenaConnection,
@@ -392,6 +353,7 @@ def batch_load_df_from_athenaconnection(
         log_item.payload['num_rows'] = workflow.nrows
         log_item.payload['num_cols'] = workflow.ncols
         log_item.save()
+        return
 
     # Merge operation
     upload_data['dst_column_names'] = workflow.get_column_names()

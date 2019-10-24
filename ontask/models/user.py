@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+"""Additional profile for OnTaskUsers."""
+
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -15,7 +19,7 @@ class OnTaskUser(models.Model):
         primary_key=True,
     )
 
-    def is_instructor(self):
+    def is_instructor(self) -> bool:
         """Return boolean with is_instructor answer."""
         return is_instructor(self.user)
 

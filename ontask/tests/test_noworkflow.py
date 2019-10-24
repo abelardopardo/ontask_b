@@ -66,9 +66,9 @@ class BackToHome(test.OnTaskTestCase):
             reverse('dataops:upload_s3'),
             reverse('dataops:upload_s4'),
             reverse('dataops:sqlconns_instructor_index'),
-            # reverse('dataops:athenaconns_instructor_index'),
+            reverse('dataops:athenaconns_instructor_index'),
             reverse('dataops:sqlupload_start', kwargs={'pk': 1}),
-            # reverse('dataops:athenaupload_start', kwargs={'pk': 1}),
+            reverse('dataops:athenaupload_start', kwargs={'pk': 1}),
             # Logs
             reverse('logs:view', kwargs={'pk': 1}),
             # Table
@@ -133,7 +133,7 @@ class BackToHome(test.OnTaskTestCase):
             reverse('dataops:plugin_diagnose', kwargs={'pk': 1}),
             reverse('dataops:plugin_moreinfo', kwargs={'pk': 1}),
             reverse('dataops:sqlconn_view', kwargs={'pk': 1}),
-            # reverse('dataops:athenaconn_view', kwargs={'pk': 1}),
+            reverse('dataops:athenaconn_view', kwargs={'pk': 1}),
             # Logs
             reverse('logs:display_ss'),
             # Table

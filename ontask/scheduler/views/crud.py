@@ -294,18 +294,18 @@ def create_action_run(
     return _edit_scheduled_action_run(request, None, action)
 
 
-# @user_passes_test(is_instructor)
-# @get_workflow(pf_related='actions')
-# def create_workflow_op(
-#     request: HttpRequest,
-#     workflow: Optional[Workflow] = None,
-# ) -> HttpResponse:
-#     messages.error(
-#         request,
-#         _('Under implementation'))
-#     return redirect('scheduler:index')
-#
-#
+@user_passes_test(is_instructor)
+@get_workflow(pf_related='actions')
+def create_workflow_op(
+    request: HttpRequest,
+    workflow: Optional[Workflow] = None,
+) -> HttpResponse:
+    messages.error(
+        request,
+        _('Under implementation'))
+    return redirect('scheduler:index')
+
+
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def edit_scheduled_operation(

@@ -110,7 +110,6 @@
             {% blocktrans %}Upload data stored in a remote database using  pre-defined SQL connection.{% endblocktrans %}
           </td>
         </tr>
-        {% comment %}
         <tr>
           <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:athenaconns_instructor_index' %}" class="btn btn-outline-primary {% if not athena_enabled %}disabled{% endif %}">
@@ -123,7 +122,6 @@
             connection.{% endblocktrans %}
           </td>
         </tr>
-        {% endcomment %}
       </tbody>
     </table>
   </div>
