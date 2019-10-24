@@ -4,20 +4,17 @@
 
 from typing import Optional
 
-from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import OnTaskDataFrameNoKey
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import (
-    AthenaRequestConnectionParam, load_df_from_athenaconnection,
+    AthenaRequestConnectionParam,
 )
-from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask.models import AthenaConnection, Log, Workflow
 from ontask.tasks import athena_dataupload_task
 

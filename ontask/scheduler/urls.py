@@ -21,11 +21,11 @@ urlpatterns = [
         views.create_action_run,
         name='create_action_run'),
 
-    # # Create scheduled workflow op
-    # path(
-    #     'create_workflow_op/',
-    #     views.create_workflow_op,
-    #     name='create_workflow_op'),
+    # Create scheduled workflow op
+    path(
+        'create_workflow_op/',
+        views.create_workflow_op,
+        name='create_workflow_op'),
 
     # Edit scheduled operation
     path(
