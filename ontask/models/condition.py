@@ -39,7 +39,7 @@ class Condition(NameAndDescription, CreateModifyFields):
         null=True,
         verbose_name=_('formula'))
 
-    formula_text =  models.CharField(
+    formula_text = models.CharField(
         max_length=CHAR_FIELD_LONG_SIZE,
         default='',
         blank=True,
@@ -113,7 +113,7 @@ class Condition(NameAndDescription, CreateModifyFields):
             self.save()
         return self.formula_text
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Render string."""
         return self.name
 
@@ -135,7 +135,7 @@ class Condition(NameAndDescription, CreateModifyFields):
             self.action.workflow,
             payload)
 
-    class Meta:
+    class Meta(object):
         """Define unique criteria and ordering.
 
         The unique criteria here is within the action, the name and being a

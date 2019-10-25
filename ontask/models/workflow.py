@@ -464,7 +464,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, self, payload)
 
-    class Meta:
+    class Meta(object):
         """Define verbose and unique together."""
 
         verbose_name = 'workflow'

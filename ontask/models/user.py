@@ -27,7 +27,7 @@ class OnTaskUser(models.Model):
         """Provide string representation (email)."""
         return self.user.email
 
-    class Meta:
+    class Meta(object):
         """Additional attributes for the model."""
 
         verbose_name = 'ontaskuser'

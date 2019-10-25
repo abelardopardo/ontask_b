@@ -77,7 +77,7 @@ class PluginAvailableTable(tables.Table):
             return '--'
         return log_item.created
 
-    class Meta:
+    class Meta(object):
         """Choose fields, sequence and attributes."""
 
         model = Plugin

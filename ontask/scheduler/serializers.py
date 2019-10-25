@@ -174,7 +174,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
 
         return instance
 
-    class Meta:
+    class Meta(object):
         """Select  model and define fields."""
 
         model = ScheduledOperation

@@ -30,7 +30,7 @@ class ConnectionTableAdmin(tables.Table):
 
     enabled = tables.BooleanColumn(verbose_name=_('Enabled?'))
 
-    class Meta:
+    class Meta(object):
         """Define model, fields, sequence and attributes."""
 
         fields = ('name', 'description_text', 'enabled')

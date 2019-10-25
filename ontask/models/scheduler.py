@@ -152,7 +152,7 @@ class ScheduledOperation(NameAndDescription, CreateModifyFields):
             self.action.workflow,
             payload)
 
-    class Meta:
+    class Meta(object):
         """Define the criteria of uniqueness with name and action."""
 
         unique_together = ('name', 'action')

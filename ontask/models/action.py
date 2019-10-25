@@ -257,7 +257,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         """Render the name."""
         return self.name
 
-    class Meta:
+    class Meta(object):
         """Make the class abstract."""
 
         abstract = True
@@ -382,7 +382,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
                 condition=None,
             )
 
-    class Meta:
+    class Meta(object):
         """Make this class abstract."""
 
         abstract = True
@@ -399,7 +399,7 @@ class ActionDataIn(models.Model):  # noqa Z214
         blank=False,
     )
 
-    class Meta:
+    class Meta(object):
         """Make this class abstract."""
 
         abstract = True
@@ -469,7 +469,7 @@ class Action(ActionDataOut, ActionDataIn):
             self.workflow,
             payload)
 
-    class Meta:
+    class Meta(object):
         """Define uniqueness with name and workflow. Order by name."""
 
         unique_together = ('name', 'workflow')

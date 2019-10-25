@@ -87,7 +87,7 @@ class ActionTable(tables.Table):
             },
         )
 
-    class Meta:
+    class Meta(object):
         """Define model, fields and ordering."""
 
         model = Action

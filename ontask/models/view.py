@@ -91,7 +91,7 @@ class View(NameAndDescription, CreateModifyFields):
             self.workflow,
             payload)
 
-    class Meta:
+    class Meta(object):
         """Define uniqueness with name in workflow and order by name."""
 
         unique_together = ('name', 'workflow')

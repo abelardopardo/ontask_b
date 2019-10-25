@@ -67,7 +67,7 @@ class Connection(NameAndDescription):
             None,
             kwargs)
 
-    class Meta:
+    class Meta(object):
         """Define as abstract and the ordering criteria."""
 
         abstract = True

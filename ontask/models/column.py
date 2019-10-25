@@ -265,7 +265,7 @@ class Column(NameAndDescription):
             self.workflow,
             payload)
 
-    class Meta:
+    class Meta(object):
         """Define additional fields, unique criteria and ordering."""
 
         verbose_name = 'column'

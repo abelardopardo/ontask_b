@@ -84,7 +84,7 @@ class ColumnSelectedTable(tables.Table):
                 'changes_allowed': record['changes_allowed'],
             })
 
-    class Meta:
+    class Meta(object):
         """Define fields, sequence, attrs and row attrs."""
 
         fields = (
