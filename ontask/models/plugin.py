@@ -74,7 +74,7 @@ class Plugin(NameAndDescription, CreateModifyFields):
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, None, payload)
 
-    class Meta:
+    class Meta(object):
         """Define the criteria for ordering."""
 
         ordering = ['name']

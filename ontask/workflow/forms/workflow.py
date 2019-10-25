@@ -46,7 +46,7 @@ class WorkflowForm(forms.ModelForm):
 
         return form_data
 
-    class Meta:
+    class Meta(object):
         """Identify the model and the fields."""
 
         model = Workflow

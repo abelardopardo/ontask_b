@@ -91,7 +91,7 @@ class ScheduleActionTable(tables.Table):
             reverse('logs:view', kwargs={'pk': log_item.id}),
             record.get_status_display())
 
-    class Meta:
+    class Meta(object):
         """Choose model, fields and sequence in the table."""
 
         model = ScheduledOperation

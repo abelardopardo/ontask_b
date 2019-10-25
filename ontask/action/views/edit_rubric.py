@@ -32,7 +32,7 @@ class RubricTable(tables.Table):
 
     criterion = tables.Column(verbose_name=_('Criterion'))
 
-    class Meta:
+    class Meta(object):
         """Define fields, sequence, attrs, etc."""
 
         fields = ('criterion',)

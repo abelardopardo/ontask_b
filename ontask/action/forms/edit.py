@@ -128,7 +128,7 @@ class EditActionOutForm(forms.ModelForm):
                 },
             )
 
-    class Meta:
+    class Meta(object):
         """Select action and the content field only."""
 
         model = Action

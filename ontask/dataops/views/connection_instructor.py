@@ -20,7 +20,7 @@ from ontask.models import AthenaConnection, SQLConnection, Workflow
 class ConnectionTableRun(tables.Table):
     """Base class to render connections to instructors."""
 
-    class Meta:
+    class Meta(object):
         """Define fields, sequence and attributes."""
 
         fields = ('name', 'description_text')

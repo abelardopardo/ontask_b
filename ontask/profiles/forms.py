@@ -21,7 +21,7 @@ class UserForm(forms.ModelForm):
             Field('name'),
         )
 
-    class Meta:
+    class Meta(object):
         model = User
         fields = ['name']
 
@@ -38,6 +38,6 @@ class ProfileForm(forms.ModelForm):
             Submit('update', 'Update', css_class="shadow btn-success"),
         )
 
-    class Meta:
+    class Meta(object):
         model = models.Profile
         fields = ['picture', 'bio']

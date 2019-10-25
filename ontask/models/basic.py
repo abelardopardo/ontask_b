@@ -24,7 +24,7 @@ class NameAndDescription(models.Model):
         verbose_name=_('description'),
     )
 
-    class Meta:
+    class Meta(object):
         """Define as abstract."""
 
         abstract = True
@@ -37,7 +37,7 @@ class CreateModifyFields(models.Model):
 
     modified = models.DateTimeField(auto_now=True, null=False)
 
-    class Meta:
+    class Meta(object):
         """Define as abstract."""
 
         abstract = True

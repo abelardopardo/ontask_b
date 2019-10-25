@@ -153,7 +153,7 @@ class ColumnBasicForm(forms.ModelForm):
 
         return form_data
 
-    class Meta:
+    class Meta(object):
         """Select model, fields and widget to consider."""
 
         model = Column

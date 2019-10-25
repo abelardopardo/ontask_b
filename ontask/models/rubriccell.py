@@ -83,7 +83,7 @@ class RubricCell(models.Model):
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, None, payload)
 
-    class Meta:
+    class Meta(object):
         """Define unique criteria and ordering.
 
         The unique criteria here is within the action, the name and being a

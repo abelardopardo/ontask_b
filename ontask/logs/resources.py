@@ -16,7 +16,7 @@ from ontask.models import Log
 class LogResource(resources.ModelResource):
     """Model resource to handle logs."""
 
-    class Meta:
+    class Meta(object):
         """Define model and fields."""
 
         model = Log
