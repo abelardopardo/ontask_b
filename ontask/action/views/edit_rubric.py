@@ -201,7 +201,7 @@ def edit_action_rubric(
             action.action_type == Action.SEND_LIST
             or action.action_type == Action.SEND_LIST_JSON),
         'is_personalized_text': action.action_type == Action.PERSONALIZED_TEXT,
-        'is_rubric_cell': action.action_type == Action.RUBRIC_TEXT,
+        'is_rubric': action.action_type == Action.RUBRIC_TEXT,
         'rows_all_false': action.get_row_all_false_count(),
         'total_rows': action.workflow.nrows,
         'all_false_conditions': False,
