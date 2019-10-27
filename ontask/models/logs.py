@@ -79,16 +79,9 @@ class Log(models.Model):
     PLUGIN_DELETE = 'plugin_delete'
     PLUGIN_EXECUTE = 'plugin_execute'
     PLUGIN_UPDATE = 'plugin_update'
-    SCHEDULE_EMAIL_EDIT = 'schedule_email_edit'
-    SCHEDULE_EMAIL_DELETE = 'schedule_email_delete'
-    SCHEDULE_JSON_LIST_EDIT = 'schedule_send_list_edit'
-    SCHEDULE_JSON_LIST_DELETE = 'schedule_send_list_delete'
-    SCHEDULE_SEND_LIST_EDIT = 'schedule_send_list_edit'
-    SCHEDULE_SEND_LIST_DELETE = 'schedule_send_list_delete'
-    SCHEDULE_CANVAS_EMAIL_EDIT = 'schedule_canvas_email_edit'
-    SCHEDULE_CANVAS_EMAIL_DELETE = 'schedule_canvas_email_delete'
-    SCHEDULE_JSON_EDIT = 'schedule_json_edit'
-    SCHEDULE_JSON_DELETE = 'schedule_json_delete'
+    SCHEDULE_CREATE = 'schedule_create'
+    SCHEDULE_EDIT = 'schedule_edit'
+    SCHEDULE_DELETE = 'schedule_delete'
     SQL_CONNECTION_CLONE = 'sql_connection_clone'
     SQL_CONNECTION_CREATE = 'sql_connection_create'
     SQL_CONNECTION_DELETE = 'sql_connection_delete'
@@ -165,18 +158,9 @@ class Log(models.Model):
         (PLUGIN_DELETE, _('Plugin deleted')),
         (PLUGIN_EXECUTE, _('Plugin executed')),
         (PLUGIN_UPDATE, _('Plugin updated')),
-        (SCHEDULE_CANVAS_EMAIL_EDIT,
-         _('Edit scheduled canvas email action')),
-        (SCHEDULE_CANVAS_EMAIL_DELETE,
-         _('Delete scheduled canvas email action')),
-        (SCHEDULE_EMAIL_EDIT, _('Edit scheduled email action')),
-        (SCHEDULE_EMAIL_DELETE, _('Delete scheduled email action')),
-        (SCHEDULE_JSON_EDIT, _('Edit scheduled JSON action')),
-        (SCHEDULE_JSON_DELETE, _('Delete scheduled JSON action')),
-        (SCHEDULE_JSON_LIST_EDIT, _('Edit scheduled JSON list action')),
-        (SCHEDULE_JSON_LIST_DELETE, _('Delete scheduled JSON list action')),
-        (SCHEDULE_SEND_LIST_EDIT, _('Edit scheduled send list action')),
-        (SCHEDULE_SEND_LIST_DELETE, _('Delete scheduled send list action')),
+        (SCHEDULE_CREATE, _('Create scheduled operation')),
+        (SCHEDULE_EDIT, _('Edit scheduled operation')),
+        (SCHEDULE_DELETE, _('Delete scheduled operation')),
         (SQL_CONNECTION_CLONE, _('SQL connection cloned')),
         (SQL_CONNECTION_CREATE, _('SQL connection created')),
         (SQL_CONNECTION_DELETE, _('SQL connection deleted')),
