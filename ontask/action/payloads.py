@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.sessions.backends.base import SessionBase
 from django.contrib.sessions.models import Session
 
-action_session_dictionary = 'action_run_payload'
+PAYLOAD_SESSION_DICTIONARY = 'action_run_payload'
 
 
 class ActionPayload(collections.MutableMapping):
@@ -269,7 +269,7 @@ def get_action_payload(session: SessionBase) -> Dict:
 
     :return: request.session[session_dictionary_name] or None
     """
-    return session.get(action_session_dictionary)
+    return session.get(PAYLOAD_SESSION_DICTIONARY)
 
 def set_action_payload(
     session: SessionBase,
@@ -281,7 +281,7 @@ def set_action_payload(
 
     :param payload: Dictionary to store
     """
-    session[action_session_dictionary] = payload
+    session[PAYLOAD_SESSION_DICTIONARY] = payload
 
 def get_or_set_action_info(
     session: Session,
@@ -308,7 +308,7 @@ def get_or_set_action_info(
         # Already exists, no need to create a new one
         return action_info
 
-    action_info = session.get(action_session_dictionary)
+    action_info = session.get(PAYLOAD_SESSION_DICTIONARY)
     if action_info:
         return payloadclass(action_info)
 
@@ -318,7 +318,7 @@ def get_or_set_action_info(
 
     # Create the object with the given class
     action_info = payloadclass(initial_values)
-    session[action_session_dictionary] = action_info.get_store()
+    session[PAYLOAD_SESSION_DICTIONARY] = action_info.get_store()
     session.save()
 
     return payloadclass(initial_values)

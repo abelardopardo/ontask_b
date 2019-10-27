@@ -2,8 +2,8 @@
 
 """Views to manipulate the workflow."""
 
-import copy
 from builtins import range
+import copy
 from typing import Optional
 
 from django.conf import settings
@@ -39,13 +39,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
     """View to create a workflow."""
 
     form_class = WorkflowForm
-
     template_name = 'workflow/includes/partial_workflow_create.html'
-
-    def get_context_data(self, **kwargs):
-        """Get context data."""
-        context = super().get_context_data(**kwargs)
-        return context
 
     @method_decorator(ajax_required)
     def get(

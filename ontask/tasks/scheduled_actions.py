@@ -13,14 +13,14 @@ from django.core.cache import cache
 from ontask.action.payloads import (
     CanvasEmailPayload, EmailPayload, JSONPayload, SendListPayload,
 )
-from ontask.models import Action, Log, ScheduledOperation
+from ontask import models
 from ontask.tasks.basic import logger, run_task
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
 
 
 def _update_item_status(
-    s_item: ScheduledOperation,
+    s_item: models.ScheduledOperation,
     run_result: List[str],
     debug: bool,
 ):
@@ -32,15 +32,15 @@ def _update_item_status(
     """
     now = datetime.now(pytz.timezone(settings.TIME_ZONE))
     if run_result is None:
-        s_item.status = ScheduledOperation.STATUS_DONE_ERROR
+        s_item.status = models.scheduler.STATUS_DONE_ERROR
     else:
         if s_item.execute_until and s_item.execute_until > now:
             # There is a second date/time and is not passed yet!
-            s_item.status = ScheduledOperation.STATUS_PENDING
+            s_item.status = models.scheduler.STATUS_PENDING
             # Update exclude values
             s_item.exclude_values.extend(run_result)
         else:
-            s_item.status = ScheduledOperation.STATUS_DONE
+            s_item.status = models.scheduler.STATUS_DONE
 
     # Save the new status in the DB
     s_item.save()
@@ -58,8 +58,8 @@ def _get_pending_items():
     now = datetime.now(pytz.timezone(settings.TIME_ZONE))
 
     # Get all the actions that are pending
-    s_items = ScheduledOperation.objects.filter(
-        status=ScheduledOperation.STATUS_PENDING,
+    s_items = models.ScheduledOperation.objects.filter(
+        status=models.scheduler.STATUS_PENDING,
         execute__lt=now)
     logger.info('%s actions pending execution', s_items.count())
 
@@ -67,8 +67,8 @@ def _get_pending_items():
 
 
 def _prepare_personalized_text(
-    s_item: ScheduledOperation,
-) -> Tuple[EmailPayload, Log]:
+    s_item: models.ScheduledOperation,
+) -> Tuple[EmailPayload, models.Log]:
     """Creaete Action info and log object for the Personalized email.
 
     :param s_item: Scheduled Action item in the DB
@@ -80,14 +80,14 @@ def _prepare_personalized_text(
     action_info['exclude_values'] = s_item.exclude_values
     log_item = s_item.action.log(
         s_item.user,
-        Log.ACTION_RUN_EMAIL,
+        models.Log.ACTION_RUN_EMAIL,
         **action_info)
     return action_info, log_item
 
 
 def _prepare_send_list(
-    s_item: ScheduledOperation,
-) -> Tuple[SendListPayload, Log]:
+    s_item: models.ScheduledOperation,
+) -> Tuple[SendListPayload, models.Log]:
     """Create Action info and log object for the List email.
 
     :param s_item: Scheduled Action item in the DB
@@ -97,14 +97,14 @@ def _prepare_send_list(
     action_info['action_id'] = s_item.action_id
     log_item = s_item.action.log(
         s_item.user,
-        Log.ACTION_RUN_SEND_LIST,
+        models.Log.ACTION_RUN_SEND_LIST,
         **action_info)
     return action_info, log_item
 
 
 def _prepare_personalized_json(
-    s_item: ScheduledOperation,
-) -> Tuple[JSONPayload, Log]:
+    s_item: models.ScheduledOperation,
+) -> Tuple[JSONPayload, models.Log]:
     """Create Action info and log object for the Personalized JSON.
 
     :param s_item: Scheduled Action item in the DB
@@ -123,14 +123,14 @@ def _prepare_personalized_json(
     # Log the event
     log_item = s_item.action.log(
         s_item.user,
-        Log.ACTION_RUN_JSON,
+        models.Log.ACTION_RUN_JSON,
         **action_info)
     return action_info, log_item
 
 
 def _prepare_send_list_json(
-    s_item: ScheduledOperation,
-) -> Tuple[JSONPayload, Log]:
+    s_item: models.ScheduledOperation,
+) -> Tuple[JSONPayload, models.Log]:
     """Create Action info and log object for the List JSON.
 
     :param s_item: Scheduled Action item in the DB
@@ -142,14 +142,14 @@ def _prepare_send_list_json(
     # Log the event
     log_item = s_item.action.log(
         s_item.user,
-        Log.ACTION_RUN_JSON_LIST,
+        models.Log.ACTION_RUN_JSON_LIST,
         **action_info)
     return action_info, log_item
 
 
 def _prepare_canvas_email(
-    s_item: ScheduledOperation,
-) -> Tuple[CanvasEmailPayload, Log]:
+    s_item: models.ScheduledOperation,
+) -> Tuple[CanvasEmailPayload, models.Log]:
     """Create Action info and log object for the List JSON.
 
     :param s_item: Scheduled Action item in the DB
@@ -162,17 +162,17 @@ def _prepare_canvas_email(
     action_info['exclude_values'] = s_item.exclude_values
     log_item = s_item.action.log(
         s_item.user,
-        Log.ACTION_RUN_CANVAS_EMAIL,
+        models.Log.ACTION_RUN_CANVAS_EMAIL,
         **action_info)
     return action_info, log_item
 
 
 _function_distributor = {
-    Action.PERSONALIZED_TEXT: _prepare_personalized_text,
-    Action.SEND_LIST: _prepare_send_list,
-    Action.PERSONALIZED_JSON: _prepare_personalized_json,
-    Action.SEND_LIST_JSON: _prepare_send_list_json,
-    Action.PERSONALIZED_CANVAS_EMAIL: _prepare_canvas_email}
+    models.Action.PERSONALIZED_TEXT: _prepare_personalized_text,
+    models.Action.SEND_LIST: _prepare_send_list,
+    models.Action.PERSONALIZED_JSON: _prepare_personalized_json,
+    models.Action.SEND_LIST_JSON: _prepare_send_list_json,
+    models.Action.PERSONALIZED_CANVAS_EMAIL: _prepare_canvas_email}
 
 
 @shared_task
@@ -195,12 +195,12 @@ def execute_scheduled_actions_task(debug: bool):
         with cache.lock(cache_lock_format.format(s_item.id)):
             # Item is now locked by the cache mechanism
             s_item.refresh_from_db()
-            if s_item.status != ScheduledOperation.STATUS_PENDING:
+            if s_item.status != models.scheduler.STATUS_PENDING:
                 continue
 
             try:
                 # Set item to running
-                s_item.status = ScheduledOperation.STATUS_EXECUTING
+                s_item.status = models.scheduler.STATUS_EXECUTING
                 s_item.save()
 
                 run_result = None
