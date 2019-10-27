@@ -22,7 +22,7 @@ class ScheduledActionAPIListCreate(generics.ListCreateAPIView):
     queryset = None
     permission_classes = (UserIsInstructor,)
 
-    # Filter the Scheduled actions only for the current user.
+    # Filter the Scheduled operations only for the current user.
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
