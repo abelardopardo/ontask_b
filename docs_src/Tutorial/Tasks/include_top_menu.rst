@@ -18,7 +18,7 @@ The menu contains the following links:
   Column operations
     This page shows information about the columns in the workflow.
 
-  Scheduled actions
+  Scheduled operations
     Shows which actions have been scheduled for execution.
 
   View logs

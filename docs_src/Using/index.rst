@@ -1034,7 +1034,7 @@ Authentication Token
 Table with Scheduled Actions
 ----------------------------
 
-The table showing all the action scheduling operations can be access through the |fa-cog| *More* link in the top-bar menu selecting the |fa-calendar| *Scheduled actions* link. The list of scheduled actions is shown as illustrated in the following figure.
+The table showing all the action scheduling operations can be access through the |fa-cog| *More* link in the top-bar menu selecting the |fa-calendar| *Scheduled operations* link. The list of scheduled actions is shown as illustrated in the following figure.
 
 .. figure:: /scaptures/schedule.png
    :align: center

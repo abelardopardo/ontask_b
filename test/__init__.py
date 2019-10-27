@@ -662,7 +662,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             (By.XPATH,
              self.class_and_text_xpath.format('a',
                                               'dropdown-item',
-                                              'Scheduled actions'))
+                                              'Scheduled operations'))
         ))
         self.selenium.find_element_by_id('ontask-base-scheduler').click()
         WebDriverWait(self.selenium, 10).until(
