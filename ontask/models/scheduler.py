@@ -3,6 +3,7 @@
 """Model is to store process to execute in the platform at a certain time."""
 
 import json
+from typing import Optional
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
@@ -11,11 +12,33 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import simplify_datetime_str
 from ontask.models import Column
-from ontask.models.workflow import Workflow
 from ontask.models.action import Action
-from ontask.models.basic import NameAndDescription, CreateModifyFields
+from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.const import CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
+from ontask.models.workflow import Workflow
+
+STATUS_CREATING = 'creating'
+STATUS_PENDING = 'pending'
+STATUS_EXECUTING = 'executing'
+STATUS_DONE = 'done'
+STATUS_DONE_ERROR = 'done_error'
+
+SCHEDULED_STATUS_SIZE = 256
+
+SCHEDULED_STATUS = [
+    (STATUS_CREATING, _('Creating')),
+    (STATUS_PENDING, _('Pending')),
+    (STATUS_EXECUTING, _('Executing')),
+    (STATUS_DONE, _('Finished')),
+    (STATUS_DONE_ERROR, _('Finished with error')),
+]
+
+RUN_ACTION = 'run_action'
+
+OPERATION_TYPES = [
+    (RUN_ACTION, _('Run action')),
+]
 
 
 class ScheduledOperation(NameAndDescription, CreateModifyFields):
@@ -23,26 +46,6 @@ class ScheduledOperation(NameAndDescription, CreateModifyFields):
 
     @DynamicAttrs
     """
-
-    STATUS_CREATING = 'creating'
-    STATUS_PENDING = 'pending'
-    STATUS_EXECUTING = 'executing'
-    STATUS_DONE = 'done'
-    STATUS_DONE_ERROR = 'done_error'
-
-    SCHEDULED_STATUS = [
-        (STATUS_CREATING, _('Creating')),
-        (STATUS_PENDING, _('Pending')),
-        (STATUS_EXECUTING, _('Executing')),
-        (STATUS_DONE, _('Finished')),
-        (STATUS_DONE_ERROR, _('Finished with error')),
-    ]
-
-    ACTION_RUN = 'action_run'
-
-    OPERATION_TYPES = [
-        (ACTION_RUN, _('Run action')),
-    ]
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -68,12 +71,13 @@ class ScheduledOperation(NameAndDescription, CreateModifyFields):
     execute_until = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=_('End of execution period (if executing multiple times)'))
+        verbose_name=_(
+            'End of execution period (if executing multiple times)'))
 
     # Status of the entry (pending, running or done)
     status = models.CharField(
         name='status',
-        max_length=256,
+        max_length=SCHEDULED_STATUS_SIZE,
         blank=False,
         choices=SCHEDULED_STATUS,
         verbose_name=_('Execution Status'))
@@ -92,7 +96,7 @@ class ScheduledOperation(NameAndDescription, CreateModifyFields):
         null=True,
         blank=True,
         on_delete=models.CASCADE,
-        related_name='scheduled_actions')
+        related_name='scheduled_operations')
 
     # The action used in the scheduling
     action = models.ForeignKey(
@@ -101,7 +105,7 @@ class ScheduledOperation(NameAndDescription, CreateModifyFields):
         null=True,
         blank=True,
         on_delete=models.CASCADE,
-        related_name='scheduled_actions')
+        related_name='scheduled_operations')
 
     # Column object denoting the one used to differentiate elements
     item_column = models.ForeignKey(
@@ -127,7 +131,7 @@ class ScheduledOperation(NameAndDescription, CreateModifyFields):
         null=True,
         verbose_name=_('payload'))
 
-    def item_column_name(self):
+    def item_column_name(self) -> Optional[str]:
         """Column name or None."""
         return self.item_column.name if self.item_column else None
 
@@ -140,7 +144,7 @@ class ScheduledOperation(NameAndDescription, CreateModifyFields):
             'action_id': self.action.id,
             'execute': simplify_datetime_str(self.execute),
             'execute_until': simplify_datetime_str(self.execute_until),
-            'item_column': self.item_column.name,
+            'item_column': self.item_column.name if self.item_column else '',
             'status': self.status,
             'exclude_values': self.exclude_values,
             'payload': json.dumps(self.payload)}

@@ -3,7 +3,6 @@
 """Serialize the scheduled action."""
 
 import datetime
-from builtins import object
 
 import pytz
 from django.conf import settings
@@ -11,9 +10,8 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
-from ontask import is_correct_email
+from ontask import is_correct_email, models
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.models import Action, ScheduledOperation
 
 
 class ScheduledActionSerializer(serializers.ModelSerializer):
@@ -55,7 +53,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
         :return: instantiated object
         """
         if not scheduled_obj:
-            scheduled_obj = ScheduledOperation()
+            scheduled_obj = models.ScheduledOperation()
 
         scheduled_obj.user = self.context['request'].user
         scheduled_obj.name = validated_data['name']
@@ -65,7 +63,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
         scheduled_obj.item_column = item_column
         scheduled_obj.exclude_values = exclude_values
         scheduled_obj.payload = payload
-        scheduled_obj.status = ScheduledOperation.STATUS_PENDING
+        scheduled_obj.status = models.scheduler.STATUS_PENDING
 
         scheduled_obj.save()
         return scheduled_obj
@@ -116,7 +114,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
 
         exclude_values = validated_data.get('exclude_values')
         # Exclude_values has to be a list
-        if not exclude_values is None and not isinstance(exclude_values, list):
+        if exclude_values is not None and not isinstance(exclude_values, list):
             raise APIException(_('Exclude_values must be a list'))
 
         # Exclude_values can only have content if item_column is given.
@@ -177,7 +175,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Select  model and define fields."""
 
-        model = ScheduledOperation
+        model = models.ScheduledOperation
 
         fields = (
             'id',
@@ -198,7 +196,7 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
         act, execute, column, exclude, payload = super().extra_validation(
             validated_data)
 
-        if act.action_type != Action.PERSONALIZED_TEXT:
+        if act.action_type != models.Action.PERSONALIZED_TEXT:
             raise APIException(_('Incorrect type of action to schedule.'))
 
         subject = payload.get('subject')
@@ -257,7 +255,7 @@ class ScheduledJSONSerializer(ScheduledActionSerializer):
         act, execute, column, exclude, pload = super().extra_validation(
             validated_data)
 
-        if act.action_type != Action.PERSONALIZED_JSON:
+        if act.action_type != models.Action.PERSONALIZED_JSON:
             raise APIException(_('Incorrect type of action to schedule.'))
 
         if not pload.get('token'):

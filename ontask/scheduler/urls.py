@@ -5,8 +5,7 @@
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from ontask.scheduler import api
-from ontask.scheduler import views
+from ontask.scheduler import api, views
 
 app_name = 'scheduler'
 

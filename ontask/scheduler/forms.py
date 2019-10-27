@@ -327,6 +327,7 @@ class SendListScheduleForm(
 
     def __init__(self, form_data, *args, **kwargs):
         """Set additional field items."""
+        columns = kwargs.pop('columns')
 
         # Call the parent constructor
         super().__init__(form_data, *args, **kwargs)
@@ -375,6 +376,13 @@ class JSONScheduleForm(ScheduleTokenForm, ScheduleItemsForm):
 
 class JSONListScheduleForm(ScheduleTokenForm, ScheduleBasicForm):
     """Form to edit ScheduleAction of types JSON List."""
+
+    def __init__(self, form_data, *args, **kwargs):
+        """Set additional field items."""
+        columns = kwargs.pop('columns')
+
+        # Call the parent constructor
+        super().__init__(form_data, *args, **kwargs)
 
     class Meta(ScheduleBasicForm.Meta):
         """Redefine the order."""
