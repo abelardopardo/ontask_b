@@ -5,8 +5,10 @@
   <div id="html-editor">
     <div id="insert-elements-in-editor" class="text-center my-3">
       <div id="column-selector">
-        <button class="btn btn-outline-dark js-insert-rubric-text"
-                type="button">{% trans 'Insert rubric text' %}</button>
+        {% if is_rubric %}
+          <button class="btn btn-outline-dark js-insert-rubric-text"
+                  type="button">{% trans 'Insert rubric text' %}</button>
+        {% endif %}
         <div class="dropdown btn-group">
           <button type="button" class="btn btn-outline-dark dropdown-toggle"
                   data-toggle="dropdown">
