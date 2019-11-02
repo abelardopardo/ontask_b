@@ -66,44 +66,7 @@ class RestrictedFileField(forms.FileField):
 
         return form_data
 
-class FormWithPayloadAbstract(forms.Form):
-    """Abstract class to implement the form with payload."""
-
-    def __init__(self, *args, **kargs):
-        self.__form_info = None
-        super().__init__(*args, **kargs)
-
-    def get_payload_field(
-        self, key:
-        str, default:
-        Optional[Any] = None
-    ) -> Any:
-        del key
-        raise Exception('Incorrect method invocation')
-
-    def set_field_from_dict(self, field_name:str):
-        del field_name
-        raise Exception('Incorrect method invocation')
-
-
-    def set_fields_from_dict(self, field_names: List[str]):
-        del field_names
-        raise Exception('Incorrect method invocation')
-
-    def store_field_in_dict(
-        self,
-        field_name: str,
-        field_value: Optional[Any] = None
-    ):
-        del field_name, field_value
-        raise Exception('Incorrect method invocation')
-
-    def store_fields_in_dict(self, field_pairs):
-        del field_pairs
-        raise Exception('Incorrect method invocation')
-
-
-class FormWithPayload(FormWithPayloadAbstract):
+class FormWithPayload(forms.Form):
     """Form that has a method to initialize fields based on a Dict.
 
     The constructor receives a form_info dictionary that is used to initialize
@@ -111,9 +74,9 @@ class FormWithPayload(FormWithPayloadAbstract):
     """
 
     def __init__(self, *args, **kargs):
-        f_info: Dict = kargs.pop('form_info', {})
+        self.__form_info = kargs.pop('form_info', {})
+        self.action = kargs.pop('action', None)
         super().__init__(*args, **kargs)
-        self.__form_info = f_info
 
     def get_payload_field(
         self,

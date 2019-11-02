@@ -4,28 +4,39 @@
 
 1) ExportWokflowBase: export workflow boolean field
 
-2) EmailCCBCCFormBase: Fields subject, cc and bcc for email
+2) EmailSubjectFormBase; subject
 
-3) ItemColumnConfirm: Fields item_column and confirm items
+3) EmailCCBCCFormBase: cc and bcc for email
 
-4) JSONTokenForm: Field to include a token
+4) ItemColumnConfirm: item_column and confirm_items
 
-5) EmailActionForm: Combines 1, 2, 3, send_confirmation, track_read
+5) JSONTokenForm: Token
 
-6) SendListActionForm: Combines 1, 2, email_to
+6) EmailActionForm: 2 + 3 + 4 + send_confirmation, track_read
 
-7) ZipActionForm: Combines 1, 3 with user_fname_column, file_suffix, zip for
-    moodle
+7) EmailActionRunForm: 6 + 1
 
-8) CanvasEmailActionForm: Combines 1, 3, subject (target_url dynamically added)
+8) SendListActionForm: 2 + 3 + email_to
 
-9) JSONActionForm: Combines 1, 3, 4
+9) SendListActionRunForm: 8 + 1
 
-10) JSONListActionForm: Combines 1, 3, 4
+10) ZipActionRunForm: 1 + 4 + user_fname_column, file_suffix, zip_for_moodle
 
-11) ValueExcludeForm: Form to select some items to exclude from the other forms
+11) CanvasEmailActionForm: 2 + 4 (target_url dynamically added)
 
-12) EnableURLForm: Form to process the enable, from and to fields of an action
+12) CanvasEmailActionRunForm: 11 + 1
+
+13) JSONActionForm: 4, 5
+
+14) JSONActionRunForm: 13 + 1
+
+15) JSONListActionForm: 5
+
+16) JSONListActionForm: 15 + 1
+
+17) ValueExcludeForm: Form to select some items to exclude from the processing
+
+18) EnableURLForm: Form to process the enable field for an action.
 """
 
 import re
@@ -41,7 +52,7 @@ from ontask.action.forms import SUFFIX_LENGTH
 from ontask.core import forms as ontask_forms
 from ontask.dataops.sql.column_queries import is_column_unique
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.models import Action
+from ontask.models import Action, Column
 
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')
@@ -49,7 +60,7 @@ participant_re = re.compile(r'^Participant \d+$')
 SUBJECT_FIELD_LENGTH = 512
 
 
-class ExportWorkflowBase(ontask_forms.FormWithPayloadAbstract):
+class ExportWorkflowBase(ontask_forms.FormWithPayload):
     """Class to include a boolean flag to export a workflow."""
 
     export_wf = forms.BooleanField(
@@ -73,7 +84,7 @@ class ExportWorkflowBase(ontask_forms.FormWithPayloadAbstract):
         return form_data
 
 
-class EmailSubjectFormBase(ontask_forms.FormWithPayloadAbstract):
+class EmailSubjectFormBase(ontask_forms.FormWithPayload):
     """Subject field."""
 
     subject = forms.CharField(
@@ -95,7 +106,7 @@ class EmailSubjectFormBase(ontask_forms.FormWithPayloadAbstract):
         return form_data
 
 
-class EmailCCBCCFormBase(ontask_forms.FormWithPayloadAbstract):
+class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
     """CC and BCC fields."""
 
     cc_email = forms.CharField(
@@ -154,12 +165,12 @@ class EmailCCBCCFormBase(ontask_forms.FormWithPayloadAbstract):
         return form_data
 
 
-class ItemColumnConfirmFormBase(ontask_forms.FormWithPayloadAbstract):
+class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
     """Basic form fields to select column for items and confirm boolean."""
 
-    item_column = forms.ChoiceField(
-        required=True,
-    )
+    item_column = forms.ModelChoiceField(
+        queryset=Column.objects.none(),
+        required=True)
 
     confirm_items = forms.BooleanField(
         initial=False,
@@ -170,46 +181,36 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayloadAbstract):
     def __init__(self, *args, **kargs):
         """Store column names and adjust initial values."""
         self.columns: List[str] = kargs.pop('columns')
-        self.action: Action = kargs.pop('action')
-
         super().__init__(*args, **kargs)
 
         self.set_fields_from_dict(['item_column', 'confirm_items'])
 
-        item_column_name = self.fields['item_column'].initial
-        if item_column_name is None:
+        item_column_pk = self.fields['item_column'].initial
+        if item_column_pk is None:
             # Try to guess if there is an "email" column
-            item_column_name = next(
-                (col.name for col in self.columns
+            item_column_pk = next(
+                (col.pk for col in self.columns
                  if col.name.lower() == 'email'),
                 None,
             )
 
-        if item_column_name is None:
-            item_column_name = ('', '---')
-        else:
-            item_column_name = (item_column_name, item_column_name)
-
-        self.fields['item_column'].initial = item_column_name
-        self.fields['item_column'].choices = [
-            (cname, cname) for cname in self.column_names]
+        self.fields['item_column'].initial = item_column_pk
+        self.fields['item_column'].queryset = self.columns
 
     def clean(self):
         """Detect uniques values in item_column."""
         form_data = super().clean()
 
-        # Move data to the payload so that is ready to be used
-        self.store_fields_in_dict([
-            ('item_column', None),
-            ('confirm_items', None)])
-
-        # Participant column must be unique
         pcolumn = form_data['item_column']
+        self.store_field_in_dict(
+            'item_column',
+            pcolumn.pk if pcolumn else None)
+        self.store_fields_in_dict([('confirm_items', None)])
 
         # The given column must have unique values
         if not is_column_unique(
             self.action.workflow.get_data_frame_table_name(),
-            pcolumn,
+            pcolumn.name,
         ):
             self.add_error(
                 'item_column',
@@ -219,7 +220,7 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayloadAbstract):
         return form_data
 
 
-class JSONTokenForm(ontask_forms.FormWithPayloadAbstract):
+class JSONTokenForm(ontask_forms.FormWithPayload):
     """Form to include a token field."""
 
     # Token to use when sending the JSON request
@@ -320,11 +321,7 @@ class EmailActionForm(
             attrs={'size': SUBJECT_FIELD_LENGTH})}
 
 
-class EmailActionFormRun(
-    ontask_forms.FormWithPayload,
-    EmailActionForm,
-    ExportWorkflowBase
-):
+class EmailActionRunForm(EmailActionForm, ExportWorkflowBase):
     """Form to edit the Send Email Action Run."""
 
     def __init__(self, *args, **kargs):
@@ -345,7 +342,7 @@ class EmailActionFormRun(
             'export_wf'])
 
 
-class SendListActionForm(EmailCCBCCFormBase):
+class SendListActionForm(EmailSubjectFormBase, EmailCCBCCFormBase):
     """Form to edit the Send Email action."""
 
     email_to = forms.CharField(label=_('Recipient'), required=True)
@@ -371,11 +368,7 @@ class SendListActionForm(EmailCCBCCFormBase):
         return form_data
 
 
-class SendListActionFormRun(
-    ontask_forms.FormWithPayload,
-    SendListActionForm,
-    ExportWorkflowBase,
-):
+class SendListActionRunForm(SendListActionForm, ExportWorkflowBase):
     """Form to edit the Send Email action Run."""
 
     def __init__(self, *args, **kargs):
@@ -389,7 +382,7 @@ class SendListActionFormRun(
             'export_wf'])
 
 
-class ZipActionForm(ontask_forms.FormWithPayload, ItemColumnConfirmFormBase):
+class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
     """Form to create a ZIP."""
 
     user_fname_column = forms.ChoiceField(
@@ -496,11 +489,7 @@ class ZipActionForm(ontask_forms.FormWithPayload, ItemColumnConfirmFormBase):
         return form_data
 
 
-class CanvasEmailActionForm(
-    ItemColumnConfirmFormBase,
-    EmailSubjectFormBase,
-    ExportWorkflowBase,
-):
+class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
     """Form to process information to run a Canvas Email action."""
 
     def __init__(self, *args, **kargs):
@@ -563,11 +552,7 @@ class CanvasEmailActionForm(
             attrs={'size': SUBJECT_FIELD_LENGTH})}
 
 
-class CanvasEmailActionFormRun(
-    ontask_forms.FormWithPayload,
-    CanvasEmailActionForm,
-    ExportWorkflowBase,
-):
+class CanvasEmailActionRunForm(CanvasEmailActionForm, ExportWorkflowBase):
     """Form to process information to run a Canvas Email action."""
 
     def __init__(self, *args, **kargs):
@@ -583,10 +568,7 @@ class CanvasEmailActionFormRun(
         )
 
 
-class JSONActionForm(
-    ItemColumnConfirmFormBase,
-    JSONTokenForm,
-):
+class JSONActionForm(ItemColumnConfirmFormBase, JSONTokenForm):
     """Form to edit information to run a JSON action."""
 
     def __init__(self, *args, **kargs):
@@ -598,10 +580,7 @@ class JSONActionForm(
         )
 
 
-class JSONActionFormRun(
-    ontask_forms.FormWithPayload,
-    JSONActionForm,
-    ExportWorkflowBase,
+class JSONActionRunForm(JSONActionForm, ExportWorkflowBase,
 ):
     """Form to edit information to run a JSON action Run"""
 
@@ -616,18 +595,12 @@ class JSONActionFormRun(
             'export_wf'])
 
 
-class JSONListActionForm(
-    ExportWorkflowBase,
-    JSONTokenForm,
-):
+class JSONListActionForm(JSONTokenForm):
+    """Use a synonym for consistency with the other classes"""
     pass
 
 
-class JSONListActionFormRun(
-    ontask_forms.FormWithPayload,
-    JSONListActionForm,
-    ExportWorkflowBase,
-):
+class JSONListActionRunForm(JSONListActionForm, ExportWorkflowBase):
     """Form to edit information to run JSON List action"""
     def __init__(self, *args, **kargs):
         """Modify the fields with the adequate information."""

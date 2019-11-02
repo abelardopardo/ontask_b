@@ -18,7 +18,7 @@ from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import Column, ScheduledOperation
 
 
-class ScheduleBasicForm(ontask_forms.FormWithPayloadAbstract, forms.ModelForm):
+class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
     """Form to create/edit objects of the ScheduleAction.
 
     To be used for the various types of actions.
@@ -261,11 +261,7 @@ class ScheduleTokenForm(ontask_forms.FormWithPayload):
         return form_data
 
 
-class EmailScheduleForm(
-    ontask_forms.FormWithPayload,
-    ScheduleBasicForm,
-    action_forms.EmailActionForm,
-):
+class EmailScheduleForm(ScheduleBasicForm, action_forms.EmailActionForm):
     """Form to create/edit objects of the ScheduleAction of type email.
 
     One of the fields is a reference to a key column, which is a subset of
@@ -318,11 +314,7 @@ class EmailScheduleForm(
         return form_data
 
 
-class SendListScheduleForm(
-    ontask_forms.FormWithPayload,
-    ScheduleBasicForm,
-    action_forms.SendListActionForm,
-):
+class SendListScheduleForm(ScheduleBasicForm, action_forms.SendListActionForm):
     """Form to create/edit objects of the ScheduleAction of type send list."""
 
     def __init__(self, form_data, *args, **kwargs):
@@ -356,11 +348,7 @@ class SendListScheduleForm(
         return form_data
 
 
-class JSONScheduleForm(
-    ontask_forms.FormWithPayload,
-    ScheduleBasicForm,
-    action_forms.JSONActionForm,
-):
+class JSONScheduleForm(ScheduleBasicForm, action_forms.JSONActionForm):
     """Form to edit ScheduleAction of type JSON."""
 
     class Meta(ScheduleItemsForm.Meta):
@@ -376,11 +364,7 @@ class JSONScheduleForm(
             'token')
 
 
-class JSONListScheduleForm(
-    ontask_forms.FormWithPayload,
-    ScheduleBasicForm,
-    action_forms.JSONListActionForm,
-):
+class JSONListScheduleForm(ScheduleBasicForm, action_forms.JSONListActionForm):
     """Form to edit ScheduleAction of types JSON List."""
 
     def __init__(self, form_data, *args, **kwargs):
@@ -409,7 +393,6 @@ class JSONListScheduleForm(
 
 
 class CanvasEmailScheduleForm(
-    ontask_forms.FormWithPayload,
     ScheduleBasicForm,
     action_forms.CanvasEmailActionForm,
 ):
