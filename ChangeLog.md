@@ -1,3 +1,9 @@
+## 6.1.2 (2019-11-2)
+
+### Fixed
+
+- Fixed erro when handling action payload in canvas email actions (Issue #173)
+
 ## 6.1.1 (2019-10-21)
 
 ### Fixed
