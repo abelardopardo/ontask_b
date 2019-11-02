@@ -71,10 +71,11 @@ def run_canvas_email_action(
             action_info['button_label'] = ugettext('Send')
             action_info['valuerange'] = 2
             action_info['step'] = 2
-            set_action_payload(req.session, action_info.get_store())
             continue_url = 'action:item_filter'
         else:
             continue_url = 'action:canvas_email_done'
+
+        set_action_payload(req.session, action_info.get_store())
 
         # Check for the CANVAS token and proceed to the continue_url
         return canvas_get_or_set_oauth_token(
