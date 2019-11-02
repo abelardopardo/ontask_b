@@ -2,7 +2,9 @@
 
 ### Fixed
 
-- Fixed erro when handling action payload in canvas email actions (Issue #173)
+- Error when handling action payload in canvas email actions (Issue #173)
+
+- Error in path for Docker container (PR #172)
 
 ## 6.1.1 (2019-10-21)
 
