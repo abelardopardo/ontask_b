@@ -202,7 +202,7 @@ def serve_action_out(
 
 
 @user_passes_test(is_instructor)
-@get_workflow()
+@get_workflow(pf_related='actions')
 def run_action_item_filter(
     request: HttpRequest,
     workflow: Optional[Workflow] = None,
@@ -229,12 +229,18 @@ def run_action_item_filter(
         return redirect('action:index')
 
     # Get the information from the payload
-    action = Action.objects.get(id=action_info['action_id'])
+    try:
+        action = workflow.actions.get(id=action_info['action_id'])
+        item_column = workflow.columns.get(pk=action_info['item_column'])
+    except:
+        # Something is wrong with this execution. Return to the action table.
+        messages.error(request, _('Incorrect item filter invocation.'))
+        return redirect('action:index')
 
     form = ValueExcludeForm(
         request.POST or None,
         action=action,
-        column_name=action_info['item_column'],
+        column_name=item_column.name,
         form_info=action_info)
 
     context = {

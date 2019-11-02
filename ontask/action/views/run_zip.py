@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.action.evaluate.action import evaluate_action
-from ontask.action.forms import ZipActionForm
+from ontask.action.forms import ZipActionRunForm
 from ontask.action.payloads import (
     ZipPayload, get_or_set_action_info, set_action_payload,
 )
@@ -65,7 +65,7 @@ def zip_action(
     )
 
     # Create the form to ask for the email subject and other information
-    form = ZipActionForm(
+    form = ZipActionRunForm(
         req.POST or None,
         column_names=[col.name for col in workflow.columns.all()],
         action=action,
