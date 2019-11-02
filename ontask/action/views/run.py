@@ -230,7 +230,7 @@ def run_action_item_filter(
 
     # Get the information from the payload
     try:
-        action = workflow.actions.get(id=action_info['action_id'])
+        action = workflow.actions.get(pk=action_info['action_id'])
         item_column = workflow.columns.get(pk=action_info['item_column'])
     except:
         # Something is wrong with this execution. Return to the action table.

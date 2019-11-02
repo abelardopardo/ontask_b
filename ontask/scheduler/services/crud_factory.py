@@ -280,3 +280,6 @@ schedule_crud_factory.register_processor(
 schedule_crud_factory.register_processor(
     models.scheduler.RUN_ACTION + '.' + models.Action.SEND_LIST_JSON,
     ScheduledOperationSaveActionRun(forms.JSONListScheduleForm))
+schedule_crud_factory.register_processor(
+    models.scheduler.RUN_ACTION + '.' + models.Action.RUBRIC_TEXT,
+    ScheduledOperationSaveActionRun(forms.EmailScheduleForm))
