@@ -296,10 +296,11 @@ class EmailActionForm(
             ('track_read', None)])
 
         # Check if the values in the item_column are correct emails
+        pcolumn = form_data['item_column']
         try:
             column_data = get_rows(
                 self.action.workflow.get_data_frame_table_name(),
-                column_names=[self._FormWithPayload__form_info['item_column']])
+                column_names=[pcolumn.name])
             if not all(is_correct_email(iname[0]) for iname in column_data):
                 # column has incorrect email addresses
                 self.add_error(
@@ -623,7 +624,6 @@ class ValueExcludeForm(ontask_forms.FormWithPayload):
 
     def __init__(self, form_data, *args, **kwargs):
         """Store action, column name and exclude init, adjust fields."""
-        self.action: Action = kwargs.pop('action', None)
         self.column_name: str = kwargs.pop('column_name', None)
         self.exclude_init: List[str] = kwargs.pop('exclude_values', list)
 
