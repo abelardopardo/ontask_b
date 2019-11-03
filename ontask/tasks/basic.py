@@ -112,7 +112,10 @@ def run_task(
         log_item.payload['status'] = 'Executing'
         log_item.save()
 
-        if action.action_type == Action.PERSONALIZED_TEXT:
+        if (
+            action.action_type == Action.PERSONALIZED_TEXT
+            or action.action_type == Action.RUBRIC_TEXT
+        ):
             items_processed = send_emails(user, action, action_info, log_item)
         elif action.action_type == Action.SEND_LIST:
             items_processed = send_list_email(
