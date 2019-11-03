@@ -17,7 +17,7 @@ from ontask.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.forms import ValueExcludeForm
-from ontask.action.payloads import get_action_payload, set_action_payload
+from ontask.action.payloads import set_action_payload
 from ontask.action.views.run_canvas_email import run_canvas_email_action
 from ontask.action.views.run_email import run_email_action
 from ontask.action.views.run_json import run_json_action
@@ -25,6 +25,7 @@ from ontask.action.views.run_json_list import run_json_list_action
 from ontask.action.views.run_send_list import run_send_list_action
 from ontask.action.views.run_survey import run_survey_action
 from ontask.action.views.serve_survey import serve_survey_row
+from ontask.core import SessionPayload
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
@@ -76,12 +77,12 @@ def run_action(
             _('Execution for this action is not allowed.'))
         return redirect(reverse('action:index'))
 
-    return fn_distributor[action.action_type](request, workflow, action)
+    # return fn_distributor[action.action_type](request, workflow, action)
 
-    # return services.action_run_request_factory.process_request(
-    #     action.action_type,
-    #     request=request,
-    #     action=action)
+    return services.action_run_request_factory.process_request(
+        action.action_type,
+        request=request,
+        action=action)
 
 
 @csrf_exempt
@@ -222,16 +223,16 @@ def run_action_item_filter(
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
-    action_info = get_action_payload(request.session)
-    if not action_info:
+    payload = SessionPayload(request.session)
+    if payload is None:
         # Something is wrong with this execution. Return to the action table.
         messages.error(request, _('Incorrect item filter invocation.'))
         return redirect('action:index')
 
     # Get the information from the payload
     try:
-        action = workflow.actions.get(pk=action_info['action_id'])
-        item_column = workflow.columns.get(pk=action_info['item_column'])
+        action = workflow.actions.get(pk=payload['action_id'])
+        item_column = workflow.columns.get(pk=payload['item_column'])
     except:
         # Something is wrong with this execution. Return to the action table.
         messages.error(request, _('Incorrect item filter invocation.'))
@@ -241,21 +242,19 @@ def run_action_item_filter(
         request.POST or None,
         action=action,
         column_name=item_column.name,
-        form_info=action_info)
+        form_info=payload)
 
     context = {
         'form': form,
         'action': action,
-        'button_label': action_info['button_label'],
-        'valuerange': range(action_info['valuerange']),
-        'step': action_info['step'],
-        'prev_step': action_info['prev_url']}
+        'button_label': payload['button_label'],
+        'valuerange': range(payload['valuerange']),
+        'step': payload['step'],
+        'prev_step': payload['prev_url']}
 
     # The post is correct
     if request.method == 'POST' and form.is_valid():
         # Updating the payload in the session
-        set_action_payload(request.session, action_info)
-
-        return redirect(action_info['post_url'])
+        return redirect(payload['post_url'])
 
     return render(request, 'action/item_filter.html', context)

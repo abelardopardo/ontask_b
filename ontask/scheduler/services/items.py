@@ -16,6 +16,7 @@ from django.utils.translation import ugettext
 from ontask.action.payloads import (
     PAYLOAD_SESSION_DICTIONARY, set_action_payload,
 )
+from ontask.core import SessionPayload
 from ontask.models import Action, Log, ScheduledOperation
 
 DAYS_IN_YEAR = 365
@@ -89,7 +90,7 @@ def create_payload(
     prev_url: str,
     s_item: Optional[ScheduledOperation] = None,
     action: Optional[Action] = None,
-) -> Dict:
+) -> SessionPayload:
     """Create a payload dictionary to store in the session.
 
     :param request: HTTP request
@@ -112,24 +113,21 @@ def create_payload(
         exclude_values = []
 
     # Get the payload from the session, and if not, use the given one
-    op_payload = request.session.get(PAYLOAD_SESSION_DICTIONARY)
-    if not op_payload:
-        op_payload = {
+    payload = SessionPayload(
+        request.session,
+        initial_values={
             'action_id': action.id,
-            'prev_url': prev_url,
-            'post_url': reverse(
-                'scheduler:finish_scheduling'),
             'exclude_values': exclude_values,
-            'operation_type': operation_type}
-        if s_item:
-            op_payload.update(s_item.payload)
-        set_action_payload(request.session, op_payload)
-        request.session.save()
-
+            'operation_type': operation_type,
+            'prev_url': prev_url,
+            'post_url': reverse('scheduler:finish_scheduling'),
+        })
     if s_item:
-        op_payload['schedule_id'] = s_item.id
+        payload.update(s_item.payload)
+        payload['schedule_id'] = s_item.id
+        payload['item_column'] = s_item.item_column.pk
 
-    return op_payload
+    return payload
 
 
 def delete_item(s_item: ScheduledOperation):

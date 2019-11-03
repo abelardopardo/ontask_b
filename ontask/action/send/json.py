@@ -25,7 +25,6 @@ def _send_and_log_json(
     action: Action,
     json_obj: str,
     headers: Mapping,
-    context: Dict[str, str],
 ):
     """Send a JSON object to the action URL and LOG event."""
     if settings.EXECUTE_ACTION_JSON_TRANSFER:
@@ -75,9 +74,10 @@ def send_json(
     :return: List of column values used to select the objects
     """
     # Evaluate the action string and obtain the list of list of JSON objects
+    item_column = action.workflow.columns.get(pk=action_info['item_column'])
     action_evals = evaluate_action(
         action,
-        column_name=action_info['item_column'],
+        column_name=item_column.name,
         exclude_values=action_info['exclude_values'],
     )
 
@@ -100,9 +100,7 @@ def send_json(
             user,
             action,
             json.loads(json_string),
-            headers,
-            context,
-        )
+            headers)
 
     return [column_value for _, column_value in action_evals]
 
@@ -139,7 +137,6 @@ def send_json_list(
         {
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             'Authorization': 'Bearer {0}'.format(action_info['token']),
-        },
-        {'user': user.id, 'action': action.id})
+        })
 
     return []

@@ -15,6 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.action import payloads
+from ontask.core import SessionPayload
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.scheduler import services
@@ -33,8 +34,7 @@ def index(
     :return: HTTP response with the table.
     """
     # Reset object to carry action info throughout dialogs
-    payloads.set_action_payload(request.session)
-    request.session.save()
+    SessionPayload.flush(request.session)
 
     return render(
         request,
@@ -179,8 +179,7 @@ def finish_scheduling(
 ) -> HttpResponse:
     """Finish the create/edit operation of a scheduled operation"""
     del workflow
-    payload = request.session.get(payloads.PAYLOAD_SESSION_DICTIONARY)
-
+    payload = SessionPayload(request.session)
     if payload is None:
         # Something is wrong with this execution. Return to action table.
         messages.error(

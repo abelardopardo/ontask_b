@@ -12,9 +12,8 @@
   <p class="text-center">{% trans 'Payload:' %}</p>
   <pre class="shadow border border-dark">{{ json_pretty }}</pre>
   <div class="text-center">
-  <a href="{{request.META.HTTP_REFERER}}"
-       class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
-    </div>
+    <a class="shadow btn btn-outline-dark spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
+  </div>
 </div>
 {% endblock container %}
 

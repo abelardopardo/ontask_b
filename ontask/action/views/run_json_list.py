@@ -5,11 +5,11 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
-from ontask.action.forms import JSONListActionForm
+from ontask.action import forms
 from ontask.action.payloads import JSONListPayload, set_action_payload
 from ontask.action.send import send_json_list
 from ontask.models import Action, Log, Workflow
-from ontask.tasks import run_task
+from ontask.tasks import run
 
 
 def run_json_list_action(
@@ -30,7 +30,7 @@ def run_json_list_action(
     action_info = JSONListPayload({'action_id': action.id})
 
     # Create the form to ask for the email subject and other information
-    form = JSONListActionForm(req.POST or None, form_info=action_info)
+    form = forms.JSONListActionRunForm(req.POST or None, form_info=action_info)
 
     if req.method == 'POST' and form.is_valid():
         # Log the event
@@ -40,7 +40,7 @@ def run_json_list_action(
             exported_workflow=action_info['export_wf'])
 
         # Send the objects
-        run_task.delay(req.user.id, log_item.id, action_info.get_store())
+        run.delay(req.user.id, log_item.id, action_info.get_store())
 
         # Reset object to carry action info throughout dialogs
         set_action_payload(req.session)

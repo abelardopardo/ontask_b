@@ -12,7 +12,7 @@ from django.core.cache import cache
 
 from ontask import models
 from ontask.action import payloads
-from ontask.tasks.basic import logger, run_task
+from ontask.tasks.basic import logger, run
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
 
@@ -211,7 +211,7 @@ def execute_scheduled_actions_task(debug: bool):
                         s_item.action.action_type](s_item)
 
                 if log_item:
-                    run_result = run_task(
+                    run_result = run(
                         s_item.user.id,
                         log_item.id,
                         action_info.get_store())

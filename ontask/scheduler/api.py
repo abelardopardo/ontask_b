@@ -10,7 +10,7 @@ from ontask.scheduler.serializers import (
 )
 
 
-class ScheduledActionAPIListCreate(generics.ListCreateAPIView):
+class ScheduledOperationAPIListCreate(generics.ListCreateAPIView):
     """
     get:
     Return the list of scheduled actions
@@ -35,13 +35,13 @@ class ScheduledActionAPIListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         if self.request.user.is_superuser:
-            # Superuser is allowed to create ScheduledActions for any user
+            # Superuser is allowed to create ScheduledOperations for any user
             serializer.save()
         else:
             serializer.save(user=self.request.user)
 
 
-class ScheduledActionAPIRetrieveUpdateDestroy(
+class ScheduledOperationAPIRetrieveUpdateDestroy(
     generics.RetrieveUpdateDestroyAPIView
 ):
     """
@@ -69,7 +69,7 @@ class ScheduledActionAPIRetrieveUpdateDestroy(
             )
 
 
-class ScheduledActionEmailAPIListCreate(ScheduledActionAPIListCreate):
+class ScheduledOperationEmailAPIListCreate(ScheduledOperationAPIListCreate):
     """
     get:
     Return the list of scheduled actions
@@ -96,7 +96,7 @@ class ScheduledActionEmailAPIListCreate(ScheduledActionAPIListCreate):
         ).distinct()
 
 
-class ScheduledActionJSONAPIListCreate(ScheduledActionAPIListCreate):
+class ScheduledOperationJSONAPIListCreate(ScheduledOperationAPIListCreate):
     """
     get:
     Return the list of scheduled actions
@@ -124,7 +124,7 @@ class ScheduledActionJSONAPIListCreate(ScheduledActionAPIListCreate):
 
 
 class ScheduledEmailAPIRetrieveUpdateDestroy(
-    ScheduledActionAPIRetrieveUpdateDestroy
+    ScheduledOperationAPIRetrieveUpdateDestroy
 ):
     """
     get:
@@ -157,7 +157,7 @@ class ScheduledEmailAPIRetrieveUpdateDestroy(
 
 
 class ScheduledJSONAPIRetrieveUpdateDestroy(
-    ScheduledActionAPIRetrieveUpdateDestroy
+    ScheduledOperationAPIRetrieveUpdateDestroy
 ):
     """
     get:

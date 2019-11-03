@@ -14,7 +14,7 @@ from ontask import is_correct_email, models
 from ontask.dataops.sql.row_queries import get_rows
 
 
-class ScheduledActionSerializer(serializers.ModelSerializer):
+class ScheduledOperationSerializer(serializers.ModelSerializer):
     """Serializer to take care of a few fields and the item column."""
 
     item_column = serializers.CharField(
@@ -188,7 +188,7 @@ class ScheduledActionSerializer(serializers.ModelSerializer):
             'payload')
 
 
-class ScheduledEmailSerializer(ScheduledActionSerializer):
+class ScheduledEmailSerializer(ScheduledOperationSerializer):
     """Validate the presence of certain fields."""
 
     def extra_validation(self, validated_data):
@@ -247,7 +247,7 @@ class ScheduledEmailSerializer(ScheduledActionSerializer):
         return act, execute, column, exclude, payload
 
 
-class ScheduledJSONSerializer(ScheduledActionSerializer):
+class ScheduledJSONSerializer(ScheduledOperationSerializer):
     """Class to add an extra check for the presence of a token."""
 
     def extra_validation(self, validated_data):
