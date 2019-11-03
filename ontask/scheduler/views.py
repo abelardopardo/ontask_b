@@ -190,7 +190,6 @@ def finish_scheduling(
     return services.schedule_crud_factory.crud_finish(
         payload.get('operation_type'),
         request=request,
-        schedule_item=None,
         payload=payload)
 
 

@@ -65,9 +65,9 @@ urlpatterns = [
     path('item_filter/', views.run_action_item_filter, name='item_filter'),
 
     #
-    # URLs to use when action finishes run
+    # URL to use when action finishes run
     #
-    path('email_done/', views.run_email_done, name='email_done'),
+    path('run_done/', views.run_done, name='run_done'),
     path('zip_done/', views.run_zip_done, name='zip_done'),
     path('zip_export/', views.action_zip_export, name='zip_export'),
     path('json_done/', views.run_json_done, name='json_done'),

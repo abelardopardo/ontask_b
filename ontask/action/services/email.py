@@ -18,7 +18,7 @@ from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.action import forms, payloads
-from ontask.action.services.run_producer_base import ActionRunServiceBase
+from ontask.action.services.run_producer_base import ActionServiceRunBase
 
 import ontask.settings
 from ontask import is_correct_email, simplify_datetime_str, models
@@ -309,7 +309,7 @@ def _deliver_msg_burst(
 def send_emails(
     user,
     action: Action,
-    action_info: Dict,
+    payload: Dict,
     log_item: Optional[Log] = None,
 ) -> List[str]:
     """Send action content evaluated for each row.
@@ -324,27 +324,27 @@ def send_emails(
     :param user: User object that executed the action
     :param action: Action from where to take the messages
     :param log_item: Log object to store results
-    :param action_info: Dictionary key, value as defined in EmailPayload
+    :param payload: Dictionary key, value as defined in EmailPayload
 
     :return: List of strings with the "to" fields used.
     """
     # Evaluate the action string, evaluate the subject, and get the value of
     # the email column.
-    item_column = action.workflow.columns(pk=action_info['item_column'])
+    item_column = action.workflow.columns.get(pk=payload['item_column'])
     action_evals = evaluate_action(
         action,
-        extra_string=action_info['subject'],
+        extra_string=payload['subject'],
         column_name=item_column.name,
-        exclude_values=action_info['exclude_values'])
+        exclude_values=payload.get('exclude_values'))
 
     # Turn cc_email and bcc email into lists
-    action_info['cc_email'] = action_info['cc_email'].split()
-    action_info['bcc_email'] = action_info['bcc_email'].split()
+    payload['cc_email'] = payload['cc_email'].split()
+    payload['bcc_email'] = payload['bcc_email'].split()
 
-    _check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
+    _check_cc_lists(payload['cc_email'], payload['bcc_email'])
 
     track_col_name = ''
-    if action_info['track_read']:
+    if payload['track_read']:
         track_col_name = _create_track_column(action)
         # Get the log item payload to store the tracking column
         log_item.payload['track_column'] = track_col_name
@@ -355,12 +355,12 @@ def send_emails(
         action,
         action_evals,
         track_col_name,
-        action_info,
+        payload,
     )
 
     _deliver_msg_burst(msgs)
 
-    if action_info['send_confirmation']:
+    if payload['send_confirmation']:
         # Confirmation message requested
         _send_confirmation_message(user, action, len(msgs))
 
@@ -428,12 +428,12 @@ def send_list_email(
     return []
 
 
-class ActionRunServiceEmail(ActionRunServiceBase):
+class ActionServiceRunEmail(ActionServiceRunBase):
     """Class to serive running an email action."""
 
     def __init__(self):
         """Assign """
-        super().__init__(forms.EmailActionRunForm, payloads.EmailPayload)
+        super().__init__(forms.EmailActionRunForm)
         # self.info_initial = {'post_url': reverse('action:email_done')}
         self.template = 'action/request_email_data.html'
         self.log_event = models.Log.ACTION_RUN_EMAIL
