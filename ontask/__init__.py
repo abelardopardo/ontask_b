@@ -21,7 +21,7 @@ __all__ = [
     'OnTaskSharedState'
 ]
 
-__version__ = 'B.6.1.2'
+__version__ = 'B.6.1.3'
 
 app_config = 'ontask.apps.OnTaskConfig'
 
