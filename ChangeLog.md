@@ -1,3 +1,9 @@
+## 6.1.3 (2019-11-4)
+
+### Fixed
+
+- Error preventing RUBRIC actions to execute
+
 ## 6.1.2 (2019-11-2)
 
 ### Fixed
