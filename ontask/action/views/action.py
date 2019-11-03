@@ -16,15 +16,15 @@ from django.views import generic
 
 from ontask import simplify_datetime_str
 from ontask.action.forms import ActionForm, ActionUpdateForm
-from ontask.action.payloads import set_action_payload
 from ontask.action.views.edit_personalized import edit_action_out
 from ontask.action.views.edit_rubric import edit_action_rubric
 from ontask.action.views.edit_survey import edit_action_in
+from ontask.core import SessionPayload
 from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.core.views import under_construction
-from ontask.models import Action, Log, Workflow
+from ontask import models
 
 
 class ActionTable(tables.Table):
@@ -90,7 +90,7 @@ class ActionTable(tables.Table):
     class Meta(object):
         """Define model, fields and ordering."""
 
-        model = Action
+        model = models.Action
         fields = (
             'name',
             'description_text',
@@ -115,7 +115,7 @@ def save_action_form(
     request: HttpRequest,
     form: Union[ActionForm, ActionUpdateForm],
     template_name: str,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> JsonResponse:
     """Save information from the form to manipulate condition/filter.
 
@@ -136,7 +136,7 @@ def save_action_form(
         if not form.has_changed():
             return JsonResponse({'html_redirect': None})
 
-        if Action.TODO_LIST == form.cleaned_data.get('action_type'):
+        if models.Action.TODO_LIST == form.cleaned_data.get('action_type'):
             # To be implemented
             return JsonResponse(
                 {'html_redirect': reverse('under_construction')})
@@ -148,11 +148,11 @@ def save_action_form(
             # Action is New. Update certain vars
             action_item.workflow = workflow
             action_item.save()
-            log_type = Log.ACTION_CREATE
+            log_type = models.Log.ACTION_CREATE
             return_url = reverse('action:edit', kwargs={'pk': action_item.id})
         else:
             action_item.save()
-            log_type = Log.ACTION_UPDATE
+            log_type = models.Log.ACTION_UPDATE
             return_url = reverse('action:index')
 
         action_item.log(request.user, log_type)
@@ -171,7 +171,7 @@ def save_action_form(
 def action_index(
     request: HttpRequest,
     wid: Optional[int] = None,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Show all the actions attached to the workflow.
 
@@ -182,8 +182,7 @@ def action_index(
     :return: HTTP response
     """
     # Reset object to carry action info throughout dialogs
-    set_action_payload(request.session)
-    request.session.save()
+    SessionPayload.flush(request.session)
 
     return render(
         request,
@@ -233,7 +232,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
     @DynamicAttrs
     """
 
-    model = Action
+    model = models.Action
 
     template_name = 'action/includes/partial_action_update.html'
 
@@ -241,7 +240,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
 
     form_class = ActionUpdateForm
 
-    def get_object(self, queryset=None) -> Action:
+    def get_object(self, queryset=None) -> models.Action:
         """Access the Action object being manipulated."""
         act_obj = super().get_object(queryset=queryset)
         if act_obj.workflow.id != self.request.session['ontask_workflow_id']:
@@ -281,8 +280,8 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
 def edit_action(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> HttpResponse:
     """Invoke the specific edit view.
 
@@ -291,14 +290,14 @@ def edit_action(
     :return: HTML response
     """
     edit_function_dict = {
-        Action.PERSONALIZED_TEXT: edit_action_out,
-        Action.PERSONALIZED_CANVAS_EMAIL: edit_action_out,
-        Action.PERSONALIZED_JSON: edit_action_out,
-        Action.RUBRIC_TEXT: edit_action_rubric,
-        Action.SEND_LIST: edit_action_out,
-        Action.SEND_LIST_JSON: edit_action_out,
-        Action.SURVEY: edit_action_in,
-        Action.TODO_LIST: under_construction,
+        models.Action.PERSONALIZED_TEXT: edit_action_out,
+        models.Action.PERSONALIZED_CANVAS_EMAIL: edit_action_out,
+        models.Action.PERSONALIZED_JSON: edit_action_out,
+        models.Action.RUBRIC_TEXT: edit_action_rubric,
+        models.Action.SEND_LIST: edit_action_out,
+        models.Action.SEND_LIST_JSON: edit_action_out,
+        models.Action.SURVEY: edit_action_in,
+        models.Action.TODO_LIST: under_construction,
     }
 
     return edit_function_dict[action.action_type](request, workflow, action)
@@ -310,8 +309,8 @@ def edit_action(
 def delete_action(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> JsonResponse:
     """Process AJAX request to delete an action.
 
@@ -324,7 +323,7 @@ def delete_action(
     # JSON response object
     # Get the appropriate action object
     if request.method == 'POST':
-        action.log(request.user, Log.ACTION_DELETE)
+        action.log(request.user, models.Log.ACTION_DELETE)
         action.delete()
         return JsonResponse({'html_redirect': reverse('action:index')})
 

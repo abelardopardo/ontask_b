@@ -5,7 +5,7 @@ from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import Http404, HttpRequest, HttpResponse
+from django import http
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -17,9 +17,7 @@ from ontask.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.forms import ValueExcludeForm
-from ontask.action.payloads import set_action_payload
 from ontask.action.views.run_canvas_email import run_canvas_email_action
-from ontask.action.views.run_email import run_email_action
 from ontask.action.views.run_json import run_json_action
 from ontask.action.views.run_json_list import run_json_list_action
 from ontask.action.views.run_send_list import run_send_list_action
@@ -29,28 +27,26 @@ from ontask.core import SessionPayload
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Action, Log, Workflow
+from ontask import models
 from ontask.action import services
 
 fn_distributor = {
-    Action.PERSONALIZED_TEXT: run_email_action,
-    Action.PERSONALIZED_CANVAS_EMAIL: run_canvas_email_action,
-    Action.PERSONALIZED_JSON: run_json_action,
-    Action.RUBRIC_TEXT: run_email_action,
-    Action.SURVEY: run_survey_action,
-    Action.SEND_LIST: run_send_list_action,
-    Action.SEND_LIST_JSON: run_json_list_action,
+    models.Action.PERSONALIZED_CANVAS_EMAIL: run_canvas_email_action,
+    models.Action.PERSONALIZED_JSON: run_json_action,
+    models.Action.SURVEY: run_survey_action,
+    models.Action.SEND_LIST: run_send_list_action,
+    models.Action.SEND_LIST_JSON: run_json_list_action,
 }
 
 
 @user_passes_test(is_instructor)
 @get_action(pf_related='actions')
 def run_action(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
-) -> HttpResponse:
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
+) -> http.HttpResponse:
     """Run specific run action view depending on action type.
 
     If it is a Survey or todo, renders a table with all rows that
@@ -70,30 +66,44 @@ def run_action(
               + 'Ask your system administrator to enable message queueing.'))
         return redirect(reverse('action:index'))
 
-    if action.action_type not in fn_distributor:
-        # Incorrect type of action.
-        messages.error(
-            request,
-            _('Execution for this action is not allowed.'))
-        return redirect(reverse('action:index'))
-
-    # return fn_distributor[action.action_type](request, workflow, action)
-
     return services.action_run_request_factory.process_request(
         action.action_type,
         request=request,
-        action=action)
+        action=action,
+        prev_url=reverse('action:run', kwargs={'pk': action.id}))
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def run_done(
+    request: http.HttpRequest,
+    workflow: Optional[models.Workflow] = None
+) -> http.HttpResponse:
+    """Finish the create/edit operation of a scheduled operation"""
+    payload = SessionPayload(request.session)
+    if payload is None:
+        # Something is wrong with this execution. Return to action table.
+        messages.error(
+            request,
+            _('Incorrect action run invocation.'))
+        return redirect('action:index')
+
+    return services.action_run_request_factory.process_done(
+        payload.get('operation_type'),
+        request=request,
+        workflow=workflow,
+        payload=payload)
 
 
 @csrf_exempt
 @xframe_options_exempt
 @login_required
-def serve_action_lti(request: HttpRequest) -> HttpResponse:
+def serve_action_lti(request: http.HttpRequest) -> http.HttpResponse:
     """Serve an action accessed through LTI."""
     try:
         action_id = int(request.GET.get('id'))
     except Exception:
-        raise Http404()
+        raise http.Http404()
 
     return serve_action(request, action_id)
 
@@ -101,7 +111,10 @@ def serve_action_lti(request: HttpRequest) -> HttpResponse:
 @csrf_exempt
 @xframe_options_exempt
 @login_required
-def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
+def serve_action(
+    request: http.HttpRequest,
+    action_id: int
+) -> http.HttpResponse:
     """Serve the rendering of an action in a workflow for a given user.
 
     - uatn: User attribute name. The attribute to check for authentication.
@@ -122,14 +135,14 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
     user_attribute_name = request.GET.get('uatn', 'email')
 
     # Get the action object
-    action = Action.objects.filter(pk=int(action_id)).prefetch_related(
+    action = models.Action.objects.filter(pk=int(action_id)).prefetch_related(
         'conditions',
     ).first()
     if not action or (not action.serve_enabled) or (not action.is_active):
-        raise Http404
+        raise http.Http404
 
     if user_attribute_name not in action.workflow.get_column_names():
-        raise Http404
+        raise http.Http404
 
     try:
         if action.is_out:
@@ -140,14 +153,14 @@ def serve_action(request: HttpRequest, action_id: int) -> HttpResponse:
         else:
             response = serve_survey_row(request, action, user_attribute_name)
     except Exception:
-        raise Http404()
+        raise http.Http404()
 
     return response
 
 
 def serve_action_out(
     user,
-    action: Action,
+    action: models.Action,
     user_attribute_name: str,
 ):
     """Serve request for an action out.
@@ -174,11 +187,11 @@ def serve_action_out(
         # Log the event
         action.log(
             user,
-            Log.ACTION_SERVED_EXECUTE,
+            models.Log.ACTION_SERVED_EXECUTE,
             error=_('Error when evaluating conditions for user {0}').format(
                 user.email))
 
-        return HttpResponse(render_to_string(
+        return http.HttpResponse(render_to_string(
             'action/action_unavailable.html',
             {}))
 
@@ -194,20 +207,20 @@ def serve_action_out(
     # Log the event
     action.log(
         user,
-        Log.ACTION_SERVED_EXECUTE,
+        models.Log.ACTION_SERVED_EXECUTE,
         error=_('Error when evaluating conditions for user {0}').format(
             user.email))
 
     # Respond the whole thing
-    return HttpResponse(response)
+    return http.HttpResponse(response)
 
 
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def run_action_item_filter(
-    request: HttpRequest,
-    workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+    request: http.HttpRequest,
+    workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
     """Offer a select widget to tick items to exclude from selection.
 
     This is a generic Web function. It assumes that the session object has a
@@ -219,6 +232,8 @@ def run_action_item_filter(
     :param request: HTTP request (GET) with a session object and a dictionary
     with the right parameters. The selected values are stored in the field
     'exclude_values'.
+
+    :param: workflow: Workflow object being processed.
 
     :return: HTTP response
     """

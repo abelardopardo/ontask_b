@@ -3,7 +3,7 @@
 """Functions to save the different types of scheduled actions."""
 
 from datetime import datetime
-from typing import Dict, Type
+from typing import Dict, Type, Optional
 
 import pytz
 from django import http
@@ -25,21 +25,6 @@ class ScheduledOperationSaveBase(object):
         """Assign the form class."""
         self.form_class = form_class
 
-    def get_form(
-        self,
-        request: http.HttpRequest,
-        action: models.Action,
-        schedule_item: models.ScheduledOperation,
-        op_payload: SessionPayload,
-    ) -> forms.ScheduleBasicForm:
-        """Instantiate the form in the class."""
-        return self.form_class(
-            form_data=request.POST or None,
-            action=action,
-            instance=schedule_item,
-            columns=action.workflow.columns.filter(is_key=True),
-            form_info=op_payload)
-
     def process(
         self,
         operation_type: str,
@@ -56,7 +41,12 @@ class ScheduledOperationSaveBase(object):
             schedule_item,
             action)
 
-        form = self.get_form(request, action, schedule_item, op_payload)
+        form = self.form_class(
+            form_data=request.POST or None,
+            action=action,
+            instance=schedule_item,
+            columns=action.workflow.columns.filter(is_key=True),
+            form_info=op_payload)
         if request.method == 'POST' and form.is_valid():
             return self.process_post(request, schedule_item, op_payload)
 
@@ -85,8 +75,8 @@ class ScheduledOperationSaveBase(object):
     def finish(
         self,
         request: http.HttpRequest,
+        payload: SessionPayload,
         schedule_item: models.ScheduledOperation = None,
-        payload: SessionPayload = None,
     ) -> http.HttpResponse:
         """Finalize the creation of a scheduled operation.
 
@@ -187,7 +177,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
             return redirect('action:item_filter')
 
         # Go straight to the final step
-        return self.finish(request, schedule_item, op_payload)
+        return self.finish(request, op_payload, schedule_item)
 
 
 class SchedulerCRUDFactory(object):

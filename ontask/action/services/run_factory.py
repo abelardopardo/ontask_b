@@ -5,7 +5,7 @@
 from django.shortcuts import render
 
 from ontask import models
-from ontask.action.services.email import ActionRunServiceEmail
+from ontask.action.services.email import ActionServiceRunEmail
 
 class ActionRunRequestFactory(object):
     """Factory to run actions."""
@@ -29,7 +29,7 @@ class ActionRunRequestFactory(object):
             runner_obj = self._runners.get(action_type)
             if not runner_obj:
                 raise ValueError(action_type)
-            return runner_obj.process_request(**kwargs)
+            return runner_obj.process_request(action_type, **kwargs)
         except ValueError:
             return render(kwargs.get('request'), 'base.html', {})
 
@@ -52,4 +52,7 @@ class ActionRunRequestFactory(object):
 action_run_request_factory = ActionRunRequestFactory()
 action_run_request_factory.register_runner(
     models.Action.PERSONALIZED_TEXT,
-    ActionRunServiceEmail())
+    ActionServiceRunEmail())
+action_run_request_factory.register_runner(
+    models.Action.RUBRIC_TEXT,
+    ActionServiceRunEmail())
