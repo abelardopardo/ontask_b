@@ -5,10 +5,10 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
-from ontask.action.forms import SendListActionForm
+from ontask.action import forms
 from ontask.action.payloads import SendListPayload
 from ontask.models import Action, Log, Workflow
-from ontask.tasks import run_task
+from ontask.tasks import run
 
 html_body = """<!DOCTYPE html>
 <html>
@@ -40,7 +40,7 @@ def run_send_list_action(
     action_info = SendListPayload({'action_id': action.id})
 
     # Create the form to ask for the email subject and other information
-    form = SendListActionForm(
+    form = forms.SendListActionRunForm(
         req.POST or None,
         action=action,
         form_info=action_info)
@@ -58,7 +58,7 @@ def run_send_list_action(
             bcc_email=action_info['bcc_email'])
 
         # Send the emails!
-        run_task.delay(req.user.id, log_item.id, action_info.get_store())
+        run.delay(req.user.id, log_item.id, action_info.get_store())
 
         # Successful processing.
         return render(

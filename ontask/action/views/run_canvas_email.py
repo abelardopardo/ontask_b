@@ -15,16 +15,15 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from ontask.action.forms import CanvasEmailActionForm
+from ontask.action import forms
 from ontask.action.payloads import (
     CanvasEmailPayload, get_or_set_action_info, set_action_payload,
 )
-from ontask.action.send import send_canvas_emails
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, OAuthUserToken, Workflow
 from ontask.oauth.views import get_initial_token_step1, refresh_token
-from ontask.tasks import run_task
+from ontask.tasks import run
 
 
 def run_canvas_email_action(
@@ -55,7 +54,7 @@ def run_canvas_email_action(
     )
 
     # Create the form to ask for the email subject and other information
-    form = CanvasEmailActionForm(
+    form = forms.CanvasEmailActionRunForm(
         req.POST or None,
         column_names=[
             col.name for col in workflow.columns.filter(is_key=True)],
@@ -197,7 +196,7 @@ def run_canvas_email_done(
         status='Preparing to execute')
 
     # Send the emails!
-    run_task.delay(request.user.id, log_item.id, action_info.get_store())
+    run.delay(request.user.id, log_item.id, action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     set_action_payload(request.session)

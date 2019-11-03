@@ -40,10 +40,11 @@ def send_canvas_emails(
     """
     # Evaluate the action string, evaluate the subject, and get the value of
     # the email column.
+    item_column = action.workflow.columns(pk=action_info['item_column'])
     action_evals = evaluate_action(
         action,
         extra_string=action_info['subject'],
-        column_name=action_info['item_column'],
+        column_name=item_column.name,
         exclude_values=action_info['exclude_values'])
 
     # Get the oauth info

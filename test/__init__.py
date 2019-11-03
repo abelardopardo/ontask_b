@@ -6,9 +6,10 @@ import os
 import subprocess
 
 from ontask import OnTaskSharedState
+from ontask.core import SessionPayload
 import test
 from builtins import object, range, str
-from typing import Mapping, Optional
+from typing import Mapping, Optional, Dict
 
 import pandas as pd
 from django.conf import settings
@@ -33,7 +34,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ontask.action.payloads import set_action_payload
 from ontask.core.permissions import group_names
 from ontask.dataops.pandas import destroy_db_engine
 from ontask.dataops.pandas import check_wf_df
@@ -183,7 +183,7 @@ class OnTaskTestCase(TransactionTestCase):
         req_params: Optional[Mapping] = None,
         meta = None,
         is_ajax: Optional[bool] = False,
-        session_payload: Optional[Mapping] = None,
+        session_payload: Optional[Dict] = None,
         **kwargs
     ) -> HttpResponse:
         """Create a request and send it to a processing function.
@@ -221,7 +221,7 @@ class OnTaskTestCase(TransactionTestCase):
         request = self.add_middleware(request)
 
         if session_payload:
-            set_action_payload(request.session, session_payload)
+            SessionPayload(request.session, session_payload)
 
         view_func = resolve(url_str).func
         return view_func(request, **url_params)

@@ -316,15 +316,12 @@ def get_or_set_action_info(
     if action_info:
         return payloadclass(action_info)
 
-    # if not initial_values:
-    #     # Nothing found in the session and no initial values given.
-    #     return None
-    #
-    # Create the object with the given class
-    action_info = payloadclass({
-        'action_id': action.id,
-        'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-        'post_url': reverse('action:email_done')})
+    if not initial_values:
+        # Nothing found in the session and no initial values given.
+        return None
+
+    # Create the object with the given class and initial values
+    action_info = payloadclass(initial_values)
     session[PAYLOAD_SESSION_DICTIONARY] = action_info.get_store()
     session.save()
 

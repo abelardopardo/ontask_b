@@ -11,14 +11,14 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from ontask.action.forms import EmailActionForm
+from ontask.action import forms
 from ontask.action.payloads import (
     EmailPayload, get_or_set_action_info, set_action_payload,
 )
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
-from ontask.tasks import run_task
+from ontask.tasks import run
 
 
 def run_email_action(
@@ -41,13 +41,13 @@ def run_email_action(
         initial_values={
             'action_id': action.id,
             'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:email_done')})
+            'post_url': reverse('action:email_done')},
+        action=action)
 
     # Create the form to ask for the email subject and other information
-    form = EmailActionForm(
+    form = forms.EmailActionRunForm(
         req.POST or None,
-        column_names=[
-            col.name for col in workflow.columns.filter(is_key=True)],
+        columns=workflow.columns.filter(is_key=True),
         action=action,
         form_info=action_info)
 
@@ -122,7 +122,7 @@ def run_email_done(
         item_column=action_info['item_column'])
 
     # Send the emails!
-    run_task.delay(request.user.id, log_item.id, action_info.get_store())
+    run.delay(request.user.id, log_item.id, action_info.get_store())
 
     # Reset object to carry action info throughout dialogs
     set_action_payload(request.session)

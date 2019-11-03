@@ -14,7 +14,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask import models
-from ontask.action import payloads
+from ontask.core import SessionPayload
 from ontask.scheduler import forms, services
 
 
@@ -30,7 +30,7 @@ class ScheduledOperationSaveBase(object):
         request: http.HttpRequest,
         action: models.Action,
         schedule_item: models.ScheduledOperation,
-        op_payload: Dict,
+        op_payload: SessionPayload,
     ) -> forms.ScheduleBasicForm:
         """Instantiate the form in the class."""
         return self.form_class(
@@ -76,7 +76,7 @@ class ScheduledOperationSaveBase(object):
         self,
         request: http.HttpRequest,
         schedule_item: models.ScheduledOperation,
-        op_payload: Dict,
+        op_payload: SessionPayload,
     ):
         """Process a POST request."""
         del request, schedule_item, op_payload
@@ -86,7 +86,7 @@ class ScheduledOperationSaveBase(object):
         self,
         request: http.HttpRequest,
         schedule_item: models.ScheduledOperation = None,
-        payload: Dict = None,
+        payload: SessionPayload = None,
     ) -> http.HttpResponse:
         """Finalize the creation of a scheduled operation.
 
@@ -105,10 +105,10 @@ class ScheduledOperationSaveBase(object):
         # Get the scheduled operation
         s_item_id = payload.pop('schedule_id', None)
         action = models.Action.objects.get(pk=payload.pop('action_id'))
-        column_name = payload.pop('item_column', None)
+        column_pk = payload.pop('item_column', None)
         column = None
-        if column_name:
-            column = action.workflow.columns.filter(name=column_name).first()
+        if column_pk:
+            column = action.workflow.columns.filter(pk=column_pk).first()
 
         # Remove some parameters from the payload
         for key in [
@@ -137,8 +137,7 @@ class ScheduledOperationSaveBase(object):
                 user=request.user,
                 workflow=action.workflow,
                 action=action,
-                operation_type=operation_type,
-                item_column=column)
+                operation_type=operation_type)
 
         # Check for exclude
         schedule_item.name = payload.pop('name')
@@ -150,14 +149,13 @@ class ScheduledOperationSaveBase(object):
         schedule_item.exclude_values = payload.pop('exclude_values', [])
 
         schedule_item.status = models.scheduler.STATUS_PENDING
-        schedule_item.payload = payload
+        schedule_item.payload = payload.get_store()
         schedule_item.save()
 
         schedule_item.log(models.Log.SCHEDULE_EDIT)
 
         # Reset object to carry action info throughout dialogs
-        payloads.set_action_payload(request.session)
-        request.session.save()
+        SessionPayload.flush(request.session)
 
         # Successful processing.
         tdelta = services.create_timedelta_string(
@@ -176,7 +174,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
         self,
         request: http.HttpRequest,
         schedule_item: models.ScheduledOperation,
-        op_payload: Dict,
+        op_payload: SessionPayload,
     ) -> http.HttpResponse:
         """Process the valid form."""
         if op_payload.get('confirm_items'):
@@ -184,7 +182,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
             op_payload['button_label'] = ugettext('Schedule')
             op_payload['valuerange'] = 2
             op_payload['step'] = 2
-            payloads.set_action_payload(request.session, op_payload)
+            op_payload.store_in_session(request.session)
 
             return redirect('action:item_filter')
 
@@ -270,16 +268,16 @@ class SchedulerCRUDFactory(object):
 schedule_crud_factory = SchedulerCRUDFactory()
 schedule_crud_factory.register_processor(
     models.scheduler.RUN_ACTION + '.' + models.Action.PERSONALIZED_TEXT,
-    ScheduledOperationSaveActionRun(forms.EmailScheduleForm))
+    ScheduledOperationSaveActionRun(forms.ScheduleEmailForm))
 schedule_crud_factory.register_processor(
     models.scheduler.RUN_ACTION + '.' + models.Action.PERSONALIZED_JSON,
-    ScheduledOperationSaveActionRun(forms.JSONScheduleForm))
+    ScheduledOperationSaveActionRun(forms.ScheduleJSONForm))
 schedule_crud_factory.register_processor(
     models.scheduler.RUN_ACTION + '.' + models.Action.SEND_LIST,
-    ScheduledOperationSaveActionRun(forms.SendListScheduleForm))
+    ScheduledOperationSaveActionRun(forms.ScheduleSendListForm))
 schedule_crud_factory.register_processor(
     models.scheduler.RUN_ACTION + '.' + models.Action.SEND_LIST_JSON,
-    ScheduledOperationSaveActionRun(forms.JSONListScheduleForm))
+    ScheduledOperationSaveActionRun(forms.ScheduleJSONListForm))
 schedule_crud_factory.register_processor(
     models.scheduler.RUN_ACTION + '.' + models.Action.RUBRIC_TEXT,
-    ScheduledOperationSaveActionRun(forms.EmailScheduleForm))
+    ScheduledOperationSaveActionRun(forms.ScheduleEmailForm))

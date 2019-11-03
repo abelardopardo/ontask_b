@@ -19,7 +19,7 @@ from ontask.core.celery import app
 from ontask import models
 
 
-class ScheduledActionTaskTestCase(test.OnTaskTestCase):
+class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
     """Test the functions to execute through celery."""
 
     fixtures = ['schedule_actions']

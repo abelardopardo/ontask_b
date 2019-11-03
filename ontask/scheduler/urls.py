@@ -46,12 +46,12 @@ urlpatterns = [
     # API
     path(
         'scheduled_email/',
-        api.ScheduledActionEmailAPIListCreate.as_view(),
+        api.ScheduledOperationEmailAPIListCreate.as_view(),
         name='api_scheduled_email'),
 
     path(
         'scheduled_json/',
-        api.ScheduledActionJSONAPIListCreate.as_view(),
+        api.ScheduledOperationJSONAPIListCreate.as_view(),
         name='api_scheduled_json'),
 
     # Get, update content or destroy scheduled actions
