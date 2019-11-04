@@ -70,11 +70,6 @@ urlpatterns = [
     path('run_done/', views.run_done, name='run_done'),
     path('zip_done/', views.run_zip_done, name='zip_done'),
     path('zip_export/', views.action_zip_export, name='zip_export'),
-    path('json_done/', views.run_json_done, name='json_done'),
-    path(
-        'canvas_email_done/',
-        views.run_canvas_email_done,
-        name='canvas_email_done'),
 
     #
     # ACTION IN EDIT PAGE

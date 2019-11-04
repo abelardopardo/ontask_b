@@ -17,10 +17,6 @@ from ontask.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.forms import ValueExcludeForm
-from ontask.action.views.run_canvas_email import run_canvas_email_action
-from ontask.action.views.run_json import run_json_action
-from ontask.action.views.run_json_list import run_json_list_action
-from ontask.action.views.run_send_list import run_send_list_action
 from ontask.action.views.run_survey import run_survey_action
 from ontask.action.views.serve_survey import serve_survey_row
 from ontask.core import SessionPayload
@@ -31,11 +27,7 @@ from ontask import models
 from ontask.action import services
 
 fn_distributor = {
-    models.Action.PERSONALIZED_CANVAS_EMAIL: run_canvas_email_action,
-    models.Action.PERSONALIZED_JSON: run_json_action,
     models.Action.SURVEY: run_survey_action,
-    models.Action.SEND_LIST: run_send_list_action,
-    models.Action.SEND_LIST_JSON: run_json_list_action,
 }
 
 

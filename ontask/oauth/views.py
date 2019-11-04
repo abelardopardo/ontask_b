@@ -3,29 +3,34 @@
 """Functions to handle OAuth2 authentication."""
 
 from datetime import timedelta
+from typing import Dict
 
 import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
+from django import http
 from django.shortcuts import redirect, reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
-from ontask.action.payloads import get_action_payload
+from ontask.core import SessionPayload
 from ontask.core.permissions import is_instructor
-from ontask.models import OAuthUserToken
+from ontask import models
 
 return_url_key = 'oauth_return_url'
 oauth_hash_key = 'oauth_hash'
 callback_url_key = 'callback_url'
 
 
-def get_initial_token_step1(request, oauth_info, return_url):
+def get_initial_token_step1(
+    request: http.HttpRequest,
+    oauth_info: Dict,
+    return_url: str,
+) -> http.HttpResponse:
     """Get initial token from the OAuth server.
 
     :param request: Received request
@@ -121,7 +126,7 @@ def refresh_token(user_token, oauth_info):
 
 
 @user_passes_test(is_instructor)
-def callback(request: WSGIRequest) -> HttpResponse:
+def callback(request: WSGIRequest) -> http.HttpResponse:
     """Process the call received from the server.
 
     This is supposed to contain the token so it is saved to the database and
@@ -132,7 +137,7 @@ def callback(request: WSGIRequest) -> HttpResponse:
     :return: Redirection to the stored page
     """
     # Get the payload from the session
-    payload = get_action_payload(request.session)
+    payload = SessionPayload(request.session)
 
     # If there is no payload, something went wrong.
     if payload is None:
@@ -197,7 +202,7 @@ def callback(request: WSGIRequest) -> HttpResponse:
     response_data = response.json()
 
     # Create the new token for the user
-    utoken = OAuthUserToken(
+    utoken = models.OAuthUserToken(
         user=request.user,
         instance_name=oauth_instance,
         access_token=response_data['access_token'],
