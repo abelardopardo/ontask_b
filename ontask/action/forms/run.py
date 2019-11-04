@@ -69,8 +69,8 @@ class ExportWorkflowBase(ontask_forms.FormWithPayload):
         label=_('Download a snapshot of the workflow?'),
         help_text=_('A zip file is useful to review the emails sent.'))
 
-    def __init__(self, *args, **kargs):
-        super().__init__(*args, **kargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         self.set_field_from_dict('export_wf')
 
@@ -90,8 +90,8 @@ class EmailSubjectFormBase(ontask_forms.FormWithPayload):
         required=True,
         label=_('Email subject'))
 
-    def __init__(self, *args, **kargs):
-        super().__init__(*args, **kargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.set_field_from_dict('subject')
 
     def clean(self):
@@ -112,8 +112,8 @@ class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
         label=_('Space-separated list of BCC emails'),
         required=False)
 
-    def __init__(self, *args, **kargs):
-        super().__init__(*args, **kargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.set_fields_from_dict(['subject', 'cc_email', 'bcc_email'])
 
     def clean(self):
@@ -165,10 +165,10 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
         required=False,
         label=_('Check/exclude items before sending?'))
 
-    def __init__(self, form_data, *args, **kargs):
+    def __init__(self, form_data, *args, **kwargs):
         """Store column names and adjust initial values."""
-        self.columns: List[str] = kargs.pop('columns')
-        super().__init__(form_data, *args, **kargs)
+        self.columns: List[str] = kwargs.pop('columns')
+        super().__init__(form_data, *args, **kwargs)
 
         self.fields['item_column'].queryset = self.columns
 
@@ -218,9 +218,9 @@ class JSONTokenForm(ontask_forms.FormWithPayload):
         required=True,
         widget=forms.Textarea(attrs={'rows': 1, 'cols': 80}))
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Modify the fields with the adequate information."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         self.set_field_from_dict('token')
         self.fields['token'].help_text = _(
@@ -236,7 +236,8 @@ class JSONTokenForm(ontask_forms.FormWithPayload):
 class EmailActionForm(
     ItemColumnConfirmFormBase,
     EmailSubjectFormBase,
-    EmailCCBCCFormBase):
+    EmailCCBCCFormBase
+):
     """Form to edit the Send Email action."""
 
     send_confirmation = forms.BooleanField(
@@ -249,9 +250,9 @@ class EmailActionForm(
         required=False,
         label=_('Track email reading in an extra column?'))
 
-    def __init__(self, form_data, *args, **kargs):
+    def __init__(self, form_data, *args, **kwargs):
         """Store column names and adjust initial values."""
-        super().__init__(form_data, *args, **kargs)
+        super().__init__(form_data, *args, **kwargs)
 
         self.fields['item_column'].label = _(
             'Column to use for target email address')
@@ -307,9 +308,9 @@ class EmailActionForm(
 class EmailActionRunForm(EmailActionForm, ExportWorkflowBase):
     """Form to edit the Send Email Action Run."""
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Adjust initial values."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['item_column'].label = _(
             'Column to use for target email address')
@@ -330,11 +331,17 @@ class SendListActionForm(EmailSubjectFormBase, EmailCCBCCFormBase):
 
     email_to = forms.CharField(label=_('Recipient'), required=True)
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Sort the fields."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         self.set_field_from_dict('email_to')
+
+        self.order_fields([
+            'email_to',
+            'subject',
+            'cc_email',
+            'bcc_email'])
 
 
     def clean(self):
@@ -352,9 +359,9 @@ class SendListActionForm(EmailSubjectFormBase, EmailCCBCCFormBase):
 class SendListActionRunForm(SendListActionForm, ExportWorkflowBase):
     """Form to edit the Send Email action Run."""
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Sort the fields."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
         self.order_fields([
             'email_to',
             'subject',
@@ -382,9 +389,9 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
         required=False,
         label=_('This ZIP will be uploaded to Moodle as feedback'))
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Store column names, action and payload, adjust fields."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['item_column'].label = _(
             'Key column to use for file name prefix (Participant id if '
@@ -464,9 +471,9 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
 class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
     """Form to process information to run a Canvas Email action."""
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Modify certain field data."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         if len(settings.CANVAS_INFO_DICT) > 1:
             # Add the target_url field if the system has more than one entry
@@ -499,9 +506,7 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
         form_data = super().clean()
 
         # Move data to the payload so that is ready to be used
-        self.store_field_in_dict('target_url', None)
-
-        target_url = self._FormWithPayload__form_info.get('target_url', None)
+        target_url = self.get_payload_field('target_url', None)
         if not target_url:
             self.store_field_in_dict(
                 'target_url',
@@ -511,6 +516,15 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
                 None,
                 _('No Canvas Service available for this action.'))
 
+        # The given column for email destination has to have integers
+        user_ids = get_rows(
+            self.action.workflow.get_data_frame_table_name(),
+            column_names=[form_data['item_column'].name],
+            filter_formula=self.action.get_filter().formula)
+        if any(not isinstance(row_item[0], int) for row_item in user_ids):
+            self.add_error(
+                'item_column',
+                _('The column does not contain valid Canvas IDs.'))
         return form_data
 
     class Meta(object):
@@ -523,9 +537,9 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
 class CanvasEmailActionRunForm(CanvasEmailActionForm, ExportWorkflowBase):
     """Form to process information to run a Canvas Email action."""
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Modify certain field data."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         self.order_fields([
             'item_column',
@@ -538,9 +552,9 @@ class CanvasEmailActionRunForm(CanvasEmailActionForm, ExportWorkflowBase):
 class JSONActionForm(ItemColumnConfirmFormBase, JSONTokenForm):
     """Form to edit information to run a JSON action."""
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Modify the fields with the adequate information."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['item_column'].label = _(
             'Column to exclude objects to send (empty to skip step)')
@@ -550,9 +564,9 @@ class JSONActionRunForm(JSONActionForm, ExportWorkflowBase,
 ):
     """Form to edit information to run a JSON action Run"""
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Modify the fields with the adequate information."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         self.order_fields([
             'item_column',
@@ -568,9 +582,9 @@ class JSONListActionForm(JSONTokenForm):
 
 class JSONListActionRunForm(JSONListActionForm, ExportWorkflowBase):
     """Form to edit information to run JSON List action"""
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Modify the fields with the adequate information."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         self.order_fields([
             'token',
