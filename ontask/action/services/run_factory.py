@@ -5,7 +5,13 @@
 from django.shortcuts import render
 
 from ontask import models
-from ontask.action.services.email import ActionServiceRunEmail
+from ontask.action.services.email import (
+    ActionServiceRunEmail,
+    ActionServiceRunEmailList,
+)
+from ontask.action.services.json import (
+    ActionServiceRunJSON, ActionServiceRunJSONList)
+from ontask.action.services.canvas_email import ActionServiceRunCanvasEmail
 
 class ActionRunRequestFactory(object):
     """Factory to run actions."""
@@ -56,3 +62,15 @@ action_run_request_factory.register_runner(
 action_run_request_factory.register_runner(
     models.Action.RUBRIC_TEXT,
     ActionServiceRunEmail())
+action_run_request_factory.register_runner(
+    models.Action.SEND_LIST,
+    ActionServiceRunEmailList())
+action_run_request_factory.register_runner(
+    models.Action.PERSONALIZED_JSON,
+    ActionServiceRunJSON())
+action_run_request_factory.register_runner(
+    models.Action.SEND_LIST_JSON,
+    ActionServiceRunJSONList())
+action_run_request_factory.register_runner(
+    models.Action.PERSONALIZED_CANVAS_EMAIL,
+    ActionServiceRunCanvasEmail())

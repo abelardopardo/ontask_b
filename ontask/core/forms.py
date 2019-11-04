@@ -73,10 +73,11 @@ class FormWithPayload(forms.Form):
     the fields in the form.
     """
 
-    def __init__(self, *args, **kargs):
-        self.__form_info = kargs.pop('form_info', {})
-        self.action = kargs.pop('action', None)
-        super().__init__(*args, **kargs)
+    def __init__(self, *args, **kwargs):
+        self.__form_info = kwargs.pop('form_info', {})
+        self.action = kwargs.pop('action', None)
+        kwargs.pop('columns', None)
+        super().__init__(*args, **kwargs)
 
     def get_payload_field(
         self,
@@ -110,10 +111,7 @@ class FormWithPayload(forms.Form):
         field_name: str,
         field_value: Optional[Any] = None
     ):
-        """Store the value of a field in the dictionary."""
-        if field_name not in self.fields:
-            return
-
+        """Store the value."""
         if field_value:
             self.__form_info[field_name] = field_value
         else:

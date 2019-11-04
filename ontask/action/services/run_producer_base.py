@@ -64,7 +64,7 @@ class ActionServiceRunBase(object):
         payload: SessionPayload,
     ) -> http.HttpResponse:
         """Process the VALID POST request."""
-        if payload['confirm_items']:
+        if payload.get('confirm_items'):
             # Add information to the session object to execute the next pages
             payload['button_label'] = ugettext('Send')
             payload['valuerange'] = 2

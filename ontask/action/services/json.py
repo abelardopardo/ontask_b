@@ -1,28 +1,29 @@
 # -*- coding: utf-8 -*-
 
-"""Function to send JSON objects to target URL in action."""
-
+"""Views to run JSON actions."""
 import datetime
 import json
-from typing import Dict, Mapping, Optional
+from typing import Mapping, Optional
 
+from celery.utils.log import get_task_logger
+from django.conf import settings
 import pytz
 import requests
-from django.conf import settings
 
-from ontask import OnTaskSharedState
-from ontask.action.evaluate.action import (
-    evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
+from ontask import OnTaskSharedState, models
+from ontask.action import forms
+from ontask.action.evaluate import (
+    evaluate_action, evaluate_row_action_out,
+    get_action_evaluation_context,
 )
-from ontask.core.celery import get_task_logger
-from ontask.models import Action, Log
+from ontask.action.services.run_producer_base import ActionServiceRunBase
 
 logger = get_task_logger('celery_execution')
 
 
 def _send_and_log_json(
     user,
-    action: Action,
+    action: models.Action,
     json_obj: str,
     headers: Mapping,
 ):
@@ -48,7 +49,7 @@ def _send_and_log_json(
     # Log seng object
     action.log(
         user,
-        Log.ACTION_JSON_SENT,
+        models.Log.ACTION_JSON_SENT,
         object=json.dumps(json_obj),
         status=status_val,
         json_sent_datetime=str(datetime.datetime.now(pytz.timezone(
@@ -57,9 +58,9 @@ def _send_and_log_json(
 
 def send_json(
     user,
-    action: Action,
+    action: models.Action,
     action_info: Mapping,
-    log_item: Optional[Log] = None,
+    log_item: Optional[models.Log] = None,
 ):
     """Send json objects to target URL.
 
@@ -107,9 +108,9 @@ def send_json(
 
 def send_json_list(
     user,
-    action: Action,
+    action: models.Action,
     action_info: Mapping,
-    log_item: Optional[Log] = None,
+    log_item: Optional[models.Log] = None,
 ):
     """Send single json object to target URL.
 
@@ -140,3 +141,22 @@ def send_json_list(
         })
 
     return []
+
+class ActionServiceRunJSON(ActionServiceRunBase):
+    """Class to serive running an email action."""
+
+    def __init__(self):
+        """Assign """
+        super().__init__(forms.JSONActionRunForm)
+        self.template = 'action/request_json_data.html'
+        self.log_event = models.Log.ACTION_RUN_JSON
+
+
+class ActionServiceRunJSONList(ActionServiceRunBase):
+    """Class to serive running an email action."""
+
+    def __init__(self):
+        """Assign """
+        super().__init__(forms.JSONListActionRunForm)
+        self.template = 'action/request_json_list_data.html'
+        self.log_event = models.Log.ACTION_RUN_JSON_LIST

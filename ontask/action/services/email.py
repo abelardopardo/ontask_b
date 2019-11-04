@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.action import forms, payloads
+from ontask.action import forms
 from ontask.action.services.run_producer_base import ActionServiceRunBase
 
 import ontask.settings
@@ -434,7 +434,15 @@ class ActionServiceRunEmail(ActionServiceRunBase):
     def __init__(self):
         """Assign """
         super().__init__(forms.EmailActionRunForm)
-        # self.info_initial = {'post_url': reverse('action:email_done')}
         self.template = 'action/request_email_data.html'
         self.log_event = models.Log.ACTION_RUN_EMAIL
 
+
+class ActionServiceRunEmailList(ActionServiceRunBase):
+    """Class to serive running an email action."""
+
+    def __init__(self):
+        """Assign """
+        super().__init__(forms.SendListActionRunForm)
+        self.template = 'action/request_send_list_data.html'
+        self.log_event = models.Log.ACTION_RUN_SEND_LIST

@@ -30,12 +30,6 @@ from ontask.action.views.run import (
     run_action, run_done, run_action_item_filter, serve_action,
     serve_action_lti,
 )
-from ontask.action.views.run_canvas_email import (
-    run_canvas_email_action, run_canvas_email_done,
-)
-from ontask.action.views.run_json import run_json_action, run_json_done
-from ontask.action.views.run_json_list import run_json_list_action
-from ontask.action.views.run_send_list import run_send_list_action
 from ontask.action.views.run_survey import (
     run_survey_action, run_survey_row, run_survey_ss, survey_thanks,
 )
