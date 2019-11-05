@@ -2,7 +2,7 @@
 
 """Base class for the Action Run Producer"""
 
-from typing import Any
+from typing import Any, Optional
 
 from django import http
 from django.shortcuts import render, redirect
@@ -77,18 +77,21 @@ class ActionServiceRunBase(object):
         return self.process_done(
             request,
             workflow=action.workflow,
-            payload=payload)
+            payload=payload,
+            action=action)
 
     def process_done(
         self,
         request: http.HttpRequest,
         workflow: models.Workflow,
         payload: SessionPayload,
+        action: Optional[models.Action] = None,
     ):
         # Get the information from the payload
-        action = workflow.actions.filter(pk=payload['action_id']).first()
         if not action:
-            return redirect('home')
+            action = workflow.actions.filter(pk=payload['action_id']).first()
+            if not action:
+                return redirect('home')
 
         log_item = action.log(request.user, **payload)
 

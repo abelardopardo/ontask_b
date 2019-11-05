@@ -28,13 +28,9 @@ from ontask.action.views.preview import (
 )
 from ontask.action.views.run import (
     run_action, run_done, run_action_item_filter, serve_action,
-    serve_action_lti,
-)
+    serve_action_lti, zip_action, action_zip_export)
 from ontask.action.views.run_survey import (
     run_survey_action, run_survey_row, run_survey_ss, survey_thanks,
-)
-from ontask.action.views.run_zip import (
-    action_zip_export, run_zip_done, zip_action,
 )
 from ontask.action.views.serve_survey import serve_survey_row
 from ontask.action.views.timeline import show_timeline

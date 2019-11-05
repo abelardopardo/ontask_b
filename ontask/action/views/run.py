@@ -3,9 +3,9 @@
 """Views to run and serve actions."""
 from typing import Optional
 
+from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django import http
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -13,6 +13,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
+from ontask import models
+from ontask.action import services
 from ontask.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
@@ -23,8 +25,6 @@ from ontask.core import SessionPayload
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask import models
-from ontask.action import services
 
 fn_distributor = {
     models.Action.SURVEY: run_survey_action,
@@ -85,6 +85,31 @@ def run_done(
         request=request,
         workflow=workflow,
         payload=payload)
+
+
+@user_passes_test(is_instructor)
+@get_action()
+def zip_action(
+    request: http.HttpRequest,
+    pk: int,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
+) -> http.HttpResponse:
+    """Request data to create a zip file.
+
+    Form asking for participant column, user file name column, file suffix,
+    if it is a ZIP for Moodle and confirm users step.
+
+    :param req: HTTP request (GET)
+    :param pk: Action key
+    :return: HTTP response
+    """
+    del workflow, pk
+    return services.action_run_request_factory.process_request(
+        models.action.ZIP_OPERATION,
+        request=request,
+        action=action,
+        prev_url=reverse('action:zip_action', kwargs={'pk': action.id}))
 
 
 @csrf_exempt
@@ -265,3 +290,59 @@ def run_action_item_filter(
         return redirect(payload['post_url'])
 
     return render(request, 'action/item_filter.html', context)
+
+
+@user_passes_test(is_instructor)
+@get_workflow(pf_related='actions')
+def action_zip_export(
+    request: http.HttpRequest,
+    workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
+    """Create a zip with the personalised text and return it as response.
+
+    :param request: Request object with a Dictionary with all the required
+    information
+    :return: Response (download)
+    """
+    # Get the payload from the session if not given
+    payload = SessionPayload(request.session)
+    if not payload:
+        # Something is wrong with this execution. Return to action table.
+        messages.error(request, _('Incorrect ZIP action invocation.'))
+        return redirect('action:index')
+
+    # Payload has the right keys
+    if any(
+        key_name not in payload.keys()
+        for key_name in [
+            'action_id', 'zip_for_moodle', 'item_column', 'user_fname_column',
+            'file_suffix']):
+        messages.error(
+            request,
+            _('Incorrect payload in ZIP action invocation'))
+        return redirect('action:index')
+
+    # Get the action
+    action = workflow.actions.filter(pk=payload['action_id']).first()
+    if not action:
+        return redirect('home')
+
+    item_column = workflow.columns.get(pk=payload['item_column'])
+    if not item_column:
+        messages.error(
+            request,
+            _('Incorrect payload in ZIP action invocation'))
+        return redirect('action:index')
+
+    user_fname_column = None
+    if payload['user_fname_column']:
+        user_fname_column = workflow.columns.get(
+            pk=payload['user_fname_column'])
+
+    # Create the ZIP with the eval data tuples and return it for download
+    return services.create_and_send_zip(
+        request.session,
+        action,
+        item_column,
+        user_fname_column,
+        payload)

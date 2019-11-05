@@ -315,8 +315,6 @@ class ActionServiceRunCanvasEmail(ActionServiceRunBase):
         payload: SessionPayload,
     ) -> http.HttpResponse:
         """Process the VALID POST request."""
-        # Request is a POST and is valid
-
         if payload.get('confirm_items'):
             # Create a dictionary in the session to carry over all the
             # information to execute the next pages
