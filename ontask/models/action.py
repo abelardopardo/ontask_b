@@ -32,6 +32,7 @@ VAR_USE_RES = [
 
 ACTION_TYPE_LENGTH = 64
 
+ZIP_OPERATION = 'create_zip_from_action'
 
 class ActionBase(NameAndDescription, CreateModifyFields):
     """Base abstract class for actions.

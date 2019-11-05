@@ -68,7 +68,6 @@ urlpatterns = [
     # URL to use when action finishes run
     #
     path('run_done/', views.run_done, name='run_done'),
-    path('zip_done/', views.run_zip_done, name='zip_done'),
     path('zip_export/', views.action_zip_export, name='zip_export'),
 
     #

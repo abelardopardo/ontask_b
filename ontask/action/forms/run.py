@@ -373,7 +373,8 @@ class SendListActionRunForm(SendListActionForm, ExportWorkflowBase):
 class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
     """Form to create a ZIP."""
 
-    user_fname_column = forms.ChoiceField(
+    user_fname_column = forms.ModelChoiceField(
+        queryset=Column.objects.none(),
         label=_(
             'Column to use for file name prefix (Full name if Moodle ZIP)'),
         required=False)
@@ -403,23 +404,25 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
             'zip_for_moodle'])
 
         # Get the initial values for certain fields
-        user_fname_column = self.fields['user_fname_column'].initial
+        # user_fname_column = self.fields['user_fname_column'].initial
+        #
+        # ufn_field = self.fields['user_fname_column']
+        # if user_fname_column:
+        #     ufn_field.choices = [(col.name, col.name) for col in self.columns]
+        #     ufn_field.initial = user_fname_column
+        # else:
+        #     ufn_field.choices = [('', '---')] + [
+        #         (col.name, col.name) for col in self.columns]
+        #     ufn_field.initial = ('', '---')
 
-        ufn_field = self.fields['user_fname_column']
-        if user_fname_column:
-            ufn_field.choices = [(col.name, col.name) for col in self.columns]
-            ufn_field.initial = user_fname_column
-        else:
-            ufn_field.choices = [('', '---')] + [
-                (col.name, col.name) for col in self.columns]
-            ufn_field.initial = ('', '---')
+        self.fields['user_fname_column'].queryset = self.columns
 
         self.order_fields([
             'item_column',
-            'confirm_items',
-            'user_fname_columns',
+            'user_fname_column',
             'file_suffix',
             'zip_for_moodle',
+            'confirm_items',
             'export_wf'])
 
     def clean(self):
@@ -427,8 +430,11 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
         form_data = super().clean()
 
         # Move data to the payload so that is ready to be used
+        pcolumn = form_data['user_fname_column']
+        self.store_field_in_dict(
+            'user_fname_column',
+            pcolumn.pk if pcolumn else None)
         self.store_fields_in_dict([
-            ('user_fname_column', None),
             ('file_suffix', None),
             ('zip_for_moodle', None)])
 
@@ -454,9 +460,9 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
             # Participant columns must match the pattern 'Participant [0-9]+'
             pcolumn_data = get_rows(
                 self.action.workflow.get_data_frame_table_name(),
-                column_names=[pcolumn])
+                column_names=[pcolumn.name])
             participant_error = any(
-                not participant_re.search(str(row[pcolumn]))
+                not participant_re.search(str(row[pcolumn.name]))
                 for row in pcolumn_data
             )
             if participant_error:

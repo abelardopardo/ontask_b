@@ -12,6 +12,7 @@ from ontask.action.services.email import (
 from ontask.action.services.json import (
     ActionServiceRunJSON, ActionServiceRunJSONList)
 from ontask.action.services.canvas_email import ActionServiceRunCanvasEmail
+from ontask.action.services.zip import ActionServiceRunZip
 
 class ActionRunRequestFactory(object):
     """Factory to run actions."""
@@ -22,6 +23,8 @@ class ActionRunRequestFactory(object):
 
     def register_runner(self, action_type: str, runner_obj):
         """Register the given object that will run the action type."""
+        if action_type in self._runners:
+            raise ValueError(action_type)
         self._runners[action_type] = runner_obj
 
     def process_request(self, action_type, **kwargs):
@@ -74,3 +77,6 @@ action_run_request_factory.register_runner(
 action_run_request_factory.register_runner(
     models.Action.PERSONALIZED_CANVAS_EMAIL,
     ActionServiceRunCanvasEmail())
+action_run_request_factory.register_runner(
+    models.action.ZIP_OPERATION,
+    ActionServiceRunZip())
