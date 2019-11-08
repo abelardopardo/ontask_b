@@ -4,12 +4,9 @@ import io
 import math
 import os
 import subprocess
-
-from ontask import OnTaskSharedState
-from ontask.core import SessionPayload
 import test
 from builtins import object, range, str
-from typing import Mapping, Optional, Dict
+from typing import Dict, Mapping, Optional
 
 import pandas as pd
 from django.conf import settings
@@ -34,9 +31,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
+from ontask import OnTaskSharedState
+from ontask.core import SessionPayload
 from ontask.core.permissions import group_names
-from ontask.dataops.pandas import destroy_db_engine
-from ontask.dataops.pandas import check_wf_df
+from ontask.dataops.pandas import check_wf_df, destroy_db_engine
 from ontask.models import Action, Workflow
 
 standard_library.install_aliases()

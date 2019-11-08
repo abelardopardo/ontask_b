@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Generic forms to be used in various placdes in the platform."""
-from typing import Dict, Optional, Any, List
+from typing import Any, Dict, List, Optional
 
 import pytz
 from django import forms

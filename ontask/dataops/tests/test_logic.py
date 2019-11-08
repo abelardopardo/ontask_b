@@ -4,10 +4,6 @@
 import datetime
 import io
 import os
-
-from django.contrib.auth import get_user_model
-
-from ontask.models.const import COLUMN_NAME_SIZE
 import test
 
 import pandas as pd
@@ -22,6 +18,7 @@ from ontask.dataops.pandas import (
 )
 from ontask.dataops.sql import get_rows
 from ontask.models import Action, Workflow
+from ontask.models.const import COLUMN_NAME_SIZE
 
 
 class DataopsMatrixManipulation(test.OnTaskTestCase):

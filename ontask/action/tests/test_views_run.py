@@ -2,8 +2,9 @@
 
 """Test views to run actions."""
 
-from datetime import timedelta
 import os
+import test
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -13,7 +14,6 @@ from rest_framework import status
 
 from ontask.core import SessionPayload
 from ontask.models import OAuthUserToken
-import test
 
 
 class ActionViewRunAction(test.OnTaskTestCase):

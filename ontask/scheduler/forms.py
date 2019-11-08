@@ -4,12 +4,12 @@
 
 import datetime
 
+import pytz
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
-import pytz
 
 from ontask.action import forms as action_forms
 from ontask.core import forms as ontask_forms

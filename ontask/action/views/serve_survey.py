@@ -9,6 +9,7 @@ from ontask.action.forms import FIELD_PREFIX
 from ontask.dataops.sql.row_queries import update_row
 from ontask.models import Action, ActionColumnConditionTuple
 
+
 def extract_survey_questions(
     action: Action, user_seed: str,
 ) -> List[ActionColumnConditionTuple]:

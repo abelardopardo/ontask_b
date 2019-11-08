@@ -7,7 +7,7 @@ from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http.request import HttpRequest
-from django.http.response import JsonResponse, HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -20,11 +20,12 @@ from ontask.action import services
 from ontask.action.forms import ValueExcludeForm
 from ontask.action.services import serve_survey_row
 from ontask.action.services.manager_factory import action_run_request_factory
-from ontask.core import SessionPayload, DataTablesServerSidePaging
+from ontask.core import DataTablesServerSidePaging, SessionPayload
 from ontask.core.celery import celery_is_up
-from ontask.core.decorators import get_action, get_workflow, ajax_required
+from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Workflow, Action
+from ontask.models import Action, Workflow
+
 
 @user_passes_test(is_instructor)
 @get_action(pf_related='actions')
@@ -356,4 +357,3 @@ def survey_thanks(request: HttpRequest) -> HttpResponse:
     :return: Http response
     """
     return render(request, 'thanks.html', {})
-

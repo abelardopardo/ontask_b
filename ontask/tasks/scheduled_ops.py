@@ -7,6 +7,7 @@ from typing import List, Tuple
 
 import pytz
 from celery import shared_task
+from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.core.cache import cache
 
@@ -14,6 +15,7 @@ from ontask import core, models
 from ontask.action.services.task import run
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
+logger = get_task_logger('celery_execution')
 
 
 def _update_item_status(

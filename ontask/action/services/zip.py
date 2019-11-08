@@ -14,10 +14,8 @@ from django.shortcuts import redirect, render
 from ontask import models
 from ontask.action import forms
 from ontask.action.evaluate.action import evaluate_action
-from ontask.action.services.manager_factory import (
-    action_run_request_factory,
-)
 from ontask.action.services.manager import ActionManagerBase
+from ontask.action.services.manager_factory import action_run_request_factory
 from ontask.core import SessionPayload
 from ontask.dataops.sql.row_queries import get_rows
 

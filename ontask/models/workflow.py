@@ -18,7 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 import ontask.dataops.pandas.database
 import ontask.dataops.pandas.datatypes
 from ontask.dataops.sql import delete_table
-from ontask.models.basic import NameAndDescription, CreateModifyFields
+from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.column import Column
 from ontask.models.logs import Log
 

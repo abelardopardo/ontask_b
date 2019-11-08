@@ -14,9 +14,8 @@ from django.core import mail
 from django.db import connection
 from psycopg2 import sql
 
-from ontask import OnTaskSharedState, tasks
+from ontask import OnTaskSharedState, models, tasks
 from ontask.core.celery import app
-from ontask import models
 
 
 class ScheduledOperationTaskTestCase(test.OnTaskTestCase):

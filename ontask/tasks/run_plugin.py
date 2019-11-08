@@ -5,10 +5,10 @@
 from celery import shared_task
 from django.utils.translation import ugettext
 
-from ontask.dataops.plugin.plugin_manager import run_plugin
-from ontask.models import Plugin
 from ontask.core.services import get_execution_items
+from ontask.dataops.plugin.plugin_manager import run_plugin
 from ontask.logs.services import get_log_item
+from ontask.models import Plugin
 
 
 @shared_task
