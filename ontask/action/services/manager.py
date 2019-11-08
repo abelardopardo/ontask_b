@@ -1,25 +1,22 @@
-# -*- coding: utf-8 -*-
-
-"""Base class for the Action Run Producer"""
-
-from typing import Any, Optional
+from typing import Any, Optional, Dict
 
 from django import http
 from django.shortcuts import render, redirect
 from django.urls.base import reverse
 from django.utils.translation import ugettext
 
-from ontask import models, tasks
+from ontask import models
+from ontask.action.services import task
 from ontask.core import SessionPayload
 
 
-class ActionServiceRunBase(object):
+class ActionManagerBase(object):
     """Base class to provide the service for the run views."""
 
     def __init__(self, form_class: Any):
         """Assign and initialize the main service parameters."""
         self.form_class = form_class
-        self.template = None
+        self.template = 'action/run_done.html'
         self.log_event = None
         self.run_task = None
 
@@ -74,13 +71,13 @@ class ActionServiceRunBase(object):
             return redirect('action:item_filter')
 
         # Go straight to the final step.
-        return self.process_done(
+        return self.process_request_done(
             request,
             workflow=action.workflow,
             payload=payload,
             action=action)
 
-    def process_done(
+    def process_request_done(
         self,
         request: http.HttpRequest,
         workflow: models.Workflow,
@@ -95,7 +92,10 @@ class ActionServiceRunBase(object):
 
         log_item = action.log(request.user, **payload)
 
-        tasks.run.delay(request.user.id, log_item.id, payload.get_store())
+        task.run.delay(
+            request.user.id,
+            log_item.id,
+            payload.get_store())
 
         # Reset object to carry action info throughout dialogs
         SessionPayload.flush(request.session)
@@ -103,5 +103,16 @@ class ActionServiceRunBase(object):
         # Successful processing.
         return render(
             request,
-            'action/action_done.html',
+            'action/run_done.html',
             {'log_id': log_item.id, 'download': payload['export_wf']})
+
+    def process_run(
+        self,
+        user,
+        action: models.Action,
+        payload: Dict,
+        log_item: models.Log,
+    ):
+        """Run the action."""
+        del user, action, payload
+        raise Exception('Incorrect invocation of run method.')

@@ -308,7 +308,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # Set the email column
         select = Select(self.selenium.find_element_by_id(
             'id_item_column'))
-        select.select_by_value('email')
+        select.select_by_visible_text('email')
 
         # Tick the track email
         self.selenium.find_element_by_id('id_track_read').click()
@@ -948,12 +948,12 @@ class ActionActionZip(test.OnTaskLiveTestCase):
         # Set column 1
         select = Select(self.selenium.find_element_by_id(
             'id_item_column'))
-        select.select_by_value('age')
+        select.select_by_visible_text('age')
 
         # Set column 2
         select = Select(self.selenium.find_element_by_id(
             'id_user_fname_column'))
-        select.select_by_value('age')
+        select.select_by_visible_text('age')
 
         # Click the next
         self.selenium.find_element_by_xpath(
@@ -967,7 +967,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
         # Set column 2
         select = Select(self.selenium.find_element_by_id(
             'id_user_fname_column'))
-        select.select_by_value('email')
+        select.select_by_visible_text('email')
 
         # Choose the Moodle option
         self.selenium.find_element_by_id('id_zip_for_moodle').click()

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""Views to run the personalized zip action."""
+"""Methods to process the personalized zip action run request."""
+
+import zipfile
 from datetime import datetime
 from io import BytesIO
 from typing import List, Optional, Tuple
-import zipfile
 
 from django import http
 from django.contrib.sessions.backends.base import SessionBase
@@ -13,7 +14,10 @@ from django.shortcuts import redirect, render
 from ontask import models
 from ontask.action import forms
 from ontask.action.evaluate.action import evaluate_action
-from ontask.action.services.run_producer_base import ActionServiceRunBase
+from ontask.action.services.manager_factory import (
+    action_run_request_factory,
+)
+from ontask.action.services.manager import ActionManagerBase
 from ontask.core import SessionPayload
 from ontask.dataops.sql.row_queries import get_rows
 
@@ -27,6 +31,28 @@ html_body = """<!DOCTYPE html>
     {0}
   </body>
 </html>"""
+
+
+def _create_filename_template(
+    payload: SessionPayload,
+    user_fname_column: Optional[models.Column],
+) -> str:
+    """Create the filename template based on given parameters."""
+    if payload['zip_for_moodle']:
+        file_name_template = (
+            '{user_fname}_{part_id}_assignsubmission_file_'
+        )
+    else:
+        if user_fname_column:
+            file_name_template = '{part_id}_{user_fname}_'
+        else:
+            file_name_template = '{part_id}'
+    if payload['file_suffix']:
+        file_name_template += payload['file_suffix']
+    else:
+        file_name_template += 'feedback.html'
+
+    return file_name_template
 
 
 def _create_eval_data_tuple(
@@ -67,7 +93,7 @@ def _create_eval_data_tuple(
 
     if user_fname_column:
         # Get the user_fname_column values
-        user_fname_data = [row[user_fname_column] for row in get_rows(
+        user_fname_data = [row[user_fname_column.name] for row in get_rows(
             action.workflow.get_data_frame_table_name(),
             column_names=[user_fname_column.name],
             filter_formula=None).fetchall()]
@@ -96,26 +122,12 @@ def create_and_send_zip(
     :param file_name_template:
     :return:
     """
-    # Create the file name template
-    if payload['zip_for_moodle']:
-        file_name_template = (
-            '{user_fname}_{part_id}_assignsubmission_file_'
-        )
-    else:
-        if user_fname_column:
-            file_name_template = '{part_id}_{user_fname}_'
-        else:
-            file_name_template = '{part_id}'
-    if payload['file_suffix']:
-        file_name_template += payload['file_suffix']
-    else:
-        file_name_template += 'feedback.html'
-
     files = _create_eval_data_tuple(
         action,
         item_column,
         payload.get('exclude_values', []),
         user_fname_column)
+    file_name_template = _create_filename_template(payload, user_fname_column)
 
     # Create the ZIP and return it for download
     sbuf = BytesIO()
@@ -147,22 +159,27 @@ def create_and_send_zip(
     return response
 
 
-class ActionServiceRunZip(ActionServiceRunBase):
-    """Class to serive running an email action."""
+class ActionManagerZip(ActionManagerBase):
+    """Class to serve running an email action."""
 
     def __init__(self):
-        """Assign """
+        """Assign default fields."""
         super().__init__(forms.ZipActionRunForm)
         self.template = 'action/action_zip_step1.html'
         self.log_event = models.Log.ACTION_RUN_ZIP
 
-    def process_done(
+    def process_request_done(
         self,
         request: http.HttpRequest,
         workflow: models.Action,
         payload: SessionPayload,
         action: Optional[models.Action] = None,
     ) -> http.HttpResponse:
+        """Finish processing the valid POST request.
+
+        Get the action and redirect to the action_done page to prompt the
+        download of the zip file.
+        """
         # Get the information from the payload
         if not action:
             action = workflow.actions.filter(pk=payload['action_id']).first()
@@ -174,3 +191,7 @@ class ActionServiceRunZip(ActionServiceRunBase):
         # Successful processing.
         return render(request, 'action/action_zip_done.html', {})
 
+
+action_run_request_factory.register_processor(
+    models.action.ZIP_OPERATION,
+    ActionManagerZip())

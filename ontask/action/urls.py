@@ -3,6 +3,7 @@
 """URL to manipulate actions."""
 
 from django.urls import path, re_path
+from django.views.generic import TemplateView
 
 from ontask.action import views
 
@@ -131,7 +132,7 @@ urlpatterns = [
     # RUN SURVEY
     #
     # Server side update of the run survey page for action in
-    path('<int:pk>/run_survey_ss/', views.run_survey_ss, name='run_survey_ss'),
+    path('<int:pk>/show_survey_table_ss/', views.show_survey_table_ss, name='show_survey_table_ss'),
 
     # Run action in a row. Can be executed by the instructor or the
     # learner!!
@@ -141,7 +142,7 @@ urlpatterns = [
         name='run_survey_row'),
 
     # Say thanks
-    path('thanks/', views.survey_thanks, name='thanks'),
+    path('thanks/', TemplateView.as_view(template_name='thanks.html')),
 
     #
     # Preview action out

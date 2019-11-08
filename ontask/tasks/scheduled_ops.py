@@ -10,9 +10,8 @@ from celery import shared_task
 from django.conf import settings
 from django.core.cache import cache
 
-from ontask import models
-from ontask.action import payloads
-from ontask.tasks.basic import logger, run
+from ontask import core, models
+from ontask.action.services.task import run
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
 
@@ -66,43 +65,43 @@ def _get_pending_items():
 
 def _prepare_personalized_text(
     s_item: models.ScheduledOperation,
-) -> Tuple[payloads.EmailPayload, models.Log]:
-    """Creaete Action info and log object for the Personalized email.
+) -> Tuple[core.SessionPayload, models.Log]:
+    """Create Action info and log object for the Personalized email.
 
     :param s_item: Scheduled Action item in the DB
-    :return: Pair (EmailPlayload, Log item)
+    :return: Pair (SessionPayload, Log item)
     """
-    action_info = payloads.EmailPayload(s_item.payload)
-    action_info['action_id'] = s_item.action_id
-    action_info['item_column'] = s_item.item_column.name
-    action_info['exclude_values'] = s_item.exclude_values
+    payload = core.SessionPayload(s_item.payload)
+    payload['action_id'] = s_item.action_id
+    payload['item_column'] = s_item.item_column.name
+    payload['exclude_values'] = s_item.exclude_values
     log_item = s_item.action.log(
         s_item.user,
         models.Log.ACTION_RUN_EMAIL,
-        **action_info)
-    return action_info, log_item
+        **payload)
+    return payload, log_item
 
 
 def _prepare_send_list(
     s_item: models.ScheduledOperation,
-) -> Tuple[payloads.SendListPayload, models.Log]:
+) -> Tuple[core.SessionPayload, models.Log]:
     """Create Action info and log object for the List email.
 
     :param s_item: Scheduled Action item in the DB
     :return: Pair (SendListPayload, Log item)
     """
-    action_info = payloads.SendListPayload(s_item.payload)
-    action_info['action_id'] = s_item.action_id
+    payload = core.SessionPayload(s_item.payload)
+    payload['action_id'] = s_item.action_id
     log_item = s_item.action.log(
         s_item.user,
         models.Log.ACTION_RUN_SEND_LIST,
-        **action_info)
-    return action_info, log_item
+        **payload)
+    return payload, log_item
 
 
 def _prepare_personalized_json(
     s_item: models.ScheduledOperation,
-) -> Tuple[payloads.JSONPayload, models.Log]:
+) -> Tuple[core.SessionPayload, models.Log]:
     """Create Action info and log object for the Personalized JSON.
 
     :param s_item: Scheduled Action item in the DB
@@ -113,56 +112,56 @@ def _prepare_personalized_json(
     if s_item.item_column:
         item_column = s_item.item_column.name
 
-    action_info = payloads.JSONPayload(s_item.payload)
-    action_info['action_id'] = s_item.action_id
-    action_info['item_column'] = item_column
-    action_info['exclude_values'] = s_item.exclude_values
+    payload = core.SessionPayload(s_item.payload)
+    payload['action_id'] = s_item.action_id
+    payload['item_column'] = item_column
+    payload['exclude_values'] = s_item.exclude_values
 
     # Log the event
     log_item = s_item.action.log(
         s_item.user,
         models.Log.ACTION_RUN_JSON,
-        **action_info)
-    return action_info, log_item
+        **payload)
+    return payload, log_item
 
 
 def _prepare_send_list_json(
     s_item: models.ScheduledOperation,
-) -> Tuple[payloads.JSONPayload, models.Log]:
+) -> Tuple[core.SessionPayload, models.Log]:
     """Create Action info and log object for the List JSON.
 
     :param s_item: Scheduled Action item in the DB
     :return: Pair (SendListPayload, Log item)
     """
-    action_info = payloads.JSONPayload(s_item.payload)
-    action_info['action_id'] = s_item.action_id
+    payload = core.SessionPayload(s_item.payload)
+    payload['action_id'] = s_item.action_id
 
     # Log the event
     log_item = s_item.action.log(
         s_item.user,
         models.Log.ACTION_RUN_JSON_LIST,
-        **action_info)
-    return action_info, log_item
+        **payload)
+    return payload, log_item
 
 
 def _prepare_canvas_email(
     s_item: models.ScheduledOperation,
-) -> Tuple[payloads.CanvasEmailPayload, models.Log]:
+) -> Tuple[core.SessionPayload, models.Log]:
     """Create Action info and log object for the List JSON.
 
     :param s_item: Scheduled Action item in the DB
-    :return: Pair (CanvasEmailPayload, Log item)
+    :return: Pair (SessionPayload, Log item)
     """
     # Get the information from the payload
-    action_info = payloads.CanvasEmailPayload(s_item.payload)
-    action_info['action_id'] = s_item.action_id
-    action_info['item_column'] = s_item.item_column.name
-    action_info['exclude_values'] = s_item.exclude_values
+    payload = core.SessionPayload(s_item.payload)
+    payload['action_id'] = s_item.action_id
+    payload['item_column'] = s_item.item_column.name
+    payload['exclude_values'] = s_item.exclude_values
     log_item = s_item.action.log(
         s_item.user,
         models.Log.ACTION_RUN_CANVAS_EMAIL,
-        **action_info)
-    return action_info, log_item
+        **payload)
+    return payload, log_item
 
 
 _function_distributor = {

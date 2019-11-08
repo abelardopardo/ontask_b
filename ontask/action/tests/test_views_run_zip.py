@@ -30,9 +30,12 @@ class ActionViewRunZIP(test.OnTaskTestCase):
         """Run the zip action."""
         # Get the object first
         action = self.workflow.actions.get(name='Suggestions about the forum')
+        column = action.workflow.columns.get(name='SID')
+        column_fn = action.workflow.columns.get(name='email')
         # Request ZIP action execution
         resp = self.get_response('action:zip_action', {'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
+
 
         # Post the execution request
         resp = self.get_response(
@@ -40,8 +43,9 @@ class ActionViewRunZIP(test.OnTaskTestCase):
             {'pk': action.id},
             method='POST',
             req_params={
-                'item_column': 'SID',
-                'user_fname_column': 'email',
+                'action_id': action.id,
+                'item_column': column.pk,
+                'user_fname_column': column_fn.pk,
                 'confirm_items': False,
                 'zip_for_moodle': False,
             })
@@ -50,19 +54,21 @@ class ActionViewRunZIP(test.OnTaskTestCase):
     def test_run_zip_export(self):
         """Test the ZIP export view."""
         action = self.workflow.actions.get(name='Suggestions about the forum')
+        column = action.workflow.columns.get(name='SID')
+        column_fn = action.workflow.columns.get(name='email')
 
         resp = self.get_response(
             'action:zip_export',
             session_payload={
+                'action_id': action.id,
                 'exclude_values': [],
                 'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-                'post_url': reverse('action:zip_done'),
+                'post_url': reverse('action:run_done'),
                 'button_label': '',
                 'valuerange': 0,
                 'step': 0,
-                'action_id': action.id,
-                'item_column': 'SID',
-                'user_fname_column': 'email',
+                'item_column': column.pk,
+                'user_fname_column': column_fn.pk,
                 'file_suffix': '',
                 'zip_for_moodle': False,
                 'confirm_items': False})

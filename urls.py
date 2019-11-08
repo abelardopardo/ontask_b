@@ -11,6 +11,7 @@ from django.contrib.sites.models import Site
 from django.urls import path, re_path
 from django.utils.translation import ugettext
 from django.views.decorators.cache import cache_page
+from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -60,8 +61,7 @@ urlpatterns = [
 
     path(
         'under_construction',
-        views.under_construction,
-        name='under_construction'),
+        TemplateView.as_view(template_name='under_construction')),
 
     path('users', include(ontask.profiles.urls, namespace='profiles')),
 

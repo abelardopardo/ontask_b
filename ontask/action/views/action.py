@@ -4,17 +4,17 @@
 
 from typing import Optional, Union
 
-import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
+import django_tables2 as tables
 
-from ontask import simplify_datetime_str
+from ontask import models, simplify_datetime_str
 from ontask.action.forms import ActionForm, ActionUpdateForm
 from ontask.action.views.edit_personalized import edit_action_out
 from ontask.action.views.edit_rubric import edit_action_rubric
@@ -23,8 +23,6 @@ from ontask.core import SessionPayload
 from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.core.tables import OperationsColumn
-from ontask.core.views import under_construction
-from ontask import models
 
 
 class ActionTable(tables.Table):
@@ -297,8 +295,10 @@ def edit_action(
         models.Action.SEND_LIST: edit_action_out,
         models.Action.SEND_LIST_JSON: edit_action_out,
         models.Action.SURVEY: edit_action_in,
-        models.Action.TODO_LIST: under_construction,
     }
+
+    if action.action_type not in edit_function_dict:
+        return redirect(reverse('under_construction'))
 
     return edit_function_dict[action.action_type](request, workflow, action)
 

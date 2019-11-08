@@ -526,7 +526,7 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
         user_ids = get_rows(
             self.action.workflow.get_data_frame_table_name(),
             column_names=[form_data['item_column'].name],
-            filter_formula=self.action.get_filter().formula)
+            filter_formula=self.action.get_filter_formula())
         if any(not isinstance(row_item[0], int) for row_item in user_ids):
             self.add_error(
                 'item_column',

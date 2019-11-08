@@ -4,7 +4,7 @@
 
 import json
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 import django.conf
 import pytz
@@ -70,6 +70,17 @@ def is_correct_email(email_txt: str) -> bool:
     """Check if string is a correct email address"""
     try:
         validate_email(email_txt)
+    except (ValueError, AttributeError):
+        return False
+
+    return True
+
+
+def are_correct_emails(emails: List[str]) -> bool:
+    """Check if string is a correct email address"""
+    try:
+        for email_txt in emails:
+            validate_email(email_txt)
     except (ValueError, AttributeError):
         return False
 
