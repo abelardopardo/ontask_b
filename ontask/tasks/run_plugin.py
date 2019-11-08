@@ -7,7 +7,8 @@ from django.utils.translation import ugettext
 
 from ontask.dataops.plugin.plugin_manager import run_plugin
 from ontask.models import Plugin
-from ontask.tasks.basic import get_execution_items, get_log_item
+from ontask.core.services import get_execution_items
+from ontask.logs.services import get_log_item
 
 
 @shared_task

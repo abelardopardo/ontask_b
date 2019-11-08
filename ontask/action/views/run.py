@@ -6,30 +6,25 @@ from typing import Optional
 from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http.request import HttpRequest
+from django.http.response import JsonResponse, HttpResponse
 from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 from ontask import models
 from ontask.action import services
-from ontask.action.evaluate import (
-    evaluate_row_action_out, get_action_evaluation_context, get_row_values,
-)
 from ontask.action.forms import ValueExcludeForm
-from ontask.action.views.run_survey import run_survey_action
-from ontask.action.views.serve_survey import serve_survey_row
-from ontask.core import SessionPayload
+from ontask.action.services import serve_survey_row
+from ontask.action.services.manager_factory import action_run_request_factory
+from ontask.core import SessionPayload, DataTablesServerSidePaging
 from ontask.core.celery import celery_is_up
-from ontask.core.decorators import get_action, get_workflow
+from ontask.core.decorators import get_action, get_workflow, ajax_required
 from ontask.core.permissions import is_instructor
-
-fn_distributor = {
-    models.Action.SURVEY: run_survey_action,
-}
-
+from ontask.models import Workflow, Action
 
 @user_passes_test(is_instructor)
 @get_action(pf_related='actions')
@@ -58,7 +53,7 @@ def run_action(
               + 'Ask your system administrator to enable message queueing.'))
         return redirect(reverse('action:index'))
 
-    return services.action_run_request_factory.process_request(
+    return action_run_request_factory.process_request(
         action.action_type,
         request=request,
         action=action,
@@ -80,7 +75,7 @@ def run_done(
             _('Incorrect action run invocation.'))
         return redirect('action:index')
 
-    return services.action_run_request_factory.process_done(
+    return action_run_request_factory.process_request_done(
         payload.get('operation_type'),
         request=request,
         workflow=workflow,
@@ -105,7 +100,7 @@ def zip_action(
     :return: HTTP response
     """
     del workflow, pk
-    return services.action_run_request_factory.process_request(
+    return action_run_request_factory.process_request(
         models.action.ZIP_OPERATION,
         request=request,
         action=action,
@@ -163,73 +158,19 @@ def serve_action(
 
     try:
         if action.is_out:
-            response = serve_action_out(
+            response = services.serve_action_out(
                 request.user,
                 action,
                 user_attribute_name)
         else:
-            response = serve_survey_row(request, action, user_attribute_name)
+            response = services.serve_survey_row(
+                request,
+                action,
+                user_attribute_name)
     except Exception:
         raise http.Http404()
 
     return response
-
-
-def serve_action_out(
-    user,
-    action: models.Action,
-    user_attribute_name: str,
-):
-    """Serve request for an action out.
-
-    Function that given a user and an Action Out
-    searches for the appropriate data in the table with the given
-    attribute name equal to the user email and returns the HTTP response.
-    :param user: User object making the request
-    :param action: Action to execute (action out)
-    :param user_attribute_name: Column to check for email
-    :return:
-    """
-    # For the response
-    payload = {'action': action.name, 'action_id': action.id}
-
-    # User_instance has the record used for verification
-    row_values = get_row_values(action, (user_attribute_name, user.email))
-
-    # Get the dictionary containing column names, attributes and condition
-    # valuations:
-    context = get_action_evaluation_context(action, row_values)
-    error = ''
-    if context is None:
-        # Log the event
-        action.log(
-            user,
-            models.Log.ACTION_SERVED_EXECUTE,
-            error=_('Error when evaluating conditions for user {0}').format(
-                user.email))
-
-        return http.HttpResponse(render_to_string(
-            'action/action_unavailable.html',
-            {}))
-
-    # Evaluate the action content.
-    action_content = evaluate_row_action_out(action, context)
-
-    # If the action content is empty, forget about it
-    response = action_content
-    if action_content is None:
-        response = render_to_string('action/action_unavailable.html', {})
-        error = _('Action not enabled for user {0}').format(user.email)
-
-    # Log the event
-    action.log(
-        user,
-        models.Log.ACTION_SERVED_EXECUTE,
-        error=_('Error when evaluating conditions for user {0}').format(
-            user.email))
-
-    # Respond the whole thing
-    return http.HttpResponse(response)
 
 
 @user_passes_test(is_instructor)
@@ -346,3 +287,73 @@ def action_zip_export(
         item_column,
         user_fname_column,
         payload)
+
+
+@user_passes_test(is_instructor)
+@csrf_exempt
+@ajax_required
+@require_http_methods(['POST'])
+@get_action(pf_related='actions')
+def show_survey_table_ss(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> JsonResponse:
+    """Show elements in table that satisfy filter request.
+
+    Serve the AJAX requests to show the elements in the table that satisfy
+    the filter and between the given limits.
+    :param request:
+    :param pk: action id being run
+    :return:
+    """
+    # Check that the GET parameters are correctly given
+    dt_page = DataTablesServerSidePaging(request)
+    if not dt_page.is_valid:
+        return JsonResponse(
+            {'error': _('Incorrect request. Unable to process')},
+        )
+
+    return services.create_survey_table(workflow, action, dt_page)
+
+
+@user_passes_test(is_instructor)
+@get_action(pf_related='actions')
+def run_survey_row(
+    request: HttpRequest,
+    pk: int,
+    workflow: Optional[Workflow] = None,
+    action: Optional[Action] = None,
+) -> HttpResponse:
+    """Render form for introducing information in a single row.
+
+    Function that runs the action in for a single row. The request
+    must have query parameters uatn = key name and uatv = key value to
+    perform the lookup.
+
+    :param request:
+
+    :param pk: Action id. It is assumed to be an action In
+
+    :return:
+    """
+    # If the action is an "out" action, return to index
+    if action.is_out:
+        return redirect('action:index')
+
+    # Get the parameters
+    user_attribute_name = request.GET.get('uatn', 'email')
+
+    return serve_survey_row(request, action, user_attribute_name)
+
+
+@login_required
+def survey_thanks(request: HttpRequest) -> HttpResponse:
+    """Respond simply saying thanks.
+
+    :param request: Http requst
+    :return: Http response
+    """
+    return render(request, 'thanks.html', {})
+

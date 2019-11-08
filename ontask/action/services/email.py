@@ -4,7 +4,7 @@
 
 import datetime
 from time import sleep
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Union
 
 import html2text
 import pytz
@@ -17,14 +17,16 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import (
+    are_correct_emails, models, settings as ontask_settings,
+    simplify_datetime_str,
+)
 from ontask.action import forms
-from ontask.action.services.run_producer_base import ActionServiceRunBase
-
-import ontask.settings
-from ontask import is_correct_email, simplify_datetime_str, models
 from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
+from ontask.action.services.manager_factory import action_run_request_factory
+from ontask.action.services.manager import ActionManagerBase
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.models import Action, Column, Log
@@ -60,7 +62,7 @@ def _send_confirmation_message(
     # Create template and render with context
     try:
         html_content = Template(
-            str(getattr(ontask.settings, 'NOTIFICATION_TEMPLATE')),
+            str(getattr(ontask_settings, 'NOTIFICATION_TEMPLATE')),
         ).render(Context(context))
         text_content = strip_tags(html_content)
     except TemplateSyntaxError as exc:
@@ -74,18 +76,18 @@ def _send_confirmation_message(
         'email_sent_datetime': str(now),
         'filter_present': cfilter is not None,
         'num_rows': action.workflow.nrows,
-        'subject': str(ontask.settings.NOTIFICATION_SUBJECT),
+        'subject': str(ontask_settings.NOTIFICATION_SUBJECT),
         'body': text_content,
-        'from_email': str(ontask.settings.NOTIFICATION_SENDER),
+        'from_email': str(ontask_settings.NOTIFICATION_SENDER),
         'to_email': [user.email]}
     action.log(user, Log.ACTION_EMAIL_NOTIFY, **context)
 
     # Send email out
     try:
         send_mail(
-            str(ontask.settings.NOTIFICATION_SUBJECT),
+            str(ontask_settings.NOTIFICATION_SUBJECT),
             text_content,
-            str(ontask.settings.NOTIFICATION_SENDER),
+            str(ontask_settings.NOTIFICATION_SENDER),
             [user.email],
             html_message=html_content)
     except Exception as exc:
@@ -94,24 +96,20 @@ def _send_confirmation_message(
         )
 
 
-def _check_cc_lists(cc_email_list: List[str], bcc_email_list: List[str]):
-    """Verify that the cc lists are correct.
+def _check_email_list(email_list_string: str) -> List[str]:
+    """Verify that a space separated list of emails are correct.
 
-    :param cc_email_list: List of emails to use in CC
-    :param bcc_email_list: List of emails to use in BCC
-    :return: Nothing or exception
+    :param email_list_string: Space separated list of emails
+    :return: List of verified email strings
     """
-    # Set the cc_email_list and bcc_email_list to the right values
-    if cc_email_list is None:
-        cc_email_list = []
-    if bcc_email_list is None:
-        bcc_email_list = []
+    if email_list_string is None:
+        return []
 
-    # Check that cc and bcc contain list of valid email addresses
-    if not all(is_correct_email(email) for email in cc_email_list):
-        raise Exception(_('Invalid email address in cc email'))
-    if not all(is_correct_email(email) for email in bcc_email_list):
-        raise Exception(_('Invalid email address in bcc email'))
+    email_list = email_list_string.split()
+    if not are_correct_emails(email_list):
+        raise Exception(_('Invalid email address.'))
+
+    return email_list
 
 
 def _create_track_column(action: Action) -> str:
@@ -306,143 +304,148 @@ def _deliver_msg_burst(
             sleep(wait_time)
 
 
-def send_emails(
-    user,
-    action: Action,
-    payload: Dict,
-    log_item: Optional[Log] = None,
-) -> List[str]:
-    """Send action content evaluated for each row.
-
-    Sends the emails for the given action and with the
-    given subject. The subject will be evaluated also with respect to the
-    rows, attributes, and conditions.
-
-    The messages are sent in bursts with a pause in seconds as specified by the
-    configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
-
-    :param user: User object that executed the action
-    :param action: Action from where to take the messages
-    :param log_item: Log object to store results
-    :param payload: Dictionary key, value as defined in EmailPayload
-
-    :return: List of strings with the "to" fields used.
-    """
-    # Evaluate the action string, evaluate the subject, and get the value of
-    # the email column.
-    item_column = action.workflow.columns.get(pk=payload['item_column'])
-    action_evals = evaluate_action(
-        action,
-        extra_string=payload['subject'],
-        column_name=item_column.name,
-        exclude_values=payload.get('exclude_values'))
-
-    # Turn cc_email and bcc email into lists
-    payload['cc_email'] = payload['cc_email'].split()
-    payload['bcc_email'] = payload['bcc_email'].split()
-
-    _check_cc_lists(payload['cc_email'], payload['bcc_email'])
-
-    track_col_name = ''
-    if payload['track_read']:
-        track_col_name = _create_track_column(action)
-        # Get the log item payload to store the tracking column
-        log_item.payload['track_column'] = track_col_name
-        log_item.save()
-
-    msgs = _create_messages(
-        user,
-        action,
-        action_evals,
-        track_col_name,
-        payload,
-    )
-
-    _deliver_msg_burst(msgs)
-
-    if payload['send_confirmation']:
-        # Confirmation message requested
-        _send_confirmation_message(user, action, len(msgs))
-
-    return [msg.to[0] for msg in msgs]
-
-
-def send_list_email(
-    user,
-    action: Action,
-    action_info: Dict,
-    log_item: Optional[Log] = None,
-) -> List[str]:
-    """Send action content evaluated once to include lists.
-
-    Sends a single email for the given action with the lists expanded and with
-    the given subject evaluated also with respect to the attributes.
-
-    :param user: User object that executed the action
-    :param action: Action from where to take the messages
-    :param log_item: Log object to store results
-    :param action_info: Dictionary key, value as defined in EmailPayload
-
-    :return: Empty list (because it is a single email sent)
-    """
-    # Evaluate the action string, evaluate the subject, and get the value of
-    # the email column.
-    action_text = evaluate_row_action_out(
-        action,
-        get_action_evaluation_context(action, {}))
-
-    # Turn cc_email and bcc email into lists
-    action_info['cc_email'] = action_info['cc_email'].split()
-    action_info['bcc_email'] = action_info['bcc_email'].split()
-
-    _check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
-
-    # Context to log the events
-    msg = _create_single_message(
-        [action_text, action_info['subject'], action_info['email_to']],
-        '',
-        user.email,
-        action_info['cc_email'],
-        action_info['bcc_email'],
-    )
-
-    try:
-        # Send email out
-        mail.get_connection().send_messages([msg])
-    except Exception as exc:
-        raise Exception(
-            _('Error when sending the list email: {0}').format(str(exc)),
-        )
-
-    # Log the event
-    context = {
-        'email_sent_datetime': str(
-            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
-        ),
-        'subject': msg.subject,
-        'body': msg.body,
-        'from_email': msg.from_email,
-        'to_email': msg.to[0]}
-    action.log(user, Log.ACTION_EMAIL_SENT, **context)
-
-    return []
-
-
-class ActionServiceRunEmail(ActionServiceRunBase):
-    """Class to serive running an email action."""
+class ActionManagerEmail(ActionManagerBase):
+    """Class to serve running an email action."""
 
     def __init__(self):
-        """Assign """
+        """Assign basic fields."""
         super().__init__(forms.EmailActionRunForm)
         self.template = 'action/request_email_data.html'
         self.log_event = models.Log.ACTION_RUN_EMAIL
 
+    def process_run(
+        self,
+        user,
+        action: models.Action,
+        payload: Dict,
+        log_item: models.Log,
+    ):
+        """Send action content evaluated for each row.
 
-class ActionServiceRunEmailList(ActionServiceRunBase):
-    """Class to serive running an email action."""
+        Sends the emails for the given action and with the
+        given subject. The subject will be evaluated also with respect to the
+        rows, attributes, and conditions.
+
+        The messages are sent in bursts with a pause in seconds as specified by
+        the configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
+
+        :param user: User object that executed the action
+        :param action: Action from where to take the messages
+        :param log_item: Log object to store results
+        :param payload: Dictionary key, value
+
+        :return: List of strings with the "to" fields used.
+        """
+        # Evaluate the action string, evaluate the subject, and get the value
+        # of the email column.
+        item_column = action.workflow.columns.get(pk=payload['item_column'])
+        action_evals = evaluate_action(
+            action,
+            extra_string=payload['subject'],
+            column_name=item_column.name,
+            exclude_values=payload.get('exclude_values'))
+
+        payload['cc_email'] = _check_email_list(payload['cc_email'])
+        payload['bcc_email'] = _check_email_list(payload['bcc_email'])
+
+        track_col_name = ''
+        if payload['track_read']:
+            track_col_name = _create_track_column(action)
+            # Get the log item payload to store the tracking column
+            log_item.payload['track_column'] = track_col_name
+            log_item.save()
+
+        msgs = _create_messages(
+            user,
+            action,
+            action_evals,
+            track_col_name,
+            payload,
+        )
+
+        _deliver_msg_burst(msgs)
+
+        if payload['send_confirmation']:
+            # Confirmation message requested
+            _send_confirmation_message(user, action, len(msgs))
+
+        return [msg.to[0] for msg in msgs]
+
+
+class ActionManagerEmailList(ActionManagerBase):
+    """Class to serve running an email action."""
 
     def __init__(self):
-        """Assign """
+        """Assign basic fields."""
         super().__init__(forms.SendListActionRunForm)
         self.template = 'action/request_send_list_data.html'
         self.log_event = models.Log.ACTION_RUN_SEND_LIST
+
+    def process_run(
+        self,
+        user,
+        action: models.Action,
+        payload: Dict,
+        log_item: models.Log,
+    ):
+        """Send action content evaluated once to include lists.
+
+        Sends a single email for the given action with the lists expanded and
+        with the given subject evaluated also with respect to the attributes.
+
+        :param user: User object that executed the action
+        :param action: Action from where to take the messages
+        :param log_item: Log object to store results
+        :param payload: Dictionary key, value
+
+        :return: Empty list (because it is a single email sent)
+        """
+        # Evaluate the action string, evaluate the subject, and get the value
+        # of the email column.
+        action_text = evaluate_row_action_out(
+            action,
+            get_action_evaluation_context(action, {}))
+
+        payload['cc_email'] = _check_email_list(payload['cc_email'])
+        payload['bcc_email'] = _check_email_list(payload['bcc_email'])
+
+        # Context to log the events
+        msg = _create_single_message(
+            [action_text, payload['subject'], payload['email_to']],
+            '',
+            user.email,
+            payload['cc_email'],
+            payload['bcc_email'],
+        )
+
+        try:
+            # Send email out
+            mail.get_connection().send_messages([msg])
+        except Exception as exc:
+            raise Exception(
+                _('Error when sending the list email: {0}').format(str(exc)),
+            )
+
+        # Log the event
+        context = {
+            'email_sent_datetime': str(
+                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            ),
+            'subject': msg.subject,
+            'body': msg.body,
+            'from_email': msg.from_email,
+            'to_email': msg.to[0]}
+        action.log(user, Log.ACTION_EMAIL_SENT, **context)
+
+        return []
+
+
+action_run_request_factory.register_processor(
+    models.Action.PERSONALIZED_TEXT,
+    ActionManagerEmail())
+action_run_request_factory.register_processor(
+    models.Action.RUBRIC_TEXT,
+    ActionManagerEmail())
+action_run_request_factory.register_processor(
+    models.Action.SEND_LIST,
+    ActionManagerEmailList())

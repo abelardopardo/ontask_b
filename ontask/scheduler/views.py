@@ -14,7 +14,6 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.action import payloads
 from ontask.core import SessionPayload
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor

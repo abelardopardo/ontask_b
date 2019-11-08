@@ -247,10 +247,10 @@ class TutorialCaptures(ScreenTests):
         # Dataops/Merge CSV Merge Step 3
         Select(self.selenium.find_element_by_id(
             'id_dst_key'
-        )).select_by_value('email')
+        )).select_by_visible_text('email')
         Select(self.selenium.find_element_by_id(
             'id_src_key'
-        )).select_by_value('email')
+        )).select_by_visible_text('email')
         Select(self.selenium.find_element_by_id(
             'id_how_merge'
         )).select_by_value('right')
@@ -406,7 +406,7 @@ class TutorialCaptures(ScreenTests):
         )
         select = Select(self.selenium.find_element_by_id(
             'id_item_column'))
-        select.select_by_value('email')
+        select.select_by_visible_text('email')
         self.selenium.find_element_by_id('id_cc_email').send_keys(
             'tutor1@example.com tutor2@example.com'
         )
@@ -474,11 +474,11 @@ class TutorialCaptures(ScreenTests):
         select = Select(self.selenium.find_element_by_id(
             'id_item_column')
         )
-        select.select_by_value('Identifier')
+        select.select_by_visible_text('Identifier')
         select = Select(self.selenium.find_element_by_id(
             'id_user_fname_column')
         )
-        select.select_by_value('Full name')
+        select.select_by_visible_text('Full name')
         self.selenium.find_element_by_id('id_file_suffix').send_keys(
             'feedback.html'
         )
@@ -612,7 +612,7 @@ class TutorialCaptures(ScreenTests):
         )
         select = Select(self.selenium.find_element_by_id(
             'id_data_type'))
-        select.select_by_value('string')
+        select.select_by_visible_text('string')
         self.selenium.find_element_by_id(
             'id_raw_categories'
         ).send_keys(question_values)

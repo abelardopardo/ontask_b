@@ -65,17 +65,6 @@ def keep_alive(request: HttpRequest) -> JsonResponse:
     return JsonResponse({})
 
 
-@login_required
-def under_construction(request: HttpRequest) -> HttpResponse:
-    """Produce a page saying that this is under construction.
-
-    :param request: Request object
-
-    :return: HTML response
-    """
-    return render(request, 'under_construction.html', {})
-
-
 def ontask_handler400(request: HttpRequest, exception) -> HttpResponse:
     """Return error 400."""
     response = render(request, '400.html', {})

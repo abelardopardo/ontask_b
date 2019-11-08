@@ -2,9 +2,8 @@
 
 """Test views to run actions."""
 
-import os
-import test
 from datetime import timedelta
+import os
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -12,10 +11,9 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from ontask.action.payloads import (
-    CanvasEmailPayload, EmailPayload, JSONPayload,
-)
+from ontask.core import SessionPayload
 from ontask.models import OAuthUserToken
+import test
 
 
 class ActionViewRunAction(test.OnTaskTestCase):
@@ -37,15 +35,18 @@ class ActionViewRunAction(test.OnTaskTestCase):
     def test_run_action_item_filter(self):
         """Test the view to filter items."""
         action = self.workflow.actions.get(name='Midterm comments')
-        payload = EmailPayload({
-            'item_column': 'email',
+        column = action.workflow.columns.get(name='email')
+        payload = {
+            'item_column': column.pk,
             'action_id': action.id,
+            'button_label': 'Send',
+            'valuerange': 2,
+            'step': 2,
             'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:email_done'),
-        })
+            'post_url': reverse('action:run_done')}
         resp = self.get_response(
             'action:item_filter',
-            session_payload=payload.get_store())
+            session_payload=payload)
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST
@@ -55,9 +56,9 @@ class ActionViewRunAction(test.OnTaskTestCase):
             req_params={
                 'exclude_values': ['ctfh9946@bogus.com'],
             },
-            session_payload=payload.get_store())
+            session_payload=payload)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(resp.url, reverse('action:email_done'))
+        self.assertEqual(resp.url, reverse('action:run_done'))
 
 
 class ActionViewRunJSONAction(test.OnTaskTestCase):
@@ -79,12 +80,12 @@ class ActionViewRunJSONAction(test.OnTaskTestCase):
     def test_run_json_action(self):
         """Test JSON action execution."""
         action = self.workflow.actions.get(name='Send JSON to remote server')
-        payload = JSONPayload({
-            'item_column': 'email',
+        column = action.workflow.columns.get(name='email')
+        payload = {
+            'item_column': column.pk,
             'action_id': action.id,
             'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:json_done'),
-        })
+            'post_url': reverse('action:run_done')}
 
         resp = self.get_response('action:run', url_params={'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
@@ -95,10 +96,10 @@ class ActionViewRunJSONAction(test.OnTaskTestCase):
             url_params={'pk': action.id},
             method='POST',
             req_params={
-                'item_column': 'email',
+                'item_column': column.pk,
                 'token': 'xxx',
                 'confirm_items': True},
-            session_payload=payload.get_store())
+            session_payload=payload)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('action:item_filter'))
 
@@ -108,9 +109,9 @@ class ActionViewRunJSONAction(test.OnTaskTestCase):
             url_params={'pk': action.id},
             method='POST',
             req_params={
-                'item_column': 'email',
+                'item_column': column.pk,
                 'token': 'xxx'},
-            session_payload=payload.get_store())
+            session_payload=payload)
         self.assertTrue(status.is_success(resp.status_code))
 
 
@@ -133,14 +134,7 @@ class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
     def test_run_canvas_email_action(self):
         """Test Canvas Email action execution."""
         action = self.workflow.actions.get(name='Initial motivation')
-        payload = CanvasEmailPayload({
-            'item_column': 'email',
-            'action_id': action.id,
-            'target_url': 'Server one',
-            'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:canvas_email_done'),
-        })
-
+        column = action.workflow.columns.get(name='SID')
         resp = self.get_response('action:run', url_params={'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
 
@@ -151,10 +145,16 @@ class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
             method='POST',
             req_params={
                 'subject': 'Email subject',
-                'item_column': 'email',
+                'item_column': column.pk,
                 'target_url': 'Server one',
             },
-            session_payload=payload.get_store())
+            session_payload={
+                'item_column': column.pk,
+                'action_id': action.id,
+                'target_url': 'Server one',
+                'prev_url': reverse('action:run', kwargs={'pk': action.id}),
+                'post_url': reverse('action:run_done'),
+            })
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
     def test_run_canvas_email_done(self):
@@ -170,22 +170,21 @@ class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
         utoken.save()
 
         action = self.workflow.actions.get(name='Initial motivation')
-        payload = CanvasEmailPayload({
-            'item_column': 'email',
-            'action_id': action.id,
-            'target_url': 'Server one',
-            'prev_url': reverse('action:run', kwargs={'pk': action.id}),
-            'post_url': reverse('action:canvas_email_done'),
-            'subject': 'Email subject',
-            'export_wf': False,
-        })
+        column = action.workflow.columns.get(name='email')
         settings.EXECUTE_ACTION_JSON_TRANSFER = False
 
         # POST -> redirect to item filter
         resp = self.get_response(
-            'action:canvas_email_done',
+            'action:run_done',
             method='POST',
-            session_payload=payload.get_store())
+            session_payload={
+                'item_column': column.pk,
+                'action_id': action.id,
+                'target_url': 'Server one',
+                'prev_url': reverse('action:run', kwargs={'pk': action.id}),
+                'post_url': reverse('action:run_done'),
+                'subject': 'Email subject',
+                'export_wf': False})
         self.assertTrue(status.is_success(resp.status_code))
 
 
@@ -216,6 +215,7 @@ class ActionServe(test.OnTaskTestCase):
             {'action_id': action.id})
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue('Oct. 10, 2017, 10:03 p.m.' in str(resp.content))
+
 
 class ActionServeSurvey(test.OnTaskTestCase):
     """Test the view to serve a survey."""

@@ -13,9 +13,6 @@ from django.http.request import HttpRequest
 from django.urls.base import reverse
 from django.utils.translation import ugettext
 
-from ontask.action.payloads import (
-    PAYLOAD_SESSION_DICTIONARY, set_action_payload,
-)
 from ontask.core import SessionPayload
 from ontask.models import Action, Log, ScheduledOperation
 

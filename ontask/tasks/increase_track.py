@@ -2,6 +2,8 @@
 
 """Function to increase the tracking column in a workflow."""
 
+import logging
+
 from celery import shared_task
 from django.contrib.auth import get_user_model
 from django.core import signing
@@ -9,7 +11,8 @@ from django.utils.translation import ugettext
 
 import ontask.dataops.sql
 from ontask.models import Action, Log
-from ontask.tasks.basic import logger
+
+logger = logging.getLogger('ontask')
 
 
 @shared_task

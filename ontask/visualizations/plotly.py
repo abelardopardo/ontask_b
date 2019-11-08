@@ -24,6 +24,15 @@ class PlotlyHandler(VisHandler):
         {layout},
         {{displaylogo: false}});</script>"""
 
+        # html_skel = """<div id="{id}" style="{style}"></div>
+        #         <script>Plotly.newPlot('{id}', {data},
+        #         {layout},
+        #         {{displaylogo: false}});
+        #         $('#{id}').on('shown.bs.modal', function (e) {{
+        #           console.log('show');
+        #           Plotly.relayout('{id}', {layout});
+        #         }})</script>"""
+
     def __init__(self, data, *args, **kwargs):
 
         super().__init__(data, *args, **kwargs)

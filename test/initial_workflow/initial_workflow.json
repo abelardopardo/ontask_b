@@ -3799,6 +3799,7 @@
     "fields": {
         "filename": "linear_model",
         "modified": "2018-05-28T01:00:42.649Z",
+        "created": "2018-05-28T01:00:41.649Z",
         "name": "Linear Model",
         "description_text": "Execute a linear model",
         "is_model": true,
@@ -3813,6 +3814,7 @@
     "fields": {
         "filename": "test_plugin_2",
         "modified": "2018-05-28T01:00:42.649Z",
+        "created": "2018-05-28T01:00:41.649Z",
         "name": "Test Plungin 2 Name",
         "description_text": "Test Plugin 2 Description Text",
         "is_model": null,
@@ -3827,6 +3829,7 @@
     "fields": {
         "filename": "test_plugin_1",
         "modified": "2018-05-28T01:00:42.598Z",
+        "created": "2018-05-28T01:00:41.598Z",
         "name": "Test Plungin 1 Name",
         "description_text": "Test Plugin 1 Description Text",
         "is_model": null,
@@ -4055,6 +4058,7 @@
         "name": "Week 2 motivation message",
         "description_text": "Send the motivation message to all students depending on their program",
         "action": 2,
+        "modified": "2019-04-15T22:46:26.569Z",
         "created": "2019-04-15T22:46:25.569Z",
         "execute": "2121-09-30T21:44:00Z",
         "execute_until": null,
