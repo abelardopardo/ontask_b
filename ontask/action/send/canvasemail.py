@@ -69,7 +69,6 @@ def send_canvas_emails(
 
     # Create the context for the log events
     context = {
-        'user': user.id,
         'action': action.id,
     }
 
