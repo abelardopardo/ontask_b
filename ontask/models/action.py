@@ -6,6 +6,7 @@ import datetime
 import re
 from typing import List
 
+import pytz
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
@@ -13,13 +14,12 @@ from django.core.validators import URLValidator
 from django.db import models
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
-import pytz
 
 import ontask
-from ontask.models.basic import NameAndDescription, CreateModifyFields
 from ontask.dataops.formula import evaluation
 from ontask.dataops.sql import select_ids_all_false
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
+from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 

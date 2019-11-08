@@ -1,7 +1,7 @@
-from typing import Any, Optional, Dict
+from typing import Any, Dict, Optional
 
 from django import http
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.utils.translation import ugettext
 

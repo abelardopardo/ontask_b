@@ -10,10 +10,8 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from ontask import models
-from ontask.action.services.manager_factory import (
-    action_run_request_factory,
-)
 from ontask.action.services.manager import ActionManagerBase
+from ontask.action.services.manager_factory import action_run_request_factory
 from ontask.core import DataTablesServerSidePaging
 from ontask.dataops.sql import search_table
 

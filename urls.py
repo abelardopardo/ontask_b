@@ -13,10 +13,10 @@ from django.utils.translation import ugettext
 from django.views.decorators.cache import cache_page
 from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from drf_yasg.renderers import SwaggerUIRenderer
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
 import ontask.accounts.urls
 import ontask.action.urls

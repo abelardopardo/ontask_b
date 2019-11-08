@@ -1,10 +1,10 @@
 import datetime
-from typing import Dict, Optional, List
+from typing import Dict, List, Optional
 
+import pytz
 from celery import shared_task
 from django.conf import settings
 from django.utils.translation import ugettext
-import pytz
 
 from ontask.action.services.manager_factory import action_run_request_factory
 from ontask.core.services import get_execution_items
@@ -85,4 +85,3 @@ def run(user_id: int, log_id: int, payload: Dict) -> Optional[List]:
         log_item.save()
 
     return items_processed
-

@@ -24,10 +24,8 @@ from rest_framework import status
 from ontask import models
 from ontask.action import forms
 from ontask.action.evaluate import evaluate_action
-from ontask.action.services.manager_factory import (
-    action_run_request_factory,
-)
 from ontask.action.services.manager import ActionManagerBase
+from ontask.action.services.manager_factory import action_run_request_factory
 from ontask.core import SessionPayload
 from ontask.core.permissions import is_instructor
 from ontask.oauth.views import get_initial_token_step1, refresh_token

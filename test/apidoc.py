@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
-from rest_framework import status
-
 import test
+
+from rest_framework import status
 
 
 class APIDocumentationTest(test.OnTaskTestCase):

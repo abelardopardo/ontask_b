@@ -6,20 +6,20 @@ from datetime import timedelta
 from typing import Dict
 
 import requests
+from django import http
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.handlers.wsgi import WSGIRequest
-from django import http
 from django.shortcuts import redirect, reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
+from ontask import models
 from ontask.core import SessionPayload
 from ontask.core.permissions import is_instructor
-from ontask import models
 
 return_url_key = 'oauth_return_url'
 oauth_hash_key = 'oauth_hash'

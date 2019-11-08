@@ -3,7 +3,7 @@
 """Functions to save the different types of scheduled actions."""
 
 from datetime import datetime
-from typing import Dict, Type, Optional
+from typing import Dict, Optional, Type
 
 import pytz
 from django import http

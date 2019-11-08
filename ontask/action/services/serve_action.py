@@ -11,13 +11,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.action.evaluate import (
-    get_row_values,
-    get_action_evaluation_context, evaluate_row_action_out,
+    evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.forms import EnterActionIn
 from ontask.action.views.serve_survey import (
-    extract_survey_questions,
-    survey_update_row_values,
+    extract_survey_questions, survey_update_row_values,
 )
 from ontask.core.permissions import has_access
 from ontask.core.views import ontask_handler404

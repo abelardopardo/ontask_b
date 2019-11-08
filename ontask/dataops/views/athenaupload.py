@@ -12,9 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.dataops.forms import (
-    AthenaRequestConnectionParam,
-)
+from ontask.dataops.forms import AthenaRequestConnectionParam
 from ontask.models import AthenaConnection, Log, Workflow
 from ontask.tasks import athena_dataupload_task
 

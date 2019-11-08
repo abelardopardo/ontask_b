@@ -2,8 +2,8 @@
 
 """Views to manipulate the workflow."""
 
-from builtins import range
 import copy
+from builtins import range
 from typing import Optional
 
 from django.conf import settings

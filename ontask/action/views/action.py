@@ -4,15 +4,15 @@
 
 from typing import Optional, Union
 
+import django_tables2 as tables
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
-import django_tables2 as tables
 
 from ontask import models, simplify_datetime_str
 from ontask.action.forms import ActionForm, ActionUpdateForm

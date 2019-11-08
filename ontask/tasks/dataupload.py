@@ -10,9 +10,9 @@ from django.conf import settings
 from django.utils.translation import ugettext
 
 import ontask.dataops.forms
-from ontask.models import AthenaConnection
 from ontask.core.services import get_execution_items
 from ontask.logs.services import get_log_item
+from ontask.models import AthenaConnection
 
 
 @shared_task

@@ -7,7 +7,7 @@ from builtins import object
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models.basic import NameAndDescription, CreateModifyFields
+from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.const import CHAR_FIELD_LONG_SIZE
 from ontask.models.logs import Log
 

@@ -15,10 +15,8 @@ from ontask.action import forms
 from ontask.action.evaluate import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
-from ontask.action.services.manager_factory import (
-    action_run_request_factory,
-)
 from ontask.action.services.manager import ActionManagerBase
+from ontask.action.services.manager_factory import action_run_request_factory
 
 logger = get_task_logger('celery_execution')
 

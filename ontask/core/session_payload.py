@@ -74,4 +74,3 @@ class SessionPayload(collections.MutableMapping):
         """
         session[PAYLOAD_SESSION_DICTIONARY] = self.__store
         session.save()
-
