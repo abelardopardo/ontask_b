@@ -18,7 +18,6 @@ from django.views.decorators.http import require_http_methods
 from ontask import models
 from ontask.action import services
 from ontask.action.forms import ValueExcludeForm
-from ontask.action.services import serve_survey_row
 from ontask.action.services.manager_factory import action_run_request_factory
 from ontask.core import DataTablesServerSidePaging, SessionPayload
 from ontask.core.celery import celery_is_up
@@ -346,7 +345,7 @@ def run_survey_row(
     # Get the parameters
     user_attribute_name = request.GET.get('uatn', 'email')
 
-    return serve_survey_row(request, action, user_attribute_name)
+    return services.serve_survey_row(request, action, user_attribute_name)
 
 
 @login_required
