@@ -52,6 +52,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
 
         scheduled_item = models.ScheduledOperation(
             user=user,
+            operation_type=models.scheduler.RUN_ACTION_PERSONALIZED_TEXT,
             name='send email action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
@@ -91,11 +92,12 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
 
         scheduled_item = models.ScheduledOperation(
             user=user,
+            operation_type=models.scheduler.RUN_ACTION_PERSONALIZED_JSON,
             name='JSON scheduled action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
                 second=0),
-            status=models.schedule.STATUS_PENDING,
+            status=models.scheduler.STATUS_PENDING,
             item_column=action.workflow.columns.get(name='email'),
             payload={'token': token})
         scheduled_item.save()
@@ -122,6 +124,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
 
         scheduled_item = models.ScheduledOperation(
             user=user,
+            operation_type=models.scheduler.RUN_ACTION_SEND_LIST,
             name='send list scheduled action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
@@ -158,6 +161,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
 
         scheduled_item = models.ScheduledOperation(
             user=user,
+            operation_type=models.scheduler.RUN_ACTION_SEND_LIST_JSON,
             name='JSON List scheduled action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
@@ -195,6 +199,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
         now = datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(second=0)
         scheduled_item = models.ScheduledOperation(
             user=user,
+            operation_type=models.scheduler.RUN_ACTION_PERSONALIZED_TEXT,
             name='send email action incrementally',
             action=action,
             execute=now,

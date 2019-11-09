@@ -39,39 +39,6 @@ def run(user_id: int, log_id: int, payload: Dict) -> Optional[List]:
             action=action,
             payload=payload,
             log_item=log_item)
-        # if (
-        #     action.action_type == Action.PERSONALIZED_TEXT
-        #     or action.action_type == Action.RUBRIC_TEXT
-        # ):
-        #     items_processed = services.send_emails(
-        #         user,
-        #         action,
-        #         payload,
-        #         log_item)
-        # elif action.action_type == Action.SEND_LIST:
-        #     items_processed = services.send_list_email(
-        #         user,
-        #         action,
-        #         payload,
-        #         log_item)
-        # elif action.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
-        #     items_processed = send_canvas_emails(
-        #         user,
-        #         action,
-        #         payload,
-        #         log_item)
-        # elif action.action_type == Action.PERSONALIZED_JSON:
-        #     items_processed = send_json(
-        #         user,
-        #         action,
-        #         payload,
-        #         log_item)
-        # elif action.action_type == Action.SEND_LIST_JSON:
-        #     items_processed = send_json_list(
-        #         user,
-        #         action,
-        #         payload,
-        #         log_item)
 
         # Reflect status in the log event
         log_item.payload['status'] = 'Execution finished successfully'
