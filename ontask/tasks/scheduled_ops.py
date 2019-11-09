@@ -3,7 +3,7 @@
 """Process the scheduled actions."""
 
 from datetime import datetime
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 import pytz
 from celery import shared_task
@@ -12,7 +12,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from ontask import core, models
-from ontask.action.services.task import run
+from ontask.action.services import task
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
 logger = get_task_logger('celery_execution')
@@ -73,7 +73,7 @@ def _prepare_personalized_text(
     :param s_item: Scheduled Action item in the DB
     :return: Pair (SessionPayload, Log item)
     """
-    payload = core.SessionPayload(s_item.payload)
+    payload = core.SessionPayload(initial_values=s_item.payload)
     payload['action_id'] = s_item.action_id
     payload['item_column'] = s_item.item_column.name
     payload['exclude_values'] = s_item.exclude_values
@@ -92,7 +92,7 @@ def _prepare_send_list(
     :param s_item: Scheduled Action item in the DB
     :return: Pair (SendListPayload, Log item)
     """
-    payload = core.SessionPayload(s_item.payload)
+    payload = core.SessionPayload(initial_values=s_item.payload)
     payload['action_id'] = s_item.action_id
     log_item = s_item.action.log(
         s_item.user,
@@ -103,7 +103,7 @@ def _prepare_send_list(
 
 def _prepare_personalized_json(
     s_item: models.ScheduledOperation,
-) -> Tuple[core.SessionPayload, models.Log]:
+) -> Tuple[Dict, models.Log]:
     """Create Action info and log object for the Personalized JSON.
 
     :param s_item: Scheduled Action item in the DB
@@ -114,7 +114,7 @@ def _prepare_personalized_json(
     if s_item.item_column:
         item_column = s_item.item_column.name
 
-    payload = core.SessionPayload(s_item.payload)
+    payload = s_item.payload
     payload['action_id'] = s_item.action_id
     payload['item_column'] = item_column
     payload['exclude_values'] = s_item.exclude_values
@@ -129,13 +129,13 @@ def _prepare_personalized_json(
 
 def _prepare_send_list_json(
     s_item: models.ScheduledOperation,
-) -> Tuple[core.SessionPayload, models.Log]:
+) -> Tuple[Dict, models.Log]:
     """Create Action info and log object for the List JSON.
 
     :param s_item: Scheduled Action item in the DB
     :return: Pair (SendListPayload, Log item)
     """
-    payload = core.SessionPayload(s_item.payload)
+    payload = s_item.payload
     payload['action_id'] = s_item.action_id
 
     # Log the event
@@ -148,14 +148,14 @@ def _prepare_send_list_json(
 
 def _prepare_canvas_email(
     s_item: models.ScheduledOperation,
-) -> Tuple[core.SessionPayload, models.Log]:
+) -> Tuple[Dict, models.Log]:
     """Create Action info and log object for the List JSON.
 
     :param s_item: Scheduled Action item in the DB
-    :return: Pair (SessionPayload, Log item)
+    :return: Pair (Dict, Log item)
     """
     # Get the information from the payload
-    payload = core.SessionPayload(s_item.payload)
+    payload = s_item.payload
     payload['action_id'] = s_item.action_id
     payload['item_column'] = s_item.item_column.name
     payload['exclude_values'] = s_item.exclude_values
@@ -204,18 +204,22 @@ def execute_scheduled_actions_task(debug: bool):
 
                 run_result = None
                 log_item = None
-                action_info = None
+                payload = None
 
                 # Get action info and log item
                 if s_item.action.action_type in _function_distributor:
-                    action_info, log_item = _function_distributor[
+                    payload, log_item = _function_distributor[
                         s_item.action.action_type](s_item)
 
+                payload['operation_type'] = s_item.action.action_type
+                if s_item.item_column:
+                    payload['item_column'] = s_item.item_column.pk
+
                 if log_item:
-                    run_result = run(
+                    run_result = task.run(
                         s_item.user.id,
                         log_item.id,
-                        action_info.get_store())
+                        payload)
                     s_item.last_executed_log = log_item
                 else:
                     logger.error(

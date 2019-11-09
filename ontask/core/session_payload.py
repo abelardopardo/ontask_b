@@ -18,17 +18,22 @@ class SessionPayload(collections.MutableMapping):
         """Remove the table from the session."""
         session.pop(PAYLOAD_SESSION_DICTIONARY, None)
 
-    def __init__(self, session: SessionBase, initial_values=None):
+    def __init__(self,
+        session: Optional[SessionBase] = None,
+        initial_values: Optional[Dict] =None,
+    ):
         """Initialize the store with the given arguments."""
         super().__init__()
         self.__store = {}
-        in_session = session.get(PAYLOAD_SESSION_DICTIONARY)
-        if in_session:
-            self.__store = in_session
+        if session:
+            in_session = session.get(PAYLOAD_SESSION_DICTIONARY)
+            if in_session:
+                self.__store = in_session
 
         if initial_values:
             self.__store.update(initial_values)
-        self.store_in_session(session)
+        if session:
+            self.store_in_session(session)
 
     def __getitem__(self, key):
         """Get item from the store.

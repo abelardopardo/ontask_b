@@ -34,10 +34,18 @@ SCHEDULED_STATUS = [
     (STATUS_DONE_ERROR, _('Finished with error')),
 ]
 
-RUN_ACTION = 'run_action'
+RUN_ACTION_PERSONALIZED_TEXT = 'run_action_personalized_text'
+RUN_ACTION_PERSONALIZED_JSON = 'run_action_personalized_json'
+RUN_ACTION_SEND_LIST = 'run_action_send_list'
+RUN_ACTION_SEND_LIST_JSON = 'run_action_send_list_json'
+RUN_ACTION_RUBRIC_TEXT = 'run_action_rubric_text'
 
 OPERATION_TYPES = [
-    (RUN_ACTION, _('Run action')),
+    (RUN_ACTION_PERSONALIZED_TEXT, _('Run personali=zed text action')),
+    (RUN_ACTION_PERSONALIZED_JSON, _('Run personalized JSON action')),
+    (RUN_ACTION_SEND_LIST, _('Run send list action')),
+    (RUN_ACTION_SEND_LIST_JSON, _('Run send JSON list action')),
+    (RUN_ACTION_RUBRIC_TEXT, _('Run rubrict text action')),
 ]
 
 

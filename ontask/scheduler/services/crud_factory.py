@@ -187,19 +187,6 @@ class SchedulerCRUDFactory(object):
         """Initialize the set of _creators."""
         self._creators = {}
 
-    @classmethod
-    def _get_operation_type(cls, operation_type: str, **kwargs) -> str:
-        """Use action and schedule_item in kwargs to obtain the operation_type.
-
-        If operation_type is RUN_ACTION, add a suffix with the type of action.
-        """
-        if operation_type == models.scheduler.RUN_ACTION:
-            action = kwargs.get('action', None)
-            if not action:
-                action = kwargs['schedule_item'].action
-            operation_type += '.' + action.action_type
-        return operation_type
-
     def _get_creator(self, operation_type):
         """Get the creator for the tiven operation_type and args."""
         creator_obj = self._creators.get(operation_type)
@@ -227,10 +214,9 @@ class SchedulerCRUDFactory(object):
 
         :return: HttpResponse
         """
-        complex_op_type = self._get_operation_type(operation_type, **kwargs)
         try:
-            return self._get_creator(complex_op_type).process(
-                complex_op_type,
+            return self._get_creator(operation_type).process(
+                operation_type,
                 **kwargs)
         except ValueError:
             return render(kwargs.get('request'), 'base.html', {})
@@ -257,17 +243,17 @@ class SchedulerCRUDFactory(object):
 
 schedule_crud_factory = SchedulerCRUDFactory()
 schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION + '.' + models.Action.PERSONALIZED_TEXT,
+    models.scheduler.RUN_ACTION_PERSONALIZED_TEXT,
     ScheduledOperationSaveActionRun(forms.ScheduleEmailForm))
 schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION + '.' + models.Action.PERSONALIZED_JSON,
+    models.scheduler.RUN_ACTION_PERSONALIZED_JSON,
     ScheduledOperationSaveActionRun(forms.ScheduleJSONForm))
 schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION + '.' + models.Action.SEND_LIST,
+    models.scheduler.RUN_ACTION_SEND_LIST,
     ScheduledOperationSaveActionRun(forms.ScheduleSendListForm))
 schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION + '.' + models.Action.SEND_LIST_JSON,
+    models.scheduler.RUN_ACTION_SEND_LIST_JSON,
     ScheduledOperationSaveActionRun(forms.ScheduleJSONListForm))
 schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION + '.' + models.Action.RUBRIC_TEXT,
+    models.scheduler.RUN_ACTION_RUBRIC_TEXT,
     ScheduledOperationSaveActionRun(forms.ScheduleEmailForm))
