@@ -114,7 +114,7 @@ def create_action_run(
         return redirect('home')
 
     return services.schedule_crud_factory.crud_process(
-        models.scheduler.RUN_ACTION,
+        models.scheduler.RUN_ACTION + action.action_type,
         action=action,
         schedule_item=None,
         request=request,
@@ -147,7 +147,7 @@ def edit_scheduled_operation(
         return redirect('home')
 
     return services.schedule_crud_factory.crud_process(
-        models.scheduler.RUN_ACTION,
+        models.scheduler.RUN_ACTION + s_item.action.action_type,
         request=request,
         action=s_item.action,
         schedule_item=s_item,
