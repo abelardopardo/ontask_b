@@ -7,7 +7,6 @@ from django.shortcuts import render
 
 from ontask.action.forms import SendListActionForm
 from ontask.action.payloads import SendListPayload
-from ontask.action.send import send_list_email
 from ontask.models import Action, Log, Workflow
 from ontask.tasks import run_task
 

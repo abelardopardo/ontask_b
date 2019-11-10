@@ -12,12 +12,13 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_correct_email
-from ontask.core.forms import FormWithPayload, date_time_widget_options
+from ontask.action import forms as action_forms
+from ontask.core import forms as ontask_forms
 from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import Column, ScheduledOperation
 
 
-class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
+class ScheduleBasicForm(ontask_forms.FormWithPayloadAbstract, forms.ModelForm):
     """Form to create/edit objects of the ScheduleAction.
 
     To be used for the various types of actions.
@@ -26,16 +27,13 @@ class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
 
     def __init__(self, form_data, *args, **kwargs):
         """Set item_column values."""
-        self.action = kwargs.pop('action')
-
-        # Call the parent constructor
         super().__init__(form_data, *args, **kwargs)
 
         self.set_fields_from_dict(['name', 'description_text'])
         self.fields['execute'].initial = parse_datetime(
-                self._FormWithPayload__form_info.get('execute', ''))
+                self.get_payload_field('execute', ''))
         self.fields['execute_until'].initial = parse_datetime(
-                self._FormWithPayload__form_info.get('execute_until', ''))
+                self.get_payload_field('execute_until', ''))
 
     def clean(self):
         """Verify that the date is corre    ct."""
@@ -75,12 +73,14 @@ class ScheduleBasicForm(FormWithPayload, forms.ModelForm):
         model = ScheduledOperation
         fields = ('name', 'description_text', 'execute', 'execute_until')
         widgets = {
-            'execute': DateTimePickerInput(options=date_time_widget_options),
+            'execute': DateTimePickerInput(
+                options=ontask_forms.date_time_widget_options),
             'execute_until':
-                DateTimePickerInput(options=date_time_widget_options)}
+                DateTimePickerInput(
+                    options=ontask_forms.date_time_widget_options)}
 
 
-class ScheduleMailSubjectForm(FormWithPayload):
+class ScheduleMailSubjectForm(ontask_forms.FormWithPayload):
     subject = forms.CharField(
         initial='',
         label=_('Email subject'),
@@ -99,7 +99,7 @@ class ScheduleMailSubjectForm(FormWithPayload):
         self.store_field_in_dict('subject')
         return form_data
 
-class ScheduleMailCCForm(FormWithPayload):
+class ScheduleMailCCForm(ontask_forms.FormWithPayload):
     cc_email = forms.CharField(
         initial='',
         label=_('CC Emails (separated by spaces)'),
@@ -228,7 +228,7 @@ class ScheduleItemsForm(ScheduleBasicForm):
             'execute_until')
 
 
-class ScheduleTokenForm(FormWithPayload):
+class ScheduleTokenForm(ontask_forms.FormWithPayload):
     # Token to use when sending the JSON request
     token = forms.CharField(
         initial='',
@@ -262,9 +262,9 @@ class ScheduleTokenForm(FormWithPayload):
 
 
 class EmailScheduleForm(
-    ScheduleMailSubjectForm,
-    ScheduleMailCCForm,
-    ScheduleItemsForm,
+    ontask_forms.FormWithPayload,
+    ScheduleBasicForm,
+    action_forms.EmailActionForm,
 ):
     """Form to create/edit objects of the ScheduleAction of type email.
 
@@ -319,11 +319,11 @@ class EmailScheduleForm(
 
 
 class SendListScheduleForm(
-    ScheduleMailSubjectForm, ScheduleMailCCForm, ScheduleBasicForm
+    ontask_forms.FormWithPayload,
+    ScheduleBasicForm,
+    action_forms.SendListActionForm,
 ):
     """Form to create/edit objects of the ScheduleAction of type send list."""
-
-    email_to = forms.CharField(label=_('Recipient'), required=True)
 
     def __init__(self, form_data, *args, **kwargs):
         """Set additional field items."""
@@ -331,8 +331,6 @@ class SendListScheduleForm(
 
         # Call the parent constructor
         super().__init__(form_data, *args, **kwargs)
-
-        self.set_field_from_dict('email_to')
 
         self.order_fields([
             'name',
@@ -358,8 +356,12 @@ class SendListScheduleForm(
         return form_data
 
 
-class JSONScheduleForm(ScheduleTokenForm, ScheduleItemsForm):
-    """Form to edit ScheduleAction of types JSON and JSON List."""
+class JSONScheduleForm(
+    ontask_forms.FormWithPayload,
+    ScheduleBasicForm,
+    action_forms.JSONActionForm,
+):
+    """Form to edit ScheduleAction of type JSON."""
 
     class Meta(ScheduleItemsForm.Meta):
         """Redefine the order."""
@@ -374,7 +376,11 @@ class JSONScheduleForm(ScheduleTokenForm, ScheduleItemsForm):
             'token')
 
 
-class JSONListScheduleForm(ScheduleTokenForm, ScheduleBasicForm):
+class JSONListScheduleForm(
+    ontask_forms.FormWithPayload,
+    ScheduleBasicForm,
+    action_forms.JSONListActionForm,
+):
     """Form to edit ScheduleAction of types JSON List."""
 
     def __init__(self, form_data, *args, **kwargs):
@@ -383,6 +389,13 @@ class JSONListScheduleForm(ScheduleTokenForm, ScheduleBasicForm):
 
         # Call the parent constructor
         super().__init__(form_data, *args, **kwargs)
+
+        self.order_fields([
+            'name',
+            'description_text',
+            'execute',
+            'execute_until',
+            'token'])
 
     class Meta(ScheduleBasicForm.Meta):
         """Redefine the order."""
@@ -395,16 +408,26 @@ class JSONListScheduleForm(ScheduleTokenForm, ScheduleBasicForm):
             'token')
 
 
-class CanvasEmailScheduleForm(ScheduleMailSubjectForm, ScheduleItemsForm):
-    """Form to create/edit ScheduleAction of type canvas email."""
+class CanvasEmailScheduleForm(
+    ontask_forms.FormWithPayload,
+    ScheduleBasicForm,
+    action_forms.CanvasEmailActionForm,
+):
+    """Form to schedule Action of type canvas email."""
 
     def __init__(self, form_data, *args, **kwargs):
         """Assign item_column field."""
         # Call the parent constructor
         super().__init__(form_data, *args, **kwargs)
 
-        self.fields['item_column'].label = _(
-            'Column in the table containing the Canvas ID')
+        self.order_fields([
+            'name',
+            'description_text',
+            'item_column',
+            'confirm_items',
+            'subject',
+            'execute',
+            'execute_until'])
 
     class Meta(ScheduleItemsForm.Meta):
         """Field order."""

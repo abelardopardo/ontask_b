@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Generic forms to be used in various placdes in the platform."""
-from typing import Dict
+from typing import Dict, Optional, Any, List
 
 import pytz
 from django import forms
@@ -66,15 +66,63 @@ class RestrictedFileField(forms.FileField):
 
         return form_data
 
-
-class FormWithPayload(forms.Form):
-    """Form that has a method to initialize fields based on a Dict."""
+class FormWithPayloadAbstract(forms.Form):
+    """Abstract class to implement the form with payload."""
 
     def __init__(self, *args, **kargs):
-        self.__form_info: Dict = kargs.pop('form_info', {})
+        self.__form_info = None
         super().__init__(*args, **kargs)
 
-    def set_field_from_dict(self, field_name):
+    def get_payload_field(
+        self, key:
+        str, default:
+        Optional[Any] = None
+    ) -> Any:
+        del key
+        raise Exception('Incorrect method invocation')
+
+    def set_field_from_dict(self, field_name:str):
+        del field_name
+        raise Exception('Incorrect method invocation')
+
+
+    def set_fields_from_dict(self, field_names: List[str]):
+        del field_names
+        raise Exception('Incorrect method invocation')
+
+    def store_field_in_dict(
+        self,
+        field_name: str,
+        field_value: Optional[Any] = None
+    ):
+        del field_name, field_value
+        raise Exception('Incorrect method invocation')
+
+    def store_fields_in_dict(self, field_pairs):
+        del field_pairs
+        raise Exception('Incorrect method invocation')
+
+
+class FormWithPayload(FormWithPayloadAbstract):
+    """Form that has a method to initialize fields based on a Dict.
+
+    The constructor receives a form_info dictionary that is used to initialize
+    the fields in the form.
+    """
+
+    def __init__(self, *args, **kargs):
+        f_info: Dict = kargs.pop('form_info', {})
+        super().__init__(*args, **kargs)
+        self.__form_info = f_info
+
+    def get_payload_field(
+        self,
+        key: str,
+        default: Optional[Any] = None
+    ) -> Any:
+        return self.__form_info.get(key, default)
+
+    def set_field_from_dict(self, field_name: str):
         """Initialize the field with the value in __form_info it it exists.
 
     :param form: Form object containing all the fields
@@ -86,7 +134,7 @@ class FormWithPayload(forms.Form):
         if field_name in self.__form_info:
             self.fields[field_name].initial = self.__form_info[field_name]
 
-    def set_fields_from_dict(self, field_names):
+    def set_fields_from_dict(self, field_names: List[str]):
         """Set the list of field_names as values in fields
 
         :param field_names: List of field_names to use
@@ -94,7 +142,11 @@ class FormWithPayload(forms.Form):
         for field_name in field_names:
             self.set_field_from_dict(field_name)
 
-    def store_field_in_dict(self, field_name, field_value=None):
+    def store_field_in_dict(
+        self,
+        field_name: str,
+        field_value: Optional[Any] = None
+    ):
         """Store the value of a field in the dictionary."""
         if field_name not in self.fields:
             return

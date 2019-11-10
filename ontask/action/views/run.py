@@ -29,6 +29,7 @@ from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
+from ontask.action import services
 
 fn_distributor = {
     Action.PERSONALIZED_TEXT: run_email_action,
@@ -76,6 +77,11 @@ def run_action(
         return redirect(reverse('action:index'))
 
     return fn_distributor[action.action_type](request, workflow, action)
+
+    # return services.action_run_request_factory.process_request(
+    #     action.action_type,
+    #     request=request,
+    #     action=action)
 
 
 @csrf_exempt

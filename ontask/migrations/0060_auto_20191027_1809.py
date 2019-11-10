@@ -11,7 +11,7 @@ def update_scheduled_op_workflow_field(apps, schema_editor):
         sch_item.workflow = sch_item.action.workflow
         sch_item.save()
 
-        
+
 class Migration(migrations.Migration):
 
     dependencies = [
