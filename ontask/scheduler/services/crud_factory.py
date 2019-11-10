@@ -193,7 +193,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
 
 
 class SchedulerCRUDFactory(object):
-    """Factory to select the right function to save a scheduled operation."""
+    """Factory to manipulate a scheduled operation."""
 
     def __init__(self):
         """Initialize the set of _creators."""
@@ -223,7 +223,7 @@ class SchedulerCRUDFactory(object):
         """Register the given object that will perform the save operation."""
         self._creators[operation_type] = saver_obj
 
-    def process(self, operation_type, **kwargs):
+    def crud_process(self, operation_type, **kwargs):
         """Execute the corresponding process function.
 
         :param operation_type: Type of scheduled item being processed. If the
@@ -247,7 +247,7 @@ class SchedulerCRUDFactory(object):
         except ValueError:
             return render(kwargs.get('request'), 'base.html', {})
 
-    def finish(self, operation_type, **kwargs):
+    def crud_finish(self, operation_type, **kwargs):
         """Execute the corresponding finish function.
 
         :param operation_type: Type of scheduled item being processed. If the

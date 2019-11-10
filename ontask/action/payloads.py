@@ -8,6 +8,9 @@ from typing import Dict, Mapping, Optional
 from django.conf import settings
 from django.contrib.sessions.backends.base import SessionBase
 from django.contrib.sessions.models import Session
+from django.urls import reverse
+
+from ontask.models import Action
 
 PAYLOAD_SESSION_DICTIONARY = 'action_run_payload'
 
@@ -288,6 +291,7 @@ def get_or_set_action_info(
     payloadclass,
     action_info: Optional[ActionPayload] = None,
     initial_values: Optional[Dict] = None,
+    action: Optional[Action] = None,
 ) -> Optional[ActionPayload]:
     """Get (from the session object) or create an ActionPayload object.
 
@@ -312,13 +316,16 @@ def get_or_set_action_info(
     if action_info:
         return payloadclass(action_info)
 
-    if not initial_values:
-        # Nothing found in the session and no initial values given.
-        return None
-
+    # if not initial_values:
+    #     # Nothing found in the session and no initial values given.
+    #     return None
+    #
     # Create the object with the given class
-    action_info = payloadclass(initial_values)
+    action_info = payloadclass({
+        'action_id': action.id,
+        'prev_url': reverse('action:run', kwargs={'pk': action.id}),
+        'post_url': reverse('action:email_done')})
     session[PAYLOAD_SESSION_DICTIONARY] = action_info.get_store()
     session.save()
 
-    return payloadclass(initial_values)
+    return action_info

@@ -18,11 +18,22 @@ from ontask.action.forms import ZipActionForm
 from ontask.action.payloads import (
     ZipPayload, get_or_set_action_info, set_action_payload,
 )
-from ontask.action.views.run_email import html_body
 from ontask.core.decorators import get_action, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import Action, Log, Workflow
+
+
+html_body = """<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>title</title>
+  </head>
+  <body>
+    {0}
+  </body>
+</html>"""
 
 
 @user_passes_test(is_instructor)

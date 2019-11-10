@@ -10,10 +10,8 @@ from celery import shared_task
 from django.conf import settings
 from django.core.cache import cache
 
-from ontask.action.payloads import (
-    CanvasEmailPayload, EmailPayload, JSONPayload, SendListPayload,
-)
 from ontask import models
+from ontask.action import payloads
 from ontask.tasks.basic import logger, run_task
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
@@ -68,13 +66,13 @@ def _get_pending_items():
 
 def _prepare_personalized_text(
     s_item: models.ScheduledOperation,
-) -> Tuple[EmailPayload, models.Log]:
+) -> Tuple[payloads.EmailPayload, models.Log]:
     """Creaete Action info and log object for the Personalized email.
 
     :param s_item: Scheduled Action item in the DB
     :return: Pair (EmailPlayload, Log item)
     """
-    action_info = EmailPayload(s_item.payload)
+    action_info = payloads.EmailPayload(s_item.payload)
     action_info['action_id'] = s_item.action_id
     action_info['item_column'] = s_item.item_column.name
     action_info['exclude_values'] = s_item.exclude_values
@@ -87,13 +85,13 @@ def _prepare_personalized_text(
 
 def _prepare_send_list(
     s_item: models.ScheduledOperation,
-) -> Tuple[SendListPayload, models.Log]:
+) -> Tuple[payloads.SendListPayload, models.Log]:
     """Create Action info and log object for the List email.
 
     :param s_item: Scheduled Action item in the DB
     :return: Pair (SendListPayload, Log item)
     """
-    action_info = SendListPayload(s_item.payload)
+    action_info = payloads.SendListPayload(s_item.payload)
     action_info['action_id'] = s_item.action_id
     log_item = s_item.action.log(
         s_item.user,
@@ -104,7 +102,7 @@ def _prepare_send_list(
 
 def _prepare_personalized_json(
     s_item: models.ScheduledOperation,
-) -> Tuple[JSONPayload, models.Log]:
+) -> Tuple[payloads.JSONPayload, models.Log]:
     """Create Action info and log object for the Personalized JSON.
 
     :param s_item: Scheduled Action item in the DB
@@ -115,7 +113,7 @@ def _prepare_personalized_json(
     if s_item.item_column:
         item_column = s_item.item_column.name
 
-    action_info = JSONPayload(s_item.payload)
+    action_info = payloads.JSONPayload(s_item.payload)
     action_info['action_id'] = s_item.action_id
     action_info['item_column'] = item_column
     action_info['exclude_values'] = s_item.exclude_values
@@ -130,13 +128,13 @@ def _prepare_personalized_json(
 
 def _prepare_send_list_json(
     s_item: models.ScheduledOperation,
-) -> Tuple[JSONPayload, models.Log]:
+) -> Tuple[payloads.JSONPayload, models.Log]:
     """Create Action info and log object for the List JSON.
 
     :param s_item: Scheduled Action item in the DB
     :return: Pair (SendListPayload, Log item)
     """
-    action_info = JSONPayload(s_item.payload)
+    action_info = payloads.JSONPayload(s_item.payload)
     action_info['action_id'] = s_item.action_id
 
     # Log the event
@@ -149,14 +147,14 @@ def _prepare_send_list_json(
 
 def _prepare_canvas_email(
     s_item: models.ScheduledOperation,
-) -> Tuple[CanvasEmailPayload, models.Log]:
+) -> Tuple[payloads.CanvasEmailPayload, models.Log]:
     """Create Action info and log object for the List JSON.
 
     :param s_item: Scheduled Action item in the DB
     :return: Pair (CanvasEmailPayload, Log item)
     """
     # Get the information from the payload
-    action_info = CanvasEmailPayload(s_item.payload)
+    action_info = payloads.CanvasEmailPayload(s_item.payload)
     action_info['action_id'] = s_item.action_id
     action_info['item_column'] = s_item.item_column.name
     action_info['exclude_values'] = s_item.exclude_values

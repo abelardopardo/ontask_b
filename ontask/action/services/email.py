@@ -17,8 +17,11 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
+# from ontask.action import forms, payloads
+# from ontask.action.services.run_factory import ActionRunServiceBase
+
 import ontask.settings
-from ontask import is_correct_email, simplify_datetime_str
+from ontask import is_correct_email, simplify_datetime_str, models
 from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
@@ -422,3 +425,74 @@ def send_list_email(
     action.log(user, Log.ACTION_EMAIL_SENT, **context)
 
     return []
+
+
+# class ActionRunServiceEmail(ActionRunServiceBase):
+#     """Class to serive running an email action."""
+#
+#     def __init__(self):
+#         """Assign """
+#         super().__init__(forms.EmailActionForm, payloads.EmailPayload)
+#         # self.info_initial = {'post_url': reverse('action:email_done')}
+#         self.template = 'action/request_email_data.html'
+#         self.log_event = models.Log.ACTION_RUN_EMAIL
+#
+#     def run(
+#         self,
+#         user,
+#         action: models.Action,
+#         action_info: Dict,
+#         log_item: Optional[models.Log] = None,
+#     ) -> List[str]:
+#         """Send action content evaluated for each row.
+#
+#         Sends the emails for the given action and with the
+#         given subject. The subject will be evaluated also with respect to the
+#         rows, attributes, and conditions.
+#
+#         The messages are sent in bursts with a pause in seconds as specified by the
+#         configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
+#
+#         :param user: User object that executed the action
+#         :param action: Action from where to take the messages
+#         :param log_item: Log object to store results
+#         :param action_info: Dictionary key, value as defined in EmailPayload
+#
+#         :return: List of strings with the "to" fields used.
+#         """
+#         # Evaluate the action string, evaluate the subject, and get the value of
+#         # the email column.
+#         action_evals = evaluate_action(
+#             action,
+#             extra_string=action_info['subject'],
+#             column_name=action_info['item_column'],
+#             exclude_values=action_info['exclude_values'])
+#
+#         # Turn cc_email and bcc email into lists
+#         action_info['cc_email'] = action_info['cc_email'].split()
+#         action_info['bcc_email'] = action_info['bcc_email'].split()
+#
+#         _check_cc_lists(action_info['cc_email'], action_info['bcc_email'])
+#
+#         track_col_name = ''
+#         if action_info['track_read']:
+#             track_col_name = _create_track_column(action)
+#             # Get the log item payload to store the tracking column
+#             log_item.payload['track_column'] = track_col_name
+#             log_item.save()
+#
+#         msgs = _create_messages(
+#             user,
+#             action,
+#             action_evals,
+#             track_col_name,
+#             action_info,
+#         )
+#
+#         _deliver_msg_burst(msgs)
+#
+#         if action_info['send_confirmation']:
+#             # Confirmation message requested
+#             _send_confirmation_message(user, action, len(msgs))
+#
+#         return [msg.to[0] for msg in msgs]

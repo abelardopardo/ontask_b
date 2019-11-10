@@ -20,17 +20,6 @@ from ontask.core.permissions import is_instructor
 from ontask.models import Action, Log, Workflow
 from ontask.tasks import run_task
 
-html_body = """<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>title</title>
-  </head>
-  <body>
-    {0}
-  </body>
-</html>"""
-
 
 def run_email_action(
     req: HttpRequest,

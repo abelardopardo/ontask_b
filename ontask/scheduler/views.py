@@ -114,7 +114,7 @@ def create_action_run(
     if not action:
         return redirect('home')
 
-    return services.schedule_crud_factory.process(
+    return services.schedule_crud_factory.crud_process(
         models.scheduler.RUN_ACTION,
         action=action,
         schedule_item=None,
@@ -147,7 +147,7 @@ def edit_scheduled_operation(
     if not s_item:
         return redirect('home')
 
-    return services.schedule_crud_factory.process(
+    return services.schedule_crud_factory.crud_process(
         models.scheduler.RUN_ACTION,
         request=request,
         action=s_item.action,
@@ -188,7 +188,7 @@ def finish_scheduling(
             _('Incorrect action scheduling invocation.'))
         return redirect('action:index')
 
-    return services.schedule_crud_factory.finish(
+    return services.schedule_crud_factory.crud_finish(
         payload.get('operation_type'),
         request=request,
         schedule_item=None,
