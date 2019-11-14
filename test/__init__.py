@@ -1034,10 +1034,10 @@ class OnTaskLiveTestCase(LiveServerTestCase):
             adesc)
 
     def create_new_send_list_action(self, aname, adesc=''):
-        self.create_new_action_out_basic(aname, Action.SEND_LIST, adesc)
+        self.create_new_action_out_basic(aname, Action.EMAIL_LIST, adesc)
 
     def create_new_JSON_list_action(self, aname, adesc=''):
-        self.create_new_action_out_basic(aname, Action.SEND_LIST_JSON, adesc)
+        self.create_new_action_out_basic(aname, Action.JSON_LIST, adesc)
 
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog

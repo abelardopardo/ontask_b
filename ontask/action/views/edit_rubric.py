@@ -198,8 +198,8 @@ def edit_action_rubric(
             if filter_condition else -1,
         'has_data': action.workflow.has_table(),
         'is_send_list': (
-            action.action_type == Action.SEND_LIST
-            or action.action_type == Action.SEND_LIST_JSON),
+            action.action_type == Action.EMAIL_LIST
+            or action.action_type == Action.JSON_LIST),
         'is_personalized_text': action.action_type == Action.PERSONALIZED_TEXT,
         'is_rubric': action.action_type == Action.RUBRIC_TEXT,
         'rows_all_false': action.get_row_all_false_count(),

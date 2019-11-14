@@ -4,3 +4,4 @@
 
 from ontask.core.datatables import DataTablesServerSidePaging
 from ontask.core.session_payload import SessionPayload
+from ontask.core.celery import celery_is_up

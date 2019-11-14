@@ -292,8 +292,8 @@ def edit_action(
         models.Action.PERSONALIZED_CANVAS_EMAIL: edit_action_out,
         models.Action.PERSONALIZED_JSON: edit_action_out,
         models.Action.RUBRIC_TEXT: edit_action_rubric,
-        models.Action.SEND_LIST: edit_action_out,
-        models.Action.SEND_LIST_JSON: edit_action_out,
+        models.Action.EMAIL_LIST: edit_action_out,
+        models.Action.JSON_LIST: edit_action_out,
         models.Action.SURVEY: edit_action_in,
     }
 
