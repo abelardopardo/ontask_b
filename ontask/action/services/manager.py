@@ -1,24 +1,46 @@
-from typing import Any, Dict, Optional
+# -*- coding: utf-8 -*-
+
+"""Base class for CRUD manager for actions."""
+
+from typing import Any, Dict, Optional, Type
 
 from django import http
+from django.forms import forms
 from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.utils.translation import ugettext
 
-from ontask import models
-from ontask.action.services import task
+from ontask import models, tasks
 from ontask.core import SessionPayload
 
 
 class ActionManagerBase(object):
     """Base class to provide the service for the run views."""
 
-    def __init__(self, form_class: Any):
+    def _create_log_event(
+        self,
+        user,
+        action: models.Action,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
+    ):
+        if not log_item and self.log_event:
+            log_item = action.log(
+                user,
+                operation_type=self.log_event,
+                **payload)
+
+        return log_item
+
+    def __init__(
+        self,
+        form_class: Optional[Type[forms.Form]] = None,
+        log_event: Optional[str] = None,
+    ):
         """Assign and initialize the main service parameters."""
         self.form_class = form_class
         self.template = 'action/run_done.html'
-        self.log_event = None
-        self.run_task = None
+        self.log_event = log_event
 
     def process_request(
         self,
@@ -33,8 +55,7 @@ class ActionManagerBase(object):
             initial_values={
                 'action_id': action.id,
                 'prev_url': prev_url,
-                'post_url': reverse('action:run_done'),
-                'operation_type': operation_type})
+                'post_url': reverse('action:run_done')})
 
         form = self.form_class(
             request.POST or None,
@@ -84,18 +105,25 @@ class ActionManagerBase(object):
         payload: SessionPayload,
         action: Optional[models.Action] = None,
     ):
+        """Finish processing the request after item selection."""
         # Get the information from the payload
         if not action:
             action = workflow.actions.filter(pk=payload['action_id']).first()
             if not action:
                 return redirect('home')
 
-        log_item = action.log(request.user, **payload)
-
-        task.run.delay(
-            request.user.id,
-            log_item.id,
+        log_item = self._create_log_event(
+            request.user,
+            action,
             payload.get_store())
+
+        tasks.execute_operation.delay(
+            action.action_type,
+            user_id=request.user.id,
+            log_id=log_item.id,
+            workflow_id=workflow.id,
+            action_id=action.id if action else None,
+            payload=payload.get_store())
 
         # Reset object to carry action info throughout dialogs
         SessionPayload.flush(request.session)
@@ -106,12 +134,13 @@ class ActionManagerBase(object):
             'action/run_done.html',
             {'log_id': log_item.id, 'download': payload['export_wf']})
 
-    def process_run(
+    def execute_operation(
         self,
         user,
-        action: models.Action,
-        payload: Dict,
-        log_item: models.Log,
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
     ):
         """Run the action."""
         del user, action, payload

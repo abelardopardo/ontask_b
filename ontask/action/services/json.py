@@ -3,14 +3,14 @@
 """Views to run JSON actions."""
 import datetime
 import json
-from typing import Dict, Mapping
+from typing import Dict, Mapping, Optional, List
 
 import pytz
 import requests
 from celery.utils.log import get_task_logger
 from django.conf import settings
 
-from ontask import OnTaskSharedState, models
+from ontask import OnTaskSharedState, models, tasks
 from ontask.action import forms
 from ontask.action.evaluate import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
@@ -61,18 +61,23 @@ class ActionManagerJSON(ActionManagerBase):
 
     def __init__(self):
         """Assign default fields."""
-        super().__init__(forms.JSONActionRunForm)
+        super().__init__(
+            forms.JSONActionRunForm,
+            models.Log.ACTION_RUN_JSON)
         self.template = 'action/request_json_data.html'
-        self.log_event = models.Log.ACTION_RUN_JSON
 
-    def process_run(
+    def execute_operation(
         self,
         user,
-        action: models.Action,
-        payload: Dict,
-        log_item: models.Log,
-    ):
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
+    ) -> Optional[List]:
         """Send the personalized JSON objects to the given URL."""
+        if log_item is None:
+            log_item = action.log(user, self.log_event, **payload)
+
         action_evals = evaluate_action(
             action,
             column_name=action.workflow.columns.get(
@@ -103,17 +108,19 @@ class ActionManagerJSONList(ActionManagerBase):
 
     def __init__(self):
         """Assign default fields."""
-        super().__init__(forms.JSONListActionRunForm)
+        super().__init__(
+            forms.JSONListActionRunForm,
+            models.Log.ACTION_RUN_JSON_LIST)
         self.template = 'action/request_json_list_data.html'
-        self.log_event = models.Log.ACTION_RUN_JSON_LIST
 
-    def process_run(
+    def execute_operation(
         self,
         user,
-        action: models.Action,
-        payload: Dict,
-        log_item: models.Log,
-    ):
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
+    ) -> Optional[List]:
         """Send single json object to target URL.
 
         Sends a single json object to the URL in the action
@@ -128,6 +135,9 @@ class ActionManagerJSONList(ActionManagerBase):
 
         :return: Empty list (there are no column values for multiple sends)
         """
+        if log_item is None:
+            action.log(user, self.log_event, **payload)
+
         action_text = evaluate_row_action_out(
             action,
             get_action_evaluation_context(action, {}))
@@ -145,9 +155,18 @@ class ActionManagerJSONList(ActionManagerBase):
         return []
 
 
-action_run_request_factory.register_processor(
+process_obj = ActionManagerJSON()
+process_list = ActionManagerJSONList()
+action_run_request_factory.register_producer(
     models.Action.PERSONALIZED_JSON,
-    ActionManagerJSON())
-action_run_request_factory.register_processor(
-    models.Action.SEND_LIST_JSON,
-    ActionManagerJSONList())
+    process_obj)
+action_run_request_factory.register_producer(
+    models.Action.JSON_LIST,
+    process_list)
+
+tasks.task_execute_factory.register_producer(
+    models.Action.PERSONALIZED_JSON,
+    process_obj)
+tasks.task_execute_factory.register_producer(
+    models.Action.JSON_LIST,
+    process_list)

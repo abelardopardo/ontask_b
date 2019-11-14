@@ -6,8 +6,6 @@ from typing import Optional
 from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http.request import HttpRequest
-from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -16,14 +14,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from ontask import models
-from ontask.action import services
-from ontask.action.forms import ValueExcludeForm
-from ontask.action.services.manager_factory import action_run_request_factory
+from ontask.action import forms, services
 from ontask.core import DataTablesServerSidePaging, SessionPayload
-from ontask.core.celery import celery_is_up
+from ontask.core import celery_is_up
 from ontask.core.decorators import ajax_required, get_action, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Action, Workflow
 
 
 @user_passes_test(is_instructor)
@@ -53,7 +48,7 @@ def run_action(
               + 'Ask your system administrator to enable message queueing.'))
         return redirect(reverse('action:index'))
 
-    return action_run_request_factory.process_request(
+    return services.action_run_request_factory.process_request(
         action.action_type,
         request=request,
         action=action,
@@ -64,9 +59,9 @@ def run_action(
 @get_workflow()
 def run_done(
     request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None
+    workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
-    """Finish the create/edit operation of a scheduled operation"""
+    """Finish the create/edit operation of a scheduled operation."""
     payload = SessionPayload(request.session)
     if payload is None:
         # Something is wrong with this execution. Return to action table.
@@ -75,7 +70,7 @@ def run_done(
             _('Incorrect action run invocation.'))
         return redirect('action:index')
 
-    return action_run_request_factory.process_request_done(
+    return services.action_run_request_factory.process_request_done(
         payload.get('operation_type'),
         request=request,
         workflow=workflow,
@@ -100,7 +95,7 @@ def zip_action(
     :return: HTTP response
     """
     del workflow, pk
-    return action_run_request_factory.process_request(
+    return services.action_run_request_factory.process_request(
         models.action.ZIP_OPERATION,
         request=request,
         action=action,
@@ -125,7 +120,7 @@ def serve_action_lti(request: http.HttpRequest) -> http.HttpResponse:
 @login_required
 def serve_action(
     request: http.HttpRequest,
-    action_id: int
+    action_id: int,
 ) -> http.HttpResponse:
     """Serve the rendering of an action in a workflow for a given user.
 
@@ -206,12 +201,12 @@ def run_action_item_filter(
     try:
         action = workflow.actions.get(pk=payload['action_id'])
         item_column = workflow.columns.get(pk=payload['item_column'])
-    except:
+    except Exception:
         # Something is wrong with this execution. Return to the action table.
         messages.error(request, _('Incorrect item filter invocation.'))
         return redirect('action:index')
 
-    form = ValueExcludeForm(
+    form = forms.ValueExcludeForm(
         request.POST or None,
         action=action,
         column_name=item_column.name,
@@ -295,11 +290,11 @@ def action_zip_export(
 @require_http_methods(['POST'])
 @get_action(pf_related='actions')
 def show_survey_table_ss(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
-) -> JsonResponse:
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
+) -> http.JsonResponse:
     """Show elements in table that satisfy filter request.
 
     Serve the AJAX requests to show the elements in the table that satisfy
@@ -311,7 +306,7 @@ def show_survey_table_ss(
     # Check that the GET parameters are correctly given
     dt_page = DataTablesServerSidePaging(request)
     if not dt_page.is_valid:
-        return JsonResponse(
+        return http.JsonResponse(
             {'error': _('Incorrect request. Unable to process')},
         )
 
@@ -321,11 +316,11 @@ def show_survey_table_ss(
 @user_passes_test(is_instructor)
 @get_action(pf_related='actions')
 def run_survey_row(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
-) -> HttpResponse:
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
+) -> http.HttpResponse:
     """Render form for introducing information in a single row.
 
     Function that runs the action in for a single row. The request
@@ -349,7 +344,7 @@ def run_survey_row(
 
 
 @login_required
-def survey_thanks(request: HttpRequest) -> HttpResponse:
+def survey_thanks(request: http.HttpRequest) -> http.HttpResponse:
     """Respond simply saying thanks.
 
     :param request: Http requst

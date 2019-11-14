@@ -3,101 +3,122 @@
 """Function to increase the tracking column in a workflow."""
 
 import logging
+from typing import Dict, Optional
 
-from celery import shared_task
 from django.contrib.auth import get_user_model
 from django.core import signing
 from django.utils.translation import ugettext
 
 import ontask.dataops.sql
-from ontask.models import Action, Log
+from ontask import models
+from ontask.tasks.execute import task_execute_factory
 
 logger = logging.getLogger('ontask')
 
 
-@shared_task
-def increase_track_count_task(method, get_dict):
-    """
-    Function to process track requests asynchronously.
+class ExecuteIncreaseTrackCount(object):
+    """Process the increase track count in a workflow."""
 
-    :param method: GET or POST received in the request
-    :param get_dict: GET dictionary received in the request
-    :return: If correct, increases one row of the DB by one
-    """
+    def __init__(self):
+        """Assign default fields."""
+        super().__init__()
+        self.log_event = models.Log.ACTION_EMAIL_READ
 
-    if method != 'GET':
-        # Only GET requests are accepted
-        logger.error(ugettext('Non-GET request received in Track URL'))
-        return False
+    def execute_operation(
+        self,
+        user,
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
+    ):
+        """Function to process track requests asynchronously.
 
-    # Obtain the track_id from the request
-    track_id = get_dict.get('v')
-    if not track_id:
-        logger.error(ugettext('No track_id found in request'))
-        # No track id, nothing to do
-        return False
+        :param user: User object
+        :param workflow: Optional workflow object
+        :param action: Optional action object
+        :param payload: has fields method and get_dict with the request
+        method and the get dictionary.
+        :param log_item: Optional logitem object.
+        :returns: nothing
+        """
+        method = payload.get('method')
+        if method != 'GET':
+            # Only GET requests are accepted
+            raise Exception(ugettext('Non-GET request received in Track URL'))
 
-    # If the track_id is not correctly signed, finish.
-    try:
-        track_id = signing.loads(track_id)
-    except signing.BadSignature:
-        logger.error(ugettext('Bad signature in track_id'))
-        return False
+        get_dict = payload.get('get_dict')
+        if get_dict is None:
+            raise Exception(ugettext('No dictionary in Track URL'))
 
-    # The request is legit and the value has been verified. Track_id has now
-    # the dictionary with the tracking information
+        # Obtain the track_id from the request
+        track_id = get_dict.get('v')
+        if not track_id:
+            raise Exception(ugettext('No track_id found in request'))
 
-    # Get the objects related to the ping
-    user = get_user_model().objects.filter(email=track_id['sender']).first()
-    if not user:
-        logger.error(ugettext('Incorrect user email %s'), track_id['sender'])
-        return False
-
-    action = Action.objects.filter(pk=track_id['action']).first()
-    if not action:
-        logger.error(
-            ugettext('Incorrect action id %s'),
-            track_id['action'])
-        return False
-
-    # Extract the relevant fields from the track_id
-    column_dst = track_id.get('column_dst', '')
-    column_to = track_id.get('column_to', '')
-    msg_to = track_id.get('to', '')
-
-    column = action.workflow.columns.filter(name=column_dst).first()
-    if not column:
-        # If the column does not exist, we are done
-        logger.error(ugettext('Column %s does not exist'), column_dst)
-        return False
-
-    log_payload = {
-        'to': msg_to,
-        'email_column': column_to,
-        'column_dst': column_dst}
-
-    # If the track comes with column_dst, the event needs to be reflected
-    # back in the data frame
-    if column_dst:
+        # If the track_id is not correctly signed, finish.
         try:
-            # Increase the relevant cell by one
-            ontask.dataops.sql.row_queries.increase_row_integer(
-                action.workflow.get_data_frame_table_name(),
-                column_dst,
-                column_to,
-                msg_to
-            )
-        except Exception as e:
-            log_payload['EXCEPTION_MSG'] = str(e)
-        else:
-            # Get the tracking column and update all the conditions in the
-            # actions that have this column as part of their formulas
-            # FIX: Too aggressive?
-            track_col = action.workflow.columns.get(name=column_dst)
-            for action in action.workflow.actions.all():
-                action.update_n_rows_selected(track_col)
+            track_id = signing.loads(track_id)
+        except signing.BadSignature:
+            raise Exception(ugettext('Bad signature in track_id'))
 
-    # Record the event
-    action.log(user, Log.ACTION_EMAIL_READ, **log_payload)
+        # The request is legit and the value has been verified. Track_id has
+        # now the dictionary with the tracking information
 
-    return True
+        # Get the objects related to the ping
+        user = get_user_model().objects.filter(
+            email=track_id['sender']).first()
+        if not user:
+            raise Exception(
+                ugettext('Incorrect user email %s'),
+                track_id['sender'])
+
+        action = models.Action.objects.filter(pk=track_id['action']).first()
+        if not action:
+            raise Exception(
+                ugettext('Incorrect action id %s'),
+                track_id['action'])
+
+        # Extract the relevant fields from the track_id
+        column_dst = track_id.get('column_dst', '')
+        column_to = track_id.get('column_to', '')
+        msg_to = track_id.get('to', '')
+
+        column = action.workflow.columns.filter(name=column_dst).first()
+        if not column:
+            # If the column does not exist, we are done
+            raise Exception(ugettext('Column %s does not exist'), column_dst)
+
+        log_payload = {
+            'to': msg_to,
+            'email_column': column_to,
+            'column_dst': column_dst}
+
+        # If the track comes with column_dst, the event needs to be reflected
+        # back in the data frame
+        if column_dst:
+            try:
+                # Increase the relevant cell by one
+                ontask.dataops.sql.row_queries.increase_row_integer(
+                    action.workflow.get_data_frame_table_name(),
+                    column_dst,
+                    column_to,
+                    msg_to
+                )
+            except Exception as e:
+                log_payload['EXCEPTION_MSG'] = str(e)
+            else:
+                # Get the tracking column and update all the conditions in the
+                # actions that have this column as part of their formulas
+                # FIX: Too aggressive?
+                track_col = action.workflow.columns.get(name=column_dst)
+                for action in action.workflow.actions.all():
+                    action.update_n_rows_selected(track_col)
+
+        # Record the event
+        action.log(user, self.log_event, **log_payload)
+
+
+task_execute_factory.register_producer(
+    models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
+    ExecuteIncreaseTrackCount())

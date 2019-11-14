@@ -16,6 +16,7 @@ from django.urls import resolve
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import tasks
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
@@ -24,7 +25,6 @@ from ontask.dataops.plugin.plugin_manager import (
     load_plugin, refresh_plugin_data,
 )
 from ontask.models import Log, Plugin, Workflow
-from ontask.tasks import run_plugin_task
 
 
 class PluginAvailableTable(tables.Table):
@@ -261,18 +261,31 @@ def plugin_invoke(
             parameters=json.dumps(exec_params, default=str),
             status='preparing execution')
 
-        run_plugin_task.apply_async(
-            (
-                request.user.id,
-                workflow.id,
-                pk,
-                in_cols,
-                out_cols,
-                form.cleaned_data['out_column_suffix'],
-                form.cleaned_data['merge_key'],
-                exec_params,
-                log_item.id),
-            serializer='pickle')
+        tasks.execute_operation.delay(
+            Log.PLUGIN_EXECUTE,
+            user_id=request.user.id,
+            log_id=log_item.id,
+            workflow_id=workflow.id,
+            payload={
+                'plugin_id': pk,
+                'input_column_names': in_cols,
+                'output_column_names': out_cols,
+                'output_suffix': form.cleaned_data['out_column_suffix'],
+                'merge_key': form.cleaned_data['merge_key'],
+                'parameters': exec_params})
+
+        # run_plugin_task.apply_async(
+        #     (
+        #         request.user.id,
+        #         workflow.id,
+        #         pk,
+        #         in_cols,
+        #         out_cols,
+        #         form.cleaned_data['out_column_suffix'],
+        #         form.cleaned_data['merge_key'],
+        #         exec_params,
+        #         log_item.id),
+        #     serializer='pickle')
 
         # Successful processing.
         return render(

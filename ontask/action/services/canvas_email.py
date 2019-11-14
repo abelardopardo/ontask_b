@@ -5,7 +5,7 @@ import datetime
 import json
 from datetime import datetime, timedelta
 from time import sleep
-from typing import Dict, Mapping, Optional, Tuple
+from typing import Dict, Optional, Tuple, List
 
 import pytz
 import requests
@@ -21,7 +21,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
-from ontask import models
+from ontask import models, tasks
 from ontask.action import forms
 from ontask.action.evaluate import evaluate_action
 from ontask.action.services.manager import ActionManagerBase
@@ -199,9 +199,10 @@ class ActionManagerCanvasEmail(ActionManagerBase):
 
     def __init__(self):
         """Assign """
-        super().__init__(forms.CanvasEmailActionRunForm)
+        super().__init__(
+            forms.CanvasEmailActionRunForm,
+            models.Log.ACTION_RUN_CANVAS_EMAIL)
         self.template = 'action/request_canvas_email_data.html'
-        self.log_event = models.Log.ACTION_RUN_EMAIL
 
     def process_post(
         self,
@@ -228,13 +229,14 @@ class ActionManagerCanvasEmail(ActionManagerBase):
             payload['target_url'],
             continue_url)
 
-    def process_run(
+    def execute_operation(
         self,
         user,
-        action: models.Action,
-        payload: Dict,
-        log_item: models.Log,
-    ):
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
+    ) -> Optional[List]:
         """Send CANVAS emails with the action content evaluated for each row.
 
         Performs the submission of the emails for the given action and with the
@@ -248,6 +250,9 @@ class ActionManagerCanvasEmail(ActionManagerBase):
         """
         # Evaluate the action string, evaluate the subject, and get the value of
         # the email column.
+        if log_item is None:
+            log_item = action.log(user, self.log_event, **payload)
+
         item_column = action.workflow.columns.get(pk=payload['item_column'])
         action_evals = evaluate_action(
             action,
@@ -328,12 +333,17 @@ class ActionManagerCanvasEmail(ActionManagerBase):
             context['email_sent_datetime'] = str(
                 datetime.now(pytz.timezone(settings.TIME_ZONE)),
             )
-            action.log(user, models.Log.ACTION_CANVAS_EMAIL_SENT, **context)
+            action.log(user, models.Log.ACTION_RUN_CANVAS_EMAIL, **context)
             to_emails.append(msg_to)
 
         return to_emails
 
-
-action_run_request_factory.register_processor(
+process_obj = ActionManagerCanvasEmail()
+action_run_request_factory.register_producer(
     models.Action.PERSONALIZED_CANVAS_EMAIL,
-    ActionManagerCanvasEmail())
+    process_obj)
+
+
+tasks.task_execute_factory.register_producer(
+    models.Action.PERSONALIZED_CANVAS_EMAIL,
+    process_obj)

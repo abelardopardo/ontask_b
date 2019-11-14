@@ -1,82 +1,91 @@
 # -*- coding: utf-8 -*-
 
 """Function to run a plugin asynchronously."""
+import logging
+from typing import Dict, Optional
 
-from celery import shared_task
 from django.utils.translation import ugettext
 
-from ontask.core.services import get_execution_items
+from ontask import models
 from ontask.dataops.plugin.plugin_manager import run_plugin
-from ontask.logs.services import get_log_item
 from ontask.models import Plugin
+from ontask.tasks.execute import task_execute_factory
+
+logger = logging.getLogger('ontask')
 
 
-@shared_task
-def run_plugin_task(
-        user_id,
-        workflow_id,
-        plugin_id,
-        input_column_names,
-        output_column_names,
-        output_suffix,
-        merge_key,
-        parameters,
-        log_id):
-    """
+class ExecuteRunPlugin(object):
+    """Process the request to run a plugin in a workflow"""
 
-    Execute the run method in a plugin with the dataframe from the given
-    workflow
+    def __init__(self):
+        """Assign default fields."""
+        super().__init__()
+        self.log_event = models.Log.PLUGIN_EXECUTE
 
-    :param user_id: Id of User object that is executing the action
-    :param workflow_id: Id of workflow being processed
-    :param plugin_id: Id of the plugin being executed
-    :param input_column_names: List of input column names
-    :param output_column_names: List of output column names
-    :param output_suffix: Suffix that is added to the output column names
-    :param merge_key: Key column to use in the merge
-    :param parameters: Dictionary with the parameters to execute the plug in
-    :param log_id: Id of the log object where the status has to be reflected
-    :return: Nothing, the result is stored in the log with log_id
-    """
+    def execute_operation(
+        self,
+        user,
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
+    ):
+        """Execute the plugin. Most of the parameters are in the payload.
 
-    # First get the log item to make sure we can record diagnostics
-    log_item = get_log_item(log_id)
-    if not log_item:
-        return False
+        Execute the run method in a plugin with the dataframe from the given
+        workflow and a payload with:
 
-    to_return = True
-    try:
-        user, workflow, __ = get_execution_items(
-            user_id=user_id,
-            workflow_id=workflow_id)
+        - plugin_id: Id of the plugin being executed
+        - input_column_names: List of input column names
+        - output_column_names: List of output column names
+        - output_suffix: Suffix that is added to the output column names
+        - merge_key: Key column to use in the merge
+        - parameters: Dictionary with the execution parameters
+        """
+        del action
+        if not log_item and self.log_event:
+            log_item = workflow.log(
+                user,
+                operation_type=self.log_event,
+                **payload)
 
-        plugin_info = Plugin.objects.filter(pk=plugin_id).first()
-        if not plugin_info:
-            raise Exception(
-                ugettext('Unable to load plugin with id {pid}').format(
-                    plugin_id),
-            )
+        try:
+            # Get all the required information
+            plugin_id = payload['plugin_id']
+            input_column_names = payload['input_column_names']
+            output_column_names = payload['output_column_names']
+            output_suffix = payload['output_suffix']
+            merge_key = payload['merge_key']
+            parameters = payload['parameters']
 
-        # Set the status to "executing" before calling the function
-        log_item.payload['status'] = 'Executing'
-        log_item.save()
+            plugin_info = Plugin.objects.filter(pk=plugin_id).first()
+            if not plugin_info:
+                raise Exception(
+                    ugettext('Unable to load plugin with id {pid}').format(
+                        plugin_id),
+                )
 
-        # Invoke plugin execution
-        run_plugin(
-            workflow,
-            plugin_info,
-            input_column_names,
-            output_column_names,
-            output_suffix,
-            merge_key,
-            parameters)
+            # Set the status to "executing" before calling the function
+            log_item.payload['status'] = 'Executing'
+            log_item.save()
 
-        # Reflect status in the log event
-        log_item.payload['status'] = 'Execution finished successfully'
-        log_item.save()
-    except Exception as exc:
-        log_item.payload['status'] = ugettext('Error: {0}').format(str(exc))
-        log_item.save()
-        to_return = False
+            # Invoke plugin execution
+            run_plugin(
+                workflow,
+                plugin_info,
+                input_column_names,
+                output_column_names,
+                output_suffix,
+                merge_key,
+                parameters)
 
-    return to_return
+            # Reflect status in the log event
+            log_item.payload['status'] = 'Execution finished successfully'
+            log_item.save()
+        except Exception as exc:
+            log_item.payload['status'] = ugettext('Error: {0}').format(str(exc))
+            log_item.save()
+
+
+task_execute_factory.register_producer(
+    models.Log.PLUGIN_EXECUTE, ExecuteRunPlugin())

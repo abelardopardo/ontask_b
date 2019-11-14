@@ -162,9 +162,10 @@ class ActionManagerZip(ActionManagerBase):
 
     def __init__(self):
         """Assign default fields."""
-        super().__init__(forms.ZipActionRunForm)
+        super().__init__(
+            forms.ZipActionRunForm,
+            models.Log.ACTION_RUN_ZIP)
         self.template = 'action/action_zip_step1.html'
-        self.log_event = models.Log.ACTION_RUN_ZIP
 
     def process_request_done(
         self,
@@ -184,12 +185,15 @@ class ActionManagerZip(ActionManagerBase):
             if not action:
                 return redirect('home')
 
-        action.log(request.user, **payload)
+        self._create_log_event(
+            request.user,
+            action,
+            payload.get_store())
 
         # Successful processing.
         return render(request, 'action/action_zip_done.html', {})
 
 
-action_run_request_factory.register_processor(
+action_run_request_factory.register_producer(
     models.action.ZIP_OPERATION,
     ActionManagerZip())

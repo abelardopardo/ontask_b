@@ -10,7 +10,8 @@ from ontask.action.services.json import (
     ActionManagerJSON, ActionManagerJSONList,
 )
 from ontask.action.services.manager import ActionManagerBase
-from ontask.action.services.manager_factory import ActionManagementFactory
+from ontask.action.services.manager_factory import (
+    ActionManagementFactory, action_run_request_factory)
 from ontask.action.services.serve_action import (
     serve_action_out, serve_survey_row,
 )
