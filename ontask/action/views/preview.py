@@ -245,15 +245,15 @@ def preview_response(
     }
 
     if (
-        action.action_type == Action.SEND_LIST
-        or action.action_type == Action.SEND_LIST_JSON
+        action.action_type == Action.EMAIL_LIST
+        or action.action_type == Action.JSON_LIST
     ):
         # Obtain the evaluation context (no condition evaluation)
         action_final_text = evaluate_row_action_out(
             action,
             get_action_evaluation_context(action, {}))
         context['action_content'] = action_final_text
-        if action.action_type == Action.SEND_LIST_JSON:
+        if action.action_type == Action.JSON_LIST:
             incorrect_json = not _check_json_is_correct(action_final_text)
             context['incorrect_json'] = incorrect_json
     else:

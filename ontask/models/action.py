@@ -44,8 +44,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
     PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
     PERSONALIZED_JSON = 'personalized_json'
     RUBRIC_TEXT = 'rubric_text'
-    SEND_LIST = 'send_list'
-    SEND_LIST_JSON = 'send_list_json'
+    EMAIL_LIST = 'send_list'
+    JSON_LIST = 'send_list_json'
     SURVEY = 'survey'
     TODO_LIST = 'todo_list'
 
@@ -55,8 +55,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         (SURVEY, _('Survey')),
         (PERSONALIZED_JSON, _('Personalized JSON')),
         (RUBRIC_TEXT, _('Rubric feedback')),
-        (SEND_LIST, _('Send List')),
-        (SEND_LIST_JSON, _('Send List as JSON')),
+        (EMAIL_LIST, _('Send List')),
+        (JSON_LIST, _('Send List as JSON')),
         (TODO_LIST, _('TODO List'))
     ]
 
@@ -65,8 +65,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         PERSONALIZED_CANVAS_EMAIL: False,
         PERSONALIZED_JSON: False,
         RUBRIC_TEXT: False,
-        SEND_LIST: False,
-        SEND_LIST_JSON: False,
+        EMAIL_LIST: False,
+        JSON_LIST: False,
         SURVEY: True,
         TODO_LIST: True,
     }
@@ -76,8 +76,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         PERSONALIZED_CANVAS_EMAIL: False,
         PERSONALIZED_JSON: False,
         RUBRIC_TEXT: True,
-        SEND_LIST: True,
-        SEND_LIST_JSON: False,
+        EMAIL_LIST: True,
+        JSON_LIST: False,
         SURVEY: False,
         TODO_LIST: False,
     }
@@ -288,7 +288,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
             self.text_content
             and (
                 self.action_type == self.PERSONALIZED_TEXT
-                or self.action_type == self.SEND_LIST))
+                or self.action_type == self.EMAIL_LIST))
 
     def rename_variable(
         self,
@@ -418,8 +418,8 @@ class Action(ActionDataOut, ActionDataIn):
         for_out = (
             self.action_type == Action.PERSONALIZED_TEXT
             or self.action_type == Action.RUBRIC_TEXT
-            or self.action_type == Action.SEND_LIST
-            or self.action_type == Action.SEND_LIST_JSON
+            or self.action_type == Action.EMAIL_LIST
+            or self.action_type == Action.JSON_LIST
             or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
                 and settings.CANVAS_INFO_DICT is not None)
         )

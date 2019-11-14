@@ -27,11 +27,13 @@ def get_execution_items(
     :return: (user, action, log)
     """
     # Get the user
-    user = get_user_model().objects.filter(id=user_id).first()
-    if not user:
-        raise Exception(
-            ugettext('Unable to find user with id {0}').format(user_id),
-        )
+    user = None
+    if user_id:
+        user = get_user_model().objects.filter(id=user_id).first()
+        if not user:
+            raise Exception(
+                ugettext('Unable to find user with id {0}').format(user_id),
+            )
 
     workflow = None
     if workflow_id:

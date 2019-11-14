@@ -767,7 +767,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.SEND_LIST)
+        select.select_by_value(Action.EMAIL_LIST)
         desc.send_keys('Send email with column values as list')
 
         self.modal_ss('action_send_list_create.png')
@@ -803,7 +803,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.SEND_LIST_JSON)
+        select.select_by_value(Action.JSON_LIST)
         desc.send_keys('Send the list of inactive students in week 2 to another platform')
 
         self.modal_ss('action_json_list_create.png')

@@ -458,8 +458,8 @@ DISABLED_ACTIONS = [
     # 'Action.PERSONALIZED_TEXT',
     # 'Action.PERSONALIZED_JSON',
     # 'Action.PERSONALIZED_CANVAS_EMAIL',
-    # 'Action.SEND_LIST',
-    # 'Action.SEND_LIST_JSON',
+    # 'Action.EMAIL_LIST',
+    # 'Action.JSON_LIST',
     # 'Action.SURVEY',
     'Action.TODO_LIST',
 ]
@@ -492,7 +492,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE = {
     'ontask_scheduler': {
-        'task': 'ontask.tasks.scheduled_actions.execute_scheduled_actions_task',
+        'task': 'ontask.tasks.scheduled_actions.execute_scheduled_operations_task',
         'schedule': crontab(minute='*/{0}'.format(SCHEDULER_MINUTE_STEP)),
         'args': (DEBUG,),
     },

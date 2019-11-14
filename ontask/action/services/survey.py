@@ -155,7 +155,7 @@ class ActionManagerSurvey(ActionManagerBase):
 
     def __init__(self):
         """Assign initial templates."""
-        super().__init__(None)
+        super().__init__(log_event=models.Log.ACTION_SURVEY_INPUT)
         self.template = 'action/run_survey.html'
 
     def process_request(
@@ -178,6 +178,6 @@ class ActionManagerSurvey(ActionManagerBase):
                 'action': action})
 
 
-action_run_request_factory.register_processor(
+action_run_request_factory.register_producer(
     models.Action.SURVEY,
     ActionManagerSurvey())

@@ -44,13 +44,13 @@ def show_timeline(
         Log.ACTION_RUN_EMAIL,
         Log.ACTION_RUN_JSON,
         Log.ACTION_RUN_JSON_LIST,
-        Log.ACTION_RUN_SEND_LIST,
+        Log.ACTION_RUN_EMAIL_LIST,
         Log.ACTION_SURVEY_INPUT,
         Log.SCHEDULE_CANVAS_EMAIL_EDIT,
         Log.SCHEDULE_EMAIL_EDIT,
         Log.SCHEDULE_JSON_EDIT,
         Log.SCHEDULE_JSON_LIST_EDIT,
-        Log.SCHEDULE_SEND_LIST_EDIT,
+        Log.SCHEDULE_EMAIL_LIST_EDIT,
     ]
 
     # Filter the logs to display and transform into values (process the json

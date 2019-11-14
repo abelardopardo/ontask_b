@@ -32,7 +32,6 @@ class Log(models.Model):
     @DynamicAttrs
     """
 
-    ACTION_CANVAS_EMAIL_SENT = 'action_canvas_email_sent'
     ACTION_CLONE = 'action_clone'
     ACTION_CREATE = 'action_create'
     ACTION_DELETE = 'action_delete'
@@ -53,8 +52,8 @@ class Log(models.Model):
     ACTION_RUN_CANVAS_EMAIL = 'action_run_canvas_email'
     ACTION_RUN_EMAIL = 'schedule_email_execute'
     ACTION_RUN_JSON = 'schedule_json_execute'
-    ACTION_RUN_JSON_LIST = 'schedule_send_list_execute'
-    ACTION_RUN_SEND_LIST = 'schedule_send_list_execute'
+    ACTION_RUN_JSON_LIST = 'schedule_json_list_execute'
+    ACTION_RUN_EMAIL_LIST = 'schedule_send_list_execute'
     ACTION_RUN_ZIP = 'zip_messages_execute'
     ACTION_SERVE_TOGGLED = 'action_serve_toggled'
     ACTION_SERVED_EXECUTE = 'action_served_execute'
@@ -105,6 +104,7 @@ class Log(models.Model):
     WORKFLOW_DATA_UPLOAD = 'workflow_data_upload'
     WORKFLOW_DELETE = 'workflow_delete'
     WORKFLOW_IMPORT = 'workflow_import'
+    WORKFLOW_INCREASE_TRACK_COUNT = 'workflow_increase_track_count'
     WORKFLOW_SHARE_ADD = 'workflow_share_add'
     WORKFLOW_SHARE_DELETE = 'workflow_share_delete'
     WORKFLOW_STAR = 'workflow_star'
@@ -112,7 +112,6 @@ class Log(models.Model):
     WORKFLOW_UPDATE_LUSERS = 'workflow_update_lusers'
 
     LOG_TYPES = [
-        (ACTION_CANVAS_EMAIL_SENT, _('Canvas Emails sent')),
         (ACTION_CLONE, _('Action cloned')),
         (ACTION_CREATE, _('Action created')),
         (ACTION_DELETE, _('Action deleted')),
@@ -134,7 +133,7 @@ class Log(models.Model):
         (ACTION_RUN_EMAIL, _('Execute scheduled email action')),
         (ACTION_RUN_JSON, _('Execute scheduled JSON action')),
         (ACTION_RUN_JSON_LIST, _('Execute scheduled JSON list action')),
-        (ACTION_RUN_SEND_LIST, _('Execute scheduled send list action')),
+        (ACTION_RUN_EMAIL_LIST, _('Execute scheduled send list action')),
         (ACTION_RUN_ZIP, _('Create a zip with personalized content')),
         (ACTION_SERVE_TOGGLED, _('Action URL toggled')),
         (ACTION_SERVED_EXECUTE, _('Action served')),
@@ -185,6 +184,7 @@ class Log(models.Model):
         (WORKFLOW_DATA_UPLOAD, _('Data uploaded to workflow')),
         (WORKFLOW_DELETE, _('Workflow deleted')),
         (WORKFLOW_IMPORT, _('Import workflow')),
+        (WORKFLOW_INCREASE_TRACK_COUNT, _('Increase workflow track count.')),
         (WORKFLOW_SHARE_ADD, _('User share added')),
         (WORKFLOW_SHARE_DELETE, _('User share deleted')),
         (WORKFLOW_STAR, _('Toggle workflow star')),

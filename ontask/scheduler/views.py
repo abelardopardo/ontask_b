@@ -105,22 +105,21 @@ def create_action_run(
     :return: HTTP response
     """
     action = workflow.actions.filter(
-        pk=pk
-    ).filter(
+        pk=pk).filter(
         Q(workflow__user=request.user)
-        | Q(workflow__shared=request.user),
-    ).first()
+        | Q(workflow__shared=request.user)).first()
     if not action:
         return redirect('home')
 
     return services.schedule_crud_factory.crud_process(
-        models.scheduler.RUN_ACTION + action.action_type,
+        action.action_type,
         action=action,
         schedule_item=None,
         request=request,
         prev_url=reverse(
             'scheduler:create_action_run',
             kwargs={'pk': action.id}))
+
 
 @user_passes_test(is_instructor)
 @get_workflow()
@@ -138,11 +137,9 @@ def edit_scheduled_operation(
     :return: HTTP response
     """
     s_item = workflow.scheduled_operations.filter(
-        pk=pk
-    ).filter(
+        pk=pk).filter(
         Q(workflow__user=request.user)
-        | Q(workflow__shared=request.user)
-    ).first()
+        | Q(workflow__shared=request.user)).first()
     if not s_item:
         return redirect('home')
 
@@ -174,9 +171,9 @@ def create_workflow_op(
 @get_workflow()
 def finish_scheduling(
     request: HttpRequest,
-    workflow: Optional[models.Workflow] = None
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
-    """Finish the create/edit operation of a scheduled operation"""
+    """Finish the create/edit operation of a scheduled operation."""
     del workflow
     payload = SessionPayload(request.session)
     if payload is None:
@@ -210,11 +207,9 @@ def delete(
     """
     # Get the appropriate scheduled action
     s_item = workflow.scheduled_operations.filter(
-        pk=pk
-    ).filter(
+        pk=pk).filter(
         Q(workflow__user=request.user)
-        | Q(workflow__shared=request.user)
-    ).first()
+        | Q(workflow__shared=request.user)).first()
     if not s_item:
         return JsonResponse({'html_redirect': reverse('scheduler:index')})
 
