@@ -70,7 +70,6 @@ def criterion_create(
         workflow=action.workflow)
 
     if request.method == 'POST' and form.is_valid():
-        # Processing now a valid POST request
         # Access the updated information
         column_initial_value = form.initial_valid_value
 
@@ -112,7 +111,7 @@ def criterion_create(
             return JsonResponse({'html_redirect': ''})
 
         # Add the criterion to the action
-        acc = ActionColumnConditionTuple.objects.get_or_create(
+        acc, __ = ActionColumnConditionTuple.objects.get_or_create(
             action=action,
             column=column,
             condition=None)
