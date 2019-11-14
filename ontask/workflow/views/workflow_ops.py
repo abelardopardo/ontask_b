@@ -24,8 +24,8 @@ from ontask.core.permissions import is_instructor
 from ontask.core.tables import OperationsColumn
 from ontask.dataops.sql import get_rows, get_text_column_hash
 from ontask.models import Column, Log, Workflow
-from ontask.tasks import workflow_update_lusers_task
 from ontask.workflow.access import store_workflow_in_session
+from ontask import tasks
 
 
 class AttributeTable(tables.Table):
@@ -333,13 +333,11 @@ def assign_luser_column(
         log_item = workflow.log(request.user, Log.WORKFLOW_UPDATE_LUSERS)
 
         # Push the update of lusers to batch processing
-        workflow_update_lusers_task.delay(
-            request.user.id,
-            workflow.id,
-            log_item.id)
-
-    workflow.lusers_is_outdated = False
-    workflow.save()
+        tasks.execute_operation.delay(
+            operation_type=Log.WORKFLOW_UPDATE_LUSERS,
+            user_id=request.user.id,
+            workflow_id=workflow.id,
+            log_id=log_item.id)
 
     messages.success(
         request,

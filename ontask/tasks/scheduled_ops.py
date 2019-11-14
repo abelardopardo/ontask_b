@@ -12,7 +12,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from ontask import core, models
-from ontask.action.services import task
+from ontask.tasks.execute import task_execute_factory
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
 logger = get_task_logger('celery_execution')
@@ -65,117 +65,8 @@ def _get_pending_items():
     return s_items
 
 
-def _prepare_personalized_text(
-    s_item: models.ScheduledOperation,
-) -> Tuple[core.SessionPayload, models.Log]:
-    """Create Action info and log object for the Personalized email.
-
-    :param s_item: Scheduled Action item in the DB
-    :return: Pair (SessionPayload, Log item)
-    """
-    payload = core.SessionPayload(initial_values=s_item.payload)
-    payload['action_id'] = s_item.action_id
-    payload['item_column'] = s_item.item_column.name
-    payload['exclude_values'] = s_item.exclude_values
-    log_item = s_item.action.log(
-        s_item.user,
-        models.Log.ACTION_RUN_EMAIL,
-        **payload)
-    return payload, log_item
-
-
-def _prepare_send_list(
-    s_item: models.ScheduledOperation,
-) -> Tuple[core.SessionPayload, models.Log]:
-    """Create Action info and log object for the List email.
-
-    :param s_item: Scheduled Action item in the DB
-    :return: Pair (SendListPayload, Log item)
-    """
-    payload = core.SessionPayload(initial_values=s_item.payload)
-    payload['action_id'] = s_item.action_id
-    log_item = s_item.action.log(
-        s_item.user,
-        models.Log.ACTION_RUN_SEND_LIST,
-        **payload)
-    return payload, log_item
-
-
-def _prepare_personalized_json(
-    s_item: models.ScheduledOperation,
-) -> Tuple[Dict, models.Log]:
-    """Create Action info and log object for the Personalized JSON.
-
-    :param s_item: Scheduled Action item in the DB
-    :return: Pair (JSONPayload, Log item)
-    """
-    # Get the information about the keycolum
-    item_column = None
-    if s_item.item_column:
-        item_column = s_item.item_column.name
-
-    payload = s_item.payload
-    payload['action_id'] = s_item.action_id
-    payload['item_column'] = item_column
-    payload['exclude_values'] = s_item.exclude_values
-
-    # Log the event
-    log_item = s_item.action.log(
-        s_item.user,
-        models.Log.ACTION_RUN_JSON,
-        **payload)
-    return payload, log_item
-
-
-def _prepare_send_list_json(
-    s_item: models.ScheduledOperation,
-) -> Tuple[Dict, models.Log]:
-    """Create Action info and log object for the List JSON.
-
-    :param s_item: Scheduled Action item in the DB
-    :return: Pair (SendListPayload, Log item)
-    """
-    payload = s_item.payload
-    payload['action_id'] = s_item.action_id
-
-    # Log the event
-    log_item = s_item.action.log(
-        s_item.user,
-        models.Log.ACTION_RUN_JSON_LIST,
-        **payload)
-    return payload, log_item
-
-
-def _prepare_canvas_email(
-    s_item: models.ScheduledOperation,
-) -> Tuple[Dict, models.Log]:
-    """Create Action info and log object for the List JSON.
-
-    :param s_item: Scheduled Action item in the DB
-    :return: Pair (Dict, Log item)
-    """
-    # Get the information from the payload
-    payload = s_item.payload
-    payload['action_id'] = s_item.action_id
-    payload['item_column'] = s_item.item_column.name
-    payload['exclude_values'] = s_item.exclude_values
-    log_item = s_item.action.log(
-        s_item.user,
-        models.Log.ACTION_RUN_CANVAS_EMAIL,
-        **payload)
-    return payload, log_item
-
-
-_function_distributor = {
-    models.Action.PERSONALIZED_TEXT: _prepare_personalized_text,
-    models.Action.SEND_LIST: _prepare_send_list,
-    models.Action.PERSONALIZED_JSON: _prepare_personalized_json,
-    models.Action.SEND_LIST_JSON: _prepare_send_list_json,
-    models.Action.PERSONALIZED_CANVAS_EMAIL: _prepare_canvas_email}
-
-
 @shared_task
-def execute_scheduled_actions_task(debug: bool):
+def execute_scheduled_operations_task(debug: bool):
     """Execute the entries in the DB that are due.
 
     :return: Nothing.
@@ -202,29 +93,18 @@ def execute_scheduled_actions_task(debug: bool):
                 s_item.status = models.scheduler.STATUS_EXECUTING
                 s_item.save()
 
-                run_result = None
-                log_item = None
-                payload = None
-
-                # Get action info and log item
-                if s_item.action.action_type in _function_distributor:
-                    payload, log_item = _function_distributor[
-                        s_item.action.action_type](s_item)
-
-                payload['operation_type'] = s_item.action.action_type
+                payload = s_item.payload
                 if s_item.item_column:
                     payload['item_column'] = s_item.item_column.pk
+                if s_item.exclude_values is not None:
+                    payload['exclude_values'] = s_item.exclude_values
 
-                if log_item:
-                    run_result = task.run(
-                        s_item.user.id,
-                        log_item.id,
-                        payload)
-                    s_item.last_executed_log = log_item
-                else:
-                    logger.error(
-                        'Execution of action type "%s" not implemented',
-                        s_item.action.action_type)
+                run_result = task_execute_factory.execute_operation(
+                    operation_type=s_item.operation_type,
+                    user=s_item.user,
+                    workflow=s_item.workflow,
+                    action=s_item.action,
+                    payload=payload)
 
                 _update_item_status(s_item, run_result, debug)
             except Exception as exc:

@@ -154,6 +154,8 @@ def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
 
     # Assign result
     workflow.lusers.set(luser_list)
+    workflow.lusers_is_outdated = False
+    workflow.save()
 
     # Report status
     log_item.payload['total_users'] = emails.rowcount

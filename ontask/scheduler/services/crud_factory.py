@@ -185,18 +185,18 @@ class SchedulerCRUDFactory(object):
 
     def __init__(self):
         """Initialize the set of _creators."""
-        self._creators = {}
+        self._producers = {}
 
     def _get_creator(self, operation_type):
         """Get the creator for the tiven operation_type and args."""
-        creator_obj = self._creators.get(operation_type)
+        creator_obj = self._producers.get(operation_type)
         if not creator_obj:
             raise ValueError(operation_type)
         return creator_obj
 
-    def register_processor(self, operation_type: str, saver_obj):
+    def register_producer(self, operation_type: str, saver_obj):
         """Register the given object that will perform the save operation."""
-        self._creators[operation_type] = saver_obj
+        self._producers[operation_type] = saver_obj
 
     def crud_process(self, operation_type, **kwargs):
         """Execute the corresponding process function.
@@ -242,18 +242,19 @@ class SchedulerCRUDFactory(object):
 
 
 schedule_crud_factory = SchedulerCRUDFactory()
-schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION_PERSONALIZED_TEXT,
-    ScheduledOperationSaveActionRun(forms.ScheduleEmailForm))
-schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION_PERSONALIZED_JSON,
+email_processor = ScheduledOperationSaveActionRun(forms.ScheduleEmailForm)
+schedule_crud_factory.register_producer(
+    models.Action.PERSONALIZED_TEXT,
+    email_processor)
+schedule_crud_factory.register_producer(
+    models.Action.RUBRIC_TEXT,
+    email_processor)
+schedule_crud_factory.register_producer(
+    models.Action.PERSONALIZED_JSON,
     ScheduledOperationSaveActionRun(forms.ScheduleJSONForm))
-schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION_SEND_LIST,
+schedule_crud_factory.register_producer(
+    models.Action.EMAIL_LIST,
     ScheduledOperationSaveActionRun(forms.ScheduleSendListForm))
-schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION_SEND_LIST_JSON,
+schedule_crud_factory.register_producer(
+    models.Action.JSON_LIST,
     ScheduledOperationSaveActionRun(forms.ScheduleJSONListForm))
-schedule_crud_factory.register_processor(
-    models.scheduler.RUN_ACTION_RUBRIC_TEXT,
-    ScheduledOperationSaveActionRun(forms.ScheduleEmailForm))

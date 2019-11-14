@@ -12,7 +12,7 @@ class ActionManagementFactory(object):
         """Initialize the set of runners."""
         self._runners = {}
 
-    def register_processor(self, action_type: str, runner_obj):
+    def register_producer(self, action_type: str, runner_obj):
         """Register the given object that will run the action type."""
         if action_type in self._runners:
             raise ValueError(action_type)
@@ -45,21 +45,6 @@ class ActionManagementFactory(object):
             if not runner_obj:
                 raise ValueError(action_type)
             return runner_obj.process_request_done(**kwargs)
-        except ValueError:
-            return render(kwargs.get('request'), 'base.html', {})
-
-    def process_run(self, action_type, **kwargs):
-        """Execute the corresponding RUN function.
-
-        :param action_type: Type of action being run.
-        :param kwargs: Dictionary with additional required fields.
-        :return: HttpResponse
-        """
-        try:
-            runner_obj = self._runners.get(action_type)
-            if not runner_obj:
-                raise ValueError(action_type)
-            return runner_obj.process_run(**kwargs)
         except ValueError:
             return render(kwargs.get('request'), 'base.html', {})
 

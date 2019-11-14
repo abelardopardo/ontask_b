@@ -52,7 +52,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
 
         scheduled_item = models.ScheduledOperation(
             user=user,
-            operation_type=models.scheduler.RUN_ACTION_PERSONALIZED_TEXT,
+            operation_type=models.Action.PERSONALIZED_TEXT,
             name='send email action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
@@ -69,7 +69,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_actions_task(True)
+        tasks.execute_scheduled_operations_task(True)
 
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_DONE
@@ -92,7 +92,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
 
         scheduled_item = models.ScheduledOperation(
             user=user,
-            operation_type=models.scheduler.RUN_ACTION_PERSONALIZED_JSON,
+            operation_type=models.Action.PERSONALIZED_JSON,
             name='JSON scheduled action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
@@ -103,7 +103,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_actions_task(True)
+        tasks.execute_scheduled_operations_task(True)
 
         scheduled_item.refresh_from_db()
         json_outbox = OnTaskSharedState.json_outbox
@@ -124,7 +124,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
 
         scheduled_item = models.ScheduledOperation(
             user=user,
-            operation_type=models.scheduler.RUN_ACTION_SEND_LIST,
+            operation_type=models.Action.EMAIL_LIST,
             name='send list scheduled action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
@@ -138,7 +138,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_actions_task(True)
+        tasks.execute_scheduled_operations_task(True)
 
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_DONE
@@ -161,7 +161,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
 
         scheduled_item = models.ScheduledOperation(
             user=user,
-            operation_type=models.scheduler.RUN_ACTION_SEND_LIST_JSON,
+            operation_type=models.Action.JSON_LIST,
             name='JSON List scheduled action',
             action=action,
             execute=datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(
@@ -171,7 +171,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_actions_task(True)
+        tasks.execute_scheduled_operations_task(True)
 
         json_outbox = OnTaskSharedState.json_outbox
         scheduled_item.refresh_from_db()
@@ -199,7 +199,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
         now = datetime.now(pytz.timezone(settings.TIME_ZONE)).replace(second=0)
         scheduled_item = models.ScheduledOperation(
             user=user,
-            operation_type=models.scheduler.RUN_ACTION_PERSONALIZED_TEXT,
+            operation_type=models.Action.PERSONALIZED_TEXT,
             name='send email action incrementally',
             action=action,
             execute=now,
@@ -215,7 +215,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_actions_task(True)
+        tasks.execute_scheduled_operations_task(True)
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
@@ -233,7 +233,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
             cursor.execute(query, ['student01@bogus.com'])
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_actions_task(True)
+        tasks.execute_scheduled_operations_task(True)
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
@@ -251,7 +251,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
             cursor.execute(query, ['student02@bogus.com'])
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_actions_task(True)
+        tasks.execute_scheduled_operations_task(True)
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
@@ -271,7 +271,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
             cursor.execute(query, ['student03@bogus.com'])
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_actions_task(True)
+        tasks.execute_scheduled_operations_task(True)
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
@@ -282,7 +282,7 @@ class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
             'student03@bogus.com']
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_actions_task(True)
+        tasks.execute_scheduled_operations_task(True)
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()

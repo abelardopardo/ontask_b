@@ -4,7 +4,7 @@
 
 import datetime
 from time import sleep
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 import html2text
 import pytz
@@ -26,10 +26,12 @@ from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
 from ontask.action.services.manager import ActionManagerBase
+from ontask import tasks
 from ontask.action.services.manager_factory import action_run_request_factory
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.models import Action, Column, Log
+import ontask.tasks.execute
 
 logger = get_task_logger('celery_execution')
 
@@ -189,10 +191,10 @@ def _create_single_message(
         # Get the plain text content and bundle it together with the HTML
         # in a message to be added to the list.
         msg = EmailMultiAlternatives(
-            msg_body_sbj_to[1],
-            html2text.html2text(msg_body_sbj_to[0]),
-            from_email,
-            [msg_body_sbj_to[2]],
+            body=msg_body_sbj_to[1],
+            subject=html2text.html2text(msg_body_sbj_to[0]),
+            from_email=from_email,
+            to=[msg_body_sbj_to[2]],
             bcc=bcc_email_list,
             cc=cc_email_list,
         )
@@ -205,7 +207,7 @@ def _create_messages(
     action: Action,
     action_evals: List,
     track_col_name: str,
-    action_info: Dict,
+    payload: Dict,
 ) -> List[Union[EmailMessage, EmailMultiAlternatives]]:
     """Create the email messages to send and the tracking ids.
 
@@ -213,7 +215,7 @@ def _create_messages(
     :param action: Action to process
     :param action_evals: Action content already evaluated
     :param track_col_name: column name to track
-    :param action_info: Dictionary with the required fields
+    :param payload: Dictionary with the required fields
     :return:
     """
     # Context to log the events (one per email)
@@ -223,13 +225,16 @@ def _create_messages(
         ),
     }
 
+    cc_email = _check_email_list(payload['cc_email'])
+    bcc_email = _check_email_list(payload['bcc_email'])
+
     # Everything seemed to work to create the messages.
     msgs = []
     # for msg_body, msg_subject, msg_to in action_evals:
     for msg_body_sbj_to in action_evals:
         # If read tracking is on, add suffix for message (or empty)
         track_str = ''
-        if action_info['track_read']:
+        if payload['track_read']:
             # The track id must identify: action & user
             track_str = (
                 '<img src="https://{0}{1}{2}?v={3}" alt=""'
@@ -243,7 +248,7 @@ def _create_messages(
                         'action': action.id,
                         'sender': user.email,
                         'to': msg_body_sbj_to[2],
-                        'column_to': action_info['item_column'],
+                        'column_to': payload['item_column'],
                         'column_dst': track_col_name,
                     },
                 ),
@@ -253,8 +258,8 @@ def _create_messages(
             msg_body_sbj_to,
             track_str,
             user.email,
-            action_info['cc_email'],
-            action_info['bcc_email'],
+            cc_email,
+            bcc_email,
         )
         msgs.append(msg)
 
@@ -309,17 +314,19 @@ class ActionManagerEmail(ActionManagerBase):
 
     def __init__(self):
         """Assign basic fields."""
-        super().__init__(forms.EmailActionRunForm)
+        super().__init__(
+            forms.EmailActionRunForm,
+            models.Log.ACTION_RUN_EMAIL)
         self.template = 'action/request_email_data.html'
-        self.log_event = models.Log.ACTION_RUN_EMAIL
 
-    def process_run(
+    def execute_operation(
         self,
         user,
-        action: models.Action,
-        payload: Dict,
-        log_item: models.Log,
-    ):
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
+    ) -> Optional[List]:
         """Send action content evaluated for each row.
 
         Sends the emails for the given action and with the
@@ -330,23 +337,24 @@ class ActionManagerEmail(ActionManagerBase):
         the configuration variables EMAIL_BURST  and EMAIL_BURST_PAUSE
 
         :param user: User object that executed the action
+        :param workflow: Optional object
         :param action: Action from where to take the messages
-        :param log_item: Log object to store results
+        :param log_item: Log object to store results (optional)
         :param payload: Dictionary key, value
 
         :return: List of strings with the "to" fields used.
         """
         # Evaluate the action string, evaluate the subject, and get the value
         # of the email column.
+        if log_item is None:
+            log_item = action.log(user, self.log_event, **payload)
+
         item_column = action.workflow.columns.get(pk=payload['item_column'])
         action_evals = evaluate_action(
             action,
             extra_string=payload['subject'],
             column_name=item_column.name,
             exclude_values=payload.get('exclude_values'))
-
-        payload['cc_email'] = _check_email_list(payload['cc_email'])
-        payload['bcc_email'] = _check_email_list(payload['bcc_email'])
 
         track_col_name = ''
         if payload['track_read']:
@@ -377,23 +385,26 @@ class ActionManagerEmailList(ActionManagerBase):
 
     def __init__(self):
         """Assign basic fields."""
-        super().__init__(forms.SendListActionRunForm)
+        super().__init__(
+            forms.SendListActionRunForm,
+            models.Log.ACTION_RUN_EMAIL_LIST)
         self.template = 'action/request_send_list_data.html'
-        self.log_event = models.Log.ACTION_RUN_SEND_LIST
 
-    def process_run(
+    def execute_operation(
         self,
         user,
-        action: models.Action,
-        payload: Dict,
-        log_item: models.Log,
-    ):
+        workflow: Optional[models.Workflow] = None,
+        action: Optional[models.Action] = None,
+        payload: Optional[Dict] = None,
+        log_item: Optional[models.Log] = None,
+    ) -> Optional[List]:
         """Send action content evaluated once to include lists.
 
         Sends a single email for the given action with the lists expanded and
         with the given subject evaluated also with respect to the attributes.
 
         :param user: User object that executed the action
+        :param workflow: Optional object
         :param action: Action from where to take the messages
         :param log_item: Log object to store results
         :param payload: Dictionary key, value
@@ -402,20 +413,23 @@ class ActionManagerEmailList(ActionManagerBase):
         """
         # Evaluate the action string, evaluate the subject, and get the value
         # of the email column.
+        if log_item is None:
+            log_item = action.log(user, self.log_event, **payload)
+
         action_text = evaluate_row_action_out(
             action,
             get_action_evaluation_context(action, {}))
 
-        payload['cc_email'] = _check_email_list(payload['cc_email'])
-        payload['bcc_email'] = _check_email_list(payload['bcc_email'])
+        cc_email = _check_email_list(payload['cc_email'])
+        bcc_email = _check_email_list(payload['bcc_email'])
 
         # Context to log the events
         msg = _create_single_message(
             [action_text, payload['subject'], payload['email_to']],
             '',
             user.email,
-            payload['cc_email'],
-            payload['bcc_email'],
+            cc_email,
+            bcc_email,
         )
 
         try:
@@ -440,12 +454,25 @@ class ActionManagerEmailList(ActionManagerBase):
         return []
 
 
-action_run_request_factory.register_processor(
+process_email = ActionManagerEmail()
+action_run_request_factory.register_producer(
     models.Action.PERSONALIZED_TEXT,
-    ActionManagerEmail())
-action_run_request_factory.register_processor(
+    process_email)
+action_run_request_factory.register_producer(
     models.Action.RUBRIC_TEXT,
-    ActionManagerEmail())
-action_run_request_factory.register_processor(
-    models.Action.SEND_LIST,
-    ActionManagerEmailList())
+    process_email)
+
+process_list = ActionManagerEmailList()
+action_run_request_factory.register_producer(
+    models.Action.EMAIL_LIST,
+    process_list)
+
+tasks.task_execute_factory.register_producer(
+    models.Action.PERSONALIZED_TEXT,
+    process_email)
+tasks.task_execute_factory.register_producer(
+    models.Action.RUBRIC_TEXT,
+    process_email)
+tasks.task_execute_factory.register_producer(
+    models.Action.EMAIL_LIST,
+    process_list)
