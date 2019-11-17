@@ -54,11 +54,11 @@ urlpatterns = [
     # Nuke the action
     path('<int:pk>/delete/', views.delete_action, name='delete'),
 
-    # Run ZIP action
-    path('<int:pk>/zip/', views.zip_action, name='zip_action'),
-
     # Run action
     path('<int:pk>/run/', views.run_action, name='run'),
+
+    # Run ZIP action
+    path('<int:pk>/zip/', views.zip_action, name='zip_action'),
 
     #
     # Personalised text and JSON action steps

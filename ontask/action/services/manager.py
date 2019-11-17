@@ -27,7 +27,6 @@ class ActionManagerBase(object):
         if not log_item and self.log_event:
             log_item = action.log(
                 user,
-                operation_type=self.log_event,
                 **payload)
 
         return log_item
@@ -54,6 +53,7 @@ class ActionManagerBase(object):
             request.session,
             initial_values={
                 'action_id': action.id,
+                'operation_type': operation_type,
                 'prev_url': prev_url,
                 'post_url': reverse('action:run_done')})
 
