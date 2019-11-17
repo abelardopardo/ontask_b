@@ -15,6 +15,7 @@ else:
 # Django Debug Toolbar
 if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
+    TEMPLATES[0]['OPTIONS']['debug'] = True
 
 if ONTASK_TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
