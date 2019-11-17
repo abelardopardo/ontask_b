@@ -82,7 +82,7 @@ class ActionManagerJSON(ActionManagerBase):
             action,
             column_name=action.workflow.columns.get(
                 pk=payload['item_column']).name,
-            exclude_values=payload['exclude_values'],
+            exclude_values=payload.get('exclude_values'),
         )
 
         # Create the headers to use for all requests

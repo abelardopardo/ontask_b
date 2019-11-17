@@ -6,6 +6,7 @@ import collections
 from typing import Dict, Optional
 
 from django.contrib.sessions.backends.base import SessionBase
+from django import http
 
 PAYLOAD_SESSION_DICTIONARY = '__ontask_session_payload__'
 
@@ -68,9 +69,18 @@ class SessionPayload(collections.MutableMapping):
         """Transform the key."""
         return key
 
+    def __update__(self, dict2):
+        """Add content to the current payload."""
+        self.__store.update(dict2)
+
     def get_store(self):
         """Return the store."""
         return self.__store
+
+    @staticmethod
+    def get_session_payload(request: http.HttpRequest) -> Optional[Dict]:
+        """Access the dictionary from the request."""
+        return request.session.get(PAYLOAD_SESSION_DICTIONARY, {})
 
     def store_in_session(self, session: SessionBase):
         """Set the payload in the current session.

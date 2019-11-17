@@ -32,7 +32,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import OnTaskSharedState
-from ontask.core import SessionPayload
+from ontask.core.session_payload import (
+    SessionPayload, PAYLOAD_SESSION_DICTIONARY)
 from ontask.core.permissions import group_names
 from ontask.dataops.pandas import check_wf_df, destroy_db_engine
 from ontask.models import Action, Workflow
@@ -124,6 +125,8 @@ class OnTaskTestCase(TransactionTestCase):
     fixtures = []
     filename = None
 
+    last_request = None
+
     @classmethod
     def tearDownClass(cls):
         # Close the db_engine
@@ -154,6 +157,7 @@ class OnTaskTestCase(TransactionTestCase):
             self.client.login(email=self.user_email, password=self.user_pwd)
         if self.workflow_name:
             self.workflow = Workflow.objects.get(name=self.workflow_name)
+        self.last_request = None
 
     def tearDown(self) -> None:
         if self.workflow:
@@ -216,13 +220,19 @@ class OnTaskTestCase(TransactionTestCase):
         for obj_name, obj_item in meta.items():
             request.META[obj_name] = obj_item
 
-        request = self.add_middleware(request)
+        old_payload = {}
+        if self.last_request:
+            old_payload = SessionPayload.get_session_payload(
+                self.last_request)
 
         if session_payload:
-            SessionPayload(request.session, session_payload)
+            old_payload.update(session_payload)
 
-        view_func = resolve(url_str).func
-        return view_func(request, **url_params)
+        self.last_request = self.add_middleware(request)
+
+        SessionPayload(self.last_request.session, old_payload)
+
+        return resolve(url_str).func(self.last_request, **url_params)
 
 
 class OnTaskApiTestCase(APITransactionTestCase):
