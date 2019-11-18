@@ -377,6 +377,9 @@ class ActionManagerEmail(ActionManagerBase):
             # Confirmation message requested
             _send_confirmation_message(user, action, len(msgs))
 
+        action.last_executed_log = log_item
+        action.save()
+
         return [msg.to[0] for msg in msgs]
 
 
@@ -449,7 +452,11 @@ class ActionManagerEmailList(ActionManagerBase):
             'body': msg.body,
             'from_email': msg.from_email,
             'to_email': msg.to[0]}
-        action.log(user, Log.ACTION_EMAIL_SENT, **context)
+        action.last_executed_log = action.log(
+            user,
+            Log.ACTION_EMAIL_SENT,
+            **context)
+        action.save()
 
         return []
 
