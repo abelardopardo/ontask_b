@@ -309,16 +309,15 @@ class ActionManagerCanvasEmail(ActionManagerBase):
             idx += 1
 
             # Send the email
-            if settings.EXECUTE_ACTION_JSON_TRANSFER:
-                result_msg, response_status = _send_single_canvas_message(
-                    target_url,
-                    conversation_url,
-                    canvas_email_payload,
-                    headers,
-                    oauth_info,
-                )
-            else:
-                # Print the JSON that would be sent through the logger
+            result_msg, response_status = _send_single_canvas_message(
+                target_url,
+                conversation_url,
+                canvas_email_payload,
+                headers,
+                oauth_info,
+            )
+            if settings.ONTASK_TESTING:
+                # Print the sent JSON
                 logger.info(
                     'SEND JSON(%s): %s',
                     target_url,
@@ -335,6 +334,9 @@ class ActionManagerCanvasEmail(ActionManagerBase):
             )
             action.log(user, models.Log.ACTION_RUN_CANVAS_EMAIL, **context)
             to_emails.append(msg_to)
+
+        action.last_executed_log = log_item
+        action.save()
 
         return to_emails
 

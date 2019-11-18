@@ -100,6 +100,9 @@ class ActionManagerJSON(ActionManagerBase):
                 json.loads(json_string),
                 headers)
 
+        action.last_executed_log = log_item
+        action.save()
+
         return [column_value for __, column_value in action_evals]
 
 
@@ -151,6 +154,9 @@ class ActionManagerJSONList(ActionManagerBase):
                 + 'charset=UTF-8',
                 'Authorization': 'Bearer {0}'.format(payload['token']),
             })
+
+        action.last_executed_log = log_item
+        action.save()
 
         return []
 
