@@ -37,7 +37,7 @@ Track email reading in an extra column?
 Download a snapshot of the workflow
   When selected, the platform saves the workflow in its current state. This function is useful to keep an exact replica of the state of the actions, conditions and data when the data was sent. The resulting file can then be imported (see the *Import workflow* in the home page) to check the content of the emails.
 
-Introduce a string in the subject field and click in the button *Preview* at the bottom of the page.
+Introduce a string in the subject field and click on the button *Preview* at the bottom of the page.
 
 .. figure:: /scaptures/tutorial_email_preview.png
    :align: center

@@ -19,7 +19,7 @@ After creating the workflow, the next screen has the menu to upload data to the 
 .. figure:: /scaptures/dataops_datauploadmerge2.png
    :align: center
 
-You can always click in the |fa-home| *Workflows* link at the left corner of the top menu to go back to the home page and select a different workflow to open (or create a new one).
+You can always click on the |fa-home| *Workflows* link at the left corner of the top menu to go back to the home page and select a different workflow to open (or create a new one).
 
 .. figure:: /scaptures/workflow_index.png
 

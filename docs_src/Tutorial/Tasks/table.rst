@@ -23,7 +23,7 @@ For tables with a large number of columns and/or rows OnTask allows you to defin
 
 You can also define views to show only a subset of rows. The subset is selected using a *row filter* stating the conditions that must be satisfied by a row to be included in the view. These conditions are stated in terms of the column values.
 
-Save the view and then click in the *View* button. The appropriate table subset is shown. The buttons at the top of the page allow you to edit the view (change the rows and columns selected), or select another available view.
+Save the view and then click on the *View* button. The appropriate table subset is shown. The buttons at the top of the page allow you to edit the view (change the rows and columns selected), or select another available view.
 
 .. figure:: /scaptures/tutorial_table_view.png
    :align: center
@@ -33,7 +33,7 @@ Save the view and then click in the *View* button. The appropriate table subset 
 Column and Row Statistics
 =========================
 
-If you click in one of the |fa-bar-chart| *Statistics* icons in the left-most column of a row OnTask shows a page with statistical representation of the population values for the columns and a mark denoting where is the value of the selected row.
+If you click on one of the |fa-bar-chart| *Statistics* icons in the left-most column of a row OnTask shows a page with statistical representation of the population values for the columns and a mark denoting where is the value of the selected row.
 
 .. figure:: /scaptures/tutorial_row_statistics.png
    :align: center

@@ -9,7 +9,7 @@ directly from the students, or perhaps from the instructors through observation.
 called *Surveys*. These surveys collect information from the students (or the instructors) through conventional web forms and the data is automatically
 added to the workflow table and available to be explored through the dashboard or statistics.
 
-The first step to create a survey is to go to the *Actions* page, click in the *New action* button, provide a name, a description (optional) and select the action type *Survey*:
+The first step to create a survey is to go to the *Actions* page, click on the *New action* button, provide a name, a description (optional) and select the action type *Survey*:
 
 .. figure:: /scaptures/tutorial_survey_create.png
    :align: center
@@ -72,5 +72,5 @@ As in the case of the personalized text action, the *Preview* button allows you 
 
 Once created, you may select the URL from the action as it was described for the personalized text and make it available for learners to enter their answers. The data will be automatically added to the table.
 
-The *Run* button in the survey actions allows an instructor to introduce the survey answers for multiple learners. This functionality is used for instructors to enter observations when interacting with learners. The table search functionality allows to find the learners quickly and then click in their survey execution and enter the data.
+The *Run* button in the survey actions allows an instructor to introduce the survey answers for multiple learners. This functionality is used for instructors to enter observations when interacting with learners. The table search functionality allows to find the learners quickly and then click on their survey execution and enter the data.
 

@@ -3,7 +3,7 @@
 The Top Menu
 ************
 
-OnTask assumes that you will be working with one workflow. The first screen (the one that appears when you log in or when you click in the *Workflows* link in the top menu) shows you the workflows available. To start working with one of them you have to *Open* it. Once you open a workflow, the top menu appears as shown in the following figure.
+OnTask assumes that you will be working with one workflow. The first screen (the one that appears when you log in or when you click on the *Workflows* link in the top menu) shows you the workflows available. To start working with one of them you have to *Open* it. Once you open a workflow, the top menu appears as shown in the following figure.
 
 .. figure:: /scaptures/tutorial_top_menu_bar.png
    :align: center

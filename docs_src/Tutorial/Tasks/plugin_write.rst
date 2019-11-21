@@ -36,7 +36,7 @@ The steps to *run the model* are:
   Description
     A more detailed description of what the model does.
 
-- Select the appropriate elements and click in the |fa-rocket| *Run* button above the form.
+- Select the appropriate elements and click on the |fa-rocket| *Run* button above the form.
 
 - The model is executed in the background (it may take some time to execute) and the result is merged into the workflow table.
 

@@ -3,7 +3,7 @@
 Download a ZIP (and upload it in Moodle)
 ****************************************
 
-Log into the platform, open a workflow that contains data and a personalized action, click in the *Actions* link in the top menu.
+Log into the platform, open a workflow that contains data and a personalized action, click on the *Actions* link in the top menu.
 
 The :ref:`personalized text actions<tut_personalized_text_action>` allow you to define a text with parts that are included/excluded depending on the value of the conditions. OnTask then allows you to :ref:`send those texts as individual emails<tut_send_personalized_email>`. However, you may want to extract those texts in HTML and process them with a different platform (for example Moodle). You can do this clicking in the *Zip* button shown in the *Operations* column for some of the actions.
 
@@ -34,7 +34,7 @@ If the ZIP created using this functionality has the file names created with cert
 .. figure:: /scaptures/downloadgradingworksheet.png
    :align: center
 
-Store the :download:`CSV file obtained from this page <../../Dataset/moodle_grades.csv>`. We are now going to :ref:`merge<merging>` the content of the Moodle CSV with the data already existing in the data table. In the *Actions* page, click in the link with name *Manage table data* and then in the *Upload or merge* option. Next, click in the *CSV Upload/Merge* button. Select the :download:`CSV grading sheet downloaded from Moodle<../../Dataset/moodle_grades.csv>`.
+Store the :download:`CSV file obtained from this page <../../Dataset/moodle_grades.csv>`. We are now going to :ref:`merge<merging>` the content of the Moodle CSV with the data already existing in the data table. In the *Actions* page, click on the link with name *Manage table data* and then in the *Upload or merge* option. Next, click on the *CSV Upload/Merge* button. Select the :download:`CSV grading sheet downloaded from Moodle<../../Dataset/moodle_grades.csv>`.
 
 .. figure:: /scaptures/tutorial_moodle_merge_step1.png
    :align: center
@@ -58,7 +58,7 @@ Verify that you are merging two columns and using ``email`` as the key.
    :align: center
    :width: 100%
 
-Click finish and verify that the table in the workflow contains two additional columns: ``Identifier`` and ``Full name``. Go to the *Actions* page and click in the link to generate a ZIP file for one of the personalized text actions. Select now the column ``Identifier`` as the first name prefix and the column ``Full name`` as the second column prefix. Choose additional file name suffix (or leave it empty), and *click the option for the ZIP to be uploaded to Moodle*.
+Click finish and verify that the table in the workflow contains two additional columns: ``Identifier`` and ``Full name``. Go to the *Actions* page and click on the link to generate a ZIP file for one of the personalized text actions. Select now the column ``Identifier`` as the first name prefix and the column ``Full name`` as the second column prefix. Choose additional file name suffix (or leave it empty), and *click the option for the ZIP to be uploaded to Moodle*.
 
 .. figure:: /scaptures/tutorial_action_zip.png
    :align: center

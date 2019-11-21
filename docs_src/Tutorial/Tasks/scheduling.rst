@@ -3,7 +3,7 @@
 Scheduling Actions
 ******************
 
-Log in the platform, open a workflow with data and actions, and click in the *Actions* link on the top menu. Sometimes the execution of the actions that produce personalized content (either text or a JSON object) need to be scheduled for some specific point in time and proceed without any instructor intervention. Choose one of these actions and in the *Actions* page click in the link *More* in the operations column. The first operation that appears is *Schedule*. Click on that link.
+Log in the platform, open a workflow with data and actions, and click on the *Actions* link on the top menu. Sometimes the execution of the actions that produce personalized content (either text or a JSON object) need to be scheduled for some specific point in time and proceed without any instructor intervention. Choose one of these actions and in the *Actions* page click on the link *More* in the operations column. The first operation that appears is *Schedule*. Click on that link.
 
 
 Scheduling Personalized Text Actions
