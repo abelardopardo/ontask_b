@@ -11,11 +11,11 @@ Suppose you have a course with 500 students and they took a pre-test in the firs
 
 .. admonition:: Steps
 
-   1. Create a new workflow (click in the *New Workflow* button in the home page of the tool). Introduce a name and a description (optional) for this workflow.
+   1. Create a new workflow (click on the *New Workflow* button in the home page of the tool). Introduce a name and a description (optional) for this workflow.
 
    #. Open the newly created workflow by clicking its name. A page titled *Workflow Details* will be shown.
 
-   #. The page says that there is no data uploaded yet, and to upload it you need to click in the *Dataops* link either at the bottom of the text or at the context menu at the top.
+   #. The page says that there is no data uploaded yet, and to upload it you need to click on the *Dataops* link either at the bottom of the text or at the context menu at the top.
 
    #. A new page titled *Upload/Merge* appears. Select the option *CSV Upload/Merge* and follow the instructions to upload the :download:`CSV file <scenario_03_data.csv>` (select all the columns to upload)
 
@@ -54,7 +54,7 @@ Suppose you have a course with 500 students and they took a pre-test in the firs
 
    #. Use the preview button with the arrows to see how the different emails are shown (only for the students that satisfy the condition of the filter).
 
-   #. Save and close the *Action Out*. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click in the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
+   #. Save and close the *Action Out*. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click on the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
 
       .. figure:: /scaptures/scenario_03_email.png
 

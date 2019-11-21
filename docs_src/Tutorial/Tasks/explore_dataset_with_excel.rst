@@ -9,7 +9,7 @@ Open the file ``student_list.csv`` with a recent version of Excel. Select all th
   :align: center
   :width: 100%
 
-Next click in the menu item `Insert` and then click in the `Table` icon as shown in the following figure.
+Next click on the menu item `Insert` and then click on the `Table` icon as shown in the following figure.
 
 .. figure:: /scaptures/excel_insert_table.png
   :align: center
@@ -21,7 +21,7 @@ If you see a dialog showing you the range just selected and stating that the tab
   :align: center
   :width: 100%
 
-The cells in the top row are the names of the columns contained in the file. If you click in the triangle at the right of any cell you will see a menu as shown in the following figure:
+The cells in the top row are the names of the columns contained in the file. If you click on the triangle at the right of any cell you will see a menu as shown in the following figure:
 
 .. figure:: /scaptures/excel_filter_menu.png
   :align: center

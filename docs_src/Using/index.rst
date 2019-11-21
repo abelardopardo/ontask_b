@@ -547,7 +547,7 @@ Column names
   braces is the way OnTask has to mark that text to be personalized or replaced by the corresponding value for each learner extracted from the data table.
 
 Conditional text
-  Using a condition to control if a portion of the text is shown or ignored is slightly different. You need to first highlight the text you want to appear depending on the condition in the editor. Then click in the pull down menu **Use condition in highlighted text** and select the condition to use. The text will be surrounded by two marks. For example if the condition name is ``No Video 1``, the text you highlighted will appear in the editor after clicking in the *Insert in text* as::
+  Using a condition to control if a portion of the text is shown or ignored is slightly different. You need to first highlight the text you want to appear depending on the condition in the editor. Then click on the pull down menu **Use condition in highlighted text** and select the condition to use. The text will be surrounded by two marks. For example if the condition name is ``No Video 1``, the text you highlighted will appear in the editor after clicking in the *Insert in text* as::
 
     {% if No Video 1 %}You need to review his week's video{% endif %}
 
@@ -566,7 +566,7 @@ These actions are a special case of the :ref:`personalized text <personalized_co
 
 OnTask extends the structure of each cell and complements the description with an additional text that is called the *feedback*. Once the table has been populated (multiple criteria and multiple levels of attainment), an email template can be created in which the appropriate feedback elements are selected based on the values of each criteria for each learner.
 
-The first step to create a personalized rubric feedback action is, as with the previous action, to click in he button to add an action and select the option *Rubric feedback*.
+The first step to create a personalized rubric feedback action is, as with the previous action, to click on the button to add an action and select the option *Rubric feedback*.
 
 .. figure:: /scaptures/rubric_create.png
    :align: center
@@ -791,7 +791,7 @@ If the option to *Check/exclude emails* has been selected, clicking in the *Next
 Making personalized content available to learners
 =================================================
 
-Sending a personalized text is just one possible way to make this content available to learner. Another one is to offer the content through a URL that can be given to the learners. To enable such URL click in the icon with three dots in the right most corner of a personalized text action.
+Sending a personalized text is just one possible way to make this content available to learner. Another one is to offer the content through a URL that can be given to the learners. To enable such URL click on the icon with three dots in the right most corner of a personalized text action.
 
 .. figure:: /scaptures/action_action_ops.png
    :align: center
@@ -813,7 +813,7 @@ After creating a :ref:`survey action <surveys>` it can be used in two modalities
    :align: center
    :width: 100%
 
-Each row contains the identifier of the student (in the previous table, the email) as a link. Instructors may click in a link available to enter the survey information or modify the already existing information for that learner.
+Each row contains the identifier of the student (in the previous table, the email) as a link. Instructors may click on a link available to enter the survey information or modify the already existing information for that learner.
 
 .. figure:: /scaptures/action_enter_data_action_in.png
    :align: center
@@ -830,7 +830,7 @@ The second operation available for *survey* actions is to make available the URL
    :align: center
    :width: 60%
 
-Once enabled, you may send the URL to the students (you may even use a personalized text action for that). Once the students click in the action, and if they are allowed to connect to OnTask as basic users, after authentication, if their email is part of the table, they will see a form with the survey questions and after answering it, the values are automatically stored in the right row and column in the table.
+Once enabled, you may send the URL to the students (you may even use a personalized text action for that). Once the students click on the action, and if they are allowed to connect to OnTask as basic users, after authentication, if their email is part of the table, they will see a form with the survey questions and after answering it, the values are automatically stored in the right row and column in the table.
 
 These two survey actions are ideal to collect information about any aspect of a learning experience in a way that is centralized and available for further processing through personalized text actions. For example, users may choose from a predefined set of topics those that were more challenging. This information can then be used in a personalized text action to provide the adequate resources to each learner.
 
@@ -932,7 +932,7 @@ Scheduled Actions
    -- Jimmy Wales
 
 
-The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref`send list through email <send_list_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON list <json_list_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click in icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
+The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref`send list through email <send_list_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON list <json_list_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
 
 .. _schedule_email:
 

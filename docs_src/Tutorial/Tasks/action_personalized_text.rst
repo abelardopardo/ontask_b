@@ -23,12 +23,12 @@ Select Learners
 Text Conditions
   This section contains the conditions to be used in the personalized text.
 
-Place the cursor in the text area and start the text with a salutation. Then click in the pull down menu next to *Insert Column Value*. Select the column *GivenName*. The string `{{ GivenName}}` appears in the text area. This notation is to instruct the next steps to replace the value among double curly braces with the name of each student.
+Place the cursor in the text area and start the text with a salutation. Then click on the pull down menu next to *Insert Column Value*. Select the column *GivenName*. The string `{{ GivenName}}` appears in the text area. This notation is to instruct the next steps to replace the value among double curly braces with the name of each student.
 
 .. figure:: /scaptures/tutorial_personalized_text_editor_with_column.png
    :align: center
 
-Select the *Text Conditions* tab and click in the |fa-plus| *Condition* . A form appears to introduce the name, description and a formula. The formula may contain any combination of Boolean operators connecting column names. For example, the condition::
+Select the *Text Conditions* tab and click on the |fa-plus| *Condition* . A form appears to introduce the name, description and a formula. The formula may contain any combination of Boolean operators connecting column names. For example, the condition::
 
   Program equal to FASS
 

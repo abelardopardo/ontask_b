@@ -13,6 +13,9 @@ OnTask contains functions to manage the following types of actions:
 Personalized text
   These actions allow to create a HTML text in which some of its elements may be present/ignored depending on the how a condition is evaluated for every student.
 
+Personalized rubric
+  These actions allow to create a HTML text in which a rubric is used to provide learners with feedback about their level of attainment.
+
 Surveys
   A set of questions for the students to answer. The information is collected and automatically added to the table in the workflow.
 
