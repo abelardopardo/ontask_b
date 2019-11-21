@@ -2,15 +2,14 @@
 
 """Basic functions and definitions used all over the platform."""
 
-import json
 from datetime import datetime
 from typing import List, Optional
 
 import django.conf
-import pytz
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
+import pytz
 
 from ontask.core.celery import app as celery_app
 
@@ -18,8 +17,7 @@ __all__ = [
     'celery_app', 'OnTaskException', 'is_legal_name',
     'OnTaskDataFrameNoKey', 'simplify_datetime_str', 'is_correct_email',
     'OnTaskEmptyWorkflow', 'OnTaskDBIdentifier', 'create_new_name',
-    'OnTaskSharedState'
-]
+    'OnTaskSharedState', 'are_correct_emails']
 
 __version__ = 'B.6.1.3'
 

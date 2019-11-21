@@ -54,7 +54,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Rename the action
         self.selenium.find_element_by_id('id_name').send_keys(suffix)
-        # click in the Update button
+        # click on the Update button
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()
@@ -79,7 +79,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        # click in EDIT action link
+        # click on EDIT action link
         self.open_action_edit(self.action_name)
 
         # Click in the add filter button
@@ -358,7 +358,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.wflow_name)
 
-        # click in the action page
+        # click on the action page
         self.open_action_edit(self.action_name)
 
         # insert the first mark
@@ -704,7 +704,7 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
         # Click the preview buttion
         self.open_preview()
 
-        # Check there is a single field and click in next
+        # Check there is a single field and click on next
         for __ in range(8):
             # There should be a single form field in the preview
             inputs = self.selenium.find_elements_by_xpath(
@@ -1431,7 +1431,7 @@ class ActionCreateRubric(test.OnTaskLiveTestCase):
         element.click()
         element.clear()
         element.send_keys('CRIT 2 description text')
-        # click in the Add criterion
+        # click on the Add criterion
         self.selenium.find_element_by_xpath(
             '//div[@id="modal-item"]//button[@type="submit"]'
         ).click()
@@ -1449,7 +1449,7 @@ class ActionCreateRubric(test.OnTaskLiveTestCase):
                 'DESC {0}'.format(index))
             self.selenium.find_element_by_id('id_feedback_text').send_keys(
                 'FEEDBACK {0}'.format(index))
-            # click in the DONE button
+            # click on the DONE button
             self.selenium.find_element_by_xpath(
                 '//div[@id="modal-item"]//button[@type="submit"]'
             ).click()

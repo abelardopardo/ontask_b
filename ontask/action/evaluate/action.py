@@ -300,8 +300,7 @@ def evaluate_row_action_in(action: Action, context: Mapping):
         None,
         tuples=tuples,
         context=context,
-        values=col_values,
-    )
+        values=col_values)
 
     # Render the form
     return Template(

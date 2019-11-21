@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans 'Export Done' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Export Done' %}{% endblock %}
 {% block scripts %}
   <script>
     {% if only_action_list %}

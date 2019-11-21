@@ -98,7 +98,7 @@ class BackToHome(test.OnTaskTestCase):
             reverse('workflow:column_restrict', kwargs={'pk': 1}),
             # Action
             reverse('action:create'),
-            reverse('action:action_out_save_content', kwargs={'pk': 1}),
+            reverse('action:save_text', kwargs={'pk': 1}),
             reverse('action:update', kwargs={'pk': 1}),
             reverse('action:clone_action', kwargs={'pk': 1}),
             reverse('action:delete', kwargs={'pk': 1}),

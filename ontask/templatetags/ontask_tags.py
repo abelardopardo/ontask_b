@@ -11,7 +11,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 import ontask
-from ontask.action.evaluate import render_rubric_criteria
+from ontask.action.evaluate.template import render_rubric_criteria
 from ontask.dataops.sql.row_queries import get_rows
 from ontask.models import Action
 

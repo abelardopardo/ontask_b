@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans 'OnTask Error' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Error' %}{% endblock %}
 {% block container %}
 <!-- the margin top should be passed to the style!!! -->
 <div class="container my-3">

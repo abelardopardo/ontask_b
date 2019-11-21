@@ -266,7 +266,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
-        # Select the age column and click in the edit button
+        # Select the age column and click on the edit button
         self.open_column_edit('age')
 
         # Append symbols to the name

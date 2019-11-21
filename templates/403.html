@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans 'OnTask Permission denied' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Permission denied' %}{% endblock %}
 {% block container %}
 <div class="container my-3">
   <h1 class="text-center">{% trans 'Permission denied' %}</h1>

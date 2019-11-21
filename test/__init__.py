@@ -168,7 +168,7 @@ class OnTaskTestCase(TransactionTestCase):
     def add_middleware(self, request: HttpRequest) -> HttpRequest:
         request.user = self.user
         # adding session
-        SessionMiddleware().process_request(request)
+        SessionMiddleware().process_run_request(request)
         # adding messages
         setattr(request, '_messages', FallbackStorage(request))
         if self.workflow:
@@ -439,7 +439,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
     def click_dropdown_option(self, dd_xpath, option_name):
         """
-        Given a dropdown xpath, click to open and then click in the given option
+        Given a dropdown xpath, click to open and then click on the given option
         :param dd_xpath: xpath to locate the dropdown element (top level)
         :param option_name: name of the option in the dropdown to click
         :return: Nothing
@@ -456,7 +456,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def click_dropdown_option_and_wait(self, dd_xpath, option_name,
                                        wait_for=None):
         """
-        Given a dropdown xpath, click to open and then click in the given option
+        Given a dropdown xpath, click to open and then click on the given option
         :param dd_xpath: xpath to locate the dropdown element (top level)
         :param option_name: name of the option in the dropdown to click
         :param wait_for: @id to wait for, or modal open if none.
@@ -479,7 +479,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def click_dropdown_option_by_number(self, dd_xpath, option_num):
         """Click the nth option in a dropdown menu.
 
-        Given a dropdown xpath, click to open and then click in the given option
+        Given a dropdown xpath, click to open and then click on the given option
 
         :param dd_xpath: xpath to locate the dropdown element (top level)
 
@@ -504,7 +504,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     ):
         """Click the nth option in a dropdown menu and wait.
 
-        Given a dropdown xpath, click to open and then click in the given option
+        Given a dropdown xpath, click to open and then click on the given option
 
         :param dd_xpath: xpath to locate the dropdown element (top level)
 
@@ -995,7 +995,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         )
 
     def create_new_action_out_basic(self, aname, action_type, adesc=''):
-        # click in the create action button
+        # click on the create action button
         self.selenium.find_element_by_class_name('js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
@@ -1075,7 +1075,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         self.wait_close_modal_refresh_table('attribute-table_previous')
 
     def create_new_survey_action(self, aname, adesc=''):
-        # click in the create action button
+        # click on the create action button
         self.selenium.find_element_by_class_name('js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
@@ -1549,7 +1549,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
     def select_filter_tab(self):
         """
-        Assuming we are in the action edit page, click in the link to open the
+        Assuming we are in the action edit page, click on the link to open the
         filter tab
         :return:
         """
@@ -1568,7 +1568,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
     def select_condition_tab(self):
         """
-        Assuming we are in the action edit page, click in the link to open the
+        Assuming we are in the action edit page, click on the link to open the
         condition tab
         :return:
         """
@@ -1656,7 +1656,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
 
     def select_rubric_tab(self):
         """
-        Assuming we are in the action edit page, click in the link to open the
+        Assuming we are in the action edit page, click on the link to open the
         rubric tab
         :return:
         """
