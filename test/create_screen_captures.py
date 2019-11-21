@@ -178,7 +178,7 @@ class ScreenTestFixture(ScreenTests):
         self.go_to_sql_connections()
         self.body_ss('workflow_sql_connections_index.png')
 
-        # click in the edit element
+        # click on the edit element
         self.selenium.find_element_by_xpath(
             "//table[@id='connection-admin-table']"
             "//tr/td[1][normalize-space() = 'remote server']"
@@ -207,7 +207,7 @@ class ScreenTestFixture(ScreenTests):
     #     self.go_to_athena_connections()
     #     self.body_ss('workflow_athena_connections_index.png')
     #
-    #     # click in the edit element
+    #     # click on the edit element
     #     self.selenium.find_element_by_xpath(
     #         "//table[@id='connection-admin-table']"
     #         "//tr/td[1][normalize-space() = 'athena connection']"
@@ -662,7 +662,7 @@ class ScreenTestFixture(ScreenTests):
         # Take picture of the modal
         self.modal_ss('action_action_in_URL.png')
 
-        # click in the OK button to return
+        # click on the OK button to return
         self.selenium.find_element_by_xpath("//button[@type='submit']").click()
         self.wait_for_modal_close()
 
@@ -721,7 +721,7 @@ class ScreenTestFixture(ScreenTests):
         # Create a canvas email action
         #
         self.go_to_actions()
-        # click in the create action button and create an action
+        # click on the create action button and create an action
         self.selenium.find_element_by_class_name('js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
@@ -755,7 +755,7 @@ class ScreenTestFixture(ScreenTests):
         #
         # SEND LIST action
         #
-        # click in the create action button and create an action
+        # click on the create action button and create an action
         self.selenium.find_element_by_class_name('js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
@@ -791,7 +791,7 @@ class ScreenTestFixture(ScreenTests):
         #
         # SEND JSON LIST action
         #
-        # click in the create action button and create an action
+        # click on the create action button and create an action
         self.selenium.find_element_by_class_name('js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
@@ -889,7 +889,7 @@ class ScreenTestFixture(ScreenTests):
         # Take picture of the modal
         self.modal_ss('action_URL_on.png')
 
-        # click in the OK button to return
+        # click on the OK button to return
         self.selenium.find_element_by_xpath(
             "//button[@type='submit']"
         ).click()
@@ -1019,7 +1019,7 @@ class ScreenTestFixture(ScreenTests):
 
         self.go_to_actions()
 
-        # click in the create action button
+        # click on the create action button
         self.selenium.find_element_by_class_name('js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))

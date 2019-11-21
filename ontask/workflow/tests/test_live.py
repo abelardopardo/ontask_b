@@ -366,7 +366,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        # click in the create action out button
+        # click on the create action out button
         self.create_new_personalized_text_action(action_name, action_desc)
 
         # Select filter tab

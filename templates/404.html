@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans 'OnTask page not found' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Page not found' %}{% endblock %}
 {% block container %}
 <div class="container my-3">
   <h1 class="text-center">{% trans 'Page not found' %}</h1>

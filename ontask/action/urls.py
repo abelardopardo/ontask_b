@@ -28,13 +28,7 @@ urlpatterns = [
     path('<int:pk>/edit/', views.edit_action, name='edit'),
 
     # Save action out content
-    path(
-        '<int:pk>/action_out_save_content/',
-        views.action_out_save_content,
-        name='action_out_save_content'),
-
-    # Action export ask
-    # path('<int:pk>/export_ask/', views.export_ask, name='export_ask'),
+    path('<int:pk>/save_text/', views.save_text, name='save_text'),
 
     # Action export the file
     re_path(
@@ -132,7 +126,10 @@ urlpatterns = [
     # RUN SURVEY
     #
     # Server side update of the run survey page for action in
-    path('<int:pk>/show_survey_table_ss/', views.show_survey_table_ss, name='show_survey_table_ss'),
+    path(
+        '<int:pk>/show_survey_table_ss/',
+        views.show_survey_table_ss,
+        name='show_survey_table_ss'),
 
     # Run action in a row. Can be executed by the instructor or the
     # learner!!

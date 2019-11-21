@@ -2,7 +2,7 @@
 {% load ontask_tags %}
 {% load i18n %}
 {% load admin_static %}
-{% block title %}{% include "_brandname.html" %} {% trans 'Admin' %} {% endblock %}
+{% block title %}{{ block.super }}{% trans 'Admin' %} {% endblock %}
 {% block branding %}
   <a class="navbar-brand" href="{% url 'admin:index' %}">{% include "_brandname.html" %} {% trans 'Admin' %}&nbsp;</a>
 {% endblock %}

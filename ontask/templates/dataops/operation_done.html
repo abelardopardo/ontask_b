@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans 'Data operation execution' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Data operation execution' %}{% endblock %}
 {% block container %}
   <div class="container text-center" id="action-run-done">
     <h1 class="text-center">{% trans 'Operation scheduled for execution' %}</h1>
