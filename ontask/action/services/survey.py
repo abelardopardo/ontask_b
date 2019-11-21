@@ -10,8 +10,8 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from ontask import models
-from ontask.action.services.manager import ActionManagerBase
-from ontask.action.services.manager_factory import action_run_request_factory
+from ontask.action.services.manager import ActionRunManager
+from ontask.action.services.manager_factory import action_process_factory
 from ontask.core import DataTablesServerSidePaging
 from ontask.dataops.sql import search_table
 
@@ -23,7 +23,7 @@ def _create_link_to_survey_row(
 ) -> str:
     """Create the <a> Link element pointing to a survey row form.
 
-    :param action: Action with the survey infroation
+    :param action_id: Action id with the survey information
     :param key_name:
     :param key_value:
     :return: HTML code with the <a> element
@@ -80,11 +80,11 @@ def _create_table_qsdata(
 ) -> List:
     """Select the subset of the qs to be sent as qs data to the JSON request.
 
-    :param action: Action being processed
+    :param action_id: Action id being processed
     :param qs: Query set from where to extract the data
     :param dt_page: Object with DataTable parameters to process the page
-    :param column_names: List of column names
-    :param key_idx: Index of the key colum
+    :param columns: List of column
+    :param key_idx: Index of the key column
     :return: Query set to return to DataTable JavaScript
     """
     final_qs = []
@@ -150,15 +150,10 @@ def create_survey_table(
     })
 
 
-class ActionManagerSurvey(ActionManagerBase):
+class ActionManagerSurvey(ActionRunManager):
     """Class to serve running an email action."""
 
-    def __init__(self):
-        """Assign initial templates."""
-        super().__init__(log_event=models.Log.ACTION_SURVEY_INPUT)
-        self.template = 'action/run_survey.html'
-
-    def process_request(
+    def process_run_request(
         self,
         operation_type: str,
         request: http.HttpRequest,
@@ -169,7 +164,7 @@ class ActionManagerSurvey(ActionManagerBase):
         # Render template with active columns.
         return render(
             request,
-            self.template,
+            self.run_template,
             {
                 'columns': [
                     cc_pair.column
@@ -178,6 +173,8 @@ class ActionManagerSurvey(ActionManagerBase):
                 'action': action})
 
 
-action_run_request_factory.register_producer(
+action_process_factory.register_producer(
     models.Action.SURVEY,
-    ActionManagerSurvey())
+    ActionManagerSurvey(
+        run_template='action/run_survey.html',
+        log_event=models.Log.ACTION_SURVEY_INPUT))

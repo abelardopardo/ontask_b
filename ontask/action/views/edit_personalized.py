@@ -5,59 +5,28 @@
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from ontask.action.evaluate import render_action_template
-from ontask.action.forms import EditActionOutForm, EnableURLForm, FilterForm
+from ontask.action.forms import EnableURLForm
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
-from ontask.models import Action, Condition, Log, Workflow
-from ontask.visualizations.plotly import PlotlyHandler
-
-
-def text_renders_correctly(
-    text_content: str,
-    action: Action,
-    form: EditActionOutForm,
-) -> bool:
-    """Check that the text content renders correctly as a template.
-
-    :param text_content: String with the text
-
-    :param action: Action to obtain the context
-
-    :param form: Form to report errors.
-
-    :return: Boolean stating correctness
-    """
-    # Render the content as a template and catch potential problems.
-    # This seems to be only possible if dealing directly with Jinja2
-    # instead of Django.
-    try:
-        render_action_template(text_content, {}, action)
-    except Exception as exc:
-        # Pass the django exception to the form (fingers crossed)
-        form.add_error(None, str(exc))
-        return False
-
-    return True
+from ontask.models import Action, Log, Workflow
 
 
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
 @get_action(pf_related='actions')
-def action_out_save_content(
+def save_text(
     request: HttpRequest,
     pk: int,
     workflow: Optional[Workflow] = None,
     action: Optional[Action] = None,
 ) -> JsonResponse:
-    """Save content of the action out.
+    """Save text content of the action.
 
     :param request: HTTP request (POST)
     :param pk: Action ID
@@ -74,99 +43,6 @@ def action_out_save_content(
         action.save()
 
     return JsonResponse({'html_redirect': ''})
-
-
-def edit_action_out(
-    request: HttpRequest,
-    workflow: Workflow,
-    action: Action,
-) -> HttpResponse:
-    """Edit action out.
-
-    :param request: Request object
-    :param workflow: The workflow with the action
-    :param action: Action
-    :return: HTML response
-    """
-    # Create the form
-    form = EditActionOutForm(request.POST or None, instance=action)
-
-    form_filter = FilterForm(
-        request.POST or None,
-        instance=action.get_filter(),
-        action=action
-    )
-
-    # Processing the request after receiving the text from the editor
-    if request.method == 'POST' and form.is_valid() and form_filter.is_valid():
-        # Get content
-        text_content = form.cleaned_data.get('text_content')
-
-        # Render the content as a template and catch potential problems.
-        if text_renders_correctly(text_content, action, form):
-            # Log the event
-            action.log(request.user, Log.ACTION_UPDATE)
-
-            # Text is good. Update the content of the action
-            action.set_text_content(text_content)
-
-            # If it is a JSON action, store the target_url
-            if (
-                action.action_type == Action.PERSONALIZED_JSON
-                or action.action_type == Action.JSON_LIST
-            ):
-                # Update the target_url field
-                action.target_url = form.cleaned_data['target_url']
-
-            action.save()
-
-            if request.POST['Submit'] == 'Submit':
-                return redirect(request.get_full_path())
-
-            return redirect('action:index')
-
-    # This is a GET request or a faulty POST request
-
-    # Get the filter or None
-    filter_condition = action.get_filter()
-
-    # Context to render the form
-    context = {
-        'filter_condition': filter_condition,
-        'action': action,
-        'load_summernote': (
-            action.action_type == Action.PERSONALIZED_TEXT
-            or action.action_type == Action.EMAIL_LIST
-        ),
-        'conditions': action.conditions.filter(is_filter=False),
-        'conditions_to_clone': Condition.objects.filter(
-            action__workflow=workflow, is_filter=False,
-        ).exclude(action=action),
-        'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-        'attribute_names': [
-            attr for attr in list(workflow.attributes.keys())
-        ],
-        'columns': workflow.columns.all(),
-        'columns_show_stat': workflow.columns.filter(is_key=False),
-        'selected_rows':
-            filter_condition.n_rows_selected
-            if filter_condition else -1,
-        'has_data': action.workflow.has_table(),
-        'is_send_list': (
-            action.action_type == Action.EMAIL_LIST
-            or action.action_type == Action.JSON_LIST),
-        'all_false_conditions': any(
-            cond.n_rows_selected == 0
-            for cond in action.conditions.all()),
-        'rows_all_false': action.get_row_all_false_count(),
-        'total_rows': workflow.nrows,
-        'form': form,
-        'form_filter': form_filter,
-        'vis_scripts': PlotlyHandler.get_engine_scripts(),
-    }
-
-    # Return the same form in the same page
-    return render(request, 'action/edit_out.html', context=context)
 
 
 @user_passes_test(is_instructor)

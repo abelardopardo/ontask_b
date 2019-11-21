@@ -11,6 +11,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 
+from ontask.action.evaluate.template import render_action_template
 from ontask.action.forms import FIELD_PREFIX
 from ontask.core.forms import date_time_widget_options
 from ontask.models import Action
@@ -127,6 +128,20 @@ class EditActionOutForm(forms.ModelForm):
                     'placeholder': _('Write a plain text message'),
                 },
             )
+
+    def clean(self):
+        """Verify that the template text renders correctly."""
+        form_data = super().clean()
+        try:
+            render_action_template(
+                form_data['text_content'],
+                {},
+                self.instance)
+        except Exception as exc:
+            # Pass the django exception as an error form
+            self.add_error(None, str(exc))
+
+        return form_data
 
     class Meta(object):
         """Select action and the content field only."""

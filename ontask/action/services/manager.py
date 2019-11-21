@@ -2,10 +2,9 @@
 
 """Base class for CRUD manager for actions."""
 
-from typing import Any, Dict, Optional, Type
+from typing import Dict, Optional
 
 from django import http
-from django.forms import forms
 from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.utils.translation import ugettext
@@ -14,7 +13,7 @@ from ontask import models, tasks
 from ontask.core import SessionPayload
 
 
-class ActionManagerBase(object):
+class ActionRunManager(object):
     """Base class to provide the service for the run views."""
 
     def _create_log_event(
@@ -31,17 +30,14 @@ class ActionManagerBase(object):
 
         return log_item
 
-    def __init__(
-        self,
-        form_class: Optional[Type[forms.Form]] = None,
-        log_event: Optional[str] = None,
-    ):
+    def __init__(self, *args, **kwargs):
         """Assign and initialize the main service parameters."""
-        self.form_class = form_class
-        self.template = 'action/run_done.html'
-        self.log_event = log_event
+        self.run_form_class = kwargs.pop('run_form_class', None)
+        self.run_template = kwargs.pop('run_template', None)
+        self.log_event = kwargs.pop('log_event', None)
+        super().__init__(*args, **kwargs)
 
-    def process_request(
+    def process_run_request(
         self,
         operation_type: str,
         request: http.HttpRequest,
@@ -57,25 +53,25 @@ class ActionManagerBase(object):
                 'prev_url': prev_url,
                 'post_url': reverse('action:run_done')})
 
-        form = self.form_class(
+        form = self.run_form_class(
             request.POST or None,
             columns=action.workflow.columns.filter(is_key=True),
             action=action,
             form_info=payload)
 
         if request.method == 'POST' and form.is_valid():
-            return self.process_post(request, action, payload)
+            return self.process_run_post(request, action, payload)
 
         # Render the form
         return render(
             request,
-            self.template,
+            self.run_template,
             {'action': action,
              'num_msgs': action.get_rows_selected(),
              'form': form,
              'valuerange': range(2)})
 
-    def process_post(
+    def process_run_post(
         self,
         request: http.HttpRequest,
         action: models.Action,
@@ -92,13 +88,13 @@ class ActionManagerBase(object):
             return redirect('action:item_filter')
 
         # Go straight to the final step.
-        return self.process_request_done(
+        return self.process_run_request_done(
             request,
             workflow=action.workflow,
             payload=payload,
             action=action)
 
-    def process_request_done(
+    def process_run_request_done(
         self,
         request: http.HttpRequest,
         workflow: models.Workflow,
@@ -143,5 +139,4 @@ class ActionManagerBase(object):
         log_item: Optional[models.Log] = None,
     ):
         """Run the action."""
-        del user, action, payload
         raise Exception('Incorrect invocation of run method.')

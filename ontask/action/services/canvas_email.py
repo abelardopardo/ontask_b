@@ -3,9 +3,8 @@
 """Views to run the personalized canvas email action."""
 import datetime
 import json
-from datetime import datetime, timedelta
 from time import sleep
-from typing import Dict, Optional, Tuple, List
+from typing import Dict, List, Optional, Tuple
 
 import pytz
 import requests
@@ -24,8 +23,9 @@ from rest_framework import status
 from ontask import models, tasks
 from ontask.action import forms
 from ontask.action.evaluate import evaluate_action
-from ontask.action.services.manager import ActionManagerBase
-from ontask.action.services.manager_factory import action_run_request_factory
+from ontask.action.services.edit_manager import ActionOutEditManager
+from ontask.action.services.manager import ActionRunManager
+from ontask.action.services.manager_factory import action_process_factory
 from ontask.core import SessionPayload
 from ontask.core.permissions import is_instructor
 from ontask.oauth.views import get_initial_token_step1, refresh_token
@@ -132,8 +132,8 @@ def _canvas_get_or_set_oauth_token(
             reverse(continue_url))
 
     # Check if the token is valid
-    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
-    dead = now > token.valid_until - timedelta(
+    now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+    dead = now > token.valid_until - datetime.timedelta(
         seconds=settings.CANVAS_TOKEN_EXPIRY_SLACK)
     if dead:
         try:
@@ -194,17 +194,10 @@ def _send_single_canvas_message(
     return result_msg, response_status
 
 
-class ActionManagerCanvasEmail(ActionManagerBase):
+class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
 
-    def __init__(self):
-        """Assign """
-        super().__init__(
-            forms.CanvasEmailActionRunForm,
-            models.Log.ACTION_RUN_CANVAS_EMAIL)
-        self.template = 'action/request_canvas_email_data.html'
-
-    def process_post(
+    def process_run_post(
         self,
         request: http.HttpRequest,
         action: models.Action,
@@ -243,13 +236,14 @@ class ActionManagerCanvasEmail(ActionManagerBase):
         given subject. The subject will be evaluated also with respect to the
         rows, attributes, and conditions.
         :param user: User object that executed the action
+        :param workflow: Workflow being processed
         :param action: Action from where to take the messages
         :param log_item: Log object to store results
         :param payload: Dictionary with all the parameters
         :return: List of field values used as "to" in emails
         """
-        # Evaluate the action string, evaluate the subject, and get the value of
-        # the email column.
+        # Evaluate the action string, evaluate the subject, and get the value
+        # of the email column.
         if log_item is None:
             log_item = action.log(user, self.log_event, **payload)
 
@@ -330,7 +324,7 @@ class ActionManagerCanvasEmail(ActionManagerBase):
             context['status'] = response_status
             context['result'] = result_msg
             context['email_sent_datetime'] = str(
-                datetime.now(pytz.timezone(settings.TIME_ZONE)),
+                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
             )
             action.log(user, models.Log.ACTION_RUN_CANVAS_EMAIL, **context)
             to_emails.append(msg_to)
@@ -340,12 +334,18 @@ class ActionManagerCanvasEmail(ActionManagerBase):
 
         return to_emails
 
-process_obj = ActionManagerCanvasEmail()
-action_run_request_factory.register_producer(
+
+canvas_email_producer = ActionManagerCanvasEmail(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.CanvasEmailActionRunForm,
+    run_template='action/request_canvas_email_data.html',
+    log_event=models.Log.ACTION_RUN_CANVAS_EMAIL)
+action_process_factory.register_producer(
     models.Action.PERSONALIZED_CANVAS_EMAIL,
-    process_obj)
+    canvas_email_producer)
 
 
 tasks.task_execute_factory.register_producer(
     models.Action.PERSONALIZED_CANVAS_EMAIL,
-    process_obj)
+    canvas_email_producer)
