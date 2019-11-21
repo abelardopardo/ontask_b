@@ -11,12 +11,8 @@ from ontask.action.views.condition import (
     ConditionCreateView, FilterCreateView, delete_condition, delete_filter,
     edit_condition, edit_filter,
 )
-from ontask.action.views.edit_personalized import (
-    action_out_save_content, edit_action_out, showurl,
-)
-from ontask.action.views.edit_rubric import (
-    edit_action_rubric, edit_rubric_cell, edit_rubric_loas,
-)
+from ontask.action.views.edit_personalized import save_text, showurl
+from ontask.action.views.edit_rubric import edit_rubric_cell, edit_rubric_loas
 from ontask.action.views.edit_survey import (
     edit_action_in, edit_description, select_column_action,
     select_condition_for_question, shuffle_questions, toggle_question_change,

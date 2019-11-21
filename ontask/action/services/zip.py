@@ -14,8 +14,8 @@ from django.shortcuts import redirect, render
 from ontask import models
 from ontask.action import forms
 from ontask.action.evaluate.action import evaluate_action
-from ontask.action.services.manager import ActionManagerBase
-from ontask.action.services.manager_factory import action_run_request_factory
+from ontask.action.services.manager import ActionRunManager
+from ontask.action.services.manager_factory import action_process_factory
 from ontask.core import SessionPayload
 from ontask.dataops.sql.row_queries import get_rows
 
@@ -157,17 +157,10 @@ def create_and_send_zip(
     return response
 
 
-class ActionManagerZip(ActionManagerBase):
+class ActionManagerZip(ActionRunManager):
     """Class to serve running an email action."""
 
-    def __init__(self):
-        """Assign default fields."""
-        super().__init__(
-            forms.ZipActionRunForm,
-            models.Log.ACTION_RUN_ZIP)
-        self.template = 'action/action_zip_step1.html'
-
-    def process_request_done(
+    def process_run_request_done(
         self,
         request: http.HttpRequest,
         workflow: models.Action,
@@ -194,6 +187,9 @@ class ActionManagerZip(ActionManagerBase):
         return render(request, 'action/action_zip_done.html', {})
 
 
-action_run_request_factory.register_producer(
+action_process_factory.register_producer(
     models.action.ZIP_OPERATION,
-    ActionManagerZip())
+    ActionManagerZip(
+        run_form_class=forms.ZipActionRunForm,
+        run_template='action/action_zip_step1.html',
+        log_event=models.Log.ACTION_RUN_ZIP))

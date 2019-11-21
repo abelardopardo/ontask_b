@@ -4,7 +4,7 @@
 
 import datetime
 from time import sleep
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Optional, Union
 
 import html2text
 import pytz
@@ -19,19 +19,18 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import (
     are_correct_emails, models, settings as ontask_settings,
-    simplify_datetime_str,
+    simplify_datetime_str, tasks,
 )
 from ontask.action import forms
 from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
-from ontask.action.services.manager import ActionManagerBase
-from ontask import tasks
-from ontask.action.services.manager_factory import action_run_request_factory
+from ontask.action.services.edit_manager import ActionOutEditManager
+from ontask.action.services.manager import ActionRunManager
+from ontask.action.services.manager_factory import action_process_factory
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.models import Action, Column, Log
-import ontask.tasks.execute
 
 logger = get_task_logger('celery_execution')
 
@@ -191,8 +190,8 @@ def _create_single_message(
         # Get the plain text content and bundle it together with the HTML
         # in a message to be added to the list.
         msg = EmailMultiAlternatives(
-            body=msg_body_sbj_to[1],
             subject=html2text.html2text(msg_body_sbj_to[0]),
+            body=msg_body_sbj_to[1],
             from_email=from_email,
             to=[msg_body_sbj_to[2]],
             bcc=bcc_email_list,
@@ -309,15 +308,31 @@ def _deliver_msg_burst(
             sleep(wait_time)
 
 
-class ActionManagerEmail(ActionManagerBase):
+class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
 
-    def __init__(self):
-        """Assign basic fields."""
-        super().__init__(
-            forms.EmailActionRunForm,
-            models.Log.ACTION_RUN_EMAIL)
-        self.template = 'action/request_email_data.html'
+    def extend_edit_context(
+        self,
+        workflow: models.Workflow,
+        action: models.Action,
+        context: Dict,
+    ) -> Optional[str]:
+        """Get the context dictionary to render the GET request.
+
+        :param workflow: Workflow being used
+        :param action: Action being used
+        :param context: Initial dictionary to extend
+        :return: An error string or None if everything was correct.
+        """
+        context.update({
+            'conditions': action.conditions.filter(is_filter=False),
+            'conditions_to_clone': models.Condition.objects.filter(
+                action__workflow=workflow, is_filter=False,
+            ).exclude(action=action),
+            'columns_show_stat': workflow.columns.filter(is_key=False),
+        })
+
+        return None
 
     def execute_operation(
         self,
@@ -383,15 +398,26 @@ class ActionManagerEmail(ActionManagerBase):
         return [msg.to[0] for msg in msgs]
 
 
-class ActionManagerEmailList(ActionManagerBase):
+class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
 
-    def __init__(self):
-        """Assign basic fields."""
-        super().__init__(
-            forms.SendListActionRunForm,
-            models.Log.ACTION_RUN_EMAIL_LIST)
-        self.template = 'action/request_send_list_data.html'
+    def extend_edit_context(
+        self,
+        workflow: models.Workflow,
+        action: models.Action,
+        context: Dict,
+    ) -> Optional[str]:
+        """Get the context dictionary to render the GET request.
+
+        :param workflow: Workflow being used
+        :param action: Action being used
+        :param context: Initial dictionary to extend
+        :return: An error string or None if everything was correct.
+        """
+        self.add_conditions(action, context)
+        self.add_conditions_to_clone(action, context)
+        self.add_columns_show_stats(action, context)
+        return None
 
     def execute_operation(
         self,
@@ -417,7 +443,7 @@ class ActionManagerEmailList(ActionManagerBase):
         # Evaluate the action string, evaluate the subject, and get the value
         # of the email column.
         if log_item is None:
-            log_item = action.log(user, self.log_event, **payload)
+            action.log(user, self.log_event, **payload)
 
         action_text = evaluate_row_action_out(
             action,
@@ -461,25 +487,30 @@ class ActionManagerEmailList(ActionManagerBase):
         return []
 
 
-process_email = ActionManagerEmail()
-action_run_request_factory.register_producer(
-    models.Action.PERSONALIZED_TEXT,
-    process_email)
-action_run_request_factory.register_producer(
-    models.Action.RUBRIC_TEXT,
-    process_email)
+email_producer = ActionManagerEmail(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.EmailActionRunForm,
+    run_template='action/request_email_data.html',
+    log_event=models.Log.ACTION_RUN_EMAIL)
 
-process_list = ActionManagerEmailList()
-action_run_request_factory.register_producer(
+email_list_producer = ActionManagerEmailList(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.SendListActionRunForm,
+    run_template='action/request_send_list_data.html',
+    log_event=models.Log.ACTION_RUN_EMAIL_LIST)
+
+action_process_factory.register_producer(
+    models.Action.PERSONALIZED_TEXT,
+    email_producer)
+action_process_factory.register_producer(
     models.Action.EMAIL_LIST,
-    process_list)
+    email_list_producer)
 
 tasks.task_execute_factory.register_producer(
     models.Action.PERSONALIZED_TEXT,
-    process_email)
-tasks.task_execute_factory.register_producer(
-    models.Action.RUBRIC_TEXT,
-    process_email)
+    email_producer)
 tasks.task_execute_factory.register_producer(
     models.Action.EMAIL_LIST,
-    process_list)
+    email_list_producer)

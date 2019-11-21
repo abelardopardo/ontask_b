@@ -3,7 +3,7 @@
 """Views to run JSON actions."""
 import datetime
 import json
-from typing import Dict, Mapping, Optional, List
+from typing import Dict, List, Mapping, Optional
 
 import pytz
 import requests
@@ -15,8 +15,9 @@ from ontask.action import forms
 from ontask.action.evaluate import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
-from ontask.action.services.manager import ActionManagerBase
-from ontask.action.services.manager_factory import action_run_request_factory
+from ontask.action.services.edit_manager import ActionOutEditManager
+from ontask.action.services.manager import ActionRunManager
+from ontask.action.services.manager_factory import action_process_factory
 
 logger = get_task_logger('celery_execution')
 
@@ -56,15 +57,8 @@ def _send_and_log_json(
             settings.TIME_ZONE))))
 
 
-class ActionManagerJSON(ActionManagerBase):
+class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
-
-    def __init__(self):
-        """Assign default fields."""
-        super().__init__(
-            forms.JSONActionRunForm,
-            models.Log.ACTION_RUN_JSON)
-        self.template = 'action/request_json_data.html'
 
     def execute_operation(
         self,
@@ -106,15 +100,8 @@ class ActionManagerJSON(ActionManagerBase):
         return [column_value for __, column_value in action_evals]
 
 
-class ActionManagerJSONList(ActionManagerBase):
+class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
-
-    def __init__(self):
-        """Assign default fields."""
-        super().__init__(
-            forms.JSONListActionRunForm,
-            models.Log.ACTION_RUN_JSON_LIST)
-        self.template = 'action/request_json_list_data.html'
 
     def execute_operation(
         self,
@@ -130,11 +117,13 @@ class ActionManagerJSONList(ActionManagerBase):
 
         :param user: User object that executed the action
 
+        :param workflow: Workflow object (if relevant)
+
         :param action: Action from where to take the messages
 
-        :param log_item: Log object to store results
-
         :param payload: Object with the additional parameters
+
+        :param log_item: Log object to store results
 
         :return: Empty list (there are no column values for multiple sends)
         """
@@ -161,18 +150,28 @@ class ActionManagerJSONList(ActionManagerBase):
         return []
 
 
-process_obj = ActionManagerJSON()
-process_list = ActionManagerJSONList()
-action_run_request_factory.register_producer(
+json_producer = ActionManagerJSON(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.JSONActionRunForm,
+    run_template='action/request_json_data.html',
+    log_event=models.Log.ACTION_RUN_JSON)
+json_list_producer = ActionManagerJSONList(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.JSONListActionRunForm,
+    run_template='action/request_json_list_data.html',
+    log_event=models.Log.ACTION_RUN_JSON_LIST)
+action_process_factory.register_producer(
     models.Action.PERSONALIZED_JSON,
-    process_obj)
-action_run_request_factory.register_producer(
+    json_producer)
+action_process_factory.register_producer(
     models.Action.JSON_LIST,
-    process_list)
+    json_list_producer)
 
 tasks.task_execute_factory.register_producer(
     models.Action.PERSONALIZED_JSON,
-    process_obj)
+    json_producer)
 tasks.task_execute_factory.register_producer(
     models.Action.JSON_LIST,
-    process_list)
+    json_list_producer)
