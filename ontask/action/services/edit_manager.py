@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Classes to edit actions  through the manager."""
-from typing import Dict, Optional
+from typing import Dict, Optional, Type
 
 from django import http
 from django.contrib import messages
@@ -10,12 +10,12 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from django import forms
 from ontask.action import forms as action_forms
 from ontask.visualizations.plotly import PlotlyHandler
 
-
-class ActionOutEditManager(object):
-    """Base class to provide edit methods for the actions out."""
+class ActionEditManager(object):
+    """Base class to provide edit methods for the actions."""
 
     def __init__(self, *args, **kwargs):
         """Assign and initialize the main service parameters."""
@@ -68,6 +68,58 @@ class ActionOutEditManager(object):
         """
         return _('Functionality under construction')
 
+    def get_render_context(
+        self,
+        action: models.Action,
+        form: Optional[Type[forms.ModelForm]] = None,
+        form_filter: Optional[action_forms.FilterForm] = None,
+    ) -> Dict:
+        """Get the initial context to render the response."""
+        filter_condition = action.get_filter()
+        return {
+            # Workflow elements
+            'attribute_names': [
+                attr for attr in list(action.workflow.attributes.keys())
+            ],
+            'columns': action.workflow.columns.all(),
+            'has_data': action.workflow.has_table(),
+            'total_rows': action.workflow.nrows,
+
+            # Action Elements
+            'action': action,
+            'form': form,
+            'form_filter': form_filter,
+            'filter_condition': filter_condition,
+            'selected_rows':
+                filter_condition.n_rows_selected
+                if filter_condition else -1,
+            'is_send_list': (
+                action.action_type == models.Action.EMAIL_LIST
+                or action.action_type == models.Action.JSON_LIST),
+            'is_personalized_text': (
+                action.action_type == models.Action.PERSONALIZED_TEXT),
+            'is_rubric': action.action_type == models.Action.RUBRIC_TEXT,
+            'all_false_conditions': any(
+                cond.n_rows_selected == 0
+                for cond in action.conditions.all()),
+            'rows_all_false': action.get_row_all_false_count(),
+
+            # Column elements
+
+            # Page elements
+            'load_summernote': (
+                action.action_type == models.Action.PERSONALIZED_TEXT
+                or action.action_type == models.Action.EMAIL_LIST
+                or action.action_type == models.Action.RUBRIC_TEXT
+            ),
+            'query_builder_ops': action.workflow.get_query_builder_ops_as_str(),
+            'vis_scripts': PlotlyHandler.get_engine_scripts()}
+
+
+
+class ActionOutEditManager(ActionEditManager):
+    """Base class to provide edit methods for the actions out."""
+
     def process_edit_request(
         self,
         request: http.HttpRequest,
@@ -103,42 +155,7 @@ class ActionOutEditManager(object):
             return redirect('action:index')
 
         # This is a GET request or a faulty POST request
-
-        filter_condition = action.get_filter()
-
-        # Context to render the form
-        context = {
-            'action': action,
-            'form': form,
-            'form_filter': form_filter,
-            'filter_condition': filter_condition,
-            'load_summernote': (
-                action.action_type == models.Action.PERSONALIZED_TEXT
-                or action.action_type == models.Action.EMAIL_LIST
-                or action.action_type == models.Action.RUBRIC_TEXT
-            ),
-            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-            'attribute_names': [
-                attr for attr in list(workflow.attributes.keys())
-            ],
-            'columns': workflow.columns.all(),
-            'selected_rows':
-                filter_condition.n_rows_selected
-                if filter_condition else -1,
-            'has_data': action.workflow.has_table(),
-            'is_send_list': (
-                action.action_type == models.Action.EMAIL_LIST
-                or action.action_type == models.Action.JSON_LIST),
-            'is_personalized_text': action.action_type == models.Action.PERSONALIZED_TEXT,
-            'is_rubric': action.action_type == models.Action.RUBRIC_TEXT,
-            'all_false_conditions': any(
-                cond.n_rows_selected == 0
-                for cond in action.conditions.all()),
-            'rows_all_false': action.get_row_all_false_count(),
-            'total_rows': workflow.nrows,
-            'vis_scripts': PlotlyHandler.get_engine_scripts(),
-        }
-
+        context = self.get_render_context(action, form, form_filter)
         extend_status = self.extend_edit_context(workflow, action, context)
         if extend_status:
             messages.error(request, extend_status)

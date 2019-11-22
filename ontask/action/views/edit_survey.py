@@ -4,14 +4,12 @@
 
 from typing import Optional
 
-import django_tables2 as tables
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -21,178 +19,9 @@ from ontask.core.decorators import (
     ajax_required, get_action, get_columncondition, get_workflow,
 )
 from ontask.core.permissions import is_instructor
-from ontask.core.tables import OperationsColumn
 from ontask.models import (
-    Action, ActionColumnConditionTuple, Condition, Log, Workflow,
+    Action, ActionColumnConditionTuple, Log, Workflow,
 )
-from ontask.visualizations.plotly import PlotlyHandler
-
-
-class ColumnSelectedTable(tables.Table):
-    """Table to render the columns selected for a given action in."""
-
-    column__name = tables.Column(verbose_name=_('Name'))  # noqa: Z116
-    column__description_text = tables.Column(  # noqa: Z116
-        verbose_name=_('Description (shown to learners)'),
-        default='',
-    )
-    changes_allowed = tables.BooleanColumn(
-        verbose_name=_('Allow change?'),
-        default=True)
-    condition = tables.Column(  # noqa: Z116
-        verbose_name=_('Condition'),
-        empty_values=[-1],
-    )
-
-    # Template to render the extra column created dynamically
-    ops_template = 'action/includes/partial_column_selected_operations.html'
-
-    def __init__(self, *args, **kwargs):
-        """Store the condition list."""
-        self.condition_list = kwargs.pop('condition_list')
-        super().__init__(*args, **kwargs)
-
-    def render_column__name(self, record):  # noqa: Z116
-        """Render as a link."""
-        return format_html(
-            '<a href="#questions" data-toggle="tooltip"'
-            + ' class="js-workflow-question-edit" data-url="{0}"'
-            + ' title="{1}">{2}</a>',
-            reverse(
-                'workflow:question_edit',
-                kwargs={'pk': record['column__id']}),
-            _('Edit the question'),
-            record['column__name'],
-        )
-
-    def render_condition(self, record):
-        """Render with template to select condition."""
-        return render_to_string(
-            'action/includes/partial_column_selected_condition.html',
-            {
-                'id': record['id'],
-                'cond_selected': record['condition__name'],
-                'conditions': self.condition_list,
-            })
-
-    def render_changes_allowed(self, record):
-        """Render the boolean to allow changes."""
-        return render_to_string(
-            'action/includes/partial_question_changes_allowed.html',
-            {
-                'id': record['id'],
-                'changes_allowed': record['changes_allowed'],
-            })
-
-    class Meta(object):
-        """Define fields, sequence, attrs and row attrs."""
-
-        fields = (
-            'column__id',
-            'column__name',
-            'column__description_text',
-            'changes_allowed',
-            'condition',
-            'operations')
-
-        sequence = (
-            'column__name',
-            'column__description_text',
-            'changes_allowed',
-            'condition',
-            'operations')
-
-        attrs = {
-            'class': 'table table-hover table-bordered',
-            'style': 'width: 100%;',
-            'id': 'column-selected-table',
-        }
-
-        row_attrs = {
-            'class': lambda record: 'danger' if not record[
-                'column__description_text'
-            ] else '',
-        }
-
-
-def edit_action_in(
-    request: HttpRequest,
-    workflow: Workflow,
-    action: Action,
-) -> HttpResponse:
-    """Edit an action in.
-
-    :param request: Request object
-    :param workflow: workflow
-    :param action: Action
-    :return: HTTP response
-    """
-    # All tuples (action, column, condition) to consider
-    tuples = action.column_condition_pair.all()
-
-    # Columns
-    all_columns = workflow.columns
-
-    # Conditions
-    filter_condition = action.get_filter()
-    all_conditions = action.conditions.filter(is_filter=False)
-
-    # Create the context info.
-    context = {
-        'action': action,
-        # Workflow elements
-        'total_rows': workflow.nrows,
-        'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-        'has_data': workflow.has_table(),
-        'selected_rows':
-            filter_condition.n_rows_selected if filter_condition else -1,
-        'all_false_conditions': any(
-            cond.n_rows_selected == 0 for cond in all_conditions
-        ),
-        # Column elements
-        'key_columns': all_columns.filter(is_key=True),
-        'columns_show_stat': all_columns.filter(is_key=False),
-        'key_selected': tuples.filter(column__is_key=True).first(),
-        'not_has_no_key': not tuples.filter(column__is_key=False).exists(),
-        'any_empty_description': tuples.filter(
-            column__description_text='',
-            column__is_key=False,
-        ).exists(),
-        'columns_to_insert': all_columns.exclude(
-            column_condition_pair__action=action,
-        ).exclude(
-            is_key=True,
-        ).distinct().order_by('position'),
-        'column_selected_table': ColumnSelectedTable(
-            tuples.filter(column__is_key=False).values(
-                'id',
-                'column__id',
-                'column__name',
-                'column__description_text',
-                'condition__name',
-                'changes_allowed'),
-            orderable=False,
-            extra_columns=[(
-                'operations',
-                OperationsColumn(
-                    verbose_name='',
-                    template_file=ColumnSelectedTable.ops_template,
-                    template_context=lambda record: {
-                        'id': record['column__id'],
-                        'aid': action.id}),
-            )],
-            condition_list=all_conditions,
-        ),
-        # Conditions
-        'filter_condition': filter_condition,
-        'conditions': all_conditions,
-        'vis_scripts': PlotlyHandler.get_engine_scripts(),
-        'conditions_to_clone': Condition.objects.filter(
-            action__workflow=workflow, is_filter=False,
-        ).exclude(action=action),
-    }
-
-    return render(request, 'action/edit_in.html', context)
 
 
 @user_passes_test(is_instructor)

@@ -2,18 +2,112 @@
 
 """Functions to process the survey run request."""
 
-from typing import List
+from typing import List, Dict, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
+from django.contrib import messages
+import django_tables2 as tables
 from django import http
-from django.shortcuts import render
-from django.urls import reverse
+from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.urls.base import reverse
+from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.action.services.edit_manager import ActionEditManager
 from ontask.action.services.manager import ActionRunManager
 from ontask.action.services.manager_factory import action_process_factory
-from ontask.core import DataTablesServerSidePaging
+from ontask.core import DataTablesServerSidePaging, OperationsColumn
 from ontask.dataops.sql import search_table
+from ontask.visualizations.plotly import PlotlyHandler
+
+
+class ColumnSelectedTable(tables.Table):
+    """Table to render the columns selected for a given action in."""
+
+    column__name = tables.Column(verbose_name=_('Name'))  # noqa: Z116
+    column__description_text = tables.Column(  # noqa: Z116
+        verbose_name=_('Description (shown to learners)'),
+        default='',
+    )
+    changes_allowed = tables.BooleanColumn(
+        verbose_name=_('Allow change?'),
+        default=True)
+    condition = tables.Column(  # noqa: Z116
+        verbose_name=_('Condition'),
+        empty_values=[-1],
+    )
+
+    # Template to render the extra column created dynamically
+    ops_template = 'action/includes/partial_column_selected_operations.html'
+
+    def __init__(self, *args, **kwargs):
+        """Store the condition list."""
+        self.condition_list = kwargs.pop('condition_list')
+        super().__init__(*args, **kwargs)
+
+    def render_column__name(self, record):  # noqa: Z116
+        """Render as a link."""
+        return format_html(
+            '<a href="#questions" data-toggle="tooltip"'
+            + ' class="js-workflow-question-edit" data-url="{0}"'
+            + ' title="{1}">{2}</a>',
+            reverse(
+                'workflow:question_edit',
+                kwargs={'pk': record['column__id']}),
+            _('Edit the question'),
+            record['column__name'],
+        )
+
+    def render_condition(self, record):
+        """Render with template to select condition."""
+        return render_to_string(
+            'action/includes/partial_column_selected_condition.html',
+            {
+                'id': record['id'],
+                'cond_selected': record['condition__name'],
+                'conditions': self.condition_list,
+            })
+
+    def render_changes_allowed(self, record):
+        """Render the boolean to allow changes."""
+        return render_to_string(
+            'action/includes/partial_question_changes_allowed.html',
+            {
+                'id': record['id'],
+                'changes_allowed': record['changes_allowed'],
+            })
+
+    class Meta(object):
+        """Define fields, sequence, attrs and row attrs."""
+
+        fields = (
+            'column__id',
+            'column__name',
+            'column__description_text',
+            'changes_allowed',
+            'condition',
+            'operations')
+
+        sequence = (
+            'column__name',
+            'column__description_text',
+            'changes_allowed',
+            'condition',
+            'operations')
+
+        attrs = {
+            'class': 'table table-hover table-bordered',
+            'style': 'width: 100%;',
+            'id': 'column-selected-table',
+        }
+
+        row_attrs = {
+            'class': lambda record: 'danger' if not record[
+                'column__description_text'
+            ] else '',
+        }
 
 
 def _create_link_to_survey_row(
@@ -150,8 +244,80 @@ def create_survey_table(
     })
 
 
-class ActionManagerSurvey(ActionRunManager):
+class ActionManagerSurvey(ActionEditManager, ActionRunManager):
     """Class to serve running an email action."""
+
+    def extend_edit_context(
+        self,
+        workflow: models.Workflow,
+        action: models.Action,
+        context: Dict,
+    ) -> Optional[str]:
+        """Get the context dictionary to render the GET request.
+
+        :param workflow: Workflow being used
+        :param action: Action being used
+        :param context: Initial dictionary to extend
+        :return: An error string or None if everything was correct.
+        """
+        self.add_conditions(action, context)
+        self.add_conditions_to_clone(action, context)
+        self.add_columns_show_stats(action, context)
+
+        # All tuples (action, column, condition) to consider
+        tuples = action.column_condition_pair.all()
+
+        context.update({
+            'column_selected_table': ColumnSelectedTable(
+                tuples.filter(column__is_key=False).values(
+                    'id',
+                    'column__id',
+                    'column__name',
+                    'column__description_text',
+                    'condition__name',
+                    'changes_allowed'),
+                orderable=False,
+                extra_columns=[(
+                    'operations',
+                    OperationsColumn(
+                        verbose_name='',
+                        template_file=ColumnSelectedTable.ops_template,
+                        template_context=lambda record: {
+                            'id': record['column__id'],
+                            'aid': action.id}),
+                )],
+                condition_list=context['conditions'],
+            ),
+            'columns_to_insert': workflow.columns.exclude(
+                column_condition_pair__action=action,
+            ).exclude(
+                is_key=True,
+            ).distinct().order_by('position'),
+            'any_empty_description': tuples.filter(
+                column__description_text='',
+                column__is_key=False,
+            ).exists(),
+            'key_columns': workflow.get_unique_columns(),
+            'key_selected': tuples.filter(column__is_key=True).first(),
+            'has_no_key': tuples.filter(column__is_key=False).exists(),
+        })
+
+        return None
+
+    def process_edit_request(
+        self,
+        request: http.HttpRequest,
+        workflow: models.Workflow,
+        action: models.Action) -> http.HttpResponse:
+        """Process the action edit request."""
+
+        context = self.get_render_context(action)
+        extend_status = self.extend_edit_context(workflow, action, context)
+        if extend_status:
+            messages.error(request, extend_status)
+            return redirect(reverse('action:index'))
+
+        return render(request, self.edit_template, context)
 
     def process_run_request(
         self,
@@ -176,5 +342,6 @@ class ActionManagerSurvey(ActionRunManager):
 action_process_factory.register_producer(
     models.Action.SURVEY,
     ActionManagerSurvey(
+        edit_template='action/edit_in.html',
         run_template='action/run_survey.html',
         log_event=models.Log.ACTION_SURVEY_INPUT))
