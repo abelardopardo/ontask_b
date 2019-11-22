@@ -14,17 +14,16 @@ FilterForm: Form to process filter elements
 ConditionForm: Form to process condition elements
 """
 
-import json
 from builtins import str
+import json
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-import ontask.settings
 from ontask import is_legal_name
 from ontask.core.forms import RestrictedFileField
 from ontask.models import Action, Condition, RubricCell
-from ontask.models.const import CHAR_FIELD_MID_SIZE
+import ontask.settings
 
 SUFFIX_LENGTH = 512
 

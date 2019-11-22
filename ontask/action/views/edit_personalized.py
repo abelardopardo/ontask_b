@@ -82,15 +82,12 @@ def showurl(
 
         return JsonResponse({'html_redirect': None})
 
-    # Create the text for the action
-    # url_text = reverse('action:serve', kwargs={'action_id': action.id})
-    url_text = reverse('action:serve_lti') + '?id=' + str(action.id)
-
-    # Render the page with the abolute URI
+    # Render the page with the absolute URI
     return JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_action_showurl.html',
-            {'url_text': request.build_absolute_uri(url_text),
+            {'url_text': request.build_absolute_uri(
+                reverse('action:serve_lti') + '?id=' + str(action.id)),
              'form': form,
              'action': action},
             request=request),

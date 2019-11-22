@@ -61,7 +61,7 @@
     <h1 class="text-center">{{ action.name }}</h1>
     <div class="text-center my-3">
       <button type="button"
-              class="shadow btn btn-outline-info js-action-preview {% if not key_selected or not_has_no_key or selected_rows == 0 %} disabled{% endif %}"
+              class="shadow btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
               data-url="{% url 'action:preview' action.id 1 %}"
               data-toggle="tooltip"
               title="{% trans 'See the content as shown to each learner' %}">
@@ -76,18 +76,18 @@
     </div>
     {% include 'action/includes/partial_action_edit_out_warning.html' %}
     <div class="alert-danger">
-    {% if not_has_no_key %}
-      <p class="text-center">{% trans 'There must be at least one question (non-key column) in the survey.' %}</p>
-    {% endif %}
-    {% if any_empty_description %}
-      <p class="text-center">{% trans 'All questions should have non-empty descriptions.' %}</p>
-    {% endif %}
-    {% if not action.description_text %}
-      <p class="shadow text-center alert-danger"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'No description text provided in Survey Parameters' %}</p>
-    {% endif %}
-    {% if not key_selected %}
-      <p class="shadow alert-danger text-center" style="margin-top:1ex;"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'You need to specify a key column in Survey Parameters' %}</p>
-    {% endif %}
+      {% if not has_no_key %}
+        <p class="text-center">{% trans 'There must be at least one question (non-key column) in the survey.' %}</p>
+      {% endif %}
+      {% if any_empty_description %}
+        <p class="text-center">{% trans 'All questions should have non-empty descriptions.' %}</p>
+      {% endif %}
+      {% if not action.description_text %}
+        <p class="shadow text-center alert-danger"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'No description text provided in Survey Parameters' %}</p>
+      {% endif %}
+      {% if not key_selected %}
+        <p class="shadow alert-danger text-center" style="margin-top:1ex;"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'You need to specify a key column in Survey Parameters' %}</p>
+      {% endif %}
     </div>
     <ul class="nav nav-tabs border-0 justify-content-center"
         id="edit-personalized-text-tabs" role="tablist">
@@ -158,4 +158,3 @@
   </div>
   {% include 'modal.html' %}
 {% endblock container %}
-
