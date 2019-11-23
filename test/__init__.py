@@ -168,7 +168,7 @@ class OnTaskTestCase(TransactionTestCase):
     def add_middleware(self, request: HttpRequest) -> HttpRequest:
         request.user = self.user
         # adding session
-        SessionMiddleware().process_run_request(request)
+        SessionMiddleware().process_request(request)
         # adding messages
         setattr(request, '_messages', FallbackStorage(request))
         if self.workflow:
