@@ -27,7 +27,7 @@ from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.dataops.pandas import check_wf_df
 from ontask.dataops.sql import clone_table
 from ontask.models import Log, Workflow
-from ontask.table.views.table_view import do_clone_view
+from ontask.table.services.view import do_clone_view
 from ontask.workflow.access import (
     remove_workflow_from_session, store_workflow_in_session,
 )
