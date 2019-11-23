@@ -26,7 +26,7 @@ from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.manager import ActionRunManager
 from ontask.core import SessionPayload
 from ontask.core.permissions import is_instructor
-from ontask.oauth.views import get_initial_token_step1, refresh_token
+from ontask.oauth.services import get_initial_token_step1, refresh_token
 
 logger = get_task_logger('celery_execution')
 
