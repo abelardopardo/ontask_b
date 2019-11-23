@@ -7,8 +7,6 @@
 - evaluate_row_action_out: Evaluates an action text for a single row of the
   table
 
-- evaluate_row_action_in: Evaluates an action survey for a single row of the
-  table
 """
 
 from builtins import str
@@ -16,13 +14,12 @@ from datetime import datetime
 from typing import Dict, List, Mapping, Optional, Tuple, Union
 
 from django.conf import settings
-from django.template import Context, Template, TemplateSyntaxError
+from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 import ontask
 from ontask.action.evaluate.template import render_action_template
-from ontask.action.forms import EnterActionIn
 from ontask.dataops.formula import EVAL_EXP, evaluate_formula
 from ontask.dataops.pandas import get_table_row_by_index
 from ontask.dataops.sql.row_queries import get_row, get_rows
@@ -273,44 +270,3 @@ def evaluate_row_action_out(
         return render_to_string('action/syntax_error.html', {'msg': str(exc)})
 
     return action_text
-
-
-def evaluate_row_action_in(action: Action, context: Mapping):
-    """Evaluate an action_in in the given context.
-
-    Given an action IN object and a row index:
-    1) Create the form and the context
-    2) Run the template with the context
-    3) Return the resulting object (HTML?)
-
-    :param action: Action object.
-    :param context: Dictionary with pairs name/value
-    :return: String with the HTML content resulting from the evaluation
-    """
-    # Get the active columns attached to the action
-    tuples = [
-        column_condition_pair
-        for column_condition_pair in action.column_condition_pair.all()
-        if column_condition_pair.column.is_active
-    ]
-
-    col_values = [context[colcon_pair.column.name] for colcon_pair in tuples]
-
-    form = EnterActionIn(
-        None,
-        tuples=tuples,
-        context=context,
-        values=col_values)
-
-    # Render the form
-    return Template(
-        """<div align="center">
-             <p class="lead">{{ description_text }}</p>
-             {% load crispy_forms_tags %}{{ form|crispy }}
-           </div>""",
-    ).render(Context(
-        {
-            'form': form,
-            'description_text': action.description_text,
-        },
-    ))

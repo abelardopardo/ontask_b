@@ -8,7 +8,7 @@ from ontask.action.forms.crud import (
     RubricCellForm, RubricLOAForm,
 )
 from ontask.action.forms.edit import (
-    EditActionOutForm, EnterActionIn, column_to_field,
+    EditActionOutForm, EnterActionIn,
 )
 from ontask.action.forms.run import (
     CanvasEmailActionForm, CanvasEmailActionRunForm, EmailActionForm,

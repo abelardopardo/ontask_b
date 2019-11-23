@@ -20,12 +20,10 @@ from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import status
 
-from ontask import models, tasks
-from ontask.action import forms
+from ontask import models
 from ontask.action.evaluate import evaluate_action
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.manager import ActionRunManager
-from ontask.action.services.manager_factory import action_process_factory
 from ontask.core import SessionPayload
 from ontask.core.permissions import is_instructor
 from ontask.oauth.views import get_initial_token_step1, refresh_token
@@ -333,19 +331,3 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
         action.save()
 
         return to_emails
-
-
-canvas_email_producer = ActionManagerCanvasEmail(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.CanvasEmailActionRunForm,
-    run_template='action/request_canvas_email_data.html',
-    log_event=models.Log.ACTION_RUN_CANVAS_EMAIL)
-action_process_factory.register_producer(
-    models.Action.PERSONALIZED_CANVAS_EMAIL,
-    canvas_email_producer)
-
-
-tasks.task_execute_factory.register_producer(
-    models.Action.PERSONALIZED_CANVAS_EMAIL,
-    canvas_email_producer)
