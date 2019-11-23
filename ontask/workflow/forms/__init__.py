@@ -5,7 +5,7 @@ from ontask.workflow.forms.attribute_shared import (
 )
 from ontask.workflow.forms.column import (
     ColumnAddForm, ColumnRenameForm, CriterionForm, FormulaColumnAddForm,
-    QuestionForm, RandomColumnAddForm,
+    QuestionForm, RandomColumnAddForm, column_to_field
 )
 from ontask.workflow.forms.workflow import (
     WorkflowExportRequestForm, WorkflowForm, WorkflowImportForm,

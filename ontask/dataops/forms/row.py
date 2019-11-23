@@ -4,7 +4,7 @@
 
 from django import forms
 
-from ontask.action.forms import column_to_field
+from ontask.workflow.forms import column_to_field
 from ontask.dataops.forms.upload import FIELD_PREFIX
 
 
