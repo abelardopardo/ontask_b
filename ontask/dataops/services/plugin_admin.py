@@ -1,26 +1,123 @@
 # -*- coding: utf-8 -*-
 
-"""Functions to manipulate plugins and check their properties."""
+"""Service functions to handle plugin invocations."""
 
+from datetime import datetime
 import inspect
 import os
 import time
-from builtins import map, str, zip
-from datetime import datetime
 from typing import List, Tuple
 
-import pandas as pd
-import pytz
 from django.conf import settings
 from django.contrib import messages
-from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext, ugettext_lazy as _
 
-import ontask.settings
+from django.db.models.expressions import F
+from django.template.loader import render_to_string
+from django.utils.dateparse import parse_datetime
+from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _, ugettext
+import django_tables2 as tables
+import pandas as pd
+import pytz
+
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.plugin import ontask_plugin
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
-from ontask.models import Log, Plugin
+
+from ontask import models
+import ontask.settings
+
+
+class PluginAdminTable(tables.Table):
+    """Class to render the table with plugins present in the system."""
+
+    description_text = tables.TemplateColumn(
+        verbose_name=_('Description'),
+        template_name='dataops/includes/partial_plugin_description.html',
+    )
+
+    last_exec = tables.DateTimeColumn(verbose_name=_('Last executed'))
+
+    filename = tables.Column(verbose_name=_('Folder'), empty_values=None)
+
+    num_executions = tables.Column(
+        verbose_name=_('Executions'),
+        empty_values=[])
+
+    def render_is_verified(self, record):
+        """Render is_verified as a tick or the button Diagnose."""
+        if record.is_verified:
+            return format_html('<span class="true">✔</span>')
+
+        return render_to_string(
+            'dataops/includes/partial_plugin_diagnose.html',
+            context={'id': record.id},
+            request=None)
+
+    def render_is_enabled(self, record):
+        """Render the is enabled as a checkbox."""
+        return render_to_string(
+            'dataops/includes/partial_plugin_enable.html',
+            context={'record': record},
+            request=None)
+
+    def render_last_exec(self, record):
+        """Render the last executed time.
+
+        :param record: Record being processed in the table.
+
+        :return:
+        """
+        log_item = models.Log.objects.filter(
+            name=models.Log.PLUGIN_EXECUTE,
+            payload__name=record.name,
+        ).order_by(F('created').desc()).first()
+        if not log_item:
+            return '—'
+        return log_item.created
+
+    def render_num_executions(self, record):
+        """Render the last executed time.
+
+        :param record: Record being processed in the table.
+
+        :return:
+        """
+        return models.Log.objects.filter(
+            name=models.Log.PLUGIN_EXECUTE,
+            payload__name=record.name,
+        ).count()
+
+    class Meta(object):
+        """Choose fields, sequence and attributes."""
+
+        model = models.Plugin
+
+        fields = (
+            'filename',
+            'name',
+            'description_text',
+            'is_model',
+            'is_verified',
+            'is_enabled')
+
+        sequence = (
+            'filename',
+            'name',
+            'description_text',
+            'is_model',
+            'is_verified',
+            'is_enabled',
+            'num_executions',
+            'last_exec')
+
+        attrs = {
+            'class': 'table table-hover table-bordered shadow',
+            'style': 'width: 100%;',
+            'id': 'plugin-admin-table',
+            'th': {'class': 'dt-body-center'},
+            'td': {'style': 'vertical-align: middle'}}
+
 
 type_function = {
     'integer': int,
@@ -29,9 +126,6 @@ type_function = {
     'datetime': parse_datetime,
     'boolean': bool,
 }
-
-
-# Initial list of results (all false until proven otherwise
 _checks = [
     _('Class inherits from OnTaskTransformation or OnTaskModel'),
     _('Class has a non-empty documentation string'),
@@ -67,7 +161,7 @@ def _get_plugin_path():
     return os.path.join(settings.BASE_DIR, plugin_folder)
 
 
-def _verify_plugin(pinobj: Plugin) -> List[Tuple[str, str]]:
+def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
     """Verify that plugin complies with certain tests.
 
     Run some tests in the plugin instance to make sure it complies with the
@@ -249,7 +343,7 @@ def _load_plugin_info(plugin_folder, plugin_rego=None):
 
     # If there is no instance given of the registry, create a new one
     if not plugin_rego:
-        plugin_rego = Plugin()
+        plugin_rego = models.Plugin()
         plugin_rego.filename = plugin_folder
 
     if plugin_instance:
@@ -318,21 +412,21 @@ def refresh_plugin_data(request, workflow = None):
     ]
 
     # Get the objects from the DB
-    reg_plugins = Plugin.objects.all()
+    reg_plugins = models.Plugin.objects.all()
 
     # Traverse the list of registered plugins and detect changes
     for rpin in reg_plugins:
         i_file = os.path.join(plugin_folder, rpin.filename, '__init__.py')
         if rpin.filename not in pfolders or not os.path.exists(i_file):
             # A plugin has vanished. Delete
-            rpin.log(request.user, Log.PLUGIN_DELETE)
+            rpin.log(request.user, models.Log.PLUGIN_DELETE)
             rpin.delete()
             continue
 
         if os.stat(i_file).st_mtime > time.mktime(rpin.modified.timetuple()):
             # A plugin has changed
             _load_plugin_info(rpin.filename, rpin)
-            rpin.log(request.user, Log.PLUGIN_UPDATE)
+            rpin.log(request.user, models.Log.PLUGIN_UPDATE)
 
         pfolders.remove(rpin.filename)
 
@@ -353,7 +447,7 @@ def refresh_plugin_data(request, workflow = None):
                 request,
                 _('Unable to load plugin in folder "{0}".').format(fname))
             continue
-        rpin.log(request.user, Log.PLUGIN_CREATE)
+        rpin.log(request.user, models.Log.PLUGIN_CREATE)
 
 
 def run_plugin(

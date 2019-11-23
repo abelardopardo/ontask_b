@@ -11,13 +11,9 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import OnTaskDataFrameNoKey
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.dataops.forms import (
-    SQLRequestConnectionParam, load_df_from_sqlconnection,
-)
-from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
+from ontask.dataops import forms, services
 from ontask.models import SQLConnection, Workflow
 
 
@@ -45,11 +41,11 @@ def sqlupload_start(
 
     :param request: Web request
     :param pk: primary key of the SQL conn used
+    :param workflow: Workflow being used
     :return: Creates the upload_data dictionary in the session
     """
     conn = SQLConnection.objects.filter(
-        pk=pk
-    ).filter(enabled=True).first()
+        pk=pk).filter(enabled=True).first()
     if not conn:
         return redirect('dataops:sqlconns_instructor_index_instructor_index')
 
@@ -57,7 +53,9 @@ def sqlupload_start(
     missing_field = conn.has_missing_fields()
     if missing_field:
         # The connection needs a password  to operate
-        form = SQLRequestConnectionParam(request.POST or None, instance=conn)
+        form = forms.SQLRequestConnectionParam(
+            request.POST or None,
+            instance=conn)
 
     context = {
         'form': form,
@@ -80,41 +78,16 @@ def sqlupload_start(
 
         # Process SQL connection using pandas
         try:
-            data_frame = load_df_from_sqlconnection(conn, run_params)
-            # Verify the data frame
-            verify_data_frame(data_frame)
-        except OnTaskDataFrameNoKey as exc:
-            messages.error(request, str(exc))
-            return render(request, 'dataops/sqlupload_start.html', context)
+            services.sql_upload_step_one(
+                request,
+                workflow,
+                conn,
+                run_params)
         except Exception as exc:
             messages.error(
                 request,
                 _('Unable to obtain data: {0}').format(str(exc)))
             return render(request, 'dataops/sqlupload_start.html', context)
-
-        # Store the data frame in the DB.
-        try:
-            # Get frame info with three lists: names, types and is_key
-            frame_info = store_temporary_dataframe(
-                data_frame,
-                workflow)
-        except Exception:
-            form.add_error(
-                None,
-                _('The data from this connection cannot be processed.'),
-            )
-            return render(request, 'dataops/sqlupload_start.html', context)
-
-        # Dictionary to populate gradually throughout the sequence of steps. It
-        # is stored in the session.
-        request.session['upload_data'] = {
-            'initial_column_names': frame_info[0],
-            'column_types': frame_info[1],
-            'src_is_key_column': frame_info[2],
-            'step_1': reverse(
-                'dataops:sqlupload_start',
-                kwargs={'pk': conn.id}),
-        }
 
         return redirect('dataops:upload_s2')
 

@@ -5,31 +5,29 @@
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
-from django.db import transaction
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
+from ontask.dataops import services
 from ontask.dataops.forms import FIELD_PREFIX, RowForm
-from ontask.dataops.sql import get_row, update_row
-from ontask.dataops.sql.row_queries import insert_row
-from ontask.models import Log, Workflow
-from ontask.workflow.ops import check_key_columns
+from ontask.dataops.sql import get_row
 
 
 @user_passes_test(is_instructor)
 @get_workflow(pf_related=['columns', 'actions'])
 def row_create(
     request: HttpRequest,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Process POST request to create a new row in the data table.
 
     :param request: Request object with all the data.
-
+    :param workflow: Workflow being processed.
     :return: Nothing. Effect done in the database.
     """
     # If the workflow has no data, the operation should not be allowed
@@ -40,23 +38,11 @@ def row_create(
     form = RowForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
-        # Create the query to update the row
-        columns = workflow.columns.all()
-        column_names = [col.name for col in columns]
         row_values = [
             form.cleaned_data[(FIELD_PREFIX + '%s') % idx]
-            for idx in range(len(columns))]
-
+            for idx in range(workflow.columns.count())]
         try:
-            with transaction.atomic():
-                # Insert the new row in the db
-                insert_row(
-                    workflow.get_data_frame_table_name(),
-                    column_names,
-                    row_values)
-                # verify that the "key" property is maintained in all the
-                # columns.
-                check_key_columns(workflow)
+            services.create_row(workflow, row_values)
         except Exception as exc:
             form.add_error(None, str(exc))
             return render(
@@ -66,19 +52,11 @@ def row_create(
                  'form': form,
                  'cancel_url': reverse('table:display')})
 
-        # Update number of rows
-        workflow.nrows += 1
-        workflow.save()
-
-        # Recompute all the values of the conditions in each of the actions
-        # TODO: Explore how to do this asynchronously (or lazy)
-        for act in workflow.actions.all():
-            act.update_n_rows_selected()
         workflow.log(
             request.user,
-            Log.WORKFLOW_DATA_ROW_CREATE,
+            models.Log.WORKFLOW_DATA_ROW_CREATE,
             new_values=list(
-                zip(column_names,
+                zip([col.name for col in workflow.columns.all()],
                     [str(rval) for rval in row_values])))
         return redirect('table:display')
 
@@ -94,7 +72,7 @@ def row_create(
 @get_workflow(pf_related='columns')
 def row_update(
     request: HttpRequest,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Process POST request to update a row in the data table.
 
@@ -127,23 +105,15 @@ def row_update(
         if not form.has_changed():
             return redirect('table:display')
 
-        # Create the query to update the row
-        column_names = [col.name for col in workflow.columns.all()]
-        row_values = [
-            form.cleaned_data[(FIELD_PREFIX + '%s') % idx]
-            for idx in range(len(column_names))]
-
         try:
-            with transaction.atomic():
-                # Update the row in the db
-                update_row(
-                    workflow.get_data_frame_table_name(),
-                    column_names,
-                    row_values,
-                    filter_dict={update_key: update_val})
-                # verify that the "key" property is maintained in all the
-                # columns.
-                check_key_columns(workflow)
+            row_values = [
+                form.cleaned_data[(FIELD_PREFIX + '%s') % idx]
+                for idx in range(workflow.columns.count())]
+            services.update_row_values(
+                workflow,
+                update_key,
+                update_val,
+                row_values)
         except Exception as exc:
             form.add_error(None, str(exc))
             return render(
@@ -153,15 +123,11 @@ def row_update(
                  'form': form,
                  'cancel_url': reverse('table:display')})
 
-        # Recompute all the values of the conditions in each of the actions
-        # TODO: Explore how to do this asynchronously (or lazy)
-        for act in workflow.actions.all():
-            act.update_n_rows_selected()
         workflow.log(
             request.user,
-            Log.WORKFLOW_DATA_ROW_UPDATE,
+            models.Log.WORKFLOW_DATA_ROW_UPDATE,
             new_values=list(zip(
-                column_names,
+                [col.name for col in workflow.columns.all()],
                 [str(rval) for rval in row_values])))
         return redirect('table:display')
 

@@ -26,7 +26,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskDataFrameNoKey, settings
 from ontask.core.forms import RestrictedFileField
-from ontask.dataops.forms.dataframeupload import (
+from ontask.dataops.services.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
