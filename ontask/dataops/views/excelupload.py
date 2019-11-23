@@ -10,17 +10,17 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import UploadExcelFileForm
-from ontask.models import Workflow
 
 
 @user_passes_test(is_instructor)
 @get_workflow()
 def excelupload_start(
     request: HttpRequest,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Upload the Excel file as first step.
 
@@ -38,6 +38,7 @@ def excelupload_start(
     step_1: URL name of the first step
 
     :param request: Web request
+    :param workflow: Workflow being used.
     :return: Creates the upload_data dictionary in the session
     """
     # Bind the form with the received data

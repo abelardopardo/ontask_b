@@ -9,7 +9,7 @@ from django.conf import settings
 from rest_framework import status
 
 from ontask.dataops.plugin import OnTaskModel
-from ontask.dataops.plugin.plugin_manager import _verify_plugin
+from ontask.dataops.services.plugin_admin import _verify_plugin
 from ontask.models import Plugin
 
 

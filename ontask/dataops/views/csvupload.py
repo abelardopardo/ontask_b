@@ -13,14 +13,14 @@ from django.utils.translation import ugettext as _
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import UploadCSVFileForm
-from ontask.models import Workflow
+from ontask import models
 
 
 @user_passes_test(is_instructor)
 @get_workflow()
 def csvupload_start(
     request: HttpRequest,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Upload the CSV file as first step.
 
@@ -38,6 +38,7 @@ def csvupload_start(
     step_1: URL name of the first step
 
     :param request: Web request
+    :param workflow: Workflow being manipulateds
     :return: Creates the upload_data dictionary in the session
     """
     # Bind the form with the received data

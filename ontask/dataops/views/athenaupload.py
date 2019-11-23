@@ -10,10 +10,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.dataops.forms import AthenaRequestConnectionParam
-from ontask.models import AthenaConnection, Log, Workflow
+from ontask.dataops import forms
 from ontask.tasks import athena_dataupload_task
 
 
@@ -22,7 +22,7 @@ from ontask.tasks import athena_dataupload_task
 def athenaupload_start(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Load a data frame using an Athena connection.
 
@@ -31,37 +31,27 @@ def athenaupload_start(
 
     :param request: Web request
     :param pk: primary key of the Athena conn used
+    :param workflow: Workflow being processed.
     :return: A page showing the low go view for status.
     """
-    conn = AthenaConnection.objects.filter(
-        pk=pk
-    ).filter(enabled=True).first()
+    conn = models.AthenaConnection.objects.filter(
+        pk=pk).filter(enabled=True).first()
     if not conn:
         return redirect(
             'dataops:athenaconns_instructor_index_instructor_index')
 
-    form = AthenaRequestConnectionParam(
+    form = forms.AthenaRequestConnectionParam(
         request.POST or None,
         workflow=workflow,
         instance=conn)
-
-    context = {
-        'form': form,
-        'wid': workflow.id,
-        'dtype': 'Athena',
-        'dtype_select': _('Athena connection'),
-        'connection': conn,
-        'valuerange': range(5) if workflow.has_table() else range(3),
-        'prev_step': reverse('dataops:athenaconns_instructor_index')}
 
     if request.method == 'POST' and form.is_valid():
         run_params = form.get_field_dict()
         log_item = workflow.log(
             request.user,
-            Log.WORKFLOW_DATA_MERGE,
+            models.Log.WORKFLOW_DATA_MERGE,
             connection=conn.name,
-            status='Preparing to execute'
-        )
+            status='Preparing to execute')
 
         # Batch execution
         athena_dataupload_task.delay(
@@ -77,4 +67,14 @@ def athenaupload_start(
             'dataops/operation_done.html',
             {'log_id': log_item.id, 'back_url': reverse('table:display')})
 
-    return render(request, 'dataops/athenaupload_start.html', context)
+    return render(
+        request,
+        'dataops/athenaupload_start.html',
+        {
+            'form': form,
+            'wid': workflow.id,
+            'dtype': 'Athena',
+            'dtype_select': _('Athena connection'),
+            'connection': conn,
+            'valuerange': range(5) if workflow.has_table() else range(3),
+            'prev_step': reverse('dataops:athenaconns_instructor_index')})
