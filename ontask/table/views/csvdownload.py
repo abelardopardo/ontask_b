@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-"""Functions to download a table in CSV format."""
+"""Views  to download a table in CSV format."""
 
 from typing import Optional
 
-import pandas as pd
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 
@@ -12,27 +11,7 @@ from ontask.core.decorators import get_view, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.pandas import get_subframe
 from ontask.models import View, Workflow
-
-
-def _respond_csv(data_frame: pd.DataFrame) -> HttpResponse:
-    """Create a HTTP Response to download a data frame in CSV format.
-
-    :param data_frame: Data frame to send
-
-    :return: HttpResponse
-    """
-    # Create the response object
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="ontask_table.csv"'
-
-    # Dump the data frame as the content of the response object
-    data_frame.to_csv(
-        path_or_buf=response,
-        sep=str(','),
-        index=False,
-        encoding='utf-8')
-
-    return response
+from ontask.table import services
 
 
 @user_passes_test(is_instructor)
@@ -44,19 +23,14 @@ def csvdownload(
     """Download the data in the workflow.
 
     :param request: HTML request
-
     :param workflow: Set by the decorator to the current workflow.
-
     :return: Return a CSV download of the data in the table
     """
-    # Fetch the data frame
-    return _respond_csv(
+    return services.create_response_with_csv(
         get_subframe(
             workflow.get_data_frame_table_name(),
             None,
-            workflow.get_column_names(),
-        ),
-    )
+            workflow.get_column_names()))
 
 
 @user_passes_test(is_instructor)
@@ -70,20 +44,13 @@ def csvdownload_view(
     """Download the data in a given view.
 
     :param request: HTML request
-
     :param pk: View ID
-
     :param workflow: Set by the decorator to the current workflow.
-
     :param view: Set by the decorator to the view with the given PK
-
     :return: Return a CSV download of the data in the table
     """
-    # Fetch the data frame
-    return _respond_csv(
+    return services.create_response_with_csv(
         get_subframe(
             workflow.get_data_frame_table_name(),
             view.formula,
-            [col.name for col in view.columns.all()],
-        ),
-    )
+            [col.name for col in view.columns.all()]))
