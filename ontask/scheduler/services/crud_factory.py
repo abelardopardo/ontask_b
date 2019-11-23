@@ -21,7 +21,7 @@ from ontask.scheduler import forms, services
 class ScheduledOperationSaveBase(object):
     """Base class for all the scheduled operation save producers."""
 
-    def __init__(self, form_class: Type[forms.ScheduleBasicForm]):
+    def __init__(self, form_class: forms.ScheduleBasicForm):
         """Assign the form class."""
         self.form_class = form_class
 

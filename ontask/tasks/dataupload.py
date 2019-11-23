@@ -9,7 +9,7 @@ from celery import shared_task
 from django.conf import settings
 from django.utils.translation import ugettext
 
-import ontask.dataops.forms
+from ontask.dataops.services import batch_load_df_from_athenaconnection
 from ontask.core.services import get_execution_items
 from ontask.logs.services import get_log_item
 from ontask.models import AthenaConnection
@@ -43,7 +43,7 @@ def athena_dataupload_task(user_id, workflow_id, conn_id, params, log_id):
                 ugettext('Unable to find connection with id {0}').format(
                     conn_id))
 
-        ontask.dataops.forms.dataframeupload.batch_load_df_from_athenaconnection(
+        batch_load_df_from_athenaconnection(
             workflow,
             conn,
             params,
