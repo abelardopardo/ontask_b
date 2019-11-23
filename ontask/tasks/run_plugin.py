@@ -7,7 +7,7 @@ from typing import Dict, Optional
 from django.utils.translation import ugettext
 
 from ontask import models
-from ontask.dataops.plugin.plugin_manager import run_plugin
+from ontask.dataops.services.plugin_admin import run_plugin
 from ontask.models import Plugin
 from ontask.tasks.execute import task_execute_factory
 
