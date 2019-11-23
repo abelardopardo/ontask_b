@@ -10,12 +10,12 @@ from django.template.loader import render_to_string
 from django.urls.base import reverse
 
 from ontask import models
-from ontask.action.forms import ActionForm, ActionUpdateForm
+from ontask.action import forms
 
 
 def save_action_form(
     request: HttpRequest,
-    form: Union[ActionForm, ActionUpdateForm],
+    form: Union[forms.ActionForm, forms.ActionUpdateForm],
     template_name: str,
     workflow: Optional[models.Workflow] = None,
 ) -> JsonResponse:
@@ -30,6 +30,8 @@ def save_action_form(
     :param form: Form to be used in the request/render
 
     :param template_name: Template for rendering the content
+
+    :param workflow: workflow being processed.
 
     :return: JSON response
     """
