@@ -5,7 +5,10 @@
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 
-from ontask.action import views
+from ontask import models, tasks
+from ontask.action import forms, views
+from ontask.action.services import ActionManagerCanvasEmail
+from ontask.action.services.manager_factory import action_process_factory
 
 app_name = 'action'
 
@@ -206,3 +209,19 @@ urlpatterns = [
         views.clone_condition,
         name='clone_condition'),
 ]
+
+
+canvas_email_producer = ActionManagerCanvasEmail(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.CanvasEmailActionRunForm,
+    run_template='action/request_canvas_email_data.html',
+    log_event=models.Log.ACTION_RUN_CANVAS_EMAIL)
+action_process_factory.register_producer(
+    models.Action.PERSONALIZED_CANVAS_EMAIL,
+    canvas_email_producer)
+
+
+tasks.task_execute_factory.register_producer(
+    models.Action.PERSONALIZED_CANVAS_EMAIL,
+    canvas_email_producer)

@@ -2,16 +2,16 @@
 
 """Manipulate template text within OnTask and evaluat it s content."""
 
+from builtins import map, str
 import re
 import string
-from builtins import map, str
-from typing import List, Mapping, Tuple
+from typing import List, Mapping
 
 from django.template import Context, Template
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models import VAR_USE_RES, Action
+from ontask.models import Action, VAR_USE_RES
 
 # Variable name to store the action ID in the context used to render a
 # template
