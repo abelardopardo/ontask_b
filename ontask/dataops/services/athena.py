@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """Service functions to handle athena connections."""
-from typing import Dict
 
-from django import http
 from django.template.loader import render_to_string
-from django.urls.base import reverse
+from django.urls import reverse
 from django.utils.html import format_html
 
-from ontask import models
 from ontask.core import OperationsColumn
 from ontask.dataops.services.connections import (
     ConnectionTableAdmin,

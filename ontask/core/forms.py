@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """Generic forms to be used in various placdes in the platform."""
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 
-import pytz
 from django import forms
 from django.conf import settings
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext_lazy as _
+import pytz
 
 from ontask.settings import MAX_UPLOAD_SIZE
 

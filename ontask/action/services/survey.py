@@ -10,7 +10,7 @@ import django_tables2 as tables
 from django import http
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.urls.base import reverse
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 

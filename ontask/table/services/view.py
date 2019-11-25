@@ -7,7 +7,7 @@ from django.http.request import HttpRequest
 from django.http.response import JsonResponse
 from django.template.loader import render_to_string
 
-from django.urls.base import reverse
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables

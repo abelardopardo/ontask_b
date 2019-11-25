@@ -2,9 +2,9 @@
 
 """Functions to evaluate the operands in OnTask conditions and filters."""
 
-import pandas as pd
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext
+import pandas as pd
 from psycopg2 import sql
 
 from ontask import OnTaskDBIdentifier, OnTaskException

@@ -15,7 +15,7 @@ from ontask.dataops.pandas import (
 from ontask.models import Workflow
 from ontask.table.serializers import string_to_df
 from ontask.table.serializers.pandas import df_to_string
-from ontask.workflow.ops import workflow_delete_column
+from ontask.workflow.services.column_crud import delete_column
 
 
 class TableApiBase(test.OnTaskApiTestCase):
@@ -636,7 +636,7 @@ class TableApiMerge(TableApiBase):
         email.save()
 
         # Drop the column with booleans because the data type is lost
-        workflow_delete_column(
+        delete_column(
             workflow,
             workflow.columns.get(name='registered')
         )
@@ -688,7 +688,7 @@ class TableApiMerge(TableApiBase):
         email.save()
 
         # Drop the column with booleans because the data type is lost
-        workflow_delete_column(
+        delete_column(
             workflow,
             workflow.columns.get(name='registered')
         )

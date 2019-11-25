@@ -2,7 +2,7 @@
 
 """Service functions to manipulate logs."""
 
-from typing import Optional
+from typing import Optional, Dict
 
 from django.utils.translation import ugettext
 from django.db.models import F, Q
@@ -39,7 +39,7 @@ def get_log_item(log_id: int) -> Optional[models.Log]:
 def log_table_server_side(
     request: http.HttpRequest,
     workflow: models.Workflow
-) -> models.Dict:
+) -> Dict:
     """Create the server side response for the table of logs.
 
     :param request: Http Request

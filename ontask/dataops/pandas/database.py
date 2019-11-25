@@ -5,13 +5,13 @@
 import logging
 from typing import Dict, List, Mapping, Optional
 
-import pandas as pd
-import sqlalchemy
-import sqlalchemy.engine
 from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
 from django.utils.translation import ugettext as _
+import pandas as pd
+import sqlalchemy
+import sqlalchemy.engine
 
 from ontask import OnTaskDataFrameNoKey, OnTaskSharedState
 from ontask.dataops.pandas.columns import has_unique_column, is_unique_column

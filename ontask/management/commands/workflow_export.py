@@ -7,7 +7,7 @@ import shutil
 from django.core.management.base import BaseCommand
 
 from ontask.models import Workflow
-from ontask.workflow.import_export import do_export_workflow_parse
+from ontask.workflow.services.import_export import do_export_workflow_parse
 
 
 class Command(BaseCommand):

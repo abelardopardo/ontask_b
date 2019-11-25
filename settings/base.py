@@ -455,13 +455,13 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 #
 ###############################################################################
 DISABLED_ACTIONS = [
-    # 'Action.PERSONALIZED_TEXT',
-    # 'Action.PERSONALIZED_JSON',
-    # 'Action.PERSONALIZED_CANVAS_EMAIL',
-    # 'Action.EMAIL_LIST',
-    # 'Action.JSON_LIST',
-    # 'Action.SURVEY',
-    'Action.TODO_LIST',
+    # 'models.Action.PERSONALIZED_TEXT',
+    # 'models.Action.PERSONALIZED_JSON',
+    # 'models.Action.PERSONALIZED_CANVAS_EMAIL',
+    # 'models.Action.EMAIL_LIST',
+    # 'models.Action.JSON_LIST',
+    # 'models.Action.SURVEY',
+    'models.Action.TODO_LIST',
 ]
 
 ###############################################################################

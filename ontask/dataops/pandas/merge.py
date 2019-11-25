@@ -4,8 +4,8 @@
 
 from typing import Dict
 
-import pandas as pd
 from django.utils.translation import gettext
+import pandas as pd
 
 from ontask.dataops.pandas.columns import has_unique_column, is_unique_column
 from ontask.dataops.pandas.dataframe import store_dataframe
@@ -232,7 +232,7 @@ def perform_dataframe_upload_merge(
     STEP B: The data frame dst_df_tmp1 is then updated with the values in
     src_df[OVERLAP].
 
-    :param workflow: Worlflow with the data frame
+    :param workflow: Workflow with the data frame
 
     :param dst_df: Destination dataframe (already stored in DB)
 

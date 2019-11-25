@@ -2,7 +2,7 @@
 
 """Service to produce the table with the scheduler objects."""
 import django_tables2 as tables
-from django.urls.base import reverse
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A

@@ -2,7 +2,7 @@
 
 """Data types considered in OnTask and its relation with Pandas data types"""
 
-from typing import List, Dict
+from typing import Dict, List
 
 import pandas as pd
 

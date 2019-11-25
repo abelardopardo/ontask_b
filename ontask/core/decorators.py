@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Decorators for functions in OnTask."""
-
 from functools import wraps
 
 from django.contrib import messages
@@ -11,7 +10,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models import ActionColumnConditionTuple, Condition, View
+from ontask import models
 from ontask.workflow.access import access, store_workflow_in_session
 
 
@@ -234,7 +233,7 @@ def get_condition(
 
             if not kwargs.get('condition'):
                 # Get the condition
-                condition = Condition.objects.filter(pk=pk).filter(
+                condition = models.Condition.objects.filter(pk=pk).filter(
                     Q(action__workflow__user=request.user)
                     | Q(action__workflow__shared=request.user),
                     action__workflow=workflow,
@@ -297,7 +296,7 @@ def get_columncondition(
                 return redirect(reverse('action:index'))
 
             # Get the column-condition
-            cc_tuple = ActionColumnConditionTuple.objects.filter(
+            cc_tuple = models.ActionColumnConditionTuple.objects.filter(
                 pk=pk).filter(
                 Q(action__workflow__user=request.user)
                 | Q(action__workflow__shared=request.user),
@@ -360,7 +359,7 @@ def get_view(
 
             if not kwargs.get('view'):
                 # Get the view
-                view = View.objects.filter(pk=pk).filter(
+                view = models.View.objects.filter(pk=pk).filter(
                     Q(workflow__user=request.user)
                     | Q(workflow__shared=request.user),
                 ).prefetch_related('columns').first()
