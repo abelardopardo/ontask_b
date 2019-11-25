@@ -4,94 +4,39 @@
 
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.forms import forms
-from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 
+from ontask import models
 from ontask.core.decorators import ajax_required, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log, Workflow
+from ontask.workflow import services
 from ontask.workflow.forms import AttributeItemForm
-
-
-def save_attribute_form(
-    request: HttpRequest,
-    workflow: Workflow,
-    template: str,
-    form: forms.Form,
-    attr_idx: int
-) -> JsonResponse:
-    """Process the AJAX request to create or update an attribute.
-
-    :param request: Request object received
-
-    :param workflow: current workflow being manipulated
-
-    :param template: Template to render in the response
-
-    :param form: Form used to ask for data
-
-    :param attr_idx: Index of the attribute being manipulated
-
-    :return: AJAX reponse
-    """
-    if request.method == 'POST' and form.is_valid():
-        # Correct form submitted
-        if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
-
-        # proceed with updating the attributes.
-        wf_attributes = workflow.attributes
-
-        # If key_idx is not -1, this means we are editing an existing pair
-        if attr_idx != -1:
-            key = sorted(wf_attributes.keys())[attr_idx]
-            wf_attributes.pop(key)
-
-            # Rename the appearances of the variable in all actions
-            for action_item in workflow.actions.all():
-                action_item.rename_variable(key, form.cleaned_data['key'])
-
-        # Update value
-        wf_attributes[form.cleaned_data['key']] = form.cleaned_data[
-            'attr_value']
-        workflow.attributes = wf_attributes
-        workflow.save()
-        workflow.log(
-            request.user,
-            Log.WORKFLOW_ATTRIBUTE_CREATE,
-            **wf_attributes)
-        return JsonResponse({'html_redirect': ''})
-
-    return JsonResponse({
-        'html_form': render_to_string(
-            template,
-            {'form': form,
-             'id': attr_idx},
-            request=request),
-    })
 
 
 @user_passes_test(is_instructor)
 @ajax_required
 @get_workflow()
 def attribute_create(
-    request: HttpRequest,
-    workflow: Optional[Workflow] = None,
-) -> JsonResponse:
-    """Render the view to create an attribute."""
-    form = AttributeItemForm(
-        request.POST or None,
-        keys=list(workflow.attributes.keys()),
-        workflow=workflow,
-    )
+    request: http.HttpRequest,
+    workflow: Optional[models.Workflow] = None,
+) -> http.JsonResponse:
+    """Render the view to create an attribute.
 
-    return save_attribute_form(
+    :param request: Http request received
+    :param workflow: Workflow being processed
+    :return: HttpResponse
+    """
+    return services.save_attribute_form(
         request,
         workflow,
         'workflow/includes/partial_attribute_create.html',
-        form,
+        AttributeItemForm(
+            request.POST or None,
+            keys=list(workflow.attributes.keys()),
+            workflow=workflow,
+        ),
         -1)
 
 
@@ -99,11 +44,17 @@ def attribute_create(
 @ajax_required
 @get_workflow()
 def attribute_edit(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-) -> JsonResponse:
-    """Render the edit attribute page."""
+    workflow: Optional[models.Workflow] = None,
+) -> http.JsonResponse:
+    """Render the view to edit an attribute.
+
+    :param request: Http request received
+    :param pk: Primery key of the attribute
+    :param workflow: Workflow being processed
+    :return: HttpResponse
+    """
     # Get the list of keys
     keys = sorted(workflow.attributes.keys())
 
@@ -114,19 +65,16 @@ def attribute_edit(
     # Remove the one being edited
     keys.remove(key)
 
-    # Create the form object with the form_fields just computed
-    form = AttributeItemForm(
-        request.POST or None,
-        key=key,
-        value=attr_value,
-        keys=keys,
-        workflow=workflow)
-
-    return save_attribute_form(
+    return services.save_attribute_form(
         request,
         workflow,
         'workflow/includes/partial_attribute_edit.html',
-        form,
+        AttributeItemForm(
+            request.POST or None,
+            key=key,
+            value=attr_value,
+            keys=keys,
+            workflow=workflow),
         int(pk))
 
 
@@ -134,36 +82,32 @@ def attribute_edit(
 @ajax_required
 @get_workflow()
 def attribute_delete(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-) -> JsonResponse:
+    workflow: Optional[models.Workflow] = None,
+) -> http.JsonResponse:
     """Delete an attribute attached to the workflow.
 
     :param request: Request object
-
     :param pk: number of the attribute with respect to the sorted list of
     items.
-
+    :param workflow: Workflow being processed
     :return: JSON REsponse
     """
     wf_attributes = workflow.attributes
     key = sorted(wf_attributes.keys())[int(pk)]
 
     if request.method == 'POST':
-        # Pop the attribute
-        # Hack, the pk has to be divided by two because it names the elements
-        # in itesm (key and value).
         wf_attributes.pop(key, None)
         workflow.attributes = wf_attributes
         workflow.log(
             request.user,
-            Log.WORKFLOW_ATTRIBUTE_DELETE,
+            models.Log.WORKFLOW_ATTRIBUTE_DELETE,
             **wf_attributes)
         workflow.save()
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'workflow/includes/partial_attribute_delete.html',
             {'pk': pk, 'key': key},

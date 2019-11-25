@@ -67,7 +67,7 @@ urlpatterns = [
 
     # Column manipulation
     path('column_add/', views.column_add, name='column_add'),
-    path('<int:pk>/question_add/', views.column_add, name='question_add'),
+    path('<int:pk>/question_add/', views.question_add, name='question_add'),
     path(
         '<int:pk>/criterion_create/',
         views.criterion_create,

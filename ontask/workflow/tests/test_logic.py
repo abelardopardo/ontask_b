@@ -14,7 +14,7 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser
 
 from ontask.models import Workflow
-from ontask.workflow.import_export import (
+from ontask.workflow.services.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
 

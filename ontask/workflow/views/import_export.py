@@ -1,35 +1,36 @@
 # -*- coding: utf-8 -*-
 
-"""Functions to import/export a workflow."""
-
+"""Views to import/export a workflow."""
 from builtins import str
 from typing import Optional
 
-from django.contrib import messages
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
+from ontask import OnTaskServiceException, models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Workflow
+from ontask.workflow import services
 from ontask.workflow.forms import WorkflowExportRequestForm, WorkflowImportForm
-from ontask.workflow.import_export import (
-    do_export_workflow, do_import_workflow,
-)
 
 
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def export_list_ask(
-    request: HttpRequest,
+    request: http.HttpRequest,
     wid,
-    workflow: Optional[Workflow] = None,
-    only_action_list: Optional[bool] = False,
-) -> HttpResponse:
-    """Request the list of actions to export (without data)."""
+    workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
+    """Request the list of actions to export (without data).
+
+    :param request: Http request
+    :param wid: workflow id
+    :param workflow: workflow being manipulated
+    :return: Http response.
+    """
     return export_ask(
         request,
         wid=wid,
@@ -40,27 +41,23 @@ def export_list_ask(
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def export_ask(
-    request: HttpRequest,
+    request: http.HttpRequest,
     wid,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
     only_action_list: Optional[bool] = False,
-) -> HttpResponse:
-    """Request additional information for the export."""
+) -> http.HttpResponse:
+    """Request additional information for the export.
+
+    :param request: Http request
+    :param wid: workflow id
+    :param workflow: workflow being manipulated
+    :param only_action_list: Boolean denoting export actions only.
+    :return: Http response.
+    """
     form = WorkflowExportRequestForm(
         request.POST or None,
         actions=workflow.actions.all(),
         put_labels=True)
-
-    context = {
-        'form': form,
-        'name': workflow.name,
-        'wid': workflow.id,
-        'nactions': workflow.actions.count(),
-        'only_action_list': only_action_list}
-
-    if not only_action_list:
-        context['nrows'] = workflow.nrows
-        context['ncols'] = workflow.ncols
 
     if request.method == 'POST' and form.is_valid():
         to_include = []
@@ -80,6 +77,17 @@ def export_ask(
              'wid': workflow.id,
              'only_action_list': only_action_list})
 
+    context = {
+        'form': form,
+        'name': workflow.name,
+        'wid': workflow.id,
+        'nactions': workflow.actions.count(),
+        'only_action_list': only_action_list}
+
+    if not only_action_list:
+        context['nrows'] = workflow.nrows
+        context['ncols'] = workflow.ncols
+
     # GET request, simply render the form
     return render(request, 'workflow/export.html', context)
 
@@ -88,10 +96,10 @@ def export_ask(
 @require_http_methods(['GET'])
 @get_workflow(pf_related='actions')
 def export(
-    request: HttpRequest,
+    request: http.HttpRequest,
     page_data: Optional[str] = '',
-    workflow: Optional[Workflow] = None,
-) -> HttpResponse:
+    workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
     """Render the view to export a workflow.
 
     This request receives a parameter include with a comma separated list.
@@ -99,12 +107,11 @@ def export(
     remaining elements are the ids of the actions to include
 
     :param request:
-
     :param page_data: Comma separated list of integers: First one is include: 0
     (do not include) or 1 include data and conditions, followed by the ids of
     the actions to include
-
-    :return:
+    :param workflow: workflow being manipulated
+    :return: Response with the file download
     """
     try:
         action_ids = [
@@ -112,13 +119,11 @@ def export(
     except ValueError:
         return redirect('home')
 
-    response = do_export_workflow(workflow, action_ids)
-
-    return response
+    return services.do_export_workflow(workflow, action_ids)
 
 
 @user_passes_test(is_instructor)
-def import_workflow(request):
+def import_workflow(request: http.HttpRequest):
     """View to handle the workflow import.
 
     View that handles a form for workflow import. It receives a file that
@@ -126,7 +131,6 @@ def import_workflow(request):
     basic checks to verify that the import procedure can go ahead.
 
     :param request: HTTP request
-
     :return: Rendering of the import page or back to the workflow index
     """
     form = WorkflowImportForm(
@@ -136,14 +140,13 @@ def import_workflow(request):
 
     if request.method == 'POST' and form.is_valid():
         # UPLOAD THE FILE!
-        status = do_import_workflow(
-            request.user,
-            form.cleaned_data['name'],
-            request.FILES['wf_file'])
-
-        # If something went wrong, show at to the top of the page
-        if status:
-            messages.error(request, status)
+        try:
+            services.do_import_workflow(
+                request.user,
+                form.cleaned_data['name'],
+                request.FILES['wf_file'])
+        except OnTaskServiceException as exc:
+            exc.message_to_error(request)
 
         # Go back to the list of workflows
         return redirect('home')
