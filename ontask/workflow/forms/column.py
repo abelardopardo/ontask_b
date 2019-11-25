@@ -75,12 +75,7 @@ class ColumnBasicForm(forms.ModelForm):
                 return form_data
 
             # Check that the name is not present already
-            if next(
-                (col for col in self.workflow.columns.all()
-                 if col.id != self.instance.id
-                    and col.name == form_data['name']),
-                None,
-            ):
+            if self.workflow.columns.filter(name=form_data['name']).exists():
                 # New column name collides with existing one
                 self.add_error(
                     'name',
@@ -409,6 +404,10 @@ class FormulaColumnAddForm(forms.ModelForm):
     def clean(self):
         """Verify that the data types of the selected columns are correct."""
         form_data = super().clean()
+
+        if self.wf_columns.filter(name=form_data['name']).exists():
+            self.add_error('name', _('A column with that name already exists'))
+            return form_data
 
         # If there are no columns given, return
         column_idx_str = form_data.get('columns')

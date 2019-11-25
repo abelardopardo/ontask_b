@@ -13,15 +13,16 @@ from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
+from ontask import models
 from ontask.dataops.pandas import check_wf_df
-from ontask.models import Action, Log, Workflow
 from ontask.workflow.serialize_workflow import (
     WorkflowExportSerializer, WorkflowImportSerializer,
 )
+from ontask.workflow.services import errors
 
 
 def _run_compatibility_patches(json_data):
-    """Function to patch the incoming JSON to make it compatible.
+    """Patch the incoming JSON to make it compatible.
 
     Over time the structure of the JSON information used to dump a workflow
     has changed. These patches are to guarantee that an old workflow is
@@ -45,7 +46,7 @@ def do_import_workflow_parse(
     user,
     name: str,
     file_item,
-) -> Workflow:
+) -> models.Workflow:
     """Read gzip file, create serializer and parse the data.
 
     Check for validity and create the workflow
@@ -86,7 +87,11 @@ def do_import_workflow_parse(
     return workflow
 
 
-def do_import_workflow(user, name, file_item):
+def do_import_workflow(
+    user,
+    name: Optional[str],
+    file_item,
+):
     """Create a new structure of workflow stored in the file item.
 
     Receives a name and a file item (submitted through a form) and creates
@@ -100,24 +105,28 @@ def do_import_workflow(user, name, file_item):
     try:
         workflow = do_import_workflow_parse(user, name, file_item)
     except IOError:
-        return _('Incorrect file. Expecting a GZIP file (exported workflow).')
+        raise errors.OnTaskWorkflowImportError(
+            _('Incorrect file. Expecting a GZIP file (exported workflow).'))
     except (TypeError, NotImplementedError) as exc:
-        return _('Unable to import workflow. Exception: {0}').format(exc)
+        raise errors.OnTaskWorkflowImportError(
+            _('Unable to import workflow. Exception: {0}').format(exc))
     except serializers.ValidationError as exc:
-        return _('Unable to import workflow. Validation error: {0}').format(
-            exc)
+        raise errors.OnTaskWorkflowImportError(
+            _('Unable to import workflow. Validation error: {0}').format(
+                exc))
     except AssertionError:
         # Something went wrong.
-        return _('Workflow data with incorrect structure.')
+        raise errors.OnTaskWorkflowImportError(
+            _('Workflow data with incorrect structure.'))
     except Exception as exc:
-        return _('Unable to import workflow: {0}').format(exc)
+        raise errors.OnTaskWorkflowImportError(
+            _('Unable to import workflow: {0}').format(exc))
 
-    workflow.log(user, Log.WORKFLOW_IMPORT)
-    return None
+    workflow.log(user, models.Log.WORKFLOW_IMPORT)
 
 
 def do_export_workflow_parse(
-    workflow: Workflow,
+    workflow: models.Workflow,
     selected_actions: Optional[List[int]] = None,
 ) -> BytesIO:
     """Serialize the workflow and attach its content to a BytesIO object.
@@ -145,7 +154,7 @@ def do_export_workflow_parse(
 
 
 def do_export_workflow(
-    workflow: Workflow,
+    workflow: models.Workflow,
     selected_actions: Optional[List[int]] = None,
 ) -> HttpResponse:
     """Proceed with the workflow export.

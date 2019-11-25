@@ -2,117 +2,20 @@
 
 """Functions to perform various operations in a workflow."""
 import copy
-from typing import List, Optional
+from typing import Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from ontask import create_new_name
-from ontask.dataops.pandas import load_table
 from ontask.dataops.sql import (
-    add_column_to_db, copy_column_in_db, df_drop_column, get_rows,
+    get_rows,
     is_column_unique,
 )
-from ontask.models import Column, Condition, Log, Workflow
+from ontask.models import Column, Log, Workflow
 
 RANDOM_PWD_LENGTH = 50
-
-
-def workflow_delete_column(
-    workflow: Workflow,
-    column: Column,
-    cond_to_delete: Optional[List[Condition]] = None,
-):
-    """Remove column from ontask.workflow.
-
-    Given a workflow and a column, removes it from the workflow (and the
-    corresponding data frame
-
-    :param workflow: Workflow object
-
-    :param column: Column object to delete
-
-    :param cond_to_delete: List of conditions to delete after removing the
-    column
-
-    :return: Nothing. Effect reflected in the database
-    """
-    # Drop the column from the DB table storing the data frame
-    df_drop_column(workflow.get_data_frame_table_name(), column.name)
-
-    # Reposition the columns above the one being deleted
-    workflow.reposition_columns(column.position, workflow.ncols + 1)
-
-    # Delete the column
-    column.delete()
-
-    # Update the information in the workflow
-    workflow.ncols = workflow.ncols - 1
-    workflow.save()
-
-    if not cond_to_delete:
-        # The conditions to delete are not given, so calculate them
-        # Get the conditions/actions attached to this workflow
-        cond_to_delete = [
-            cond for cond in Condition.objects.filter(
-                action__workflow=workflow,
-            )
-            if column in cond.columns.all()]
-
-    # If a column disappears, the conditions that contain that variable
-    # are removed
-    actions_without_filters = []
-    for condition in cond_to_delete:
-        if condition.is_filter:
-            actions_without_filters.append(condition.action)
-
-        # Formula has the name of the deleted column. Delete it
-        condition.delete()
-
-    # Traverse the actions for which the filter has been deleted and reassess
-    #  all their conditions
-    # TODO: Explore how to do this asynchronously (or lazy)
-    for act in actions_without_filters:
-        act.update_n_rows_selected()
-
-    # If a column disappears, the views that contain only that column need to
-    # disappear as well as they are no longer relevant.
-    for view in workflow.views.all():
-        if view.columns.count() == 0:
-            view.delete()
-
-
-def workflow_restrict_column(column: Column) -> Optional[str]:
-    """Set category of the column to the existing set of values.
-
-    Given a workflow and a column, modifies the column so that only the
-    values already present are allowed for future updates.
-
-    :param column: Column object to restrict
-
-    :return: String with error or None if correct
-    """
-    # Load the data frame
-    data_frame = load_table(
-        column.workflow.get_data_frame_table_name())
-
-    cat_values = set(data_frame[column.name].dropna())
-    if not cat_values:
-        # Column has no meaningful values. Nothing to do.
-        return _('Column has no meaningful values')
-
-    # Set categories
-    column.set_categories(list(cat_values))
-    column.save()
-
-    # Re-evaluate the operands in the workflow
-    column.workflow.set_query_builder_ops()
-    column.workflow.save()
-
-    # Correct execution
-    return None
 
 
 def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
@@ -199,42 +102,6 @@ def do_clone_column_only(
         active_to=column.active_to,
     )
     new_column.save()
-    return new_column
-
-
-def clone_wf_column(column: Column) -> Column:
-    """Create a clone of a column.
-
-    :param column: Object to clone
-
-    :return: Cloned object (DF has an additional column as well
-    """
-    workflow = column.workflow
-
-    new_column = do_clone_column_only(
-        column,
-        new_name=create_new_name(column.name, workflow.columns))
-
-    # Update the number of columns in the workflow
-    workflow.ncols += 1
-    workflow.save()
-    workflow.refresh_from_db()
-
-    # Reposition the new column at the end
-    new_column.position = workflow.ncols
-    new_column.save()
-
-    # Create the column in the database
-    add_column_to_db(
-        workflow.get_data_frame_table_name(),
-        new_column.name,
-        new_column.data_type)
-
-    copy_column_in_db(
-        workflow.get_data_frame_table_name(),
-        column.name,
-        new_column.name)
-
     return new_column
 
 

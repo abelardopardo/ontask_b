@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskException
-from ontask.models import Workflow
+from ontask import models
 
 
 def access(
@@ -21,7 +21,7 @@ def access(
     wid: Optional[int],
     select_related: Optional[Union[str, List]] = None,
     prefetch_related:  Optional[Union[str, List]] = None,
-) -> Optional[Workflow]:
+) -> Optional[models.Workflow]:
     """Verify that the workflow stored in the request can be accessed.
 
     :param request: HTTP request object
@@ -46,12 +46,12 @@ def access(
         # with this one
         wid = sid
     elif sid != wid:
-        Workflow.unlock_workflow_by_id(sid)
+        models.Workflow.unlock_workflow_by_id(sid)
 
     with cache.lock('ONTASK_WORKFLOW_{0}'.format(wid)):
 
         # Step 1: Get the workflow that is being accessed
-        workflow = Workflow.objects.filter(id=wid).filter(
+        workflow = models.Workflow.objects.filter(id=wid).filter(
             Q(user=request.user) | Q(shared__id=request.user.id),
         )
 
@@ -126,13 +126,14 @@ def access(
 
 def wf_lock_and_update(
     request: HttpRequest,
-    workflow: Workflow,
+    workflow: models.Workflow,
     create_session: Optional[bool] = False,
-) -> Workflow:
+) -> models.Workflow:
     """Lock a workflow and updates the value in the session.
 
     :param request: Http request to update
-
+    :param workflow: Workflow being modified
+    :param create_session: Boolean encoding if a session needs to be created.
     :param workflow: Object to store
     """
     workflow.lock(request, create_session)
@@ -142,24 +143,24 @@ def wf_lock_and_update(
     return workflow
 
 
-def store_workflow_nrows_in_session(request: HttpRequest, wflow: Workflow):
+def store_workflow_nrows_in_session(
+    request: HttpRequest,
+    wflow: models.Workflow
+):
     """Store the workflow id and name in the request.session dictionary.
 
     :param request: Request object
-
     :param wflow: Workflow object
-
     :return: Nothing. Store the id and the name in the session
     """
     request.session['ontask_workflow_rows'] = wflow.nrows
     request.session.save()
 
 
-def store_workflow_in_session(request: HttpRequest, wflow: Workflow):
+def store_workflow_in_session(request: HttpRequest, wflow: models.Workflow):
     """Store the workflow id, name, and number of rows in the session.
 
     :param request: Request object
-
     :param wflow: Workflow object
     :return: Nothing. Store the id, name and nrows in the session
     """
@@ -173,7 +174,7 @@ def remove_workflow_from_session(request: HttpRequest):
     wid = request.session.pop('ontask_workflow_id', None)
     # If removing workflow from session, mark it as available for sharing
     if wid:
-        Workflow.unlock_workflow_by_id(wid)
+        models.Workflow.unlock_workflow_by_id(wid)
     request.session.pop('ontask_workflow_name', None)
     request.session.pop('ontask_workflow_rows', None)
     request.session.save()
