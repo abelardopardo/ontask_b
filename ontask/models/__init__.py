@@ -17,3 +17,6 @@ from ontask.models.sqlconnection import SQLConnection
 from ontask.models.view import View
 from ontask.models.workflow import Workflow
 from ontask.models.user import OnTaskUser
+from ontask.models.const import (
+    CHAR_FIELD_MID_SIZE, CHAR_FIELD_LONG_SIZE, COLUMN_NAME_SIZE,
+)

@@ -6,7 +6,7 @@ from builtins import object
 
 from rest_framework import serializers
 
-from ontask.models import Log
+from ontask import models
 
 
 class LogSerializer(serializers.ModelSerializer):
@@ -16,10 +16,8 @@ class LogSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         """Choose the model, fields and read_only."""
-        model = Log
-
+        model = models.Log
         fields = ('useremail', 'created', 'name', 'workflow', 'payload')
-
         read_only_fields = (
             'useremail',
             'created',

@@ -17,7 +17,6 @@ from ontask.action.evaluate import (
 )
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.manager import ActionRunManager
-from ontask.action.services.manager_factory import action_process_factory
 
 logger = get_task_logger('celery_execution')
 
@@ -148,30 +147,3 @@ class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
         action.save()
 
         return []
-
-
-json_producer = ActionManagerJSON(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.JSONActionRunForm,
-    run_template='action/request_json_data.html',
-    log_event=models.Log.ACTION_RUN_JSON)
-json_list_producer = ActionManagerJSONList(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.JSONListActionRunForm,
-    run_template='action/request_json_list_data.html',
-    log_event=models.Log.ACTION_RUN_JSON_LIST)
-action_process_factory.register_producer(
-    models.Action.PERSONALIZED_JSON,
-    json_producer)
-action_process_factory.register_producer(
-    models.Action.JSON_LIST,
-    json_list_producer)
-
-tasks.task_execute_factory.register_producer(
-    models.Action.PERSONALIZED_JSON,
-    json_producer)
-tasks.task_execute_factory.register_producer(
-    models.Action.JSON_LIST,
-    json_list_producer)

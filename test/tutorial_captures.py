@@ -13,8 +13,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
+from ontask import models
 from ontask.dataops.pandas import destroy_db_engine
-from ontask.models import Action
 
 
 class TutorialCaptures(ScreenTests):
@@ -288,7 +288,7 @@ class TutorialCaptures(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_TEXT)
+        select.select_by_value(models.Action.PERSONALIZED_TEXT)
         desc.send_keys('')
 
         self.modal_ss('tutorial_personalized_text_create.png')
@@ -508,7 +508,7 @@ class TutorialCaptures(ScreenTests):
         )
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_JSON)
+        select.select_by_value(models.Action.PERSONALIZED_JSON)
         desc.send_keys('')
 
         self.modal_ss('tutorial_personalized_json_create.png')
@@ -576,7 +576,7 @@ class TutorialCaptures(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.SURVEY)
+        select.select_by_value(models.Action.SURVEY)
         desc.send_keys('Survey description for the learners')
 
         self.modal_ss('tutorial_survey_create.png')

@@ -11,14 +11,13 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import status
 
+from ontask import models
 from ontask.dataops.forms.upload import load_df_from_csvfile
 from ontask.dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
 from ontask.dataops.pandas import (
     get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
 from ontask.dataops.sql import get_rows
-from ontask.models import Action, Workflow
-from ontask.models.const import COLUMN_NAME_SIZE
 
 
 class DataopsMatrixManipulation(test.OnTaskTestCase):
@@ -124,7 +123,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
     def test_merge_inner(self):
 
         # Get the workflow
-        self.workflow = Workflow.objects.all()[0]
+        self.workflow = models.Workflow.objects.all()[0]
 
         # Parse the source data frame
         df_dst, df_src = self.parse_data_frames()
@@ -636,7 +635,7 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
 
     def test_eval_conditions(self):
         # Get the action first
-        self.action = Action.objects.get(name=self.action_name)
+        self.action = models.Action.objects.get(name=self.action_name)
 
         # Get wflow table, filter and column names
         wflow_table = self.action.workflow.get_data_frame_table_name()
@@ -687,7 +686,7 @@ class ConditionNameWithSymbols(test.OnTaskTestCase):
 
     def test_action_1_preview(self):
         """Test that first action renders correctly."""
-        self.workflow = Workflow.objects.all().first()
+        self.workflow = models.Workflow.objects.all().first()
         self.user = get_user_model().objects.filter(
             email='instructor01@bogus.com'
         ).first()
@@ -737,7 +736,9 @@ class ColumnNameTooLarge(test.OnTaskTestCase):
         data_frame = load_df_from_csvfile( io.StringIO(self.csv), 0, 0)
 
         self.assertTrue(
-            any(len(cname) > COLUMN_NAME_SIZE for cname in data_frame.columns))
+            any(
+                len(cname) > models.COLUMN_NAME_SIZE
+                for cname in data_frame.columns))
 
         try:
             store_table(data_frame, 'TABLE_NAME')

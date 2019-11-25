@@ -2,10 +2,10 @@
 
 from django.contrib import admin
 
-from ontask.models import OAuthUserToken
+from ontask import models
 
 
-@admin.register(OAuthUserToken)
+@admin.register(models.OAuthUserToken)
 class OAuthUserTokenAdmin(admin.ModelAdmin):
     list_display = (
         'user',

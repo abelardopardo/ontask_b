@@ -3,9 +3,9 @@
 
 from django.contrib import admin
 
-from ontask.models import Log
+from ontask import models
 
 
-@admin.register(Log)
+@admin.register(models.Log)
 class LogAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'created', 'name', 'workflow', 'payload')

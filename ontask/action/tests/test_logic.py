@@ -7,9 +7,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 
+from ontask import models
 from ontask.action.views.import_export import do_import_action
 from ontask.dataops.pandas import check_wf_df, load_table
-from ontask.models import Action, Workflow
 
 
 class EmailActionTracking(test.OnTaskTestCase):
@@ -55,7 +55,7 @@ class EmailActionTracking(test.OnTaskTestCase):
                 self.client.get(reverse('trck') + '?v=' + trck)
 
             # Get the workflow and the data frame
-            workflow = Workflow.objects.get(name=self.wflow_name)
+            workflow = models.Workflow.objects.get(name=self.wflow_name)
             df = load_table(workflow.get_data_frame_table_name())
 
             # Check that the results have been updated in the DB (to 1)
@@ -85,7 +85,7 @@ class ActionImport(test.OnTaskTestCase):
     def test_do_import(self):
         """Test the do_import_action functionality."""
         user = get_user_model().objects.get(email='instructor01@bogus.com')
-        wflow = Workflow.objects.get(name=self.wflow_name)
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
 
         with open(os.path.join(
             settings.BASE_DIR(),
@@ -95,5 +95,5 @@ class ActionImport(test.OnTaskTestCase):
         ), 'rb') as file_obj:
             do_import_action(user, workflow=wflow, file_item=file_obj)
 
-        Action.objects.get(name='Initial survey')
+        models.Action.objects.get(name='Initial survey')
         self.assertTrue(check_wf_df(wflow))

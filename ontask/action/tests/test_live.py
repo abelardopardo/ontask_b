@@ -9,9 +9,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
+from ontask import models
 from ontask.dataops.formula import has_variable
 from ontask.dataops.pandas import check_wf_df
-from ontask.models import Action, Column, Condition, Workflow
 
 
 class ActionActionEdit(test.OnTaskLiveTestCase):
@@ -346,7 +346,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # self.assertIn('EmailRead_1', self.selenium.page_source)
 
         # Make sure the workflow is consistent
-        check_wf_df(Workflow.objects.get(name=self.wflow_name))
+        check_wf_df(models.Workflow.objects.get(name=self.wflow_name))
 
         # End of session
         self.logout()
@@ -504,7 +504,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         ).click()
         self.wait_for_datatable('action-table_previous')
 
-        action = Action.objects.get(name=action_name)
+        action = models.Action.objects.get(name=action_name)
         self.assertTrue(action.text_content == content_txt)
         self.assertTrue(action.target_url == target_url)
 
@@ -540,7 +540,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.wait_for_modal_close()
 
         # Assert that the action has the value changed
-        a = Action.objects.get(name='simple action')
+        a = models.Action.objects.get(name='simple action')
         self.assertEqual(a.serve_enabled, True)
 
         self.open_action_url('simple action')
@@ -799,15 +799,17 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
     # Test operations with the filter
     def test_action_01_rename_column_condition_attribute(self):
         # First get objects for future checks
-        workflow = Workflow.objects.get(name=self.wflow_name)
+        workflow = models.Workflow.objects.get(name=self.wflow_name)
         column = workflow.columns.get(name='registered')
         attributes = workflow.attributes
-        Action.objects.get(name='Check registration', workflow=workflow)
-        action_out = Action.objects.get(
+        models.Action.objects.get(name='Check registration', workflow=workflow)
+        action_out = models.Action.objects.get(
             name='Detecting age',
             workflow=workflow
         )
-        condition = Condition.objects.get(name='Registered', action=action_out)
+        condition = models.Condition.objects.get(
+            name='Registered',
+            action=action_out)
 
         # pre-conditions
         # Column name is the correct one
@@ -870,13 +872,13 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         self.edit_condition('Registered', 'Registered new', None, [])
 
         # Refresh variables
-        workflow = Workflow.objects.prefetch_related('columns').get(
+        workflow = models.Workflow.objects.prefetch_related('columns').get(
             id=workflow.id
         )
         column = workflow.columns.get(id=column.id)
         attributes = workflow.attributes
-        action_out = Action.objects.get(id=action_out.id)
-        condition = Condition.objects.get(id=condition.id)
+        action_out = models.Action.objects.get(id=action_out.id)
+        condition = models.Condition.objects.get(id=condition.id)
         filter_formula = action_out.get_filter_formula()
 
         # Post conditions
@@ -1394,7 +1396,7 @@ class ActionCreateRubric(test.OnTaskLiveTestCase):
         # Login
         self.login('instructor01@bogus.com')
 
-        workflow = Workflow.objects.get(name=self.workflow_name)
+        workflow = models.Workflow.objects.get(name=self.workflow_name)
         # GO TO THE WORKFLOW PAGE
         self.access_workflow_from_home_page(self.workflow_name)
 
@@ -1438,7 +1440,7 @@ class ActionCreateRubric(test.OnTaskLiveTestCase):
         self.wait_for_modal_close()
         self.wait_for_datatable('rubric-table_previous')
 
-        column = Column.objects.get(name='Structure')
+        column = models.Column.objects.get(name='Structure')
         loas = column.categories[:]
         for index in range(2 * len(column.categories)):
             items = self.selenium.find_elements_by_class_name(

@@ -3,9 +3,9 @@
 
 from rest_framework import generics
 
+from ontask import models
 from ontask.core.permissions import UserIsInstructor
 from ontask.logs.serializers import LogSerializer
-from ontask.models import Log
 
 
 class LogAPIList(generics.ListAPIView):
@@ -25,6 +25,6 @@ class LogAPIList(generics.ListAPIView):
         """
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return Log.objects.all()
+            return models.Log.objects.all()
 
-        return Log.objects.filter(user=self.request.user)
+        return models.Log.objects.filter(user=self.request.user)

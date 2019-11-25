@@ -14,14 +14,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from ontask import models
 from ontask.action.forms import ActionDescriptionForm
 from ontask.core.decorators import (
     ajax_required, get_action, get_columncondition, get_workflow,
 )
 from ontask.core.permissions import is_instructor
-from ontask.models import (
-    Action, ActionColumnConditionTuple, Log, Workflow,
-)
 
 
 @user_passes_test(is_instructor)
@@ -33,8 +31,8 @@ def select_column_action(
     request: HttpRequest,
     pk: int,
     cpk: Optional[int] = -1,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
     key: Optional[bool] = None,
 ) -> JsonResponse:
     """Operation to add a column to a survey.
@@ -66,12 +64,12 @@ def select_column_action(
 
     if key != 0:
         # Insert the column in the pairs
-        acc = ActionColumnConditionTuple.objects.get_or_create(
+        acc = models.ActionColumnConditionTuple.objects.get_or_create(
             action=action,
             column=column,
             condition=None)
 
-        acc.log(request.user, Log.ACTION_QUESTION_ADD)
+        acc.log(request.user, models.Log.ACTION_QUESTION_ADD)
 
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
@@ -83,8 +81,8 @@ def unselect_column_action(
     request: HttpRequest,
     pk: int,
     cpk: Optional[int] = -1,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> HttpResponse:
     """Unselect a column from action in.
 
@@ -113,8 +111,8 @@ def select_condition_for_question(
     request: HttpRequest,
     pk: int,
     condpk: Optional[int] = None,
-    workflow: Optional[Workflow] = None,
-    cc_tuple: Optional[ActionColumnConditionTuple] = None,
+    workflow: Optional[models.Workflow] = None,
+    cc_tuple: Optional[models.ActionColumnConditionTuple] = None,
 ) -> JsonResponse:
     """Select condition for a question in a survey.
 
@@ -147,8 +145,8 @@ def select_condition_for_question(
 def shuffle_questions(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> JsonResponse:
     """Enable/Disable the shuffle question flag in Surveys.
 
@@ -169,7 +167,7 @@ def shuffle_questions(
 def toggle_question_change(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> JsonResponse:
     """Enable/Disable changes in the question.
 
@@ -178,7 +176,7 @@ def toggle_question_change(
     :return: HTML response
     """
     # Check if the workflow is locked
-    acc_item = ActionColumnConditionTuple.objects.filter(pk=pk).first()
+    acc_item = models.ActionColumnConditionTuple.objects.filter(pk=pk).first()
     if not acc_item:
         messages.error(
             request,
@@ -193,7 +191,7 @@ def toggle_question_change(
 
     acc_item.changes_allowed = not acc_item.changes_allowed
     acc_item.save()
-    acc_item.log(request.user, Log.ACTION_QUESTION_TOGGLE_CHANGES)
+    acc_item.log(request.user, models.Log.ACTION_QUESTION_TOGGLE_CHANGES)
 
     return JsonResponse({'is_checked': acc_item.changes_allowed})
 
@@ -204,8 +202,8 @@ def toggle_question_change(
 def edit_description(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> JsonResponse:
     """Edit the description attached to an action.
 

@@ -6,8 +6,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import is_legal_name
-from ontask.models import Condition
+from ontask import is_legal_name, models
 
 CHAR_FIELD_SIZE = 1024
 
@@ -66,7 +65,7 @@ class AttributeItemForm(forms.Form):
 
         # Check if there is a condition with that name
         if (
-            Condition.objects.filter(
+            models.Condition.objects.filter(
                 action__workflow=self.workflow,
                 name=attr_name,
             ).exists()

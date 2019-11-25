@@ -8,9 +8,9 @@ import test
 from django.conf import settings
 from rest_framework import status
 
+from ontask import models
 from ontask.dataops.plugin import OnTaskModel
 from ontask.dataops.services.plugin_admin import _verify_plugin
-from ontask.models import Plugin
 
 
 class BogusPlugin(object):
@@ -46,7 +46,7 @@ class DataopsTransform(test.OnTaskTestCase):
     def test_transform_model(self):
         """Test the view to filter items."""
         # Make sure the plugins are reloaded
-        Plugin.objects.all().delete()
+        models.Plugin.objects.all().delete()
         resp = self.get_response('dataops:transform')
         self.assertTrue(status.is_success(resp.status_code))
 

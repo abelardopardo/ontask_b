@@ -24,7 +24,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
-from ontask import OnTaskDataFrameNoKey, settings
+from ontask import OnTaskDataFrameNoKey, settings, models
 from ontask.core.forms import RestrictedFileField
 from ontask.dataops.forms.select import MergeForm, SelectKeysForm
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
@@ -32,8 +32,6 @@ from ontask.dataops.services.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
-from ontask.models import AthenaConnection, SQLConnection
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
 # Field prefix to use in forms to avoid using column names (they are given by
 # the user and may pose a problem (injection bugs)
@@ -165,7 +163,7 @@ class UploadExcelFileForm(UploadBasic):
         help_text=_('File in Excel format (.xls or .xlsx)'))
 
     sheet = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('Sheet within the excelsheet to upload'))
@@ -271,25 +269,25 @@ class UploadS3FileForm(UploadBasic):
     """
 
     aws_access_key = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=False,
         initial='',
         help_text=_('AWS S3 Bucket access key'))
 
     aws_secret_access_key = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=False,
         initial='',
         help_text=_('AWS S3 Bucket secret access key'))
 
     aws_bucket_name = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('AWS S3 Bucket name'))
 
     aws_file_key = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('AWS S3 Bucket file path'))
@@ -370,7 +368,7 @@ class SQLConnectionForm(ConnectionForm):
         form_data = super().clean()
 
         # Check if the name already exists
-        name_exists = SQLConnection.objects.filter(
+        name_exists = models.SQLConnection.objects.filter(
             name=self.cleaned_data['name'],
         ).exclude(id=self.instance.id).exists()
         if name_exists:
@@ -384,7 +382,7 @@ class SQLConnectionForm(ConnectionForm):
     class Meta(ConnectionForm):
         """Define the model and the fields to manipulate."""
 
-        model = SQLConnection
+        model = models.SQLConnection
 
         fields = [
             'name',
@@ -410,14 +408,14 @@ class SQLRequestConnectionParam(forms.Form):
 
         if not self.instance.db_password:
             self.fields['password'] = forms.CharField(
-                max_length=CHAR_FIELD_MID_SIZE,
+                max_length=models.CHAR_FIELD_MID_SIZE,
                 widget=forms.PasswordInput,
                 required=True,
                 help_text=_('Authentication for the database connection'))
 
         if not self.instance.db_table:
             self.fields['table_name'] = forms.CharField(
-                max_length=CHAR_FIELD_MID_SIZE,
+                max_length=models.CHAR_FIELD_MID_SIZE,
                 required=True,
                 help_text=_('Table to load'))
 
@@ -433,7 +431,7 @@ class AthenaConnectionForm(ConnectionForm):
         form_data = super().clean()
 
         # Check if the name already exists
-        name_exists = AthenaConnection.objects.filter(
+        name_exists = models.AthenaConnection.objects.filter(
             name=self.cleaned_data['name'],
         ).exclude(id=self.instance.id).exists()
         if name_exists:
@@ -447,7 +445,7 @@ class AthenaConnectionForm(ConnectionForm):
     class Meta(ConnectionForm):
         """Define the model and the fields to manipulate."""
 
-        model = AthenaConnection
+        model = models.AthenaConnection
 
         fields = [
             'name',
@@ -472,20 +470,20 @@ class AthenaRequestConnectionParam(forms.Form):
 
         if not self.instance.aws_secret_access_key:
             self.fields['aws_secret_access_key'] = forms.CharField(
-                max_length=CHAR_FIELD_LONG_SIZE,
+                max_length=models.CHAR_FIELD_LONG_SIZE,
                 required=True,
                 help_text=_('Authentication for the connection'))
 
         if not self.instance.aws_session_token:
             self.fields['aws_session_token'] = forms.CharField(
-                max_length=CHAR_FIELD_LONG_SIZE,
+                max_length=models.CHAR_FIELD_LONG_SIZE,
                 required=False,
                 widget=forms.Textarea,
                 help_text=_('Authentication for the session'))
 
         if not self.instance.table_name:
             self.fields['table_name'] = forms.CharField(
-                max_length=CHAR_FIELD_MID_SIZE,
+                max_length=models.CHAR_FIELD_MID_SIZE,
                 required=True,
                 help_text=_('Table to load'))
 

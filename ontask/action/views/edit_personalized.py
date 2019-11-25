@@ -10,10 +10,10 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
+from ontask import models
 from ontask.action.forms import EnableURLForm
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
-from ontask.models import Action, Log, Workflow
 
 
 @user_passes_test(is_instructor)
@@ -23,8 +23,8 @@ from ontask.models import Action, Log, Workflow
 def save_text(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> JsonResponse:
     """Save text content of the action.
 
@@ -51,8 +51,8 @@ def save_text(
 def showurl(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> JsonResponse:
     """Create page to show URL to access action.
 
@@ -75,7 +75,7 @@ def showurl(
             # Recording the event
             action.log(
                 request.user,
-                Log.ACTION_SERVE_TOGGLED,
+                models.Log.ACTION_SERVE_TOGGLED,
                 served_enabled=action.serve_enabled)
 
             return JsonResponse({'html_redirect': reverse('action:index')})

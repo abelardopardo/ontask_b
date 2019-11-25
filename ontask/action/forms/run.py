@@ -52,7 +52,7 @@ from ontask.action.forms import SUFFIX_LENGTH
 from ontask.core import forms as ontask_forms
 from ontask.dataops.sql.column_queries import is_column_unique
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.models import Action, Column
+from ontask import models
 
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')
@@ -157,7 +157,7 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
     """Basic form fields to select column for items and confirm boolean."""
 
     item_column = forms.ModelChoiceField(
-        queryset=Column.objects.none(),
+        queryset=models.Column.objects.none(),
         required=True)
 
     confirm_items = forms.BooleanField(
@@ -374,7 +374,7 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
     """Form to create a ZIP."""
 
     user_fname_column = forms.ModelChoiceField(
-        queryset=Column.objects.none(),
+        queryset=models.Column.objects.none(),
         label=_(
             'Column to use for file name prefix (Full name if Moodle ZIP)'),
         required=False)
@@ -649,7 +649,7 @@ class EnableURLForm(forms.ModelForm):
     class Meta(object):
         """Define fields and datetime picker widget."""
 
-        model = Action
+        model = models.Action
         fields = ('serve_enabled', 'active_from', 'active_to')
 
         widgets = {

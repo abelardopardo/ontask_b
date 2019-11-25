@@ -10,7 +10,7 @@ import pytz
 from django.conf import settings
 from rest_framework import status
 
-from ontask.models import ScheduledOperation
+from ontask import models
 
 
 class SchedulerForms(test.OnTaskTestCase):
@@ -58,10 +58,10 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 1)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 1)
 
         # Change the name of the scheduled item
-        sc_item = ScheduledOperation.objects.first()
+        sc_item = models.ScheduledOperation.objects.first()
         resp = self.get_response(
             'scheduler:edit_scheduled_operation',
             {'pk': sc_item.id},
@@ -73,13 +73,13 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 1)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 1)
         sc_item.refresh_from_db()
 
         self.assertEqual(sc_item.name, 'First scheduling round2')
 
         # Select the confirm items
-        sc_item = ScheduledOperation.objects.first()
+        sc_item = models.ScheduledOperation.objects.first()
         resp = self.get_response(
             'scheduler:edit_scheduled_operation',
             {'pk': sc_item.id},
@@ -92,7 +92,7 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(ScheduledOperation.objects.count(), 1)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 1)
 
         # Index of all scheduled actions (to execute the table render)
         resp = self.get_response('scheduler:index')
@@ -119,7 +119,7 @@ class SchedulerForms(test.OnTaskTestCase):
             method='POST',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 0)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
     def test_schedule_json_action(self):
         """Test creation of a scheduled execution of json action."""
@@ -146,10 +146,10 @@ class SchedulerForms(test.OnTaskTestCase):
                 'token': 'faketoken',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 1)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 1)
 
         # Change the name of the scheduled item
-        sc_item = ScheduledOperation.objects.first()
+        sc_item = models.ScheduledOperation.objects.first()
         resp = self.get_response(
             'scheduler:edit_scheduled_operation',
             {'pk': sc_item.id},
@@ -161,13 +161,13 @@ class SchedulerForms(test.OnTaskTestCase):
                 'token': 'faketoken',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 1)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 1)
         sc_item.refresh_from_db()
 
         self.assertEqual(sc_item.name, 'First scheduling round2')
 
         # Select the item_column for confirmation
-        sc_item = ScheduledOperation.objects.first()
+        sc_item = models.ScheduledOperation.objects.first()
         resp = self.get_response(
             'scheduler:edit_scheduled_operation',
             {'pk': sc_item.id},
@@ -180,7 +180,7 @@ class SchedulerForms(test.OnTaskTestCase):
                 'token': 'faketoken',
             })
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(ScheduledOperation.objects.count(), 1)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 1)
 
         # Index of all scheduled actions (to execute the table render)
         resp = self.get_response('scheduler:index')
@@ -200,7 +200,7 @@ class SchedulerForms(test.OnTaskTestCase):
             method='POST',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 0)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
     def test_schedule_times_in_forms(self):
         """Test the date_time when scheduling actions"""
@@ -228,7 +228,7 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 0)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
         # POST the form to schedule this action
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
@@ -246,7 +246,7 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 0)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
         # POST the form to schedule this action
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
@@ -264,7 +264,7 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 1)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 1)
 
         # POST the form to schedule this action
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
@@ -282,4 +282,4 @@ class SchedulerForms(test.OnTaskTestCase):
                 'subject': 'Subject text',
             })
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(ScheduledOperation.objects.count(), 2)
+        self.assertEqual(models.ScheduledOperation.objects.count(), 2)

@@ -22,7 +22,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_legal_name
 from ontask.core.forms import RestrictedFileField
-from ontask.models import Action, Condition, RubricCell
+from ontask import models
 import ontask.settings
 
 SUFFIX_LENGTH = 512
@@ -59,7 +59,7 @@ class ActionUpdateForm(forms.ModelForm):
     class Meta(object):
         """Select Action and the two fields."""
 
-        model = Action
+        model = models.Action
         fields = ('name', 'description_text')
 
 
@@ -71,19 +71,18 @@ class ActionForm(ActionUpdateForm):
         super().__init__(*args, **kargs)
 
         at_field = self.fields['action_type']
-        at_field.widget.choices = Action.AVAILABLE_ACTION_TYPES
+        at_field.widget.choices = models.Action.AVAILABLE_ACTION_TYPES
 
-        if len(Action.AVAILABLE_ACTION_TYPES) == 1:
+        if len(models.Action.AVAILABLE_ACTION_TYPES) == 1:
             # There is only one type of action. No need to generate the field.
             # Set to value and hide
             at_field.widget = forms.HiddenInput()
-            at_field.initial = Action.AVAILABLE_ACTION_TYPES[0][0]
+            at_field.initial = models.Action.AVAILABLE_ACTION_TYPES[0][0]
 
     class Meta(ActionUpdateForm.Meta):
         """Select action and the three fields."""
 
-        model = Action
-
+        model = models.Action
         fields = ('name', 'description_text', 'action_type')
 
 
@@ -93,7 +92,7 @@ class ActionDescriptionForm(forms.ModelForm):
     class Meta(object):
         """Select model and the description field."""
 
-        model = Action
+        model = models.Action
         fields = ('description_text',)
 
 
@@ -119,7 +118,7 @@ class FilterForm(forms.ModelForm):
     class Meta(object):
         """Select model and fields."""
 
-        model = Condition
+        model = models.Condition
         fields = ('description_text', 'formula')
 
 
@@ -201,7 +200,7 @@ class RubricCellForm(forms.ModelForm):
     class Meta(object):
         """Select Action and the two fields."""
 
-        model = RubricCell
+        model = models.RubricCell
         fields = ('description_text', 'feedback_text')
 
 

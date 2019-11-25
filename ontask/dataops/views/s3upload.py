@@ -10,17 +10,17 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
+from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.forms import UploadS3FileForm
-from ontask.models import Workflow
 
 
 @user_passes_test(is_instructor)
 @get_workflow()
 def s3upload_start(
     request: HttpRequest,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Upload the S3 data as first step.
 

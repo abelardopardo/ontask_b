@@ -7,8 +7,8 @@ from builtins import object
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
+from ontask import models
 from ontask.dataops.pandas import pandas_datatype_names
-from ontask.models import Column
 
 try:
     profile  # noqa: Z444
@@ -34,7 +34,7 @@ class ColumnSerializer(serializers.ModelSerializer):
         column_obj = None
         try:
             # Create the object, but point to the given workflow
-            column_obj = Column(
+            column_obj = models.Column(
                 name=validated_data['name'],
                 description_text=validated_data.get('description_text', ''),
                 workflow=self.context['workflow'],
@@ -72,7 +72,7 @@ class ColumnSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Select the model and the fields."""
 
-        model = Column
+        model = models.Column
         exclude = ('id', 'workflow')
 
 
@@ -82,6 +82,5 @@ class ColumnNameSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Select the model and the name."""
 
-        model = Column
-
+        model = models.Column
         fields = ('name',)

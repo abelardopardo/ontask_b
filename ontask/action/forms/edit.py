@@ -12,7 +12,7 @@ from django_summernote.widgets import SummernoteInplaceWidget
 
 from ontask.action.evaluate.template import render_action_template
 from ontask.action.forms import FIELD_PREFIX
-from ontask.models import Action
+from ontask import models
 from ontask.workflow.forms import column_to_field
 
 
@@ -27,16 +27,16 @@ class EditActionOutForm(forms.ModelForm):
 
         # Personalized text, canvas email
         if (
-            self.instance.action_type == Action.PERSONALIZED_TEXT
-            or self.instance.action_type == Action.RUBRIC_TEXT
-            or self.instance.action_type == Action.EMAIL_LIST
+            self.instance.action_type == models.Action.PERSONALIZED_TEXT
+            or self.instance.action_type == models.Action.RUBRIC_TEXT
+            or self.instance.action_type == models.Action.EMAIL_LIST
         ):
             self.fields['text_content'].widget = SummernoteInplaceWidget()
 
         # Add the Target URL field
         if (
-            self.instance.action_type == Action.PERSONALIZED_JSON
-            or self.instance.action_type == Action.JSON_LIST
+            self.instance.action_type == models.Action.PERSONALIZED_JSON
+            or self.instance.action_type == models.Action.JSON_LIST
         ):
             # Add the target_url field
             self.fields['target_url'] = forms.CharField(
@@ -62,7 +62,7 @@ class EditActionOutForm(forms.ModelForm):
                 },
             )
 
-        if self.instance.action_type == Action.PERSONALIZED_CANVAS_EMAIL:
+        if self.instance.action_type == models.Action.PERSONALIZED_CANVAS_EMAIL:
             # Modify the content field so that it uses the TextArea
             self.fields['text_content'].widget = forms.Textarea(
                 attrs={
@@ -89,7 +89,7 @@ class EditActionOutForm(forms.ModelForm):
     class Meta(object):
         """Select action and the content field only."""
 
-        model = Action
+        model = models.Action
         fields = ['text_content']
 
 

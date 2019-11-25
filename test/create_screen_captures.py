@@ -13,10 +13,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
+from ontask import models
 from ontask.dataops.pandas import destroy_db_engine
-# from ontask.models import SQLConnection
-# from ontask.models import AthenaConnection
-from ontask.models import Action
 
 standard_library.install_aliases()
 
@@ -733,7 +731,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.PERSONALIZED_CANVAS_EMAIL)
+        select.select_by_value(models.Action.PERSONALIZED_CANVAS_EMAIL)
         desc.send_keys('Motivating message depending on the program enrolled')
 
         self.modal_ss('action_personalized_canvas_email_create.png')
@@ -767,7 +765,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.EMAIL_LIST)
+        select.select_by_value(models.Action.EMAIL_LIST)
         desc.send_keys('Send email with column values as list')
 
         self.modal_ss('action_send_list_create.png')
@@ -803,7 +801,7 @@ class ScreenTestFixture(ScreenTests):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.JSON_LIST)
+        select.select_by_value(models.Action.JSON_LIST)
         desc.send_keys('Send the list of inactive students in week 2 to another platform')
 
         self.modal_ss('action_json_list_create.png')
@@ -1032,7 +1030,7 @@ class ScreenTestFixture(ScreenTests):
             + 'from the rubric')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.RUBRIC_TEXT)
+        select.select_by_value(models.Action.RUBRIC_TEXT)
         self.modal_ss('rubric_create.png')
         self.cancel_modal()
 

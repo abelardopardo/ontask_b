@@ -9,9 +9,8 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
-from ontask import create_new_name
+from ontask import create_new_name, models
 from ontask.dataops.forms import ConnectionForm
-from ontask.models import Connection
 
 
 class ConnectionTableAdmin(tables.Table):
@@ -88,7 +87,7 @@ def save_connection_form(
 
 def clone(
     request: HttpRequest,
-    conn: Connection,
+    conn: models.Connection,
     mgr,
     clone_url: str,
 ) -> JsonResponse:
@@ -123,7 +122,7 @@ def clone(
 
 def delete(
     request: HttpRequest,
-    conn: Connection,
+    conn: models.Connection,
     delete_url: str,
 ) -> JsonResponse:
     """Finish processing AJAX request for the delete connection operation.
@@ -150,7 +149,7 @@ def delete(
 
 def toggle(
     request: HttpRequest,
-    conn: Connection,
+    conn: models.Connection,
     toggle_url: str,
 ) -> JsonResponse:
     """Toggle the enable field in the given connection."""

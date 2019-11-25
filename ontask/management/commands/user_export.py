@@ -7,7 +7,7 @@ import shutil
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
-from ontask.models import Workflow
+from ontask import models
 from ontask.workflow.services.import_export import do_export_workflow_parse
 
 
@@ -41,7 +41,7 @@ class Command(BaseCommand):
             return
 
         # Search for the workflow
-        workflows = Workflow.objects.filter(
+        workflows = models.Workflow.objects.filter(
             user__email=options['useremail'],
         ).prefetch_related('actions')
 

@@ -3,10 +3,10 @@
 
 from django.contrib import admin
 
-from ontask.models import ScheduledOperation
+from ontask import models
 
 
-@admin.register(ScheduledOperation)
+@admin.register(models.ScheduledOperation)
 class ScheduledEmailActionAdmin(admin.ModelAdmin):
     list_display = ('user', 'created', 'execute',
                     'status', 'action', 'item_column', 'last_executed_log')

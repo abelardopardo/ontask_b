@@ -7,14 +7,14 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from ontask.models import Profile
+from ontask import models
 
 User = get_user_model()
 admin.site.unregister(User)
 
 
 class UserProfileInline(admin.StackedInline):
-    model = Profile
+    model = models.Profile
 
 
 @admin.register(User)

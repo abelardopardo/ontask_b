@@ -16,7 +16,7 @@ from django.utils import timezone
 from rest_framework import status
 
 from ontask.core import SessionPayload
-from ontask.models import OAuthUserToken
+from ontask import models
 
 
 class ActionViewRunEmailAction(test.OnTaskTestCase):
@@ -456,7 +456,7 @@ class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
     def test_run_canvas_email_done(self):
         """Test last step of sending canvas emails."""
         user = get_user_model().objects.get(email=self.user_email)
-        utoken = OAuthUserToken(
+        utoken = models.OAuthUserToken(
             user=user,
             instance_name='Server one',
             access_token='bogus token',

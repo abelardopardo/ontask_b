@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import List, Optional
 
 import pytz
-from django.conf import settings
+from django import conf
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
@@ -99,7 +99,7 @@ def simplify_datetime_str(dtime: datetime) -> str:
     if dtime is None:
         return ''
     return dtime.astimezone(
-        pytz.timezone(settings.TIME_ZONE),
+        pytz.timezone(conf.settings.TIME_ZONE),
     ).strftime('%Y-%m-%d %H:%M:%S %z')
 
 

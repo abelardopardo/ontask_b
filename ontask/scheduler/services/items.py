@@ -13,14 +13,14 @@ from django.http.request import HttpRequest
 from django.urls import reverse
 from django.utils.translation import ugettext
 
+from ontask import models
 from ontask.core import SessionPayload
-from ontask.models import Action, Log, ScheduledOperation
 
 DAYS_IN_YEAR = 365
 SECONDS_IN_HOUR = 3600
 
 
-def get_item_value_dictionary(sch_obj: ScheduledOperation) -> Dict:
+def get_item_value_dictionary(sch_obj: models.ScheduledOperation) -> Dict:
     """Get a dictionary with the values in the time."""
     item_values = model_to_dict(sch_obj)
     item_values['item_column'] = str(sch_obj.item_column)
@@ -85,8 +85,8 @@ def create_payload(
     request: HttpRequest,
     operation_type: str,
     prev_url: str,
-    s_item: Optional[ScheduledOperation] = None,
-    action: Optional[Action] = None,
+    s_item: Optional[models.ScheduledOperation] = None,
+    action: Optional[models.Action] = None,
 ) -> SessionPayload:
     """Create a payload dictionary to store in the session.
 
@@ -127,7 +127,7 @@ def create_payload(
     return payload
 
 
-def delete_item(s_item: ScheduledOperation):
+def delete_item(s_item: models.ScheduledOperation):
     """Delete a scheduled operation and log the event."""
-    s_item.log(Log.SCHEDULE_DELETE)
+    s_item.log(models.Log.SCHEDULE_DELETE)
     s_item.delete()

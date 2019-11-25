@@ -4,7 +4,7 @@
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
-from ontask.models import View
+from ontask import models
 from ontask.workflow.serialize_column import ColumnNameSerializer
 
 
@@ -21,7 +21,7 @@ class ViewSerializer(serializers.ModelSerializer):
         """Create the View object."""
         view_obj = None
         try:
-            view_obj = View(
+            view_obj = models.View(
                 workflow=self.context['workflow'],
                 name=validated_data['name'],
                 description_text=validated_data['description_text'],
@@ -55,8 +55,7 @@ class ViewSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Set the model and fields to exclude."""
 
-        model = View
-
+        model = models.View
         exclude = (
             'id',
             'workflow',

@@ -7,7 +7,7 @@ import argparse
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 
-from ontask.models import Workflow
+from ontask import models
 from ontask.workflow.services.import_export import do_import_workflow_parse
 
 
@@ -63,7 +63,7 @@ class Command(BaseCommand):
             )
 
         # Search for a workflow with the given name
-        workflow = Workflow.objects.filter(
+        workflow = models.Workflow.objects.filter(
             user__email=options['useremail'],
             name=options['name'],
         ).first()

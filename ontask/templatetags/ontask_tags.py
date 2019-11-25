@@ -11,9 +11,9 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 import ontask
+from ontask import models
 from ontask.action.evaluate.template import render_rubric_criteria
 from ontask.dataops.sql.row_queries import get_rows
-from ontask.models import Action
 
 register = template.Library()
 
@@ -147,7 +147,7 @@ def ot_insert_column_list(context, column_name) -> str:
             action.workflow.get_data_frame_table_name(),
             column_names=[column_name],
             filter_formula=action.get_filter_formula())]
-    if action.action_type == Action.JSON_LIST:
+    if action.action_type == models.Action.JSON_LIST:
         return mark_safe(json.dumps(column_values))
 
     return ', '.join(column_values)

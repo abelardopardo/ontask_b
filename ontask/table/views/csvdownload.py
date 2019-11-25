@@ -7,10 +7,10 @@ from typing import Optional
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 
+from ontask import models
 from ontask.core.decorators import get_view, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops.pandas import get_subframe
-from ontask.models import View, Workflow
 from ontask.table import services
 
 
@@ -18,7 +18,7 @@ from ontask.table import services
 @get_workflow(pf_related=['columns'])
 def csvdownload(
     request: HttpRequest,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Download the data in the workflow.
 
@@ -38,8 +38,8 @@ def csvdownload(
 def csvdownload_view(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    view: Optional[View] = None,
+    workflow: Optional[models.Workflow] = None,
+    view: Optional[models.View] = None,
 ) -> HttpResponse:
     """Download the data in a given view.
 

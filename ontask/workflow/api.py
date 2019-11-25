@@ -11,9 +11,9 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import UserIsInstructor
-from ontask.models import Workflow
 from ontask.workflow.serialize_workflow import (
     WorkflowListSerializer, WorkflowLockSerializer,
 )
@@ -40,9 +40,9 @@ class WorkflowAPIListCreate(generics.ListCreateAPIView):
         """Access the required workflow."""
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return Workflow.objects.all()
+            return models.Workflow.objects.all()
 
-        return Workflow.objects.filter(
+        return models.Workflow.objects.filter(
             Q(user=self.request.user) | Q(shared=self.request.user),
         ).distinct()
 
@@ -80,9 +80,9 @@ class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         """Access the relevant workflow."""
         if self.request.user.is_superuser:
-            return Workflow.objects.all()
+            return models.Workflow.objects.all()
 
-        return Workflow.objects.filter(
+        return models.Workflow.objects.filter(
             Q(user=self.request.user) | Q(shared=self.request.user),
         ).distinct()
 
@@ -117,7 +117,7 @@ class WorkflowAPILock(APIView):
         request: HttpRequest,
         pk: int,
         format=None,    # noqa: 132
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Return the serialized value of the lock property in the wflow."""
         serializer = self.serializer_class({'lock': workflow.is_locked()})
@@ -129,7 +129,7 @@ class WorkflowAPILock(APIView):
         request: HttpRequest,
         pk: int,
         format=None,    # noqa: 132
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Set the lock for a workflow."""
         return Response(status=status.HTTP_201_CREATED)
@@ -140,7 +140,7 @@ class WorkflowAPILock(APIView):
         request: HttpRequest,
         pk: int,
         format=None,  # noqa: 132
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Remove the lock in a workflow."""
         workflow.unlock()

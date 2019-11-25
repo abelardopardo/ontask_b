@@ -9,9 +9,9 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
+from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log, Workflow
 
 
 @user_passes_test(is_instructor)
@@ -19,7 +19,7 @@ from ontask.models import Log, Workflow
 def show_timeline(
     request: HttpRequest,
     pk: Optional[int] = None,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Show a vertical timeline of action executions.
 
@@ -39,18 +39,18 @@ def show_timeline(
         logs = workflow.logs
 
     event_names = [
-        Log.ACTION_DOWNLOAD,
-        Log.ACTION_RUN_CANVAS_EMAIL,
-        Log.ACTION_RUN_EMAIL,
-        Log.ACTION_RUN_JSON,
-        Log.ACTION_RUN_JSON_LIST,
-        Log.ACTION_RUN_EMAIL_LIST,
-        Log.ACTION_SURVEY_INPUT,
-        Log.SCHEDULE_CANVAS_EMAIL_EDIT,
-        Log.SCHEDULE_EMAIL_EDIT,
-        Log.SCHEDULE_JSON_EDIT,
-        Log.SCHEDULE_JSON_LIST_EDIT,
-        Log.SCHEDULE_EMAIL_LIST_EDIT,
+        models.Log.ACTION_DOWNLOAD,
+        models.Log.ACTION_RUN_CANVAS_EMAIL,
+        models.Log.ACTION_RUN_EMAIL,
+        models.Log.ACTION_RUN_JSON,
+        models.Log.ACTION_RUN_JSON_LIST,
+        models.Log.ACTION_RUN_EMAIL_LIST,
+        models.Log.ACTION_SURVEY_INPUT,
+        models.Log.SCHEDULE_CANVAS_EMAIL_EDIT,
+        models.Log.SCHEDULE_EMAIL_EDIT,
+        models.Log.SCHEDULE_JSON_EDIT,
+        models.Log.SCHEDULE_JSON_LIST_EDIT,
+        models.Log.SCHEDULE_EMAIL_LIST_EDIT,
     ]
 
     # Filter the logs to display and transform into values (process the json

@@ -4,10 +4,10 @@
 
 from django.contrib import admin
 
-from ontask.models import Plugin
+from ontask import models
 
 
-@admin.register(Plugin)
+@admin.register(models.Plugin)
 class PluginRegistryAdmin(admin.ModelAdmin):
     """Admin for the plugin registry."""
 

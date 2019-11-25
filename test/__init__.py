@@ -31,12 +31,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ontask import OnTaskSharedState
+from ontask import OnTaskSharedState, models
 from ontask.core.session_payload import (
     SessionPayload, PAYLOAD_SESSION_DICTIONARY)
 from ontask.core.permissions import group_names
 from ontask.dataops.pandas import check_wf_df, destroy_db_engine
-from ontask.models import Action, Workflow
 
 standard_library.install_aliases()
 
@@ -134,7 +133,7 @@ class OnTaskTestCase(TransactionTestCase):
         super().tearDownClass()
 
     @classmethod
-    def store_workflow_in_session(cls, session, wflow: Workflow):
+    def store_workflow_in_session(cls, session, wflow: models.Workflow):
         """Store the workflow id, name, and number of rows in the session.
 
         :param wflow: Workflow object
@@ -156,7 +155,8 @@ class OnTaskTestCase(TransactionTestCase):
             self.user = get_user_model().objects.get(email=self.user_email)
             self.client.login(email=self.user_email, password=self.user_pwd)
         if self.workflow_name:
-            self.workflow = Workflow.objects.get(name=self.workflow_name)
+            self.workflow = models.Workflow.objects.get(
+                name=self.workflow_name)
         self.last_request = None
 
     def tearDown(self) -> None:
@@ -1022,32 +1022,34 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     def create_new_personalized_text_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.PERSONALIZED_TEXT,
+            models.Action.PERSONALIZED_TEXT,
             adesc)
 
     def create_new_rubric_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.RUBRIC_TEXT,
+            models.Action.RUBRIC_TEXT,
             adesc)
 
     def create_new_json_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.PERSONALIZED_JSON,
+            models.Action.PERSONALIZED_JSON,
             adesc)
 
     def create_new_personalized_canvas_email_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            Action.PERSONALIZED_CANVAS_EMAIL,
+            models.Action.PERSONALIZED_CANVAS_EMAIL,
             adesc)
 
     def create_new_send_list_action(self, aname, adesc=''):
-        self.create_new_action_out_basic(aname, Action.EMAIL_LIST, adesc)
+        self.create_new_action_out_basic(
+            aname,
+            models.Action.EMAIL_LIST, adesc)
 
     def create_new_JSON_list_action(self, aname, adesc=''):
-        self.create_new_action_out_basic(aname, Action.JSON_LIST, adesc)
+        self.create_new_action_out_basic(aname, models.Action.JSON_LIST, adesc)
 
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog
@@ -1085,7 +1087,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(Action.SURVEY)
+        select.select_by_value(models.Action.SURVEY)
         desc.send_keys(adesc)
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
@@ -1915,7 +1917,7 @@ def delete_all_tables():
     cursor = connection.cursor()
     table_list = connection.introspection.get_table_list(cursor)
     for tinfo in table_list:
-        if not tinfo.name.startswith(Workflow.table_prefix):
+        if not tinfo.name.startswith(models.Workflow.table_prefix):
             continue
         cursor.execute('DROP TABLE "{0}";'.format(tinfo.name))
 

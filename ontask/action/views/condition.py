@@ -10,18 +10,18 @@ from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.views import generic
 
+from ontask import models
 from ontask.action.forms import ConditionForm, FilterForm
 from ontask.core.decorators import ajax_required, get_action, get_condition
 from ontask.core.permissions import UserIsInstructor, is_instructor
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula, get_variables
-from ontask.models import Action, Condition, Log, Workflow
 
 
 def save_condition_form(
     request: HttpRequest,
     form,
     template_name: str,
-    action: Action,
+    action: models.Action,
     is_filter: Optional[bool] = False,
 ) -> JsonResponse:
     """
@@ -69,9 +69,9 @@ def save_condition_form(
 
         # Store the type of event to log
         if is_new:
-            log_type = Log.CONDITION_CREATE
+            log_type = models.Log.CONDITION_CREATE
         else:
-            log_type = Log.CONDITION_UPDATE
+            log_type = models.Log.CONDITION_UPDATE
         condition.log(request.user, log_type)
         return JsonResponse({'html_redirect': ''})
 
@@ -136,8 +136,8 @@ class FilterCreateView(ConditionFilterCreateView):
 def edit_filter(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    condition: Optional[Condition] = None,
+    workflow: Optional[models.Workflow] = None,
+    condition: Optional[models.Condition] = None,
 ) -> JsonResponse:
     """Edit the filter of an action through AJAX.
 
@@ -165,8 +165,8 @@ def edit_filter(
 def delete_filter(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    condition: Optional[Condition] = None,
+    workflow: Optional[models.Workflow] = None,
+    condition: Optional[models.Condition] = None,
 ) -> JsonResponse:
     """Handle the AJAX request to delete a filter.
 
@@ -190,7 +190,7 @@ def delete_filter(
         condition.action.set_text_content(action_content)
         condition.action.save()
 
-    condition.log(request.user, Log.CONDITION_DELETE)
+    condition.log(request.user, models.Log.CONDITION_DELETE)
     action = condition.action
     condition.delete()
     action.update_n_rows_selected()
@@ -212,8 +212,8 @@ class ConditionCreateView(ConditionFilterCreateView):
 def edit_condition(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    condition: Optional[Condition] = None,
+    workflow: Optional[models.Workflow] = None,
+    condition: Optional[models.Condition] = None,
 ) -> JsonResponse:
     """Handle the AJAX request to edit a condition.
 
@@ -240,8 +240,8 @@ def edit_condition(
 def delete_condition(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    condition: Optional[Condition] = None,
+    workflow: Optional[models.Workflow] = None,
+    condition: Optional[models.Condition] = None,
 ) -> JsonResponse:
     """Handle the AJAX request to delete a condition.
 
@@ -260,7 +260,7 @@ def delete_condition(
             action.set_text_content(action_content)
             action.save()
 
-        condition.log(request.user, Log.CONDITION_DELETE)
+        condition.log(request.user, models.Log.CONDITION_DELETE)
         condition.delete()
         action.rows_all_false = None
         action.save()

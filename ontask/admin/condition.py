@@ -4,10 +4,10 @@
 
 from django.contrib import admin
 
-from ontask.models import Condition
+from ontask import models
 
 
-@admin.register(Condition)
+@admin.register(models.Condition)
 class ConditionAdmin(admin.ModelAdmin):
     """Define Condition Admin."""
 

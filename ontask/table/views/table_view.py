@@ -11,10 +11,9 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import create_new_name
+from ontask import create_new_name, models
 from ontask.core.decorators import ajax_required, get_view, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log, View, Workflow
 from ontask.table.forms import ViewAddForm
 from ontask.table import services
 
@@ -23,7 +22,7 @@ from ontask.table import services
 @get_workflow(pf_related='views')
 def view_index(
     request: HttpRequest,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Render the list of views attached to a workflow.
 
@@ -54,7 +53,7 @@ def view_index(
 @get_workflow(pf_related='columns')
 def view_add(
     request: HttpRequest,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> JsonResponse:
     """Create a new view.
 
@@ -84,8 +83,8 @@ def view_add(
 def view_edit(
     request: HttpRequest,
     pk: Optional[int] = None,
-    workflow: Optional[Workflow] = None,
-    view: Optional[View] = None,
+    workflow: Optional[models.Workflow] = None,
+    view: Optional[models.View] = None,
 ) -> JsonResponse:
     """Edit the content of a view.
 
@@ -107,8 +106,8 @@ def view_edit(
 def view_delete(
     request: HttpRequest,
     pk: Optional[int] = None,
-    workflow: Optional[Workflow] = None,
-    view: Optional[View] = None,
+    workflow: Optional[models.Workflow] = None,
+    view: Optional[models.View] = None,
 ) -> JsonResponse:
     """Delete a view.
 
@@ -138,8 +137,8 @@ def view_delete(
 def view_clone(
     request: HttpRequest,
     pk: Optional[int] = None,
-    workflow: Optional[Workflow] = None,
-    view: Optional[View] = None,
+    workflow: Optional[models.Workflow] = None,
+    view: Optional[models.View] = None,
 ) -> JsonResponse:
     """Clone a view.
 
@@ -165,7 +164,7 @@ def view_clone(
     )
     view.log(
         request.user,
-        Log.VIEW_CLONE,
+        models.Log.VIEW_CLONE,
         id_old=id_old,
         name_old=name_old)
     return JsonResponse({'html_redirect': ''})

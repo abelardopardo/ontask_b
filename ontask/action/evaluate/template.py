@@ -11,7 +11,7 @@ from django.template import Context, Template
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models import Action, VAR_USE_RES
+from ontask import models
 
 # Variable name to store the action ID in the context used to render a
 # template
@@ -178,7 +178,7 @@ def _clean_whitespace(template_text: str) -> str:
     return template_text
 
 
-def render_rubric_criteria(action: Action, context) -> List[List]:
+def render_rubric_criteria(action: models.Action, context) -> List[List]:
     """Calculate the list of elements [criteria, feedback] for action."""
     criteria = [acc.column for acc in action.column_condition_pair.all()]
     cells = action.rubric_cells.all()
@@ -202,7 +202,7 @@ def render_rubric_criteria(action: Action, context) -> List[List]:
 def render_action_template(
     template_text: str,
     context_dict: Mapping,
-    action: Action = None,
+    action: models.Action = None,
 ) -> str:
     """Render a template using a given context.
 
@@ -248,7 +248,7 @@ def render_action_template(
     # Steps 1 and 2. Apply the translation process to all variables that
     # appear in the the template text
     new_template_text = template_text
-    for rexpr in VAR_USE_RES:
+    for rexpr in models.VAR_USE_RES:
         if action and action.has_html_text:
             new_template_text = rexpr.sub(
                 _change_unescape_vname,

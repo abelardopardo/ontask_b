@@ -9,8 +9,7 @@ from test.compare import compare_workflows
 from django.conf import settings
 from rest_framework import status
 
-from ontask import entity_prefix
-from ontask.models import Action, Column, Condition, View, Workflow
+from ontask import entity_prefix, models
 
 
 class WorkflowTestViewWorkflowCrud(test.OnTaskTestCase):
@@ -65,9 +64,9 @@ class WorkflowTestViewWorkflowCrud(test.OnTaskTestCase):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
-        self.assertEqual(Workflow.objects.count(), 2)
+        self.assertEqual(models.Workflow.objects.count(), 2)
 
-        new_wf = Workflow.objects.get(
+        new_wf = models.Workflow.objects.get(
             name=entity_prefix() + self.workflow_name)
         compare_workflows(self.workflow, new_wf)
 
@@ -84,18 +83,18 @@ class WorkflowTestViewWorkflowCrud(test.OnTaskTestCase):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         self.assertFalse(new_wf.has_table())
-        self.assertEqual(Workflow.objects.count(), 2)
+        self.assertEqual(models.Workflow.objects.count(), 2)
         self.assertEqual(
-            Column.objects.count(),
+            models.Column.objects.count(),
             self.workflow.columns.count())
         self.assertEqual(
-            Action.objects.count(),
+            models.Action.objects.count(),
             self.workflow.actions.count())
         self.assertTrue(all(
             cond.action.workflow == self.workflow
-            for cond in Condition.objects.all()))
+            for cond in models.Condition.objects.all()))
         self.assertEqual(
-            View.objects.count(),
+            models.View.objects.count(),
             self.workflow.views.count())
 
         # Delete the workflow
@@ -110,4 +109,4 @@ class WorkflowTestViewWorkflowCrud(test.OnTaskTestCase):
             method='POST',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertEqual(Workflow.objects.count(), 1)
+        self.assertEqual(models.Workflow.objects.count(), 1)
