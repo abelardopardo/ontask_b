@@ -10,21 +10,19 @@ from typing import List, Tuple
 
 from django.conf import settings
 from django.contrib import messages
-
 from django.db.models.expressions import F
 from django.template.loader import render_to_string
 from django.utils.dateparse import parse_datetime
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext, ugettext_lazy as _
 import django_tables2 as tables
 import pandas as pd
 import pytz
 
+from ontask import models
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.plugin import ontask_plugin
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
-
-from ontask import models
 import ontask.settings
 
 

@@ -10,7 +10,7 @@ from croniter import croniter
 from django.conf import settings
 from django.forms.models import model_to_dict
 from django.http.request import HttpRequest
-from django.urls.base import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext
 
 from ontask.core import SessionPayload

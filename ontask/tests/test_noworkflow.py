@@ -88,6 +88,7 @@ class BackToHome(test.OnTaskTestCase):
             # 'workflow:share_delete',
             reverse('workflow:column_add'),
             # 'workflow:question_add',
+            reverse('workflow:question_add'),
             reverse('workflow:formula_column_add'),
             reverse('workflow:random_column_add'),
             reverse('workflow:column_delete', kwargs={'pk': 1}),

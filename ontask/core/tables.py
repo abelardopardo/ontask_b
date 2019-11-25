@@ -2,8 +2,8 @@
 
 """Generic table elements for django-tables2 package."""
 
-import django_tables2 as tables
 from django.template.loader import render_to_string
+import django_tables2 as tables
 
 
 class OperationsColumn(tables.Column):

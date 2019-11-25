@@ -6,7 +6,7 @@ from typing import Dict
 
 from django import http
 from django.template.loader import render_to_string
-from django.urls.base import reverse
+from django.urls import reverse
 from django.utils.html import format_html
 
 from ontask import models

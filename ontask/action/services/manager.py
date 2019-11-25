@@ -6,7 +6,7 @@ from typing import Dict, Optional
 
 from django import http
 from django.shortcuts import redirect, render
-from django.urls.base import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext
 
 from ontask import models, tasks

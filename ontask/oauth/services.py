@@ -8,14 +8,14 @@ import requests
 from django import http
 from django.conf import settings
 from django.shortcuts import redirect
-from django.urls.base import reverse
-from django.utils import timezone
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from rest_framework import status
 
 from ontask import models
+from ontask.core import SessionPayload
 
 return_url_key = 'oauth_return_url'
 oauth_hash_key = 'oauth_hash'
@@ -123,7 +123,7 @@ def refresh_token(user_token, oauth_info):
 
 def process_callback(
     request: http.HttpRequest,
-    payload: models.SessionPayload,
+    payload: SessionPayload,
 ) -> Optional[str]:
     """Extract the token and store for future calls.
 

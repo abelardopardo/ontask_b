@@ -5,8 +5,8 @@
 import collections
 from typing import Dict, Optional
 
-from django.contrib.sessions.backends.base import SessionBase
 from django import http
+from django.contrib.sessions.backends.base import SessionBase
 
 PAYLOAD_SESSION_DICTIONARY = '__ontask_session_payload__'
 

@@ -6,7 +6,7 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
-from django.urls.base import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
@@ -18,7 +18,7 @@ from ontask.action.views.serve_survey import (
     extract_survey_questions, survey_update_row_values,
 )
 from ontask.core.permissions import has_access
-from ontask.core.views import ontask_handler404
+from ontask.core.services import ontask_handler404
 from ontask.models import Action, Log
 
 

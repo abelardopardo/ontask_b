@@ -8,7 +8,7 @@ from django import http
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.urls.base import reverse
+from django.urls import reverse
 
 from ontask import models
 from ontask.core.decorators import ajax_required

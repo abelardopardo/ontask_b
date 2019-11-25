@@ -5,7 +5,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from ontask.core.permissions import is_instructor
+from ontask.core import is_instructor
 
 
 class OnTaskUser(models.Model):

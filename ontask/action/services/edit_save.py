@@ -7,7 +7,7 @@ from typing import Optional, Union
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
 from django.template.loader import render_to_string
-from django.urls.base import reverse
+from django.urls import reverse
 
 from ontask import models
 from ontask.action import forms
