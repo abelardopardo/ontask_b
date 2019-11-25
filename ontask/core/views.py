@@ -3,16 +3,20 @@
 """Basic views to render error."""
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.http import JsonResponse
+from django.http.request import HttpRequest
+from django.http.response import HttpResponse
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 
+from ontask import models, tasks
 from ontask.core.decorators import ajax_required
-from ontask.core.permissions import UserIsInstructor
+from ontask.core.permissions import UserIsInstructor, is_admin, is_instructor
 from ontask.django_auth_lti.decorators import lti_role_required
-from ontask import tasks, models
+from ontask.workflow.views import index
 
 
 class AboutPage(generic.TemplateView):
@@ -24,6 +28,20 @@ class ToBeDone(UserIsInstructor, generic.TemplateView):
     """Page showing the to be done."""
 
     template_name = 'base.html'
+
+
+def home(request: HttpRequest) -> HttpResponse:
+    """Render the home page."""
+    if not request.user.is_authenticated:
+        # Unauthenticated request, go to login
+        return redirect(reverse('accounts:login'))
+
+    if is_instructor(request.user) or is_admin(request.user):
+        # Authenticated request, go to the workflow index
+        return index(request)
+
+    # Authenticated request from learner, show profile
+    return redirect(reverse('profiles:show_self'))
 
 
 @login_required
@@ -66,29 +84,3 @@ def keep_alive(request: HttpRequest) -> JsonResponse:
     return JsonResponse({})
 
 
-def ontask_handler400(request: HttpRequest, exception) -> HttpResponse:
-    """Return error 400."""
-    response = render(request, '400.html', {})
-    response.status_code = 400
-    return response
-
-
-def ontask_handler403(request: HttpRequest, exception) -> HttpResponse:
-    """Return error 403."""
-    response = render(request, '403.html', {})
-    response.status_code = 403
-    return response
-
-
-def ontask_handler404(request: HttpRequest, exception) -> HttpResponse:
-    """Return error 404."""
-    response = render(request, '404.html', {})
-    response.status_code = 404
-    return response
-
-
-def ontask_handler500(request: HttpRequest) -> HttpResponse:
-    """Return error 500."""
-    response = render(request, '500.html', {})
-    response.status_code = 500
-    return response
