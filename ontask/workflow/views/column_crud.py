@@ -197,7 +197,7 @@ def formula_column_add(
                 request.user,
                 workflow,
                 column,
-                form.cleaned_data['op_tpe'],
+                form.cleaned_data['op_type'],
                 form.selected_columns)
             form.save_m2m()
         except OnTaskServiceException as exc:
