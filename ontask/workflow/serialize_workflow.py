@@ -8,9 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
+from ontask import models
 from ontask.action.serializers import ActionSerializer
 from ontask.dataops.pandas import store_table
-from ontask.models import Workflow
 from ontask.table.serializers import DataFramePandasField, ViewSerializer
 from ontask.workflow.serialize_column import ColumnSerializer
 
@@ -38,7 +38,7 @@ class WorkflowListSerializer(serializers.ModelSerializer):
 
         workflow_obj = None
         try:
-            workflow_obj = Workflow(
+            workflow_obj = models.Workflow(
                 user=self.context['request'].user,
                 name=validated_data['name'],
                 description_text=validated_data.get('description_text', ''),
@@ -58,8 +58,7 @@ class WorkflowListSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Select model and fields to consider."""
 
-        model = Workflow
-
+        model = models.Workflow
         fields = ('id', 'name', 'description_text', 'attributes')
 
 
@@ -121,7 +120,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             if not wflow_name:
                 raise Exception(_('Unexpected empty workflow name.'))
 
-            if Workflow.objects.filter(
+            if models.Workflow.objects.filter(
                 name=wflow_name,
                 user=self.context['user']
             ).exists():
@@ -132,7 +131,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         # Initial values
         workflow_obj = None
         try:
-            workflow_obj = Workflow(
+            workflow_obj = models.Workflow(
                 user=self.context['user'],
                 name=wflow_name,
                 description_text=validated_data['description_text'],
@@ -214,8 +213,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Select model and fields to exclude."""
 
-        model = Workflow
-
+        model = models.Workflow
         exclude = (
             'id',
             'user',

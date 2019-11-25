@@ -7,7 +7,7 @@ from builtins import next, object
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models import View
+from ontask import models
 
 
 class ViewAddForm(forms.ModelForm):
@@ -75,5 +75,5 @@ class ViewAddForm(forms.ModelForm):
     class Meta(object):
         """Define models and fields to consider."""
 
-        model = View
+        model = models.View
         fields = ['name', 'description_text', 'formula', 'columns']

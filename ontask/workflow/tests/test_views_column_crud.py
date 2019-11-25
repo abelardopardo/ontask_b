@@ -8,8 +8,8 @@ import test
 from django.conf import settings
 from rest_framework import status
 
+from ontask import models
 from ontask.dataops.pandas import load_table
-from ontask.models import Action
 
 
 class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
@@ -60,7 +60,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
     def test_question_add(self):
         """Test adding a question to a survey."""
         # Get the survey action
-        survey = self.workflow.actions.get(action_type=Action.SURVEY)
+        survey = self.workflow.actions.get(action_type=models.Action.SURVEY)
 
         # GET the form
         resp = self.get_response(
@@ -86,7 +86,7 @@ class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
     def test_question_rename(self):
         """Test renaming a question in a survey."""
         # Get the survey action and the first of the columns
-        survey = self.workflow.actions.get(action_type=Action.SURVEY)
+        survey = self.workflow.actions.get(action_type=models.Action.SURVEY)
         column = survey.column_condition_pair.first().column
         old_name = column.name
         # GET the form

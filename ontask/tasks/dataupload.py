@@ -9,10 +9,10 @@ from celery import shared_task
 from django.conf import settings
 from django.utils.translation import ugettext
 
+from ontask import models
 from ontask.dataops.services import batch_load_df_from_athenaconnection
 from ontask.core.services import get_execution_items
 from ontask.logs.services import get_log_item
-from ontask.models import AthenaConnection
 
 
 @shared_task
@@ -36,7 +36,7 @@ def athena_dataupload_task(user_id, workflow_id, conn_id, params, log_id):
             user_id=user_id,
             workflow_id=workflow_id)
 
-        conn = AthenaConnection.objects.filter(
+        conn = models.AthenaConnection.objects.filter(
             enabled=True).filter(pk=conn_id).first()
         if not conn:
             raise Exception(

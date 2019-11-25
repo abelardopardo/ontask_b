@@ -16,7 +16,6 @@ from ontask.dataops.services.connections import (
     ConnectionTableAdmin, ConnectionTableRun,
 )
 from ontask.dataops.services.dataframeupload import load_df_from_sqlconnection
-from ontask.models import SQLConnection
 
 
 class SQLConnectionTableAdmin(ConnectionTableAdmin):
@@ -44,7 +43,7 @@ class SQLConnectionTableAdmin(ConnectionTableAdmin):
     class Meta(ConnectionTableAdmin.Meta):
         """Define model."""
 
-        model = SQLConnection
+        model = models.SQLConnection
 
 
 class SQLConnectionTableRun(ConnectionTableRun):
@@ -61,7 +60,7 @@ class SQLConnectionTableRun(ConnectionTableRun):
     class Meta(ConnectionTableRun.Meta):
         """Define models, fields, sequence and attributes."""
 
-        model = SQLConnection
+        model = models.SQLConnection
 
 
 def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
@@ -84,7 +83,7 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
                 'dataops:sqlconn_delete',
                 kwargs={'pk': record['id']})})
     return SQLConnectionTableAdmin(
-        SQLConnection.objects.values(
+        models.SQLConnection.objects.values(
             'id',
             'name',
             'description_text',
@@ -108,7 +107,7 @@ def create_sql_connection_runtable() -> SQLConnectionTableRun:
                 'dataops:sqlupload_start',
                 kwargs={'pk': record['id']})})
     return SQLConnectionTableRun(
-        SQLConnection.objects.filter(enabled=True).values(
+        models.SQLConnection.objects.filter(enabled=True).values(
             'id',
             'name',
             'description_text'),
@@ -119,7 +118,7 @@ def create_sql_connection_runtable() -> SQLConnectionTableRun:
 def sql_upload_step_one(
     request: http.HttpRequest,
     workflow: models.Workflow,
-    conn: SQLConnection,
+    conn: models.SQLConnection,
     run_params: Dict,
 ):
     """Perform the first step to load a data frame from a SQL connection.

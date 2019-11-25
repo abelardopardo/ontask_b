@@ -11,10 +11,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops import forms, services
-from ontask.models import SQLConnection, Workflow
 
 
 @user_passes_test(is_instructor)
@@ -22,7 +22,7 @@ from ontask.models import SQLConnection, Workflow
 def sqlupload_start(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Load a data frame using a SQL connection.
 
@@ -44,7 +44,7 @@ def sqlupload_start(
     :param workflow: Workflow being used
     :return: Creates the upload_data dictionary in the session
     """
-    conn = SQLConnection.objects.filter(
+    conn = models.SQLConnection.objects.filter(
         pk=pk).filter(enabled=True).first()
     if not conn:
         return redirect('dataops:sqlconns_instructor_index_instructor_index')

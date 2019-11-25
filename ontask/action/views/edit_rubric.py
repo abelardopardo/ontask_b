@@ -11,15 +11,10 @@ from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.action.forms import (
-    RubricCellForm, RubricLOAForm,
-)
+from ontask import models
+from ontask.action.forms import RubricCellForm, RubricLOAForm
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
-from ontask.models import (
-    Action, Log, Workflow,
-)
-
 
 @user_passes_test(is_instructor)
 @ajax_required
@@ -29,8 +24,8 @@ def edit_rubric_cell(
     pk: int,
     cid: int,
     loa_pos: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> JsonResponse:
     """Edit a cell in a rubric.
 
@@ -67,7 +62,7 @@ def edit_rubric_cell(
             cell.column = action.workflow.columns.get(pk=cid)
             cell.loa_position = loa_pos
         cell.save()
-        cell.log(request.user, Log.ACTION_RUBRIC_CELL_EDIT)
+        cell.log(request.user, models.Log.ACTION_RUBRIC_CELL_EDIT)
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({
@@ -86,8 +81,8 @@ def edit_rubric_cell(
 def edit_rubric_loas(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> JsonResponse:
     """Edit a cell in a rubric.
 
@@ -128,7 +123,10 @@ def edit_rubric_loas(
                     str(exc)))
 
         # Log the event
-        action.log(request.user, Log.ACTION_RUBRIC_LOA_EDIT, new_loas=loas)
+        action.log(
+            request.user,
+            models.Log.ACTION_RUBRIC_LOA_EDIT,
+            new_loas=loas)
 
         # Done processing the correct POST request
         return JsonResponse({'html_redirect': ''})

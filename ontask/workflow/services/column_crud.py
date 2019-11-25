@@ -14,7 +14,7 @@ from ontask.dataops.pandas import (
 from ontask.dataops.sql import (
     add_column_to_db, copy_column_in_db, db_rename_column, df_drop_column,
 )
-from ontask.models import Column, Condition, Workflow
+from ontask import models
 from ontask.workflow.ops import do_clone_column_only
 from ontask.workflow.services import errors
 
@@ -283,9 +283,9 @@ def update_column(
 
 def delete_column(
     user,
-    workflow: Workflow,
-    column: Column,
-    cond_to_delete: Optional[List[Condition]] = None,
+    workflow: models.Workflow,
+    column: models.Column,
+    cond_to_delete: Optional[List[models.Condition]] = None,
 ):
     """Remove column from ontask.workflow.
 
@@ -318,7 +318,7 @@ def delete_column(
         # The conditions to delete are not given, so calculate them
         # Get the conditions/actions attached to this workflow
         cond_to_delete = [
-            cond for cond in Condition.objects.filter(
+            cond for cond in models.Condition.objects.filter(
                 action__workflow=workflow)
             if column in cond.columns.all()]
 
@@ -345,7 +345,7 @@ def delete_column(
             view.delete()
 
 
-def clone_column(user, column: Column) -> Column:
+def clone_column(user, column: models.Column) -> models.Column:
     """Create a clone of a column.
 
     :param user: User executing operation

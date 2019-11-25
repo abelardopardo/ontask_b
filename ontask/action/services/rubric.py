@@ -13,7 +13,6 @@ from ontask.action import forms
 from ontask.action.services.email import ActionManagerEmail
 from ontask.action.services.manager_factory import action_process_factory
 from ontask.core.celery import get_task_logger
-from ontask.models import Action, ActionColumnConditionTuple, RubricCell
 
 logger = get_task_logger('celery_execution')
 
@@ -37,7 +36,9 @@ class RubricTable(tables.Table):
         }
 
 
-def _verify_criteria_loas(criteria: List[ActionColumnConditionTuple]) -> bool:
+def _verify_criteria_loas(
+    criteria: List[models.ActionColumnConditionTuple]
+) -> bool:
     """Verify that all columns have all categories identical."""
     if not criteria:
         return True
@@ -50,8 +51,8 @@ def _verify_criteria_loas(criteria: List[ActionColumnConditionTuple]) -> bool:
 
 
 def _create_rubric_table(
-    action: Action,
-    criteria: List[ActionColumnConditionTuple],
+    action: models.Action,
+    criteria: List[models.ActionColumnConditionTuple],
     context: Dict
 ):
     if not criteria:
@@ -78,7 +79,7 @@ def _create_rubric_table(
                 'workflow/includes/partial_criterion_cell.html',
                 context={'criterion': criterion, 'action': action}))])
 
-        cels = RubricCell.objects.filter(
+        cels = models.RubricCell.objects.filter(
             action=action,
             column=criterion.column)
         for idx in range(len(loas)):

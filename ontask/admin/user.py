@@ -3,9 +3,9 @@
 
 from django.contrib import admin
 
-from ontask.models import OnTaskUser
+from ontask import models
 
 
-@admin.register(OnTaskUser)
+@admin.register(models.OnTaskUser)
 class OnTaskUserAdmin(admin.ModelAdmin):
     pass

@@ -13,12 +13,12 @@ from ontask.dataops.sql import (
     get_rows,
     is_column_unique,
 )
-from ontask.models import Column, Log, Workflow
+from ontask import models
 
 RANDOM_PWD_LENGTH = 50
 
 
-def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
+def do_workflow_update_lusers(workflow: models.Workflow, log_item: models.Log):
     """Recalculate the field lusers.
 
     Recalculate the elements in the field lusers of the workflow based on the
@@ -70,10 +70,10 @@ def do_workflow_update_lusers(workflow: Workflow, log_item: Log):
 
 
 def do_clone_column_only(
-    column: Column,
-    new_workflow: Optional[Workflow] = None,
+    column: models.Column,
+    new_workflow: Optional[models.Workflow] = None,
     new_name: Optional[str] = None,
-) -> Column:
+) -> models.Column:
     """Clone a column.
 
     :param column: Object to clone.
@@ -89,7 +89,7 @@ def do_clone_column_only(
     if new_workflow is None:
         new_workflow = column.workflow
 
-    new_column = Column(
+    new_column = models.Column(
         name=new_name,
         description_text=column.description_text,
         workflow=new_workflow,
@@ -105,7 +105,7 @@ def do_clone_column_only(
     return new_column
 
 
-def check_key_columns(workflow: Workflow):
+def check_key_columns(workflow: models.Workflow):
     """Check that key columns maintain their property.
 
     Function used to verify that after changes in the DB the key columns

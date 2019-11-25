@@ -5,7 +5,7 @@ import test
 
 from rest_framework import status
 
-from ontask.models import SQLConnection
+from ontask import models
 
 
 class DataopsViewSQLConnections(test.OnTaskTestCase):
@@ -55,8 +55,8 @@ class DataopsViewSQLConnectionsAdmin(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Object in db
-        sqlconn = SQLConnection.objects.get(name='conn name')
-        self.assertEqual(SQLConnection.objects.count(), 1)
+        sqlconn = models.SQLConnection.objects.get(name='conn name')
+        self.assertEqual(models.SQLConnection.objects.count(), 1)
         self.assertEqual(sqlconn.conn_type, 'postgresql')
         self.assertEqual(sqlconn.db_name, 'DB NAME')
         self.assertEqual(sqlconn.db_table, 'TABLE NAME')
@@ -88,8 +88,8 @@ class DataopsViewSQLConnectionsAdmin(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Object in db
-        sqlconn = SQLConnection.objects.get(name='conn name2')
-        self.assertEqual(SQLConnection.objects.count(), 1)
+        sqlconn = models.SQLConnection.objects.get(name='conn name2')
+        self.assertEqual(models.SQLConnection.objects.count(), 1)
         self.assertEqual(sqlconn.conn_type, 'postgresql')
         self.assertEqual(sqlconn.db_name, 'DB NAME2')
         self.assertEqual(sqlconn.db_table, 'TABLE NAME2')
@@ -109,8 +109,8 @@ class DataopsViewSQLConnectionsAdmin(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Object in db
-        sqlconn = SQLConnection.objects.get(name='Copy of conn name2')
-        self.assertEqual(SQLConnection.objects.count(), 2)
+        sqlconn = models.SQLConnection.objects.get(name='Copy of conn name2')
+        self.assertEqual(models.SQLConnection.objects.count(), 2)
         self.assertEqual(sqlconn.conn_type, 'postgresql')
         self.assertEqual(sqlconn.db_name, 'DB NAME2')
         self.assertEqual(sqlconn.db_table, 'TABLE NAME2')
@@ -130,5 +130,4 @@ class DataopsViewSQLConnectionsAdmin(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Object in db
-        sqlconn = SQLConnection.objects.get(name='conn name2')
-        self.assertEqual(SQLConnection.objects.count(), 1)
+        self.assertEqual(models.SQLConnection.objects.count(), 1)

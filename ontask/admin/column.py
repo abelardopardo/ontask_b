@@ -4,10 +4,10 @@
 
 from django.contrib import admin
 
-from ontask.models import Column
+from ontask import models
 
 
-@admin.register(Column)
+@admin.register(models.Column)
 class ColumnAdmin(admin.ModelAdmin):
     """Column Admin app."""
 

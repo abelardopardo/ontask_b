@@ -10,7 +10,6 @@ from rest_framework.authtoken.models import Token
 
 from ontask import models
 from ontask.core.permissions import is_instructor
-from ontask.models import OAuthUserToken
 from ontask.profiles import forms
 
 
@@ -29,7 +28,7 @@ class ShowProfile(LoginRequiredMixin, generic.TemplateView):
         if user == self.request.user:
             kwargs["editable"] = True
         kwargs["show_user"] = user
-        kwargs["tokens"] = OAuthUserToken.objects.filter(
+        kwargs["tokens"] = models.OAuthUserToken.objects.filter(
             user=user
         )
         return super().get(request, *args, **kwargs)
@@ -100,9 +99,5 @@ def delete_token(request, pk):
     :param pk: Token id to remove
     :return:
     """
-
-    # Delete the token
-    OAuthUserToken.objects.get(id=pk).delete()
-
-    # Go back to showing the profile
+    models.OAuthUserToken.objects.get(id=pk).delete()
     return redirect('profiles:show_self')

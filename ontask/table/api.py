@@ -19,7 +19,7 @@ from ontask.dataops.pandas import (
     is_unique_column, load_table, perform_dataframe_upload_merge,
     store_dataframe, verify_data_frame,
 )
-from ontask.models import Workflow
+from ontask import models
 from ontask.table.serializers import (
     DataFrameJSONMergeSerializer, DataFrameJSONSerializer,
     DataFramePandasMergeSerializer, DataFramePandasSerializer,
@@ -45,7 +45,7 @@ class TableBasicOps(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Override the content in the workflow.
 
@@ -88,7 +88,7 @@ class TableBasicOps(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Retrieve the existing data frame."""
         serializer = self.serializer_class(
@@ -101,7 +101,7 @@ class TableBasicOps(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Create a new data frame."""
         if load_table(workflow.get_data_frame_table_name()) is not None:
@@ -119,7 +119,7 @@ class TableBasicOps(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ):
         """Process the put method to update the data frame."""
         return self.override(
@@ -135,7 +135,7 @@ class TableBasicOps(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Flush the data in the data frame."""
         workflow.flush()
@@ -240,7 +240,7 @@ class TableBasicMerge(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Process the GET request."""
         # Try to retrieve the wflow to check for permissions
@@ -258,7 +258,7 @@ class TableBasicMerge(APIView):
         request: HttpRequest,
         wid: int,
         format=None,
-        workflow: Optional[Workflow] = None,
+        workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Process the put request."""
         # Get the dst_df

@@ -4,10 +4,10 @@
 
 from django.contrib import admin
 
-from ontask.models import Workflow
+from ontask import models
 
 
-@admin.register(Workflow)
+@admin.register(models.Workflow)
 class WorkflowAdmin(admin.ModelAdmin):
     """Workflow admin app."""
 

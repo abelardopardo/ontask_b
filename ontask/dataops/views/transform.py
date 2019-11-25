@@ -11,19 +11,19 @@ from django.shortcuts import redirect, render, reverse
 from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import models
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops import services
 from ontask.dataops.forms import FIELD_PREFIX, PluginInfoForm
-from ontask.models import Plugin, Workflow
 
 
 @user_passes_test(is_instructor)
 @get_workflow()
 def transform_model(
     request: HttpRequest,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Show the table of models.
 
@@ -38,7 +38,7 @@ def transform_model(
 
     table_err = None
     if request.user.is_superuser:
-        table_err = Plugin.objects.filter(is_model=None)
+        table_err = models.Plugin.objects.filter(is_model=None)
 
     return render(
         request,
@@ -54,7 +54,7 @@ def transform_model(
 def plugin_invoke(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
+    workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
     """Render the view for the first step of plugin execution.
 
@@ -71,7 +71,7 @@ def plugin_invoke(
                 + 'Ask your system administrator to enable queueing.'))
         return redirect(reverse('table:display'))
 
-    plugin_info = Plugin.objects.filter(pk=pk).first()
+    plugin_info = models.Plugin.objects.filter(pk=pk).first()
     if not plugin_info:
         return redirect('home')
 

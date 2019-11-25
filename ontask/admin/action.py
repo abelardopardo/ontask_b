@@ -4,10 +4,10 @@
 
 from django.contrib import admin
 
-from ontask.models import Action
+from ontask import models
 
 
-@admin.register(Action)
+@admin.register(models.Action)
 class ActionAdmin(admin.ModelAdmin):
     """Define Action Admin."""
 

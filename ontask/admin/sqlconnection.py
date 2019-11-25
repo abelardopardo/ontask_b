@@ -4,10 +4,10 @@
 
 from django.contrib import admin
 
-from ontask.models import SQLConnection
+from ontask import models
 
 
-@admin.register(SQLConnection)
+@admin.register(models.SQLConnection)
 class SQLConnectionAdmin(admin.ModelAdmin):
     """Admin for the SQL Connections."""
 

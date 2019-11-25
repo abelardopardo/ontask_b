@@ -11,13 +11,13 @@ import pandas as pd
 from pyathena import connect
 from smart_open import smart_open
 
+from ontask import models
 from ontask.dataops.pandas import (
     create_db_engine, load_table, perform_dataframe_upload_merge,
     store_temporary_dataframe, verify_data_frame,
 )
 from ontask.dataops.pandas.dataframe import store_workflow_table
 from ontask.dataops.sql import table_queries
-from ontask.models import AthenaConnection, Log, SQLConnection, Workflow
 
 
 def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
@@ -243,7 +243,7 @@ def load_df_from_googlesheet(
 
 
 def load_df_from_sqlconnection(
-    conn_item: SQLConnection,
+    conn_item: models.SQLConnection,
     run_params: Dict,
 ) -> pd.DataFrame:
     """Load a DF from a SQL connection.
@@ -272,10 +272,10 @@ def load_df_from_sqlconnection(
 
 
 def batch_load_df_from_athenaconnection(
-    workflow: Workflow,
-    conn: AthenaConnection,
+    workflow: models.Workflow,
+    conn: models.AthenaConnection,
     run_params: Dict,
-    log_item: Log
+    log_item: models.Log
 ):
     """Batch load a DF from an Athena connection.
 

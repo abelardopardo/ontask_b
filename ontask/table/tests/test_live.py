@@ -9,8 +9,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
+from ontask import models
 from ontask.dataops.pandas import load_table
-from ontask.models import Workflow
 
 
 class TableDerivedColumns(test.OnTaskLiveTestCase):
@@ -308,7 +308,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
 
         # Check that the data is correct
         df = load_table(
-            Workflow.objects.all()[0].get_data_frame_table_name(),
+             models.Workflow.objects.all()[0].get_data_frame_table_name(),
         )
 
         # d1 = c1 + c2

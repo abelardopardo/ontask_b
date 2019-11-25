@@ -6,7 +6,7 @@ import shutil
 
 from django.core.management.base import BaseCommand
 
-from ontask.models import Workflow
+from ontask import models
 from ontask.workflow.services.import_export import do_export_workflow_parse
 
 
@@ -31,7 +31,7 @@ class Command(BaseCommand):
         wid = options['w']
 
         # Search for the workflow
-        workflow = Workflow.objects.filter(pk=wid).first()
+        workflow = models.Workflow.objects.filter(pk=wid).first()
         if not workflow:
             self.stdout.write(self.style.ERROR(
                 'There is no workflow with the given IDs',

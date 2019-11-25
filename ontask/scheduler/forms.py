@@ -11,9 +11,9 @@ from django.conf import settings
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import models
 from ontask.action import forms as action_forms
 from ontask.core import forms as ontask_forms
-from ontask.models import ScheduledOperation
 
 
 class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
@@ -67,7 +67,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
     class Meta(object):
         """Define model, fields and widgets."""
 
-        model = ScheduledOperation
+        model = models.ScheduledOperation
         fields = ('name', 'description_text', 'execute', 'execute_until')
         widgets = {
             'execute': DateTimePickerInput(

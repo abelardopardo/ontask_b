@@ -185,11 +185,3 @@ class ActionManagerZip(ActionRunManager):
 
         # Successful processing.
         return render(request, 'action/action_zip_done.html', {})
-
-
-action_process_factory.register_producer(
-    models.action.ZIP_OPERATION,
-    ActionManagerZip(
-        run_form_class=forms.ZipActionRunForm,
-        run_template='action/action_zip_step1.html',
-        log_event=models.Log.ACTION_RUN_ZIP))

@@ -3,8 +3,8 @@
 from django.db.models import Q
 from rest_framework import generics
 
+from ontask import models
 from ontask.core.permissions import UserIsInstructor
-from ontask.models import Action, ScheduledOperation
 from ontask.scheduler.serializers import (
     ScheduledEmailSerializer, ScheduledJSONSerializer,
 )
@@ -26,9 +26,9 @@ class ScheduledOperationAPIListCreate(generics.ListCreateAPIView):
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledOperation.objects.all()
+            return models.ScheduledOperation.objects.all()
 
-        return ScheduledOperation.objects.filter(
+        return models.ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).distinct()
@@ -84,15 +84,15 @@ class ScheduledOperationEmailAPIListCreate(ScheduledOperationAPIListCreate):
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledOperation.objects.filter(
+            return models.ScheduledOperation.objects.filter(
                 action__action_type=Action.PERSONALIZED_TEXT
             )
 
-        return ScheduledOperation.objects.filter(
+        return models.ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.PERSONALIZED_TEXT
+            action__action_type=models.Action.PERSONALIZED_TEXT
         ).distinct()
 
 
@@ -111,15 +111,15 @@ class ScheduledOperationJSONAPIListCreate(ScheduledOperationAPIListCreate):
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledOperation.objects.filter(
-                action__action_type=Action.PERSONALIZED_JSON
+            return models.ScheduledOperation.objects.filter(
+                action__action_type=models.Action.PERSONALIZED_JSON
             )
 
-        return ScheduledOperation.objects.filter(
+        return models.ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.PERSONALIZED_JSON
+            action__action_type=models.Action.PERSONALIZED_JSON
         ).distinct()
 
 
@@ -144,15 +144,15 @@ class ScheduledEmailAPIRetrieveUpdateDestroy(
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledOperation.objects.filter(
-                action__action_type=Action.PERSONALIZED_TEXT
+            return models.ScheduledOperation.objects.filter(
+                action__action_type=models.Action.PERSONALIZED_TEXT
             )
 
-        return ScheduledOperation.objects.filter(
+        return models.ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.PERSONALIZED_TEXT
+            action__action_type=models.Action.PERSONALIZED_TEXT
         ).distinct()
 
 
@@ -177,13 +177,13 @@ class ScheduledJSONAPIRetrieveUpdateDestroy(
     def get_queryset(self):
         # Admin get to see all of them
         if self.request.user.is_superuser:
-            return ScheduledOperation.objects.filter(
-                action__action_type=Action.PERSONALIZED_JSON
+            return models.ScheduledOperation.objects.filter(
+                action__action_type=models.Action.PERSONALIZED_JSON
             )
 
-        return ScheduledOperation.objects.filter(
+        return models.ScheduledOperation.objects.filter(
             Q(user=self.request.user) |
             Q(action__workflow__shared=self.request.user)
         ).filter(
-            action__action_type=Action.PERSONALIZED_JSON
+            action__action_type=models.Action.PERSONALIZED_JSON
         ).distinct()

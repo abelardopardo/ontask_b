@@ -23,11 +23,11 @@ from ontask.action.evaluate.template import render_action_template
 from ontask.dataops.formula import EVAL_EXP, evaluate_formula
 from ontask.dataops.pandas import get_table_row_by_index
 from ontask.dataops.sql.row_queries import get_row, get_rows
-from ontask.models import Action
+from ontask import models
 
 
 def _render_tuple_result(
-    action: Action,
+    action: models.Action,
     context: Dict[str, Union[str, float, int, datetime]],
     extra_string: str,
     column_name: str,
@@ -62,7 +62,7 @@ def _render_tuple_result(
 
 
 def action_condition_evaluation(
-    action: Action,
+    action: models.Action,
     row_values: Mapping,
 ) -> Optional[Dict[str, bool]]:
     """Calculate dictionary with column_name: Boolean evaluations.
@@ -90,7 +90,7 @@ def action_condition_evaluation(
 
 
 def get_action_evaluation_context(
-    action: Action,
+    action: models.Action,
     row_values: Mapping,
     condition_eval: Mapping = None,
 ) -> Optional[Dict]:
@@ -133,7 +133,7 @@ def get_action_evaluation_context(
 
 
 def evaluate_action(
-    action: Action,
+    action: models.Action,
     extra_string: str = None,
     column_name: str = None,
     exclude_values: List[str] = None,
@@ -194,7 +194,7 @@ def evaluate_action(
 
 
 def get_row_values(
-    action: Action,
+    action: models.Action,
     row_idx: Union[int, Tuple[str, str]],
 ) -> Dict[str, Union[str, int, float, datetime]]:
     """Get the values in a row either by index or by key.
@@ -229,7 +229,7 @@ def get_row_values(
 
 
 def evaluate_row_action_out(
-    action: Action,
+    action: models.Action,
     context: Mapping,
     text: str = None,
 ) -> Optional[str]:

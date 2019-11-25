@@ -6,12 +6,12 @@ from django.http.request import HttpRequest
 from django.http.response import JsonResponse
 from django.template.loader import render_to_string
 
-from ontask.models import Log, Workflow
+from ontask import models
 
 
 def save_attribute_form(
     request: HttpRequest,
-    workflow: Workflow,
+    workflow: models.Workflow,
     template: str,
     form: forms.Form,
     attr_idx: int,
@@ -54,7 +54,7 @@ def save_attribute_form(
         workflow.save()
         workflow.log(
             request.user,
-            Log.WORKFLOW_ATTRIBUTE_CREATE,
+            models.Log.WORKFLOW_ATTRIBUTE_CREATE,
             **wf_attributes)
         return JsonResponse({'html_redirect': ''})
 

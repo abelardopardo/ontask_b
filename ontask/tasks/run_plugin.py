@@ -8,7 +8,6 @@ from django.utils.translation import ugettext
 
 from ontask import models
 from ontask.dataops.services.plugin_admin import run_plugin
-from ontask.models import Plugin
 from ontask.tasks.execute import task_execute_factory
 
 logger = logging.getLogger('ontask')
@@ -58,7 +57,7 @@ class ExecuteRunPlugin(object):
             merge_key = payload['merge_key']
             parameters = payload['parameters']
 
-            plugin_info = Plugin.objects.filter(pk=plugin_id).first()
+            plugin_info = models.Plugin.objects.filter(pk=plugin_id).first()
             if not plugin_info:
                 raise Exception(
                     ugettext('Unable to load plugin with id {pid}').format(

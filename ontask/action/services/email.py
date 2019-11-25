@@ -27,17 +27,15 @@ from ontask.action.evaluate.action import (
 )
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.manager import ActionRunManager
-from ontask.action.services.manager_factory import action_process_factory
 from ontask.core.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
-from ontask.models import Action, Column, Log
 
 logger = get_task_logger('celery_execution')
 
 
 def _send_confirmation_message(
     user,
-    action: Action,
+    action: models.Action,
     nmsgs: int,
 ) -> None:
     """Send the confirmation message.
@@ -81,7 +79,7 @@ def _send_confirmation_message(
         'body': text_content,
         'from_email': str(ontask_settings.NOTIFICATION_SENDER),
         'to_email': [user.email]}
-    action.log(user, Log.ACTION_EMAIL_NOTIFY, **context)
+    action.log(user, models.Log.ACTION_EMAIL_NOTIFY, **context)
 
     # Send email out
     try:
@@ -113,7 +111,7 @@ def _check_email_list(email_list_string: str) -> List[str]:
     return email_list
 
 
-def _create_track_column(action: Action) -> str:
+def _create_track_column(action: models.Action) -> str:
     """Create an additional column for email tracking.
 
     :param action: Action to consider
@@ -130,7 +128,7 @@ def _create_track_column(action: Action) -> str:
 
     # Add the column if needed (before the mass email to avoid overload
     # Create the new column and store
-    column = Column(
+    column = models.Column(
         name=track_col_name,
         description_text='Emails sent with action {0} on {1}'.format(
             action.name,
@@ -203,7 +201,7 @@ def _create_single_message(
 
 def _create_messages(
     user,
-    action: Action,
+    action: models.Action,
     action_evals: List,
     track_col_name: str,
     payload: Dict,
@@ -269,7 +267,7 @@ def _create_messages(
         context['to_email'] = msg.to[0]
         if track_str:
             context['track_id'] = track_str
-        action.log(user, Log.ACTION_EMAIL_SENT, **context)
+        action.log(user, models.Log.ACTION_EMAIL_SENT, **context)
 
     return msgs
 
@@ -480,37 +478,10 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
             'to_email': msg.to[0]}
         action.last_executed_log = action.log(
             user,
-            Log.ACTION_EMAIL_SENT,
+            models.Log.ACTION_EMAIL_SENT,
             **context)
         action.save()
 
         return []
 
 
-email_producer = ActionManagerEmail(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.EmailActionRunForm,
-    run_template='action/request_email_data.html',
-    log_event=models.Log.ACTION_RUN_EMAIL)
-
-email_list_producer = ActionManagerEmailList(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.SendListActionRunForm,
-    run_template='action/request_send_list_data.html',
-    log_event=models.Log.ACTION_RUN_EMAIL_LIST)
-
-action_process_factory.register_producer(
-    models.Action.PERSONALIZED_TEXT,
-    email_producer)
-action_process_factory.register_producer(
-    models.Action.EMAIL_LIST,
-    email_list_producer)
-
-tasks.task_execute_factory.register_producer(
-    models.Action.PERSONALIZED_TEXT,
-    email_producer)
-tasks.task_execute_factory.register_producer(
-    models.Action.EMAIL_LIST,
-    email_list_producer)

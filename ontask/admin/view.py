@@ -4,10 +4,10 @@
 
 from django.contrib import admin
 
-from ontask.models import View
+from ontask import models
 
 
-@admin.register(View)
+@admin.register(models.View)
 class ViewAdmin(admin.ModelAdmin):
     """Class to admin the views."""
 

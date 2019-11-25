@@ -8,9 +8,9 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from import_export import resources
 
+from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.models import Log
 
 
 class LogResource(resources.ModelResource):
@@ -19,8 +19,7 @@ class LogResource(resources.ModelResource):
     class Meta(object):
         """Define model and fields."""
 
-        model = Log
-
+        model = models.Log
         fields = ('id', 'created', 'name', 'payload',)
 
 
@@ -34,7 +33,7 @@ def export(request, wid):
     :return: Return a CSV download of the logs
     """
     dataset = LogResource().export(
-        Log.objects.filter(user=request.user, workflow__id=wid)
+        models.Log.objects.filter(user=request.user, workflow__id=wid)
     )
 
     # Create the response as a csv download

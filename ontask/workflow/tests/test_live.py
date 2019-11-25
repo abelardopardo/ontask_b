@@ -9,9 +9,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ontask import OnTaskSharedState
+from ontask import OnTaskSharedState, models
 from ontask.dataops.pandas import database, destroy_db_engine
-from ontask.models import Workflow
 
 
 class WorkflowInitial(test.OnTaskLiveTestCase):
@@ -236,7 +235,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
 
         # Check that the number of rows is the correct one in the only
         # workflow available
-        wf = Workflow.objects.all()[0]
+        wf = models.Workflow.objects.all()[0]
         self.assertEqual(wf.nrows, 3)
         self.assertEqual(wf.ncols, 6)
 
@@ -301,7 +300,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
-            database.check_wf_df(Workflow.objects.get(id=1))
+            database.check_wf_df(models.Workflow.objects.get(id=1))
             idx += 1
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
@@ -464,7 +463,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('attribute-table_previous')
 
         # Check that the attributes are properly stored in the workflow
-        workflow = Workflow.objects.all()[0]
+        workflow = models.Workflow.objects.all()[0]
         self.assertEqual(len(workflow.attributes), 2)
         self.assertEqual(workflow.attributes['key1'], 'value1')
         self.assertEqual(workflow.attributes['newkey2'], 'newvalue2')
@@ -498,7 +497,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
             1
         )
         # Check that the attributes are properly stored in the workflow
-        workflow = Workflow.objects.all()[0]
+        workflow = models.Workflow.objects.all()[0]
         self.assertEqual(len(workflow.attributes), 1)
         self.assertEqual(workflow.attributes['key1'], 'value1')
 
@@ -600,7 +599,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
             'instructor02@bogus.com')
 
         # Check that the shared users are properly stored in the workflow
-        workflow = Workflow.objects.all()[0]
+        workflow = models.Workflow.objects.all()[0]
         self.assertEqual(workflow.shared.count(), 2)
         users = workflow.shared.values_list('email', flat=True)
         self.assertTrue('instructor02@bogus.com' in users)
@@ -638,7 +637,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
             1
         )
         # Check that the shared users are properly stored in the workflow
-        workflow = Workflow.objects.all()[0]
+        workflow = models.Workflow.objects.all()[0]
         self.assertEqual(workflow.shared.count(), 1)
         users = workflow.shared.values_list('email', flat=True)
         self.assertTrue('instructor02@bogus.com' in users)
@@ -698,8 +697,8 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         )
 
         # Check elements in workflow and in newwf
-        w1 = Workflow.objects.get(name=test.wflow_name)
-        w2 = Workflow.objects.get(name='newwf')
+        w1 = models.Workflow.objects.get(name=test.wflow_name)
+        w2 = models.Workflow.objects.get(name='newwf')
 
         # Equal descriptions
         self.assertEqual(w1.description_text,

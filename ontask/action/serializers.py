@@ -9,9 +9,7 @@ from rest_framework import serializers
 
 from ontask.dataops.formula import get_variables
 from ontask.dataops.sql.column_queries import add_column_to_db
-from ontask.models import (
-    Action, ActionColumnConditionTuple, Condition, RubricCell,
-)
+from ontask import models
 from ontask.workflow.serialize_column import (
     ColumnNameSerializer, ColumnSerializer,
 )
@@ -29,7 +27,7 @@ def _create_condition(validated_data, action):
     :param action: Action object to use as parent object.
     :return: reference to new condition object.
     """
-    condition_obj = Condition(
+    condition_obj = models.Condition(
         action=action,
         name=validated_data['name'],
         description_text=validated_data['description_text'],
@@ -142,7 +140,7 @@ class ConditionSerializer(serializers.ModelSerializer):
     columns = ColumnNameSerializer(required=False, many=True)
 
     @profile
-    def create(self, validated_data, **kwargs) -> Optional[Condition]:
+    def create(self, validated_data, **kwargs) -> Optional[models.Condition]:
         """Create a new condition object based on the validated_data.
 
         :param validated_data: Validated data obtained by the parser
@@ -192,7 +190,7 @@ class ConditionSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Define object condition and select fields to serialize."""
 
-        model = Condition
+        model = models.Condition
         exclude = ('id', 'action', 'created', 'modified')
 
 
@@ -202,7 +200,7 @@ class ConditionNameSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Select the model and the only field required."""
 
-        model = Condition
+        model = models.Condition
         fields = ('name',)
 
 
@@ -226,7 +224,7 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
                 name=validated_data['condition']['name'],
             )
 
-        return ActionColumnConditionTuple.objects.get_or_create(
+        return models.ActionColumnConditionTuple.objects.get_or_create(
             action=action,
             column=action.workflow.columns.get(
                 name=validated_data['column']['name']),
@@ -236,7 +234,7 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Define the model and select only column and condition elements."""
 
-        model = ActionColumnConditionTuple
+        model = models.ActionColumnConditionTuple
         fields = ('column', 'condition', 'changes_allowed')
 
 
@@ -249,7 +247,7 @@ class RubricCellSerializer(serializers.ModelSerializer):
         """Create the tuple object with column, condition, action."""
         action = self.context['action']
 
-        return RubricCell.objects.get_or_create(
+        return models.RubricCell.objects.get_or_create(
             action=action,
             column=action.workflow.columns.get(
                 name=validated_data['column']['name']),
@@ -260,7 +258,7 @@ class RubricCellSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Define the model and select fields to seralize."""
 
-        model = RubricCell
+        model = models.RubricCell
         fields = ('column', 'loa_position', 'description_text', 'feedback_text')
 
 
@@ -325,7 +323,7 @@ class ActionSerializer(serializers.ModelSerializer):
                 column_names = [col_data['name'] for col_data in columns.data]
                 # List for bulk creation of objects
                 bulk_list = [
-                    ActionColumnConditionTuple(
+                    models.ActionColumnConditionTuple(
                         action=action_obj,
                         column=col,
                         condition=None,
@@ -333,7 +331,8 @@ class ActionSerializer(serializers.ModelSerializer):
                     for col in wflow_columns if col.name in column_names
                 ]
                 # Create the objects
-                ActionColumnConditionTuple.objects.bulk_create(bulk_list)
+                models.ActionColumnConditionTuple.objects.bulk_create(
+                    bulk_list)
             else:
                 raise Exception(_('Invalid column data'))
 
@@ -372,11 +371,11 @@ class ActionSerializer(serializers.ModelSerializer):
             action_type = validated_data.get('action_type')
             if not action_type:
                 if validated_data['is_out']:
-                    action_type = Action.PERSONALIZED_TEXT
+                    action_type = models.Action.PERSONALIZED_TEXT
                 else:
-                    action_type = Action.SURVEY
+                    action_type = models.Action.SURVEY
 
-            action_obj = Action(
+            action_obj = models.Action(
                 workflow=self.context['workflow'],
                 name=validated_data['name'],
                 description_text=validated_data['description_text'],
@@ -411,7 +410,7 @@ class ActionSerializer(serializers.ModelSerializer):
             )
         except Exception:
             if action_obj and action_obj.id:
-                ActionColumnConditionTuple.objects.filter(
+                models.ActionColumnConditionTuple.objects.filter(
                     action=action_obj,
                 ).delete()
                 action_obj.delete()
@@ -422,7 +421,7 @@ class ActionSerializer(serializers.ModelSerializer):
     class Meta(object):
         """Model definition, and exclude fields, instead of include."""
 
-        model = Action
+        model = models.Action
 
         exclude = (
             'id',
@@ -464,8 +463,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
     class Meta(object):
         """Define the model and the field to exclude."""
 
-        model = Action
-
+        model = models.Action
         exclude = (
             'id',
             'workflow',

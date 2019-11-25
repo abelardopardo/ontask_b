@@ -11,7 +11,7 @@ from ontask.dataops.services.connections import (
     ConnectionTableAdmin,
     ConnectionTableRun,
 )
-from ontask.models import AthenaConnection
+from ontask import models
 
 
 class AthenaConnectionTableAdmin(ConnectionTableAdmin):
@@ -38,7 +38,7 @@ class AthenaConnectionTableAdmin(ConnectionTableAdmin):
 
     class Meta(ConnectionTableAdmin.Meta):
         """Define model, fields, sequence and attributes."""
-        model = AthenaConnection
+        model = models.AthenaConnection
 
 
 class AthenaConnectionTableRun(ConnectionTableRun):
@@ -54,7 +54,7 @@ class AthenaConnectionTableRun(ConnectionTableRun):
 
     class Meta(ConnectionTableRun.Meta):
         """Define models, fields, sequence and attributes."""
-        model = AthenaConnection
+        model = models.AthenaConnection
 
 
 def create_athena_connection_admintable() -> AthenaConnectionTableAdmin:
@@ -78,7 +78,7 @@ def create_athena_connection_admintable() -> AthenaConnectionTableAdmin:
                 kwargs={'pk': record['id']})})
 
     return AthenaConnectionTableAdmin(
-        AthenaConnection.objects.values(
+        models.AthenaConnection.objects.values(
             'id',
             'name',
             'description_text',
@@ -101,7 +101,7 @@ def create_athena_connection_runtable() -> AthenaConnectionTableRun:
                 'dataops:athenaupload_start',
                 kwargs={'pk': record['id']})})
     return AthenaConnectionTableRun(
-        AthenaConnection.objects.filter(enabled=True).values(
+        models.AthenaConnection.objects.filter(enabled=True).values(
             'id',
             'name',
             'description_text'),

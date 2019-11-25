@@ -9,10 +9,9 @@ from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import is_legal_name
+from ontask import is_legal_name, models
 from ontask.core.forms import date_time_widget_options
 from ontask.dataops.pandas import is_unique_column, load_table
-from ontask.models import Column
 
 INITIAL_VALUE_LENGTH = 512
 
@@ -106,7 +105,7 @@ class ColumnBasicForm(forms.ModelForm):
                         cat.strip()
                         for cat in form_data['raw_categories'].split(',')]
                 try:
-                    valid_values = Column.validate_column_values(
+                    valid_values = models.Column.validate_column_values(
                         form_data['data_type'],
                         category_values)
                 except ValueError:
@@ -151,8 +150,7 @@ class ColumnBasicForm(forms.ModelForm):
     class Meta(object):
         """Select model, fields and widget to consider."""
 
-        model = Column
-
+        model = models.Column
         fields = [
             'name',
             'description_text',
@@ -193,7 +191,7 @@ class ColumnAddForm(ColumnBasicForm):
         if initial_value:
             # See if the given value is allowed for the column data type
             try:
-                self.initial_valid_value = Column.validate_column_value(
+                self.initial_valid_value = models.Column.validate_column_value(
                     form_data['data_type'],
                     initial_value,
                 )

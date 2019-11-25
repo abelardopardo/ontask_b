@@ -14,20 +14,17 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from ontask import create_new_name
+from ontask import create_new_name, models
 from ontask.core.decorators import ajax_required, get_action, get_condition
 from ontask.core.permissions import is_instructor
 from ontask.dataops.formula import get_variables
-from ontask.models import (
-    Action, ActionColumnConditionTuple, Condition, Log, RubricCell, Workflow,
-)
 
 
 def do_clone_condition(
-    condition: Condition,
-    new_action: Action = None,
+    condition: models.Condition,
+    new_action: models.Action = None,
     new_name: str = None,
-) -> Condition:
+) -> models.Condition:
     """Clone a condition.
 
     Function to clone a condition and change action and/or name
@@ -45,7 +42,7 @@ def do_clone_condition(
     if new_action is None:
         new_action = condition.action
 
-    new_condition = Condition(
+    new_condition = models.Condition(
         name=new_name,
         description_text=condition.description_text,
         action=new_action,
@@ -68,8 +65,8 @@ def do_clone_condition(
 
 
 def do_clone_action(
-    action: Action,
-    new_workflow: Workflow = None,
+    action: models.Action,
+    new_workflow: models.Workflow = None,
     new_name: str = None,
 ):
     """Clone an action.
@@ -89,7 +86,7 @@ def do_clone_action(
     if new_workflow is None:
         new_workflow = action.workflow
 
-    new_action = Action(
+    new_action = models.Action(
         name=new_name,
         description_text=action.description_text,
         workflow=new_workflow,
@@ -109,7 +106,7 @@ def do_clone_action(
         # Clone the column/condition pairs field.
         for acc_tuple in action.column_condition_pair.all():
             cname = acc_tuple.condition.name if acc_tuple.condition else None
-            ActionColumnConditionTuple.objects.get_or_create(
+            models.ActionColumnConditionTuple.objects.get_or_create(
                 action=new_action,
                 column=new_action.workflow.columns.get(
                     name=acc_tuple.column.name),
@@ -118,7 +115,7 @@ def do_clone_action(
 
         # Clone the rubric cells if any
         for rubric_cell in action.rubric_cells.all():
-            RubricCell.objects.create(
+            models.RubricCell.objects.create(
                 action=new_action,
                 column=new_action.workflow.columns.get(
                     name=rubric_cell.column.name),
@@ -145,8 +142,8 @@ def do_clone_action(
 def clone_action(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    action: Optional[Action] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> JsonResponse:
     """View to clone an action.
 
@@ -174,7 +171,7 @@ def clone_action(
     # Log event
     action.log(
         request.user,
-        Log.ACTION_CLONE,
+        models.Log.ACTION_CLONE,
         id_old=id_old,
         name_old=name_old)
 
@@ -191,8 +188,8 @@ def clone_action(
 def clone_condition(
     request: HttpRequest,
     pk: int,
-    workflow: Optional[Workflow] = None,
-    condition: Optional[Condition] = None,
+    workflow: Optional[models.Workflow] = None,
+    condition: Optional[models.Condition] = None,
     action_pk: Optional[int] = None,
 ) -> JsonResponse:
     """JSON request to clone a condition.
@@ -205,7 +202,7 @@ def clone_condition(
     :return: JSON response
     """
     if action_pk:
-        action = Action.objects.filter(id=action_pk).first()
+        action = models.Action.objects.filter(id=action_pk).first()
         if not action:
             messages.error(request, _('Incorrect action id.'))
             return JsonResponse({'html_redirect': ''})
@@ -226,7 +223,7 @@ def clone_condition(
         new_name=create_new_name(condition.name, action.conditions))
     condition.log(
         request.user,
-        Log.CONDITION_CLONE,
+        models.Log.CONDITION_CLONE,
         id_old=id_old,
         name_old=name_old)
     messages.success(request, _('Condition successfully cloned.'))

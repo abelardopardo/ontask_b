@@ -13,7 +13,7 @@ from django.utils.six import BytesIO
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 
-from ontask.models import Workflow
+from ontask import models
 from ontask.workflow.services.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
@@ -32,7 +32,7 @@ class WorkflowImportExport(test.OnTaskTestCase):
     def test_export(self):
         """Test the export functionality."""
         # Get the only workflow
-        workflow = Workflow.objects.get(name='wflow1')
+        workflow = models.Workflow.objects.get(name='wflow1')
 
         # Export data only
         response = do_export_workflow(workflow,
@@ -88,7 +88,7 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
 
         # Workflow must not exist
         self.assertFalse(
-            Workflow.objects.filter(
+            models.Workflow.objects.filter(
                 user__email='instructor01@bogus.com',
                 name=self.wflow_name
             ).exists(),
@@ -98,7 +98,7 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
             do_import_workflow_parse(user, self.wflow_name, f)
 
         # Get the new workflow
-        workflow = Workflow.objects.filter(name=self.wflow_name).first()
+        workflow = models.Workflow.objects.filter(name=self.wflow_name).first()
         self.assertIsNotNone(workflow, 'Incorrect import operation')
 
         # Do the export now
@@ -113,7 +113,8 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
             do_import_workflow_parse(user, self.wflow_name2, f)
 
         # Do the export now
-        workflow2 = Workflow.objects.filter(name=self.wflow_name2).first()
+        workflow2 = models.Workflow.objects.filter(
+            name=self.wflow_name2).first()
         self.assertIsNotNone(workflow, 'Incorrect import operation')
 
         compare_workflows(workflow, workflow2)
@@ -197,7 +198,7 @@ class WorkflowDelete(test.OnTaskTestCase):
     def test_delete(self):
         """Test invokation of delete table"""
         # Get the workflow first
-        self.workflow = Workflow.objects.all().first()
+        self.workflow = models.Workflow.objects.all().first()
 
         # JSON POST request for workflow delete
         resp = self.get_response(
@@ -206,5 +207,5 @@ class WorkflowDelete(test.OnTaskTestCase):
             url_params={'wid': self.workflow.id},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertTrue(Workflow.objects.count() == 0)
+        self.assertTrue(models.Workflow.objects.count() == 0)
         self.workflow = None

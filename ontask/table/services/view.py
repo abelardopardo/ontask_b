@@ -12,8 +12,8 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
+from ontask import models
 from ontask.core import OperationsColumn
-from ontask.models import View, Workflow, Log
 from ontask.table.forms import ViewAddForm
 
 
@@ -46,12 +46,9 @@ class ViewTable(tables.Table):
     class Meta(object):
         """Select the model and specify fields, sequence and attributes."""
 
-        model = View
-
+        model = models.View
         fields = ('name', 'description_text', 'operations')
-
         sequence = ('name', 'description_text', 'operations')
-
         attrs = {
             'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',
@@ -60,10 +57,10 @@ class ViewTable(tables.Table):
 
 
 def do_clone_view(
-    view: View,
-    new_workflow: Workflow = None,
+    view: models.View,
+    new_workflow: models.Workflow = None,
     new_name: str = None,
-) -> View:
+) -> models.View:
     """Clone a view.
 
     :param view: Object to clone
@@ -80,7 +77,7 @@ def do_clone_view(
     if new_workflow is None:
         new_workflow = view.workflow
 
-    new_view = View(
+    new_view = models.View(
         name=new_name,
         description_text=view.description_text,
         workflow=new_workflow,
@@ -124,7 +121,7 @@ def save_view_form(
         form.save_m2m()  # Needed to propagate the save effect to M2M relations
         view.log(
             request.user,
-            Log.VIEW_EDIT if form.instance.id else Log.VIEW_CREATE)
+            models.Log.VIEW_EDIT if form.instance.id else models.Log.VIEW_CREATE)
 
         return JsonResponse({'html_redirect': ''})
 

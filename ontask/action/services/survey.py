@@ -2,25 +2,23 @@
 
 """Functions to process the survey run request."""
 
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
-from django.contrib import messages
-import django_tables2 as tables
 from django import http
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
+import django_tables2 as tables
 
 from ontask import models
 from ontask.action.services.edit_manager import ActionEditManager
 from ontask.action.services.manager import ActionRunManager
-from ontask.action.services.manager_factory import action_process_factory
 from ontask.core import DataTablesServerSidePaging, OperationsColumn
 from ontask.dataops.sql import search_table
-from ontask.visualizations.plotly import PlotlyHandler
 
 
 class ColumnSelectedTable(tables.Table):
@@ -339,9 +337,3 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
                 'action': action})
 
 
-action_process_factory.register_producer(
-    models.Action.SURVEY,
-    ActionManagerSurvey(
-        edit_template='action/edit_in.html',
-        run_template='action/run_survey.html',
-        log_event=models.Log.ACTION_SURVEY_INPUT))

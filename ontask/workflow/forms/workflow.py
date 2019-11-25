@@ -7,9 +7,9 @@ import json
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import models
 import ontask.settings
 from ontask.core.forms import RestrictedFileField
-from ontask.models import Workflow
 
 CHAR_FIELD_LENGTH = 512
 
@@ -34,7 +34,7 @@ class WorkflowForm(forms.ModelForm):
             return form_data
 
         # Check if the name already exists
-        name_exists = Workflow.objects.filter(
+        name_exists = models.Workflow.objects.filter(
             user=self.user,
             name=self.cleaned_data['name']
         ).exclude(id=self.instance.id).exists()
@@ -49,8 +49,7 @@ class WorkflowForm(forms.ModelForm):
     class Meta(object):
         """Identify the model and the fields."""
 
-        model = Workflow
-
+        model = models.Workflow
         fields = ['name', 'description_text']
 
 
@@ -88,7 +87,7 @@ class WorkflowImportForm(forms.Form):
             )
 
         # Check if the name already exists
-        name_exists = Workflow.objects.filter(
+        name_exists = models.Workflow.objects.filter(
             user=self.user,
             name=self.cleaned_data['name']).exists()
         if name_exists:

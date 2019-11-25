@@ -6,9 +6,7 @@ from django.urls import path, re_path
 from django.views.generic import TemplateView
 
 from ontask import models, tasks
-from ontask.action import forms, views
-from ontask.action.services import ActionManagerCanvasEmail
-from ontask.action.services.manager_factory import action_process_factory
+from ontask.action import forms, views, services
 
 app_name = 'action'
 
@@ -211,16 +209,84 @@ urlpatterns = [
 ]
 
 
-canvas_email_producer = ActionManagerCanvasEmail(
+email_producer = services.ActionManagerEmail(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.EmailActionRunForm,
+    run_template='action/request_email_data.html',
+    log_event=models.Log.ACTION_RUN_EMAIL)
+
+email_list_producer = services.ActionManagerEmailList(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.SendListActionRunForm,
+    run_template='action/request_send_list_data.html',
+    log_event=models.Log.ACTION_RUN_EMAIL_LIST)
+
+services.action_process_factory.register_producer(
+    models.Action.PERSONALIZED_TEXT,
+    email_producer)
+services.action_process_factory.register_producer(
+    models.Action.EMAIL_LIST,
+    email_list_producer)
+
+json_producer = services.ActionManagerJSON(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.JSONActionRunForm,
+    run_template='action/request_json_data.html',
+    log_event=models.Log.ACTION_RUN_JSON)
+json_list_producer = services.ActionManagerJSONList(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_out.html',
+    run_form_class=forms.JSONListActionRunForm,
+    run_template='action/request_json_list_data.html',
+    log_event=models.Log.ACTION_RUN_JSON_LIST)
+services.action_process_factory.register_producer(
+    models.Action.PERSONALIZED_JSON,
+    json_producer)
+services.action_process_factory.register_producer(
+    models.Action.JSON_LIST,
+    json_list_producer)
+
+canvas_email_producer = services.ActionManagerCanvasEmail(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_out.html',
     run_form_class=forms.CanvasEmailActionRunForm,
     run_template='action/request_canvas_email_data.html',
     log_event=models.Log.ACTION_RUN_CANVAS_EMAIL)
-action_process_factory.register_producer(
+services.action_process_factory.register_producer(
     models.Action.PERSONALIZED_CANVAS_EMAIL,
     canvas_email_producer)
 
+
+services.action_process_factory.register_producer(
+    models.action.ZIP_OPERATION,
+    services.ActionManagerZip(
+        run_form_class=forms.ZipActionRunForm,
+        run_template='action/action_zip_step1.html',
+        log_event=models.Log.ACTION_RUN_ZIP))
+
+services.action_process_factory.register_producer(
+    models.Action.SURVEY,
+    services.ActionManagerSurvey(
+        edit_template='action/edit_in.html',
+        run_template='action/run_survey.html',
+        log_event=models.Log.ACTION_SURVEY_INPUT))
+
+tasks.task_execute_factory.register_producer(
+    models.Action.PERSONALIZED_TEXT,
+    email_producer)
+tasks.task_execute_factory.register_producer(
+    models.Action.EMAIL_LIST,
+    email_list_producer)
+
+tasks.task_execute_factory.register_producer(
+    models.Action.PERSONALIZED_JSON,
+    json_producer)
+tasks.task_execute_factory.register_producer(
+    models.Action.JSON_LIST,
+    json_list_producer)
 
 tasks.task_execute_factory.register_producer(
     models.Action.PERSONALIZED_CANVAS_EMAIL,

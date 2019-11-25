@@ -5,14 +5,14 @@
 import random
 from typing import List, Mapping, Tuple
 
+from ontask import models
 from ontask.action.forms import FIELD_PREFIX
 from ontask.dataops.sql.row_queries import update_row
-from ontask.models import Action, ActionColumnConditionTuple
 
 
 def extract_survey_questions(
-    action: Action, user_seed: str,
-) -> List[ActionColumnConditionTuple]:
+    action: models.Action, user_seed: str,
+) -> List[models.ActionColumnConditionTuple]:
     """Extract the set of questions to include in a survey.
 
     :param action: Action being executed
@@ -35,7 +35,7 @@ def extract_survey_questions(
 
 
 def survey_update_row_values(
-    action: Action,
+    action: models.Action,
     colcon_items,
     show_key: bool,
     form_data: Mapping,

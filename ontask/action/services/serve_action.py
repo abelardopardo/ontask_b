@@ -19,7 +19,6 @@ from ontask.action.views.serve_survey import (
 )
 from ontask.core.permissions import has_access
 from ontask.core.services import ontask_handler404
-from ontask.models import Action, Log
 
 
 def serve_action_out(
@@ -81,7 +80,7 @@ def serve_action_out(
 
 def serve_survey_row(
     request: HttpRequest,
-    action: Action,
+    action: models.Action,
     user_attribute_name: str,
 ) -> HttpResponse:
     """Serve a request for action in.
@@ -156,7 +155,7 @@ def serve_survey_row(
         # Log the event and update its content in the action
         log_item = action.log(
             request.user,
-            Log.ACTION_SURVEY_INPUT,
+            models.Log.ACTION_SURVEY_INPUT,
             new_values=json.dumps(dict(zip(row_keys, row_values))))
 
         # Modify the time of execution for the action

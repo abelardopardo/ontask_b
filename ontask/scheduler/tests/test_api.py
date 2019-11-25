@@ -8,7 +8,7 @@ from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from ontask.models import Action, ScheduledOperation
+from ontask import models
 
 
 class ScheduleApiCreate(test.OnTaskApiTestCase):
@@ -49,7 +49,9 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         self.assertEqual(response.data['previous'], None)
 
         # Get the action
-        action = Action.objects.get(name=action_name, workflow__name='wflow1')
+        action = models.Action.objects.get(
+            name=action_name,
+            workflow__name='wflow1')
 
         # Schedule one of the actions
         response = self.client.post(
@@ -73,7 +75,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Element has been scheduled
         self.assertEqual(response.status_code, 201)
 
-        sch_item = ScheduledOperation.objects.get(action=action)
+        sch_item = models.ScheduledOperation.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name)
         self.assertEqual(sch_item.description_text, self.s_desc)
         self.assertEqual(sch_item.action, action)
@@ -102,7 +104,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Element has been scheduled
         self.assertTrue(status.is_success(response.status_code))
 
-        sch_item = ScheduledOperation.objects.get(action=action)
+        sch_item = models.ScheduledOperation.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name + '2')
 
         # Delete the element
@@ -123,7 +125,9 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         self.assertEqual(response.data['previous'], None)
 
         # Get the action
-        action = Action.objects.get(name=action_name, workflow__name='wflow1')
+        action = models.Action.objects.get(
+            name=action_name,
+            workflow__name='wflow1')
 
         # Schedule one of the actions
         response = self.client.post(
@@ -145,7 +149,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Element has been created
         self.assertEqual(response.status_code, 201)
 
-        sch_item = ScheduledOperation.objects.get(action=action)
+        sch_item = models.ScheduledOperation.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name)
         self.assertEqual(sch_item.description_text, self.s_desc)
         self.assertEqual(sch_item.action, action)
@@ -171,7 +175,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Element has been scheduled
         self.assertTrue(status.is_success(response.status_code))
 
-        sch_item = ScheduledOperation.objects.get(action=action)
+        sch_item = models.ScheduledOperation.objects.get(action=action)
         self.assertEqual(sch_item.name, self.s_name + '2')
 
         # Delete the element
@@ -212,7 +216,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         self.assertEqual(response.data['previous'], None)
 
         # Get the action
-        action = Action.objects.get(
+        action = models.Action.objects.get(
             name=action_name,
             workflow__name='user2 workflow')
 
@@ -255,7 +259,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         self.assertEqual(response.data['previous'], None)
 
         # Get the action
-        action = Action.objects.get(name=action_name)
+        action = models.Action.objects.get(name=action_name)
 
         # Schedule the action with the wrong function
         response = self.client.post(
