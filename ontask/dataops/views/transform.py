@@ -103,7 +103,7 @@ def plugin_invoke(
             plugin_info,
             plugin_instance,
             {
-                'columns': form.cleaned_data['columns'],
+                'columns': form.cleaned_data.get('columns'),
                 'input_column_names': form.get_input_column_names(),
                 'output_column_names': form.get_output_column_names(),
                 'params': form.get_parameters(),

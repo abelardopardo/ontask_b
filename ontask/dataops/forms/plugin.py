@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
 """Form to collect information to run a plugin."""
-from typing import List, Dict
+from typing import Dict, List
 
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from ontask.core.forms import date_time_widget_options
+from ontask import models
 from ontask.core import ONTASK_FIELD_PREFIX
+from ontask.core.forms import date_time_widget_options
 
 STRING_PARAM_MAX_LENGTH = 1024
 
@@ -19,7 +20,7 @@ class PluginInfoForm(forms.Form):
 
     # Columns to combine
     columns = forms.ModelMultipleChoiceField(
-        queryset=None,
+        queryset=models.Column.objects.none(),
         label=_('Input Columns (to read data)'),
         required=False,
         help_text=_('To select a subset of the table to pass to the plugin'))
@@ -182,7 +183,7 @@ class PluginInfoForm(forms.Form):
     def get_input_column_names(self) -> List[str]:
         """Create list of input column names.
 
-        Given the indeces selected in the form, extract the columns from the
+        Given the indexes selected in the form, extract the columns from the
         workflow and return the list of names
         :return: List of column names
         """
@@ -193,8 +194,8 @@ class PluginInfoForm(forms.Form):
             int(self.cleaned_data[self.in_field_pattern % index])
             for index in range(len(self.plugin_instance.input_column_names))]
 
-        return self.workflow.columns.filter(
-            pk__in=column_idx_list).values_list('name', flat=True)
+        return list(self.workflow.columns.filter(
+            pk__in=column_idx_list).values_list('name', flat=True))
 
     def get_output_column_names(self) -> List[str]:
         """Create list of output column names.
@@ -206,12 +207,10 @@ class PluginInfoForm(forms.Form):
         if not self.plugin_instance.output_column_names:
             return []
 
-        column_idx_list = [
-            int(self.cleaned_data[self.out_field_pattern % index])
+        return [
+            self.cleaned_data[self.out_field_pattern % index]
             for index in range(len(self.plugin_instance.output_column_names))]
 
-        return self.workflow.columns.filter(
-            pk__in=column_idx_list).values_list('name', flat=True)
 
     def get_parameters(self) -> Dict:
         """Create a dictionary with the given parameters.
