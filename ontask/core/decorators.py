@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.workflow.services.session_ops import (
+from ontask.core.session_ops import (
     store_workflow_in_session,
     verify_workflow_access,
 )
