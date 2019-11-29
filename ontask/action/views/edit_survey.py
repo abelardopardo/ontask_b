@@ -65,7 +65,7 @@ def select_column_action(
 
     if key != 0:
         # Insert the column in the pairs
-        acc = models.ActionColumnConditionTuple.objects.get_or_create(
+        acc, __ = models.ActionColumnConditionTuple.objects.get_or_create(
             action=action,
             column=column,
             condition=None)
