@@ -19,7 +19,7 @@ from rest_framework.renderers import JSONRenderer
 from ontask import models
 from ontask.action.forms import ActionImportForm
 from ontask.action.serializers import ActionSelfcontainedSerializer
-from ontask.core.decorators import get_action, get_workflow
+from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 
 

@@ -6,8 +6,6 @@ import datetime
 from time import sleep
 from typing import Dict, List, Optional, Union
 
-import html2text
-import pytz
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core import mail, signing
@@ -16,18 +14,20 @@ from django.template import Context, Template, TemplateSyntaxError
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
+import html2text
+import pytz
 
 from ontask import (
     are_correct_emails, models, settings as ontask_settings,
-    simplify_datetime_str, tasks,
+    simplify_datetime_str,
 )
-from ontask.action import forms
 from ontask.action.evaluate.action import (
-    evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
+    evaluate_action,
+    evaluate_row_action_out, get_action_evaluation_context,
 )
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.manager import ActionRunManager
-from ontask.core.celery import get_task_logger
+from ontask.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
 
 logger = get_task_logger('celery_execution')

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """Forms to manipulate the columns."""
-
 import re
 
-import pandas as pd
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+import pandas as pd
 
 from ontask import is_legal_name, models
 from ontask.core.forms import date_time_widget_options
@@ -468,57 +467,3 @@ class RandomColumnAddForm(ColumnBasicForm):
             + 'or comma separated list of values.')
 
 
-def column_to_field(col, initial=None, required=False, label=None):
-    """Generate form fields to enter values for a column.
-
-    Function that given the description of a column it generates the
-    appropriate field to be included in a form
-    :param col: Column object to use as the basis to create the field
-    :param initial: Initial value for the field
-    :param required: flag to generate the field with the required attribute
-    :param label: Value to overwrite the label attribute
-    :return: Field object
-    """
-    # If no label is given, take the column name
-    if not label:
-        label = col.name
-
-    if col.categories:
-        # Column has a finite set of prefixed values
-        choices = [(value_cat, value_cat) for value_cat in col.categories]
-        initial = next(
-            (choice for choice in choices if initial == choice[0]),
-            ('', '---'))
-
-        # If the column is of type string, allow always the empty value
-        if col.data_type == 'string':
-            choices.insert(0, ('', '---'))
-
-        return forms.ChoiceField(
-            choices=choices,
-            required=required,
-            initial=initial,
-            label=label)
-
-    distributor = {
-        'string': forms.CharField,
-        'integer': forms.IntegerField,
-        'double': forms.FloatField,
-        'boolean': forms.BooleanField,
-        'datetime': forms.DateTimeField,
-    }
-
-    new_field = distributor[col.data_type](
-        initial=initial,
-        label=label,
-        required=required)
-
-    # Column is open value
-    if col.data_type == 'string' and not initial:
-        new_field.initial = ''
-
-    if col.data_type == 'datetime':
-        new_field.widget = DateTimePickerInput(
-            options=date_time_widget_options)
-
-    return new_field

@@ -2,20 +2,20 @@
 
 """Test to verify that the scheduled actions are properly executed."""
 
-import os
-import test
 from datetime import datetime, timedelta
+import os
 
-import pytz
 from celery.contrib.testing.worker import start_worker
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.db import connection
 from psycopg2 import sql
+import pytz
 
 from ontask import OnTaskSharedState, models, tasks
-from ontask.core.celery import app
+from ontask.celery import app
+import test
 
 
 class ScheduledOperationTaskTestCase(test.OnTaskTestCase):

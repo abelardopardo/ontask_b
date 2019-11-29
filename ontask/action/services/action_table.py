@@ -2,9 +2,9 @@
 
 """Service to produce the table with the action objects."""
 
-import django_tables2 as tables
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+import django_tables2 as tables
 
 from ontask import models, simplify_datetime_str
 from ontask.core.tables import OperationsColumn

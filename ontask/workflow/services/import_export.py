@@ -2,8 +2,8 @@
 
 """Functions to perform the import/export operations."""
 
-import gzip
 from datetime import datetime
+import gzip
 from io import BytesIO
 from typing import List, Optional
 
@@ -14,7 +14,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from ontask import models
-from ontask.dataops.pandas import check_wf_df
+from ontask.core.checks import check_wf_df
 from ontask.workflow.serialize_workflow import (
     WorkflowExportSerializer, WorkflowImportSerializer,
 )

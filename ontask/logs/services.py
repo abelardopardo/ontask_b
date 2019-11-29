@@ -2,16 +2,15 @@
 
 """Service functions to manipulate logs."""
 
-from typing import Optional, Dict
+from typing import Dict, Optional
 
-from django.utils.translation import ugettext
-from django.db.models import F, Q
 from django import http
-from django.utils.translation import ugettext_lazy as _
+from django.db.models import F, Q
 from django.shortcuts import reverse
+from django.utils.translation import ugettext, ugettext_lazy as _
 
-from ontask.core.celery import get_task_logger
 from ontask import models, simplify_datetime_str
+from ontask.celery import get_task_logger
 from ontask.core import DataTablesServerSidePaging
 
 logger = get_task_logger('celery_execution')

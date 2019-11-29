@@ -12,7 +12,7 @@ from ontask import models, tasks
 from ontask.action import forms
 from ontask.action.services.email import ActionManagerEmail
 from ontask.action.services.manager_factory import action_process_factory
-from ontask.core.celery import get_task_logger
+from ontask.celery import get_task_logger
 
 logger = get_task_logger('celery_execution')
 

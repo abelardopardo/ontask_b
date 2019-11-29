@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import test
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -9,7 +8,9 @@ from django.shortcuts import reverse
 
 from ontask import models
 from ontask.action.views.import_export import do_import_action
-from ontask.dataops.pandas import check_wf_df, load_table
+from ontask.core.checks import check_wf_df
+from ontask.dataops.pandas import load_table
+import test
 
 
 class EmailActionTracking(test.OnTaskTestCase):

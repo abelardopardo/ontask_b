@@ -6,8 +6,8 @@ from typing import Any, List
 from django.db import transaction
 
 from ontask import models
-from ontask.dataops.sql import update_row, insert_row
-from ontask.workflow.ops import check_key_columns
+from ontask.core.checks import check_key_columns
+from ontask.dataops.sql import insert_row, update_row
 
 
 def create_row(workflow: models.Workflow, row_values: List[Any]):

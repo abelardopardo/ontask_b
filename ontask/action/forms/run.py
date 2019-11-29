@@ -47,12 +47,11 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import is_correct_email
+from ontask import is_correct_email, models
 from ontask.action.forms import SUFFIX_LENGTH
 from ontask.core import forms as ontask_forms
 from ontask.dataops.sql.column_queries import is_column_unique
 from ontask.dataops.sql.row_queries import get_rows
-from ontask import models
 
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')

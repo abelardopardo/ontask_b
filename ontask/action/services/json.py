@@ -5,15 +5,15 @@ import datetime
 import json
 from typing import Dict, List, Mapping, Optional
 
-import pytz
-import requests
 from celery.utils.log import get_task_logger
 from django.conf import settings
+import pytz
+import requests
 
-from ontask import OnTaskSharedState, models, tasks
-from ontask.action import forms
+from ontask import OnTaskSharedState, models
 from ontask.action.evaluate import (
-    evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
+    evaluate_action, evaluate_row_action_out,
+    get_action_evaluation_context,
 )
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.manager import ActionRunManager

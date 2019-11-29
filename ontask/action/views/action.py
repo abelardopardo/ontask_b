@@ -4,8 +4,8 @@
 
 from typing import Optional
 
-from django.contrib.auth.decorators import user_passes_test
 from django import http
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -97,7 +97,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
         """Access the Action object being manipulated."""
         act_obj = super().get_object(queryset=queryset)
         if act_obj.workflow.id != self.request.session['ontask_workflow_id']:
-            raise Http404()
+            raise http.Http404()
 
         return act_obj
 

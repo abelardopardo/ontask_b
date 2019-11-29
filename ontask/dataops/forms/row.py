@@ -5,7 +5,7 @@
 from django import forms
 
 from ontask.core import ONTASK_FIELD_PREFIX
-from ontask.workflow.forms import column_to_field
+from ontask.core.forms import column_to_field
 
 
 class RowForm(forms.Form):

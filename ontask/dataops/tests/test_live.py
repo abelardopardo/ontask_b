@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import test
 
 from django.conf import settings
 from django.utils.html import escape
@@ -11,8 +10,10 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
-from ontask.dataops.pandas import check_wf_df, load_table
+from ontask.core.checks import check_wf_df
+from ontask.dataops.pandas import load_table
 from ontask.dataops.sql.column_queries import is_column_in_table
+import test
 
 
 class DataopsSymbols(test.OnTaskLiveTestCase):

@@ -2,135 +2,20 @@
 
 """Functions to clone the actions."""
 
-import copy
-from builtins import str
 from typing import Optional
 
+from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django import http
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from ontask import create_new_name, models
+from ontask.action import services
 from ontask.core.decorators import ajax_required, get_action, get_condition
 from ontask.core.permissions import is_instructor
-from ontask.dataops.formula import get_variables
-
-
-def do_clone_condition(
-    condition: models.Condition,
-    new_action: models.Action = None,
-    new_name: str = None,
-) -> models.Condition:
-    """Clone a condition.
-
-    Function to clone a condition and change action and/or name
-
-    :param condition: Condition to clone
-    :param new_action: New action to point
-    :param new_name: New name
-    :return: New condition
-    """
-    if new_name is None:
-        new_name = condition.name
-    if new_action is None:
-        new_action = condition.action
-
-    new_condition = models.Condition(
-        name=new_name,
-        description_text=condition.description_text,
-        action=new_action,
-        formula=copy.deepcopy(condition.formula),
-        n_rows_selected=condition.n_rows_selected,
-        is_filter=condition.is_filter
-    )
-    new_condition.save()
-
-    try:
-        # Update the many to many field.
-        new_condition.columns.set(new_condition.action.workflow.columns.filter(
-            name__in=get_variables(new_condition.formula),
-        ))
-    except Exception as exc:
-        new_condition.delete()
-        raise exc
-
-    return new_condition
-
-
-def do_clone_action(
-    action: models.Action,
-    new_workflow: models.Workflow = None,
-    new_name: str = None,
-):
-    """Clone an action.
-
-    Function that given an action clones it and changes workflow and name
-
-    :param action: Object to clone
-
-    :param new_workflow: New workflow object to point
-
-    :param new_name: New name
-
-    :return: Cloned object
-    """
-    if new_name is None:
-        new_name = action.name
-    if new_workflow is None:
-        new_workflow = action.workflow
-
-    new_action = models.Action(
-        name=new_name,
-        description_text=action.description_text,
-        workflow=new_workflow,
-        last_executed_log=None,
-        action_type=action.action_type,
-        serve_enabled=action.serve_enabled,
-        active_from=action.active_from,
-        active_to=action.active_to,
-        rows_all_false=copy.deepcopy(action.rows_all_false),
-        text_content=action.text_content,
-        target_url=action.target_url,
-        shuffle=action.shuffle,
-    )
-    new_action.save()
-
-    try:
-        # Clone the column/condition pairs field.
-        for acc_tuple in action.column_condition_pair.all():
-            cname = acc_tuple.condition.name if acc_tuple.condition else None
-            models.ActionColumnConditionTuple.objects.get_or_create(
-                action=new_action,
-                column=new_action.workflow.columns.get(
-                    name=acc_tuple.column.name),
-                condition=new_action.conditions.filter(name=cname).first(),
-            )
-
-        # Clone the rubric cells if any
-        for rubric_cell in action.rubric_cells.all():
-            models.RubricCell.objects.create(
-                action=new_action,
-                column=new_action.workflow.columns.get(
-                    name=rubric_cell.column.name),
-                loa_position=rubric_cell.loa_position,
-                description_text=rubric_cell.description_text,
-                feedback_text=rubric_cell.feedback_text)
-
-        # Clone the conditions
-        for condition in action.conditions.all():
-            do_clone_condition(condition, new_action)
-
-        # Update
-        new_action.save()
-    except Exception as exc:
-        new_action.delete()
-        raise exc
-
-    return new_action
 
 
 @user_passes_test(is_instructor)
@@ -156,21 +41,11 @@ def clone_action(
                 request=request),
         })
 
-    # POST REQUEST!
-    id_old = action.id,
-    name_old = action.name,
-
-    action = do_clone_action(
+    services.do_clone_action(
+        request.user,
         action,
         new_workflow=None,
         new_name=create_new_name(action.name, workflow.actions))
-
-    # Log event
-    action.log(
-        request.user,
-        models.Log.ACTION_CLONE,
-        id_old=id_old,
-        name_old=name_old)
 
     messages.success(request, _('Action successfully cloned.'))
 
@@ -212,16 +87,12 @@ def clone_condition(
         condition.action.set_text_content(action_content)
         condition.action.save()
 
-    id_old = condition.id
-    name_old = condition.name
-    condition = do_clone_condition(
+    condition = services.do_clone_condition(
+        request.user,
         condition,
         new_action=action,
         new_name=create_new_name(condition.name, action.conditions))
-    condition.log(
-        request.user,
-        models.Log.CONDITION_CLONE,
-        id_old=id_old,
-        name_old=name_old)
+
     messages.success(request, _('Condition successfully cloned.'))
+
     return http.JsonResponse({'html_redirect': ''})

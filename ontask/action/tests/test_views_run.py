@@ -2,11 +2,8 @@
 
 """Test views to run actions."""
 
-import os
-
-from ontask import OnTaskSharedState
-import test
 from datetime import timedelta
+import os
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -15,8 +12,9 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
+from ontask import OnTaskSharedState, models
 from ontask.core import SessionPayload
-from ontask import models
+import test
 
 
 class ActionViewRunEmailAction(test.OnTaskTestCase):

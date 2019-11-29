@@ -6,7 +6,7 @@ from django.urls import path, re_path
 from django.views.generic import TemplateView
 
 from ontask import models, tasks
-from ontask.action import forms, views, services
+from ontask.action import forms, services, views
 
 app_name = 'action'
 

@@ -2,20 +2,21 @@
 
 
 import os
-import test
 
-import pandas as pd
 from django.conf import settings
 from django.shortcuts import reverse
+import pandas as pd
 from rest_framework.authtoken.models import Token
 
-from ontask.dataops.pandas import (
-    check_wf_df, detect_datetime_columns, load_table,
-)
 from ontask import models
+from ontask.core.checks import check_wf_df
+from ontask.dataops.pandas import (
+    detect_datetime_columns, load_table,
+)
 from ontask.table.serializers import string_to_df
 from ontask.table.serializers.pandas import df_to_string
 from ontask.workflow.services.column_crud import delete_column
+import test
 
 
 class TableApiBase(test.OnTaskApiTestCase):

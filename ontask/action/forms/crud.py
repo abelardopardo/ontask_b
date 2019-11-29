@@ -20,9 +20,8 @@ import json
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import is_legal_name
+from ontask import is_legal_name, models
 from ontask.core.forms import RestrictedFileField
-from ontask import models
 import ontask.settings
 
 SUFFIX_LENGTH = 512

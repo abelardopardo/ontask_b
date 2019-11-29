@@ -19,12 +19,13 @@ from ontask.action.services.errors import (
     OnTaskActionSurveyDataNotFound,
     OnTaskActionSurveyNoTableData,
 )
+from ontask.celery import celery_is_up
 from ontask.core import (
     DataTablesServerSidePaging, SessionPayload,
-    celery_is_up, is_instructor, has_access,
-    ajax_required, get_action, get_workflow,
+    ajax_required, get_action, get_workflow, has_access, is_instructor,
 )
 from ontask.core.services import ontask_handler404
+
 
 def _common_run_survey_row(
     request: http.HttpRequest,

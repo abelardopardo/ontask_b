@@ -7,9 +7,9 @@ from typing import Dict, Optional
 
 from django.utils.translation import ugettext
 
-import ontask.workflow.ops
 from ontask import models
 from ontask.tasks.execute import task_execute_factory
+from ontask.workflow.services.luser_update import do_workflow_update_lusers
 
 logger = logging.getLogger('celery_execution')
 
@@ -47,7 +47,7 @@ class ExecuteUpdateWorkflowLUser(object):
 
         # First get the log item to make sure we can record diagnostics
         try:
-            ontask.workflow.ops.do_workflow_update_lusers(workflow, log_item)
+            do_workflow_update_lusers(workflow, log_item)
 
             # Reflect status in the log event
             log_item.payload['status'] = 'Execution finished successfully'

@@ -16,6 +16,7 @@ from ontask.action.forms import RubricCellForm, RubricLOAForm
 from ontask.core.decorators import ajax_required, get_action
 from ontask.core.permissions import is_instructor
 
+
 @user_passes_test(is_instructor)
 @ajax_required
 @get_action(pf_related=['columns'])

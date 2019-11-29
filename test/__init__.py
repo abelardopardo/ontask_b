@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from builtins import object, range, str
 import io
 import math
 import os
 import subprocess
-import test
-from builtins import object, range, str
 from typing import Dict, Mapping, Optional
 
-import pandas as pd
+from PIL import Image
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -20,7 +19,7 @@ from django.shortcuts import reverse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from django.urls import resolve
 from future import standard_library
-from PIL import Image
+import pandas as pd
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
@@ -32,10 +31,13 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import OnTaskSharedState, models
-from ontask.core.session_payload import (
-    SessionPayload, PAYLOAD_SESSION_DICTIONARY)
+from ontask.core.checks import check_wf_df
+from ontask.core.manage_session import (
+    SessionPayload
+)
 from ontask.core.permissions import group_names
-from ontask.dataops.pandas import check_wf_df, destroy_db_engine
+from ontask.dataops.pandas import destroy_db_engine
+import test
 
 standard_library.install_aliases()
 

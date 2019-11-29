@@ -3,11 +3,12 @@
 """Test views to run ZIP actions."""
 
 import os
-import test
 
 from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework import status
+
+import test
 
 
 class ActionViewRunZIP(test.OnTaskTestCase):
