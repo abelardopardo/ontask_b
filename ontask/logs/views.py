@@ -14,9 +14,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from ontask import models
-from ontask.core.decorators import ajax_required, get_workflow
-from ontask.core.permissions import is_instructor
+from ontask.core import ajax_required, get_workflow, is_instructor
 from ontask.logs.services import log_table_server_side
+
 
 @user_passes_test(is_instructor)
 @get_workflow()
@@ -27,9 +27,7 @@ def display(
     """Render the table frame for the logs.
 
     :param request: Http request
-
     :param workflow: workflow
-
     :return: Http response
     """
     # Render the page with the table
@@ -54,7 +52,12 @@ def display_ss(
     request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
 ) -> http.JsonResponse:
-    """Return the subset of logs to include in a table page."""
+    """Return the subset of logs to include in a table page.
+
+    :param request: Http Request
+    :param workflow: Workflow being manipulated.
+    :return: JSON response
+    """
     # Render the page with the table
     return http.JsonResponse(log_table_server_side(request, workflow))
 
@@ -84,11 +87,12 @@ def view(
         messages.error(request, _('Incorrect log number requested'))
         return redirect(reverse('logs:index'))
 
-    context = {'log_item': log_item}
-
-    context['json_pretty'] = json.dumps(
-        log_item.payload,
-        sort_keys=True,
-        indent=4)
-
-    return render(request, 'logs/view.html', context)
+    return render(
+        request,
+        'logs/view.html',
+        {
+            'log_item': log_item,
+            'json_pretty': json.dumps(
+                log_item.payload,
+                sort_keys=True,
+                indent=4)})

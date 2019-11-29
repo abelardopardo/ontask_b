@@ -4,7 +4,7 @@
 
 from django import forms
 
-from ontask.dataops.forms.upload import FIELD_PREFIX
+from ontask.core import ONTASK_FIELD_PREFIX
 from ontask.workflow.forms import column_to_field
 
 
@@ -35,4 +35,4 @@ class RowForm(forms.Form):
             elif column.data_type == 'integer':
                 field.required = True
 
-            self.fields[FIELD_PREFIX + '%s' % idx] = field
+            self.fields[ONTASK_FIELD_PREFIX + '%s' % idx] = field

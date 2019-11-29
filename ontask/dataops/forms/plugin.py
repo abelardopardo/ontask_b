@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Form to collect information to run a plugin."""
+from typing import List, Dict
 
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
@@ -8,7 +9,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.core.forms import date_time_widget_options
-from ontask.dataops.forms.upload import FIELD_PREFIX
+from ontask.core import ONTASK_FIELD_PREFIX
 
 STRING_PARAM_MAX_LENGTH = 1024
 
@@ -18,12 +19,17 @@ class PluginInfoForm(forms.Form):
 
     # Columns to combine
     columns = forms.ModelMultipleChoiceField(
-        label=_('Input Columns (to read data)'),
         queryset=None,
+        label=_('Input Columns (to read data)'),
         required=False,
         help_text=_('To select a subset of the table to pass to the plugin'))
 
-    def _create_datatype_field(self, p_type, p_help, lbl):
+    in_field_pattern = ONTASK_FIELD_PREFIX + 'input_%s'
+    out_field_pattern = ONTASK_FIELD_PREFIX + 'output_%s'
+    param_field_pattern = ONTASK_FIELD_PREFIX + 'parameter_%s'
+
+    @staticmethod
+    def _create_datatype_field(p_type, p_help, lbl):
         """Create a new field depending on the datatype."""
         if p_type == 'integer':
             new_field = forms.IntegerField(
@@ -61,7 +67,7 @@ class PluginInfoForm(forms.Form):
     def _create_output_column_fields(self):
         """Create the fields for the outputs and the output suffix."""
         for idx, cname in enumerate(self.plugin_instance.output_column_names):
-            self.fields[FIELD_PREFIX + 'output_%s' % idx] = forms.CharField(
+            self.fields[self.out_field_pattern % idx] = forms.CharField(
                 initial=cname,
                 label=ugettext('Name for result column "{0}"').format(cname),
                 strip=True,
@@ -102,7 +108,7 @@ class PluginInfoForm(forms.Form):
                     new_field.initial = p_init
 
             # Insert the new_field in the form
-            self.fields[FIELD_PREFIX + 'parameter_%s' % idx] = new_field
+            self.fields[self.param_field_pattern % idx] = new_field
 
     def __init__(self, *args, **kwargs):
         """Create the form based on the columns and the plugin information."""
@@ -121,11 +127,10 @@ class PluginInfoForm(forms.Form):
             for idx, icolumn in enumerate(
                 self.plugin_instance.input_column_names,
             ):
-                field_name = FIELD_PREFIX + 'input_%s' % idx
                 choices = [
                     (col.id, col.name) for col in self.workflow.columns.all()]
                 choices.insert(0, ('', _('Select column')))
-                self.fields[field_name] = forms.ChoiceField(
+                self.fields[self.in_field_pattern % idx] = forms.ChoiceField(
                     initial=('', _('Select column')),
                     label=_('Column for input {0}').format(icolumn),
                     required=True,
@@ -173,3 +178,46 @@ class PluginInfoForm(forms.Form):
             )
 
         return form_data
+
+    def get_input_column_names(self) -> List[str]:
+        """Create list of input column names.
+
+        Given the indeces selected in the form, extract the columns from the
+        workflow and return the list of names
+        :return: List of column names
+        """
+        if not self.plugin_instance.input_column_names:
+            return []
+
+        column_idx_list = [
+            int(self.cleaned_data[self.in_field_pattern % index])
+            for index in range(len(self.plugin_instance.input_column_names))]
+
+        return self.workflow.columns.filter(
+            pk__in=column_idx_list).values_list('name', flat=True)
+
+    def get_output_column_names(self) -> List[str]:
+        """Create list of output column names.
+
+        Given the indeces selected in the form, extract the columns from the
+        workflow and return the list of names
+        :return: List of column names
+        """
+        if not self.plugin_instance.output_column_names:
+            return []
+
+        column_idx_list = [
+            int(self.cleaned_data[self.out_field_pattern % index])
+            for index in range(len(self.plugin_instance.output_column_names))]
+
+        return self.workflow.columns.filter(
+            pk__in=column_idx_list).values_list('name', flat=True)
+
+    def get_parameters(self) -> Dict:
+        """Create a dictionary with the given parameters.
+
+        :return: Dictionary with the key/value pairs
+        """
+        return {
+            tpl[0]: self.cleaned_data[self.param_field_pattern % idx]
+            for idx, tpl in enumerate(self.plugin_instance.parameters)}

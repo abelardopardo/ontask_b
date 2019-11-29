@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""Core elements of the application."""
+"""Core elements of the application.
+
+The constant ONTASK_FIELD_PREFIX is used in forms to avoid using column names
+(they are given by the user and may pose a problem)
+"""
 from ontask.core.celery import celery_is_up
 from ontask.core.decorators import (
     ajax_required, get_action, get_column, get_columncondition, get_condition,
@@ -11,3 +15,5 @@ from ontask.core.permissions import (
 )
 from ontask.core.session_payload import SessionPayload
 from ontask.core.tables import DataTablesServerSidePaging, OperationsColumn
+
+ONTASK_FIELD_PREFIX = '___ontask___upload_'
