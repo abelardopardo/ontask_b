@@ -22,9 +22,9 @@ from ontask.core import (
     UserIsInstructor, ajax_required, get_workflow, is_instructor,
 )
 from ontask.core.checks import check_wf_df
+from ontask.core.session_ops import remove_workflow_from_session
 from ontask.workflow import services
 from ontask.workflow.forms import WorkflowForm
-from ontask.workflow.services.session_ops import remove_workflow_from_session
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):

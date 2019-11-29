@@ -12,10 +12,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskServiceException, create_new_name, models
 from ontask.action.services.clone import do_clone_action
+from ontask.core.session_ops import store_workflow_in_session
 from ontask.dataops.sql import clone_table
 from ontask.table.services import do_clone_view
 from ontask.workflow.services.column_crud import do_clone_column_only
-from ontask.workflow.services.session_ops import store_workflow_in_session
 
 
 def save_workflow_form(

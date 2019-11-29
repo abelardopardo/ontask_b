@@ -13,7 +13,6 @@ from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops import forms
-from ontask.tasks import athena_dataupload_task
 
 
 @user_passes_test(is_instructor)
@@ -53,12 +52,12 @@ def athenaupload_start(
             status='Preparing to execute')
 
         # Batch execution
-        athena_dataupload_task.delay(
-            request.user.id,
-            workflow.id,
-            conn.id,
-            run_params,
-            log_item.id)
+        # athena_dataupload_task.delay(
+        #     request.user.id,
+        #     workflow.id,
+        #     conn.id,
+        #     run_params,
+        #     log_item.id)
 
         # Show log execution
         return render(

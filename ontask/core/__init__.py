@@ -13,6 +13,9 @@ from ontask.core.manage_session import SessionPayload
 from ontask.core.permissions import (
     UserIsInstructor, has_access, is_admin, is_instructor,
 )
+from ontask.core.session_ops import (
+    store_workflow_in_session, store_workflow_nrows_in_session,
+)
 from ontask.core.tables import DataTablesServerSidePaging, OperationsColumn
 
 ONTASK_FIELD_PREFIX = '___ontask___upload_'
