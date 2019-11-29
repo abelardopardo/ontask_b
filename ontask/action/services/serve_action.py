@@ -1,24 +1,25 @@
+# -*- coding: utf-8 -*-
+
+"""Functions to serve actions through direct URL access."""
+import random
 import json
+from typing import Dict, List, Tuple, Any
 
 from django import http
-from django.contrib import messages
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
-from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.action.evaluate import (
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
-from ontask.action.forms import EnterActionIn
-from ontask.action.views.serve_survey import (
-    extract_survey_questions, survey_update_row_values,
+from ontask.action.services.errors import (
+    OnTaskActionSurveyDataNotFound,
+    OnTaskActionSurveyNoTableData,
 )
-from ontask.core.permissions import has_access
-from ontask.core.services import ontask_handler404
+from ontask.dataops.sql import update_row
 
 
 def serve_action_out(
@@ -78,30 +79,25 @@ def serve_action_out(
     return http.HttpResponse(response)
 
 
-def serve_survey_row(
-    request: HttpRequest,
+def get_survey_context(
+    request: http.HttpRequest,
+    is_manager: bool,
     action: models.Action,
     user_attribute_name: str,
-) -> HttpResponse:
-    """Serve a request for action in.
+) -> Dict:
+    """Get the context to render a survey page.
 
-    Function that given a request, and an action IN, it performs the lookup
-     and data input of values.
-
-    :param request: HTTP request
-
-    :param action:  Action In
-
-    :param user_attribute_name: The column name used to check for email
-
-    :return:
+    :param request: Request received
+    :param is_manager: User is manager
+    :param workflow: Workflow object being processed
+    :param action: Action object being executed
+    :return: Dictionary with the context
     """
     # Get the attribute value depending if the user is managing the workflow
     # User is instructor, and either owns the workflow or is allowed to access
     # it as shared
-    manager = has_access(request.user, action.workflow)
     user_attribute_value = None
-    if manager:
+    if is_manager:
         user_attribute_value = request.GET.get('uatv')
     if not user_attribute_value:
         user_attribute_value = request.user.email
@@ -118,65 +114,100 @@ def serve_survey_row(
 
     if not context:
         # If the data has not been found, flag
-        if not manager:
-            return ontask_handler404(request, None)
+        if not is_manager:
+            raise OnTaskActionSurveyDataNotFound()
 
-        messages.error(
-            request,
-            _('Data not found in the table'))
-        return redirect(reverse('action:run', kwargs={'pk': action.id}))
+        raise OnTaskActionSurveyNoTableData(
+            message=_('Data not found in the table'))
 
-    # Get the active columns attached to the action
-    colcon_items = extract_survey_questions(action, request.user)
+    return context
 
-    # Bind the form with the existing data
-    form = EnterActionIn(
-        request.POST or None,
-        tuples=colcon_items,
-        context=context,
-        values=[context[colcon.column.name] for colcon in colcon_items],
-        show_key=manager)
 
-    keep_processing = (
-        request.method == 'POST'
-        and form.is_valid()
-        and not request.POST.get('lti_version'))
-    if keep_processing:
-        # Update the content in the DB
-        row_keys, row_values  = survey_update_row_values(
-            action,
-            colcon_items,
-            manager,
-            form.cleaned_data,
-            'email',
-            request.user.email,
-            context)
+def update_row_values(
+    request: HttpRequest,
+    action: models.Action,
+    row_data: Tuple[List, List, str, Any],
+) -> HttpResponse:
+    """Serve a request for action in.
 
-        # Log the event and update its content in the action
-        log_item = action.log(
-            request.user,
-            models.Log.ACTION_SURVEY_INPUT,
-            new_values=json.dumps(dict(zip(row_keys, row_values))))
+    Function that given a request, and an action IN, it performs the lookup
+     and data input of values.
 
-        # Modify the time of execution for the action
-        action.last_executed_log = log_item
-        action.save()
+    :param request: HTTP request
+    :param action:  Action In
+    :param user_attribute_name: The column name used to check for email
+    :return:
+    """
+    # keys = []
+    # values = []
+    # where_field = None
+    # where_value = None
+    # # Create the SET name = value part of the query
+    # for idx, colcon in enumerate(colcon_items):
+    #     if colcon.column.is_key and not is_manager:
+    #         # If it is a learner request and a key column, skip
+    #         continue
+    #
+    #     # Skip the element if there is a condition and it is false
+    #     if colcon.condition and not context[colcon.condition.name]:
+    #         continue
+    #
+    #     field_value = form_data[FIELD_PREFIX + '{0}'.format(idx)]
+    #     if colcon.column.is_key:
+    #         # Remember one unique key for selecting the row
+    #         where_field = colcon.column.name
+    #         where_value = field_value
+    #         continue
+    #
+    #     keys.append(colcon.column.name)
+    #     values.append(field_value)
 
-        # If not instructor, just thank the user!
-        if not manager:
-            return render(request, 'thanks.html', {})
-
-        # Back to running the action
-        return redirect(reverse('action:run', kwargs={'pk': action.id}))
-
-    return render(
-        request,
-        'action/run_survey_row.html',
-        {
-            'form': form,
-            'action': action,
-            'cancel_url': reverse(
-                'action:run', kwargs={'pk': action.id},
-            ) if manager else None,
-        },
+    keys, values, where_field, where_value = row_data
+    # Execute the query
+    update_row(
+        action.workflow.get_data_frame_table_name(),
+        keys,
+        values,
+        filter_dict={where_field: where_value},
     )
+
+    # Recompute all the values of the conditions in each of the actions
+    # TODO: Explore how to do this asynchronously (or lazy)
+    for act in action.workflow.actions.all():
+        act.update_n_rows_selected()
+
+    # Log the event and update its content in the action
+    log_item = action.log(
+        request.user,
+        models.Log.ACTION_SURVEY_INPUT,
+        new_values=json.dumps(dict(zip(keys, values))))
+
+    # Modify the time of execution for the action
+    action.last_executed_log = log_item
+    action.save()
+
+
+def extract_survey_questions(
+    action: models.Action, user_seed: str,
+) -> List[models.ActionColumnConditionTuple]:
+    """Extract the set of questions to include in a survey.
+
+    :param action: Action being executed
+    :param user_seed: Seed so that it can be replicated several times and
+    is user dependent
+    :return: List of ColumnCondition pairs
+    """
+    # Get the active columns attached to the action
+    colcon_items = [
+        pair for pair in action.column_condition_pair.all()
+        if pair.column.is_active
+    ]
+
+    if action.shuffle:
+        # Shuffle the columns if needed
+        random.seed(user_seed)
+        random.shuffle(colcon_items)
+
+    return colcon_items
+
+

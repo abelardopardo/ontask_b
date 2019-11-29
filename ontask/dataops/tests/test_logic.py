@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-
+"""Testing logic functions in the package."""
 import datetime
 import io
 import os
-import test
 
-import pandas as pd
 from django.conf import settings
 from django.contrib.auth import get_user_model
+import pandas as pd
 from rest_framework import status
 
 from ontask import models
@@ -18,6 +17,7 @@ from ontask.dataops.pandas import (
     get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
 from ontask.dataops.sql import get_rows
+import test
 
 
 class DataopsMatrixManipulation(test.OnTaskTestCase):
@@ -66,21 +66,13 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
 
     def parse_data_frames(self):
         # Parse the two CSV strings and return as data frames
-
         if self.workflow:
             # Get the workflow data frame
             df_dst = load_table(self.workflow.get_data_frame_table_name())
         else:
-            df_dst = load_df_from_csvfile(
-                io.StringIO(self.csv1),
-                0,
-                0
-            )
+            df_dst = load_df_from_csvfile(io.StringIO(self.csv1), 0, 0)
 
-        df_src = load_df_from_csvfile(
-            io.StringIO(self.csv2),
-            0,
-            0)
+        df_src = load_df_from_csvfile(io.StringIO(self.csv2), 0, 0)
         store_table(df_src, 'TEMPORARY_TABLE')
         df_src = load_table('TEMPORARY_TABLE')
         # Fix the merge_info fields.
@@ -154,14 +146,14 @@ class FormulaEvaluation(test.OnTaskTestCase):
             'operator': '{1}',  # Operator
             'type': '{2}',  # Data type: integer, double, text, ...
             'value': '{3}'}],  # The constant
-        'valid': True
-    }
+        'valid': True}
     test_table = 'TEST_TABLE'
-    test_columns = ['v_integer',
-                    'v_double',
-                    'v_boolean',
-                    'v_string',
-                    'v_datetime']
+    test_columns = [
+        'v_integer',
+        'v_double',
+        'v_boolean',
+        'v_string',
+        'v_datetime']
 
     def set_skel(self, input_value, op_value, type_value, value, vname=None):
         if vname:
@@ -176,7 +168,8 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.skel['rules'][0]['value'] = value
         return self.skel
 
-    def do_operand(self,
+    def do_operand(
+        self,
         input_value,
         op_value,
         type_value,
@@ -185,7 +178,8 @@ class FormulaEvaluation(test.OnTaskTestCase):
         value3):
 
         result1 = evaluate_formula(
-            self.set_skel(input_value,
+            self.set_skel(
+                input_value,
                 op_value.format(''),
                 type_value,
                 value1),
@@ -193,7 +187,8 @@ class FormulaEvaluation(test.OnTaskTestCase):
             {'variable': value2}
         )
         result2 = evaluate_formula(
-            self.set_skel(input_value,
+            self.set_skel(
+                input_value,
                 op_value.format(''),
                 type_value,
                 value1),
@@ -212,7 +207,8 @@ class FormulaEvaluation(test.OnTaskTestCase):
 
         if op_value.find('{0}') != -1:
             result1 = evaluate_formula(
-                self.set_skel(input_value,
+                self.set_skel(
+                    input_value,
                     op_value.format('not_'),
                     type_value,
                     value1),
@@ -220,7 +216,8 @@ class FormulaEvaluation(test.OnTaskTestCase):
                 {'variable': value2}
             )
             result2 = evaluate_formula(
-                self.set_skel(input_value,
+                self.set_skel(
+                    input_value,
                     op_value.format('not_'),
                     type_value,
                     value1),
@@ -245,7 +242,6 @@ class FormulaEvaluation(test.OnTaskTestCase):
         row_yes=1,
         row_no=1
     ):
-
         self.set_skel(
             input_value,
             op_value.format(''),
@@ -263,11 +259,12 @@ class FormulaEvaluation(test.OnTaskTestCase):
                 type_value,
                 value, 'v_' + type_value
             )
-            data_frame = load_table(self.test_table, self.test_columns,
+            data_frame = load_table(
+                self.test_table,
+                self.test_columns,
                 self.skel)
             self.assertEqual(data_frame.shape[0], row_no)
             evaluate_formula(self.skel, EVAL_TXT)
-
 
     def test_eval_node(self):
         #
@@ -283,13 +280,15 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('select', '{0}equal', 'boolean', 'true', None, None)
         self.do_operand('select', '{0}equal', 'boolean', 'false', False, True)
         self.do_operand('select', '{0}equal', 'boolean', 'false', None, None)
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}equal',
             'datetime',
             '2018-09-15T00:03:03',
             datetime.datetime(2018, 9, 15, 0, 3, 3),
             datetime.datetime(2018, 9, 15, 0, 3, 4))
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}equal',
             'datetime',
             '2018-09-15T00:03:03',
@@ -299,30 +298,36 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         # BEGINS WITH
         #
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}begins_with',
             'string', 'ab', 'abcd', 'acd')
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}begins_with',
             'string', 'ab', None, None)
 
         #
         # CONTAINS
         #
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}contains',
             'string', 'bc', 'abcd', 'acd')
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}contains',
             'string', 'bc', None, None)
 
         #
         # ENDS WITH
         #
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}ends_with',
             'string', 'cd', 'abcd', 'abc')
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}ends_with',
             'string', 'cd', None, None)
 
@@ -339,13 +344,15 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', 'less', 'integer', '1', None, None)
         self.do_operand('number', 'less', 'double', '1.2', 0.2, 3.2)
         self.do_operand('number', 'less', 'double', '1.2', None, None)
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'less',
             'datetime',
             '2018-09-15T00:03:03',
             datetime.datetime(2018, 9, 15, 0, 3, 2),
             datetime.datetime(2018, 9, 15, 0, 3, 4))
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'less',
             'datetime',
             '2018-09-15T00:03:03',
@@ -361,19 +368,22 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', 'less_or_equal', 'double', '1.2', 0.2, 3.2)
         self.do_operand('number', 'less_or_equal', 'double', '1.2', 1.2, 3.2)
         self.do_operand('number', 'less_or_equal', 'double', '1.2', None, None)
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'less_or_equal',
             'datetime',
             '2018-09-15T00:03:03',
             datetime.datetime(2018, 9, 15, 0, 3, 2),
             datetime.datetime(2018, 9, 15, 0, 3, 4))
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'less_or_equal',
             'datetime',
             '2018-09-15T00:03:03',
             datetime.datetime(2018, 9, 15, 0, 3, 3),
             datetime.datetime(2018, 9, 15, 0, 3, 4))
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'less_or_equal',
             'datetime',
             '2018-09-15T00:03:03',
@@ -387,13 +397,15 @@ class FormulaEvaluation(test.OnTaskTestCase):
         self.do_operand('number', 'greater', 'integer', '1', None, None)
         self.do_operand('number', 'greater', 'double', '1.2', 3.2, 0.2)
         self.do_operand('number', 'greater', 'double', '1.2', None, None)
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'greater',
             'datetime',
             '2018-09-15T00:03:03',
             datetime.datetime(2018, 9, 15, 0, 3, 4),
             datetime.datetime(2018, 9, 15, 0, 3, 2))
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'greater',
             'datetime',
             '2018-09-15T00:03:03',
@@ -405,35 +417,44 @@ class FormulaEvaluation(test.OnTaskTestCase):
         #
         self.do_operand('number', 'greater_or_equal', 'integer', '1', 3, 0)
         self.do_operand('number', 'greater_or_equal', 'integer', '1', 1, 0)
-        self.do_operand('number',
+        self.do_operand(
+            'number',
             'greater_or_equal',
             'integer',
             '1',
             None,
             None)
-        self.do_operand('number', 'greater_or_equal',
+        self.do_operand(
+            'number',
+            'greater_or_equal',
             'double', '1.2', 3.2, 0.2)
-        self.do_operand('number', 'greater_or_equal',
+        self.do_operand(
+            'number',
+            'greater_or_equal',
             'double', '1.2', 1.2, 0.2)
-        self.do_operand('number',
+        self.do_operand(
+            'number',
             'greater_or_equal',
             'double',
             '1.2',
             None,
             None)
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'greater_or_equal',
             'datetime',
             '2018-09-15T00:03:03',
             datetime.datetime(2018, 9, 15, 0, 3, 4),
             datetime.datetime(2018, 9, 15, 0, 3, 2))
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'greater_or_equal',
             'datetime',
             '2018-09-15T00:03:03',
             datetime.datetime(2018, 9, 15, 0, 3, 3),
             datetime.datetime(2018, 9, 15, 0, 3, 2))
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'greater_or_equal',
             'datetime',
             '2018-09-15T00:03:03',
@@ -444,13 +465,15 @@ class FormulaEvaluation(test.OnTaskTestCase):
         # In Between (needs special function)
         #
         self.do_operand('number', '{0}between', 'integer', ['1', '4'], 2, 5)
-        self.do_operand('number',
+        self.do_operand(
+            'number',
             '{0}between',
             'integer',
             ['1', '4'],
             None,
             None)
-        self.do_operand('number',
+        self.do_operand(
+            'number',
             '{0}between',
             'double',
             ['1.0',
@@ -733,7 +756,7 @@ class ColumnNameTooLarge(test.OnTaskTestCase):
 
     def upload_column_name_too_long(self):
         """Use the table store to detect column names that are too long."""
-        data_frame = load_df_from_csvfile( io.StringIO(self.csv), 0, 0)
+        data_frame = load_df_from_csvfile(io.StringIO(self.csv), 0, 0)
 
         self.assertTrue(
             any(

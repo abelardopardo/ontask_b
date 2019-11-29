@@ -12,7 +12,7 @@ from ontask.dataops.pandas.database import (
 )
 from ontask.dataops.pandas.dataframe import (
     add_column_to_df, get_subframe, get_table_row_by_index, rename_df_column,
-    store_dataframe, store_temporary_dataframe,
+    store_dataframe, store_temporary_dataframe, store_workflow_table,
 )
 from ontask.dataops.pandas.datatypes import pandas_datatype_names
 from ontask.dataops.pandas.merge import perform_dataframe_upload_merge

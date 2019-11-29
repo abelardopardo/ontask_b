@@ -15,8 +15,6 @@ from ontask import models
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import is_admin, is_instructor
 from ontask.dataops import forms, services
-import ontask.dataops.services.athena
-import ontask.dataops.services.sql
 from ontask.workflow.access import remove_workflow_from_session
 
 
@@ -25,7 +23,6 @@ def sql_connection_admin_index(request: HttpRequest) -> HttpResponse:
     """Show and handle the SQL connections.
 
     :param request: Request
-
     :return: Render the appropriate page.
     """
     remove_workflow_from_session(request)
@@ -33,7 +30,7 @@ def sql_connection_admin_index(request: HttpRequest) -> HttpResponse:
         request,
         'dataops/connections_admin.html',
         {
-            'table': ontask.dataops.services.sql.create_sql_connection_admintable(),
+            'table': services.create_sql_connection_admintable(),
             'title': _('SQL Connections'),
             'data_url': reverse('dataops:sqlconn_add')})
 
@@ -43,7 +40,6 @@ def athena_connection_admin_index(request: HttpRequest) -> HttpResponse:
     """Show and handle the connections.
 
     :param request: Request
-
     :return: Render the appropriate page.
     """
     remove_workflow_from_session(request)
@@ -51,7 +47,7 @@ def athena_connection_admin_index(request: HttpRequest) -> HttpResponse:
         request,
         'dataops/connections_admin.html',
         {
-            'table': ontask.dataops.services.athena.create_athena_connection_admintable(),
+            'table': services.create_athena_connection_admintable(),
             'title': _('Athena Connections'),
             'data_url': reverse('dataops:athenaconn_add')})
 
@@ -62,9 +58,7 @@ def sql_connection_view(request: HttpRequest, pk: int) -> JsonResponse:
     """Show the SQL connection in a modal.
 
     :param request: Request object
-
     :param pk: Primary key of the connection element
-
     :return: AJAX response
     """
     c_obj = models.SQLConnection.objects.filter(pk=pk).first()
@@ -86,9 +80,7 @@ def athena_connection_view(request: HttpRequest, pk: int) -> JsonResponse:
     """Show the Athena connection in a modal.
 
     :param request: Request object
-
     :param pk: Primary key of the connection element
-
     :return: AJAX response
     """
     c_obj = models.AthenaConnection.objects.filter(pk=pk).first()
@@ -113,9 +105,7 @@ def sql_connection_edit(
     """Respond to the request to create/edit an SQL connection object.
 
     :param request: HTML request
-
     :param pk: Primary key
-
     :return:
     """
     conn = None
@@ -129,12 +119,29 @@ def sql_connection_edit(
         if not conn:
             return JsonResponse({'html_redirect': reverse('home')})
 
-    return services.save_connection_form(
-        request,
-        form_class(request.POST or None, instance=conn),
-        'dataops/includes/partial_connection_addedit.html',
-        is_add,
-        action_url)
+    form = form_class(request.POST or None, instance=conn)
+
+    # If it is a POST and it is correct
+    if request.method == 'POST' and form.is_valid():
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+        conn = form.save()
+        if is_add:
+            conn.log(request.user, conn.create_event)
+        else:
+            conn.log(request.user, conn.edit_event)
+        return JsonResponse({'html_redirect': ''})
+
+    # Request is a GET
+    return JsonResponse({
+        'html_form': render_to_string(
+            'dataops/includes/partial_connection_addedit.html',
+            {
+                'form': form,
+                'id': form.instance.id,
+                'add': is_add,
+                'action_url': action_url},
+            request=request)})
 
 
 @user_passes_test(is_admin)
@@ -146,10 +153,8 @@ def athena_connection_edit(
     """Respond to the request to create/edit an Athena connection object.
 
     :param request: HTML request
-
     :param pk: Primary key
-
-    :return:
+    :return: JSON Response
     """
     conn = None
     is_add = pk is None
@@ -162,12 +167,28 @@ def athena_connection_edit(
         if not conn:
             return JsonResponse({'html_redirect': reverse('home')})
 
-    return services.save_connection_form(
-        request,
-        form_class(request.POST or None, instance=conn),
-        'dataops/includes/partial_connection_addedit.html',
-        is_add,
-        action_url)
+    form = form_class(request.POST or None, instance=conn)
+
+    if request.method == 'POST' and form.is_valid():
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+        conn = form.save()
+        if is_add:
+            conn.log(request.user, conn.create_event)
+        else:
+            conn.log(request.user, conn.edit_event)
+        return JsonResponse({'html_redirect': ''})
+
+    # Request is a GET
+    return JsonResponse({
+        'html_form': render_to_string(
+            'dataops/includes/partial_connection_addedit.html',
+            {
+                'form': form,
+                'id': form.instance.id,
+                'add': is_add,
+                'action_url': action_url},
+            request=request)})
 
 
 @user_passes_test(is_admin)
@@ -176,9 +197,7 @@ def sql_connection_clone(request: HttpRequest, pk: int) -> JsonResponse:
     """AJAX handshake to clone an SQL connection.
 
     :param request: HTTP request
-
     :param pk: ID of the connection to clone.
-
     :return: AJAX response
     """
     conn = models.SQLConnection.objects.filter(pk=pk).first()
@@ -199,9 +218,7 @@ def athena_connection_clone(request: HttpRequest, pk: int) -> JsonResponse:
     """AJAX handshake to clone an Athena connection.
 
     :param request: HTTP request
-
     :param pk: ID of the connection to clone.
-
     :return: AJAX response
     """
     conn = models.AthenaConnection.objects.filter(pk=pk).first()
@@ -222,9 +239,7 @@ def sql_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
     """AJAX processor for the delete SQL connection operation.
 
     :param request: AJAX request
-
     :param pk: primary key for the connection
-
     :return: AJAX response to handle the form
     """
     conn = models.SQLConnection.objects.filter(pk=pk).first()
@@ -244,9 +259,7 @@ def athena_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
     """AJAX processor for the delete an Athena connection operation.
 
     :param request: AJAX request
-
     :param pk: primary key for the connection
-
     :return: AJAX response to handle the form
     """
     conn = models.AthenaConnection.objects.filter(pk=pk).first()

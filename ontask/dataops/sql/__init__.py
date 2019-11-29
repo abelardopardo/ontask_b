@@ -9,7 +9,7 @@ from ontask.dataops.sql.column_queries import (
 )
 from ontask.dataops.sql.row_queries import (
     delete_row, get_num_rows, get_row, get_rows, increase_row_integer,
-    select_ids_all_false, update_row,
+    select_ids_all_false, update_row, insert_row
 )
 from ontask.dataops.sql.table_queries import (
     clone_table, delete_table, get_select_query_txt, rename_table,

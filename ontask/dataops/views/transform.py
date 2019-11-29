@@ -12,11 +12,10 @@ from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.core import ONTASK_FIELD_PREFIX, get_workflow, is_instructor
 from ontask.core.celery import celery_is_up
-from ontask.core.decorators import get_workflow
-from ontask.core.permissions import is_instructor
 from ontask.dataops import services
-from ontask.dataops.forms import FIELD_PREFIX, PluginInfoForm
+from ontask.dataops.forms import PluginInfoForm
 
 
 @user_passes_test(is_instructor)
@@ -60,6 +59,7 @@ def plugin_invoke(
 
     :param request: HTTP request received
     :param pk: primary key of the plugin
+    :param workflow: Workflow being manipulated
     :return: Page offering to select the columns to invoke
     """
     # Verify that celery is running!
@@ -102,7 +102,13 @@ def plugin_invoke(
             workflow,
             plugin_info,
             plugin_instance,
-            form)
+            {
+                'columns': form.cleaned_data['columns'],
+                'input_column_names': form.get_input_column_names(),
+                'output_column_names': form.get_output_column_names(),
+                'params': form.get_parameters(),
+                'out_column_suffix': form.cleaned_data['out_column_suffix'],
+                'merge_key': form.cleaned_data['merge_key']})
 
         # Successful processing.
         return render(
@@ -117,13 +123,13 @@ def plugin_invoke(
             'form': form,
             'input_column_fields': [
                 fld for fld in list(form)
-                if fld.name.startswith(FIELD_PREFIX + 'input')],
+                if fld.name.startswith(ONTASK_FIELD_PREFIX + 'input')],
             'output_column_fields': [
                 fld for fld in list(form)
-                if fld.name.startswith(FIELD_PREFIX + 'output')],
+                if fld.name.startswith(ONTASK_FIELD_PREFIX + 'output')],
             'parameters': [
                 fld for fld in list(form)
-                if fld.name.startswith(FIELD_PREFIX + 'parameter')],
+                if fld.name.startswith(ONTASK_FIELD_PREFIX + 'parameter')],
             'pinstance': plugin_instance,
             'id': workflow.id,
         })

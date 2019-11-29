@@ -13,8 +13,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from ontask import models
-from ontask.core.decorators import get_workflow
-from ontask.core.permissions import is_instructor
+from ontask.core import get_workflow, is_instructor
 from ontask.dataops import services
 from ontask.dataops.forms import SelectColumnUploadForm, SelectKeysForm
 
@@ -151,7 +150,7 @@ def upload_s2(
             return services.upload_step_two(
                 request,
                 workflow,
-                form,
+                form.cleaned_data,
                 upload_data)
         except Exception as exc:
             # Something went wrong. Flag it and reload

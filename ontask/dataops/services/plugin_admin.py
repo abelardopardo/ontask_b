@@ -19,10 +19,11 @@ import django_tables2 as tables
 import pandas as pd
 import pytz
 
-from ontask import models
+from ontask import models, OnTaskServiceException
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.plugin import ontask_plugin
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
+from ontask.dataops.services.errors import OnTasDataopsPluginInstantiationError
 import ontask.settings
 
 
@@ -387,9 +388,11 @@ def load_plugin(foldername):
         if not all(test_result == 'Ok' for test_result, __ in tests):
             return None, tests
     except AttributeError as exc:
-        return None, [(str(exc), _('Class instantiation'))]
+        raise OnTasDataopsPluginInstantiationError(
+            message=_('Error while instantiating the plugin class'))
     except Exception as exc:
-        return None, [(str(exc), _('Instance creation'))]
+        raise OnTasDataopsPluginInstantiationError(
+            message=_('Error while instantiating the plugin class'))
 
     return plugin_instance, tests
 
@@ -464,23 +467,17 @@ def run_plugin(
     workflow
 
     :param workflow: Workflow object being processed
-
     :param plugin_info: PluginReistry object being processed
-
     :param input_column_names: List of input column names
-
     :param output_column_names: List of output column names
-
     :param output_suffix: Suffix that is added to the output column names
-
     :param merge_key: Key column to use in the merge
-
     :param plugin_params: Dictionary with the parameters to execute the plug in
-
     :return: Nothing, the result is stored in the log with log_id
     """
-    plugin_instance, msgs = load_plugin(plugin_info.filename)
-    if plugin_instance is None:
+    try:
+        plugin_instance, msgs = load_plugin(plugin_info.filename)
+    except OnTaskServiceException as exc:
         raise Exception(
             ugettext('Unable to instantiate plugin "{0}"').format(
                 plugin_info.name),

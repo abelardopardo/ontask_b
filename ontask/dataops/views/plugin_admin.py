@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from ontask import models
+from ontask import models, OnTaskServiceException
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import is_admin, is_instructor
 from ontask.dataops import services
@@ -24,8 +24,7 @@ def plugin_admin(
     """Show the table of plugins and their status.
 
     :param request: HTTP Request
-
-    :return:
+    :return: Rendered page
     """
     remove_workflow_from_session(request)
 
@@ -49,8 +48,7 @@ def diagnose(
     :param request: HTML request object
     :param workflow: Workflow being processed.
     :param pk: Primary key of the transform element
-
-    :return:
+    :return: JSON reponse
     """
     # Action being used
     plugin = models.Plugin.objects.filter(id=pk).first()
@@ -58,7 +56,12 @@ def diagnose(
         return http.JsonResponse({'html_redirect': reverse('home')})
 
     # Reload the plugin to get the messages stored in the right place.
-    pinstance, msgs = services.load_plugin(plugin.filename)
+    try:
+        pinstance, msgs = services.load_plugin(plugin.filename)
+    except OnTaskServiceException as exc:
+        exc.message_to_error(request)
+        return http.JsonResponse({
+            'html_redirect': reverse('dataops:plugin_admin')})
 
     # If the new instance is now properly verified, simply redirect to the
     # transform page
@@ -86,10 +89,8 @@ def moreinfo(
     """Show the detailed information about a plugin.
 
     :param request: HTML request object
-
     :param pk: Primary key of the Plugin element
-
-    :return:
+    :return: JSON response
     """
     # Action being used
     plugin = models.Plugin.objects.filter(id=pk).first()
@@ -97,7 +98,12 @@ def moreinfo(
         return http.JsonResponse({'html_redirect': reverse('home')})
 
     # Reload the plugin to get the messages stored in the right place.
-    pinstance, msgs = services.load_plugin(plugin.filename)
+    try:
+        pinstance, msgs = services.load_plugin(plugin.filename)
+    except OnTaskServiceException as exc:
+        exc.message_to_error(request)
+        return http.JsonResponse({
+            'html_redirect': reverse('dataops:plugin_admin')})
 
     # Get the descriptions and show them in the modal
     return http.JsonResponse({
@@ -117,10 +123,8 @@ def plugin_toggle(
     """Toggle the field is_enabled of a plugin.
 
     :param request: HTML request object
-
     :param pk: Primary key of the Plugin element
-
-    :return:
+    :return: JSON Response
     """
     plugin_item = models.Plugin.objects.get(pk=pk)
     if plugin_item.is_verified:

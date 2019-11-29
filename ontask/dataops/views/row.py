@@ -14,7 +14,8 @@ from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops import services
-from ontask.dataops.forms import FIELD_PREFIX, RowForm
+from ontask.dataops.forms import RowForm
+from ontask.core import ONTASK_FIELD_PREFIX
 from ontask.dataops.sql import get_row
 
 
@@ -39,7 +40,7 @@ def row_create(
 
     if request.method == 'POST' and form.is_valid():
         row_values = [
-            form.cleaned_data[(FIELD_PREFIX + '%s') % idx]
+            form.cleaned_data[(ONTASK_FIELD_PREFIX + '%s') % idx]
             for idx in range(workflow.columns.count())]
         try:
             services.create_row(workflow, row_values)
@@ -107,7 +108,7 @@ def row_update(
 
         try:
             row_values = [
-                form.cleaned_data[(FIELD_PREFIX + '%s') % idx]
+                form.cleaned_data[(ONTASK_FIELD_PREFIX + '%s') % idx]
                 for idx in range(workflow.columns.count())]
             services.update_row_values(
                 workflow,
