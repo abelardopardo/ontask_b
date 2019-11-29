@@ -5,14 +5,14 @@
 from datetime import datetime
 from typing import List, Optional
 
-import pytz
 from django import conf
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
+import pytz
 
-from ontask.core.celery import app as celery_app
+from ontask.celery import app as celery_app
 
 __all__ = [
     'are_correct_emails',
@@ -121,7 +121,7 @@ def create_new_name(old_name: str, obj_manager) -> str:
 class OnTaskDBIdentifier(sql.Identifier):
     """Class to manage the presence of % in SQL identifiers."""
 
-    def __init__(self, *strings):
+    def __init__(self, *strings: str):
         """Replace % by %% in string."""
         if not strings:
             raise TypeError('Identifier cannot be empty')

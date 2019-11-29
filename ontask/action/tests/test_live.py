@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import test
 
 from django.conf import settings
 from django.core import mail
@@ -10,8 +9,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask import models
+from ontask.core.checks import check_wf_df
 from ontask.dataops.formula import has_variable
-from ontask.dataops.pandas import check_wf_df
+import test
 
 
 class ActionActionEdit(test.OnTaskLiveTestCase):

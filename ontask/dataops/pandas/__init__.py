@@ -7,7 +7,7 @@ from ontask.dataops.pandas.columns import (
     has_unique_column, is_unique_column,
 )
 from ontask.dataops.pandas.database import (
-    check_wf_df, create_db_engine, destroy_db_engine, load_table, set_engine,
+    create_db_engine, destroy_db_engine, load_table, set_engine,
     store_table, verify_data_frame,
 )
 from ontask.dataops.pandas.dataframe import (

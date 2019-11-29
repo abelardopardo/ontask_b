@@ -12,8 +12,8 @@ from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.celery import celery_is_up
 from ontask.core import ONTASK_FIELD_PREFIX, get_workflow, is_instructor
-from ontask.core.celery import celery_is_up
 from ontask.dataops import services
 from ontask.dataops.forms import PluginInfoForm
 

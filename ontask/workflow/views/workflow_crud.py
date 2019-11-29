@@ -17,14 +17,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
 from ontask import OnTaskServiceException, models
+from ontask.celery import celery_is_up
 from ontask.core import (
     UserIsInstructor, ajax_required, get_workflow, is_instructor,
 )
-from ontask.core.celery import celery_is_up
-from ontask.dataops.pandas import check_wf_df
+from ontask.core.checks import check_wf_df
 from ontask.workflow import services
-from ontask.workflow.access import remove_workflow_from_session
 from ontask.workflow.forms import WorkflowForm
+from ontask.workflow.services.session_ops import remove_workflow_from_session
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):

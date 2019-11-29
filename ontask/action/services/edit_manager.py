@@ -3,16 +3,16 @@
 """Classes to edit actions  through the manager."""
 from typing import Dict, Optional, Type
 
-from django import http
+from django import forms, http
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from django import forms
 from ontask.action import forms as action_forms
 from ontask.visualizations.plotly import PlotlyHandler
+
 
 class ActionEditManager(object):
     """Base class to provide edit methods for the actions."""

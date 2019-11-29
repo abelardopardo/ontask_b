@@ -19,9 +19,10 @@ class SessionPayload(collections.MutableMapping):
         """Remove the table from the session."""
         session.pop(PAYLOAD_SESSION_DICTIONARY, None)
 
-    def __init__(self,
+    def __init__(
+        self,
         session: Optional[SessionBase] = None,
-        initial_values: Optional[Dict] =None,
+        initial_values: Optional[Dict] = None,
     ):
         """Initialize the store with the given arguments."""
         super().__init__()

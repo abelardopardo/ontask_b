@@ -6,8 +6,6 @@ import json
 from time import sleep
 from typing import Dict, List, Optional, Tuple
 
-import pytz
-import requests
 from celery.utils.log import get_task_logger
 from django import http
 from django.conf import settings
@@ -18,6 +16,8 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
+import pytz
+import requests
 from rest_framework import status
 
 from ontask import models

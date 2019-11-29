@@ -2,20 +2,18 @@
 
 """Methods to process the personalized zip action run request."""
 
-import zipfile
 from datetime import datetime
 from io import BytesIO
 from typing import List, Optional, Tuple
+import zipfile
 
 from django import http
 from django.contrib.sessions.backends.base import SessionBase
 from django.shortcuts import redirect, render
 
 from ontask import models
-from ontask.action import forms
 from ontask.action.evaluate.action import evaluate_action
 from ontask.action.services.manager import ActionRunManager
-from ontask.action.services.manager_factory import action_process_factory
 from ontask.core import SessionPayload
 from ontask.dataops.sql.row_queries import get_rows
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """Functions to serve actions through direct URL access."""
-import random
 import json
-from typing import Dict, List, Tuple, Any
+import random
+from typing import Any, Dict, List, Tuple
 
 from django import http
 from django.http.request import HttpRequest
@@ -13,7 +13,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.action.evaluate import (
-    evaluate_row_action_out, get_action_evaluation_context, get_row_values,
+    evaluate_row_action_out,
+    get_action_evaluation_context, get_row_values,
 )
 from ontask.action.services.errors import (
     OnTaskActionSurveyDataNotFound,

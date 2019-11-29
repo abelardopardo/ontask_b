@@ -3,19 +3,19 @@
 """Functions to manipulate other workflow ops."""
 from typing import Dict
 
-import django_tables2 as tables
 from django import http
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
+import django_tables2 as tables
 
 from ontask import is_correct_email, models, tasks
 from ontask.core import DataTablesServerSidePaging, OperationsColumn
 from ontask.dataops.sql import get_rows, get_text_column_hash
-from ontask.workflow.access import store_workflow_in_session
 from ontask.workflow.services import errors
+from ontask.workflow.services.session_ops import store_workflow_in_session
 
 
 class AttributeTable(tables.Table):

@@ -6,16 +6,16 @@ EditActionOutForm: Form to process content action_out (Base class)
 
 EditActionIn: Form to process action in elements
 """
-from typing import Tuple, List, Any
+from typing import Any, List, Tuple
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 
+from ontask import models
 from ontask.action.evaluate.template import render_action_template
 from ontask.action.forms import FIELD_PREFIX
-from ontask import models
-from ontask.workflow.forms import column_to_field
+from ontask.core.forms import column_to_field
 
 
 class EditActionOutForm(forms.ModelForm):

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """Functions to manipulate column CRUD ops."""
+import copy
 import random
 from typing import Any, List, Optional
 
-import pandas as pd
 from django.utils.translation import ugettext_lazy as _
+import pandas as pd
 
 from ontask import create_new_name, models
 from ontask.dataops.pandas import (
@@ -14,8 +15,6 @@ from ontask.dataops.pandas import (
 from ontask.dataops.sql import (
     add_column_to_db, copy_column_in_db, db_rename_column, df_drop_column,
 )
-from ontask import models
-from ontask.workflow.ops import do_clone_column_only
 from ontask.workflow.services import errors
 
 _op_distrib = {
@@ -380,4 +379,40 @@ def clone_column(user, column: models.Column) -> models.Column:
 
     new_column.log(user, models.Log.COLUMN_CLONE)
 
+    return new_column
+
+
+def do_clone_column_only(
+    column: models.Column,
+    new_workflow: Optional[models.Workflow] = None,
+    new_name: Optional[str] = None,
+) -> models.Column:
+    """Clone a column.
+
+    :param column: Object to clone.
+
+    :param new_workflow: Optional new worklow object to link to.
+
+    :param new_name: Optional new name to use.
+
+    :result: New object.
+    """
+    if new_name is None:
+        new_name = column.name
+    if new_workflow is None:
+        new_workflow = column.workflow
+
+    new_column = models.Column(
+        name=new_name,
+        description_text=column.description_text,
+        workflow=new_workflow,
+        data_type=column.data_type,
+        is_key=column.is_key,
+        position=column.position,
+        in_viz=column.in_viz,
+        categories=copy.deepcopy(column.categories),
+        active_from=column.active_from,
+        active_to=column.active_to,
+    )
+    new_column.save()
     return new_column

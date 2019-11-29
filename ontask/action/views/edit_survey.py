@@ -17,7 +17,8 @@ from django.views.decorators.http import require_http_methods
 from ontask import models
 from ontask.action.forms import ActionDescriptionForm
 from ontask.core.decorators import (
-    ajax_required, get_action, get_columncondition, get_workflow,
+    ajax_required, get_action,
+    get_columncondition, get_workflow,
 )
 from ontask.core.permissions import is_instructor
 

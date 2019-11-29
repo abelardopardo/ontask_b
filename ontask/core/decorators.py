@@ -11,7 +11,10 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.workflow.access import access, store_workflow_in_session
+from ontask.workflow.services.session_ops import (
+    store_workflow_in_session,
+    verify_workflow_access,
+)
 
 
 def ajax_required(func):
@@ -45,7 +48,7 @@ def get_workflow(
         @wraps(func)  # noqa Z430
         def function_wrapper(request, **kwargs):  # noqa Z430
             try:
-                workflow = access(
+                workflow = verify_workflow_access(
                     request,
                     wid=kwargs.get('wid'),
                     select_related=s_related,
@@ -80,7 +83,7 @@ def get_column(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             try:
-                workflow = access(
+                workflow = verify_workflow_access(
                     request,
                     wid=kwargs.get('wid'),
                     select_related=s_related,
@@ -140,7 +143,7 @@ def get_action(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             try:
-                workflow = access(
+                workflow = verify_workflow_access(
                     request,
                     wid=kwargs.get('wid'),
                     select_related=s_related,
@@ -201,7 +204,7 @@ def get_condition(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             try:
-                workflow = access(
+                workflow = verify_workflow_access(
                     request,
                     wid=kwargs.get('wid'),
                     select_related=s_related,
@@ -265,7 +268,7 @@ def get_columncondition(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             try:
-                workflow = access(
+                workflow = verify_workflow_access(
                     request,
                     wid=kwargs.get('wid'),
                     select_related=s_related,
@@ -326,7 +329,7 @@ def get_view(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             try:
-                workflow = access(
+                workflow = verify_workflow_access(
                     request,
                     wid=kwargs.get('wid'),
                     select_related=s_related,

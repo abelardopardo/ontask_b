@@ -14,7 +14,7 @@ from ontask import models
 from ontask.action.forms import ConditionForm, FilterForm
 from ontask.core.decorators import ajax_required, get_action, get_condition
 from ontask.core.permissions import UserIsInstructor, is_instructor
-from ontask.dataops.formula import EVAL_TXT, evaluate_formula, get_variables
+from ontask.dataops.formula import get_variables
 
 
 def save_condition_form(

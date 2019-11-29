@@ -11,9 +11,10 @@ from django.utils.translation import ugettext as _
 
 from ontask import models
 from ontask.dataops.pandas import (
-    load_table, perform_dataframe_upload_merge, store_workflow_table)
+    load_table, perform_dataframe_upload_merge, store_workflow_table,
+)
 from ontask.dataops.sql import table_queries
-from ontask.workflow.access import store_workflow_in_session
+from ontask.workflow.services.session_ops import store_workflow_in_session
 
 
 def upload_step_two(

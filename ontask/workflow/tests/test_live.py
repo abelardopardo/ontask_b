@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import os
-import test
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import OnTaskSharedState, models
+from ontask.core.checks import check_wf_df
 from ontask.dataops.pandas import database, destroy_db_engine
+import test
 
 
 class WorkflowInitial(test.OnTaskLiveTestCase):
@@ -300,7 +301,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
-            database.check_wf_df(models.Workflow.objects.get(id=1))
+            check_wf_df(models.Workflow.objects.get(id=1))
             idx += 1
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
