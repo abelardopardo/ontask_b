@@ -5,7 +5,7 @@
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django import http
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -23,23 +23,19 @@ from ontask.core.permissions import UserIsInstructor, is_instructor
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def action_index(
-    request: HttpRequest,
+    request: http.HttpRequest,
     wid: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Show all the actions attached to the workflow.
 
     :param request: HTTP Request
-
     :param wid: Primary key of the workflow object to use
-
     :param workflow: Workflow for the session.
-
     :return: HTTP response
     """
     # Reset object to carry action info throughout dialogs
     SessionPayload.flush(request.session)
-
     return render(
         request,
         'action/index.html',
@@ -60,7 +56,11 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
     @method_decorator(user_passes_test(is_instructor))
     @method_decorator(ajax_required)
     @method_decorator(get_workflow())
-    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+    def get(
+        self,
+        request: http.HttpRequest,
+        *args, **kwargs
+    ) -> http.HttpResponse:
         """Process the get requet when creating an action."""
         return services.save_action_form(
             request,
@@ -72,7 +72,7 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
     @method_decorator(user_passes_test(is_instructor))
     @method_decorator(ajax_required)
     @method_decorator(get_workflow())
-    def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
+    def post(self, request: http.HttpRequest, **kwargs) -> http.HttpResponse:
         """Process the post request when creating an action."""
         return services.save_action_form(
             request,
@@ -89,11 +89,8 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
     """
 
     model = models.Action
-
     template_name = 'action/includes/partial_action_update.html'
-
     context_object_name = 'action'
-
     form_class = ActionUpdateForm
 
     def get_object(self, queryset=None) -> models.Action:
@@ -107,7 +104,12 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
     @method_decorator(user_passes_test(is_instructor))
     @method_decorator(ajax_required)
     @method_decorator(get_workflow())
-    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+    def get(
+        self,
+        request: http.HttpRequest,
+        *args,
+        **kwargs
+    ) -> http.HttpResponse:
         """Process the get request."""
         return services.save_action_form(
             request,
@@ -119,7 +121,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
     @method_decorator(user_passes_test(is_instructor))
     @method_decorator(ajax_required)
     @method_decorator(get_workflow())
-    def post(self, request: HttpRequest, **kwargs) -> HttpResponse:
+    def post(self, request: http.HttpRequest, **kwargs) -> http.HttpResponse:
         """Process post request."""
         return services.save_action_form(
             request,
@@ -134,11 +136,11 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
 @user_passes_test(is_instructor)
 @get_action(pf_related=['actions', 'columns'])
 def edit_action(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Invoke the specific edit view.
 
     :param request: Request object
@@ -155,27 +157,25 @@ def edit_action(
 @ajax_required
 @get_action()
 def delete_action(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Process AJAX request to delete an action.
 
     :param request: Request object
-
     :param pk: Action id to delete.
-
-    :return:
+    :return: JSON Response
     """
     # JSON response object
     # Get the appropriate action object
     if request.method == 'POST':
         action.log(request.user, models.Log.ACTION_DELETE)
         action.delete()
-        return JsonResponse({'html_redirect': reverse('action:index')})
+        return http.JsonResponse({'html_redirect': reverse('action:index')})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_action_delete.html',
             {'action': action},

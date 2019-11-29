@@ -59,14 +59,10 @@ def view(
     """View an existing scheduled action.
 
     :param request: HTTP request
-
     :param pk: primary key of the scheduled action
-
     :param workflow: Current workflow being used.
     :return: HTTP response
     """
-    del request
-
     sch_obj = models.ScheduledOperation.objects.filter(
         action__workflow=workflow,
         pk=pk).first()
@@ -82,10 +78,7 @@ def view(
                 'id': sch_obj.id,
                 'timedelta': services.create_timedelta_string(
                     sch_obj.execute,
-                    sch_obj.execute_until),
-            },
-        ),
-    })
+                    sch_obj.execute_until)})})
 
 
 @user_passes_test(is_instructor)
@@ -98,9 +91,7 @@ def create_action_run(
     """Edit an existing scheduled action run operation.
 
     :param request: HTTP request
-
     :param pk: primary key of the action
-
     :param workflow: Workflow of the current context.
     :return: HTTP response
     """
@@ -131,9 +122,8 @@ def edit_scheduled_operation(
     """Edit an existing scheduled email action.
 
     :param request: HTTP request
-
     :param pk: primary key of the action
-
+    :param workflow: Workflow being manipulated.
     :return: HTTP response
     """
     s_item = workflow.scheduled_operations.filter(
@@ -161,9 +151,7 @@ def create_workflow_op(
 ) -> HttpResponse:
     """Create a new workflow operation."""
     del workflow
-    messages.error(
-        request,
-        _('Under implementation'))
+    messages.error(request, _('Under implementation'))
     return redirect('scheduler:index')
 
 
@@ -200,9 +188,8 @@ def delete(
     """View screen to confirm deletion scheduled item.
 
     :param request: Request object
-
     :param pk: Scheduled item id to delete
-
+    :param workflow: workflow being manipulated.
     :return:
     """
     # Get the appropriate scheduled action

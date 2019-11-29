@@ -8,7 +8,7 @@ from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, JsonResponse
+from django import http
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
@@ -30,11 +30,8 @@ def do_clone_condition(
     Function to clone a condition and change action and/or name
 
     :param condition: Condition to clone
-
     :param new_action: New action to point
-
     :param new_name: New name
-
     :return: New condition
     """
     if new_name is None:
@@ -140,11 +137,11 @@ def do_clone_action(
 @ajax_required
 @get_action(pf_related='actions')
 def clone_action(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """View to clone an action.
 
     :param request: Request object
@@ -152,7 +149,7 @@ def clone_action(
     :return:
     """
     if request.method == 'GET':
-        return JsonResponse({
+        return http.JsonResponse({
             'html_form': render_to_string(
                 'action/includes/partial_action_clone.html',
                 {'pk': pk, 'name': action.name},
@@ -177,7 +174,7 @@ def clone_action(
 
     messages.success(request, _('Action successfully cloned.'))
 
-    return JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
@@ -186,12 +183,12 @@ def clone_action(
 @require_http_methods(['POST'])
 @get_condition(pf_related='actions', is_filter=None)
 def clone_condition(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     condition: Optional[models.Condition] = None,
     action_pk: Optional[int] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """JSON request to clone a condition.
 
     The post request must come with the action_content
@@ -205,7 +202,7 @@ def clone_condition(
         action = models.Action.objects.filter(id=action_pk).first()
         if not action:
             messages.error(request, _('Incorrect action id.'))
-            return JsonResponse({'html_redirect': ''})
+            return http.JsonResponse({'html_redirect': ''})
     else:
         action = condition.action
 
@@ -227,4 +224,4 @@ def clone_condition(
         id_old=id_old,
         name_old=name_old)
     messages.success(request, _('Condition successfully cloned.'))
-    return JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})

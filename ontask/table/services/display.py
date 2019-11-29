@@ -15,8 +15,8 @@ from pytz import timezone
 
 from ontask import models
 from ontask.core import DataTablesServerSidePaging
-from ontask.dataops.sql import delete_row
-from ontask.dataops.sql import search_table
+from ontask.dataops.sql import delete_row, search_table
+from ontask.table.services.errors import OnTaskTableNoKeyValueError
 from ontask.visualizations.plotly import PlotlyHandler
 
 
@@ -193,6 +193,15 @@ def perform_row_delete(
     :param row_value: Value of the previous column to select the row.
     :return: Reflected in the workflow
     """
+    # if there is no key or value, flag the message and return to table
+    # view
+    if not row_key or not row_value:
+        raise OnTaskTableNoKeyValueError(
+            message=_('Incorrect URL invoked to delete a row'))
+        # The response will require going to the table display anyway
+        return http.JsonResponse(
+            {'html_redirect': reverse('table:display')})
+
     # Proceed to delete the row
     delete_row(workflow.get_data_frame_table_name(), (row_key, row_value))
 

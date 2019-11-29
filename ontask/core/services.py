@@ -22,11 +22,8 @@ def get_execution_items(
     Given a set of ids, get the objects from the DB
 
     :param user_id: User id
-
     :param workflow_id: Workflow ID (being manipulated)
-
     :param action_id: Action id (to be executed)
-
     :return: (user, action, log)
     """
     # Get the user

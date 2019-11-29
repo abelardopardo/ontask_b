@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.core import signing
 from django.utils.translation import ugettext
 
-import ontask.dataops.sql
+from ontask.dataops.sql.row_queries import increase_row_integer
 from ontask import models
 from ontask.tasks.execute import task_execute_factory
 
@@ -99,7 +99,7 @@ class ExecuteIncreaseTrackCount(object):
         if column_dst:
             try:
                 # Increase the relevant cell by one
-                ontask.dataops.sql.row_queries.increase_row_integer(
+                increase_row_integer(
                     action.workflow.get_data_frame_table_name(),
                     column_dst,
                     column_to,

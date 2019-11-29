@@ -21,6 +21,7 @@ from ontask.workflow.views import index
 
 class AboutPage(generic.TemplateView):
     """About page."""
+
     template_name = 'about.html'
 
 
@@ -31,13 +32,15 @@ class ToBeDone(UserIsInstructor, generic.TemplateView):
 
 
 def home(request: HttpRequest) -> HttpResponse:
-    """Render the home page."""
+    """Render the home page.
+
+    :param request: Received HTTP Request
+    :return: Rendered page.
+    """
     if not request.user.is_authenticated:
-        # Unauthenticated request, go to login
         return redirect(reverse('accounts:login'))
 
     if is_instructor(request.user) or is_admin(request.user):
-        # Authenticated request, go to the workflow index
         return index(request)
 
     # Authenticated request from learner, show profile
@@ -49,7 +52,6 @@ def home(request: HttpRequest) -> HttpResponse:
 @xframe_options_exempt
 @lti_role_required(['Instructor', 'Learner'])
 def lti_entry(request: HttpRequest) -> HttpResponse:
-    """Enter the application through LTI."""
     return redirect('home')
 
 
@@ -59,7 +61,6 @@ def trck(request: HttpRequest) -> HttpResponse:
     """Receive a request with a token from email read tracking.
 
     :param request: Request object
-
     :return: Reflects in the DB the reception and (optionally) in the data
     table of the workflow
     """
@@ -78,7 +79,6 @@ def keep_alive(request: HttpRequest) -> JsonResponse:
     """Return empty response to keep session alive.
 
     :param request:
-
     :return: Empty JSON response
     """
     return JsonResponse({})

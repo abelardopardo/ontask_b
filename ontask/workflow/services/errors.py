@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""Exception base class for the workflow services."""
 from ontask import OnTaskServiceException
 
 

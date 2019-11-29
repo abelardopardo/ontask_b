@@ -6,6 +6,8 @@ EditActionOutForm: Form to process content action_out (Base class)
 
 EditActionIn: Form to process action in elements
 """
+from typing import Tuple, List, Any
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
@@ -133,3 +135,34 @@ class EnterActionIn(forms.Form):
             else:
                 # We are adding at least one field to be filled
                 self.is_empty = False
+
+    def get_key_value_pairs(self) -> Tuple[List, List, str, Any]:
+        """Extract key/value pairs and primary key/value.
+
+        :return: Tuple with List[keys], List[values], where_field, where_value
+        """
+        keys = []
+        values = []
+        where_field = None
+        where_value = None
+        # Create the SET name = value part of the query
+        for idx, colcon in enumerate(self.tuples):
+            if colcon.column.is_key and not self.show_key:
+                # If it is a learner request and a key column, skip
+                continue
+
+            # Skip the element if there is a condition and it is false
+            if colcon.condition and not self.context[colcon.condition.name]:
+                continue
+
+            field_value = self.cleaned_data[FIELD_PREFIX + '{0}'.format(idx)]
+            if colcon.column.is_key:
+                # Remember one unique key for selecting the row
+                where_field = colcon.column.name
+                where_value = field_value
+                continue
+
+            keys.append(colcon.column.name)
+            values.append(field_value)
+
+        return keys, values, where_field, where_value

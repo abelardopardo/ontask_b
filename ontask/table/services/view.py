@@ -14,7 +14,7 @@ import django_tables2 as tables
 
 from ontask import models
 from ontask.core import OperationsColumn
-from ontask.table.forms import ViewAddForm
+from ontask.table.services.errors import OnTaskTableCloneError
 
 
 class ViewTable(tables.Table):
@@ -57,6 +57,7 @@ class ViewTable(tables.Table):
 
 
 def do_clone_view(
+    user,
     view: models.View,
     new_workflow: models.Workflow = None,
     new_name: str = None,
@@ -71,6 +72,9 @@ def do_clone_view(
 
     :result: New clone object
     """
+    id_old = view.id
+    name_old = view.name
+
     # Proceed to clone the view
     if new_name is None:
         new_name = view.name
@@ -89,45 +93,35 @@ def do_clone_view(
         # Update the many to many field.
         new_view.columns.set(list(view.columns.all()))
     except Exception as exc:
-        new_view.delete()
-        raise exc
+        raise OnTaskTableCloneError(
+            message=_('Error while cloning table view.'),
+            to_delete=[new_view]
+        )
+
+    view.log(
+        user,
+        models.Log.VIEW_CLONE,
+        id_old=id_old,
+        name_old=name_old)
 
     return new_view
 
 
 def save_view_form(
-    request: HttpRequest,
-    form: ViewAddForm,
-    template_name: str,
-) -> JsonResponse:
-    """Save the data attached to a view as provided in a form.
+    user,
+    workflow: models.Workflow,
+    view: models.View
+):
+    """Save the data attached to a view.
 
     :param request: HTTP request
-
-    :param form: Form object with the collected information
-
-    :param template_name: To render the response
-
+    :param wokflow: Workflow being processed
+    :param view: View being processed.
     :return: AJAX Response
     """
-    if request.method == 'POST' and form.is_valid():
-        if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
-
-        # Correct POST submission
-        view = form.save(commit=False)
-        view.workflow = form.workflow
-        view.save()
-        form.save_m2m()  # Needed to propagate the save effect to M2M relations
-        view.log(
-            request.user,
-            models.Log.VIEW_EDIT if form.instance.id else models.Log.VIEW_CREATE)
-
-        return JsonResponse({'html_redirect': ''})
-
-    return JsonResponse({
-        'html_form': render_to_string(
-            template_name,
-            {'form': form, 'id': form.instance.id},
-            request=request),
-    })
+    view.workflow = workflow
+    is_new = view.id is None
+    view.save()
+    view.log(
+        user,
+        models.Log.VIEW_CREATE if is_new else models.Log.VIEW_EDIT)
