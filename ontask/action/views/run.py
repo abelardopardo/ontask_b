@@ -15,10 +15,73 @@ from django.views.decorators.http import require_http_methods
 
 from ontask import models
 from ontask.action import forms, services
-from ontask.core import DataTablesServerSidePaging, SessionPayload
-from ontask.core import celery_is_up
-from ontask.core.decorators import ajax_required, get_action, get_workflow
-from ontask.core.permissions import is_instructor
+from ontask.action.services.errors import (
+    OnTaskActionSurveyDataNotFound,
+    OnTaskActionSurveyNoTableData,
+)
+from ontask.core import (
+    DataTablesServerSidePaging, SessionPayload,
+    celery_is_up, is_instructor, has_access,
+    ajax_required, get_action, get_workflow,
+)
+from ontask.core.services import ontask_handler404
+
+def _common_run_survey_row(
+    request: http.HttpRequest,
+    action: Optional[models.Action] = None,
+    user_attribute_name: Optional[str] = None,
+) -> http.HttpResponse:
+    # Access the data corresponding to the user
+    is_manager = has_access(request.user, action.workflow)
+    try:
+        context = services.get_survey_context(
+            request,
+            is_manager,
+            action,
+            user_attribute_name)
+    except OnTaskActionSurveyDataNotFound:
+        return ontask_handler404(request, None)
+    except OnTaskActionSurveyNoTableData as exc:
+        exc.message_to_error(request)
+        return redirect(reverse('action:run', kwargs={'pk': action.id}))
+
+    # Get the active columns attached to the action
+    colcon_items = services.extract_survey_questions(action, request.user)
+    # Bind the form with the existing data
+    form = forms.EnterActionIn(
+        request.POST or None,
+        tuples=colcon_items,
+        context=context,
+        values=[context[colcon.column.name] for colcon in colcon_items],
+        show_key=is_manager)
+    if (
+        request.method == 'POST'
+        and form.is_valid()
+        and not request.POST.get('lti_version')
+    ):
+        services.update_row_values(
+            request,
+            action,
+            form.get_key_value_pairs())
+        # If not instructor, just thank the user!
+        if not is_manager:
+            return render(request, 'thanks.html', {})
+
+        # Back to running the action
+        return redirect(reverse('action:run', kwargs={'pk': action.id}))
+
+    return render(
+        request,
+        'action/run_survey_row.html',
+        {
+            'form': form,
+            'action': action,
+            'cancel_url': reverse(
+                'action:run', kwargs={'pk': action.id},
+            ) if is_manager else None,
+        },
+    )
+
 
 
 @user_passes_test(is_instructor)
@@ -138,9 +201,6 @@ def serve_action(
     :param action_id: Action ID to use
     :return: Http response
     """
-    # Get the parameters
-    user_attribute_name = request.GET.get('uatn', 'email')
-
     # Get the action object
     action = models.Action.objects.filter(pk=int(action_id)).prefetch_related(
         'conditions',
@@ -148,25 +208,55 @@ def serve_action(
     if not action or (not action.serve_enabled) or (not action.is_active):
         raise http.Http404
 
+    # Get the parameters
+    user_attribute_name = request.GET.get('uatn', 'email')
     if user_attribute_name not in action.workflow.get_column_names():
         raise http.Http404
 
-    try:
-        if action.is_out:
+    if action.is_out:
+        try:
             response = services.serve_action_out(
                 request.user,
                 action,
                 user_attribute_name)
-        else:
-            response = services.serve_survey_row(
-                request,
-                action,
-                user_attribute_name)
-    except Exception:
-        raise http.Http404()
+        except Exception:
+            raise http.Http404()
 
-    return response
+        return response
 
+    return _common_run_survey_row(request, action, user_attribute_name)
+
+
+@user_passes_test(is_instructor)
+@get_action(pf_related='actions')
+def run_survey_row(
+    request: http.HttpRequest,
+    pk: int,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
+    user_attribute_name: Optional[str] = None,
+) -> http.HttpResponse:
+    """Render form for introducing information in a single row.
+
+    Function that runs the action in for a single row. The request
+    must have query parameters uatn = key name and uatv = key value to
+    perform the lookup.
+
+    :param request: Received HTTP Request
+    :param pk: Primary key for the action
+    :param workflow: Workflow being processed
+    :param action: Action being executed
+    :param user_attribute_name: Optional attribute name for the user
+    :return: Http Response
+    """
+    if action.is_out:
+        return redirect('action:index')
+
+    if not user_attribute_name:
+        # Get the parameters
+        user_attribute_name = request.GET.get('uatn', 'email')
+
+    return _common_run_survey_row(request, action, user_attribute_name)
 
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
@@ -311,36 +401,6 @@ def show_survey_table_ss(
         )
 
     return services.create_survey_table(workflow, action, dt_page)
-
-
-@user_passes_test(is_instructor)
-@get_action(pf_related='actions')
-def run_survey_row(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    action: Optional[models.Action] = None,
-) -> http.HttpResponse:
-    """Render form for introducing information in a single row.
-
-    Function that runs the action in for a single row. The request
-    must have query parameters uatn = key name and uatv = key value to
-    perform the lookup.
-
-    :param request:
-
-    :param pk: Action id. It is assumed to be an action In
-
-    :return:
-    """
-    # If the action is an "out" action, return to index
-    if action.is_out:
-        return redirect('action:index')
-
-    # Get the parameters
-    user_attribute_name = request.GET.get('uatn', 'email')
-
-    return services.serve_survey_row(request, action, user_attribute_name)
 
 
 @login_required

@@ -20,9 +20,13 @@ from ontask.action.services.preview import (
 )
 from ontask.action.services.rubric import ActionManagerRubric
 from ontask.action.services.serve_action import (
-    serve_action_out, serve_survey_row,
+    serve_action_out, update_row_values, get_survey_context,
+    extract_survey_questions,
 )
 from ontask.action.services.survey import (
     ActionManagerSurvey, create_survey_table,
 )
 from ontask.action.services.zip import ActionManagerZip, create_and_send_zip
+from ontask.action.services.errors import (
+    OnTaskActionSurveyNoTableData, OnTaskActionSurveyDataNotFound,
+)

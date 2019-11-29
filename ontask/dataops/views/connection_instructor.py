@@ -12,8 +12,6 @@ from ontask import models
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops import services
-import ontask.dataops.services.athena
-import ontask.dataops.services.sql
 
 
 @user_passes_test(is_instructor)
@@ -25,16 +23,14 @@ def sql_connection_instructor_index(
     """Render a page showing a table with the available SQL connections.
 
     :param request: HTML request
-
     :param workflow: Current workflow being used
-
     :return: HTML response
     """
     return render(
         request,
         'dataops/connections.html',
         {
-            'table': ontask.dataops.services.sql.create_sql_connection_runtable(),
+            'table': services.create_sql_connection_runtable(),
             'is_sql': True,
             'title': _('SQL Connections')})
 
@@ -48,15 +44,13 @@ def athena_connection_instructor_index(
     """Render a page showing a table with the available Athena connections.
 
     :param request: HTML request
-
     :param workflow: Current workflow being used
-
     :return: HTML response
     """
     return render(
         request,
         'dataops/connections.html',
         {
-            'table': ontask.dataops.services.athena.create_athena_connection_runtable(),
+            'table': services.create_athena_connection_runtable(),
             'is_athena': True,
             'title': _('Athena Connections')})

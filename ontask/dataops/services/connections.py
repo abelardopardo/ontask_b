@@ -10,7 +10,6 @@ from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
 from ontask import create_new_name, models
-from ontask.dataops.forms import ConnectionForm
 
 
 class ConnectionTableAdmin(tables.Table):
@@ -43,46 +42,6 @@ class ConnectionTableRun(tables.Table):
             'style': 'width: 100%;',
             'id': 'conn-instructor-table',
         }
-
-
-def save_connection_form(
-    request: HttpRequest,
-    form: ConnectionForm,
-    template_name: str,
-    is_add: str,
-    action_url: str,
-) -> JsonResponse:
-    """Save the connection provided in the form.
-
-    :param request: HTTP request
-
-    :param form: form object with the collected information
-
-    :param template_name: To render the response
-
-    :return: AJAX response
-    """
-    # If it is a POST and it is correct
-    if request.method == 'POST' and form.is_valid():
-        if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
-        conn = form.save()
-        if is_add:
-            conn.log(request.user, conn.create_event)
-        else:
-            conn.log(request.user, conn.edit_event)
-        return JsonResponse({'html_redirect': ''})
-
-    # Request is a GET
-    return JsonResponse({
-        'html_form': render_to_string(
-            template_name,
-            {
-                'form': form,
-                'id': form.instance.id,
-                'add': is_add,
-                'action_url': action_url},
-            request=request)})
 
 
 def clone(

@@ -13,7 +13,6 @@ from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
 from ontask import models, tasks
-from ontask.dataops.forms import FIELD_PREFIX, PluginInfoForm
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
 from ontask.dataops.services.plugin_admin import refresh_plugin_data
 
@@ -84,67 +83,6 @@ class PluginAvailableTable(tables.Table):
         }
 
 
-def _prepare_plugin_input_output(
-    plugin_instance: OnTaskPluginAbstract,
-    workflow: models.Workflow,
-    form: PluginInfoForm,
-) -> Tuple[List, List]:
-    """Prepare input, output and parameters for plugin execution.
-
-    :param plugin_instance: Plugin object allowed to execute
-
-    :param workflow: Workflow object (to access columns and similar)
-
-    :param form: Form just populated with a POST
-
-    :return: [list of inputs, list of outputs]
-    """
-    # Take the list of inputs from the form if empty list is given.
-    input_column_names = []
-    if plugin_instance.input_column_names:
-        # Traverse the fields and get the names of the columns
-        for idx, __ in enumerate(plugin_instance.input_column_names):
-            input_column_names.append(
-                workflow.columns.get(id=int(
-                    form.cleaned_data[FIELD_PREFIX + 'input_%s' % idx],
-                )).name,
-            )
-    else:
-        input_column_names = [col.name for col in form.cleaned_data['columns']]
-
-    output_column_names = []
-    if plugin_instance.output_column_names:
-        # Process the output columns
-        for idx, __ in enumerate(plugin_instance.output_column_names):
-            output_column_names.append(
-                form.cleaned_data[FIELD_PREFIX + 'output_%s' % idx])
-    else:
-        # Plugin instance has an empty set of output files, clone the input
-        output_column_names = input_column_names[:]
-
-    suffix = form.cleaned_data['out_column_suffix']
-    if suffix:
-        # A suffix has been provided, add it to the list of outputs
-        output_column_names = [
-            cname + suffix for cname in output_column_names
-        ]
-
-    return input_column_names, output_column_names
-
-
-def _prepare_plugin_parameters(
-    plugin_instance: OnTaskPluginAbstract,
-    form: PluginInfoForm,
-) -> Dict:
-    # Pack the parameters
-    exec_params = {}
-    for idx, tpl in enumerate(plugin_instance.parameters):
-        exec_params[tpl[0]] = form.cleaned_data[
-            FIELD_PREFIX + 'parameter_%s' % idx]
-
-    return exec_params
-
-
 def create_model_table(
     request: http.HttpRequest,
     workflow: models.Workflow,
@@ -175,7 +113,7 @@ def plugin_run(
     workflow: models.Workflow,
     plugin_info: models.Plugin,
     plugin_instance: OnTaskPluginAbstract,
-    form: PluginInfoForm,
+    run_parameters: Dict,
 ) -> models.Log:
     """Batch execute the given instance of the plugin.
 
@@ -183,26 +121,33 @@ def plugin_run(
     :param workflow: Current workflow being manipulated
     :param plugin_info: Information about the plugin in the DB
     :param plugin_instance: Instance of the class to execute
-    :param form: form received
+    :param run_parameters: Dictionary with all the required parameters
     :return:
     """
-    in_cols, out_cols = _prepare_plugin_input_output(
-        plugin_instance,
-        workflow,
-        form)
+    # If the plugin has no inputs, copy the columns field.
+    input_column_names = run_parameters['input_column_names']
+    if not plugin_instance.input_column_names:
+        input_column_names = [col.name for col in run_parameters['columns']]
 
-    exec_params = _prepare_plugin_parameters(
-        plugin_instance,
-        form)
+    # If there are no output columns, clone the input
+    output_column_names = run_parameters['output_column_names']
+    if not plugin_instance.output_column_names:
+        # Plugin instance has an empty set of output files, clone the input
+        output_column_names = run_parameters['input_column_names'][:]
+
+    suffix = run_parameters['out_column_suffix']
+    if suffix:
+        # A suffix has been provided, add it to the list of outputs
+        output_column_names = [
+            cname + suffix for cname in run_parameters['output_column_names']]
 
     # Log the event with the status "preparing invocation"
-
     log_item = plugin_info.log(
         request.user,
         models.Log.PLUGIN_EXECUTE,
-        input_column_names=in_cols,
-        output_column_names=out_cols,
-        parameters=json.dumps(exec_params, default=str),
+        input_column_names=input_column_names,
+        output_column_names=output_column_names,
+        parameters=json.dumps(run_parameters['params'], default=str),
         status='preparing execution')
 
     tasks.execute_operation.delay(
@@ -212,10 +157,10 @@ def plugin_run(
         workflow_id=workflow.id,
         payload={
             'plugin_id': plugin_info.pk,
-            'input_column_names': in_cols,
-            'output_column_names': out_cols,
-            'output_suffix': form.cleaned_data['out_column_suffix'],
-            'merge_key': form.cleaned_data['merge_key'],
-            'parameters': exec_params})
+            'input_column_names': input_column_names,
+            'output_column_names': output_column_names,
+            'output_suffix': run_parameters['out_column_suffix'],
+            'merge_key': run_parameters['merge_key'],
+            'parameters': run_parameters['params']})
 
     return log_item

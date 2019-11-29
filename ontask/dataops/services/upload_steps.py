@@ -10,9 +10,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from ontask import models
-from ontask.dataops.forms import SelectColumnUploadForm
-from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
-from ontask.dataops.pandas.dataframe import store_workflow_table
+from ontask.dataops.pandas import (
+    load_table, perform_dataframe_upload_merge, store_workflow_table)
 from ontask.dataops.sql import table_queries
 from ontask.workflow.access import store_workflow_in_session
 
@@ -20,14 +19,15 @@ from ontask.workflow.access import store_workflow_in_session
 def upload_step_two(
     request: http.HttpRequest,
     workflow: models.Workflow,
-    form: SelectColumnUploadForm,
+    select_column_data: Dict,
     upload_data: Dict,
 ) -> http.HttpResponse:
     """Process the received dataframe and either store or continue merge.
 
     :param request: Http request received.
     :param workflow: workflow being processed.
-    :param form: Form with the upload/merge information (column names, keys)
+    :param select_column_data: Dictionary with the upload/merge information
+    (new column names, keep the keys)
     :param upload_data: Dictionary with the upload information.
     :return: Http Response
     """
@@ -37,14 +37,14 @@ def upload_step_two(
     src_is_key_column = upload_data.get('src_is_key_column')
     keep_key_column = upload_data.get('keep_key_column')
     for idx in range(len(initial_columns)):
-        new_name = form.cleaned_data['new_name_%s' % idx]
+        new_name = select_column_data['new_name_%s' % idx]
         upload_data['rename_column_names'][idx] = new_name
-        upload = form.cleaned_data['upload_%s' % idx]
+        upload = select_column_data['upload_%s' % idx]
         upload_data['columns_to_upload'][idx] = upload
 
         if src_is_key_column[idx]:
             # If the column is key, check if the user wants to keep it
-            keep_key_column[idx] = form.cleaned_data['make_key_%s' % idx]
+            keep_key_column[idx] = select_column_data['make_key_%s' % idx]
 
     if workflow.has_data_frame():
         # A Merge operation is required

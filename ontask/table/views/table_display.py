@@ -14,7 +14,7 @@ from django.views.decorators.http import require_http_methods
 
 from ontask.core.decorators import ajax_required, get_view, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask import models
+from ontask import models, OnTaskServiceException
 from ontask.table import services
 
 
@@ -144,18 +144,10 @@ def row_delete(
 
     # Process the confirmed response
     if request.method == 'POST':
-        # if there is no key or value, flag the message and return to table
-        # view
-        if not row_key or not row_value:
-            messages.error(
-                request,
-                _('Incorrect URL invoked to delete a row'))
-            # The response will require going to the table display anyway
-            return http.JsonResponse(
-                {'html_redirect': reverse('table:display')})
-
-
-        services.perform_row_delete(workflow, row_key, row_value)
+        try:
+            services.perform_row_delete(workflow, row_key, row_value)
+        except OnTaskServiceException as exc:
+            exc.message_to_error(request)
 
         return http.JsonResponse({'html_redirect': reverse('table:display')})
 

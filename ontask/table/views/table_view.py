@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import create_new_name, models
+from ontask import create_new_name, models, OnTaskServiceException
 from ontask.core.decorators import ajax_required, get_view, get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.table.forms import ViewAddForm
@@ -70,11 +70,23 @@ def view_add(
 
     # Form to read/process data
     form = ViewAddForm(request.POST or None, workflow=workflow)
-    return services.save_view_form(
-        request,
-        form,
-        'table/includes/partial_view_add.html',
-    )
+
+    if request.method == 'POST' and form.is_valid():
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+
+        view = form.save(commit=False)
+        services.save_view_form(request.user, workflow, view)
+        form.save_m2m()  # Needed to propagate the save effect to M2M relations
+
+        return JsonResponse({'html_redirect': ''})
+
+    return JsonResponse({
+        'html_form': render_to_string(
+            'table/includes/partial_view_add.html',
+            {'form': form, 'id': form.instance.id},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
@@ -94,10 +106,23 @@ def view_edit(
     :param view: View to be edited
     :return: AJAX Response
     """
-    return services.save_view_form(
-        request,
-        ViewAddForm(request.POST or None, instance=view, workflow=workflow),
-        'table/includes/partial_view_edit.html')
+    form = ViewAddForm(request.POST or None, instance=view, workflow=workflow)
+    if request.method == 'POST' and form.is_valid():
+        if not form.has_changed():
+            return JsonResponse({'html_redirect': None})
+
+        view = form.save(commit=False)
+        services.save_view_form(request.user, workflow, view)
+        form.save_m2m()  # Needed to propagate the save effect to M2M relations
+
+        return JsonResponse({'html_redirect': ''})
+
+    return JsonResponse({
+        'html_form': render_to_string(
+            'table/includes/partial_view_edit.html',
+            {'form': form, 'id': form.instance.id},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
@@ -120,7 +145,7 @@ def view_delete(
     :return: AJAX response to handle the form.
     """
     if request.method == 'POST':
-        view.log(request.user, Log.VIEW_DELETE)
+        view.log(request.user, models.Log.VIEW_DELETE)
         view.delete()
         return JsonResponse({'html_redirect': reverse('table:view_index')})
 
@@ -155,16 +180,14 @@ def view_clone(
                 {'pk': pk, 'vname': view.name},
                 request=request)})
 
-    id_old = view.id
-    name_old = view.name
-    view = services.do_clone_view(
-        view,
-        new_workflow=None,
-        new_name=create_new_name(view.name, workflow.views)
-    )
-    view.log(
-        request.user,
-        models.Log.VIEW_CLONE,
-        id_old=id_old,
-        name_old=name_old)
+    try:
+        services.do_clone_view(
+            request.user,
+            view,
+            new_workflow=None,
+            new_name=create_new_name(view.name, workflow.views)
+        )
+    except OnTaskServiceException as exc:
+        exc.message_to_error(request)
+        exc.delete()
     return JsonResponse({'html_redirect': ''})
