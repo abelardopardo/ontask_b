@@ -211,7 +211,6 @@ class PluginInfoForm(forms.Form):
             self.cleaned_data[self.out_field_pattern % index]
             for index in range(len(self.plugin_instance.output_column_names))]
 
-
     def get_parameters(self) -> Dict:
         """Create a dictionary with the given parameters.
 

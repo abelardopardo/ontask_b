@@ -38,7 +38,7 @@ def s3upload_start(
     step_1: URL name of the first step
 
     :param request: Web request
-
+    :param workflow: Workflow being manipulated (set by the decorator)
     :return: Creates the upload_data dictionary in the session
     """
     # Bind the form with the received data

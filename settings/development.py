@@ -41,15 +41,15 @@ THUMBNAIL_DEBUG = True
 # Allow internal IPs for debugging
 INTERNAL_IPS = ['127.0.0.1', '0.0.0.1', 'localhost']
 
-# Reset logging
-# (see http://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/)
 LOGGING_CONFIG = None
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': "[%(asctime)s] %(levelname)s [%(pathname)s:%(lineno)s] %(message)s",
+            'format': (
+                '[%(asctime)s] %(levelname)s '
+                + '[%(pathname)s:%(lineno)s] %(message)s'),
             'datefmt': "%d/%b/%Y %H:%M:%S"
         },
         'simple': {

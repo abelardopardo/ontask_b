@@ -27,7 +27,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -598,7 +598,7 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -816,7 +816,7 @@ class DataopsMergeBasic(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()

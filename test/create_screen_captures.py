@@ -2,8 +2,6 @@
 
 
 import os
-import test
-from test import ElementHasFullOpacity, ScreenTests
 
 from django.conf import settings
 from future import standard_library
@@ -15,6 +13,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
 from ontask.dataops.pandas import destroy_db_engine
+import test
+from test import ElementHasFullOpacity, ScreenTests
 
 standard_library.install_aliases()
 
@@ -132,7 +132,7 @@ class ScreenTestFixture(ScreenTests):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
         # Insert a SQL Connection
         # sqlc = SQLConnection(

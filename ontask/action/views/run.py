@@ -84,7 +84,6 @@ def _common_run_survey_row(
     )
 
 
-
 @user_passes_test(is_instructor)
 @get_action(pf_related='actions')
 def run_action(
@@ -154,11 +153,12 @@ def zip_action(
     Form asking for participant column, user file name column, file suffix,
     if it is a ZIP for Moodle and confirm users step.
 
-    :param req: HTTP request (GET)
+    :param request: HTTP request (GET)
     :param pk: Action key
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param action: Action being manipulated (set by the decorators)
     :return: HTTP response
     """
-    del workflow, pk
     return services.action_process_factory.process_run_request(
         models.action.ZIP_OPERATION,
         request=request,
@@ -259,6 +259,7 @@ def run_survey_row(
 
     return _common_run_survey_row(request, action, user_attribute_name)
 
+
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def run_action_item_filter(
@@ -276,9 +277,7 @@ def run_action_item_filter(
     :param request: HTTP request (GET) with a session object and a dictionary
     with the right parameters. The selected values are stored in the field
     'exclude_values'.
-
-    :param: workflow: Workflow object being processed.
-
+    :param workflow: Workflow object being processed.
     :return: HTTP response
     """
     # Get the payload from the session, and if not, use the given one
@@ -329,6 +328,7 @@ def action_zip_export(
 
     :param request: Request object with a Dictionary with all the required
     information
+    :param workflow: Workflow being  manipulated (set by the decorator)
     :return: Response (download)
     """
     # Get the payload from the session if not given
@@ -392,6 +392,8 @@ def show_survey_table_ss(
     the filter and between the given limits.
     :param request:
     :param pk: action id being run
+    :param workflow: Workflow being  manipulated (set by the decorator)
+    :param action: Action being  manipulated (set by the decorator)
     :return:
     """
     # Check that the GET parameters are correctly given

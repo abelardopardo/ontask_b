@@ -14,8 +14,8 @@ class OntaskTestPlugin(OnTaskTransformation):
 
     1. Field name: Plugin name show to the users.
 
-    2. Field description_text: A string with the detailed description of what the
-    plugin does
+    2. Field description_text: A string with the detailed description of what
+    the plugin does
 
     3. Field input_column_names: A potentially empty list of column names 
     (strings). If the list is empty, the columns are selected by the user at

@@ -22,6 +22,7 @@ class MergeForm(forms.Form):
     merge_help = _('Select one method to see detailed information')
 
     how_merge_initial = None
+
     def __init__(self, *args, **kargs):
         """Adjust the choices for the select fields."""
         self.how_merge_initial = next((

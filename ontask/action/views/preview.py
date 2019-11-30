@@ -37,14 +37,11 @@ def preview_next_all_false_response(
     the preview_response method
 
     :param request: HTTP Request object
-
     :param pk: Primary key of the action
-
     :param idx: Index of the preview requested
-
     :param workflow: Current workflow being manipulated
-
-    :return:
+    :param action: Action being used in preview (set by the decorators)
+    :return: JSON Response with the rendering of the preview
     """
     # Get the list of indexes
     idx_list = action.rows_all_false

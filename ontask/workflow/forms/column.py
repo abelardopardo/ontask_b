@@ -14,7 +14,7 @@ from ontask.dataops.pandas import is_unique_column, load_table
 
 INITIAL_VALUE_LENGTH = 512
 
-INTERVAL_PATTERN = '-?(?P<from>\d+)\s-\s-?(?P<to>\d+)'
+INTERVAL_PATTERN = '-?(?P<from>\\d+)\\s-\\s-?(?P<to>\\d+)'
 
 
 class ColumnBasicForm(forms.ModelForm):

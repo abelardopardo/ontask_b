@@ -166,9 +166,8 @@ def criterion_remove(
     """Remove the criterion from the rubric. Does not remove the column.
 
     :param request:
-
     :param pk: For the Action/Column/condition triplet
-
+    :param workflow: workflow being manipulated (set by the decorator)
     :return: JSON Response
     """
     triplet = models.ActionColumnConditionTuple.objects.filter(pk=pk).first()

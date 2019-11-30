@@ -30,6 +30,8 @@ def save_text(
 
     :param request: HTTP request (POST)
     :param pk: Action ID
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param action: Action being saved (set by the decorators)
     :return: Nothing, changes reflected in the DB
     """
     # Wrong type of action.
@@ -60,9 +62,9 @@ def showurl(
     to retrieve the personalised message.
 
     :param request: Json request
-
     :param pk: Primary key of the action to show the URL
-
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param action: Action being manipulated (set by the decorators)
     :return: Json response with the content to show in the screen
     """
     form = EnableURLForm(request.POST or None, instance=action)

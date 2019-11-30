@@ -85,7 +85,7 @@ class ScheduledOperationEmailAPIListCreate(ScheduledOperationAPIListCreate):
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return models.ScheduledOperation.objects.filter(
-                action__action_type=Action.PERSONALIZED_TEXT
+                action__action_type=models.Action.PERSONALIZED_TEXT
             )
 
         return models.ScheduledOperation.objects.filter(

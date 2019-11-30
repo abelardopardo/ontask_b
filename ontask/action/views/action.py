@@ -145,6 +145,8 @@ def edit_action(
 
     :param request: Request object
     :param pk: Action PK
+    :param workflow: Workflow being processed,
+    :param action: Action being edited (set by the decorator)
     :return: HTML response
     """
     return services.action_process_factory.process_edit_request(
@@ -166,6 +168,8 @@ def delete_action(
 
     :param request: Request object
     :param pk: Action id to delete.
+    :param workflow: Workflow being processed,
+    :param action: Action being deleted (set by the decorator)
     :return: JSON Response
     """
     # JSON response object

@@ -8,6 +8,7 @@ import os
 import time
 from typing import List, Tuple
 
+from django import http
 from django.conf import settings
 from django.contrib import messages
 from django.db.models.expressions import F
@@ -19,7 +20,7 @@ import django_tables2 as tables
 import pandas as pd
 import pytz
 
-from ontask import models, OnTaskServiceException
+from ontask import OnTaskServiceException, models
 from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
 from ontask.dataops.plugin import ontask_plugin
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
@@ -397,13 +398,13 @@ def load_plugin(foldername):
     return plugin_instance, tests
 
 
-def refresh_plugin_data(request, workflow = None):
+def refresh_plugin_data(request: http.HttpRequest):
     """Refresh the plugin data in the system.
 
     Function to traverse the directory where the plugins live and check if
     the folders in there are reflected in the Plugin model.
 
-    :return: Reflect the changes in the database
+    :params request: Http Request
     """
     plugin_folder = _get_plugin_path()
 

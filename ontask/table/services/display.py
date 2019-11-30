@@ -3,14 +3,14 @@
 """Functions to support the display of a table."""
 from builtins import next, str
 from datetime import datetime
-from typing import Optional, Any
+from typing import Any, Optional
 
-from django.conf import settings
 from django import http
-from django.utils.html import escape, urlencode
+from django.conf import settings
 from django.shortcuts import render, reverse
-from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
+from django.utils.html import escape, urlencode
+from django.utils.translation import ugettext_lazy as _
 from pytz import timezone
 
 from ontask import models
@@ -199,8 +199,6 @@ def perform_row_delete(
         raise OnTaskTableNoKeyValueError(
             message=_('Incorrect URL invoked to delete a row'))
         # The response will require going to the table display anyway
-        return http.JsonResponse(
-            {'html_redirect': reverse('table:display')})
 
     # Proceed to delete the row
     delete_row(workflow.get_data_frame_table_name(), (row_key, row_value))

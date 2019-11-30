@@ -17,6 +17,7 @@ def do_clone_condition(
 
     Function to clone a condition and change action and/or name
 
+    :param user: User executing the operation
     :param condition: Condition to clone
     :param new_action: New action to point
     :param new_name: New name
@@ -68,16 +69,14 @@ def do_clone_action(
 
     Function that given an action clones it and changes workflow and name
 
+    :param user: User executing the operation
     :param action: Object to clone
-
     :param new_workflow: New workflow object to point
-
     :param new_name: New name
-
     :return: Cloned object
     """
-    old_id = action.id,
-    old_name = action.name,
+    old_id = action.id
+    old_name = action.name
 
     if new_name is None:
         new_name = action.name
@@ -123,14 +122,13 @@ def do_clone_action(
 
         # Clone the conditions
         for condition in action.conditions.all():
-            do_clone_condition(condition, new_action)
+            do_clone_condition(user, condition, new_action)
 
         # Update
         new_action.save()
     except Exception as exc:
         new_action.delete()
         raise exc
-
 
     # Log event
     action.log(

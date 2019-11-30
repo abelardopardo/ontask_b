@@ -2,11 +2,11 @@
 
 """Script to create users. Execute without parameters for help."""
 
+from builtins import str
 import codecs
 import csv
 import os
 import sys
-from builtins import str
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -109,6 +109,7 @@ class Command(BaseCommand):
         concatenating all the columns with name "column_name"
         :param filenames: List of filenames
         :param column_name: Column name to search.
+        :param debug: Boolean controlling the log messages.
         :return: List of values.
         """
         to_return = []

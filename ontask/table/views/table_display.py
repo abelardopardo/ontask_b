@@ -3,18 +3,17 @@
 """Functions to implement all views related to the table element."""
 from typing import Optional
 
-from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
 from django import http
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from ontask import OnTaskServiceException, models
 from ontask.core.decorators import ajax_required, get_view, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask import models, OnTaskServiceException
 from ontask.table import services
 
 
@@ -27,7 +26,7 @@ def display(
     """Render the page base for displaying the table.
 
     :param request: HTTP request
-
+    :param workflow: Workflow being manipulated (set by the decorators)
     :return: Initial rendering of the page with the table skeleton
     """
     if workflow.nrows == 0:
@@ -81,9 +80,9 @@ def display_view(
     """Render the skeleton of the table view.
 
     :param request: HTTP request
-    :param workflow: Workflow current being used
     :param pk: PK of the view to use
-
+    :param workflow: Workflow current being used
+    :param view: View being displayed (set by the decorators)
     :return: Initial rendering of the page with the table skeleton
     """
     return services.render_table_display_page(

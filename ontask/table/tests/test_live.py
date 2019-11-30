@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import test
 
 from django.conf import settings
 from selenium.webdriver.common.action_chains import ActionChains
@@ -11,6 +10,7 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask import models
 from ontask.dataops.pandas import load_table
+import test
 
 
 class TableDerivedColumns(test.OnTaskLiveTestCase):
@@ -26,7 +26,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -348,7 +348,7 @@ class TableViews(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -553,7 +553,7 @@ class TableInsertRow(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()

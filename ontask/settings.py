@@ -93,7 +93,8 @@ HELP_URL = getattr(settings, 'ONTASK_HELP_URL', '')
 if 'siteprefs' in settings.INSTALLED_APPS:
     # Respect those users who doesn't have siteprefs installed.
     from siteprefs.toolbox import (
-        patch_locals, register_prefs, pref, pref_group)
+    patch_locals, register_prefs, pref, pref_group,
+)
 
     patch_locals()  # That's bootstrap.
 
@@ -141,8 +142,8 @@ if 'siteprefs' in settings.INSTALLED_APPS:
                     verbose_name=_('Folder where code packages are stored'),
                     static=False,
                     field=models.CharField(max_length=2048, blank=True)),
-                ),
-                static=False),
+            ),
+            static=False),
         pref_group(
             _('Logs'),
             (
@@ -157,11 +158,11 @@ if 'siteprefs' in settings.INSTALLED_APPS:
             _('Miscellaneous'),
             (
                 pref
-                (HELP_URL,
-                 verbose_name=_(
-                     'URL prefix to access the documentation'),
-                 static=False,
-                 field=models.CharField(max_length=256, blank=True)),
+                    (HELP_URL,
+                    verbose_name=_(
+                        'URL prefix to access the documentation'),
+                    static=False,
+                    field=models.CharField(max_length=256, blank=True)),
             ),
             static=False),
     )

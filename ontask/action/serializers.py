@@ -11,8 +11,7 @@ from ontask import models
 from ontask.dataops.formula import get_variables
 from ontask.dataops.sql.column_queries import add_column_to_db
 from ontask.workflow.serialize_column import (
-    ColumnNameSerializer,
-    ColumnSerializer,
+    ColumnNameSerializer, ColumnSerializer,
 )
 
 try:
@@ -260,7 +259,11 @@ class RubricCellSerializer(serializers.ModelSerializer):
         """Define the model and select fields to seralize."""
 
         model = models.RubricCell
-        fields = ('column', 'loa_position', 'description_text', 'feedback_text')
+        fields = (
+            'column',
+            'loa_position',
+            'description_text',
+            'feedback_text')
 
 
 class ActionSerializer(serializers.ModelSerializer):

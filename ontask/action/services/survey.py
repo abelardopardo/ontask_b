@@ -306,8 +306,15 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
         self,
         request: http.HttpRequest,
         workflow: models.Workflow,
-        action: models.Action) -> http.HttpResponse:
-        """Process the action edit request."""
+        action: models.Action
+    ) -> http.HttpResponse:
+        """Process the action edit request.
+
+        :param request: Http Request received
+        :param workflow: Workflow being manipulated
+        :param action: Action being used as a survey
+        :return: Http response with the right edit template.
+        """
 
         context = self.get_render_context(action)
         extend_status = self.extend_edit_context(workflow, action, context)

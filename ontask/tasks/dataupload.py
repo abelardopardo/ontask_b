@@ -4,7 +4,7 @@
 
 # @shared_task
 # def athena_dataupload_task(user_id, workflow_id, conn_id, params, log_id):
-#     """Upload or merge data in the current workflow using an Athena connection.
+#     """Upload or merge data using an Athena connection.
 #
 #     :param user_id: Id of User object that is executing the action
 #     :param workflow_id: Workflow to upload the data

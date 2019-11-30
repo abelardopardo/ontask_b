@@ -6,7 +6,6 @@ from typing import Dict
 
 from django import http
 from django.db.models.query_utils import Q
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
@@ -15,51 +14,39 @@ from ontask.action.services.clone import do_clone_action
 from ontask.core.session_ops import store_workflow_in_session
 from ontask.dataops.sql import clone_table
 from ontask.table.services import do_clone_view
+from ontask.workflow.forms import WorkflowForm
 from ontask.workflow.services.column_crud import do_clone_column_only
 
 
 def save_workflow_form(
     request: http.HttpRequest,
-    form,
-    template_name: str,
+    form: WorkflowForm,
 ) -> http.JsonResponse:
     """Save the workflow to create a form.
 
-    :param request:
-    :param form:
-    :param template_name:
+    :param request: Received HTTP Request
+    :param form: Form used to get the Workflow parameters
     :return: JSON Response
     """
-    if request.method == 'POST' and form.is_valid():
-        if not form.has_changed():
-            return http.JsonResponse({'html_redirect': None})
+    if form.instance.id:
+        log_type = models.Log.WORKFLOW_UPDATE
+        redirect_url = ''
+        # Save the instance
+        workflow_item = form.save()
+    else:
+        # This is a new instance!
+        form.instance.user = request.user
+        workflow_item = form.save()
+        workflow_item.nrows = 0
+        workflow_item.ncols = 0
+        log_type = models.Log.WORKFLOW_CREATE
+        redirect_url = reverse('dataops:uploadmerge')
 
-        if form.instance.id:
-            log_type = models.Log.WORKFLOW_UPDATE
-            redirect_url = ''
-            # Save the instance
-            workflow_item = form.save()
-        else:
-            # This is a new instance!
-            form.instance.user = request.user
-            workflow_item = form.save()
-            workflow_item.nrows = 0
-            workflow_item.ncols = 0
-            log_type = models.Log.WORKFLOW_CREATE
-            redirect_url = reverse('dataops:uploadmerge')
+        # Store in session
+        store_workflow_in_session(request, workflow_item)
 
-            # Store in session
-            store_workflow_in_session(request, workflow_item)
-
-        workflow_item.log(request.user, log_type)
-        return http.JsonResponse({'html_redirect': redirect_url})
-
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            template_name,
-            {'form': form},
-            request=request),
-    })
+    workflow_item.log(request.user, log_type)
+    return http.JsonResponse({'html_redirect': redirect_url})
 
 
 def get_detail_context(workflow: models.Workflow) -> Dict:
@@ -117,6 +104,7 @@ def get_index_context(user) -> Dict:
 def do_clone_workflow(user, workflow: models.Workflow) -> models.Workflow:
     """Clone a workflow.
 
+    :param user: User performing the operation
     :param workflow: source workflow
     :return: Cloned object
     """
@@ -157,10 +145,10 @@ def do_clone_workflow(user, workflow: models.Workflow) -> models.Workflow:
 
         # Clone actions
         for item_obj in workflow.actions.all():
-            do_clone_action(item_obj, new_workflow)
+            do_clone_action(user, item_obj, new_workflow)
 
         for item_obj in workflow.views.all():
-            do_clone_view(item_obj, new_workflow)
+            do_clone_view(user, item_obj, new_workflow)
 
         # Done!
         new_workflow.save()

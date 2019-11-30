@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Amazon Athena Connection model."""
-from typing import Dict, Tuple
+from typing import Dict
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -115,7 +115,6 @@ class AthenaConnection(Connection):
         """Get the object with the given PK."""
         return AthenaConnection.objects.get(pk=pk)
 
-
     def get_display_dict(self) -> Dict:
         """Create dictionary with (verbose_name, value)"""
         d_dict = super().get_display_dict()
@@ -128,7 +127,6 @@ class AthenaConnection(Connection):
         if remove_title in d_dict:
             d_dict[remove_title] = _('REMOVED')
         return d_dict
-
 
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""

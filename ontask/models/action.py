@@ -6,7 +6,6 @@ import datetime
 import re
 from typing import List
 
-import pytz
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
@@ -14,6 +13,7 @@ from django.core.validators import URLValidator
 from django.db import models
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
+import pytz
 
 import ontask
 from ontask.dataops.formula import evaluation
@@ -33,6 +33,7 @@ VAR_USE_RES = [
 ACTION_TYPE_LENGTH = 64
 
 ZIP_OPERATION = 'create_zip_from_action'
+
 
 class ActionBase(NameAndDescription, CreateModifyFields):
     """Base abstract class for actions.

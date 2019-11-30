@@ -142,9 +142,9 @@ def edit_filter(
     """Edit the filter of an action through AJAX.
 
     :param request: HTTP request
-
     :param pk: condition ID
-
+    :param workflow: Workflow being processed
+    :param condition: Filter to edit (set by the decorator)
     :return: AJAX response
     """
     # Render the form with the Condition information
@@ -171,9 +171,9 @@ def delete_filter(
     """Handle the AJAX request to delete a filter.
 
     :param request: AJAX request
-
     :param pk: Filter ID
-
+    :param workflow: Workflow being processed
+    :param condition: Filter to edit (set by the decorator)
     :return: AJAX response
     """
     if request.method == 'GET':
@@ -218,9 +218,9 @@ def edit_condition(
     """Handle the AJAX request to edit a condition.
 
     :param request: AJAX request
-
     :param pk: Condition ID
-
+    :param workflow: Workflow being processed
+    :param condition: condition to edit (set by the decorator)
     :return: AJAX reponse
     """
     # Render the form with the Condition information
@@ -246,9 +246,9 @@ def delete_condition(
     """Handle the AJAX request to delete a condition.
 
     :param request: HTTP request
-
     :param pk: condition or filter id
-
+    :param workflow: Workflow being processed
+    :param condition: Condition to delete (set by the decorator)
     :return: AJAX response to render
     """
     # Treat the two types of requests

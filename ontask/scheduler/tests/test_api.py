@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import test
 
 from django.conf import settings
 from django.shortcuts import reverse
@@ -9,6 +8,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 
 from ontask import models
+import test
 
 
 class ScheduleApiCreate(test.OnTaskApiTestCase):
@@ -31,7 +31,7 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email='instructor01@bogus.com')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -112,8 +112,6 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
             reverse('scheduler:api_rud_email', kwargs={'pk': sch_item.id})
         )
         self.assertEqual(response.status_code, 204)
-
-
 
     def test_schedule_json(self):
         action_name = 'json action'

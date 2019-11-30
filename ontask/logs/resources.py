@@ -29,7 +29,7 @@ def export(request, wid):
     """Export the logs from the given workflow
 
     :param request: HTML request
-    :param pk: pk of the workflow to export
+    :param wid: pk of the workflow to export
     :return: Return a CSV download of the logs
     """
     dataset = LogResource().export(

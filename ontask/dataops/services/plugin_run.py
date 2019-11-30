@@ -3,7 +3,7 @@
 """Service functions to handle plugin invocations."""
 
 import json
-from typing import Dict, List, Tuple
+from typing import Dict
 
 from django import http
 from django.db.models.expressions import F
@@ -96,7 +96,7 @@ def create_model_table(
     :return: Table with available model plugins
     """
     # Traverse the plugin folder and refresh the db content.
-    refresh_plugin_data(request, workflow)
+    refresh_plugin_data(request)
 
     return PluginAvailableTable(
         models.Plugin.objects.filter(

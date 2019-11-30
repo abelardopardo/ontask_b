@@ -4,6 +4,7 @@
 import os
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 import pandas as pd
 from rest_framework.authtoken.models import Token
@@ -76,12 +77,15 @@ class TableApiBase(test.OnTaskApiTestCase):
         "forcenas": ['value']
     }
 
+    user_name = 'instructor01@bogus.com'
+
     def setUp(self):
         super().setUp()
         # Get the token for authentication and set credentials in client
-        token = Token.objects.get(user__email='instructor01@bogus.com')
+        token = Token.objects.get(user__email=self.user_name)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
+        self.user = get_user_model().objects.get(email=self.user_name)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -638,9 +642,9 @@ class TableApiMerge(TableApiBase):
 
         # Drop the column with booleans because the data type is lost
         delete_column(
+            self.user,
             workflow,
-            workflow.columns.get(name='registered')
-        )
+            workflow.columns.get(name='registered'))
 
         # Transform new table into string
         r_df = pd.DataFrame(self.src_df2)
@@ -690,9 +694,9 @@ class TableApiMerge(TableApiBase):
 
         # Drop the column with booleans because the data type is lost
         delete_column(
+            self.user,
             workflow,
-            workflow.columns.get(name='registered')
-        )
+            workflow.columns.get(name='registered'))
 
         # Transform new table into string
         r_df = pd.DataFrame(self.src_df2)

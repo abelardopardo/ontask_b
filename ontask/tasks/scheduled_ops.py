@@ -3,15 +3,15 @@
 """Process the scheduled actions."""
 
 from datetime import datetime
-from typing import List, Tuple, Dict
+from typing import List
 
-import pytz
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.core.cache import cache
+import pytz
 
-from ontask import core, models
+from ontask import models
 from ontask.tasks.execute import task_execute_factory
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
