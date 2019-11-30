@@ -7,7 +7,6 @@ from typing import Any, Dict, List, Tuple
 
 from django import http
 from django.http.request import HttpRequest
-from django.http.response import HttpResponse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
@@ -90,7 +89,6 @@ def get_survey_context(
 
     :param request: Request received
     :param is_manager: User is manager
-    :param workflow: Workflow object being processed
     :param action: Action object being executed
     :param user_attribute_name: Name of the column to use for username
     :return: Dictionary with the context
@@ -129,7 +127,7 @@ def update_row_values(
     request: HttpRequest,
     action: models.Action,
     row_data: Tuple[List, List, str, Any],
-) -> HttpResponse:
+):
     """Serve a request for action in.
 
     Function that given a request, and an action IN, it performs the lookup
@@ -140,7 +138,6 @@ def update_row_values(
     :param row_data: Tuple containing keys, values, where_field, where_value.
     Keys and values are the values in the row. Where field, and where value is
     pair find the given row
-    :param user_attribute_name: The column name used to check for email
     :return:
     """
     keys, values, where_field, where_value = row_data

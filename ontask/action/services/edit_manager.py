@@ -7,7 +7,6 @@ from django import forms, http
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.action import forms as action_forms
@@ -23,7 +22,8 @@ class ActionEditManager(object):
         self.edit_template = kwargs.pop('edit_template', None)
         super().__init__(*args, **kwargs)
 
-    def add_conditions(self, action: models.Action, context: Dict):
+    @staticmethod
+    def add_conditions(action: models.Action, context: Dict):
         """Add conditions to the context
 
         :param action: Action being processed
@@ -32,7 +32,8 @@ class ActionEditManager(object):
         """
         context['conditions'] = action.conditions.filter(is_filter=False)
 
-    def add_conditions_to_clone(self, action: models.Action, context: Dict):
+    @staticmethod
+    def add_conditions_to_clone(action: models.Action, context: Dict):
         """Add conditions clone to the context
 
         :param action: Action being processed
@@ -43,7 +44,8 @@ class ActionEditManager(object):
                 action__workflow=action.workflow, is_filter=False,
             ).exclude(action=action)
 
-    def add_columns_show_stats(self, action: models.Action, context: Dict):
+    @staticmethod
+    def add_columns_show_stats(action: models.Action, context: Dict):
         """Add conditions to show stats to the context
 
         :param action: Action being processed
@@ -66,10 +68,10 @@ class ActionEditManager(object):
         :param context: Initial dictionary to extend
         :return: An error string or None if everything was correct.
         """
-        return _('Functionality under construction')
+        return None
 
+    @staticmethod
     def get_render_context(
-        self,
         action: models.Action,
         form: Optional[Type[forms.ModelForm]] = None,
         form_filter: Optional[action_forms.FilterForm] = None,

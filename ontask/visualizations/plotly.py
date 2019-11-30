@@ -136,9 +136,7 @@ class PlotlyColumnHistogram(PlotlyHandler):
 
         data = []
         column = self.data.columns[0]
-        column_dtype = \
-            pandas_datatype_names.get(
-                self.data[column].dtype.name)
+        column_dtype = pandas_datatype_names.get(self.data[column].dtype.name)
         data_list = self.data[column].dropna().tolist()
         # Special case for bool and datetime. Turn into strings to be
         # treated as such

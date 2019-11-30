@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Exceptions when manipulating actions."""
 from ontask import OnTaskServiceException
 
 

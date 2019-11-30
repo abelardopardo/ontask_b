@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Manipulate template text within OnTask and evaluat it s content."""
-
 from builtins import map, str
 import re
 import string
