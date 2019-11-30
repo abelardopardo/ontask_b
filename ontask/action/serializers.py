@@ -299,8 +299,8 @@ class ActionSerializer(serializers.ModelSerializer):
         initial='',
         allow_blank=True)
 
+    @staticmethod
     def create_column_condition_pairs(
-        self,
         validated_data,
         action_obj,
         wflow_columns,

@@ -3,11 +3,12 @@
 """Tests redirection to home when no workflow is selected."""
 
 import os
-import test
 
 from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
+
+import test
 
 
 class BackToHome(test.OnTaskTestCase):
@@ -86,7 +87,7 @@ class BackToHome(test.OnTaskTestCase):
             # 'workflow:share_delete',
             reverse('workflow:column_add'),
             # 'workflow:question_add',
-            reverse('workflow:question_add'),
+            reverse('workflow:question_add', kwargs={'pk': 1}),
             reverse('workflow:formula_column_add'),
             reverse('workflow:random_column_add'),
             reverse('workflow:column_delete', kwargs={'pk': 1}),
