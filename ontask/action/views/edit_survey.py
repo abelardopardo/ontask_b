@@ -4,13 +4,11 @@
 
 from typing import Optional
 
-from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -39,13 +37,11 @@ def select_column_action(
     """Operation to add a column to a survey.
 
     :param request: Request object
-
     :param pk: Action PK
-
     :param cpk: column PK.
-
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param action: Action being edited (set by the decorators)
     :param key: The columns is a key column
-
     :return: JSON response
     """
     if cpk == -1:
@@ -88,8 +84,10 @@ def unselect_column_action(
     """Unselect a column from action in.
 
     :param request: Request object
-    :param apk: Action PK
+    :param pk: Action PK
     :param cpk: column PK
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param action: Action being edited (set by the decorators)
     :return: JSON response
     """
     # Get the column
@@ -118,11 +116,11 @@ def select_condition_for_question(
     """Select condition for a question in a survey.
 
     :param request: Request object
-
-    :param tpk: tuple ActionColumnCondition PK
-
+    :param pk: tuple ActionColumnCondition PK
     :param condpk: Condition PK
-
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param cc_tuple: ActionColumnCondition object being edited (set by the
+    decorators)
     :return: JSON response
     """
     condition = None
@@ -149,10 +147,12 @@ def shuffle_questions(
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
 ) -> JsonResponse:
-    """Enable/Disable the shuffle question flag in Surveys.
+    """Enable/Disable the shuffle question flag a survey.
 
     :param request: Request object
     :param pk: Action PK
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param action: Action being manipulated (set by the decorators)
     :return: HTML response
     """
     # Check if the workflow is locked
@@ -165,36 +165,27 @@ def shuffle_questions(
 @user_passes_test(is_instructor)
 @ajax_required
 @get_workflow(pf_related='actions')
+@get_columncondition()
 def toggle_question_change(
     request: HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
+    cc_tuple: Optional[models.ActionColumnConditionTuple] = None,
 ) -> JsonResponse:
     """Enable/Disable changes in the question.
 
     :param request: Request object
     :param pk: Action/Question/Condition PK
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param cc_tuple: Action/Column/Condition tuple being manipulated (set by
+    the decorator)
     :return: HTML response
     """
-    # Check if the workflow is locked
-    acc_item = models.ActionColumnConditionTuple.objects.filter(pk=pk).first()
-    if not acc_item:
-        messages.error(
-            request,
-            _('Incorrect invocation of toggle question change function.'))
-        return JsonResponse({}, status=404)
+    cc_tuple.changes_allowed = not cc_tuple.changes_allowed
+    cc_tuple.save()
+    cc_tuple.log(request.user, models.Log.ACTION_QUESTION_TOGGLE_CHANGES)
 
-    if acc_item.action.workflow != workflow:
-        messages.error(
-            request,
-            _('Incorrect invocation of toggle question change function.'))
-        return JsonResponse({}, status=404)
-
-    acc_item.changes_allowed = not acc_item.changes_allowed
-    acc_item.save()
-    acc_item.log(request.user, models.Log.ACTION_QUESTION_TOGGLE_CHANGES)
-
-    return JsonResponse({'is_checked': acc_item.changes_allowed})
+    return JsonResponse({'is_checked': cc_tuple.changes_allowed})
 
 
 @user_passes_test(is_instructor)
@@ -209,9 +200,9 @@ def edit_description(
     """Edit the description attached to an action.
 
     :param request: AJAX request
-
     :param pk: Action ID
-
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param action: Action being modified (set by the decorators)
     :return: AJAX response
     """
     # Create the form

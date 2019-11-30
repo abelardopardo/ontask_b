@@ -37,7 +37,6 @@ from ontask.core.manage_session import (
 )
 from ontask.core.permissions import group_names
 from ontask.dataops.pandas import destroy_db_engine
-import test
 
 standard_library.install_aliases()
 
@@ -96,6 +95,25 @@ def create_users():
         Token.objects.create(user=usr)
 
 
+def _pg_restore_table(filename):
+    """
+    Function that given a file produced with a pg_dump, it uploads its
+    content to the existing database
+
+    :param filename: File in pg_dump format to restore
+    :return:
+    """
+    process = subprocess.Popen(['psql',
+                                '-o',
+                                '/dev/null',
+                                '-d',
+                                settings.DATABASES['default']['NAME'],
+                                '-q',
+                                '-f',
+                                filename])
+    process.wait()
+
+
 class ElementHasFullOpacity(object):
     """
     Detect when an element has opacity equal to 1
@@ -138,8 +156,8 @@ class OnTaskTestCase(TransactionTestCase):
     def store_workflow_in_session(cls, session, wflow: models.Workflow):
         """Store the workflow id, name, and number of rows in the session.
 
+        :param session: Current session used to store the information
         :param wflow: Workflow object
-
         :return: Nothing. Store the id, name and nrows in the session
         """
         session['ontask_workflow_rows'] = wflow.nrows
@@ -150,7 +168,7 @@ class OnTaskTestCase(TransactionTestCase):
         super().setUp()
         delete_all_tables()
         if self.filename:
-            test.pg_restore_table(self.filename)
+            _pg_restore_table(self.filename)
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
         if self.user_email:
@@ -185,7 +203,7 @@ class OnTaskTestCase(TransactionTestCase):
         url_params: Optional[Mapping] = None,
         method: Optional[str] = 'GET',
         req_params: Optional[Mapping] = None,
-        meta = None,
+        meta=None,
         is_ajax: Optional[bool] = False,
         session_payload: Optional[Dict] = None,
         **kwargs
@@ -1805,7 +1823,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         Assert that there is a column with the given name and with the given
         type
         :param name: Column name
-        :param type: Type string (to check against the data-original-title
+        :param col_type: Type string (to check against the data-original-title)
         :param row_idx: Row index in the table (search if none is given)
         :return: Nothing
         """
@@ -1926,22 +1944,3 @@ def delete_all_tables():
     # To make sure the table is dropped.
     connection.commit()
     return
-
-
-def pg_restore_table(filename):
-    """
-    Function that given a file produced with a pg_dump, it uploads its
-    content to the existing database
-
-    :param filename: File in pg_dump format to restore
-    :return:
-    """
-    process = subprocess.Popen(['psql',
-                                '-o',
-                                '/dev/null',
-                                '-d',
-                                settings.DATABASES['default']['NAME'],
-                                '-q',
-                                '-f',
-                                filename])
-    process.wait()

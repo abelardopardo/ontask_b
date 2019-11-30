@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import random
 from builtins import str
+import random
 
 import pandas as pd
 
@@ -155,7 +155,6 @@ def main():
     # df.to_csv('spq_sample.csv', index=False)
     result = plugin_instance.run(
         df,
-        'email',
         parameters={'answer_list': plugin_instance.parameters[0][3]}
     )
 

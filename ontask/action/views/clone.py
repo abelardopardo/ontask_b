@@ -31,6 +31,8 @@ def clone_action(
 
     :param request: Request object
     :param pk: id of the action to clone
+    :param workflow: Workflow being manipulated (set by decorator)
+    :param action: Action being cloned (set by decorator)
     :return:
     """
     if request.method == 'GET':
@@ -70,6 +72,8 @@ def clone_condition(
 
     :param request: Request object
     :param pk: id of the condition to clone
+    :param workflow: Workflow being manipulated (set by decorator)
+    :param condition: Condition being cloned (set by decorator)
     :param action_pk: Primary key of the action to receive the condition
     :return: JSON response
     """

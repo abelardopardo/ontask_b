@@ -261,7 +261,8 @@ def delete_table(table_name: str):
 
     :return: Drop the table in the DB
     """
-    query = sql.SQL('DROP TABLE IF EXISTS {0}').format(sql.Identifier(table_name))
+    query = sql.SQL('DROP TABLE IF EXISTS {0}').format(
+        sql.Identifier(table_name))
 
     try:
         with connection.connection.cursor() as cursor:

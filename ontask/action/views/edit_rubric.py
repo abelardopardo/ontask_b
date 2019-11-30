@@ -31,13 +31,11 @@ def edit_rubric_cell(
     """Edit a cell in a rubric.
 
     :param request:
-
     :param pk: Action ID
-
     :param cid: Column id
-
     :param loa_pos: Level of attainment position in the column categories
-
+    :param workflow: Workflow being manipulated (set by the decorator)
+    :param action: Action being edited (set by the decorators)
     :return: JSON Response
     """
     # If the request has the 'action_content', update the action
@@ -88,9 +86,9 @@ def edit_rubric_loas(
     """Edit a cell in a rubric.
 
     :param request:
-
     :param pk: Action ID
-
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param action: Action being edited (set by the decorators)
     :return: JSON Response
     """
     # If the request has the 'action_content', update the action

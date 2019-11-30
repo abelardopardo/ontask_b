@@ -41,10 +41,12 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
         **kwargs,
     ) -> http.JsonResponse:
         """Process the get request."""
-        return services.save_workflow_form(
-            request,
-            self.form_class(workflow_user=request.user),
-            self.template_name)
+        return http.JsonResponse({
+            'html_form': render_to_string(
+                self.template_name,
+                {'form': self.form_class(workflow_user=request.user)},
+                request=request),
+        })
 
     @method_decorator(ajax_required)
     def post(
@@ -54,10 +56,19 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
         **kwargs,
     ) -> http.JsonResponse:
         """Process the post request."""
-        return services.save_workflow_form(
-            request,
-            self.form_class(request.POST, workflow_user=request.user),
-            self.template_name)
+        form = self.form_class(request.POST, workflow_user=request.user)
+        if request.method == 'POST' and form.is_valid():
+            if not form.has_changed():
+                return http.JsonResponse({'html_redirect': None})
+
+            return services.save_workflow_form(request, form)
+
+        return http.JsonResponse({
+            'html_form': render_to_string(
+                self.template_name,
+                {'form': form},
+                request=request),
+        })
 
 
 @user_passes_test(is_instructor)
@@ -129,24 +140,31 @@ def update(
     :param workflow: workflow being manipulated.
     :return: JSON response
     """
+    if workflow.user != request.user:
+        # If the user does not own the workflow, notify error and go back to
+        # index
+        messages.error(
+            request,
+            _('You can only rename workflows you created.'))
+        return http.JsonResponse({'html_redirect': ''})
+
     form = WorkflowForm(
         request.POST or None,
         instance=workflow,
         workflow_user=workflow.user)
 
-    # If the user owns the workflow, proceed
-    if workflow.user == request.user:
-        return services.save_workflow_form(
-            request,
-            form,
-            'workflow/includes/partial_workflow_update.html')
+    if request.method == 'POST' and form.is_valid():
+        if not form.has_changed():
+            return http.JsonResponse({'html_redirect': None})
 
-    # If the user does not own the workflow, notify error and go back to
-    # index
-    messages.error(
-        request,
-        _('You can only rename workflows you created.'))
-    return http.JsonResponse({'html_redirect': ''})
+        return services.save_workflow_form(request, form)
+
+    return http.JsonResponse({
+        'html_form': render_to_string(
+            'workflow/includes/partial_workflow_update.html',
+            {'form': form},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)

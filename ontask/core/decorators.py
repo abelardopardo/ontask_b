@@ -36,13 +36,8 @@ def get_workflow(
 
     It also passes the select_related and prefetch_related fields.
 
-    :param wid: A workflow ID to use if there is no object stored in the
-    request.
-
     :param s_related: select_related to use when fetching the workflow
-
     :param pf_related: prefetch_re  lated to use when fetching the workflow
-
     """
     def get_workflow_decorator(func):  # noqa Z430
         @wraps(func)  # noqa Z430

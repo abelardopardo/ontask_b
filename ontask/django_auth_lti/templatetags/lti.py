@@ -17,7 +17,9 @@ class ResourceLinkIdNode(template.Node):
         if request:
             rli = request.LTI.get('resource_link_id')
             if rli:
-                return format_html("<input type='hidden' name='resource_link_id' value='{}' />", rli)
+                return format_html(
+                    "<input type='hidden' name='resource_link_id' value='{}' />",
+                    rli)
             else:
                 logger.warning(
                     _('Failed to find resource_link_id '

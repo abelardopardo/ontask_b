@@ -286,10 +286,10 @@ def column_edit(
 ) -> JsonResponse:
     """Edit a column.
 
-    :param request:
-
-    :param pk:
-
+    :param request: Http Request received
+    :param pk: Column primary key for lookup
+    :param workflow: Workflow being processed
+    :param column: Column to edit (set by the decorator)
     :return:
     """
     # Detect if this operation is to edit a new column or a new question (in
@@ -349,10 +349,9 @@ def column_delete(
     """Delete a column in the table attached to a workflow.
 
     :param request: HTTP request
-
-    :param pk: ID of the column to delete. The workflow element is taken
-     from the session.
-
+    :param pk: ID of the column to delete.
+    :param workflow: Workflow being processed
+    :param column: Column to delete (set by the decorator)
     :return: Render the delete column form
     """
     # Get the workflow element
@@ -406,10 +405,9 @@ def column_clone(
     """Clone a column in the table attached to a workflow.
 
     :param request: HTTP request
-
-    :param pk: ID of the column to clone. The workflow element is taken
-     from the session.
-
+    :param pk: ID of the column to clone.
+    :param workflow: Workflow being processed
+    :param column: Column to clone (set by the decorator)
     :return: Render the clone column form
     """
     # Get the name of the column to clone

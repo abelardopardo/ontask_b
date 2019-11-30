@@ -142,14 +142,14 @@ class OnTaskSharedState(object):
 class OnTaskException(Exception):
     """Generic class in OnTask for exceptions."""
 
-    def __init__(self, msg, value=0):
+    def __init__(self, message, value=0):
         """Store message and value."""
-        self.msg = msg
+        self.message = message
         self.value = value
 
     def __str__(self):
         """Return exception message as string representation."""
-        return repr(self.msg)
+        return repr(self.message)
 
 
 class OnTaskDataFrameNoKey(OnTaskException):
@@ -184,8 +184,7 @@ class OnTaskServiceException(OnTaskException):
 
     def __init__(self, *args, **kwargs):
         """Store the three fields."""
-        self.field_name = kwargs.pop('field_name')
-        self.message = kwargs.pop('message')
+        self.field_name = kwargs.pop('field_name', None)
         self.objects_to_delete = kwargs.pop('to_delete', [])
 
         super().__init__(*args, **kwargs)

@@ -1,7 +1,7 @@
 from collections import defaultdict
 
-import oauth2
 from lxml import etree, objectify
+import oauth2
 
 from .outcome_response import OutcomeResponse
 from .utils import InvalidLTIConfigError
@@ -24,10 +24,10 @@ accessors = [
 
 
 class OutcomeRequest(object):
-    """
-    Class for consuming & generating LTI Outcome Requests.
+    """Class for consuming & generating LTI Outcome Requests.
 
-    Outcome Request documentation: http://www.imsglobal.org/lti/v1p1pd/ltiIMGv1p1pd.html#_Toc309649691
+    Outcome Request documentation:
+    http://www.imsglobal.org/lti/v1p1pd/ltiIMGv1p1pd.html#_Toc309649691
 
     This class can be used both by Tool Providers and Tool Consumers, though
     they each use it differently. The TP will use it to POST an OAuth-signed

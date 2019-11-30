@@ -34,9 +34,9 @@ def stat_column(
     double, string, boolean
 
     :param request: HTTP request
-
     :param pk: primary key of the column
-
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param column: Column being manipulated (set by the decorators)
     :return: Render the page
     """
     stat_data, __, visualizations = services.get_column_visualization_items(
@@ -66,6 +66,8 @@ def stat_column_json(
 
     :param request: HTTP request
     :param pk: Column primary key
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param column: Column being manipulated (set by the decorators)
     :return: HTML rendering of the visualization
     """
     # Request to see the statistics for a non-key column that belongs to the
@@ -99,9 +101,8 @@ def stat_table_view(
     """Render the page with stats and visualizations for a view.
 
     :param request: HTTP request
-
     :param pk: View id to use
-
+    :param workflow: Workflow being manipulated (set by the decorators)
     :return: Render the page
     """
     # If the workflow has no data, something went wrong, go back to the

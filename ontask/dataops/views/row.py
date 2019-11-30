@@ -11,11 +11,11 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.core import ONTASK_FIELD_PREFIX
 from ontask.core.decorators import get_workflow
 from ontask.core.permissions import is_instructor
 from ontask.dataops import services
 from ontask.dataops.forms import RowForm
-from ontask.core import ONTASK_FIELD_PREFIX
 from ontask.dataops.sql import get_row
 
 
@@ -78,8 +78,8 @@ def row_update(
     """Process POST request to update a row in the data table.
 
     :param request: Request object with all the data.
-
-    :return:
+    :param workflow: Workflow being manipulated
+    :return: Http Response with the page rendering.
     """
     # Get the pair key,value to fetch the row from the table
     update_key = request.GET.get('k')

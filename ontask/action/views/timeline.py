@@ -24,7 +24,8 @@ def show_timeline(
     """Show a vertical timeline of action executions.
 
     :param request: HTTP request
-    :param pk: Action PK. If none, all of them are considered
+    :param pk: Action PK. If none, all of them in workflow are considered
+    :param workflow: Workflow being manipulated (set by the decorators)
     :return: HTTP response
     """
     action = None

@@ -25,7 +25,8 @@ class ActionManagementFactory(object):
         self,
         request: http.HttpRequest,
         workflow: models.Workflow,
-        action: models.Action) -> http.HttpResponse:
+        action: models.Action
+    ) -> http.HttpResponse:
         """Execute the corresponding function to process an edit request.
 
         :param request: Http Request received (get or post)

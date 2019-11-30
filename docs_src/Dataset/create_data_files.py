@@ -9,8 +9,8 @@ import random
 import string
 import sys
 
-import pandas as pd
 from numpy.random import choice
+import pandas as pd
 
 # Initial file fields
 #
@@ -192,12 +192,13 @@ def read_initial_file(file_name, num_students=500):
     max_l = len(all_students)
     if num_students < max_l:
         # Trim the result
-        all_students = all_students.drop(random.sample(range(len(all_students)),
+        all_students = all_students.drop(
+            random.sample(range(len(all_students)),
             max_l - num_students),
             axis=0)
 
-    all_students['Full name'] = all_students['GivenName'] + ' ' \
-                                + all_students['Surname']
+    all_students['Full name'] = (
+        all_students['GivenName'] + ' ' + all_students['Surname'])
     return all_students
 
 

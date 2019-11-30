@@ -24,7 +24,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
-from ontask import OnTaskDataFrameNoKey, settings, models
+from ontask import OnTaskDataFrameNoKey, models, settings
 from ontask.core.forms import RestrictedFileField
 from ontask.dataops.forms.select import MergeForm, SelectKeysForm
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
@@ -503,7 +503,6 @@ class AthenaRequestConnectionParam(forms.Form):
                 required=True,
                 label=_('Method to select rows to merge/update'),
                 help_text=MergeForm.merge_help)
-
 
     def get_field_dict(self):
         """Return a dictionary with the resulting fields"""

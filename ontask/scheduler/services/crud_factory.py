@@ -3,15 +3,14 @@
 """Functions to save the different types of scheduled actions."""
 
 from datetime import datetime
-from typing import Dict, Optional, Type
 
-import pytz
 from django import http
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
+import pytz
 
 from ontask import models
 from ontask.core import SessionPayload

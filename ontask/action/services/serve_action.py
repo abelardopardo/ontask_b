@@ -92,6 +92,7 @@ def get_survey_context(
     :param is_manager: User is manager
     :param workflow: Workflow object being processed
     :param action: Action object being executed
+    :param user_attribute_name: Name of the column to use for username
     :return: Dictionary with the context
     """
     # Get the attribute value depending if the user is managing the workflow
@@ -136,33 +137,12 @@ def update_row_values(
 
     :param request: HTTP request
     :param action:  Action In
+    :param row_data: Tuple containing keys, values, where_field, where_value.
+    Keys and values are the values in the row. Where field, and where value is
+    pair find the given row
     :param user_attribute_name: The column name used to check for email
     :return:
     """
-    # keys = []
-    # values = []
-    # where_field = None
-    # where_value = None
-    # # Create the SET name = value part of the query
-    # for idx, colcon in enumerate(colcon_items):
-    #     if colcon.column.is_key and not is_manager:
-    #         # If it is a learner request and a key column, skip
-    #         continue
-    #
-    #     # Skip the element if there is a condition and it is false
-    #     if colcon.condition and not context[colcon.condition.name]:
-    #         continue
-    #
-    #     field_value = form_data[FIELD_PREFIX + '{0}'.format(idx)]
-    #     if colcon.column.is_key:
-    #         # Remember one unique key for selecting the row
-    #         where_field = colcon.column.name
-    #         where_value = field_value
-    #         continue
-    #
-    #     keys.append(colcon.column.name)
-    #     values.append(field_value)
-
     keys, values, where_field, where_value = row_data
     # Execute the query
     update_row(

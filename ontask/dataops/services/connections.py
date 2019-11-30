@@ -53,9 +53,9 @@ def clone(
     """Finish AJAX handshake to clone a connection.
 
     :param request: HTTP request
-
-    :param pk: ID of the connection to clone.
-
+    :param conn: Connection to clone.
+    :param mgr: Manager to handle the right type of connection
+    :param clone_url: String with the URL to perform the clone operation.
     :return: AJAX response
     """
     if request.method == 'GET':
@@ -87,9 +87,8 @@ def delete(
     """Finish processing AJAX request for the delete connection operation.
 
     :param request: AJAX request
-
-    :param pk: primary key for the connection
-
+    :param conn: Connection to delete.
+    :param delete_url: String with the URL to perform the delete operation.
     :return: AJAX response to handle the form
     """
     if request.method == 'POST':

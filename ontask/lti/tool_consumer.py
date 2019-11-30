@@ -1,12 +1,12 @@
-import time
 from collections import defaultdict
-from urllib.parse import unquote
+import time
+from urllib.parse import unquote, urlparse
 
 import oauth2
 
-from .launch_params import LaunchParamsMixin
-from .request_validator import RequestValidatorMixin
-from .utils import InvalidLTIConfigError, generate_identifier
+from ontask.lti.launch_params import LaunchParamsMixin
+from ontask.lti.request_validator import RequestValidatorMixin
+from ontask.lti.utils import InvalidLTIConfigError, generate_identifier
 
 accessors = [
     'consumer_key',
@@ -74,7 +74,7 @@ class ToolConsumer(LaunchParamsMixin, RequestValidatorMixin, object):
             'oauth_consumer_key': consumer.key
         })
 
-        uri = urlparse.urlparse(self.launch_url)
+        uri = urlparse(self.launch_url)
         if uri.query != '':
             for param in uri.query.split('&'):
                 key, val = param.split('=')

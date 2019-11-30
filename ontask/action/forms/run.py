@@ -342,7 +342,6 @@ class SendListActionForm(EmailSubjectFormBase, EmailCCBCCFormBase):
             'cc_email',
             'bcc_email'])
 
-
     def clean(self):
         """Verify recipient email value"""
         form_data = super().clean()
@@ -565,9 +564,8 @@ class JSONActionForm(ItemColumnConfirmFormBase, JSONTokenForm):
             'Column to exclude objects to send (empty to skip step)')
 
 
-class JSONActionRunForm(JSONActionForm, ExportWorkflowBase,
-):
-    """Form to edit information to run a JSON action Run"""
+class JSONActionRunForm(JSONActionForm, ExportWorkflowBase):
+    """Form to edit information to run a JSON action Run."""
 
     def __init__(self, *args, **kwargs):
         """Modify the fields with the adequate information."""

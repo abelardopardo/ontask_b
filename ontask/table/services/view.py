@@ -3,10 +3,6 @@
 """Functions to support the display of a view."""
 import copy
 
-from django.http.request import HttpRequest
-from django.http.response import JsonResponse
-from django.template.loader import render_to_string
-
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
@@ -64,12 +60,10 @@ def do_clone_view(
 ) -> models.View:
     """Clone a view.
 
+    :param user: User requesting the operation
     :param view: Object to clone
-
     :param new_workflow: Non empty if it has to point to a new workflow
-
     :param new_name: Non empty if it has to be renamed.
-
     :result: New clone object
     """
     id_old = view.id
@@ -114,7 +108,7 @@ def save_view_form(
 ):
     """Save the data attached to a view.
 
-    :param request: HTTP request
+    :param user: user requesting the operation
     :param wokflow: Workflow being processed
     :param view: View being processed.
     :return: AJAX Response

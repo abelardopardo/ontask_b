@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 
+from builtins import str
 import codecs
 import csv
 import getopt
 import os
 import shlex
 import sys
-from builtins import str
+from typing import Any, List, Optional
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -15,15 +16,20 @@ from django.contrib.auth.models import Group
 ___doc___ = """Script to create users. Execute without parameters for help"""
 
 
-def get_column_value_list(filenames, column_name, debug=False):
-    """
-    Function that given a set of filenames returns the list of values
-    concatenating all the columns with name "column_name"
-    :param filenames:
-    :param column_name:
-    :return:
-    """
+def get_column_value_list(
+    filenames: List[str],
+    column_name: str,
+    debug: Optional[bool] = False
+) -> List[Any]:
+    """Read and concatenate column in filenames.
 
+    Function that given a set of filenames return the list of values
+    concatenating all the columns with name "column_name"
+    :param filenames: List of strings with filenames
+    :param column_name: Column name to select in each file
+    :param debug: Boolean controlling the debug messages
+    :return: List of values in that column across all the files
+    """
     result = []
     for file_name in filenames:
 
@@ -68,7 +74,7 @@ def get_column_value_list(filenames, column_name, debug=False):
 
             # At this point we are processing a data line
 
-            # If the number of fields does not match then number of columns Flag!
+            # If the number of fields doesn't match number of columns, flag!
             if col_idx >= len(data):
                 print('Mismatched line', line_number, 'skipping',
                       file=sys.stderr)

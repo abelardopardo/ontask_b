@@ -49,19 +49,23 @@ def _do_burst_pause(burst: int, burst_pause: int, idx: int):
 
 
 def _refresh_and_retry_send(
-    target_url,
     oauth_info,
-    conversation_url,
-    canvas_email_payload,
+    conversation_url: str,
+    canvas_email_payload: Dict,
 ):
     """Refresh OAuth token and retry send.
 
+    :param target_url: URL to use as target
+    :param oauth_info: Object with the oauth information
+    :param conversation_urL: URL to send the conversation
+    :param canvas_email_payload: Dictionary with additional information
     :return:
     """
     # Request rejected due to token expiration. Refresh the
     # token
     user_token = None
     result_msg = ugettext('OAuth token refreshed')
+    response_status = None
     try:
         user_token = refresh_token(user_token, oauth_info)
     except Exception as exc:
@@ -148,7 +152,6 @@ def _canvas_get_or_set_oauth_token(
 
 
 def _send_single_canvas_message(
-    target_url: str,
     conversation_url: str,
     canvas_email_payload,
     headers: Dict,
@@ -179,7 +182,6 @@ def _send_single_canvas_message(
     )
     if req_rejected:
         result_msg, response_status = _refresh_and_retry_send(
-            target_url,
             oauth_info,
             conversation_url,
             canvas_email_payload,
@@ -302,7 +304,6 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
 
             # Send the email
             result_msg, response_status = _send_single_canvas_message(
-                target_url,
                 conversation_url,
                 canvas_email_payload,
                 headers,

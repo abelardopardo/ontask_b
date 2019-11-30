@@ -113,10 +113,12 @@ def create_and_send_zip(
 ) -> http.HttpResponse:
     """Process the list of tuples in files and create the ZIP BytesIO object.
 
-    :param files: List of triplets (user_fname, part_id,
-    :param for_moodle:
-    :param file_name_template:
-    :return:
+    :param session: Session object while creating a zip (need it to flush it)
+    :param action: Action being used for ZIP
+    :param item_column: Column used to itemize the zip
+    :param user_fname_column: Optional column to create file name
+    :param payload: Dictionary with additional parameters to create the ZIP
+    :return: HttpResponse to send back with the ZIP download header
     """
     files = _create_eval_data_tuple(
         action,

@@ -79,7 +79,7 @@ def action_import(
     """Import one action given in a gz file.
 
     :param request: Http request
-
+    :param workflow: Workflow being manipulated (set by the decorators)
     :return: HTTP response
     """
     form = ActionImportForm(request.POST or None, request.FILES or None)

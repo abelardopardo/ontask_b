@@ -130,8 +130,8 @@ def update_luser_email_column(
 
     :param user: User making the request
     :param pk: Column ID to obtain the user id
-    :workflow: Workflow being manipulated.
-    :param column:
+    :param workflow: Workflow being manipulated.
+    :param column: Column being used to update the luser field.
     :return:
     """
     if not pk:

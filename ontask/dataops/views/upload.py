@@ -76,7 +76,7 @@ def upload_s2(
     keep_key_column: Boolean list with those key columns that need to be kept.
 
     :param request: Web request
-
+    :param workflow: Workflow being manipulated (set by the decorators)
     :return: the dictionary upload_data in the session object
     """
     # Get the dictionary to store information about the upload
@@ -221,6 +221,7 @@ def upload_s3(
     how_merge: How to merge. One of {left, right, outter, inner}
 
     :param request: Web request
+    :param workflow: Workflow being manipulated (set by the decorators)
     :return: the dictionary upload_data in the session object
     """
     # Get the dictionary to store information about the upload
@@ -326,6 +327,7 @@ def upload_s4(
     how_merge: How to merge. One of {left, right, outter, inner}
 
     :param request: Web request
+    :param workflow: Workflow being manipulated (set by the decorators)
     :return:
     """
     # Get the dictionary containing the information about the upload

@@ -244,9 +244,7 @@ def load_df_from_sqlconnection(
     """Load a DF from a SQL connection.
 
     :param conn_item: SQLConnection object with the connection parameters.
-
-    :param password: Password
-
+    :param run_params: Dictionary with the execution parameters.
     :return: Data frame or raise an exception.
     """
     # Get the engine from the DB

@@ -71,8 +71,9 @@ def view(
 ) -> http.HttpResponse:
     """View the content of one of the logs.
 
-    :param request:
-    :param pk:
+    :param request: Http Request received
+    :param pk: Primary key of the log to view
+    :param workflow: Workflow being manipulated (set by the decorators)
     :return: Http response rendering the view.html
     """
     # Get the log item

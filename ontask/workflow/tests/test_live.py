@@ -58,7 +58,8 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//body/div/h1"),
                 'Select Columns')
         )
 
@@ -103,7 +104,8 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
 
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
-            os.path.join(settings.BASE_DIR(),
+            os.path.join(
+                settings.BASE_DIR(),
                 'ontask',
                 'fixtures',
                 'simple2.csv')
@@ -114,7 +116,8 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//body/div/h1"),
                 'Select Columns')
         )
 
@@ -219,7 +222,8 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//body/div/h1"),
                 'Select Columns')
         )
         WebDriverWait(self.selenium, 10).until_not(
@@ -255,7 +259,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -371,7 +375,8 @@ class WorkflowModify(test.OnTaskLiveTestCase):
 
         # Select filter tab
         self.select_filter_tab()
-        self.open_condition(None,
+        self.open_condition(
+            None,
             "//button[contains(@class, 'js-filter-create')]")
         # Select the another2 column (with new name
         select = Select(self.selenium.find_element_by_name(
@@ -411,7 +416,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -517,7 +522,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -562,7 +567,8 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
         # Value now should be in the table
         self.select_share_tab()
-        self.search_table_row_by_string('share-table',
+        self.search_table_row_by_string(
+            'share-table',
             1,
             'instructor02@bogus.com')
 
@@ -595,7 +601,8 @@ class WorkflowShare(test.OnTaskLiveTestCase):
 
         # Value now should be in the table
         self.select_share_tab()
-        self.search_table_row_by_string('share-table',
+        self.search_table_row_by_string(
+            'share-table',
             1,
             'instructor02@bogus.com')
 
@@ -607,16 +614,17 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         self.assertTrue('superuser@bogus.com' in users)
 
         # click the delete button in the superuser@bogus.com row
-        element = self.search_table_row_by_string('share-table',
+        element = self.search_table_row_by_string(
+            'share-table',
             1,
             'superuser@bogus.com')
         element.find_element_by_xpath('td[2]/button').click()
 
         # Wait for the delete confirmation frame
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
-                'Confirm user deletion')
-        )
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, 'modal-title'),
+                'Confirm user deletion'))
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
@@ -658,7 +666,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -673,7 +681,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_link_text('Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Import workflow')
+                'Import workflow')
         )
 
         # Set the workflow name and file
@@ -681,9 +689,9 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         wname.send_keys('newwf')
         wfile = self.selenium.find_element_by_id('id_wf_file')
         wfile.send_keys(os.path.join(settings.BASE_DIR(),
-                                     'ontask',
-                                     'fixtures',
-                                     'ontask_workflow.gz'))
+            'ontask',
+            'fixtures',
+            'ontask_workflow.gz'))
 
         # Click in the submit
         self.selenium.find_element_by_xpath(
@@ -703,7 +711,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
 
         # Equal descriptions
         self.assertEqual(w1.description_text,
-                         w2.description_text)
+            w2.description_text)
 
         # Equal number of columns
         self.assertEqual(w1.columns.count(), w2.columns.count())
@@ -723,7 +731,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
 
         # Equal number of actions
         self.assertEqual(w1.actions.count(),
-                         w2.actions.count())
+            w2.actions.count())
 
         # Equal names and content in the conditions
         for x, y in zip(w1.actions.all(), w2.actions.all()):
@@ -731,11 +739,11 @@ class WorkflowImport(test.OnTaskLiveTestCase):
             self.assertEqual(x.description_text, y.description_text)
             self.assertEqual(x.text_content, y.text_content)
             self.assertEqual(x.conditions.count(),
-                             y.conditions.count())
+                y.conditions.count())
             for c1, c2 in zip(x.conditions.all(), y.conditions.all()):
                 self.assertEqual(c1.name, c2.name)
                 self.assertEqual(c1.description_text,
-                                 c2.description_text)
+                    c2.description_text)
                 self.assertEqual(c1.formula, c2.formula)
                 self.assertEqual(c1.is_filter, c2.is_filter)
 

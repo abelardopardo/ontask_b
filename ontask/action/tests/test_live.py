@@ -30,7 +30,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -232,13 +232,15 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
 
         # Add condition
         self.select_condition_tab()
-        self.create_condition('c1',
+        self.create_condition(
+            'c1',
             'cdesc1',
             [('age', 'less or equal', '12.1')])
 
         # Click in the add a second condition
         self.select_condition_tab()
-        self.create_condition('c2',
+        self.create_condition(
+            'c2',
             'cdesc2',
             [('age', 'greater', '12.1')])
 
@@ -577,7 +579,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -665,7 +667,7 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -790,7 +792,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -923,7 +925,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -1017,7 +1019,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -1099,7 +1101,7 @@ class ActionAllKeyColumns(test.OnTaskLiveTestCase):
 
     def setUp(self):
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         test.delete_all_tables()
@@ -1146,7 +1148,7 @@ class ActionSendListActionCreate(test.OnTaskLiveTestCase):
     def setUp(self):
         """Set up and restore the PG table."""
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         """Delete the PG table."""
@@ -1249,7 +1251,7 @@ class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
     def setUp(self):
         """Set up and restore the PG table."""
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         """Delete the PG table."""
@@ -1337,7 +1339,7 @@ class ActionServeLongSurvey(test.OnTaskLiveTestCase):
     def setUp(self):
         """Set up and restore the PG table."""
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         """Delete the PG table."""
@@ -1384,7 +1386,7 @@ class ActionCreateRubric(test.OnTaskLiveTestCase):
     def setUp(self):
         """Set up and restore the PG table."""
         super().setUp()
-        test.pg_restore_table(self.filename)
+        test._pg_restore_table(self.filename)
 
     def tearDown(self):
         """Delete the PG table."""

@@ -18,7 +18,7 @@ class OperationsColumn(tables.Column):
 
         self.empty_values = []
 
-    def render(self, record, table):
+    def render(self, record):
         """Render the column using the template."""
         return render_to_string(
             self.template_file,
@@ -33,7 +33,7 @@ class BooleanColumn(tables.Column):
         self.get_field = kwargs.pop('get_field')
         super().__init__(*args, **kwargs)
 
-    def render(self, record, table):
+    def render(self, record):
         """Render tick and cross."""
         return '✔' if self.get_field(record) else '✘'
 

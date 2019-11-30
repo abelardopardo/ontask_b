@@ -3,8 +3,8 @@
 Implementation of visualizations using the Plotly JS library
 """
 
-import json
 from builtins import str
+import json
 
 from django.utils.translation import ugettext as _
 
@@ -23,15 +23,6 @@ class PlotlyHandler(VisHandler):
         <script>Plotly.newPlot('{id}', {data}, 
         {layout},
         {{displaylogo: false}});</script>"""
-
-        # html_skel = """<div id="{id}" style="{style}"></div>
-        #         <script>Plotly.newPlot('{id}', {data},
-        #         {layout},
-        #         {{displaylogo: false}});
-        #         $('#{id}').on('shown.bs.modal', function (e) {{
-        #           console.log('show');
-        #           Plotly.relayout('{id}', {layout});
-        #         }})</script>"""
 
     def __init__(self, data, *args, **kwargs):
 
@@ -144,15 +135,17 @@ class PlotlyColumnHistogram(PlotlyHandler):
             self.format_dict[key] = value
 
         data = []
-        for column in self.data.columns:
-            column_dtype = \
-                pandas_datatype_names.get(
-                    self.data[column].dtype.name)
+        column = self.data.columns[0]
+        column_dtype = \
+            pandas_datatype_names.get(
+                self.data[column].dtype.name)
         data_list = self.data[column].dropna().tolist()
         # Special case for bool and datetime. Turn into strings to be
         # treated as such
-        if column_dtype == 'boolean' or column_dtype == 'datetime' or \
-            column_dtype == 'string':
+        if (
+            column_dtype == 'boolean' or column_dtype == 'datetime' or
+            column_dtype == 'string'
+        ):
             data_list = [str(x) for x in data_list]
 
         data.append(

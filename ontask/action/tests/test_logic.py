@@ -41,7 +41,7 @@ class EmailActionTracking(test.OnTaskTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        test.pg_restore_table(cls.filename)
+        test._pg_restore_table(cls.filename)
 
     def tearDown(self):
         test.delete_all_tables()

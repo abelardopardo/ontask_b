@@ -10,4 +10,4 @@ class OnTaskConfig(AppConfig):
 
     def ready(self):
         # Needed so that the signal registration is done
-        from ontask import signals  # noqa
+        pass

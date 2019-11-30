@@ -34,8 +34,10 @@ class ExecuteUpdateWorkflowLUser(object):
         Recalculate the elements in field lusers of the workflow based on the
         fields luser_email_column and luser_email_column_MD5
 
-        :param user_id: Id of User object that is executing the action
-        :param workflow_id: Id of workflow being processed
+        :param user: User object that is executing the action
+        :param workflow: Workflow being processed (if applicable)
+        :param action: Action being executed (if applicable)
+        :param payload: Dictionary with the execution parameters
         :param log_id: Id of the log object where the status is reflected
         :return: Nothing, the result is stored in the log with log_id
         """

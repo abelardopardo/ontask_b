@@ -116,7 +116,6 @@ class ActionEditManager(object):
             'vis_scripts': PlotlyHandler.get_engine_scripts()}
 
 
-
 class ActionOutEditManager(ActionEditManager):
     """Base class to provide edit methods for the actions out."""
 
@@ -124,7 +123,8 @@ class ActionOutEditManager(ActionEditManager):
         self,
         request: http.HttpRequest,
         workflow: models.Workflow,
-        action: models.Action) -> http.HttpResponse:
+        action: models.Action
+    ) -> http.HttpResponse:
         """Process the action edit request."""
         form = self.edit_form_class(request.POST or None, instance=action)
 

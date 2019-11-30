@@ -140,7 +140,7 @@ def assign_luser_column(
     :param request: HTTP request
     :param pk: Column id
     :param workflow: Workflow being manipulated.
-    :param Column to pick the email or None to flush
+    :param column: Column to assign as the LUSER value
     :return: JSON data to perform the operation
     """
     if workflow.nrows == 0:
