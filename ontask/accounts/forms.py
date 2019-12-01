@@ -2,11 +2,10 @@
 
 from authtools import forms as authtoolsforms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Field, Layout, Submit
+from crispy_forms.layout import Field, Layout, Submit
 from django import forms
 from django.contrib.auth import forms as authforms
 from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import reverse
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -24,8 +23,8 @@ class LoginForm(AuthenticationForm):
             Field('password', placeholder=_('Enter Password')),
             Submit('sign_in', _('Log in'),
                    css_class='btn btn-lg btn-outline-primary btn-block'),
-            HTML('<a href="{}">Forgot Password?</a>'.format(
-                reverse('accounts:password-reset'))),
+            # HTML('<a href="{}">Forgot Password?</a>'.format(
+            #    reverse('accounts:password-reset'))),
             Field('remember_me'),
         )
 
