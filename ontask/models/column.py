@@ -235,7 +235,7 @@ class Column(NameAndDescription):
             (self.active_from and now < self.active_from)
             or (self.active_to and self.active_to < now))
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Render as string."""
         return self.name
 
