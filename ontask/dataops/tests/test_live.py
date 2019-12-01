@@ -10,6 +10,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
+from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.core.checks import check_wf_df
 from ontask.dataops.pandas import load_table
 from ontask.dataops.sql.column_queries import is_column_in_table
@@ -168,19 +169,21 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         # Enter data using the RUN menu. Select one entry to populate
         self.selenium.find_element_by_link_text("student01@bogus.com").click()
         self.wait_for_page(element_id='action-row-datainput')
-        self.selenium.find_element_by_id("id____ontask___select_1").click()
-        self.selenium.find_element_by_id("id____ontask___select_1").clear()
-        self.selenium.find_element_by_id("id____ontask___select_1").send_keys(
-            "17")
-        self.selenium.find_element_by_id("id____ontask___select_2").click()
-        self.selenium.find_element_by_id("id____ontask___select_2").clear()
-        self.selenium.find_element_by_id("id____ontask___select_2").send_keys(
-            "Carmelo Coton2")
-        self.selenium.find_element_by_id("id____ontask___select_3").click()
-        self.selenium.find_element_by_id("id____ontask___select_3").clear()
-        self.selenium.find_element_by_id("id____ontask___select_3").send_keys(
-            "xxx"
-        )
+        field = self.selenium.find_element_by_id(
+            'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1')
+        field.click()
+        field.clear()
+        field.send_keys('17')
+        field = self.selenium.find_element_by_id(
+            'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '2')
+        field.click()
+        field.clear()
+        field.send_keys('Carmelo Coton2')
+        field = self.selenium.find_element_by_id(
+            'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '3')
+        field.click()
+        field.clear()
+        field.send_keys('xxx')
 
         # Submit the data for one entry
         self.selenium.find_element_by_xpath(
@@ -318,11 +321,12 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_link_text("student01@bogus.com").click()
 
         # Modify the value of the column
-        self.selenium.find_element_by_id("id____ontask___select_1").click()
-        self.selenium.find_element_by_id("id____ontask___select_1").clear()
-        self.selenium.find_element_by_id("id____ontask___select_1").send_keys(
-            "14"
-        )
+        field = self.selenium.find_element_by_id(
+            'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1')
+        field.click()
+        field.clear()
+        field.send_keys('14')
+
         # Submit changes to the first element
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
@@ -333,10 +337,12 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_link_text("student02@bogus.com").click()
 
         # Modify the value of the columne
-        self.selenium.find_element_by_id("id____ontask___select_1").clear()
-        self.selenium.find_element_by_id(
-            "id____ontask___select_1"
-        ).send_keys("15")
+        field = self.selenium.find_element_by_id(
+            'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1')
+        field.click()
+        field.clear()
+        field.send_keys('15')
+
         # Submit changes to the second element
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
@@ -347,11 +353,12 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_link_text("student03@bogus.com").click()
 
         # Modify the value of the column
-        self.selenium.find_element_by_id("id____ontask___select_1").click()
-        self.selenium.find_element_by_id("id____ontask___select_1").clear()
-        self.selenium.find_element_by_id(
-            "id____ontask___select_1"
-        ).send_keys("16")
+        field = self.selenium.find_element_by_id(
+            'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1')
+        field.click()
+        field.clear()
+        field.send_keys('16')
+
         # Submit changes to the second element
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
