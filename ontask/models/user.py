@@ -5,8 +5,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from ontask.core import is_instructor
-
 
 class OnTaskUser(models.Model):
     """Extend the existing authtools.User with additional fields."""
@@ -18,10 +16,6 @@ class OnTaskUser(models.Model):
         related_name='ontask_info',
         primary_key=True,
     )
-
-    def is_instructor(self) -> bool:
-        """Return boolean with is_instructor answer."""
-        return is_instructor(self.user)
 
     def __str__(self):
         """Provide string representation (email)."""
