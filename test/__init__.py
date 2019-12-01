@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from builtins import object, range, str
+from builtins import range, str
 import io
 import math
 import os
@@ -35,20 +35,20 @@ from ontask.core.checks import check_wf_df
 from ontask.core.manage_session import (
     SessionPayload
 )
-from ontask.core.permissions import group_names
+from ontask.core.permissions import GROUP_NAMES
 from ontask.dataops.pandas import destroy_db_engine
 
 standard_library.install_aliases()
 
 # email, [groups], Superuser?
 user_info = [
-    ('Student One', 'student01@bogus.com', [group_names[0]], False),
-    ('Student Two', 'student02@bogus.com', [group_names[0]], False),
-    ('Student Three', 'student03@bogus.com', [group_names[0]], False),
-    ('Instructor One', 'instructor01@bogus.com', [group_names[1]], False),
-    ('Instructor Two', 'instructor02@bogus.com', [group_names[1]], False),
-    ('Instructor Three', 'instructor03@bogus.com', [group_names[1]], False),
-    ('Super User', 'superuser@bogus.com', group_names, True)]
+    ('Student One', 'student01@bogus.com', [GROUP_NAMES[0]], False),
+    ('Student Two', 'student02@bogus.com', [GROUP_NAMES[0]], False),
+    ('Student Three', 'student03@bogus.com', [GROUP_NAMES[0]], False),
+    ('Instructor One', 'instructor01@bogus.com', [GROUP_NAMES[1]], False),
+    ('Instructor Two', 'instructor02@bogus.com', [GROUP_NAMES[1]], False),
+    ('Instructor Three', 'instructor03@bogus.com', [GROUP_NAMES[1]], False),
+    ('Super User', 'superuser@bogus.com', GROUP_NAMES, True)]
 
 boguspwd = 'boguspwd'
 
@@ -64,7 +64,7 @@ def create_groups():
     :return:
     """
 
-    for gname in group_names:
+    for gname in GROUP_NAMES:
         Group.objects.get_or_create(name=gname)
 
 
@@ -114,7 +114,7 @@ def _pg_restore_table(filename):
     process.wait()
 
 
-class ElementHasFullOpacity(object):
+class ElementHasFullOpacity:
     """
     Detect when an element has opacity equal to 1
 

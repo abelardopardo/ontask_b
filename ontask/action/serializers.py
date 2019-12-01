@@ -187,7 +187,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
         return condition_obj
 
-    class Meta(object):
+    class Meta:
         """Define object condition and select fields to serialize."""
 
         model = models.Condition
@@ -197,7 +197,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 class ConditionNameSerializer(serializers.ModelSerializer):
     """Trivial serializer to dump only the name of the column."""
 
-    class Meta(object):
+    class Meta:
         """Select the model and the only field required."""
 
         model = models.Condition
@@ -231,7 +231,7 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
             condition=condition_obj,
             changes_allowed=validated_data.get('changes_allowed', False))
 
-    class Meta(object):
+    class Meta:
         """Define the model and select only column and condition elements."""
 
         model = models.ActionColumnConditionTuple
@@ -255,7 +255,7 @@ class RubricCellSerializer(serializers.ModelSerializer):
             description_text=validated_data['description_text'],
             feedback_text=validated_data['feedback_text'])
 
-    class Meta(object):
+    class Meta:
         """Define the model and select fields to seralize."""
 
         model = models.RubricCell
@@ -422,7 +422,7 @@ class ActionSerializer(serializers.ModelSerializer):
 
         return action_obj
 
-    class Meta(object):
+    class Meta:
         """Model definition, and exclude fields, instead of include."""
 
         model = models.Action
@@ -464,7 +464,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
 
         return action_obj
 
-    class Meta(object):
+    class Meta:
         """Define the model and the field to exclude."""
 
         model = models.Action

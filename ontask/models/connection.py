@@ -27,7 +27,7 @@ class Connection(NameAndDescription):
     optional_fields = []
 
     @classmethod
-    def get(cls, pk):
+    def get(cls, primary_key):
         """Get the object with the given PK. Must be overwritten."""
         raise NotImplementedError
 
@@ -67,7 +67,7 @@ class Connection(NameAndDescription):
             None,
             kwargs)
 
-    class Meta(object):
+    class Meta:
         """Define as abstract and the ordering criteria."""
 
         abstract = True

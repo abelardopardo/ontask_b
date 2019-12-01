@@ -13,7 +13,7 @@ from ontask import models, tasks
 from ontask.core import SessionPayload
 
 
-class ActionRunManager(object):
+class ActionRunManager:
     """Base class to provide the service for the run views."""
 
     def _create_log_event(

@@ -23,7 +23,7 @@ accessors = [
 ]
 
 
-class OutcomeRequest(object):
+class OutcomeRequest:
     """Class for consuming & generating LTI Outcome Requests.
 
     Outcome Request documentation:

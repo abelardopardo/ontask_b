@@ -4,8 +4,8 @@
 
 import datetime
 import json
-from builtins import object
 
+from django import http
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
@@ -14,14 +14,14 @@ from django.core.cache import cache
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+import pandas as pd
 
-from ontask.dataops.pandas.database import load_table, is_table_in_db
+from ontask.dataops.pandas.database import is_table_in_db, load_table
 from ontask.dataops.sql import delete_table
 from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.column import Column
+from ontask.models.const import CHAR_FIELD_MD5_SIZE
 from ontask.models.logs import Log
-
-CHAR_FIELD_MD5_SIZE = 32
 
 
 class Workflow(NameAndDescription, CreateModifyFields):
@@ -134,11 +134,11 @@ class Workflow(NameAndDescription, CreateModifyFields):
             except Exception:
                 raise Exception('Unable to unlock workflow {0}'.format(wid))
 
-    def data_frame(self):
+    def data_frame(self) -> pd.DataFrame:
         """Access the data frame by the serializer."""
         return load_table(self.get_data_frame_table_name())
 
-    def get_data_frame_table_name(self):
+    def get_data_frame_table_name(self) -> str:
         """Get the table name containing the data frame.
 
         It updates the field if not present.
@@ -149,7 +149,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
             self.save()
         return self.data_frame_table_name
 
-    def get_data_frame_upload_table_name(self):
+    def get_upload_table_name(self):
         """Get table name used for temporary data upload.
 
         :return: The table name to store the data frame
@@ -159,7 +159,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
             self.save()
         return self.upload_table_prefix.format(self.id)
 
-    def has_table(self):
+    def has_table(self) -> bool:
         """Check if the workflow has a table.
 
         Boolean stating if there is a table storing a data frame
@@ -251,21 +251,21 @@ class Workflow(NameAndDescription, CreateModifyFields):
 
         self.query_builder_ops = json_value
 
-    def get_query_builder_ops_as_str(self):
+    def get_query_builder_ops_as_str(self) -> str:
         """Obtain the query builder operands as a string.
 
         :return: Query builder ops structure as string (JSON dumps)
         """
         return json.dumps(self.query_builder_ops)
 
-    def has_data_frame(self):
+    def has_data_frame(self) -> bool:
         """Check if a workflow has data frame.
 
         :return: If the workflow has a dataframe
         """
         return is_table_in_db(self.get_data_frame_table_name())
 
-    def is_locked(self):
+    def is_locked(self) -> bool:
         """Check if the workflow is locked.
 
         :return: Is the given workflow locked?
@@ -283,7 +283,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # date is beyond the current time.
         return session.expire_date >= timezone.now()
 
-    def lock(self, request, create_session=False):
+    def lock(self, request: http.HttpRequest, create_session: bool = False):
         """Set a session key in the workflow to set is as locked.
 
         :param request: HTTP request
@@ -442,15 +442,11 @@ class Workflow(NameAndDescription, CreateModifyFields):
             col.position = col.position + step
             col.save()
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Render as string."""
         return self.name
 
-    def __unicode__(self):
-        """Render as unicode."""
-        return self.name
-
-    def log(self, user, operation_type: str, **kwargs):
+    def log(self, user, operation_type: str, **kwargs: str):
         """Log the operation with the object."""
         payload = {
             'name': self.name,
@@ -461,7 +457,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, self, payload)
 
-    class Meta(object):
+    class Meta:
         """Define verbose and unique together."""
 
         verbose_name = 'workflow'

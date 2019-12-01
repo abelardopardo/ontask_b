@@ -45,7 +45,7 @@ LAUNCH_DATA_PARAMETERS = [
 ]
 
 
-class LaunchParamsMixin(object):
+class LaunchParamsMixin:
     def __init__(self):
         super().__init__()
 

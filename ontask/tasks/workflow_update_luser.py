@@ -14,7 +14,7 @@ from ontask.workflow.services.luser_update import do_workflow_update_lusers
 logger = logging.getLogger('celery_execution')
 
 
-class ExecuteUpdateWorkflowLUser(object):
+class ExecuteUpdateWorkflowLUser:
     """Update the LUSER field in a workflow."""
 
     def __init__(self):

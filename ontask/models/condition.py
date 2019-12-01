@@ -146,7 +146,7 @@ class Condition(CreateModifyFields):
             self.action.workflow,
             payload)
 
-    class Meta(object):
+    class Meta:
         """Define unique criteria and ordering.
 
         The unique criteria here is within the action, the name and being a

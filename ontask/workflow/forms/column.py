@@ -2,6 +2,7 @@
 
 """Forms to manipulate the columns."""
 import re
+from typing import Dict
 
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
@@ -9,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
 from ontask import is_legal_name, models
-from ontask.core.forms import date_time_widget_options
+from ontask.core import DATE_TIME_WIDGET_OPTIONS
 from ontask.dataops.pandas import is_unique_column, load_table
 
 INITIAL_VALUE_LENGTH = 512
@@ -55,7 +56,7 @@ class ColumnBasicForm(forms.ModelForm):
 
         self.initial_valid_value = None
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check that the name is legal and the categories have right value."""
         form_data = super().clean()
 
@@ -146,7 +147,7 @@ class ColumnBasicForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Select model, fields and widget to consider."""
 
         model = models.Column
@@ -161,8 +162,8 @@ class ColumnBasicForm(forms.ModelForm):
 
         widgets = {
             'active_from': DateTimePickerInput(
-                options=date_time_widget_options),
-            'active_to': DateTimePickerInput(options=date_time_widget_options),
+                options=DATE_TIME_WIDGET_OPTIONS),
+            'active_to': DateTimePickerInput(options=DATE_TIME_WIDGET_OPTIONS),
         }
 
 
@@ -181,7 +182,7 @@ class ColumnAddForm(ColumnBasicForm):
 
         self.fields['data_type'].choices = self.data_type_choices[1:]
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Validate the initial value."""
         form_data = super().clean()
 
@@ -275,7 +276,7 @@ class CriterionForm(ColumnBasicForm):
             self.fields['raw_categories'].label = _(
                 'Comma-separated list of levels of attainment')
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Validate the position field."""
         form_data = super().clean()
 
@@ -315,7 +316,7 @@ class ColumnRenameForm(ColumnBasicForm):
 
         self.fields['data_type'].disabled = True
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify that the rename preserve key, or verify the unique prop."""
         form_data = super().clean()
 
@@ -398,7 +399,7 @@ class FormulaColumnAddForm(forms.ModelForm):
         # Selected columns
         self.selected_columns = None
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify that the data types of the selected columns are correct."""
         form_data = super().clean()
 

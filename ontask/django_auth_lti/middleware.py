@@ -1,6 +1,5 @@
 
 import logging
-from builtins import object
 
 from django.conf import settings
 from django.contrib import auth
@@ -12,7 +11,7 @@ from ontask.django_auth_lti.timer import Timer
 logger = logging.getLogger('ontask')
 
 
-class LTIAuthMiddleware(object):
+class LTIAuthMiddleware:
     """
     Middleware for authenticating users via an LTI launch URL.
 

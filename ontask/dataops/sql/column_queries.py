@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from psycopg2 import sql
 
 from ontask import OnTaskDBIdentifier
-from ontask.models.const import COLUMN_NAME_SIZE
+from ontask.models import COLUMN_NAME_SIZE
 
 sql_to_ontask_datatype_names = {
     # Translation between SQL data type names, and those handled in OnTask

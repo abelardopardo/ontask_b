@@ -17,7 +17,7 @@ class ConnectionTableAdmin(tables.Table):
 
     enabled = tables.BooleanColumn(verbose_name=_('Enabled?'))
 
-    class Meta(object):
+    class Meta:
         """Define model, fields, sequence and attributes."""
 
         fields = ('name', 'description_text', 'enabled')
@@ -32,7 +32,7 @@ class ConnectionTableAdmin(tables.Table):
 class ConnectionTableRun(tables.Table):
     """Base class to render connections to instructors."""
 
-    class Meta(object):
+    class Meta:
         """Define fields, sequence and attributes."""
 
         fields = ('name', 'description_text')

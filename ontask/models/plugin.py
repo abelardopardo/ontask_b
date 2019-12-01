@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Models for the plugin registry and the SQL connections."""
-
-from builtins import object
-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -74,7 +71,7 @@ class Plugin(NameAndDescription, CreateModifyFields):
         payload.update(kwargs)
         return Log.objects.register(user, operation_type, None, payload)
 
-    class Meta(object):
+    class Meta:
         """Define the criteria for ordering."""
 
         ordering = ['name']

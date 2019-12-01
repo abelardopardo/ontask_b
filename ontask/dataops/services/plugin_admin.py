@@ -88,7 +88,7 @@ class PluginAdminTable(tables.Table):
             payload__name=record.name,
         ).count()
 
-    class Meta(object):
+    class Meta:
         """Choose fields, sequence and attributes."""
 
         model = models.Plugin

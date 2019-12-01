@@ -2,8 +2,6 @@
 
 """Serializers to import/export columns and column names."""
 
-from builtins import object
-
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
@@ -69,7 +67,7 @@ class ColumnSerializer(serializers.ModelSerializer):
 
         return column_obj
 
-    class Meta(object):
+    class Meta:
         """Select the model and the fields."""
 
         model = models.Column
@@ -79,7 +77,7 @@ class ColumnSerializer(serializers.ModelSerializer):
 class ColumnNameSerializer(serializers.ModelSerializer):
     """Serializer to return only the name."""
 
-    class Meta(object):
+    class Meta:
         """Select the model and the name."""
 
         model = models.Column

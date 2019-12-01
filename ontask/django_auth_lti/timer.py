@@ -1,9 +1,8 @@
 
 import time
-from builtins import object
 
 
-class Timer(object):
+class Timer:
     def __init__(self, verbose=False):
         self.verbose = verbose
 

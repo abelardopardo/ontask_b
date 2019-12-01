@@ -3,15 +3,14 @@
 """Forms to upload, import and export a workflow."""
 
 import json
+from typing import Dict
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.core import RestrictedFileField
 import ontask.settings
-from ontask.core.forms import RestrictedFileField
-
-CHAR_FIELD_LENGTH = 512
 
 
 class WorkflowForm(forms.ModelForm):
@@ -22,7 +21,7 @@ class WorkflowForm(forms.ModelForm):
         self.user = kwargs.pop('workflow_user', None)
         super().__init__(*args, **kwargs)
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check if the name for the workflow is unique."""
         form_data = super().clean()
 
@@ -46,7 +45,7 @@ class WorkflowForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Identify the model and the fields."""
 
         model = models.Workflow
@@ -57,7 +56,7 @@ class WorkflowImportForm(forms.Form):
     """Form to import a workflow (processing name and file)."""
 
     name = forms.CharField(
-        max_length=CHAR_FIELD_LENGTH,
+        max_length=models.CHAR_FIELD_SMALL_SIZE,
         strip=True,
         required=False,
         initial='',
@@ -76,7 +75,7 @@ class WorkflowImportForm(forms.Form):
 
         super().__init__(data, *args, **kwargs)
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check that the name is unique and form multipart."""
         form_data = super().clean()
 

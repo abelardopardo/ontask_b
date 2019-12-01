@@ -9,14 +9,14 @@ from django.contrib.auth import get_user_model
 from django.core import signing
 from django.utils.translation import ugettext
 
-from ontask.dataops.sql.row_queries import increase_row_integer
 from ontask import models
+from ontask.dataops.sql.row_queries import increase_row_integer
 from ontask.tasks.execute import task_execute_factory
 
 logger = logging.getLogger('ontask')
 
 
-class ExecuteIncreaseTrackCount(object):
+class ExecuteIncreaseTrackCount:
     """Process the increase track count in a workflow."""
 
     def __init__(self):

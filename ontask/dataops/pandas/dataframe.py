@@ -133,7 +133,7 @@ def store_temporary_dataframe(
         - Column types (OnTask)
         - List of booleans denoting if the column is unique
     """
-    table_name = workflow.get_data_frame_upload_table_name()
+    table_name = workflow.get_upload_table_name()
 
     if settings.DEBUG:
         logger.debug('Storing table %s', table_name)
@@ -169,7 +169,7 @@ def store_dataframe(
     if settings.DEBUG:
         logger.debug(
             'Storing dataframe %s',
-            workflow.get_data_frame_upload_table_name())
+            workflow.get_upload_table_name())
 
     _verify_dataframe_columns(workflow, data_frame)
 
@@ -233,7 +233,7 @@ def store_workflow_table(
         update_info['columns_to_upload'] = [True] * len(update_info[
             'initial_column_names'])
 
-    db_table = workflow.get_data_frame_upload_table_name()
+    db_table = workflow.get_upload_table_name()
     new_columns = []
     for old_n, new_n, data_type, is_key, upload in zip(
         update_info['initial_column_names'],

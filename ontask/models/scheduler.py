@@ -5,7 +5,6 @@
 import json
 from typing import Optional
 
-from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -13,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import simplify_datetime_str
 from ontask.models import Column
 from ontask.models.action import Action
-from ontask.models.basic import CreateModifyFields, NameAndDescription
+from ontask.models.basic import CreateModifyFields, NameAndDescription, Owner
 from ontask.models.const import CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
@@ -50,18 +49,11 @@ OPERATION_TYPES = [
 ]
 
 
-class ScheduledOperation(NameAndDescription, CreateModifyFields):
+class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
     """Objects encoding the scheduling of a send email action.
 
     @DynamicAttrs
     """
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        db_index=True,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False)
 
     # Type of event logged see above
     operation_type = models.CharField(
@@ -165,7 +157,7 @@ class ScheduledOperation(NameAndDescription, CreateModifyFields):
             self.action.workflow,
             payload)
 
-    class Meta(object):
+    class Meta:
         """Define the criteria of uniqueness with name and action."""
 
         unique_together = ('name', 'action')

@@ -129,7 +129,7 @@ class OnTaskDBIdentifier(sql.Identifier):
         super().__init__(*[strval.replace('%', '%%') for strval in strings])
 
 
-class OnTaskSharedState(object):
+class OnTaskSharedState:
     """Global dictionary."""
 
     __shared_state = {}

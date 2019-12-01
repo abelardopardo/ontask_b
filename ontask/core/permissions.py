@@ -5,7 +5,7 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from rest_framework import permissions
 
-group_names = [
+GROUP_NAMES = [
     'student',
     'instructor']
 

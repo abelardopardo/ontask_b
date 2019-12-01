@@ -7,7 +7,7 @@ import pandas as pd
 class_name = 'LinearRegressionModel'
 
 
-class LinearRegressionModel(object):
+class LinearRegressionModel:
     """
     Class implementing an OnTask plugin that given two coefficients it
     applies a linear regression model to the input column.

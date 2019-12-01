@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """View objects."""
-
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -91,7 +90,7 @@ class View(NameAndDescription, CreateModifyFields):
             self.workflow,
             payload)
 
-    class Meta(object):
+    class Meta:
         """Define uniqueness with name in workflow and order by name."""
 
         unique_together = ('name', 'workflow')

@@ -52,6 +52,7 @@ def home(request: HttpRequest) -> HttpResponse:
 @xframe_options_exempt
 @lti_role_required(['Instructor', 'Learner'])
 def lti_entry(request: HttpRequest) -> HttpResponse:
+    """Responde through LTI entry."""
     return redirect('home')
 
 
@@ -82,5 +83,3 @@ def keep_alive(request: HttpRequest) -> JsonResponse:
     :return: Empty JSON response
     """
     return JsonResponse({})
-
-
