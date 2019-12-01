@@ -5,9 +5,7 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from rest_framework import permissions
 
-GROUP_NAMES = [
-    'student',
-    'instructor']
+GROUP_NAMES = ['student', 'instructor']
 
 
 class IsOwner(permissions.BasePermission):
