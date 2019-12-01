@@ -4,11 +4,11 @@
 import datetime
 from typing import Dict, Optional
 
-import pytz
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.utils.translation import ugettext
+import pytz
 
 from ontask.core.services import get_execution_items
 from ontask.logs.services import get_log_item
@@ -16,7 +16,7 @@ from ontask.logs.services import get_log_item
 logger = get_task_logger('celery_execution')
 
 
-class ExecuteFactory(object):
+class ExecuteFactory:
     """Factory to execute all received operations."""
 
     def __init__(self):

@@ -13,7 +13,7 @@ from ontask.action import forms as action_forms
 from ontask.visualizations.plotly import PlotlyHandler
 
 
-class ActionEditManager(object):
+class ActionEditManager:
     """Base class to provide edit methods for the actions."""
 
     def __init__(self, *args, **kwargs):

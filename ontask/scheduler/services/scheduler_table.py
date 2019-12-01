@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """Service to produce the table with the scheduler objects."""
-import django_tables2 as tables
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from django_tables2 import A
+import django_tables2 as tables
 
 from ontask import models
 from ontask.core.tables import OperationsColumn
@@ -69,7 +69,7 @@ class ScheduleActionTable(tables.Table):
             reverse('logs:view', kwargs={'pk': log_item.id}),
             record.get_status_display())
 
-    class Meta(object):
+    class Meta:
         """Choose model, fields and sequence in the table."""
 
         model = models.ScheduledOperation

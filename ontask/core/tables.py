@@ -38,7 +38,7 @@ class BooleanColumn(tables.Column):
         return '✔' if self.get_field(record) else '✘'
 
 
-class DataTablesServerSidePaging(object):
+class DataTablesServerSidePaging:
     """Class to handle DataTables Server Side Paging request.
 
     For large tables DataTables allows to pre-load a subset of a table

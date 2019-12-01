@@ -16,10 +16,9 @@ keywords meant for the Logger (eg. ectra).
 """
 
 import logging
-from builtins import object
 
 
-class NewStyleLogMessage(object):
+class NewStyleLogMessage:
     def __init__(self, message, *args, **kwargs):
         """Assign message args and kwargs."""
         self.message = message

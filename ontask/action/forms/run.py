@@ -38,25 +38,22 @@
 
 18) EnableURLForm: Form to process the enable field for an action.
 """
-
 import re
-from typing import List
+from typing import Dict, List
 
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.conf import settings
+from django.db.models import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_correct_email, models
-from ontask.action.forms import SUFFIX_LENGTH
-from ontask.core import forms as ontask_forms
+from ontask.core import ONTASK_SUFFIX_LENGTH, forms as ontask_forms
 from ontask.dataops.sql.column_queries import is_column_unique
 from ontask.dataops.sql.row_queries import get_rows
 
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')
-
-SUBJECT_FIELD_LENGTH = 512
 
 
 class ExportWorkflowBase(ontask_forms.FormWithPayload):
@@ -73,7 +70,7 @@ class ExportWorkflowBase(ontask_forms.FormWithPayload):
 
         self.set_field_from_dict('export_wf')
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify email values."""
         form_data = super().clean()
         self.store_fields_in_dict([('export_wf', None)])
@@ -84,7 +81,7 @@ class EmailSubjectFormBase(ontask_forms.FormWithPayload):
     """Subject field."""
 
     subject = forms.CharField(
-        max_length=1024,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         strip=True,
         required=True,
         label=_('Email subject'))
@@ -93,12 +90,17 @@ class EmailSubjectFormBase(ontask_forms.FormWithPayload):
         super().__init__(*args, **kwargs)
         self.set_field_from_dict('subject')
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify email values."""
         form_data = super().clean()
         self.store_field_in_dict('subject', None)
         return form_data
 
+    class Meta:
+        """Set the size for the subject field."""
+
+        widgets = {'subject': forms.TextInput(
+            attrs={'size': models.CHAR_FIELD_MID_SIZE})}
 
 class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
     """CC and BCC fields."""
@@ -115,7 +117,7 @@ class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
         super().__init__(*args, **kwargs)
         self.set_fields_from_dict(['subject', 'cc_email', 'bcc_email'])
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify email values."""
         form_data = super().clean()
 
@@ -166,7 +168,7 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
 
     def __init__(self, form_data, *args, **kwargs):
         """Store column names and adjust initial values."""
-        self.columns: List[str] = kwargs.pop('columns')
+        self.columns: QuerySet = kwargs.pop('columns')
         super().__init__(form_data, *args, **kwargs)
 
         self.fields['item_column'].queryset = self.columns
@@ -184,7 +186,7 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
         self.fields['confirm_items'].initial = bool(self.get_payload_field(
             'exclude_values'))
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Detect uniques values in item_column."""
         form_data = super().clean()
 
@@ -225,7 +227,7 @@ class JSONTokenForm(ontask_forms.FormWithPayload):
         self.fields['token'].help_text = _(
             'Authentication token provided by the external platform.')
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify form values."""
         form_data = super().clean()
         self.store_field_in_dict('token')
@@ -270,7 +272,7 @@ class EmailActionForm(
             'track_read',
             'export_wf'])
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify email values."""
         form_data = super().clean()
 
@@ -296,12 +298,6 @@ class EmailActionForm(
                 _('The column with email addresses has incorrect values.'))
 
         return form_data
-
-    class Meta(object):
-        """Redefine size of the subject field."""
-
-        widgets = {'subject': forms.TextInput(
-            attrs={'size': SUBJECT_FIELD_LENGTH})}
 
 
 class EmailActionRunForm(EmailActionForm, ExportWorkflowBase):
@@ -342,7 +338,7 @@ class SendListActionForm(EmailSubjectFormBase, EmailCCBCCFormBase):
             'cc_email',
             'bcc_email'])
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify recipient email value"""
         form_data = super().clean()
         self.store_field_in_dict('email_to')
@@ -378,7 +374,7 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
         required=False)
 
     file_suffix = forms.CharField(
-        max_length=SUFFIX_LENGTH,
+        max_length=ONTASK_SUFFIX_LENGTH,
         strip=True,
         required=False,
         label='File name suffix ("feedback.html" if empty)')
@@ -423,7 +419,7 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
             'confirm_items',
             'export_wf'])
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Detect uniques values in one column, and different column names."""
         form_data = super().clean()
 
@@ -505,7 +501,7 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
             'confirm_items',
             'export_wf'])
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Store the target_url if not part of the form"""
         form_data = super().clean()
 
@@ -530,12 +526,6 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
                 'item_column',
                 _('The column does not contain valid Canvas IDs.'))
         return form_data
-
-    class Meta(object):
-        """Set the size for the subject field."""
-
-        widgets = {'subject': forms.TextInput(
-            attrs={'size': SUBJECT_FIELD_LENGTH})}
 
 
 class CanvasEmailActionRunForm(CanvasEmailActionForm, ExportWorkflowBase):
@@ -616,7 +606,7 @@ class ValueExcludeForm(ontask_forms.FormWithPayload):
             filter_formula=self.action.get_filter_formula()).fetchall()
         self.set_field_from_dict('exclude_values')
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Store the values in the field in the dictionary."""
         form_data = super().clean()
         self.store_field_in_dict('exclude_values')
@@ -626,7 +616,7 @@ class ValueExcludeForm(ontask_forms.FormWithPayload):
 class EnableURLForm(forms.ModelForm):
     """Form to edit the serve_enabled, active_from, and active_to."""
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify given datetimes."""
         form_data = super().clean()
 
@@ -643,7 +633,7 @@ class EnableURLForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Define fields and datetime picker widget."""
 
         model = models.Action
@@ -651,6 +641,6 @@ class EnableURLForm(forms.ModelForm):
 
         widgets = {
             'active_from': DateTimePickerInput(
-                options=ontask_forms.date_time_widget_options),
+                options=ontask_forms.DATE_TIME_WIDGET_OPTIONS),
             'active_to': DateTimePickerInput(
-                options=ontask_forms.date_time_widget_options)}
+                options=ontask_forms.DATE_TIME_WIDGET_OPTIONS)}

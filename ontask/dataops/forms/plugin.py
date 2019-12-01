@@ -9,8 +9,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask import models
-from ontask.core import ONTASK_FIELD_PREFIX
-from ontask.core.forms import date_time_widget_options
+from ontask.core import DATE_TIME_WIDGET_OPTIONS, ONTASK_UPLOAD_FIELD_PREFIX
 
 STRING_PARAM_MAX_LENGTH = 1024
 
@@ -25,9 +24,9 @@ class PluginInfoForm(forms.Form):
         required=False,
         help_text=_('To select a subset of the table to pass to the plugin'))
 
-    in_field_pattern = ONTASK_FIELD_PREFIX + 'input_%s'
-    out_field_pattern = ONTASK_FIELD_PREFIX + 'output_%s'
-    param_field_pattern = ONTASK_FIELD_PREFIX + 'parameter_%s'
+    in_field_pattern = ONTASK_UPLOAD_FIELD_PREFIX + 'input_%s'
+    out_field_pattern = ONTASK_UPLOAD_FIELD_PREFIX + 'output_%s'
+    param_field_pattern = ONTASK_UPLOAD_FIELD_PREFIX + 'parameter_%s'
 
     @staticmethod
     def _create_datatype_field(p_type, p_help, lbl):
@@ -60,7 +59,7 @@ class PluginInfoForm(forms.Form):
             new_field = forms.DateTimeField(
                 required=False,
                 label=lbl,
-                widget=DateTimePickerInput(options=date_time_widget_options),
+                widget=DateTimePickerInput(options=DATE_TIME_WIDGET_OPTIONS),
                 help_text=p_help)
 
         return new_field
@@ -158,7 +157,7 @@ class PluginInfoForm(forms.Form):
 
         self._create_param_fields()
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Validate that input and output lists."""
         form_data = super().clean()
 

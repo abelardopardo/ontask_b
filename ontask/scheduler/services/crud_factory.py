@@ -17,7 +17,7 @@ from ontask.core import SessionPayload
 from ontask.scheduler import forms, services
 
 
-class ScheduledOperationSaveBase(object):
+class ScheduledOperationSaveBase:
     """Base class for all the scheduled operation save producers."""
 
     def __init__(self, form_class: forms.ScheduleBasicForm):
@@ -179,7 +179,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
         return self.finish(request, op_payload, schedule_item)
 
 
-class SchedulerCRUDFactory(object):
+class SchedulerCRUDFactory:
     """Factory to manipulate a scheduled operation."""
 
     def __init__(self):

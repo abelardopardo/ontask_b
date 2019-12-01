@@ -18,22 +18,20 @@ The currently supported formats are:
 from builtins import str
 from io import TextIOWrapper
 import json
-from typing import Optional
+from typing import Dict, Optional
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
 from ontask import OnTaskDataFrameNoKey, models, settings
-from ontask.core.forms import RestrictedFileField
+from ontask.core import RestrictedFileField
 from ontask.dataops.forms.select import MergeForm, SelectKeysForm
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
 from ontask.dataops.services import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3,
 )
-
-URL_FIELD_LENGTH = 1024
 
 
 class UploadBasic(forms.Form):
@@ -102,7 +100,7 @@ class UploadCSVFileForm(UploadBasic):
         initial=0,
         required=False)
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check that the integers are positive.
 
         :return: The cleaned data
@@ -164,7 +162,7 @@ class UploadExcelFileForm(UploadBasic):
         initial='',
         help_text=_('Sheet within the excelsheet to upload'))
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check that the data can be loaded from the file.
 
         :return: The cleaned data
@@ -198,7 +196,7 @@ class UploadGoogleSheetForm(UploadBasic):
     """
 
     google_url = forms.CharField(
-        max_length=URL_FIELD_LENGTH,
+        max_length=models.URL_FIELD_SIZE,
         strip=True,
         required=True,
         label=_('URL'),
@@ -218,7 +216,7 @@ class UploadGoogleSheetForm(UploadBasic):
         initial=0,
         required=False)
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check that the data can be loaded from the URL.
 
         :return: The cleaned data
@@ -302,7 +300,7 @@ class UploadS3FileForm(UploadBasic):
         initial=0,
         required=False)
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check that the integers are positive.
 
         :return: The cleaned data
@@ -359,7 +357,7 @@ class SQLConnectionForm(ConnectionForm):
     dialect[+driver]://user:password@host/dbname[?key=value..]
     """
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Validate the initial value."""
         form_data = super().clean()
 
@@ -422,7 +420,7 @@ class AthenaConnectionForm(ConnectionForm):
     We collect information to open a connection to an Athena instance
     """
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Validate the initial value."""
         form_data = super().clean()
 

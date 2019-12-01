@@ -2,8 +2,6 @@
 
 """View to export logs."""
 
-from builtins import object
-
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from import_export import resources
@@ -16,7 +14,7 @@ from ontask.core.permissions import is_instructor
 class LogResource(resources.ModelResource):
     """Model resource to handle logs."""
 
-    class Meta(object):
+    class Meta:
         """Define model and fields."""
 
         model = models.Log

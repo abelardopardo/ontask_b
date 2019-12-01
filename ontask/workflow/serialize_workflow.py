@@ -2,7 +2,7 @@
 
 """Serializers to import/export, list the workflows."""
 
-from builtins import object, str
+from builtins import str
 
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
@@ -55,7 +55,7 @@ class WorkflowListSerializer(serializers.ModelSerializer):
 
         return workflow_obj
 
-    class Meta(object):
+    class Meta:
         """Select model and fields to consider."""
 
         model = models.Workflow
@@ -210,7 +210,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
         return workflow_obj
 
-    class Meta(object):
+    class Meta:
         """Select model and fields to exclude."""
 
         model = models.Workflow

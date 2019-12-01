@@ -6,7 +6,7 @@ EditActionOutForm: Form to process content action_out (Base class)
 
 EditActionIn: Form to process action in elements
 """
-from typing import Any, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -14,8 +14,7 @@ from django_summernote.widgets import SummernoteInplaceWidget
 
 from ontask import models
 from ontask.action.evaluate.template import render_action_template
-from ontask.action.forms import FIELD_PREFIX
-from ontask.core.forms import column_to_field
+from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX, column_to_field
 
 
 class EditActionOutForm(forms.ModelForm):
@@ -74,7 +73,7 @@ class EditActionOutForm(forms.ModelForm):
                 },
             )
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify that the template text renders correctly."""
         form_data = super().clean()
         try:
@@ -88,7 +87,7 @@ class EditActionOutForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Select action and the content field only."""
 
         model = models.Action
@@ -122,7 +121,7 @@ class EnterActionIn(forms.Form):
             if cc_item.condition and not self.context[cc_item.condition.name]:
                 continue
 
-            field_name = FIELD_PREFIX + '{0}'.format(idx)
+            field_name = ONTASK_UPLOAD_FIELD_PREFIX + '{0}'.format(idx)
             the_field = column_to_field(
                 cc_item.column,
                 self.form_values[idx],
@@ -155,7 +154,8 @@ class EnterActionIn(forms.Form):
             if colcon.condition and not self.context[colcon.condition.name]:
                 continue
 
-            field_value = self.cleaned_data[FIELD_PREFIX + '{0}'.format(idx)]
+            field_value = self.cleaned_data[
+                ONTASK_UPLOAD_FIELD_PREFIX + '{0}'.format(idx)]
             if colcon.column.is_key:
                 # Remember one unique key for selecting the row
                 where_field = colcon.column.name

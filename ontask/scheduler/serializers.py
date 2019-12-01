@@ -4,9 +4,9 @@
 
 import datetime
 
-import pytz
 from django.conf import settings
 from django.utils.translation import ugettext, ugettext_lazy as _
+import pytz
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
@@ -172,7 +172,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
 
         return instance
 
-    class Meta(object):
+    class Meta:
         """Select  model and define fields."""
 
         model = models.ScheduledOperation

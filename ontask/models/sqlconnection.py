@@ -96,9 +96,9 @@ class SQLConnection(Connection):
     toggle_event = Log.SQL_CONNECTION_TOGGLE
 
     @classmethod
-    def get(cls, pk):
+    def get(cls, primary_key):
         """Get the object with the given PK."""
-        return SQLConnection.objects.get(pk=pk)
+        return SQLConnection.objects.get(pk=primary_key)
 
     def get_display_dict(self) -> Dict:
         """Create dictionary with (verbose_name, value)"""

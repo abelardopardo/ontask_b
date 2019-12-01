@@ -4,12 +4,12 @@
 
 import datetime
 
-import pytz
 from django.conf import settings
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
+import pytz
 
 from ontask.dataops.pandas.datatypes import pandas_datatype_names
 from ontask.models.basic import NameAndDescription
@@ -240,10 +240,6 @@ class Column(NameAndDescription):
         """Render as string."""
         return self.name
 
-    def __unicode__(self):
-        """Render as unicode."""
-        return self.name
-
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""
         payload = {
@@ -264,7 +260,7 @@ class Column(NameAndDescription):
             self.workflow,
             payload)
 
-    class Meta(object):
+    class Meta:
         """Define additional fields, unique criteria and ordering."""
 
         verbose_name = 'column'

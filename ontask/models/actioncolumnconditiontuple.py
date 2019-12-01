@@ -78,7 +78,7 @@ class ActionColumnConditionTuple(models.Model):
             self.action.workflow,
             payload)
 
-    class Meta(object):
+    class Meta:
         """Define uniqueness with name in workflow and order by name."""
 
         unique_together = ('action', 'column', 'condition')

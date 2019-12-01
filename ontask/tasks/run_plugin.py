@@ -13,7 +13,7 @@ from ontask.tasks.execute import task_execute_factory
 logger = logging.getLogger('ontask')
 
 
-class ExecuteRunPlugin(object):
+class ExecuteRunPlugin:
     """Process the request to run a plugin in a workflow"""
 
     def __init__(self):

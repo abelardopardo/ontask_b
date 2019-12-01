@@ -184,7 +184,7 @@ def upload_step_four(
     # Get the dataframes to merge
     try:
         dst_df = load_table(workflow.get_data_frame_table_name())
-        src_df = load_table(workflow.get_data_frame_upload_table_name())
+        src_df = load_table(workflow.get_upload_table_name())
     except Exception:
         return render(
             request,
@@ -200,7 +200,7 @@ def upload_step_four(
     except Exception as exc:
         # Nuke the temporary table
         table_queries.delete_table(
-            workflow.get_data_frame_upload_table_name(),
+            workflow.get_upload_table_name(),
         )
         col_info = workflow.get_column_info()
         workflow.log(

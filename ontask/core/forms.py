@@ -12,7 +12,7 @@ import pytz
 
 from ontask.settings import MAX_UPLOAD_SIZE
 
-date_time_widget_options = {
+DATE_TIME_WIDGET_OPTIONS = {
     'locale': settings.LANGUAGE_CODE,
     'icons': {
         'time': 'fa fa-clock-o',
@@ -60,8 +60,7 @@ class RestrictedFileField(forms.FileField):
             else:
                 raise forms.ValidationError(_(
                     'File type ({0}) is not supported.').format(
-                        form_data.content_type),
-                )
+                    form_data.content_type))
         except AttributeError:
             return form_data
 
@@ -177,6 +176,6 @@ def column_to_field(col, initial=None, required=False, label=None):
 
     if col.data_type == 'datetime':
         new_field.widget = DateTimePickerInput(
-            options=date_time_widget_options)
+            options=DATE_TIME_WIDGET_OPTIONS)
 
     return new_field

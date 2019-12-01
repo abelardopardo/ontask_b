@@ -2,10 +2,27 @@
 
 """Abstract model classes for common fields in mvarious objects."""
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+
+
+class Owner(models.Model):
+    """Class containing the reference to the user owner."""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False)
+
+    class Meta:
+        """Define as abstract."""
+
+        abstract = True
 
 
 class NameAndDescription(models.Model):
@@ -24,7 +41,7 @@ class NameAndDescription(models.Model):
         verbose_name=_('description'),
     )
 
-    class Meta(object):
+    class Meta:
         """Define as abstract."""
 
         abstract = True
@@ -37,7 +54,7 @@ class CreateModifyFields(models.Model):
 
     modified = models.DateTimeField(auto_now=True, null=False)
 
-    class Meta(object):
+    class Meta:
         """Define as abstract."""
 
         abstract = True

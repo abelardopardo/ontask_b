@@ -3,13 +3,14 @@
 """Forms for scheduling actions."""
 
 import datetime
+from typing import Dict
 
-import pytz
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
+import pytz
 
 from ontask import models
 from ontask.action import forms as action_forms
@@ -32,7 +33,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
         self.fields['execute_until'].initial = parse_datetime(
             self.get_payload_field('execute_until', ''))
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify that the date is corre    ct."""
         form_data = super().clean()
 
@@ -64,17 +65,17 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Define model, fields and widgets."""
 
         model = models.ScheduledOperation
         fields = ('name', 'description_text', 'execute', 'execute_until')
         widgets = {
             'execute': DateTimePickerInput(
-                options=ontask_forms.date_time_widget_options),
+                options=ontask_forms.DATE_TIME_WIDGET_OPTIONS),
             'execute_until':
                 DateTimePickerInput(
-                    options=ontask_forms.date_time_widget_options)}
+                    options=ontask_forms.DATE_TIME_WIDGET_OPTIONS)}
 
 
 class ScheduleEmailForm(ScheduleBasicForm, action_forms.EmailActionForm):

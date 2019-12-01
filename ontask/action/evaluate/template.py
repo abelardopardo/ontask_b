@@ -4,7 +4,7 @@
 from builtins import map, str
 import re
 import string
-from typing import List, Mapping
+from typing import Dict, List, Mapping
 
 from django.template import Context, Template
 from django.utils.html import escape
@@ -49,6 +49,7 @@ def make_xlat(*args, **kwds):
         return adict[match.group(0)]
 
     def xlat(text: str) -> str:
+        """Apply regext substitution."""
         return rx.sub(one_xlat, text)
 
     return xlat
@@ -101,7 +102,6 @@ def _change_vname(match) -> str:
     """Change variable name using the match object from re.
 
     :param match:
-
     :return: String with the variable name translated
     """
     return (
@@ -115,7 +115,6 @@ def _change_unescape_vname(match) -> str:
     """Change unscaped variable name using the match object from re.
 
     :param match:
-
     :return: String with the variable name translated
     """
     var_name = match.group('vname').replace(
@@ -177,8 +176,13 @@ def _clean_whitespace(template_text: str) -> str:
     return template_text
 
 
-def render_rubric_criteria(action: models.Action, context) -> List[List]:
-    """Calculate the list of elements [criteria, feedback] for action."""
+def render_rubric_criteria(action: models.Action, context: Dict) -> List[List]:
+    """Calculate the list of elements [criteria, feedback] for action.
+
+    :param action: Action being manipulated (Rubric)
+    :param context: Dictionary with values
+    :return: List of HTML snippets, one per criteria.
+    """
     criteria = [acc.column for acc in action.column_condition_pair.all()]
     cells = action.rubric_cells.all()
     text_sources = []

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Send Email Messages with the rendered content in the action."""
-
 import datetime
 from time import sleep
 from typing import Dict, List, Optional, Union
@@ -483,5 +482,3 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
         action.save()
 
         return []
-
-

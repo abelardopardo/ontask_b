@@ -259,7 +259,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         """Render the name."""
         return self.name
 
-    class Meta(object):
+    class Meta:
         """Make the class abstract."""
 
         abstract = True
@@ -291,11 +291,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
                 self.action_type == self.PERSONALIZED_TEXT
                 or self.action_type == self.EMAIL_LIST))
 
-    def rename_variable(
-        self,
-        old_name: str,
-        new_name: str,
-    ) -> None:
+    def rename_variable(self, old_name: str, new_name: str) -> None:
         """Rename a variable present in the action content.
 
         Two steps are performed. Rename the variable in the text_content, and
@@ -384,7 +380,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
                 condition=None,
             )
 
-    class Meta(object):
+    class Meta:
         """Make this class abstract."""
 
         abstract = True
@@ -401,7 +397,7 @@ class ActionDataIn(models.Model):  # noqa Z214
         blank=False,
     )
 
-    class Meta(object):
+    class Meta:
         """Make this class abstract."""
 
         abstract = True
@@ -471,7 +467,7 @@ class Action(ActionDataOut, ActionDataIn):
             self.workflow,
             payload)
 
-    class Meta(object):
+    class Meta:
         """Define uniqueness with name and workflow. Order by name."""
 
         unique_together = ('name', 'workflow')

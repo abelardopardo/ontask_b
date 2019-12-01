@@ -8,7 +8,6 @@
   table
 
 """
-
 from builtins import str
 from datetime import datetime
 from typing import Dict, List, Mapping, Optional, Tuple, Union

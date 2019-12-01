@@ -4,12 +4,12 @@
 
 import json
 
-from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
+from ontask.models.basic import Owner
 from ontask.models.const import CHAR_FIELD_MID_SIZE
 
 
@@ -26,7 +26,7 @@ class LogManager(models.Manager):
         return log_item
 
 
-class Log(models.Model):
+class Log(Owner):
     """Model to encode logs in OnTask.
 
     @DynamicAttrs
@@ -192,13 +192,6 @@ class Log(models.Model):
         (WORKFLOW_UPDATE_LUSERS, _('Update list of workflow users')),
     ]
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        db_index=True,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False)
-
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
     modified = models.DateTimeField(auto_now=True, null=False)
@@ -248,7 +241,7 @@ class Log(models.Model):
         """
         self.payload = json.dumps(payload)
 
-    def __unicode__(self):
+    def __str__(self):
         """Represent as a tuple."""
         return '%s %s %s %s' % (
             self.user,

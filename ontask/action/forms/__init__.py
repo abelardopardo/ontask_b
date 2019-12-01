@@ -4,8 +4,8 @@
 
 from ontask.action.forms.crud import (
     ActionDescriptionForm, ActionForm,
-    ActionImportForm, ActionUpdateForm, ConditionForm, FIELD_PREFIX, FilterForm,
-    RubricCellForm, RubricLOAForm, SUFFIX_LENGTH,
+    ActionImportForm, ActionUpdateForm, ConditionForm, FilterForm,
+    RubricCellForm, RubricLOAForm,
 )
 from ontask.action.forms.edit import EditActionOutForm, EnterActionIn
 from ontask.action.forms.run import (

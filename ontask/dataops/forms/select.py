@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Forms to select the colums for upload and decide which keys to keep."""
+from typing import Dict
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -83,7 +84,7 @@ class SelectColumnUploadForm(forms.Form):
                     label='',
                     required=False)
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check that at least a key column has been selected."""
         cleaned_data = super().clean()
 

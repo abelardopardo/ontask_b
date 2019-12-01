@@ -52,7 +52,7 @@ class ViewSerializer(serializers.ModelSerializer):
 
         return view_obj
 
-    class Meta(object):
+    class Meta:
         """Set the model and fields to exclude."""
 
         model = models.View

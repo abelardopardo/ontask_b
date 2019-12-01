@@ -16,19 +16,14 @@ ConditionForm: Form to process condition elements
 
 from builtins import str
 import json
+from typing import Dict
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_legal_name, models
-from ontask.core.forms import RestrictedFileField
+from ontask.core import RestrictedFileField
 import ontask.settings
-
-SUFFIX_LENGTH = 512
-
-# Field prefix to use in forms to avoid using column names (they are given by
-# the user and may pose a problem (injection bugs)
-FIELD_PREFIX = '___ontask___select_'
 
 
 class ActionUpdateForm(forms.ModelForm):
@@ -39,7 +34,7 @@ class ActionUpdateForm(forms.ModelForm):
         self.workflow = kwargs.pop('workflow')
         super().__init__(*args, **kwargs)
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Verify that the name is not taken."""
         form_data = super().clean()
 
@@ -55,7 +50,7 @@ class ActionUpdateForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Select Action and the two fields."""
 
         model = models.Action
@@ -65,7 +60,7 @@ class ActionUpdateForm(forms.ModelForm):
 class ActionForm(ActionUpdateForm):
     """Edit name, description and action type."""
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args: str, **kargs: str):
         """Adjust widget choices depending on action type."""
         super().__init__(*args, **kargs)
 
@@ -88,7 +83,7 @@ class ActionForm(ActionUpdateForm):
 class ActionDescriptionForm(forms.ModelForm):
     """Form to edit the description of an action."""
 
-    class Meta(object):
+    class Meta:
         """Select model and the description field."""
 
         model = models.Action
@@ -99,10 +94,9 @@ class FilterForm(forms.ModelForm):
     """Form to read/write information about a filter."""
 
     action = None
-
     old_name = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: str, **kwargs: str):
         """Adjust formula field parameters to use QueryBuilder."""
         self.action = kwargs.pop('action')
 
@@ -114,7 +108,7 @@ class FilterForm(forms.ModelForm):
         # Filter should be hidden.
         self.fields['formula'].widget = forms.HiddenInput()
 
-    class Meta(object):
+    class Meta:
         """Select model and fields."""
 
         model = models.Condition
@@ -136,7 +130,7 @@ class ConditionForm(FilterForm):
         if self.instance.name:
             self.old_name = self.instance.name
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check that data is not empty."""
         form_data = super().clean()
 
@@ -196,7 +190,7 @@ class ActionImportForm(forms.Form):
 class RubricCellForm(forms.ModelForm):
     """Edit the content of a RubricCellForm."""
 
-    class Meta(object):
+    class Meta:
         """Select Action and the two fields."""
 
         model = models.RubricCell
@@ -220,7 +214,7 @@ class RubricLOAForm(forms.Form):
         self.fields['levels_of_attainment'].initial = ', '.join(
             self.criteria[0].categories)
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check that the number of LOAs didn't change."""
         form_data = super().clean()
 
@@ -232,7 +226,6 @@ class RubricLOAForm(forms.Form):
         if len(current_n_loas) != len(self.criteria[0].categories):
             self.add_error(
                 'levels_of_attainment',
-                _('The number of levels cannot change.')
-            )
+                _('The number of levels cannot change.'))
 
         return form_data

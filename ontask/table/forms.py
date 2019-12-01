@@ -2,7 +2,8 @@
 
 """Forms to manage Views."""
 
-from builtins import next, object
+from builtins import next
+from typing import Dict
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -36,7 +37,7 @@ class ViewAddForm(forms.ModelForm):
         # The queryset for the columns must be extracted from the workflow
         self.fields['columns'].queryset = self.workflow.columns.all()
 
-    def clean(self):
+    def clean(self) -> Dict:
         """Check if three properties in the form.
 
         1) Number of columns is not empty
@@ -72,7 +73,7 @@ class ViewAddForm(forms.ModelForm):
 
         return form_data
 
-    class Meta(object):
+    class Meta:
         """Define models and fields to consider."""
 
         model = models.View

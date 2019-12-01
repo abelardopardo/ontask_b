@@ -8,7 +8,7 @@ from django.shortcuts import render
 from ontask import models
 
 
-class ActionManagementFactory(object):
+class ActionManagementFactory:
     """Factory to run actions."""
 
     def __init__(self):
