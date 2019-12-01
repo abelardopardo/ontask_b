@@ -8,20 +8,21 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_legal_name, models
+from ontask.models.basic import CHAR_FIELD_MID_SIZE
 
 
 class AttributeItemForm(forms.Form):
     """Form to get a key/value pair as attribute."""
 
     key = forms.CharField(
-        max_length=models.CHAR_FIELD_MID_SIZE,
+        max_length=CHAR_FIELD_MID_SIZE,
         strip=True,
         required=True,
         label=_('Name'))
 
     # Field for the value
     attr_value = forms.CharField(
-        max_length=models.CHAR_FIELD_MID_SIZE,
+        max_length=CHAR_FIELD_MID_SIZE,
         label='Value')
 
     def __init__(self, *args, **kwargs):
@@ -92,7 +93,7 @@ class SharedForm(forms.Form):
     """
 
     user_email = forms.CharField(
-        max_length=models.CHAR_FIELD_MID_SIZE,
+        max_length=CHAR_FIELD_MID_SIZE,
         strip=True,
         label=_('User email'))
 

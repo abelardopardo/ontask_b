@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.core import RestrictedFileField
+from ontask.models.basic import CHAR_FIELD_SMALL_SIZE
 import ontask.settings
 
 
@@ -56,7 +57,7 @@ class WorkflowImportForm(forms.Form):
     """Form to import a workflow (processing name and file)."""
 
     name = forms.CharField(
-        max_length=models.CHAR_FIELD_SMALL_SIZE,
+        max_length=CHAR_FIELD_SMALL_SIZE,
         strip=True,
         required=False,
         initial='',

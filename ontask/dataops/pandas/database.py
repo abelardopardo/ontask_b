@@ -15,8 +15,7 @@ import sqlalchemy.engine
 
 from ontask import OnTaskDataFrameNoKey, OnTaskSharedState
 from ontask.dataops.pandas.columns import has_unique_column
-from ontask.dataops.sql import get_select_query_txt
-from ontask.models import COLUMN_NAME_SIZE
+from ontask.dataops.sql import COLUMN_NAME_SIZE, get_select_query_txt
 
 logger = logging.getLogger('console')
 

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """First entry point to define URLs."""
-
 from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.i18n import i18n_patterns
@@ -21,7 +20,6 @@ from rest_framework import permissions
 import ontask
 from ontask import models
 from ontask.core import views
-from ontask.core.views import home
 from ontask.dataops.pandas import set_engine
 from ontask.templatetags.ontask_tags import ontask_version
 
@@ -42,7 +40,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     # Home Page!
-    path('', home, name='home'),
+    path('', views.home, name='home'),
     path('lti_entry', views.lti_entry, name='lti_entry'),
     path('not_authorized', views.home, name='not_authorized'),
     path('about', views.AboutPage.as_view(), name='about'),

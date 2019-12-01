@@ -48,9 +48,11 @@ from django.db.models import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_correct_email, models
-from ontask.core import ONTASK_SUFFIX_LENGTH, forms as ontask_forms
+from ontask.core import (
+    ONTASK_SUFFIX_LENGTH, forms as ontask_forms, )
 from ontask.dataops.sql.column_queries import is_column_unique
 from ontask.dataops.sql.row_queries import get_rows
+from ontask.models.basic import CHAR_FIELD_MID_SIZE
 
 # Format of column name to produce a Moodle compatible ZIP
 participant_re = re.compile(r'^Participant \d+$')
@@ -81,7 +83,7 @@ class EmailSubjectFormBase(ontask_forms.FormWithPayload):
     """Subject field."""
 
     subject = forms.CharField(
-        max_length=models.CHAR_FIELD_MID_SIZE,
+        max_length=CHAR_FIELD_MID_SIZE,
         strip=True,
         required=True,
         label=_('Email subject'))
@@ -100,7 +102,7 @@ class EmailSubjectFormBase(ontask_forms.FormWithPayload):
         """Set the size for the subject field."""
 
         widgets = {'subject': forms.TextInput(
-            attrs={'size': models.CHAR_FIELD_MID_SIZE})}
+            attrs={'size': CHAR_FIELD_MID_SIZE})}
 
 class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
     """CC and BCC fields."""

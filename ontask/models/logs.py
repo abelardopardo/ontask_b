@@ -9,8 +9,7 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models.basic import Owner
-from ontask.models.const import CHAR_FIELD_MID_SIZE
+from ontask.models.basic import CHAR_FIELD_MID_SIZE, Owner
 
 
 class LogManager(models.Manager):

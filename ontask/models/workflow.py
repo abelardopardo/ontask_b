@@ -20,8 +20,9 @@ from ontask.dataops.pandas.database import is_table_in_db, load_table
 from ontask.dataops.sql import delete_table
 from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.column import Column
-from ontask.models.const import CHAR_FIELD_MD5_SIZE
 from ontask.models.logs import Log
+
+CHAR_FIELD_MD5_SIZE = 32
 
 
 class Workflow(NameAndDescription, CreateModifyFields):

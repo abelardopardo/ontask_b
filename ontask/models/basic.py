@@ -6,7 +6,9 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+CHAR_FIELD_SMALL_SIZE = 512
+CHAR_FIELD_MID_SIZE = 1024
+CHAR_FIELD_LONG_SIZE = 2048
 
 
 class Owner(models.Model):
