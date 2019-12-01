@@ -17,6 +17,16 @@ class OnTaskUser(models.Model):
         primary_key=True,
     )
 
+    def is_instructor(self):
+        """Return boolean with is_instructor answer."""
+        return (
+            self.user.is_authenticated
+            and (
+                self.user.groups.filter(name='instructor').exists()
+                or self.user.is_superuser
+            )
+        )
+
     def __str__(self):
         """Provide string representation (email)."""
         return self.user.email
