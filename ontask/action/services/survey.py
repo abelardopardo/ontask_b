@@ -45,7 +45,8 @@ class ColumnSelectedTable(tables.Table):
         self.condition_list = kwargs.pop('condition_list')
         super().__init__(*args, **kwargs)
 
-    def render_column__name(self, record):  # noqa: Z116
+    @staticmethod
+    def render_column_name(record: models.ActionColumnConditionTuple) -> str:
         """Render as a link."""
         return format_html(
             '<a href="#questions" data-toggle="tooltip"'
@@ -58,7 +59,10 @@ class ColumnSelectedTable(tables.Table):
             record['column__name'],
         )
 
-    def render_condition(self, record):
+    def render_condition(
+        self,
+        record: models.ActionColumnConditionTuple
+    ) -> str:
         """Render with template to select condition."""
         return render_to_string(
             'action/includes/partial_column_selected_condition.html',
@@ -68,7 +72,10 @@ class ColumnSelectedTable(tables.Table):
                 'conditions': self.condition_list,
             })
 
-    def render_changes_allowed(self, record):
+    @staticmethod
+    def render_changes_allowed(
+        record: models.ActionColumnConditionTuple
+    ) -> str:
         """Render the boolean to allow changes."""
         return render_to_string(
             'action/includes/partial_question_changes_allowed.html',
@@ -98,8 +105,7 @@ class ColumnSelectedTable(tables.Table):
         attrs = {
             'class': 'table table-hover table-bordered',
             'style': 'width: 100%;',
-            'id': 'column-selected-table',
-        }
+            'id': 'column-selected-table'}
 
         row_attrs = {
             'class': lambda record: 'danger' if not record[
