@@ -24,11 +24,13 @@ from ontask.dataops.sql import search_table
 class ColumnSelectedTable(tables.Table):
     """Table to render the columns selected for a given action in."""
 
-    column__name = tables.Column(verbose_name=_('Name'))  # noqa: Z116
-    column__description_text = tables.Column(  # noqa: Z116
+    column_name = tables.Column(
+        verbose_name=_('Name'),
+        accessor=tables.A('column__name'))  # noqa: Z116
+    column_description = tables.Column(  # noqa: Z116
         verbose_name=_('Description (shown to learners)'),
         default='',
-    )
+        accessor=tables.A('column__description_text'))  # noqa: Z116
     changes_allowed = tables.BooleanColumn(
         verbose_name=_('Allow change?'),
         default=True)
@@ -52,11 +54,9 @@ class ColumnSelectedTable(tables.Table):
             '<a href="#questions" data-toggle="tooltip"'
             + ' class="js-workflow-question-edit" data-url="{0}"'
             + ' title="{1}">{2}</a>',
-            reverse(
-                'workflow:question_edit',
-                kwargs={'pk': record['column__id']}),
+            reverse('workflow:question_edit', kwargs={'pk': record.column.id}),
             _('Edit the question'),
-            record['column__name'],
+            record.column.name,
         )
 
     def render_condition(
@@ -64,11 +64,12 @@ class ColumnSelectedTable(tables.Table):
         record: models.ActionColumnConditionTuple
     ) -> str:
         """Render with template to select condition."""
+        cond = record.condition
         return render_to_string(
             'action/includes/partial_column_selected_condition.html',
             {
-                'id': record['id'],
-                'cond_selected': record['condition__name'],
+                'id': record.id,
+                'cond_selected': cond.name if cond else None,
                 'conditions': self.condition_list,
             })
 
@@ -79,25 +80,22 @@ class ColumnSelectedTable(tables.Table):
         """Render the boolean to allow changes."""
         return render_to_string(
             'action/includes/partial_question_changes_allowed.html',
-            {
-                'id': record['id'],
-                'changes_allowed': record['changes_allowed'],
-            })
+            {'id': record.id, 'changes_allowed': record.changes_allowed})
 
     class Meta:
         """Define fields, sequence, attrs and row attrs."""
 
         fields = (
-            'column__id',
-            'column__name',
-            'column__description_text',
+            'column_id',
+            'column_name',
+            'column_description',
             'changes_allowed',
             'condition',
             'operations')
 
         sequence = (
-            'column__name',
-            'column__description_text',
+            'column_name',
+            'column_description',
             'changes_allowed',
             'condition',
             'operations')
@@ -108,10 +106,9 @@ class ColumnSelectedTable(tables.Table):
             'id': 'column-selected-table'}
 
         row_attrs = {
-            'class': lambda record: 'danger' if not record[
-                'column__description_text'
-            ] else '',
-        }
+            'class': (
+                lambda record:
+                'danger' if not record.column.description_text else '')}
 
 
 def _create_link_to_survey_row(
@@ -273,13 +270,7 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
 
         context.update({
             'column_selected_table': ColumnSelectedTable(
-                tuples.filter(column__is_key=False).values(
-                    'id',
-                    'column__id',
-                    'column__name',
-                    'column__description_text',
-                    'condition__name',
-                    'changes_allowed'),
+                tuples.filter(column__is_key=False),
                 orderable=False,
                 extra_columns=[(
                     'operations',
@@ -287,11 +278,9 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
                         verbose_name='',
                         template_file=ColumnSelectedTable.ops_template,
                         template_context=lambda record: {
-                            'id': record['column__id'],
-                            'aid': action.id}),
-                )],
-                condition_list=context['conditions'],
-            ),
+                            'id': record.column.id,
+                            'aid': action.id}))],
+                condition_list=context['conditions']),
             'columns_to_insert': workflow.columns.exclude(
                 column_condition_pair__action=action,
             ).exclude(
@@ -303,8 +292,7 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
             ).exists(),
             'key_columns': workflow.get_unique_columns(),
             'key_selected': tuples.filter(column__is_key=True).first(),
-            'has_no_key': tuples.filter(column__is_key=False).exists(),
-        })
+            'has_no_key': tuples.filter(column__is_key=False).exists()})
 
         return None
 
@@ -348,5 +336,3 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
                     for cc_pair in action.column_condition_pair.all()
                     if cc_pair.column.is_active],
                 'action': action})
-
-
