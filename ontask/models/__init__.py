@@ -4,12 +4,11 @@
 from ontask.models.action import Action, VAR_USE_RES
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
 from ontask.models.athenaconnection import AthenaConnection
+from ontask.models.basic import (
+    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CHAR_FIELD_SMALL_SIZE)
 from ontask.models.column import Column
 from ontask.models.condition import Condition
 from ontask.models.connection import Connection
-from ontask.models.const import (
-    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CHAR_FIELD_SMALL_SIZE,
-    COLUMN_NAME_SIZE, URL_FIELD_SIZE)
 from ontask.models.logs import Log
 from ontask.models.oauth import OAuthUserToken
 from ontask.models.plugin import Plugin

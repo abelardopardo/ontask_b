@@ -16,7 +16,7 @@ from ontask.dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
 from ontask.dataops.pandas import (
     get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
-from ontask.dataops.sql import get_rows
+from ontask.dataops.sql import COLUMN_NAME_SIZE, get_rows
 import test
 
 
@@ -759,9 +759,7 @@ class ColumnNameTooLarge(test.OnTaskTestCase):
         data_frame = load_df_from_csvfile(io.StringIO(self.csv), 0, 0)
 
         self.assertTrue(
-            any(
-                len(cname) > models.COLUMN_NAME_SIZE
-                for cname in data_frame.columns))
+            any(len(cname) > COLUMN_NAME_SIZE for cname in data_frame.columns))
 
         try:
             store_table(data_frame, 'TABLE_NAME')

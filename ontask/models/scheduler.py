@@ -12,8 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import simplify_datetime_str
 from ontask.models import Column
 from ontask.models.action import Action
-from ontask.models.basic import CreateModifyFields, NameAndDescription, Owner
-from ontask.models.const import CHAR_FIELD_MID_SIZE
+from ontask.models.basic import (
+    CHAR_FIELD_MID_SIZE, CreateModifyFields, NameAndDescription, Owner)
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 

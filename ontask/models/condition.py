@@ -8,9 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.dataops.formula import EVAL_TXT, evaluate_formula
 from ontask.dataops.sql import get_num_rows
-from ontask.models.basic import CreateModifyFields
+from ontask.models.basic import (
+    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CreateModifyFields)
 from ontask.models.column import Column
-from ontask.models.const import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
 
 

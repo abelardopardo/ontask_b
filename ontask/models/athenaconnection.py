@@ -7,8 +7,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from fernet_fields import EncryptedCharField, EncryptedTextField
 
+from ontask.models.basic import CHAR_FIELD_MID_SIZE
 from ontask.models.connection import Connection
-from ontask.models.const import CHAR_FIELD_MID_SIZE
 from ontask.models.logs import Log
 
 
