@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask import models
+from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.core.checks import check_wf_df
 from ontask.dataops.formula import has_variable
 import test
@@ -637,7 +638,9 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         # Enter data for the remaining user
         self.selenium.find_element_by_link_text("student02@bogus.com").click()
         # Mark as registered
-        self.selenium.find_element_by_id("id____ontask___select_1").click()
+        self.selenium.find_element_by_id(
+            'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1').click()
+
         # Submit form
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
@@ -738,7 +741,7 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_link_text('1.0').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.ID, 'id____ontask___select_2')
+                (By.ID, 'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '2')
             )
         )
 
