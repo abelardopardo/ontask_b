@@ -17,10 +17,10 @@ urlpatterns = [
         views.PasswordChangeView.as_view(),
         name='password-change'),
 
-    path(
-        'password-reset/',
-        views.PasswordResetView.as_view(),
-        name='password-reset'),
+    # path(
+    #     'password-reset/',
+    #     views.PasswordResetView.as_view(),
+    #     name='password-reset'),
 
     path(
         'password-reset-done/',
