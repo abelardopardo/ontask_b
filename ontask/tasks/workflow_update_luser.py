@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Task to update the users connected to a workflow (luser field)."""
-
 import logging
 from typing import Dict, Optional
 
@@ -38,7 +37,7 @@ class ExecuteUpdateWorkflowLUser:
         :param workflow: Workflow being processed (if applicable)
         :param action: Action being executed (if applicable)
         :param payload: Dictionary with the execution parameters
-        :param log_id: Id of the log object where the status is reflected
+        :param log_item: Id of the log object where the status is reflected
         :return: Nothing, the result is stored in the log with log_id
         """
         if not log_item and self.log_event:

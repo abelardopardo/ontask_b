@@ -9,18 +9,17 @@ https://docs.djangoproject.com/en/dev/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
-
 import json
 import os
-import sys
 from os.path import dirname, exists, join
+import sys
 
-import environ
 from celery.schedules import crontab
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+import environ
 
 # Use 12factor inspired environment variables or from a file and define defaults
 env = environ.Env()
@@ -41,7 +40,7 @@ else:
 # DUMP CONFIG IN DEBUG
 #
 ###############################################################################
-def dump_config():
+def dump_config() -> None:
     """Print the configuration in the console."""
     print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
     print('BASE_DIR:', BASE_DIR())

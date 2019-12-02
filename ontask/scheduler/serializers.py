@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-#
 
 """Serialize the scheduled action."""
-
 import datetime
 
 from django.conf import settings

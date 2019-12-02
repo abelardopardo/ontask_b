@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the scheduler pages."""
-
 import json
 import os
-import test
 
-import pandas as pd
 from django.conf import settings
 from django.db import IntegrityError
+import pandas as pd
 
 from ontask.table.serializers import (
     DataFrameJSONMergeSerializer, ViewSerializer,
@@ -16,6 +14,7 @@ from ontask.table.serializers import (
 from ontask.table.serializers.pandas import (
     DataFramePandasSerializer, df_to_string,
 )
+import test
 
 
 class TableTestSerializers(test.OnTaskTestCase):

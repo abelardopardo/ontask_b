@@ -1,4 +1,4 @@
-
+from typing import Dict
 
 from authtools import views as authviews
 from braces import views as bracesviews
@@ -18,7 +18,7 @@ class LoginView(bracesviews.AnonymousRequiredMixin,
     template_name = "accounts/login.html"
     form_class = forms.LoginForm
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> Dict:
         context = super().get_context_data(**kwargs)
         context['ONTASK_SHOW_HOME_FOOTER_IMAGE'] = \
             settings.SHOW_HOME_FOOTER_IMAGE

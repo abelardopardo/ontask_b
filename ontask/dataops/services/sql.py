@@ -21,7 +21,8 @@ from ontask.dataops.services.dataframeupload import load_df_from_sqlconnection
 class SQLConnectionTableAdmin(ConnectionTableAdmin):
     """Table to render the SQL admin items."""
 
-    def render_name(self, record):
+    @staticmethod
+    def render_name(record):
         """Render name as a link."""
         return format_html(
             '<a class="js-connection-addedit" href="#" data-url="{0}">{1}</a>',
@@ -29,7 +30,8 @@ class SQLConnectionTableAdmin(ConnectionTableAdmin):
             record['name'],
         )
 
-    def render_enabled(self, record):
+    @staticmethod
+    def render_enabled(record):
         """Render the boolean to allow changes."""
         return render_to_string(
             'dataops/includes/partial_connection_enable.html',
@@ -49,7 +51,8 @@ class SQLConnectionTableAdmin(ConnectionTableAdmin):
 class SQLConnectionTableRun(ConnectionTableRun):
     """Class to render the table of SQL connections."""
 
-    def render_name(self, record):
+    @staticmethod
+    def render_name(record):
         """Render the name as a link."""
         return format_html(
             '<a class="js-connection-view" href="#" data-url="{0}">{1}</a>',

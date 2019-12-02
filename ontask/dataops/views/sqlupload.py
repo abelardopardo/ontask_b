@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Function to upload a data frame from an existing SQL connection object."""
-
 from typing import Optional
 
 from django.contrib import messages

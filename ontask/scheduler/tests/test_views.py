@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the scheduler pages."""
-
-import os
-import test
 from datetime import datetime, timedelta
+import os
 
-import pytz
 from django.conf import settings
+import pytz
 from rest_framework import status
 
 from ontask import models
+import test
 
 
 class SchedulerForms(test.OnTaskTestCase):

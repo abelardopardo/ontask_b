@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+"""Functions for LTI Configuration."""
 from collections import defaultdict
 
 from lxml import etree, objectify
@@ -38,7 +41,7 @@ class ToolConfig:
         for opt in accessors:
             setattr(self, opt, None)
 
-        self.custom_params = kwargs.pop('custom_params') if\
+        self.custom_params = kwargs.pop('custom_params') if \
             kwargs.get('custom_params') else defaultdict(lambda: None)
         self.extensions = kwargs.pop('extensions') if kwargs.get('extensions')\
             else defaultdict(lambda: None)

@@ -104,6 +104,7 @@ class EmailSubjectFormBase(ontask_forms.FormWithPayload):
         widgets = {'subject': forms.TextInput(
             attrs={'size': CHAR_FIELD_MID_SIZE})}
 
+
 class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
     """CC and BCC fields."""
 

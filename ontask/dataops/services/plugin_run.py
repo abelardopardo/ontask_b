@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Service functions to handle plugin invocations."""
-
 import json
 from typing import Dict
 
@@ -38,7 +37,8 @@ class PluginAvailableTable(tables.Table):
 
         super().__init__(*args, **kwargs)
 
-    def render_name(self, record):
+    @staticmethod
+    def render_name(record):
         """Render as a link or empty if it has not been verified."""
         if record.is_verified:
             return format_html(

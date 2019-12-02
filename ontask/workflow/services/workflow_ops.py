@@ -31,7 +31,8 @@ class AttributeTable(tables.Table):
         template_context=lambda record: {'id': record['id']},
     )
 
-    def render_name(self, record):
+    @staticmethod
+    def render_name(record):
         """Render name field as a link.
 
         Impossible to use LinkColumn because href="#". A template may be an

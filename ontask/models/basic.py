@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Abstract model classes for common fields in mvarious objects."""
-
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _

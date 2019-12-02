@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to run the different types of actions."""
-
 from django import http
 from django.shortcuts import render
 

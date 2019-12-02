@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to save the different types of scheduled actions."""
-
 from datetime import datetime
 
 from django import http
@@ -71,8 +70,8 @@ class ScheduledOperationSaveBase:
         del request, schedule_item, op_payload
         raise ValueError('Incorrect  invocation of process_post method')
 
+    @staticmethod
     def finish(
-        self,
         request: http.HttpRequest,
         payload: SessionPayload,
         schedule_item: models.ScheduledOperation = None,
@@ -82,13 +81,10 @@ class ScheduledOperationSaveBase:
         All required data is passed through the payload.
 
         :param request: Request object received
-
         :param schedule_item: ScheduledOperation item being processed. If None,
         it has to be extracted from the information in the payload.
-
         :param payload: Dictionary with all the required data coming from
         previous requests.
-
         :return: Http Response
         """
         # Get the scheduled operation
@@ -203,14 +199,12 @@ class SchedulerCRUDFactory:
         :param operation_type: Type of scheduled item being processed. If the
         type is RUN_ACTION, the method explands its type looking at the type of
         action (either as a parameter, or within the schedule_item)
-
         :param kwargs: Dictionary with the following fields:
         - request: HttpRequest that prompted the process
         - action: Optional field stating the action being considered
         - schedule_item: Item being processed (if it exists)
         - prev_url: String with the URL to "go back" in case there is an
           intermediate step
-
         :return: HttpResponse
         """
         try:
@@ -226,12 +220,10 @@ class SchedulerCRUDFactory:
         :param operation_type: Type of scheduled item being processed. If the
         type is RUN_ACTION, the method explands its type looking at the type
         of action (either as a parameter, or within the schedule_item)
-
         :param kwargs: Dictionary with the following fields:
         - request: HttpRequest that prompted the process
         - schedule_item: Item being processed (if it exists)
         - payload: Dictionary with all the additional fields for the request
-
         :return: HttpResponse
         """
         try:

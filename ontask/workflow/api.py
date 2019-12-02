@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """API classes to manipulate workflows."""
-
 from typing import Optional
 
 from django.db.models import Q

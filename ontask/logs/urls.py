@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """URLs to access the logs."""
-
 from django.urls import path
 
 from ontask.logs import api, resources, views

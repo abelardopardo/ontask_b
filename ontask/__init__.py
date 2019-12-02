@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Basic functions and definitions used all over the platform."""
-
 from datetime import datetime
 from typing import List, Optional
 
@@ -18,6 +17,7 @@ __all__ = [
     'are_correct_emails',
     'celery_app',
     'create_new_name',
+    'entity_prefix',
     'is_legal_name',
     'is_correct_email',
     'OnTaskDataFrameNoKey',

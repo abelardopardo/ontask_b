@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the workflow pages."""
-
 import os
-import test
-from test.compare import compare_workflows
 
 from django.conf import settings
 from rest_framework import status
 
 from ontask import entity_prefix, models
+import test
+from test.compare import compare_workflows
 
 
 class WorkflowTestViewWorkflowCrud(test.OnTaskTestCase):

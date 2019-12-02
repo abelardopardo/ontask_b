@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Profiles models."""
-
 import uuid
 
 from django.conf import settings

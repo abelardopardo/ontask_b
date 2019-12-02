@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Script to create users. Execute without parameters for help."""
-
 from builtins import str
 import codecs
 import csv
@@ -102,7 +101,8 @@ class Command(BaseCommand):
             group,
             options['verbosity'] > 0)
 
-    def get_column_value_list(self, filenames, column_name, debug=False):
+    @staticmethod
+    def get_column_value_list(filenames, column_name, debug=False):
         """Get the values of the given column from all filenames.
 
         Function that given a set of filenames returns the list of values
@@ -128,7 +128,8 @@ class Command(BaseCommand):
 
         return to_return
 
-    def create_users(self, emails, password, group=None, debug=False):
+    @staticmethod
+    def create_users(emails, password, group=None, debug=False):
         """Create users with the given information.
 
         Given a list of emails, create demo users with the initial password,

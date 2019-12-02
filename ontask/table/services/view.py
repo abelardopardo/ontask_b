@@ -28,7 +28,8 @@ class ViewTable(tables.Table):
         template_context=lambda record: {'id': record['id']},
     )
 
-    def render_name(self, record):
+    @staticmethod
+    def render_name(record):
         """Render the name of the action as a link."""
         return format_html(
             """<a href="#" class="js-view-edit"
@@ -109,7 +110,7 @@ def save_view_form(
     """Save the data attached to a view.
 
     :param user: user requesting the operation
-    :param wokflow: Workflow being processed
+    :param workflow: Workflow being processed
     :param view: View being processed.
     :return: AJAX Response
     """

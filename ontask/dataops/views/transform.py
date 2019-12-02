@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views to manipulate the transformations and models."""
-
 from typing import Optional
 
 from django.contrib import messages

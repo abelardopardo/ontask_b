@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test the views to update or create new rews."""
-
 import os
-import test
 
 from django.conf import settings
 from django.urls import reverse
@@ -11,6 +9,7 @@ from rest_framework import status
 
 from ontask.dataops.sql import get_row
 from ontask.dataops.views import row_update
+import test
 
 
 class DataopsViewsRow(test.OnTaskTestCase):

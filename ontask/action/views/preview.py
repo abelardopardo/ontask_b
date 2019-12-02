@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views to preview resulting text in the action."""
-
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test

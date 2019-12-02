@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
 """Backend class to authenticate LTI requests."""
-
 import logging
 from time import time
 from typing import Mapping, Optional
 
-import oauth2
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
+import oauth2
 
 from ontask.lti.tool_provider import DjangoToolProvider
 
@@ -27,7 +26,6 @@ class LTIAuthBackend(ModelBackend):
     this behavior by setting the ``create_unknown_user`` attribute to
     ``False``.
     """
-
     # Create a User object if not already in the database?
     create_unknown_user = True
     # Username prefix for users without an sis source id
@@ -183,7 +181,8 @@ class LTIAuthBackend(ModelBackend):
 
         return user
 
-    def get_default_username(self, tool_provider, prefix=''):
+    @staticmethod
+    def get_default_username(tool_provider, prefix=''):
         """Return a default username value from tool_provider.
 
         This is needed in case offical LTI param lis_person_sourcedid is not

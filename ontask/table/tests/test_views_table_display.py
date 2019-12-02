@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the scheduler pages."""
-
 import os
-import test
 
 from django.conf import settings
 from django.urls import reverse
@@ -11,6 +9,7 @@ from rest_framework import status
 
 from ontask.dataops.pandas import get_table_row_by_index
 from ontask.table.views.table_display import row_delete
+import test
 
 
 class TableTestViewTableDisplay(test.OnTaskTestCase):

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Test views to run ZIP actions."""
-
 import os
 
 from django.conf import settings

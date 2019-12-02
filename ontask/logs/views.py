@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views to show logs and log table."""
-
 import json
 from typing import Optional
 

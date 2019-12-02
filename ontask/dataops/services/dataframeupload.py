@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Upload DataFrames from various sources."""
-
 from typing import Dict, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
@@ -88,11 +87,8 @@ def load_df_from_csvfile(
     (testing the conversion on every string column).
 
     :param file_obj: File object to read the CSV content
-
     :param skiprows: Number of lines to skip at the top of the document
-
     :param skipfooter: Number of lines to skip at the bottom of the document
-
     :return: Resulting data frame, or an Exception.
     """
     data_frame = pd.read_csv(
@@ -119,9 +115,7 @@ def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
     (testing the conversion on every string column).
 
     :param file_obj: File object to read the CSV content
-
     :param sheet_name: Sheet in the file to read
-
     :return: Resulting data frame, or an Exception.
     """
     data_frame = pd.read_excel(
@@ -153,17 +147,11 @@ def load_df_from_s3(
     (testing the conversion on every string column).
 
     :param aws_key: Key to access the S3 bucket
-
     :param aws_secret: Secret to access the S3 bucket
-
     :param bucket_name: Bucket name
-
     :param file_path: Path to access the file within the bucket
-
     :param skiprows: Number of lines to skip at the top of the document
-
     :param skipfooter: Number of lines to skip at the bottom of the document
-
     :return: Resulting data frame, or an Exception.
     """
     path_prefix = ''
@@ -204,11 +192,8 @@ def load_df_from_googlesheet(
     (testing the conversion on every string column).
 
     :param url_string: URL where the file is available
-
     :param skiprows: Number of lines to skip at the top of the document
-
     :param skipfooter: Number of lines to skip at the bottom of the document
-
     :return: Resulting data frame, or an Exception.
     """
     # Process the URL provided by google. If the URL is obtained using the

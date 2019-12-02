@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Data types considered in OnTask and its relation with Pandas data types"""
-
 from typing import Dict, List
 
 import pandas as pd

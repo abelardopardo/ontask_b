@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Action model."""
-
 import datetime
 import re
 from typing import List

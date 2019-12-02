@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views for editing Surveys and TODO_list actions."""
-
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Test plugin manager functions."""
-
 import os
 
 from django.conf import settings

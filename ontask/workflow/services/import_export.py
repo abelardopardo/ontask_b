@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to perform the import/export operations."""
-
 from datetime import datetime
 import gzip
 from io import BytesIO

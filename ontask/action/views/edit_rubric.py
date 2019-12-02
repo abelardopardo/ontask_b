@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """View to edit rubric actions."""
-
 from typing import Optional
 
 from django.contrib import messages

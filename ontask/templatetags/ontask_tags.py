@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Tags to include URLS and other auxiliary HTML resources."""
-
 import json
 
 from django import template

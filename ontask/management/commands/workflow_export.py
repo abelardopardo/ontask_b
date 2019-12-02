@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Command to export a single workflow."""
-
 import shutil
 
 from django.core.management.base import BaseCommand

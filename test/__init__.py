@@ -502,9 +502,7 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         Given a dropdown xpath, click to open and then click on the given option
 
         :param dd_xpath: xpath to locate the dropdown element (top level)
-
         :param option_num: position of the option in the dropdown to click
-
         :return: Nothing
         """
         self.selenium.find_element_by_xpath(dd_xpath).click()
@@ -527,11 +525,8 @@ class OnTaskLiveTestCase(LiveServerTestCase):
         Given a dropdown xpath, click to open and then click on the given option
 
         :param dd_xpath: xpath to locate the dropdown element (top level)
-
         :param option_num: posotion of the option in the dropdown to click
-
         :param wait_for: @id to wait for, or modal open if none.
-
         :return: Nothing
         """
         self.click_dropdown_option_by_number(dd_xpath, option_num)

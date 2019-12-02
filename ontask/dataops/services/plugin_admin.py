@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Service functions to handle plugin invocations."""
-
 from datetime import datetime
 import inspect
 import os
@@ -44,7 +43,8 @@ class PluginAdminTable(tables.Table):
         verbose_name=_('Executions'),
         empty_values=[])
 
-    def render_is_verified(self, record):
+    @staticmethod
+    def render_is_verified(record):
         """Render is_verified as a tick or the button Diagnose."""
         if record.is_verified:
             return format_html('<span class="true">✔</span>')
@@ -54,14 +54,16 @@ class PluginAdminTable(tables.Table):
             context={'id': record.id},
             request=None)
 
-    def render_is_enabled(self, record):
+    @staticmethod
+    def render_is_enabled(record):
         """Render the is enabled as a checkbox."""
         return render_to_string(
             'dataops/includes/partial_plugin_enable.html',
             context={'record': record},
             request=None)
 
-    def render_last_exec(self, record):
+    @staticmethod
+    def render_last_exec(record):
         """Render the last executed time.
 
         :param record: Record being processed in the table.
@@ -76,7 +78,8 @@ class PluginAdminTable(tables.Table):
             return '—'
         return log_item.created
 
-    def render_num_executions(self, record):
+    @staticmethod
+    def render_num_executions(record):
         """Render the last executed time.
 
         :param record: Record being processed in the table.

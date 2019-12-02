@@ -1,11 +1,10 @@
 # -*- coding: UTF-8 -*-#
 
 """Serilizers for frames and merge operations."""
-
 import json
 
-import pandas as pd
 from django.utils.translation import ugettext_lazy as _
+import pandas as pd
 from rest_framework import serializers
 
 from ontask.dataops.pandas import detect_datetime_columns

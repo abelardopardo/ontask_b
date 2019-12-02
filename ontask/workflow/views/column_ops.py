@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views to move coumns and restrict values."""
-
 from typing import Optional
 
 from django import http

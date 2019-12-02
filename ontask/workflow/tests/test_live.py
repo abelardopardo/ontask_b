@@ -680,15 +680,16 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         # Click in the import button and wait
         self.selenium.find_element_by_link_text('Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                'Import workflow')
-        )
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//body/div/h1"),
+                'Import workflow'))
 
         # Set the workflow name and file
         wname = self.selenium.find_element_by_id('id_name')
         wname.send_keys('newwf')
         wfile = self.selenium.find_element_by_id('id_wf_file')
-        wfile.send_keys(os.path.join(settings.BASE_DIR(),
+        wfile.send_keys(os.path.join(
+            settings.BASE_DIR(),
             'ontask',
             'fixtures',
             'ontask_workflow.gz'))
@@ -710,7 +711,8 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         w2 = models.Workflow.objects.get(name='newwf')
 
         # Equal descriptions
-        self.assertEqual(w1.description_text,
+        self.assertEqual(
+            w1.description_text,
             w2.description_text)
 
         # Equal number of columns
@@ -730,7 +732,8 @@ class WorkflowImport(test.OnTaskLiveTestCase):
             self.assertEqual(x.is_key, y.is_key)
 
         # Equal number of actions
-        self.assertEqual(w1.actions.count(),
+        self.assertEqual(
+            w1.actions.count(),
             w2.actions.count())
 
         # Equal names and content in the conditions
@@ -738,11 +741,13 @@ class WorkflowImport(test.OnTaskLiveTestCase):
             self.assertEqual(x.name, y.name)
             self.assertEqual(x.description_text, y.description_text)
             self.assertEqual(x.text_content, y.text_content)
-            self.assertEqual(x.conditions.count(),
+            self.assertEqual(
+                x.conditions.count(),
                 y.conditions.count())
             for c1, c2 in zip(x.conditions.all(), y.conditions.all()):
                 self.assertEqual(c1.name, c2.name)
-                self.assertEqual(c1.description_text,
+                self.assertEqual(
+                    c1.description_text,
                     c2.description_text)
                 self.assertEqual(c1.formula, c2.formula)
                 self.assertEqual(c1.is_filter, c2.is_filter)

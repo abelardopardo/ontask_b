@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
 """Service to manipulate items."""
-import json
 from datetime import datetime
+import json
 from typing import Dict, Optional
 
-import pytz
 from croniter import croniter
 from django.conf import settings
 from django.forms.models import model_to_dict
 from django.http.request import HttpRequest
 from django.urls import reverse
 from django.utils.translation import ugettext
+import pytz
 
 from ontask import models
 from ontask.core import SessionPayload
@@ -43,9 +43,7 @@ def create_timedelta_string(
     etc. are needed.
 
     :param ftime: datetime object (may be in the past)
-
     :param utime: until datetime object
-
     :return: String rendering
     """
     now = datetime.now(pytz.timezone(settings.TIME_ZONE))
@@ -91,16 +89,11 @@ def create_payload(
     """Create a payload dictionary to store in the session.
 
     :param request: HTTP request
-
     :param operation_type: String denoting the type of s_item being processed
-
     :param prev_url: String with the URL to use to "go back"
-
     :param s_item: Existing schedule item being processed (Optional)
-
     :param action: Corresponding action for the schedule operation type, or
     if empty, it is contained in the scheduled_item (Optional)
-
     :return: Dictionary with pairs name: value
     """
     if s_item:

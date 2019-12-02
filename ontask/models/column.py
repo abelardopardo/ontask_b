@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Column model."""
-
 import datetime
 
 from django.conf import settings

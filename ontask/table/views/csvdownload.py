@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views  to download a table in CSV format."""
-
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test

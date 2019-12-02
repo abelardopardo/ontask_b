@@ -4,7 +4,7 @@
 from builtins import map, str
 import re
 import string
-from typing import Dict, List, Mapping
+from typing import Callable, Dict, List, Mapping
 
 from django.template import Context, Template
 from django.utils.html import escape
@@ -28,7 +28,7 @@ white_space_res = [
 _ontask_template_prelude = '{% load ontask_tags %}'
 
 
-def make_xlat(*args, **kwds):
+def make_xlat(*args, **kwds) -> Callable:
     """Apply multiple character substitutions.
 
     Auxiliary function to define a translator that applies multiple character

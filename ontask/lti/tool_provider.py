@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """Class implementing the ToolProvider for LTI."""
-
-import re
 from collections import defaultdict
+import re
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from django.shortcuts import redirect

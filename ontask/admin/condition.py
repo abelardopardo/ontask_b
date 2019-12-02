@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Admin for Conditions."""
-
 from django.contrib import admin
 
 from ontask import models

@@ -305,5 +305,5 @@ rst_prolog += """
 def setup(app):
     app.add_stylesheet('css/custom.css')  # may also be an URL
     app.add_stylesheet(
-        "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
     )

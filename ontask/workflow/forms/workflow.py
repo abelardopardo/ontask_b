@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Forms to upload, import and export a workflow."""
-
 import json
 from typing import Dict
 

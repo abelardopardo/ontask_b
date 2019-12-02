@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """Tests the special cases for decorators."""
-
 import os
-import test
 
 from django.conf import settings
+
+import test
 
 
 class DecoratorAnomalies(test.OnTaskTestCase):

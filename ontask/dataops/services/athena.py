@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
 """Service functions to handle athena connections."""
-
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 
+from ontask import models
 from ontask.core import OperationsColumn
 from ontask.dataops.services.connections import (
     ConnectionTableAdmin,
     ConnectionTableRun,
 )
-from ontask import models
 
 
 class AthenaConnectionTableAdmin(ConnectionTableAdmin):
     """Table to render the Athena admin items."""
 
-    def render_name(self, record):
+    @staticmethod
+    def render_name(record):
         """Render name as a link."""
         return format_html(
             '<a class="js-connection-addedit" href="#" data-url="{0}">{1}</a>',
@@ -25,7 +25,8 @@ class AthenaConnectionTableAdmin(ConnectionTableAdmin):
             record['name'],
         )
 
-    def render_enabled(self, record):
+    @staticmethod
+    def render_enabled(record):
         """Render the boolean to allow changes."""
         return render_to_string(
             'dataops/includes/partial_connection_enable.html',
@@ -44,7 +45,8 @@ class AthenaConnectionTableAdmin(ConnectionTableAdmin):
 class AthenaConnectionTableRun(ConnectionTableRun):
     """Class to render the table of Athena connections."""
 
-    def render_name(self, record):
+    @staticmethod
+    def render_name(record):
         """Render the name as a link."""
         return format_html(
             '<a class="js-connection-view" href="#" data-url="{0}">{1}</a>',

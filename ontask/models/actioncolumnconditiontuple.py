@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Models for a tuple Action/Column/Condition."""
-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Condition Model."""
-
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _

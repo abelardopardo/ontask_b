@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views for steps 2 - 4 of the upload process."""
-
 from builtins import range, zip
 from typing import Optional
 
@@ -27,9 +26,7 @@ def uploadmerge(
     """Show the table of options for upload/merge operation.
 
     :param request: Http Request
-
     :param workflow: To know if this is upload or merge.
-
     :return: Nothing
     """
     # Get the workflow that is being used

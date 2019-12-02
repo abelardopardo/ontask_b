@@ -13,7 +13,6 @@ FilterForm: Form to process filter elements
 
 ConditionForm: Form to process condition elements
 """
-
 from builtins import str
 import json
 from typing import Dict

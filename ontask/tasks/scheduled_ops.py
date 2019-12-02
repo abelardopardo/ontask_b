@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Process the scheduled actions."""
-
 from datetime import datetime
 from typing import List
 
@@ -26,7 +25,6 @@ def _update_item_status(
     """Update the status of the scheduled item.
 
     :param s_item: Scheduled item
-
     :return: Nothing
     """
     now = datetime.now(pytz.timezone(settings.TIME_ZONE))

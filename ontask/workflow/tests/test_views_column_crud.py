@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the column pages."""
-
 import os
-import test
 
 from django.conf import settings
 from rest_framework import status
 
 from ontask import models
 from ontask.dataops.pandas import load_table
+import test
 
 
 class WorkflowTestViewColumnCrud(test.OnTaskTestCase):

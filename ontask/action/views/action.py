@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views to render the list of actions."""
-
 from typing import Optional
 
 from django import http

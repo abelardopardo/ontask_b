@@ -215,7 +215,7 @@ def run(*script_args):
         print('These files were not found: ', ', '.join(not_present))
         filenames = [x for x in filenames if x not in not_present]
 
-    if filenames == []:
+    if not filenames:
         print('No files provided to create users. Terminating')
         return
 

@@ -115,15 +115,10 @@ class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
         Sends a single json object to the URL in the action
 
         :param user: User object that executed the action
-
         :param workflow: Workflow object (if relevant)
-
         :param action: Action from where to take the messages
-
         :param payload: Object with the additional parameters
-
         :param log_item: Log object to store results
-
         :return: Empty list (there are no column values for multiple sends)
         """
         if log_item is None:

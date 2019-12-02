@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views implementing CRUD operations with workflows."""
-
 from builtins import range
 from typing import Optional
 

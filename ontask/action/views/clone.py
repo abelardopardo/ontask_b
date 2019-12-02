@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to clone the actions."""
-
 from typing import Optional
 
 from django import http

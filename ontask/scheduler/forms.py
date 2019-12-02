@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Forms for scheduling actions."""
-
 import datetime
 from typing import Dict
 

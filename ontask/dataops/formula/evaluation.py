@@ -12,28 +12,29 @@ for execution.
 
 - Text rendering: Render a formula to a readable format.
 """
-
 import itertools
+from typing import Dict, List, Optional, Tuple, Union
 
 from psycopg2 import sql
 
 from ontask.dataops.formula import operands
 
 
-def evaluate_formula(node, eval_type, given_variables=None):
+def evaluate_formula(
+    node,
+    eval_type: str,
+    given_variables: Optional[Dict] = None,
+) -> Union[bool, Tuple[str, List]]:
     """Evaluate a node depending on the type and with the given variables.
 
     Given a node representing a formula, and a dictionary with (name, values),
     evaluates the expression represented by the node.
 
     :param node: JSON node representing the expression
-
     :param eval_type: Type of evaluation. See NodeEvaluation: EVAL_EXP is for
     a python expression, EVAL_SQL is a query, and EVAL_TXT a text
     representation of the formula
-
     :param given_variables: Dictionary (name, value) of variables
-
     :return: True/False, (SQL query, fields) or string depending on eval_type
     """
     if 'condition' not in node:

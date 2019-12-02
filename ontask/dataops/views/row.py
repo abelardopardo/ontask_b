@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to update and create a row in the dataframe."""
-
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test

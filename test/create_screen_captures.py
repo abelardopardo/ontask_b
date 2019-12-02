@@ -90,7 +90,7 @@ class ScreenImportTest(ScreenTests):
         self.selenium.find_element_by_link_text('Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Import workflow')
+                'Import workflow')
         )
 
         #
@@ -233,7 +233,7 @@ class ScreenTestFixture(ScreenTests):
 
         # Workdlow card
         self.element_ss('//div[contains(@class, "ontask-card")]',
-                        'workflow_card.png')
+            'workflow_card.png')
         #
         # Navigation bar, details
         #
@@ -322,7 +322,7 @@ class ScreenTestFixture(ScreenTests):
 
         # Table of columns (separated)
         self.element_ss("//div[@id='column-table_wrapper']",
-                        'wokflow_columns.png')
+            'wokflow_columns.png')
 
         #
         # Ops/Edit Column
@@ -356,9 +356,9 @@ class ScreenTestFixture(ScreenTests):
         )
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'test',
-                         'initial_workflow',
-                         'initial_workflow.csv')
+                'test',
+                'initial_workflow',
+                'initial_workflow.csv')
         )
 
         # Picture of the body
@@ -544,7 +544,7 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the buttons
         self.element_ss("//div[@id='table-operation-buttons']",
-                        'table_buttons.png')
+            'table_buttons.png')
 
         #
         # Table Views
@@ -802,7 +802,9 @@ class ScreenTestFixture(ScreenTests):
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
         select.select_by_value(models.Action.JSON_LIST)
-        desc.send_keys('Send the list of inactive students in week 2 to another platform')
+        desc.send_keys(
+            'Send the list of inactive students '
+            'in week 2 to another platform')
 
         self.modal_ss('action_json_list_create.png')
 
@@ -821,7 +823,6 @@ class ScreenTestFixture(ScreenTests):
             "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_datatable('action-table_previous')
-
 
         # Picture of Canvas scheduling
         # self.open_action_schedule('Send Canvas reminder')

@@ -104,11 +104,8 @@ def _canvas_get_or_set_oauth_token(
     process starts.
 
     :param request: Request object to process
-
     :param oauth_instance_name: Locator for the OAuth instance in OnTask
-
     :param continue_url: URL to continue if the token exists and is valid
-
     :return: Http response
     """
     # Get the information from the payload

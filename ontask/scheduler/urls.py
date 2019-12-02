@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """URLs for the scheduler package."""
-
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 

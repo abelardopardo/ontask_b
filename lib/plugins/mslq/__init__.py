@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import random
 from builtins import str
+import random
+from typing import Dict, Optional
 
 import pandas as pd
 
@@ -25,7 +26,6 @@ def mslq_encode(answers, num):
     They are the averages of the corresponding questions.
 
     :param answers: Array of 44 integers encoding the answers
-
     :param num: Number of possibe answers in each question
     """
     ival_idx = [1, 4, 5, 7, 10, 14, 15, 17, 21]
@@ -109,14 +109,13 @@ class MSLQEvaluate(OnTaskTransformation):
              'Comma separated list of possible answer values')
         ]
 
-    def run(self, data_frame, parameters=dict):
+    def run(self, data_frame: pd.DataFrame, parameters: Optional[Dict] = dict):
         """
         Algorithm to encode MSLQ test responses. Creates a data frame to
         be merged with the existing data.
 
         :param data_frame: Input data for the plugin
         :param parameters: Dictionary with (name, value) pairs.
-
         :return: a Pandas data_frame to merge with the existing one 
         """
 

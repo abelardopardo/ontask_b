@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Create the user profile after user is saved."""
-
 import logging
 
 from django.conf import settings

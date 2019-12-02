@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Functions to evaluate the operands in OnTask conditions and filters."""
+from typing import Any, Dict, Tuple, Union
 
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext
@@ -19,24 +20,20 @@ GET_CONSTANT = {
     'double': lambda operand: float(operand),
     'boolean': lambda operand: operand == 'true',
     'string': lambda operand: str(operand),
-    'datetime': lambda operand: parse_datetime(operand),
-}
+    'datetime': lambda operand: parse_datetime(operand)}
 
 
-def value_is_null(var_value):
+def value_is_null(var_value: Any) -> bool:
     """Check if the value is None or NaN."""
     return var_value is None or pd.isna(var_value)
 
 
-def get_value(node, given_variables):
+def get_value(node, given_variables: Dict) -> Any:
     """Return the value to consider for the variable in node['field'].
 
     :param node: Terminal node in the formula
-
     :param given_variables: Dictionary with the list of variables/values
-
     :param given_variables: Dictionary of var/values
-
     :return: The value
     """
     # Get the variable name
@@ -58,15 +55,16 @@ def get_value(node, given_variables):
     return varvalue
 
 
-def equal(node, eval_type, given_variables):
+def equal(
+    node,
+    eval_type: str,
+    given_variables: Dict
+) -> Union[str, bool, Tuple]:
     """Process the equal operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -523,15 +521,16 @@ def less_or_equal(node, eval_type, given_variables):
     )
 
 
-def greater(node, eval_type, given_variables):
+def greater(
+    node,
+    eval_type: str,
+    given_variables: Dict
+) -> Union[bool, str, Tuple]:
     """Process the greater operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -564,15 +563,16 @@ def greater(node, eval_type, given_variables):
     )
 
 
-def greater_or_equal(node, eval_type, given_variables):
+def greater_or_equal(
+    node,
+    eval_type: str,
+    given_variables: Dict
+) -> Union[bool, str, Tuple]:
     """Process the greater_or_equal operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -606,15 +606,16 @@ def greater_or_equal(node, eval_type, given_variables):
     )
 
 
-def between(node, eval_type, given_variables):
+def between(
+    node,
+    eval_type: str,
+    given_variables: Dict
+) -> Union[bool, str, Tuple]:
     """Process the between operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     if eval_type == EVAL_EXP:
@@ -657,15 +658,16 @@ def between(node, eval_type, given_variables):
     )
 
 
-def not_between(node, eval_type, given_variables):
+def not_between(
+    node,
+    eval_type: str,
+    given_variables: Dict,
+) -> Union[bool, str, Tuple]:
     """Process the not_between operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     if eval_type == EVAL_EXP:

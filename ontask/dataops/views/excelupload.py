@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """View to start the excelupload process."""
-
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test

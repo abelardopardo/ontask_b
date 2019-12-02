@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Service to produce the table with the action objects."""
-
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
@@ -57,7 +56,8 @@ class ActionTable(tables.Table):
             'serve_enabled': record.serve_enabled},
     )
 
-    def render_name(self, record):
+    @staticmethod
+    def render_name(record):
         """Render name as a link with a potential flag."""
         return render_to_string(
             'action/includes/partial_action_name.html',

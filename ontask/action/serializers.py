@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-#
 
 """Classes to serialize Actions and Conditions."""
-
 from typing import Optional
 
 from django.utils.translation import ugettext_lazy as _
@@ -17,7 +16,7 @@ from ontask.workflow.serialize_column import (
 try:
     profile  # noqa: Z444
 except NameError:
-    def profile(x): return x  # noqa E731
+    def profile(x: int) -> int: return x  # noqa E731
 
 
 def _create_condition(validated_data, action):

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Test to verify that the scheduled actions are properly executed."""
-
 from datetime import datetime, timedelta
 import os
 

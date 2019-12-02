@@ -16,7 +16,7 @@ accessors = [
 
 
 class ToolConsumer(LaunchParamsMixin, RequestValidatorMixin, object):
-    def __init__(self, consumer_key, consumer_secret, params={}):
+    def __init__(self, consumer_key, consumer_secret, params=dict):
         """
         Create new ToolConsumer.
         """

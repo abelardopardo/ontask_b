@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Service functions to handle connections."""
-
 from django.contrib import messages
 from django.http.request import HttpRequest
 from django.http.response import JsonResponse
