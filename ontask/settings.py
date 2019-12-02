@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Action configuration options."""
-
 import os
 import sys
 
@@ -93,8 +92,8 @@ HELP_URL = getattr(settings, 'ONTASK_HELP_URL', '')
 if 'siteprefs' in settings.INSTALLED_APPS:
     # Respect those users who doesn't have siteprefs installed.
     from siteprefs.toolbox import (
-    patch_locals, register_prefs, pref, pref_group,
-)
+        patch_locals, register_prefs, pref, pref_group,
+    )
 
     patch_locals()  # That's bootstrap.
 

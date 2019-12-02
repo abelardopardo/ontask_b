@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Command to import a workflow."""
-
 import argparse
 
 from django.contrib.auth import get_user_model

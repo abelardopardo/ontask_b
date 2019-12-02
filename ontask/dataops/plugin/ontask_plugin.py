@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Abstract class to use to inherit a plugin."""
-
 from abc import ABCMeta
 from builtins import object
 

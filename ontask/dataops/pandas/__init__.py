@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to manipulate the dataframe, its columns, merging and the DB."""
-
 from ontask.dataops.pandas.columns import (
     are_unique_columns, detect_datetime_columns, get_column_statistics,
     has_unique_column, is_unique_column,

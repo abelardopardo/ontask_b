@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """First step to load data from a Google Sheet."""
-
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test

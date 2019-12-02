@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """File with a command to create a superuser."""
-
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 

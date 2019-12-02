@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-Implementation of visualizations using the Plotly JS library
-"""
 
+"""Implementation of visualizations using the Plotly JS library."""
+from abc import abstractmethod
 from builtins import str
 import json
 
@@ -48,6 +47,13 @@ class PlotlyHandler(VisHandler):
             if script not in current:
                 current.append(script)
         return current
+
+    @abstractmethod
+    def get_id(self):
+        """Return the name of this handler.
+
+        :return: string with the name
+        """
 
     def render(self):
         """Return the rendering in HTML fo this visualization.
@@ -113,8 +119,8 @@ class PlotlyBoxPlot(PlotlyHandler):
         # If a title is given, place it in front of the widget
 
     def get_id(self):
-        """
-        Return the name of this handler
+        """Return the name of this handler.
+
         :return: string with the name
         """
         return self.format_dict['id']

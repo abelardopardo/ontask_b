@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Generic table elements for django-tables2 package."""
-
 from django.template.loader import render_to_string
 import django_tables2 as tables
 
@@ -18,7 +17,7 @@ class OperationsColumn(tables.Column):
 
         self.empty_values = []
 
-    def render(self, record):
+    def render(self, record) -> str:
         """Render the column using the template."""
         return render_to_string(
             self.template_file,

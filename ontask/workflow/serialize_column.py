@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Serializers to import/export columns and column names."""
-
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
@@ -11,7 +10,7 @@ from ontask.dataops.pandas import pandas_datatype_names
 try:
     profile  # noqa: Z444
 except NameError:
-    def profile(bogus_param): return bogus_param  # noqa: E731
+    def profile(bogus_param: int) -> int: return bogus_param  # noqa: E731
 
 
 class ColumnSerializer(serializers.ModelSerializer):

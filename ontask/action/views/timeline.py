@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """View to implement the timeline visualization."""
-
 import json
 from typing import Optional
 

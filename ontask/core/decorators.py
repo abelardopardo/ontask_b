@@ -2,6 +2,7 @@
 
 """Decorators for functions in OnTask."""
 from functools import wraps
+from typing import Callable
 
 from django.contrib import messages
 from django.db.models import Q
@@ -17,7 +18,7 @@ from ontask.core.session_ops import (
 )
 
 
-def ajax_required(func):
+def ajax_required(func: Callable) -> Callable:
     """Verify that the request is AJAX."""
     @wraps(func)
     def function_wrapper(request, *args, **kwargs):  # noqa Z430
@@ -31,7 +32,7 @@ def ajax_required(func):
 def get_workflow(
     s_related: object = None,
     pf_related: object = None,
-):
+) -> Callable:
     """Check that the request has the correct workflow stored.
 
     It also passes the select_related and prefetch_related fields.
@@ -72,7 +73,7 @@ def get_workflow(
 def get_column(
     s_related=None,
     pf_related=None,
-):
+) -> Callable:
     """Check that the pk parameter refers to an action in the Workflow."""
     def get_column_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
@@ -132,7 +133,7 @@ def get_column(
 def get_action(
     s_related=None,
     pf_related=None,
-):
+) -> Callable:
     """Check that the pk parameter refers to an action in the Workflow."""
     def get_action_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
@@ -193,7 +194,7 @@ def get_condition(
     s_related=None,
     pf_related=None,
     is_filter=False,
-):
+) -> Callable:
     """Check that the pk parameter refers to a condition in the Workflow."""
     def get_condition_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
@@ -257,7 +258,7 @@ def get_condition(
 def get_columncondition(
     s_related=None,
     pf_related=None,
-):
+) -> Callable:
     """Check that the pk parameter refers to a condition in the Workflow."""
     def get_columncondition_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430
@@ -318,7 +319,7 @@ def get_columncondition(
 def get_view(
     s_related=None,
     pf_related=None,
-):
+) -> Callable:
     """Check that the pk parameter refers to a condition in the Workflow."""
     def get_view_decorator(func):  # noqa Z430
         @wraps(func)  # noqa: Z430

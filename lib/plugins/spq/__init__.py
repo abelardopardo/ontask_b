@@ -2,6 +2,7 @@
 
 from builtins import str
 import random
+from typing import Dict
 
 import pandas as pd
 
@@ -101,14 +102,13 @@ class SPQEvaluate(OnTaskTransformation):
              'Comma-separated list of possible answer values')
         ]
 
-    def run(self, data_frame, parameters=dict):
+    def run(self, data_frame: pd.DataFrame, parameters: Dict = dict):
         """
         Runs the algorithm and returns a pandas data frame structure that is
         merged with the existing data frame in the workflow 
 
         :param data_frame: Input data for the plugin
         :param parameters: Dictionary with (name, value) pairs.
-
         :return: a Pandas data_frame to merge with the existing one 
         """
 

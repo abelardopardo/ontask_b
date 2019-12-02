@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Admin definitions for action."""
-
 from django.contrib import admin
 
 from ontask import models

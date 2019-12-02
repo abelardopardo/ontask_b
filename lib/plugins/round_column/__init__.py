@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from typing import Dict, Optional
 
 import numpy as np
 import pandas as pd
@@ -32,14 +33,13 @@ class RoundColumn(OnTaskTransformation):
              'Number of decimal places to consider'),
         ]
 
-    def run(self, data_frame, parameters=dict):
+    def run(self, data_frame: pd.DataFrame, parameters: Optional[Dict] = dict):
         """
         Parse the parameters to guarantee that they were correct, and if so,
         returns the dataframe with the rounded columns.
 
         :param data_frame: Input data for the plugin
         :param parameters: Dictionary with (name, value) pairs.
-
         :return: a Pandas data_frame to merge with the existing one
         """
 

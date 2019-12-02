@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Base class for CRUD manager for actions."""
-
 from typing import Dict, Optional
 
 from django import http

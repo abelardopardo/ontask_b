@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Pages to edit the attributes."""
-
 from typing import Optional
 
 from django import http

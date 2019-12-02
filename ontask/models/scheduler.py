@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Model is to store process to execute in the platform at a certain time."""
-
 import json
 from typing import Optional
 

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to do data frame merging."""
-
 from typing import Dict
 
 from django.utils.translation import gettext

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Basic functions and classes to check for permissions."""
-
 from django.contrib.auth.mixins import UserPassesTestMixin
 from rest_framework import permissions
 
@@ -17,13 +16,12 @@ class IsOwner(permissions.BasePermission):
         return obj.user == request.user
 
 
-def is_instructor(user):
+def is_instructor(user) -> bool:
     """Check if the user is authenticated and belongs to the instructor group.
 
     @DynamicAttrs
 
     :param user: User object
-
     :return: Boolean stating if user belongs to the group
     """
     return (
@@ -41,7 +39,6 @@ def is_admin(user):
     @DynamicAttrs
 
     :param user: User object
-
     :return: Boolean stating if user is admin
     """
     return user.is_authenticated and user.is_superuser
@@ -51,9 +48,7 @@ def has_access(user, workflow):
     """Calculate if user has access to workflow.
 
     :param user: User object
-
     :param workflow: Workflow object
-
     :return: True if it is owner or in the shared list
     """
     return workflow.user == user or user in workflow.shared.all()

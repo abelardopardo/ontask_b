@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Basic views to render error."""
-
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.http.request import HttpRequest

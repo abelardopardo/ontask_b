@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Implementation of visualizations using the Vega JS libarry
-"""
-
+"""Implementation of visualizations using the Vega JS libarry."""
 from abc import ABCMeta, abstractmethod
 from builtins import object
 
@@ -22,7 +19,8 @@ class VisHandler(with_metaclass(ABCMeta, object)):
     @staticmethod
     @abstractmethod
     def get_engine_scripts(current=None):
-        """
+        """Add scripts to the given list.
+
         Add to the given list the additional src attributes for the
         <script > elements to include in the HTML head
         :return: Nothing. Modify current list
@@ -30,15 +28,14 @@ class VisHandler(with_metaclass(ABCMeta, object)):
 
     @abstractmethod
     def get_id(self):
-        """
-        Return the name of this handler
+        """Return the name of this handler.
+
         :return: string with the name
         """
 
     @abstractmethod
     def render(self):
-        """
-        Return the rendering in HTML fo this visualization
+        """Return the rendering in HTML fo this visualization.
 
         :return: String as HTML snippet
         """

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """DB queries to manipulate columns."""
-
 from typing import List
 
 from django.db import connection

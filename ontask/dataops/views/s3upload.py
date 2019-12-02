@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """View for the initial step to load data from an S3 bucket."""
-
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test

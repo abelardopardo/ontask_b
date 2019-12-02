@@ -27,9 +27,7 @@ class LinearModel(OnTaskModel):
         returns the dataframe with the resulting linear model.
 
         :param data_frame: Input data for the plugin
-
         :param parameters: Dictionary with (name, value) pairs.
-
         :return: a Pandas data_frame to merge with the existing one 
         """
 

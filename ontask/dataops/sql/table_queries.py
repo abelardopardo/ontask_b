@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Direct SQL operations in the DB."""
-
 import logging
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 

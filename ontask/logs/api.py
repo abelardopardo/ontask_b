@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+"""API functions."""
 from rest_framework import generics
 
 from ontask import models

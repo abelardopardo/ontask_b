@@ -194,7 +194,7 @@ def read_initial_file(file_name, num_students=500):
         # Trim the result
         all_students = all_students.drop(
             random.sample(range(len(all_students)),
-            max_l - num_students),
+                max_l - num_students),
             axis=0)
 
     all_students['Full name'] = (
@@ -475,11 +475,11 @@ def create_project_data(all_students):
         project_student_data = {'SID': student_info['SID']}
 
         if student_info['Enrolment Type'] == 'International':
-            p_weights_structure = [.7,.2,.1]
-            p_weights_prez = [.2,.5,.3]
+            p_weights_structure = [.7, .2, .1]
+            p_weights_prez = [.2, .5, .3]
         else:
-            p_weights_structure = [.6,.3,.1]
-            p_weights_prez = [.7,.2,.1]
+            p_weights_structure = [.6, .3, .1]
+            p_weights_prez = [.7, .2, .1]
 
         project_student_data['Structure'] = str(choice(
             levels_of_attainment,

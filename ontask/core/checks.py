@@ -17,7 +17,6 @@ def check_wf_df(workflow):
     and the structure of the underlying dataframe
 
     :param workflow: Workflow object
-
     :return: Boolean stating the result of the check. True: Correct.
     """
     # Get the df

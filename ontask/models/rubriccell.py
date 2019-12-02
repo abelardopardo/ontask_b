@@ -8,7 +8,6 @@ rubric contains a description, and a feedback text. The model in this file
 stores each cell of the rubric and threfore has a reference to a criteria (or
 column) a category string, a description string, and a feedback string.
 """
-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 

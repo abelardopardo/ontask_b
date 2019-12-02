@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """First step for CSV upload."""
-
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test

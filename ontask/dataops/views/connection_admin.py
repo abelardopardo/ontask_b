@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Common functions to handle connections."""
-
 from typing import Optional
 
 from django.contrib.auth.decorators import user_passes_test

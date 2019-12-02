@@ -65,7 +65,8 @@ class SessionPayload(collections.MutableMapping):
         """Return length."""
         return len(self.__store)
 
-    def __keytransform__(self, key):
+    @staticmethod
+    def __keytransform__(key):
         """Transform the key."""
         return key
 

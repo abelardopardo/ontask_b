@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Operations to manipulate dataframes."""
-
 import logging
 from typing import Dict, List, Optional
 

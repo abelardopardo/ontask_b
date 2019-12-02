@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Forms to manage Views."""
-
 from builtins import next
 from typing import Dict
 

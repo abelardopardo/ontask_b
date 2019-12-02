@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Service to save the action when editing."""
-
 from typing import Optional, Union
 
 from django.http.request import HttpRequest
@@ -26,13 +25,9 @@ def save_action_form(
     record.
 
     :param request: Request object
-
     :param form: Form to be used in the request/render
-
     :param template_name: Template for rendering the content
-
     :param workflow: workflow being processed.
-
     :return: JSON response
     """
     if request.method == 'POST' and form.is_valid():

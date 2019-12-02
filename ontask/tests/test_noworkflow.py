@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Tests redirection to home when no workflow is selected."""
-
 import os
 
 from django.conf import settings

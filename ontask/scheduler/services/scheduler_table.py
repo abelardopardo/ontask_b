@@ -47,7 +47,8 @@ class ScheduleActionTable(tables.Table):
         verbose_name=_('Status'),
         accessor=A('get_status_display'))
 
-    def render_name(self, record):
+    @staticmethod
+    def render_name(record):
         """Render name as link."""
         return format_html(
             '<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>',
@@ -57,7 +58,8 @@ class ScheduleActionTable(tables.Table):
             _('Edit this scheduled operation'),
             record.name)
 
-    def render_status(self, record):
+    @staticmethod
+    def render_status(record):
         """Render status as a link."""
         log_item = record.last_executed_log
         if not log_item:

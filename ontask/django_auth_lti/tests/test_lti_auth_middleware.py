@@ -1,8 +1,8 @@
 import unittest
 
-import mock
 from django.contrib.auth import models
 from django.test import RequestFactory
+import mock
 from mock import patch
 
 from ontask.django_auth_lti.middleware_patched import (
@@ -17,7 +17,8 @@ class TestLTIAuthMiddleware(unittest.TestCase):
     def setUp(self):
         self.mw = MultiLTILaunchAuthMiddleware()
 
-    def build_lti_launch_request(self, post_data):
+    @staticmethod
+    def build_lti_launch_request(post_data):
         """
         Utility method that builds a fake lti launch request with custom data.
         """

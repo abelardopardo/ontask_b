@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Classes for plugin admin."""
-
 from django.contrib import admin
 
 from ontask import models

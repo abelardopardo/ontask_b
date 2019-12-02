@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for import export."""
-
 import os
-import test
 
 from django.conf import settings
 from rest_framework import status
+
+import test
 
 
 class WorkflowTestViewImportExport(test.OnTaskTestCase):

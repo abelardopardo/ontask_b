@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """View to export logs."""
-
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse
 from import_export import resources

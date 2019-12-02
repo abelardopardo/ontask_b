@@ -8,6 +8,6 @@ class OnTaskConfig(AppConfig):
     name = 'ontask'
     verbose_name = _('OnTask')
 
-    def ready(self):
+    def ready(self) -> None:
         # Needed so that the signal registration is done
         pass

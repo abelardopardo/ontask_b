@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Admin classes for the views."""
-
 from django.contrib import admin
 
 from ontask import models

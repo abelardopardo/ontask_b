@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the scheduler pages."""
-
 import os
-import test
 
 from django.conf import settings
 from rest_framework import status
 
 from ontask.dataops.pandas import get_table_row_by_index
+import test
 
 
 class TableTestStatView(test.OnTaskTestCase):

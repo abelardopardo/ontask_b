@@ -11,7 +11,7 @@ from ontask.scheduler.serializers import (
 
 
 class ScheduledOperationAPIListCreate(generics.ListCreateAPIView):
-    """
+    """Class to operate through the
     get:
     Return the list of scheduled actions
 
@@ -22,8 +22,8 @@ class ScheduledOperationAPIListCreate(generics.ListCreateAPIView):
     queryset = None
     permission_classes = (UserIsInstructor,)
 
-    # Filter the Scheduled operations only for the current user.
     def get_queryset(self):
+        """Filter the Scheduled operations only for the current user."""
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return models.ScheduledOperation.objects.all()
@@ -34,6 +34,7 @@ class ScheduledOperationAPIListCreate(generics.ListCreateAPIView):
         ).distinct()
 
     def perform_create(self, serializer):
+        """Create the operation."""
         if self.request.user.is_superuser:
             # Superuser is allowed to create ScheduledOperations for any user
             serializer.save()
@@ -60,6 +61,7 @@ class ScheduledOperationAPIRetrieveUpdateDestroy(
     permission_classes = (UserIsInstructor,)
 
     def perform_create(self, serializer):
+        """Create operation."""
         if self.request.user.is_superuser:
             # Superuser is allowed to create workflows for any user
             serializer.save()
@@ -80,8 +82,8 @@ class ScheduledOperationEmailAPIListCreate(ScheduledOperationAPIListCreate):
 
     serializer_class = ScheduledEmailSerializer
 
-    # Filter the workflows only for the current user.
     def get_queryset(self):
+        """Filter the workflows only for the current user."""
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return models.ScheduledOperation.objects.filter(
@@ -107,8 +109,8 @@ class ScheduledOperationJSONAPIListCreate(ScheduledOperationAPIListCreate):
 
     serializer_class = ScheduledJSONSerializer
 
-    # Filter the workflows only for the current user.
     def get_queryset(self):
+        """Filter the workflows only for the current user."""
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return models.ScheduledOperation.objects.filter(
@@ -140,8 +142,8 @@ class ScheduledEmailAPIRetrieveUpdateDestroy(
 
     serializer_class = ScheduledEmailSerializer
 
-    # Filter the workflows only for the current user.
     def get_queryset(self):
+        """Filter the operations only for the current user."""
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return models.ScheduledOperation.objects.filter(
@@ -173,8 +175,8 @@ class ScheduledJSONAPIRetrieveUpdateDestroy(
 
     serializer_class = ScheduledJSONSerializer
 
-    # Filter the workflows only for the current user.
     def get_queryset(self):
+        """Filter the requested operations."""
         # Admin get to see all of them
         if self.request.user.is_superuser:
             return models.ScheduledOperation.objects.filter(

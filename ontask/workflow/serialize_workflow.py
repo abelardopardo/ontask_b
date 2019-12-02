@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-#
 
 """Serializers to import/export, list the workflows."""
-
 from builtins import str
+from typing import List
 
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
@@ -17,7 +17,7 @@ from ontask.workflow.serialize_column import ColumnSerializer
 try:
     profile  # noqa: Z444
 except NameError:
-    def profile(bogus): return bogus  # noqa: E731
+    def profile(bogus: int) -> int: return bogus  # noqa: E731
 
 
 class WorkflowListSerializer(serializers.ModelSerializer):
@@ -92,7 +92,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         label='OnTask Version',
         help_text=_('To guarantee compability'))
 
-    def get_actions(self, workflow):
+    def get_actions(self, workflow: models.Workflow) -> List[models.Action]:
         """Get the list of selected actions."""
         action_list = self.context.get('selected_actions', [])
         if not action_list:

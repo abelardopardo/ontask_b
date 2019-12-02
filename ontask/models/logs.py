@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """Model for OnTask Logs."""
-
 import json
+from typing import Dict
 
 from django.contrib.postgres.fields import JSONField
 from django.db import models
@@ -15,7 +15,12 @@ from ontask.models.basic import CHAR_FIELD_MID_SIZE, Owner
 class LogManager(models.Manager):
     """Manager to create elements with the right parameters."""
 
-    def register(self, user, name, workflow, payload):
+    def register(
+        self,
+        user,
+        name: str,
+        workflow,
+        payload: Dict):
         """Handle user, name, workflow and payload."""
         log_item = self.create(
             user=user,

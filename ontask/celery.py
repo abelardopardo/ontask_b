@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Celery definitions and a test function."""
-
 import os
 
 from celery import Celery
@@ -35,7 +34,7 @@ def debug_task(self):
     logger.debug('Request: %s', str(self.request))
 
 
-def celery_is_up():
+def celery_is_up() -> bool:
     """Check if celery is up.
 
     :return: Boolean encoding if the process is running

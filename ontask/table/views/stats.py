@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Implementation of views providing visualisation and stats."""
-
 from typing import Optional
 
 from django import http

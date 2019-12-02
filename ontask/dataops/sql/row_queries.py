@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """DB queries to manipulate rows."""
-
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from django.db import connection

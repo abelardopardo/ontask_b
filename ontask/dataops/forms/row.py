@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Forms to introduce values for a row in the data frame."""
-
 from django import forms
 
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX, column_to_field

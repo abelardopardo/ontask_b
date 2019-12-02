@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the scheduler pages."""
-
 import os
 
 from django.conf import settings

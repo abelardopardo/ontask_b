@@ -14,7 +14,6 @@ The currently supported formats are:
 
 - SQL connection to a remote DB
 """
-
 from builtins import str
 from io import TextIOWrapper
 import json

@@ -1,24 +1,23 @@
 # -*- coding: UTF-8 -*-#
 
 """Functions to serialize pandas data frames."""
-
 import base64
-import pickle
 from io import BytesIO
+import pickle
 
-import pandas as pd
 from django.utils.translation import ugettext_lazy as _
+import pandas as pd
 from rest_framework import serializers
 
 
 class DataFramePandasField(serializers.Field):
     """Serialize a data frame pandas field."""
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: pd.DataFrame) -> str:
         """Transform the data frame into a string."""
         return df_to_string(instance)
 
-    def to_internal_value(self, string):
+    def to_internal_value(self, string: str) -> pd.DataFrame:
         """Transform string to the DF."""
         data_frame = string_to_df(string)
         if data_frame is None:

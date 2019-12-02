@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Function to increase the tracking column in a workflow."""
-
 import logging
 from typing import Dict, Optional
 

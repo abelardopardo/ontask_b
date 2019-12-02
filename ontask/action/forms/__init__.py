@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Module containing the forms for manipulating actions and conditions."""
-
 from ontask.action.forms.crud import (
     ActionDescriptionForm, ActionForm,
     ActionImportForm, ActionUpdateForm, ConditionForm, FilterForm,

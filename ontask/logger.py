@@ -14,7 +14,6 @@ exclude these names or just remove log_kwargs from the _log call. On
 a further note, this implementation also silently ignores misspelled
 keywords meant for the Logger (eg. ectra).
 """
-
 import logging
 
 
@@ -42,9 +41,9 @@ N = NewStyleLogMessage
 class StyleAdapter(logging.LoggerAdapter):
     """Adapt the style of the logger."""
 
-    def __init__(self, logger, extra=None):
+    def __init__(self, logger_param, extra=None):
         """Change the extra parameter to empty dict."""
-        super().__init__(logger, extra or {})
+        super().__init__(logger_param, extra or {})
 
     def log(self, level, msg, *args, **kwargs):
         """Emit the message."""

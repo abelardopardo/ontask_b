@@ -390,11 +390,8 @@ def do_clone_column_only(
     """Clone a column.
 
     :param column: Object to clone.
-
     :param new_workflow: Optional new worklow object to link to.
-
     :param new_name: Optional new name to use.
-
     :result: New object.
     """
     if new_name is None:

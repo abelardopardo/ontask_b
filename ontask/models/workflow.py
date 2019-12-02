@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Model description for the Workflow."""
-
 import datetime
 import json
 

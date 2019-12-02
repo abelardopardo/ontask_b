@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to manipulate Pandas DataFrames an related operations."""
-
 import logging
 from typing import Dict, List, Mapping, Optional
 
@@ -29,7 +28,7 @@ ontask_to_sqlalchemy = {
 }
 
 
-def set_engine():
+def set_engine() -> None:
     """Create a persistent SQLAlchemy connection to the DB."""
     if getattr(OnTaskSharedState, 'engine', None):
         return
@@ -58,17 +57,11 @@ def create_db_engine(
     object is required by the pandas functions to_sql and from_sql
 
     :param dialect: Dialect for the engine (oracle, mysql, postgresql, etc)
-
     :param driver: DBAPI driver (psycopg2, ...)
-
     :param username: Username to connect with the database
-
     :param password: Password to connect with the database
-
     :param host: Host to connect with the database
-
     :param dbname: database name
-
     :return: the engine
     """
     database_url = '{dial}{drv}://{usr}:{pwd}@{h}/{dbname}'.format(
@@ -95,7 +88,6 @@ def destroy_db_engine(db_engine=None):
     """Destroys the DB SQAlchemy engine.
 
     :param db_engine: Engine to destroy
-
     :return: Nothing
     """
     if db_engine:
@@ -113,11 +105,8 @@ def load_table(
     """Load a Pandas data frame from the SQL DB.
 
     :param table_name: Table name
-
     :param columns: Optional list of columns to load (all if NOne is given)
-
     :param filter_exp: JSON expression to filter a subset of rows
-
     :return: data frame
     """
     if table_name not in connection.introspection.table_names():
@@ -165,12 +154,9 @@ def store_table(
     - sqlalchemy.UnicodeText()
 
     :param data_frame: The data frame to store
-
     :param table_name: The name of the table in the DB
-
     :param dtype: dictionary with (column_name, data type) to force the storage
     of certain data types
-
     :return: Nothing. Side effect in the DB
     """
     # Check the length of the column names
@@ -206,7 +192,6 @@ def verify_data_frame(data_frame: pd.DataFrame):
     2) All column names are below the maximum size
 
     :param data_frame: Data frame to verify
-
     :return: None or an exception with the descripton of the problem in the
     text
     """
