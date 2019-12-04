@@ -1,15 +1,25 @@
 # -*- coding: utf-8 -*-
 
-import test
+"""Test the Workflow API."""
+import os
 
+from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework.authtoken.models import Token
 
 from ontask import models
+import test
 
 
 class WorkflowApiCreate(test.OnTaskApiTestCase):
     fixtures = ['simple_workflow']
+
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'ontask',
+        'fixtures',
+        'simple_workflow.sql'
+    )
 
     def setUp(self):
         super().setUp()
@@ -34,18 +44,19 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
 
     def test_workflow_create(self):
         # Trying to create an existing wflow and detecting its duplication
-        response = self.client.post(reverse('workflow:api_workflows'),
-                                    {'name': test.wflow_name})
+        response = self.client.post(
+            reverse('workflow:api_workflows'),
+            {'name': test.wflow_name})
 
         # Message should flag the existence of the wflow
         self.assertIn('Workflow could not be created.',
-                      response.data.get('detail', ''))
+            response.data.get('detail', ''))
 
         # Create a second one
-        response = self.client.post(reverse('workflow:api_workflows'),
-                                    {'name': test.wflow_name + '2',
-                                     'attributes': {'one': 'two'}},
-                                    format='json')
+        response = self.client.post(
+            reverse('workflow:api_workflows'),
+            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            format='json')
 
         # Compare the workflows
         workflow = models.Workflow.objects.get(name=test.wflow_name + '2')
@@ -65,11 +76,11 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
     def test_workflow_update(self):
         # Run the update (PUT) method
         response = self.client.put(reverse('workflow:api_rud',
-                                           kwargs={'pk': 1}),
-                                   {'name': test.wflow_name + '2',
-                                    'description_text': test.wflow_desc + '2',
-                                    'attributes': {'k1': 'v1'}},
-                                   format='json')
+            kwargs={'pk': 1}),
+            {'name': test.wflow_name + '2',
+             'description_text': test.wflow_desc + '2',
+             'attributes': {'k1': 'v1'}},
+            format='json')
 
         # Get the workflow and verify
         wflow_id = response.data['id']
