@@ -1,15 +1,13 @@
-import json
-import logging
 from collections import OrderedDict
+import json
 
 from django.conf import settings
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
 
+from ontask import LOGGER
 from ontask.django_auth_lti.thread_local import set_current_request
 from ontask.django_auth_lti.timer import Timer
-
-logger = logging.getLogger('django_auth_lti.backends')
 
 
 class MultiLTILaunchAuthMiddleware:
