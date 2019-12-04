@@ -93,14 +93,12 @@ def compare_tuples(t1, t2):
     assert t1.column.name == t2.column.name
 
 
-def compare_tables(m1, m2):
+def are_identical_dataframes(m1: pd.DataFrame, m2: pd.DataFrame):
     """Compare two pandas data frames.
 
     :param m1: Pandas data frame
-
     :param m2: Pandas data frame
-
-    :return:
+    :return: Nothing if they are correct, exception if incorrect.
     """
     # If both are empty, done.
     if m2 is None and m1 is None:

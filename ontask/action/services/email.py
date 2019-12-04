@@ -169,7 +169,6 @@ def _create_single_message(
     :param from_email: From email
     :param cc_email_list: CC list
     :param bcc_email_list: BCC list
-
     :return: Either EmailMessage or EmailMultiAlternatives
     """
     if settings.EMAIL_HTML_ONLY:
@@ -351,7 +350,6 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         :param action: Action from where to take the messages
         :param log_item: Log object to store results (optional)
         :param payload: Dictionary key, value
-
         :return: List of strings with the "to" fields used.
         """
         # Evaluate the action string, evaluate the subject, and get the value
@@ -431,7 +429,6 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
         :param action: Action from where to take the messages
         :param log_item: Log object to store results
         :param payload: Dictionary key, value
-
         :return: Empty list (because it is a single email sent)
         """
         # Evaluate the action string, evaluate the subject, and get the value

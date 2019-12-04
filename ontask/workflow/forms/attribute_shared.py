@@ -87,7 +87,6 @@ class SharedForm(forms.Form):
     The form uses two parameters:
 
     :param user: The user making the request (to detect self-sharing)
-
     :param workflow: The workflow to share (to detect users already in the
      list)
     """

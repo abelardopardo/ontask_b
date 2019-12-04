@@ -94,11 +94,8 @@ def not_equal(node, eval_type, given_variables):
     """Process the not equal operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -128,11 +125,8 @@ def begins_with(node, eval_type, given_variables):
     """Process the begins_with operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -162,11 +156,8 @@ def not_begins_with(node, eval_type, given_variables):
     """Process the not_begins_with operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -196,11 +187,8 @@ def contains(node, eval_type, given_variables):
     """Process the contains operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -230,11 +218,8 @@ def not_contains(node, eval_type, given_variables):
     """Process the not_contains operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -264,11 +249,8 @@ def ends_with(node, eval_type, given_variables):
     """Process the ends_with operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -296,11 +278,8 @@ def not_ends_with(node, eval_type, given_variables):
     """Process the not_ends_width operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -331,11 +310,8 @@ def is_empty(node, eval_type, given_variables):
     """Process the is_empty operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     if eval_type == EVAL_EXP:
@@ -359,11 +335,8 @@ def is_not_empty(node, eval_type, given_variables):
     """Process the is_empty operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     if eval_type == EVAL_EXP:
@@ -387,11 +360,8 @@ def is_null(node, eval_type, given_variables):
     """Process the is_null operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     if eval_type == EVAL_EXP:
@@ -415,11 +385,8 @@ def is_not_null(node, eval_type, given_variables):
     """Process the is_not_null operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     if eval_type == EVAL_EXP:
@@ -442,11 +409,8 @@ def less(node, eval_type, given_variables):
     """Process the less operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])
@@ -483,11 +447,8 @@ def less_or_equal(node, eval_type, given_variables):
     """Process the less_or_equal operator.
 
     :param node: Formula node
-
     :param eval_type: Type of evaluation
-
     :param given_variables: Dictionary of var/values
-
     :return: Boolean result, SQL query, or text result
     """
     constant = GET_CONSTANT.get(node['type'])(node['value'])

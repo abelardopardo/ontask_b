@@ -81,16 +81,11 @@ def render_table_display_server_side(
     taken from a view.
 
     :param request: AJAX request
-
     :param workflow: workflow object
-
     :param columns: Subset of columns to consider
-
     :param formula: Expression to filter rows
-
     :param view_id: ID of the view restricting the display (if any)
-
-    :return:
+    :return: JSON response
     """
     # Check that the GET parameter are correctly given
     dt_page = DataTablesServerSidePaging(request)

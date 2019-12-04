@@ -59,7 +59,6 @@ def is_legal_name(strval: str) -> Optional[str]:
     Additionally, any column name that starts with __ is reserved for OnTask.
 
     :param strval: String with the column name
-
     :return: String with message suggesting changes, or None if string correct
     """
     if "'" in strval:

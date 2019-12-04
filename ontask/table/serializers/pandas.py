@@ -40,7 +40,6 @@ def df_to_string(df):
     """Transform a data frame into a b64 encoded pickled representation.
 
     :param df: Pandas dataframe
-
     :return: Base64 encoded string of its pickled representation
     """
     try:

@@ -71,13 +71,9 @@ def _create_eval_data_tuple(
     - HTML body text
 
     :param action: Action being processed
-
     :param item_column: The column used to iterate
-
     :param exclude_values: List of values to exclude from evaluation
-
     :param user_fname_column: Column to use for filename creation
-
     :return: List[Tuple[text, text, text]]
     """
     # Obtain the personalised text

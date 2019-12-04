@@ -2,6 +2,7 @@
 
 """Column model."""
 import datetime
+from typing import Any, List
 
 from django.conf import settings
 from django.contrib.postgres.fields.jsonb import JSONField
@@ -113,9 +114,7 @@ class Column(NameAndDescription):
         the ISO 8601 string format and stored.
 
         :param cat_values: List of category values
-
         :param validate: Boolean to enable validation of the given values
-
         :return: Nothing. Sets the value in the object
         """
         # Calculate the values to store
@@ -131,7 +130,7 @@ class Column(NameAndDescription):
         else:
             self.categories = to_store
 
-    def get_simplified_data_type(self):
+    def get_simplified_data_type(self) -> str:
         """Get a data type name to show to users.
 
         :return: The simplified data type using "number" for either integer or
@@ -151,7 +150,7 @@ class Column(NameAndDescription):
 
         raise Exception('Unexpected data type {0}'.format(self.data_type))
 
-    def reposition_and_update_df(self, to_idx):
+    def reposition_and_update_df(self, to_idx: int):
         """Recalculate the position of this column.
 
         :param to_idx: Destination index of the given column
@@ -162,16 +161,14 @@ class Column(NameAndDescription):
         self.save()
 
     @classmethod
-    def validate_column_value(cls, data_type, col_value):
+    def validate_column_value(cls, data_type, col_value) -> Any:
         """Check if a value is correct for a column.
 
         Test that a value is suitable to be stored in this column. It is done
          simply by casting the type and throwing the corresponding exception.
 
         :param data_type: string specifying the data type
-
         :param col_value: Value to store in the column
-
         :return: The new value to be stored
         """
         # Remove spaces
@@ -203,7 +200,11 @@ class Column(NameAndDescription):
         return newval
 
     @classmethod
-    def validate_column_values(cls, data_type, col_values):
+    def validate_column_values(
+        cls,
+        data_type: str,
+        col_values: List[Any]
+    ) -> List[Any]:
         """Check if column values are valid.
 
         Test that a list of values are suitable to be stored in this column.
@@ -211,9 +212,7 @@ class Column(NameAndDescription):
         corresponding exception.
 
         :param data_type: string specifying the data type
-
         :param col_values: List of values to store in the column
-
         :return: The new values to be stored
         """
         return [
@@ -221,7 +220,7 @@ class Column(NameAndDescription):
             for col_val in col_values]
 
     @property
-    def is_active(self):
+    def is_active(self) -> bool:
         """Check if a column is active.
 
         The current time is within the

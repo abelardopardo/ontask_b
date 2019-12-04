@@ -20,15 +20,10 @@ def _perform_non_overlapping_column_merge(
     """Merge the non overlapping columns of the new data frame.
 
     :param dst_df: Existing data frame
-
     :param src_df_no_overlap: portion of the src_df with no overlap
-
     :param merge_info: Information about how to merge
-
     :param dst_key: key column in dst_frame
-
     :param src_key: key column in src_frame
-
     :return: Modified data frame
     """
     # Step A. Perform the merge of non-overlapping columns
@@ -67,15 +62,10 @@ def _perform_overlap_update(
     """Perform the updat of the columns that overlap with the data_frame.
 
     :param dst_df: Left data frame with all the columns
-
     :param src_df: Right data frame with the overlapping columns
-
     :param dst_key: Left key column
-
     :param src_key: Right key column
-
     :param how_merge: Merge version: inner, outer, left or right
-
     :return: Returns the updated data frame depending on the type of merge
     variant requested.
 
@@ -110,7 +100,6 @@ def _perform_overlap_update(
     dst_df_tmp1 with the intersection of the two keys (src and dst). Then,
     dst_df_tmp1 is updated with the content of src_df[OVERLAP]. Finally,
     the rows only in the src_df need to be appended to the dataframe.
-
     """
     # If the src data frame has a single column (they key), there is no need
     # to do any operation
@@ -166,9 +155,7 @@ def _update_is_key_field(merge_info: Dict, workflow):
 
     :param merge_info: dictionary with the lists of columns to upload, rename
     and keep as key
-
     :param workflow: current workflow (to access columns)
-
     :result: None
     """
     # Update the value of is_key based on "keep_key_column"
@@ -232,11 +219,8 @@ def perform_dataframe_upload_merge(
     src_df[OVERLAP].
 
     :param workflow: Workflow with the data frame
-
     :param dst_df: Destination dataframe (already stored in DB)
-
     :param src_df: Source dataframe, stored in temporary table
-
     :param merge_info: Dictionary with merge options
            - initial_column_names: List of initial column names in src data
              frame.
@@ -246,7 +230,6 @@ def perform_dataframe_upload_merge(
            - src_selected_key: Key in the source data frame
            - dst_selected_key: key in the destination (existing) data frame
            - how_merge: How to merge: inner, outer, left or right
-
     :return: None or Exception with anomaly in the message
     """
     # STEP 1 Rename the column names.

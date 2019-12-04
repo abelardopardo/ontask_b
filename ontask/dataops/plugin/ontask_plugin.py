@@ -60,9 +60,7 @@ class OnTaskPluginAbstract(object, metaclass=ABCMeta):
         after column renaming).
 
         :param data_frame: Input data for the plugin
-
         :param parameters: dictionary with the parameters
-
         :return: a Pandas data_frame to append to the existing one
         """
         raise Exception(_('This method should be implemented!'))

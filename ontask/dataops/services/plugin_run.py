@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """Service functions to handle plugin invocations."""
+import datetime
 import json
-from typing import Dict
+from typing import Dict, Union
 
 from django import http
 from django.db.models.expressions import F
@@ -51,12 +52,11 @@ class PluginAvailableTable(tables.Table):
 
         return record.filename
 
-    def render_last_exec(self, record):
+    def render_last_exec(self, record) -> Union[str, datetime]:
         """Render the last executed time.
 
         :param record: Record being processed in the table.
-
-        :return:
+        :return: Datetime/string
         """
         log_item = self.workflow.logs.filter(
             user=self.user,

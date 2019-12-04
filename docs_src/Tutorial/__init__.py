@@ -31,11 +31,9 @@ class LinearRegressionModel:
         :param data_frame: Input data for the plugin
         :param merge_key: Name of the column key that will be used for merging
         :param parameters: Dictionary with (name, value) pairs.
-
         :return: a Pandas data_frame to merge with the existing one (must
         contain a column with name merge_key)
         """
-
         # Extract the key column from the given data frame
         result = pd.DataFrame(data_frame[merge_key])
 
