@@ -76,6 +76,7 @@ def clone_condition(
     :param action_pk: Primary key of the action to receive the condition
     :return: JSON response
     """
+    del pk, workflow
     if action_pk:
         action = models.Action.objects.filter(id=action_pk).first()
         if not action:

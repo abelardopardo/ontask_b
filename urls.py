@@ -123,9 +123,9 @@ try:
     eval_obj = [eval(daction) for daction in settings.DISABLED_ACTIONS]
     for atype in eval_obj:
         to_remove = next(
-            afull_type for afull_type in models.Action.ACTION_TYPES
-            if atype == afull_type[0])
-        models.Action.AVAILABLE_ACTION_TYPES.remove(to_remove)
+            afull_type for afull_type in models.Action.ACTION_TYPES.keys()
+            if atype == afull_type)
+        models.Action.AVAILABLE_ACTION_TYPES.pop(to_remove)
 except Exception as exc:
     raise Exception(
         'Unable to configure available action types. '

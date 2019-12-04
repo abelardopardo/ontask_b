@@ -566,14 +566,6 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
     wflow_desc = 'Simple workflow structure with two type of actions'
     wflow_empty = 'The workflow does not have data'
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     # Test operations with the filter
     def test_action_01_data_entry(self):
         # Login
@@ -655,14 +647,6 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
     )
 
     wflow_name = 'Test personalized survey'
-
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     # Test operations with the filter
     def test_action_01_condition_and_run(self):
@@ -780,14 +764,6 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
     )
 
     wflow_name = 'wflow2'
-
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     # Test operations with the filter
     def test_action_01_rename_column_condition_attribute(self):
@@ -914,16 +890,8 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
     wflow_name = 'wflow2'
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
-    # Test operations with the filter
     def test_action_01_zip(self):
+        """Test ZIP action."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -1008,16 +976,8 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
                   "{% if cond 1 %}Cond 1 is true{% endif %}\\n" + \
                   "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
-    # Test action rename
     def test_action_detect_all_false_rows(self):
+        """Test action rename."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -1090,14 +1050,6 @@ class ActionAllKeyColumns(test.OnTaskLiveTestCase):
 
     wflow_name = 'all key columns'
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     # Test action rename
     def test_action_insert_column_value(self):
         # Login
@@ -1136,18 +1088,8 @@ class ActionSendListActionCreate(test.OnTaskLiveTestCase):
     action_name = 'Send to someone'
     action_text = 'Dear sir/madam\\nHere is the student list: '
 
-    def setUp(self):
-        """Set up and restore the PG table."""
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        """Delete the PG table."""
-        test.delete_all_tables()
-        super().tearDown()
-
-    # Test action rename
     def test_send_list_action_create_edit(self):
+        """Send list action after creating and editing."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -1239,18 +1181,8 @@ class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
     action_name = 'JSON LIST'
     action_text = '{ "student_list": {% ot_insert_column_list "email" %} }'
 
-    def setUp(self):
-        """Set up and restore the PG table."""
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        """Delete the PG table."""
-        test.delete_all_tables()
-        super().tearDown()
-
-    # Test action rename
     def test_send_list_action_create_edit(self):
+        """Create and edit a list action."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -1327,16 +1259,6 @@ class ActionServeLongSurvey(test.OnTaskLiveTestCase):
     workflow_name = 'Test survey run pages'
     action_name = 'survey'
 
-    def setUp(self):
-        """Set up and restore the PG table."""
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        """Delete the PG table."""
-        test.delete_all_tables()
-        super().tearDown()
-
     def test_serve_long_survey(self):
         """Test the serve_action view with a long number of entries."""
         # Login
@@ -1373,16 +1295,6 @@ class ActionCreateRubric(test.OnTaskLiveTestCase):
 
     workflow_name = 'test rubric'
     action_name = 'survey'
-
-    def setUp(self):
-        """Set up and restore the PG table."""
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        """Delete the PG table."""
-        test.delete_all_tables()
-        super().tearDown()
 
     def test_create_rubric_action(self):
         """Test the creation of a rubric action."""

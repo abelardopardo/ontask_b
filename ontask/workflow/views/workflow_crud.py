@@ -54,6 +54,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
         **kwargs,
     ) -> http.JsonResponse:
         """Process the post request."""
+        del args, kwargs
         form = self.form_class(request.POST, workflow_user=request.user)
         if request.method == 'POST' and form.is_valid():
             if not form.has_changed():

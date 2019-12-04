@@ -23,9 +23,8 @@ from rest_framework import status
 from ontask import models
 from ontask.action.evaluate import evaluate_action
 from ontask.action.services.edit_manager import ActionOutEditManager
-from ontask.action.services.manager import ActionRunManager
-from ontask.core import SessionPayload
-from ontask.core.permissions import is_instructor
+from ontask.action.services.run_manager import ActionRunManager
+from ontask.core import SessionPayload, is_instructor
 from ontask.oauth.services import get_initial_token_step1, refresh_token
 
 LOGGER = get_task_logger('celery_execution')

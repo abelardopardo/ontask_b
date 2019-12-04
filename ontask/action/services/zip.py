@@ -12,7 +12,7 @@ from django.shortcuts import redirect, render
 
 from ontask import models
 from ontask.action.evaluate.action import evaluate_action
-from ontask.action.services.manager import ActionRunManager
+from ontask.action.services.run_manager import ActionRunManager
 from ontask.core import SessionPayload
 from ontask.dataops.sql.row_queries import get_rows
 

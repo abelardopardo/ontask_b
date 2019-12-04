@@ -33,6 +33,7 @@ def save_text(
     :param action: Action being saved (set by the decorators)
     :return: Nothing, changes reflected in the DB
     """
+    del pk, workflow
     # Wrong type of action.
     if action.is_in:
         return JsonResponse({'html_redirect': reverse('home')})
@@ -66,6 +67,7 @@ def showurl(
     :param action: Action being manipulated (set by the decorators)
     :return: Json response with the content to show in the screen
     """
+    del pk, workflow
     form = EnableURLForm(request.POST or None, instance=action)
 
     if request.method == 'POST' and form.is_valid():

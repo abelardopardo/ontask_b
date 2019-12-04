@@ -40,6 +40,7 @@ def criterion_create(
     :param action: Action in which the criteria (column) is being created)
     :return: JSON response
     """
+    del pk
     if action.action_type != models.Action.RUBRIC_TEXT:
         messages.error(
             request,
@@ -170,6 +171,7 @@ def criterion_remove(
     :param workflow: workflow being manipulated (set by the decorator)
     :return: JSON Response
     """
+    del workflow
     triplet = models.ActionColumnConditionTuple.objects.filter(pk=pk).first()
     if not triplet:
         messages.error(

@@ -49,6 +49,7 @@ def diagnose(
     :param pk: Primary key of the transform element
     :return: JSON reponse
     """
+    del workflow
     # Action being used
     plugin = models.Plugin.objects.filter(id=pk).first()
     if not plugin:
@@ -125,6 +126,7 @@ def plugin_toggle(
     :param pk: Primary key of the Plugin element
     :return: JSON Response
     """
+    del request
     plugin_item = models.Plugin.objects.get(pk=pk)
     if plugin_item.is_verified:
         plugin_item.is_enabled = not plugin_item.is_enabled

@@ -13,17 +13,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
 from ontask.dataops.pandas import destroy_db_engine
-import test
 from test import ElementHasFullOpacity, ScreenTests
 
 standard_library.install_aliases()
 
 
 class ScreenTutorialTest(ScreenTests):
-
-    def setUp(self):
-        super().setUp()
-        test.create_users()
 
     def test_ss_00(self):
         """
@@ -68,14 +63,6 @@ class ScreenTutorialTest(ScreenTests):
 
 
 class ScreenImportTest(ScreenTests):
-
-    def setUp(self):
-        super().setUp()
-        test.create_users()
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     def test_ss_01(self):
         """
@@ -130,40 +117,34 @@ class ScreenTestFixture(ScreenTests):
 
     wflow_name = 'combine columns'
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-        # Insert a SQL Connection
-        # sqlc = SQLConnection(
-        #     name='remote server',
-        #     description_text='Server with student records',
-        #     conn_type='mysql',
-        #     conn_driver='',
-        #     db_user='remote_db_user',
-        #     db_password=True,
-        #     db_host='dbserver.bogus.com',
-        #     db_port=None,
-        #     db_name='demographics',
-        #     db_table='s_records'
-        # )
-        # sqlc.save()
-
-        # Insert an Amazon Athena Connection
-        # athenac = AthenaConnection(
-        #     name='athena connection',
-        #     description_text='Connection to amazon athena server',
-        #     aws_access_key='[YOUR AWS ACCESS KEY HERE]',
-        #     aws_secret_access_key='[YOUR AWS SECRET ACCESS KEY HERE]',
-        #     aws_bucket_name='[S3 BUCKET NAME HERE]',
-        #     aws_file_path='[FILE PATH WITHIN BUCKET HERE]',
-        #     aws_region_name='[AWS REGION NAME HERE]',
-        # )
-        # athenac.save()
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
+    # def setUp(self):
+    #     super().setUp()
+    #     # Insert a SQL Connection
+    #     sqlc = SQLConnection(
+    #         name='remote server',
+    #         description_text='Server with student records',
+    #         conn_type='mysql',
+    #         conn_driver='',
+    #         db_user='remote_db_user',
+    #         db_password=True,
+    #         db_host='dbserver.bogus.com',
+    #         db_port=None,
+    #         db_name='demographics',
+    #         db_table='s_records'
+    #     )
+    #     sqlc.save()
+    #
+    #     # Insert an Amazon Athena Connection
+    #     athenac = AthenaConnection(
+    #         name='athena connection',
+    #         description_text='Connection to amazon athena server',
+    #         aws_access_key='[YOUR AWS ACCESS KEY HERE]',
+    #         aws_secret_access_key='[YOUR AWS SECRET ACCESS KEY HERE]',
+    #         aws_bucket_name='[S3 BUCKET NAME HERE]',
+    #         aws_file_path='[FILE PATH WITHIN BUCKET HERE]',
+    #         aws_region_name='[AWS REGION NAME HERE]',
+    #     )
+    #     athenac.save()
 
     def test_sql_admin(self):
         # Login

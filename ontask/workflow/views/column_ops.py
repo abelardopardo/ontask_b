@@ -66,6 +66,7 @@ def column_move_top(
     :param column: Column pointed by the pk
     :return: Once done, redirects to the column page
     """
+    del request, pk, workflow
     # The workflow and column objects have been correctly obtained
     if column.position > 1:
         column.reposition_and_update_df(1)
@@ -89,6 +90,7 @@ def column_move_bottom(
     :param column: Column pointed by the pk
     :return: Once done, redirects to the column page
     """
+    del request, pk
     # The workflow and column objects have been correctly obtained
     if column.position < workflow.ncols:
         column.reposition_and_update_df(workflow.ncols)

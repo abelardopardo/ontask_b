@@ -119,6 +119,7 @@ class WorkflowAPILock(APIView):
         workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Return the serialized value of the lock property in the wflow."""
+        del request, pk, format
         serializer = self.serializer_class({'lock': workflow.is_locked()})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -131,6 +132,7 @@ class WorkflowAPILock(APIView):
         workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Set the lock for a workflow."""
+        del request, pk, format, workflow
         return Response(status=status.HTTP_201_CREATED)
 
     @method_decorator(get_workflow(pf_related='columns'))
@@ -141,6 +143,7 @@ class WorkflowAPILock(APIView):
         format=None,  # noqa: 132
         workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
+        del request, pk, format
         """Remove the lock in a workflow."""
         workflow.unlock()
         return Response(status=status.HTTP_200_OK)

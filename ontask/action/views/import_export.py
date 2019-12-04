@@ -139,7 +139,7 @@ def export(
     :param workflow: Set by the decorators (current workflow)
     :return: HTTP response
     """
-
+    del request
     try:
         action_ids = [int(a_idx) for a_idx in pklist.split(',')]
     except ValueError:

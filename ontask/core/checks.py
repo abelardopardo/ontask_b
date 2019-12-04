@@ -104,7 +104,8 @@ def check_key_columns(workflow: models.Workflow):
         (
             col.name for col in workflow.columns.filter(is_key=True)
             if not is_column_unique(
-            workflow.get_data_frame_table_name(), col.name)),
+                workflow.get_data_frame_table_name(),
+                col.name)),
         None)
     if col_name:
         raise Exception(_(

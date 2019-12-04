@@ -49,16 +49,16 @@ class ActionBase(NameAndDescription, CreateModifyFields):
     SURVEY = 'survey'
     TODO_LIST = 'todo_list'
 
-    ACTION_TYPES = [
-        (PERSONALIZED_TEXT, _('Personalized text')),
-        (PERSONALIZED_CANVAS_EMAIL, _('Personalized Canvas Email')),
-        (SURVEY, _('Survey')),
-        (PERSONALIZED_JSON, _('Personalized JSON')),
-        (RUBRIC_TEXT, _('Rubric feedback')),
-        (EMAIL_LIST, _('Send List')),
-        (JSON_LIST, _('Send List as JSON')),
-        (TODO_LIST, _('TODO List'))
-    ]
+    ACTION_TYPES = {
+        PERSONALIZED_TEXT: _('Personalized text'),
+        PERSONALIZED_CANVAS_EMAIL: _('Personalized Canvas Email'),
+        SURVEY: _('Survey'),
+        PERSONALIZED_JSON: _('Personalized JSON'),
+        RUBRIC_TEXT: _('Rubric feedback'),
+        EMAIL_LIST: _('Send List'),
+        JSON_LIST: _('Send List as JSON'),
+        TODO_LIST: _('TODO List'),
+    }
 
     ACTION_IS_DATA_IN = {
         PERSONALIZED_TEXT: False,
@@ -82,7 +82,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         TODO_LIST: False,
     }
 
-    AVAILABLE_ACTION_TYPES = ACTION_TYPES[:]
+    AVAILABLE_ACTION_TYPES = dict(ACTION_TYPES)
 
     workflow = models.ForeignKey(
         Workflow,
@@ -96,7 +96,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
     # Action type
     action_type = models.CharField(
         max_length=ACTION_TYPE_LENGTH,
-        choices=ACTION_TYPES,
+        choices=ACTION_TYPES.items(),
         default=PERSONALIZED_TEXT,
     )
 

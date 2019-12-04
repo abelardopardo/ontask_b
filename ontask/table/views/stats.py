@@ -38,6 +38,7 @@ def stat_column(
     :param column: Column being manipulated (set by the decorators)
     :return: Render the page
     """
+    del pk
     stat_data, __, visualizations = services.get_column_visualization_items(
         workflow, column)
 
@@ -69,9 +70,9 @@ def stat_column_json(
     :param column: Column being manipulated (set by the decorators)
     :return: HTML rendering of the visualization
     """
+    del pk
     # Request to see the statistics for a non-key column that belongs to the
     # selected workflow
-
     stat_data, __, visualizations = services.get_column_visualization_items(
         workflow,
         column)

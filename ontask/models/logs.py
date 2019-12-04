@@ -20,7 +20,8 @@ class LogManager(models.Manager):
         user,
         name: str,
         workflow,
-        payload: Dict):
+        payload: Dict
+    ) -> 'Log':
         """Handle user, name, workflow and payload."""
         log_item = self.create(
             user=user,
@@ -54,11 +55,11 @@ class Log(Owner):
     ACTION_RUBRIC_CELL_EDIT = 'action_rubriccell_edit'
     ACTION_RUBRIC_LOA_EDIT = 'action_rubric_loa_edit'
     ACTION_RUN_CANVAS_EMAIL = 'action_run_canvas_email'
-    ACTION_RUN_EMAIL = 'schedule_email_execute'
-    ACTION_RUN_JSON = 'schedule_json_execute'
-    ACTION_RUN_JSON_LIST = 'schedule_json_list_execute'
-    ACTION_RUN_EMAIL_LIST = 'schedule_send_list_execute'
-    ACTION_RUN_ZIP = 'zip_messages_execute'
+    ACTION_RUN_EMAIL = 'action_run_email'
+    ACTION_RUN_JSON = 'action_runjson'
+    ACTION_RUN_JSON_LIST = 'action_run_list'
+    ACTION_RUN_EMAIL_LIST = 'action_run_send_list'
+    ACTION_RUN_ZIP = 'action_run_zip_messages'
     ACTION_SERVE_TOGGLED = 'action_serve_toggled'
     ACTION_SERVED_EXECUTE = 'action_served_execute'
     ACTION_SURVEY_INPUT = 'survey_input'
@@ -115,86 +116,86 @@ class Log(Owner):
     WORKFLOW_UPDATE = 'workflow_update'
     WORKFLOW_UPDATE_LUSERS = 'workflow_update_lusers'
 
-    LOG_TYPES = [
-        (ACTION_CLONE, _('Action cloned')),
-        (ACTION_CREATE, _('Action created')),
-        (ACTION_DELETE, _('Action deleted')),
-        (ACTION_DOWNLOAD, _('Download a ZIP with one file per text')),
-        (ACTION_EMAIL_NOTIFY, _('Notification email sent')),
-        (ACTION_EMAIL_READ, _('Email read')),
-        (ACTION_EMAIL_SENT, _('Emails sent')),
-        (ACTION_IMPORT, _('Action imported')),
-        (ACTION_JSON_SENT, _('Emails sent')),
-        (ACTION_LIST_EMAIL_SENT, _('Email with data list sent')),
-        (ACTION_QUESTION_ADD, _('Question added')),
-        (ACTION_QUESTION_TOGGLE_CHANGES, _('Question toggle changes')),
-        (ACTION_RUBRIC_CRITERION_ADD, _('Add a rubric criterion')),
-        (ACTION_RUBRIC_CRITERION_EDIT, _('Edit rubric criterion')),
-        (ACTION_RUBRIC_CRITERION_DELETE, _('Delete rubric criterion')),
-        (ACTION_RUBRIC_CELL_EDIT, _('Rubric cell edit')),
-        (ACTION_RUBRIC_LOA_EDIT, _('Rubric level of attainment edit')),
-        (ACTION_RUN_CANVAS_EMAIL, _('Execute scheduled canvas email action')),
-        (ACTION_RUN_EMAIL, _('Execute scheduled email action')),
-        (ACTION_RUN_JSON, _('Execute scheduled JSON action')),
-        (ACTION_RUN_JSON_LIST, _('Execute scheduled JSON list action')),
-        (ACTION_RUN_EMAIL_LIST, _('Execute scheduled send list action')),
-        (ACTION_RUN_ZIP, _('Create a zip with personalized content')),
-        (ACTION_SERVE_TOGGLED, _('Action URL toggled')),
-        (ACTION_SERVED_EXECUTE, _('Action served')),
-        (ACTION_SURVEY_INPUT, _('Survey data input')),
-        (ACTION_UPDATE, _('Action updated')),
-        (ATHENA_CONNECTION_CLONE, _('Athena connection cloned')),
-        (ATHENA_CONNECTION_CREATE, _('Athena connection created')),
-        (ATHENA_CONNECTION_DELETE, _('Athena connection deleted')),
-        (ATHENA_CONNECTION_EDIT, _('Athena connection updated')),
-        (ATHENA_CONNECTION_TOGGLE, _('SQL connection toggled')),
-        (COLUMN_ADD, _('Column added')),
-        (COLUMN_ADD_FORMULA, _('Column with formula created')),
-        (COLUMN_ADD_RANDOM, _('Column with random values created')),
-        (COLUMN_CLONE, _('Column cloned')),
-        (COLUMN_DELETE, _('Column deleted')),
-        (COLUMN_EDIT, _('Column edited')),
-        (COLUMN_RESTRICT, _('Column restricted')),
-        (CONDITION_CLONE, _('Condition cloned')),
-        (CONDITION_CREATE, _('Condition created')),
-        (CONDITION_DELETE, _('Condition deleted')),
-        (CONDITION_UPDATE, _('Condition updated')),
-        (PLUGIN_CREATE, _('Plugin created')),
-        (PLUGIN_DELETE, _('Plugin deleted')),
-        (PLUGIN_EXECUTE, _('Plugin executed')),
-        (PLUGIN_UPDATE, _('Plugin updated')),
-        (SCHEDULE_CREATE, _('Create scheduled operation')),
-        (SCHEDULE_EDIT, _('Edit scheduled operation')),
-        (SCHEDULE_DELETE, _('Delete scheduled operation')),
-        (SQL_CONNECTION_CLONE, _('SQL connection cloned')),
-        (SQL_CONNECTION_CREATE, _('SQL connection created')),
-        (SQL_CONNECTION_DELETE, _('SQL connection deleted')),
-        (SQL_CONNECTION_EDIT, _('SQL connection updated')),
-        (SQL_CONNECTION_TOGGLE, _('SQL connection toggled')),
-        (VIEW_CREATE, _('Table view created')),
-        (VIEW_EDIT, _('Table view edited')),
-        (VIEW_DELETE, _('Table view deleted')),
-        (VIEW_CLONE, _('Table view cloned')),
-        (WORKFLOW_ATTRIBUTE_CREATE, _('New attribute in workflow')),
-        (WORKFLOW_ATTRIBUTE_UPDATE, _('Attributes updated in workflow')),
-        (WORKFLOW_ATTRIBUTE_DELETE, _('Attribute deleted')),
-        (WORKFLOW_CLONE, _('Workflow cloned')),
-        (WORKFLOW_CREATE, _('Workflow created')),
-        (WORKFLOW_DATA_FAILEDMERGE, _('Failed data merge into workflow')),
-        (WORKFLOW_DATA_FLUSH, _('Workflow data flushed')),
-        (WORKFLOW_DATA_MERGE, _('Data merged into workflow')),
-        (WORKFLOW_DATA_ROW_CREATE, _('Table row created')),
-        (WORKFLOW_DATA_ROW_UPDATE, _('Table row updated')),
-        (WORKFLOW_DATA_UPLOAD, _('Data uploaded to workflow')),
-        (WORKFLOW_DELETE, _('Workflow deleted')),
-        (WORKFLOW_IMPORT, _('Import workflow')),
-        (WORKFLOW_INCREASE_TRACK_COUNT, _('Increase workflow track count.')),
-        (WORKFLOW_SHARE_ADD, _('User share added')),
-        (WORKFLOW_SHARE_DELETE, _('User share deleted')),
-        (WORKFLOW_STAR, _('Toggle workflow star')),
-        (WORKFLOW_UPDATE, _('Workflow updated')),
-        (WORKFLOW_UPDATE_LUSERS, _('Update list of workflow users')),
-    ]
+    LOG_TYPES = {
+        ACTION_CLONE: _('Action cloned'),
+        ACTION_CREATE: _('Action created'),
+        ACTION_DELETE: _('Action deleted'),
+        ACTION_DOWNLOAD: _('Download a ZIP with one file per text'),
+        ACTION_EMAIL_NOTIFY: _('Notification email sent'),
+        ACTION_EMAIL_READ: _('Email read'),
+        ACTION_EMAIL_SENT: _('Emails sent'),
+        ACTION_IMPORT: _('Action imported'),
+        ACTION_JSON_SENT: _('Emails sent'),
+        ACTION_LIST_EMAIL_SENT: _('Email with data list sent'),
+        ACTION_QUESTION_ADD: _('Question added'),
+        ACTION_QUESTION_TOGGLE_CHANGES: _('Question toggle changes'),
+        ACTION_RUBRIC_CRITERION_ADD: _('Add a rubric criterion'),
+        ACTION_RUBRIC_CRITERION_EDIT: _('Edit rubric criterion'),
+        ACTION_RUBRIC_CRITERION_DELETE: _('Delete rubric criterion'),
+        ACTION_RUBRIC_CELL_EDIT: _('Rubric cell edit'),
+        ACTION_RUBRIC_LOA_EDIT: _('Rubric level of attainment edit'),
+        ACTION_RUN_CANVAS_EMAIL: _('Execute scheduled canvas email action'),
+        ACTION_RUN_EMAIL: _('Execute scheduled email action'),
+        ACTION_RUN_JSON: _('Execute scheduled JSON action'),
+        ACTION_RUN_JSON_LIST: _('Execute scheduled JSON list action'),
+        ACTION_RUN_EMAIL_LIST: _('Execute scheduled send list action'),
+        ACTION_RUN_ZIP: _('Create a zip with personalized content'),
+        ACTION_SERVE_TOGGLED: _('Action URL toggled'),
+        ACTION_SERVED_EXECUTE: _('Action served'),
+        ACTION_SURVEY_INPUT: _('Survey data input'),
+        ACTION_UPDATE: _('Action updated'),
+        ATHENA_CONNECTION_CLONE: _('Athena connection cloned'),
+        ATHENA_CONNECTION_CREATE: _('Athena connection created'),
+        ATHENA_CONNECTION_DELETE: _('Athena connection deleted'),
+        ATHENA_CONNECTION_EDIT: _('Athena connection updated'),
+        ATHENA_CONNECTION_TOGGLE: _('SQL connection toggled'),
+        COLUMN_ADD: _('Column added'),
+        COLUMN_ADD_FORMULA: _('Column with formula created'),
+        COLUMN_ADD_RANDOM: _('Column with random values created'),
+        COLUMN_CLONE: _('Column cloned'),
+        COLUMN_DELETE: _('Column deleted'),
+        COLUMN_EDIT: _('Column edited'),
+        COLUMN_RESTRICT: _('Column restricted'),
+        CONDITION_CLONE: _('Condition cloned'),
+        CONDITION_CREATE: _('Condition created'),
+        CONDITION_DELETE: _('Condition deleted'),
+        CONDITION_UPDATE: _('Condition updated'),
+        PLUGIN_CREATE: _('Plugin created'),
+        PLUGIN_DELETE: _('Plugin deleted'),
+        PLUGIN_EXECUTE: _('Plugin executed'),
+        PLUGIN_UPDATE: _('Plugin updated'),
+        SCHEDULE_CREATE: _('Create scheduled operation'),
+        SCHEDULE_EDIT: _('Edit scheduled operation'),
+        SCHEDULE_DELETE: _('Delete scheduled operation'),
+        SQL_CONNECTION_CLONE: _('SQL connection cloned'),
+        SQL_CONNECTION_CREATE: _('SQL connection created'),
+        SQL_CONNECTION_DELETE: _('SQL connection deleted'),
+        SQL_CONNECTION_EDIT: _('SQL connection updated'),
+        SQL_CONNECTION_TOGGLE: _('SQL connection toggled'),
+        VIEW_CREATE: _('Table view created'),
+        VIEW_EDIT: _('Table view edited'),
+        VIEW_DELETE: _('Table view deleted'),
+        VIEW_CLONE: _('Table view cloned'),
+        WORKFLOW_ATTRIBUTE_CREATE: _('New attribute in workflow'),
+        WORKFLOW_ATTRIBUTE_UPDATE: _('Attributes updated in workflow'),
+        WORKFLOW_ATTRIBUTE_DELETE: _('Attribute deleted'),
+        WORKFLOW_CLONE: _('Workflow cloned'),
+        WORKFLOW_CREATE: _('Workflow created'),
+        WORKFLOW_DATA_FAILEDMERGE: _('Failed data merge into workflow'),
+        WORKFLOW_DATA_FLUSH: _('Workflow data flushed'),
+        WORKFLOW_DATA_MERGE: _('Data merged into workflow'),
+        WORKFLOW_DATA_ROW_CREATE: _('Table row created'),
+        WORKFLOW_DATA_ROW_UPDATE: _('Table row updated'),
+        WORKFLOW_DATA_UPLOAD: _('Data uploaded to workflow'),
+        WORKFLOW_DELETE: _('Workflow deleted'),
+        WORKFLOW_IMPORT: _('Import workflow'),
+        WORKFLOW_INCREASE_TRACK_COUNT: _('Increase workflow track count.'),
+        WORKFLOW_SHARE_ADD: _('User share added'),
+        WORKFLOW_SHARE_DELETE: _('User share deleted'),
+        WORKFLOW_STAR: _('Toggle workflow star'),
+        WORKFLOW_UPDATE: _('Workflow updated'),
+        WORKFLOW_UPDATE_LUSERS: _('Update list of workflow users'),
+    }
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
@@ -204,7 +205,7 @@ class Log(Owner):
     name = models.CharField(
         max_length=CHAR_FIELD_MID_SIZE,
         blank=False,
-        choices=LOG_TYPES)
+        choices=LOG_TYPES.items())
 
     workflow = models.ForeignKey(
         'Workflow',
@@ -246,12 +247,8 @@ class Log(Owner):
         self.payload = json.dumps(payload)
 
     def __str__(self):
-        """Represent as a tuple."""
-        return '%s %s %s %s' % (
-            self.user,
-            self.created,
-            self.name,
-            self.payload)
+        """Return the name translation."""
+        return str(self.LOG_TYPES[self.name])
 
     @cached_property
     def log_useremail(self):

@@ -50,6 +50,7 @@ def flush(
     workflow: Optional[models.Workflow] = None,
 ) -> JsonResponse:
     """Render the view to flush a workflow."""
+    del wid
     if workflow.nrows == 0:
         # Table is empty, redirect to data upload
         return JsonResponse({'html_redirect': reverse('dataops:uploadmerge')})
@@ -81,6 +82,7 @@ def star(
     :param workflow: Workflow being manipulated.
     :return: Empty JSON, side effect start relation is updated.
     """
+    del wid
     # Get the workflows with stars
     stars = request.user.workflows_star.all()
     if workflow in stars:

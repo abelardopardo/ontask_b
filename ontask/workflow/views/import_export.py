@@ -54,6 +54,7 @@ def export_ask(
     :param only_action_list: Boolean denoting export actions only.
     :return: Http response.
     """
+    del wid
     form = WorkflowExportRequestForm(
         request.POST or None,
         actions=workflow.actions.all(),
@@ -113,6 +114,7 @@ def export(
     :param workflow: workflow being manipulated
     :return: Response with the file download
     """
+    del request
     try:
         action_ids = [
             int(a_idx) for a_idx in page_data.split(',') if a_idx]

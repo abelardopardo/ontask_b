@@ -25,14 +25,6 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         'wflow_symbols.sql'
     )
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     def test_01_symbols(self):
         symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
 
@@ -384,10 +376,6 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
 class DataopsExcelUpload(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     def test_01_excelupload(self):
         # Login
         self.login('instructor01@bogus.com')
@@ -430,10 +418,6 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
 
 class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     def test_01_excelupload_sheet(self):
         # Login
@@ -480,10 +464,6 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
                   "{% if bool1 cond %}Bool 1 is true{% endif %}\\n" + \
                   "{% if bool2 cond %}Bool 2 is true{% endif %}\\n" + \
                   "{% if bool3 cond %}Bool 3 is true{% endif %}\\n"
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     def test_01_nan_manipulation(self):
         # Login
@@ -591,14 +571,6 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         'fixtures',
         'plugin_execution.sql'
     )
-
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     def test_01_first_plugin(self):
         # Login
@@ -805,14 +777,6 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
 
 
 class DataopsMergeBasic(test.OnTaskLiveTestCase):
-
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     def template_merge(self, method, rename=True):
         # Login

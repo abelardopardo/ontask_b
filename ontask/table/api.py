@@ -52,6 +52,7 @@ class TableBasicOps(APIView):
         :param format: format for the response
         :param workflow: Workflow being manipulated (set by decorator)
         """
+        del wid, format
         # Try to retrieve the wflow to check for permissions
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
@@ -88,6 +89,7 @@ class TableBasicOps(APIView):
         workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Retrieve the existing data frame."""
+        del request, wid, format
         serializer = self.serializer_class(
             {'data_frame': load_table(workflow.get_data_frame_table_name())})
         return Response(serializer.data)
@@ -135,6 +137,7 @@ class TableBasicOps(APIView):
         workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Flush the data in the data frame."""
+        del request, wid, format
         workflow.flush()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -240,6 +243,7 @@ class TableBasicMerge(APIView):
         workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Process the GET request."""
+        del request, wid, format
         # Try to retrieve the wflow to check for permissions
         serializer = self.serializer_class({
             'src_df': load_table(workflow.get_data_frame_table_name()),
@@ -258,6 +262,7 @@ class TableBasicMerge(APIView):
         workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Process the put request."""
+        del wid, format
         # Get the dst_df
         dst_df = load_table(workflow.get_data_frame_table_name())
 

@@ -31,11 +31,6 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email='instructor01@bogus.com')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     def test_schedule_email(self):
         action_name = 'simple action'
@@ -247,7 +242,6 @@ class ScheduleApiCreate(test.OnTaskApiTestCase):
 
         s_name = 'Scheduling first email'
         s_desc = 'First email intervention'
-        s_execute = '2119-05-02 12:32:18+10:30'
         s_subject = 'subject'
         # Get list of workflows
         response = self.client.get(reverse('scheduler:api_scheduled_email'))

@@ -63,6 +63,7 @@ def view(
     :param workflow: Current workflow being used.
     :return: HTTP response
     """
+    del request
     sch_obj = models.ScheduledOperation.objects.filter(
         action__workflow=workflow,
         pk=pk).first()

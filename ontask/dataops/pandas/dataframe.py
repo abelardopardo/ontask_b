@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Operations to manipulate dataframes."""
-import logging
 from typing import Dict, List, Optional
 
 from django.conf import settings
@@ -18,8 +17,6 @@ from ontask.dataops.sql import (
 )
 from ontask.dataops.sql.column_queries import get_df_column_types
 from ontask.dataops.sql.row_queries import get_rows
-
-logger = logging.getLogger('console')
 
 
 def _verify_dataframe_columns(
@@ -134,9 +131,6 @@ def store_temporary_dataframe(
     """
     table_name = workflow.get_upload_table_name()
 
-    if settings.DEBUG:
-        logger.debug('Storing table %s', table_name)
-
     # Get the if the columns have unique values per row
     column_unique = are_unique_columns(data_frame)
 
@@ -165,11 +159,6 @@ def store_dataframe(
 
     :return: Nothing. All this info is stored in the workflow
     """
-    if settings.DEBUG:
-        logger.debug(
-            'Storing dataframe %s',
-            workflow.get_upload_table_name())
-
     _verify_dataframe_columns(workflow, data_frame)
 
     # Store the data frame temporarily in the DB (use type-inference)

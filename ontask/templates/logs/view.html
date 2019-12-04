@@ -4,7 +4,7 @@
 {% block title %}{{ block.super }}{% trans 'Log View' %}{% endblock %}
 {% block container %}
 <div class="container">
-  <h1 class="text-center">{% trans 'Log' %} {{ log_item.id }}: {{ log_item.name }}</h1>
+  <h1 class="text-center">{% trans 'Log' %} {{ log_item.id }}: {{ log_item }}</h1>
   {% if log_item.workflow %}
     <h4 class="text-center">{% trans 'Workflow' %}: {{ log_item.workflow.name }}</h4>
   {% endif %}
@@ -12,7 +12,7 @@
   <p class="text-center">{% trans 'Payload:' %}</p>
   <pre class="shadow border border-dark">{{ json_pretty }}</pre>
   <div class="text-center">
-    <a class="shadow btn btn-outline-dark spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
+    <a class="shadow btn btn-outline-dark spin" href="{% url 'logs:index' %}">{% trans 'Logs' %}</a>
   </div>
 </div>
 {% endblock container %}

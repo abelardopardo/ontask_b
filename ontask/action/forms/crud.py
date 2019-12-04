@@ -70,7 +70,7 @@ class ActionForm(ActionUpdateForm):
             # There is only one type of action. No need to generate the field.
             # Set to value and hide
             at_field.widget = forms.HiddenInput()
-            at_field.initial = models.Action.AVAILABLE_ACTION_TYPES[0][0]
+            at_field.initial = models.Action.AVAILABLE_ACTION_TYPES.items()[0][0]
 
     class Meta(ActionUpdateForm.Meta):
         """Select action and the three fields."""

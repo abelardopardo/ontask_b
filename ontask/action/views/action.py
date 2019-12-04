@@ -26,6 +26,7 @@ def action_index(
     wid: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
+    del wid
     """Show all the actions attached to the workflow.
 
     :param request: HTTP Request
@@ -148,6 +149,7 @@ def edit_action(
     :param action: Action being edited (set by the decorator)
     :return: HTML response
     """
+    del pk
     return services.action_process_factory.process_edit_request(
         request,
         workflow,
@@ -171,6 +173,7 @@ def delete_action(
     :param action: Action being deleted (set by the decorator)
     :return: JSON Response
     """
+    del pk, workflow
     # JSON response object
     # Get the appropriate action object
     if request.method == 'POST':

@@ -410,6 +410,7 @@ def column_clone(
     :param column: Column to clone (set by the decorator)
     :return: Render the clone column form
     """
+    del workflow
     # Get the name of the column to clone
     context = {'pk': pk, 'cname': column.name}
 

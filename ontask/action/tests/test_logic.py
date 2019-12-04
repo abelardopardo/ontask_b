@@ -37,15 +37,6 @@ class EmailActionTracking(test.OnTaskTestCase):
     wflow_desc = 'description text for workflow 1'
     wflow_empty = 'The workflow does not have data'
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        test._pg_restore_table(cls.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     def test_tracking(self):
         """Test that tracking hits are properly stored."""
         # Repeat the checks two times to test if they are accumulating
