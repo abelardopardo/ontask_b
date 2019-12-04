@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 
 from ontask import models
-from ontask.workflow.services.import_export import do_import_workflow_parse
+from ontask.workflow import services
 
 
 class Command(BaseCommand):
@@ -88,4 +88,4 @@ class Command(BaseCommand):
                 ),
             ))
 
-        do_import_workflow_parse(user, options['name'], args[0])
+        services.do_import_workflow_parse(user, options['name'], args[0])
