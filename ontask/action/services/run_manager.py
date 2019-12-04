@@ -22,12 +22,12 @@ class ActionRunManager:
         payload: Optional[Dict] = None,
         log_item: Optional[models.Log] = None,
     ):
-        if not log_item and self.log_event:
-            log_item = action.log(
-                user,
-                **payload)
+        if log_item or not self.log_event:
+            return log_item
 
-        return log_item
+        log_payload = dict(payload)
+        log_payload['operation_type'] = self.log_event
+        return action.log(user, **log_payload)
 
     def __init__(self, *args, **kwargs):
         """Assign and initialize the main service parameters."""
