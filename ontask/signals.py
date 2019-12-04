@@ -12,20 +12,6 @@ from ontask.dataops import sql
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_profile_handler(
-    sender,
-    instance,
-    created: bool,
-    **kwargs) -> None:
-    """Create user profile if not created already."""
-    del kwargs, sender
-    if not created:
-        return
-    profile = models.Profile(user=instance)
-    profile.save()
-
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_ontaskuser_handler(sender, instance, created, **kwargs):
     """Create the user extension whenever a new user is created."""
     del sender, kwargs
