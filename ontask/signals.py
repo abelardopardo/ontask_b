@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """Intercept signals when manipulating some objects."""
-import logging
 
 from django.conf import settings
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import models
+from ontask import LOGGER, models
 from ontask.dataops.sql import delete_table
-
-LOGGER = logging.getLogger('project')
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
