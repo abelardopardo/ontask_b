@@ -60,15 +60,15 @@ class ActionEditManager:
         workflow: models.Workflow,
         action: models.Action,
         context: Dict,
-    ) -> Optional[str]:
+    ):
         """Get the context dictionary to render the GET request.
 
         :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
-        :return: An error string or None if everything was correct.
+        :return: Nothing.
         """
-        return None
+        del workflow, action, context
 
     @staticmethod
     def get_render_context(
@@ -158,9 +158,10 @@ class ActionOutEditManager(ActionEditManager):
 
         # This is a GET request or a faulty POST request
         context = self.get_render_context(action, form, form_filter)
-        extend_status = self.extend_edit_context(workflow, action, context)
-        if extend_status:
-            messages.error(request, extend_status)
+        try:
+            self.extend_edit_context(workflow, action, context)
+        except Exception as exc:
+            messages.error(request, str(exc))
             return redirect(reverse('action:index'))
 
         # Return the same form in the same page

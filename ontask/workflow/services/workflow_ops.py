@@ -15,7 +15,7 @@ from ontask import is_correct_email, models, tasks
 from ontask.core import DataTablesServerSidePaging, OperationsColumn
 from ontask.core.session_ops import store_workflow_in_session
 from ontask.dataops.sql import get_rows, get_text_column_hash
-from ontask.workflow.services import errors
+from ontask.workflow import services
 
 
 class AttributeTable(tables.Table):
@@ -150,7 +150,7 @@ def update_luser_email_column(
 
     # Verify that the column as a valid set of emails
     if not all(is_correct_email(row[column.name]) for row in emails):
-        raise errors.OnTaskWorkflowIncorrectEmail(
+        raise services.OnTaskWorkflowIncorrectEmail(
             message=_('The selected column does not contain email addresses.'))
 
     # Update the column

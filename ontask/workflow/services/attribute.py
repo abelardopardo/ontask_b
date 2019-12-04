@@ -19,15 +19,10 @@ def save_attribute_form(
     """Process the AJAX request to create or update an attribute.
 
     :param request: Request object received
-
     :param workflow: current workflow being manipulated
-
     :param template: Template to render in the response
-
     :param form: Form used to ask for data
-
     :param attr_idx: Index of the attribute being manipulated
-
     :return: AJAX reponse
     """
     if request.method == 'POST' and form.is_valid():

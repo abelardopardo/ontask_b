@@ -2,7 +2,7 @@
 
 """Send Email Messages with the rendered content in the action."""
 from collections import OrderedDict
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
@@ -10,8 +10,9 @@ import django_tables2 as tables
 
 from ontask import models, tasks
 from ontask.action import forms
+from ontask.action.services import OnTaskActionRubricIncorrectContext
 from ontask.action.services.email import ActionManagerEmail
-from ontask.action.services.manager_factory import action_process_factory
+from ontask.action.services.manager_factory import ACTION_PROCESS_FACTORY
 from ontask.celery import get_task_logger
 
 LOGGER = get_task_logger('celery_execution')
@@ -55,6 +56,7 @@ def _create_rubric_table(
     criteria: List[models.ActionColumnConditionTuple],
     context: Dict
 ):
+    """Create the table showing the rubric content."""
     if not criteria:
         return
 
@@ -113,17 +115,18 @@ class ActionManagerRubric(ActionManagerEmail):
         workflow: models.Workflow,
         action: models.Action,
         context: Dict,
-    ) -> Optional[str]:
+    ):
         """Get the context dictionary to render the GET request.
 
         :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
-        :return: An error string or None if everything was correct.
+        :return: Nothing
         """
         criteria = action.column_condition_pair.all()
         if not _verify_criteria_loas(criteria):
-            return _('Inconsistent LOA in rubric criteria')
+            raise OnTaskActionRubricIncorrectContext(
+                _('Inconsistent LOA in rubric criteria'))
         _create_rubric_table(action, criteria, context)
 
         columns_to_insert_qs = action.workflow.columns.exclude(
@@ -147,17 +150,17 @@ class ActionManagerRubric(ActionManagerEmail):
         return None
 
 
-process_rubric = ActionManagerRubric(
+PROCESS_RUBRIC = ActionManagerRubric(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_rubric.html',
     run_form_class=forms.SendListActionRunForm,
     run_template='action/request_send_list_data.html',
     log_event=models.Log.ACTION_RUN_EMAIL)
 
-action_process_factory.register_producer(
+ACTION_PROCESS_FACTORY.register_producer(
     models.Action.RUBRIC_TEXT,
-    process_rubric)
+    PROCESS_RUBRIC)
 
 tasks.task_execute_factory.register_producer(
     models.Action.RUBRIC_TEXT,
-    process_rubric)
+    PROCESS_RUBRIC)

@@ -80,7 +80,7 @@ class ActionViewRunEmailAction(test.OnTaskTestCase):
         self._verify_content()
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_run_action_email_with_filter(self):
+    def test_email_with_filter(self):
         """Run sequence of request to send email without filtering users."""
         self.client.login(email=self.user_email, password=self.user_pwd)
 
@@ -295,7 +295,7 @@ class ActionViewRunJSONAction(test.OnTaskTestCase):
         self._verify_content()
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_run_json_action_with_filter(self):
+    def test_json_action_with_filter(self):
         """Test JSON action without using the filter execution."""
         OnTaskSharedState.json_outbox = None
         self.client.login(email=self.user_email, password=self.user_pwd)

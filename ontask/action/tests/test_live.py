@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Test live execution of action operations."""
 import os
 
 from django.conf import settings
@@ -15,6 +16,8 @@ import test
 
 
 class ActionActionEdit(test.OnTaskLiveTestCase):
+    """Test Action Edit."""
+
     action_name = 'simple action'
     fixtures = ['simple_action']
     filename = os.path.join(
@@ -29,7 +32,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
     wflow_empty = 'The workflow does not have data'
 
     # Test action rename
-    def test_action_00_rename(self):
+    def test_rename(self):
         suffix = ' 2'
 
         # Login
@@ -61,7 +64,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.logout()
 
     # Test operations with the filter
-    def test_action_01_filter(self):
+    def test_filter(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -212,7 +215,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.logout()
 
     # Test operations with the conditions and the email preview
-    def test_action_02_condition(self):
+    def test_condition(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -242,7 +245,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
             """$('#id_text_content').summernote(
-                   'editor.insertText', 
+                   'editor.insertText',
                    "{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}")""")
 
         # Click the preview button
@@ -282,7 +285,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.logout()
 
     # Test send_email operation
-    def test_action_03_send_email(self):
+    def test_send_email(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -342,7 +345,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_action_04_save_action_with_buttons(self):
+    def test_save_action_with_buttons(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -466,7 +469,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.logout()
 
     # Test operations with the filter
-    def test_action_05_JSON_action(self):
+    def test_json_action(self):
         action_name = 'JSON action'
         content_txt = '{ "name": 3 }'
         target_url = 'https://bogus.com'
@@ -502,7 +505,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_action_URL(self):
+    def test_action_url(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -531,8 +534,8 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.wait_for_modal_close()
 
         # Assert that the action has the value changed
-        a = models.Action.objects.get(name='simple action')
-        self.assertEqual(a.serve_enabled, True)
+        action = models.Action.objects.get(name='simple action')
+        self.assertEqual(action.serve_enabled, True)
 
         self.open_action_url('simple action')
         # Disable the URL
@@ -546,14 +549,16 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.wait_for_modal_close()
 
         # Assert that the action has the value changed
-        a.refresh_from_db()
-        self.assertEqual(a.serve_enabled, False)
+        action.refresh_from_db()
+        self.assertEqual(action.serve_enabled, False)
 
         # End of session
         self.logout()
 
 
 class ActionActionInCreate(test.OnTaskLiveTestCase):
+    """Class to test survey creation."""
+
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -638,6 +643,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
 
 
 class ActionActionInPersonalized(test.OnTaskLiveTestCase):
+    """Class to test survey with conditions controlling questions."""
     fixtures = ['test_personalized_survey']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -649,7 +655,7 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
     wflow_name = 'Test personalized survey'
 
     # Test operations with the filter
-    def test_action_01_condition_and_run(self):
+    def test_condition_and_run(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -760,13 +766,12 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         settings.BASE_DIR(),
         'ontask',
         'fixtures',
-        'simple_workflow_two_actions.sql'
-    )
+        'simple_workflow_two_actions.sql')
 
     wflow_name = 'wflow2'
 
     # Test operations with the filter
-    def test_action_01_rename_column_condition_attribute(self):
+    def test_rename_column_condition_attribute(self):
         # First get objects for future checks
         workflow = models.Workflow.objects.get(name=self.wflow_name)
         column = workflow.columns.get(name='registered')
@@ -958,6 +963,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
 
 
 class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
+    """Test the detection of all false rows."""
     action_name = 'simple action'
     fixtures = ['simple_action']
     filename = os.path.join(
@@ -976,7 +982,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
                   "{% if cond 1 %}Cond 1 is true{% endif %}\\n" + \
                   "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
 
-    def test_action_detect_all_false_rows(self):
+    def test_detect_all_false_rows(self):
         """Test action rename."""
         # Login
         self.login('instructor01@bogus.com')
@@ -1039,6 +1045,8 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
 
 
 class ActionAllKeyColumns(test.OnTaskLiveTestCase):
+    """Test the case of all key columns in a workflow."""
+
     action_name = 'Test1'
     fixtures = ['all_key_columns']
     filename = os.path.join(
@@ -1074,6 +1082,8 @@ class ActionAllKeyColumns(test.OnTaskLiveTestCase):
 
 
 class ActionSendListActionCreate(test.OnTaskLiveTestCase):
+    """Test sending a list of values."""
+
     fixtures = ['simple_action']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -1088,7 +1098,7 @@ class ActionSendListActionCreate(test.OnTaskLiveTestCase):
     action_name = 'Send to someone'
     action_text = 'Dear sir/madam\\nHere is the student list: '
 
-    def test_send_list_action_create_edit(self):
+    def test_send_list_create_edit(self):
         """Send list action after creating and editing."""
         # Login
         self.login('instructor01@bogus.com')
@@ -1109,7 +1119,7 @@ class ActionSendListActionCreate(test.OnTaskLiveTestCase):
         )
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
+           """$('#id_text_content').summernote('editor.insertText',
             "{0}");""".format(self.action_text)
         )
 
@@ -1167,6 +1177,8 @@ class ActionSendListActionCreate(test.OnTaskLiveTestCase):
 
 
 class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
+    """Test the JSON List action."""
+
     fixtures = ['simple_action']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -1181,7 +1193,7 @@ class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
     action_name = 'JSON LIST'
     action_text = '{ "student_list": {% ot_insert_column_list "email" %} }'
 
-    def test_send_list_action_create_edit(self):
+    def test_json_list_create_edit(self):
         """Create and edit a list action."""
         # Login
         self.login('instructor01@bogus.com')

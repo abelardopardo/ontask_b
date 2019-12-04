@@ -13,8 +13,7 @@ from django.views.decorators.http import require_http_methods
 
 from ontask import create_new_name, models
 from ontask.action import services
-from ontask.core.decorators import ajax_required, get_action, get_condition
-from ontask.core.permissions import is_instructor
+from ontask.core import ajax_required, get_action, get_condition, is_instructor
 
 
 @user_passes_test(is_instructor)

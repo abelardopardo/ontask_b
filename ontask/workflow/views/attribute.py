@@ -8,10 +8,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 
 from ontask import models
-from ontask.core.decorators import ajax_required, get_workflow
-from ontask.core.permissions import is_instructor
-from ontask.workflow import services
-from ontask.workflow.forms import AttributeItemForm
+from ontask.core import ajax_required, get_workflow, is_instructor
+from ontask.workflow import forms, services
 
 
 @user_passes_test(is_instructor)
@@ -31,7 +29,7 @@ def attribute_create(
         request,
         workflow,
         'workflow/includes/partial_attribute_create.html',
-        AttributeItemForm(
+        forms.AttributeItemForm(
             request.POST or None,
             keys=list(workflow.attributes.keys()),
             workflow=workflow,
@@ -68,7 +66,7 @@ def attribute_edit(
         request,
         workflow,
         'workflow/includes/partial_attribute_edit.html',
-        AttributeItemForm(
+        forms.AttributeItemForm(
             request.POST or None,
             key=key,
             value=attr_value,

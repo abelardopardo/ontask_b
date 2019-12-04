@@ -32,6 +32,7 @@ def _common_run_survey_row(
     action: Optional[models.Action] = None,
     user_attribute_name: Optional[str] = None,
 ) -> http.HttpResponse:
+    """Extract the survey row and create the Form to collect data."""
     # Access the data corresponding to the user
     is_manager = has_access(request.user, action.workflow)
     try:
@@ -112,7 +113,7 @@ def run_action(
               + 'Ask your system administrator to enable message queueing.'))
         return redirect(reverse('action:index'))
 
-    return services.action_process_factory.process_run_request(
+    return services.ACTION_PROCESS_FACTORY.process_run_request(
         action.action_type,
         request=request,
         action=action,
@@ -134,7 +135,7 @@ def run_done(
             _('Incorrect action run invocation.'))
         return redirect('action:index')
 
-    return services.action_process_factory.process_run_request_done(
+    return services.ACTION_PROCESS_FACTORY.process_run_request_done(
         payload.get('operation_type'),
         request=request,
         workflow=workflow,
@@ -161,7 +162,7 @@ def zip_action(
     :return: HTTP response
     """
     del pk, workflow
-    return services.action_process_factory.process_run_request(
+    return services.ACTION_PROCESS_FACTORY.process_run_request(
         models.action.ZIP_OPERATION,
         request=request,
         action=action,

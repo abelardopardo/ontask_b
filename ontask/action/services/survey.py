@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Functions to process the survey run request."""
-from typing import Dict, List, Optional
+from typing import Dict, List
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django import http
@@ -252,13 +252,13 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
         workflow: models.Workflow,
         action: models.Action,
         context: Dict,
-    ) -> Optional[str]:
+    ):
         """Get the context dictionary to render the GET request.
 
         :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
-        :return: An error string or None if everything was correct.
+        :return: Nothing.
         """
         self.add_conditions(action, context)
         self.add_conditions_to_clone(action, context)
@@ -293,8 +293,6 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
             'key_selected': tuples.filter(column__is_key=True).first(),
             'has_no_key': tuples.filter(column__is_key=False).exists()})
 
-        return None
-
     def process_edit_request(
         self,
         request: http.HttpRequest,
@@ -310,9 +308,10 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
         """
 
         context = self.get_render_context(action)
-        extend_status = self.extend_edit_context(workflow, action, context)
-        if extend_status:
-            messages.error(request, extend_status)
+        try:
+            self.extend_edit_context(workflow, action, context)
+        except Exception as exc:
+            messages.error(request, str(exc))
             return redirect(reverse('action:index'))
 
         return render(request, self.edit_template, context)

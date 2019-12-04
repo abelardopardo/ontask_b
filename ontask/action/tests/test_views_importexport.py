@@ -63,11 +63,12 @@ class ActionViewExport(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue('File containing a previously' in str(resp.content))
 
-        file_obj = open(os.path.join(
-            settings.BASE_DIR(),
-            'lib',
-            'surveys',
-            'spq_survey.gz'),
+        file_obj = open(
+            os.path.join(
+                settings.BASE_DIR(),
+                'lib',
+                'surveys',
+                'spq_survey.gz'),
             'rb')
 
         # Post request

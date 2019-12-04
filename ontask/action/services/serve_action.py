@@ -182,5 +182,3 @@ def extract_survey_questions(
         random.shuffle(colcon_items)
 
     return colcon_items
-
-

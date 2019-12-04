@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Classes to represent errors while executing services."""
 from ontask import OnTaskServiceException
 
 

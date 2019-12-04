@@ -12,12 +12,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from ontask import models
-from ontask.action.forms import ActionDescriptionForm
-from ontask.core.decorators import (
-    ajax_required, get_action,
-    get_columncondition, get_workflow,
+from ontask.action import forms
+from ontask.core import (
+    ajax_required, get_action, get_columncondition, get_workflow,
+    is_instructor,
 )
-from ontask.core.permissions import is_instructor
 
 
 @user_passes_test(is_instructor)
@@ -211,7 +210,7 @@ def edit_description(
     """
     del pk, workflow
     # Create the form
-    form = ActionDescriptionForm(
+    form = forms.ActionDescriptionForm(
         request.POST or None,
         instance=action)
 

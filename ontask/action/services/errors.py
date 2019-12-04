@@ -11,3 +11,6 @@ class OnTaskActionSurveyDataNotFound(OnTaskServiceException):
 class OnTaskActionSurveyNoTableData(OnTaskServiceException):
     """Raised when a survey requested by instructor has no data."""
 
+
+class OnTaskActionRubricIncorrectContext(OnTaskServiceException):
+    """Raised when a survey is requested by a user but user is not found."""

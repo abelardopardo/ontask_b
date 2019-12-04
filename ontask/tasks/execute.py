@@ -10,7 +10,7 @@ from django.conf import settings
 from django.utils.translation import ugettext
 import pytz
 
-from ontask.core.services import get_execution_items
+from ontask.core import services
 from ontask.logs.services import get_log_item
 
 LOGGER = get_task_logger('celery_execution')
@@ -81,7 +81,7 @@ def execute_operation(
             return None
 
     try:
-        user, workflow, action = get_execution_items(
+        user, workflow, action = services.get_execution_items(
             user_id=user_id,
             workflow_id=workflow_id,
             action_id=action_id)

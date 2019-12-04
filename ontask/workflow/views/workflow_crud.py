@@ -17,18 +17,15 @@ from django.views import generic
 from ontask import OnTaskServiceException, models
 from ontask.celery import celery_is_up
 from ontask.core import (
-    UserIsInstructor, ajax_required, get_workflow, is_instructor,
-)
-from ontask.core.checks import check_wf_df
-from ontask.core.session_ops import remove_workflow_from_session
-from ontask.workflow import services
-from ontask.workflow.forms import WorkflowForm
+    UserIsInstructor, ajax_required, check_wf_df, get_workflow, is_instructor,
+    remove_workflow_from_session)
+from ontask.workflow import forms, services
 
 
 class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
     """View to create a workflow."""
 
-    form_class = WorkflowForm
+    form_class = forms.WorkflowForm
     template_name = 'workflow/includes/partial_workflow_create.html'
 
     @method_decorator(ajax_required)
@@ -142,7 +139,7 @@ def update(
             _('You can only rename workflows you created.'))
         return http.JsonResponse({'html_redirect': ''})
 
-    form = WorkflowForm(
+    form = forms.WorkflowForm(
         request.POST or None,
         instance=workflow,
         workflow_user=workflow.user)

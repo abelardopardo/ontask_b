@@ -16,10 +16,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from ontask import models
-from ontask.action.forms import ActionImportForm
-from ontask.action.serializers import ActionSelfcontainedSerializer
-from ontask.core.decorators import get_workflow
-from ontask.core.permissions import is_instructor
+from ontask.action import forms, serializers
+from ontask.core import get_workflow, is_instructor
 
 
 def do_import_action(
@@ -46,7 +44,7 @@ def do_import_action(
         )
 
     # Serialize content
-    action_data = ActionSelfcontainedSerializer(
+    action_data = serializers.ActionSelfcontainedSerializer(
         data=parsed_data,
         many=True,
         context={
@@ -81,7 +79,7 @@ def action_import(
     :param workflow: Workflow being manipulated (set by the decorators)
     :return: HTTP response
     """
-    form = ActionImportForm(request.POST or None, request.FILES or None)
+    form = forms.ActionImportForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST' and form.is_valid():
         # Process the reception of the file
@@ -146,7 +144,7 @@ def export(
         return redirect('home')
 
     # Serialize the content and return data
-    serializer = ActionSelfcontainedSerializer(
+    serializer = serializers.ActionSelfcontainedSerializer(
         instance=workflow.actions.filter(id__in=action_ids),
         many=True,
         required=True)

@@ -10,8 +10,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from ontask import OnTaskServiceException, models
-from ontask.core.decorators import ajax_required
-from ontask.core.permissions import is_admin, is_instructor
+from ontask.core import ajax_required, is_admin, is_instructor
 from ontask.core.session_ops import remove_workflow_from_session
 from ontask.dataops import services
 

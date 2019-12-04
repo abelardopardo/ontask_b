@@ -11,8 +11,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 
 from ontask import models
-from ontask.core.decorators import ajax_required, get_column, get_workflow
-from ontask.core.permissions import is_instructor
+from ontask.core import ajax_required, get_column, get_workflow, is_instructor
 from ontask.table import services
 
 

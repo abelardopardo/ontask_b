@@ -14,13 +14,13 @@ from ontask.action.services.clone import do_clone_action
 from ontask.core.session_ops import store_workflow_in_session
 from ontask.dataops.sql import clone_table
 from ontask.table.services import do_clone_view
-from ontask.workflow.forms import WorkflowForm
+from ontask.workflow import forms
 from ontask.workflow.services.column_crud import do_clone_column_only
 
 
 def save_workflow_form(
     request: http.HttpRequest,
-    form: WorkflowForm,
+    form: forms.WorkflowForm,
 ) -> http.JsonResponse:
     """Save the workflow to create a form.
 

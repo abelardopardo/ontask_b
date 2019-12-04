@@ -22,6 +22,7 @@ class ActionRunManager:
         payload: Optional[Dict] = None,
         log_item: Optional[models.Log] = None,
     ):
+        """Create an ACTION RUN log if needed."""
         if log_item or not self.log_event:
             return log_item
 
@@ -138,4 +139,5 @@ class ActionRunManager:
         log_item: Optional[models.Log] = None,
     ):
         """Run the action."""
+        del user, workflow, action, payload, log_item
         raise Exception('Incorrect invocation of run method.')

@@ -9,7 +9,7 @@ from django.utils.translation import ugettext
 import pytz
 
 from ontask import models
-from ontask.core.services import get_execution_items
+from ontask.core import services
 from ontask.dataops.services.dataframeupload import (
     batch_load_df_from_athenaconnection,
 )
@@ -33,7 +33,7 @@ def athena_dataupload_task(user_id, workflow_id, conn_id, params, log_id):
         return
 
     try:
-        user, workflow, __ = get_execution_items(
+        user, workflow, __ = services.get_execution_items(
             user_id=user_id,
             workflow_id=workflow_id)
 

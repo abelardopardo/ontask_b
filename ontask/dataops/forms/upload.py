@@ -26,12 +26,9 @@ import pandas as pd
 from ontask import OnTaskDataFrameNoKey, models, settings
 from ontask.core import (
     RestrictedFileField, )
+from ontask.dataops import services
 from ontask.dataops.forms.select import MergeForm, SelectKeysForm
 from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
-from ontask.dataops.services import (
-    load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
-    load_df_from_s3,
-)
 from ontask.models.basic import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
 
 URL_FIELD_SIZE = 1024
@@ -126,7 +123,7 @@ class UploadCSVFileForm(UploadBasic):
 
         # Process CSV file using pandas read_csv
         try:
-            self.data_frame = load_df_from_csvfile(
+            self.data_frame = services.load_df_from_csvfile(
                 TextIOWrapper(
                     self.files['data_file'].file,
                     encoding=self.data.encoding),
@@ -174,7 +171,7 @@ class UploadExcelFileForm(UploadBasic):
 
         # # Process Excel file using pandas read_excel
         try:
-            self.data_frame = load_df_from_excelfile(
+            self.data_frame = services.load_df_from_excelfile(
                 self.files['data_file'],
                 form_data['sheet'])
         except Exception as exc:
@@ -239,7 +236,7 @@ class UploadGoogleSheetForm(UploadBasic):
             return form_data
 
         try:
-            self.data_frame = load_df_from_googlesheet(
+            self.data_frame = services.load_df_from_googlesheet(
                 form_data['google_url'],
                 self.cleaned_data['skip_lines_at_top'],
                 self.cleaned_data['skip_lines_at_bottom'])
@@ -326,7 +323,7 @@ class UploadS3FileForm(UploadBasic):
 
         # Process S3 file using pandas read_excel
         try:
-            self.data_frame = load_df_from_s3(
+            self.data_frame = services.load_df_from_s3(
                 self.cleaned_data['aws_access_key'],
                 self.cleaned_data['aws_secret_access_key'],
                 self.cleaned_data['aws_bucket_name'],

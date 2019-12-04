@@ -10,7 +10,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 from ontask.core import SessionPayload
 from ontask.core.permissions import is_instructor
-from ontask.oauth.services import process_callback, return_url_key
+from ontask.oauth import services
 
 
 @user_passes_test(is_instructor)
@@ -41,10 +41,10 @@ def callback(request: WSGIRequest) -> http.HttpResponse:
             ugettext('Error in OAuth2 step 1 ({0})').format(error_string))
         return redirect('action:index')
 
-    status = process_callback(request, payload)
+    status = services.process_callback(request, payload)
     if status:
         messages.error(request, status)
         return redirect('action:index')
 
     return redirect(
-        request.session.get(return_url_key, reverse('action:index')))
+        request.session.get(services.return_url_key, reverse('action:index')))

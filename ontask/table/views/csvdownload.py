@@ -7,8 +7,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, HttpResponse
 
 from ontask import models
-from ontask.core.decorators import get_view, get_workflow
-from ontask.core.permissions import is_instructor
+from ontask.core import get_view, get_workflow, is_instructor
 from ontask.dataops.pandas import get_subframe
 from ontask.table import services
 

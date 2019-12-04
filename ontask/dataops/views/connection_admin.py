@@ -11,8 +11,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.core.decorators import ajax_required
-from ontask.core.permissions import is_admin, is_instructor
+from ontask.core import ajax_required, is_admin, is_instructor
 from ontask.core.session_ops import remove_workflow_from_session
 from ontask.dataops import forms, services
 

@@ -11,10 +11,8 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from ontask import OnTaskServiceException, models
-from ontask.core.decorators import get_workflow
-from ontask.core.permissions import is_instructor
-from ontask.workflow import services
-from ontask.workflow.forms import WorkflowExportRequestForm, WorkflowImportForm
+from ontask.core import get_workflow, is_instructor
+from ontask.workflow import forms, services
 
 
 @user_passes_test(is_instructor)
@@ -55,7 +53,7 @@ def export_ask(
     :return: Http response.
     """
     del wid
-    form = WorkflowExportRequestForm(
+    form = forms.WorkflowExportRequestForm(
         request.POST or None,
         actions=workflow.actions.all(),
         put_labels=True)
@@ -135,7 +133,7 @@ def import_workflow(request: http.HttpRequest):
     :param request: HTTP request
     :return: Rendering of the import page or back to the workflow index
     """
-    form = WorkflowImportForm(
+    form = forms.WorkflowImportForm(
         request.POST or None,
         request.FILES or None,
         user=request.user)

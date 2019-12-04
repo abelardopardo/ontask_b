@@ -19,7 +19,7 @@ from ontask.action.views.edit_survey import (
 )
 from ontask.action.views.import_export import action_import, export
 from ontask.action.views.preview import (
-    preview_next_all_false_response,
+    preview_next_all_false,
     preview_response,
 )
 from ontask.action.views.run import (
