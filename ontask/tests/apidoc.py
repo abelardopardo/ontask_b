@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-
-import test
-
+"""Test the access to the API doc."""
 from rest_framework import status
 
+from ontask import tests
 
-class APIDocumentationTest(test.OnTaskTestCase):
+
+class APIDocumentationTest(tests.OnTaskTestCase):
     fixtures = ['initial_db']
 
     user_email = 'instructor01@bogus.com'

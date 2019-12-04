@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Test live execution of dataops views.s"""
 import os
 
 from django.conf import settings
@@ -9,14 +10,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask import models
+from ontask import models, tests
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.dataops.pandas import load_table
 from ontask.dataops.sql.column_queries import is_column_in_table
-import test
 
 
-class DataopsSymbols(test.OnTaskLiveTestCase):
+class DataopsSymbols(tests.OnTaskLiveTestCase):
     fixtures = ['wflow_symbols']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -373,7 +373,7 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsExcelUpload(test.OnTaskLiveTestCase):
+class DataopsExcelUpload(tests.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def test_01_excelupload(self):
@@ -416,7 +416,7 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
+class DataopsExcelUploadSheet(tests.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
     def test_01_excelupload_sheet(self):
@@ -456,7 +456,7 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsNaNProcessing(test.OnTaskLiveTestCase):
+class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
     action_text = "Bool1 = {{ bool1 }}\\n" + \
                   "Bool2 = {{ bool2 }}\\n" + \
@@ -563,7 +563,7 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsPluginExecution(test.OnTaskLiveTestCase):
+class DataopsPluginExecution(tests.OnTaskLiveTestCase):
     fixtures = ['plugin_execution']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -776,9 +776,14 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsMergeBasic(test.OnTaskLiveTestCase):
+class DataopsMergeBasic(tests.OnTaskLiveTestCase):
+    """Basic class to test various merge variations."""
+
+    wf_name = None
+    merge_file = ''
 
     def template_merge(self, method, rename=True):
+        """Template function to use with merge tests."""
         # Login
         self.login('instructor01@bogus.com')
 

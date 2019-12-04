@@ -9,12 +9,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from ontask import models
+from ontask import models, tests
 from ontask.dataops.pandas import load_table
-import test
 
 
-class TableDerivedColumns(test.OnTaskLiveTestCase):
+class TableDerivedColumns(tests.OnTaskLiveTestCase):
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -327,7 +326,7 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class TableViews(test.OnTaskLiveTestCase):
+class TableViews(tests.OnTaskLiveTestCase):
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -524,7 +523,7 @@ class TableViews(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class TableInsertRow(test.OnTaskLiveTestCase):
+class TableInsertRow(tests.OnTaskLiveTestCase):
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),

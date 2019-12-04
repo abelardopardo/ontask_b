@@ -2,6 +2,7 @@
 
 
 import os
+from test import ElementHasFullOpacity, ScreenTests
 from time import sleep
 
 from django.conf import settings
@@ -13,7 +14,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
 from ontask.dataops.pandas import destroy_db_engine
-from test import ElementHasFullOpacity, ScreenTests
 
 
 class TutorialCaptures(ScreenTests):

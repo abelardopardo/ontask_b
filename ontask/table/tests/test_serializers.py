@@ -8,16 +8,16 @@ from django.conf import settings
 from django.db import IntegrityError
 import pandas as pd
 
+from ontask import tests
 from ontask.table.serializers import (
     DataFrameJSONMergeSerializer, ViewSerializer,
 )
 from ontask.table.serializers.pandas import (
     DataFramePandasSerializer, df_to_string,
 )
-import test
 
 
-class TableTestSerializers(test.OnTaskTestCase):
+class TableTestSerializers(tests.OnTaskTestCase):
     """Test stat views."""
 
     fixtures = ['simple_table']

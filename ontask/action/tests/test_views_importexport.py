@@ -7,11 +7,11 @@ from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
+from ontask import tests
 from ontask.action.views import action_import
-import test
 
 
-class ActionViewExport(test.OnTaskTestCase):
+class ActionViewExport(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['simple_workflow_two_actions']

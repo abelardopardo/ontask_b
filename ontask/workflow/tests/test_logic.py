@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
+"""Test workflow basic operations"""
 import gzip
 import os
 import shutil
 import tempfile
-import test
-from test.compare import compare_workflows
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -13,13 +12,14 @@ from django.utils.six import BytesIO
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 
-from ontask import models
+from ontask import models, tests
+from ontask.tests.compare import compare_workflows
 from ontask.workflow.services.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow_parse,
 )
 
 
-class WorkflowImportExport(test.OnTaskTestCase):
+class WorkflowImportExport(tests.OnTaskTestCase):
     """Test import export functionality."""
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
@@ -62,7 +62,7 @@ class WorkflowImportExport(test.OnTaskTestCase):
         self.assertEqual(workflow.query_builder_ops, data['query_builder_ops'])
 
 
-class WorkflowImportExportCycle(test.OnTaskTestCase):
+class WorkflowImportExportCycle(tests.OnTaskTestCase):
     fixtures = ['initial_db']
 
     gz_filename = os.path.join(
@@ -102,7 +102,7 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
         self.assertIsNotNone(workflow, 'Incorrect import operation')
 
         # Do the export now
-        filename = os.path.join(tempfile.gettempdir(), 'ontask_test.gz')
+        filename = os.path.join(tempfile.gettempdir(), 'ontask_tests.gz')
         zbuf = do_export_workflow_parse(workflow, workflow.actions.all())
         zbuf.seek(0)
         with open(filename, 'wb') as f:
@@ -183,7 +183,8 @@ class WorkflowImportExportCycle(test.OnTaskTestCase):
                         titem1.condition.name,
                         titem2.condition.name)
 
-class WorkflowDelete(test.OnTaskTestCase):
+
+class WorkflowDelete(tests.OnTaskTestCase):
     fixtures = ['test_merge']
     filename = os.path.join(
         settings.BASE_DIR(),

@@ -9,13 +9,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from ontask import models
+from ontask import models, tests
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.dataops.formula import has_variable
-import test
 
 
-class ActionActionEdit(test.OnTaskLiveTestCase):
+class ActionActionEdit(tests.OnTaskLiveTestCase):
     """Test Action Edit."""
 
     action_name = 'simple action'
@@ -556,7 +555,7 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionInCreate(test.OnTaskLiveTestCase):
+class ActionActionInCreate(tests.OnTaskLiveTestCase):
     """Class to test survey creation."""
 
     fixtures = ['simple_workflow_two_actions']
@@ -642,7 +641,7 @@ class ActionActionInCreate(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionInPersonalized(test.OnTaskLiveTestCase):
+class ActionActionInPersonalized(tests.OnTaskLiveTestCase):
     """Class to test survey with conditions controlling questions."""
     fixtures = ['test_personalized_survey']
     filename = os.path.join(
@@ -755,7 +754,7 @@ class ActionActionInPersonalized(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionRenameEffect(test.OnTaskLiveTestCase):
+class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
     """This test case is to check the effect of renaming columns, attributes
        and conditions. These name changes need to propagate throughout various
        elements attached to the workflow
@@ -880,7 +879,7 @@ class ActionActionRenameEffect(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionZip(test.OnTaskLiveTestCase):
+class ActionActionZip(tests.OnTaskLiveTestCase):
     """
     This test case is to check if the ZIP opeation is correct
     """
@@ -962,7 +961,7 @@ class ActionActionZip(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
+class ActionActionDetectAllFalseRows(tests.OnTaskLiveTestCase):
     """Test the detection of all false rows."""
     action_name = 'simple action'
     fixtures = ['simple_action']
@@ -1044,7 +1043,7 @@ class ActionActionDetectAllFalseRows(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionAllKeyColumns(test.OnTaskLiveTestCase):
+class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
     """Test the case of all key columns in a workflow."""
 
     action_name = 'Test1'
@@ -1081,7 +1080,7 @@ class ActionAllKeyColumns(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionSendListActionCreate(test.OnTaskLiveTestCase):
+class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
     """Test sending a list of values."""
 
     fixtures = ['simple_action']
@@ -1176,7 +1175,7 @@ class ActionSendListActionCreate(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
+class ActionJSONListActionCreate(tests.OnTaskLiveTestCase):
     """Test the JSON List action."""
 
     fixtures = ['simple_action']
@@ -1255,7 +1254,7 @@ class ActionJSONListActionCreate(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionServeLongSurvey(test.OnTaskLiveTestCase):
+class ActionServeLongSurvey(tests.OnTaskLiveTestCase):
     """Test the view to serve a survey."""
     fixtures = ['long_survey']
     filename = os.path.join(
@@ -1292,7 +1291,7 @@ class ActionServeLongSurvey(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionCreateRubric(test.OnTaskLiveTestCase):
+class ActionCreateRubric(tests.OnTaskLiveTestCase):
     """Test the view to serve a survey."""
     fixtures = ['test_rubric']
     filename = os.path.join(

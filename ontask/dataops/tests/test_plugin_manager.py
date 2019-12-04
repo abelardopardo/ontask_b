@@ -6,10 +6,9 @@ import os
 from django.conf import settings
 from rest_framework import status
 
-from ontask import models
+from ontask import models, tests
 from ontask.dataops.plugin import OnTaskModel
 from ontask.dataops.services.plugin_admin import _verify_plugin
-import test
 
 
 class BogusPlugin:
@@ -26,7 +25,7 @@ class BogusPlugin2(OnTaskModel):
         self.parameters = 3
 
 
-class DataopsTransform(test.OnTaskTestCase):
+class DataopsTransform(tests.OnTaskTestCase):
     """Test the transformation views."""
 
     fixtures = ['plugin_execution']
@@ -53,7 +52,7 @@ class DataopsTransform(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class DataopsPluginErrors(test.OnTaskTestCase):
+class DataopsPluginErrors(tests.OnTaskTestCase):
     """Test the error detection for plugins."""
 
     def test_condition_1(self):

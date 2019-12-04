@@ -7,11 +7,10 @@ from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework.authtoken.models import Token
 
-from ontask import models
-import test
+from ontask import models, tests
 
 
-class WorkflowApiCreate(test.OnTaskApiTestCase):
+class WorkflowApiCreate(tests.OnTaskApiTestCase):
     fixtures = ['simple_workflow']
 
     filename = os.path.join(
@@ -46,7 +45,7 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
         # Trying to create an existing wflow and detecting its duplication
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': test.wflow_name})
+            {'name': tests.wflow_name})
 
         # Message should flag the existence of the wflow
         self.assertIn('Workflow could not be created.',
@@ -55,11 +54,11 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
         # Create a second one
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Compare the workflows
-        workflow = models.Workflow.objects.get(name=test.wflow_name + '2')
+        workflow = models.Workflow.objects.get(name=tests.wflow_name + '2')
         self.compare_wflows(response.data, workflow)
 
     def test_workflow_no_post_on_update(self):
@@ -68,7 +67,7 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
             reverse(
                 'workflow:api_rud',
                 kwargs={'pk': 1}),
-            {'name': test.wflow_name + '2'})
+            {'name': tests.wflow_name + '2'})
 
         # Verify that the method post is not allowed
         self.assertIn('Method "POST" not allowed', response.data['detail'])
@@ -77,15 +76,15 @@ class WorkflowApiCreate(test.OnTaskApiTestCase):
         # Run the update (PUT) method
         response = self.client.put(reverse('workflow:api_rud',
             kwargs={'pk': 1}),
-            {'name': test.wflow_name + '2',
-             'description_text': test.wflow_desc + '2',
+            {'name': tests.wflow_name + '2',
+             'description_text': tests.wflow_desc + '2',
              'attributes': {'k1': 'v1'}},
             format='json')
 
         # Get the workflow and verify
         wflow_id = response.data['id']
         workflow = models.Workflow.objects.get(id=wflow_id)
-        self.assertEqual(workflow.name, test.wflow_name + '2')
+        self.assertEqual(workflow.name, tests.wflow_name + '2')
 
     def test_workflow_delete(self):
         # Run the update delete

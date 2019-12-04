@@ -7,12 +7,12 @@ from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
-from ontask.dataops.pandas import get_table_row_by_index
-from ontask.table.views.table_display import row_delete
-import test
+from ontask import tests
+from ontask.dataops import pandas
+from ontask.table import views
 
 
-class TableTestViewTableDisplay(test.OnTaskTestCase):
+class TableTestViewTableDisplay(tests.OnTaskTestCase):
     """Test stat views."""
 
     fixtures = ['simple_table']
@@ -76,7 +76,7 @@ class TableTestViewTableDisplay(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Delete one row of the table
-        r_val = get_table_row_by_index(self.workflow, None, 1)
+        r_val = pandas.get_table_row_by_index(self.workflow, None, 1)
         resp = self.get_response(
             'table:row_delete',
             req_params={
@@ -96,7 +96,7 @@ class TableTestViewTableDisplay(test.OnTaskTestCase):
             {},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         req = self.add_middleware(req)
-        resp = row_delete(req)
+        resp = views.row_delete(req)
         self.assertTrue(status.is_success(resp.status_code))
         self.workflow.refresh_from_db()
         self.assertEqual(self.workflow.nrows, nrows - 1)

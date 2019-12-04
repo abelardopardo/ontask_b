@@ -11,12 +11,11 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from ontask import OnTaskSharedState, models
+from ontask import OnTaskSharedState, models, tests
 from ontask.core import SessionPayload
-import test
 
 
-class ActionViewRunEmailAction(test.OnTaskTestCase):
+class ActionViewRunEmailAction(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
@@ -172,7 +171,7 @@ class ActionViewRunEmailAction(test.OnTaskTestCase):
         self.assertEqual(resp.url, reverse('action:run_done'))
 
 
-class ActionViewRunEmailListAction(test.OnTaskTestCase):
+class ActionViewRunEmailListAction(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
@@ -237,7 +236,7 @@ class ActionViewRunEmailListAction(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionViewRunJSONAction(test.OnTaskTestCase):
+class ActionViewRunJSONAction(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
@@ -356,7 +355,7 @@ class ActionViewRunJSONAction(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionViewRunJSONListAction(test.OnTaskTestCase):
+class ActionViewRunJSONListAction(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
@@ -408,7 +407,7 @@ class ActionViewRunJSONListAction(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
+class ActionViewRunCanvasEmailAction(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
@@ -481,7 +480,7 @@ class ActionViewRunCanvasEmailAction(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionServe(test.OnTaskTestCase):
+class ActionServe(tests.OnTaskTestCase):
     """Test the view to serve an action."""
 
     fixtures = ['simple_action']
@@ -510,7 +509,7 @@ class ActionServe(test.OnTaskTestCase):
         self.assertTrue('Oct. 10, 2017, 10:03 p.m.' in str(resp.content))
 
 
-class ActionServeSurvey(test.OnTaskTestCase):
+class ActionServeSurvey(tests.OnTaskTestCase):
     """Test the view to serve a survey."""
 
     fixtures = ['simple_workflow_two_actions']

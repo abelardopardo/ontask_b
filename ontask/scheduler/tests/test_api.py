@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Test scheduler API."""
 import os
 
 from django.conf import settings
@@ -7,11 +8,10 @@ from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from ontask import models
-import test
+from ontask import models, tests
 
 
-class ScheduleApiCreate(test.OnTaskApiTestCase):
+class ScheduleApiCreate(tests.OnTaskApiTestCase):
     """Test schedule creation through API"""
 
     fixtures = ['three_actions']
