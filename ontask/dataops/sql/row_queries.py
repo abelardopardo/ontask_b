@@ -217,7 +217,7 @@ def select_ids_all_false(
     if filter_formula:
         filter_query, filter_fields = formula.evaluate(
             filter_formula,
-            formula.sEVAL_SQL,
+            formula.EVAL_SQL,
         )
         query = query + sql.SQL(' AND ') + filter_query
         query_fields += filter_fields
