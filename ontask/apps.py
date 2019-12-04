@@ -10,4 +10,5 @@ class OnTaskConfig(AppConfig):
 
     def ready(self) -> None:
         # Needed so that the signal registration is done
-        pass
+        # noinspection PyUnresolvedReferences
+        from ontask import signals
