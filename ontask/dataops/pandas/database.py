@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to manipulate Pandas DataFrames an related operations."""
-import logging
 from typing import Dict, List, Mapping, Optional
 
 from django.conf import settings
@@ -12,11 +11,9 @@ import pandas as pd
 import sqlalchemy
 import sqlalchemy.engine
 
-from ontask import OnTaskDataFrameNoKey, OnTaskSharedState
+from ontask import LOGGER, OnTaskDataFrameNoKey, OnTaskSharedState
 from ontask.dataops.pandas.columns import has_unique_column
 from ontask.dataops.sql import COLUMN_NAME_SIZE, get_select_query_txt
-
-logger = logging.getLogger('console')
 
 # Translation between OnTask data types and SQLAlchemy
 ontask_to_sqlalchemy = {
@@ -74,7 +71,7 @@ def create_db_engine(
     )
 
     if settings.DEBUG:
-        logger.debug('Creating engine: %s', database_url)
+        LOGGER.debug('Creating engine: %s', database_url)
 
     return sqlalchemy.create_engine(
         database_url,
@@ -113,7 +110,7 @@ def load_table(
         return None
 
     if settings.DEBUG:
-        logger.debug('Loading table %s', table_name)
+        LOGGER.debug('Loading table %s', table_name)
 
     if columns or filter_exp:
         # A list of columns or a filter exp is given

@@ -13,7 +13,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.production')
 
 app = Celery('ontask')
 
-logger = get_task_logger('celery_execution')
+LOGGER = get_task_logger('celery_execution')
 
 # - namespace='CELERY' means all celery-related configuration keys
 #   should have a `CELERY_` prefix.
@@ -27,11 +27,11 @@ app.autodiscover_tasks(['ontask.tasks'])
 def debug_task(self):
     """Test celery execution."""
     if settings.DEBUG:
-        logger.debug('Celery running in development mode.')
+        LOGGER.debug('Celery running in development mode.')
     else:
-        logger.debug('Celery running in production mode.')
+        LOGGER.debug('Celery running in production mode.')
 
-    logger.debug('Request: %s', str(self.request))
+    LOGGER.debug('Request: %s', str(self.request))
 
 
 def celery_is_up() -> bool:

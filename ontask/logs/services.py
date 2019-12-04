@@ -7,12 +7,13 @@ from django import http
 from django.db.models import F, Q
 from django.shortcuts import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
+from import_export import resources
 
 from ontask import models, simplify_datetime_str
 from ontask.celery import get_task_logger
 from ontask.core import DataTablesServerSidePaging
 
-logger = get_task_logger('celery_execution')
+LOGGER = get_task_logger('celery_execution')
 
 
 def get_log_item(log_id: int) -> Optional[models.Log]:
@@ -27,7 +28,7 @@ def get_log_item(log_id: int) -> Optional[models.Log]:
     log_item = models.Log.objects.filter(pk=log_id).first()
     if not log_item:
         # Not much can be done here. Call has no place to report error...
-        logger.error(
+        LOGGER.error(
             ugettext('Incorrect execution request with log_id %s'),
             str(log_id))
 

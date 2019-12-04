@@ -1,13 +1,12 @@
 import json
-import logging
 
 from django import template
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import LOGGER
 from ontask.django_auth_lti.thread_local import get_current_request
 
-logger = logging.getLogger('ontask')
 register = template.Library()
 
 
@@ -21,12 +20,12 @@ class ResourceLinkIdNode(template.Node):
                     "<input type='hidden' name='resource_link_id' value='{}' />",
                     rli)
             else:
-                logger.warning(
+                LOGGER.warning(
                     _('Failed to find resource_link_id '
                       + 'in request context %s'),
                     json.dumps(request.LTI, indent=4))
         else:
-            logger.warning(
+            LOGGER.warning(
                 _("Failed to get current request from thread_local"))
         return ''
 

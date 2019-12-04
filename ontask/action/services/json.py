@@ -18,7 +18,7 @@ from ontask.action.evaluate import (
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.manager import ActionRunManager
 
-logger = get_task_logger('celery_execution')
+LOGGER = get_task_logger('celery_execution')
 
 
 def _send_and_log_json(
@@ -39,7 +39,7 @@ def _send_and_log_json(
             'target': action.target_url,
             'text': json.dumps(json_obj),
             'auth': headers['Authorization']}
-        logger.info('SEND JSON(%s): %s', action.target_url, payload['text'])
+        LOGGER.info('SEND JSON(%s): %s', action.target_url, payload['text'])
         if getattr(OnTaskSharedState, 'json_outbox', None):
             OnTaskSharedState.json_outbox.append(payload)
         else:

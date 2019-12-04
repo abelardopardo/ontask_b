@@ -13,7 +13,7 @@ import pytz
 from ontask.core.services import get_execution_items
 from ontask.logs.services import get_log_item
 
-logger = get_task_logger('celery_execution')
+LOGGER = get_task_logger('celery_execution')
 
 
 class ExecuteFactory:
