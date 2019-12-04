@@ -14,7 +14,7 @@ from ontask.action.services.email import ActionManagerEmail
 from ontask.action.services.manager_factory import action_process_factory
 from ontask.celery import get_task_logger
 
-logger = get_task_logger('celery_execution')
+LOGGER = get_task_logger('celery_execution')
 
 
 class RubricTable(tables.Table):

@@ -14,7 +14,8 @@ from ontask import models
 from ontask.tasks.execute import task_execute_factory
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
-logger = get_task_logger('celery_execution')
+
+LOGGER = get_task_logger('celery_execution')
 
 
 def _update_item_status(
@@ -43,7 +44,7 @@ def _update_item_status(
     s_item.save()
 
     if debug:
-        logger.info('Status set to %s', s_item.status)
+        LOGGER.info('Status set to %s', s_item.status)
 
 
 def _get_pending_items():
@@ -58,7 +59,7 @@ def _get_pending_items():
     s_items = models.ScheduledOperation.objects.filter(
         status=models.scheduler.STATUS_PENDING,
         execute__lt=now)
-    logger.info('%s actions pending execution', s_items.count())
+    LOGGER.info('%s actions pending execution', s_items.count())
 
     return s_items
 
@@ -78,7 +79,7 @@ def execute_scheduled_operations_task(debug: bool):
 
     for s_item in s_items:
         if debug:
-            logger.info('Starting execution of task %s', str(s_item.id))
+            LOGGER.info('Starting execution of task %s', str(s_item.id))
 
         with cache.lock(cache_lock_format.format(s_item.id)):
             # Item is now locked by the cache mechanism
@@ -106,6 +107,6 @@ def execute_scheduled_operations_task(debug: bool):
 
                 _update_item_status(s_item, run_result, debug)
             except Exception as exc:
-                logger.error(
+                LOGGER.error(
                     'Error while processing scheduled action: {0}'.format(
                         str(exc)))

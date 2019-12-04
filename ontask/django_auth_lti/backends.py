@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Backend class to authenticate LTI requests."""
-import logging
 from time import time
 from typing import Mapping, Optional
 
@@ -13,9 +12,8 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 import oauth2
 
+from ontask import LOGGER
 from ontask.lti.tool_provider import DjangoToolProvider
-
-logger = logging.getLogger('ontask')
 
 
 class LTIAuthBackend(ModelBackend):
@@ -40,31 +38,31 @@ class LTIAuthBackend(ModelBackend):
     ):
         """Try to authenticate an LTI request."""
         if settings.DEBUG:
-            logger.info('Begin authentication process')
+            LOGGER.info('Begin authentication process')
 
         if not request:
             if settings.DEBUG:
-                logger.error('No request object in authentication')
+                LOGGER.error('No request object in authentication')
             return None
 
         request_key = request.POST.get('oauth_consumer_key')
 
         if request_key is None:
-            logger.error(
+            LOGGER.error(
                 'Request does not contain an oauth_consumer_key. Stopping')
             return None
 
         if not settings.LTI_OAUTH_CREDENTIALS:
-            logger.error('Missing LTI_OAUTH_CREDENTIALS in settings')
+            LOGGER.error('Missing LTI_OAUTH_CREDENTIALS in settings')
             raise PermissionDenied
 
         secret = settings.LTI_OAUTH_CREDENTIALS.get(request_key)
 
         if secret is None:
-            logger.error('Could not get a secret for key %s', request_key)
+            LOGGER.error('Could not get a secret for key %s', request_key)
             raise PermissionDenied
 
-        logger.debug('using key/secret %s/%s', request_key, secret)
+        LOGGER.debug('using key/secret %s/%s', request_key, secret)
         tool_provider = DjangoToolProvider(
             request_key,
             secret,
@@ -72,41 +70,41 @@ class LTIAuthBackend(ModelBackend):
 
         postparams = request.POST.dict()
 
-        logger.debug('Request is secure: %s', request.is_secure())
+        LOGGER.debug('Request is secure: %s', request.is_secure())
         if settings.DEBUG:
             for key in postparams:
-                logger.debug('POST %s: %s', key, postparams.get(key))
-            logger.debug('Request abs url is %s', request.build_absolute_uri())
+                LOGGER.debug('POST %s: %s', key, postparams.get(key))
+            LOGGER.debug('Request abs url is %s', request.build_absolute_uri())
 
             for key in request.META:
-                logger.debug('META %s: %s', key, request.META.get(key))
+                LOGGER.debug('META %s: %s', key, request.META.get(key))
 
-        logger.info('Checking the signature')
+        LOGGER.info('Checking the signature')
 
         try:
             request_is_valid = tool_provider.is_valid_request(request)
         except oauth2.Error:
-            logger.exception(
+            LOGGER.exception(
                 'error attempting to validate LTI launch %s',
                 postparams)
             request_is_valid = False
 
         if not request_is_valid:
-            logger.error('Invalid request: signature check failed.')
+            LOGGER.error('Invalid request: signature check failed.')
             raise PermissionDenied
 
-        logger.info('done checking the signature')
-        logger.info(
+        LOGGER.info('done checking the signature')
+        LOGGER.info(
             'about to check the timestamp: {%s}',
             int(tool_provider.oauth_timestamp))
 
         if time() - int(tool_provider.oauth_timestamp) > 60 * 60:
-            logger.error('OAuth timestamp is too old.')
+            LOGGER.error('OAuth timestamp is too old.')
             # raise PermissionDenied
         else:
-            logger.info('Valid timestamp')
+            LOGGER.info('Valid timestamp')
 
-        logger.info('Done checking the timestamp')
+        LOGGER.info('Done checking the timestamp')
 
         # (this is where we should check the nonce)
 
@@ -129,10 +127,10 @@ class LTIAuthBackend(ModelBackend):
 
         # Check that we have an email field at least
         if not email:
-            logger.error('Invalid request: Invalid email.')
+            LOGGER.error('Invalid request: Invalid email.')
             raise PermissionDenied
 
-        logger.info('Valid username: %s', username)
+        LOGGER.info('Valid username: %s', username)
 
         user_model = get_user_model()
 
@@ -143,21 +141,21 @@ class LTIAuthBackend(ModelBackend):
             user, created = user_model.objects.get_or_create(email=email)
 
             if created:
-                logger.debug(
+                LOGGER.debug(
                     'Authenticate created a new user for %s',
                     username)
             else:
-                logger.debug(
+                LOGGER.debug(
                     'Authenticate found an existing user for %s',
                     username)
 
         else:
-            logger.debug(
+            LOGGER.debug(
                 'automatic user creation disbled. Find and existing record')
             try:
                 user = user_model.objects.get_by_natural_key(username)
             except user_model.DoesNotExist:
-                logger.debug('authenticate could not find user %s', username)
+                LOGGER.debug('authenticate could not find user %s', username)
 
         # update user information if given by LTI and not present in user obj.
         if not user.name and username:
@@ -177,7 +175,7 @@ class LTIAuthBackend(ModelBackend):
             user.groups.add(Group.objects.get(name='instructor'))
 
         user.save()
-        logger.debug('Updated the user record in the database')
+        LOGGER.debug('Updated the user record in the database')
 
         return user
 

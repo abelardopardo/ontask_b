@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Task to update the users connected to a workflow (luser field)."""
-import logging
 from typing import Dict, Optional
 
 from django.utils.translation import ugettext
@@ -9,8 +8,6 @@ from django.utils.translation import ugettext
 from ontask import models
 from ontask.tasks.execute import task_execute_factory
 from ontask.workflow.services.luser_update import do_workflow_update_lusers
-
-logger = logging.getLogger('celery_execution')
 
 
 class ExecuteUpdateWorkflowLUser:

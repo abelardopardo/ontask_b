@@ -42,11 +42,11 @@ class MultiLTILaunchAuthMiddleware:
 
     def process_request(self, request):
         if settings.DEBUG:
-            logger.debug('inside process_request %s', request.path)
+            LOGGER.debug('inside process_request %s', request.path)
 
         # AuthenticationMiddleware is required so that request.user exists.
         if not getattr(request, 'user', None):
-            logger.debug('improperly configured: request has no user attr')
+            LOGGER.debug('improperly configured: request has no user attr')
             raise ImproperlyConfigured(
                 "The Django LTI auth middleware requires the"
                 " authentication middleware to be installed.  Edit your"
@@ -58,27 +58,27 @@ class MultiLTILaunchAuthMiddleware:
         resource_link_id = None
         if request.method == 'POST' and request.POST.get(
                 'lti_message_type') == 'basic-lti-launch-request':
-            logger.debug(
+            LOGGER.debug(
                 'received a basic-lti-launch-request - authenticating the user'
             )
 
             # authenticate and log the user in
             with Timer() as t:
                 user = auth.authenticate(request=request)
-            logger.debug('authenticate() took %s s', t.secs)
+            LOGGER.debug('authenticate() took %s s', t.secs)
 
             if user is not None:
                 # User is valid. Set request.user and persist user in the
                 # session by logging the user in.
 
-                logger.debug(
+                LOGGER.debug(
                     'user was successfully authenticated; now log them in'
                 )
                 request.user = user
                 with Timer() as t:
                     auth.login(request, user)
 
-                logger.debug('login() took %s s', t.secs)
+                LOGGER.debug('login() took %s s', t.secs)
 
                 resource_link_id = request.POST.get('resource_link_id')
                 lti_launch = {
@@ -170,20 +170,20 @@ class MultiLTILaunchAuthMiddleware:
 
                 # Limit the number of LTI launches stored in the session
                 max_launches = getattr(settings, 'LTI_AUTH_MAX_LAUNCHES', 10)
-                logger.info("LTI launch count %s [max=%s]",
+                LOGGER.info("LTI launch count %s [max=%s]",
                             len(list(lti_launches.keys())),
                             max_launches)
                 if len(list(lti_launches.keys())) >= max_launches:
                     invalidated_launch = lti_launches.popitem(last=False)
-                    logger.info("LTI launch invalidated: %s",
+                    LOGGER.info("LTI launch invalidated: %s",
                                 json.dumps(invalidated_launch, indent=4))
 
                 lti_launches[resource_link_id] = lti_launch
-                logger.info("LTI launch added to session: %s",
+                LOGGER.info("LTI launch added to session: %s",
                             json.dumps(lti_launch, indent=4))
             else:
                 # User could not be authenticated!
-                logger.warning('user could not be authenticated via LTI '
+                LOGGER.warning('user could not be authenticated via LTI '
                                'params; let the request continue in case '
                                'another auth plugin is configured')
         else:
@@ -193,7 +193,7 @@ class MultiLTILaunchAuthMiddleware:
                 request.session.get('LTI_LAUNCH', {}).get(resource_link_id, {}))
         set_current_request(request)
         if not request.LTI and settings.DEBUG:
-            logger.warning("Could not find LTI launch for resource_link_id %s",
+            LOGGER.warning("Could not find LTI launch for resource_link_id %s",
                            resource_link_id)
 
     def clean_username(self, username, request):
@@ -204,11 +204,11 @@ class MultiLTILaunchAuthMiddleware:
         backend_str = request.session[auth.BACKEND_SESSION_KEY]
         backend = auth.load_backend(backend_str)
         try:
-            logger.debug('calling the backend %s clean_username with %s',
+            LOGGER.debug('calling the backend %s clean_username with %s',
                          backend,
                          username)
             username = backend.clean_username(username)
-            logger.debug('cleaned username is %s', username)
+            LOGGER.debug('cleaned username is %s', username)
         except AttributeError:  # Backend has no clean_username method.
             pass
         return username

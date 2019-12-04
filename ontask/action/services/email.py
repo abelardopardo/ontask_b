@@ -25,11 +25,11 @@ from ontask.action.evaluate.action import (
     evaluate_row_action_out, get_action_evaluation_context,
 )
 from ontask.action.services.edit_manager import ActionOutEditManager
-from ontask.action.services.manager import ActionRunManager
+from ontask.action.services.run_manager import ActionRunManager
 from ontask.celery import get_task_logger
 from ontask.dataops.sql.column_queries import add_column_to_db
 
-logger = get_task_logger('celery_execution')
+LOGGER = get_task_logger('celery_execution')
 
 
 def _send_confirmation_message(
@@ -298,7 +298,7 @@ def _deliver_msg_burst(
         mail.get_connection().send_messages(msg_chunk)
 
         if idx != len(msg_chunks) - 1:
-            logger.info(
+            LOGGER.info(
                 'Email Burst (%s) reached. Waiting for %s secs',
                 str(len(msg_chunk)),
                 str(wait_time))

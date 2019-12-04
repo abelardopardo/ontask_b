@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """Direct SQL operations in the DB."""
-import logging
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from django.db import connection
 from psycopg2 import sql
 
-from ontask import OnTaskDBIdentifier
+from ontask import LOGGER, OnTaskDBIdentifier
 from ontask.dataops.formula import EVAL_SQL, evaluate_formula
-
-logger = logging.getLogger('ontask')
 
 
 def clone_table(table_from: str, table_to: str):
@@ -267,4 +264,4 @@ def delete_table(table_name: str):
         with connection.connection.cursor() as cursor:
             cursor.execute(query)
     except Exception as exc:
-        logger.error('Error when dropping table %s: %s', table_name, str(exc))
+        LOGGER.error('Error when dropping table %s: %s', table_name, str(exc))

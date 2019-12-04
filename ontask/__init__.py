@@ -2,6 +2,7 @@
 
 """Basic functions and definitions used all over the platform."""
 from datetime import datetime
+import logging
 from typing import List, Optional
 
 from django import conf
@@ -16,10 +17,12 @@ from ontask.celery import app as celery_app
 __all__ = [
     'are_correct_emails',
     'celery_app',
+    'CELERY_LOGGER',
     'create_new_name',
     'entity_prefix',
     'is_legal_name',
     'is_correct_email',
+    'LOGGER',
     'OnTaskDataFrameNoKey',
     'OnTaskDBIdentifier',
     'OnTaskEmptyWorkflow',
@@ -32,6 +35,9 @@ __version__ = 'B.6.1.3'
 
 app_config = 'ontask.apps.OnTaskConfig'
 
+LOGGER = logging.getLogger('ontask')
+
+CELERY_LOGGER = logging.getLogger('celery_execution')
 
 def is_legal_name(strval: str) -> Optional[str]:
     """Check if a string is a valid column, attribute or condition name.

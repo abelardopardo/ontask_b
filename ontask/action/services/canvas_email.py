@@ -28,7 +28,7 @@ from ontask.core import SessionPayload
 from ontask.core.permissions import is_instructor
 from ontask.oauth.services import get_initial_token_step1, refresh_token
 
-logger = get_task_logger('celery_execution')
+LOGGER = get_task_logger('celery_execution')
 
 
 def _do_burst_pause(burst: int, burst_pause: int, idx: int):
@@ -41,7 +41,7 @@ def _do_burst_pause(burst: int, burst_pause: int, idx: int):
     """
     if burst and (idx % burst) == 0:
         # Burst exists and the limit has been reached
-        logger.info(
+        LOGGER.info(
             'Burst (%s) reached. Waiting for %s secs',
             str(burst),
             str(burst_pause))
@@ -308,7 +308,7 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
             )
             if settings.ONTASK_TESTING:
                 # Print the sent JSON
-                logger.info(
+                LOGGER.info(
                     'SEND JSON(%s): %s',
                     target_url,
                     json.dumps(canvas_email_payload))

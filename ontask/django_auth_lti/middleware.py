@@ -1,14 +1,13 @@
+# -*- coding: utf-8 -*-
 
-import logging
-
+"""Functions related with the middleware."""
 from django.conf import settings
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
+from ontask import LOGGER
 from ontask.django_auth_lti.timer import Timer
-
-logger = logging.getLogger('ontask')
 
 
 class LTIAuthMiddleware:
@@ -25,11 +24,11 @@ class LTIAuthMiddleware:
 
     def process_request(self, request):
         if settings.DEBUG:
-            logger.debug('inside process_request %s' % request.path)
+            LOGGER.debug('inside process_request %s' % request.path)
 
         # AuthenticationMiddleware is required so that request.user exists.
         if not getattr(request, 'user', None):
-            logger.debug(_('improperly configured: requeset has no user attr'))
+            LOGGER.debug(_('improperly configured: requeset has no user attr'))
             raise ImproperlyConfigured(
                 _("The Django LTI auth middleware requires the"
                   " authentication middleware to be installed.  Edit your"
@@ -39,26 +38,26 @@ class LTIAuthMiddleware:
 
         if request.method == 'POST' and request.POST.get('lti_message_type') == 'basic-lti-launch-request':
 
-            logger.debug(_('received a basic-lti-launch-request - '
+            LOGGER.debug(_('received a basic-lti-launch-request - '
                            'authenticating the user'))
 
             # authenticate and log the user in
             with Timer() as t:
                 user = auth.authenticate(request=request)
-            logger.debug(_('authenticate() took %s s') % t.secs)
+            LOGGER.debug(_('authenticate() took %s s') % t.secs)
 
             if user is not None:
                 # User is valid.  Set request.user and persist user in the session
                 # by logging the user in.
 
-                logger.debug(
+                LOGGER.debug(
                     _('user was successfully authenticated; now log them in')
                 )
                 request.user = user
                 with Timer() as t:
                     auth.login(request, user)
 
-                logger.debug('login() took %s s' % t.secs)
+                LOGGER.debug('login() took %s s' % t.secs)
 
                 lti_launch = {
                     'context_id': request.POST.get('context_id'),
@@ -113,7 +112,7 @@ class LTIAuthMiddleware:
 
             else:
                 # User could not be authenticated!
-                logger.warning(
+                LOGGER.warning(
                     _('user could not be authenticated via LTI params; let '
                       'the request continue in case another auth plugin is '
                       'configured')
@@ -124,7 +123,7 @@ class LTIAuthMiddleware:
         # single launch version of LTIAuthMiddleware
         setattr(request, 'LTI', request.session.get('LTI_LAUNCH', {}))
         if not request.LTI and settings.DEBUG:
-            logger.warning(_("Could not find LTI launch parameters"))
+            LOGGER.warning(_("Could not find LTI launch parameters"))
 
     def clean_username(self, username, request):
         """
@@ -134,12 +133,12 @@ class LTIAuthMiddleware:
         backend_str = request.session[auth.BACKEND_SESSION_KEY]
         backend = auth.load_backend(backend_str)
         try:
-            logger.debug(
+            LOGGER.debug(
                 _('calling the backend {0} clean_username with {1}'),
                 backend,
                 username)
             username = backend.clean_username(username)
-            logger.debug(_('cleaned username is {0}'), username)
+            LOGGER.debug(_('cleaned username is {0}'), username)
         except AttributeError:  # Backend has no clean_username method.
             pass
         return username

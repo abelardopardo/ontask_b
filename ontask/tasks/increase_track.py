@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Function to increase the tracking column in a workflow."""
-import logging
 from typing import Dict, Optional
 
 from django.contrib.auth import get_user_model
@@ -11,8 +10,6 @@ from django.utils.translation import ugettext
 from ontask import models
 from ontask.dataops.sql.row_queries import increase_row_integer
 from ontask.tasks.execute import task_execute_factory
-
-logger = logging.getLogger('ontask')
 
 
 class ExecuteIncreaseTrackCount:
