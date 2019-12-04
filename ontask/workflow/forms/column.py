@@ -11,7 +11,7 @@ import pandas as pd
 
 from ontask import is_legal_name, models
 from ontask.core import DATE_TIME_WIDGET_OPTIONS
-from ontask.dataops.pandas import is_unique_column, load_table
+from ontask.dataops import pandas
 
 INITIAL_VALUE_LENGTH = 512
 
@@ -62,7 +62,7 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Load the data frame from the DB for various checks and leave it in
         # the form for future use
-        self.data_frame = load_table(
+        self.data_frame = pandas.load_table(
             self.workflow.get_data_frame_table_name())
 
         # Column name must be a legal variable name
@@ -338,7 +338,8 @@ class ColumnRenameForm(ColumnBasicForm):
             # Case 2: False -> True Unique values must be verified
             if (
                 not self.instance.is_key
-                and not is_unique_column(self.data_frame[self.instance.name])
+                and not pandas.is_unique_column(
+                    self.data_frame[self.instance.name])
             ):
                 self.add_error(
                     'is_key',
@@ -466,5 +467,3 @@ class RandomColumnAddForm(ColumnBasicForm):
         self.fields['raw_categories'].label = _(
             'Number (values from 1 to N, interval m - n) '
             + 'or comma separated list of values.')
-
-

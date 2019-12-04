@@ -8,7 +8,7 @@ from psycopg2 import sql
 from psycopg2.extras import DictCursor
 
 from ontask import OnTaskDBIdentifier
-from ontask.dataops.formula import EVAL_SQL, evaluate_formula
+from ontask.dataops import formula
 from ontask.dataops.sql.table_queries import (
     get_boolean_clause, get_select_query,
 )
@@ -203,7 +203,7 @@ def select_ids_all_false(
     ).format(sql.Identifier(table_name))
 
     cond_sql, cond_fields = zip(*[
-        evaluate_formula(c_formula, EVAL_SQL)
+        formula.evaluate(c_formula, formula.EVAL_SQL)
         for c_formula in cond_formula_list
     ])
 
@@ -215,9 +215,9 @@ def select_ids_all_false(
 
     # Query clause for the filter
     if filter_formula:
-        filter_query, filter_fields = evaluate_formula(
+        filter_query, filter_fields = formula.evaluate(
             filter_formula,
-            EVAL_SQL,
+            formula.sEVAL_SQL,
         )
         query = query + sql.SQL(' AND ') + filter_query
         query_fields += filter_fields
@@ -241,9 +241,9 @@ def get_num_rows(table_name, cond_filter=None):
 
     cond_fields = []
     if cond_filter is not None:
-        cond_filter, cond_fields = evaluate_formula(
+        cond_filter, cond_fields = formula.evaluate(
             cond_filter,
-            EVAL_SQL,
+            formula.EVAL_SQL,
         )
         query = sql.SQL('{0} WHERE {1}').format(query, cond_filter)
 

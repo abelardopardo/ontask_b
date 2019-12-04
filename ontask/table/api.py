@@ -13,14 +13,8 @@ from rest_framework.views import APIView
 
 from ontask import OnTaskDataFrameNoKey, models
 from ontask.core import UserIsInstructor, get_workflow
-from ontask.dataops.pandas import (
-    is_unique_column, load_table, perform_dataframe_upload_merge,
-    store_dataframe, verify_data_frame,
-)
-from ontask.table.serializers import (
-    DataFrameJSONMergeSerializer, DataFrameJSONSerializer,
-    DataFramePandasMergeSerializer, DataFramePandasSerializer,
-)
+from ontask.dataops import pandas
+from ontask.table import serializers
 
 
 class TableBasicOps(APIView):
@@ -65,9 +59,9 @@ class TableBasicOps(APIView):
 
         try:
             # Verify the data frame
-            verify_data_frame(df)
+            pandas.verify_data_frame(df)
             # Store the content in the db and...
-            store_dataframe(df, workflow)
+            pandas.store_dataframe(df, workflow)
         except OnTaskDataFrameNoKey as exc:
             return Response(
                 str(exc),
@@ -90,7 +84,9 @@ class TableBasicOps(APIView):
         """Retrieve the existing data frame."""
         del request, wid, format
         serializer = self.serializer_class(
-            {'data_frame': load_table(workflow.get_data_frame_table_name())})
+            {
+                'data_frame': pandas.load_table(
+                    workflow.get_data_frame_table_name())})
         return Response(serializer.data)
 
     @method_decorator(get_workflow(pf_related='columns'))
@@ -102,7 +98,7 @@ class TableBasicOps(APIView):
         workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
         """Create a new data frame."""
-        if load_table(workflow.get_data_frame_table_name()) is not None:
+        if pandas.load_table(workflow.get_data_frame_table_name()) is not None:
             raise APIException(
                 _('Post request requires workflow without a table'))
         return self.override(
@@ -160,7 +156,7 @@ class TableJSONOps(TableBasicOps):
     remains, just the data frame is deleted.
     """
 
-    serializer_class = DataFrameJSONSerializer
+    serializer_class = serializers.DataFrameJSONSerializer
 
 
 class TablePandasOps(TableBasicOps):
@@ -214,7 +210,7 @@ class TablePandasOps(TableBasicOps):
     encoded string of the binary representation of a pandas data frame.
     """
 
-    serializer_class = DataFramePandasSerializer
+    serializer_class = serializers.DataFramePandasSerializer
 
 
 class TableBasicMerge(APIView):
@@ -245,7 +241,7 @@ class TableBasicMerge(APIView):
         del request, wid, format
         # Try to retrieve the wflow to check for permissions
         serializer = self.serializer_class({
-            'src_df': load_table(workflow.get_data_frame_table_name()),
+            'src_df': pandas.load_table(workflow.get_data_frame_table_name()),
             'how': '',
             'left_on': '',
             'right_on': ''})
@@ -263,7 +259,7 @@ class TableBasicMerge(APIView):
         """Process the put request."""
         del wid, format
         # Get the dst_df
-        dst_df = load_table(workflow.get_data_frame_table_name())
+        dst_df = pandas.load_table(workflow.get_data_frame_table_name())
 
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
@@ -278,7 +274,7 @@ class TableBasicMerge(APIView):
                 _('how must be one of left, right, outer or inner'))
 
         left_on = serializer.validated_data['left_on']
-        if not is_unique_column(dst_df[left_on]):
+        if not pandas.is_unique_column(dst_df[left_on]):
             raise APIException(
                 _('column {0} does not contain a unique key.').format(left_on))
 
@@ -290,7 +286,7 @@ class TableBasicMerge(APIView):
             raise APIException(_('column {0} not found in data frame').format(
                 right_on))
 
-        if not is_unique_column(src_df[right_on]):
+        if not pandas.is_unique_column(src_df[right_on]):
             raise APIException(_(
                 'column {0} does not contain a unique key.').format(right_on))
 
@@ -305,7 +301,7 @@ class TableBasicMerge(APIView):
 
         # Ready to perform the MERGE
         try:
-            perform_dataframe_upload_merge(
+            pandas.perform_dataframe_upload_merge(
                 workflow,
                 dst_df,
                 src_df,
@@ -329,7 +325,7 @@ class TableJSONMerge(TableBasicMerge):
     Request to merge a given data frame with the one attached to the workflow.
     """
 
-    serializer_class = DataFrameJSONMergeSerializer
+    serializer_class = serializers.DataFrameJSONMergeSerializer
 
 
 class TablePandasMerge(TableBasicMerge):
@@ -389,4 +385,4 @@ class TablePandasMerge(TableBasicMerge):
     """
 
     # To be overwritten by the subclass
-    serializer_class = DataFramePandasMergeSerializer
+    serializer_class = serializers.DataFramePandasMergeSerializer

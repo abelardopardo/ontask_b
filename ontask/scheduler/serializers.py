@@ -11,7 +11,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
 from ontask import is_correct_email, models
-from ontask.dataops.sql.row_queries import get_rows
+from ontask.dataops import sql
 
 
 class ScheduledOperationSerializer(serializers.ModelSerializer):
@@ -64,7 +64,13 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
     def extra_validation(
         self,
         validated_data: Dict,
-    ) -> Tuple[models.Action, datetime, str, Optional[List[str]], Dict]:
+    ) -> Tuple[
+        models.Action,
+        datetime.datetime,
+        str,
+        Optional[List[str]],
+        Dict,
+    ]:
         """Check for extra properties.
 
         Checking for extra validation properties in the information contained
@@ -203,7 +209,7 @@ class ScheduledEmailSerializer(ScheduledOperationSerializer):
 
         # Check if the values in the email column are correct emails
         try:
-            column_data = get_rows(
+            column_data = sql.get_rows(
                 act.workflow.get_data_frame_table_name(),
                 column_names=[column.name])
             if not all(

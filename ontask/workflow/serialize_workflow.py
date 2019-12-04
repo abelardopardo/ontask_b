@@ -10,7 +10,7 @@ from rest_framework.exceptions import APIException
 
 from ontask import models
 from ontask.action.serializers import ActionSerializer
-from ontask.dataops.pandas import store_table
+from ontask.dataops import pandas
 from ontask.table.serializers import DataFramePandasField, ViewSerializer
 from ontask.workflow.serialize_column import ColumnSerializer
 
@@ -164,7 +164,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             data_frame = validated_data.get('data_frame')
             if data_frame is not None:
                 # Store the table in the DB
-                store_table(
+                pandas.store_table(
                     data_frame,
                     workflow_obj.get_data_frame_table_name(),
                     dtype={

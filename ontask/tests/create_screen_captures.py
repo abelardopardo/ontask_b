@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
+"""Create screen captures to include in the documentation."""
 import os
-from test import ElementHasFullOpacity, ScreenTests
 
 from django.conf import settings
 from future import standard_library
@@ -13,7 +12,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
-from ontask.dataops.pandas import destroy_db_engine
+from ontask.tests import ElementHasFullOpacity, ScreenTests
 
 standard_library.install_aliases()
 
@@ -25,7 +24,6 @@ class ScreenTutorialTest(ScreenTests):
         Create a workflow, upload data and merge
         :return:
         """
-
         # Login
         self.login('instructor01@bogus.com')
         self.body_ss('workflow_index_empty.png')
@@ -57,9 +55,6 @@ class ScreenTutorialTest(ScreenTests):
         self.body_ss('dataops_datauploadmerge2.png')
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()
 
 
 class ScreenImportTest(ScreenTests):
@@ -101,9 +96,6 @@ class ScreenImportTest(ScreenTests):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()
 
 
 class ScreenTestFixture(ScreenTests):
@@ -173,9 +165,6 @@ class ScreenTestFixture(ScreenTests):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()
 
     # def test_athena_admin(self):
     #     # Login
@@ -289,9 +278,6 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-        # Close the db_engine
-        destroy_db_engine()
-
     def test_ss_details(self):
         # Login
         self.login('instructor01@bogus.com')
@@ -317,9 +303,6 @@ class ScreenTestFixture(ScreenTests):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()
 
     def test_ss_dataops(self):
         # Login
@@ -507,9 +490,6 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-        # Close the db_engine
-        destroy_db_engine()
-
     def test_ss_table(self):
         # Login
         self.login('instructor01@bogus.com')
@@ -559,9 +539,6 @@ class ScreenTestFixture(ScreenTests):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()
 
     def test_ss_action(self):
         # Login
@@ -968,9 +945,6 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-        # Close the db_engine
-        destroy_db_engine()
-
     def test_ss_logs(self):
         # Login
         self.login('instructor01@bogus.com')
@@ -988,9 +962,6 @@ class ScreenTestFixture(ScreenTests):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()
 
     def test_rubric(self):
         action_name = 'Project feedback'
@@ -1038,6 +1009,3 @@ class ScreenTestFixture(ScreenTests):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()

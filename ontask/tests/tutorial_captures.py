@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
+"""Screen captures for scenario 4"""
 import os
-from test import ElementHasFullOpacity, ScreenTests
 from time import sleep
 
 from django.conf import settings
@@ -13,7 +12,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
-from ontask.dataops.pandas import destroy_db_engine
+from ontask.tests import ElementHasFullOpacity, ScreenTests
 
 
 class TutorialCaptures(ScreenTests):
@@ -757,6 +756,3 @@ class TutorialCaptures(ScreenTests):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()

@@ -2,7 +2,7 @@
 
 from django.test import TestCase
 
-from ontask.dataops.formula import EVAL_EXP, evaluation
+from ontask.dataops import formula
 
 
 class HasVariableTest(TestCase):
@@ -47,14 +47,14 @@ class HasVariableTest(TestCase):
 
         self.assertTrue(self.compare(self.formula1, self.formula2))
 
-        f3 = evaluation.rename_variable(
+        f3 = formula.rename_variable(
             self.formula1,
             'Course_Code_a',
             'Course_Code_b')
 
         self.assertTrue(self.compare(self.formula3, f3))
 
-        evaluation.rename_variable(
+        formula.rename_variable(
             self.formula1,
             'Course_Code_b',
             'Course_Code_a')
@@ -62,7 +62,7 @@ class HasVariableTest(TestCase):
     def test_evaluate_formula(self):
 
         self.assertTrue(
-            evaluation.evaluate_formula(
+            formula.evaluate(
                 self.formula1,
-                EVAL_EXP,
+                formula.EVAL_EXP,
                 {'Course_Code_a': 'df', 'ANOTHER': 'v2'}))

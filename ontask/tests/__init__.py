@@ -31,12 +31,12 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import OnTaskSharedState, models
+from ontask.core import GROUP_NAMES
 from ontask.core.checks import sanity_checks
 from ontask.core.manage_session import (
     SessionPayload
 )
-from ontask.core.permissions import GROUP_NAMES
-from ontask.dataops.pandas import destroy_db_engine
+from ontask.dataops import pandas
 
 standard_library.install_aliases()
 
@@ -85,7 +85,7 @@ class OnTaskBasicTestCase(TransactionTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        destroy_db_engine(OnTaskSharedState.engine)
+        pandas.destroy_db_engine(OnTaskSharedState.engine)
         super().tearDownClass()
 
     def setUp(self):

@@ -14,7 +14,7 @@ from ontask import models
 from ontask.action.evaluate.action import evaluate_action
 from ontask.action.services.run_manager import ActionRunManager
 from ontask.core import SessionPayload
-from ontask.dataops.sql.row_queries import get_rows
+from ontask.dataops import sql
 
 _HTML_BODY = """<!DOCTYPE html>
 <html>
@@ -84,7 +84,7 @@ def _create_eval_data_tuple(
 
     if user_fname_column:
         # Get the user_fname_column values
-        user_fname_data = [row[user_fname_column.name] for row in get_rows(
+        user_fname_data = [row[user_fname_column.name] for row in sql.get_rows(
             action.workflow.get_data_frame_table_name(),
             column_names=[user_fname_column.name],
             filter_formula=None).fetchall()]

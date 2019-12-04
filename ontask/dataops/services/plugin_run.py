@@ -52,7 +52,7 @@ class PluginAvailableTable(tables.Table):
 
         return record.filename
 
-    def render_last_exec(self, record) -> Union[str, datetime]:
+    def render_last_exec(self, record) -> Union[str, datetime.datetime]:
         """Render the last executed time.
 
         :param record: Record being processed in the table.

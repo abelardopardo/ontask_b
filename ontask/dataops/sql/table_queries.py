@@ -7,7 +7,7 @@ from django.db import connection
 from psycopg2 import sql
 
 from ontask import LOGGER, OnTaskDBIdentifier
-from ontask.dataops.formula import EVAL_SQL, evaluate_formula
+from ontask.dataops import formula
 
 
 def clone_table(table_from: str, table_to: str):
@@ -60,7 +60,9 @@ def get_boolean_clause(
 
     if filter_formula:
         # There is a filter
-        clause, clause_fields = evaluate_formula(filter_formula, EVAL_SQL)
+        clause, clause_fields = formula.evaluate(
+            filter_formula,
+            formula.EVAL_SQL)
 
     if filter_pairs:
         c_txt = ' AND ' if conjunction else ' OR '
@@ -186,9 +188,9 @@ def search_table(
     where_clause = sql.SQL('')
     # Add filter part if present
     if filter_formula:
-        filter_query, filter_fields = evaluate_formula(
+        filter_query, filter_fields = formula.evaluate(
             filter_formula,
-            EVAL_SQL)
+            formula.EVAL_SQL)
         if filter_query:
             where_clause = filter_query
             query_fields += filter_fields

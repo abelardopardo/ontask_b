@@ -20,7 +20,7 @@ from psycopg2 import sql
 from ontask.dataops.formula import operands
 
 
-def evaluate_formula(
+def evaluate(
     node,
     eval_type: str,
     given_variables: Optional[Dict] = None,
@@ -45,7 +45,7 @@ def evaluate_formula(
 
     # Node is a COMPOSITION, get the values of the sub-clauses recursively
     sub_clauses = [
-        evaluate_formula(sub_formula, eval_type, given_variables)
+        evaluate(sub_formula, eval_type, given_variables)
         for sub_formula in node['rules']]
 
     # Combine subresults depending on the type of evaluation

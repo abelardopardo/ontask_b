@@ -4,7 +4,7 @@
 import copy
 
 from ontask import models
-from ontask.dataops.formula import get_variables
+from ontask.dataops import formula
 
 
 def do_clone_condition(
@@ -44,7 +44,7 @@ def do_clone_condition(
     try:
         # Update the many to many field.
         new_condition.columns.set(new_condition.action.workflow.columns.filter(
-            name__in=get_variables(new_condition.formula),
+            name__in=formula.get_variables(new_condition.formula),
         ))
     except Exception as exc:
         new_condition.delete()

@@ -8,15 +8,7 @@ from django.utils.translation import gettext, ugettext_lazy as _
 import numpy as np
 import pandas as pd
 
-from ontask.dataops.formula import evaluation
-from ontask.dataops.pandas import are_unique_columns, is_unique_column
-from ontask.dataops.pandas.database import store_table
-from ontask.dataops.pandas.datatypes import pandas_datatype_names
-from ontask.dataops.sql import (
-    db_rename_column, delete_table, df_drop_column, get_num_rows, rename_table,
-)
-from ontask.dataops.sql.column_queries import get_df_column_types
-from ontask.dataops.sql.row_queries import get_rows
+from ontask.dataops import formula, pandas, sql
 
 
 def _verify_dataframe_columns(
@@ -65,7 +57,7 @@ def _verify_dataframe_columns(
     for col in workflow.columns.all():
         # Condition 1: If the column is marked as a key column, it should
         # maintain this property
-        if col.is_key and not is_unique_column(data_frame[col.name]):
+        if col.is_key and not pandas.is_unique_column(data_frame[col.name]):
             raise Exception(gettext(
                 'Column {0} looses its "key" property through this merge.'
                 + ' Either remove this property from the column or '
@@ -73,7 +65,7 @@ def _verify_dataframe_columns(
                 + 'dataset').format(col.name))
 
         # Get the pandas data type
-        df_col_type = pandas_datatype_names.get(
+        df_col_type = pandas.datatype_names.get(
             data_frame[col.name].dtype.name)
 
         # Condition 2: Review potential data type changes
@@ -130,13 +122,13 @@ def store_temporary_dataframe(
     table_name = workflow.get_upload_table_name()
 
     # Get the if the columns have unique values per row
-    column_unique = are_unique_columns(data_frame)
+    column_unique = pandas.are_unique_columns(data_frame)
 
     # Store the table in the DB
-    store_table(data_frame, table_name)
+    pandas.store_table(data_frame, table_name)
 
     # Get the column types
-    df_column_types = get_df_column_types(table_name)
+    df_column_types = sql.get_df_column_types(table_name)
 
     # Return a list with three list with information about the
     # data frame that will be needed in the next steps
@@ -229,7 +221,7 @@ def store_workflow_table(
         # Step 1: Check if column needs to be uploaded
         if not upload:
             # Column is dropped
-            df_drop_column(db_table, old_n)
+            sql.df_drop_column(db_table, old_n)
 
             if current_col:
                 # Dropping an existing column. Incorrect.
@@ -239,7 +231,7 @@ def store_workflow_table(
         # Step 2: Check if the column must be renamed
         if old_n != new_n:
             # Rename column from old_n to new_n
-            db_rename_column(db_table, old_n, new_n)
+            sql.db_rename_column(db_table, old_n, new_n)
 
             if current_col:
                 rename_df_column(workflow, old_n, new_n)
@@ -260,11 +252,11 @@ def store_workflow_table(
 
     # Step 4: Rename the table (Drop the original one first
     if workflow.has_table():
-        delete_table(workflow.get_data_frame_table_name())
-    rename_table(db_table, workflow.get_data_frame_table_name())
+        sql.delete_table(workflow.get_data_frame_table_name())
+    sql.rename_table(db_table, workflow.get_data_frame_table_name())
 
     # Step 5: Update workflow fields and save
-    workflow.nrows = get_num_rows(workflow.get_data_frame_table_name())
+    workflow.nrows = sql.get_num_rows(workflow.get_data_frame_table_name())
     workflow.set_query_builder_ops()
     workflow.save()
 
@@ -283,7 +275,7 @@ def get_table_row_by_index(
      index is out of bounds
     """
     # Get the data
-    df_data = get_rows(
+    df_data = sql.get_rows(
         workflow.get_data_frame_table_name(),
         column_names=workflow.get_column_names(),
         filter_formula=filter_formula)
@@ -350,7 +342,7 @@ def rename_df_column(
 
     # Rename the appearances of the variable in the formulas in the views
     for view in workflow.views.all():
-        view.formula = evaluation.rename_variable(
+        view.formula = formula.evaluation.rename_variable(
             view.formula,
             old_name,
             new_name)
@@ -374,7 +366,7 @@ def get_subframe(
     """
     # Create the DataFrame and set the column names
     return pd.DataFrame.from_records(
-        get_rows(
+        sql.get_rows(
             table_name,
             column_names=column_names,
             filter_formula=filter_formula,

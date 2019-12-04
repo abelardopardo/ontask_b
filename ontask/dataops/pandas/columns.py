@@ -5,7 +5,7 @@ from typing import Dict, List
 
 import pandas as pd
 
-from ontask.dataops.pandas.datatypes import pandas_datatype_names
+from ontask.dataops import pandas
 
 
 def get_column_statistics(df_column) -> Dict:
@@ -45,7 +45,7 @@ def get_column_statistics(df_column) -> Dict:
         'counts': {},
     }
 
-    data_type = pandas_datatype_names.get(df_column.dtype.name)
+    data_type = pandas.datatype_names.get(df_column.dtype.name)
 
     if data_type == 'integer' or data_type == 'double':
         quantiles = df_column.quantile([0, .25, .5, .75, 1])

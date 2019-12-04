@@ -5,11 +5,9 @@ from django import template
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.action.evaluate import (
-    ACTION_CONTEXT_VAR, TR_ITEM, VIZ_NUMBER_CONTEXT_VAR,
-)
-from ontask.dataops.pandas import get_subframe
-from ontask.visualizations.plotly import PlotlyColumnHistogram
+from ontask.action import evaluate
+from ontask.dataops import pandas
+from ontask.visualizations import plotly
 
 register = template.Library()
 
@@ -17,7 +15,7 @@ register = template.Library()
 def vis_html_content(context, column_name):
     """Create the HTML visualization code."""
     # Get the action
-    action = context.get(ACTION_CONTEXT_VAR)
+    action = context.get(evaluate.ACTION_CONTEXT_VAR)
     if not action:
         raise Exception(_('Action object not found when processing tag'))
     workflow = action.workflow
@@ -27,7 +25,7 @@ def vis_html_content(context, column_name):
         raise Exception(_('Column {0} does not exist').format(column_name))
 
     # Get the visualization number to generate unique IDs
-    viz_number = context[VIZ_NUMBER_CONTEXT_VAR]
+    viz_number = context[evaluate.VIZ_NUMBER_CONTEXT_VAR]
 
     # Create the context for the visualization
     viz_ctx = {
@@ -39,28 +37,28 @@ def vis_html_content(context, column_name):
     # If the template is simply being saved and rendered to detect syntax
     # errors, we may not have the data of an individual, so we have to relax
     # this restriction.
-    ivalue = context.get(TR_ITEM(column_name))
+    ivalue = context.get(evaluate.TR_ITEM(column_name))
     if ivalue is not None:
         viz_ctx['individual_value'] = ivalue
 
     # Get the data from the data frame
-    df = get_subframe(
+    df = pandas.get_subframe(
         workflow.get_data_frame_table_name(),
         action.get_filter_formula(),
         [column_name])
 
     # Get the visualisation
-    viz = PlotlyColumnHistogram(data=df, context=viz_ctx)
+    viz = plotly.PlotlyColumnHistogram(data=df, context=viz_ctx)
 
     prefix = ''
     if viz_number == 0:
         prefix = ''.join([
             '<script src="{0}"></script>'.format(x)
-            for x in PlotlyColumnHistogram.get_engine_scripts()
+            for x in plotly.PlotlyColumnHistogram.get_engine_scripts()
         ])
 
     # Update viz number
-    context[VIZ_NUMBER_CONTEXT_VAR] = viz_number + 1
+    context[evaluate.VIZ_NUMBER_CONTEXT_VAR] = viz_number + 1
 
     # Return the rendering of the viz marked as safe
     return mark_safe(prefix + viz.render())

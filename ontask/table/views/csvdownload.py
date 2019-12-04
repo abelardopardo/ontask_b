@@ -8,7 +8,7 @@ from django.http import HttpRequest, HttpResponse
 
 from ontask import models
 from ontask.core import get_view, get_workflow, is_instructor
-from ontask.dataops.pandas import get_subframe
+from ontask.dataops import pandas
 from ontask.table import services
 
 
@@ -26,7 +26,7 @@ def csvdownload(
     """
     del request
     return services.create_response_with_csv(
-        get_subframe(
+        pandas.get_subframe(
             workflow.get_data_frame_table_name(),
             None,
             workflow.get_column_names()))
@@ -50,7 +50,7 @@ def csvdownload_view(
     """
     del request, pk
     return services.create_response_with_csv(
-        get_subframe(
+        pandas.get_subframe(
             workflow.get_data_frame_table_name(),
             view.formula,
             [col.name for col in view.columns.all()]))

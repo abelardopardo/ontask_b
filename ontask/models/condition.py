@@ -5,8 +5,7 @@ from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.dataops.formula import EVAL_TXT, evaluate_formula
-from ontask.dataops.sql import get_num_rows
+from ontask.dataops import formula, sql
 from ontask.models.basic import (
     CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CreateModifyFields)
 from ontask.models.column import Column
@@ -98,7 +97,7 @@ class Condition(CreateModifyFields):
                 'valid': True,
             }
 
-        new_count = get_num_rows(
+        new_count = sql.get_num_rows(
             self.action.workflow.get_data_frame_table_name(),
             formula,
         )
@@ -119,7 +118,9 @@ class Condition(CreateModifyFields):
         :return: String
         """
         if not self.formula_text:
-            self.formula_text = evaluate_formula(self.formula, EVAL_TXT)
+            self.formula_text = formula.evaluate(
+                self.formula,
+                formula.EVAL_TXT)
             self.save()
         return self.formula_text
 

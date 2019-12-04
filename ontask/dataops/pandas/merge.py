@@ -6,8 +6,7 @@ from typing import Dict
 from django.utils.translation import gettext
 import pandas as pd
 
-from ontask.dataops.pandas.columns import has_unique_column, is_unique_column
-from ontask.dataops.pandas.dataframe import store_dataframe
+from ontask.dataops import pandas
 
 
 def _perform_non_overlapping_column_merge(
@@ -252,7 +251,7 @@ def perform_dataframe_upload_merge(
     if 'keep_key_column' not in merge_info:
         kk_column = []
         for cname in merge_info['rename_column_names']:
-            kk_column.append(is_unique_column(src_df[cname]))
+            kk_column.append(pandas.is_unique_column(src_df[cname]))
         merge_info['keep_key_column'] = kk_column
 
     # Get the keys
@@ -291,14 +290,14 @@ def perform_dataframe_upload_merge(
 
     # If the merge produced a data frame with no unique columns, flag it as an
     # error to prevent the data frame from propagating without a key column
-    if not has_unique_column(new_df):
+    if not pandas.has_unique_column(new_df):
         raise Exception(gettext(
             'Merge operation produced a result without any key columns. '
             + 'Review the key columns in the data to upload.',
         ))
 
     # Store the result back in the DB
-    store_dataframe(new_df, workflow)
+    pandas.store_dataframe(new_df, workflow)
 
     _update_is_key_field(merge_info, workflow)
 

@@ -11,14 +11,10 @@ from django.utils.html import format_html
 
 from ontask import models
 from ontask.core import OperationsColumn
-from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
-from ontask.dataops.services.connections import (
-    ConnectionTableAdmin, ConnectionTableRun,
-)
-from ontask.dataops.services.dataframeupload import load_df_from_sqlconnection
+from ontask.dataops import pandas, services
 
 
-class SQLConnectionTableAdmin(ConnectionTableAdmin):
+class SQLConnectionTableAdmin(services.ConnectionTableAdmin):
     """Table to render the SQL admin items."""
 
     @staticmethod
@@ -42,13 +38,13 @@ class SQLConnectionTableAdmin(ConnectionTableAdmin):
                     'dataops:sqlconn_toggle',
                     kwargs={'pk': record['id']})})
 
-    class Meta(ConnectionTableAdmin.Meta):
+    class Meta(services.ConnectionTableAdmin.Meta):
         """Define model."""
 
         model = models.SQLConnection
 
 
-class SQLConnectionTableRun(ConnectionTableRun):
+class SQLConnectionTableRun(services.ConnectionTableRun):
     """Class to render the table of SQL connections."""
 
     @staticmethod
@@ -60,7 +56,7 @@ class SQLConnectionTableRun(ConnectionTableRun):
             record['name'],
         )
 
-    class Meta(ConnectionTableRun.Meta):
+    class Meta(services.ConnectionTableRun.Meta):
         """Define models, fields, sequence and attributes."""
 
         model = models.SQLConnection
@@ -133,13 +129,13 @@ def sql_upload_step_one(
     :return: Nothing, it creates the new dataframe in the database
     """
     # Process SQL connection using pandas
-    data_frame = load_df_from_sqlconnection(conn, run_params)
+    data_frame = services.load_df_from_sqlconnection(conn, run_params)
     # Verify the data frame
-    verify_data_frame(data_frame)
+    pandas.verify_data_frame(data_frame)
 
     # Store the data frame in the DB.
     # Get frame info with three lists: names, types and is_key
-    frame_info = store_temporary_dataframe(
+    frame_info = pandas.store_temporary_dataframe(
         data_frame,
         workflow)
 

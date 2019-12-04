@@ -20,7 +20,7 @@ from rest_framework import permissions
 import ontask
 from ontask import models
 from ontask.core import views
-from ontask.dataops.pandas import set_engine
+from ontask.dataops import pandas
 from ontask.templatetags.ontask_tags import ontask_version
 
 api_description = ugettext(
@@ -105,7 +105,7 @@ handler404 = 'ontask.core.services.ontask_handler404'
 handler500 = 'ontask.core.services.ontask_handler500'
 
 # Create the DB engine with SQLAlchemy (once!)
-set_engine()
+pandas.set_engine()
 
 # Make sure the Site has the right information
 try:

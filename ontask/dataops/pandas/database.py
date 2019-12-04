@@ -12,8 +12,7 @@ import sqlalchemy
 import sqlalchemy.engine
 
 from ontask import LOGGER, OnTaskDataFrameNoKey, OnTaskSharedState
-from ontask.dataops.pandas.columns import has_unique_column
-from ontask.dataops.sql import COLUMN_NAME_SIZE, get_select_query_txt
+from ontask.dataops import pandas, sql
 
 # Translation between OnTask data types and SQLAlchemy
 ontask_to_sqlalchemy = {
@@ -114,7 +113,7 @@ def load_table(
 
     if columns or filter_exp:
         # A list of columns or a filter exp is given
-        query, query_fields = get_select_query_txt(
+        query, query_fields = sql.get_select_query_txt(
             table_name,
             column_names=columns,
             filter_formula=filter_exp)
@@ -157,10 +156,10 @@ def store_table(
     :return: Nothing. Side effect in the DB
     """
     # Check the length of the column names
-    if any(len(cname) > COLUMN_NAME_SIZE for cname in data_frame.columns):
+    if any(len(cname) > sql.COLUMN_NAME_SIZE for cname in data_frame.columns):
         raise Exception(
             _('Column name is longer than {0} characters').format(
-                COLUMN_NAME_SIZE))
+                sql.COLUMN_NAME_SIZE))
 
     if dtype is None:
         dtype = {}
@@ -194,16 +193,16 @@ def verify_data_frame(data_frame: pd.DataFrame):
     """
     # If the data frame does not have any unique key, it is not useful (no
     # way to uniquely identify rows). There must be at least one.
-    if not has_unique_column(data_frame):
+    if not pandas.has_unique_column(data_frame):
         raise OnTaskDataFrameNoKey(_(
             'The data has no column with unique values per row. '
             + 'At least one column must have unique values.'),
         )
 
-    if any(len(cname) > COLUMN_NAME_SIZE for cname in data_frame.columns):
+    if any(len(cname) > sql.COLUMN_NAME_SIZE for cname in data_frame.columns):
         raise Exception(
             _('Column name is longer than {0} characters').format(
-                COLUMN_NAME_SIZE))
+                sql.COLUMN_NAME_SIZE))
 
     return
 

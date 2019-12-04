@@ -5,8 +5,7 @@ from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.dataops.formula import EVAL_TXT, evaluate_formula
-from ontask.dataops.sql import get_num_rows
+from ontask.dataops import formula, sql
 from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.column import Column
 from ontask.models.logs import Log
@@ -67,7 +66,7 @@ class View(NameAndDescription, CreateModifyFields):
         :return: Number of rows resulting from using the formula
         """
         if not self.nrows:
-            self.nrows = get_num_rows(
+            self.nrows = sql.get_num_rows(
                 self.workflow.get_data_frame_table_name(),
                 self.formula
             )
@@ -80,7 +79,9 @@ class View(NameAndDescription, CreateModifyFields):
             'id': self.id,
             'name': self.name,
             'columns': [col.name for col in self.columns.all()],
-            'formula': evaluate_formula(self.formula, EVAL_TXT),
+            'formula': formula.evaluate(
+                self.formula,
+                formula.EVAL_TXT),
             'nrows': self.nrows}
 
         payload.update(kwargs)

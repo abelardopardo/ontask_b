@@ -8,7 +8,7 @@ from django.dispatch.dispatcher import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import LOGGER, models
-from ontask.dataops.sql import delete_table
+from ontask.dataops import sql
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -43,4 +43,4 @@ def delete_data_frame_table(sender, instance, **kwargs):
     """Delete the data table when deleting the workflow."""
     del sender, kwargs
     if instance.has_table():
-        delete_table(instance.get_data_frame_table_name())
+        sql.delete_table(instance.get_data_frame_table_name())

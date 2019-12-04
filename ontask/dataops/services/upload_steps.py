@@ -10,11 +10,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from ontask import models
-from ontask.core.session_ops import store_workflow_in_session
-from ontask.dataops.pandas import (
-    load_table, perform_dataframe_upload_merge, store_workflow_table,
-)
-from ontask.dataops.sql import table_queries
+from ontask.core import store_workflow_in_session
+from ontask.dataops import pandas, sql
 
 
 def upload_step_two(
@@ -59,7 +56,7 @@ def upload_step_two(
 
     # This is the first data to be stored in the workflow. Save the uploaded
     # dataframe in the DB and finish.
-    store_workflow_table(workflow, upload_data)
+    pandas.store_workflow_table(workflow, upload_data)
 
     # Update the session information
     store_workflow_in_session(request, workflow)
@@ -183,8 +180,8 @@ def upload_step_four(
     """
     # Get the dataframes to merge
     try:
-        dst_df = load_table(workflow.get_data_frame_table_name())
-        src_df = load_table(workflow.get_upload_table_name())
+        dst_df = pandas.load_table(workflow.get_data_frame_table_name())
+        src_df = pandas.load_table(workflow.get_upload_table_name())
     except Exception:
         return render(
             request,
@@ -192,16 +189,14 @@ def upload_step_four(
             {'message': _('Exception while loading data frame')})
 
     try:
-        perform_dataframe_upload_merge(
+        pandas.perform_dataframe_upload_merge(
             workflow,
             dst_df,
             src_df,
             upload_data)
     except Exception as exc:
         # Nuke the temporary table
-        table_queries.delete_table(
-            workflow.get_upload_table_name(),
-        )
+        sql.delete_table(workflow.get_upload_table_name())
         col_info = workflow.get_column_info()
         workflow.log(
             request.user,

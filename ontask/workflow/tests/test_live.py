@@ -9,9 +9,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ontask import OnTaskSharedState, models, tests
+from ontask import models, tests
 from ontask.core.checks import check_wf_df
-from ontask.dataops.pandas import database, destroy_db_engine
 
 
 class WorkflowInitial(tests.OnTaskLiveTestCase):
@@ -174,9 +173,6 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        database.destroy_db_engine(OnTaskSharedState.engine)
 
     def test_02_workflow_create_upload_with_prelude(self):
         """
@@ -720,6 +716,3 @@ class WorkflowImport(tests.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()

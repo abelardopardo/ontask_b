@@ -7,7 +7,7 @@ from django.conf import settings
 from rest_framework import status
 
 from ontask import models, tests
-from ontask.dataops.pandas import load_table
+from ontask.dataops import pandas
 
 
 class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
@@ -132,7 +132,7 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
-        df = load_table(self.workflow.get_data_frame_table_name())
+        df = pandas.load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(
             df['FORMULA COLUMN'].equals(df['Q01'] + df['Q02']))
 
@@ -155,7 +155,7 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
-        df = load_table(self.workflow.get_data_frame_table_name())
+        df = pandas.load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(all(0 < num < 13 for num in df['RANDOM COLUMN']))
 
     def test_column_clone(self):
@@ -175,7 +175,7 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
-        df = load_table(self.workflow.get_data_frame_table_name())
+        df = pandas.load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(df['Copy of Q01'].equals(df['Q01']))
 
     def test_column_restrict(self):

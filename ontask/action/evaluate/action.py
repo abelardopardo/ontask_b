@@ -19,9 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 import ontask
 from ontask import models
 from ontask.action.evaluate.template import render_action_template
-from ontask.dataops.formula import EVAL_EXP, evaluate_formula
-from ontask.dataops.pandas import get_table_row_by_index
-from ontask.dataops.sql.row_queries import get_row, get_rows
+from ontask.dataops import formula, pandas, sql
 
 
 def _render_tuple_result(
@@ -76,9 +74,9 @@ def action_condition_evaluation(
     for condition in conditions:
         # Evaluate the condition
         try:
-            condition_eval[condition['name']] = evaluate_formula(
+            condition_eval[condition['name']] = formula.evaluate(
                 condition['formula'],
-                EVAL_EXP,
+                formula.EVAL_EXP,
                 row_values)
         except ontask.OnTaskException:
             # Something went wrong evaluating a condition. Stop.
@@ -112,9 +110,9 @@ def get_action_evaluation_context(
         for condition in conditions:
             # Evaluate the condition
             try:
-                condition_eval[condition['name']] = evaluate_formula(
+                condition_eval[condition['name']] = formula.evaluate(
                     condition['formula'],
-                    EVAL_EXP,
+                    formula.EVAL_EXP,
                     row_values)
             except ontask.OnTaskException:
                 # Something went wrong evaluating a condition. Stop.
@@ -162,7 +160,7 @@ def evaluate_action(
              provided) and the column value.
     """
     # Get the table data
-    rows = get_rows(
+    rows = sql.get_rows(
         action.workflow.get_data_frame_table_name(),
         filter_formula=action.get_filter_formula())
     list_of_renders = []
@@ -207,14 +205,14 @@ def get_row_values(
 
     # If row_idx is an integer, get the data by index, otherwise, by key
     if isinstance(row_idx, int):
-        row = get_table_row_by_index(
+        row = pandas.get_table_row_by_index(
             action.workflow,
             filter_formula,
             row_idx,
         )
     else:
 
-        row = get_row(
+        row = sql.get_row(
             action.workflow.get_data_frame_table_name(),
             row_idx[0],
             row_idx[1],

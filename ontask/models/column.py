@@ -11,7 +11,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
 import pytz
 
-from ontask.dataops.pandas.datatypes import pandas_datatype_names
+from ontask.dataops import pandas
 from ontask.models.basic import CHAR_FIELD_MID_SIZE, NameAndDescription
 from ontask.models.logs import Log
 
@@ -49,7 +49,7 @@ class Column(NameAndDescription):
         blank=False,
         choices=[
             (dtype, dtype)
-            for __, dtype in list(pandas_datatype_names.items())],
+            for __, dtype in list(pandas.datatype_names.items())],
         verbose_name=_('type of data to store in the column'))
 
     # Boolean stating if the column is a unique key

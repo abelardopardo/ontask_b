@@ -7,8 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
-from ontask.dataops.formula import get_variables
-from ontask.dataops.sql.column_queries import add_column_to_db
+from ontask.dataops import formula, sql
 from ontask.workflow.serialize_column import (
     ColumnNameSerializer, ColumnSerializer,
 )
@@ -66,7 +65,7 @@ def _create_columns(new_columns, context):
 
     # Add columns to DB
     for col in new_columns:
-        add_column_to_db(
+        sql.add_column_to_db(
             workflow.get_data_frame_table_name(),
             col.name,
             col.data_type)
@@ -168,7 +167,7 @@ class ConditionSerializer(serializers.ModelSerializer):
                 else:
                     raise Exception(_('Incorrect column data'))
             else:
-                cnames = get_variables(condition_obj.formula)
+                cnames = formula.get_variables(condition_obj.formula)
 
             # Set the condition values
             condition_obj.columns.set(

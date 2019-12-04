@@ -17,7 +17,7 @@ from ontask import models
 from ontask.action.services.edit_manager import ActionEditManager
 from ontask.action.services.run_manager import ActionRunManager
 from ontask.core import DataTablesServerSidePaging, OperationsColumn
-from ontask.dataops.sql import search_table
+from ontask.dataops import sql
 
 
 class ColumnSelectedTable(tables.Table):
@@ -153,7 +153,7 @@ def _create_initial_qs(
         order_col_name = columns[dt_page.order_col].name
 
     # Get the query set (including the filter in the action)
-    qs = search_table(
+    qs = sql.search_table(
         table_name,
         dt_page.search_value,
         columns_to_search=[col.name for col in columns],

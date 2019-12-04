@@ -4,10 +4,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.dataops.pandas import (
-    is_unique_column, load_table, pandas_datatype_names,
-)
-from ontask.dataops.sql import is_column_unique
+from ontask.dataops import pandas, sql
 
 
 def _check_logs(workflow: models.Workflow) -> bool:
@@ -30,7 +27,7 @@ def check_wf_df(workflow: models.Workflow) -> bool:
     :return: Boolean stating the result of the check. True: Correct.
     """
     # Get the df
-    df = load_table(workflow.get_data_frame_table_name())
+    df = pandas.load_table(workflow.get_data_frame_table_name())
 
     # Set values in case there is no df
     if df is not None:
@@ -55,7 +52,7 @@ def check_wf_df(workflow: models.Workflow) -> bool:
     # Identical data types
     # for n1, n2 in zip(wf_cols, df_col_names):
     for col in wf_cols:
-        df_dt = pandas_datatype_names.get(df[col.name].dtype.name)
+        df_dt = pandas.datatype_names.get(df[col.name].dtype.name)
         if col.data_type == 'boolean' and df_dt == 'string':
             # This is the case of a column with Boolean and Nulls
             continue
@@ -66,7 +63,7 @@ def check_wf_df(workflow: models.Workflow) -> bool:
 
     # Verify that the columns marked as unique are preserved
     for col in workflow.columns.filter(is_key=True):
-        assert is_unique_column(df[col.name]), (
+        assert pandas.is_unique_column(df[col.name]), (
             'Column {0} should be unique.'.format(col.name)
         )
 
@@ -103,7 +100,7 @@ def check_key_columns(workflow: models.Workflow):
     col_name = next(
         (
             col.name for col in workflow.columns.filter(is_key=True)
-            if not is_column_unique(
+            if not sql.is_column_unique(
                 workflow.get_data_frame_table_name(),
                 col.name)),
         None)
