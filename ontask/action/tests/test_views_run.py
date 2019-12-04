@@ -21,7 +21,8 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
     fixtures = ['initial_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
-        'test',
+        'ontask',
+        'tests',
         'initial_workflow',
         'initial_workflow.sql',
     )
@@ -177,7 +178,8 @@ class ActionViewRunEmailListAction(tests.OnTaskTestCase):
     fixtures = ['initial_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
-        'test',
+        'ontask',
+        'tests',
         'initial_workflow',
         'initial_workflow.sql',
     )
@@ -242,7 +244,8 @@ class ActionViewRunJSONAction(tests.OnTaskTestCase):
     fixtures = ['initial_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
-        'test',
+        'ontask',
+        'tests',
         'initial_workflow',
         'initial_workflow.sql',
     )
@@ -361,7 +364,8 @@ class ActionViewRunJSONListAction(tests.OnTaskTestCase):
     fixtures = ['initial_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
-        'test',
+        'ontask',
+        'tests',
         'initial_workflow',
         'initial_workflow.sql',
     )
@@ -413,7 +417,8 @@ class ActionViewRunCanvasEmailAction(tests.OnTaskTestCase):
     fixtures = ['initial_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
-        'test',
+        'ontask',
+        'tests',
         'initial_workflow',
         'initial_workflow.sql',
     )
