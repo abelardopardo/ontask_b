@@ -10,7 +10,6 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask import models
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
-from ontask.core.checks import check_wf_df
 from ontask.dataops.formula import has_variable
 import test
 
@@ -28,14 +27,6 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
     wflow_name = 'wflow1'
     wflow_desc = 'description text for workflow 1'
     wflow_empty = 'The workflow does not have data'
-
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     # Test action rename
     def test_action_00_rename(self):
@@ -347,9 +338,6 @@ class ActionActionEdit(test.OnTaskLiveTestCase):
         # This column is now added by Celery which needs to be running
         # with the same DB configuration (which is not).
         # self.assertIn('EmailRead_1', self.selenium.page_source)
-
-        # Make sure the workflow is consistent
-        check_wf_df(models.Workflow.objects.get(name=self.wflow_name))
 
         # End of session
         self.logout()

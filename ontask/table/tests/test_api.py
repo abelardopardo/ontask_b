@@ -10,10 +10,7 @@ import pandas as pd
 from rest_framework.authtoken.models import Token
 
 from ontask import models
-from ontask.core.checks import check_wf_df
-from ontask.dataops.pandas import (
-    detect_datetime_columns, load_table,
-)
+from ontask.dataops.pandas import detect_datetime_columns, load_table
 from ontask.table.serializers import string_to_df
 from ontask.table.serializers.pandas import df_to_string
 from ontask.workflow.services.column_crud import delete_column
@@ -197,9 +194,6 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, df)
 
-        # Check that the rest of the information is correct
-        self.assertTrue(check_wf_df(workflow))
-
     def test_table_json_create_error(self):
         # Create a second workflow
         response = self.client.post(
@@ -250,10 +244,6 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, df)
 
-        # Check that the rest of the
-        # information is correct
-        self.assertTrue(check_wf_df(workflow))
-
     def test_table_JSON_update(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
@@ -278,11 +268,6 @@ class TableApiCreate(TableApiBase):
 
         # Compare both elements
         self.compare_tables(r_df, df)
-
-        # Check that the rest of the
-        # information is correct
-        workflow = models.Workflow.objects.get(id=workflow.id)
-        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_update(self):
         # Get the only workflow in the fixture
@@ -309,11 +294,6 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, df)
 
-        # Check that the rest of the
-        # information is correct
-        workflow = models.Workflow.objects.get(id=workflow.id)
-        self.assertTrue(check_wf_df(workflow))
-
     def test_table_JSON_flush(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
@@ -323,9 +303,6 @@ class TableApiCreate(TableApiBase):
             'table:api_ops',
             kwargs={'wid': workflow.id}))
 
-        workflow = models.Workflow.objects.all()[0]
-        self.assertTrue(check_wf_df(workflow))
-
     def test_table_pandas_flush(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
@@ -333,9 +310,6 @@ class TableApiCreate(TableApiBase):
         # Flush the data in the table
         response = self.client.delete(
             reverse('table:api_pops', kwargs={'wid': workflow.id}))
-
-        workflow = models.Workflow.objects.all()[0]
-        self.assertTrue(check_wf_df(workflow))
 
 
 class TableApiMerge(TableApiBase):
@@ -360,7 +334,6 @@ class TableApiMerge(TableApiBase):
 
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, df)
-        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_get(self):
         # Get the only workflow in the fixture
@@ -380,7 +353,6 @@ class TableApiMerge(TableApiBase):
 
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, df)
-        self.assertTrue(check_wf_df(workflow))
 
     # Merge and create an empty dataset
     def test_table_JSON_merge_to_empty(self):
@@ -402,10 +374,6 @@ class TableApiMerge(TableApiBase):
             response.data['detail'],
             'Unable to perform merge operation: '
             + 'Merge operation produced a result with no rows')
-
-        # Check for df/wf consistency
-        workflow = models.Workflow.objects.all()[0]
-        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_to_empty(self):
         # Get the only workflow in the fixture
@@ -429,10 +397,6 @@ class TableApiMerge(TableApiBase):
                          'Unable to perform merge operation: '
                          + 'Merge operation produced a result with no rows')
 
-        # Check for df/wf consistency
-        workflow = models.Workflow.objects.all()[0]
-        self.assertTrue(check_wf_df(workflow))
-
     # Merge with inner values
     def test_table_JSON_merge_to_inner(self):
         # Get the only workflow in the fixture
@@ -454,9 +418,6 @@ class TableApiMerge(TableApiBase):
 
         # Result should have two rows
         self.assertEqual(workflow.nrows, 2)
-
-        # Check for df/wf consistency
-        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_to_inner(self):
         # Get the only workflow in the fixture
@@ -482,11 +443,8 @@ class TableApiMerge(TableApiBase):
         # Result should have two rows
         self.assertEqual(workflow.nrows, 2)
 
-        # Check for df/wf consistency
-        self.assertTrue(check_wf_df(workflow))
-
-    # Merge with outer values
     def test_table_JSON_merge_to_outer(self):
+        """Merge with outer values."""
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -517,9 +475,6 @@ class TableApiMerge(TableApiBase):
 
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 4)
-
-        # Check for df/wf consistency
-        self.assertTrue(check_wf_df(workflow))
 
     def test_table_pandas_merge_to_outer(self):
         # Get the only workflow in the fixture
@@ -556,9 +511,6 @@ class TableApiMerge(TableApiBase):
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 4)
 
-        # Check for df/wf consistency
-        self.assertTrue(check_wf_df(workflow))
-
     # Merge with left values
     def test_table_JSON_merge_to_left(self):
         # Get the only workflow in the fixture
@@ -593,9 +545,6 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(df[df['sid'] == 1]['newcol'].values[0],
                          self.src_df['newcol'][0])
 
-        # Check for df/wf consistency
-        self.assertTrue(check_wf_df(workflow))
-
     def test_table_pandas_merge_to_left(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
@@ -623,9 +572,6 @@ class TableApiMerge(TableApiBase):
         df = load_table(workflow.get_data_frame_table_name())
         self.assertEqual(df[df['sid'] == 1]['newcol'].values[0],
                          self.src_df['newcol'][0])
-
-        # Check for df/wf consistency
-        self.assertTrue(check_wf_df(workflow))
 
     # Merge with outer values but producing NaN everywhere
     def test_table_JSON_merge_to_outer_NaN(self):
@@ -677,9 +623,6 @@ class TableApiMerge(TableApiBase):
         # Compare both elements and check wf df consistency
         self.compare_tables(df, new_df)
 
-        # Check for df/wf consistency
-        self.assertTrue(check_wf_df(workflow))
-
     def test_table_pandas_merge_to_outer_NaN(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
@@ -728,6 +671,3 @@ class TableApiMerge(TableApiBase):
 
         # Compare both elements and check wf df consistency
         self.compare_tables(df, new_df)
-
-        # Check for df/wf consistency
-        self.assertTrue(check_wf_df(workflow))

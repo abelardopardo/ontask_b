@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views implementing CRUD operations with workflows."""
-from builtins import range
 from typing import Optional
 
 from django import http
@@ -85,11 +84,6 @@ def detail(
     # Safety check for consistency (only in development)
     if settings.DEBUG:
         check_wf_df(workflow)
-
-        # Columns are properly numbered
-        cpos = workflow.columns.values_list('position', flat=True)
-        rng = range(1, len(cpos) + 1)
-        assert sorted(cpos) == list(rng)
 
     return render(
         request,

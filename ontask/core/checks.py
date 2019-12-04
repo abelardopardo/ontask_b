@@ -10,7 +10,17 @@ from ontask.dataops.pandas import (
 from ontask.dataops.sql import is_column_unique
 
 
-def check_wf_df(workflow):
+def _check_logs(workflow: models.Workflow) -> bool:
+    """Check that all logs are correctly created.
+
+    :param workflow: Workflow being processed.
+    :result: True or a failed assertion
+    """
+    assert (workflow.logs.exclude(name__in=models.Log.LOG_TYPES).count() == 0)
+    return True
+
+
+def check_wf_df(workflow: models.Workflow) -> bool:
     """Check consistency between Workflow info and the data frame.
 
     Check the consistency between the information stored in the workflow
@@ -59,6 +69,24 @@ def check_wf_df(workflow):
         assert is_unique_column(df[col.name]), (
             'Column {0} should be unique.'.format(col.name)
         )
+
+    # Columns are properly numbered
+    cpos = workflow.columns.values_list('position', flat=True)
+    rng = range(1, len(cpos) + 1)
+    assert sorted(cpos) == list(rng)
+
+    return True
+
+
+def sanity_checks() -> bool:
+    """Perform various sanity checks for consistency.
+
+    :result: True or an assertion fail
+    """
+    for workflow in models.Workflow.objects.all():
+        check_wf_df(workflow)
+
+        _check_logs(workflow)
 
     return True
 
