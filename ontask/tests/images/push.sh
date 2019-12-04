@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rsync -ahvz *.png ../../docs_src/scaptures
+rsync -ahvz *.png ../../../docs_src/scaptures
