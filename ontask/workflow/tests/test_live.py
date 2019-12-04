@@ -9,13 +9,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ontask import OnTaskSharedState, models
+from ontask import OnTaskSharedState, models, tests
 from ontask.core.checks import check_wf_df
 from ontask.dataops.pandas import database, destroy_db_engine
-import test
 
 
-class WorkflowInitial(test.OnTaskLiveTestCase):
+class WorkflowInitial(tests.OnTaskLiveTestCase):
 
     def setUp(self):
         """Create the required users."""
@@ -32,7 +31,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Create the workflow
-        self.create_new_workflow(test.wflow_name, test.wflow_desc)
+        self.create_new_workflow(tests.wflow_name, tests.wflow_desc)
 
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
@@ -189,7 +188,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Create the workflow
-        self.create_new_workflow(test.wflow_name, test.wflow_desc)
+        self.create_new_workflow(tests.wflow_name, tests.wflow_desc)
 
         # Go to the CSV upload step 1
         self.selenium.find_element_by_xpath(
@@ -247,7 +246,7 @@ class WorkflowInitial(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowModify(test.OnTaskLiveTestCase):
+class WorkflowModify(tests.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -270,7 +269,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Go to the details page
-        self.access_workflow_from_home_page(test.wflow_name)
+        self.access_workflow_from_home_page(tests.wflow_name)
 
         # Go to column details
         self.go_to_details()
@@ -333,7 +332,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Open the workflow
-        self.access_workflow_from_home_page(test.wflow_name)
+        self.access_workflow_from_home_page(tests.wflow_name)
 
         # Go to the details page
         self.go_to_details()
@@ -396,7 +395,7 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowAttribute(test.OnTaskLiveTestCase):
+class WorkflowAttribute(tests.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -412,7 +411,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(test.wflow_name)
+        self.access_workflow_from_home_page(tests.wflow_name)
 
         # Click on the more-ops and then attributes button
         self.go_to_attribute_page()
@@ -494,7 +493,7 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowShare(test.OnTaskLiveTestCase):
+class WorkflowShare(tests.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -508,7 +507,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(test.wflow_name)
+        self.access_workflow_from_home_page(tests.wflow_name)
 
         # Click on the share
         self.go_to_workflow_share()
@@ -630,7 +629,7 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowImport(test.OnTaskLiveTestCase):
+class WorkflowImport(tests.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -674,7 +673,7 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         )
 
         # Check elements in workflow and in newwf
-        w1 = models.Workflow.objects.get(name=test.wflow_name)
+        w1 = models.Workflow.objects.get(name=tests.wflow_name)
         w2 = models.Workflow.objects.get(name='newwf')
 
         # Equal descriptions

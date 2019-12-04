@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+"""Test the table API.s"""
 import os
 
 from django.conf import settings
@@ -9,15 +9,14 @@ from django.shortcuts import reverse
 import pandas as pd
 from rest_framework.authtoken.models import Token
 
-from ontask import models
+from ontask import models, tests
 from ontask.dataops.pandas import detect_datetime_columns, load_table
 from ontask.table.serializers import string_to_df
 from ontask.table.serializers.pandas import df_to_string
 from ontask.workflow.services.column_crud import delete_column
-import test
 
 
-class TableApiBase(test.OnTaskApiTestCase):
+class TableApiBase(tests.OnTaskApiTestCase):
     fixtures = ['simple_table']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -165,7 +164,7 @@ class TableApiCreate(TableApiBase):
         # Create a second workflow
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Get the only workflow in the fixture
@@ -193,7 +192,7 @@ class TableApiCreate(TableApiBase):
         # Create a second workflow
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Get the only workflow in the fixture
@@ -214,7 +213,7 @@ class TableApiCreate(TableApiBase):
         # Create a second workflow
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': test.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Get the only workflow in the fixture

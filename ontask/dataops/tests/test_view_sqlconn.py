@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """Test views to manipulate the SQL connections."""
-import test
-
 from rest_framework import status
 
-from ontask import models
+from ontask import models, tests
 
 
-class DataopsViewSQLConnections(test.OnTaskTestCase):
+class DataopsViewSQLConnections(tests.OnTaskTestCase):
     """Test the SQL connection views."""
 
     fixtures = ['empty_wflow']
@@ -24,7 +22,7 @@ class DataopsViewSQLConnections(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class DataopsViewSQLConnectionsAdmin(test.OnTaskTestCase):
+class DataopsViewSQLConnectionsAdmin(tests.OnTaskTestCase):
     """Test the SQL connection views."""
 
     fixtures = ['empty_wflow']

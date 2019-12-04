@@ -7,13 +7,12 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 
-from ontask import models
+from ontask import models, tests
 from ontask.action.views.import_export import do_import_action
 from ontask.dataops.pandas import load_table
-import test
 
 
-class EmailActionTracking(test.OnTaskTestCase):
+class EmailActionTracking(tests.OnTaskTestCase):
     """Test Email tracking."""
 
     fixtures = ['simple_email_action']
@@ -53,7 +52,7 @@ class EmailActionTracking(test.OnTaskTestCase):
             data_frame = load_table(workflow.get_data_frame_table_name())
 
             # Check that the results have been updated in the DB (to 1)
-            for uemail in [x[1] for x in test.user_info
+            for uemail in [x[1] for x in tests.user_info
                            if x[1].startswith('student')]:
                 self.assertEqual(
                     int(data_frame.loc[data_frame['email'] == uemail,
@@ -61,7 +60,7 @@ class EmailActionTracking(test.OnTaskTestCase):
                     idx
                 )
 
-class ActionImport(test.OnTaskTestCase):
+class ActionImport(tests.OnTaskTestCase):
     """Test action import."""
 
     fixtures = ['simple_email_action']

@@ -6,10 +6,10 @@ import os
 from django.conf import settings
 from rest_framework import status
 
-import test
+from ontask import tests
 
 
-class WorkflowTestViewImportExport(test.OnTaskTestCase):
+class WorkflowTestViewImportExport(tests.OnTaskTestCase):
     """Test column views."""
 
     fixtures = ['initial_workflow']

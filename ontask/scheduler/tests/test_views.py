@@ -8,11 +8,10 @@ from django.conf import settings
 import pytz
 from rest_framework import status
 
-from ontask import models
-import test
+from ontask import models, tests
 
 
-class SchedulerForms(test.OnTaskTestCase):
+class SchedulerForms(tests.OnTaskTestCase):
     """Test schedule creation through forms."""
 
     user_email = 'instructor01@bogus.com'

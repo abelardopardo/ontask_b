@@ -6,12 +6,11 @@ import os
 from django.conf import settings
 from rest_framework import status
 
-from ontask import entity_prefix, models
-import test
-from test.compare import compare_workflows
+from ontask import entity_prefix, models, tests
+from ontask.tests.compare import compare_workflows
 
 
-class WorkflowTestViewWorkflowCrud(test.OnTaskTestCase):
+class WorkflowTestViewWorkflowCrud(tests.OnTaskTestCase):
     """Test workflow views."""
 
     fixtures = ['initial_workflow']

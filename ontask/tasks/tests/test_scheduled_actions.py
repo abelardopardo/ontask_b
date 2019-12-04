@@ -12,12 +12,11 @@ from django.db import connection
 from psycopg2 import sql
 import pytz
 
-from ontask import OnTaskSharedState, models, tasks
+from ontask import OnTaskSharedState, models, tasks, tests
 from ontask.celery import app
-import test
 
 
-class ScheduledOperationTaskTestCase(test.OnTaskTestCase):
+class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
     """Test the functions to execute through celery."""
 
     fixtures = ['schedule_actions']

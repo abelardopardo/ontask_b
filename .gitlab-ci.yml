@@ -28,9 +28,11 @@ test:
     - coverage run -a ./manage.py test -v 2 ontask.dataops
     - coverage run -a ./manage.py test -v 2 ontask.table
     - coverage run -a ./manage.py test -v 2 ontask.action
-    - coverage run -a ./manage.py test -v 2 ontask.tests
     - coverage run -a ./manage.py test -v 2 ontask.scheduler
     - coverage run -a ./manage.py test -v 2 ontask.tasks
+    - coverage run -a ./manage.py test -v 2 ontask.tests
+    - coverage report
+    - coverage html
   artifacts:
     paths:
       - htmlcov
@@ -40,14 +42,6 @@ test:
 build_doc:
   stage: Build doc
   script:
-    - python3 manage.py collectstatic --no-input
-    - coverage run -a ./manage.py test -v 2 test.create_screen_captures
-    - coverage run -a ./manage.py test -v 2 test.scenario_01_captures
-    - coverage run -a ./manage.py test -v 2 test.scenario_02_captures
-    - coverage run -a ./manage.py test -v 2 test.scenario_03_captures
-    - coverage run -a ./manage.py test -v 2 test.tutorial_captures
-    - coverage report
-    - coverage html
     - cd test/images
     - bash push.sh
     - cd ../..

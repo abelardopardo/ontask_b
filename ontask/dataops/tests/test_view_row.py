@@ -7,12 +7,11 @@ from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
-from ontask.dataops.sql import get_row
-from ontask.dataops.views import row_update
-import test
+from ontask import tests
+from ontask.dataops import sql, views
 
 
-class DataopsViewsRow(test.OnTaskTestCase):
+class DataopsViewsRow(tests.OnTaskTestCase):
     """Test the views to create and update the row values."""
 
     fixtures = ['test_condition_evaluation']
@@ -74,7 +73,7 @@ class DataopsViewsRow(test.OnTaskTestCase):
         self.workflow.refresh_from_db()
         self.assertEqual(nrows + 1, self.workflow.nrows)
 
-        row_val = get_row(
+        row_val = sql.get_row(
             self.workflow.get_data_frame_table_name(),
             key_name='key',
             key_value=9)
@@ -111,10 +110,10 @@ class DataopsViewsRow(test.OnTaskTestCase):
                 '___ontask___upload_8': '06/05/2019 19:23'}
         )
         request = self.add_middleware(request)
-        resp = row_update(request)
+        resp = views.row_update(request)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
-        row_val = get_row(
+        row_val = sql.get_row(
             self.workflow.get_data_frame_table_name(),
             key_name='key',
             key_value=8)

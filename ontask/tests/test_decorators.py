@@ -5,10 +5,10 @@ import os
 
 from django.conf import settings
 
-import test
+from ontask import tests
 
 
-class DecoratorAnomalies(test.OnTaskTestCase):
+class DecoratorAnomalies(tests.OnTaskTestCase):
     """Test the detection of anomalies when using decorators."""
 
     fixtures = ['initial_workflow']

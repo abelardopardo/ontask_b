@@ -7,10 +7,10 @@ from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework import status
 
-import test
+from ontask import tests
 
 
-class ActionViewRunZIP(test.OnTaskTestCase):
+class ActionViewRunZIP(tests.OnTaskTestCase):
     """Test the view run a ZIP action."""
 
     fixtures = ['initial_workflow']
@@ -35,7 +35,6 @@ class ActionViewRunZIP(test.OnTaskTestCase):
         # Request ZIP action execution
         resp = self.get_response('action:zip_action', {'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
-
 
         # Post the execution request
         resp = self.get_response(

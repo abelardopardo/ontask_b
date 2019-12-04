@@ -7,10 +7,10 @@ from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
-import test
+from ontask import tests
 
 
-class BackToHome(test.OnTaskTestCase):
+class BackToHome(tests.OnTaskTestCase):
     """Test redirection to home page when no workflow is set."""
 
     fixtures = ['initial_workflow']

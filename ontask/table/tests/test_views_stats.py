@@ -6,11 +6,11 @@ import os
 from django.conf import settings
 from rest_framework import status
 
-from ontask.dataops.pandas import get_table_row_by_index
-import test
+from ontask import tests
+from ontask.dataops import pandas
 
 
-class TableTestStatView(test.OnTaskTestCase):
+class TableTestStatView(tests.OnTaskTestCase):
     """Test stat views."""
 
     fixtures = ['simple_table']
@@ -43,7 +43,7 @@ class TableTestStatView(test.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Get one of the rows
-        r_val = get_table_row_by_index(self.workflow, None, 1)
+        r_val = pandas.get_table_row_by_index(self.workflow, None, 1)
         resp = self.get_response(
             'table:stat_table',
             req_params={

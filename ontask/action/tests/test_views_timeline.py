@@ -6,10 +6,10 @@ import os
 from django.conf import settings
 from rest_framework import status
 
-import test
+from ontask import tests
 
 
-class ActionViewTimeline(test.OnTaskTestCase):
+class ActionViewTimeline(tests.OnTaskTestCase):
     """Test the view to show the timeline for actions."""
 
     fixtures = ['initial_workflow']

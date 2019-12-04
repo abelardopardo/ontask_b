@@ -6,12 +6,11 @@ import os
 from django.conf import settings
 from rest_framework import status
 
-from ontask import models
+from ontask import models, tests
 from ontask.dataops.pandas import load_table
-import test
 
 
-class WorkflowTestViewColumnCrud(test.OnTaskTestCase):
+class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
     """Test column views."""
 
     fixtures = ['initial_workflow']

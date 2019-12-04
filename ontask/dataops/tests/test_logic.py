@@ -10,17 +10,16 @@ from django.contrib.auth import get_user_model
 import pandas as pd
 from rest_framework import status
 
-from ontask import models
-from ontask.dataops.forms.upload import load_df_from_csvfile
+from ontask import models, tests
+from ontask.dataops import services
 from ontask.dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
 from ontask.dataops.pandas import (
     get_subframe, load_table, perform_dataframe_upload_merge, store_table,
 )
 from ontask.dataops.sql import COLUMN_NAME_SIZE, get_rows
-import test
 
 
-class DataopsMatrixManipulation(test.OnTaskTestCase):
+class DataopsMatrixManipulation(tests.OnTaskTestCase):
     fixtures = ['test_merge']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -70,9 +69,12 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
             # Get the workflow data frame
             df_dst = load_table(self.workflow.get_data_frame_table_name())
         else:
-            df_dst = load_df_from_csvfile(io.StringIO(self.csv1), 0, 0)
+            df_dst = services.load_df_from_csvfile(
+                io.StringIO(self.csv1),
+                0,
+                0)
 
-        df_src = load_df_from_csvfile(io.StringIO(self.csv2), 0, 0)
+        df_src = services.load_df_from_csvfile(io.StringIO(self.csv2), 0, 0)
         store_table(df_src, 'TEMPORARY_TABLE')
         df_src = load_table('TEMPORARY_TABLE')
         # Fix the merge_info fields.
@@ -86,7 +88,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
     def test_df_equivalent_after_sql(self):
 
         # Parse the CSV
-        df_source = load_df_from_csvfile(
+        df_source = services.load_df_from_csvfile(
             io.StringIO(self.csv1),
             0,
             0)
@@ -135,7 +137,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
         self.assertEquals(result, None)
 
 
-class FormulaEvaluation(test.OnTaskTestCase):
+class FormulaEvaluation(tests.OnTaskTestCase):
     skel = {
         'condition': 'AND',
         'not': False,
@@ -642,7 +644,7 @@ class FormulaEvaluation(test.OnTaskTestCase):
             0)
 
 
-class ConditionSetEvaluation(test.OnTaskTestCase):
+class ConditionSetEvaluation(tests.OnTaskTestCase):
     fixtures = ['test_condition_evaluation']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -692,7 +694,7 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
             assert cond_eval1 == cond_eval2
 
 
-class ConditionNameWithSymbols(test.OnTaskTestCase):
+class ConditionNameWithSymbols(tests.OnTaskTestCase):
     fixtures = ['symbols_in_condition_name']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -737,7 +739,7 @@ class ConditionNameWithSymbols(test.OnTaskTestCase):
                     condition_value)
 
 
-class ColumnNameTooLarge(test.OnTaskTestCase):
+class ColumnNameTooLarge(tests.OnTaskTestCase):
     """Test the storage of a dataframe with column that are too large."""
 
     csv = """key,text1,text2,double1,double2,bool1,bool2,date1,date2
@@ -752,7 +754,7 @@ class ColumnNameTooLarge(test.OnTaskTestCase):
 
     def upload_column_name_too_long(self):
         """Use the table store to detect column names that are too long."""
-        data_frame = load_df_from_csvfile(io.StringIO(self.csv), 0, 0)
+        data_frame = services.load_df_from_csvfile(io.StringIO(self.csv), 0, 0)
 
         self.assertTrue(
             any(len(cname) > COLUMN_NAME_SIZE for cname in data_frame.columns))

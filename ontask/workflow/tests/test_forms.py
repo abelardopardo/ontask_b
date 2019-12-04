@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """Test cases for the forms in the workflow package."""
+from ontask import tests
 from ontask.workflow import forms
-import test
 
 
-class WorkflowFormTest(test.OnTaskTestCase):
+class WorkflowFormTest(tests.OnTaskTestCase):
     # Valid data
     def test_workflow_valid(self):
         form = forms.WorkflowForm(
