@@ -46,12 +46,9 @@ def show_timeline(
         models.Log.ACTION_RUN_JSON_LIST,
         models.Log.ACTION_RUN_EMAIL_LIST,
         models.Log.ACTION_SURVEY_INPUT,
-        models.Log.SCHEDULE_CANVAS_EMAIL_EDIT,
-        models.Log.SCHEDULE_EMAIL_EDIT,
-        models.Log.SCHEDULE_JSON_EDIT,
-        models.Log.SCHEDULE_JSON_LIST_EDIT,
-        models.Log.SCHEDULE_EMAIL_LIST_EDIT,
-    ]
+        models.Log.SCHEDULE_CREATE,
+        models.Log.SCHEDULE_EDIT,
+        models.Log.SCHEDULE_DELETE]
 
     # Filter the logs to display and transform into values (process the json
     # and the long value for the log name
@@ -62,7 +59,9 @@ def show_timeline(
          'payload': json.dumps(log.payload, indent=2),
          'action_name': log.payload['action'],
          'action_id': log.payload['action_id']}
-        for log in logs.filter(name__in=event_names)
+        for log in logs.filter(
+            name__in=event_names
+        ).exclude(payload__action=None)
     ]
 
     return render(
