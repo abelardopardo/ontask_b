@@ -110,7 +110,8 @@ class ScreenTestFixture(ScreenTests):
     fixtures = ['test/initial_workflow/initial_workflow.json']
     filename = os.path.join(
         settings.BASE_DIR(),
-        'test',
+        'ontask',
+        'tests',
         'initial_workflow',
         'initial_workflow.sql'
     )
@@ -337,7 +338,8 @@ class ScreenTestFixture(ScreenTests):
         )
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                'test',
+                'ontask',
+                'tests',
                 'initial_workflow',
                 'initial_workflow.csv')
         )
