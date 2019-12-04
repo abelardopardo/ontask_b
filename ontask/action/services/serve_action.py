@@ -19,7 +19,7 @@ from ontask.action.services.errors import (
     OnTaskActionSurveyDataNotFound,
     OnTaskActionSurveyNoTableData,
 )
-from ontask.dataops.sql import update_row
+from ontask.dataops import sql
 
 
 def serve_action_out(
@@ -137,7 +137,7 @@ def update_row_values(
     """
     keys, values, where_field, where_value = row_data
     # Execute the query
-    update_row(
+    sql.update_row(
         action.workflow.get_data_frame_table_name(),
         keys,
         values,

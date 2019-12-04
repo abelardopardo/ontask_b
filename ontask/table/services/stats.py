@@ -7,8 +7,7 @@ from django.utils.translation import ugettext as _
 from pandas import DataFrame
 
 from ontask import models
-from ontask.dataops.pandas import get_column_statistics, load_table
-from ontask.dataops.sql.row_queries import get_row
+from ontask.dataops import pandas, sql
 from ontask.visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 
 VISUALIZATION_WIDTH = 600
@@ -34,14 +33,14 @@ def _get_df_and_columns(
             return None
         columns_to_view = view.columns.filter(is_key=False)
 
-        df = load_table(
+        df = pandas.load_table(
             workflow.get_data_frame_table_name(),
             [col.name for col in columns_to_view],
             view.formula)
     else:
         # No view given, fetch the entire data frame
         columns_to_view = workflow.columns.filter(is_key=False)
-        df = load_table(
+        df = pandas.load_table(
             workflow.get_data_frame_table_name(),
             [col.name for col in columns_to_view])
 
@@ -120,10 +119,10 @@ def get_column_visualization_items(
     visualization HTML
     """
     # Get the dataframe
-    df = load_table(workflow.get_data_frame_table_name(), [column.name])
+    df = pandas.load_table(workflow.get_data_frame_table_name(), [column.name])
 
     # Extract the data to show at the top of the page
-    stat_data = get_column_statistics(df[column.name])
+    stat_data = pandas.get_column_statistics(df[column.name])
 
     visualizations = _get_column_visualisations(
         column,
@@ -158,7 +157,7 @@ def get_table_visualization_items(
 
     if bool(rowselect_key):
         template = 'table/stat_row.html'
-        row = get_row(
+        row = sql.get_row(
             workflow.get_data_frame_table_name(),
             rowselect_key,
             rowselect_val,

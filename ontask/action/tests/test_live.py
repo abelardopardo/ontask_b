@@ -11,7 +11,7 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask import models, tests
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
-from ontask.dataops.formula import has_variable
+from ontask.dataops import formula
 
 
 class ActionActionEdit(tests.OnTaskLiveTestCase):
@@ -356,7 +356,8 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
 
         # insert the first mark
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', "mark1");"""
+            """$('#id_text_content').summernote('editor.insertText', 
+            "mark1");"""
         )
 
         # Create filter.
@@ -375,7 +376,8 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', "mark2");"""
+            """$('#id_text_content').summernote('editor.insertText', 
+            "mark2");"""
         )
 
         # Modify the filter. Click in the edit filter button
@@ -394,7 +396,8 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', "mark3");"""
+            """$('#id_text_content').summernote('editor.insertText', 
+            "mark3");"""
         )
 
         # Click in the more ops and then the delete filter button
@@ -411,7 +414,8 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', "cmark1");"""
+            """$('#id_text_content').summernote('editor.insertText', 
+            "cmark1");"""
         )
 
         # Create condition. Click in the add condition button
@@ -430,7 +434,8 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         # insert the second mark
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', "cmark2");"""
+            """$('#id_text_content').summernote('editor.insertText', 
+            "cmark2");"""
         )
 
         # Modify the condition. Click in the condition edit button
@@ -448,7 +453,8 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         # insert the third mark
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', "cmark3");"""
+            """$('#id_text_content').summernote('editor.insertText', 
+            "cmark3");"""
         )
 
         # Delete the condition
@@ -792,13 +798,14 @@ class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
         # Attribute name is the correct one
         self.assertEqual(attributes['attribute name'], 'attribute value')
         # Column name is present in condition formula
-        self.assertTrue(has_variable(condition.formula, 'registered'))
+        self.assertTrue(formula.has_variable(condition.formula, 'registered'))
         # Column name is present in action_out text
         self.assertTrue('{{ registered }}' in action_out.text_content)
         # Attribute name is present in action_out text
         self.assertTrue('{{ attribute name }}' in action_out.text_content)
         # Column name is present in action-in filter
-        self.assertTrue(has_variable(action_out.get_filter_formula(), 'age'))
+        self.assertTrue(
+            formula.has_variable(action_out.get_filter_formula(), 'age'))
 
         # Login
         self.login('instructor01@bogus.com')
@@ -863,17 +870,19 @@ class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
         self.assertEqual(attributes['attribute name new'],
             'attribute value')
         # Column name is present in condition formula
-        self.assertFalse(has_variable(condition.formula,
+        self.assertFalse(formula.has_variable(
+            condition.formula,
             'registered'))
-        self.assertTrue(has_variable(condition.formula,
+        self.assertTrue(formula.has_variable(
+            condition.formula,
             'registered new'))
         # Column name is present in action_out text
         self.assertTrue('{{ registered new }}' in action_out.text_content)
         # Attribute name is present in action_out text
         self.assertTrue('{{ attribute name new }}' in action_out.text_content)
         # Column age is present in action-in filter
-        self.assertFalse(has_variable(filter_formula, 'age'))
-        self.assertTrue(has_variable(filter_formula, 'age new'))
+        self.assertFalse(formula.has_variable(filter_formula, 'age'))
+        self.assertTrue(formula.has_variable(filter_formula, 'age new'))
 
         # End of session
         self.logout()
@@ -1118,8 +1127,8 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         )
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-           """$('#id_text_content').summernote('editor.insertText',
-            "{0}");""".format(self.action_text)
+            """$('#id_text_content').summernote('editor.insertText',
+             "{0}");""".format(self.action_text)
         )
 
         # Insert the reference to the column

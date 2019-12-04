@@ -11,12 +11,7 @@ import pandas as pd
 from rest_framework import status
 
 from ontask import models, tests
-from ontask.dataops import services
-from ontask.dataops.formula import EVAL_EXP, EVAL_TXT, evaluate_formula
-from ontask.dataops.pandas import (
-    get_subframe, load_table, perform_dataframe_upload_merge, store_table,
-)
-from ontask.dataops.sql import COLUMN_NAME_SIZE, get_rows
+from ontask.dataops import formula, pandas, services, sql
 
 
 class DataopsMatrixManipulation(tests.OnTaskTestCase):
@@ -67,7 +62,8 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
         # Parse the two CSV strings and return as data frames
         if self.workflow:
             # Get the workflow data frame
-            df_dst = load_table(self.workflow.get_data_frame_table_name())
+            df_dst = pandas.load_table(
+                self.workflow.get_data_frame_table_name())
         else:
             df_dst = services.load_df_from_csvfile(
                 io.StringIO(self.csv1),
@@ -75,8 +71,8 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
                 0)
 
         df_src = services.load_df_from_csvfile(io.StringIO(self.csv2), 0, 0)
-        store_table(df_src, 'TEMPORARY_TABLE')
-        df_src = load_table('TEMPORARY_TABLE')
+        pandas.store_table(df_src, 'TEMPORARY_TABLE')
+        df_src = pandas.load_table('TEMPORARY_TABLE')
         # Fix the merge_info fields.
 
         self.merge_info['initial_column_names'] = list(df_src.columns)
@@ -94,10 +90,10 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
             0)
 
         # Store the DF in the DB
-        store_table(df_source, self.table_name)
+        pandas.store_table(df_source, self.table_name)
 
         # Load it from the DB
-        df_dst = load_table(self.table_name)
+        df_dst = pandas.load_table(self.table_name)
 
         # NaN in boolean columns are now None
         df_source['bool1'] = df_source['bool1'].where(
@@ -124,14 +120,14 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
 
         self.merge_info['how_merge'] = 'inner'
 
-        result = perform_dataframe_upload_merge(
+        result = pandas.perform_dataframe_upload_merge(
             self.workflow,
             df_dst,
             df_src,
             self.merge_info)
 
         # Load again the workflow data frame
-        load_table(self.workflow.get_data_frame_table_name())
+        pandas.load_table(self.workflow.get_data_frame_table_name())
 
         # Result must be correct (None)
         self.assertEquals(result, None)
@@ -179,22 +175,22 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         value2,
         value3):
 
-        result1 = evaluate_formula(
+        result1 = formula.evaluate(
             self.set_skel(
                 input_value,
                 op_value.format(''),
                 type_value,
                 value1),
-            EVAL_EXP,
+            formula.EVAL_EXP,
             {'variable': value2}
         )
-        result2 = evaluate_formula(
+        result2 = formula.evaluate(
             self.set_skel(
                 input_value,
                 op_value.format(''),
                 type_value,
                 value1),
-            EVAL_EXP,
+            formula.EVAL_EXP,
             {'variable': value3}
         )
 
@@ -208,22 +204,22 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         self.assertFalse(result2)
 
         if op_value.find('{0}') != -1:
-            result1 = evaluate_formula(
+            result1 = formula.evaluate(
                 self.set_skel(
                     input_value,
                     op_value.format('not_'),
                     type_value,
                     value1),
-                EVAL_EXP,
+                formula.EVAL_EXP,
                 {'variable': value2}
             )
-            result2 = evaluate_formula(
+            result2 = formula.evaluate(
                 self.set_skel(
                     input_value,
                     op_value.format('not_'),
                     type_value,
                     value1),
-                EVAL_EXP,
+                formula.EVAL_EXP,
                 {'variable': value3}
             )
 
@@ -250,9 +246,12 @@ class FormulaEvaluation(tests.OnTaskTestCase):
             type_value,
             value, 'v_' + type_value
         )
-        data_frame = load_table(self.test_table, self.test_columns, self.skel)
+        data_frame = pandas.load_table(
+            self.test_table,
+            self.test_columns,
+            self.skel)
         self.assertEqual(data_frame.shape[0], row_yes)
-        evaluate_formula(self.skel, EVAL_TXT)
+        formula.evaluate(self.skel, formula.EVAL_TXT)
 
         if op_value.find('{0}') != -1:
             self.set_skel(
@@ -261,12 +260,12 @@ class FormulaEvaluation(tests.OnTaskTestCase):
                 type_value,
                 value, 'v_' + type_value
             )
-            data_frame = load_table(
+            data_frame = pandas.load_table(
                 self.test_table,
                 self.test_columns,
                 self.skel)
             self.assertEqual(data_frame.shape[0], row_no)
-            evaluate_formula(self.skel, EVAL_TXT)
+            formula.evaluate(self.skel, formula.EVAL_TXT)
 
     def test_eval_node(self):
         #
@@ -526,7 +525,7 @@ class FormulaEvaluation(tests.OnTaskTestCase):
             columns=self.test_columns)
 
         # Store the data frame
-        store_table(df, 'TEST_TABLE')
+        pandas.store_table(df, 'TEST_TABLE')
 
         #
         # EQUAL
@@ -665,13 +664,13 @@ class ConditionSetEvaluation(tests.OnTaskTestCase):
         conditions = self.action.conditions.filter(is_filter=False)
 
         # Get dataframe
-        df = get_subframe(
+        df = pandas.get_subframe(
             wflow_table,
             filter_formula,
             column_names)
 
         # Get the query set
-        qs = get_rows(
+        qs = sql.get_rows(
             wflow_table,
             column_names=column_names,
             filter_formula=filter_formula)
@@ -681,15 +680,19 @@ class ConditionSetEvaluation(tests.OnTaskTestCase):
             row_value_df = dict(list(zip(column_names, df.loc[idx, :])))
             row_value_qs = dict(list(zip(column_names, row)))
 
-            cond_eval1 = [evaluate_formula(x.formula,
-                EVAL_EXP,
-                row_value_df)
-                          for x in conditions]
+            cond_eval1 = [
+                formula.evaluate(
+                    x.formula,
+                    formula.EVAL_EXP,
+                    row_value_df)
+                for x in conditions]
 
-            cond_eval2 = [evaluate_formula(x.formula,
-                EVAL_EXP,
-                row_value_qs)
-                          for x in conditions]
+            cond_eval2 = [
+                formula.evaluate(
+                    x.formula,
+                    formula.EVAL_EXP,
+                    row_value_qs)
+                for x in conditions]
 
             assert cond_eval1 == cond_eval2
 
@@ -712,7 +715,7 @@ class ConditionNameWithSymbols(tests.OnTaskTestCase):
             email='instructor01@bogus.com'
         ).first()
         attribute_value = list(self.workflow.attributes.values())[0]
-        df = load_table(self.workflow.get_data_frame_table_name())
+        df = pandas.load_table(self.workflow.get_data_frame_table_name())
 
         for action_name in [self.action_name1, self.action_name2]:
             action = self.workflow.actions.get(name=action_name)
@@ -756,11 +759,12 @@ class ColumnNameTooLarge(tests.OnTaskTestCase):
         """Use the table store to detect column names that are too long."""
         data_frame = services.load_df_from_csvfile(io.StringIO(self.csv), 0, 0)
 
-        self.assertTrue(
-            any(len(cname) > COLUMN_NAME_SIZE for cname in data_frame.columns))
+        self.assertTrue(any(
+            len(cname) > sql.COLUMN_NAME_SIZE
+            for cname in data_frame.columns))
 
         try:
-            store_table(data_frame, 'TABLE_NAME')
+            pandas.store_table(data_frame, 'TABLE_NAME')
         except Exception as exc:
             self.assertTrue('Column name is longer than' in str(exc))
         else:

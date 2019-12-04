@@ -12,6 +12,7 @@ from ontask.action.services.email import (
 from ontask.action.services.errors import (
     OnTaskActionRubricIncorrectContext, OnTaskActionSurveyDataNotFound,
     OnTaskActionSurveyNoTableData)
+from ontask.action.services.import_export import do_import_action
 from ontask.action.services.json import ActionManagerJSON, ActionManagerJSONList
 from ontask.action.services.manager_factory import (
     ACTION_PROCESS_FACTORY, ActionManagementFactory)

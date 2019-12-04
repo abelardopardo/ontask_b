@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-
+"""Screen captures for scenario 2"""
 import os
-from test import ScreenTests
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask.dataops.pandas import destroy_db_engine
+from ontask.tests import ScreenTests
 
 
 class Scenario2Captures(ScreenTests):
@@ -92,6 +91,3 @@ class Scenario2Captures(ScreenTests):
 
         # End of session
         self.logout()
-
-        # Close the db_engine
-        destroy_db_engine()

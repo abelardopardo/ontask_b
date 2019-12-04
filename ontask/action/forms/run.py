@@ -48,11 +48,8 @@ from django.db.models import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_correct_email, models
-from ontask.core import (
-    ONTASK_SUFFIX_LENGTH, forms as ontask_forms, )
-from ontask.dataops.sql.column_queries import is_column_unique
-from ontask.dataops.sql.row_queries import get_rows
-from ontask.models.basic import CHAR_FIELD_MID_SIZE
+from ontask.core import ONTASK_SUFFIX_LENGTH, forms as ontask_forms
+from ontask.dataops import sql
 
 # Format of column name to produce a Moodle compatible ZIP
 PARTICIPANT_RE = re.compile(r'^Participant \d+$')
@@ -83,7 +80,7 @@ class EmailSubjectFormBase(ontask_forms.FormWithPayload):
     """Subject field."""
 
     subject = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         strip=True,
         required=True,
         label=_('Email subject'))
@@ -102,7 +99,7 @@ class EmailSubjectFormBase(ontask_forms.FormWithPayload):
         """Set the size for the subject field."""
 
         widgets = {'subject': forms.TextInput(
-            attrs={'size': CHAR_FIELD_MID_SIZE})}
+            attrs={'size': models.CHAR_FIELD_MID_SIZE})}
 
 
 class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
@@ -200,7 +197,7 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
         self.store_fields_in_dict([('confirm_items', None)])
 
         # The given column must have unique values
-        if not is_column_unique(
+        if not sql.is_column_unique(
             self.action.workflow.get_data_frame_table_name(),
             pcolumn.name,
         ):
@@ -287,7 +284,7 @@ class EmailActionForm(
         # Check if the values in the item_column are correct emails
         pcolumn = form_data['item_column']
         try:
-            column_data = get_rows(
+            column_data = sql.get_rows(
                 self.action.workflow.get_data_frame_table_name(),
                 column_names=[pcolumn.name])
             if not all(is_correct_email(iname[0]) for iname in column_data):
@@ -455,7 +452,7 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
                 return form_data
 
             # Participant columns must match the pattern 'Participant [0-9]+'
-            pcolumn_data = get_rows(
+            pcolumn_data = sql.get_rows(
                 self.action.workflow.get_data_frame_table_name(),
                 column_names=[pcolumn.name])
             participant_error = any(
@@ -520,7 +517,7 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
                 _('No Canvas Service available for this action.'))
 
         # The given column for email destination has to have integers
-        user_ids = get_rows(
+        user_ids = sql.get_rows(
             self.action.workflow.get_data_frame_table_name(),
             column_names=[form_data['item_column'].name],
             filter_formula=self.action.get_filter_formula())
@@ -602,7 +599,7 @@ class ValueExcludeForm(ontask_forms.FormWithPayload):
 
         super().__init__(form_data, *args, **kwargs)
 
-        self.fields['exclude_values'].choices = get_rows(
+        self.fields['exclude_values'].choices = sql.get_rows(
             self.action.workflow.get_data_frame_table_name(),
             column_names=[self.column_name, self.column_name],
             filter_formula=self.action.get_filter_formula()).fetchall()

@@ -15,8 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 import pytz
 
 import ontask
-from ontask.dataops.formula import evaluation
-from ontask.dataops.sql import select_ids_all_false
+from ontask.dataops import formula, sql
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
 from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
@@ -196,7 +195,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
             # Workflow has a data frame and condition list is non empty
 
             # Get the list of indeces
-            self.rows_all_false = select_ids_all_false(
+            self.rows_all_false = sql.select_ids_all_false(
                 self.workflow.get_data_frame_table_name(),
                 filter_item.formula if filter_item else None,
                 cond_list.values_list('formula', flat=True),
@@ -312,7 +311,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
 
         # Rename the variable in all conditions
         for cond in self.conditions.all():
-            cond.formula = evaluation.rename_variable(
+            cond.formula = formula.rename_variable(
                 cond.formula, old_name, new_name)
             cond.save()
 

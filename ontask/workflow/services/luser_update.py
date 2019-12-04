@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext
 
 from ontask import models
-from ontask.dataops.sql import get_rows
+from ontask.dataops import sql
 
 RANDOM_PWD_LENGTH = 50
 
@@ -23,7 +23,7 @@ def do_workflow_update_lusers(workflow: models.Workflow, log_item: models.Log):
     :return: Changes in the lusers ManyToMany relationships
     """
     # Get the column content
-    emails = get_rows(
+    emails = sql.get_rows(
         workflow.get_data_frame_table_name(),
         column_names=[workflow.luser_email_column.name])
 

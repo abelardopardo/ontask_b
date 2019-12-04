@@ -8,8 +8,8 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 
 from ontask import models, tests
-from ontask.action.views.import_export import do_import_action
-from ontask.dataops.pandas import load_table
+from ontask.action import services
+from ontask.dataops import pandas
 
 
 class EmailActionTracking(tests.OnTaskTestCase):
@@ -49,7 +49,8 @@ class EmailActionTracking(tests.OnTaskTestCase):
 
             # Get the workflow and the data frame
             workflow = models.Workflow.objects.get(name=self.wflow_name)
-            data_frame = load_table(workflow.get_data_frame_table_name())
+            data_frame = pandas.load_table(
+                workflow.get_data_frame_table_name())
 
             # Check that the results have been updated in the DB (to 1)
             for uemail in [x[1] for x in tests.user_info
@@ -84,6 +85,6 @@ class ActionImport(tests.OnTaskTestCase):
             'fixtures',
             'survey_to_import.gz'
         ), 'rb') as file_obj:
-            do_import_action(user, workflow=wflow, file_item=file_obj)
+            services.do_import_action(user, workflow=wflow, file_item=file_obj)
 
         models.Action.objects.get(name='Initial survey')

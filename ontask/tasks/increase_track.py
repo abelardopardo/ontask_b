@@ -8,7 +8,7 @@ from django.core import signing
 from django.utils.translation import ugettext
 
 from ontask import models
-from ontask.dataops.sql.row_queries import increase_row_integer
+from ontask.dataops import sql
 from ontask.tasks.execute import task_execute_factory
 
 
@@ -36,7 +36,7 @@ class ExecuteIncreaseTrackCount:
         :param payload: has fields method and get_dict with the request
         method and the get dictionary.
         :param log_item: Optional logitem object.
-        :returns: nothing
+        :return: Nothing
         """
         del user, workflow, action, log_item
         method = payload.get('method')
@@ -96,7 +96,7 @@ class ExecuteIncreaseTrackCount:
         if column_dst:
             try:
                 # Increase the relevant cell by one
-                increase_row_integer(
+                sql.increase_row_integer(
                     action.workflow.get_data_frame_table_name(),
                     column_dst,
                     column_to,

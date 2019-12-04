@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import OnTaskServiceException, create_new_name, models
 from ontask.action.services.clone import do_clone_action
 from ontask.core.session_ops import store_workflow_in_session
-from ontask.dataops.sql import clone_table
+from ontask.dataops import sql
 from ontask.table.services import do_clone_view
 from ontask.workflow import forms
 from ontask.workflow.services.column_crud import do_clone_column_only
@@ -139,7 +139,7 @@ def do_clone_workflow(user, workflow: models.Workflow) -> models.Workflow:
             )
 
         # Clone the DB table
-        clone_table(
+        sql.clone_table(
             workflow.get_data_frame_table_name(),
             new_workflow.get_data_frame_table_name())
 

@@ -3,7 +3,7 @@
 """Model description for the Workflow."""
 import datetime
 import json
-from typing import List
+from typing import List, Tuple
 
 from django import http
 from django.conf import settings
@@ -16,8 +16,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
-from ontask.dataops.pandas.database import is_table_in_db, load_table
-from ontask.dataops.sql import delete_table
+from ontask.dataops import pandas, sql
 from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.column import Column
 from ontask.models.logs import Log
@@ -137,7 +136,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
 
     def data_frame(self) -> pd.DataFrame:
         """Access the data frame by the serializer."""
-        return load_table(self.get_data_frame_table_name())
+        return pandas.load_table(self.get_data_frame_table_name())
 
     def get_data_frame_table_name(self) -> str:
         """Get the table name containing the data frame.
@@ -166,7 +165,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         Boolean stating if there is a table storing a data frame
         :return: True if the workflow has a table storing the data frame
         """
-        return is_table_in_db(self.get_data_frame_table_name())
+        return pandas.is_table_in_db(self.get_data_frame_table_name())
 
     def get_column_info(self):
         """Access name, data_type and key for all columns.
@@ -264,7 +263,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
 
         :return: If the workflow has a dataframe
         """
-        return is_table_in_db(self.get_data_frame_table_name())
+        return pandas.is_table_in_db(self.get_data_frame_table_name())
 
     def is_locked(self) -> bool:
         """Check if the workflow is locked.
@@ -366,7 +365,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         :return: Reflected in the DB
         """
         # Step 1: Delete the data frame from the database
-        delete_table(self.get_data_frame_table_name())
+        sql.delete_table(self.get_data_frame_table_name())
 
         # Reset some of the workflow fields
         self.nrows = 0
@@ -390,7 +389,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # Save the workflow with the new fields.
         self.save()
 
-    def add_columns(self, triplets: List[str, str, bool]):
+    def add_columns(self, triplets: List[Tuple[str, str, bool]]):
         """Add a set of columns to the workflow.
 
         :param triplets: List of (column name, data type, is_key)

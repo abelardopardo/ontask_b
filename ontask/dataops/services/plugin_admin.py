@@ -20,10 +20,9 @@ import pandas as pd
 import pytz
 
 from ontask import OnTaskServiceException, models
-from ontask.dataops.pandas import load_table, perform_dataframe_upload_merge
+from ontask.dataops import pandas, services
 from ontask.dataops.plugin import ontask_plugin
 from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
-from ontask.dataops.services.errors import OnTasDataopsPluginInstantiationError
 import ontask.settings
 
 
@@ -376,7 +375,9 @@ def load_plugin(foldername):
 
         class_name = getattr(ctx_handler, 'class_name')
         if not class_name:
-            class_name = getattr(ctx_handler, ontask_plugin.class_name)
+            class_name = getattr(
+                ctx_handler,
+                ontask_plugin.class_name)
         plugin_class = getattr(ctx_handler, class_name)
         # Get an instance of this class
         plugin_instance = plugin_class()
@@ -387,10 +388,10 @@ def load_plugin(foldername):
         if not all(test_result == 'Ok' for test_result, __ in tests):
             return None, tests
     except AttributeError:
-        raise OnTasDataopsPluginInstantiationError(
+        raise services.OnTasDataopsPluginInstantiationError(
             message=_('Error while instantiating the plugin class'))
     except Exception:
-        raise OnTasDataopsPluginInstantiationError(
+        raise services.OnTasDataopsPluginInstantiationError(
             message=_('Error while instantiating the plugin class'))
 
     return plugin_instance, tests
@@ -510,7 +511,7 @@ def run_plugin(
 
     # Get the data frame from the workflow
     try:
-        df = load_table(workflow.get_data_frame_table_name())
+        df = pandas.load_table(workflow.get_data_frame_table_name())
     except Exception as exc:
         raise Exception(
             ugettext(
@@ -577,7 +578,7 @@ def run_plugin(
 
     # Proceed with the merge
     try:
-        new_frame = perform_dataframe_upload_merge(
+        new_frame = pandas.perform_dataframe_upload_merge(
             workflow,
             df,
             new_df,

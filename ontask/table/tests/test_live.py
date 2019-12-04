@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 from ontask import models, tests
-from ontask.dataops.pandas import load_table
+from ontask.dataops import pandas
 
 
 class TableDerivedColumns(tests.OnTaskLiveTestCase):
@@ -298,7 +298,7 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check that the data is correct
-        df = load_table(
+        df = pandas.load_table(
              models.Workflow.objects.all()[0].get_data_frame_table_name(),
         )
 

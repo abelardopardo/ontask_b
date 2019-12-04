@@ -5,7 +5,8 @@ from ontask.dataops.services.athena import (
     create_athena_connection_admintable,
     create_athena_connection_runtable,
 )
-from ontask.dataops.services.connections import clone, delete, toggle
+from ontask.dataops.services.connections import (
+    ConnectionTableAdmin, ConnectionTableRun, clone, delete, toggle)
 from ontask.dataops.services.dataframeupload import (
     load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
     load_df_from_s3, load_df_from_sqlconnection,

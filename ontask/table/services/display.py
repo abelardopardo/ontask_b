@@ -15,7 +15,7 @@ from pytz import timezone
 
 from ontask import models
 from ontask.core import DataTablesServerSidePaging
-from ontask.dataops.sql import delete_row, search_table
+from ontask.dataops import sql
 from ontask.table.services.errors import OnTaskTableNoKeyValueError
 from ontask.visualizations.plotly import PlotlyHandler
 
@@ -103,7 +103,7 @@ def render_table_display_server_side(
         # The first column is ops
         order_col_name = column_names[dt_page.order_col - 1]
 
-    qs = search_table(
+    qs = sql.search_table(
         workflow.get_data_frame_table_name(),
         dt_page.search_value,
         columns_to_search=column_names,
@@ -196,7 +196,7 @@ def perform_row_delete(
         # The response will require going to the table display anyway
 
     # Proceed to delete the row
-    delete_row(workflow.get_data_frame_table_name(), (row_key, row_value))
+    sql.delete_row(workflow.get_data_frame_table_name(), (row_key, row_value))
 
     # Update rowcount
     workflow.nrows -= 1

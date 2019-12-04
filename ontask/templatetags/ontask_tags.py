@@ -11,8 +11,8 @@ from django.utils.safestring import mark_safe
 
 import ontask
 from ontask import models
-from ontask.action.evaluate.template import render_rubric_criteria
-from ontask.dataops.sql.row_queries import get_rows
+from ontask.action import evaluate
+from ontask.dataops import sql
 
 register = template.Library()
 
@@ -142,7 +142,7 @@ def ot_insert_column_list(context, column_name) -> str:
     """Insert in the text a column list."""
     action = context['ONTASK_ACTION_CONTEXT_VARIABLE___']
     column_values = [
-        str(citem[0]) for citem in get_rows(
+        str(citem[0]) for citem in sql.get_rows(
             action.workflow.get_data_frame_table_name(),
             column_names=[column_name],
             filter_formula=action.get_filter_formula())]
@@ -158,5 +158,5 @@ def ot_insert_rubric_feedback(context) -> str:
     return render_to_string(
         'action/includes/partial_rubric_message.html',
         context={
-            'text_sources': render_rubric_criteria(
+            'text_sources': evaluate.render_rubric_criteria(
                 context['ONTASK_ACTION_CONTEXT_VARIABLE___'], context)})

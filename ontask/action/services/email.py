@@ -27,7 +27,7 @@ from ontask.action.evaluate.action import (
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.run_manager import ActionRunManager
 from ontask.celery import get_task_logger
-from ontask.dataops.sql.column_queries import add_column_to_db
+from ontask.dataops import sql
 
 LOGGER = get_task_logger('celery_execution')
 
@@ -146,7 +146,7 @@ def _create_track_column(action: models.Action) -> str:
     action.workflow.save()
 
     # Add the column to the DB table
-    add_column_to_db(
+    sql.add_column_to_db(
         action.workflow.get_data_frame_table_name(),
         track_col_name,
         'integer',

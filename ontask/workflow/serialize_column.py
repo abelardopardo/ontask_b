@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
-from ontask.dataops.pandas import pandas_datatype_names
+from ontask.dataops import pandas
 
 try:
     profile  # noqa: Z444
@@ -23,7 +23,7 @@ class ColumnSerializer(serializers.ModelSerializer):
         data_type = validated_data.get('data_type')
         if (
             data_type is None
-            or data_type not in list(pandas_datatype_names.values())
+            or data_type not in list(pandas.datatype_names.values())
         ):
             # The data type is not legal
             raise Exception(_('Incorrect data type {0}.').format(data_type))

@@ -24,12 +24,8 @@ from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
 from ontask import OnTaskDataFrameNoKey, models, settings
-from ontask.core import (
-    RestrictedFileField, )
-from ontask.dataops import services
-from ontask.dataops.forms.select import MergeForm, SelectKeysForm
-from ontask.dataops.pandas import store_temporary_dataframe, verify_data_frame
-from ontask.models.basic import CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE
+from ontask.core import RestrictedFileField
+from ontask.dataops import forms as dataops_forms, pandas, services
 
 URL_FIELD_SIZE = 1024
 
@@ -51,7 +47,7 @@ class UploadBasic(forms.Form):
         """
         try:
             # Verify the data frame
-            verify_data_frame(self.data_frame)
+            pandas.verify_data_frame(self.data_frame)
         except OnTaskDataFrameNoKey as exc:
             self.add_error(None, str(exc))
             return
@@ -59,7 +55,7 @@ class UploadBasic(forms.Form):
         # Store the data frame in the DB.
         try:
             # Get frame info with three lists: names, types and is_key
-            self.frame_info = store_temporary_dataframe(
+            self.frame_info = pandas.store_temporary_dataframe(
                 self.data_frame,
                 self.workflow)
         except Exception as exc:
@@ -157,7 +153,7 @@ class UploadExcelFileForm(UploadBasic):
         help_text=_('File in Excel format (.xls or .xlsx)'))
 
     sheet = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('Sheet within the excelsheet to upload'))
@@ -263,25 +259,25 @@ class UploadS3FileForm(UploadBasic):
     """
 
     aws_access_key = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=False,
         initial='',
         help_text=_('AWS S3 Bucket access key'))
 
     aws_secret_access_key = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=False,
         initial='',
         help_text=_('AWS S3 Bucket secret access key'))
 
     aws_bucket_name = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('AWS S3 Bucket name'))
 
     aws_file_key = forms.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
+        max_length=models.CHAR_FIELD_MID_SIZE,
         required=True,
         initial='',
         help_text=_('AWS S3 Bucket file path'))
@@ -402,14 +398,14 @@ class SQLRequestConnectionParam(forms.Form):
 
         if not self.instance.db_password:
             self.fields['password'] = forms.CharField(
-                max_length=CHAR_FIELD_MID_SIZE,
+                max_length=models.CHAR_FIELD_MID_SIZE,
                 widget=forms.PasswordInput,
                 required=True,
                 help_text=_('Authentication for the database connection'))
 
         if not self.instance.db_table:
             self.fields['table_name'] = forms.CharField(
-                max_length=CHAR_FIELD_MID_SIZE,
+                max_length=models.CHAR_FIELD_MID_SIZE,
                 required=True,
                 help_text=_('Table to load'))
 
@@ -464,20 +460,20 @@ class AthenaRequestConnectionParam(forms.Form):
 
         if not self.instance.aws_secret_access_key:
             self.fields['aws_secret_access_key'] = forms.CharField(
-                max_length=CHAR_FIELD_LONG_SIZE,
+                max_length=models.CHAR_FIELD_LONG_SIZE,
                 required=True,
                 help_text=_('Authentication for the connection'))
 
         if not self.instance.aws_session_token:
             self.fields['aws_session_token'] = forms.CharField(
-                max_length=CHAR_FIELD_LONG_SIZE,
+                max_length=models.CHAR_FIELD_LONG_SIZE,
                 required=False,
                 widget=forms.Textarea,
                 help_text=_('Authentication for the session'))
 
         if not self.instance.table_name:
             self.fields['table_name'] = forms.CharField(
-                max_length=CHAR_FIELD_MID_SIZE,
+                max_length=models.CHAR_FIELD_MID_SIZE,
                 required=True,
                 help_text=_('Table to load'))
 
@@ -493,14 +489,14 @@ class AthenaRequestConnectionParam(forms.Form):
                     choices=merge_choices,
                     required=True,
                     label=_('Key Column in Existing Table'),
-                    help_text=SelectKeysForm.dst_help)
+                    help_text=dataops_forms.SelectKeysForm.dst_help)
 
             self.fields['how_merge'] = forms.ChoiceField(
                 initial=None,
-                choices=MergeForm.how_merge_choices,
+                choices=dataops_forms.MergeForm.how_merge_choices,
                 required=True,
                 label=_('Method to select rows to merge/update'),
-                help_text=MergeForm.merge_help)
+                help_text=dataops_forms.MergeForm.merge_help)
 
     def get_field_dict(self):
         """Return a dictionary with the resulting fields"""

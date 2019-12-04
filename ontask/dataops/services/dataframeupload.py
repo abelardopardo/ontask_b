@@ -11,10 +11,7 @@ from pyathena import connect
 from smart_open import smart_open
 
 from ontask import models
-from ontask.dataops.pandas import (
-    create_db_engine, load_table, perform_dataframe_upload_merge,
-    store_temporary_dataframe, store_workflow_table, verify_data_frame)
-from ontask.dataops.sql import table_queries
+from ontask.dataops import pandas, sql
 
 
 def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
@@ -236,7 +233,7 @@ def load_df_from_sqlconnection(
     :return: Data frame or raise an exception.
     """
     # Get the engine from the DB
-    db_engine = create_db_engine(
+    db_engine = pandas.create_db_engine(
         conn_item.conn_type,
         conn_item.conn_driver,
         conn_item.db_user,
@@ -306,27 +303,27 @@ def batch_load_df_from_athenaconnection(
     # datetime just in case
     data_frame = _process_object_column(data_frame)
 
-    verify_data_frame(data_frame)
+    pandas.verify_data_frame(data_frame)
 
-    column_names, column_types, is_key_column = store_temporary_dataframe(
+    col_names, col_types, is_key = pandas.store_temporary_dataframe(
         data_frame,
         workflow)
 
     upload_data = {
-        'initial_column_names': column_names,
-        'column_types': column_types,
-        'src_is_key_column': is_key_column,
-        'rename_column_names': column_names[:],
-        'columns_to_upload': [True] * len(column_names),
-        'keep_key_column': is_key_column[:]
+        'initial_column_names': col_names,
+        'col_types': col_types,
+        'src_is_key_column': is_key,
+        'rename_column_names': col_names[:],
+        'columns_to_upload': [True] * len(col_names),
+        'keep_key_column': is_key[:]
     }
 
     if not workflow.has_data_frame():
         # Regular load operation
-        store_workflow_table(workflow, upload_data)
-        log_item.payload['column_names'] = column_names,
-        log_item.payload['column_types'] = column_types,
-        log_item.payload['column_unique'] = is_key_column
+        pandas.store_workflow_table(workflow, upload_data)
+        log_item.payload['col_names'] = col_names,
+        log_item.payload['col_types'] = col_types,
+        log_item.payload['column_unique'] = is_key
         log_item.payload['num_rows'] = workflow.nrows
         log_item.payload['num_cols'] = workflow.ncols
         log_item.save()
@@ -342,27 +339,25 @@ def batch_load_df_from_athenaconnection(
     upload_data['dst_selected_key'] = run_params['merge_key']
     upload_data['how_merge'] = run_params['merge_method']
 
-    dst_df = load_table(workflow.get_data_frame_table_name())
-    src_df = load_table(workflow.get_data_frame_upload_table_name())
+    dst_df = pandas.load_table(workflow.get_data_frame_table_name())
+    src_df = pandas.load_table(workflow.get_data_frame_upload_table_name())
 
     try:
-        perform_dataframe_upload_merge(
+        pandas.perform_dataframe_upload_merge(
             workflow,
             dst_df,
             src_df,
             upload_data)
     except Exception as exc:
         # Nuke the temporary table
-        table_queries.delete_table(
-            workflow.get_data_frame_upload_table_name(),
-        )
+        sql.delete_table(workflow.get_data_frame_upload_table_name())
         raise Exception(_('Unable to perform merge operation: {0}').format(
             str(exc)))
 
-    column_names, column_types, is_key_column = workflow.get_column_info()
-    log_item.payload['column_names'] = column_names,
-    log_item.payload['column_types'] = column_types,
-    log_item.payload['column_unique'] = is_key_column
+    col_names, col_types, is_key = workflow.get_column_info()
+    log_item.payload['col_names'] = col_names,
+    log_item.payload['col_types'] = col_types,
+    log_item.payload['column_unique'] = is_key
     log_item.payload['num_rows'] = workflow.nrows
     log_item.payload['num_cols'] = workflow.ncols
     log_item.save()

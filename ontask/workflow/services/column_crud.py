@@ -9,12 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
 from ontask import create_new_name, models
-from ontask.dataops.pandas import (
-    load_table, pandas_datatype_names, rename_df_column, store_dataframe,
-)
-from ontask.dataops.sql import (
-    add_column_to_db, copy_column_in_db, db_rename_column, df_drop_column,
-)
+from ontask.dataops import pandas, sql
 from ontask.workflow import services
 
 _op_distrib = {
@@ -86,7 +81,7 @@ def add_column_to_workflow(
 
     # Add the new column to the DB
     try:
-        add_column_to_db(
+        sql.add_column_to_db(
             workflow.get_data_frame_table_name(),
             column.name,
             column.data_type,
@@ -129,14 +124,14 @@ def add_formula_column(
     column.save()
 
     # Update the data frame
-    df = load_table(workflow.get_data_frame_table_name())
+    df = pandas.load_table(workflow.get_data_frame_table_name())
 
     # Add the column with the appropriate computation
     cnames = [col.name for col in selected_columns]
     df[column.name] = _op_distrib[operation](df[cnames])
 
     # Populate the column type
-    column.data_type = pandas_datatype_names.get(
+    column.data_type = pandas.datatype_names.get(
         df[column.name].dtype.name)
 
     # Update the positions of the appropriate columns
@@ -146,7 +141,7 @@ def add_formula_column(
 
     # Store the df to DB
     try:
-        store_dataframe(df, workflow)
+        pandas.store_dataframe(df, workflow)
     except Exception as exc:
         raise services.OnTaskWorkflowAddColumn(
             message=_('Unable to add column: {0}').format(str(exc)),
@@ -210,7 +205,7 @@ def add_random_column(
 
     # Store the df to DB
     try:
-        store_dataframe(data_frame, workflow)
+        pandas.store_dataframe(data_frame, workflow)
     except Exception as exc:
         raise services.OnTaskWorkflowStoreError(
             message=_('Unable to add the column: {0}').format(str(exc)),
@@ -247,11 +242,11 @@ def update_column(
     """
     # If there is a new name, rename the data frame columns
     if old_name != column.name:
-        db_rename_column(
+        sql.db_rename_column(
             workflow.get_data_frame_table_name(),
             old_name,
             column.name)
-        rename_df_column(workflow, old_name, column.name)
+        pandas.rename_df_column(workflow, old_name, column.name)
 
     if old_position != column.position:
         # Update the positions of the appropriate columns
@@ -299,7 +294,7 @@ def delete_column(
     column.log(user, models.Log.COLUMN_DELETE)
 
     # Drop the column from the DB table storing the data frame
-    df_drop_column(workflow.get_data_frame_table_name(), column.name)
+    sql.df_drop_column(workflow.get_data_frame_table_name(), column.name)
 
     # Reposition the columns above the one being deleted
     workflow.reposition_columns(column.position, workflow.ncols + 1)
@@ -365,12 +360,12 @@ def clone_column(user, column: models.Column) -> models.Column:
     new_column.save()
 
     # Create the column in the database
-    add_column_to_db(
+    sql.add_column_to_db(
         workflow.get_data_frame_table_name(),
         new_column.name,
         new_column.data_type)
 
-    copy_column_in_db(
+    sql.copy_column_in_db(
         workflow.get_data_frame_table_name(),
         column.name,
         new_column.name)

@@ -9,12 +9,7 @@ from django.db import IntegrityError
 import pandas as pd
 
 from ontask import tests
-from ontask.table.serializers import (
-    DataFrameJSONMergeSerializer, ViewSerializer,
-)
-from ontask.table.serializers.pandas import (
-    DataFramePandasSerializer, df_to_string,
-)
+from ontask.table import serializers
 
 
 class TableTestSerializers(tests.OnTaskTestCase):
@@ -37,7 +32,7 @@ class TableTestSerializers(tests.OnTaskTestCase):
         """Test the view serialization."""
         # Try to create a view with a name that already exists.
         try:
-            views = ViewSerializer(
+            views = serializers.ViewSerializer(
                 data=[{
                     "columns": [
                         {"name": "email"},
@@ -66,7 +61,7 @@ class TableTestSerializers(tests.OnTaskTestCase):
             raise Exception('Incorrect serializer operation.')
 
         # Try to create a view with a different name
-        views = ViewSerializer(
+        views = serializers.ViewSerializer(
             data=[{
                 "columns": [
                     {"name": "email"},
@@ -107,9 +102,9 @@ class TableTestSerializers(tests.OnTaskTestCase):
                     '2018-10-12 21:12:04+10:30'],
             })
 
-        df_str = df_to_string(df)
+        df_str = serializers.df_to_string(df)
 
-        new_df = DataFramePandasSerializer(
+        new_df = serializers.DataFramePandasSerializer(
             data={'data_frame': df_str},
             many=False,
         )
@@ -134,7 +129,7 @@ class TableTestSerializers(tests.OnTaskTestCase):
             })
         df['d5'] = pd.to_datetime(df['d5'], infer_datetime_format=True)
 
-        new_df = DataFrameJSONMergeSerializer(
+        new_df = serializers.DataFrameJSONMergeSerializer(
             data={
                 'how': 'inner',
                 'left_on': 'sid',
@@ -145,8 +140,6 @@ class TableTestSerializers(tests.OnTaskTestCase):
         )
         self.assertTrue(new_df.is_valid())
         new_df = new_df.validated_data['src_df']
-        # new_df['d5'] = pd.to_datetime(new_df['d5'], infer_datetime_format=True)
-        # new_df['d5'].dt.tz_convert()
         self.assertTrue(
             all(list(df[col]) == list(new_df[col])
                 for col in new_df.columns))

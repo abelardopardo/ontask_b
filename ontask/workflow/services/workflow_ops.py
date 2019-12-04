@@ -14,7 +14,7 @@ import django_tables2 as tables
 from ontask import is_correct_email, models, tasks
 from ontask.core import DataTablesServerSidePaging, OperationsColumn
 from ontask.core.session_ops import store_workflow_in_session
-from ontask.dataops.sql import get_rows, get_text_column_hash
+from ontask.dataops import sql
 from ontask.workflow import services
 
 
@@ -112,7 +112,7 @@ def check_luser_email_column_outdated(workflow: models.Workflow):
     :return: Side effect, md5_hash_is_outdated is updated.
     """
     if workflow.luser_email_column:
-        md5_hash = get_text_column_hash(
+        md5_hash = sql.get_text_column_hash(
             workflow.get_data_frame_table_name(),
             workflow.luser_email_column.name)
         if md5_hash != workflow.luser_email_column_md5:
@@ -146,7 +146,7 @@ def update_luser_email_column(
     table_name = workflow.get_data_frame_table_name()
 
     # Get the column content
-    emails = get_rows(table_name, column_names=[column.name])
+    emails = sql.get_rows(table_name, column_names=[column.name])
 
     # Verify that the column as a valid set of emails
     if not all(is_correct_email(row[column.name]) for row in emails):
@@ -158,7 +158,7 @@ def update_luser_email_column(
     workflow.save()
 
     # Calculate the MD5 value
-    md5_hash = get_text_column_hash(table_name, column.name)
+    md5_hash = sql.get_text_column_hash(table_name, column.name)
 
     if workflow.luser_email_column_md5 == md5_hash:
         return

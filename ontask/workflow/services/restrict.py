@@ -4,7 +4,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.dataops.pandas import load_table
+from ontask.dataops import pandas
 from ontask.workflow import services
 
 
@@ -19,7 +19,7 @@ def restrict_column(user, column: models.Column):
     :return: String with error or None if correct
     """
     # Load the data frame
-    data_frame = load_table(
+    data_frame = pandas.load_table(
         column.workflow.get_data_frame_table_name())
 
     cat_values = set(data_frame[column.name].dropna())

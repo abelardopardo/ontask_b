@@ -12,8 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models, tests
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
-from ontask.dataops.pandas import load_table
-from ontask.dataops.sql.column_queries import is_column_in_table
+from ontask.dataops import pandas, sql
 
 
 class DataopsSymbols(tests.OnTaskLiveTestCase):
@@ -70,7 +69,7 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
         # There should be a message saying that the name of this column already
         # exists
         self.assertIn('There is a column already with this name',
-                      self.selenium.page_source)
+            self.selenium.page_source)
 
         # Click again in the name and introduce something different
         self.selenium.find_element_by_id("id_name").click()
@@ -138,7 +137,7 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
         )
         self.select_parameters_tab()
         self.click_dropdown_option("//div[@id='select-key-column-name']",
-                                   'email')
+            'email')
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
@@ -201,19 +200,19 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
 
         # Insert attribute
         self.click_dropdown_option("//div[@id='attribute-selector']",
-                                   symbols + '3')
+            symbols + '3')
 
         # Insert column name
         self.click_dropdown_option("//div[@id='column-selector']", symbols)
 
         # Insert second column name
         self.click_dropdown_option("//div[@id='column-selector']",
-                                   symbols + '2')
+            symbols + '2')
 
         # Create new condition
         self.create_condition(symbols + "4",
-                              '',
-                              [(symbols, "begins with", "C")])
+            '',
+            [(symbols, "begins with", "C")])
 
         # Create the filter
         self.create_filter('', [(symbols + "2", "doesn't begin with", "x")])
@@ -276,11 +275,11 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
         # Verify that everything appears normally
         self.assertIn(escape(symbols), self.selenium.page_source)
         self.assertIn('<td class=" dt-center">12</td>',
-                      self.selenium.page_source)
+            self.selenium.page_source)
         self.assertIn('<td class=" dt-center">12.1</td>',
-                      self.selenium.page_source)
+            self.selenium.page_source)
         self.assertIn('<td class=" dt-center">13.2</td>',
-                      self.selenium.page_source)
+            self.selenium.page_source)
 
         # Go to the actions page
         self.go_to_actions()
@@ -292,7 +291,7 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
         # Set the right columns to process
         self.select_parameters_tab()
         self.click_dropdown_option("//div[@id='select-key-column-name']",
-                                   'email' + symbols)
+            'email' + symbols)
         # This wait is incorrect. Don't know how to wait for an AJAX call.
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
@@ -363,11 +362,11 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
 
         # Assert the new values
         self.assertIn('<td class=" dt-center">14</td>',
-                      self.selenium.page_source)
+            self.selenium.page_source)
         self.assertIn('<td class=" dt-center">15</td>',
-                      self.selenium.page_source)
+            self.selenium.page_source)
         self.assertIn('<td class=" dt-center">16</td>',
-                      self.selenium.page_source)
+            self.selenium.page_source)
 
         # End of session
         self.logout()
@@ -389,9 +388,9 @@ class DataopsExcelUpload(tests.OnTaskLiveTestCase):
         # Upload file
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'ontask',
-                         'fixtures',
-                         'excel_upload.xlsx')
+                'ontask',
+                'fixtures',
+                'excel_upload.xlsx')
         )
         self.selenium.find_element_by_id("id_sheet").click()
         self.selenium.find_element_by_id("id_sheet").clear()
@@ -432,9 +431,9 @@ class DataopsExcelUploadSheet(tests.OnTaskLiveTestCase):
         # Upload the file
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'ontask',
-                         'fixtures',
-                         'excel_upload.xlsx')
+                'ontask',
+                'fixtures',
+                'excel_upload.xlsx')
         )
         self.selenium.find_element_by_id("id_sheet").click()
         self.selenium.find_element_by_id("id_sheet").clear()
@@ -483,9 +482,9 @@ class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
         # Select file and upload
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'ontask',
-                         'fixtures',
-                         'test_df_merge_update_df1.csv')
+                'ontask',
+                'fixtures',
+                'test_df_merge_update_df1.csv')
         )
         self.selenium.find_element_by_name("Submit").click()
         self.wait_for_page()
@@ -502,14 +501,14 @@ class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
         # Select the second file and submit
         self.selenium.find_element_by_id("id_data_file").send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'ontask',
-                         'fixtures',
-                         'test_df_merge_update_df2.csv')
+                'ontask',
+                'fixtures',
+                'test_df_merge_update_df2.csv')
         )
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
-                                             'Select Columns')
+                'Select Columns')
         )
 
         # Select all the columns for upload
@@ -584,8 +583,8 @@ class DataopsPluginExecution(tests.OnTaskLiveTestCase):
 
         # Click in the first plugin
         element = self.search_table_row_by_string('transform-table',
-                                                  1,
-                                                  'Test Plugin 1 Name')
+            1,
+            'Test Plugin 1 Name')
         element.find_element_by_link_text('Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
@@ -628,11 +627,15 @@ class DataopsPluginExecution(tests.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = models.Workflow.objects.get(name='Plugin test')
-        self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
-                                           'RESULT 1'))
-        self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
-                                           'RESULT 2'))
-        df = load_table(wflow.get_data_frame_table_name())
+        self.assertTrue(
+            sql.is_column_in_table(
+                wflow.get_data_frame_table_name(),
+                'RESULT 1'))
+        self.assertTrue(
+            sql.is_column_in_table(
+                wflow.get_data_frame_table_name(),
+                'RESULT 2'))
+        df = pandas.load_table(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2']]))
 
@@ -642,8 +645,8 @@ class DataopsPluginExecution(tests.OnTaskLiveTestCase):
 
         # Click in the first plugin
         element = self.search_table_row_by_string('transform-table',
-                                                  1,
-                                                  'Test Plugin 1 Name')
+            1,
+            'Test Plugin 1 Name')
         element.find_element_by_link_text('Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
@@ -697,11 +700,15 @@ class DataopsPluginExecution(tests.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = models.Workflow.objects.get(name='Plugin test')
-        self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
-                                           'RESULT 1_2'))
-        self.assertTrue(is_column_in_table(wflow.get_data_frame_table_name(),
-                                           'RESULT 2_2'))
-        df = load_table(wflow.get_data_frame_table_name())
+        self.assertTrue(
+            sql.is_column_in_table(
+                wflow.get_data_frame_table_name(),
+                'RESULT 1_2'))
+        self.assertTrue(
+            sql.is_column_in_table(
+                wflow.get_data_frame_table_name(),
+                'RESULT 2_2'))
+        df = pandas.load_table(wflow.get_data_frame_table_name())
         self.assertTrue(all([x == 1 for x in df['RESULT 1_2']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2_2']]))
 
@@ -720,8 +727,8 @@ class DataopsPluginExecution(tests.OnTaskLiveTestCase):
 
         # Click in the second plugin
         element = self.search_table_row_by_string('transform-table',
-                                                  1,
-                                                  'Test Plugin 2 Name')
+            1,
+            'Test Plugin 2 Name')
         element.find_element_by_link_text('Test Plugin 2 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
@@ -766,7 +773,7 @@ class DataopsPluginExecution(tests.OnTaskLiveTestCase):
 
         # Assert the content of the dataframe
         wflow = models.Workflow.objects.get(name='Plugin test')
-        df = load_table(wflow.get_data_frame_table_name())
+        df = pandas.load_table(wflow.get_data_frame_table_name())
         self.assertTrue('RESULT 3' in set(df.columns))
         self.assertTrue('RESULT 4' in set(df.columns))
         self.assertTrue(df['RESULT 3'].equals(df['A1'] + df['A2']))
@@ -873,7 +880,7 @@ class DataopsMerge(DataopsMergeBasic):
 
         # Assert the content of the dataframe
         wflow = models.Workflow.objects.get(name=self.wf_name)
-        df = load_table(wflow.get_data_frame_table_name())
+        df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -890,7 +897,7 @@ class DataopsMerge(DataopsMergeBasic):
 
         # Assert the content of the dataframe
         wflow = models.Workflow.objects.get(name=self.wf_name)
-        df = load_table(wflow.get_data_frame_table_name())
+        df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))
@@ -907,7 +914,7 @@ class DataopsMerge(DataopsMergeBasic):
 
         # Assert the content of the dataframe
         wflow = models.Workflow.objects.get(name=self.wf_name)
-        df = load_table(wflow.get_data_frame_table_name())
+        df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' in set(df.columns))
@@ -924,7 +931,7 @@ class DataopsMerge(DataopsMergeBasic):
 
         # Assert the content of the dataframe
         wflow = models.Workflow.objects.get(name=self.wf_name)
-        df = load_table(wflow.get_data_frame_table_name())
+        df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('text3' in set(df.columns))
@@ -946,7 +953,7 @@ class DataopsMerge(DataopsMergeBasic):
 
         # Assert the content of the dataframe
         wflow = models.Workflow.objects.get(name=self.wf_name)
-        df = load_table(wflow.get_data_frame_table_name())
+        df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
         self.assertTrue('key2' not in set(df.columns))
@@ -984,7 +991,7 @@ class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
         # Assert additional properties
         wflow = models.Workflow.objects.get(name=self.wf_name)
         self.assertTrue(wflow.columns.get(name='key1').is_key,
-                        'Column key1 has lost is key property')
+            'Column key1 has lost is key property')
         self.assertTrue(wflow.columns.get(name='key2').is_key,
-                        'Column key2 has lost is key property')
+            'Column key2 has lost is key property')
         self.logout()

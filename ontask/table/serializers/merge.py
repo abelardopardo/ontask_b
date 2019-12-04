@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 from rest_framework import serializers
 
-from ontask.dataops.pandas import detect_datetime_columns
+from ontask.dataops import pandas
 from ontask.table.serializers.pandas import DataFramePandasField
 
 
@@ -27,9 +27,9 @@ class DataFrameJSONField(serializers.Field):
         try:
             df = pd.DataFrame(data)
             # Detect date/time columns
-            df = detect_datetime_columns(df)
+            df = pandas.detect_datetime_columns(df)
         except Exception as exc:
-            raise serializers.ValidationError(exc)
+            raise serializers.ValidationError(str(exc))
 
         return df
 

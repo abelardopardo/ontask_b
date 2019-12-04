@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ontask import OnTaskServiceException, models
 from ontask.core import ajax_required, get_column, get_workflow, is_instructor
-from ontask.dataops.pandas import load_table
+from ontask.dataops import pandas
 from ontask.workflow import services
 
 
@@ -130,7 +130,7 @@ def column_restrict_values(
 
         return http.JsonResponse({'html_redirect': reverse('workflow:detail')})
 
-    df = load_table(workflow.get_data_frame_table_name())
+    df = pandas.load_table(workflow.get_data_frame_table_name())
     return http.JsonResponse({
         'html_form': render_to_string(
             'workflow/includes/partial_column_restrict.html',
