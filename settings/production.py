@@ -6,6 +6,8 @@ from settings.base import *  # NOQA
 
 # Show emails to console
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Send email through SMTP server
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ################################################################################
 #
@@ -40,85 +42,39 @@ loaders = [
 TEMPLATES[0]['OPTIONS'].update({"loaders": loaders})
 TEMPLATES[0].update({"APP_DIRS": False})
 
-# Reset logging
-LOGGING_CONFIG = None
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '[%(asctime)s] %(levelname)s [%(pathname)s:%(lineno)s] %(message)s',
-            'datefmt': "%d/%b/%Y %H:%M:%S"
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
+LOGGING['loggers'] = {
+    'django': {
+        'handlers': ['django_log_file'],
+        'propagate': True,
+        'level': 'ERROR',
     },
-    'handlers': {
-        'django_log_file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': join(LOG_FOLDER, 'django.log'),
-            'formatter': 'verbose'
-        },
-        'ontask_log_file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': join(LOG_FOLDER, 'ontask.log'),
-            'formatter': 'verbose'
-        },
-        'script_log_file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': join(LOG_FOLDER, 'script.log'),
-            'formatter': 'verbose'
-        },
-        'celery_log_file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': join(LOG_FOLDER, 'celery.log'),
-            'formatter': 'verbose'
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
-        }
+    'ontask': {
+        'handlers': ['ontask_log_file'],
+        'level': 'ERROR',
     },
-    'loggers': {
-        'django': {
-            'handlers': ['django_log_file'],
-            'propagate': True,
-            'level': 'ERROR',
-        },
-        'ontask': {
-            'handlers': ['ontask_log_file'],
-            'level': 'ERROR',
-        },
-        'scripts': {
-            'handlers': ['script_log_file'],
-            'propagate': True,
-            'level': 'DEBUG',
-        },
-        'celery_execution': {
-            'handlers': ['celery_log_file'],
-            'propagate': True,
-            'level': 'ERROR',
-        },
-        'django.security.DisallowedHost': {
-            'handlers': ['ontask_log_file'],
-            'propagate': True,
-            'level': 'DEBUG',
-        },
-        'ontask.django_auth_lti.backends': {
-            'handlers': ['ontask_log_file'],
-            'level': 'DEBUG',
-        },
-        'ontask.django_auth_lti.middleware_patched': {
-            'handlers': ['ontask_log_file'],
-            'level': 'DEBUG',
-        },
-    }
+    'scripts': {
+        'handlers': ['script_log_file'],
+        'propagate': True,
+        'level': 'DEBUG',
+    },
+    'celery_execution': {
+        'handlers': ['celery_log_file'],
+        'propagate': True,
+        'level': 'ERROR',
+    },
+    'django.security.DisallowedHost': {
+        'handlers': ['ontask_log_file'],
+        'propagate': True,
+        'level': 'DEBUG',
+    },
+    'ontask.django_auth_lti.backends': {
+        'handlers': ['ontask_log_file'],
+        'level': 'DEBUG',
+    },
+    'ontask.django_auth_lti.middleware_patched': {
+        'handlers': ['ontask_log_file'],
+        'level': 'DEBUG',
+    },
 }
 
 logging.config.dictConfig(LOGGING)
