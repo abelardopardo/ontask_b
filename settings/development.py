@@ -50,7 +50,7 @@ LOGGING['loggers'] = {
         'level': 'DEBUG',
     },
     'ontask': {
-        'handlers': ['console'],
+        'handlers': ['django_log_file'],
         'level': 'DEBUG',
     },
     'scripts': {
@@ -69,11 +69,11 @@ LOGGING['loggers'] = {
         'level': 'DEBUG',
     },
     'ontask.django_auth_lti.backends': {
-        'handlers': ['console'],
+        'handlers': ['django_log_file'],
         'level': 'DEBUG',
     },
     'ontask.django_auth_lti.middleware_patched': {
-        'handlers': ['console'],
+        'handlers': ['django_log_file'],
         'level': 'DEBUG',
     },
 }
