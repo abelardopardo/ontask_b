@@ -11,7 +11,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
-from ontask.core.checks import check_wf_df
 from ontask.dataops.pandas import load_table
 from ontask.dataops.sql.column_queries import is_column_in_table
 import test
@@ -242,8 +241,6 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']/div/div/div/div[2]/button[2]").click()
 
-        assert check_wf_df(models.Workflow.objects.get(name='sss'))
-
         # End of session
         self.logout()
 
@@ -380,8 +377,6 @@ class DataopsSymbols(test.OnTaskLiveTestCase):
         self.assertIn('<td class=" dt-center">16</td>',
                       self.selenium.page_source)
 
-        assert check_wf_df(models.Workflow.objects.get(name='sss'))
-
         # End of session
         self.logout()
 
@@ -429,8 +424,6 @@ class DataopsExcelUpload(test.OnTaskLiveTestCase):
         self.assertEqual(wflow.nrows, 29)
         self.assertEqual(wflow.ncols, 14)
 
-        assert check_wf_df(models.Workflow.objects.get(name='wflow1'))
-
         # End of session
         self.logout()
 
@@ -474,8 +467,6 @@ class DataopsExcelUploadSheet(test.OnTaskLiveTestCase):
         wflow = models.Workflow.objects.all()[0]
         self.assertEqual(wflow.nrows, 19)
         self.assertEqual(wflow.ncols, 14)
-
-        assert check_wf_df(models.Workflow.objects.get(name='wflow1'))
 
         # End of session
         self.logout()
@@ -587,8 +578,6 @@ class DataopsNaNProcessing(test.OnTaskLiveTestCase):
 
         # Click in the preview and circle around the 12 rows
         self.open_browse_preview(11)
-
-        assert check_wf_df(models.Workflow.objects.get(name='wflow1'))
 
         # End of session
         self.logout()
@@ -744,8 +733,6 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         self.assertTrue(all([x == 1 for x in df['RESULT 1_2']]))
         self.assertTrue(all([x == 2 for x in df['RESULT 2_2']]))
 
-        assert check_wf_df(models.Workflow.objects.get(name='Plugin test'))
-
         # End of session
         self.logout()
 
@@ -812,8 +799,6 @@ class DataopsPluginExecution(test.OnTaskLiveTestCase):
         self.assertTrue('RESULT 4' in set(df.columns))
         self.assertTrue(df['RESULT 3'].equals(df['A1'] + df['A2']))
         self.assertTrue(df['RESULT 4'].equals(df['A1'] - df['A2']))
-
-        assert check_wf_df(models.Workflow.objects.get(name='Plugin test'))
 
         # End of session
         self.logout()
@@ -928,8 +913,6 @@ class DataopsMerge(DataopsMergeBasic):
         self.assertTrue('bool3' in set(df.columns))
         self.assertTrue('date3' in set(df.columns))
 
-        assert check_wf_df(models.Workflow.objects.get(name='Testing Merge'))
-
         # End of session
         self.logout()
 
@@ -946,8 +929,6 @@ class DataopsMerge(DataopsMergeBasic):
         self.assertTrue('double3' in set(df.columns))
         self.assertTrue('bool3' in set(df.columns))
         self.assertTrue('date3' in set(df.columns))
-
-        assert check_wf_df(models.Workflow.objects.get(name='Testing Merge'))
 
         # End of session
         self.logout()
@@ -966,8 +947,6 @@ class DataopsMerge(DataopsMergeBasic):
         self.assertTrue('bool3' in set(df.columns))
         self.assertTrue('date3' in set(df.columns))
 
-        assert check_wf_df(models.Workflow.objects.get(name='Testing Merge'))
-
         # End of session
         self.logout()
 
@@ -983,8 +962,6 @@ class DataopsMerge(DataopsMergeBasic):
         self.assertTrue('double3' in set(df.columns))
         self.assertTrue('bool3' in set(df.columns))
         self.assertTrue('date3' in set(df.columns))
-
-        assert check_wf_df(models.Workflow.objects.get(name='Testing Merge'))
 
         # End of session
         self.logout()
@@ -1008,8 +985,6 @@ class DataopsMerge(DataopsMergeBasic):
         self.assertTrue('double3' not in set(df.columns))
         self.assertTrue('bool3' not in set(df.columns))
         self.assertTrue('date3' not in set(df.columns))
-
-        assert check_wf_df(models.Workflow.objects.get(name='Testing Merge'))
 
         # End of session
         self.logout()

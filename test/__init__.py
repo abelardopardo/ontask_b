@@ -31,7 +31,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import OnTaskSharedState, models
-from ontask.core.checks import check_wf_df
+from ontask.core.checks import sanity_checks
 from ontask.core.manage_session import (
     SessionPayload
 )
@@ -133,27 +133,98 @@ class ElementHasFullOpacity:
             return False
 
 
-class OnTaskTestCase(TransactionTestCase):
-    """OnTask test cases."""
+class OnTaskBasicTestCase(TransactionTestCase):
+    """Basic test case to prepare/dismantle tests."""
+
+    fixtures = []
+    filename = None
+
+    @classmethod
+    def tearDownClass(cls):
+        destroy_db_engine(OnTaskSharedState.engine)
+        super().tearDownClass()
+
+    def setUp(self):
+        super().setUp()
+        if self.filename:
+            self._pg_restore_table(self.filename)
+
+    def tearDown(self) -> None:
+        sanity_checks()
+        self._delete_all_tables()
+        super().tearDown()
+
+    @staticmethod
+    def _pg_restore_table(filename):
+        """Upload a dump into the existing database
+
+        :param filename: File in pg_dump format to restore
+        :return: Nothing. Effect reflected in the DB
+        """
+        process = subprocess.Popen([
+            'psql',
+            '-o',
+            '/dev/null',
+            '-d',
+            settings.DATABASES['default']['NAME'],
+            '-q',
+            '-f',
+            filename])
+        process.wait()
+
+    @staticmethod
+    def _delete_all_tables():
+        """Delete all tables related to existing workflows."""
+        cursor = connection.cursor()
+        table_list = connection.introspection.get_table_list(cursor)
+        for tinfo in table_list:
+            if not tinfo.name.startswith(models.Workflow.table_prefix):
+                continue
+            cursor.execute('DROP TABLE "{0}";'.format(tinfo.name))
+
+        # To make sure the table is dropped.
+        connection.commit()
+        return
+
+    @staticmethod
+    def create_groups():
+        """Create the user groups for OnTask."""
+        for gname in GROUP_NAMES:
+            Group.objects.get_or_create(name=gname)
+
+    def create_users(self):
+        """Create all the users based in the user_info."""
+        self.create_groups()
+        for uname, uemail, glist, suser in user_info:
+            uobj = get_user_model().objects.filter(email=uemail).first()
+            if not uobj:
+                uobj = get_user_model().objects.create_user(
+                    name=uname,
+                    email=uemail,
+                    password=boguspwd)
+
+            for gname in glist:
+                gobj = Group.objects.get(name=gname)
+                uobj.groups.add(gobj)
+                uobj.save()
+
+        # Create the tokens for all the users
+        for usr in get_user_model().objects.all():
+            Token.objects.create(user=usr)
+
+
+class OnTaskTestCase(OnTaskBasicTestCase):
+    """OnTask test cases not using selenium."""
 
     user_email = None
     user_pwd = None
     workflow_name = None
     workflow = None
 
-    fixtures = []
-    filename = None
-
     last_request = None
 
     @classmethod
-    def tearDownClass(cls):
-        # Close the db_engine
-        destroy_db_engine(OnTaskSharedState.engine)
-        super().tearDownClass()
-
-    @classmethod
-    def store_workflow_in_session(cls, session, wflow: models.Workflow):
+    def _store_workflow_in_session(cls, session, wflow: models.Workflow):
         """Store the workflow id, name, and number of rows in the session.
 
         :param session: Current session used to store the information
@@ -166,9 +237,6 @@ class OnTaskTestCase(TransactionTestCase):
 
     def setUp(self):
         super().setUp()
-        delete_all_tables()
-        if self.filename:
-            _pg_restore_table(self.filename)
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
         if self.user_email:
@@ -179,12 +247,6 @@ class OnTaskTestCase(TransactionTestCase):
                 name=self.workflow_name)
         self.last_request = None
 
-    def tearDown(self) -> None:
-        if self.workflow:
-            self.workflow.refresh_from_db()
-            check_wf_df(self.workflow)
-        super().tearDown()
-
     def add_middleware(self, request: HttpRequest) -> HttpRequest:
         request.user = self.user
         # adding session
@@ -192,7 +254,7 @@ class OnTaskTestCase(TransactionTestCase):
         # adding messages
         setattr(request, '_messages', FallbackStorage(request))
         if self.workflow:
-            self.store_workflow_in_session(request.session, self.workflow)
+            self._store_workflow_in_session(request.session, self.workflow)
         request.session.save()
 
         return request
@@ -255,41 +317,31 @@ class OnTaskTestCase(TransactionTestCase):
         return resolve(url_str).func(self.last_request, **url_params)
 
 
-class OnTaskApiTestCase(APITransactionTestCase):
+class OnTaskApiTestCase(OnTaskBasicTestCase, APITransactionTestCase):
     """OnTask tests for the API."""
-
-    @classmethod
-    def tearDownClass(cls):
-        # Close the db_engine
-        destroy_db_engine(OnTaskSharedState.engine)
-        super().tearDownClass()
 
     def compare_wflows(self, jwflow, workflow):
         # Name and description match the one in the db
         self.assertEqual(jwflow['name'], workflow.name)
-        self.assertEqual(jwflow['description_text'],
-                         workflow.description_text)
+        self.assertEqual(jwflow['description_text'], workflow.description_text)
 
         jattr = jwflow['attributes']
         dattr = workflow.attributes
-        self.assertEqual(set(jattr.items()),
-                         set(dattr.items()))
+        self.assertEqual(set(jattr.items()), set(dattr.items()))
 
-    def compare_tables(self, m1, m2):
-        """
-        Compares two pandas data frames
+    def compare_tables(self, m1: pd.DataFrame, m2: pd.DataFrame):
+        """Compare two pandas data frames.
+
         :param m1: Pandas data frame
         :param m2: Pandas data frame
-        :return:
+        :return: Nothing. Assert various properties.
         """
-
         # If both are empty, done.
         if m2 is None and m1 is None:
             return
 
         # Assert that the number of columns are identical
-        self.assertEqual(len(list(m1.columns)),
-                         len(list(m2.columns)))
+        self.assertEqual(len(list(m1.columns)), len(list(m2.columns)))
 
         # The names of the columns have to be identical
         self.assertEqual(set(list(m1.columns)),
@@ -307,7 +359,7 @@ class OnTaskApiTestCase(APITransactionTestCase):
             )
 
 
-class OnTaskLiveTestCase(LiveServerTestCase):
+class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     """OnTask tests that use selenium."""
 
     viewport_height = 1024
@@ -354,7 +406,6 @@ class OnTaskLiveTestCase(LiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
-        destroy_db_engine(OnTaskSharedState.engine)
         super().tearDownClass()
 
     def open(self, url):
@@ -1921,21 +1972,3 @@ class ScreenTests(OnTaskLiveTestCase):
                             self.viewport_height * self.device_pixel_ratio))
 
         img.save(self.img_path(self.prefix + ss_filename))
-
-
-def delete_all_tables():
-    """
-    Delete all tables related to existing workflows
-    :return:
-    """
-
-    cursor = connection.cursor()
-    table_list = connection.introspection.get_table_list(cursor)
-    for tinfo in table_list:
-        if not tinfo.name.startswith(models.Workflow.table_prefix):
-            continue
-        cursor.execute('DROP TABLE "{0}";'.format(tinfo.name))
-
-    # To make sure the table is dropped.
-    connection.commit()
-    return

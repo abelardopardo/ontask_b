@@ -8,7 +8,6 @@ from django.shortcuts import reverse
 
 from ontask import models
 from ontask.action.views.import_export import do_import_action
-from ontask.core.checks import check_wf_df
 from ontask.dataops.pandas import load_table
 import test
 
@@ -79,10 +78,6 @@ class ActionImport(test.OnTaskTestCase):
 
     wflow_name = 'wflow1'
 
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     def test_do_import(self):
         """Test the do_import_action functionality."""
         user = get_user_model().objects.get(email='instructor01@bogus.com')
@@ -97,4 +92,4 @@ class ActionImport(test.OnTaskTestCase):
             do_import_action(user, workflow=wflow, file_item=file_obj)
 
         models.Action.objects.get(name='Initial survey')
-        self.assertTrue(check_wf_df(wflow))
+
