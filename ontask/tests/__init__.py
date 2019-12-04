@@ -1849,14 +1849,19 @@ class ScreenTests(OnTaskLiveTestCase):
                   '/div[contains(@class, "modal-dialog")]' \
                   '/div[@class="modal-content"]'
 
+    img_path_prefix = os.path.join(
+            settings.BASE_DIR(),
+            'ontask',
+            'tests',
+            'images')
+
     def setUp(self):
         """Create the basic users"""
         super().setUp()
         self.create_users()
 
-    @staticmethod
-    def img_path(f):
-        return os.path.join(settings.BASE_DIR(), 'test', 'images', f)
+    def _img_path(self, image_file: str) -> str:
+        return os.path.join(self.img_path_prefix, image_file)
 
     def _get_image(self, xpath):
         """
@@ -1889,7 +1894,7 @@ class ScreenTests(OnTaskLiveTestCase):
         # Get the image
         img = self._get_image(xpath)
 
-        img.save(self.img_path(self.prefix + ss_filename))
+        img.save(self._img_path(self.prefix + ss_filename))
 
     def modal_ss(self, ss_filename):
         self.element_ss(self.modal_xpath, ss_filename)
@@ -1921,4 +1926,4 @@ class ScreenTests(OnTaskLiveTestCase):
                             self.viewport_width * self.device_pixel_ratio,
                             self.viewport_height * self.device_pixel_ratio))
 
-        img.save(self.img_path(self.prefix + ss_filename))
+        img.save(self._img_path(self.prefix + ss_filename))
