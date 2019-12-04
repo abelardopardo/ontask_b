@@ -121,9 +121,7 @@ def store_temporary_dataframe(
     """Store a temporary dataframe.
 
     :param data_frame: Data frame to store
-
     :param workflow: Data frame will belong to this workflow
-
     :return: List of three lists:
         - Data frame columns
         - Column types (OnTask)
@@ -154,9 +152,7 @@ def store_dataframe(
     It also updates the corresponding column information
 
     :param data_frame: Data frame to dump to DB
-
     :param workflow: Corresponding workflow
-
     :return: Nothing. All this info is stored in the workflow
     """
     _verify_dataframe_columns(workflow, data_frame)
@@ -195,16 +191,13 @@ def store_workflow_table(
     Step 5: Update workflow fields and update
 
     :param workflow: Workflow object being manipulated.
-
     :param update_info: Dictionary with the following fields:
         - initial_column_names: list of column names detected in read phase.
         - rename_column_names: List of new names for the columns
         - column_types: List of types detected after storing in DB
         - keep_key_column: List of booleans to flag if key property is kept
         - columns_to_upload: List of booleans to flag column upload
-
         The first field is mandatory. The have default values if not provided.
-
     :return: Nothing. Anomalies are raised as Exceptions
     """
     # Check information on update_info and complete if needed
@@ -284,11 +277,8 @@ def get_table_row_by_index(
     """Select the set of elements in the row with the given index.
 
     :param workflow: Workflow object storing the data
-
     :param filter_formula: Condition object to filter the data (or None)
-
     :param idx: Row number to get (first row is idx = 1)
-
     :return: A dictionary with the (column_name, value) data or None if the
      index is out of bounds
     """
@@ -309,7 +299,7 @@ def add_column_to_df(
     df: pd.DataFrame,
     column,
     initial_value=None,
-):
+) -> pd.DataFrame:
     """Add a column to the data frame.
 
     Function that add a new column to the data frame with the structure to
@@ -317,11 +307,8 @@ def add_column_to_df(
     based on the data type stored in the column object.
 
     :param df: Data frame to modify
-
     :param column: Column object to add
-
     :param initial_value: initial value in the column
-
     :return: new data frame with the additional column
     """
     # Should we use pd.Series instead: pd.Series(dtype=np.int64)
@@ -353,11 +340,8 @@ def rename_df_column(
     """Change the name of a column in the dataframe.
 
     :param workflow: workflow object that is handling the data frame
-
     :param old_name: old column name
-
     :param new_name: new column name
-
     :return: Workflow object updated
     """
     # Rename the appearances of the variable in all actions
@@ -384,11 +368,8 @@ def get_subframe(
      resulting query set into a data frame.
 
     :param table_name: Table
-
     :param filter_formula: Formula to filter the data (or None)
-
     :param column_names: [list of column names], QuerySet with the data rows
-
     :return: DataFrame
     """
     # Create the DataFrame and set the column names

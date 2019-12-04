@@ -5,7 +5,7 @@ from datetime import datetime
 import inspect
 import os
 import time
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from django import http
 from django.conf import settings
@@ -63,11 +63,10 @@ class PluginAdminTable(tables.Table):
             request=None)
 
     @staticmethod
-    def render_last_exec(record):
+    def render_last_exec(record) -> Union[str, datetime]:
         """Render the last executed time.
 
         :param record: Record being processed in the table.
-
         :return:
         """
         log_item = models.Log.objects.filter(
@@ -79,12 +78,11 @@ class PluginAdminTable(tables.Table):
         return log_item.created
 
     @staticmethod
-    def render_num_executions(record):
+    def render_num_executions(record) -> int:
         """Render the last executed time.
 
         :param record: Record being processed in the table.
-
-        :return:
+        :return: Numnber of executions
         """
         return models.Log.objects.filter(
             name=models.Log.PLUGIN_EXECUTE,
@@ -203,7 +201,6 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
        dictionary.
 
     :param pinobj: Plugin instance
-
     :return: List of Booleans with the result of the tests
     """
     diag = ['Unchecked'] * len(_checks)
@@ -335,10 +332,8 @@ def _load_plugin_info(plugin_folder, plugin_rego=None):
     """Load the plugin and populate the Plugin table.
 
     :param plugin_folder: Folder to load the information from.
-
     :param plugin_rego: Plugin record in the table (none if it needs to
                         be created)
-
     :return: Record in the DB is updated and returned.
     """
     # Load the given module

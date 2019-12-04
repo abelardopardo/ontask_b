@@ -52,8 +52,7 @@ class SelectColumnUploadForm(forms.Form):
           is_key: list stating if the corresponding column is key
 
         :param args:
-
-        :param kargs:
+        :param kargs: Multiple additional parameters to store.
         """
         # Names of the columns to process and Boolean stating if they are key
         self.column_names = kargs.pop('column_names')

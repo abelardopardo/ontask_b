@@ -6,6 +6,7 @@ import codecs
 import csv
 import os
 import sys
+from typing import Any, List
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -136,13 +137,9 @@ class Command(BaseCommand):
         make them members of the given group
 
         :param emails: List of emails
-
         :param password: Password to assign to all users
-
         :param group: Make users members of this group (if given)
-
         :param debug: Boolean controlling the printing of debug messages
-
         :return: Effect in the database
         """
         for email in emails:
@@ -170,14 +167,12 @@ class Command(BaseCommand):
                 user.save()
 
 
-def process_csv_file(data_in, column_name):
+def process_csv_file(data_in, column_name) -> List[Any]:
     """Process a CSV file (already open) and return list of values in column.
 
     :param data_in: file object already open and ready to be used.
-
     :param column_name: Name of the column from where to extract the data.
-
-    :return:
+    :return: List of values in the column
     """
     to_return = []
 

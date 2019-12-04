@@ -19,9 +19,7 @@ def do_workflow_update_lusers(workflow: models.Workflow, log_item: models.Log):
     fields luser_email_column and luser_email_column_MD5
 
     :param workflow: Workflow to update
-
     :param log_item: Log where to leave the status of the operation
-
     :return: Changes in the lusers ManyToMany relationships
     """
     # Get the column content

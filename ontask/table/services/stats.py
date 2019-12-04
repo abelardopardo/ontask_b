@@ -55,7 +55,7 @@ def _get_column_visualisations(
     viz_id: Optional[str] = '',
     single_val: Optional[str] = None,
     context: Optional[Dict] = None,
-):
+) -> List[str]:
     """Create a column visualization.
 
     Given a column object and a dataframe, create the visualisations for this
@@ -64,18 +64,12 @@ def _get_column_visualisations(
     visualisation is marked (place individual value in population measure.
 
     :param column: Column element to visualize
-
     :param col_data: Data in the column (extracted from the data frame)
-
     :param viz_id: String to use to label the visualization
-
     :param vis_scripts: Collection of visualisation scripts needed in HTML
-
     :param single_val: Mark a specific value (or None)
-
     :param context: Dictionary to pass to the rendering
-
-    :return:
+    :return: List of Javascript code
     """
     # Result to return
     visualizations = []
@@ -117,7 +111,7 @@ def _get_column_visualisations(
 def get_column_visualization_items(
     workflow: models.Workflow,
     column: models.Column,
-):
+) -> Tuple[Dict, List, List[str]]:
     """Get the visualization items (scripts and HTML) for a column.
 
     :param workflow: Workflow being processed

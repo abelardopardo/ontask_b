@@ -25,9 +25,7 @@ def transform_model(
     """Show the table of models.
 
     :param request: HTTP Request
-
     :param workflow: Object to apply the models.
-
     :return:
     """
     url_name = resolve(request.path).url_name

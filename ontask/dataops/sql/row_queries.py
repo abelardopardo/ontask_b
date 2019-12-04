@@ -26,13 +26,9 @@ def get_rows(
     pairs and return a subset of columns (or all of them if empty)
 
     :param table_name: Primary key of the workflow storing the data
-
     :param column_names: optional list of columns to select
-
     :param filter_formula: Optional JSON formula to use in the WHERE clause
-
     :param filter_pairs: Pairs key: value to filter in the WHERE clause
-
     :return: cursor resulting from the query
     """
     query, fields = get_select_query(
@@ -59,17 +55,11 @@ def get_row(
     """Get a single row in the DB with the key name/value pair.
 
     :param table_name: Name of the table
-
     :param key_name: Key name to uniquely identify the row
-
     :param key_value: Key value to uniquely identify the row
-
     :param column_names: Columns to access (all of them if empty)
-
     :param filter_formula: Optional filter formula
-
     :param filter_pairs: Optional dictionary to restrict the clause
-
     :return: Dictionary with the row
     """
     key_pair = {key_name: key_value}
@@ -105,11 +95,8 @@ def insert_row(
     Given a table and a list of  (set_field, set_value) create a new row
 
     :param table_name: Table name
-
     :param keys: List of column names
-
     :param values: List of column values
-
     :return: Nothing. Effect reflected in the database.
     """
     ncols = len(keys)
@@ -140,13 +127,9 @@ def update_row(
     of (set_fields, set_values)
 
     :param table_name: Table name
-
     :param keys: List of column names
-
     :param values: List of column values
-
     :param filter_dict: Dictionary of key, value to select the row
-
     :return:
     """
     query = sql.SQL('UPDATE {0} SET ').format(
@@ -183,13 +166,9 @@ def increase_row_integer(
     where_value), it increases the field in the appropriate row
 
     :param table_name: Primary key to detect workflow
-
     :param set_field: name of the field to be increased
-
     :param where_field: Field used to filter the row in the table
-
     :param where_value: Value of the previous field to filter the row
-
     :return: The table in the workflow pointed by PK is modified.
     """
     query = sql.SQL('UPDATE {0} SET {1} = {1} + 1 WHERE {2} = %s').format(
@@ -212,11 +191,8 @@ def select_ids_all_false(
     """Create query to select rows with all conditions equal to false.
 
     :param table_name: Table in the DB
-
     :param filter_formula: Filter formula for the WHERE clause (if any)
-
     :param cond_formula_list: Non-empty list of condition formulas
-
     :return: List of indeces for which all conditions (and filter) are false
     """
     # Prelude for the query
@@ -257,9 +233,7 @@ def get_num_rows(table_name, cond_filter=None):
     """Get the number of rows in the table that satisfy the condition.
 
     :param table_name: Table name
-
     :param cond_filter: Formula
-
     :return: integer
     """
     query = sql.SQL('SELECT count (*) FROM {0}').format(
@@ -284,10 +258,8 @@ def delete_row(table_name: str, kv_pair: Tuple[str, Any]):
     """Delete the row with the given key, value pair.
 
     :param table_name: Table to manipulate
-
     :param kv_pair: A key=value pair to identify the row. Key is suppose to
     be unique.
-
     :return: Drops that row from the table in the DB
     """
     # Get the key/value subclause

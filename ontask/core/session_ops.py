@@ -79,13 +79,9 @@ def verify_workflow_access(
     """Verify that the workflow stored in the request can be accessed.
 
     :param request: HTTP request object
-
     :param wid: ID of the workflow that is being requested
-
     :param select_related: Field to add as select_related query filter
-
     :param prefetch_related: Field to add as prefetch_related query filter
-
     :return: Workflow object or raise exception with message
     """
     # Lock the workflow object while deciding if it is accessible or not to

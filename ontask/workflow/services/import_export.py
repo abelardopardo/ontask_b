@@ -4,7 +4,7 @@
 from datetime import datetime
 import gzip
 from io import BytesIO
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
@@ -20,7 +20,7 @@ from ontask.workflow.serialize_workflow import (
 )
 
 
-def _run_compatibility_patches(json_data):
+def _run_compatibility_patches(json_data: Dict) -> Dict:
     """Patch the incoming JSON to make it compatible.
 
     Over time the structure of the JSON information used to dump a workflow
@@ -30,7 +30,6 @@ def _run_compatibility_patches(json_data):
     1. Change action.target_url from None to ''
 
     :param json_data: Json object to process
-
     :return: Modified json_data
     """
     # Target_url field in actions should be present an empty by default
@@ -51,11 +50,8 @@ def do_import_workflow_parse(
     Check for validity and create the workflow
 
     :param user: User used for the operation
-
     :param name: Workflow name
-
     :param file_item: File item previously opened
-
     :return: workflow object or raise exception
     """
     data_in = gzip.GzipFile(fileobj=file_item)
@@ -131,9 +127,7 @@ def do_export_workflow_parse(
     """Serialize the workflow and attach its content to a BytesIO object.
 
     :param workflow: Workflow to serialize
-
     :param selected_actions: Subset of actions
-
     :return: BytesIO
     """
     # Get the info to send from the serializer
@@ -159,9 +153,7 @@ def do_export_workflow(
     """Proceed with the workflow export.
 
     :param workflow: Workflow record to export be included.
-
     :param selected_actions: A subset of actions to export
-
     :return: Page that shows a confirmation message and starts the download
     """
     # Get the in-memory compressed file

@@ -3,6 +3,7 @@
 """Model description for the Workflow."""
 import datetime
 import json
+from typing import List
 
 from django import http
 from django.conf import settings
@@ -287,10 +288,8 @@ class Workflow(NameAndDescription, CreateModifyFields):
         """Set a session key in the workflow to set is as locked.
 
         :param request: HTTP request
-
         :param create_session: Boolean to flag if a new session has to be
                created.
-
         :return: The session_key is assigned and saved.
         """
         if request.session.session_key is not None:
@@ -391,11 +390,10 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # Save the workflow with the new fields.
         self.save()
 
-    def add_columns(self, triplets):
+    def add_columns(self, triplets: List[str, str, bool]):
         """Add a set of columns to the workflow.
 
         :param triplets: List of (column name, data type, is_key)
-
         :return: Nothing. Create objects in the workflow.
         """
         bulk_list = []
@@ -413,13 +411,11 @@ class Workflow(NameAndDescription, CreateModifyFields):
         self.ncols = position
         self.save()
 
-    def reposition_columns(self, from_idx, to_idx):
+    def reposition_columns(self, from_idx: int, to_idx: int):
         """Relocate the columns from one index to another.
 
         :param from_idx: Position from which the column is repositioned.
-
         :param to_idx: New position for the column
-
         :return: Nothing. Column is repositioned.
         """
         # If the indeces are identical, nothing needs to be moved.

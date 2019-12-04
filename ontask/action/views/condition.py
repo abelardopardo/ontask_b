@@ -28,15 +28,10 @@ def save_condition_form(
     Process the AJAX form to create and update conditions and filters.
 
     :param request: HTTP request
-
     :param form: Form being used to ask for the fields
-
     :param template_name: Template being used to render the form
-
     :param action: The action to which the condition is attached to
-
     :param is_filter: The condition is a filter
-
     :return: JSON response
     """
     if request.method == 'POST' and form.is_valid():
@@ -288,13 +283,9 @@ def propagate_changes(condition, changed_data, old_name, is_new):
     If the name has changed, the text_content in the action is updated.
 
     :param condition: Object being manipulated
-
     :param changed_data: Non-empty list of fields that have changed
-
     :param old_name: Previous name of the condition
-
     :param is_new: if the condition has just been created
-
     :return: Nothing
     """
     if is_new or 'formula' in changed_data:

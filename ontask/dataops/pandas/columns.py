@@ -15,7 +15,6 @@ def get_column_statistics(df_column) -> Dict:
     depending on its type.
 
     :param df_column: data frame with a single column
-
     :return: A dictionary with keys depending on the type of column
       {'min': minimum value (integer, double an datetime),
        'q1': Q1 value (0.25) (integer, double),
@@ -67,11 +66,10 @@ def get_column_statistics(df_column) -> Dict:
     return to_return
 
 
-def is_unique_column(df_column):
+def is_unique_column(df_column: pd.Series) -> bool:
     """Check if a column has unique non-empty values.
 
     :param df_column: Column of a pandas data frame
-
     :return: Boolean encoding if the column has unique values
     """
     return len(df_column.dropna().unique()) == len(df_column)
@@ -81,7 +79,6 @@ def are_unique_columns(data_frame: pd.DataFrame) -> List[bool]:
     """Check if columns have unique non-empty values.
 
     :param data_frame: Pandas data frame
-
     :return: Array of Booleans stating of a column has unique values
     """
     return [
@@ -93,7 +90,6 @@ def has_unique_column(data_frame: pd.DataFrame) -> bool:
     """Verify if the data frame has a unique column.
 
     :param data_frame:
-
     :return: Boolean with the result
     """
     return any(
@@ -101,15 +97,14 @@ def has_unique_column(data_frame: pd.DataFrame) -> bool:
     )
 
 
-def detect_datetime_columns(data_frame):
+def detect_datetime_columns(data_frame: pd.DataFrame) -> pd.DataFrame:
     """Try to convert columns to datetime type.
 
     Given a data frame traverse the columns and those that have type "string"
     try to see if it is of type datetime. If so, apply the translation.
 
     :param data_frame: Pandas dataframe to detect datetime columns
-
-    :return:
+    :return: The modified data frame
     """
     # Strip white space from all string columns and try to convert to
     # datetime just in case

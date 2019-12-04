@@ -36,14 +36,10 @@ def add_column_to_db(
     """Add an extra column of the given type with initial value.
 
     :param table_name: Table to consider
-
     :param col_name: Column name
-
     :param col_type: OnTask column type
-
     :param initial: initial value
-
-    :return:
+    :return: Nothing. Effect done in the DB
     """
     sql_type = ontask_to_sql_datatype_names[col_type]
 
@@ -69,11 +65,8 @@ def copy_column_in_db(
     """Copy the values in one column to another.
 
     :param table_name: Table to process
-
     :param col_from: Source column
-
     :param col_to: Destination column
-
     :return: Nothing. The change is performed in the DB
     """
     query = sql.SQL('UPDATE {0} SET {1}={2}').format(
@@ -89,9 +82,7 @@ def is_column_in_table(table_name: str, column_name: str) -> bool:
     """Check if a column is in the table.
 
     :param table_name: Table used for the check
-
     :param column_name: Column used for the check
-
     :return: Boolean
     """
     query = sql.SQL(
@@ -108,9 +99,7 @@ def is_column_unique(table_name: str, column_name: str) -> bool:
     """Return if a table column has all non-empty unique values.
 
     :param table_name: table
-
     :param column_name: column
-
     :return: Boolean (is unique)
     """
     query = sql.SQL('SELECT COUNT(DISTINCT {0}) = count(*) from {1}').format(
@@ -128,7 +117,6 @@ def get_df_column_types(table_name: str) -> List[str]:
     """Get the list of data types in the given table.
 
     :param table_name: Table name
-
     :return: List of SQL types
     """
     with connection.connection.cursor() as cursor:
@@ -145,11 +133,8 @@ def db_rename_column(table: str, old_name: str, new_name: str):
     """Rename a column in the database.
 
     :param table: table
-
     :param old_name: Old name of the column
-
     :param new_name: New name of the column
-
     :return: Nothing. Change reflected in the database table
     """
     if len(new_name) > COLUMN_NAME_SIZE:
@@ -169,9 +154,7 @@ def df_drop_column(table_name: str, column_name: str):
     """Drop a column from the DB table storing a data frame.
 
     :param table_name: Table
-
     :param column_name: Column name
-
     :return: Drops the column from the corresponding DB table
     """
     with connection.connection.cursor() as cursor:
@@ -184,9 +167,7 @@ def get_text_column_hash(table_name: str, column_name: str) -> str:
     """Calculate and return the MD5 hash of a text column.
 
     :param table_name: table to use
-
     :param column_name: column to pull the values
-
     :return: MD5 hash of the concatenation of the column values
     """
     query = sql.SQL('SELECT MD5(STRING_AGG({0}, {1})) FROM {2}').format(

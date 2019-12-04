@@ -90,13 +90,10 @@ class OntaskTestPlugin(OnTaskTransformation):
         merged with the existing data frame in the workflow using the merge_key.
 
         :param data_frame: Input data for the plugin
-
         :param parameters: Dictionary with (name, value) pairs.
-
         :return: a Pandas data_frame to merge with the existing one (must
         contain a column with name merge_key)
         """
-
         # Extract the key column from the given data frame
         result = data_frame.deep_copy()
 

@@ -108,8 +108,8 @@ class WorkflowExportRequestForm(forms.Form):
         stating if the labels should be included in the form
 
         :param args:
-
-        :param kargs:
+        :param kargs: Additional arguments such as list  of actions,
+        field_prefix
         """
         # List of columns to process and a field prefix
         self.actions = kargs.pop('actions', [])

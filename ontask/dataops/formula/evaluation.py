@@ -101,9 +101,7 @@ def has_variable(node, var_name):
     dictionaries.
 
     :param node: node element at the top of the formula
-
     :param var_name: ID to search for
-
     :return: Boolean encoding if formula has id.
     """
     if 'condition' in node:
@@ -121,7 +119,6 @@ def get_variables(node):
     """Get a list with the variable names in a formula.
 
     :param node:
-
     :return: list of strings (variable names)
     """
     if 'condition' in node:
@@ -139,11 +136,8 @@ def rename_variable(node, old_name, new_name):
      attributes.
 
     :param node: Root node of the formula object
-
     :param old_name: Old variable name
-
     :param new_name: New variable name
-
     :return: The new modified formula.
     """
     # Trivial case of an empty formula

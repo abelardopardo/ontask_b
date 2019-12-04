@@ -30,16 +30,14 @@ _op_distrib = {
 }
 
 
-def _partition(list_in, num):
+def _partition(list_in: List[Any], num: int) -> List[List[Any]]:
     """Partitions the list in num lists.
 
     Given a list and n, returns a list with n lists, and inside each of them a
     set of elements from the shuffled list. All lists are of the same size
 
     :param list_in: List of elements to partition
-
     :param num: Number of partitions
-
     :return: List of lists with shuffled elements partitioned
     """
     random.shuffle(list_in)
@@ -64,7 +62,7 @@ def add_column_to_workflow(
     be stored
     :param action: If the column is a question, this is the action in which it
     is being used.
-    :return: Side effect. Column added to Wflow and DB
+    :return: Nothing. Column added to Wflow and DB
     """
     # Catch the special case of integer type and no initial value. Pandas
     # encodes it as NaN but a cycle through the database transforms it into

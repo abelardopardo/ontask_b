@@ -122,10 +122,8 @@ class OnTaskTestPlugin(OnTaskTransformation):
 
         :param data_frame: Input data for the plugin
         :param parameters: Dictionary with (name, value) pairs.
-
         :return: a Pandas data_frame to merge with the existing one
         """
-
         # Create the result
         result = pd.DataFrame()
 

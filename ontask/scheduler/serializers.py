@@ -2,6 +2,7 @@
 
 """Serialize the scheduled action."""
 import datetime
+from typing import Dict, List, Optional, Tuple
 
 from django.conf import settings
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -29,26 +30,19 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         exclude_values,
         payload,
         scheduled_obj=None,
-    ):
+    ) -> models.ScheduledOperation:
         """Instantiate or update the object of class ScheduledOperation.
 
         Given the validated data and a set of parameters that have been
         validated, instantiate or update the object of class ScheduledOperation.
 
         :param validated_data: Data obtained by the serializer
-
         :param action: Action object
-
         :param execute: Execution date/time
-
         :param item_column: Item column object (if given)
-
         :param exclude_values: List of values from item_column to exluce
-
         :param payload: JSON object
-
         :param scheduled_obj: Object to instantiate or update
-
         :return: instantiated object
         """
         if not scheduled_obj:
@@ -67,7 +61,10 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         scheduled_obj.save()
         return scheduled_obj
 
-    def extra_validation(self, validated_data):
+    def extra_validation(
+        self,
+        validated_data: Dict,
+    ) -> Tuple[models.Action, datetime, str, Optional[List[str]], Dict]:
         """Check for extra properties.
 
         Checking for extra validation properties in the information contained
@@ -86,7 +83,6 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         - The received object has a payload
 
         :param validated_data:
-
         :return: action, execute, item_column, exclude_values, payload
         """
         # Get the action
