@@ -279,7 +279,7 @@ def _deliver_msg_burst(
     :param msgs: List of either EmailMessage or EmailMultiAlternatives
     :return: Nothing.
     """
-    if len(msgs) == 0:
+    if not msgs:
         # bypass trivial case, no list given
         return
 
@@ -313,13 +313,13 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         workflow: models.Workflow,
         action: models.Action,
         context: Dict,
-    ) -> Optional[str]:
+    ):
         """Get the context dictionary to render the GET request.
 
         :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
-        :return: An error string or None if everything was correct.
+        :return: Nothing
         """
         context.update({
             'conditions': action.conditions.filter(is_filter=False),
@@ -328,8 +328,6 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
             ).exclude(action=action),
             'columns_show_stat': workflow.columns.filter(is_key=False),
         })
-
-        return None
 
     def execute_operation(
         self,
@@ -403,18 +401,17 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
         workflow: models.Workflow,
         action: models.Action,
         context: Dict,
-    ) -> Optional[str]:
+    ):
         """Get the context dictionary to render the GET request.
 
         :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
-        :return: An error string or None if everything was correct.
+        :return: Nothing
         """
         self.add_conditions(action, context)
         self.add_conditions_to_clone(action, context)
         self.add_columns_show_stats(action, context)
-        return None
 
     def execute_operation(
         self,

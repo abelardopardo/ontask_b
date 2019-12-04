@@ -70,7 +70,8 @@ class ActionForm(ActionUpdateForm):
             # There is only one type of action. No need to generate the field.
             # Set to value and hide
             at_field.widget = forms.HiddenInput()
-            at_field.initial = models.Action.AVAILABLE_ACTION_TYPES.items()[0][0]
+            at_field.initial = models.Action.AVAILABLE_ACTION_TYPES.items(
+            )[0][0]
 
     class Meta(ActionUpdateForm.Meta):
         """Select action and the three fields."""
@@ -95,7 +96,7 @@ class FilterForm(forms.ModelForm):
     action = None
     old_name = None
 
-    def __init__(self, *args: str, **kwargs: str):
+    def __init__(self, *args, **kwargs):
         """Adjust formula field parameters to use QueryBuilder."""
         self.action = kwargs.pop('action')
 

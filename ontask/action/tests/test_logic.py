@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Test task logic functions."""
 import os
 
 from django.conf import settings
@@ -13,6 +14,8 @@ import test
 
 
 class EmailActionTracking(test.OnTaskTestCase):
+    """Test Email tracking."""
+
     fixtures = ['simple_email_action']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -47,18 +50,20 @@ class EmailActionTracking(test.OnTaskTestCase):
 
             # Get the workflow and the data frame
             workflow = models.Workflow.objects.get(name=self.wflow_name)
-            df = load_table(workflow.get_data_frame_table_name())
+            data_frame = load_table(workflow.get_data_frame_table_name())
 
             # Check that the results have been updated in the DB (to 1)
             for uemail in [x[1] for x in test.user_info
                            if x[1].startswith('student')]:
                 self.assertEqual(
-                    int(df.loc[df['email'] == uemail,
+                    int(data_frame.loc[data_frame['email'] == uemail,
                                'EmailRead_1'].values[0]),
                     idx
                 )
 
 class ActionImport(test.OnTaskTestCase):
+    """Test action import."""
+
     fixtures = ['simple_email_action']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -83,4 +88,3 @@ class ActionImport(test.OnTaskTestCase):
             do_import_action(user, workflow=wflow, file_item=file_obj)
 
         models.Action.objects.get(name='Initial survey')
-

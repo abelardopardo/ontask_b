@@ -16,7 +16,7 @@ from ontask.action.services.run_manager import ActionRunManager
 from ontask.core import SessionPayload
 from ontask.dataops.sql.row_queries import get_rows
 
-html_body = """<!DOCTYPE html>
+_HTML_BODY = """<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
@@ -97,7 +97,7 @@ def _create_eval_data_tuple(
         user_fname_data = [''] * len(action_evals)
 
     return [
-        (user_fname, part_id, html_body.format(msg_body))
+        (user_fname, part_id, _HTML_BODY.format(msg_body))
         for (msg_body, part_id), user_fname in
         zip(action_evals, user_fname_data)
     ]
@@ -128,18 +128,18 @@ def create_and_send_zip(
 
     # Create the ZIP and return it for download
     sbuf = BytesIO()
-    zf = zipfile.ZipFile(sbuf, 'w')
+    zip_file_obj = zipfile.ZipFile(sbuf, 'w')
     for user_fname, part_id, msg_body in files:
         if payload['zip_for_moodle']:
             # If a zip for Moodle, field is Participant [number]. Take the
             # number only
             part_id = part_id.split()[1]
 
-        zf.writestr(
+        zip_file_obj.writestr(
             file_name_template.format(user_fname=user_fname, part_id=part_id),
             str(msg_body),
         )
-    zf.close()
+    zip_file_obj.close()
 
     SessionPayload.flush(session)
 

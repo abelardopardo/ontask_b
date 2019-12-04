@@ -13,8 +13,7 @@ from django.views.decorators.http import require_http_methods
 
 from ontask import OnTaskServiceException, models
 from ontask.core import ajax_required, get_action, get_workflow, is_instructor
-from ontask.workflow import services
-from ontask.workflow.forms import CriterionForm
+from ontask.workflow import forms, services
 
 
 @user_passes_test(is_instructor)
@@ -62,7 +61,7 @@ def criterion_create(
         action.save()
 
     # Form to read/process data
-    form = CriterionForm(
+    form = forms.CriterionForm(
         request.POST or None,
         other_criterion=models.ActionColumnConditionTuple.objects.filter(
             action=action).first(),
@@ -120,7 +119,7 @@ def criterion_edit(
 
     action = triplet.action
     column = triplet.column
-    form = CriterionForm(
+    form = forms.CriterionForm(
         request.POST or None,
         workflow=workflow,
         other_criterion=models.ActionColumnConditionTuple.objects.filter(

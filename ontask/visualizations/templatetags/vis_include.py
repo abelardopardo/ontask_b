@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.action.evaluate import (
-    action_context_var, tr_item, viz_number_context_var,
+    ACTION_CONTEXT_VAR, TR_ITEM, VIZ_NUMBER_CONTEXT_VAR,
 )
 from ontask.dataops.pandas import get_subframe
 from ontask.visualizations.plotly import PlotlyColumnHistogram
@@ -17,7 +17,7 @@ register = template.Library()
 def vis_html_content(context, column_name):
     """Create the HTML visualization code."""
     # Get the action
-    action = context.get(action_context_var)
+    action = context.get(ACTION_CONTEXT_VAR)
     if not action:
         raise Exception(_('Action object not found when processing tag'))
     workflow = action.workflow
@@ -27,7 +27,7 @@ def vis_html_content(context, column_name):
         raise Exception(_('Column {0} does not exist').format(column_name))
 
     # Get the visualization number to generate unique IDs
-    viz_number = context[viz_number_context_var]
+    viz_number = context[VIZ_NUMBER_CONTEXT_VAR]
 
     # Create the context for the visualization
     viz_ctx = {
@@ -39,7 +39,7 @@ def vis_html_content(context, column_name):
     # If the template is simply being saved and rendered to detect syntax
     # errors, we may not have the data of an individual, so we have to relax
     # this restriction.
-    ivalue = context.get(tr_item(column_name))
+    ivalue = context.get(TR_ITEM(column_name))
     if ivalue is not None:
         viz_ctx['individual_value'] = ivalue
 
@@ -60,7 +60,7 @@ def vis_html_content(context, column_name):
         ])
 
     # Update viz number
-    context[viz_number_context_var] = viz_number + 1
+    context[VIZ_NUMBER_CONTEXT_VAR] = viz_number + 1
 
     # Return the rendering of the viz marked as safe
     return mark_safe(prefix + viz.render())

@@ -12,11 +12,10 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 
 from ontask import models
-from ontask.action import services
-from ontask.action.forms import ActionForm, ActionUpdateForm
-from ontask.core import SessionPayload
-from ontask.core.decorators import ajax_required, get_action, get_workflow
-from ontask.core.permissions import UserIsInstructor, is_instructor
+from ontask.action import forms, services
+from ontask.core import (
+    SessionPayload, UserIsInstructor, ajax_required, get_action, get_workflow,
+    is_instructor)
 
 
 @user_passes_test(is_instructor)
@@ -26,7 +25,6 @@ def action_index(
     wid: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
-    del wid
     """Show all the actions attached to the workflow.
 
     :param request: HTTP Request
@@ -34,6 +32,7 @@ def action_index(
     :param workflow: Workflow for the session.
     :return: HTTP response
     """
+    del wid
     # Reset object to carry action info throughout dialogs
     SessionPayload.flush(request.session)
     return render(
@@ -49,7 +48,7 @@ def action_index(
 class ActionCreateView(UserIsInstructor, generic.TemplateView):
     """Process get/post requests to create an action."""
 
-    form_class = ActionForm
+    form_class = forms.ActionForm
 
     template_name = 'action/includes/partial_action_create.html'
 
@@ -91,7 +90,7 @@ class ActionUpdateView(UserIsInstructor, generic.DetailView):
     model = models.Action
     template_name = 'action/includes/partial_action_update.html'
     context_object_name = 'action'
-    form_class = ActionUpdateForm
+    form_class = forms.ActionUpdateForm
 
     def get_object(self, queryset=None) -> models.Action:
         """Access the Action object being manipulated."""
@@ -150,7 +149,7 @@ def edit_action(
     :return: HTML response
     """
     del pk
-    return services.action_process_factory.process_edit_request(
+    return services.ACTION_PROCESS_FACTORY.process_edit_request(
         request,
         workflow,
         action)

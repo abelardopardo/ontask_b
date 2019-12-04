@@ -13,8 +13,7 @@ from django.utils.translation import ugettext as _
 
 from ontask import models
 from ontask.core import get_workflow, is_instructor
-from ontask.dataops import services
-from ontask.dataops.forms import SelectColumnUploadForm, SelectKeysForm
+from ontask.dataops import forms, services
 
 
 @user_passes_test(is_instructor)
@@ -115,7 +114,7 @@ def upload_s2(
         upload_data['keep_key_column'] = keep_key_column
 
     # Bind the form with the received data (remember unique columns)
-    form = SelectColumnUploadForm(
+    form = forms.SelectColumnUploadForm(
         request.POST or None,
         column_names=rename_column_names,
         columns_to_upload=columns_to_upload,
@@ -258,7 +257,7 @@ def upload_s3(
 
     # Bind the form with the received data (remember unique columns and
     # preselected keys.)'
-    form = SelectKeysForm(
+    form = forms.SelectKeysForm(
         request.POST or None,
         dst_keys=dst_unique_col_names,
         src_keys=src_unique_col_names,

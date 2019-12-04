@@ -15,7 +15,7 @@ from django.views.decorators.http import require_http_methods
 
 from ontask import models
 from ontask.core import ajax_required, get_workflow, is_instructor
-from ontask.logs.services import LogResource, log_table_server_side
+from ontask.logs import services
 
 
 @user_passes_test(is_instructor)
@@ -59,7 +59,7 @@ def display_ss(
     :return: JSON response
     """
     # Render the page with the table
-    return http.JsonResponse(log_table_server_side(request, workflow))
+    return http.JsonResponse(services.log_table_server_side(request, workflow))
 
 
 @user_passes_test(is_instructor)
@@ -110,7 +110,8 @@ def export(
     :return: Return a CSV download of the logs
     """
     del wid
-    dataset = LogResource().export(workflow.logs.filter(user=request.user))
+    dataset = services.LogResource().export(
+        workflow.logs.filter(user=request.user))
 
     # Create the response as a csv download
     response = HttpResponse(dataset.csv, content_type='text/csv')

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Functions for Condition CRUD."""
-from typing import Optional
+from typing import Optional, Union
 
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest, JsonResponse
@@ -11,10 +11,10 @@ from django.utils.html import escape
 from django.views import generic
 
 from ontask import models
-from ontask.action.forms import ConditionForm, FilterForm
-from ontask.core.decorators import ajax_required, get_action, get_condition
-from ontask.core.permissions import UserIsInstructor, is_instructor
-from ontask.dataops.formula import get_variables
+from ontask.action import forms
+from ontask.core import (
+    UserIsInstructor, ajax_required, get_action, get_condition, is_instructor)
+from ontask.dataops import formula
 
 
 def save_condition_form(
@@ -57,7 +57,7 @@ def save_condition_form(
         condition.is_filter = is_filter
         condition.save()
         condition.columns.set(action.workflow.columns.filter(
-            name__in=get_variables(condition.formula),
+            name__in=formula.get_variables(condition.formula),
         ))
 
         # If the request has the 'action_content' field, update the action
@@ -90,7 +90,7 @@ def save_condition_form(
 class ConditionFilterCreateView(UserIsInstructor, generic.TemplateView):
     """Class to create a filter."""
 
-    form_class = None
+    form_class: Union[forms.FilterForm, forms.ConditionForm] = None
 
     template_name = None
 
@@ -126,7 +126,7 @@ class FilterCreateView(ConditionFilterCreateView):
     It receives the action IDwhere the condition needs to be connected.
     """
 
-    form_class = FilterForm
+    form_class = forms.FilterForm
 
     template_name = 'action/includes/partial_filter_addedit.html'
 
@@ -152,7 +152,7 @@ def edit_filter(
     # Render the form with the Condition information
     return save_condition_form(
         request,
-        FilterForm(
+        forms.FilterForm(
             request.POST or None,
             instance=condition,
             action=condition.action),
@@ -205,7 +205,7 @@ def delete_filter(
 class ConditionCreateView(ConditionFilterCreateView):
     """Handle AJAX requests to create a non-filter condition."""
 
-    form_class = ConditionForm
+    form_class = forms.ConditionForm
     template_name = 'action/includes/partial_condition_addedit.html'
 
 
@@ -230,7 +230,7 @@ def edit_condition(
     # Render the form with the Condition information
     return save_condition_form(
         request,
-        ConditionForm(
+        forms.ConditionForm(
             request.POST or None,
             instance=condition,
             action=condition.action),

@@ -75,4 +75,4 @@ class ActionManagementFactory:
             return render(kwargs.get('request'), 'base.html', {})
 
 
-action_process_factory = ActionManagementFactory()
+ACTION_PROCESS_FACTORY = ActionManagementFactory()

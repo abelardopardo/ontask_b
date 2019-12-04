@@ -12,10 +12,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskServiceException, create_new_name, models
-from ontask.core.decorators import ajax_required, get_view, get_workflow
-from ontask.core.permissions import is_instructor
-from ontask.table import services
-from ontask.table.forms import ViewAddForm
+from ontask.core import ajax_required, get_view, get_workflow, is_instructor
+from ontask.table import forms, services
 
 
 @user_passes_test(is_instructor)
@@ -69,7 +67,7 @@ def view_add(
         return JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
-    form = ViewAddForm(request.POST or None, workflow=workflow)
+    form = forms.ViewAddForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
@@ -107,7 +105,9 @@ def view_edit(
     :return: AJAX Response
     """
     del pk
-    form = ViewAddForm(request.POST or None, instance=view, workflow=workflow)
+    form = forms.ViewAddForm(
+        request.POST or None,
+        instance=view, workflow=workflow)
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
             return JsonResponse({'html_redirect': None})

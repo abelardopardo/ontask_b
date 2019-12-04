@@ -10,9 +10,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from ontask import models
-from ontask.core.decorators import get_workflow
-from ontask.core.permissions import is_instructor
-from ontask.dataops.forms import UploadS3FileForm
+from ontask.core import get_workflow, is_instructor
+from ontask.dataops import forms
 
 
 @user_passes_test(is_instructor)
@@ -41,7 +40,7 @@ def s3upload_start(
     :return: Creates the upload_data dictionary in the session
     """
     # Bind the form with the received data
-    form = UploadS3FileForm(
+    form = forms.UploadS3FileForm(
         request.POST or None,
         request.FILES or None,
         workflow=workflow)

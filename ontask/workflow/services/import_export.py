@@ -14,10 +14,10 @@ from rest_framework.renderers import JSONRenderer
 
 from ontask import models
 from ontask.core.checks import check_wf_df
+from ontask.workflow import services
 from ontask.workflow.serialize_workflow import (
     WorkflowExportSerializer, WorkflowImportSerializer,
 )
-from ontask.workflow.services import errors
 
 
 def _run_compatibility_patches(json_data):
@@ -104,21 +104,21 @@ def do_import_workflow(
     try:
         workflow = do_import_workflow_parse(user, name, file_item)
     except IOError:
-        raise errors.OnTaskWorkflowImportError(
+        raise services.OnTaskWorkflowImportError(
             _('Incorrect file. Expecting a GZIP file (exported workflow).'))
     except (TypeError, NotImplementedError) as exc:
-        raise errors.OnTaskWorkflowImportError(
+        raise services.OnTaskWorkflowImportError(
             _('Unable to import workflow. Exception: {0}').format(exc))
     except serializers.ValidationError as exc:
-        raise errors.OnTaskWorkflowImportError(
+        raise services.OnTaskWorkflowImportError(
             _('Unable to import workflow. Validation error: {0}').format(
                 exc))
     except AssertionError:
         # Something went wrong.
-        raise errors.OnTaskWorkflowImportError(
+        raise services.OnTaskWorkflowImportError(
             _('Workflow data with incorrect structure.'))
     except Exception as exc:
-        raise errors.OnTaskWorkflowImportError(
+        raise services.OnTaskWorkflowImportError(
             _('Unable to import workflow: {0}').format(exc))
 
     workflow.log(user, models.Log.WORKFLOW_IMPORT)

@@ -11,11 +11,11 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.action import forms
 from ontask.action.evaluate import (
     action_condition_evaluation,
     evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
-from ontask.action.forms import EnterActionIn
 
 
 def _check_json_is_correct(text_content: str) -> bool:
@@ -75,7 +75,7 @@ def _evaluate_row_action_in(action: models.Action, context: Mapping):
 
     col_values = [context[colcon_pair.column.name] for colcon_pair in tuples]
 
-    form = EnterActionIn(
+    form = forms.EnterActionIn(
         None,
         tuples=tuples,
         context=context,

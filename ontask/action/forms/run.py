@@ -55,7 +55,7 @@ from ontask.dataops.sql.row_queries import get_rows
 from ontask.models.basic import CHAR_FIELD_MID_SIZE
 
 # Format of column name to produce a Moodle compatible ZIP
-participant_re = re.compile(r'^Participant \d+$')
+PARTICIPANT_RE = re.compile(r'^Participant \d+$')
 
 
 class ExportWorkflowBase(ontask_forms.FormWithPayload):
@@ -459,7 +459,7 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
                 self.action.workflow.get_data_frame_table_name(),
                 column_names=[pcolumn.name])
             participant_error = any(
-                not participant_re.search(str(row[pcolumn.name]))
+                not PARTICIPANT_RE.search(str(row[pcolumn.name]))
                 for row in pcolumn_data
             )
             if participant_error:
@@ -573,7 +573,6 @@ class JSONActionRunForm(JSONActionForm, ExportWorkflowBase):
 
 class JSONListActionForm(JSONTokenForm):
     """Use a synonym for consistency with the other classes"""
-    pass
 
 
 class JSONListActionRunForm(JSONListActionForm, ExportWorkflowBase):

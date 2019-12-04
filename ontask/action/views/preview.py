@@ -11,15 +11,14 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ontask import models
 from ontask.action import services
-from ontask.core.decorators import ajax_required, get_action
-from ontask.core.permissions import is_instructor
+from ontask.core import ajax_required, get_action, is_instructor
 
 
 @csrf_exempt
 @user_passes_test(is_instructor)
 @ajax_required
 @get_action(pf_related='actions')
-def preview_next_all_false_response(
+def preview_next_all_false(
     request: HttpRequest,
     pk: Optional[int] = None,
     idx: Optional[int] = None,

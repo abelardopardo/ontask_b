@@ -10,9 +10,8 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from ontask import models
-from ontask.action.forms import EnableURLForm
-from ontask.core.decorators import ajax_required, get_action
-from ontask.core.permissions import is_instructor
+from ontask.action import forms
+from ontask.core import ajax_required, get_action, is_instructor
 
 
 @user_passes_test(is_instructor)
@@ -68,7 +67,7 @@ def showurl(
     :return: Json response with the content to show in the screen
     """
     del pk, workflow
-    form = EnableURLForm(request.POST or None, instance=action)
+    form = forms.EnableURLForm(request.POST or None, instance=action)
 
     if request.method == 'POST' and form.is_valid():
         if form.has_changed():

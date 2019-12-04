@@ -8,7 +8,6 @@
   table
 
 """
-from builtins import str
 from datetime import datetime
 from typing import Dict, List, Mapping, Optional, Tuple, Union
 
@@ -62,7 +61,7 @@ def _render_tuple_result(
 
 def action_condition_evaluation(
     action: models.Action,
-    row_values: Mapping,
+    row_values: Dict,
 ) -> Optional[Dict[str, bool]]:
     """Calculate dictionary with column_name: Boolean evaluations.
 
@@ -80,8 +79,7 @@ def action_condition_evaluation(
             condition_eval[condition['name']] = evaluate_formula(
                 condition['formula'],
                 EVAL_EXP,
-                row_values,
-            )
+                row_values)
         except ontask.OnTaskException:
             # Something went wrong evaluating a condition. Stop.
             return None
@@ -90,7 +88,7 @@ def action_condition_evaluation(
 
 def get_action_evaluation_context(
     action: models.Action,
-    row_values: Mapping,
+    row_values: Dict,
     condition_eval: Mapping = None,
 ) -> Optional[Dict]:
     """Create a dictionary with name:value to evaluate action content.
@@ -117,8 +115,7 @@ def get_action_evaluation_context(
                 condition_eval[condition['name']] = evaluate_formula(
                     condition['formula'],
                     EVAL_EXP,
-                    row_values,
-                )
+                    row_values)
             except ontask.OnTaskException:
                 # Something went wrong evaluating a condition. Stop.
                 return None

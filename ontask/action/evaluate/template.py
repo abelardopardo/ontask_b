@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Manipulate template text within OnTask and evaluat it s content."""
-from builtins import map, str
 import re
 import string
 from typing import Callable, Dict, List, Mapping
@@ -14,18 +13,18 @@ from ontask import models
 
 # Variable name to store the action ID in the context used to render a
 # template
-action_context_var = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
-viz_number_context_var = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
+ACTION_CONTEXT_VAR = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
+VIZ_NUMBER_CONTEXT_VAR = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
 
 # Regular expression and replacements replace whitespace surrounding condition
 # markup
-white_space_res = [
+WHITE_SPACE_RES = [
     (re.compile(r'\n[ \t\r\f\v]*{% if '), '{% if '),
     (re.compile(r'{% endif %}[ \t\r\f\v]*\n'), '{% endif %}'),
 ]
 
 # Template prelude to load the ontask_tags
-_ontask_template_prelude = '{% load ontask_tags %}'
+_ONTASK_TEMPLATE_PRELUDE = '{% load ontask_tags %}'
 
 
 def make_xlat(*args, **kwds) -> Callable:
@@ -43,14 +42,14 @@ def make_xlat(*args, **kwds) -> Callable:
     changes to a string
     """
     adict = dict(*args, **kwds)
-    rx = re.compile(r'|'.join(map(re.escape, adict)))
+    re_exec = re.compile(r'|'.join(map(re.escape, adict)))
 
     def one_xlat(match: str) -> str:
         return adict[match.group(0)]
 
     def xlat(text: str) -> str:
         """Apply regext substitution."""
-        return rx.sub(one_xlat, text)
+        return re_exec.sub(one_xlat, text)
 
     return xlat
 
@@ -59,7 +58,7 @@ def make_xlat(*args, **kwds) -> Callable:
 # 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 # !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 # abcdefghijklmnopqrstuvwxyzABCDEFG
-tr_item = make_xlat(
+TR_ITEM = make_xlat(
     {
         '!': '_a',
         '"': '_b',
@@ -157,7 +156,7 @@ def _translate(varname: str) -> str:
         varname = 'OT_' + varname
 
     # Return the new variable name surrounded by the detected marks.
-    return tr_item(varname)
+    return TR_ITEM(varname)
 
 
 def _clean_whitespace(template_text: str) -> str:
@@ -170,7 +169,7 @@ def _clean_whitespace(template_text: str) -> str:
     :return: Modified template text
     """
     # Loop over the regular expressions and apply them to the given text
-    for rexp, replace in white_space_res:
+    for rexp, replace in WHITE_SPACE_RES:
         template_text = rexp.sub(replace, template_text)
 
     return template_text
@@ -276,17 +275,17 @@ def render_action_template(
     #  a case of collision in the translation. Need to stop immediately.
     assert len(context_dict) == len(new_context)
 
-    if action_context_var in new_context:
-        raise Exception(_('Name {0} is reserved.').format(action_context_var))
-    new_context[action_context_var] = action
+    if ACTION_CONTEXT_VAR in new_context:
+        raise Exception(_('Name {0} is reserved.').format(ACTION_CONTEXT_VAR))
+    new_context[ACTION_CONTEXT_VAR] = action
 
-    if viz_number_context_var in new_context:
+    if VIZ_NUMBER_CONTEXT_VAR in new_context:
         raise Exception(_('Name {0} is reserved.').format(
-            viz_number_context_var,
+            VIZ_NUMBER_CONTEXT_VAR,
         ))
-    new_context[viz_number_context_var] = 0
+    new_context[VIZ_NUMBER_CONTEXT_VAR] = 0
 
     # Step 4. Return the redering of the new elements
     return Template(
-        _ontask_template_prelude + new_template_text,
+        _ONTASK_TEMPLATE_PRELUDE + new_template_text,
     ).render(Context(new_context))

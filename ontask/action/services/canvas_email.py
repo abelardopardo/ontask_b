@@ -25,7 +25,7 @@ from ontask.action.evaluate import evaluate_action
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.run_manager import ActionRunManager
 from ontask.core import SessionPayload, is_instructor
-from ontask.oauth.services import get_initial_token_step1, refresh_token
+from ontask.oauth import services
 
 LOGGER = get_task_logger('celery_execution')
 
@@ -66,7 +66,7 @@ def _refresh_and_retry_send(
     result_msg = ugettext('OAuth token refreshed')
     response_status = None
     try:
-        user_token = refresh_token(user_token, oauth_info)
+        user_token = services.refresh_token(user_token, oauth_info)
     except Exception as exc:
         result_msg = str(exc)
 
@@ -124,7 +124,7 @@ def _canvas_get_or_set_oauth_token(
     if not token:
         # There is no token, authentication has to take place for the first
         # time
-        return get_initial_token_step1(
+        return services.get_initial_token_step1(
             request,
             oauth_info,
             reverse(continue_url))
@@ -135,7 +135,7 @@ def _canvas_get_or_set_oauth_token(
         seconds=settings.CANVAS_TOKEN_EXPIRY_SLACK)
     if dead:
         try:
-            refresh_token(token, oauth_info)
+            services.refresh_token(token, oauth_info)
         except Exception as exc:
             # Something went wrong when refreshing the token
             messages.error(

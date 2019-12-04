@@ -16,7 +16,9 @@ from ontask.workflow.serialize_column import (
 try:
     profile  # noqa: Z444
 except NameError:
-    def profile(x: int) -> int: return x  # noqa E731
+    def profile(bogus: int) -> int:
+        """Useless, to prevent an emtpy exception handler"""
+        return bogus  # noqa E731
 
 
 def _create_condition(validated_data, action):
@@ -143,9 +145,10 @@ class ConditionSerializer(serializers.ModelSerializer):
         """Create a new condition object based on the validated_data.
 
         :param validated_data: Validated data obtained by the parser
-        :param kwargs: Additional arguments
+        :param kwargs: Additional arguments (unused)
         :return: Condition object
         """
+        del kwargs
         condition_obj = None
         try:
             condition_obj = _create_condition(
@@ -215,6 +218,7 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, **kwargs):
         """Create the tuple object with column, condition, action."""
+        del kwargs
         action = self.context['action']
 
         condition_obj = None
@@ -244,6 +248,7 @@ class RubricCellSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, **kwargs):
         """Create the tuple object with column, condition, action."""
+        del kwargs
         action = self.context['action']
 
         return models.RubricCell.objects.get_or_create(
@@ -366,9 +371,10 @@ class ActionSerializer(serializers.ModelSerializer):
         """Create the action.
 
         :param validated_data: Validated data
-        :param kwargs: Extra material
+        :param kwargs: Extra material (unused)
         :return: Create the action in the DB
         """
+        del kwargs
         action_obj = None
         try:
             action_type = validated_data.get('action_type')

@@ -15,7 +15,7 @@ from ontask.dataops.pandas import (
 from ontask.dataops.sql import (
     add_column_to_db, copy_column_in_db, db_rename_column, df_drop_column,
 )
-from ontask.workflow.services import errors
+from ontask.workflow import services
 
 _op_distrib = {
     'sum': lambda operand: operand.sum(axis=1, skipna=False),
@@ -94,7 +94,7 @@ def add_column_to_workflow(
             column.data_type,
             initial=column_initial_value)
     except Exception as exc:
-        raise errors.OnTaskWorkflowAddColumn(
+        raise services.OnTaskWorkflowAddColumn(
             message=_('Unable to add element: {0}').format(str(exc)),
             to_delete=[column])
 
@@ -150,7 +150,7 @@ def add_formula_column(
     try:
         store_dataframe(df, workflow)
     except Exception as exc:
-        raise errors.OnTaskWorkflowAddColumn(
+        raise services.OnTaskWorkflowAddColumn(
             message=_('Unable to add column: {0}').format(str(exc)),
             to_delete=[column])
 
@@ -182,7 +182,7 @@ def add_random_column(
     try:
         int_value = int(column.categories[0])
         if int_value <= 1:
-            raise errors.OnTaskWorkflowIntegerLowerThanOne(
+            raise services.OnTaskWorkflowIntegerLowerThanOne(
                 field_name='values',
                 message=_('The integer value has to be larger than 1'))
         column.set_categories([idx + 1 for idx in range(int_value)])
@@ -214,7 +214,7 @@ def add_random_column(
     try:
         store_dataframe(data_frame, workflow)
     except Exception as exc:
-        raise errors.OnTaskWorkflowStoreError(
+        raise services.OnTaskWorkflowStoreError(
             message=_('Unable to add the column: {0}').format(str(exc)),
             to_delete=[column])
 

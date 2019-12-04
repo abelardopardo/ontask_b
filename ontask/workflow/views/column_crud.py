@@ -11,12 +11,9 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskServiceException, models
-from ontask.core.decorators import ajax_required, get_column, get_workflow
-from ontask.core.permissions import is_instructor
+from ontask.core import ajax_required, get_column, get_workflow, is_instructor
 from ontask.dataops.formula import evaluation
 from ontask.workflow import forms, services
-from ontask.workflow.services import OnTaskWorkflowIntegerLowerThanOne
-from ontask.workflow.services.column_crud import clone_column
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -248,7 +245,7 @@ def random_column_add(
                 column,
                 form.data_frame)
             form.save_m2m()
-        except OnTaskWorkflowIntegerLowerThanOne as exc:
+        except services.OnTaskWorkflowIntegerLowerThanOne as exc:
             form.add_error(exc.field_name, str(exc))
             return JsonResponse({
                 'html_form': render_to_string(
@@ -424,7 +421,7 @@ def column_clone(
 
     # Proceed to clone the column
     try:
-        clone_column(request.user, column)
+        services.clone_column(request.user, column)
     except Exception as exc:
         messages.error(
             request,

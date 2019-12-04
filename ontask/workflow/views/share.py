@@ -10,9 +10,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from ontask import models
-from ontask.core.decorators import ajax_required, get_workflow
-from ontask.core.permissions import is_instructor
-from ontask.workflow.forms import SharedForm
+from ontask.core import ajax_required, get_workflow, is_instructor
+from ontask.workflow import forms
 
 
 @user_passes_test(is_instructor)
@@ -29,7 +28,7 @@ def share_create(
     :return: JSON response
     """
     # Create the form object with the form_fields just computed
-    form = SharedForm(
+    form = forms.SharedForm(
         request.POST or None,
         user=request.user,
         workflow=workflow)

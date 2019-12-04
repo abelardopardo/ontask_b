@@ -11,9 +11,8 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.action.forms import RubricCellForm, RubricLOAForm
-from ontask.core.decorators import ajax_required, get_action
-from ontask.core.permissions import is_instructor
+from ontask.action import forms
+from ontask.core import ajax_required, get_action, is_instructor
 
 
 @user_passes_test(is_instructor)
@@ -44,7 +43,7 @@ def edit_rubric_cell(
         action.set_text_content(action_content)
         action.save()
 
-    form = RubricCellForm(
+    form = forms.RubricCellForm(
         request.POST or None,
         instance=action.rubric_cells.filter(
             column=cid,
@@ -98,7 +97,7 @@ def edit_rubric_loas(
         action.set_text_content(action_content)
         action.save()
 
-    form = RubricLOAForm(
+    form = forms.RubricLOAForm(
         request.POST or None,
         criteria=[acc.column for acc in action.column_condition_pair.all()])
 

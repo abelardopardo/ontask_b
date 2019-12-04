@@ -10,12 +10,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
-from ontask.core.decorators import get_workflow
-from ontask.core.permissions import is_instructor
-from ontask.dataops import services
-from ontask.dataops.forms import RowForm
-from ontask.dataops.sql import get_row
+from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX, get_workflow, is_instructor
+from ontask.dataops import forms, services, sql
 
 
 @user_passes_test(is_instructor)
@@ -35,7 +31,7 @@ def row_create(
         return redirect('dataops:uploadmerge')
 
     # Create the form
-    form = RowForm(request.POST or None, workflow=workflow)
+    form = forms.RowForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
         row_values = [
@@ -92,10 +88,10 @@ def row_update(
             {'message': _('Unable to update table row')})
 
     # Get the form populated with the row values
-    form = RowForm(
+    form = forms.RowForm(
         request.POST or None,
         workflow=workflow,
-        initial_values=get_row(
+        initial_values=sql.get_row(
             workflow.get_data_frame_table_name(),
             key_name=update_key,
             key_value=update_val,
