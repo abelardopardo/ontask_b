@@ -42,6 +42,7 @@ def preview_next_all_false_response(
     :param action: Action being used in preview (set by the decorators)
     :return: JSON Response with the rendering of the preview
     """
+    del workflow
     # Get the list of indexes
     idx_list = action.rows_all_false
 
@@ -78,17 +79,13 @@ def preview_response(
     denote which instance to show.
 
     :param request: HTML request object
-
     :param pk: Primary key of the an action for which to do the preview
-
     :param idx: Index of the reponse to preview
-
     :param workflow: Current workflow being manipulated
-
     :param action: Might have been fetched already
-
     :return: JsonResponse
     """
+    del pk, workflow
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content')
     if action_content:

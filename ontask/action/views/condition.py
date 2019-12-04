@@ -111,6 +111,7 @@ class ConditionFilterCreateView(UserIsInstructor, generic.TemplateView):
     @method_decorator(get_action(pf_related=['actions', 'columns']))
     def post(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
         """Process POST request to  create a filter."""
+        del args
         return save_condition_form(
             request,
             self.form_class(request.POST, action=kwargs['action']),
@@ -147,6 +148,7 @@ def edit_filter(
     :param condition: Filter to edit (set by the decorator)
     :return: AJAX response
     """
+    del pk, workflow
     # Render the form with the Condition information
     return save_condition_form(
         request,
@@ -176,6 +178,7 @@ def delete_filter(
     :param condition: Filter to edit (set by the decorator)
     :return: AJAX response
     """
+    del pk, workflow
     if request.method == 'GET':
         return JsonResponse({
             'html_form': render_to_string(
@@ -223,6 +226,7 @@ def edit_condition(
     :param condition: condition to edit (set by the decorator)
     :return: AJAX reponse
     """
+    del pk, workflow
     # Render the form with the Condition information
     return save_condition_form(
         request,
@@ -251,6 +255,7 @@ def delete_condition(
     :param condition: Condition to delete (set by the decorator)
     :return: AJAX response to render
     """
+    del pk, workflow
     # Treat the two types of requests
     if request.method == 'POST':
         action = condition.action

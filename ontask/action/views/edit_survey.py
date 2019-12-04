@@ -43,6 +43,7 @@ def select_column_action(
     :param key: The columns is a key column
     :return: JSON response
     """
+    del pk
     if cpk == -1:
         # Unsetting key column
         action.column_condition_pair.filter(column__is_key=True).delete()
@@ -89,6 +90,7 @@ def unselect_column_action(
     :param action: Action being edited (set by the decorators)
     :return: JSON response
     """
+    del request, pk
     # Get the column
     column = workflow.columns.filter(pk=cpk).first()
     if not column:
@@ -122,6 +124,7 @@ def select_condition_for_question(
     decorators)
     :return: JSON response
     """
+    del request, pk, workflow
     condition = None
     if condpk:
         # Get the condition
@@ -154,6 +157,7 @@ def shuffle_questions(
     :param action: Action being manipulated (set by the decorators)
     :return: HTML response
     """
+    del request, pk, workflow
     # Check if the workflow is locked
     action.shuffle = not action.shuffle
     action.save()
@@ -180,6 +184,7 @@ def toggle_question_change(
     the decorator)
     :return: HTML response
     """
+    del pk, workflow
     cc_tuple.changes_allowed = not cc_tuple.changes_allowed
     cc_tuple.save()
     cc_tuple.log(request.user, models.Log.ACTION_QUESTION_TOGGLE_CHANGES)
@@ -204,6 +209,7 @@ def edit_description(
     :param action: Action being modified (set by the decorators)
     :return: AJAX response
     """
+    del pk, workflow
     # Create the form
     form = ActionDescriptionForm(
         request.POST or None,

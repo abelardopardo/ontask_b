@@ -38,6 +38,7 @@ class ExecuteIncreaseTrackCount:
         :param log_item: Optional logitem object.
         :returns: nothing
         """
+        del user, workflow, action, log_item
         method = payload.get('method')
         if method != 'GET':
             # Only GET requests are accepted

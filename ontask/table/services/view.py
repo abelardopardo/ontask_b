@@ -87,7 +87,7 @@ def do_clone_view(
     try:
         # Update the many to many field.
         new_view.columns.set(list(view.columns.all()))
-    except Exception as exc:
+    except Exception:
         raise OnTaskTableCloneError(
             message=_('Error while cloning table view.'),
             to_delete=[new_view]

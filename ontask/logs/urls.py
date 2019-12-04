@@ -3,7 +3,7 @@
 """URLs to access the logs."""
 from django.urls import path
 
-from ontask.logs import api, resources, views
+from ontask.logs import api, views
 
 app_name = 'logs'
 
@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('<int:pk>/view/', views.view, name='view'),
 
-    path('<int:wid>/export/', resources.export, name='export'),
+    path('<int:wid>/export/', views.export, name='export'),
 
     path('list/', api.LogAPIList.as_view()),
 ]

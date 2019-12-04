@@ -52,6 +52,7 @@ def home(request: HttpRequest) -> HttpResponse:
 @lti_role_required(['Instructor', 'Learner'])
 def lti_entry(request: HttpRequest) -> HttpResponse:
     """Responde through LTI entry."""
+    del request
     return redirect('home')
 
 
@@ -81,4 +82,5 @@ def keep_alive(request: HttpRequest) -> JsonResponse:
     :param request:
     :return: Empty JSON response
     """
+    del request
     return JsonResponse({})

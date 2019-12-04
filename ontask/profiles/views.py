@@ -47,6 +47,7 @@ class EditProfile(LoginRequiredMixin, generic.TemplateView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        del args, kwargs
         user = self.request.user
         user_form = forms.UserForm(request.POST, instance=user)
         profile_form = forms.ProfileForm(request.POST,
@@ -99,5 +100,6 @@ def delete_token(request, pk):
     :param pk: Token id to remove
     :return:
     """
+    del request
     models.OAuthUserToken.objects.get(id=pk).delete()
     return redirect('profiles:show_self')

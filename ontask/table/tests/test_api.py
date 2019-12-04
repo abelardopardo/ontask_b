@@ -81,12 +81,7 @@ class TableApiBase(test.OnTaskApiTestCase):
         # Get the token for authentication and set credentials in client
         token = Token.objects.get(user__email=self.user_name)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        test._pg_restore_table(self.filename)
         self.user = get_user_model().objects.get(email=self.user_name)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
 
 class TableApiCreate(TableApiBase):
@@ -177,7 +172,7 @@ class TableApiCreate(TableApiBase):
         workflow = models.Workflow.objects.get(id=response.data['id'])
 
         # Upload the table
-        response = self.client.post(
+        self.client.post(
             reverse('table:api_ops', kwargs={'wid': workflow.id}),
             {'data_frame': self.new_table},
             format='json')
@@ -230,7 +225,7 @@ class TableApiCreate(TableApiBase):
         r_df = detect_datetime_columns(r_df)
 
         # Upload the table
-        response = self.client.post(
+        self.client.post(
             reverse('table:api_pops', kwargs={'wid': workflow.id}),
             {'data_frame': df_to_string(r_df)},
             format='json')
@@ -253,7 +248,7 @@ class TableApiCreate(TableApiBase):
         r_df = detect_datetime_columns(r_df)
 
         # Upload a new table
-        response = self.client.put(
+        self.client.put(
             reverse(
                 'table:api_ops',
                 kwargs={'wid': workflow.id}),
@@ -278,7 +273,7 @@ class TableApiCreate(TableApiBase):
         r_df = detect_datetime_columns(r_df)
 
         # Upload a new table
-        response = self.client.put(
+        self.client.put(
             reverse(
                 'table:api_pops',
                 kwargs={'wid': workflow.id}),
@@ -299,7 +294,7 @@ class TableApiCreate(TableApiBase):
         workflow = models.Workflow.objects.all()[0]
 
         # Flush the data in the table
-        response = self.client.delete(reverse(
+        self.client.delete(reverse(
             'table:api_ops',
             kwargs={'wid': workflow.id}))
 
@@ -308,7 +303,7 @@ class TableApiCreate(TableApiBase):
         workflow = models.Workflow.objects.all()[0]
 
         # Flush the data in the table
-        response = self.client.delete(
+        self.client.delete(
             reverse('table:api_pops', kwargs={'wid': workflow.id}))
 
 
@@ -403,7 +398,7 @@ class TableApiMerge(TableApiBase):
         workflow = models.Workflow.objects.all()[0]
 
         # Get the data through the API
-        response = self.client.put(
+        self.client.put(
             reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df,
@@ -427,7 +422,7 @@ class TableApiMerge(TableApiBase):
         r_df = pd.DataFrame(self.src_df)
 
         # Get the data through the API
-        response = self.client.put(
+        self.client.put(
             reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
                 "src_df": df_to_string(r_df),
@@ -525,7 +520,7 @@ class TableApiMerge(TableApiBase):
         email.save()
 
         # Get the data through the API
-        response = self.client.put(
+        self.client.put(
             reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df,
@@ -553,7 +548,7 @@ class TableApiMerge(TableApiBase):
         r_df = pd.DataFrame(self.src_df)
 
         # Get the data through the API
-        response = self.client.put(
+        self.client.put(
             reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
                 "src_df": df_to_string(r_df),
@@ -600,7 +595,7 @@ class TableApiMerge(TableApiBase):
         new_df = pd.merge(df, r_df, how="outer", left_on="sid", right_on="sid")
 
         # Get the data through the API
-        response = self.client.put(
+        self.client.put(
             reverse('table:api_merge', kwargs={'wid': workflow.id}),
             {
                 "src_df": self.src_df2,
@@ -649,7 +644,7 @@ class TableApiMerge(TableApiBase):
         new_df = pd.merge(df, r_df, how="outer", left_on="sid", right_on="sid")
 
         # Get the data through the API
-        response = self.client.put(
+        self.client.put(
             reverse('table:api_pmerge', kwargs={'wid': workflow.id}),
             {
                 "src_df": df_to_string(r_df),

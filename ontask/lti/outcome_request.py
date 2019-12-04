@@ -138,7 +138,7 @@ class OutcomeRequest:
                 sourcedGUID.sourcedId
             self.score = str(result.resultRecord.result.
                              resultScore.textString)
-        except:
+        except Exception:
             pass
 
         try:
@@ -147,7 +147,7 @@ class OutcomeRequest:
             # Get result sourced id from resultRecord
             self.lis_result_sourcedid = result.resultRecord.\
                 sourcedGUID.sourcedId
-        except:
+        except Exception:
             pass
 
         try:
@@ -156,7 +156,7 @@ class OutcomeRequest:
             # Get result sourced id from resultRecord
             self.lis_result_sourcedid = result.resultRecord.\
                 sourcedGUID.sourcedId
-        except:
+        except Exception:
             pass
 
     def has_required_attributes(self):

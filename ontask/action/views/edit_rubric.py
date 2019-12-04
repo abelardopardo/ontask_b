@@ -37,6 +37,7 @@ def edit_rubric_cell(
     :param action: Action being edited (set by the decorators)
     :return: JSON Response
     """
+    del workflow
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content')
     if action_content:
@@ -90,6 +91,7 @@ def edit_rubric_loas(
     :param action: Action being edited (set by the decorators)
     :return: JSON Response
     """
+    del workflow
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content')
     if action_content:

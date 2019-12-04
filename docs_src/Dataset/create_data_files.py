@@ -183,7 +183,7 @@ def add_column(all_students, col_name, values, probabilities):
 
     all_students[col_name] = \
         [weighted_choice(list(zip(values, probabilities)))
-         for x in range(len(all_students))]
+         for __ in range(len(all_students))]
 
 
 def read_initial_file(file_name, num_students=500):

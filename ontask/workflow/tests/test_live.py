@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Test live execution of operations related to workflows and columns."""
 import os
 
 from django.conf import settings
@@ -15,13 +16,11 @@ import test
 
 
 class WorkflowInitial(test.OnTaskLiveTestCase):
-    def setUp(self):
-        super().setUp()
-        test.create_users()
 
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
+    def setUp(self):
+        """Create the required users."""
+        super().setUp()
+        self.create_users()
 
     def test_01_workflow_create_upload_merge_column_edit(self):
         """
@@ -257,14 +256,6 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         'simple_workflow.sql'
     )
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     def test_02_workflow_column_create_delete(self):
         new_cols = [
             ('newc1', 'string', 'male,female', ''),
@@ -305,8 +296,8 @@ class WorkflowModify(test.OnTaskLiveTestCase):
         for cname, ctype, clist, cinit in new_cols:
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
-            check_wf_df(models.Workflow.objects.get(id=1))
             idx += 1
+        check_wf_df(models.Workflow.objects.get(id=1))
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
         idx = 5
@@ -414,14 +405,6 @@ class WorkflowAttribute(test.OnTaskLiveTestCase):
         'simple_workflow.sql'
     )
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     def test_workflow_attributes(self):
         pass
 
@@ -519,14 +502,6 @@ class WorkflowShare(test.OnTaskLiveTestCase):
         'fixtures',
         'simple_workflow.sql'
     )
-
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     def test_workflow_share(self):
         # Login
@@ -663,14 +638,6 @@ class WorkflowImport(test.OnTaskLiveTestCase):
         'fixtures',
         'simple_workflow_export.sql'
     )
-
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     def test_import_complete(self):
 

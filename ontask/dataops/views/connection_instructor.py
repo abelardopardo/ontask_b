@@ -26,6 +26,7 @@ def sql_connection_instructor_index(
     :param workflow: Current workflow being used
     :return: HTML response
     """
+    del workflow
     return render(
         request,
         'dataops/connections.html',
@@ -47,6 +48,7 @@ def athena_connection_instructor_index(
     :param workflow: Current workflow being used
     :return: HTML response
     """
+    del workflow
     return render(
         request,
         'dataops/connections.html',

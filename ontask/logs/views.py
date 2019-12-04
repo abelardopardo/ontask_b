@@ -7,6 +7,7 @@ from typing import Optional
 from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
@@ -14,7 +15,7 @@ from django.views.decorators.http import require_http_methods
 
 from ontask import models
 from ontask.core import ajax_required, get_workflow, is_instructor
-from ontask.logs.services import log_table_server_side
+from ontask.logs.services import LogResource, log_table_server_side
 
 
 @user_passes_test(is_instructor)
@@ -76,11 +77,7 @@ def view(
     :return: Http response rendering the view.html
     """
     # Get the log item
-    log_item = models.Log.objects.filter(
-        pk=pk,
-        user=request.user,
-        workflow=workflow,
-    ).first()
+    log_item = workflow.logs.filter(pk=pk, user=request.user).first()
 
     # If the log item is not there, flag!
     if not log_item:
@@ -96,3 +93,27 @@ def view(
                 log_item.payload,
                 sort_keys=True,
                 indent=4)})
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def export(
+    request: http.HttpRequest,
+    wid: int,
+    workflow: models.Workflow
+) -> http.HttpResponse:
+    """Export the logs from the given workflow.
+
+    :param request: HTML request
+    :param wid: pk of the workflow to export
+    :param workflow: Workflow being manipulated
+    :return: Return a CSV download of the logs
+    """
+    del wid
+    dataset = LogResource().export(workflow.logs.filter(user=request.user))
+
+    # Create the response as a csv download
+    response = HttpResponse(dataset.csv, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="logs.csv"'
+
+    return response

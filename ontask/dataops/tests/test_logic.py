@@ -129,7 +129,7 @@ class DataopsMatrixManipulation(test.OnTaskTestCase):
             self.merge_info)
 
         # Load again the workflow data frame
-        df_dst = load_table(self.workflow.get_data_frame_table_name())
+        load_table(self.workflow.get_data_frame_table_name())
 
         # Result must be correct (None)
         self.assertEquals(result, None)
@@ -651,10 +651,6 @@ class ConditionSetEvaluation(test.OnTaskTestCase):
         'test_condition_evaluation.sql'
     )
     action_name = 'Test action'
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
 
     def test_eval_conditions(self):
         # Get the action first

@@ -25,6 +25,7 @@ def csvdownload(
     :param workflow: Set by the decorator to the current workflow.
     :return: Return a CSV download of the data in the table
     """
+    del request
     return services.create_response_with_csv(
         get_subframe(
             workflow.get_data_frame_table_name(),
@@ -48,6 +49,7 @@ def csvdownload_view(
     :param view: Set by the decorator to the view with the given PK
     :return: Return a CSV download of the data in the table
     """
+    del request, pk
     return services.create_response_with_csv(
         get_subframe(
             workflow.get_data_frame_table_name(),

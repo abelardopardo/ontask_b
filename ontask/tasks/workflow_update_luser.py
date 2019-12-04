@@ -37,6 +37,7 @@ class ExecuteUpdateWorkflowLUser:
         :param log_item: Id of the log object where the status is reflected
         :return: Nothing, the result is stored in the log with log_id
         """
+        del action
         if not log_item and self.log_event:
             log_item = workflow.log(
                 user,

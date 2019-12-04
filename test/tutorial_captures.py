@@ -2,8 +2,6 @@
 
 
 import os
-import test
-from test import ElementHasFullOpacity, ScreenTests
 from time import sleep
 
 from django.conf import settings
@@ -15,6 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
 from ontask.dataops.pandas import destroy_db_engine
+from test import ElementHasFullOpacity, ScreenTests
 
 
 class TutorialCaptures(ScreenTests):
@@ -30,10 +29,6 @@ class TutorialCaptures(ScreenTests):
         '{% if Program is SMED %}Sme suggestions for SMED{% endif %}\n' + \
         'Kind regards\n' + \
         'Jane Doe'
-
-    def setUp(self):
-        super().setUp()
-        test.create_users()
 
     def test(self):
         """

@@ -58,62 +58,6 @@ wflow_desc = 'description text for workflow 1'
 wflow_empty = 'The workflow does not have data'
 
 
-def create_groups():
-    """
-    Create the user groups for OnTask
-    :return:
-    """
-
-    for gname in GROUP_NAMES:
-        Group.objects.get_or_create(name=gname)
-
-
-def create_users():
-    """
-    Create all the users based in the user_info
-    :return:
-    """
-
-    # Create the groups first
-    create_groups()
-
-    for uname, uemail, glist, suser in user_info:
-        uobj = get_user_model().objects.filter(email=uemail).first()
-        if not uobj:
-            uobj = get_user_model().objects.create_user(
-                name=uname,
-                email=uemail,
-                password=boguspwd)
-
-        for gname in glist:
-            gobj = Group.objects.get(name=gname)
-            uobj.groups.add(gobj)
-            uobj.save()
-
-    # Create the tokens for all the users
-    for usr in get_user_model().objects.all():
-        Token.objects.create(user=usr)
-
-
-def _pg_restore_table(filename):
-    """
-    Function that given a file produced with a pg_dump, it uploads its
-    content to the existing database
-
-    :param filename: File in pg_dump format to restore
-    :return:
-    """
-    process = subprocess.Popen(['psql',
-                                '-o',
-                                '/dev/null',
-                                '-d',
-                                settings.DATABASES['default']['NAME'],
-                                '-q',
-                                '-f',
-                                filename])
-    process.wait()
-
-
 class ElementHasFullOpacity:
     """
     Detect when an element has opacity equal to 1
@@ -321,6 +265,7 @@ class OnTaskApiTestCase(OnTaskBasicTestCase, APITransactionTestCase):
     """OnTask tests for the API."""
 
     def compare_wflows(self, jwflow, workflow):
+        """Compare two workflows."""
         # Name and description match the one in the db
         self.assertEqual(jwflow['name'], workflow.name)
         self.assertEqual(jwflow['description_text'], workflow.description_text)
@@ -345,7 +290,7 @@ class OnTaskApiTestCase(OnTaskBasicTestCase, APITransactionTestCase):
 
         # The names of the columns have to be identical
         self.assertEqual(set(list(m1.columns)),
-                         set(list(m2.columns)))
+            set(list(m2.columns)))
 
         # Check the values of every column
         for cname in list(m1.columns):
@@ -525,7 +470,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         ).click()
 
     def click_dropdown_option_and_wait(self, dd_xpath, option_name,
-                                       wait_for=None):
+        wait_for=None):
         """
         Given a dropdown xpath, click to open and then click on the given option
         :param dd_xpath: xpath to locate the dropdown element (top level)
@@ -695,8 +640,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
             (By.XPATH,
              self.class_and_text_xpath.format('a',
-                                              'dropdown-item',
-                                              'Workflow operations'))
+                 'dropdown-item',
+                 'Workflow operations'))
         ))
         self.selenium.find_element_by_id('ontask-base-workflow').click()
         WebDriverWait(self.selenium, 10).until(
@@ -713,8 +658,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
             (By.XPATH,
              self.class_and_text_xpath.format('a',
-                                              'dropdown-item',
-                                              'Column operations'))
+                 'dropdown-item',
+                 'Column operations'))
         ))
         self.selenium.find_element_by_id('ontask-base-columns').click()
         WebDriverWait(self.selenium, 10).until(
@@ -735,8 +680,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
             (By.XPATH,
              self.class_and_text_xpath.format('a',
-                                              'dropdown-item',
-                                              'Scheduled operations'))
+                 'dropdown-item',
+                 'Scheduled operations'))
         ))
         self.selenium.find_element_by_id('ontask-base-scheduler').click()
         WebDriverWait(self.selenium, 10).until(
@@ -752,8 +697,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
             (By.XPATH,
              self.class_and_text_xpath.format('a',
-                                              'dropdown-item',
-                                              'View logs'))
+                 'dropdown-item',
+                 'View logs'))
         ))
         self.selenium.find_element_by_id('ontask-base-logs').click()
         # Wait for ajax table to refresh
@@ -912,8 +857,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
             (By.XPATH,
              self.class_and_text_xpath.format('a',
-                                              'dropdown-item',
-                                              'Workflow operations'))
+                 'dropdown-item',
+                 'Workflow operations'))
         ))
         self.selenium.find_element_by_link_text('Workflow operations').click()
         WebDriverWait(self.selenium, 10).until(
@@ -993,11 +938,11 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
 
     def add_column(self,
-                   col_name,
-                   col_type,
-                   col_categories='',
-                   col_init='',
-                   index=None):
+        col_name,
+        col_type,
+        col_categories='',
+        col_init='',
+        index=None):
         # Click on the Add Column -> Regular column
         self.open_add_regular_column()
 
@@ -1122,7 +1067,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.selenium.find_element_by_class_name('js-attribute-create').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'modal-title'),
-                                             'Create attribute')
+                'Create attribute')
         )
 
         # Fill out the form
@@ -1358,12 +1303,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def open_add_regular_column(self):
         # Click on the Add Column button
         self.click_dropdown_option_and_wait('//*[@id="addColumnOperations"]',
-                                            'Regular column')
+            'Regular column')
 
     def open_add_derived_column(self):
         # Click on the Add Column button
         self.click_dropdown_option_and_wait('//*[@id="addColumnOperations"]',
-                                            'Formula-derived column')
+            'Formula-derived column')
 
     def open_column_edit(self, name):
         self.selenium.find_element_by_xpath(
@@ -1903,6 +1848,11 @@ class ScreenTests(OnTaskLiveTestCase):
     modal_xpath = '//div[@id="modal-item"]' \
                   '/div[contains(@class, "modal-dialog")]' \
                   '/div[@class="modal-content"]'
+
+    def setUp(self):
+        """Create the basic users"""
+        super().setUp()
+        self.create_users()
 
     @staticmethod
     def img_path(f):

@@ -2,8 +2,6 @@
 
 
 import os
-import test
-from test import ScreenTests
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
@@ -11,16 +9,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask.dataops.pandas import destroy_db_engine
+from test import ScreenTests
 
 
 class Scenario3Captures(ScreenTests):
 
     workflow_name = 'Scenario 3'
     description = 'Scenario 3 in the documentation'
-
-    def setUp(self):
-        super().setUp()
-        test.create_users()
 
     def test(self):
         """

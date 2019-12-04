@@ -9,7 +9,7 @@
       <p class="text-center">{% blocktrans with n=tdelta %}The operation will start executing in {{ n }}{% endblocktrans %}</p>
     {% endif %}
     <div class="text-center">
-      <a class="shadow btn btn-outline-dark" href="{% url 'scheduler:index' %}">{% trans 'Back' %}</a>
+      <a class="shadow btn btn-outline-dark" href="{% url 'scheduler:index' %}">{% trans 'Scheduled operations' %}</a>
       <a href="{% url 'scheduler:edit_scheduled_operation' s_item.id %}"
          class="shadow btn btn-outline-primary">
       <span class="fa fa-pencil"></span> {% trans 'Edit' %}</a>

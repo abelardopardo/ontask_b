@@ -16,7 +16,7 @@ from ontask.action.evaluate import (
     get_action_evaluation_context,
 )
 from ontask.action.services.edit_manager import ActionOutEditManager
-from ontask.action.services.manager import ActionRunManager
+from ontask.action.services.run_manager import ActionRunManager
 
 LOGGER = get_task_logger('celery_execution')
 

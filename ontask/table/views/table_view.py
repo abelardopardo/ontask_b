@@ -11,11 +11,11 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import create_new_name, models, OnTaskServiceException
+from ontask import OnTaskServiceException, create_new_name, models
 from ontask.core.decorators import ajax_required, get_view, get_workflow
 from ontask.core.permissions import is_instructor
-from ontask.table.forms import ViewAddForm
 from ontask.table import services
+from ontask.table.forms import ViewAddForm
 
 
 @user_passes_test(is_instructor)
@@ -106,6 +106,7 @@ def view_edit(
     :param view: View to be edited
     :return: AJAX Response
     """
+    del pk
     form = ViewAddForm(request.POST or None, instance=view, workflow=workflow)
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
@@ -144,6 +145,7 @@ def view_delete(
     :param view: View to be deleted.
     :return: AJAX response to handle the form.
     """
+    del pk, workflow
     if request.method == 'POST':
         view.log(request.user, models.Log.VIEW_DELETE)
         view.delete()

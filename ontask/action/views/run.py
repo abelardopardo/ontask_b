@@ -104,6 +104,7 @@ def run_action(
     :param action: Action object to be assigned by the decorators
     :return: HttpResponse
     """
+    del pk, workflow
     if not celery_is_up():
         messages.error(
             request,
@@ -159,6 +160,7 @@ def zip_action(
     :param action: Action being manipulated (set by the decorators)
     :return: HTTP response
     """
+    del pk, workflow
     return services.action_process_factory.process_run_request(
         models.action.ZIP_OPERATION,
         request=request,
@@ -250,6 +252,7 @@ def run_survey_row(
     :param user_attribute_name: Optional attribute name for the user
     :return: Http Response
     """
+    del pk, workflow
     if action.is_out:
         return redirect('action:index')
 
@@ -396,6 +399,7 @@ def show_survey_table_ss(
     :param action: Action being  manipulated (set by the decorator)
     :return:
     """
+    del pk
     # Check that the GET parameters are correctly given
     dt_page = DataTablesServerSidePaging(request)
     if not dt_page.is_valid:

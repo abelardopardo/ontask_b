@@ -16,6 +16,16 @@ from ontask.core import DataTablesServerSidePaging
 LOGGER = get_task_logger('celery_execution')
 
 
+class LogResource(resources.ModelResource):
+    """Model resource to handle logs."""
+
+    class Meta:
+        """Define model and fields."""
+
+        model = models.Log
+        fields = ('id', 'created', 'name', 'payload',)
+
+
 def get_log_item(log_id: int) -> Optional[models.Log]:
     """Get the log object.
 

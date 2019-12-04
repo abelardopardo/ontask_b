@@ -61,6 +61,7 @@ def get_execution_items(
 
 def ontask_handler400(request: HttpRequest, exception) -> HttpResponse:
     """Return error 400."""
+    del exception
     response = render(request, '400.html', {})
     response.status_code = 400
     return response
@@ -68,6 +69,7 @@ def ontask_handler400(request: HttpRequest, exception) -> HttpResponse:
 
 def ontask_handler403(request: HttpRequest, exception) -> HttpResponse:
     """Return error 403."""
+    del exception
     response = render(request, '403.html', {})
     response.status_code = 403
     return response
@@ -75,6 +77,7 @@ def ontask_handler403(request: HttpRequest, exception) -> HttpResponse:
 
 def ontask_handler404(request: HttpRequest, exception) -> HttpResponse:
     """Return error 404."""
+    del exception
     response = render(request, '404.html', {})
     response.status_code = 404
     return response

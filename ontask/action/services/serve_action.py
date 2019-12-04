@@ -37,16 +37,12 @@ def serve_action_out(
     :param user_attribute_name: Column to check for email
     :return:
     """
-    # For the response
-    payload = {'action': action.name, 'action_id': action.id}
-
     # User_instance has the record used for verification
     row_values = get_row_values(action, (user_attribute_name, user.email))
 
     # Get the dictionary containing column names, attributes and condition
     # valuations:
     context = get_action_evaluation_context(action, row_values)
-    error = ''
     if context is None:
         # Log the event
         action.log(
@@ -66,7 +62,6 @@ def serve_action_out(
     response = action_content
     if action_content is None:
         response = render_to_string('action/action_unavailable.html', {})
-        error = _('Action not enabled for user {0}').format(user.email)
 
     # Log the event
     action.log(

@@ -156,6 +156,7 @@ class ToolConfig:
 
     def to_xml(self, opts=defaultdict(lambda: None)):
         """Generate XML from the current settings."""
+        del opts
         if not self.launch_url or not self.secure_launch_url:
             raise InvalidLTIConfigError('Invalid LTI configuration')
 

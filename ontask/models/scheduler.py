@@ -39,13 +39,13 @@ RUN_ACTION_EMAIL_LIST = RUN_ACTION + Action.EMAIL_LIST
 RUN_ACTION_JSON_LIST = RUN_ACTION + Action.JSON_LIST
 RUN_ACTION_RUBRIC_TEXT = RUN_ACTION + Action.RUBRIC_TEXT
 
-OPERATION_TYPES = [
-    (RUN_ACTION_PERSONALIZED_TEXT, _('Run personalized text action')),
-    (RUN_ACTION_PERSONALIZED_JSON, _('Run personalized JSON action')),
-    (RUN_ACTION_EMAIL_LIST, _('Run send list action')),
-    (RUN_ACTION_JSON_LIST, _('Run send JSON list action')),
-    (RUN_ACTION_RUBRIC_TEXT, _('Run rubrict text action')),
-]
+OPERATION_TYPES = {
+    RUN_ACTION_PERSONALIZED_TEXT: _('Run personalized text action'),
+    RUN_ACTION_PERSONALIZED_JSON: _('Run personalized JSON action'),
+    RUN_ACTION_EMAIL_LIST: _('Run send list action'),
+    RUN_ACTION_JSON_LIST: _('Run send JSON list action'),
+    RUN_ACTION_RUBRIC_TEXT: _('Run rubrict text action'),
+}
 
 
 class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
@@ -59,7 +59,7 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         max_length=CHAR_FIELD_MID_SIZE,
         null=False,
         blank=False,
-        choices=OPERATION_TYPES)
+        choices=OPERATION_TYPES.items())
 
     # Time of execution
     execute = models.DateTimeField(
@@ -137,11 +137,16 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
 
     def log(self, operation_type: str, **kwargs):
         """Log the operation with the object."""
+        action_name = ''
+        action_id = -1
+        if self.action:
+            action_name = self.action.name
+            action_id = self.action.id
         payload = {
             'id': self.id,
             'name': self.name,
-            'action': self.action.name,
-            'action_id': self.action.id,
+            'action': action_name,
+            'action_id': action_id,
             'execute': simplify_datetime_str(self.execute),
             'execute_until': simplify_datetime_str(self.execute_until),
             'item_column': self.item_column.name if self.item_column else '',
@@ -155,6 +160,10 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
             operation_type,
             self.action.workflow,
             payload)
+
+    def __str__(self):
+        """Return the name translation."""
+        return str(OPERATION_TYPES[self.name])
 
     class Meta:
         """Define the criteria of uniqueness with name and action."""

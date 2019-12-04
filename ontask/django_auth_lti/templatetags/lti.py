@@ -32,4 +32,5 @@ class ResourceLinkIdNode(template.Node):
 
 @register.tag
 def resource_link_id(parser, token):
+    del parser, token
     return ResourceLinkIdNode()

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+"""Classes for testing."""
 import os
 
 from django.conf import settings
@@ -24,17 +25,8 @@ class TableDerivedColumns(test.OnTaskLiveTestCase):
 
     wflow_name = 'combine columns'
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
-    # Test operations with all derived columns
     def test_table_create_derived_columns(self):
-
+        """Test operations to create derived columns."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -346,14 +338,6 @@ class TableViews(test.OnTaskLiveTestCase):
 
     wflow_name = 'combine columns'
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
     # Test operations with all derived columns
     def test_table_views(self):
         # Login
@@ -551,16 +535,8 @@ class TableInsertRow(test.OnTaskLiveTestCase):
 
     wflow_name = 'combine columns'
 
-    def setUp(self):
-        super().setUp()
-        test._pg_restore_table(self.filename)
-
-    def tearDown(self):
-        test.delete_all_tables()
-        super().tearDown()
-
-    # Test operations with all derived columns
     def test_table_insert_row(self):
+        """Test operations  with derived columns."""
         # Login
         self.login('instructor01@bogus.com')
 

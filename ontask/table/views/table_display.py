@@ -85,6 +85,7 @@ def display_view(
     :param view: View being displayed (set by the decorators)
     :return: Initial rendering of the page with the table skeleton
     """
+    del pk
     return services.render_table_display_page(
         request,
         workflow,
@@ -116,6 +117,7 @@ def display_view_ss(
     :param view: View to capture subset of the table
     :return: AJAX response
     """
+    del pk
     return services.render_table_display_server_side(
         request,
         workflow,

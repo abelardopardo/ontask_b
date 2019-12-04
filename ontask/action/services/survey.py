@@ -15,7 +15,7 @@ import django_tables2 as tables
 
 from ontask import models
 from ontask.action.services.edit_manager import ActionEditManager
-from ontask.action.services.manager import ActionRunManager
+from ontask.action.services.run_manager import ActionRunManager
 from ontask.core import DataTablesServerSidePaging, OperationsColumn
 from ontask.dataops.sql import search_table
 

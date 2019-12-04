@@ -105,7 +105,7 @@ class ActionTestSerializers(test.OnTaskTestCase):
             },
         )
         self.assertTrue(action_data.is_valid())
-        action = action_data.save(user=self.workflow.user, name='NEW ACTION')
+        action_data.save(user=self.workflow.user, name='NEW ACTION')
         self.workflow.refresh_from_db()
         action = self.workflow.actions.get(name='NEW ACTION')
         self.assertEqual(action.is_out, True)

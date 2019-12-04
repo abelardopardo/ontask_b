@@ -391,10 +391,10 @@ def load_plugin(foldername):
         tests = _verify_plugin(plugin_instance)
         if not all(test_result == 'Ok' for test_result, __ in tests):
             return None, tests
-    except AttributeError as exc:
+    except AttributeError:
         raise OnTasDataopsPluginInstantiationError(
             message=_('Error while instantiating the plugin class'))
-    except Exception as exc:
+    except Exception:
         raise OnTasDataopsPluginInstantiationError(
             message=_('Error while instantiating the plugin class'))
 
@@ -481,7 +481,7 @@ def run_plugin(
     """
     try:
         plugin_instance, msgs = load_plugin(plugin_info.filename)
-    except OnTaskServiceException as exc:
+    except OnTaskServiceException:
         raise Exception(
             ugettext('Unable to instantiate plugin "{0}"').format(
                 plugin_info.name),

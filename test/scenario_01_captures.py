@@ -2,8 +2,6 @@
 
 
 import os
-import test
-from test import ElementHasFullOpacity, ScreenTests
 
 from django.conf import settings
 from selenium.webdriver.common.by import By
@@ -11,16 +9,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask.dataops.pandas import destroy_db_engine
+from test import ElementHasFullOpacity, ScreenTests
 
 
 class Scenario1Captures(ScreenTests):
 
     workflow_name = 'Scenario 1'
     description = 'Scenario 1 in the documentation'
-
-    def setUp(self):
-        super().setUp()
-        test.create_users()
 
     def test(self):
         """

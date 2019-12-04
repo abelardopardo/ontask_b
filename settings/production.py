@@ -103,7 +103,7 @@ LOGGING = {
         'celery_execution': {
             'handlers': ['celery_log_file'],
             'propagate': True,
-            'level': 'DEBUG',
+            'level': 'ERROR',
         },
         'django.security.DisallowedHost': {
             'handlers': ['ontask_log_file'],

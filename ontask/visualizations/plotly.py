@@ -130,6 +130,8 @@ class PlotlyColumnHistogram(PlotlyHandler):
     """Create a histogram."""
 
     def _create_dictionaries(self, data, *args, **kwargs):
+        """Create the dictionary needed for the rendering."""
+        del data, args
         self.format_dict['id'] = 'histogram-id'
 
         self.layout.update({
