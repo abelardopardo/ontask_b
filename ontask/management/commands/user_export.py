@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
 from ontask import models
-from ontask.workflow.services.import_export import do_export_workflow_parse
+from ontask.workflow import services
 
 
 class Command(BaseCommand):
@@ -54,7 +54,9 @@ class Command(BaseCommand):
             # Export the workflow and store it in the given file name
             print('Storing workflow in', filename)
 
-            zbuf = do_export_workflow_parse(workflow, workflow.actions.all())
+            zbuf = services.do_export_workflow_parse(
+                workflow,
+                workflow.actions.all())
             zbuf.seek(0)
             with open(filename, 'wb') as file_obj:
                 shutil.copyfileobj(zbuf, file_obj, length=131072)

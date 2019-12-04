@@ -404,8 +404,7 @@ class ActionViewRunJSONListAction(tests.OnTaskTestCase):
                 'token': 'fake token'})
         payload = SessionPayload.get_session_payload(self.last_request)
         self.assertTrue(payload == {})
-        self.assertTrue(
-            len(OnTaskSharedState.json_outbox) == 1)
+        self.assertTrue(len(OnTaskSharedState.json_outbox) == 1)
         self.assertTrue(
             OnTaskSharedState.json_outbox[0]['auth'] == 'Bearer fake token')
         self.assertTrue(status.is_success(resp.status_code))
