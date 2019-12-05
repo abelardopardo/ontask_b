@@ -17,7 +17,7 @@ Current Version: 6.1.3 ([documentation](http://ontask-version-b.readthedocs.io/e
 
 - **NEW** Action to write a rubric with a feedback paragraph for each criteria and level of attainment and create a personalized message to each student.
 
-- **NEW** Actions can now be trigger incrementally. Execution can now be scheduled over a time window, and at ever execution, only those new learners that have not been considered before are processed. This action execution is **ideal** to implement triggers that send messages whenever a change in data is detected (requires data to be refreshed frequently)
+- **NEW** Actions can now be executed incrementally. Execution can now be scheduled over a time window, and at ever execution, only those new learners that have not been considered before are processed. This action execution is **ideal** to implement triggers that send messages whenever a change in data is detected (requires data to be refreshed frequently)
  
 - **NEW** Action to send data columns through email or JSON objects
 
