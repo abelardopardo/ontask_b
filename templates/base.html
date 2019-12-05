@@ -54,7 +54,6 @@
                      href="{% url 'home' %}" id="ontask-base-home"
                      data-toggle="tooltip" title="{% trans 'Your workflows' %}"><span class="fa fa-home"></span> {% trans 'Workflows' %}</a>
                 </li>
-              {% else %}FALSE
               {% endif %}
               {% if request.session.ontask_workflow_id %}
                 {% url 'workflow:detail' as workflow_detail %}
