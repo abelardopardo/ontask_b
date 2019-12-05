@@ -2,13 +2,13 @@
 
 """Test workflow basic operations"""
 import gzip
+from io import BytesIO
 import os
 import shutil
 import tempfile
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.six import BytesIO
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 
