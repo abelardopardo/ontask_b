@@ -196,10 +196,7 @@ ONTASK_HELP_URL = "html/index.html"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            join(BASE_DIR(), 'templates'),
-            # insert more TEMPLATE_DIRS here
-        ],
+        'DIRS': [join(BASE_DIR(),  'ontask', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -219,10 +216,7 @@ TEMPLATES = [
                 'ontask_tags': 'ontask.templatetags.ontask_tags',
                 'vis_include':
                     'ontask.visualizations.templatetags.vis_include',
-            }
-        },
-    },
-]
+            }}}]
 
 # Application definition
 INSTALLED_APPS = [
