@@ -33,6 +33,7 @@ test:
     - coverage run -a ./manage.py test -v 2 ontask.tests
     - coverage report
     - coverage html
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
   artifacts:
     paths:
       - htmlcov
@@ -42,17 +43,12 @@ test:
 build_doc:
   stage: Build doc
   script:
-    - cd test/images
+    - cd ontask/tests/images
     - bash push.sh
-    - cd ../..
+    - cd ../../..
     - cd docs_src && make clean html copy_to_docs && cd ..
-    - coverage report
-    - coverage html
-  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
   artifacts:
     paths:
-      - htmlcov
-      - .coverage
       - test/images
       - docs
 
