@@ -13,14 +13,16 @@ from ontask.dataops import sql
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_ontaskuser_handler(sender, instance, created, **kwargs):
-    """Create the user extension whenever a new user is created."""
+    """Create the user extensions whenever a new user is created."""
     del sender, kwargs
     if not created:
         return
 
-    # Create the profile object, only if it is newly created
+    # Create the profile and ontask user objects, only if it is newly created
     ouser = models.OnTaskUser(user=instance)
     ouser.save()
+    profile = models.Profile(user=instance)
+    profile.save()
     LOGGER.info(_('New ontask user profile for %s created'), str(instance))
 
 
