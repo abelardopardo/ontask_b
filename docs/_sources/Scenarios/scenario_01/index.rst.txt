@@ -13,11 +13,11 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
 
 .. admonition:: Steps
 
-   1. Create a new workflow (click in the *New Workflow* button in the home page of the tool). Introduce a name and a description (optional) for this workflow.
+   1. Create a new workflow (click on the *New Workflow* button in the home page of the tool). Introduce a name and a description (optional) for this workflow.
 
    #. Open the newly created workflow by clicking its name. A page titled *Workflow Details* will be shown.
 
-   #. The page says that there is no data uploaded yet, and to upload it you need to click in the *Dataops* link either at the bottom of the text or at the context menu at the top.
+   #. The page says that there is no data uploaded yet, and to upload it you need to click on the *Dataops* link either at the bottom of the text or at the context menu at the top.
 
    #. A new page titled *Upload/Merge* appears. Select the option *CSV Upload/Merge* and follow the instructions to upload the :download:`CSV file <scenario_01_data.csv>` (select all the columns to upload)
 
@@ -43,9 +43,9 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
       .. figure:: /scaptures/scenario_01_action_SMED.png
          :align: center
 
-   #. Once you are satisfied with how the text read, click in the *Preview* button at the bottom of the page and you will see how the message is produced by changing the name of the student (the rest of the text remains the same). Use the arrows to traverse the list of 129 students in this group.
+   #. Once you are satisfied with how the text read, click on the *Preview* button at the bottom of the page and you will see how the message is produced by changing the name of the student (the rest of the text remains the same). Use the arrows to traverse the list of 129 students in this group.
 
-   #. Save and close the *Action Out*. You go back to the screen showing you all the actions in the workflow (you can see the one we just created). If you click in the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
+   #. Save and close the *Action Out*. You go back to the screen showing you all the actions in the workflow (you can see the one we just created). If you click on the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
 
       .. figure:: /scaptures/scenario_01_action_SMED_email.png
          :align: center

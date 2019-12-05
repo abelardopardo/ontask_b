@@ -13,11 +13,11 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
 
 .. admonition:: Steps
 
-   1. Create a new workflow (click in the *New Workflow* button in the home page of the tool). Introduce a name and a description (optional) for this workflow.
+   1. Create a new workflow (click on the *New Workflow* button in the home page of the tool). Introduce a name and a description (optional) for this workflow.
 
    #. Open the newly created workflow by clicking its name. A page titled *Workflow Details* will be shown.
 
-   #. The page says that there is no data uploaded yet, and to upload it you need to click in the *Dataops* link either at the bottom of the text or at the context menu at the top.
+   #. The page says that there is no data uploaded yet, and to upload it you need to click on the *Dataops* link either at the bottom of the text or at the context menu at the top.
 
    #. A new page titled *Upload/Merge* appears. Select the option *CSV Upload/Merge* and follow the instructions to upload the :download:`CSV file <scenario_02_data.csv>` (select all the columns to upload)
 
@@ -42,12 +42,12 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
 
    #. Now, and this is the crucial step, we are going to mark these
       paragraphs with one of the previously defined conditions. Select and
-      highlight the paragraph to the students in the FASS program. Then click in
+      highlight the paragraph to the students in the FASS program. Then click on
       the arrow next to the condition named *Student in FASS* and select the
       option *Insert in text*. The text should now be surrounded by the strings
       ``{% if Student in FASS %}`` and ``{% endif %}``.
 
-   #. Repeat the same procedure now with the three remaining paragraphs. Select the text and then click in the appropriate condition. The final result should be similar to the one shown in the following figure.
+   #. Repeat the same procedure now with the three remaining paragraphs. Select the text and then click on the appropriate condition. The final result should be similar to the one shown in the following figure.
 
       .. figure:: /scaptures/scenario_02_text_all_conditions.png
          :align: center
@@ -57,7 +57,7 @@ Suppose now that you :download:`do have the class listing in an excel sheet <sce
       .. figure:: /scaptures/scenario_02_preview.png
          :align: center
 
-   #. Save and close the *Action Out*. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click in the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
+   #. Save and close the *Action Out*. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click on the *Email* button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.
 
      .. figure:: /scaptures/scenario_02_action_email.png
         :align: center

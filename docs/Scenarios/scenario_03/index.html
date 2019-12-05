@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>4.3. Scenario 3: Send email to some students with personalised text &#8212; OnTask (B.6.1.1) B.6.1.1 documentation</title>
+    <title>4.3. Scenario 3: Send email to some students with personalised text &#8212; OnTask (B.6.1.3) B.6.1.3 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
@@ -60,43 +60,56 @@
 <div class="admonition-steps admonition">
 <p class="admonition-title">Steps</p>
 <ol class="arabic">
-<li><p>Create a new workflow (click in the <em>New Workflow</em> button in the home page of the tool). Introduce a name and a description (optional) for this workflow.</p></li>
+<li><p>Create a new workflow (click on the <em>New Workflow</em> button in the home page of the tool). Introduce a name and a description (optional) for this workflow.</p></li>
 <li><p>Open the newly created workflow by clicking its name. A page titled <em>Workflow Details</em> will be shown.</p></li>
-<li><p>The page says that there is no data uploaded yet, and to upload it you need to click in the <em>Dataops</em> link either at the bottom of the text or at the context menu at the top.</p></li>
+<li><p>The page says that there is no data uploaded yet, and to upload it you need to click on the <em>Dataops</em> link either at the bottom of the text or at the context menu at the top.</p></li>
 <li><p>A new page titled <em>Upload/Merge</em> appears. Select the option <em>CSV Upload/Merge</em> and follow the instructions to upload the <a class="reference download internal" download="" href="../../_downloads/bc42aed166e379ba52bb1891c4c8a5be/scenario_03_data.csv"><code class="xref download docutils literal notranslate"><span class="pre">CSV</span> <span class="pre">file</span></code></a> (select all the columns to upload)</p></li>
 <li><p>Click the <em>Details</em> page to see a summary of the elements in the workflow: 500 rows, 10 columns, 1 action and 0 attributes. All the steps up to here can be done by <a class="reference download internal" download="" href="../../_downloads/40306b6d56fec953ba79cc967f839d87/scenario_03_wflow.gz"><code class="xref download docutils literal notranslate"><span class="pre">importing</span> <span class="pre">the</span> <span class="pre">given</span> <span class="pre">workflow</span> <span class="pre">file</span></code></a>.</p></li>
 <li><p>Click the <em>Table</em> link at the top of the page and browse through the data included in the workflow. Locate the column called <em>Pretest</em> and verify that it has the scores between 0 and 100.</p></li>
 <li><p>Click the <em>Actions</em> link at the top of the page. The new page shows a list of actions available for this workflow. Click on the button to create a <em>New Action Out</em> to send the email with suggestions to the students that failed the pretest. Choose an name and description (optional) for the action, for example <em>Send email with suggestions</em>.</p></li>
 <li><p>The next page is the action out editor. The are at the has the name <em>Filter</em> and is to define a condition to filter only a subset of the students. In this scenario, for this action, we want to consider only those students that have failed the pretest, or in other words, the pretest score is below 50. Click the <em>Add Filter</em> button and introduce this condition as shown in the following figure:</p>
-<div class="figure align-center">
+<blockquote>
+<div><div class="figure align-center">
 <img alt="../../_images/scenario_03_filter.png" src="../../_images/scenario_03_filter.png" />
 </div>
+</div></blockquote>
 </li>
 <li><p>The next step is to define a condition to identify those students for which the score in the pretest is less than 30. In the second area from there is a button to create a new condition (<em>Conditions + New</em>). Click the button and a new window opens to specify a condition. Enter the condition as shown in the following picture:</p>
-<div class="figure align-center">
+<blockquote>
+<div><div class="figure align-center">
 <img alt="../../_images/scenario_03_condition_one.png" src="../../_images/scenario_03_condition_one.png" />
 </div>
+</div></blockquote>
 </li>
 <li><p>Repeat the same operation (add another condition), but this time the condition is that the pretest score is larger or equal to 30 <strong>and</strong> lower than 40. The second condition can be added clicking in the <em>Add Rule</em> button. The result should be like the one shown in the following figure:</p>
-<div class="figure align-center">
+<blockquote>
+<div><div class="figure align-center">
 <img alt="../../_images/scenario_03_condition_two.png" src="../../_images/scenario_03_condition_two.png" />
 </div>
+</div></blockquote>
 </li>
 <li><p>Create a third condition, but this time the rule should state that the pretest condition is larger or equal to 40.</p></li>
-<li><p>The next step is to write the body of the email starting with a
-greeting that includes the student’s name and a sentence communicating the
+<li><dl class="simple">
+<dt>The next step is to write the body of the email starting with a</dt><dd><p>greeting that includes the student’s name and a sentence communicating the
 pretest score. Use the pull down menu labelled <em>Insert column name</em> to
-insert the column name.</p></li>
+insert the column name.</p>
+</dd>
+</dl>
+</li>
 <li><p>Write three paragraphs for each of the categories of score. For each of them, select it, select the pull down menu of the appropriate condition, and click the option <em>Insert in text</em>. The text should be surrounded with some special mark-up such as <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">Bottom</span> <span class="pre">third</span> <span class="pre">(0-30)</span> <span class="pre">%}</span></code> as shown in the following figure:</p>
-<div class="figure align-center">
+<blockquote>
+<div><div class="figure align-center">
 <img alt="../../_images/scenario_03_text.png" src="../../_images/scenario_03_text.png" />
 </div>
+</div></blockquote>
 </li>
 <li><p>Use the preview button with the arrows to see how the different emails are shown (only for the students that satisfy the condition of the filter).</p></li>
-<li><p>Save and close the <em>Action Out</em>. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click in the <em>Email</em> button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.</p>
-<div class="figure align-default">
+<li><p>Save and close the <em>Action Out</em>. You now are back to the screen showing the actions in the workflow (you can see the one we just created). If you click on the <em>Email</em> button, you will be asked for some extra data such as the email subject, the column to use as email address and some options to track email reading or even obtain a snapshot (duplicate) of the workflow as it is right now for future reference.</p>
+<blockquote>
+<div><div class="figure align-default">
 <img alt="../../_images/scenario_03_email.png" src="../../_images/scenario_03_email.png" />
 </div>
+</div></blockquote>
 </li>
 <li><p>That’s it! Those students that failed the pretest will receive a message with some suggestions framed according to their score.</p></li>
 </ol>

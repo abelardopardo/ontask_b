@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>3. Using OnTask &#8212; OnTask (B.6.1.1) B.6.1.1 documentation</title>
+    <title>3. Using OnTask &#8212; OnTask (B.6.1.3) B.6.1.3 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -211,7 +211,7 @@
 </dd>
 <dt>Column operations</dt><dd><p>This page shows information about the columns in the workflow.</p>
 </dd>
-<dt>Scheduled actions</dt><dd><p>Shows which actions have been scheduled for execution.</p>
+<dt>Scheduled operations</dt><dd><p>Shows which actions have been scheduled for execution.</p>
 </dd>
 <dt>View logs</dt><dd><p>A table showing the history of operations performed on this workflow</p>
 </dd>
@@ -573,7 +573,7 @@ showing all the actions in the workflow.</p>
 <dt>Column names</dt><dd><p>The other element that can be personalized is a column name. For example, suppose you have a column in your table with the first name of the learners. You can use the column name to personalize the greeting in the text. To insert a column name, you follow the same steps used for the attribute but this time you select the column name from the pull-down menu. You will see that the name of the column appears in the text also surrounded by double curly braces (for example <code class="docutils literal notranslate"><span class="pre">Hi</span> <span class="pre">{{</span> <span class="pre">GivenName</span> <span class="pre">}}</span></code>. The double curly
 braces is the way OnTask has to mark that text to be personalized or replaced by the corresponding value for each learner extracted from the data table.</p>
 </dd>
-<dt>Conditional text</dt><dd><p>Using a condition to control if a portion of the text is shown or ignored is slightly different. You need to first highlight the text you want to appear depending on the condition in the editor. Then click in the pull down menu <strong>Use condition in highlighted text</strong> and select the condition to use. The text will be surrounded by two marks. For example if the condition name is <code class="docutils literal notranslate"><span class="pre">No</span> <span class="pre">Video</span> <span class="pre">1</span></code>, the text you highlighted will appear in the editor after clicking in the <em>Insert in text</em> as:</p>
+<dt>Conditional text</dt><dd><p>Using a condition to control if a portion of the text is shown or ignored is slightly different. You need to first highlight the text you want to appear depending on the condition in the editor. Then click on the pull down menu <strong>Use condition in highlighted text</strong> and select the condition to use. The text will be surrounded by two marks. For example if the condition name is <code class="docutils literal notranslate"><span class="pre">No</span> <span class="pre">Video</span> <span class="pre">1</span></code>, the text you highlighted will appear in the editor after clicking in the <em>Insert in text</em> as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">No</span> <span class="n">Video</span> <span class="mi">1</span> <span class="o">%</span><span class="p">}</span><span class="n">You</span> <span class="n">need</span> <span class="n">to</span> <span class="n">review</span> <span class="n">his</span> <span class="n">week</span><span class="s1">&#39;s video{</span><span class="si">% e</span><span class="s1">ndif %}</span>
 </pre></div>
 </div>
@@ -589,7 +589,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <span id="personalized-rubric"></span><h3>3.4.2. Personalized Rubric Feedback<a class="headerlink" href="#personalized-rubric-feedback" title="Permalink to this headline">¶</a></h3>
 <p>These actions are a special case of the <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a> where an email template is combined with a <a class="reference external" href="https://en.wikipedia.org/wiki/Rubric_(academic)">rubric</a> to provide learners with a set of comments based on the obtained scores. A rubric is a two dimensional table. Each row is a <em>criterion</em> used for assessment (for example, when using a rubric to grade a presentation, one criterion could be the clarith with which concepts have been presented. The columns of the table are <em>levels of attainment</em> that specify how well was the criterion addressed. In each cell of this two-dimensional table there is a paragraph describing the elements of the corresponding criterion and level of attainment.</p>
 <p>OnTask extends the structure of each cell and complements the description with an additional text that is called the <em>feedback</em>. Once the table has been populated (multiple criteria and multiple levels of attainment), an email template can be created in which the appropriate feedback elements are selected based on the values of each criteria for each learner.</p>
-<p>The first step to create a personalized rubric feedback action is, as with the previous action, to click in he button to add an action and select the option <em>Rubric feedback</em>.</p>
+<p>The first step to create a personalized rubric feedback action is, as with the previous action, to click on the button to add an action and select the option <em>Rubric feedback</em>.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/rubric_create.png"><img alt="../_images/rubric_create.png" src="../_images/rubric_create.png" style="width: 100%;" /></a>
 </div>
@@ -745,7 +745,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 </div>
 <div class="section" id="making-personalized-content-available-to-learners">
 <h3>3.5.2. Making personalized content available to learners<a class="headerlink" href="#making-personalized-content-available-to-learners" title="Permalink to this headline">¶</a></h3>
-<p>Sending a personalized text is just one possible way to make this content available to learner. Another one is to offer the content through a URL that can be given to the learners. To enable such URL click in the icon with three dots in the right most corner of a personalized text action.</p>
+<p>Sending a personalized text is just one possible way to make this content available to learner. Another one is to offer the content through a URL that can be given to the learners. To enable such URL click on the icon with three dots in the right most corner of a personalized text action.</p>
 <div class="figure align-center">
 <img alt="../_images/action_action_ops.png" src="../_images/action_action_ops.png" />
 </div>
@@ -761,7 +761,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_run_action_in.png"><img alt="../_images/action_run_action_in.png" src="../_images/action_run_action_in.png" style="width: 100%;" /></a>
 </div>
-<p>Each row contains the identifier of the student (in the previous table, the email) as a link. Instructors may click in a link available to enter the survey information or modify the already existing information for that learner.</p>
+<p>Each row contains the identifier of the student (in the previous table, the email) as a link. Instructors may click on a link available to enter the survey information or modify the already existing information for that learner.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_enter_data_action_in.png"><img alt="../_images/action_enter_data_action_in.png" src="../_images/action_enter_data_action_in.png" style="width: 100%;" /></a>
 </div>
@@ -772,7 +772,7 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/action_action_in_URL.png"><img alt="../_images/action_action_in_URL.png" src="../_images/action_action_in_URL.png" style="width: 60%;" /></a>
 </div>
-<p>Once enabled, you may send the URL to the students (you may even use a personalized text action for that). Once the students click in the action, and if they are allowed to connect to OnTask as basic users, after authentication, if their email is part of the table, they will see a form with the survey questions and after answering it, the values are automatically stored in the right row and column in the table.</p>
+<p>Once enabled, you may send the URL to the students (you may even use a personalized text action for that). Once the students click on the action, and if they are allowed to connect to OnTask as basic users, after authentication, if their email is part of the table, they will see a form with the survey questions and after answering it, the values are automatically stored in the right row and column in the table.</p>
 <p>These two survey actions are ideal to collect information about any aspect of a learning experience in a way that is centralized and available for further processing through personalized text actions. For example, users may choose from a predefined set of topics those that were more challenging. This information can then be used in a personalized text action to provide the adequate resources to each learner.</p>
 </div>
 </div>
@@ -991,7 +991,7 @@ created the current values of the other columns. The column is not refreshed if 
 <div><p>“I have no regular schedule. I get up whenever I can.”
 – Jimmy Wales</p>
 </div></blockquote>
-<p>The <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>, <a class="reference internal" href="#personalized-canvas-email"><span class="std std-ref">personalized canvas email</span></a>, :ref`send list through email &lt;send_list_action&gt;`, <a class="reference internal" href="#personalized-json"><span class="std std-ref">personalized JSON object</span></a> and <a class="reference internal" href="#json-list-action"><span class="std std-ref">send JSON list</span></a> actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the <span class="fa fa-comments"></span> <em>Actions</em> page from the top menu, click in icon with three dots in the right-most column of the action and select the operation <span class="fa fa-calendar"></span> <em>Schedule</em>.</p>
+<p>The <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>, <a class="reference internal" href="#personalized-canvas-email"><span class="std std-ref">personalized canvas email</span></a>, :ref`send list through email &lt;send_list_action&gt;`, <a class="reference internal" href="#personalized-json"><span class="std std-ref">personalized JSON object</span></a> and <a class="reference internal" href="#json-list-action"><span class="std std-ref">send JSON list</span></a> actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the <span class="fa fa-comments"></span> <em>Actions</em> page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation <span class="fa fa-calendar"></span> <em>Schedule</em>.</p>
 <div class="section" id="scheduling-a-personalized-text-action">
 <span id="schedule-email"></span><h4>3.7.3.1. Scheduling a Personalized Text Action<a class="headerlink" href="#scheduling-a-personalized-text-action" title="Permalink to this headline">¶</a></h4>
 <p>The following figure shows the information requested to schedule the execution of a personalized text action (sending emails to learners):</p>
@@ -1042,7 +1042,7 @@ created the current values of the other columns. The column is not refreshed if 
 <span class="target" id="schedule-canvas"></span></div>
 <div class="section" id="table-with-scheduled-actions">
 <span id="scheduler-menu"></span><h4>3.7.3.3. Table with Scheduled Actions<a class="headerlink" href="#table-with-scheduled-actions" title="Permalink to this headline">¶</a></h4>
-<p>The table showing all the action scheduling operations can be access through the <span class="fa fa-cog"></span> <em>More</em> link in the top-bar menu selecting the <span class="fa fa-calendar"></span> <em>Scheduled actions</em> link. The list of scheduled actions is shown as illustrated in the following figure.</p>
+<p>The table showing all the action scheduling operations can be access through the <span class="fa fa-cog"></span> <em>More</em> link in the top-bar menu selecting the <span class="fa fa-calendar"></span> <em>Scheduled operations</em> link. The list of scheduled actions is shown as illustrated in the following figure.</p>
 <div class="figure align-center">
 <a class="reference internal image-reference" href="../_images/schedule.png"><img alt="../_images/schedule.png" src="../_images/schedule.png" style="width: 100%;" /></a>
 </div>

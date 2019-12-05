@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>2. Installation process &#8212; OnTask (B.6.1.1) B.6.1.1 documentation</title>
+    <title>2. Installation process &#8212; OnTask (B.6.1.3) B.6.1.3 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -260,7 +260,7 @@ part of the python libraries in the system.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALLOWED_HOSTS</span><span class="o">=</span><span class="n">HOSTNAME1</span><span class="p">,</span><span class="n">HOSTNAME2</span>
 <span class="n">BASE_URL</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
 <span class="c1"># syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database</span>
-<span class="n">DATABASE_URL</span><span class="o">=</span><span class="n">postgres</span><span class="p">:</span><span class="o">//</span><span class="p">[</span><span class="n">PSQLUSERNAME</span><span class="p">]:[</span><span class="n">PSQLPWD</span><span class="p">]</span><span class="nd">@127</span><span class="o">.</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">ontask</span>
+<span class="n">DATABASE_URL</span><span class="o">=</span><span class="n">postgres</span><span class="p">:</span><span class="o">//</span><span class="p">[</span><span class="n">PSQLUSERNAME</span><span class="p">]:[</span><span class="n">PSQLPWD</span><span class="p">]</span><span class="o">@</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">ontask</span>
 <span class="n">DEBUG</span><span class="o">=</span><span class="kc">False</span>
 <span class="n">DOMAIN_NAME</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">DOMAIN</span> <span class="n">NAME</span><span class="p">]</span>
 <span class="n">EXECUTE_ACTION_JSON_TRANSFER</span><span class="o">=</span><span class="kc">True</span>
@@ -761,8 +761,8 @@ before starting the application. Make sure the server is running <strong>in prod
 
 <span class="sd">    1. Field name: Plugin name show to the users.</span>
 
-<span class="sd">    2. Field description_text: A string with the detailed description of what the</span>
-<span class="sd">    plugin does</span>
+<span class="sd">    2. Field description_text: A string with the detailed description of what</span>
+<span class="sd">    the plugin does</span>
 
 <span class="sd">    3. Field input_column_names: A potentially empty list of column names </span>
 <span class="sd">    (strings). If the list is empty, the columns are selected by the user at</span>
@@ -815,10 +815,10 @@ before starting the application. Make sure the server is running <strong>in prod
         <span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RESULT 1&#39;</span><span class="p">,</span> <span class="s1">&#39;RESULT 2&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">(</span><span class="s1">&#39;param string&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="s1">&#39;v2&#39;</span><span class="p">],</span> <span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="s1">&#39;help param string&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param integer&#39;</span><span class="p">,</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;help param integer&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param double&#39;</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">],</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="p">(</span><span class="s1">&#39;param integer&#39;</span><span class="p">,</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;help param integer&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;param double&#39;</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span>
                              <span class="s1">&#39;help param double&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;help param boolean&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;param boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;help param boolean&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;param datetime&#39;</span><span class="p">,</span> <span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;2018-05-25 18:03:00+09:30&#39;</span><span class="p">,</span>
                                <span class="s1">&#39;help param datetime&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s1">&#39;param datetime2&#39;</span><span class="p">,</span> <span class="s1">&#39;datetime&#39;</span><span class="p">,</span> 
@@ -837,13 +837,10 @@ before starting the application. Make sure the server is running <strong>in prod
 <span class="sd">        merged with the existing data frame in the workflow using the merge_key.</span>
 
 <span class="sd">        :param data_frame: Input data for the plugin</span>
-
 <span class="sd">        :param parameters: Dictionary with (name, value) pairs.</span>
-
 <span class="sd">        :return: a Pandas data_frame to merge with the existing one (must</span>
 <span class="sd">        contain a column with name merge_key)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="c1"># Extract the key column from the given data frame</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">data_frame</span><span class="o">.</span><span class="n">deep_copy</span><span class="p">()</span>
 
