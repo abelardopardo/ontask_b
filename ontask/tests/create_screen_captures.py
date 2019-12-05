@@ -99,7 +99,7 @@ class ScreenImportTest(ScreenTests):
 
 
 class ScreenTestFixture(ScreenTests):
-    fixtures = ['test/initial_workflow/initial_workflow.json']
+    fixtures = ['ontask/tests/initial_workflow/initial_workflow.json']
     filename = os.path.join(
         settings.BASE_DIR(),
         'ontask',
