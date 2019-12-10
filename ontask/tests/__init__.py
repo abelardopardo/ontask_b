@@ -23,6 +23,7 @@ import pandas as pd
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
@@ -1841,7 +1842,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
 class ScreenTests(OnTaskLiveTestCase):
     viewport_width = 1040
-    viewport_height = 1440
+    viewport_height = 1064
     prefix = ''
     workflow_name = 'BIOL1011'
     description = 'Course on Cell Biology'
@@ -1902,21 +1903,24 @@ class ScreenTests(OnTaskLiveTestCase):
     def body_ss(self, ss_filename):
         img = self._get_image('//body')
 
-        body = self.selenium.find_element_by_id('base_footer')
-        coord = body.location
-        dims = body.size
+        try:
+            body = self.selenium.find_element_by_id('base_footer')
+            coord = body.location
+            dims = body.size
 
-        # If the bottom of the content is before the footer, crop
-        if (
-            coord['y'] + dims['height'] * self.device_pixel_ratio
-        ) < self.viewport_height:
-            img = img.crop(
-                (0,
-                 0,
-                 math.ceil(dims['width'] * self.device_pixel_ratio),
-                 math.ceil((coord['y'] + dims['height'] + 5) *
-                           self.device_pixel_ratio))
-            )
+            # If the bottom of the content is before the footer, crop
+            if (
+                coord['y'] + dims['height'] * self.device_pixel_ratio
+            ) < self.viewport_height:
+                img = img.crop(
+                    (0,
+                     0,
+                     math.ceil(dims['width'] * self.device_pixel_ratio),
+                     math.ceil((coord['y'] + dims['height'] + 5) *
+                               self.device_pixel_ratio))
+                )
+        except NoSuchElementException:
+            pass
 
         # If the height of the image is larger than the view_port, crop
         img_width, img_height = img.size
