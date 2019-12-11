@@ -4,6 +4,7 @@
 from ontask.action.services.action_table import ActionTable
 from ontask.action.services.canvas_email import ActionManagerCanvasEmail
 from ontask.action.services.clone import do_clone_action, do_clone_condition
+from ontask.action.services.condition import save_condition_form
 from ontask.action.services.edit_save import save_action_form
 from ontask.action.services.email import (
     ActionManagerEmail,

@@ -27,7 +27,7 @@ def ontask_version() -> str:
 @register.filter
 def country(country_code) -> str:
     """Extract the country from the given variable."""
-    return country_code[0:country_code.find('-')]
+    return ontask.get_country_code(country_code)
 
 
 @register.simple_tag

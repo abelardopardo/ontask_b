@@ -164,7 +164,10 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
     confirm_items = forms.BooleanField(
         initial=False,
         required=False,
-        label=_('Check/exclude items before sending?'))
+        label=_('Check/exclude items before sending?'),
+        help_text=_(
+            'Allows a last minute check and select some elements to be '
+            'excluded.'))
 
     def __init__(self, form_data, *args, **kwargs):
         """Store column names and adjust initial values."""
@@ -249,7 +252,9 @@ class EmailActionForm(
     track_read = forms.BooleanField(
         initial=False,
         required=False,
-        label=_('Track email reading in an extra column?'))
+        label=_('Track email reading in an extra column?'),
+        help_text=_('Adds an extra column to the workflow. '
+                    'Results are aproximate.'))
 
     def __init__(self, form_data, *args, **kwargs):
         """Store column names and adjust initial values."""
@@ -574,6 +579,7 @@ class JSONListActionForm(JSONTokenForm):
 
 class JSONListActionRunForm(JSONListActionForm, ExportWorkflowBase):
     """Form to edit information to run JSON List action"""
+
     def __init__(self, *args, **kwargs):
         """Modify the fields with the adequate information."""
         super().__init__(*args, **kwargs)

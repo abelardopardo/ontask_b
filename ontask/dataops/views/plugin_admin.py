@@ -113,7 +113,7 @@ def moreinfo(
     })
 
 
-@user_passes_test(is_instructor)
+@user_passes_test(is_admin)
 @ajax_required
 def plugin_toggle(
     request: http.HttpRequest,
@@ -126,7 +126,10 @@ def plugin_toggle(
     :return: JSON Response
     """
     del request
-    plugin_item = models.Plugin.objects.get(pk=pk)
+    plugin_item = models.Plugin.objects.filter(pk=pk).first()
+    if not plugin_item:
+        return http.JsonResponse({})
+
     if plugin_item.is_verified:
         plugin_item.is_enabled = not plugin_item.is_enabled
         plugin_item.save()

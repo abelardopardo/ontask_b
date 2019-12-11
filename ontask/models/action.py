@@ -25,8 +25,7 @@ from ontask.models.workflow import Workflow
 # presence of a "{% MACRONAME variable %} construct in a string (template)
 VAR_USE_RES = [
     re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
-    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})'),
-]
+    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')]
 
 ACTION_TYPE_LENGTH = 64
 
@@ -56,8 +55,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         RUBRIC_TEXT: _('Rubric feedback'),
         EMAIL_LIST: _('Send List'),
         JSON_LIST: _('Send List as JSON'),
-        TODO_LIST: _('TODO List'),
-    }
+        TODO_LIST: _('TODO List')}
 
     ACTION_IS_DATA_IN = {
         PERSONALIZED_TEXT: False,
@@ -67,8 +65,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         EMAIL_LIST: False,
         JSON_LIST: False,
         SURVEY: True,
-        TODO_LIST: True,
-    }
+        TODO_LIST: True}
 
     LOAD_SUMMERNOTE = {
         PERSONALIZED_TEXT: True,
@@ -78,8 +75,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         EMAIL_LIST: True,
         JSON_LIST: False,
         SURVEY: False,
-        TODO_LIST: False,
-    }
+        TODO_LIST: False}
 
     AVAILABLE_ACTION_TYPES = dict(ACTION_TYPES)
 
@@ -89,45 +85,39 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         null=False,
         blank=False,
         on_delete=models.CASCADE,
-        related_name='actions',
-    )
+        related_name='actions')
 
     # Action type
     action_type = models.CharField(
         max_length=ACTION_TYPE_LENGTH,
-        choices=ACTION_TYPES.items(),
-        default=PERSONALIZED_TEXT,
-    )
+        choices=[(key, value) for key, value in ACTION_TYPES.items()],
+        default=PERSONALIZED_TEXT)
 
     # Reference to the record of the last execution
     last_executed_log = models.ForeignKey(
         Log,
         on_delete=models.CASCADE,
         null=True,
-        blank=True,
-    )
+        blank=True)
 
     # Validity window for URL availability
     active_from = models.DateTimeField(
         _('Action available from'),
         blank=True,
         null=True,
-        default=None,
-    )
+        default=None)
 
     active_to = models.DateTimeField(
         _('Action available until'),
         blank=True,
         null=True,
-        default=None,
-    )
+        default=None)
 
     # Index of rows with all conditions false
     rows_all_false = JSONField(
         default=None,
         blank=True,
-        null=True,
-    )
+        null=True)
 
     @functional.cached_property
     def is_in(self) -> bool:
@@ -150,8 +140,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
         return not (
             (self.active_from and now < self.active_from)
-            or (self.active_to and self.active_to < now)
-        )
+            or (self.active_to and self.active_to < now))
 
     def get_filter(self):
         """Get filter condition."""
@@ -181,8 +170,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
             if not self.workflow.has_data_frame():
                 # Workflow does not have a dataframe
                 raise ontask.OnTaskException(
-                    'Workflow without DF in get_table_row_count_all_false',
-                )
+                    'Workflow without DF in get_table_row_count_all_false')
 
             # Separate filter from conditions
             filter_item = self.conditions.filter(is_filter=True).first()
@@ -230,8 +218,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         for cond in conditions[start_idx:]:
             cond.update_n_rows_selected(
                 column=column,
-                filter_formula=filter_formula,
-            )
+                filter_formula=filter_formula)
 
     def used_columns(self):
         """List of column used in the action.
@@ -271,8 +258,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
         default=False,
         verbose_name=_('URL available to users?'),
         null=False,
-        blank=False,
-    )
+        blank=False)
 
     # Text to be personalised
     text_content = models.TextField(default='', blank=True)
