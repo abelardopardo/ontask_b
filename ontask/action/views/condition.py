@@ -28,7 +28,7 @@ class ConditionFilterCreateViewBase(UserIsInstructor, generic.TemplateView):
     def get(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
         """Process GET request to create a filter."""
         action = kwargs.get('action')
-        form = self.form_class(action=action, request=request)
+        form = self.form_class(action=action)
         return JsonResponse({
             'html_form': render_to_string(
                 self.template_name,
@@ -46,7 +46,7 @@ class ConditionFilterCreateViewBase(UserIsInstructor, generic.TemplateView):
         """Process POST request to  create a filter."""
         del args
         action = kwargs.get('action')
-        form = self.form_class(action=action, request=request)
+        form = self.form_class(request.POST, action=action)
         if request.method == 'POST' and form.is_valid():
 
             if not form.has_changed():
