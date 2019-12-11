@@ -6,8 +6,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.dataops import formula, sql
-from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.column import Column
+from ontask.models.common import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 

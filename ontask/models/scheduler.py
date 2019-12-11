@@ -12,7 +12,7 @@ from django_celery_beat.models import PeriodicTask
 from ontask import simplify_datetime_str
 from ontask.models import Column
 from ontask.models.action import Action
-from ontask.models.basic import (
+from ontask.models.common import (
     CHAR_FIELD_MID_SIZE, CreateModifyFields, NameAndDescription, Owner)
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow

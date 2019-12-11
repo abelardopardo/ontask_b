@@ -225,9 +225,31 @@ EMAIL_LIST_PRODUCER = services.ActionManagerEmailList(
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.PERSONALIZED_TEXT,
     EMAIL_PRODUCER)
+tasks.task_execute_factory.register_producer(
+    models.Action.PERSONALIZED_TEXT,
+    EMAIL_PRODUCER)
+
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.EMAIL_LIST,
     EMAIL_LIST_PRODUCER)
+tasks.task_execute_factory.register_producer(
+    models.Action.EMAIL_LIST,
+    EMAIL_LIST_PRODUCER)
+
+RUBRIC_PRODUCER = services.ActionManagerRubric(
+    edit_form_class=forms.EditActionOutForm,
+    edit_template='action/edit_rubric.html',
+    run_form_class=forms.SendListActionRunForm,
+    run_template='action/request_send_list_data.html',
+    log_event=models.Log.ACTION_RUN_EMAIL)
+
+services.ACTION_PROCESS_FACTORY.register_producer(
+    models.Action.RUBRIC_TEXT,
+    RUBRIC_PRODUCER)
+
+tasks.task_execute_factory.register_producer(
+    models.Action.RUBRIC_TEXT,
+    RUBRIC_PRODUCER)
 
 JSON_PRODUCER = services.ActionManagerJSON(
     edit_form_class=forms.EditActionOutForm,
@@ -235,16 +257,27 @@ JSON_PRODUCER = services.ActionManagerJSON(
     run_form_class=forms.JSONActionRunForm,
     run_template='action/request_json_data.html',
     log_event=models.Log.ACTION_RUN_JSON)
+
 JSON_LIST_PRODUCER = services.ActionManagerJSONList(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_out.html',
     run_form_class=forms.JSONListActionRunForm,
     run_template='action/request_json_list_data.html',
     log_event=models.Log.ACTION_RUN_JSON_LIST)
+
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.PERSONALIZED_JSON,
     JSON_PRODUCER)
+
+tasks.task_execute_factory.register_producer(
+    models.Action.PERSONALIZED_JSON,
+    JSON_PRODUCER)
+
 services.ACTION_PROCESS_FACTORY.register_producer(
+    models.Action.JSON_LIST,
+    JSON_LIST_PRODUCER)
+
+tasks.task_execute_factory.register_producer(
     models.Action.JSON_LIST,
     JSON_LIST_PRODUCER)
 
@@ -254,10 +287,14 @@ CANVAS_EMAIL_PRODUCER = services.ActionManagerCanvasEmail(
     run_form_class=forms.CanvasEmailActionRunForm,
     run_template='action/request_canvas_email_data.html',
     log_event=models.Log.ACTION_RUN_CANVAS_EMAIL)
+
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.PERSONALIZED_CANVAS_EMAIL,
     CANVAS_EMAIL_PRODUCER)
 
+tasks.task_execute_factory.register_producer(
+    models.Action.PERSONALIZED_CANVAS_EMAIL,
+    CANVAS_EMAIL_PRODUCER)
 
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.action.ZIP_OPERATION,
@@ -272,21 +309,3 @@ services.ACTION_PROCESS_FACTORY.register_producer(
         edit_template='action/edit_in.html',
         run_template='action/run_survey.html',
         log_event=models.Log.ACTION_SURVEY_INPUT))
-
-tasks.task_execute_factory.register_producer(
-    models.Action.PERSONALIZED_TEXT,
-    EMAIL_PRODUCER)
-tasks.task_execute_factory.register_producer(
-    models.Action.EMAIL_LIST,
-    EMAIL_LIST_PRODUCER)
-
-tasks.task_execute_factory.register_producer(
-    models.Action.PERSONALIZED_JSON,
-    JSON_PRODUCER)
-tasks.task_execute_factory.register_producer(
-    models.Action.JSON_LIST,
-    JSON_LIST_PRODUCER)
-
-tasks.task_execute_factory.register_producer(
-    models.Action.PERSONALIZED_CANVAS_EMAIL,
-    CANVAS_EMAIL_PRODUCER)

@@ -6,9 +6,9 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.dataops import formula, sql
-from ontask.models.basic import (
-    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CreateModifyFields)
 from ontask.models.column import Column
+from ontask.models.common import (
+    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CreateModifyFields)
 from ontask.models.logs import Log
 
 

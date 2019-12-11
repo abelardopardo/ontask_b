@@ -17,8 +17,8 @@ from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
 from ontask.dataops import pandas, sql
-from ontask.models.basic import CreateModifyFields, NameAndDescription
 from ontask.models.column import Column
+from ontask.models.common import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
 
 CHAR_FIELD_MD5_SIZE = 32

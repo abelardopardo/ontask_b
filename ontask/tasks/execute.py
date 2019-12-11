@@ -8,7 +8,7 @@ from celery.utils.log import get_task_logger
 from django.utils.translation import ugettext
 
 from ontask import models
-from ontask.core import services
+from ontask.tasks.common import get_execution_items
 
 CELERY_LOGGER = get_task_logger('celery_execution')
 
@@ -71,9 +71,8 @@ def execute_operation(
     :param payload: Rest of parameters.
     :return: Nothing
     """
-    run_result = None
     try:
-        user, workflow, action = services.get_execution_items(
+        user, workflow, action = get_execution_items(
             user_id=user_id,
             workflow_id=workflow_id,
             action_id=action_id)

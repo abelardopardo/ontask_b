@@ -8,9 +8,9 @@ from ontask.dataops.services.athena import (
 from ontask.dataops.services.connections import (
     ConnectionTableAdmin, ConnectionTableRun, clone, delete, toggle)
 from ontask.dataops.services.dataframeupload import (
-    load_df_from_csvfile, load_df_from_excelfile, load_df_from_googlesheet,
-    load_df_from_s3, load_df_from_sqlconnection,
-)
+    batch_load_df_from_athenaconnection, load_df_from_csvfile,
+    load_df_from_excelfile, load_df_from_googlesheet, load_df_from_s3,
+    load_df_from_sqlconnection)
 from ontask.dataops.services.errors import OnTasDataopsPluginInstantiationError
 from ontask.dataops.services.plugin_admin import (
     PluginAdminTable, load_plugin, refresh_plugin_data, run_plugin,

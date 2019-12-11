@@ -16,8 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework.renderers import JSONRenderer
 
 from ontask import models
-from ontask.action import forms, serializers
-from ontask.action.services import do_import_action
+from ontask.action import forms, serializers, services
 from ontask.core import get_workflow, is_instructor
 
 
@@ -46,7 +45,7 @@ def action_import(
         # UPLOAD THE FILE!
         try:
             with transaction.atomic():
-                actions = do_import_action(
+                actions = services.do_import_action(
                     request.user,
                     workflow,
                     request.FILES['upload_file'])

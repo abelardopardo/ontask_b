@@ -9,11 +9,9 @@ from django.utils.translation import ugettext
 import pytz
 
 from ontask import models
-from ontask.core import services
-from ontask.dataops.services.dataframeupload import (
-    batch_load_df_from_athenaconnection,
-)
+from ontask.dataops import services
 from ontask.logs.services import get_log_item
+from ontask.tasks.common import get_execution_items
 
 
 @shared_task
@@ -33,7 +31,7 @@ def athena_dataupload_task(user_id, workflow_id, conn_id, params, log_id):
         return
 
     try:
-        user, workflow, __ = services.get_execution_items(
+        user, workflow, __ = get_execution_items(
             user_id=user_id,
             workflow_id=workflow_id)
 
@@ -44,7 +42,7 @@ def athena_dataupload_task(user_id, workflow_id, conn_id, params, log_id):
                 ugettext('Unable to find connection with id {0}').format(
                     conn_id))
 
-        batch_load_df_from_athenaconnection(
+        services.batch_load_df_from_athenaconnection(
             workflow,
             conn,
             params,

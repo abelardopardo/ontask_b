@@ -15,10 +15,6 @@ from django.views.decorators.http import require_http_methods
 
 from ontask import models
 from ontask.action import forms, services
-from ontask.action.services.errors import (
-    OnTaskActionSurveyDataNotFound,
-    OnTaskActionSurveyNoTableData,
-)
 from ontask.celery import celery_is_up
 from ontask.core import (
     DataTablesServerSidePaging, SessionPayload,
@@ -41,9 +37,9 @@ def _common_run_survey_row(
             is_manager,
             action,
             user_attribute_name)
-    except OnTaskActionSurveyDataNotFound:
+    except services.OnTaskActionSurveyDataNotFound:
         return ontask_handler404(request, None)
-    except OnTaskActionSurveyNoTableData as exc:
+    except services.OnTaskActionSurveyNoTableData as exc:
         exc.message_to_error(request)
         return redirect(reverse('action:run', kwargs={'pk': action.id}))
 

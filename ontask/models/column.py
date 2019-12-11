@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 import pytz
 
 from ontask.dataops import pandas
-from ontask.models.basic import CHAR_FIELD_MID_SIZE, NameAndDescription
+from ontask.models.common import CHAR_FIELD_MID_SIZE, NameAndDescription
 from ontask.models.logs import Log
 
 

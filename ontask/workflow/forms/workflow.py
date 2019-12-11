@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.core import RestrictedFileField
-from ontask.models.basic import CHAR_FIELD_SMALL_SIZE
+from ontask.models.common import CHAR_FIELD_SMALL_SIZE
 import ontask.settings
 
 
