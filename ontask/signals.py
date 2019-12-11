@@ -13,10 +13,12 @@ from ontask.scheduler import services
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_ontaskuser_handler(sender, instance, created, **kwargs):
+def create_ontaskuser_handler(sender, **kwargs):
     """Create the user extensions whenever a new user is created."""
-    del sender, kwargs
-    if not created:
+    del sender
+    created = kwargs.get('created', True)
+    instance = kwargs.get('instance')
+    if not created or not instance:
         return
 
     # Create the profile and ontask user objects, only if it is newly created
@@ -28,9 +30,13 @@ def create_ontaskuser_handler(sender, instance, created, **kwargs):
 
 
 @receiver(pre_delete, sender=models.Workflow)
-def delete_data_frame_table(sender, instance, **kwargs):
+def delete_data_frame_table(sender, **kwargs):
     """Delete the data table when deleting the workflow."""
-    del sender, kwargs
+    del sender
+    instance = kwargs.get('instance')
+    if not instance:
+        return
+
     if instance.has_table():
         sql.delete_table(instance.get_data_frame_table_name())
 

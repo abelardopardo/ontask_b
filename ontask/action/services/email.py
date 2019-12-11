@@ -431,11 +431,11 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
         :param payload: Dictionary key, value
         :return: Empty list (because it is a single email sent)
         """
-        # Evaluate the action string, evaluate the subject, and get the value
-        # of the email column.
         if log_item is None:
             action.log(user, self.log_event, **payload)
 
+        # Evaluate the action string, evaluate the subject, and get the value
+        # of the email column.
         action_text = evaluate_row_action_out(
             action,
             get_action_evaluation_context(action, {}))

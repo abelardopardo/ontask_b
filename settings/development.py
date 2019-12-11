@@ -59,7 +59,7 @@ LOGGING['loggers'] = {
         'level': 'DEBUG',
     },
     'celery_execution': {
-        'handlers': ['console'],
+        'handlers': ['celery_log_file'],
         'propagate': True,
         'level': 'DEBUG',
     },

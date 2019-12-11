@@ -105,15 +105,12 @@ class FilterForm(forms.ModelForm):
         # Required enforced in the server (not in the browser)
         self.fields['formula'].required = False
 
-        # Filter should be hidden.
-        self.fields['formula'].widget = forms.HiddenInput()
-
     class Meta:
         """Select model and fields."""
 
         model = models.Condition
         fields = ('description_text', 'formula')
-
+        widgets = {'formula': forms.HiddenInput()}
 
 class ConditionForm(FilterForm):
     """Form to read information about a condition.

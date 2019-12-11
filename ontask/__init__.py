@@ -39,89 +39,6 @@ LOGGER = logging.getLogger('ontask')
 
 CELERY_LOGGER = logging.getLogger('celery_execution')
 
-def is_legal_name(strval: str) -> Optional[str]:
-    """Check if a string is a valid column, attribute or condition name.
-
-    These are the characters that have been found to be problematic with
-    these names and the responsible for these anomalies:
-
-    - \" Provokes a db error when handling the templates due to the encoding
-      produced by the text editor.
-
-    - ' String delimiter, python messes around with it and it is too complex to
-        handle all possible cases and translations.
-
-    In principle, arbitrary combinations of the following symbols should be
-    handle by OnTask::
-
-      !#$%&()*+,-./:;<=>?@[\\]^_`{|}~
-
-    Additionally, any column name that starts with __ is reserved for OnTask.
-
-    :param strval: String with the column name
-    :return: String with message suggesting changes, or None if string correct
-    """
-    if "'" in strval:
-        return _("The symbol ' cannot be used in the name.")
-
-    if '"' in strval:
-        return _('The symbol " cannot be used in the name.')
-
-    if strval.startswith('__'):
-        return _('The name cannot start with "__"')
-
-    return None
-
-
-def entity_prefix() -> str:
-    """Return the prefix to use when cloning objects."""
-    return _('Copy of ')
-
-
-def is_correct_email(email_txt: str) -> bool:
-    """Check if string is a correct email address."""
-    try:
-        validate_email(email_txt)
-    except (ValueError, AttributeError):
-        return False
-
-    return True
-
-
-def are_correct_emails(emails: List[str]) -> bool:
-    """Check if string is a correct email address."""
-    try:
-        for email_txt in emails:
-            validate_email(email_txt)
-    except (ValueError, AttributeError):
-        return False
-
-    return True
-
-
-def simplify_datetime_str(dtime: datetime) -> str:
-    """Transform datetime object into string."""
-    if dtime is None:
-        return ''
-    return dtime.astimezone(
-        pytz.timezone(conf.settings.TIME_ZONE),
-    ).strftime('%Y-%m-%d %H:%M:%S %z')
-
-
-def create_new_name(old_name: str, obj_manager) -> str:
-    """Provide a new name that does not exist in current manager.
-
-    :param old_name: Current name
-    :param obj_manager: Query to use to filter by name
-    :return: New name
-    """
-    # Get the new name appending as many times as needed the 'Copy of '
-    new_name = old_name
-    while obj_manager.filter(name=new_name).exists():
-        new_name = entity_prefix() + new_name
-
-    return new_name
-
 
 class OnTaskDBIdentifier(sql.Identifier):
     """Class to manage the presence of % in SQL identifiers."""
@@ -206,3 +123,91 @@ class OnTaskServiceException(OnTaskException):
     def __str__(self):
         """Render as a string."""
         return self.message
+
+
+def is_legal_name(strval: str) -> Optional[str]:
+    """Check if a string is a valid column, attribute or condition name.
+
+    These are the characters that have been found to be problematic with
+    these names and the responsible for these anomalies:
+
+    - \" Provokes a db error when handling the templates due to the encoding
+      produced by the text editor.
+
+    - ' String delimiter, python messes around with it and it is too complex to
+        handle all possible cases and translations.
+
+    In principle, arbitrary combinations of the following symbols should be
+    handle by OnTask::
+
+      !#$%&()*+,-./:;<=>?@[\\]^_`{|}~
+
+    Additionally, any column name that starts with __ is reserved for OnTask.
+
+    :param strval: String with the column name
+    :return: String with message suggesting changes, or None if string correct
+    """
+    if "'" in strval:
+        return _("The symbol ' cannot be used in the name.")
+
+    if '"' in strval:
+        return _('The symbol " cannot be used in the name.')
+
+    if strval.startswith('__'):
+        return _('The name cannot start with "__"')
+
+    return None
+
+
+def entity_prefix() -> str:
+    """Return the prefix to use when cloning objects."""
+    return _('Copy of ')
+
+
+def is_correct_email(email_txt: str) -> bool:
+    """Check if string is a correct email address."""
+    try:
+        validate_email(email_txt)
+    except (ValueError, AttributeError):
+        return False
+
+    return True
+
+
+def are_correct_emails(emails: List[str]) -> bool:
+    """Check if string is a correct email address."""
+    try:
+        for email_txt in emails:
+            validate_email(email_txt)
+    except (ValueError, AttributeError):
+        return False
+
+    return True
+
+
+def simplify_datetime_str(dtime: datetime) -> str:
+    """Transform datetime object into string."""
+    if dtime is None:
+        return ''
+    return dtime.astimezone(
+        pytz.timezone(conf.settings.TIME_ZONE),
+    ).strftime('%Y-%m-%d %H:%M:%S %z')
+
+
+def create_new_name(old_name: str, obj_manager) -> str:
+    """Provide a new name that does not exist in current manager.
+
+    :param old_name: Current name
+    :param obj_manager: Query to use to filter by name
+    :return: New name
+    """
+    # Get the new name appending as many times as needed the 'Copy of '
+    new_name = old_name
+    while obj_manager.filter(name=new_name).exists():
+        new_name = entity_prefix() + new_name
+
+    return new_name
+
+def get_country_code(language_code: str) -> str:
+    """Extract the country code from the language code."""
+    return language_code[0:language_code.find('-')]
