@@ -156,12 +156,21 @@ def edit_condition(
         if not form.has_changed():
             return JsonResponse({'html_redirect': None})
 
-        # FIXME
         return services.save_condition_form(
             request,
             form,
             condition.action,
             is_filter=False)
+
+    return JsonResponse({
+        'html_form': render_to_string(
+            'action/includes/partial_condition_addedit.html',
+            {
+                'form': form,
+                'action_id': condition.action.id,
+                'condition': form.instance},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)
