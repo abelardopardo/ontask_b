@@ -5,8 +5,7 @@ from typing import Dict, Optional
 
 from django.utils.translation import ugettext
 
-from ontask import models
-from ontask.tasks.execute import task_execute_factory
+from ontask import models, tasks
 from ontask.workflow.services.luser_update import do_workflow_update_lusers
 
 
@@ -57,6 +56,6 @@ class ExecuteUpdateWorkflowLUser:
             log_item.save()
 
 
-task_execute_factory.register_producer(
+tasks.task_execute_factory.register_producer(
     models.Log.WORKFLOW_UPDATE_LUSERS,
     ExecuteUpdateWorkflowLUser())

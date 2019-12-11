@@ -3,12 +3,10 @@
 """Views to manipulate the CRUD for scheduled exections."""
 from typing import Optional
 
+from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
-from django.http import JsonResponse
-from django.http.request import HttpRequest
-from django.http.response import HttpResponse
 from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
@@ -23,9 +21,9 @@ from ontask.scheduler import services
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def index(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Render the list of actions attached to a workflow.
 
     :param request: Request object
@@ -52,10 +50,10 @@ def index(
 @ajax_required
 @get_workflow()
 def view(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """View an existing scheduled action.
 
     :param request: HTTP request
@@ -69,9 +67,9 @@ def view(
         pk=pk).first()
     if not sch_obj:
         # Connection object not found, go to table of sql connections
-        return JsonResponse({'html_redirect': reverse('scheduler:index')})
+        return http.JsonResponse({'html_redirect': reverse('scheduler:index')})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'scheduler/includes/partial_show_schedule_action.html',
             {
@@ -79,16 +77,17 @@ def view(
                 'id': sch_obj.id,
                 'timedelta': services.create_timedelta_string(
                     sch_obj.execute,
+                    sch_obj.frequency,
                     sch_obj.execute_until)})})
 
 
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def create_action_run(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Edit an existing scheduled action run operation.
 
     :param request: HTTP request
@@ -116,10 +115,10 @@ def create_action_run(
 @user_passes_test(is_instructor)
 @get_workflow()
 def edit_scheduled_operation(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Edit an existing scheduled email action.
 
     :param request: HTTP request
@@ -127,7 +126,8 @@ def edit_scheduled_operation(
     :param workflow: Workflow being manipulated.
     :return: HTTP response
     """
-    s_item = workflow.scheduled_operations.filter(
+    # s_item = workflow.scheduled_operations.filter(
+    s_item = models.ScheduledOperation.objects.filter(
         pk=pk).filter(
         Q(workflow__user=request.user)
         | Q(workflow__shared=request.user)).first()
@@ -147,9 +147,9 @@ def edit_scheduled_operation(
 @user_passes_test(is_instructor)
 @get_workflow()
 def create_workflow_op(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Create a new workflow operation."""
     del workflow
     messages.error(request, _('Under implementation'))
@@ -159,9 +159,9 @@ def create_workflow_op(
 @user_passes_test(is_instructor)
 @get_workflow()
 def finish_scheduling(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Finish the create/edit operation of a scheduled operation."""
     del workflow
     payload = SessionPayload(request.session)
@@ -182,10 +182,10 @@ def finish_scheduling(
 @ajax_required
 @get_workflow(pf_related='actions')
 def delete(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """View screen to confirm deletion scheduled item.
 
     :param request: Request object
@@ -199,10 +199,10 @@ def delete(
         Q(workflow__user=request.user)
         | Q(workflow__shared=request.user)).first()
     if not s_item:
-        return JsonResponse({'html_redirect': reverse('scheduler:index')})
+        return http.JsonResponse({'html_redirect': reverse('scheduler:index')})
 
     if request.method == 'GET':
-        return JsonResponse({
+        return http.JsonResponse({
             'html_form': render_to_string(
                 'scheduler/includes/partial_scheduler_delete.html',
                 {'s_item': s_item},
@@ -210,4 +210,28 @@ def delete(
         })
 
     services.delete_item(s_item)
-    return JsonResponse({'html_redirect': reverse('scheduler:index')})
+    return http.JsonResponse({'html_redirect': reverse('scheduler:index')})
+
+
+@user_passes_test(is_instructor)
+@ajax_required
+@get_workflow()
+def schedule_toggle(
+    request: http.HttpRequest,
+    pk: int,
+    workflow: models.Workflow,
+) -> http.JsonResponse:
+    """Toggle the field enabled of a scheduled operation.
+
+    :param request: HTML request object
+    :param pk: Primary key of the scheduled element
+    :return: JSON Response
+    """
+    del request
+    sch_item = workflow.scheduled_operations.filter(pk=pk).first()
+    if not sch_item:
+        return http.JsonResponse({})
+
+    sch_item.task.enabled = not sch_item.task.enabled
+    sch_item.task.save()
+    return http.JsonResponse({'is_checked': sch_item.task.enabled})

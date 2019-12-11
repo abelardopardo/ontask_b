@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
 
 """Execute any operation received through celery."""
-import datetime
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from celery import shared_task
 from celery.utils.log import get_task_logger
-from django.conf import settings
 from django.utils.translation import ugettext
-import pytz
 
+from ontask import models
 from ontask.core import services
-from ontask.logs.services import get_log_item
 
-LOGGER = get_task_logger('celery_execution')
+CELERY_LOGGER = get_task_logger('celery_execution')
 
 
 class ExecuteFactory:
@@ -29,7 +26,7 @@ class ExecuteFactory:
             raise ValueError(operation_type)
         self._producers[operation_type] = producer_obj
 
-    def execute_operation(self, operation_type, **kwargs):
+    def execute_operation(self, operation_type, **kwargs) -> Any:
         """Execute the given operation.
 
         Invoke the object that implements the following method
@@ -44,7 +41,7 @@ class ExecuteFactory:
 
         :param operation_type: String encoding the type of operation
         :param kwargs: Parameters passed to execution
-        :return: Nothing
+        :return: Whatever is returned by the execution
         """
         producer_obj = self._producers.get(operation_type)
         if not producer_obj:
@@ -74,24 +71,20 @@ def execute_operation(
     :param payload: Rest of parameters.
     :return: Nothing
     """
-    log_item = None
-    if log_id:
-        log_item = get_log_item(log_id)
-        if not log_item:
-            return None
-
+    run_result = None
     try:
         user, workflow, action = services.get_execution_items(
             user_id=user_id,
             workflow_id=workflow_id,
             action_id=action_id)
 
-        # Set the status to "executing" before calling the function
-        if log_item:
+        log_item = None
+        if log_id:
+            log_item = models.Log.objects.get(pk=log_id)
             log_item.payload['status'] = 'Executing'
             log_item.save()
 
-        run_result = task_execute_factory.execute_operation(
+        task_execute_factory.execute_operation(
             operation_type=operation_type,
             user=user,
             workflow=workflow,
@@ -99,13 +92,6 @@ def execute_operation(
             payload=payload,
             log_item=log_item)
 
-        # Reflect status in the log event
-        log_item.payload['status'] = 'Execution finished successfully'
-        log_item.payload['datetime'] = str(
-            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
-        log_item.payload['run_result'] = run_result
-        log_item.save()
-
     except Exception as exc:
-        log_item.payload['status'] = ugettext('Error: {0}').format(exc)
-        log_item.save()
+        CELERY_LOGGER.error(
+            ugettext('Error executing operation: {0}').format(exc))

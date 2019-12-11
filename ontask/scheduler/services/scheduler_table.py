@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """Service to produce the table with the scheduler objects."""
+from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
@@ -37,11 +39,16 @@ class ScheduleActionTable(tables.Table):
 
     name = tables.Column(verbose_name=_('Name'))
 
-    execute = tables.DateTimeColumn(
-        verbose_name=_('Scheduled'))
+    execute = tables.DateTimeColumn(verbose_name=_('Start'))
 
-    execute_until = tables.DateTimeColumn(
-        verbose_name=_('Until'))
+    frequency = tables.Column(verbose_name=_('Frequency'))
+
+    execute_until = tables.DateTimeColumn(verbose_name=_('Stop'))
+
+    enabled = tables.BooleanColumn(
+        verbose_name=_('Enabled?'),
+        default=True,
+        accessor=A('task__enabled'))
 
     status = tables.Column(
         verbose_name=_('Status'),
@@ -57,6 +64,23 @@ class ScheduleActionTable(tables.Table):
                 kwargs={'pk': record.id}),
             _('Edit this scheduled operation'),
             record.name)
+
+    @staticmethod
+    def render_frequency(record):
+        """Create the cron description."""
+        if not record.frequency:
+            return ''
+        return str(ExpressionDescriptor(
+            record.frequency,
+            casing_type=CasingTypeEnum.LowerCase))
+
+    @staticmethod
+    def render_enabled(record):
+        """Render the is enabled as a checkbox."""
+        return render_to_string(
+            'scheduler/includes/partial_scheduler_enable.html',
+            context={'record': record},
+            request=None)
 
     @staticmethod
     def render_status(record):
@@ -78,18 +102,19 @@ class ScheduleActionTable(tables.Table):
 
         fields = (
             'name',
-            'workflow',
             'action',
             'execute',
+            'frequency',
             'execute_until',
             'status')
 
         sequence = (
             'name',
-            'workflow',
             'action',
             'execute',
+            'frequency',
             'execute_until',
+            'enabled',
             'status',
             'operations')
 

@@ -2,6 +2,7 @@
 
 """Functions to save the different types of scheduled actions."""
 from datetime import datetime
+from typing import Type
 
 from django import http
 from django.conf import settings
@@ -19,7 +20,7 @@ from ontask.scheduler import forms, services
 class ScheduledOperationSaveBase:
     """Base class for all the scheduled operation save producers."""
 
-    def __init__(self, form_class: forms.ScheduleBasicForm):
+    def __init__(self, form_class: Type[forms.ScheduleBasicForm]):
         """Assign the form class."""
         self.form_class = form_class
 
@@ -48,7 +49,10 @@ class ScheduledOperationSaveBase:
         if request.method == 'POST' and form.is_valid():
             return self.process_post(request, schedule_item, op_payload)
 
-        # Render the form
+        frequency = op_payload.get('frequency')
+        if not frequency:
+            frequency = '0 5 * * 0'
+
         return render(
             request,
             'scheduler/edit.html',
@@ -56,6 +60,7 @@ class ScheduledOperationSaveBase:
                 'action': action,
                 'form': form,
                 'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
+                'frequency': frequency,
                 'valuerange': range(2),
             },
         )
@@ -129,12 +134,14 @@ class ScheduledOperationSaveBase:
         schedule_item.description_text = payload.pop('description_text')
         schedule_item.item_column = column
         schedule_item.execute = parse_datetime(payload.pop('execute'))
+        schedule_item.frequency = payload.pop('frequency')
         schedule_item.execute_until = parse_datetime(
             payload.pop('execute_until'))
         schedule_item.exclude_values = payload.pop('exclude_values', [])
 
         schedule_item.status = models.scheduler.STATUS_PENDING
         schedule_item.payload = payload.get_store()
+
         schedule_item.save()
 
         schedule_item.log(models.Log.SCHEDULE_EDIT)
@@ -145,6 +152,7 @@ class ScheduledOperationSaveBase:
         # Successful processing.
         tdelta = services.create_timedelta_string(
             schedule_item.execute,
+            schedule_item.frequency,
             schedule_item.execute_until)
         return render(
             request,
@@ -233,19 +241,3 @@ class SchedulerCRUDFactory:
 
 
 schedule_crud_factory = SchedulerCRUDFactory()
-email_processor = ScheduledOperationSaveActionRun(forms.ScheduleEmailForm)
-schedule_crud_factory.register_producer(
-    models.Action.PERSONALIZED_TEXT,
-    email_processor)
-schedule_crud_factory.register_producer(
-    models.Action.RUBRIC_TEXT,
-    email_processor)
-schedule_crud_factory.register_producer(
-    models.Action.PERSONALIZED_JSON,
-    ScheduledOperationSaveActionRun(forms.ScheduleJSONForm))
-schedule_crud_factory.register_producer(
-    models.Action.EMAIL_LIST,
-    ScheduledOperationSaveActionRun(forms.ScheduleSendListForm))
-schedule_crud_factory.register_producer(
-    models.Action.JSON_LIST,
-    ScheduledOperationSaveActionRun(forms.ScheduleJSONListForm))
