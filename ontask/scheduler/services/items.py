@@ -5,7 +5,7 @@ from datetime import datetime
 import json
 from typing import Dict, Optional
 
-from croniter import croniter
+from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
 from django.conf import settings
 from django.forms.models import model_to_dict
 from django.http.request import HttpRequest
@@ -22,19 +22,24 @@ SECONDS_IN_HOUR = 3600
 
 def get_item_value_dictionary(sch_obj: models.ScheduledOperation) -> Dict:
     """Get a dictionary with the values in the time."""
-    item_values = model_to_dict(sch_obj)
-    item_values['item_column'] = str(sch_obj.item_column)
-    item_values['workflow'] = str(sch_obj.workflow)
-    item_values['action'] = str(sch_obj.action)
-    item_values.pop('id')
-    item_values.pop('user')
-    item_values['payload'] = json.dumps(item_values['payload'], indent=2)
+    result = model_to_dict(sch_obj)
+    result['item_column'] = str(sch_obj.item_column)
+    result['workflow'] = str(sch_obj.workflow)
+    result['action'] = str(sch_obj.action)
+    result['payload'] = json.dumps(result['payload'], indent=2)
+    result.pop('id')
+    result.pop('user')
+    result = {
+        models.ScheduledOperation._meta.get_field(
+            key).verbose_name.title(): val
+        for key, val in result.items()}
 
-    return item_values
+    return result
 
 
 def create_timedelta_string(
     ftime: datetime,
+    frequency: str,
     utime: Optional[datetime] = None,
 ) -> Optional[str]:
     """Create a string rendering a time delta between now and the given one.
@@ -43,40 +48,41 @@ def create_timedelta_string(
     etc. are needed.
 
     :param ftime: datetime object (may be in the past)
+    :param frequency: string with the cron frequency (or empty)
     :param utime: until datetime object
     :return: String rendering
     """
+    if not models.ScheduledOperation.validate_times(ftime, frequency, utime):
+        return None
+
     now = datetime.now(pytz.timezone(settings.TIME_ZONE))
 
-    if utime and utime < now:
-        return None
+    if ftime and not frequency and not utime:
+        # Single execution
+        if ftime < now and not utime:
+            return None
 
-    if ftime < now and not utime:
-        return None
+        return ftime.strftime('%H:%M:%S %z %Y/%b/%d')
 
-    dtime = ftime
-    delta_string = []
-    if ftime < now:
-        ctab = str(
-            settings.CELERY_BEAT_SCHEDULE['ontask_scheduler']['schedule'])
-        citer = croniter(' '.join(ctab.split()[1:6]), now)
-        dtime = citer.get_next(datetime)
+    # Repeating execution.
+    result = str(ExpressionDescriptor(
+        frequency,
+        casing_type=CasingTypeEnum.LowerCase))
+    if not ftime and not utime:
+        return result
 
-    tdelta = dtime - now
-    if tdelta.days // DAYS_IN_YEAR >= 1:
-        delta_string.append(
-            ugettext('{0} years').format(tdelta.days // DAYS_IN_YEAR))
-    days = tdelta.days % DAYS_IN_YEAR
-    if days != 0:
-        delta_string.append(ugettext('{0} days').format(days))
-    hours = tdelta.seconds // SECONDS_IN_HOUR
-    if hours != 0:
-        delta_string.append(ugettext('{0} hours').format(hours))
-    minutes = (tdelta.seconds % SECONDS_IN_HOUR) // 60
-    if minutes != 0:
-        delta_string.append(ugettext('{0} minutes').format(minutes))
+    if ftime:
+        # Has start time
+        result = (
+            ugettext('Starting at ')
+            + ftime.strftime('%H:%M:%S %z %Y/%b/%d')
+            + ', ' + result)
 
-    return ', '.join(delta_string)
+    if utime:
+        # Has finish time
+        result = result + ', until ' + utime.strftime('%H:%M:%S %z %Y/%b/%d')
+
+    return result
 
 
 def create_payload(

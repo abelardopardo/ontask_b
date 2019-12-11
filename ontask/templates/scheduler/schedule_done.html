@@ -4,9 +4,9 @@
 {% block title %}{{ block.super }}{% trans 'Operation scheduled' %}{% endblock %}
 {% block container %}
   <div class="container">
+    <h1 class="text-center">{% trans 'Operation scheduled for execution' %}</h1>
     {% if tdelta %}
-      <h1 class="text-center">{% trans 'Operation scheduled for execution' %}</h1>
-      <p class="text-center">{% blocktrans with n=tdelta %}The operation will start executing in {{ n }}{% endblocktrans %}</p>
+      <p class="text-center">{% blocktrans with n=tdelta %}Operation execution: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     <div class="text-center">
       <a class="shadow btn btn-outline-dark" href="{% url 'scheduler:index' %}">{% trans 'Scheduled operations' %}</a>

@@ -210,7 +210,9 @@ class SchedulerForms(tests.OnTaskTestCase):
         action = self.workflow.actions.get(name='simple action')
 
         # Get the form to schedule this action
-        resp = self.get_response('scheduler:create_action_run', {'pk': action.id})
+        resp = self.get_response(
+            'scheduler:create_action_run',
+            {'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the form to schedule this action with wrong dates
@@ -221,6 +223,8 @@ class SchedulerForms(tests.OnTaskTestCase):
             req_params={
                 'name': 'Second scheduling round',
                 'item_column': str(self.workflow.columns.get(name='email').id),
+                'multiple_executions': True,
+                'frequency': '* * * * *',
                 'execute': '05/31/2119 14:35',
                 'execute_until': '05/31/2119 14:30',
                 'subject': 'Subject text',
@@ -239,6 +243,8 @@ class SchedulerForms(tests.OnTaskTestCase):
             req_params={
                 'name': 'Second scheduling round',
                 'item_column': str(self.workflow.columns.get(name='email').id),
+                'multiple_executions': True,
+                'frequency': '* * * * *',
                 'execute': execute.strftime('%m/%d/%Y %H:%M:%S'),
                 'execute_until': execute_until.strftime('%m/%d/%Y %H:%M:%S'),
                 'subject': 'Subject text',
@@ -257,6 +263,8 @@ class SchedulerForms(tests.OnTaskTestCase):
             req_params={
                 'name': 'Second scheduling round',
                 'item_column': str(self.workflow.columns.get(name='email').id),
+                'multiple_executions': True,
+                'frequency': '* * * * *',
                 'execute': execute.strftime('%m/%d/%Y %H:%m'),
                 'execute_until': execute_until.strftime('%m/%d/%Y %H:%m'),
                 'subject': 'Subject text',
@@ -275,6 +283,8 @@ class SchedulerForms(tests.OnTaskTestCase):
             req_params={
                 'name': 'Third scheduling round',
                 'item_column': str(self.workflow.columns.get(name='email').id),
+                'multiple_executions': True,
+                'frequency': '* * * * *',
                 'execute': execute.strftime('%m/%d/%Y %H:%m'),
                 'execute_until': execute_until.strftime('%m/%d/%Y %H:%m'),
                 'subject': 'Subject text',

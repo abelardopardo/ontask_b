@@ -7,11 +7,32 @@
 {% block title %}{{ block.super }}{% trans 'Scheduled Execution' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
+  {% ontask_jqcron_css %}
   {% ontask_datetimepicker_js %}
+  {% ontask_jqcron_js %}
 {% endblock extrahead %}
 {% block scripts %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   <script src="{% static 'scheduler/js/scheduler.js' %}?v={% ontask_version %}"></script>
+  <script type="text/javascript">
+    jqCronWidget = $('.ontask-scheduler-frequency').jqCron({
+      default_value: '{{ frequency }}',
+      enabled_minute: true,
+      multiple_dom: true,
+      multiple_month: true,
+      multiple_mins: true,
+      multiple_dow: true,
+      multiple_time_hours: true,
+      multiple_time_minutes: true,
+      no_reset_button: false,
+      numeric_zero_pad: true,
+      bind_to: $('#id_frequency'),
+      bind_method: {
+        set: function($element, value) {
+          $element.is(':input') ? $element.attr('value', value) : $element.data('jqCronValue', value);
+      },
+    }});
+  </script>
 {% endblock scripts %}
 {% block container %}
   <div class="container" id="email-schedule-send">

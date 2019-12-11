@@ -27,6 +27,16 @@ body {
   background-color: #f8f9fa;
 }
 
+#div_id_multiple_executions {
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+}
+
+#div_id_execute_until {
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid gray;
+}
+
 #workflows-star {
   border: 1px solid rgba(0,0,0,.125);
 }

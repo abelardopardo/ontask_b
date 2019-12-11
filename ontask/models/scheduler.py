@@ -7,6 +7,7 @@ from typing import Optional
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django_celery_beat.models import PeriodicTask
 
 from ontask import simplify_datetime_str
 from ontask.models import Column
@@ -63,16 +64,23 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
 
     # Time of execution
     execute = models.DateTimeField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         verbose_name=_('When to execute this action'))
+
+    # Crontab string encoding the frequency of execution (if  needed
+    frequency = models.CharField(
+        max_length=CHAR_FIELD_MID_SIZE,
+        null=True,
+        blank=True,
+        default='')
 
     # Time to finish the execution
     execute_until = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_(
-            'End of execution period (if executing multiple times)'))
+            'End of execution period (Optional)'))
 
     # Status of the entry (pending, running or done)
     status = models.CharField(
@@ -107,6 +115,14 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         on_delete=models.CASCADE,
         related_name='scheduled_operations')
 
+    # Key to the periodic table in django_celery_beat
+    task = models.OneToOneField(
+        PeriodicTask,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name=_('scheduled_operation'))
+
     # Column object denoting the one used to differentiate elements
     item_column = models.ForeignKey(
         Column,
@@ -134,6 +150,42 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
     def item_column_name(self) -> Optional[str]:
         """Column name or None."""
         return self.item_column.name if self.item_column else None
+
+    @staticmethod
+    def validate_times(execute, frequency, execute_until) -> bool:
+        """Verify that the execute, frequency and execute_until are correct.
+
+        There are eight possible combinations when specifying the start,
+        stop and frequency parameters in the item depending if they are None or
+        a valid value (execute, frequency, execute_until:
+
+        1) None None None -> ERROR. Something is needed
+        2) None None True -> ERROR. Only execute_until. Not allowed
+        3) None True None -> Never ending crontab starting immediately
+        4) None True True -> Crontab with an expiry date
+        5) True None None -> SINGLE execution at a given date/time
+        6) True None True -> ERROR: Missing frequency
+        7) True True None -> Crontab that starts at a given time in the future
+        8) True True True -> Crontab starting and stopping at a given time.
+        """
+        if not execute and not frequency:
+            # Cases 1 and 2
+            return False
+
+        # Start and end are given, but there is no frequency.
+        if execute and not frequency and execute_until:
+            # Case 6
+            return False
+
+        return True
+
+    def are_times_valid(self) -> bool:
+        """Verify that the execute, frequency and execute_until are correct.
+        """
+        return self.validate_times(
+            self.execute,
+            self.frequency,
+            self.execute_until)
 
     def log(self, operation_type: str, **kwargs):
         """Log the operation with the object."""
@@ -163,7 +215,7 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
 
     def __str__(self):
         """Return the name translation."""
-        return str(OPERATION_TYPES[self.name])
+        return self.name
 
     class Meta:
         """Define the criteria of uniqueness with name and action."""

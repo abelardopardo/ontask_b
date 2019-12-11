@@ -46,14 +46,17 @@ def ontask_jqcron_js() -> str:
     """Provide the jqCron jquery files"""
     return format_html(
         '<script src="{0}js/jqCron/jqCron.js"></script>'.format(
-            settings.STATIC_URL))
+            settings.STATIC_URL)
+        + '<script src="{0}js/jqCron/jqCron.{1}.js"></script>'.format(
+            settings.STATIC_URL,
+            ontask.get_country_code(settings.LANGUAGE_CODE)))
 
 
 @register.simple_tag
 def ontask_jqcron_css() -> str:
     """Provide the jqCron CSS files"""
     return format_html(
-        '<script src="{0}css/jqCron/jqCron.css"></script>'.format(
+        '<link rel="stylesheet" href="{0}css/jqCron/jqCron.css">'.format(
             settings.STATIC_URL))
 
 
@@ -116,11 +119,11 @@ def ontask_datatables_bootstrap_js() -> str:
 def ontask_datetimepicker_css() -> str:
     """Provide the datetime picker CSS URL."""
     return format_html(
-        '<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap'
-        + '-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" '
-        + 'type="text/css" media="all" rel="stylesheet"><link href="{'
-        + '0}bootstrap_datepicker_plus/css/datepicker-widget.css" '
-        + 'type="text/css" media="all" rel="stylesheet">'.format(
+        ('<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap'
+         + '-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" '
+         + 'type="text/css" media="all" rel="stylesheet"><link href="{'
+         + '0}bootstrap_datepicker_plus/css/datepicker-widget.css" '
+         + 'type="text/css" media="all" rel="stylesheet">').format(
             settings.STATIC_URL))
 
 
@@ -128,15 +131,15 @@ def ontask_datetimepicker_css() -> str:
 def ontask_datetimepicker_js() -> str:
     """Provide the datetime picker JS URL."""
     return format_html(
-        '<script type="text/javascript" src="{'
-        + '0}js/moment-with-locales.js"></script>'.format(
+        ('<script type="text/javascript" src="{'
+         + '0}js/moment-with-locales.js"></script>').format(
             settings.STATIC_URL)
-        + '<script type="text/javascript" '
-        + 'src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4'
-        + '.17.47/js/bootstrap-datetimepicker.min.js"></script><script '
-        + 'type="text/javascript" src="{'
-        + '0}bootstrap_datepicker_plus/js/datepicker-widget.js"></script'
-        + '>'.format(settings.STATIC_URL))
+        + ('<script type="text/javascript" '
+           + 'src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4'
+           + '.17.47/js/bootstrap-datetimepicker.min.js"></script><script '
+           + 'type="text/javascript" src="{'
+           + '0}bootstrap_datepicker_plus/js/datepicker-widget.js"></script'
+           + '>').format(settings.STATIC_URL))
 
 
 @register.simple_tag(takes_context=True)
