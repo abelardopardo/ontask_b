@@ -8,11 +8,9 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
-from ontask import models, tasks
-from ontask.action import forms
+from ontask import models
 from ontask.action.services import OnTaskActionRubricIncorrectContext
 from ontask.action.services.email import ActionManagerEmail
-from ontask.action.services.manager_factory import ACTION_PROCESS_FACTORY
 from ontask.celery import get_task_logger
 
 LOGGER = get_task_logger('celery_execution')
@@ -148,19 +146,3 @@ class ActionManagerRubric(ActionManagerEmail):
         context['columns_to_insert'] = columns_to_insert
 
         return None
-
-
-PROCESS_RUBRIC = ActionManagerRubric(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_rubric.html',
-    run_form_class=forms.SendListActionRunForm,
-    run_template='action/request_send_list_data.html',
-    log_event=models.Log.ACTION_RUN_EMAIL)
-
-ACTION_PROCESS_FACTORY.register_producer(
-    models.Action.RUBRIC_TEXT,
-    PROCESS_RUBRIC)
-
-tasks.task_execute_factory.register_producer(
-    models.Action.RUBRIC_TEXT,
-    PROCESS_RUBRIC)

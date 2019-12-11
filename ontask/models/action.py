@@ -17,7 +17,7 @@ import pytz
 import ontask
 from ontask.dataops import formula, sql
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
-from ontask.models.basic import CreateModifyFields, NameAndDescription
+from ontask.models.common import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 

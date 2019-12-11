@@ -6,7 +6,7 @@ from typing import Dict
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.models.basic import NameAndDescription
+from ontask.models.common import NameAndDescription
 from ontask.models.logs import Log
 
 

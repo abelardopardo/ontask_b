@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import is_legal_name, models
-from ontask.models.basic import CHAR_FIELD_MID_SIZE
+from ontask.models.common import CHAR_FIELD_MID_SIZE
 
 
 class AttributeItemForm(forms.Form):
