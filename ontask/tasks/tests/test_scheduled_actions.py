@@ -67,7 +67,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_operation(True)
+        tasks.execute_scheduled_operation(scheduled_item.id)
 
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_DONE
@@ -101,7 +101,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_operation(True)
+        tasks.execute_scheduled_operation(scheduled_item.id)
 
         scheduled_item.refresh_from_db()
         json_outbox = OnTaskSharedState.json_outbox
@@ -136,7 +136,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_operation(True)
+        tasks.execute_scheduled_operation(scheduled_item.id)
 
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_DONE
@@ -169,7 +169,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler
-        tasks.execute_scheduled_operation(True)
+        tasks.execute_scheduled_operation(scheduled_item.id)
 
         json_outbox = OnTaskSharedState.json_outbox
         scheduled_item.refresh_from_db()
@@ -201,6 +201,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             name='send email action incrementally',
             action=action,
             execute=now,
+            frequency='* * * * *',
             execute_until=now + timedelta(hours=1),
             status=models.scheduler.STATUS_PENDING,
             item_column=action.workflow.columns.get(name='email'),
@@ -213,7 +214,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         scheduled_item.save()
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(True)
+        tasks.execute_scheduled_operation(scheduled_item.id)
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
@@ -231,9 +232,9 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             cursor.execute(query, ['student01@bogus.com'])
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(True)
+        tasks.execute_scheduled_operation(scheduled_item.id)
 
-        # Event stil pending, with no values in exclude values
+        # Event stil pending, with one values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
         assert scheduled_item.exclude_values == ['student01@bogus.com']
@@ -249,9 +250,9 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             cursor.execute(query, ['student02@bogus.com'])
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(True)
+        tasks.execute_scheduled_operation(scheduled_item.id)
 
-        # Event stil pending, with no values in exclude values
+        # Event stil pending, with two values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
         assert scheduled_item.exclude_values == [
@@ -269,9 +270,9 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             cursor.execute(query, ['student03@bogus.com'])
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(True)
+        tasks.execute_scheduled_operation(scheduled_item.id)
 
-        # Event stil pending, with no values in exclude values
+        # Event stil pending, with three values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
         assert scheduled_item.exclude_values == [
@@ -280,7 +281,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             'student03@bogus.com']
 
         # Execute the scheduler for the first time
-        tasks.execute_scheduled_operation(True)
+        tasks.execute_scheduled_operation(scheduled_item.id)
 
         # Event stil pending, with no values in exclude values
         scheduled_item.refresh_from_db()
