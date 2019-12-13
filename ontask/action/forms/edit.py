@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_summernote.widgets import SummernoteInplaceWidget
 
 from ontask import models
-from ontask.action.evaluate.template import render_action_template
+from ontask.action import evaluate
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX, column_to_field
 
 
@@ -77,7 +77,7 @@ class EditActionOutForm(forms.ModelForm):
         """Verify that the template text renders correctly."""
         form_data = super().clean()
         try:
-            render_action_template(
+            evaluate.render_action_template(
                 form_data['text_content'],
                 {},
                 self.instance)
