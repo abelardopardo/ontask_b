@@ -142,7 +142,7 @@ class WorkflowAPILock(APIView):
         format=None,  # noqa: 132
         workflow: Optional[models.Workflow] = None,
     ) -> HttpResponse:
-        del request, pk, format
         """Remove the lock in a workflow."""
+        del request, pk, format
         workflow.unlock()
         return Response(status=status.HTTP_200_OK)
