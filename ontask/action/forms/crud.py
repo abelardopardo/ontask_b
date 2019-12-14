@@ -64,7 +64,9 @@ class ActionForm(ActionUpdateForm):
         super().__init__(*args, **kargs)
 
         at_field = self.fields['action_type']
-        at_field.widget.choices = models.Action.AVAILABLE_ACTION_TYPES.items()
+        at_field.widget.choices = [
+            (key, value)
+            for key, value in models.Action.AVAILABLE_ACTION_TYPES.items()]
 
         if len(models.Action.AVAILABLE_ACTION_TYPES) == 1:
             # There is only one type of action. No need to generate the field.
