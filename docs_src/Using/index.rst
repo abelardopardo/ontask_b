@@ -671,27 +671,27 @@ The field *Target URL* is to introduce the URL where the object will be sent.
 
 The preview button in the personalized JSON action shows the resulting object after verifying that the structure after evaluating the corresponding expressions is a valid JSON object.
 
-.. _send_list_action:
+.. _email_list_action:
 
 Send Column data as List in Email
 =================================
 
 This type of action sends a single email including data in some of the columns in the workflow. Creating these actions is almost identical to creating a :ref:`Personalized Text <personalized_content>`, action with the difference it is not possible to use conditions (there is a single email), and including a column in the text means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
 
-.. figure:: /scaptures/action_send_list_create.png
+.. figure:: /scaptures/action_email_list_create.png
    :align: center
    :width: 60%
 
 The page to edit this action is similar to the one to edit a :ref:`Personalized Text action <personalized_content>` but only two tabs are present: *Text* and *Select Learners*.
  In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the text. The following figure shows the resulting text with the inclusion of the data in the *email* column.
 
-.. figure:: /scaptures/action_send_list_edit.png
+.. figure:: /scaptures/action_email_list_edit.png
    :align: center
    :width: 100%
 
 Using the *Preview* button shows how the message is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
 
-.. figure:: /scaptures/action_send_list_preview.png
+.. figure:: /scaptures/action_email_list_preview.png
    :align: center
    :width: 100%
 
@@ -932,7 +932,7 @@ Scheduled Actions
    -- Jimmy Wales
 
 
-The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref`send list through email <send_list_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON list <json_list_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
+The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref`send list through email <email_list_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON list <json_list_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
 
 .. _schedule_email:
 
