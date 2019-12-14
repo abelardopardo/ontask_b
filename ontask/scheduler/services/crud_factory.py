@@ -21,7 +21,17 @@ class SchedulerCRUDFactory:
 
     def register_producer(self, operation_type: str, saver_obj):
         """Register the given object that will perform the save operation."""
+        if operation_type in self._producers:
+            raise ValueError(operation_type)
         self._producers[operation_type] = saver_obj
+
+        if operation_type == saver_obj.operation_type:
+            return
+
+        # If the object has different operation_type field than the given
+        # operation type, register it with both (one is for creation, the other
+        # is once created, for editing)
+        self._producers[saver_obj.operation_type] = saver_obj
 
     def crud_process(self, operation_type, **kwargs):
         """Execute the corresponding process function.
