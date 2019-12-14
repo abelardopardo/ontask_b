@@ -56,7 +56,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
         self.fields['frequency'].label = ''
 
         self.fields['multiple_executions'].initial = bool(
-            self.fields['frequency'].initial)
+            self.instance.frequency)
 
     def clean(self) -> Dict:
         """Verify that the date is corre    ct."""
