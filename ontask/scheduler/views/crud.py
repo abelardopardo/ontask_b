@@ -7,43 +7,15 @@ from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.core import (
-    SessionPayload, ajax_required, get_workflow,
-    is_instructor)
+    SessionPayload, ajax_required, get_workflow, is_instructor,
+)
 from ontask.scheduler import services
-
-
-@user_passes_test(is_instructor)
-@get_workflow(pf_related='actions')
-def index(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Render the list of actions attached to a workflow.
-
-    :param request: Request object
-    :param workflow: Workflow currently used
-    :return: HTTP response with the table.
-    """
-    # Reset object to carry action info throughout dialogs
-    SessionPayload.flush(request.session)
-
-    return render(
-        request,
-        'scheduler/index.html',
-        {
-            'table': services.ScheduleActionTable(
-                models.ScheduledOperation.objects.filter(
-                    action__workflow=workflow.id),
-                orderable=False),
-            'workflow': workflow,
-        },
-    )
 
 
 @user_passes_test(is_instructor)
@@ -126,8 +98,7 @@ def edit_scheduled_operation(
     :param workflow: Workflow being manipulated.
     :return: HTTP response
     """
-    # s_item = workflow.scheduled_operations.filter(
-    s_item = models.ScheduledOperation.objects.filter(
+    s_item = workflow.scheduled_operations.filter(
         pk=pk).filter(
         Q(workflow__user=request.user)
         | Q(workflow__shared=request.user)).first()
