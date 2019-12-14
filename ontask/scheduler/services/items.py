@@ -122,7 +122,8 @@ def create_payload(
     if s_item:
         payload.update(s_item.payload)
         payload['schedule_id'] = s_item.id
-        payload['item_column'] = s_item.item_column.pk
+        if s_item.item_column:
+            payload['item_column'] = s_item.item_column.pk
 
     return payload
 
