@@ -471,7 +471,7 @@ var jqCronDefaultSettings = {
 			_$blockDOW.append(_self.getText('text_dow'));
 			_selectorDow = newSelector(_$blockDOW, settings.multiple_dow, 'day_of_week');
 			for(i=0, list=_self.getText('weekdays'); i<list.length; i++){
-				_selectorDow.add(i+1, list[i]);
+				_selectorDow.add(i, list[(i + 6) % 7]);
 			}
 
 			// DOM  (day of month)
