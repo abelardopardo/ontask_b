@@ -47,15 +47,6 @@ class SQLConnectionTableAdmin(services.ConnectionTableAdmin):
 class SQLConnectionTableRun(services.ConnectionTableRun):
     """Class to render the table of SQL connections."""
 
-    @staticmethod
-    def render_name(record):
-        """Render the name as a link."""
-        return format_html(
-            '<a class="js-connection-view" href="#" data-url="{0}">{1}</a>',
-            reverse('dataops:sqlconn_view', kwargs={'pk': record['id']}),
-            record['name'],
-        )
-
     class Meta(services.ConnectionTableRun.Meta):
         """Define models, fields, sequence and attributes."""
 
@@ -104,6 +95,9 @@ def create_sql_connection_runtable() -> SQLConnectionTableRun:
             'id': record['id'],
             'run_url': reverse(
                 'dataops:sqlupload_start',
+                kwargs={'pk': record['id']}),
+            'view_url': reverse(
+                'dataops:sqlconn_view',
                 kwargs={'pk': record['id']})})
     return SQLConnectionTableRun(
         models.SQLConnection.objects.filter(enabled=True).values(
