@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """Test views to manipulate the SQL connections."""
+import os
+
+from django.conf import settings
+from django.urls import reverse
 from rest_framework import status
 
 from ontask import models, tests
@@ -129,3 +133,53 @@ class DataopsViewSQLConnectionsAdmin(tests.OnTaskTestCase):
 
         # Object in db
         self.assertEqual(models.SQLConnection.objects.count(), 1)
+
+
+class DataopsRunSQLConnections(tests.OnTaskTestCase):
+    """Test the SQL connection run."""
+
+    fixtures = ['ontask/tests/initial_workflow/initial_workflow.json']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'ontask',
+        'tests',
+        'initial_workflow',
+        'initial_workflow.sql'
+    )
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    workflow_name = 'BIOL1011'
+
+    def test_sql_run(self):
+        """Execute the RUN step."""
+
+        sql_conn = models.SQLConnection.objects.get(pk=1)
+        self.assertIsNotNone(sql_conn)
+
+        # Modify the item so that it is able to access the DB
+        sql_conn.conn_type = 'postgresql'
+        sql_conn.db_name = settings.DATABASE_URL['NAME']
+        sql_conn.db_user = settings.DATABASE_URL['USER']
+        sql_conn.db_password = settings.DATABASE_URL['PASSWORD']
+        sql_conn.db_port = settings.DATABASE_URL['PORT']
+        sql_conn.db_host = settings.DATABASE_URL['HOST']
+        sql_conn.db_table = '__ONTASK_WORKFLOW_TABLE_1'
+        sql_conn.save()
+
+        # Load the first step for the sql upload form (GET)
+        resp = self.get_response(
+            'dataops:sqlupload_start',
+            {'pk': sql_conn.id})
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertIn('Establish a SQL connection', str(resp.content))
+
+        # Load the first step for the sql upload form (POST)
+        resp = self.get_response(
+            'dataops:sqlupload_start',
+            {'pk': sql_conn.id},
+            method='POST',
+            req_params={'db_password': 'boguspwd'})
+        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(resp.url, reverse('dataops:upload_s2'))

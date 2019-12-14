@@ -397,15 +397,17 @@ class SQLRequestConnectionParam(forms.Form):
         super().__init__(*args, **kwargs)
 
         if not self.instance.db_password:
-            self.fields['password'] = forms.CharField(
+            self.fields['db_password'] = forms.CharField(
                 max_length=models.CHAR_FIELD_MID_SIZE,
+                label=_('Password'),
                 widget=forms.PasswordInput,
                 required=True,
                 help_text=_('Authentication for the database connection'))
 
         if not self.instance.db_table:
-            self.fields['table_name'] = forms.CharField(
+            self.fields['db_table'] = forms.CharField(
                 max_length=models.CHAR_FIELD_MID_SIZE,
+                label=_('Table name'),
                 required=True,
                 help_text=_('Table to load'))
 

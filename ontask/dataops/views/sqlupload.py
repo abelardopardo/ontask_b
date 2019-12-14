@@ -72,7 +72,10 @@ def sqlupload_start(
         'db_table': conn.db_table}
 
     if request.method == 'POST' and (not missing_field or form.is_valid()):
-        run_params = conn.get_missing_fields(form.cleaned_data)
+        if form:
+            run_params = conn.get_missing_fields(form.cleaned_data)
+        else:
+            run_params = {}
 
         # Process SQL connection using pandas
         try:
