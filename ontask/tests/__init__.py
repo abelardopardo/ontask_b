@@ -1055,7 +1055,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             models.Action.PERSONALIZED_CANVAS_EMAIL,
             adesc)
 
-    def create_new_send_list_action(self, aname, adesc=''):
+    def create_new_email_list_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
             models.Action.EMAIL_LIST, adesc)

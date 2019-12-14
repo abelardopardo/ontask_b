@@ -321,7 +321,7 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
             context['email_sent_datetime'] = str(
                 datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
             )
-            action.log(user, models.Log.ACTION_RUN_CANVAS_EMAIL, **context)
+            action.log(user, models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL, **context)
             to_emails.append(msg_to)
 
         action.last_executed_log = log_item

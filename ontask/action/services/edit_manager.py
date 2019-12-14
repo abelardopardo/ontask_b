@@ -95,7 +95,7 @@ class ActionEditManager:
             'selected_rows':
                 filter_condition.n_rows_selected
                 if filter_condition else -1,
-            'is_send_list': (
+            'is_email_list': (
                 action.action_type == models.Action.EMAIL_LIST
                 or action.action_type == models.Action.JSON_LIST),
             'is_personalized_text': (

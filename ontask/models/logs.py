@@ -54,12 +54,16 @@ class Log(Owner):
     ACTION_RUBRIC_CRITERION_DELETE = 'action_rubric_criterion_delete'
     ACTION_RUBRIC_CELL_EDIT = 'action_rubriccell_edit'
     ACTION_RUBRIC_LOA_EDIT = 'action_rubric_loa_edit'
+
+    ACTION_RUN_PERSONALIZED_EMAIL = 'action_run_email'
     ACTION_RUN_CANVAS_EMAIL = 'action_run_canvas_email'
-    ACTION_RUN_EMAIL = 'action_run_email'
-    ACTION_RUN_JSON = 'action_runjson'
-    ACTION_RUN_JSON_LIST = 'action_run_list'
-    ACTION_RUN_EMAIL_LIST = 'action_run_send_list'
-    ACTION_RUN_ZIP = 'action_run_zip_messages'
+    ACTION_RUN_RUBRIC_TEXT = 'action_run_email'
+    ACTION_RUN_EMAIL_LIST = 'action_run_email_list'
+    ACTION_RUN_PERSONALIZED_CANVAS_EMAIL = 'action_run_canvas_email'
+    ACTION_RUN_PERSONALIZED_JSON = 'action_run_json'
+    ACTION_RUN_JSON_LIST = 'action_run_json_list'
+    ACTION_ZIP = 'action_run_zip_messages'
+
     ACTION_SERVE_TOGGLED = 'action_serve_toggled'
     ACTION_SERVED_EXECUTE = 'action_served_execute'
     ACTION_SURVEY_INPUT = 'survey_input'
@@ -134,12 +138,12 @@ class Log(Owner):
         ACTION_RUBRIC_CRITERION_DELETE: _('Delete rubric criterion'),
         ACTION_RUBRIC_CELL_EDIT: _('Rubric cell edit'),
         ACTION_RUBRIC_LOA_EDIT: _('Rubric level of attainment edit'),
-        ACTION_RUN_CANVAS_EMAIL: _('Execute scheduled canvas email action'),
-        ACTION_RUN_EMAIL: _('Execute scheduled email action'),
-        ACTION_RUN_JSON: _('Execute scheduled JSON action'),
+        ACTION_RUN_PERSONALIZED_CANVAS_EMAIL: _('Execute scheduled canvas email action'),
+        ACTION_RUN_PERSONALIZED_EMAIL: _('Execute scheduled email action'),
+        ACTION_RUN_PERSONALIZED_JSON: _('Execute scheduled JSON action'),
         ACTION_RUN_JSON_LIST: _('Execute scheduled JSON list action'),
         ACTION_RUN_EMAIL_LIST: _('Execute scheduled send list action'),
-        ACTION_RUN_ZIP: _('Create a zip with personalized content'),
+        ACTION_ZIP: _('Create a zip with personalized content'),
         ACTION_SERVE_TOGGLED: _('Action URL toggled'),
         ACTION_SERVED_EXECUTE: _('Action served'),
         ACTION_SURVEY_INPUT: _('Survey data input'),
@@ -205,7 +209,7 @@ class Log(Owner):
     name = models.CharField(
         max_length=CHAR_FIELD_MID_SIZE,
         blank=False,
-        choices=LOG_TYPES.items())
+        choices=[(key, value) for key, value in LOG_TYPES.items()])
 
     workflow = models.ForeignKey(
         'Workflow',

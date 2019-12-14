@@ -1106,7 +1106,7 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
     action_name = 'Send to someone'
     action_text = 'Dear sir/madam\\nHere is the student list: '
 
-    def test_send_list_create_edit(self):
+    def test_email_list_create_edit(self):
         """Send list action after creating and editing."""
         # Login
         self.login('instructor01@bogus.com')
@@ -1117,7 +1117,7 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.create_new_send_list_action(self.action_name, '')
+        self.create_new_email_list_action(self.action_name, '')
 
         # insert the action text
         WebDriverWait(self.selenium, 10).until(

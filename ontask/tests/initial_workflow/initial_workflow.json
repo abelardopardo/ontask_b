@@ -3762,7 +3762,7 @@
         "created": "2019-09-03T09:49:08.382Z",
         "modified": "2019-09-03T09:50:05.509Z",
         "workflow": 1,
-        "action_type": "send_list",
+        "action_type": "email_list",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
@@ -3782,7 +3782,7 @@
         "created": "2019-09-03T10:41:07.348Z",
         "modified": "2019-09-03T10:42:39.438Z",
         "workflow": 1,
-        "action_type": "send_list_json",
+        "action_type": "json_list",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
@@ -4201,7 +4201,7 @@
         "description_text": "Description of the schedule sending email list",
         "created": "2019-12-07T11:21:18.559Z",
         "modified": "2019-12-07T11:21:18.559Z",
-        "operation_type": "send_list",
+        "operation_type": "email_list",
         "execute": "2119-12-07T11:20:00Z",
         "frequency": "",
         "execute_until": null,
@@ -4256,7 +4256,7 @@
         "description_text": "Description of schedule JSON list",
         "created": "2019-12-07T11:25:34.958Z",
         "modified": "2019-12-07T11:25:34.958Z",
-        "operation_type": "send_list_json",
+        "operation_type": "json_list",
         "execute": "2119-12-07T11:25:00Z",
         "frequency": "",
         "execute_until": null,
@@ -4286,6 +4286,23 @@
         "db_port": null,
         "db_name": "demographics",
         "db_table": "s_records"
+    }
+},
+{
+    "model": "ontask.sqlconnection",
+    "pk": 2,
+    "fields": {
+        "name": "remote server2",
+        "description_text": "Server with student records2",
+        "enabled": true,
+        "conn_type": "postgresql",
+        "conn_driver": "",
+        "db_user": "ontask",
+        "db_password": "",
+        "db_host": "localhost",
+        "db_port": null,
+        "db_name": "ontask_b",
+        "db_table": "__ONTASK_WORKFLOW_TABLE_1"
     }
 },
 {

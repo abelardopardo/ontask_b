@@ -10,8 +10,8 @@ from django.utils.translation import ugettext_lazy as _
 from django_celery_beat.models import PeriodicTask
 
 from ontask import simplify_datetime_str
-from ontask.models import Column
 from ontask.models.action import Action
+from ontask.models.column import Column
 from ontask.models.common import (
     CHAR_FIELD_MID_SIZE, CreateModifyFields, NameAndDescription, Owner)
 from ontask.models.logs import Log
@@ -33,19 +33,15 @@ SCHEDULED_STATUS = [
     (STATUS_DONE_ERROR, _('Finished with error')),
 ]
 
-RUN_ACTION = 'run_action_'
-RUN_ACTION_PERSONALIZED_TEXT = RUN_ACTION + Action.PERSONALIZED_TEXT
-RUN_ACTION_PERSONALIZED_JSON = RUN_ACTION + Action.PERSONALIZED_JSON
-RUN_ACTION_EMAIL_LIST = RUN_ACTION + Action.EMAIL_LIST
-RUN_ACTION_JSON_LIST = RUN_ACTION + Action.JSON_LIST
-RUN_ACTION_RUBRIC_TEXT = RUN_ACTION + Action.RUBRIC_TEXT
-
 OPERATION_TYPES = {
-    RUN_ACTION_PERSONALIZED_TEXT: _('Run personalized text action'),
-    RUN_ACTION_PERSONALIZED_JSON: _('Run personalized JSON action'),
-    RUN_ACTION_EMAIL_LIST: _('Run send list action'),
-    RUN_ACTION_JSON_LIST: _('Run send JSON list action'),
-    RUN_ACTION_RUBRIC_TEXT: _('Run rubrict text action'),
+    Log.ACTION_RUN_PERSONALIZED_EMAIL: Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_EMAIL],
+    Log.ACTION_RUN_PERSONALIZED_JSON: Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_JSON],
+    Log.ACTION_RUN_JSON_LIST: Log.LOG_TYPES[Log.ACTION_RUN_JSON_LIST],
+    Log.ACTION_RUN_EMAIL_LIST: Log.LOG_TYPES[Log.ACTION_RUN_EMAIL_LIST],
+    Log.WORKFLOW_INCREASE_TRACK_COUNT: Log.LOG_TYPES[
+        Log.WORKFLOW_INCREASE_TRACK_COUNT],
+    Log.PLUGIN_EXECUTE: Log.LOG_TYPES[Log.PLUGIN_EXECUTE],
+    Log.WORKFLOW_UPDATE_LUSERS: Log.LOG_TYPES[Log.WORKFLOW_UPDATE_LUSERS],
 }
 
 
@@ -60,7 +56,7 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         max_length=CHAR_FIELD_MID_SIZE,
         null=False,
         blank=False,
-        choices=OPERATION_TYPES.items())
+        choices=[(key, value) for key, value in OPERATION_TYPES.items()])
 
     # Time of execution
     execute = models.DateTimeField(

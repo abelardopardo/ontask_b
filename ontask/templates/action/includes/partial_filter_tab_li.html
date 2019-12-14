@@ -1,7 +1,7 @@
 {% load i18n %}
 <li class="nav-item pr-1">
   <a class="nav-link border border-dark border-bottom-0" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="false">
-    {% if not is_send_list %}{% trans 'Select Learners' %}{% else %}{% trans 'Select Learners' %}{% endif %}
+    {% if not is_email_list %}{% trans 'Select Learners' %}{% else %}{% trans 'Select Learners' %}{% endif %}
     {% if not filter_condition %}{% trans '(Empty)' %}{% else %}{% blocktrans with n=selected_rows tot=total_rows count counter=selected_rows %}({{ n }} learner of {{ tot }}){% plural %}({{ n }} learners of {{ tot }}){% endblocktrans %}{% endif %}
   </a>
 </li>
