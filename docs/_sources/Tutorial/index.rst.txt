@@ -34,6 +34,7 @@ The tutorial is organized as a collection of tasks. Some of them require the use
    Tasks/zip_download
    Tasks/database_upload
    Tasks/plugin_write
+   Tasks/api_browse
 
 ..
     Tasks/manage_attributes

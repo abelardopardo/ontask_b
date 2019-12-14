@@ -661,21 +661,21 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <p>The preview button in the personalized JSON action shows the resulting object after verifying that the structure after evaluating the corresponding expressions is a valid JSON object.</p>
 </div>
 <div class="section" id="send-column-data-as-list-in-email">
-<span id="send-list-action"></span><h3>3.4.5. Send Column data as List in Email<a class="headerlink" href="#send-column-data-as-list-in-email" title="Permalink to this headline">¶</a></h3>
+<span id="email-list-action"></span><h3>3.4.5. Send Column data as List in Email<a class="headerlink" href="#send-column-data-as-list-in-email" title="Permalink to this headline">¶</a></h3>
 <p>This type of action sends a single email including data in some of the columns in the workflow. Creating these actions is almost identical to creating a <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Text</span></a>, action with the difference it is not possible to use conditions (there is a single email), and including a column in the text means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_send_list_create.png"><img alt="../_images/action_send_list_create.png" src="../_images/action_send_list_create.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_email_list_create.png"><img alt="../_images/action_email_list_create.png" src="../_images/action_email_list_create.png" style="width: 60%;" /></a>
 </div>
 <dl class="simple">
 <dt>The page to edit this action is similar to the one to edit a <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Text action</span></a> but only two tabs are present: <em>Text</em> and <em>Select Learners</em>.</dt><dd><p>In the <em>Text</em> tab, when you select one column from the pull down menu <em>Insert Column as List</em>, a placeholder is inserted in the text. The following figure shows the resulting text with the inclusion of the data in the <em>email</em> column.</p>
 </dd>
 </dl>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_send_list_edit.png"><img alt="../_images/action_send_list_edit.png" src="../_images/action_send_list_edit.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_email_list_edit.png"><img alt="../_images/action_email_list_edit.png" src="../_images/action_email_list_edit.png" style="width: 100%;" /></a>
 </div>
 <p>Using the <em>Preview</em> button shows how the message is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_send_list_preview.png"><img alt="../_images/action_send_list_preview.png" src="../_images/action_send_list_preview.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_email_list_preview.png"><img alt="../_images/action_email_list_preview.png" src="../_images/action_email_list_preview.png" style="width: 100%;" /></a>
 </div>
 </div>
 <div class="section" id="send-column-data-as-list-in-json">
@@ -991,7 +991,7 @@ created the current values of the other columns. The column is not refreshed if 
 <div><p>“I have no regular schedule. I get up whenever I can.”
 – Jimmy Wales</p>
 </div></blockquote>
-<p>The <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>, <a class="reference internal" href="#personalized-canvas-email"><span class="std std-ref">personalized canvas email</span></a>, :ref`send list through email &lt;send_list_action&gt;`, <a class="reference internal" href="#personalized-json"><span class="std std-ref">personalized JSON object</span></a> and <a class="reference internal" href="#json-list-action"><span class="std std-ref">send JSON list</span></a> actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the <span class="fa fa-comments"></span> <em>Actions</em> page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation <span class="fa fa-calendar"></span> <em>Schedule</em>.</p>
+<p>The <a class="reference internal" href="#personalized-content"><span class="std std-ref">personalized text</span></a>, <a class="reference internal" href="#personalized-canvas-email"><span class="std std-ref">personalized canvas email</span></a>, :ref`send list through email &lt;email_list_action&gt;`, <a class="reference internal" href="#personalized-json"><span class="std std-ref">personalized JSON object</span></a> and <a class="reference internal" href="#json-list-action"><span class="std std-ref">send JSON list</span></a> actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the <span class="fa fa-comments"></span> <em>Actions</em> page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation <span class="fa fa-calendar"></span> <em>Schedule</em>.</p>
 <div class="section" id="scheduling-a-personalized-text-action">
 <span id="schedule-email"></span><h4>3.7.3.1. Scheduling a Personalized Text Action<a class="headerlink" href="#scheduling-a-personalized-text-action" title="Permalink to this headline">¶</a></h4>
 <p>The following figure shows the information requested to schedule the execution of a personalized text action (sending emails to learners):</p>
