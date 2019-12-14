@@ -5,7 +5,7 @@ from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from ontask import models
-from ontask.scheduler import api, forms, services, views
+from ontask.scheduler import api, services, views
 
 app_name = 'scheduler'
 
@@ -73,8 +73,7 @@ urlpatterns = [
 
 urlpatterns = format_suffix_patterns(urlpatterns)
 
-email_processor = services.ScheduledOperationSaveActionRun(
-    forms.ScheduleEmailForm)
+email_processor = services.ScheduledOperationSaveEmail()
 
 services.schedule_crud_factory.register_producer(
     models.Action.PERSONALIZED_TEXT,
@@ -86,12 +85,12 @@ services.schedule_crud_factory.register_producer(
 
 services.schedule_crud_factory.register_producer(
     models.Action.PERSONALIZED_JSON,
-    services.ScheduledOperationSaveActionRun(forms.ScheduleJSONForm))
+    services.ScheduledOperationSaveJSON())
 
 services.schedule_crud_factory.register_producer(
     models.Action.EMAIL_LIST,
-    services.ScheduledOperationSaveActionRun(forms.ScheduleSendListForm))
+    services.ScheduledOperationSaveEmailList())
 
 services.schedule_crud_factory.register_producer(
     models.Action.JSON_LIST,
-    services.ScheduledOperationSaveActionRun(forms.ScheduleJSONListForm))
+    services.ScheduledOperationSaveJSONList())
