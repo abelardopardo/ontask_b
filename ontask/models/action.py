@@ -42,8 +42,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
     PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
     PERSONALIZED_JSON = 'personalized_json'
     RUBRIC_TEXT = 'rubric_text'
-    EMAIL_LIST = 'send_list'
-    JSON_LIST = 'send_list_json'
+    EMAIL_LIST = 'email_list'
+    JSON_LIST = 'json_list'
     SURVEY = 'survey'
     TODO_LIST = 'todo_list'
 

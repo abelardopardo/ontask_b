@@ -52,14 +52,14 @@
             id="edit-personalized-text-tabs" role="tablist">
           {% include 'action/includes/partial_text_summernote_tab_li.html' %}
           {% include 'action/includes/partial_filter_tab_li.html' %}
-          {% if not is_send_list %}
+          {% if not is_email_list %}
             {% include 'action/includes/partial_condition_tab_li.html' %}
           {% endif %}
         </ul>
         <div class="tab-content" id="edit-personalized-text-tab-content">
           {% include 'action/includes/partial_text_summernote_tab_body.html' %}
           {% include 'action/includes/partial_filter_tab_body.html' %}
-          {% if not is_send_list %}
+          {% if not is_email_list %}
             {% include 'action/includes/partial_condition_tab_body.html' %}
           {% endif %}
         </div>

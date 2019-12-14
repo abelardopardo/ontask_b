@@ -728,16 +728,16 @@ class ScreenTestFixture(ScreenTests):
         select.select_by_value(models.Action.EMAIL_LIST)
         desc.send_keys('Send email with column values as list')
 
-        self.modal_ss('action_send_list_create.png')
+        self.modal_ss('action_email_list_create.png')
 
         # Cancel creation
         self.cancel_modal()
 
         # Open the action
         self.open_action_edit('Send Email with list')
-        self.body_ss('action_send_list_edit.png')
+        self.body_ss('action_email_list_edit.png')
         self.open_preview()
-        self.modal_ss('action_send_list_preview.png')
+        self.modal_ss('action_email_list_preview.png')
         self.cancel_modal()
 
         # Save action and back to action index

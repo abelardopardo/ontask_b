@@ -111,7 +111,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         assert all(token in item['auth'] for item in json_outbox)
 
 
-    def test_scheduled_send_list_action(self):
+    def test_scheduled_email_list_action(self):
         """Create a scheduled send list action and execute it."""
 
         user = get_user_model().objects.get(email='instructor01@bogus.com')

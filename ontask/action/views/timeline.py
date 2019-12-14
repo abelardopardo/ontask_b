@@ -39,9 +39,9 @@ def show_timeline(
 
     event_names = [
         models.Log.ACTION_DOWNLOAD,
-        models.Log.ACTION_RUN_CANVAS_EMAIL,
-        models.Log.ACTION_RUN_EMAIL,
-        models.Log.ACTION_RUN_JSON,
+        models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL,
+        models.Log.ACTION_RUN_PERSONALIZED_EMAIL,
+        models.Log.ACTION_RUN_PERSONALIZED_JSON,
         models.Log.ACTION_RUN_JSON_LIST,
         models.Log.ACTION_RUN_EMAIL_LIST,
         models.Log.ACTION_SURVEY_INPUT,
