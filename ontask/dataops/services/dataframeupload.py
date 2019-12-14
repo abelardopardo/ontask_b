@@ -232,17 +232,26 @@ def load_df_from_sqlconnection(
     :param run_params: Dictionary with the execution parameters.
     :return: Data frame or raise an exception.
     """
-    # Get the engine from the DB
+    if conn_item.db_password:
+        password = conn_item.db_password
+    else:
+        password = run_params['db_password']
+
+    if conn_item.db_table:
+        table_name = conn_item.db_table
+    else:
+        table_name = run_params['db_table']
+
     db_engine = pandas.create_db_engine(
         conn_item.conn_type,
         conn_item.conn_driver,
         conn_item.db_user,
-        run_params['password'],
+        password,
         conn_item.db_host,
         conn_item.db_name)
 
     # Try to fetch the data
-    data_frame = pd.read_sql_table(run_params['db_table'], db_engine)
+    data_frame = pd.read_sql_table(table_name, db_engine)
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
