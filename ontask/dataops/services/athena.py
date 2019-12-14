@@ -45,15 +45,6 @@ class AthenaConnectionTableAdmin(ConnectionTableAdmin):
 class AthenaConnectionTableRun(ConnectionTableRun):
     """Class to render the table of Athena connections."""
 
-    @staticmethod
-    def render_name(record):
-        """Render the name as a link."""
-        return format_html(
-            '<a class="js-connection-view" href="#" data-url="{0}">{1}</a>',
-            reverse('dataops:athenaconn_view', kwargs={'pk': record['id']}),
-            record['name'],
-        )
-
     class Meta(ConnectionTableRun.Meta):
         """Define models, fields, sequence and attributes."""
         model = models.AthenaConnection
@@ -96,11 +87,14 @@ def create_athena_connection_runtable() -> AthenaConnectionTableRun:
     """
     operation_column = OperationsColumn(
         verbose_name='',
-        template_file='dataops/includes/partial_athenaconn_runop.html',
+        template_file='dataops/includes/partial_connection_run.html',
         template_context=lambda record: {
             'id': record['id'],
             'run_url': reverse(
                 'dataops:athenaupload_start',
+                kwargs={'pk': record['id']}),
+            'view_url': reverse(
+                'dataops:athenaconn_view',
                 kwargs={'pk': record['id']})})
     return AthenaConnectionTableRun(
         models.AthenaConnection.objects.filter(enabled=True).values(
