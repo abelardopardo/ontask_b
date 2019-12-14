@@ -38,12 +38,12 @@ class ActionBase(NameAndDescription, CreateModifyFields):
     @DynamicAttrs
     """
 
-    PERSONALIZED_TEXT = 'personalized_text'
-    PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
-    PERSONALIZED_JSON = 'personalized_json'
-    RUBRIC_TEXT = 'rubric_text'
     EMAIL_LIST = 'email_list'
     JSON_LIST = 'json_list'
+    PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
+    PERSONALIZED_TEXT = 'personalized_text'
+    PERSONALIZED_JSON = 'personalized_json'
+    RUBRIC_TEXT = 'rubric_text'
     SURVEY = 'survey'
     TODO_LIST = 'todo_list'
 

@@ -55,19 +55,19 @@ class Log(Owner):
     ACTION_RUBRIC_CELL_EDIT = 'action_rubriccell_edit'
     ACTION_RUBRIC_LOA_EDIT = 'action_rubric_loa_edit'
 
-    ACTION_RUN_PERSONALIZED_EMAIL = 'action_run_email'
-    ACTION_RUN_CANVAS_EMAIL = 'action_run_canvas_email'
-    ACTION_RUN_RUBRIC_TEXT = 'action_run_email'
     ACTION_RUN_EMAIL_LIST = 'action_run_email_list'
-    ACTION_RUN_PERSONALIZED_CANVAS_EMAIL = 'action_run_canvas_email'
-    ACTION_RUN_PERSONALIZED_JSON = 'action_run_json'
     ACTION_RUN_JSON_LIST = 'action_run_json_list'
-    ACTION_ZIP = 'action_run_zip_messages'
+    ACTION_RUN_PERSONALIZED_CANVAS_EMAIL = (
+        'action_run_personalized_canvas_email')
+    ACTION_RUN_PERSONALIZED_EMAIL = 'action_run_personalized_email'
+    ACTION_RUN_PERSONALIZED_JSON = 'action_run_personalized_json'
+    ACTION_RUN_RUBRIC_TEXT = 'action_run_rubric_text'
 
     ACTION_SERVE_TOGGLED = 'action_serve_toggled'
     ACTION_SERVED_EXECUTE = 'action_served_execute'
     ACTION_SURVEY_INPUT = 'survey_input'
     ACTION_UPDATE = 'action_update'
+    ACTION_ZIP = 'action_zip'
     ATHENA_CONNECTION_CREATE = 'athena_connection_create'
     ATHENA_CONNECTION_EDIT = 'athena_connection_edit'
     ATHENA_CONNECTION_DELETE = 'athena_connection_delete'
