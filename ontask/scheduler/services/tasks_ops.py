@@ -64,3 +64,4 @@ def schedule_task(s_item: models.ScheduledOperation):
             args=json.dumps([s_item.id]))
 
     s_item.task = task_id
+    s_item.save()
