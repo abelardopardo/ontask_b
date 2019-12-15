@@ -23,7 +23,8 @@ SECONDS_IN_HOUR = 3600
 def get_item_value_dictionary(sch_obj: models.ScheduledOperation) -> Dict:
     """Get a dictionary with the values in the time."""
     result = model_to_dict(sch_obj)
-    result['frequency'] = str(ExpressionDescriptor(result['frequency']))
+    if result['frequency']:
+        result['frequency'] = str(ExpressionDescriptor(result['frequency']))
     result['item_column'] = str(sch_obj.item_column)
     result['workflow'] = str(sch_obj.workflow)
     result['action'] = str(sch_obj.action)
