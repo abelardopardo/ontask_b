@@ -117,18 +117,6 @@ def edit_scheduled_operation(
 
 @user_passes_test(is_instructor)
 @get_workflow()
-def create_workflow_op(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Create a new workflow operation."""
-    del workflow
-    messages.error(request, _('Under implementation'))
-    return redirect('scheduler:index')
-
-
-@user_passes_test(is_instructor)
-@get_workflow()
 def finish_scheduling(
     request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,

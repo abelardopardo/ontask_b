@@ -20,11 +20,11 @@ urlpatterns = [
         views.create_action_run,
         name='create_action_run'),
 
-    # Create scheduled workflow op
-    path(
-        'create_workflow_op/',
-        views.create_workflow_op,
-        name='create_workflow_op'),
+    # Select a SQL connection
+    path('select_sql/', views.sql_connection_index, name='select_sql'),
+
+    # Create a SQL upload operation
+    path('<int:pk>/sqlupload/', views.schedule_sqlupload, name='sqlupload'),
 
     # Edit scheduled operation
     path(
@@ -41,7 +41,7 @@ urlpatterns = [
     # View the details of a scheduled operation
     path('<int:pk>/view/', views.view, name='view'),
 
-    # Delete scheduled email action
+    # Delete scheduled action
     path('<int:pk>/delete/', views.delete, name='delete'),
 
     path(
