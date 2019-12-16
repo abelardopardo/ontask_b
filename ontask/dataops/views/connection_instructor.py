@@ -15,7 +15,7 @@ from ontask.dataops import services
 
 @user_passes_test(is_instructor)
 @get_workflow()
-def sql_connection_instructor_index(
+def sql_connection_index(
     request: HttpRequest,
     workflow: Optional[models.Workflow] = None,
 ) -> HttpResponse:
@@ -26,13 +26,11 @@ def sql_connection_instructor_index(
     :return: HTML response
     """
     del workflow
+    table = services.sql_connection_select_table('dataops:sqlupload_start')
     return render(
         request,
         'dataops/connections.html',
-        {
-            'table': services.create_sql_connection_runtable(),
-            'is_sql': True,
-            'title': _('SQL Connections')})
+        {'table': table, 'is_sql': True, 'title': _('SQL Connections')})
 
 
 @user_passes_test(is_instructor)

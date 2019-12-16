@@ -22,7 +22,7 @@ class DataopsViewSQLConnections(tests.OnTaskTestCase):
 
     def test_sql_views_instructor(self):
         """Test the view to filter items."""
-        resp = self.get_response('dataops:sqlconns_instructor_index')
+        resp = self.get_response('dataops:sqlconns_index')
         self.assertTrue(status.is_success(resp.status_code))
 
 
