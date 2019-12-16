@@ -46,7 +46,8 @@ urlpatterns = [
     path('about', views.AboutPage.as_view(), name='about'),
     path(
         'under_construction',
-        TemplateView.as_view(template_name='under_construction')),
+        TemplateView.as_view(template_name='under_construction.html'),
+        name='under_construction'),
     path('users', include('ontask.profiles.urls', namespace='profiles')),
     path('ota', admin.site.urls),
     path('trck', views.trck, name='trck'),
