@@ -64,7 +64,7 @@ def upload_step_two(
     col_info = workflow.get_column_info()
     workflow.log(
         request.user,
-        models.Log.WORKFLOW_DATA_UPLOAD,
+        upload_data['log_upload'],
         column_names=col_info[0],
         column_types=col_info[1],
         column_unique=col_info[2])
@@ -211,7 +211,7 @@ def upload_step_four(
     col_info = workflow.get_column_info()
     workflow.log(
         request.user,
-        models.Log.WORKFLOW_DATA_MERGE,
+        upload_data['log_merge'],
         column_names=col_info[0],
         column_types=col_info[1],
         column_unique=col_info[2])

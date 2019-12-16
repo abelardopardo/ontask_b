@@ -63,7 +63,8 @@ def csvupload_start(
             'column_types': form.frame_info[1],
             'src_is_key_column': form.frame_info[2],
             'step_1': reverse('dataops:csvupload_start'),
-        }
+            'log_upload': models.Log.WORKFLOW_DATA_CSV_UPLOAD,
+            'log_merge': models.Log.WORKFLOW_DATA_CSV_MERGE}
 
         return redirect('dataops:upload_s2')
 

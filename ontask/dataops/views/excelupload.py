@@ -62,7 +62,9 @@ def excelupload_start(
             'initial_column_names': form.frame_info[0],
             'column_types': form.frame_info[1],
             'src_is_key_column': form.frame_info[2],
-            'step_1': reverse('dataops:excelupload_start')}
+            'step_1': reverse('dataops:excelupload_start'),
+            'log_upload': models.Log.WORKFLOW_DATA_EXCEL_UPLOAD,
+            'log_merge': models.Log.WORKFLOW_DATA_EXCEL_MERGE}
 
         return redirect('dataops:upload_s2')
 
