@@ -54,7 +54,6 @@ class Log(Owner):
     ACTION_RUBRIC_CRITERION_DELETE = 'action_rubric_criterion_delete'
     ACTION_RUBRIC_CELL_EDIT = 'action_rubriccell_edit'
     ACTION_RUBRIC_LOA_EDIT = 'action_rubric_loa_edit'
-
     ACTION_RUN_EMAIL_LIST = 'action_run_email_list'
     ACTION_RUN_JSON_LIST = 'action_run_json_list'
     ACTION_RUN_PERSONALIZED_CANVAS_EMAIL = (
@@ -62,7 +61,6 @@ class Log(Owner):
     ACTION_RUN_PERSONALIZED_EMAIL = 'action_run_personalized_email'
     ACTION_RUN_PERSONALIZED_JSON = 'action_run_personalized_json'
     ACTION_RUN_RUBRIC_TEXT = 'action_run_rubric_text'
-
     ACTION_SERVE_TOGGLED = 'action_serve_toggled'
     ACTION_SERVED_EXECUTE = 'action_served_execute'
     ACTION_SURVEY_INPUT = 'survey_input'
@@ -110,7 +108,18 @@ class Log(Owner):
     WORKFLOW_DATA_MERGE = 'workflow_data_merge'
     WORKFLOW_DATA_ROW_UPDATE = 'tablerow_update'
     WORKFLOW_DATA_ROW_CREATE = 'tablerow_create'
-    WORKFLOW_DATA_UPLOAD = 'workflow_data_upload'
+    WORKFLOW_DATA_ATHENA_MERGE = 'workflow_athane_data_merge'
+    WORKFLOW_DATA_ATHENA_UPLOAD = 'workflow_athena_data_upload'
+    WORKFLOW_DATA_CSV_MERGE = 'workflow_csv_data_merge'
+    WORKFLOW_DATA_CSV_UPLOAD = 'workflow_csv_data_upload'
+    WORKFLOW_DATA_EXCEL_MERGE = 'workflow_excel_data_merge'
+    WORKFLOW_DATA_EXCEL_UPLOAD = 'workflow_excel_data_upload'
+    WORKFLOW_DATA_GSHEET_MERGE = 'workflow_gsheet_data_merge'
+    WORKFLOW_DATA_GSHEET_UPLOAD = 'workflow_gsheet_data_upload'
+    WORKFLOW_DATA_S3_MERGE = 'workflow_s3_data_merge'
+    WORKFLOW_DATA_S3_UPLOAD = 'workflow_se_data_upload'
+    WORKFLOW_DATA_SQL_MERGE = 'workflow_sql_data_merge'
+    WORKFLOW_DATA_SQL_UPLOAD = 'workflow_sql_data_upload'
     WORKFLOW_DELETE = 'workflow_delete'
     WORKFLOW_IMPORT = 'workflow_import'
     WORKFLOW_INCREASE_TRACK_COUNT = 'workflow_increase_track_count'
@@ -138,7 +147,8 @@ class Log(Owner):
         ACTION_RUBRIC_CRITERION_DELETE: _('Delete rubric criterion'),
         ACTION_RUBRIC_CELL_EDIT: _('Rubric cell edit'),
         ACTION_RUBRIC_LOA_EDIT: _('Rubric level of attainment edit'),
-        ACTION_RUN_PERSONALIZED_CANVAS_EMAIL: _('Execute scheduled canvas email action'),
+        ACTION_RUN_PERSONALIZED_CANVAS_EMAIL:
+            _('Execute scheduled canvas email action'),
         ACTION_RUN_PERSONALIZED_EMAIL: _('Execute scheduled email action'),
         ACTION_RUN_PERSONALIZED_JSON: _('Execute scheduled JSON action'),
         ACTION_RUN_JSON_LIST: _('Execute scheduled JSON list action'),
@@ -152,7 +162,7 @@ class Log(Owner):
         ATHENA_CONNECTION_CREATE: _('Athena connection created'),
         ATHENA_CONNECTION_DELETE: _('Athena connection deleted'),
         ATHENA_CONNECTION_EDIT: _('Athena connection updated'),
-        ATHENA_CONNECTION_TOGGLE: _('SQL connection toggled'),
+        ATHENA_CONNECTION_TOGGLE: _('Athena connection toggled'),
         COLUMN_ADD: _('Column added'),
         COLUMN_ADD_FORMULA: _('Column with formula created'),
         COLUMN_ADD_RANDOM: _('Column with random values created'),
@@ -190,7 +200,18 @@ class Log(Owner):
         WORKFLOW_DATA_MERGE: _('Data merged into workflow'),
         WORKFLOW_DATA_ROW_CREATE: _('Table row created'),
         WORKFLOW_DATA_ROW_UPDATE: _('Table row updated'),
-        WORKFLOW_DATA_UPLOAD: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_ATHENA_UPLOAD: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_ATHENA_MERGE: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_CSV_UPLOAD: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_CSV_MERGE: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_EXCEL_UPLOAD: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_EXCEL_MERGE: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_GSHEET_UPLOAD: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_GSHEET_MERGE: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_S3_UPLOAD: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_S3_MERGE: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_SQL_UPLOAD: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_SQL_MERGE: _('Data uploaded to workflow'),
         WORKFLOW_DELETE: _('Workflow deleted'),
         WORKFLOW_IMPORT: _('Import workflow'),
         WORKFLOW_INCREASE_TRACK_COUNT: _('Increase workflow track count.'),
