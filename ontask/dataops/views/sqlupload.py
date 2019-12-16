@@ -3,9 +3,9 @@
 """Function to upload a data frame from an existing SQL connection object."""
 from typing import Optional
 
+from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -18,10 +18,10 @@ from ontask.dataops import forms, services
 @user_passes_test(is_instructor)
 @get_workflow()
 def sqlupload_start(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Load a data frame using a SQL connection.
 
     The four step process will populate the following dictionary with name
@@ -45,7 +45,7 @@ def sqlupload_start(
     conn = models.SQLConnection.objects.filter(
         pk=pk).filter(enabled=True).first()
     if not conn:
-        return redirect('dataops:sqlconns_instructor_index_instructor_index')
+        return redirect('dataops:sqlconns_index')
 
     form = None
     missing_field = conn.has_missing_fields()
@@ -61,7 +61,7 @@ def sqlupload_start(
         'dtype': 'SQL',
         'dtype_select': _('SQL connection'),
         'valuerange': range(5) if workflow.has_table() else range(3),
-        'prev_step': reverse('dataops:sqlconns_instructor_index'),
+        'prev_step': reverse('dataops:sqlconns_index'),
         'conn_type': conn.conn_type,
         'conn_driver': conn.conn_driver,
         'db_user': conn.db_user,

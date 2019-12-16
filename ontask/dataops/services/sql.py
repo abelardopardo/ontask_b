@@ -44,10 +44,22 @@ class SQLConnectionTableAdmin(services.ConnectionTableAdmin):
         model = models.SQLConnection
 
 
-class SQLConnectionTableRun(services.ConnectionTableRun):
+class SQLConnectionTableSelect(services.ConnectionTableSelect):
     """Class to render the table of SQL connections."""
 
-    class Meta(services.ConnectionTableRun.Meta):
+    def __init__(self, *args, **kwargs):
+        """Store the select url string to use when rendering name."""
+        self.select_url = kwargs.pop('select_url')
+        super().__init__(*args, **kwargs)
+
+    def render_name(self, record):
+        """Render the name as a link."""
+        return format_html(
+            '<a href="{0}">{1}</a>',
+            reverse(self.select_url, kwargs={'pk': record['id']}),
+            record['name'])
+
+    class Meta(services.ConnectionTableSelect.Meta):
         """Define models, fields, sequence and attributes."""
 
         model = models.SQLConnection
@@ -83,27 +95,29 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
             'operations', op_column)])
 
 
-def create_sql_connection_runtable() -> SQLConnectionTableRun:
+def sql_connection_select_table(
+    select_url: str
+) -> SQLConnectionTableSelect:
     """Create the table structure with the SQL connections for Running.
 
+    :param select_url: URL to use for the select link in every row
     :return: SQL Connection Table Run object.
     """
     operation_column = OperationsColumn(
         verbose_name='',
-        template_file='dataops/includes/partial_connection_run.html',
+        template_file='dataops/includes/partial_connection_select.html',
         template_context=lambda record: {
             'id': record['id'],
-            'run_url': reverse(
-                'dataops:sqlupload_start',
-                kwargs={'pk': record['id']}),
             'view_url': reverse(
                 'dataops:sqlconn_view',
                 kwargs={'pk': record['id']})})
-    return SQLConnectionTableRun(
+
+    return SQLConnectionTableSelect(
         models.SQLConnection.objects.filter(enabled=True).values(
             'id',
             'name',
             'description_text'),
+        select_url=select_url,
         orderable=False,
         extra_columns=[('operations', operation_column)])
 
@@ -142,4 +156,5 @@ def sql_upload_step_one(
         'step_1': reverse(
             'dataops:sqlupload_start',
             kwargs={'pk': conn.id}),
-    }
+            'log_upload': models.Log.WORKFLOW_DATA_SQL_UPLOAD,
+            'log_merge': models.Log.WORKFLOW_DATA_SQL_MERGE}

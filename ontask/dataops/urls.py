@@ -68,8 +68,8 @@ urlpatterns = [
 
     path(
         'sqlconns_instructor/',
-        views.sql_connection_instructor_index,
-        name='sqlconns_instructor_index'),
+        views.sql_connection_index,
+        name='sqlconns_index'),
 
     path(
         'sqlconn_add/',

@@ -28,7 +28,7 @@ class ConnectionTableAdmin(tables.Table):
         }
 
 
-class ConnectionTableRun(tables.Table):
+class ConnectionTableSelect(tables.Table):
     """Base class to render connections to instructors."""
 
     class Meta:

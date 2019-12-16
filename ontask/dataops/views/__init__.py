@@ -10,7 +10,7 @@ from ontask.dataops.views.connection_admin import (
     sqlconn_toggle,
 )
 from ontask.dataops.views.connection_instructor import (
-    athena_connection_instructor_index, sql_connection_instructor_index,
+    athena_connection_instructor_index, sql_connection_index,
 )
 from ontask.dataops.views.csvupload import csvupload_start
 from ontask.dataops.views.excelupload import excelupload_start

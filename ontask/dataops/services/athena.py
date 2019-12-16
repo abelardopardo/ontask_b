@@ -9,7 +9,7 @@ from ontask import models
 from ontask.core import OperationsColumn
 from ontask.dataops.services.connections import (
     ConnectionTableAdmin,
-    ConnectionTableRun,
+    ConnectionTableSelect,
 )
 
 
@@ -42,10 +42,10 @@ class AthenaConnectionTableAdmin(ConnectionTableAdmin):
         model = models.AthenaConnection
 
 
-class AthenaConnectionTableRun(ConnectionTableRun):
+class AthenaConnectionTableSelect(ConnectionTableSelect):
     """Class to render the table of Athena connections."""
 
-    class Meta(ConnectionTableRun.Meta):
+    class Meta(ConnectionTableSelect.Meta):
         """Define models, fields, sequence and attributes."""
         model = models.AthenaConnection
 
@@ -80,14 +80,14 @@ def create_athena_connection_admintable() -> AthenaConnectionTableAdmin:
         extra_columns=[('operations', op_column)])
 
 
-def create_athena_connection_runtable() -> AthenaConnectionTableRun:
+def create_athena_connection_runtable() -> AthenaConnectionTableSelect:
     """Create the table structure with the SQL connections for Running.
 
     :return: SQL Connection Table Run object.
     """
     operation_column = OperationsColumn(
         verbose_name='',
-        template_file='dataops/includes/partial_connection_run.html',
+        template_file='dataops/includes/partial_connection_select.html',
         template_context=lambda record: {
             'id': record['id'],
             'run_url': reverse(
@@ -96,7 +96,7 @@ def create_athena_connection_runtable() -> AthenaConnectionTableRun:
             'view_url': reverse(
                 'dataops:athenaconn_view',
                 kwargs={'pk': record['id']})})
-    return AthenaConnectionTableRun(
+    return AthenaConnectionTableSelect(
         models.AthenaConnection.objects.filter(enabled=True).values(
             'id',
             'name',
