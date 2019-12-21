@@ -2,11 +2,13 @@
 
 """Functions to save the different types of scheduled actions."""
 from datetime import datetime
+from typing import Optional, Dict
 
 from django import http
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
 import pytz
@@ -29,25 +31,39 @@ class ScheduledOperationSaveBase:
     operation_type = None
     form_class = None
 
+    @staticmethod
+    def _create_payload(**kwargs) -> SessionPayload:
+        """Create the session payload to carry through the operation.
+
+        :param kwargs: key/value pairs for the call
+        :return: Session payload object
+        """
+        raise NotImplementedError
+
     def process(
         self,
         request: http.HttpRequest,
-        action: models.Action,
         schedule_item: models.ScheduledOperation,
-        prev_url: str,
+        workflow: Optional[models.Workflow] = None,
+        connection: Optional[models.Connection] = None,
+        action: Optional[models.Action] = None,
+        prev_url: Optional[str] = None,
     ) -> http.HttpResponse:
         """Process the request."""
-        op_payload = services.create_payload(
-            request,
-            self.operation_type,
-            prev_url,
-            schedule_item,
-            action)
+        op_payload = self._create_payload(
+            request=request,
+            operation_type=self.operation_type,
+            schedule_item=schedule_item,
+            workflow=workflow,
+            connection=connection,
+            action=action,
+            prev_url=prev_url)
 
         form = self.form_class(
             form_data=request.POST or None,
-            action=action,
             instance=schedule_item,
+            workflow=workflow,
+            action=action,
             columns=action.workflow.columns.filter(is_key=True),
             form_info=op_payload)
         if request.method == 'POST' and form.is_valid():
@@ -61,13 +77,12 @@ class ScheduledOperationSaveBase:
             request,
             'scheduler/edit.html',
             {
+                'workflow': workflow,
                 'action': action,
                 'form': form,
                 'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
                 'frequency': frequency,
-                'valuerange': range(2),
-            },
-        )
+                'valuerange': op_payload['valuerange']})
 
     def process_post(
         self,
@@ -165,6 +180,45 @@ class ScheduledOperationSaveBase:
 
 class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
     """Base class for those saving Action Run operations."""
+
+    @staticmethod
+    def _create_payload(**kwargs) -> SessionPayload:
+        """Create a payload dictionary to store in the session.
+
+        :param request: HTTP request
+        :param operation_type: String denoting the type of s_item being
+        processed
+        :param s_item: Existing schedule item being processed (Optional)
+        :param prev_url: String with the URL to use to "go back"
+        :param action: Corresponding action for the schedule operation type, or
+        if empty, it is contained in the scheduled_item (Optional)
+        :return: Dictionary with pairs name: value
+        """
+        s_item = kwargs.get('schedule_item')
+        if s_item:
+            action = s_item.action
+            exclude_values = s_item.exclude_values
+        else:
+            exclude_values = []
+
+        # Get the payload from the session, and if not, use the given one
+        payload = SessionPayload(
+            kwargs.get('request').session,
+            initial_values={
+                'action_id': kwargs.get('action').id,
+                'exclude_values': exclude_values,
+                'operation_type': kwargs.get('operation_type'),
+                'valuerange': range(2),
+                'prev_url': kwargs.get('prev_url'),
+                'post_url': reverse('scheduler:finish_scheduling'),
+            })
+        if s_item:
+            payload.update(s_item.payload)
+            payload['schedule_id'] = s_item.id
+            if s_item.item_column:
+                payload['item_column'] = s_item.item_column.pk
+
+        return payload
 
     def process_post(
         self,
