@@ -185,28 +185,26 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
 
     def log(self, operation_type: str, **kwargs):
         """Log the operation with the object."""
-        action_name = ''
-        action_id = -1
-        if self.action:
-            action_name = self.action.name
-            action_id = self.action.id
         payload = {
             'id': self.id,
             'name': self.name,
-            'action': action_name,
-            'action_id': action_id,
             'execute': simplify_datetime_str(self.execute),
+            'frequency': self.frequency,
             'execute_until': simplify_datetime_str(self.execute_until),
             'item_column': self.item_column.name if self.item_column else '',
             'status': self.status,
             'exclude_values': self.exclude_values,
             'payload': json.dumps(self.payload)}
 
+        if self.action:
+            payload['action'] = self.action.name
+            payload['action_id'] = self.action.id
+
         payload.update(kwargs)
         return Log.objects.register(
             self.user,
             operation_type,
-            self.action.workflow,
+            self.workflow,
             payload)
 
     def __str__(self):
@@ -216,4 +214,4 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
     class Meta:
         """Define the criteria of uniqueness with name and action."""
 
-        unique_together = ('name', 'action')
+        unique_together = ('name', 'workflow')
