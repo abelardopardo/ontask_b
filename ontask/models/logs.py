@@ -60,7 +60,6 @@ class Log(Owner):
         'action_run_personalized_canvas_email')
     ACTION_RUN_PERSONALIZED_EMAIL = 'action_run_personalized_email'
     ACTION_RUN_PERSONALIZED_JSON = 'action_run_personalized_json'
-    ACTION_RUN_RUBRIC_TEXT = 'action_run_rubric_text'
     ACTION_SERVE_TOGGLED = 'action_serve_toggled'
     ACTION_SERVED_EXECUTE = 'action_served_execute'
     ACTION_SURVEY_INPUT = 'survey_input'
@@ -105,20 +104,13 @@ class Log(Owner):
     WORKFLOW_CREATE = 'workflow_create'
     WORKFLOW_DATA_FAILEDMERGE = 'workflow_data_failedmerge'
     WORKFLOW_DATA_FLUSH = 'workflow_data_flush'
-    WORKFLOW_DATA_MERGE = 'workflow_data_merge'
     WORKFLOW_DATA_ROW_UPDATE = 'tablerow_update'
     WORKFLOW_DATA_ROW_CREATE = 'tablerow_create'
-    WORKFLOW_DATA_ATHENA_MERGE = 'workflow_athane_data_merge'
     WORKFLOW_DATA_ATHENA_UPLOAD = 'workflow_athena_data_upload'
-    WORKFLOW_DATA_CSV_MERGE = 'workflow_csv_data_merge'
     WORKFLOW_DATA_CSV_UPLOAD = 'workflow_csv_data_upload'
-    WORKFLOW_DATA_EXCEL_MERGE = 'workflow_excel_data_merge'
     WORKFLOW_DATA_EXCEL_UPLOAD = 'workflow_excel_data_upload'
-    WORKFLOW_DATA_GSHEET_MERGE = 'workflow_gsheet_data_merge'
     WORKFLOW_DATA_GSHEET_UPLOAD = 'workflow_gsheet_data_upload'
-    WORKFLOW_DATA_S3_MERGE = 'workflow_s3_data_merge'
     WORKFLOW_DATA_S3_UPLOAD = 'workflow_se_data_upload'
-    WORKFLOW_DATA_SQL_MERGE = 'workflow_sql_data_merge'
     WORKFLOW_DATA_SQL_UPLOAD = 'workflow_sql_data_upload'
     WORKFLOW_DELETE = 'workflow_delete'
     WORKFLOW_IMPORT = 'workflow_import'
@@ -197,21 +189,14 @@ class Log(Owner):
         WORKFLOW_CREATE: _('Workflow created'),
         WORKFLOW_DATA_FAILEDMERGE: _('Failed data merge into workflow'),
         WORKFLOW_DATA_FLUSH: _('Workflow data flushed'),
-        WORKFLOW_DATA_MERGE: _('Data merged into workflow'),
         WORKFLOW_DATA_ROW_CREATE: _('Table row created'),
         WORKFLOW_DATA_ROW_UPDATE: _('Table row updated'),
         WORKFLOW_DATA_ATHENA_UPLOAD: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_ATHENA_MERGE: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_CSV_UPLOAD: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_CSV_MERGE: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_EXCEL_UPLOAD: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_EXCEL_MERGE: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_GSHEET_UPLOAD: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_GSHEET_MERGE: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_S3_UPLOAD: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_S3_MERGE: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_SQL_UPLOAD: _('Data uploaded to workflow'),
-        WORKFLOW_DATA_SQL_MERGE: _('Data uploaded to workflow'),
+        WORKFLOW_DATA_CSV_UPLOAD: _('Upload Data from CSV File'),
+        WORKFLOW_DATA_EXCEL_UPLOAD: _('Upload Data from Excel Sheet'),
+        WORKFLOW_DATA_GSHEET_UPLOAD: _('Upload Data from Google Sheet'),
+        WORKFLOW_DATA_S3_UPLOAD: _('Upload Data from S3 CSV source'),
+        WORKFLOW_DATA_SQL_UPLOAD: _('Upload Data from SQL source'),
         WORKFLOW_DELETE: _('Workflow deleted'),
         WORKFLOW_IMPORT: _('Import workflow'),
         WORKFLOW_INCREASE_TRACK_COUNT: _('Increase workflow track count.'),
