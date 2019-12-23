@@ -5,7 +5,7 @@ from typing import Dict, Optional
 
 from django.utils.translation import ugettext
 
-from ontask import models, tasks
+from ontask import models
 from ontask.dataops.services.plugin_admin import run_plugin
 
 
@@ -80,7 +80,3 @@ class ExecuteRunPlugin:
         except Exception as exc:
             log_item.payload['status'] = ugettext('Error: {0}').format(str(exc))
             log_item.save()
-
-
-tasks.task_execute_factory.register_producer(
-    models.Log.PLUGIN_EXECUTE, ExecuteRunPlugin())

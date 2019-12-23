@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.core import signing
 from django.utils.translation import ugettext
 
-from ontask import models, tasks
+from ontask import models
 from ontask.dataops import sql
 
 
@@ -113,8 +113,3 @@ class ExecuteIncreaseTrackCount:
 
         # Record the event
         action.log(user, self.log_event, **log_payload)
-
-
-tasks.task_execute_factory.register_producer(
-    models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
-    ExecuteIncreaseTrackCount())

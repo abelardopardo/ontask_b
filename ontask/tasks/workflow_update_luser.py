@@ -5,7 +5,7 @@ from typing import Dict, Optional
 
 from django.utils.translation import ugettext
 
-from ontask import models, tasks
+from ontask import models
 from ontask.workflow.services.luser_update import do_workflow_update_lusers
 
 
@@ -54,8 +54,3 @@ class ExecuteUpdateWorkflowLUser:
             log_item.payload['status'] = \
                 ugettext('Error: {0}').format(e)
             log_item.save()
-
-
-tasks.task_execute_factory.register_producer(
-    models.Log.WORKFLOW_UPDATE_LUSERS,
-    ExecuteUpdateWorkflowLUser())
