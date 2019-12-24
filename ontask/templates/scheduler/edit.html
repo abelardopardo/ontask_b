@@ -12,6 +12,7 @@
   {% ontask_jqcron_js %}
 {% endblock extrahead %}
 {% block scripts %}
+  <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   <script src="{% static 'scheduler/js/scheduler.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
@@ -37,22 +38,31 @@
 {% block container %}
   <div class="container" id="email-schedule-send">
     <div id="step_sequence" hidden>
-      {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
+      {% include 'step_by_step.html' with valuerange=payload.valuerange step=1 %}
     </div>
-    <h1 class="text-center">{% trans 'Schedule Operation Execution' %}</h1>
-    {% include 'action/includes/partial_action_edit_out_warning.html' %}
+    <h1 class="text-center">{{ payload.page_title }}</h1>
     <p class="text-center">{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
-    <p class="lead text-center">{{ action.name }}</p>
+    {% if action %}
+      <p class="lead text-center">
+        <a class="spin" data-toggle="tooltip"
+           title="{% trans 'Edit the action scheduled for execution' %}"
+           href="{% url 'action:edit' action.id %}">{{ action.name }}</a>
+      </p>
+      {% include 'action/includes/partial_action_edit_out_warning.html' %}
+    {% endif %}
     <div class="row justify-content-center">
       <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <div class="text-center mb-3">
+        {% include 'dataops/merge_help.html' %}
+        <div class="text-center mt-3 mb-3">
           <a type="button" class="shadow btn btn-outline-dark"
              href="{% url 'scheduler:index' %}"> {% trans 'Cancel' %}</a>
-          <button type="button" class="shadow btn btn-outline-info js-action-preview"
-                  data-url="{% url 'action:preview' action.id 1 %}">
-            <span class="fa fa fa-eye"></span> {% trans 'Preview' %}</button>
+          {% if action %}
+            <button type="button" class="shadow btn btn-outline-info js-action-preview"
+                    data-url="{% url 'action:preview' action.id 1 %}">
+              <span class="fa fa fa-eye"></span> {% trans 'Preview' %}</button>
+          {% endif %}
           <button type="Submit" name="Submit" value="Submit" id="next-step-on" hidden
                   class="shadow btn btn-outline-primary btn-space spin">
             <span class="fa fa-angle-right"></span> {% trans 'Next' %}</button>

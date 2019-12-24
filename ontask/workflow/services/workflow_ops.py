@@ -6,8 +6,6 @@ from typing import Dict
 from django import http
 from django.db.models import Q
 from django.template.loader import render_to_string
-from django.urls import reverse
-from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
@@ -31,25 +29,10 @@ class AttributeTable(tables.Table):
         template_context=lambda record: {'id': record['id']},
     )
 
-    @staticmethod
-    def render_name(record):
-        """Render name field as a link.
-
-        Impossible to use LinkColumn because href="#". A template may be an
-        overkill.
-        """
-        return format_html(
-            '<a href="#" data-toggle="tooltip"'
-            + ' class="js-attribute-edit" data-url="{0}" title="{1}">{2}</a>',
-            reverse('workflow:attribute_edit', kwargs={'pk': record['id']}),
-            _('Edit the attribute'),
-            record['name'],
-        )
-
     class Meta:
         """Select fields and attributes."""
 
-        fields = ('name', 'value', 'operations')
+        fields = ('operations', 'name', 'value')
 
         attrs = {'class': 'table', 'id': 'attribute-table'}
 
@@ -66,7 +49,7 @@ class WorkflowShareTable(tables.Table):
         orderable=False,
         template_file='workflow/includes/partial_share_operations.html',
         template_context=lambda elems: {'id': elems['id']},
-        verbose_name='',
+        verbose_name=_('Operations'),
         attrs={'td': {'class': 'dt-body-center'}},
     )
 
@@ -75,7 +58,7 @@ class WorkflowShareTable(tables.Table):
 
         fields = ('email', 'id')
 
-        sequence = ('email', 'operations')
+        sequence = ('operations', 'email')
 
         attrs = {
             'class': 'table',
@@ -235,14 +218,7 @@ def column_table_server_side(
 
         final_qs.append({
             'number': col.position,
-            'name': format_html(
-                '<a href="#" class="js-workflow-column-edit"'
-                + 'data-toggle="tooltip" data-url="{0}"'
-                + 'title="{1}">{2}</a>',
-                reverse('workflow:column_edit', kwargs={'pk': col.id}),
-                _('Edit the parameters of this column'),
-                col.name,
-            ),
+            'name': col.name,
             'description': col.description_text,
             'type': col.get_simplified_data_type(),
             'key': '<span class="true">✔</span>' if col.is_key else '',

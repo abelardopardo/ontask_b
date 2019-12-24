@@ -1,20 +1,25 @@
 {% load i18n %}
-<a href="{% url 'table:display_view' id %}"
-   class="btn btn-sm btn-light"
-   data-toggle="tooltip"
-   title="{% trans 'Access the table with this view' %}">
-   <span class="fa fa-eye"></span></a>
-<button type="button"
-        class="btn btn-sm btn-light js-view-clone"
-        data-url="{% url 'table:view_clone' id %}"
-        data-toggle="tooltip"
-        title="{% trans 'Create an identical view' %}">
-  <span class="fa fa fa-clone"></span>
-</button>
-<button type="button"
-        class="btn btn-sm btn-light js-view-delete"
-        data-url="{% url 'table:view_delete' id %}"
-        data-toggle="tooltip"
-        title="{% trans 'Delete the view' %}">
-  <span class="fa fa-trash"></span>
-</button>
+<div class="btn-group btn-group-sm" role="group">
+  <a href="#" type="button" data-url="{% url 'table:view_edit' id %}"
+     class="btn btn-primary btn-light js-view-edit" data-toggle="tooltip"
+     title="{% trans 'Change the columns present in the view' %}">
+     <span class="fa fa-pencil"></span></a>
+  <a href="{% url 'table:display_view' id %}" type="button"
+     class="btn btn-primary btn-light" data-toggle="tooltip"
+     title="{% trans 'Access the table with this view' %}">
+     <span class="fa fa-eye"></span></a>
+  <button type="button"
+          class="btn btn-primary btn-light js-view-clone"
+          data-url="{% url 'table:view_clone' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Create an identical view' %}">
+    <span class="fa fa fa-clone"></span>
+  </button>
+  <button type="button"
+          class="btn btn-primary btn-light js-view-delete"
+          data-url="{% url 'table:view_delete' id %}"
+          data-toggle="tooltip"
+          title="{% trans 'Delete the view' %}">
+    <span class="fa fa-trash"></span>
+  </button>
+</div>

@@ -1,9 +1,6 @@
 {% load i18n %}
-<a href="{% url 'action:edit' action_id %}" data-toggle="tooltip"
-   title="{% trans 'Edit the action' %}">
-  {{ action_name }}
-  {% if danger_msg %}
-    <span class="fa fa-exclamation-triangle" style="color:red;"
-          data-toggle="tooltip" title="{% trans 'The action cannot be executed' %}"></span>
-  {% endif %}
-</a>
+{{ action_name }}
+{% if danger_msg %}
+  <span class="fa fa-exclamation-triangle" style="color:red;" data-toggle="tooltip"
+        title="{% trans 'The action has some anomalies. Edit to review them' %}"></span>
+{% endif %}

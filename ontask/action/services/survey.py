@@ -9,7 +9,6 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
@@ -46,18 +45,6 @@ class ColumnSelectedTable(tables.Table):
         self.condition_list = kwargs.pop('condition_list')
         super().__init__(*args, **kwargs)
 
-    @staticmethod
-    def render_column_name(record: models.ActionColumnConditionTuple) -> str:
-        """Render as a link."""
-        return format_html(
-            '<a href="#questions" data-toggle="tooltip"'
-            + ' class="js-workflow-question-edit" data-url="{0}"'
-            + ' title="{1}">{2}</a>',
-            reverse('workflow:question_edit', kwargs={'pk': record.column.id}),
-            _('Edit the question'),
-            record.column.name,
-        )
-
     def render_condition(
         self,
         record: models.ActionColumnConditionTuple
@@ -93,11 +80,11 @@ class ColumnSelectedTable(tables.Table):
             'operations')
 
         sequence = (
+            'operations',
             'column_name',
             'column_description',
             'changes_allowed',
-            'condition',
-            'operations')
+            'condition')
 
         attrs = {
             'class': 'table table-hover table-bordered',
@@ -274,7 +261,7 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
                 extra_columns=[(
                     'operations',
                     OperationsColumn(
-                        verbose_name='',
+                        verbose_name=_('Operations'),
                         template_file=ColumnSelectedTable.ops_template,
                         template_context=lambda record: {
                             'id': record.column.id,

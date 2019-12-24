@@ -26,14 +26,35 @@
           stateSaveParams: function (settings, data) {
             delete data.search;
           },
-          "order": [[0, "asc"]],
+          "order": [[1, "asc"]],
           "language": {
             "url": location.protocol + getLanguage()
           },
           "columnDefs": [
             {"className": "dt-center", "targets": "_all"},
-            {"orderable": false, "targets": 2},
-            {"searchable": false, "targets": 2},
+            {"orderable": false, "targets": 0},
+            {"searchable": false, "targets": 0},
+          ],
+          colReorder: false,
+          rowReorder: false,
+        });
+        var share_table = $('#share-table').DataTable({
+          "autoWidth": false,
+          "search": {
+            "caseInsensitive": true,
+          },
+          stateSave: true,
+          stateSaveParams: function (settings, data) {
+            delete data.search;
+          },
+          "order": [[1, "asc"]],
+          "language": {
+            "url": location.protocol + getLanguage()
+          },
+          "columnDefs": [
+            {"className": "dt-center", "targets": "_all"},
+            {"orderable": false, "targets": 0},
+            {"searchable": false, "targets": 0},
           ],
           colReorder: false,
           rowReorder: false,
