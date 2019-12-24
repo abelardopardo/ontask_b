@@ -978,7 +978,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
         # Click in the Delete button
         self.selenium.find_element_by_xpath(
-            xpath_txt + '/td[2]/div/button').click()
+            xpath_txt + '/td[2]/div/button[2]').click()
         self.wait_for_modal_open()
 
         self.selenium.find_element_by_xpath(

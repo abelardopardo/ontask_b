@@ -539,7 +539,7 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
         self.select_share_tab()
         self.search_table_row_by_string(
             'share-table',
-            1,
+            2,
             'instructor02@bogus.com')
 
         # Click in the create share dialog again
@@ -573,7 +573,7 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
         self.select_share_tab()
         self.search_table_row_by_string(
             'share-table',
-            1,
+            2,
             'instructor02@bogus.com')
 
         # Check that the shared users are properly stored in the workflow
@@ -586,9 +586,9 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
         # click the delete button in the superuser@bogus.com row
         element = self.search_table_row_by_string(
             'share-table',
-            1,
+            2,
             'superuser@bogus.com')
-        element.find_element_by_xpath('td[2]/button').click()
+        element.find_element_by_xpath('td[1]/button').click()
 
         # Wait for the delete confirmation frame
         WebDriverWait(self.selenium, 10).until(
