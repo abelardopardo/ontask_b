@@ -736,6 +736,10 @@ class DataopsPluginExecution(tests.OnTaskLiveTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
+        # Spinner not visible
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
 
         # Provide the execution data (input columns and merge key
         self.selenium.find_element_by_id(
