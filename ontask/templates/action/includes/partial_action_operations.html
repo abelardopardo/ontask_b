@@ -1,12 +1,15 @@
 {% load i18n %}
-<div class=" btn-group" role="group">
+<div class="btn-group btn-group-sm" role="group">
+  <a href="{% url 'action:edit' id %}" class="btn btn-primary btn-light spin"
+     data-toggle="tooltip" title="{% trans 'Edit the action' %}" role="button">
+    <span class="fa fa-pencil"></span></a>
   <a href="{% url 'action:run' id %}"
-     class="btn btn-light btn-sm spin {% if not is_executable %}disabled{% endif %}"
-     data-toggle="tooltip"
-     title="{% if action_tval == 'survey' or action_tval == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action_tval == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span> {% trans 'Run' %}</a>
+     class="btn btn-primary btn-light spin {% if not is_executable %}disabled{% endif %}"
+     data-toggle="tooltip" role="button"
+     title="{% if action_tval == 'survey' or action_tval == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action_tval == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span></a>
   <div class="dropdown">
-    <button class="btn btn-light btn-sm" type="button" id="actionMoreOperations"
-            data-toggle="dropdown"><span class="fa fa-ellipsis-h"></span></button>
+    <button class="btn btn-primary btn-light" type="button" id="actionMoreOperations"
+            data-toggle="dropdown"><span class="fa fa-ellipsis-v"></span></button>
     <div class="shadow dropdown-menu dropdown-menu-right" aria-labelledby="actionMoreOperations">
       {% if action_tval == 'personalized_text' or action_tval == 'personalized_canvas_email' or action_tval == 'survey' %}
         <button type="button"
@@ -26,8 +29,8 @@
       {% if action_tval == 'personalized_text' %}
         <a href="{% url 'action:zip_action' id %}"
            class="spin dropdown-item"
-            data-toggle="tooltip"
-            title="{% trans 'Create a ZIP with each personalised text in a file' %}">
+           data-toggle="tooltip"
+           title="{% trans 'Create a ZIP with each personalised text in a file' %}">
           <span class="fa fa-file-archive-o"></span> {% trans 'ZIP' %}</a>
       {% endif %}
       <a href="{% url 'action:timeline' id %}" class="spin dropdown-item"

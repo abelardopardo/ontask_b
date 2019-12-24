@@ -20,7 +20,7 @@ class ConnectionTableAdmin(tables.Table):
         """Define model, fields, sequence and attributes."""
 
         fields = ('name', 'description_text', 'enabled')
-        sequence = ('name', 'description_text', 'enabled', 'operations')
+        sequence = ('operations', 'name', 'description_text', 'enabled', )
         attrs = {
             'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',

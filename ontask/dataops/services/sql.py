@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 
 """Service functions to handle SQL connections."""
@@ -8,23 +7,20 @@ from django import http
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.core import OperationsColumn
-from ontask.dataops import pandas, services
+from ontask.dataops import pandas
+from ontask.dataops.services.connections import (
+    ConnectionTableAdmin,
+    ConnectionTableSelect,
+)
+from ontask.dataops.services.dataframeupload import load_df_from_sqlconnection
 
 
-class SQLConnectionTableAdmin(services.ConnectionTableAdmin):
+class SQLConnectionTableAdmin(ConnectionTableAdmin):
     """Table to render the SQL admin items."""
-
-    @staticmethod
-    def render_name(record):
-        """Render name as a link."""
-        return format_html(
-            '<a class="js-connection-addedit" href="#" data-url="{0}">{1}</a>',
-            reverse('dataops:sqlconn_edit', kwargs={'pk': record['id']}),
-            record['name'],
-        )
 
     @staticmethod
     def render_enabled(record):
@@ -38,13 +34,13 @@ class SQLConnectionTableAdmin(services.ConnectionTableAdmin):
                     'dataops:sqlconn_toggle',
                     kwargs={'pk': record['id']})})
 
-    class Meta(services.ConnectionTableAdmin.Meta):
+    class Meta(ConnectionTableAdmin.Meta):
         """Define model."""
 
         model = models.SQLConnection
 
 
-class SQLConnectionTableSelect(services.ConnectionTableSelect):
+class SQLConnectionTableSelect(ConnectionTableSelect):
     """Class to render the table of SQL connections."""
 
     def __init__(self, *args, **kwargs):
@@ -59,7 +55,7 @@ class SQLConnectionTableSelect(services.ConnectionTableSelect):
             reverse(self.select_url, kwargs={'pk': record['id']}),
             record['name'])
 
-    class Meta(services.ConnectionTableSelect.Meta):
+    class Meta(ConnectionTableSelect.Meta):
         """Define models, fields, sequence and attributes."""
 
         model = models.SQLConnection
@@ -71,10 +67,13 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
     :return: SQL Connection Table Admin object.
     """
     op_column = OperationsColumn(
-        verbose_name='',
+        verbose_name=_('Operations'),
         template_file='dataops/includes/partial_connection_adminop.html',
         template_context=lambda record: {
             'id': record['id'],
+            'edit_url': reverse(
+                'dataops:sqlconn_edit',
+                kwargs={'pk': record['id']}),
             'view_url': reverse(
                 'dataops:sqlconn_view',
                 kwargs={'pk': record['id']}),
@@ -137,7 +136,7 @@ def sql_upload_step_one(
     :return: Nothing, it creates the new dataframe in the database
     """
     # Process SQL connection using pandas
-    data_frame = services.load_df_from_sqlconnection(conn, run_params)
+    data_frame = load_df_from_sqlconnection(conn, run_params)
     # Verify the data frame
     pandas.verify_data_frame(data_frame)
 

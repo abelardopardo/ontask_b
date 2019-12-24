@@ -1,15 +1,19 @@
 {% load i18n %}
-<button type="button" class="btn btn-sm btn-light js-connection-view"
-        data-url="{{ view_url }}" data-toggle="tooltip"
-        title="{% trans 'View details' %}">
-  <span class="fa fa fa-eye"></span></button>
-<button type="button" class="btn btn-sm btn-light js-connection-clone"
-        data-url="{{ clone_url }}" data-toggle="tooltip"
-        data-toggle="tooltip"
-        title="{% trans 'Create an exact duplicate' %}">
-  <span class="fa fa fa-clone"></span></button>
-<button type="button" class="btn btn-sm btn-light js-connection-delete"
-        data-url="{{ delete_url }}" data-toggle="tooltip"
-        data-toggle="tooltip"
-        title="{% trans 'Delete' %}">
-  <span class="fa fa-trash"></span></button>
+<div class="btn-group btn-group-sm" role="group">
+  <button type="button" class="btn btn-primary btn-light js-connection-addedit"
+     data-url="{{ edit_url }}"
+     data-toggle="tooltip" title="{% trans 'Edit the connection' %}" role="button">
+    <span class="fa fa-pencil"></span></button>
+  <button type="button" class="btn btn-primary btn-light js-connection-view"
+          data-url="{{ view_url }}" data-toggle="tooltip"
+          title="{% trans 'View connection details' %}">
+    <span class="fa fa fa-eye"></span></button>
+  <button type="button" class="btn btn-primary btn-light js-connection-clone"
+          data-url="{{ clone_url }}" data-toggle="tooltip"
+          title="{% trans 'Create an exact duplicate of this conneciton' %}">
+    <span class="fa fa fa-clone"></span></button>
+  <button type="button" class="btn btn-primary btn-light js-connection-delete"
+          data-url="{{ delete_url }}" data-toggle="tooltip"
+          title="{% trans 'Delete the connection' %}">
+    <span class="fa fa-trash"></span></button>
+</div>

@@ -62,7 +62,6 @@ class ActionTable(tables.Table):
         return render_to_string(
             'action/includes/partial_action_name.html',
             context={
-                'action_id': record.id,
                 'danger_msg': (
                     record.get_row_all_false_count or not record.is_executable
                 ),
@@ -81,8 +80,9 @@ class ActionTable(tables.Table):
             'last_executed_log',
         )
         sequence = (
-            'action_type',
+            'operations',
             'name',
+            'action_type',
             'description_text',
             'last_executed_log',
         )

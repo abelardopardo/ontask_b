@@ -38,14 +38,14 @@
             },
             columns: [
               {"data": "number", "class": "dt-center"},
+              {"data": "operations", "class": "dt-center"},
               {"data": "name", "class": "dt-center"},
               {"data": "description"},
               {"data": "type", "class": "dt-center"},
               {"data": "key", "class": "dt-center"},
-              {"data": "operations", "class": "dt-center"},
             ],
             columnDefs: [
-              {"targets": 3,
+              {"targets": 4,
                createdCell: function(td, cellData, rowData, row, col){
                  if (cellData == 'Text') {
                    $(td).addClass('column-type-string');
@@ -58,7 +58,7 @@
                  }
                }
               },
-              {"orderable": false, "targets": 5},
+              {"orderable": false, "targets": 1},
               {"searchable": false, "targets": "operations"},
             ],
             drawCallback: function(settings) {
@@ -95,11 +95,11 @@
           <thead>
             <tr>
               <th>#</th>
+              <th>{% trans 'Operations' %}</th>
               <th>{% trans 'Name' %}</th>
               <th>{% trans 'Description' %}</th>
               <th>{% trans 'Type' %}</th>
               <th>{% trans 'Key?' %}</th>
-              <th></th>
             </tr>
           </thead>
         </table>

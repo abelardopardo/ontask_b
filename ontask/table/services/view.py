@@ -3,8 +3,6 @@
 """Functions to support the display of a view."""
 import copy
 
-from django.urls import reverse
-from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
@@ -23,29 +21,17 @@ class ViewTable(tables.Table):
         verbose_name=_('Description'))
 
     operations = OperationsColumn(
-        verbose_name='',
+        verbose_name=_('Operations'),
         template_file='table/includes/partial_view_operations.html',
         template_context=lambda record: {'id': record['id']},
     )
-
-    @staticmethod
-    def render_name(record):
-        """Render the name of the action as a link."""
-        return format_html(
-            """<a href="#" class="js-view-edit"
-                  data-toggle="tooltip" data-url="{0}"
-                  title="{1}">{2}</a>""",
-            reverse('table:view_edit', kwargs={'pk': record['id']}),
-            _('Change the columns present in the view'),
-            record['name'],
-        )
 
     class Meta:
         """Select the model and specify fields, sequence and attributes."""
 
         model = models.View
-        fields = ('name', 'description_text', 'operations')
-        sequence = ('name', 'description_text', 'operations')
+        fields = ('operations', 'name', 'description_text')
+        sequence = ('operations', 'name', 'description_text')
         attrs = {
             'class': 'table table-hover table-bordered shadow',
             'style': 'width: 100%;',

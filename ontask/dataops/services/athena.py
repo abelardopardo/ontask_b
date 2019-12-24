@@ -3,7 +3,7 @@
 """Service functions to handle athena connections."""
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.core import OperationsColumn
@@ -15,15 +15,6 @@ from ontask.dataops.services.connections import (
 
 class AthenaConnectionTableAdmin(ConnectionTableAdmin):
     """Table to render the Athena admin items."""
-
-    @staticmethod
-    def render_name(record):
-        """Render name as a link."""
-        return format_html(
-            '<a class="js-connection-addedit" href="#" data-url="{0}">{1}</a>',
-            reverse('dataops:athenaconn_edit', kwargs={'pk': record['id']}),
-            record['name'],
-        )
 
     @staticmethod
     def render_enabled(record):
@@ -60,6 +51,9 @@ def create_athena_connection_admintable() -> AthenaConnectionTableAdmin:
         template_file='dataops/includes/partial_connection_adminop.html',
         template_context=lambda record: {
             'id': record['id'],
+            'edit_url': reverse(
+                'dataops:athenaconn_edit',
+                kwargs={'pk': record['id']}),
             'view_url': reverse(
                 'dataops:athenaconn_view',
                 kwargs={'pk': record['id']}),
@@ -86,7 +80,7 @@ def create_athena_connection_runtable() -> AthenaConnectionTableSelect:
     :return: SQL Connection Table Run object.
     """
     operation_column = OperationsColumn(
-        verbose_name='',
+        verbose_name=_('Operations'),
         template_file='dataops/includes/partial_connection_select.html',
         template_context=lambda record: {
             'id': record['id'],

@@ -16,20 +16,6 @@ from ontask.core.tables import OperationsColumn
 class ScheduleActionTable(tables.Table):
     """Table to show the email actions scheduled for a workflow."""
 
-    action = tables.LinkColumn(
-        verbose_name=_('Action'),
-        viewname='action:edit',
-        text=lambda record: record.action.name,
-        kwargs={'pk': A('action.id')},
-        attrs={
-            'a': {
-                'class': 'spin',
-                'data-toggle': 'tooltip',
-                'title': _('Edit the action scheduled for execution'),
-            },
-        },
-    )
-
     operations = OperationsColumn(
         verbose_name='',
         orderable=False,
@@ -39,11 +25,13 @@ class ScheduleActionTable(tables.Table):
 
     name = tables.Column(verbose_name=_('Name'))
 
-    execute = tables.DateTimeColumn(verbose_name=_('Start'))
+    operation_type = tables.Column(verbose_name=_('Type'))
+
+    execute = tables.DateTimeColumn(verbose_name=_('From'))
 
     frequency = tables.Column(verbose_name=_('Frequency'))
 
-    execute_until = tables.DateTimeColumn(verbose_name=_('Stop'))
+    execute_until = tables.DateTimeColumn(verbose_name=_('Until'))
 
     enabled = tables.BooleanColumn(
         verbose_name=_('Enabled?'),
@@ -55,15 +43,9 @@ class ScheduleActionTable(tables.Table):
         accessor=A('get_status_display'))
 
     @staticmethod
-    def render_name(record):
-        """Render name as link."""
-        return format_html(
-            '<a href="{0}" data-toggle="tooltip" title="{1}">{2}</a>',
-            reverse(
-                'scheduler:edit_scheduled_operation',
-                kwargs={'pk': record.id}),
-            _('Edit this scheduled operation'),
-            record.name)
+    def render_operation_type(record):
+        """Create the string with the operation type."""
+        return models.Log.LOG_TYPES[record.operation_type]
 
     @staticmethod
     def render_frequency(record):
@@ -102,21 +84,21 @@ class ScheduleActionTable(tables.Table):
 
         fields = (
             'name',
-            'action',
+            'operation_type',
             'execute',
             'frequency',
             'execute_until',
             'status')
 
         sequence = (
+            'operations',
             'name',
-            'action',
+            'operation_type',
             'execute',
             'frequency',
             'execute_until',
             'enabled',
-            'status',
-            'operations')
+            'status')
 
         attrs = {
             'class': 'table table-hover table-bordered shadow',
