@@ -218,7 +218,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Execute the scheduler for the first time
         tasks.execute_scheduled_operation(scheduled_item.id, True)
 
-        # Event stil pending, with no values in exclude values
+        # Event still pending, with no values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
         assert scheduled_item.exclude_values == []
@@ -236,7 +236,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Execute the scheduler for the first time
         tasks.execute_scheduled_operation(scheduled_item.id, True)
 
-        # Event stil pending, with one values in exclude values
+        # Event still pending, with one values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
         assert scheduled_item.exclude_values == ['student01@bogus.com']
@@ -254,7 +254,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Execute the scheduler for the first time
         tasks.execute_scheduled_operation(scheduled_item.id, True)
 
-        # Event stil pending, with two values in exclude values
+        # Event still pending, with two values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
         assert scheduled_item.exclude_values == [
@@ -274,7 +274,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Execute the scheduler for the first time
         tasks.execute_scheduled_operation(scheduled_item.id, True)
 
-        # Event stil pending, with three values in exclude values
+        # Event still pending, with three values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
         assert scheduled_item.exclude_values == [
@@ -285,7 +285,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Execute the scheduler for the first time
         tasks.execute_scheduled_operation(scheduled_item.id, True)
 
-        # Event stil pending, with no values in exclude values
+        # Event still pending, with no values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
         assert scheduled_item.exclude_values == [

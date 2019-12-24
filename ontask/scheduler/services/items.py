@@ -8,21 +8,16 @@ from typing import Dict, Optional
 from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
 from django.conf import settings
 from django.forms.models import model_to_dict
-from django.http.request import HttpRequest
-from django.urls import reverse
 from django.utils.translation import ugettext
 import pytz
 
 from ontask import models
-from ontask.core import SessionPayload
-
-DAYS_IN_YEAR = 365
-SECONDS_IN_HOUR = 3600
 
 
 def get_item_value_dictionary(sch_obj: models.ScheduledOperation) -> Dict:
     """Get a dictionary with the values in the time."""
     result = model_to_dict(sch_obj)
+    result['operation_type'] = models.Log.LOG_TYPES[result['operation_type']]
     if result['frequency']:
         result['frequency'] = str(ExpressionDescriptor(result['frequency']))
     result['item_column'] = str(sch_obj.item_column)
@@ -54,7 +49,11 @@ def create_timedelta_string(
     :param utime: until datetime object
     :return: String rendering
     """
-    if not models.ScheduledOperation.validate_times(ftime, frequency, utime):
+    diagnostic_msg = models.ScheduledOperation.validate_times(
+        ftime,
+        frequency,
+        utime)
+    if diagnostic_msg:
         return None
 
     now = datetime.now(pytz.timezone(settings.TIME_ZONE))

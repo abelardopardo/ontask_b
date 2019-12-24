@@ -24,10 +24,10 @@ def _update_item_status(
     :param s_item: Scheduled item
     :return: Nothing
     """
-    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
     if run_result is None:
         s_item.status = models.scheduler.STATUS_DONE_ERROR
     else:
+        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
         if s_item.frequency and (
             not s_item.execute_until or now < s_item.execute_until
         ):
