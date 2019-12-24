@@ -60,7 +60,7 @@ def create_action_run(
     pk: int,
     workflow: Optional[models.Workflow] = None,
 ) -> http.HttpResponse:
-    """Edit an existing scheduled action run operation.
+    """Create a new scheduled action run operation.
 
     :param request: HTTP request
     :param pk: primary key of the action
@@ -78,10 +78,34 @@ def create_action_run(
         action.action_type,
         action=action,
         schedule_item=None,
+        request=request)
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def create_sql_upload(
+    request: http.HttpRequest,
+    pk: int,
+    workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
+    """Create a new scheduled SQL upload operation.
+
+    :param request: HTTP request
+    :param pk: primary key of the action
+    :param workflow: Workflow of the current context.
+    :return: HTTP response
+    """
+    conn = models.SQLConnection.objects.filter(
+        pk=pk).filter(enabled=True).first()
+    if not conn:
+        return redirect('scheduler:index')
+
+    return services.schedule_crud_factory.crud_process(
+        models.Log.WORKFLOW_DATA_SQL_UPLOAD,
         request=request,
-        prev_url=reverse(
-            'scheduler:create_action_run',
-            kwargs={'pk': action.id}))
+        workflow=workflow,
+        connection=conn,
+        schedule_item=None)
 
 
 @user_passes_test(is_instructor)
@@ -108,8 +132,9 @@ def edit_scheduled_operation(
     return services.schedule_crud_factory.crud_process(
         s_item.operation_type,
         request=request,
-        action=s_item.action,
         schedule_item=s_item,
+        workflow=s_item.workflow,
+        action=s_item.action,
         prev_url=reverse(
             'scheduler:edit_scheduled_operation',
             kwargs={'pk': s_item.id}))
@@ -194,3 +219,5 @@ def schedule_toggle(
     sch_item.task.enabled = not sch_item.task.enabled
     sch_item.task.save()
     return http.JsonResponse({'is_checked': sch_item.task.enabled})
+
+
