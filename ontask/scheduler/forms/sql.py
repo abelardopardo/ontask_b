@@ -1,109 +1,60 @@
 # -*- coding: utf-8 -*-
 
-"""Forms required to schedule Action Run"""
-from ontask.action import forms as action_forms
+"""Forms required to schedule SQL upload/merge operation"""
+from typing import Dict
+
+from django import forms
+from django.utils.translation import ugettext_lazy as _
+
+from ontask import models
+from ontask.dataops import forms as dataops_forms
 from ontask.scheduler.forms import ScheduleBasicForm
 
 
-class ScheduleEmailForm(ScheduleBasicForm, action_forms.EmailActionForm):
-    """Form to create/edit objects of the ScheduleAction of type email.
+class ScheduleSQLUploadForm(
+    ScheduleBasicForm,
+    dataops_forms.MergeForm,
+    dataops_forms.SQLRequestConnectionParam):
+    """Form to request info for the SQL scheduled upload
 
-    One of the fields is a reference to a key column, which is a subset of
-    the columns attached to the action. The subset is passed as the name
-    arguments "columns" (list of key columns).
+    Three blocks of information are requested:
 
-    There is an additional field to allow for an extra step to review and
-    filter email addresses.
+    Block 1: Name, description, start -- frequency -- stop times
+
+    Block 2: Parameters for the SQL connection
+
+    Block 3: Parameters for the merge: Left/Right column + merge method
     """
 
-    def __init__(self, form_data, *args, **kwargs):
-        """Set field order."""
-        super().__init__(form_data, *args, **kwargs)
-        self.order_fields([
-            'name',
-            'description_text',
-            'execute',
-            'multiple_executions',
-            'frequency',
-            'execute_until',
-            'item_column',
-            'subject',
-            'cc_email',
-            'bcc_email',
-            'confirm_items',
-            'send_confirmation',
-            'track_read'])
+    dst_help = dataops_forms.SelectKeysForm.dst_help
 
+    dst_key = forms.ChoiceField(
+        required=True,
+        label=_('Key Column in Existing Table'),
+        help_text=dst_help)
 
-class ScheduleSendListForm(ScheduleBasicForm, action_forms.SendListActionForm):
-    """Form to create/edit objects of the ScheduleAction of type send list."""
+    src_key = forms.CharField(
+        max_length=models.CHAR_FIELD_MID_SIZE,
+        strip=True,
+        required=True,
+        label=_('Key column in new data'))
 
-    def __init__(self, form_data, *args, **kwargs):
-        """Set field order."""
-        super().__init__(form_data, *args, **kwargs)
-        self.order_fields([
-            'name',
-            'description_text',
-            'execute',
-            'multiple_executions',
-            'frequency',
-            'execute_until',
-            'email_to',
-            'subject',
-            'cc_email',
-            'bcc_email'])
+    def __init__(self, *args, **kargs):
+        """Initalize all the fields"""
+        dst_choices = [(dkey, dkey) for dkey in kargs.pop('columns')]
 
+        super().__init__(*args, **kargs)
 
-class ScheduleJSONForm(ScheduleBasicForm, action_forms.JSONActionForm):
-    """Form to edit ScheduleAction of type JSON."""
+        self.set_fields_from_dict(['dst_key', 'src_key', 'how_merge'])
 
-    def __init__(self, form_data, *args, **kwargs):
-        """Set field order."""
-        super().__init__(form_data, *args, **kwargs)
-        self.order_fields([
-            'name',
-            'description_text',
-            'execute',
-            'multiple_executions',
-            'frequency',
-            'execute_until',
-            'item_column',
-            'confirm_items',
-            'token'])
+        self.fields['dst_key'].choices = dst_choices
 
+    def clean(self) -> Dict:
+        """Store the fields in the Form Payload"""
+        form_data = super().clean()
+        self.store_fields_in_dict([
+            ('dst_key', None),
+            ('src_key', None),
+            ('how_merge', None)])
 
-class ScheduleJSONListForm(ScheduleBasicForm, action_forms.JSONListActionForm):
-    """Form to edit ScheduleAction of types JSON List."""
-
-    def __init__(self, form_data, *args, **kwargs):
-        """Set field order."""
-        super().__init__(form_data, *args, **kwargs)
-        self.order_fields([
-            'name',
-            'description_text',
-            'execute',
-            'multiple_executions',
-            'frequency',
-            'execute_until',
-            'token'])
-
-
-class ScheduleCanvasEmailForm(
-    ScheduleBasicForm,
-    action_forms.CanvasEmailActionForm,
-):
-    """Form to schedule Action of type canvas email."""
-
-    def __init__(self, form_data, *args, **kwargs):
-        """Set field order."""
-        super().__init__(form_data, *args, **kwargs)
-        self.order_fields([
-            'name',
-            'description_text',
-            'item_column',
-            'confirm_items',
-            'subject',
-            'execute',
-            'multiple_executions',
-            'frequency',
-            'execute_until'])
+        return form_data
