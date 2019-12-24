@@ -53,8 +53,7 @@ def googlesheetupload_start(
             'column_types': form.frame_info[1],
             'src_is_key_column': form.frame_info[2],
             'step_1': reverse('dataops:googlesheetupload_start'),
-            'log_upload': models.Log.WORKFLOW_DATA_GSHEET_UPLOAD,
-            'log_merge': models.Log.WORKFLOW_DATA_GSHEET_MERGE}
+            'log_upload': models.Log.WORKFLOW_DATA_GSHEET_UPLOAD}
 
         return redirect('dataops:upload_s2')
 
