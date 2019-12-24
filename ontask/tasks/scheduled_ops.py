@@ -2,7 +2,7 @@
 
 """Process the scheduled actions."""
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from celery import shared_task
 from django.conf import settings
@@ -46,8 +46,13 @@ def _update_item_status(
 
 
 @shared_task
-def execute_scheduled_operation(s_item_id: int):
-    """Execute the scheduled operation in s_item."""
+def execute_scheduled_operation(s_item_id: int, debug: Optional[bool] = False):
+    """Execute the scheduled operation in s_item.
+
+    :param s_item_id: ID of the scheduled item to execute
+    :param debug: For debugging purposes (bypasses the too soon test)
+    :return: Nothing, execution carries out normally.
+    """
 
     s_item = models.ScheduledOperation.objects.filter(pk=s_item_id).first()
     if not s_item:
@@ -65,7 +70,7 @@ def execute_scheduled_operation(s_item_id: int):
             return
 
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
-        if s_item.execute and now < s_item.execute:
+        if s_item.execute and now < s_item.execute and not debug:
             # Not yet
             if settings.DEBUG:
                 CELERY_LOGGER.info('Too soon to execute operation.')
@@ -82,8 +87,9 @@ def execute_scheduled_operation(s_item_id: int):
 
         try:
             # Set item to running
-            s_item.status = models.scheduler.STATUS_EXECUTING
-            s_item.save()
+            models.ScheduledOperation.objects.filter(pk=s_item.id).update(
+                status=models.scheduler.STATUS_EXECUTING)
+            s_item.refresh_from_db(fields=['status'])
 
             payload = s_item.payload
             if s_item.item_column:
