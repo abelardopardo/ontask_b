@@ -46,7 +46,7 @@ def athenaupload_start(
         run_params = form.get_field_dict()
         log_item = workflow.log(
             request.user,
-            models.Log.WORKFLOW_DATA_MERGE,
+            models.Log.WORKFLOW_DATA_ATHENA_UPLOAD,
             connection=conn.name,
             status='Preparing to execute')
 

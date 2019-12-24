@@ -155,5 +155,4 @@ def sql_upload_step_one(
         'step_1': reverse(
             'dataops:sqlupload_start',
             kwargs={'pk': conn.id}),
-            'log_upload': models.Log.WORKFLOW_DATA_SQL_UPLOAD,
-            'log_merge': models.Log.WORKFLOW_DATA_SQL_MERGE}
+        'log_upload': models.Log.WORKFLOW_DATA_SQL_UPLOAD}

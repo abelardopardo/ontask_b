@@ -211,7 +211,7 @@ def upload_step_four(
     col_info = workflow.get_column_info()
     workflow.log(
         request.user,
-        upload_data['log_merge'],
+        upload_data['log_upload'],
         column_names=col_info[0],
         column_types=col_info[1],
         column_unique=col_info[2])
