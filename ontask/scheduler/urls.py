@@ -94,3 +94,7 @@ services.schedule_crud_factory.register_producer(
 services.schedule_crud_factory.register_producer(
     models.Action.JSON_LIST,
     services.ScheduledOperationSaveJSONList())
+
+services.schedule_crud_factory.register_producer(
+    models.Log.WORKFLOW_DATA_SQL_UPLOAD,
+    services.ScheduledOperationSaveSQLUpload())

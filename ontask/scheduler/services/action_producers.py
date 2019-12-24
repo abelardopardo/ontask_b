@@ -178,6 +178,7 @@ class ScheduledOperationSaveBase:
             {'tdelta': tdelta, 's_item': schedule_item})
 
 
+
 class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
     """Base class for those saving Action Run operations."""
 
@@ -239,6 +240,80 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
         # Go straight to the final step
         return self.finish(request, op_payload, schedule_item)
 
+    def finish(
+        self,
+        request: http.HttpRequest,
+        payload: SessionPayload,
+        schedule_item: models.ScheduledOperation = None,
+    ) -> Optional[http.HttpResponse]:
+        """Finalize the creation of a scheduled operation.
+
+        All required data is passed through the payload.
+
+        :param request: Request object received
+        :param schedule_item: ScheduledOperation item being processed. If None,
+        it has to be extracted from the information in the payload.
+        :param payload: Dictionary with all the required data coming from
+        previous requests.
+        :return: Http Response
+        """
+        s_item_id = payload.pop('schedule_id', None)
+        schedule_item = None
+        if s_item_id:
+            # Get the item being processed
+            if not schedule_item:
+                schedule_item = models.ScheduledOperation.objects.filter(
+                    id=s_item_id).first()
+            if not schedule_item:
+                messages.error(
+                    request,
+                    _('Incorrect request for operation scheduling'))
+                return redirect('action:index')
+        else:
+            action = models.Action.objects.get(pk=payload.pop('action_id'))
+            payload['workflow'] = action.workflow
+            payload['action'] = action
+
+        # Remove some parameters from the payload
+        for key in [
+            'button_label',
+            'valuerange',
+            'step',
+            'prev_url',
+            'post_url',
+            'confirm_items',
+            'action_id',
+            'page_title',
+        ]:
+            payload.pop(key, None)
+
+        try:
+            schedule_item = self.create_or_update(
+                request.user,
+                payload.get_store(),
+                schedule_item)
+        except Exception as exc:
+            messages.error(
+                request,
+                str(_('Unable to create scheduled operation ({0})')).format(
+                    str(exc)))
+            return redirect('action:index')
+
+        schedule_item.log(models.Log.SCHEDULE_EDIT)
+
+        # Reset object to carry action info throughout dialogs
+        SessionPayload.flush(request.session)
+
+        # Successful processing.
+        tdelta = create_timedelta_string(
+            schedule_item.execute,
+            schedule_item.frequency,
+            schedule_item.execute_until)
+        return render(
+            request,
+            'scheduler/schedule_done.html',
+            {'tdelta': tdelta, 's_item': schedule_item})
+
 
 class ScheduledOperationSaveEmail(ScheduledOperationSaveActionRun):
     """Process Personalised Email."""
@@ -260,10 +335,9 @@ class ScheduledOperationSaveJSON(ScheduledOperationSaveActionRun):
     operation_type = models.Log.ACTION_RUN_PERSONALIZED_JSON
     form_class = forms.ScheduleJSONForm
 
+
 class ScheduledOperationSaveJSONList(ScheduledOperationSaveActionRun):
     """Process JSON List."""
 
     operation_type = models.Log.ACTION_RUN_JSON_LIST
     form_class = forms.ScheduleJSONListForm
-
-

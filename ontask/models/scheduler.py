@@ -151,7 +151,7 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         return self.item_column.name if self.item_column else None
 
     @staticmethod
-    def validate_times(execute, frequency, execute_until) -> bool:
+    def validate_times(execute, frequency, execute_until) -> Optional[str]:
         """Verify that the execute, frequency and execute_until are correct.
 
         There are eight possible combinations when specifying the start,
@@ -166,17 +166,34 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         6) True None True -> ERROR: Missing frequency
         7) True True None -> Crontab that starts at a given time in the future
         8) True True True -> Crontab starting and stopping at a given time.
+
+        :param execute: Datetime to start execution
+        :param frequency: String with a crontab format
+        :param execute_until: Datetime to stop execution
+        :return: Error message, or Nothing if everything is fine.
         """
         if not execute and not frequency:
             # Cases 1 and 2
-            return False
+            return _('Incorrect execution time specification.')
 
         # Start and end are given, but there is no frequency.
         if execute and not frequency and execute_until:
             # Case 6
-            return False
+            return _('Frequency of execution is mission.')
 
-        return True
+        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        if execute_until and execute_until < now:
+            # Case 4 and 8 when current date/time is later
+            return _('Execution times in the past. No execution possible.')
+
+        if execute and not frequency and not execute_until and execute < now:
+            # Case 5 when the start time is in the past
+            return _('Execution time is in the past. No execution possible.')
+
+        if execute and execute_until and execute_until < execute:
+            return _('Incorrect execution dates.')
+
+        return None
 
     def are_times_valid(self) -> Optional[str]:
         """Verify that execute, frequency and execute_until are correct.

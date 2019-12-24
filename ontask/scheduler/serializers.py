@@ -1,17 +1,15 @@
 # -*- coding: UTF-8 -*-#
 
 """Serialize the scheduled action."""
-import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Dict
 
-from django.conf import settings
 from django.utils.translation import ugettext, ugettext_lazy as _
-import pytz
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
 from ontask import is_correct_email, models
 from ontask.dataops import sql
+from ontask.scheduler.services import schedule_crud_factory
 
 
 class ScheduledOperationSerializer(serializers.ModelSerializer):
@@ -21,60 +19,11 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         source='item_column_name',
         required=False)
 
-    def instantiate_or_update(
-        self,
-        validated_data,
-        action,
-        execute,
-        item_column,
-        exclude_values,
-        payload,
-        scheduled_obj=None,
-    ) -> models.ScheduledOperation:
-        """Instantiate or update the object of class ScheduledOperation.
-
-        Given the validated data and a set of parameters that have been
-        validated, instantiate or update the object of class ScheduledOperation.
-
-        :param validated_data: Data obtained by the serializer
-        :param action: Action object
-        :param execute: Execution date/time
-        :param item_column: Item column object (if given)
-        :param exclude_values: List of values from item_column to exluce
-        :param payload: JSON object
-        :param scheduled_obj: Object to instantiate or update
-        :return: instantiated object
-        """
-        if not scheduled_obj:
-            scheduled_obj = models.ScheduledOperation()
-
-        scheduled_obj.user = self.context['request'].user
-        scheduled_obj.name = validated_data['name']
-        scheduled_obj.description_text = validated_data.get('description_text')
-        scheduled_obj.action = action
-        scheduled_obj.execute = execute
-        scheduled_obj.item_column = item_column
-        scheduled_obj.exclude_values = exclude_values
-        scheduled_obj.payload = payload
-        scheduled_obj.status = models.scheduler.STATUS_PENDING
-
-        scheduled_obj.save()
-        return scheduled_obj
-
-    def extra_validation(
-        self,
-        validated_data: Dict,
-    ) -> Tuple[
-        models.Action,
-        datetime.datetime,
-        str,
-        Optional[List[str]],
-        Dict,
-    ]:
+    def extra_validation(self, validated_data: Dict):
         """Check for extra properties.
 
-        Checking for extra validation properties in the information contained
-        in the validated data. Namely:
+        Checking for extra properties in the information contained in the
+        validated data. Namely:
 
         - The action name corresponds with a valid action for the user.
 
@@ -89,19 +38,29 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         - The received object has a payload
 
         :param validated_data:
-        :return: action, execute, item_column, exclude_values, payload
+        :return: Nothing. Exceptions are raised when anomalies are detected
         """
-        # Get the action
+        this_user = self.context['request'].user
+
+        # Workflow should be owned by the user
+        workflow = validated_data['workflow']
+        if workflow.user != this_user:
+            raise APIException(
+                _('Incorrect permission to manipulate workflow'))
+
+        # If action is given, it should be owned by the user
         action = validated_data['action']
-        if action.workflow.user != self.context['request'].user:
+        if action is not None and action.workflow != workflow:
             # The action could not be found.
             raise APIException(_('Incorrect permission to manipulate action.'))
 
-        # Execution date must be in the future
-        execute = validated_data.get('execute')
-        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        if not execute or execute <= now:
-            raise APIException(_('Invalid date/time for execution'))
+        # Execution date/times must be correct
+        diagnostic_msg = models.ScheduledOperation.validate_times(
+            validated_data.get('execute'),
+            validated_data.get('frequency'),
+            validated_data.get('execute_until'))
+        if diagnostic_msg:
+            raise APIException(diagnostic_msg)
 
         # Item_column, if present has to be a correct column name
         item_column = validated_data.get('item_column_name')
@@ -127,21 +86,13 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         if not payload:
             raise APIException(_('Scheduled objects needs a payload.'))
 
-        return action, execute, item_column, exclude_values, payload
-
-    def create(self, validated_data, **kwargs):
+    def create(self, validated_data, **kwargs) -> models.ScheduledOperation:
         """Create a new instance of the scheduled data."""
-        act, execute, column, exclude, payload = self.extra_validation(
-            validated_data)
-
         try:
-            scheduled_obj = self.instantiate_or_update(
-                validated_data,
-                act,
-                execute,
-                column,
-                exclude,
-                payload)
+            self.extra_validation(validated_data)
+            scheduled_obj = schedule_crud_factory.crud_create_or_update(
+                self.context['request'].user,
+                validated_data)
         except Exception as exc:
             raise APIException(
                 ugettext('Scheduled action could not be created: {0}').format(
@@ -149,29 +100,20 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
 
         return scheduled_obj
 
-    def update(self, instance, validated_data):
+    def update(self, instance: models.ScheduledOperation, validated_data):
         """Update the information in the scheduled action."""
-        act, execute, column, exclude, payload = self.extra_validation(
-            validated_data)
-
         try:
-            instance = self.instantiate_or_update(
+            self.extra_validation(validated_data)
+            scheduled_obj = schedule_crud_factory.crud_create_or_update(
+                self.context['request'].user,
                 validated_data,
-                act,
-                execute,
-                column,
-                exclude,
-                payload,
                 instance)
-
-            # Save the object
-            instance.save()
         except Exception as exc:
             raise APIException(
                 ugettext('Unable to update scheduled action: {0}').format(
                     str(exc)))
 
-        return instance
+        return scheduled_obj
 
     class Meta:
         """Select  model and define fields."""
@@ -182,8 +124,12 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'description_text',
-            'action',
+            'operation_type',
             'execute',
+            'frequency',
+            'execute_until',
+            'workflow',
+            'action',
             'item_column',
             'exclude_values',
             'payload')
@@ -192,28 +138,31 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
 class ScheduledEmailSerializer(ScheduledOperationSerializer):
     """Validate the presence of certain fields."""
 
-    def extra_validation(self, validated_data):
+    def extra_validation(self, validated_data: Dict):
         """Validate the presence of certain fields."""
-        act, execute, column, exclude, payload = super().extra_validation(
-            validated_data)
+        super().extra_validation(validated_data)
 
-        if act.action_type != models.Action.PERSONALIZED_TEXT:
+        action = validated_data['action']
+        payload = validated_data['payload']
+        item_column_name = validated_data.pop('item_column_name', None)
+        if not item_column_name:
+            raise APIException(_('Personalized text needs an item_column'))
+        item_column = action.workflow.columns.get(name=item_column_name)
+
+        if action.action_type != models.Action.PERSONALIZED_TEXT:
             raise APIException(_('Incorrect type of action to schedule.'))
 
         subject = payload.get('subject')
         if not subject:
             raise APIException(_('Personalized text needs a subject.'))
 
-        if not column:
-            raise APIException(_('Personalized text needs an item_column'))
-
         # Check if the values in the email column are correct emails
         try:
             column_data = sql.get_rows(
-                act.workflow.get_data_frame_table_name(),
-                column_names=[column.name])
+                action.workflow.get_data_frame_table_name(),
+                column_names=[item_column.name])
             if not all(
-                is_correct_email(row[column.name]) for row in column_data
+                is_correct_email(row[item_column.name]) for row in column_data
             ):
                 # column has incorrect email addresses
                 raise APIException(
@@ -221,31 +170,29 @@ class ScheduledEmailSerializer(ScheduledOperationSerializer):
         except TypeError:
             raise APIException(
                 _('The column with email addresses has incorrect values.'))
-
-        try:
-            if not all(
-                is_correct_email(email_val)
-                for email_val in payload.get('cc_email', [])
-                if email_val
-            ):
-                raise APIException(
-                    _('cc_email must be a comma-separated list of emails.'))
-        except TypeError:
-            raise APIException(
-                _('cc_email must be a comma-separated list of emails.'))
+        validated_data['item_column'] = item_column
 
         try:
             if not all(
                 is_correct_email(email)
-                for email in payload.get('bcc_email', []) if email
+                for email in payload.get('cc_email', '').split() if email
             ):
                 raise APIException(
-                    _('bcc_email must be a comma-separated list of emails.'))
-        except TypeError:
+                    _('cc_email must be a space-separated list of emails.'))
+        except Exception:
             raise APIException(
-                _('bcc_email must be a comma-separated list of emails.'))
+                _('cc_email must be a space-separated list of emails.'))
 
-        return act, execute, column, exclude, payload
+        try:
+            if not all(
+                is_correct_email(email)
+                for email in payload.get('bcc_email', '').split() if email
+            ):
+                raise APIException(
+                    _('bcc_email must be a space-separated list of emails.'))
+        except Exception:
+            raise APIException(
+                _('bcc_email must be a space-separated list of emails.'))
 
 
 class ScheduledJSONSerializer(ScheduledOperationSerializer):
@@ -253,14 +200,17 @@ class ScheduledJSONSerializer(ScheduledOperationSerializer):
 
     def extra_validation(self, validated_data):
         """Check that the token is present before execution."""
-        act, execute, column, exclude, pload = super().extra_validation(
-            validated_data)
+        super().extra_validation(validated_data)
 
-        if act.action_type != models.Action.PERSONALIZED_JSON:
+        action = validated_data['action']
+        payload = validated_data['payload']
+        item_column_name = validated_data.pop('item_column_name')
+        item_column = action.workflow.columns.get(name=item_column_name)
+        validated_data['item_column'] = item_column
+
+        if action.action_type != models.Action.PERSONALIZED_JSON:
             raise APIException(_('Incorrect type of action to schedule.'))
 
-        if not pload.get('token'):
+        if not payload.get('token'):
             raise APIException(_(
                 'Personalized JSON needs a token in payload.'))
-
-        return act, execute, column, exclude, pload

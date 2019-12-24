@@ -351,7 +351,7 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # The column must now have name another2
-        self.search_table_row_by_string('column-table', 2, 'another2')
+        self.search_table_row_by_string('column-table', 3, 'another2')
 
         # Goto the action page
         self.go_to_actions()
@@ -419,17 +419,17 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
         self.create_attribute('key1', 'value1')
 
         # Values now should be in the table
-        self.search_table_row_by_string('attribute-table', 1, 'key1')
-        self.search_table_row_by_string('attribute-table', 2, 'value1')
+        self.search_table_row_by_string('attribute-table', 2, 'key1')
+        self.search_table_row_by_string('attribute-table', 3, 'value1')
 
         # Create key2, value2
         self.create_attribute('key2', 'value2')
-        self.search_table_row_by_string('attribute-table', 1, 'key2')
-        self.search_table_row_by_string('attribute-table', 2, 'value2')
+        self.search_table_row_by_string('attribute-table', 2, 'key2')
+        self.search_table_row_by_string('attribute-table', 3, 'value2')
 
         # Rename second attribute
         self.selenium.find_element_by_xpath(
-            "//tr/td[1][normalize-space() = 'key2']"
+            "//tr/td[2][normalize-space() = 'key2']/../td[1]/div/a"
         ).click()
         self.wait_for_modal_open()
         self.selenium.find_element_by_id('id_key').clear()
@@ -458,7 +458,7 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
         # click the delete button in the second row
         self.selenium.find_element_by_xpath(
             '//table[@id="attribute-table"]'
-            '//tr[2]/td[3]//button[contains(@class, "js-attribute-delete")]'
+            '//tr[2]/td[1]//button[contains(@class, "js-attribute-delete")]'
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((

@@ -973,14 +973,13 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def delete_column(self, col_name):
         xpath_txt = \
             '//table[@id="column-table"]' \
-            '//tr/td[2][normalize-space() = "{0}"]/..'.format(
+            '//tr/td[3][normalize-space() = "{0}"]/..'.format(
                 col_name
             )
-        # Click in the dropdown
-        self.click_dropdown_option_and_wait(
-            xpath_txt + '/td[6]/div/button',
-            'Delete'
-        )
+        # Click in the Delete button
+        self.selenium.find_element_by_xpath(
+            xpath_txt + '/td[2]/div/button').click()
+        self.wait_for_modal_open()
 
         self.selenium.find_element_by_xpath(
             '//div[@id="modal-item"]//button[@type="submit"]'
@@ -1314,7 +1313,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def open_column_edit(self, name):
         self.selenium.find_element_by_xpath(
             '//table[@id="column-table"]'
-            '//td[2][normalize-space() = "{0}"]'.format(name)).click()
+            '//td[3][normalize-space() = "{0}"]/'
+            '../td[2]/div/button[1]'.format(name)).click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//form[contains(@class, "js-column-edit-form")]'),
@@ -1818,8 +1818,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         if row_idx:
             xpath_txt = \
                 '//table[@id="column-table"]' \
-                '//tr[{0}]/td[2][normalize-space() = "{1}"]' \
-                '/../td[4][normalize-space() = "{2}"]'.format(
+                '//tr[{0}]/td[3][normalize-space() = "{1}"]' \
+                '/../td[5][normalize-space() = "{2}"]'.format(
                     row_idx,
                     name,
                     col_type
@@ -1827,8 +1827,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         else:
             xpath_txt = \
                 '//table[@id="column-table"]' \
-                '//tr/td[2][normalize-space() = "{0}"]' \
-                '/../td[4][normalize-space() = "{1}"]'.format(
+                '//tr/td[3][normalize-space() = "{0}"]' \
+                '/../td[5][normalize-space() = "{1}"]'.format(
                     name,
                     col_type
                 )

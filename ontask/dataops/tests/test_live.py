@@ -584,7 +584,8 @@ class DataopsPluginExecution(tests.OnTaskLiveTestCase):
         self.go_to_transform()
 
         # Click in the first plugin
-        element = self.search_table_row_by_string('transform-table',
+        element = self.search_table_row_by_string(
+            'transform-table',
             1,
             'Test Plugin 1 Name')
         element.find_element_by_link_text('Test Plugin 1 Name').click()

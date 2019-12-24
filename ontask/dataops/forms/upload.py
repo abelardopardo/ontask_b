@@ -24,7 +24,7 @@ from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
 from ontask import OnTaskDataFrameNoKey, models, settings
-from ontask.core import RestrictedFileField
+from ontask.core import RestrictedFileField, forms as ontask_forms
 from ontask.dataops import forms as dataops_forms, pandas, services
 
 URL_FIELD_SIZE = 1024
@@ -388,7 +388,7 @@ class SQLConnectionForm(ConnectionForm):
         ]
 
 
-class SQLRequestConnectionParam(forms.Form):
+class SQLRequestConnectionParam(ontask_forms.FormWithPayload):
     """Form to ask for a password for a SQL connection execution."""
 
     def __init__(self, *args, **kwargs):
@@ -407,12 +407,25 @@ class SQLRequestConnectionParam(forms.Form):
                 required=True,
                 help_text=_('Authentication for the database connection'))
 
-        if not self.instance.db_table:
+        if not self.connection.db_table:
             self.fields['db_table'] = forms.CharField(
                 max_length=models.CHAR_FIELD_MID_SIZE,
                 label=_('Table name'),
                 required=True,
                 help_text=_('Table to load'))
+            self.set_fields_from_dict(['db_table'])
+
+    def clean(self) -> Dict:
+        """Store the fields in the Form Payload"""
+        form_data = super().clean()
+
+        if 'db_password' in self.fields:
+            self.store_fields_in_dict([('db_password', None)])
+
+        if 'db_table' in self.fields:
+            self.store_fields_in_dict([('db_table', None)])
+
+        return form_data
 
 
 class AthenaConnectionForm(ConnectionForm):
@@ -500,7 +513,7 @@ class AthenaRequestConnectionParam(forms.Form):
                 initial=None,
                 choices=dataops_forms.MergeForm.how_merge_choices,
                 required=True,
-                label=_('Method to select rows to merge/update'),
+                label=_('Method to select rows to merge'),
                 help_text=dataops_forms.MergeForm.merge_help)
 
     def get_field_dict(self):
