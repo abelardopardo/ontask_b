@@ -393,7 +393,7 @@ class TableViews(tests.OnTaskLiveTestCase):
         # Click in the link to see the table resulting from this view
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'v1']/../td[3]/a"
+            "//td[2][normalize-space() = 'v1']/../td[1]/div/a[2]"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -454,7 +454,7 @@ class TableViews(tests.OnTaskLiveTestCase):
         # Check the table resulting from the view
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'v2']/../td[3]/a"
+            "//td[2][normalize-space() = 'v2']/../td[1]/div/a[2]"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -491,8 +491,8 @@ class TableViews(tests.OnTaskLiveTestCase):
 
         # Click in the clone link of the first view
         self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']//tr/td[1][normalize-space() = 'v1']/"
-            "../td[3]/button[1]"
+            "//table[@id='view-table']//tr/td[2][normalize-space() = 'v1']/"
+            "../td[1]/div/button[1]"
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -509,7 +509,7 @@ class TableViews(tests.OnTaskLiveTestCase):
         # Open the view with the clone
         self.selenium.find_element_by_xpath(
             "//table[@id='view-table']"
-            "//td[1][normalize-space() = 'Copy of v1']/../td[3]/a"
+            "//td[2][normalize-space() = 'Copy of v1']/../td[1]/div/a[2]"
         ).click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
@@ -595,7 +595,7 @@ class TableInsertRow(tests.OnTaskLiveTestCase):
         element = self.selenium.find_element_by_xpath(
             "//table[@id='table-data']"
             "//tr/td[2][normalize-space() = '100']/"
-            "../td[1]/button"
+            "../td[1]/div/button"
         )
         ActionChains(self.selenium).move_to_element(element).click().perform()
         self.wait_for_modal_open()

@@ -87,7 +87,7 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
         # click the delete button in the second row
         self.selenium.find_element_by_xpath(
             '//table[@id="attribute-table"]'
-            '//tr[1]/td[3]//button[contains(@class, "js-attribute-delete")]'
+            '//tr[1]/td[1]//button[contains(@class, "js-attribute-delete")]'
         ).click()
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
@@ -149,7 +149,7 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
 
         # Click in the RUN link of the action in
         element = self.search_action('action in')
-        element.find_element_by_link_text("Run").click()
+        element.find_element_by_xpath('td[1]/div/a[2]').click()
         # Wait for paging widget
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -199,14 +199,16 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_class_name('note-editable').click()
 
         # Insert attribute
-        self.click_dropdown_option("//div[@id='attribute-selector']",
+        self.click_dropdown_option(
+            "//div[@id='attribute-selector']",
             symbols + '3')
 
         # Insert column name
         self.click_dropdown_option("//div[@id='column-selector']", symbols)
 
         # Insert second column name
-        self.click_dropdown_option("//div[@id='column-selector']",
+        self.click_dropdown_option(
+            "//div[@id='column-selector']",
             symbols + '2')
 
         # Create new condition

@@ -1328,16 +1328,11 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             '../td[1]/div/button'.format(col_idx, text)
         self.click_dropdown_option_and_wait(xpath_str, ddown_option)
 
-    def open_view_row_op(self, text, ddown_option):
-        xpath_str = \
-            '//table[@id="view-table"]//tr/td[1][normalize-space() = "{0}"]/' \
-            '../td[3]/div/button'.format(text)
-        self.click_dropdown_option_and_wait(xpath_str, ddown_option)
-
     def open_action_edit(self, name):
         self.selenium.find_element_by_xpath(
             '//table[@id="action-table"]'
-            '//td[2][normalize-space() = "{0}"]/a'.format(name)).click()
+            '//td[2][normalize-space() = "{0}"]/'
+            '../td[1]/div/a[1]'.format(name)).click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[contains(@class, "js-action-preview")]')
@@ -1351,12 +1346,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         xpath_str = \
             '//table[@id="action-table"]' \
             '//tr/td[2][normalize-space() = "{0}"]/' \
-            '../td[5]/div/div/button'.format(name)
+            '../td[1]/div/div/button'.format(name)
         self.click_dropdown_option_and_wait(xpath_str, 'Rename')
 
     def open_action_email(self, name):
         element = self.search_action(name)
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_xpath('td[1]/div/a[2]').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[contains(@class, "js-action-preview")]')
@@ -1365,7 +1360,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def open_action_canvas_email(self, name):
         element = self.search_action(name)
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_xpath('td[1]/div/a[2]').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH,
@@ -1377,14 +1372,14 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         xpath_str = \
             '//table[@id="action-table"]' \
             '//tr/td[2][contains(normalize-space(), "{0}")]/' \
-            '../td[5]/div/div/button'.format(name)
+            '../td[1]/div/div/button'.format(name)
         self.click_dropdown_option_and_wait(xpath_str, txt)
 
     def open_action_zip(self, name):
         xpath_str = \
             '//table[@id="action-table"]' \
             '//tr/td[2][normalize-space() = "{0}"]/' \
-            '../td[5]/div/div/button'.format(name)
+            '../td[1]/div/div/button'.format(name)
         self.click_dropdown_option_and_wait(
             xpath_str,
             'ZIP',
@@ -1392,12 +1387,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def open_action_json_run(self, name):
         element = self.search_action(name)
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_xpath('td[1]/div/a[2]').click()
         self.wait_for_page(element_id='json-action-request-data')
 
     def open_action_run(self, name, is_action_in=False):
         element = self.search_action(name)
-        element.find_element_by_link_text('Run').click()
+        element.find_element_by_xpath('td[1]/div/a[2]').click()
         if is_action_in:
             self.wait_for_datatable('actioninrun-data_previous')
         else:
@@ -1416,7 +1411,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         xpath_str = \
             '//table[@id="action-table"]' \
             '//tr/td[2][normalize-space() = "{0}"]/' \
-            '../td[5]/div/div/button'.format(name)
+            '../td[1]/div/div/button'.format(name)
         self.click_dropdown_option_and_wait(
             xpath_str,
             'Schedule',
@@ -1507,9 +1502,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         # Go to views first
         self.go_to_table_views()
 
-        element = self.search_table_row_by_string('view-table', 1, vname)
+        element = self.search_table_row_by_string('view-table', 2, vname)
         element.find_element_by_xpath(
-            'td//a/span[contains(@class, "fa-eye")]'
+            'td[1]/div/a/span[contains(@class, "fa-eye")]'
         ).click()
         self.wait_for_datatable('table-data_previous')
 
@@ -1634,14 +1629,14 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         # Click in the pull down menu
         element = self.selenium.find_element_by_xpath(
             '//table[@id="column-selected-table"]'
-            '//td[1][normalize-space() = "{0}"]/'
-            '../td[4]/div/button'.format(qname))
+            '//td[2][normalize-space() = "{0}"]/'
+            '../td[5]/div/button'.format(qname))
         element.click()
         # Click in the condition name
         self.selenium.find_element_by_xpath(
             '//table[@id="column-selected-table"]'
-            '//td[1][normalize-space() = "{0}"]/'
-            '../td[4]/div/div/button[normalize-space() = "{1}"]'.format(
+            '//td[2][normalize-space() = "{0}"]/'
+            '../td[5]/div/div/button[normalize-space() = "{1}"]'.format(
                 qname,
                 cname
             )
@@ -1789,7 +1784,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def edit_attribute(self, attribute_key, nkey, nvalue):
         self.selenium.find_element_by_xpath(
             '//table[@id="attribute-table"]'
-            '//tr/td[1][normalize-space() = "{0}"]'.format(attribute_key)
+            '//tr/td[2][normalize-space() = "{0}"]/'
+            '../td[1]/div/a[1]'.format(attribute_key)
         ).click()
         self.wait_for_modal_open()
 

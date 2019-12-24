@@ -152,8 +152,9 @@ class ScreenTestFixture(ScreenTests):
 
         # click on the edit element
         self.selenium.find_element_by_xpath(
-            "//table[@id='connection-admin-table']"
-            "//tr/td[1][normalize-space() = 'remote server']"
+            '//table[@id="connection-admin-table"]'
+            '//tr/td[2][normalize-space() = "remote server"]/'
+            '../td[1]/div/button[1]'
         ).click()
         self.wait_for_modal_open()
 
@@ -426,7 +427,11 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('dataops_SQL_available.png')
 
         # Click on the link RUN
-        self.selenium.find_element_by_link_text('Run').click()
+        element = self.search_table_row_by_string(
+            'conn-instructor-table',
+            1,
+            'remote server')
+        element.find_element_by_xpath('td[1]/a').click()
         self.wait_for_page(None, 'sql-load-step1')
 
         # Picture of the RUN menu in SQL
@@ -527,8 +532,8 @@ class ScreenTestFixture(ScreenTests):
 
         # Click edit view definition
         self.go_to_table_views()
-        element = self.search_table_row_by_string('view-table', 1, 'Midterm')
-        element.find_element_by_xpath("td[1]/a").click()
+        element = self.search_table_row_by_string('view-table', 2, 'Midterm')
+        element.find_element_by_xpath("td[1]/div/a[1]").click()
         self.wait_for_modal_open()
 
         # Take picture of the modal
@@ -791,7 +796,7 @@ class ScreenTestFixture(ScreenTests):
 
         # Picture of the action row
         self.element_ss(
-            "//table[@id='action-table']/tbody/tr/td[normalize-space("
+            "//table[@id='action-table']/tbody/tr/td[2][normalize-space("
             ")='Midterm comments']/..",
             'action_action_ops.png'
         )
