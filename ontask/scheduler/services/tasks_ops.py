@@ -62,5 +62,5 @@ def schedule_task(s_item: models.ScheduledOperation):
             task='ontask.tasks.scheduled_ops.execute_scheduled_operation',
             args=json.dumps([s_item.id]))
 
-    s_item.task = task_id
-    s_item.save()
+    models.ScheduledOperation.objects.filter(pk=s_item.id).update(task=task_id)
+    s_item.refresh_from_db(fields=['task'])
