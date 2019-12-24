@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """Forms for scheduling actions."""
-import datetime
 from typing import Dict
 
 from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
-from django.conf import settings
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext_lazy as _
-import pytz
 
 from ontask import models
-from ontask.action import forms as action_forms
 from ontask.core import forms as ontask_forms
 
 

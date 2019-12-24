@@ -392,11 +392,14 @@ class SQLRequestConnectionParam(forms.Form):
     """Form to ask for a password for a SQL connection execution."""
 
     def __init__(self, *args, **kwargs):
-        self.instance = kwargs.pop('instance')
+        self.connection = kwargs.pop('connection')
+        if not self.connection:
+            self.connection = models.SQLConnection.objects.get(
+                pk=kwargs.get('instance').payload['connection_id'])
 
         super().__init__(*args, **kwargs)
 
-        if not self.instance.db_password:
+        if not self.connection.db_password:
             self.fields['db_password'] = forms.CharField(
                 max_length=models.CHAR_FIELD_MID_SIZE,
                 label=_('Password'),

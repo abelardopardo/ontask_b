@@ -13,9 +13,7 @@
   </button>
 </div>
 {% if share_table.data|length %}
-  <div class="justify-content-center">
-    {% render_table share_table %}
-  </div>
+  {% render_table share_table %}
 {% else %}
   <p class="text-center">{% blocktrans %}You may select instructors by their email
   so that they can manage this workflow.{% endblocktrans %}</p>

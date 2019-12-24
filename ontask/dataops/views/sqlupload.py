@@ -53,7 +53,7 @@ def sqlupload_start(
         # The connection needs a password  to operate
         form = forms.SQLRequestConnectionParam(
             request.POST or None,
-            instance=conn)
+            connection=conn)
 
     context = {
         'form': form,

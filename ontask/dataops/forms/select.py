@@ -37,12 +37,12 @@ class MergeForm(forms.Form):
             initial=self.how_merge_initial,
             choices=self.how_merge_choices,
             required=True,
-            label=_('Method to select rows to merge/update'),
+            label=_('Method to select rows to merge'),
             help_text=self.merge_help)
 
 
 class SelectColumnUploadForm(forms.Form):
-    """Form to handle the seelction of columns when uploading."""
+    """Form to handle the selection of columns when uploading."""
 
     def __init__(self, *args, **kargs):
         """Initialize the fields for the given columns.

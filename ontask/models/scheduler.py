@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 """Model is to store process to execute in the platform at a certain time."""
+from datetime import datetime
 import json
 from typing import Optional
 
+from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django_celery_beat.models import PeriodicTask
+import pytz
 
 from ontask import simplify_datetime_str
 from ontask.models.action import Action
@@ -175,8 +178,10 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
 
         return True
 
-    def are_times_valid(self) -> bool:
-        """Verify that the execute, frequency and execute_until are correct.
+    def are_times_valid(self) -> Optional[str]:
+        """Verify that execute, frequency and execute_until are correct.
+
+        :return: An error message or None if everything is fine
         """
         return self.validate_times(
             self.execute,
