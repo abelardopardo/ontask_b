@@ -114,7 +114,7 @@ class ActionRunManager:
             payload.get_store())
 
         tasks.execute_operation.delay(
-            action.action_type,
+            self.log_event,
             user_id=request.user.id,
             log_id=log_item.id,
             workflow_id=workflow.id,
