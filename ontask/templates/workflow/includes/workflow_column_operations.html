@@ -1,16 +1,16 @@
 {% load i18n %}
 <div class=" btn-group btn-group-sm" role="group">
-  <button type="button" class="btn btn-primary btn-light js-workflow-column-edit"
+  <button type="button" class="btn btn-secondary btn-light js-workflow-column-edit"
      data-url="{% url 'workflow:column_edit' id %}"
      data-toggle="tooltip" title="{% trans 'Edit the parameters of this column' %}">
     <span class="fa fa-pencil"></span></button>
-  <button type="button" class="btn btn-primary btn-light js-column-delete"
+  <button type="button" class="btn btn-secondary btn-light js-column-delete"
           data-url="{% url 'workflow:column_delete' id %}"
           data-toggle="tooltip" title="{% trans 'Delete column' %}">
     <span class="fa fa-trash"></span></button>
-  <div class="dropdown">
-    <button class="btn btn-light" type="button" id="columnOperations"
-            data-toggle="dropdown"><span class="fa fa-ellipsis-v"></span></button>
+  <div class="btn-group dropright" role="group">
+    <button class="btn btn-light btn-secondary dropdown-toggle" type="button"
+            id="columnOperations" data-toggle="dropdown"></button>
     <div class="shadow dropdown-menu dropdown-menu-right" aria-labelledby="columnOperations">
       <button type="button"
               class="dropdown-item js-column-clone align-middle"
@@ -45,7 +45,6 @@
          class="dropdown-item spin">
         <span class="fa fa-step-backward" style="transform:rotate(-90deg);"></span>
         {% trans 'Make last column' %}</a>
-      </a>
     </div>
   </div>
 </div>
