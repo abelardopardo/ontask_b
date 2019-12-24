@@ -69,5 +69,23 @@ class SchedulerCRUDFactory:
         except ValueError:
             return render(kwargs.get('request'), 'base.html', {})
 
+    def crud_create_or_update(
+        self,
+        user,
+        data_dict: Dict,
+        s_item: Optional[models.ScheduledOperation] = None,
+    ):
+        """Execute the corresponding create/update function.
+
+        :param user: User creating the operation
+        :param data_dict: Dictionary with all the information required to
+         manipulate the new object (including the operation_type)
+        :param s_item: Optional existing object
+        :return: created object
+        """
+        return self._get_creator(data_dict['operation_type']).create_or_update(
+            user,
+            data_dict,
+            s_item)
 
 schedule_crud_factory = SchedulerCRUDFactory()

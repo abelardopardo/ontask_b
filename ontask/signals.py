@@ -45,11 +45,9 @@ def delete_data_frame_table(sender, **kwargs):
 def create_scheduled_task(sender, **kwargs):
     """Create the task in django_celery_beat for every scheduled operation."""
     del sender
-    created = kwargs.get('created', True)
     instance = kwargs.get('instance')
-    if not created or not instance:
+    if not instance:
         return
-
     services.schedule_task(instance)
 
 

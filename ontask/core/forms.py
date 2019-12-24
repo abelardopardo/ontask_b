@@ -78,6 +78,7 @@ class FormWithPayload(forms.Form):
         self.__form_info = kwargs.pop('form_info', {})
         self.action = kwargs.pop('action', None)
         kwargs.pop('columns', None)
+        kwargs.pop('connection', None)
         super().__init__(*args, **kwargs)
 
     def get_payload_field(
@@ -111,7 +112,7 @@ class FormWithPayload(forms.Form):
         field_value: Optional[Any] = None
     ):
         """Store the value."""
-        if field_value:
+        if field_value is not None:
             self.__form_info[field_name] = field_value
         else:
             self.__form_info[field_name] = self.cleaned_data[field_name]

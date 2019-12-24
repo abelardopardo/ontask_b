@@ -6,9 +6,11 @@ from typing import Optional
 from django import http
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.core import SessionPayload, get_workflow, is_instructor
+from ontask.dataops.services import sql_connection_select_table
 from ontask.scheduler import services
 
 
@@ -32,9 +34,26 @@ def index(
         'scheduler/index.html',
         {
             'table': services.ScheduleActionTable(
-                models.ScheduledOperation.objects.filter(
-                    action__workflow=workflow.id),
+                models.ScheduledOperation.objects.filter(workflow=workflow.id),
                 orderable=False),
-            'workflow': workflow,
-        },
-    )
+            'workflow': workflow})
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def sql_connection_index(
+    request: http.HttpRequest,
+    workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
+    """Show table of SQL connections for user to choose one.
+
+    :param request: HTTP request
+    :param workflow: Workflow of the current context.
+    :return: HTTP response
+    """
+    del workflow
+    table = sql_connection_select_table('scheduler:sqlupload')
+    return render(
+        request,
+        'dataops/connections.html',
+        {'table': table, 'is_sql': True, 'title': _('SQL Connections')})

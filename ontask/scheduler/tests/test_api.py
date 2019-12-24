@@ -54,15 +54,17 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': self.s_name,
                 'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
                 'payload': {
-                        'subject': s_subject,
-                        'cc_email': [],
-                        'bcc_email': [],
-                        'track_read': False,
-                        'send_confirmation': False,
+                    'subject': s_subject,
+                    'cc_email': '',
+                    'bcc_email': '',
+                    'track_read': False,
+                    'send_confirmation': False,
                 },
             },
             format='json')
@@ -82,17 +84,17 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': self.s_name + '2',
                 'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
                 'payload': {
                     'subject': s_subject,
-                    'cc_email': [],
-                    'bcc_email': [],
+                    'cc_email': '',
+                    'bcc_email': '',
                     'track_read': False,
-                    'send_confirmation': False,
-                },
-            },
+                    'send_confirmation': False}},
             format='json'
         )
 
@@ -128,6 +130,8 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': self.s_name,
                 'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_json',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
@@ -153,6 +157,8 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': self.s_name + '2',
                 'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_json',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
@@ -183,6 +189,8 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': self.s_name,
                 'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_json',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
@@ -198,7 +206,6 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         self.assertEqual(response.status_code, 500)
 
     def test_action_from_other_user(self):
-
         action_name = 'email action'
 
         # Get list of workflows
@@ -219,15 +226,17 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': self.s_name,
                 'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
                 'payload': {
-                        'subject': 'subject',
-                        'cc_email': [],
-                        'bcc_email': [],
-                        'track_read': False,
-                        'send_confirmation': False,
+                    'subject': 'subject',
+                    'cc_email': '',
+                    'bcc_email': '',
+                    'track_read': False,
+                    'send_confirmation': False,
                 },
             },
             format='json')
@@ -237,7 +246,6 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         self.assertTrue('Incorrect permission' in response.data['detail'])
 
     def test_anomalies(self):
-
         action_name = 'simple action'
 
         s_name = 'Scheduling first email'
@@ -259,6 +267,8 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': self.s_name,
                 'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
@@ -278,20 +288,23 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': '2000-11-12 12:05:07+10:30',
                 'payload': {
-                        'subject': s_subject,
-                        'cc_email': [],
-                        'bcc_email': [],
-                        'track_read': False,
-                        'send_confirmation': False,
+                    'subject': s_subject,
+                    'cc_email': '',
+                    'bcc_email': '',
+                    'track_read': False,
+                    'send_confirmation': False,
                 },
             },
             format='json')
         self.assertEqual(response.status_code, 500)
-        self.assertTrue('Invalid date/time' in response.data['detail'])
+        self.assertTrue(
+            'Execution time is in the past' in response.data['detail'])
 
         # Schedule with the wrong item column
         response = self.client.post(
@@ -299,15 +312,17 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email2',
                 'execute': self.s_execute,
                 'payload': {
-                        'subject': s_subject,
-                        'cc_email': [],
-                        'bcc_email': [],
-                        'track_read': False,
-                        'send_confirmation': False,
+                    'subject': s_subject,
+                    'cc_email': '',
+                    'bcc_email': '',
+                    'track_read': False,
+                    'send_confirmation': False,
                 },
             },
             format='json')
@@ -322,15 +337,17 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'action': action.id,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
                 'exclude_values': {},
                 'payload': {
-                        'subject': s_subject,
-                        'cc_email': [],
-                        'bcc_email': [],
-                        'track_read': False,
-                        'send_confirmation': False,
+                    'subject': s_subject,
+                    'cc_email': '',
+                    'bcc_email': '',
+                    'track_read': False,
+                    'send_confirmation': False,
                 },
             },
             format='json')
@@ -344,6 +361,8 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
@@ -359,12 +378,14 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
                 'payload': {
-                    'cc_email': [],
-                    'bcc_email': [],
+                    'cc_email': '',
+                    'bcc_email': '',
                     'track_read': False,
                     'send_confirmation': False,
                 },
@@ -380,12 +401,14 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
                     'subject': s_subject,
-                    'cc_email': [],
-                    'bcc_email': [],
+                    'cc_email': '',
+                    'bcc_email': '',
                     'track_read': False,
                     'send_confirmation': False,
                 },
@@ -401,13 +424,15 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'sid',
                 'execute': self.s_execute,
                 'payload': {
                     'subject': s_subject,
-                    'cc_email': [],
-                    'bcc_email': [],
+                    'cc_email': '',
+                    'bcc_email': '',
                     'track_read': False,
                     'send_confirmation': False,
                 },
@@ -418,19 +443,21 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         self.assertTrue(
             'addresses has incorrect values' in response.data['detail'])
 
-        # Schedule with incorrect vlues in cc_email
+        # Schedule with incorrect values in cc_email
         response = self.client.post(
             reverse('scheduler:api_scheduled_email'),
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
                 'payload': {
                     'subject': s_subject,
                     'cc_email': 1,
-                    'bcc_email': [],
+                    'bcc_email': '',
                     'track_read': False,
                     'send_confirmation': False,
                 },
@@ -439,7 +466,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
 
         self.assertEqual(response.status_code, 500)
         self.assertTrue(
-            'must be a comma-separated list of emails'
+            'must be a space-separated list of emails'
             in response.data['detail'])
 
         # Schedule with incorrect vlues in cc_email
@@ -448,13 +475,15 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
                 'payload': {
                     'subject': s_subject,
-                    'cc_email': ['xxx', 'yyy'],
-                    'bcc_email': [],
+                    'cc_email': 'xxx yyy',
+                    'bcc_email': '',
                     'track_read': False,
                     'send_confirmation': False,
                 },
@@ -463,7 +492,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
 
         self.assertEqual(response.status_code, 500)
         self.assertTrue(
-            'must be a comma-separated list of emails'
+            'must be a space-separated list of emails'
             in response.data['detail'])
 
         # Schedule with incorrect vlues in bcc_email
@@ -472,12 +501,14 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
                 'payload': {
                     'subject': s_subject,
-                    'cc_email': [],
+                    'cc_email': '',
                     'bcc_email': 1,
                     'track_read': False,
                     'send_confirmation': False,
@@ -487,7 +518,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
 
         self.assertEqual(response.status_code, 500)
         self.assertTrue(
-            'must be a comma-separated list of emails'
+            'must be a space-separated list of emails'
             in response.data['detail'])
 
         # Schedule with incorrect vlues in bcc_email
@@ -496,13 +527,15 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             {
                 'name': s_name,
                 'description_text': s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
                 'action': action.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
                 'payload': {
                     'subject': s_subject,
-                    'cc_email': [],
-                    'bcc_email': ['xxx', 'yyy'],
+                    'cc_email': '',
+                    'bcc_email': 'xxx yyy',
                     'track_read': False,
                     'send_confirmation': False,
                 },
@@ -511,5 +544,5 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
 
         self.assertEqual(response.status_code, 500)
         self.assertTrue(
-            'must be a comma-separated list of emails'
+            'must be a space-separated list of emails'
             in response.data['detail'])

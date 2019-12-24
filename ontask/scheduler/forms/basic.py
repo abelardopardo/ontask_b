@@ -37,6 +37,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
 
     def __init__(self, form_data, *args, **kwargs):
         """Set item_column values."""
+        self.workflow = kwargs.pop('workflow', None)
         super().__init__(form_data, *args, **kwargs)
 
         self.set_fields_from_dict([
@@ -63,7 +64,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
             'execute_until'])
 
     def clean(self) -> Dict:
-        """Verify that the date is corre    ct."""
+        """Verify that the date is correct."""
         form_data = super().clean()
 
         if not form_data['multiple_executions']:
@@ -77,35 +78,13 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
             ('frequency', form_data['frequency']),
             ('execute_until', str(form_data['execute_until']))])
 
-        # The executed time must be in the future
-        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-        when_data = self.cleaned_data.get('execute')
-        frequency = self.cleaned_data.get('frequency')
-        until_data = self.cleaned_data.get('execute_until')
-        if when_data and not until_data and when_data <= now:
-            self.add_error(
-                'execute',
-                _('Date/time must be in the future'))
-
-        if until_data:
-            if until_data <= when_data:
-                self.add_error(
-                    'execute_until',
-                    _('Final execution date/time must be after '
-                      + 'the previous one'))
-            elif until_data <= now:
-                self.add_error(
-                    'execute_until',
-                    _('Final execution date/time must be in the future'))
-
-        if not models.ScheduledOperation.validate_times(
-            when_data,
-            frequency,
-            until_data
-        ):
-            self.add_error(
-                None,
-                _('Incorrect combination of date/times.'))
+        # The executed times must be correct
+        diagnostic_msg = models.ScheduledOperation.validate_times(
+            self.cleaned_data.get('execute'),
+            self.cleaned_data.get('frequency'),
+            self.cleaned_data.get('execute_until'))
+        if diagnostic_msg:
+            self.add_error(None, diagnostic_msg)
 
         return form_data
 

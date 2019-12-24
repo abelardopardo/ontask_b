@@ -4171,7 +4171,7 @@
         "description_text": "rubrick feedback description",
         "created": "2019-12-07T11:19:23.372Z",
         "modified": "2019-12-07T11:19:23.372Z",
-        "operation_type": "action_run_rubric_text",
+        "operation_type": "action_run_personalized_email",
         "execute": "2119-12-07T11:18:00Z",
         "frequency": "",
         "execute_until": null,
