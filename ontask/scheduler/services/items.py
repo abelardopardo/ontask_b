@@ -86,48 +86,6 @@ def create_timedelta_string(
     return result
 
 
-def create_payload(
-    request: HttpRequest,
-    operation_type: str,
-    prev_url: str,
-    s_item: Optional[models.ScheduledOperation] = None,
-    action: Optional[models.Action] = None,
-) -> SessionPayload:
-    """Create a payload dictionary to store in the session.
-
-    :param request: HTTP request
-    :param operation_type: String denoting the type of s_item being processed
-    :param prev_url: String with the URL to use to "go back"
-    :param s_item: Existing schedule item being processed (Optional)
-    :param action: Corresponding action for the schedule operation type, or
-    if empty, it is contained in the scheduled_item (Optional)
-    :return: Dictionary with pairs name: value
-    """
-    if s_item:
-        action = s_item.action
-        exclude_values = s_item.exclude_values
-    else:
-        exclude_values = []
-
-    # Get the payload from the session, and if not, use the given one
-    payload = SessionPayload(
-        request.session,
-        initial_values={
-            'action_id': action.id,
-            'exclude_values': exclude_values,
-            'operation_type': operation_type,
-            'prev_url': prev_url,
-            'post_url': reverse('scheduler:finish_scheduling'),
-        })
-    if s_item:
-        payload.update(s_item.payload)
-        payload['schedule_id'] = s_item.id
-        if s_item.item_column:
-            payload['item_column'] = s_item.item_column.pk
-
-    return payload
-
-
 def delete_item(s_item: models.ScheduledOperation):
     """Delete a scheduled operation and log the event."""
     s_item.log(models.Log.SCHEDULE_DELETE)

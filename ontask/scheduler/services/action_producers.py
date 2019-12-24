@@ -1,189 +1,25 @@
 # -*- coding: utf-8 -*-
 
 """Functions to save the different types of scheduled actions."""
-from datetime import datetime
-from typing import Optional, Dict
+from typing import Optional
 
 from django import http
-from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.dateparse import parse_datetime
 from django.utils.translation import ugettext, ugettext_lazy as _
-import pytz
 
 from ontask import models
 from ontask.core import SessionPayload
-from ontask.scheduler import forms, services
-
-
-class ScheduledOperationSaveBase:
-    """Base class for all the scheduled operation save producers.
-
-    :Attribute operation_type: The value to store in the scheduled item
-    and needs to be overwritten by subclasses
-
-    :Attribute form_class: Form to be used when creating one operation in the
-    Web interface.
-    """
-
-    operation_type = None
-    form_class = None
-
-    @staticmethod
-    def _create_payload(**kwargs) -> SessionPayload:
-        """Create the session payload to carry through the operation.
-
-        :param kwargs: key/value pairs for the call
-        :return: Session payload object
-        """
-        raise NotImplementedError
-
-    def process(
-        self,
-        request: http.HttpRequest,
-        schedule_item: models.ScheduledOperation,
-        workflow: Optional[models.Workflow] = None,
-        connection: Optional[models.Connection] = None,
-        action: Optional[models.Action] = None,
-        prev_url: Optional[str] = None,
-    ) -> http.HttpResponse:
-        """Process the request."""
-        op_payload = self._create_payload(
-            request=request,
-            operation_type=self.operation_type,
-            schedule_item=schedule_item,
-            workflow=workflow,
-            connection=connection,
-            action=action,
-            prev_url=prev_url)
-
-        form = self.form_class(
-            form_data=request.POST or None,
-            instance=schedule_item,
-            workflow=workflow,
-            action=action,
-            columns=action.workflow.columns.filter(is_key=True),
-            form_info=op_payload)
-        if request.method == 'POST' and form.is_valid():
-            return self.process_post(request, schedule_item, op_payload)
-
-        frequency = op_payload.get('frequency')
-        if not frequency:
-            frequency = '0 5 * * 0'
-
-        return render(
-            request,
-            'scheduler/edit.html',
-            {
-                'workflow': workflow,
-                'action': action,
-                'form': form,
-                'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
-                'frequency': frequency,
-                'valuerange': op_payload['valuerange']})
-
-    def process_post(
-        self,
-        request: http.HttpRequest,
-        schedule_item: models.ScheduledOperation,
-        op_payload: SessionPayload,
-    ):
-        """Process a POST request."""
-        del request, schedule_item, op_payload
-        raise ValueError('Incorrect  invocation of process_post method')
-
-    @staticmethod
-    def finish(
-        request: http.HttpRequest,
-        payload: SessionPayload,
-        schedule_item: models.ScheduledOperation = None,
-    ) -> http.HttpResponse:
-        """Finalize the creation of a scheduled operation.
-
-        All required data is passed through the payload.
-
-        :param request: Request object received
-        :param schedule_item: ScheduledOperation item being processed. If None,
-        it has to be extracted from the information in the payload.
-        :param payload: Dictionary with all the required data coming from
-        previous requests.
-        :return: Http Response
-        """
-        # Get the scheduled operation
-        s_item_id = payload.pop('schedule_id', None)
-        action = models.Action.objects.get(pk=payload.pop('action_id'))
-        column_pk = payload.pop('item_column', None)
-        column = None
-        if column_pk:
-            column = action.workflow.columns.filter(pk=column_pk).first()
-
-        # Remove some parameters from the payload
-        for key in [
-            'button_label',
-            'valuerange',
-            'step',
-            'prev_url',
-            'post_url',
-            'confirm_items',
-        ]:
-            payload.pop(key, None)
-        operation_type = payload.pop('operation_type')
-
-        if s_item_id:
-            # Get the item being processed
-            if not schedule_item:
-                schedule_item = models.ScheduledOperation.objects.filter(
-                    id=s_item_id).first()
-            if not schedule_item:
-                messages.error(
-                    request,
-                    _('Incorrect request for operation scheduling'))
-                return redirect('action:index')
-        else:
-            schedule_item = models.ScheduledOperation(
-                user=request.user,
-                workflow=action.workflow,
-                action=action,
-                operation_type=operation_type)
-
-        # Update the other fields
-        schedule_item.name = payload.pop('name')
-        schedule_item.description_text = payload.pop('description_text')
-        schedule_item.item_column = column
-        schedule_item.execute = parse_datetime(payload.pop('execute'))
-        schedule_item.frequency = payload.pop('frequency')
-        schedule_item.execute_until = parse_datetime(
-            payload.pop('execute_until'))
-        schedule_item.exclude_values = payload.pop('exclude_values', [])
-        schedule_item.status = models.scheduler.STATUS_PENDING
-        schedule_item.payload = payload.get_store()
-
-        # Save and log
-        schedule_item.save()
-        schedule_item.log(models.Log.SCHEDULE_EDIT)
-
-        # Reset object to carry action info throughout dialogs
-        SessionPayload.flush(request.session)
-
-        # Successful processing.
-        tdelta = services.create_timedelta_string(
-            schedule_item.execute,
-            schedule_item.frequency,
-            schedule_item.execute_until)
-        return render(
-            request,
-            'scheduler/schedule_done.html',
-            {'tdelta': tdelta, 's_item': schedule_item})
-
+from ontask.scheduler import forms
+from ontask.scheduler.services.crud_factory import ScheduledOperationSaveBase
+from ontask.scheduler.services.items import create_timedelta_string
 
 
 class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
     """Base class for those saving Action Run operations."""
 
-    @staticmethod
-    def _create_payload(**kwargs) -> SessionPayload:
+    def _create_payload(self, **kwargs) -> SessionPayload:
         """Create a payload dictionary to store in the session.
 
         :param request: HTTP request
@@ -196,6 +32,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
         :return: Dictionary with pairs name: value
         """
         s_item = kwargs.get('schedule_item')
+        action = kwargs.get('action')
         if s_item:
             action = s_item.action
             exclude_values = s_item.exclude_values
@@ -206,12 +43,13 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
         payload = SessionPayload(
             kwargs.get('request').session,
             initial_values={
-                'action_id': kwargs.get('action').id,
+                'action_id': action.id,
                 'exclude_values': exclude_values,
-                'operation_type': kwargs.get('operation_type'),
-                'valuerange': range(2),
+                'operation_type': self.operation_type,
+                'valuerange': list(range(2)),
                 'prev_url': kwargs.get('prev_url'),
                 'post_url': reverse('scheduler:finish_scheduling'),
+                'page_title': ugettext('Schedule Action Execution'),
             })
         if s_item:
             payload.update(s_item.payload)
