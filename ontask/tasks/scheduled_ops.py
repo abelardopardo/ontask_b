@@ -10,7 +10,7 @@ from django.core.cache import cache
 import pytz
 
 from ontask import CELERY_LOGGER, models
-from ontask.tasks.execute import task_execute_factory
+from ontask.tasks.execute_factory import task_execute_factory
 
 cache_lock_format = '__ontask_scheduled_item_{0}'
 

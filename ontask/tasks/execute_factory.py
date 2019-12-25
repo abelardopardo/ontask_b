@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """Execute any operation received through celery."""
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 from celery import shared_task
 from celery.utils.log import get_task_logger
+from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext
 
 from ontask import models
-from ontask.tasks.common import get_execution_items
 
 CELERY_LOGGER = get_task_logger('celery_execution')
 
@@ -52,6 +52,53 @@ class ExecuteFactory:
 task_execute_factory = ExecuteFactory()
 
 
+def _get_execution_items(
+    user_id: int,
+    workflow_id: Optional[int] = None,
+    action_id: Optional[int] = None,
+) -> Tuple:
+    """Get the objects with the given ids.
+
+    Given a set of ids, get the objects from the DB
+
+    :param user_id: User id
+    :param workflow_id: Workflow ID (being manipulated)
+    :param action_id: Action id (to be executed)
+    :return: (user, action, log)
+    """
+    # Get the user
+    user = None
+    if user_id:
+        user = get_user_model().objects.filter(id=user_id).first()
+        if not user:
+            raise Exception(
+                ugettext('Unable to find user with id {0}').format(user_id),
+            )
+
+    workflow = None
+    if workflow_id:
+        workflow = models.Workflow.objects.filter(
+            user=user,
+            pk=workflow_id).first()
+        if not workflow:
+            raise Exception(
+                ugettext('Unable to find workflow with id {0}').format(
+                    workflow_id))
+
+    action = None
+    if action_id:
+        # Get the action
+        action = models.Action.objects.filter(
+            workflow__user=user,
+            pk=action_id).first()
+        if not action:
+            raise Exception(
+                ugettext('Unable to find action with id {0}').format(
+                    action_id))
+
+    return user, workflow, action
+
+
 @shared_task
 def execute_operation(
     operation_type: str,
@@ -72,7 +119,7 @@ def execute_operation(
     :return: Nothing
     """
     try:
-        user, workflow, action = get_execution_items(
+        user, workflow, action = _get_execution_items(
             user_id=user_id,
             workflow_id=workflow_id,
             action_id=action_id)

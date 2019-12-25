@@ -96,11 +96,7 @@ class ScheduledOperationSaveSQLUpload(ScheduledOperationSaveBase):
                 pk=payload.pop('workflow_id'))
 
         # Remove some parameters from the payload
-        for key in [
-            'valuerange',
-            'workflow_id',
-            'page_title',
-        ]:
+        for key in ['valuerange', 'workflow_id', 'page_title']:
             payload.pop(key, None)
 
         try:

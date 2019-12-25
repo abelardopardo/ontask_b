@@ -15,6 +15,7 @@ from ontask.workflow.services.import_export import (
     do_export_workflow, do_export_workflow_parse, do_import_workflow,
     do_import_workflow_parse,
 )
+from ontask.workflow.services.luser_update import ExecuteUpdateWorkflowLUser
 from ontask.workflow.services.restrict import restrict_column
 from ontask.workflow.services.workflow_crud import (
     do_clone_workflow, get_detail_context, get_index_context,

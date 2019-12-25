@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Service functions to handle plugin invocations."""
+"""Service functions to manage and check plugin compliance."""
 import datetime
 import json
 from typing import Dict, Union
@@ -108,14 +108,14 @@ def create_model_table(
         workflow=workflow)
 
 
-def plugin_run(
+def plugin_queue_execution(
     request: http.HttpRequest,
     workflow: models.Workflow,
     plugin_info: models.Plugin,
     plugin_instance: OnTaskPluginAbstract,
     run_parameters: Dict,
 ) -> models.Log:
-    """Batch execute the given instance of the plugin.
+    """Put in the batch queue the execution of a plugin.
 
     :param request: Received request to process
     :param workflow: Current workflow being manipulated
