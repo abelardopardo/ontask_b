@@ -14,15 +14,12 @@ from django.db.models.expressions import F
 from django.template.loader import render_to_string
 from django.utils.dateparse import parse_datetime
 from django.utils.html import format_html
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
-import pandas as pd
-import pytz
 
-from ontask import OnTaskServiceException, models
-from ontask.dataops import pandas, services
+from ontask import models
+from ontask.dataops import services
 from ontask.dataops.plugin import ontask_plugin
-from ontask.dataops.plugin.ontask_plugin import OnTaskPluginAbstract
 import ontask.settings
 
 
@@ -206,7 +203,7 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
     check_idx = 0
     try:
         # Verify that the class inherits from OnTaskPluginAbstract
-        if issubclass(type(pinobj), OnTaskPluginAbstract):
+        if issubclass(type(pinobj), ontask_plugin.OnTaskPluginAbstract):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect parent class')
@@ -313,7 +310,7 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
         # Test the method run
         run_method = getattr(pinobj, 'run', None)
         if callable(run_method) and (
-            inspect.signature(OnTaskPluginAbstract.run)
+            inspect.signature(ontask_plugin.OnTaskPluginAbstract.run)
             == inspect.signature(pinobj.__class__.run)
         ):
             diag[check_idx] = _('Ok')
@@ -449,161 +446,3 @@ def refresh_plugin_data(request: http.HttpRequest):
                 _('Unable to load plugin in folder "{0}".').format(fname))
             continue
         rpin.log(request.user, models.Log.PLUGIN_CREATE)
-
-
-def run_plugin(
-    workflow,
-    plugin_info,
-    input_column_names,
-    output_column_names,
-    output_suffix,
-    merge_key,
-    plugin_params,
-):
-    """
-    Execute the run method in the plugin.
-
-    Execute the run method in a plugin with the dataframe from the given
-    workflow
-
-    :param workflow: Workflow object being processed
-    :param plugin_info: PluginReistry object being processed
-    :param input_column_names: List of input column names
-    :param output_column_names: List of output column names
-    :param output_suffix: Suffix that is added to the output column names
-    :param merge_key: Key column to use in the merge
-    :param plugin_params: Dictionary with the parameters to execute the plug in
-    :return: Nothing, the result is stored in the log with log_id
-    """
-    try:
-        plugin_instance, msgs = load_plugin(plugin_info.filename)
-    except OnTaskServiceException:
-        raise Exception(
-            ugettext('Unable to instantiate plugin "{0}"').format(
-                plugin_info.name),
-        )
-
-    # Check that the list of given inputs is consistent: if plugin has a list
-    # of inputs, it has to have the same length as the given list.
-    if (
-        plugin_instance.get_input_column_names()
-        and len(plugin_instance.get_input_column_names())
-        != len(input_column_names)
-    ):
-        raise Exception(
-            ugettext(
-                'Inconsistent number of inputs when invoking plugin "{0}"',
-            ).format(plugin_info.name),
-        )
-
-    # Check that the list of given outputs has the same length as the list of
-    # outputs proposed by the plugin
-    if (
-        plugin_instance.get_output_column_names()
-        and len(plugin_instance.get_output_column_names())
-        != len(output_column_names)
-    ):
-        raise Exception(
-            ugettext(
-                'Inconsistent number of outputs when invoking plugin "{0}"',
-            ).format(plugin_info.name),
-        )
-
-    # Get the data frame from the workflow
-    try:
-        df = pandas.load_table(workflow.get_data_frame_table_name())
-    except Exception as exc:
-        raise Exception(
-            ugettext(
-                'Exception when retrieving the data frame from workflow: {0}',
-            ).format(str(exc)),
-        )
-
-    # Set the updated names of the input, output columns, and the suffix
-    if not plugin_instance.get_input_column_names():
-        plugin_instance.input_column_names = input_column_names
-    plugin_instance.output_column_names = output_column_names
-    plugin_instance.output_suffix = output_suffix
-
-    # Create a new dataframe with the given input columns, and rename them if
-    # needed
-    try:
-        sub_df = pd.DataFrame(df[input_column_names])
-        if plugin_instance.get_input_column_names():
-            sub_df.columns = plugin_instance.get_input_column_names()
-    except Exception as exc:
-        raise Exception(ugettext(
-                'Error when creating data frame for plugin: {0}'
-        ).format(str(exc)))
-
-    # Try the execution and catch any exception
-    try:
-        new_df = plugin_instance.run(sub_df, parameters=plugin_params)
-    except Exception as exc:
-        raise Exception(
-            ugettext('Error while executing plugin: {0}').format(str(exc)),
-        )
-
-    # If plugin does not return a data frame, flag as error
-    if not isinstance(new_df, pd.DataFrame):
-        raise Exception(
-            ugettext(
-                'Plugin executed but did not return a pandas data frame.'),
-        )
-
-    # Execution is DONE. Now we have to perform various additional checks
-
-    # Result has to have the exact same number of rows
-    if new_df.shape[0] != df.shape[0]:
-        raise Exception(
-            ugettext(
-                'Incorrect number of rows ({0}) in result data frame.',
-            ).format(new_df.shape[0]),
-        )
-
-    # Merge key name cannot be part of the output df
-    if merge_key in new_df.columns:
-        raise Exception(
-            ugettext(
-                'Column name {0} cannot be in the result data frame.'.format(
-                    merge_key)),
-        )
-
-    # Result column names are consistent
-    if set(new_df.columns) != set(plugin_instance.get_output_column_names()):
-        raise Exception(ugettext('Incorrect columns in result data frame.'))
-
-    # Add the merge column to the result df
-    new_df[merge_key] = df[merge_key]
-
-    # Proceed with the merge
-    try:
-        new_frame = pandas.perform_dataframe_upload_merge(
-            workflow,
-            df,
-            new_df,
-            {
-                'how_merge': 'inner',
-                'dst_selected_key': merge_key,
-                'src_selected_key': merge_key,
-                'initial_column_names': list(new_df.columns),
-                'rename_column_names': list(new_df.columns),
-                'columns_to_upload': [True] * len(list(new_df.columns)),
-            },
-        )
-    except Exception as exc:
-        raise Exception(
-            ugettext('Error while merging result: {0}.').format(str(exc)),
-        )
-
-    if isinstance(new_frame, str):
-        raise Exception(
-            ugettext('Error while merging result: {0}.').format(new_frame))
-
-    # Update execution time in the plugin
-    plugin_info.executed = datetime.now(
-        pytz.timezone(settings.TIME_ZONE),
-    )
-    plugin_info.save()
-
-    return True

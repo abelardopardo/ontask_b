@@ -93,7 +93,7 @@ def plugin_invoke(
         plugin_instance=plugin_instance)
 
     if request.method == 'POST' and form.is_valid():
-        log_item = services.plugin_run(
+        log_item = services.plugin_queue_execution(
             request,
             workflow,
             plugin_info,

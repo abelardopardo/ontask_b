@@ -138,9 +138,9 @@ class ScheduledOperationSaveBase:
         if not s_item:
             s_item = models.ScheduledOperation(
                 user=user,
+                operation_type=data_dict['operation_type'],
                 workflow=data_dict.pop('workflow'),
-                action=data_dict.pop('action', None),
-                operation_type=data_dict['operation_type'])
+                action=data_dict.pop('action', None))
         data_dict.pop('operation_type', None)
 
         # Update the other fields

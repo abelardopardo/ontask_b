@@ -3,7 +3,9 @@
 """Views to manipulate dataframes."""
 from django.urls import path
 
-from ontask.dataops import views
+from ontask import models
+from ontask.dataops import services, views
+from ontask.tasks import task_execute_factory
 
 app_name = 'dataops'
 urlpatterns = [
@@ -152,3 +154,12 @@ urlpatterns = [
         views.athenaconn_toggle,
         name='athenaconn_toggle'),
 ]
+
+task_execute_factory.register_producer(
+    models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
+    services.ExecuteIncreaseTrackCount())
+
+
+task_execute_factory.register_producer(
+    models.Log.PLUGIN_EXECUTE,
+    services.ExecuteRunPlugin())
