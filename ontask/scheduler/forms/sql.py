@@ -28,26 +28,27 @@ class ScheduleSQLUploadForm(
 
     dst_help = dataops_forms.SelectKeysForm.dst_help
 
-    dst_key = forms.ChoiceField(
-        required=True,
-        label=_('Key Column in Existing Table'),
+    dst_key = forms.CharField(
+        max_length=models.CHAR_FIELD_MID_SIZE,
+        strip=True,
+        required=False,
+        label=_('Key column in the existing table. '
+                'Leave empty if uploading to empty workflow'),
         help_text=dst_help)
 
     src_key = forms.CharField(
         max_length=models.CHAR_FIELD_MID_SIZE,
         strip=True,
-        required=True,
-        label=_('Key column in new data'))
+        required=False,
+        label=_('Key column in new table. '
+                'Leave empty if uploading to empty workflow'))
 
     def __init__(self, *args, **kargs):
         """Initalize all the fields"""
-        dst_choices = [(dkey, dkey) for dkey in kargs.pop('columns')]
-
         super().__init__(*args, **kargs)
-
         self.set_fields_from_dict(['dst_key', 'src_key', 'how_merge'])
 
-        self.fields['dst_key'].choices = dst_choices
+        self.fields['how_merge'].required = False
 
     def clean(self) -> Dict:
         """Store the fields in the Form Payload"""
@@ -57,4 +58,25 @@ class ScheduleSQLUploadForm(
             ('src_key', None),
             ('how_merge', None)])
 
+        # If the workflow has data, both keys have to be non empty, the
+        # first one needs to be a unique column, and the merge method cannot
+        # be empty
+        if self.workflow.has_data_frame():
+            if not form_data['dst_key'] or not form_data['src_key']:
+                self.add_error(
+                    None,
+                    _('The operation requires the names of two key columns.')
+                )
+            column = self.workflow.columns.filter(
+                name=form_data['dst_key']).filter(is_key=True).first()
+            if form_data['dst_key'] and not column:
+                self.add_error(
+                    'dst_key',
+                    _('The column selected is not a key column.')
+                )
+            if not form_data['how_merge']:
+                self.add_error(
+                    'how_merge',
+                    _('The operation requires a merge method.')
+                )
         return form_data
