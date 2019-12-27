@@ -78,11 +78,19 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
             ('frequency', form_data['frequency']),
             ('execute_until', str(form_data['execute_until']))])
 
+        obj_name = self.workflow.scheduled_operations.filter(
+            name=form_data['name'])
+        if obj_name.exists():
+            self.add_error(
+                'name',
+                str(_('There is an operation scheduled with this name')))
+
         # The executed times must be correct
         diagnostic_msg = models.ScheduledOperation.validate_times(
             self.cleaned_data.get('execute'),
             self.cleaned_data.get('frequency'),
             self.cleaned_data.get('execute_until'))
+
         if diagnostic_msg:
             self.add_error(None, diagnostic_msg)
 
