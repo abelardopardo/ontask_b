@@ -154,6 +154,10 @@ class SchedulerViewCreateSQLUpload(tests.OnTaskTestCase):
             db_host='localhost').first()
         self.assertIsNotNone(sql_conn)
 
+        # Modify connection to point to the test DB
+        sql_conn.db_name = settings.DATABASE_URL['NAME']
+        sql_conn.save()
+
         # GET the form to create the scheduled SQL operation
         resp = self.get_response(
             'scheduler:sqlupload',

@@ -14,6 +14,7 @@ import os
 from os.path import dirname, exists, join
 import sys
 
+from celery.schedules import crontab
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
 from django.urls import reverse_lazy
@@ -202,7 +203,7 @@ ONTASK_HELP_URL = "html/index.html"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [join(BASE_DIR(),  'ontask', 'templates')],
+        'DIRS': [join(BASE_DIR(), 'ontask', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -456,7 +457,6 @@ LOGGING = {
     },
 }
 
-
 ###############################################################################
 #
 # SUMMERNOTE CONFIGURATION
@@ -527,13 +527,6 @@ SHORT_DATETIME_FORMAT = 'r'
 
 ###############################################################################
 #
-# Scheduler configuration
-#
-###############################################################################
-SCHEDULER_MINUTE_STEP = env.int('SCHEDULER_MINUTE_STEP', default=15)
-
-###############################################################################
-#
 # CELERY parameters
 #
 ###############################################################################
@@ -543,7 +536,22 @@ CELERY_ACCEPT_CONTENT = ['application/json', 'pickle']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
-CELERY_BEAT_SCHEDULE = {}
+
+CLEAN_SESSION_TASK_NAME = '__ONTASK_CLEANUP_SESSION_TASK'
+CRONTAB_ITEMS = SESSION_CLEANUP_CRONTAB.split()
+CELERY_BEAT_SCHEDULE = {
+    'ontask_scheduler': {
+        'task': 'ontask.tasks.session_cleanup.session_cleanup',
+        'schedule': crontab(
+            minute=CRONTAB_ITEMS[0],
+            hour=CRONTAB_ITEMS[1],
+            day_of_week=CRONTAB_ITEMS[2],
+            day_of_month=CRONTAB_ITEMS[3],
+            month_of_year=CRONTAB_ITEMS[4]),
+        #     'args': (DEBUG,),
+        'name': CLEAN_SESSION_TASK_NAME,
+    },
+}
 CELERY_TASK_ALWAYS_EAGER = ONTASK_TESTING
 
 ###############################################################################
