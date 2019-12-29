@@ -14,6 +14,8 @@ from ontask.dataops import pandas
 
 
 class TableDerivedColumns(tests.OnTaskLiveTestCase):
+    """Tests to check how the derived columns are created."""
+
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -24,7 +26,7 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
 
     wflow_name = 'combine columns'
 
-    def test_table_create_derived_columns(self):
+    def test_create_derived_columns(self):
         """Test operations to create derived columns."""
         # Login
         self.login('instructor01@bogus.com')
@@ -298,35 +300,46 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check that the data is correct
-        df = pandas.load_table(
+        dframe = pandas.load_table(
              models.Workflow.objects.all()[0].get_data_frame_table_name(),
         )
 
         # d1 = c1 + c2
-        self.assertTrue((df['d1'] == df[['c1', 'c2']].sum(axis=1)).all())
+        self.assertTrue(
+            (dframe['d1'] == dframe[['c1', 'c2']].sum(axis=1)).all())
         # d2 = c3 * c4
-        self.assertTrue((df['d2'] == df[['c3', 'c4']].prod(axis=1)).all())
+        self.assertTrue(
+            (dframe['d2'] == dframe[['c3', 'c4']].prod(axis=1)).all())
         # d3 = max(c5, c6)
-        self.assertTrue((df['d3'] == df[['c5', 'c6']].max(axis=1)).all())
+        self.assertTrue(
+            (dframe['d3'] == dframe[['c5', 'c6']].max(axis=1)).all())
         # d4 = min(c7, c8)
-        self.assertTrue((df['d4'] == df[['c7', 'c8']].min(axis=1)).all())
+        self.assertTrue(
+            (dframe['d4'] == dframe[['c7', 'c8']].min(axis=1)).all())
         # d5 = mean(c1, c2)
-        self.assertTrue((df['d5'] == df[['c1', 'c2']].mean(axis=1)).all())
+        self.assertTrue(
+            (dframe['d5'] == dframe[['c1', 'c2']].mean(axis=1)).all())
         # d6 = median(c3, c4)
-        self.assertTrue((df['d6'] == df[['c3', 'c4']].median(axis=1)).all())
+        self.assertTrue(
+            (dframe['d6'] == dframe[['c3', 'c4']].median(axis=1)).all())
         # d7 = std(c5, c6) (error below 10^{-11})
         self.assertTrue(
-            ((df['d7'] - df[['c5', 'c6']].std(axis=1)).abs() < 0.1e-12).all())
+            ((dframe['d7'] - dframe[['c5', 'c6']].std(
+                axis=1)).abs() < 0.1e-12).all())
         # d8 = all(c91, c92)
-        self.assertTrue((df['d8'] == df[['c91', 'c92']].all(axis=1)).all())
+        self.assertTrue(
+            (dframe['d8'] == dframe[['c91', 'c92']].all(axis=1)).all())
         # d9 = any(c91, c92)
-        self.assertTrue((df['d9'] == df[['c91', 'c92']].any(axis=1)).all())
+        self.assertTrue(
+            (dframe['d9'] == dframe[['c91', 'c92']].any(axis=1)).all())
 
         # End of session
         self.logout()
 
 
 class TableViews(tests.OnTaskLiveTestCase):
+    """Test Table views."""
+    
     fixtures = ['derived_column']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -549,12 +562,12 @@ class TableInsertRow(tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_link_text('Row').click()
 
         # Fill out the fields in the form
-        for x in range(0, 10):
+        for idx in range(0, 10):
             keyelem = self.selenium.find_element_by_id(
-                'id____ontask___upload_{0}'.format(x)
+                'id____ontask___upload_{0}'.format(idx)
             )
             keyelem.clear()
-            keyelem.send_keys(str(x))
+            keyelem.send_keys(str(idx))
 
         # Set c91 to true
         c91 = self.selenium.find_element_by_id('id____ontask___upload_10')
