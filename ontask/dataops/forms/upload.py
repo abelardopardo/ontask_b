@@ -20,6 +20,7 @@ import json
 from typing import Dict, Optional
 
 from django import forms
+from django.core import signing
 from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
@@ -420,7 +421,8 @@ class SQLRequestConnectionParam(ontask_forms.FormWithPayload):
         form_data = super().clean()
 
         if 'db_password' in self.fields:
-            self.store_fields_in_dict([('db_password', None)])
+            self.store_fields_in_dict([
+                ('db_password', signing.dumps(form_data['db_password']))])
 
         if 'db_table' in self.fields:
             self.store_fields_in_dict([('db_table', None)])
