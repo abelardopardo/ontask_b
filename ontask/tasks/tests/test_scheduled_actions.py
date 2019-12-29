@@ -213,6 +213,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             status=models.scheduler.STATUS_PENDING,
             item_column=action.workflow.columns.get(name='email'),
             payload={
+                'exclude_values': [],
                 'subject': 'Email subject',
                 'cc_email': '',
                 'bcc_email': '',
@@ -226,7 +227,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Event still pending, with no values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
-        assert scheduled_item.exclude_values == []
+        assert scheduled_item.payload.get('exclude_values', []) == []
 
         # Modify one of the values in the matrix
         with connection.cursor() as cursor:
@@ -244,7 +245,8 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Event still pending, with one values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
-        assert scheduled_item.exclude_values == ['student01@bogus.com']
+        assert scheduled_item.payload['exclude_values'] == [
+            'student01@bogus.com']
 
         # Modify one of the values in the matrix
         with connection.cursor() as cursor:
@@ -262,7 +264,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Event still pending, with two values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
-        assert scheduled_item.exclude_values == [
+        assert scheduled_item.payload['exclude_values'] == [
             'student01@bogus.com',
             'student02@bogus.com']
 
@@ -282,7 +284,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Event still pending, with three values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
-        assert scheduled_item.exclude_values == [
+        assert scheduled_item.payload['exclude_values'] == [
             'student01@bogus.com',
             'student02@bogus.com',
             'student03@bogus.com']
@@ -293,7 +295,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         # Event still pending, with no values in exclude values
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_PENDING
-        assert scheduled_item.exclude_values == [
+        assert scheduled_item.payload['exclude_values'] == [
             'student01@bogus.com',
             'student02@bogus.com',
             'student03@bogus.com']

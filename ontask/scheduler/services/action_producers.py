@@ -35,7 +35,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
         action = kwargs.get('action')
         if s_item:
             action = s_item.action
-            exclude_values = s_item.exclude_values
+            exclude_values = s_item.payload.get('exclude_values', [])
         else:
             exclude_values = []
 

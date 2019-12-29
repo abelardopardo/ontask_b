@@ -3,7 +3,7 @@
 """Views to run JSON actions."""
 import datetime
 import json
-from typing import Dict, List, Mapping, Optional
+from typing import Dict, Mapping, Optional
 
 from celery.utils.log import get_task_logger
 from django.conf import settings
@@ -66,7 +66,7 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
         action: Optional[models.Action] = None,
         payload: Optional[Dict] = None,
         log_item: Optional[models.Log] = None,
-    ) -> Optional[List]:
+    ):
         """Send the personalized JSON objects to the given URL."""
         if log_item is None:
             log_item = action.log(user, self.log_event, **payload)
@@ -75,7 +75,7 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
             action,
             column_name=action.workflow.columns.get(
                 pk=payload['item_column']).name,
-            exclude_values=payload.get('exclude_values'),
+            exclude_values=payload.get('exclude_values', []),
         )
 
         # Create the headers to use for all requests
@@ -96,7 +96,10 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
         action.last_executed_log = log_item
         action.save()
 
-        return [column_value for __, column_value in action_evals]
+        # Update excluded items in payload
+        self._update_excluded_items(
+            payload,
+            [column_value for __, column_value in action_evals])
 
 
 class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
@@ -109,7 +112,7 @@ class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
         action: Optional[models.Action] = None,
         payload: Optional[Dict] = None,
         log_item: Optional[models.Log] = None,
-    ) -> Optional[List]:
+    ):
         """Send single json object to target URL.
 
         Sends a single json object to the URL in the action
@@ -140,5 +143,3 @@ class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
 
         action.last_executed_log = log_item
         action.save()
-
-        return []

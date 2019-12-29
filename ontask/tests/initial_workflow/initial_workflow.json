@@ -4150,8 +4150,8 @@
         "workflow": 1,
         "action": 4,
         "item_column": 2,
-        "exclude_values": [],
         "payload": {
+            "exclude_values": [],
             "subject": "subject",
             "cc_email": "ccemail@bogus.com",
             "bcc_email": "gccemail@bogus.com",
@@ -4180,8 +4180,8 @@
         "workflow": 1,
         "action": 8,
         "item_column": 2,
-        "exclude_values": [],
         "payload": {
+            "exclude_values": [],
             "subject": "rubric subject",
             "cc_email": "",
             "bcc_email": "",
@@ -4210,7 +4210,6 @@
         "workflow": 1,
         "action": 9,
         "item_column": null,
-        "exclude_values": [],
         "payload": {
             "subject": "Email subject",
             "cc_email": "",
@@ -4239,8 +4238,8 @@
         "workflow": 1,
         "action": 5,
         "item_column": 2,
-        "exclude_values": [],
         "payload": {
+            "exclude_values": [],
             "token": "fake token"
         }
     }
@@ -4265,7 +4264,6 @@
         "workflow": 1,
         "action": 10,
         "item_column": null,
-        "exclude_values": [],
         "payload": {
             "token": "TOKEN"
         }

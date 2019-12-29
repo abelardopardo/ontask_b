@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Base class for CRUD manager for actions."""
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 from django import http
 from django.shortcuts import redirect, render
@@ -29,6 +29,18 @@ class ActionRunManager:
         log_payload = dict(payload)
         log_payload['operation_type'] = self.log_event
         return action.log(user, **log_payload)
+
+    @staticmethod
+    def _update_excluded_items(payload: Dict, new_items: List[str]):
+        """Update the list with exclude_items in the given payload
+
+        :param payload: Dictionary being used for the execution
+        :param new_items: List of new items to extend
+        :result: Nothing. Payload is changed
+        """
+        exclude_values = payload.get('exclude_values', [])
+        exclude_values.extend(new_items)
+        payload['exclude_values'] = exclude_values
 
     def __init__(self, *args, **kwargs):
         """Assign and initialize the main service parameters."""

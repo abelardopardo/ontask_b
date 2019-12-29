@@ -4,7 +4,7 @@
 import datetime
 import json
 from time import sleep
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Optional, Tuple
 
 from celery.utils.log import get_task_logger
 from django import http
@@ -225,7 +225,7 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
         action: Optional[models.Action] = None,
         payload: Optional[Dict] = None,
         log_item: Optional[models.Log] = None,
-    ) -> Optional[List]:
+    ):
         """Send CANVAS emails with the action content evaluated for each row.
 
         Performs the submission of the emails for the given action and with the
@@ -236,7 +236,7 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
         :param action: Action from where to take the messages
         :param log_item: Log object to store results
         :param payload: Dictionary with all the parameters
-        :return: List of field values used as "to" in emails
+        :return: Nothing
         """
         # Evaluate the action string, evaluate the subject, and get the value
         # of the email column.
@@ -248,7 +248,7 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
             action,
             extra_string=payload['subject'],
             column_name=item_column.name,
-            exclude_values=payload.get('exclude_values'))
+            exclude_values=payload.get('exclude_values', []))
 
         # Get the oauth info
         target_url = payload['target_url']
@@ -327,4 +327,5 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
         action.last_executed_log = log_item
         action.save()
 
-        return to_emails
+        # Update excluded items in payload
+        self._update_excluded_items(payload, to_emails)

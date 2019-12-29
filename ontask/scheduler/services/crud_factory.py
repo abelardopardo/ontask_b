@@ -164,8 +164,6 @@ class ScheduledOperationSaveBase:
             execute_until = parse_datetime(execute_until)
         s_item.execute_until = execute_until
 
-        s_item.exclude_values = data_dict.pop('exclude_values', [])
-
         s_item.status = models.scheduler.STATUS_PENDING
 
         if 'payload' in data_dict:
