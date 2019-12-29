@@ -16,7 +16,7 @@ from ontask.tasks.execute_factory import task_execute_factory
 
 def _update_item_status(
     s_item: models.ScheduledOperation,
-    run_result: List[str],
+    run_result: Optional[List[str]] = None,
 ):
     """Update the status of the scheduled item.
 
@@ -89,6 +89,11 @@ def execute_scheduled_operation(s_item_id: int):
                 status=models.scheduler.STATUS_EXECUTING)
             s_item.refresh_from_db(fields=['status'])
 
+            # Create and update the log
+            log_item = s_item.workflow.log(s_item.user, s_item.operation_type)
+            s_item.last_executed_log = log_item
+            s_item.save()
+
             payload = s_item.payload
             if s_item.item_column:
                 payload['item_column'] = s_item.item_column.pk
@@ -100,7 +105,8 @@ def execute_scheduled_operation(s_item_id: int):
                 user=s_item.user,
                 workflow=s_item.workflow,
                 action=s_item.action,
-                payload=payload)
+                payload=payload,
+                log_item=log_item)
 
             _update_item_status(s_item, run_result)
         except Exception as exc:
@@ -108,3 +114,6 @@ def execute_scheduled_operation(s_item_id: int):
                 'Error processing action {0}: {1}'.format(
                     s_item.name,
                     str(exc)))
+            models.ScheduledOperation.objects.filter(pk=s_item.id).update(
+                status=models.scheduler.STATUS_DONE_ERROR)
+

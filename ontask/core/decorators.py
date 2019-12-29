@@ -70,6 +70,18 @@ def ajax_required(func: Callable) -> Callable:
     return function_wrapper
 
 
+def store_workflow_in_session(session: SessionStore, wflow: models.Workflow):
+    """Store the workflow id, name, and number of rows in the session.
+
+    :param session: object of SessionStore
+    :param wflow: Workflow object
+    :return: Nothing. Store the id, name and nrows in the session
+    """
+    session['ontask_workflow_id'] = wflow.id
+    session['ontask_workflow_name'] = wflow.name
+    session['ontask_workflow_rows'] = wflow.nrows
+
+
 def get_workflow(
     s_related: object = None,
     pf_related: object = None,
@@ -96,7 +108,7 @@ def get_workflow(
                 return _error_redirect(request)
 
             # Update the session
-            store_workflow_in_session(request, workflow)
+            store_workflow_in_session(request.session, workflow)
 
             kwargs['workflow'] = workflow
 
@@ -126,7 +138,7 @@ def get_column(
                 return _error_redirect(request)
 
             # Update the session
-            store_workflow_in_session(request, workflow)
+            store_workflow_in_session(request.session, workflow)
 
             kwargs['workflow'] = workflow
 
@@ -176,7 +188,7 @@ def get_action(
                 return _error_redirect(request)
 
             # Update the session
-            store_workflow_in_session(request, workflow)
+            store_workflow_in_session(request.session, workflow)
 
             kwargs['workflow'] = workflow
 
@@ -227,7 +239,7 @@ def get_condition(
                 return _error_redirect(request)
 
             # Update the session
-            store_workflow_in_session(request, workflow)
+            store_workflow_in_session(request.session, workflow)
 
             kwargs['workflow'] = workflow
 
@@ -281,7 +293,7 @@ def get_columncondition(
                 return _error_redirect(request)
 
             # Update the session
-            store_workflow_in_session(request, workflow)
+            store_workflow_in_session(request.session, workflow)
 
             kwargs['workflow'] = workflow
 
@@ -332,7 +344,7 @@ def get_view(
                 return _error_redirect(request)
 
             # Update the session
-            store_workflow_in_session(request, workflow)
+            store_workflow_in_session(request.session, workflow)
 
             kwargs['workflow'] = workflow
 

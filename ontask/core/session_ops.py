@@ -137,10 +137,10 @@ def acquire_workflow_access(
 
         # Step 4: The workflow is locked by a session different from this one.
         # See if the session locking it is still valid
-        session = Session.objects.filter(
+        old_session = Session.objects.filter(
             session_key=workflow.session_key,
         ).first()
-        if not session:
+        if not old_session:
             # The session stored as locking the
             # workflow is no longer in the session table, so the user can
             # access the workflow
@@ -151,7 +151,7 @@ def acquire_workflow_access(
                 create_session=True)
 
         # Get the owner of the session locking the workflow
-        user_id = session.get_decoded().get('_auth_user_id')
+        user_id = old_session.get_decoded().get('_auth_user_id')
         if not user_id:
             # Session has no user_id, so proceed to lock the workflow
             return _wf_lock_and_update(session, user, workflow)
@@ -167,7 +167,7 @@ def acquire_workflow_access(
 
         # Step 6: The workflow is locked by an existing session. See if the
         # session is valid
-        if session.expire_date >= timezone.now():
+        if old_session.expire_date >= timezone.now():
             raise OnTaskException(
                 _('The workflow is being modified by user {0}').format(
                     owner.email),
