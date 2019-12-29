@@ -162,3 +162,7 @@ task_execute_factory.register_producer(
 task_execute_factory.register_producer(
     models.Log.PLUGIN_EXECUTE,
     services.ExecuteRunPlugin())
+
+task_execute_factory.register_producer(
+    models.Log.WORKFLOW_DATA_SQL_UPLOAD,
+    services.ExecuteSQLUpload())

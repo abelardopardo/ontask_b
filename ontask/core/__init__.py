@@ -9,15 +9,14 @@ from ontask.core.checks import check_key_columns, check_wf_df
 from ontask.core.decorators import (
     ajax_required, get_action, get_column, get_columncondition, get_condition,
     get_view, get_workflow,
-)
+    store_workflow_in_session)
 from ontask.core.forms import (
     DATE_TIME_WIDGET_OPTIONS, RestrictedFileField, column_to_field)
 from ontask.core.manage_session import SessionPayload
 from ontask.core.permissions import (
     GROUP_NAMES, UserIsInstructor, has_access, is_admin, is_instructor)
 from ontask.core.session_ops import (
-    remove_workflow_from_session, store_workflow_in_session,
-    store_workflow_nrows_in_session)
+    _store_workflow_nrows_in_session, remove_workflow_from_session)
 from ontask.core.tables import DataTablesServerSidePaging, OperationsColumn
 
 ONTASK_UPLOAD_FIELD_PREFIX = '___ontask___upload_'
