@@ -46,11 +46,10 @@ def _update_item_status(
 
 
 @shared_task
-def execute_scheduled_operation(s_item_id: int, debug: Optional[bool] = False):
+def execute_scheduled_operation(s_item_id: int):
     """Execute the scheduled operation in s_item.
 
     :param s_item_id: ID of the scheduled item to execute
-    :param debug: For debugging purposes (bypasses the too soon test)
     :return: Nothing, execution carries out normally.
     """
 
@@ -70,7 +69,7 @@ def execute_scheduled_operation(s_item_id: int, debug: Optional[bool] = False):
             return
 
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
-        if s_item.execute and now < s_item.execute and not debug:
+        if s_item.execute and s_item.frequency and now < s_item.execute:
             # Not yet
             if settings.DEBUG:
                 CELERY_LOGGER.info('Too soon to execute operation.')
