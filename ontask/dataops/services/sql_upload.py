@@ -49,6 +49,9 @@ def _load_df_from_sqlconnection(
     # Try to fetch the data
     data_frame = pd.read_sql_table(table_name, db_engine)
 
+    # Remove the engine
+    db_engine.dispose()
+
     # Strip white space from all string columns and try to convert to
     # datetime just in case
     return services.process_object_column(data_frame)
