@@ -113,6 +113,13 @@ RDS_PORT = get_from_os_or_env('RDS_PORT', env)
 # SECURITY WARNING: keep the secret key used in production secret!
 # Raises ImproperlyConfigured exception if SECRET_KEY not defined
 SECRET_KEY = get_from_os_or_env('SECRET_KEY', env, '')
+
+# Frequency to run the session clearsession command
+SESSION_CLEANUP_CRONTAB = get_from_os_or_env(
+    'SESSION_CLEANUP_CRONTAB',
+    env,
+    '05 5 6 * *')
+
 STATIC_URL_SUFFIX = get_from_os_or_env('STATIC_URL_SUFFIX', env, 'static')
 
 TIME_ZONE = get_from_os_or_env('TIME_ZONE', env, 'UTC')

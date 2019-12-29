@@ -223,6 +223,11 @@ The following variables, if defined in the environment, are considered by OnTask
 
   Default: ``''``
 
+``SESSION_CLEANUP_CRONTAB``
+  Crontab string specifying the frequency to run the ``cleansessions` command.
+
+  Default `'05 5 6 * *'`
+
 ``STATIC_URL_SUFFIX``
   URL suffix to be used by OnTask to access the static files. This definition is ignored if ``AWS_ACCESS_KEY_ID`` is defined as it is assumed that the static content is served through AWS. Make sure this value is not terminated by a slash.
 
