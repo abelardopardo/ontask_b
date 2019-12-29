@@ -10,8 +10,9 @@ from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
 from ontask import is_correct_email, models, tasks
-from ontask.core import DataTablesServerSidePaging, OperationsColumn
-from ontask.core.session_ops import store_workflow_in_session
+from ontask.core import (
+    DataTablesServerSidePaging, OperationsColumn,
+    store_workflow_in_session)
 from ontask.dataops import sql
 from ontask.workflow import services
 
@@ -171,7 +172,7 @@ def do_flush(request: http.HttpRequest, workflow: models.Workflow):
     workflow.flush()
     workflow.refresh_from_db()
     # update the request object with the new number of rows
-    store_workflow_in_session(request, workflow)
+    store_workflow_in_session(request.session, workflow)
     workflow.log(request.user, models.Log.WORKFLOW_DATA_FLUSH)
 
 

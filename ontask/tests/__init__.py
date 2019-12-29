@@ -854,7 +854,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.wait_for_datatable('transform-table_previous')
 
     def go_to_attribute_page(self):
-        self.selenium.find_element_by_class_name('fa-cog').click()
+        self.selenium.find_element_by_id('ontask-base-settings').click()
         WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
             (By.XPATH,
              self.class_and_text_xpath.format('a',

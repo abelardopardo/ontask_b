@@ -2,28 +2,69 @@
 
 """Decorators for functions in OnTask."""
 from functools import wraps
-from typing import Callable
+from typing import Callable, Optional
 
+from django import http
 from django.contrib import messages
 from django.db.models import Q
-from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.core.session_ops import (
-    store_workflow_in_session,
-    verify_workflow_access,
-)
+from ontask.core.session_ops import (SessionStore, acquire_workflow_access)
+
+
+def _get_requested_workflow(
+    request: http.HttpRequest,
+    wid: int = None,
+    s_related: object = None,
+    pf_related: object = None,
+) -> Optional[models.Workflow]:
+    """Access the requested workflow.
+
+    :param request: HTTP request received
+    :param s_related: select_related to use when fetching the workflow
+    :param pf_related: prefetch_related to use when fetching the workflow
+    :param wid: ID of the requested workflow
+    :return
+    """
+    try:
+        workflow = acquire_workflow_access(
+            request.user,
+            request.session,
+            wid=wid,
+            select_related=s_related,
+            prefetch_related=pf_related)
+    except Exception as exc:
+        messages.error(request, str(exc))
+        workflow = None
+
+    return workflow
+
+
+def _error_redirect(
+    request: http.HttpRequest,
+    where: Optional[str] = 'home'
+) -> http.HttpResponse:
+    """Redirect the response when an error has been detected.
+
+    :param request: Request received (used to check if is an ajax one
+    :param where: URL name to redirect (home by default)
+    :return: HttpResponse
+    """
+    if request.is_ajax():
+        return http.JsonResponse({'html_redirect': reverse(where)})
+    return redirect(where)
 
 
 def ajax_required(func: Callable) -> Callable:
     """Verify that the request is AJAX."""
     @wraps(func)
     def function_wrapper(request, *args, **kwargs):  # noqa Z430
+        """Verify that request is ajax and if so, call func."""
         if not request.is_ajax():
-            return HttpResponseBadRequest()
+            return http.HttpResponseBadRequest()
         return func(request, *args, **kwargs)
 
     return function_wrapper
@@ -38,25 +79,21 @@ def get_workflow(
     It also passes the select_related and prefetch_related fields.
 
     :param s_related: select_related to use when fetching the workflow
-    :param pf_related: prefetch_re  lated to use when fetching the workflow
+    :param pf_related: prefetch_related to use when fetching the workflow
     """
     def get_workflow_decorator(func):  # noqa Z430
+        """Wrapper to get access to the function."""
         @wraps(func)  # noqa Z430
         def function_wrapper(request, **kwargs):  # noqa Z430
-            try:
-                workflow = verify_workflow_access(
-                    request,
-                    wid=kwargs.get('wid'),
-                    select_related=s_related,
-                    prefetch_related=pf_related,
-                )
-            except Exception as exc:
-                messages.error(request, str(exc))
-                workflow = None
+            """Wrapper to get access to the request."""
+            workflow = _get_requested_workflow(
+                request,
+                kwargs.get('wid'),
+                s_related,
+                pf_related)
+
             if not workflow:
-                if request.is_ajax():
-                    return JsonResponse({'html_redirect': reverse('home')})
-                return redirect('home')
+                return _error_redirect(request)
 
             # Update the session
             store_workflow_in_session(request, workflow)
@@ -76,22 +113,17 @@ def get_column(
 ) -> Callable:
     """Check that the pk parameter refers to an action in the Workflow."""
     def get_column_decorator(func):  # noqa Z430
+        """Wrapper to get access to the function."""
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            try:
-                workflow = verify_workflow_access(
-                    request,
-                    wid=kwargs.get('wid'),
-                    select_related=s_related,
-                    prefetch_related=pf_related,
-                )
-            except Exception as exc:
-                messages.error(request, str(exc))
-                workflow = None
+            """Wrapper to get access to the request."""
+            workflow = _get_requested_workflow(
+                request,
+                kwargs.get('wid'),
+                s_related,
+                pf_related)
             if not workflow:
-                if request.is_ajax():
-                    return JsonResponse({'html_redirect': reverse('home')})
-                return redirect('home')
+                return _error_redirect(request)
 
             # Update the session
             store_workflow_in_session(request, workflow)
@@ -104,10 +136,7 @@ def get_column(
                     _('Workflow has no data. '
                       + 'Go to "Manage table data" to upload data.'),
                 )
-                if request.is_ajax():
-                    return JsonResponse(
-                        {'html_redirect': reverse('action:index')})
-                return redirect(reverse('action:index'))
+                return _error_redirect(request, 'action:index')
 
             if not kwargs.get('column'):
                 column = workflow.columns.filter(
@@ -117,9 +146,7 @@ def get_column(
                     | Q(workflow__shared=request.user),
                 ).first()
                 if not column:
-                    if request.is_ajax():
-                        return JsonResponse({'html_redirect': reverse('home')})
-                    return redirect('home')
+                    return _error_redirect(request)
 
                 kwargs['column'] = column
 
@@ -136,22 +163,17 @@ def get_action(
 ) -> Callable:
     """Check that the pk parameter refers to an action in the Workflow."""
     def get_action_decorator(func):  # noqa Z430
+        """Wrapper to get access to the function."""
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            try:
-                workflow = verify_workflow_access(
-                    request,
-                    wid=kwargs.get('wid'),
-                    select_related=s_related,
-                    prefetch_related=pf_related,
-                )
-            except Exception as exc:
-                messages.error(request, str(exc))
-                workflow = None
+            """Wrapper to get access to the request."""
+            workflow = _get_requested_workflow(
+                request,
+                kwargs.get('wid'),
+                s_related,
+                pf_related)
             if not workflow:
-                if request.is_ajax():
-                    return JsonResponse({'html_redirect': reverse('home')})
-                return redirect('home')
+                return _error_redirect(request)
 
             # Update the session
             store_workflow_in_session(request, workflow)
@@ -164,10 +186,7 @@ def get_action(
                     _('Workflow has no data. '
                       + 'Go to "Manage table data" to upload data.'),
                 )
-                if request.is_ajax():
-                    return JsonResponse(
-                        {'html_redirect': reverse('action:index')})
-                return redirect(reverse('action:index'))
+                return _error_redirect(request, 'action:index')
 
             if not kwargs.get('action'):
                 action = workflow.actions.filter(
@@ -177,9 +196,7 @@ def get_action(
                     | Q(workflow__shared=request.user),
                 ).first()
                 if not action:
-                    if request.is_ajax():
-                        return JsonResponse({'html_redirect': reverse('home')})
-                    return redirect('home')
+                    return _error_redirect(request)
 
                 kwargs['action'] = action
 
@@ -197,22 +214,17 @@ def get_condition(
 ) -> Callable:
     """Check that the pk parameter refers to a condition in the Workflow."""
     def get_condition_decorator(func):  # noqa Z430
+        """Wrapper to get access to the function."""
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            try:
-                workflow = verify_workflow_access(
-                    request,
-                    wid=kwargs.get('wid'),
-                    select_related=s_related,
-                    prefetch_related=pf_related,
-                )
-            except Exception as exc:
-                messages.error(request, str(exc))
-                workflow = None
+            """Wrapper to get access to the request."""
+            workflow = _get_requested_workflow(
+                request,
+                kwargs.get('wid'),
+                s_related,
+                pf_related)
             if not workflow:
-                if request.is_ajax():
-                    return JsonResponse({'html_redirect': reverse('home')})
-                return redirect('home')
+                return _error_redirect(request)
 
             # Update the session
             store_workflow_in_session(request, workflow)
@@ -225,10 +237,7 @@ def get_condition(
                     _('Workflow has no data. '
                       + 'Go to "Manage table data" to upload data.'),
                 )
-                if request.is_ajax():
-                    return JsonResponse(
-                        {'html_redirect': reverse('action:index')})
-                return redirect(reverse('action:index'))
+                return _error_redirect(request, 'action:index')
 
             if not kwargs.get('condition'):
                 # Get the condition
@@ -242,9 +251,7 @@ def get_condition(
                     # Get the condition
                 condition = condition.select_related('action').first()
                 if not condition:
-                    if request.is_ajax():
-                        return JsonResponse({'html_redirect': reverse('home')})
-                    return redirect('home')
+                    return _error_redirect(request)
 
                 kwargs['condition'] = condition
 
@@ -261,22 +268,17 @@ def get_columncondition(
 ) -> Callable:
     """Check that the pk parameter refers to a condition in the Workflow."""
     def get_columncondition_decorator(func):  # noqa Z430
+        """Wrapper to get access to the function."""
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            try:
-                workflow = verify_workflow_access(
-                    request,
-                    wid=kwargs.get('wid'),
-                    select_related=s_related,
-                    prefetch_related=pf_related,
-                )
-            except Exception as exc:
-                messages.error(request, str(exc))
-                workflow = None
+            """Wrapper to get access to the request."""
+            workflow = _get_requested_workflow(
+                request,
+                kwargs.get('wid'),
+                s_related,
+                pf_related)
             if not workflow:
-                if request.is_ajax():
-                    return JsonResponse({'html_redirect': reverse('home')})
-                return redirect('home')
+                return _error_redirect(request)
 
             # Update the session
             store_workflow_in_session(request, workflow)
@@ -289,10 +291,7 @@ def get_columncondition(
                     _('Workflow has no data. '
                       + 'Go to "Manage table data" to upload data.'),
                 )
-                if request.is_ajax():
-                    return JsonResponse(
-                        {'html_redirect': reverse('action:index')})
-                return redirect(reverse('action:index'))
+                return _error_redirect(request, 'action:index')
 
             # Get the column-condition
             cc_tuple = models.ActionColumnConditionTuple.objects.filter(
@@ -303,9 +302,7 @@ def get_columncondition(
             ).select_related('action', 'condition', 'column').first()
 
             if not cc_tuple:
-                if request.is_ajax():
-                    return JsonResponse({'html_redirect': reverse('home')})
-                return redirect('home')
+                return _error_redirect(request)
 
             kwargs['cc_tuple'] = cc_tuple
 
@@ -322,23 +319,17 @@ def get_view(
 ) -> Callable:
     """Check that the pk parameter refers to a condition in the Workflow."""
     def get_view_decorator(func):  # noqa Z430
+        """Wrapper to get access to the function."""
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
-            try:
-                workflow = verify_workflow_access(
-                    request,
-                    wid=kwargs.get('wid'),
-                    select_related=s_related,
-                    prefetch_related=pf_related,
-                )
-            except Exception as exc:
-                messages.error(request, str(exc))
-                workflow = None
-
+            """Wrapper to get access to the request."""
+            workflow = _get_requested_workflow(
+                request,
+                kwargs.get('wid'),
+                s_related,
+                pf_related)
             if not workflow:
-                if request.is_ajax():
-                    return JsonResponse({'html_redirect': reverse('home')})
-                return redirect('home')
+                return _error_redirect(request)
 
             # Update the session
             store_workflow_in_session(request, workflow)
@@ -351,10 +342,7 @@ def get_view(
                     _('Workflow has no data. '
                       + 'Go to "Manage table data" to upload data.'),
                 )
-                if request.is_ajax():
-                    return JsonResponse(
-                        {'html_redirect': reverse('action:index')})
-                return redirect(reverse('action:index'))
+                return _error_redirect(request, 'action:index')
 
             if not kwargs.get('view'):
                 # Get the view
@@ -364,9 +352,7 @@ def get_view(
                 ).prefetch_related('columns').first()
 
                 if not view:
-                    if request.is_ajax():
-                        return JsonResponse({'html_redirect': reverse('home')})
-                    return redirect('home')
+                    return _error_redirect(request)
 
                 kwargs['view'] = view
 

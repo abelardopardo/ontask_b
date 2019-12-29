@@ -73,15 +73,15 @@ urlpatterns = [
 
 urlpatterns = format_suffix_patterns(urlpatterns)
 
-email_processor = services.ScheduledOperationSaveEmail()
+EMAIL_PROCESSOR = services.ScheduledOperationSaveEmail()
 
 services.schedule_crud_factory.register_producer(
     models.Action.PERSONALIZED_TEXT,
-    email_processor)
+    EMAIL_PROCESSOR)
 
 services.schedule_crud_factory.register_producer(
     models.Action.RUBRIC_TEXT,
-    email_processor)
+    EMAIL_PROCESSOR)
 
 services.schedule_crud_factory.register_producer(
     models.Action.PERSONALIZED_JSON,

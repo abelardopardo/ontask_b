@@ -10,9 +10,8 @@ from django.core.cache import cache
 import pytz
 
 from ontask import CELERY_LOGGER, models
+from ontask.core import ONTASK_SCHEDULED_LOCKED_ITEM
 from ontask.tasks.execute_factory import task_execute_factory
-
-cache_lock_format = '__ontask_scheduled_item_{0}'
 
 
 def _update_item_status(
@@ -59,7 +58,7 @@ def execute_scheduled_operation(s_item_id: int):
             CELERY_LOGGER.info('Operation without scheduled item.')
         return
 
-    with cache.lock(cache_lock_format.format(s_item.id)):
+    with cache.lock(ONTASK_SCHEDULED_LOCKED_ITEM.format(s_item.id)):
         # Item is now locked by the cache mechanism
         s_item.refresh_from_db()
         if s_item.status != models.scheduler.STATUS_PENDING:
@@ -106,5 +105,6 @@ def execute_scheduled_operation(s_item_id: int):
             _update_item_status(s_item, run_result)
         except Exception as exc:
             CELERY_LOGGER.error(
-                'Error while processing scheduled action: {0}'.format(
+                'Error processing action {0}: {1}'.format(
+                    s_item.name,
                     str(exc)))

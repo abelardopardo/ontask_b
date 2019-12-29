@@ -2,9 +2,9 @@
 
 """Factory handling the various Scheduled Item Producers."""
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Dict, Optional, Type
 
-from django import http
+from django import forms, http
 from django.conf import settings
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
@@ -110,8 +110,8 @@ class ScheduledOperationSaveBase:
     Web interface.
     """
 
-    operation_type = None
-    form_class = None
+    operation_type: Optional[str] = None
+    form_class: Type[forms.Form] = None
 
     @staticmethod
     def _create_payload(**kwargs) -> SessionPayload:

@@ -88,6 +88,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, **kwargs) -> models.ScheduledOperation:
         """Create a new instance of the scheduled data."""
+        del kwargs
         try:
             self.extra_validation(validated_data)
             scheduled_obj = schedule_crud_factory.crud_create_or_update(

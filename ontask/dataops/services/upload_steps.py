@@ -59,7 +59,7 @@ def upload_step_two(
     pandas.store_workflow_table(workflow, upload_data)
 
     # Update the session information
-    store_workflow_in_session(request, workflow)
+    store_workflow_in_session(request.session, workflow)
 
     col_info = workflow.get_column_info()
     workflow.log(
@@ -215,7 +215,7 @@ def upload_step_four(
         column_names=col_info[0],
         column_types=col_info[1],
         column_unique=col_info[2])
-    store_workflow_in_session(request, workflow)
+    store_workflow_in_session(request.session, workflow)
     request.session.pop('upload_data', None)
 
     return redirect(reverse('table:display'))

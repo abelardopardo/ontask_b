@@ -14,7 +14,7 @@ from ontask import models
 from ontask.dataops import pandas, sql
 
 
-def _process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
+def process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
     """Perform additional steps in every object dataframe column.
 
     The process includes:
@@ -99,7 +99,7 @@ def load_df_from_csvfile(
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return _process_object_column(data_frame)
+    return process_object_column(data_frame)
 
 
 def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
@@ -124,7 +124,7 @@ def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return _process_object_column(data_frame)
+    return process_object_column(data_frame)
 
 
 def load_df_from_s3(
@@ -171,7 +171,7 @@ def load_df_from_s3(
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return _process_object_column(data_frame)
+    return process_object_column(data_frame)
 
 
 def load_df_from_googlesheet(
@@ -220,42 +220,6 @@ def load_df_from_googlesheet(
 
     # Process the link using pandas read_csv
     return load_df_from_csvfile(url_string, skiprows, skipfooter)
-
-
-def load_df_from_sqlconnection(
-    conn_item: models.SQLConnection,
-    run_params: Dict,
-) -> pd.DataFrame:
-    """Load a DF from a SQL connection.
-
-    :param conn_item: SQLConnection object with the connection parameters.
-    :param run_params: Dictionary with the execution parameters.
-    :return: Data frame or raise an exception.
-    """
-    if conn_item.db_password:
-        password = conn_item.db_password
-    else:
-        password = run_params['db_password']
-
-    if conn_item.db_table:
-        table_name = conn_item.db_table
-    else:
-        table_name = run_params['db_table']
-
-    db_engine = pandas.create_db_engine(
-        conn_item.conn_type,
-        conn_item.conn_driver,
-        conn_item.db_user,
-        password,
-        conn_item.db_host,
-        conn_item.db_name)
-
-    # Try to fetch the data
-    data_frame = pd.read_sql_table(table_name, db_engine)
-
-    # Strip white space from all string columns and try to convert to
-    # datetime just in case
-    return _process_object_column(data_frame)
 
 
 def batch_load_df_from_athenaconnection(
@@ -310,7 +274,7 @@ def batch_load_df_from_athenaconnection(
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    data_frame = _process_object_column(data_frame)
+    data_frame = process_object_column(data_frame)
 
     pandas.verify_data_frame(data_frame)
 

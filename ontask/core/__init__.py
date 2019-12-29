@@ -29,6 +29,8 @@ ONTASK_SELECT_FIELD_PREFIX = '___ontask___select_'
 # Field to use to name the scheduled tasks (use the ScheduledOperation id
 ONTASK_SCHEDULED_TASK_NAME_TEMPLATE = '___ontask___scheduled_{0}'
 
+ONTASK_SCHEDULED_LOCKED_ITEM = '___ontask___scheduled___locked___item_{0}'
+
 # Length of suffix to add to file names
 ONTASK_SUFFIX_LENGTH = 512
 

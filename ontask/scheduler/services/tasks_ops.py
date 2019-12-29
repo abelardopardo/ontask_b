@@ -11,16 +11,6 @@ from ontask.core import ONTASK_SCHEDULED_TASK_NAME_TEMPLATE
 from ontask.scheduler.services import errors
 
 
-def delete_task(s_item: models.ScheduledOperation):
-    """Delete the task corresponding to the given scheduled item.
-
-    :param s_item: Scheduled operation item being processed.
-    :return: Delete the task in the  PeriodicTask table
-    """
-    if s_item.task:
-        s_item.task.delete()
-
-
 def schedule_task(s_item: models.ScheduledOperation):
     """Create the task corresponding to the given scheduled item.
 
@@ -29,8 +19,10 @@ def schedule_task(s_item: models.ScheduledOperation):
 
     If the s_item already contains a pointer to a task in PeriodicTasks, it
     is canceled.
+
+    If the s_item status is not PENDING, no new task is created.
     """
-    delete_task(s_item)
+    s_item.delete_task()
 
     msg = s_item.are_times_valid()
     if msg:

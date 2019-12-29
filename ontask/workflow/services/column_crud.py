@@ -5,6 +5,7 @@ import copy
 import random
 from typing import Any, List, Optional
 
+from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
@@ -274,7 +275,7 @@ def update_column(
 
 
 def delete_column(
-    user,
+    user: get_user_model(),
     workflow: models.Workflow,
     column: models.Column,
     cond_to_delete: Optional[List[models.Condition]] = None,

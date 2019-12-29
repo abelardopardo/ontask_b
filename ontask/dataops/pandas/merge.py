@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Functions to do data frame merging."""
-from typing import Dict
+from typing import Dict, Optional
 
 from django.utils.translation import gettext
 import pandas as pd
@@ -174,6 +174,39 @@ def _update_is_key_field(merge_info: Dict, workflow):
         # the keep_key value.
         col.is_key = col.is_key and keep_key
         col.save()
+
+def validate_merge_parameters(
+    dst_df: pd.DataFrame,
+    src_df: pd.DataFrame,
+    how_merge: str,
+    left_on: str,
+    right_on: str,
+) -> Optional[str]:
+    """Verify that the merge parameters are correct
+
+    :return: Error message, or none if everything is correct
+    """
+    # Check that the parameters are correct
+    if not how_merge or how_merge not in ['left', 'right', 'outer', 'inner']:
+        return gettext('Merge method must be one of '
+                       'left, right, outer or inner')
+
+    if left_on not in list(dst_df.columns):
+        return gettext(
+            'Column {0} not found in current data frame').format(left_on)
+
+    if not pandas.is_unique_column(dst_df[left_on]):
+        return gettext('Column {0} is not a unique key.').format(left_on)
+
+    if right_on not in list(src_df.columns):
+        return gettext(
+            'Column {0} not found in new data frame').format(right_on)
+
+    if not pandas.is_unique_column(src_df[right_on]):
+        return gettext(
+            'Column {0} is not a unique key.').format(right_on)
+
+    return None
 
 
 def perform_dataframe_upload_merge(

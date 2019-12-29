@@ -109,7 +109,7 @@ class ScheduledOperationSaveSQLUpload(ScheduledOperationSaveBase):
                 request,
                 str(_('Unable to create scheduled operation ({0})')).format(
                     str(exc)))
-            return redirect('action:index')
+            return redirect('scheduler:index')
 
         schedule_item.log(models.Log.SCHEDULE_EDIT)
 

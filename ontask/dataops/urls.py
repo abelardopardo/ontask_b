@@ -159,7 +159,6 @@ task_execute_factory.register_producer(
     models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
     services.ExecuteIncreaseTrackCount())
 
-
 task_execute_factory.register_producer(
     models.Log.PLUGIN_EXECUTE,
     services.ExecuteRunPlugin())

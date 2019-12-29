@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskServiceException, create_new_name, models
 from ontask.action.services.clone import do_clone_action
-from ontask.core.session_ops import store_workflow_in_session
+from ontask.core import store_workflow_in_session
 from ontask.dataops import sql
 from ontask.table.services import do_clone_view
 from ontask.workflow import forms
@@ -43,7 +43,7 @@ def save_workflow_form(
         redirect_url = reverse('dataops:uploadmerge')
 
         # Store in session
-        store_workflow_in_session(request, workflow_item)
+        store_workflow_in_session(request.session, workflow_item)
 
     workflow_item.log(request.user, log_type)
     return http.JsonResponse({'html_redirect': redirect_url})

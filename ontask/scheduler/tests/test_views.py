@@ -41,7 +41,9 @@ class SchedulerForms(tests.OnTaskTestCase):
         action = self.workflow.actions.get(name='simple action')
 
         # Get the form to schedule this action
-        resp = self.get_response('scheduler:create_action_run', {'pk': action.id})
+        resp = self.get_response(
+            'scheduler:create_action_run',
+            {'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the form to schedule this action
@@ -129,7 +131,9 @@ class SchedulerForms(tests.OnTaskTestCase):
         action = self.workflow.actions.get(name='json action')
 
         # Get the form to schedule this action
-        resp = self.get_response('scheduler:create_action_run', {'pk': action.id})
+        resp = self.get_response(
+            'scheduler:create_action_run',
+            {'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the form to schedule this action

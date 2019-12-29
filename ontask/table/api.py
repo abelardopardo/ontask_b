@@ -267,37 +267,19 @@ class TableBasicMerge(APIView):
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
 
-        # Check that the parameters are correct
-        how = serializer.validated_data['how']
-        if how == '' or how not in ['left', 'right', 'outer', 'inner']:
-            raise APIException(
-                _('how must be one of left, right, outer or inner'))
-
-        left_on = serializer.validated_data['left_on']
-        if not pandas.is_unique_column(dst_df[left_on]):
-            raise APIException(
-                _('column {0} does not contain a unique key.').format(left_on))
-
-        # Operation has been accepted by the serializer
         src_df = serializer.validated_data['src_df']
-
+        how = serializer.validated_data['how']
+        left_on = serializer.validated_data['left_on']
         right_on = serializer.validated_data['right_on']
-        if right_on not in list(src_df.columns):
-            raise APIException(_('column {0} not found in data frame').format(
-                right_on))
+        error = pandas.validate_merge_parameters(
+            dst_df,
+            src_df,
+            how,
+            left_on,
+            right_on)
 
-        if not pandas.is_unique_column(src_df[right_on]):
-            raise APIException(_(
-                'column {0} does not contain a unique key.').format(right_on))
-
-        merge_info = {
-            'how_merge': how,
-            'dst_selected_key': left_on,
-            'src_selected_key': right_on,
-            'initial_column_names': list(src_df.columns),
-            'rename_column_names': list(src_df.columns),
-            'columns_to_upload': [True] * len(list(src_df.columns)),
-        }
+        if error:
+            raise APIException(error)
 
         # Ready to perform the MERGE
         try:
@@ -305,7 +287,13 @@ class TableBasicMerge(APIView):
                 workflow,
                 dst_df,
                 src_df,
-                merge_info)
+                {
+                    'how_merge': how,
+                    'dst_selected_key': left_on,
+                    'src_selected_key': right_on,
+                    'initial_column_names': list(src_df.columns),
+                    'rename_column_names': list(src_df.columns),
+                    'columns_to_upload': [True] * len(list(src_df.columns))})
         except Exception as exc:
             raise APIException(
                 _('Unable to perform merge operation: {0}').format(str(exc)))

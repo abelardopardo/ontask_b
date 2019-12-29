@@ -59,4 +59,4 @@ def delete_scheduled_task(sender, **kwargs):
     if not instance:
         return
 
-    services.delete_task(instance)
+    instance.delete_task()
