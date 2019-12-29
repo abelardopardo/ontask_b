@@ -72,19 +72,19 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
                 raise APIException(
                     _('Invalid column name for selecting items'))
 
-        exclude_values = validated_data.get('exclude_values')
+        # Check that the received object has a payload
+        payload = validated_data.get('payload', {})
+        if not payload:
+            raise APIException(_('Scheduled objects need a payload.'))
+
+        exclude_values = payload.get('exclude_values', [])
         # Exclude_values has to be a list
         if exclude_values is not None and not isinstance(exclude_values, list):
             raise APIException(_('Exclude_values must be a list'))
 
         # Exclude_values can only have content if item_column is given.
-        if not item_column and exclude_values:
+        if not item_column and payload.get('exclude_values'):
             raise APIException(_('Exclude items needs a value in item_column'))
-
-        # Check that the received object has a payload
-        payload = validated_data.get('payload', {})
-        if not payload:
-            raise APIException(_('Scheduled objects needs a payload.'))
 
     def create(self, validated_data, **kwargs) -> models.ScheduledOperation:
         """Create a new instance of the scheduled data."""
@@ -132,7 +132,6 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
             'workflow',
             'action',
             'item_column',
-            'exclude_values',
             'payload')
 
 

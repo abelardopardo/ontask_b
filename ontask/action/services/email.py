@@ -335,7 +335,7 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         action: Optional[models.Action] = None,
         payload: Optional[Dict] = None,
         log_item: Optional[models.Log] = None,
-    ) -> Optional[List]:
+    ):
         """Send action content evaluated for each row.
 
         Sends the emails for the given action and with the
@@ -350,7 +350,7 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         :param action: Action from where to take the messages
         :param log_item: Log object to store results (optional)
         :param payload: Dictionary key, value
-        :return: List of strings with the "to" fields used.
+        :return: Nothing
         """
         # Evaluate the action string, evaluate the subject, and get the value
         # of the email column.
@@ -362,7 +362,7 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
             action,
             extra_string=payload['subject'],
             column_name=item_column.name,
-            exclude_values=payload.get('exclude_values'))
+            exclude_values=payload.get('exclude_values', []))
 
         track_col_name = ''
         if payload['track_read']:
@@ -388,7 +388,8 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         action.last_executed_log = log_item
         action.save()
 
-        return [msg.to[0] for msg in msgs]
+        # Update excluded items in payload
+        self._update_excluded_items(payload, [msg.to[0] for msg in msgs])
 
 
 class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
@@ -418,7 +419,7 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
         action: Optional[models.Action] = None,
         payload: Optional[Dict] = None,
         log_item: Optional[models.Log] = None,
-    ) -> Optional[List]:
+    ):
         """Send action content evaluated once to include lists.
 
         Sends a single email for the given action with the lists expanded and
@@ -429,7 +430,7 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
         :param action: Action from where to take the messages
         :param log_item: Log object to store results
         :param payload: Dictionary key, value
-        :return: Empty list (because it is a single email sent)
+        :return: Nothing
         """
         if log_item is None:
             action.log(user, self.log_event, **payload)
@@ -474,5 +475,3 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
             models.Log.ACTION_EMAIL_SENT,
             **context)
         action.save()
-
-        return []

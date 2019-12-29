@@ -210,5 +210,3 @@ class ExecuteSQLUpload:
 
         log_item.payload = merge_info
         log_item.save()
-
-        return []

@@ -341,8 +341,8 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'workflow': action.workflow.id,
                 'item_column': 'email',
                 'execute': self.s_execute,
-                'exclude_values': {},
                 'payload': {
+                    'exclude_values': {},
                     'subject': s_subject,
                     'cc_email': '',
                     'bcc_email': '',
@@ -370,7 +370,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             format='json')
 
         self.assertEqual(response.status_code, 500)
-        self.assertTrue('needs a payload' in response.data['detail'])
+        self.assertTrue('need a payload' in response.data['detail'])
 
         # Schedule without subject
         response = self.client.post(

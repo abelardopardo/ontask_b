@@ -132,13 +132,6 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         related_name='scheduled_actions',
         verbose_name=_('Column to select the elements for the action'))
 
-    # JSON element with values to exclude from item selection.
-    exclude_values = JSONField(
-        default=list,
-        blank=True,
-        null=True,
-        verbose_name=_('exclude values'))
-
     # JSON element with additional information
     payload = JSONField(
         default=dict,

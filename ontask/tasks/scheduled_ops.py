@@ -2,7 +2,6 @@
 
 """Process the scheduled actions."""
 from datetime import datetime
-from typing import List, Optional
 
 from celery import shared_task
 from django.conf import settings
@@ -14,31 +13,24 @@ from ontask.core import ONTASK_SCHEDULED_LOCKED_ITEM
 from ontask.tasks.execute_factory import task_execute_factory
 
 
-def _update_item_status(
-    s_item: models.ScheduledOperation,
-    run_result: Optional[List[str]] = None,
-):
+def _update_item_status(s_item: models.ScheduledOperation):
     """Update the status of the scheduled item.
 
     :param s_item: Scheduled item
     :return: Nothing
     """
-    if run_result is None:
-        s_item.status = models.scheduler.STATUS_DONE_ERROR
+    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+    if s_item.frequency and (
+        not s_item.execute_until or now < s_item.execute_until
+    ):
+        new_status = models.scheduler.STATUS_PENDING
     else:
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
-        if s_item.frequency and (
-            not s_item.execute_until or now < s_item.execute_until
-        ):
-            # There is a future execution
-            s_item.status = models.scheduler.STATUS_PENDING
-            # Update exclude values
-            s_item.exclude_values.extend(run_result)
-        else:
-            s_item.status = models.scheduler.STATUS_DONE
+        new_status = models.scheduler.STATUS_DONE
 
     # Save the new status in the DB
-    s_item.save()
+    models.ScheduledOperation.objects.filter(pk=s_item.id).update(
+        status=new_status)
+    s_item.refresh_from_db(fields=['status'])
 
     if settings.DEBUG:
         CELERY_LOGGER.info('Status set to %s', s_item.status)
@@ -96,10 +88,8 @@ def execute_scheduled_operation(s_item_id: int):
             payload = s_item.payload
             if s_item.item_column:
                 payload['item_column'] = s_item.item_column.pk
-            if s_item.exclude_values is not None:
-                payload['exclude_values'] = s_item.exclude_values
 
-            run_result = task_execute_factory.execute_operation(
+            task_execute_factory.execute_operation(
                 operation_type=s_item.operation_type,
                 user=s_item.user,
                 workflow=s_item.workflow,
@@ -107,7 +97,10 @@ def execute_scheduled_operation(s_item_id: int):
                 payload=payload,
                 log_item=log_item)
 
-            _update_item_status(s_item, run_result)
+            # Update payload
+            s_item.save()
+
+            _update_item_status(s_item)
         except Exception as exc:
             CELERY_LOGGER.error(
                 'Error processing action %s:: %s',
