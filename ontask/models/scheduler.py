@@ -195,6 +195,11 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
 
         return None
 
+    def delete_task(self):
+        """Delete the task if present."""
+        if self.task:
+            self.task.delete()
+
     def are_times_valid(self) -> Optional[str]:
         """Verify that execute, frequency and execute_until are correct.
 

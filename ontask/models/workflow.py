@@ -2,10 +2,10 @@
 
 """Model description for the Workflow."""
 import datetime
+from importlib import import_module
 import json
 from typing import List, Tuple
 
-from django import http
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
@@ -22,6 +22,8 @@ from ontask.models.common import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
 
 CHAR_FIELD_MD5_SIZE = 32
+
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
 class Workflow(NameAndDescription, CreateModifyFields):
@@ -283,18 +285,23 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # date is beyond the current time.
         return session.expire_date >= timezone.now()
 
-    def lock(self, request: http.HttpRequest, create_session: bool = False):
+    def lock(
+        self,
+        session: SessionStore,
+        user: get_user_model(),
+        update_session: bool = False
+    ):
         """Set a session key in the workflow to set is as locked.
 
-        :param request: HTTP request
-        :param create_session: Boolean to flag if a new session has to be
-               created.
+        :param session: Session object used for the locking
+        :param user: User requesting the lock
+        :param update_session: Boolean to flag if a session has to be updated
         :return: The session_key is assigned and saved.
         """
-        if request.session.session_key is not None:
+        if session.session_key is not None:
             # Trivial case, the request has a legit session, so use it for
             # the lock.
-            self.session_key = request.session.session_key
+            self.session_key = session.session_key
             self.save()
 
         # The request has a temporary session (non persistent). This is the
@@ -312,19 +319,19 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # Case 4: The workflow has a perfectly valid session: UPDATE THE
         # EXPIRE DATE OF THE SESSION
         #
-        if create_session:
+        if update_session:
             # Cases 1 and 2. Create a session and store the user_id
-            request.session['_auth_user_id'] = request.user.id
-            request.session.save()
-            self.session_key = request.session.session_key
+            session['_auth_user_id'] = user.id
+            session.save()
+            self.session_key = session.session_key
             self.save()
             return
 
         # Cases 3 and 4. Update the existing session
-        session = Session.objects.get(pk=self.session_key)
-        session.expire_date = timezone.now() + datetime.timedelta(
+        existing_session = Session.objects.get(pk=self.session_key)
+        existing_session.expire_date = timezone.now() + datetime.timedelta(
             seconds=settings.SESSION_COOKIE_AGE)
-        session.save()
+        existing_session.save()
 
     def unlock(self):
         """Remove the session_key from the workflow.
@@ -441,7 +448,12 @@ class Workflow(NameAndDescription, CreateModifyFields):
         """Render as string."""
         return self.name
 
-    def log(self, user, operation_type: str, **kwargs: str):
+    def log(
+        self,
+        user: get_user_model(),
+        operation_type:
+        str, **kwargs: str
+    ) -> Log:
         """Log the operation with the object."""
         payload = {
             'name': self.name,

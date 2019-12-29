@@ -4297,12 +4297,12 @@
         "enabled": true,
         "conn_type": "postgresql",
         "conn_driver": "",
-        "db_user": "ontask",
+        "db_user": "",
         "db_password": "",
         "db_host": "localhost",
-        "db_port": null,
+        "db_port": 5432,
         "db_name": "ontask_b",
-        "db_table": "__ONTASK_WORKFLOW_TABLE_1"
+        "db_table": "__ONTASK_TEST_TABLE"
     }
 },
 {

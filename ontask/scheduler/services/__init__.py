@@ -15,4 +15,4 @@ from ontask.scheduler.services.scheduler_table import ScheduleActionTable
 from ontask.scheduler.services.sql_producer import (
     ScheduledOperationSaveSQLUpload,
 )
-from ontask.scheduler.services.tasks_ops import delete_task, schedule_task
+from ontask.scheduler.services.tasks_ops import schedule_task

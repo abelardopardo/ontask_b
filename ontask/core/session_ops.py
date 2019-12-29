@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """Functions to manipulate the workflow in the session."""
+from importlib import import_module
 from typing import List, Optional, Union
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
@@ -13,50 +15,42 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskException, models
 
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
-def wf_lock_and_update(
-    request: HttpRequest,
+
+def _wf_lock_and_update(
+    session: SessionStore,
+    user: get_user_model(),
     workflow: models.Workflow,
     create_session: Optional[bool] = False,
 ) -> models.Workflow:
     """Lock a workflow and updates the value in the session.
 
-    :param request: Http request to update
+    :param session: Session being used
+    :param user: User requesting the lock
     :param workflow: Workflow being modified
     :param create_session: Boolean encoding if a session needs to be created.
     :param workflow: Object to store
     """
-    workflow.lock(request, create_session)
+    workflow.lock(session, user, create_session)
     # Update nrows in case it was asynch modified
-    store_workflow_nrows_in_session(request, workflow)
+    _store_workflow_nrows_in_session(session, workflow)
 
     return workflow
 
 
-def store_workflow_nrows_in_session(
-    request: HttpRequest,
+def _store_workflow_nrows_in_session(
+    session: SessionStore,
     wflow: models.Workflow
 ):
     """Store the workflow id and name in the request.session dictionary.
 
-    :param request: Request object
+    :param session: Session object to store the worklfow
     :param wflow: Workflow object
     :return: Nothing. Store the id and the name in the session
     """
-    request.session['ontask_workflow_rows'] = wflow.nrows
-    request.session.save()
-
-
-def store_workflow_in_session(request: HttpRequest, wflow: models.Workflow):
-    """Store the workflow id, name, and number of rows in the session.
-
-    :param request: Request object
-    :param wflow: Workflow object
-    :return: Nothing. Store the id, name and nrows in the session
-    """
-    request.session['ontask_workflow_id'] = wflow.id
-    request.session['ontask_workflow_name'] = wflow.name
-    store_workflow_nrows_in_session(request, wflow)
+    session['ontask_workflow_rows'] = wflow.nrows
+    session.save()
 
 
 def remove_workflow_from_session(request: HttpRequest):
@@ -70,23 +64,25 @@ def remove_workflow_from_session(request: HttpRequest):
     request.session.save()
 
 
-def verify_workflow_access(
-    request,
-    wid: Optional[int],
+def acquire_workflow_access(
+    user: get_user_model(),
+    session: SessionStore,
+    wid: Optional[int] = None,
     select_related: Optional[Union[str, List]] = None,
-    prefetch_related:  Optional[Union[str, List]] = None,
-) -> Optional[models.Workflow]:
-    """Verify that the workflow stored in the request can be accessed.
+    prefetch_related: Optional[
+        Union[str, List]] = None) -> Optional[models.Workflow]:
+    """Acquire access to the workflow stored in the session or wid.
 
-    :param request: HTTP request object
-    :param wid: ID of the workflow that is being requested
+    :param user: User making the request
+    :param session: Session object to use for locking the workflow
+    :param wid: ID of the workflow that is being accessed
     :param select_related: Field to add as select_related query filter
     :param prefetch_related: Field to add as prefetch_related query filter
     :return: Workflow object or raise exception with message
     """
     # Lock the workflow object while deciding if it is accessible or not to
     # avoid race conditions.
-    sid = request.session.get('ontask_workflow_id')
+    sid = session.get('ontask_workflow_id')
     if wid is None and sid is None:
         # No key was given and none was found in the session (anomaly)
         return None
@@ -102,7 +98,7 @@ def verify_workflow_access(
 
         # Step 1: Get the workflow that is being accessed
         workflow = models.Workflow.objects.filter(id=wid).filter(
-            Q(user=request.user) | Q(shared__id=request.user.id),
+            Q(user=user) | Q(shared__id=user.id),
         )
 
         if not workflow:
@@ -125,15 +121,19 @@ def verify_workflow_access(
 
         # Step 2: If the workflow is locked by this user session, return
         # correct result (the session_key may be None if using the API)
-        if request.session.session_key == workflow.session_key:
+        if session.session_key == workflow.session_key:
             # Update nrows. Asynch execution of plugin may have modified it
-            store_workflow_nrows_in_session(request, workflow)
+            _store_workflow_nrows_in_session(session, workflow)
             return workflow
 
         # Step 3: If the workflow is unlocked, LOCK and return
         if not workflow.session_key:
             # Workflow is unlocked. Proceed to lock
-            return wf_lock_and_update(request, workflow, create_session=True)
+            return _wf_lock_and_update(
+                session,
+                user,
+                workflow,
+                create_session=True)
 
         # Step 4: The workflow is locked by a session different from this one.
         # See if the session locking it is still valid
@@ -144,13 +144,17 @@ def verify_workflow_access(
             # The session stored as locking the
             # workflow is no longer in the session table, so the user can
             # access the workflow
-            return wf_lock_and_update(request, workflow, create_session=True)
+            return _wf_lock_and_update(
+                session,
+                user,
+                workflow,
+                create_session=True)
 
         # Get the owner of the session locking the workflow
         user_id = session.get_decoded().get('_auth_user_id')
         if not user_id:
             # Session has no user_id, so proceed to lock the workflow
-            return wf_lock_and_update(request, workflow)
+            return _wf_lock_and_update(session, user, workflow)
 
         owner = get_user_model().objects.get(id=user_id)
 
@@ -158,8 +162,8 @@ def verify_workflow_access(
         # if the session locking happens to be from the same user (a
         # previous session that has not been properly closed, or an API
         # call from the same user)
-        if owner == request.user:
-            return wf_lock_and_update(request, workflow)
+        if owner == user:
+            return _wf_lock_and_update(session, user, workflow)
 
         # Step 6: The workflow is locked by an existing session. See if the
         # session is valid
@@ -171,4 +175,4 @@ def verify_workflow_access(
 
         # The workflow is locked by a session that has expired. Take the
         # workflow and lock it with the current session.
-        return wf_lock_and_update(request, workflow)
+        return _wf_lock_and_update(session, user, workflow)
