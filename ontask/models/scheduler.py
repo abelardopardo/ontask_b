@@ -37,8 +37,10 @@ SCHEDULED_STATUS = [
 ]
 
 OPERATION_TYPES = {
-    Log.ACTION_RUN_PERSONALIZED_EMAIL: Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_EMAIL],
-    Log.ACTION_RUN_PERSONALIZED_JSON: Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_JSON],
+    Log.ACTION_RUN_PERSONALIZED_EMAIL:
+        Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_EMAIL],
+    Log.ACTION_RUN_PERSONALIZED_JSON:
+        Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_JSON],
     Log.ACTION_RUN_JSON_LIST: Log.LOG_TYPES[Log.ACTION_RUN_JSON_LIST],
     Log.ACTION_RUN_EMAIL_LIST: Log.LOG_TYPES[Log.ACTION_RUN_EMAIL_LIST],
     Log.WORKFLOW_INCREASE_TRACK_COUNT: Log.LOG_TYPES[
@@ -213,7 +215,6 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
             'execute_until': simplify_datetime_str(self.execute_until),
             'item_column': self.item_column.name if self.item_column else '',
             'status': self.status,
-            'exclude_values': self.exclude_values,
             'payload': json.dumps(self.payload)}
 
         if self.action:
