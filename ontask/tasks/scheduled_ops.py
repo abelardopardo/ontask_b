@@ -63,8 +63,7 @@ def execute_scheduled_operation(s_item_id: int):
         s_item.refresh_from_db()
         if s_item.status != models.scheduler.STATUS_PENDING:
             if settings.DEBUG:
-                CELERY_LOGGER.info(
-                    'Operation with status {0}.'.format(s_item.status))
+                CELERY_LOGGER.info('Operation with status %s.', s_item.status)
             return
 
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
@@ -111,9 +110,8 @@ def execute_scheduled_operation(s_item_id: int):
             _update_item_status(s_item, run_result)
         except Exception as exc:
             CELERY_LOGGER.error(
-                'Error processing action {0}: {1}'.format(
-                    s_item.name,
-                    str(exc)))
+                'Error processing action %s:: %s',
+                s_item.name,
+                str(exc))
             models.ScheduledOperation.objects.filter(pk=s_item.id).update(
                 status=models.scheduler.STATUS_DONE_ERROR)
-

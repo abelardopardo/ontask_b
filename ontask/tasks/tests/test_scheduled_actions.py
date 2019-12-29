@@ -55,6 +55,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             user=user,
             operation_type=models.Log.ACTION_RUN_PERSONALIZED_EMAIL,
             name='send email action',
+            workflow=action.workflow,
             action=action,
             execute=now + self.tdelta,
             status=models.scheduler.STATUS_PENDING,
@@ -95,6 +96,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             user=user,
             operation_type=models.Log.ACTION_RUN_PERSONALIZED_JSON,
             name='JSON scheduled action',
+            workflow=action.workflow,
             action=action,
             execute=now + self.tdelta,
             status=models.scheduler.STATUS_PENDING,
@@ -113,7 +115,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         assert all(token in item['auth'] for item in json_outbox)
 
 
-    def test_scheduled_email_list_action(self):
+    def test_scheduled_email_list(self):
         """Create a scheduled send list action and execute it."""
 
         user = get_user_model().objects.get(email='instructor01@bogus.com')
@@ -127,6 +129,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             user=user,
             operation_type=models.Log.ACTION_RUN_EMAIL_LIST,
             name='send list scheduled action',
+            workflow=action.workflow,
             action=action,
             execute=now + self.tdelta,
             status=models.scheduler.STATUS_PENDING,
@@ -164,6 +167,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             user=user,
             operation_type=models.Log.ACTION_RUN_JSON_LIST,
             name='JSON List scheduled action',
+            workflow=action.workflow,
             action=action,
             execute=now + timedelta(minutes=2),
             status=models.scheduler.STATUS_PENDING,
@@ -179,7 +183,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         assert len(json_outbox) == 1
         assert all(token in item['auth'] for item in json_outbox)
 
-    def test_scheduled_incremental_email_action(self):
+    def test_scheduled_incremental_email(self):
         """Test an incremental scheduled action."""
         # Modify the data table so that initially all records have registered
         # equal to alse
@@ -201,6 +205,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             user=user,
             operation_type=models.Log.ACTION_RUN_PERSONALIZED_EMAIL,
             name='send email action incrementally',
+            workflow=action.workflow,
             action=action,
             execute=now,
             frequency='* * * * *',

@@ -16,6 +16,8 @@ from ontask.workflow.services import delete_column
 
 
 class TableApiBase(tests.OnTaskApiTestCase):
+    """Basic function and data for testing the API."""
+
     fixtures = ['simple_table']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -83,7 +85,7 @@ class TableApiBase(tests.OnTaskApiTestCase):
 
 
 class TableApiCreate(TableApiBase):
-    # Getting the table attached to the workflow
+    """Test the api to create a table."""
 
     def test_table_JSON_get(self):
         # Get the only workflow in the fixture
@@ -98,10 +100,10 @@ class TableApiCreate(TableApiBase):
         r_df = pandas.detect_datetime_columns(r_df)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
-        self.compare_tables(r_df, df)
+        self.compare_tables(r_df, dframe)
 
     # Getting the table attached to the workflow
     def test_table_pandas_get(self):
@@ -116,10 +118,10 @@ class TableApiCreate(TableApiBase):
         r_df = serializers.string_to_df(response.data['data_frame'])
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
-        self.compare_tables(r_df, df)
+        self.compare_tables(r_df, dframe)
 
     def test_table_try_JSON_overwrite(self):
         # Upload a table and try to overwrite an existing one (should fail)
@@ -179,13 +181,13 @@ class TableApiCreate(TableApiBase):
         workflow = models.Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
         # Transform new table into data frame
         r_df = pd.DataFrame(self.new_table)
         r_df = pandas.detect_datetime_columns(r_df)
 
         # Compare both elements
-        self.compare_tables(r_df, df)
+        self.compare_tables(r_df, dframe)
 
     def test_table_json_create_error(self):
         # Create a second workflow
@@ -232,10 +234,10 @@ class TableApiCreate(TableApiBase):
         workflow = models.Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
-        self.compare_tables(r_df, df)
+        self.compare_tables(r_df, dframe)
 
     def test_table_JSON_update(self):
         # Get the only workflow in the fixture
@@ -257,10 +259,10 @@ class TableApiCreate(TableApiBase):
         workflow = models.Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
-        self.compare_tables(r_df, df)
+        self.compare_tables(r_df, dframe)
 
     def test_table_pandas_update(self):
         # Get the only workflow in the fixture
@@ -282,10 +284,10 @@ class TableApiCreate(TableApiBase):
         workflow = models.Workflow.objects.get(id=workflow.id)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements
-        self.compare_tables(r_df, df)
+        self.compare_tables(r_df, dframe)
 
     def test_table_JSON_flush(self):
         # Get the only workflow in the fixture
@@ -323,10 +325,10 @@ class TableApiMerge(TableApiBase):
         r_df = pandas.detect_datetime_columns(r_df)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
-        self.compare_tables(r_df, df)
+        self.compare_tables(r_df, dframe)
 
     def test_table_pandas_merge_get(self):
         # Get the only workflow in the fixture
@@ -342,10 +344,10 @@ class TableApiMerge(TableApiBase):
         r_df = serializers.string_to_df(response.data['src_df'])
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
-        self.compare_tables(r_df, df)
+        self.compare_tables(r_df, dframe)
 
     # Merge and create an empty dataset
     def test_table_JSON_merge_to_empty(self):
@@ -534,8 +536,8 @@ class TableApiMerge(TableApiBase):
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 3)
 
-        df = pandas.load_table(workflow.get_data_frame_table_name())
-        self.assertEqual(df[df['sid'] == 1]['newcol'].values[0],
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
+        self.assertEqual(dframe[dframe['sid'] == 1]['newcol'].values[0],
                          self.src_df['newcol'][0])
 
     def test_table_pandas_merge_to_left(self):
@@ -562,8 +564,8 @@ class TableApiMerge(TableApiBase):
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 3)
 
-        df = pandas.load_table(workflow.get_data_frame_table_name())
-        self.assertEqual(df[df['sid'] == 1]['newcol'].values[0],
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
+        self.assertEqual(dframe[dframe['sid'] == 1]['newcol'].values[0],
                          self.src_df['newcol'][0])
 
     # Merge with outer values but producing NaN everywhere
@@ -589,8 +591,13 @@ class TableApiMerge(TableApiBase):
         r_df = pd.DataFrame(self.src_df2)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
-        new_df = pd.merge(df, r_df, how="outer", left_on="sid", right_on="sid")
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
+        new_df = pd.merge(
+            dframe,
+            r_df,
+            how="outer",
+            left_on="sid",
+            right_on="sid")
 
         # Get the data through the API
         self.client.put(
@@ -611,10 +618,10 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.ncols, 8)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
-        self.compare_tables(df, new_df)
+        self.compare_tables(dframe, new_df)
 
     def test_table_pandas_merge_to_outer_NaN(self):
         # Get the only workflow in the fixture
@@ -638,8 +645,13 @@ class TableApiMerge(TableApiBase):
         r_df = pd.DataFrame(self.src_df2)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
-        new_df = pd.merge(df, r_df, how="outer", left_on="sid", right_on="sid")
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
+        new_df = pd.merge(
+            dframe,
+            r_df,
+            how="outer",
+            left_on="sid",
+            right_on="sid")
 
         # Get the data through the API
         self.client.put(
@@ -660,7 +672,7 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.ncols, 8)
 
         # Load the df from the db
-        df = pandas.load_table(workflow.get_data_frame_table_name())
+        dframe = pandas.load_table(workflow.get_data_frame_table_name())
 
         # Compare both elements and check wf df consistency
-        self.compare_tables(df, new_df)
+        self.compare_tables(dframe, new_df)

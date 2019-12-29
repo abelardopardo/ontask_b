@@ -10,19 +10,19 @@ from ontask.tasks.execute_factory import (
 from ontask.tasks.scheduled_ops import execute_scheduled_operation
 from ontask.tasks.session_cleanup import session_cleanup
 
-clean_session_task_name = '__ONTASK_CLEANUP_SESSION_TASK'
-crontab_items = settings.SESSION_CLEANUP_CRONTAB.split()
-schedule, _ = CrontabSchedule.objects.get_or_create(
-    minute=crontab_items[0],
-    hour=crontab_items[1],
-    day_of_week=crontab_items[2],
-    day_of_month=crontab_items[3],
-    month_of_year=crontab_items[4])
+CLEAN_SESSION_TASK_NAME = '__ONTASK_CLEANUP_SESSION_TASK'
+CRONTAB_ITEMS = settings.SESSION_CLEANUP_CRONTAB.split()
+SCHEDULE, _ = CrontabSchedule.objects.get_or_create(
+    minute=CRONTAB_ITEMS[0],
+    hour=CRONTAB_ITEMS[1],
+    day_of_week=CRONTAB_ITEMS[2],
+    day_of_month=CRONTAB_ITEMS[3],
+    month_of_year=CRONTAB_ITEMS[4])
 
-clean_session_task = PeriodicTask.objects.filter(
-    name=clean_session_task_name).first()
-if not clean_session_task:
+CLEAN_SESSION_TASK = PeriodicTask.objects.filter(
+    name=CLEAN_SESSION_TASK_NAME).first()
+if not CLEAN_SESSION_TASK:
     PeriodicTask.objects.create(
-        crontab=schedule,
-        name=clean_session_task_name,
+        crontab=SCHEDULE,
+        name=CLEAN_SESSION_TASK_NAME,
         task='ontask.tasks.session_cleanup.session_cleanup')
