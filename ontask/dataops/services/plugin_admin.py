@@ -17,10 +17,9 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
-from ontask import models
+from ontask import models, settings as ontask_settings
 from ontask.dataops import services
 from ontask.dataops.plugin import ontask_plugin
-import ontask.settings
 
 
 class PluginAdminTable(tables.Table):
@@ -150,7 +149,7 @@ _checks = [
 
 
 def _get_plugin_path():
-    plugin_folder = str(getattr(ontask.settings, 'PLUGIN_DIRECTORY'))
+    plugin_folder = str(getattr(ontask_settings, 'PLUGIN_DIRECTORY'))
 
     if os.path.isabs(plugin_folder):
         return plugin_folder
@@ -226,7 +225,10 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if pinobj.description_text and isinstance(pinobj.description_text, str):
+        if pinobj.description_text and isinstance(
+            pinobj.description_text,
+            str
+        ):
             diag[check_idx] = _('Ok')
         else:
             diag[check_idx] = _('Incorrect type')
@@ -234,7 +236,8 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
 
         diag[check_idx] = _('Not found')
         if pinobj.input_column_names is not None and isinstance(
-            pinobj.input_column_names, list
+            pinobj.input_column_names,
+            list,
         ) and all(
             isinstance(colname, str)
             for colname in pinobj.input_column_names
@@ -246,7 +249,8 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
 
         diag[check_idx] = _('Not found')
         if pinobj.output_column_names is not None and isinstance(
-            pinobj.output_column_names, list
+            pinobj.output_column_names,
+            list,
         ) and all(
             isinstance(cname, str)
             for cname in pinobj.output_column_names
@@ -257,7 +261,10 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
         check_idx += 1
 
         diag[check_idx] = _('Not found')
-        if pinobj.parameters is None or not isinstance(pinobj.parameters, list):
+        if pinobj.parameters is None or not isinstance(
+            pinobj.parameters,
+            list
+        ):
             diag[check_idx] = _('Incorrect type')
             return list(zip(diag, _checks))
 

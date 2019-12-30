@@ -96,7 +96,7 @@ def _execute_plugin(
             sub_df.columns = plugin_instance.get_input_column_names()
     except Exception as exc:
         raise Exception(ugettext(
-                'Error when creating data frame for plugin: {0}'
+            'Error when creating data frame for plugin: {0}',
         ).format(str(exc)))
 
     # Try the execution and catch any exception
@@ -173,7 +173,7 @@ def _execute_plugin(
 
 
 class ExecuteRunPlugin:
-    """Process the request to run a plugin in a workflow"""
+    """Process the request to run a plugin in a workflow."""
 
     def __init__(self):
         """Assign default fields."""
@@ -241,5 +241,6 @@ class ExecuteRunPlugin:
             log_item.payload['status'] = 'Execution finished successfully'
             log_item.save()
         except Exception as exc:
-            log_item.payload['status'] = ugettext('Error: {0}').format(str(exc))
+            log_item.payload['status'] = ugettext(
+                'Error: {0}').format(str(exc))
             log_item.save()

@@ -5,7 +5,7 @@ from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.dataops import formula, sql
+from ontask.dataops import formula as dataops_formula, sql
 from ontask.models.column import Column
 from ontask.models.common import (
     CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CreateModifyFields)
@@ -118,9 +118,9 @@ class Condition(CreateModifyFields):
         :return: String
         """
         if not self.formula_text:
-            self.formula_text = formula.evaluate(
+            self.formula_text = dataops_formula.evaluate(
                 self.formula,
-                formula.EVAL_TXT)
+                dataops_formula.EVAL_TXT)
             self.save()
         return self.formula_text
 

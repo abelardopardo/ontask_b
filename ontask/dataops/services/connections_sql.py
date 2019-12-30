@@ -10,8 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import models
 from ontask.core import OperationsColumn
 from ontask.dataops.services.connections import (
-    ConnectionTableAdmin,
-    ConnectionTableSelect,
+    ConnectionTableAdmin, ConnectionTableSelect,
 )
 
 
@@ -90,9 +89,7 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
             'operations', op_column)])
 
 
-def sql_connection_select_table(
-    select_url: str
-) -> SQLConnectionTableSelect:
+def sql_connection_select_table(select_url: str) -> SQLConnectionTableSelect:
     """Create the table structure with the SQL connections for Running.
 
     :param select_url: URL to use for the select link in every row
@@ -115,5 +112,3 @@ def sql_connection_select_table(
         select_url=select_url,
         orderable=False,
         extra_columns=[('operations', operation_column)])
-
-

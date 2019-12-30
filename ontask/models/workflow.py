@@ -377,7 +377,6 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # Reset some of the workflow fields
         self.nrows = 0
         self.ncols = 0
-        self.n_filterd_rows = -1
         self.data_frame_table_name = ''
 
         # Step 2: Delete the conditions attached to all the actions attached
