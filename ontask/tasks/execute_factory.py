@@ -138,6 +138,10 @@ def execute_operation(
             payload=payload,
             log_item=log_item)
 
+        if log_id:
+            log_item.payload['status'] = 'Finished'
+            log_item.save()
+
     except Exception as exc:
         CELERY_LOGGER.error(
             ugettext('Error executing operation: {0}').format(exc))

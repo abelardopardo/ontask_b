@@ -20,7 +20,6 @@ def get_item_value_dictionary(sch_obj: models.ScheduledOperation) -> Dict:
     result['operation_type'] = models.Log.LOG_TYPES[result['operation_type']]
     if result['frequency']:
         result['frequency'] = str(ExpressionDescriptor(result['frequency']))
-    result['item_column'] = str(sch_obj.item_column)
     result['workflow'] = str(sch_obj.workflow)
     result['action'] = str(sch_obj.action)
     result['payload'] = json.dumps(result['payload'], indent=2)

@@ -46,7 +46,6 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
 
     def test_run_action_email_no_filter(self):
         """Run sequence of request to send email without filtering users."""
-        self.client.login(email=self.user_email, password=self.user_pwd)
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
 
@@ -82,8 +81,6 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
 
     def test_email_with_filter(self):
         """Run sequence of request to send email without filtering users."""
-        self.client.login(email=self.user_email, password=self.user_pwd)
-
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
         exclude_values = ['pzaz8370@bogus.com', 'tdrv2640@bogus.com']
@@ -205,7 +202,6 @@ class ActionViewRunEmailListAction(tests.OnTaskTestCase):
 
     def test_run_action_email_no_filter(self):
         """Run sequence of request to send email list ."""
-        self.client.login(email=self.user_email, password=self.user_pwd)
         action = self.workflow.actions.get(name='Send Email with list')
 
         # Step 1 invoke the form
@@ -264,7 +260,6 @@ class ActionViewRunJSONAction(tests.OnTaskTestCase):
     def test_run_json_action_no_filter(self):
         """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
-        self.client.login(email=self.user_email, password=self.user_pwd)
         action = self.workflow.actions.get(name='Send JSON to remote server')
         column = action.workflow.columns.get(name='email')
 
@@ -300,7 +295,6 @@ class ActionViewRunJSONAction(tests.OnTaskTestCase):
     def test_json_action_with_filter(self):
         """Test JSON action without using the filter execution."""
         OnTaskSharedState.json_outbox = None
-        self.client.login(email=self.user_email, password=self.user_pwd)
         action = self.workflow.actions.get(name='Send JSON to remote server')
         column = action.workflow.columns.get(name='email')
         exclude_values = ['pzaz8370@bogus.com', 'tdrv2640@bogus.com']
@@ -378,7 +372,6 @@ class ActionViewRunJSONListAction(tests.OnTaskTestCase):
     def test_run_json_list_action(self):
         """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
-        self.client.login(email=self.user_email, password=self.user_pwd)
         action = self.workflow.actions.get(name='Send list through JSON')
 
         # Step 1 invoke the form

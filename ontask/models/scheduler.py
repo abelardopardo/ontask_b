@@ -14,7 +14,6 @@ import pytz
 
 from ontask import simplify_datetime_str
 from ontask.models.action import Action
-from ontask.models.column import Column
 from ontask.models.common import (
     CHAR_FIELD_MID_SIZE, CreateModifyFields, NameAndDescription, Owner)
 from ontask.models.logs import Log
@@ -124,16 +123,6 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         on_delete=models.SET_NULL,
         related_name=_('scheduled_operation'))
 
-    # Column object denoting the one used to differentiate elements
-    item_column = models.ForeignKey(
-        Column,
-        db_index=False,
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
-        related_name='scheduled_actions',
-        verbose_name=_('Column to select the elements for the action'))
-
     # JSON element with additional information
     payload = JSONField(
         default=dict,
@@ -213,7 +202,6 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
             'execute': simplify_datetime_str(self.execute),
             'frequency': self.frequency,
             'execute_until': simplify_datetime_str(self.execute_until),
-            'item_column': self.item_column.name if self.item_column else '',
             'status': self.status,
             'payload': json.dumps(self.payload)}
 

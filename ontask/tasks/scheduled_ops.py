@@ -86,8 +86,6 @@ def execute_scheduled_operation(s_item_id: int):
             s_item.save()
 
             payload = s_item.payload
-            if s_item.item_column:
-                payload['item_column'] = s_item.item_column.pk
 
             task_execute_factory.execute_operation(
                 operation_type=s_item.operation_type,
