@@ -8,7 +8,7 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 import pandas as pd
 from pyathena import connect
-from smart_open import smart_open
+import smart_open
 
 from ontask import models
 from ontask.dataops import pandas, sql
@@ -156,11 +156,18 @@ def load_df_from_s3(
         # If key/secret are given, create prefix
         path_prefix = '{0}:{1}@'.format(aws_key, aws_secret)
 
-    data_frame = pd.read_csv(
-        smart_open('s3://{0}{1}/{2}'.format(
+    if settings.ONTASK_TESTING:
+        uri = 'file:///{1}/{2}'.format(
             path_prefix,
             bucket_name,
-            file_path)),
+            file_path)
+    else:
+        uri = 's3://{0}{1}/{2}'.format(
+            path_prefix,
+            bucket_name,
+            file_path)
+    data_frame = pd.read_csv(
+        smart_open.open(uri),
         index_col=False,
         infer_datetime_format=True,
         quotechar='"',
@@ -288,8 +295,7 @@ def batch_load_df_from_athenaconnection(
         'src_is_key_column': is_key,
         'rename_column_names': col_names[:],
         'columns_to_upload': [True] * len(col_names),
-        'keep_key_column': is_key[:]
-    }
+        'keep_key_column': is_key[:]}
 
     if not workflow.has_data_frame():
         # Regular load operation
