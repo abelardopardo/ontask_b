@@ -4149,8 +4149,8 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 4,
-        "item_column": 2,
         "payload": {
+            "item_column": 2,
             "exclude_values": [],
             "subject": "subject",
             "cc_email": "ccemail@bogus.com",
@@ -4179,8 +4179,8 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 8,
-        "item_column": 2,
         "payload": {
+            "item_column": 2,
             "exclude_values": [],
             "subject": "rubric subject",
             "cc_email": "",
@@ -4209,7 +4209,6 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 9,
-        "item_column": null,
         "payload": {
             "subject": "Email subject",
             "cc_email": "",
@@ -4237,8 +4236,8 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 5,
-        "item_column": 2,
         "payload": {
+            "item_column": 2,
             "exclude_values": [],
             "token": "fake token"
         }
@@ -4263,7 +4262,6 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 10,
-        "item_column": null,
         "payload": {
             "token": "TOKEN"
         }

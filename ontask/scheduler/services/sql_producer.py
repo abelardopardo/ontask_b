@@ -44,8 +44,6 @@ class ScheduledOperationSaveSQLUpload(ScheduledOperationSaveBase):
         if s_item:
             payload.update(s_item.payload)
             payload['schedule_id'] = s_item.id
-            if s_item.item_column:
-                payload['item_column'] = s_item.item_column.pk
             payload['connection_id'] = s_item.payload['connection_id']
         else:
             payload['connection_id'] = kwargs.get('connection').id

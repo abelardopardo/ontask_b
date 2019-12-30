@@ -225,6 +225,7 @@ def _create_messages(
 
     # Everything seemed to work to create the messages.
     msgs = []
+    column_to = action.workflow.columns.get(pk=payload['item_column']).name
     # for msg_body, msg_subject, msg_to in action_evals:
     for msg_body_sbj_to in action_evals:
         # If read tracking is on, add suffix for message (or empty)
@@ -243,7 +244,7 @@ def _create_messages(
                         'action': action.id,
                         'sender': user.email,
                         'to': msg_body_sbj_to[2],
-                        'column_to': payload['item_column'],
+                        'column_to': column_to,
                         'column_dst': track_col_name,
                     },
                 ),
@@ -352,11 +353,6 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         :param payload: Dictionary key, value
         :return: Nothing
         """
-        # Evaluate the action string, evaluate the subject, and get the value
-        # of the email column.
-        if log_item is None:
-            log_item = action.log(user, self.log_event, **payload)
-
         item_column = action.workflow.columns.get(pk=payload['item_column'])
         action_evals = evaluate_action(
             action,

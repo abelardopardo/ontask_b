@@ -147,11 +147,6 @@ class ScheduledOperationSaveBase:
         s_item.name = data_dict.pop('name')
         s_item.description_text = data_dict.pop('description_text')
 
-        column = data_dict.pop('item_column', None)
-        if isinstance(column, int):
-            column = s_item.workflow.columns.filter(pk=column).first()
-        s_item.item_column = column
-
         execute = data_dict.pop('execute', '')
         if isinstance(execute, str):
             execute = parse_datetime(execute)
@@ -172,6 +167,11 @@ class ScheduledOperationSaveBase:
         else:
             # Object is coming through the WEB interface
             s_item.payload = dict(data_dict)
+
+        column = s_item.payload.get('item_column')
+        if isinstance(column, str):
+            column = s_item.workflow.columns.filter(name=column).first()
+            s_item.payload['item_column'] = column.id
 
         s_item.save()
 

@@ -59,8 +59,8 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             action=action,
             execute=now + self.tdelta,
             status=models.scheduler.STATUS_PENDING,
-            item_column=action.workflow.columns.get(name='email'),
             payload={
+                'item_column': action.workflow.columns.get(name='email').id,
                 'subject': 'Email subject',
                 'cc_email': '',
                 'bcc_email': '',
@@ -100,8 +100,9 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             action=action,
             execute=now + self.tdelta,
             status=models.scheduler.STATUS_PENDING,
-            item_column=action.workflow.columns.get(name='email'),
-            payload={'token': token})
+            payload={
+                'item_column': action.workflow.columns.get(name='email').id,
+                'token': token})
         scheduled_item.save()
 
         # Execute the scheduler
@@ -113,7 +114,6 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         assert len(json_outbox) == 3
         assert all(item['target'] == action.target_url for item in json_outbox)
         assert all(token in item['auth'] for item in json_outbox)
-
 
     def test_scheduled_email_list(self):
         """Create a scheduled send list action and execute it."""
@@ -211,8 +211,8 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
             frequency='* * * * *',
             execute_until=now + timedelta(hours=1),
             status=models.scheduler.STATUS_PENDING,
-            item_column=action.workflow.columns.get(name='email'),
             payload={
+                'item_column': action.workflow.columns.get(name='email').id,
                 'exclude_values': [],
                 'subject': 'Email subject',
                 'cc_email': '',
@@ -233,10 +233,10 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         with connection.cursor() as cursor:
             query = sql.SQL(
                 'UPDATE {0} SET {1} = true WHERE {2} = {3}').format(
-                    sql.Identifier(workflow.get_data_frame_table_name()),
-                    sql.Identifier('registered'),
-                    sql.Identifier('email'),
-                    sql.Placeholder())
+                sql.Identifier(workflow.get_data_frame_table_name()),
+                sql.Identifier('registered'),
+                sql.Identifier('email'),
+                sql.Placeholder())
             cursor.execute(query, ['student01@bogus.com'])
 
         # Execute the scheduler for the first time
@@ -252,10 +252,10 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         with connection.cursor() as cursor:
             query = sql.SQL(
                 'UPDATE {0} SET {1} = true WHERE {2} = {3}').format(
-                    sql.Identifier(workflow.get_data_frame_table_name()),
-                    sql.Identifier('registered'),
-                    sql.Identifier('email'),
-                    sql.Placeholder())
+                sql.Identifier(workflow.get_data_frame_table_name()),
+                sql.Identifier('registered'),
+                sql.Identifier('email'),
+                sql.Placeholder())
             cursor.execute(query, ['student02@bogus.com'])
 
         # Execute the scheduler for the first time
@@ -272,10 +272,10 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         with connection.cursor() as cursor:
             query = sql.SQL(
                 'UPDATE {0} SET {1} = true WHERE {2} = {3}').format(
-                    sql.Identifier(workflow.get_data_frame_table_name()),
-                    sql.Identifier('registered'),
-                    sql.Identifier('email'),
-                    sql.Placeholder())
+                sql.Identifier(workflow.get_data_frame_table_name()),
+                sql.Identifier('registered'),
+                sql.Identifier('email'),
+                sql.Placeholder())
             cursor.execute(query, ['student03@bogus.com'])
 
         # Execute the scheduler for the first time

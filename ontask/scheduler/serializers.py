@@ -15,10 +15,6 @@ from ontask.scheduler.services import schedule_crud_factory
 class ScheduledOperationSerializer(serializers.ModelSerializer):
     """Serializer to take care of a few fields and the item column."""
 
-    item_column = serializers.CharField(
-        source='item_column_name',
-        required=False)
-
     def extra_validation(self, validated_data: Dict):
         """Check for extra properties.
 
@@ -29,13 +25,13 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
 
         - The execute time must be in the future
 
+        - The received object has a payload
+
         - The item_column, if present, must be a correct column name
 
         - Exclude_values must be a list
 
         - Exclude_values can only be non-empty if item_column is given.
-
-        - The received object has a payload
 
         :param validated_data:
         :return: Nothing. Exceptions are raised when anomalies are detected
@@ -62,8 +58,13 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         if diagnostic_msg:
             raise APIException(diagnostic_msg)
 
+        # Check that the received object has a payload
+        payload = validated_data.get('payload', {})
+        if not payload:
+            raise APIException(_('Scheduled objects need a payload.'))
+
         # Item_column, if present has to be a correct column name
-        item_column = validated_data.get('item_column_name')
+        item_column = payload.get('item_column')
         if item_column:
             item_column = action.workflow.columns.filter(
                 name=item_column,
@@ -72,11 +73,6 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
                 raise APIException(
                     _('Invalid column name for selecting items'))
 
-        # Check that the received object has a payload
-        payload = validated_data.get('payload', {})
-        if not payload:
-            raise APIException(_('Scheduled objects need a payload.'))
-
         exclude_values = payload.get('exclude_values', [])
         # Exclude_values has to be a list
         if exclude_values is not None and not isinstance(exclude_values, list):
@@ -84,7 +80,8 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
 
         # Exclude_values can only have content if item_column is given.
         if not item_column and payload.get('exclude_values'):
-            raise APIException(_('Exclude items needs a value in item_column'))
+            raise APIException(
+                _('Exclude items needs a column in item_column'))
 
     def create(self, validated_data, **kwargs) -> models.ScheduledOperation:
         """Create a new instance of the scheduled data."""
@@ -131,7 +128,6 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
             'execute_until',
             'workflow',
             'action',
-            'item_column',
             'payload')
 
 
@@ -144,10 +140,17 @@ class ScheduledEmailSerializer(ScheduledOperationSerializer):
 
         action = validated_data['action']
         payload = validated_data['payload']
-        item_column_name = validated_data.pop('item_column_name', None)
+        item_column_name = payload.get('item_column')
         if not item_column_name:
-            raise APIException(_('Personalized text needs an item_column'))
-        item_column = action.workflow.columns.get(name=item_column_name)
+            raise APIException(
+                _('Personalized text need a column name in payload '
+                  'field item_column.'))
+
+        item_column = action.workflow.columns.filter(
+            name=item_column_name).first()
+        if not item_column:
+            raise APIException(
+                _('Incorrect column name in field item_column.'))
 
         if action.action_type != models.Action.PERSONALIZED_TEXT:
             raise APIException(_('Incorrect type of action to schedule.'))
@@ -170,7 +173,7 @@ class ScheduledEmailSerializer(ScheduledOperationSerializer):
         except TypeError:
             raise APIException(
                 _('The column with email addresses has incorrect values.'))
-        validated_data['item_column'] = item_column
+        payload['item_column'] = item_column.id
 
         try:
             if not all(
@@ -203,13 +206,22 @@ class ScheduledJSONSerializer(ScheduledOperationSerializer):
         super().extra_validation(validated_data)
 
         action = validated_data['action']
-        payload = validated_data['payload']
-        item_column_name = validated_data.pop('item_column_name')
-        item_column = action.workflow.columns.get(name=item_column_name)
-        validated_data['item_column'] = item_column
-
         if action.action_type != models.Action.PERSONALIZED_JSON:
             raise APIException(_('Incorrect type of action to schedule.'))
+
+        payload = validated_data['payload']
+        item_column_name = payload.get('item_column')
+        if not item_column_name:
+            raise APIException(
+                _('Personalized text need a column name in payload '
+                  'field item_column.'))
+
+        item_column = action.workflow.columns.filter(
+            name=item_column_name).first()
+        if not item_column:
+            raise APIException(
+                _('Incorrect column name in field item_column.'))
+        payload['item_column'] = item_column.id
 
         if not payload.get('token'):
             raise APIException(_(

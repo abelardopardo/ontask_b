@@ -28,6 +28,7 @@ class ActionRunManager:
 
         log_payload = dict(payload)
         log_payload['operation_type'] = self.log_event
+        log_payload['action'] = action.name
         return action.log(user, **log_payload)
 
     @staticmethod
