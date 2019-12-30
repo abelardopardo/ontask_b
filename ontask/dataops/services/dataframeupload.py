@@ -157,8 +157,7 @@ def load_df_from_s3(
         path_prefix = '{0}:{1}@'.format(aws_key, aws_secret)
 
     if settings.ONTASK_TESTING:
-        uri = 'file:///{1}/{2}'.format(
-            path_prefix,
+        uri = 'file:///{0}/{1}'.format(
             bucket_name,
             file_path)
     else:
@@ -233,7 +232,7 @@ def batch_load_df_from_athenaconnection(
     workflow: models.Workflow,
     conn: models.AthenaConnection,
     run_params: Dict,
-    log_item: models.Log
+    log_item: models.Log,
 ):
     """Batch load a DF from an Athena connection.
 
@@ -300,8 +299,8 @@ def batch_load_df_from_athenaconnection(
     if not workflow.has_data_frame():
         # Regular load operation
         pandas.store_workflow_table(workflow, upload_data)
-        log_item.payload['col_names'] = col_names,
-        log_item.payload['col_types'] = col_types,
+        log_item.payload['col_names'] = col_names
+        log_item.payload['col_types'] = col_types
         log_item.payload['column_unique'] = is_key
         log_item.payload['num_rows'] = workflow.nrows
         log_item.payload['num_cols'] = workflow.ncols
@@ -334,8 +333,8 @@ def batch_load_df_from_athenaconnection(
             str(exc)))
 
     col_names, col_types, is_key = workflow.get_column_info()
-    log_item.payload['col_names'] = col_names,
-    log_item.payload['col_types'] = col_types,
+    log_item.payload['col_names'] = col_names
+    log_item.payload['col_types'] = col_types
     log_item.payload['column_unique'] = is_key
     log_item.payload['num_rows'] = workflow.nrows
     log_item.payload['num_cols'] = workflow.ncols

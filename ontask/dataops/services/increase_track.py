@@ -27,7 +27,7 @@ class ExecuteIncreaseTrackCount:
         payload: Optional[Dict] = None,
         log_item: Optional[models.Log] = None,
     ):
-        """Function to process track requests asynchronously.
+        """Process track requests asynchronously.
 
         :param user: User object
         :param workflow: Optional workflow object
@@ -99,10 +99,9 @@ class ExecuteIncreaseTrackCount:
                     action.workflow.get_data_frame_table_name(),
                     column_dst,
                     column_to,
-                    msg_to
-                )
-            except Exception as e:
-                log_payload['EXCEPTION_MSG'] = str(e)
+                    msg_to)
+            except Exception as exc:
+                log_payload['EXCEPTION_MSG'] = str(exc)
             else:
                 # Get the tracking column and update all the conditions in the
                 # actions that have this column as part of their formulas
