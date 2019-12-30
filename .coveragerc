@@ -4,6 +4,7 @@ omit =
     */tests/*
     */migration*
     ontask/accounts/*
+    ontask/lti/*
     ontask/management/*
     ontask/django_auth_lti/*
     ontask/profiles/*
@@ -18,11 +19,12 @@ omit =
     */tests/*
     */migration*
     ontask/accounts/*
+    ontask/lti/*
     ontask/management/*
     ontask/django_auth_lti/*
     ontask/profiles/*
     settings/*
-    /wsgi.py
+    wsgi.py
     ontask/visualizations/rgraph.py
     ontask/visualizations/vega.py
 
