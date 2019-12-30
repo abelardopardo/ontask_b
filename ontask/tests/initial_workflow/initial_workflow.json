@@ -16,11 +16,193 @@
     }
 },
 {
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 1,
+    "fields": {
+        "clocked_time": "2119-12-07T11:13:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 2,
+    "fields": {
+        "clocked_time": "2119-12-07T11:18:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 3,
+    "fields": {
+        "clocked_time": "2119-12-07T11:20:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 4,
+    "fields": {
+        "clocked_time": "2119-12-07T11:22:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 5,
+    "fields": {
+        "clocked_time": "2119-12-07T11:25:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.periodictasks",
+    "pk": 1,
+    "fields": {
+        "last_update": "2019-12-30T21:16:19.572Z"
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 1,
+    "fields": {
+        "name": "___ontask___scheduled_2",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 1,
+        "args": "[2]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2019-12-30T21:16:19.535Z",
+        "description": ""
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 2,
+    "fields": {
+        "name": "___ontask___scheduled_3",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 2,
+        "args": "[3]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2019-12-30T21:16:19.548Z",
+        "description": ""
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 3,
+    "fields": {
+        "name": "___ontask___scheduled_4",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 3,
+        "args": "[4]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2019-12-30T21:16:19.556Z",
+        "description": ""
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 4,
+    "fields": {
+        "name": "___ontask___scheduled_5",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 4,
+        "args": "[5]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2019-12-30T21:16:19.565Z",
+        "description": ""
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 5,
+    "fields": {
+        "name": "___ontask___scheduled_6",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 5,
+        "args": "[6]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2019-12-30T21:16:19.573Z",
+        "description": ""
+    }
+},
+{
     "model": "authtools.user",
     "pk": 1,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VlpTV3RVZUU5dkh1$iFEi/ej6nCIXpLiOgRLdVA",
-        "last_login": "2019-12-07T10:08:06.026Z",
+        "last_login": "2019-12-30T21:16:53.420Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -380,7 +562,7 @@
     "pk": 21,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$STBhcmlYNGIweGtn$SDlxz/4KX/mP5TrzHUTVwQ",
-        "last_login": "2019-12-07T08:57:49.344Z",
+        "last_login": "2019-12-30T21:17:12.655Z",
         "is_superuser": true,
         "email": "superuser@bogus.com",
         "is_staff": true,
@@ -461,6 +643,181 @@
         "app": "ontask",
         "name": "help_url",
         "text": "html/index.html"
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "superuser@bogus.com"
+        ],
+        "created": "2019-12-30T21:20:12.894Z",
+        "modified": "2019-12-30T21:20:12.894Z",
+        "name": "sql_connection_clone",
+        "workflow": null,
+        "payload": {
+            "id": 3,
+            "name": "Copy of remote server2",
+            "id_old": 2,
+            "db_host": "localhost",
+            "db_name": "ontask_b",
+            "db_port": 5432,
+            "db_user": "",
+            "db_table": "__ONTASK_TEST_TABLE",
+            "name_old": "remote server2",
+            "conn_type": "postgresql",
+            "conn_driver": "",
+            "db_password": ""
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "superuser@bogus.com"
+        ],
+        "created": "2019-12-30T21:20:46.215Z",
+        "modified": "2019-12-30T21:20:46.215Z",
+        "name": "sql_connection_edit",
+        "workflow": null,
+        "payload": {
+            "id": 2,
+            "name": "remote server 3",
+            "db_host": "localhost",
+            "db_name": "ontask_b",
+            "db_port": 5432,
+            "db_user": "",
+            "db_table": null,
+            "conn_type": "postgresql",
+            "conn_driver": "",
+            "db_password": ""
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "superuser@bogus.com"
+        ],
+        "created": "2019-12-30T21:21:33.883Z",
+        "modified": "2019-12-30T21:21:33.883Z",
+        "name": "sql_connection_edit",
+        "workflow": null,
+        "payload": {
+            "id": 3,
+            "name": "remote server2",
+            "db_host": "localhost",
+            "db_name": "ontask_b",
+            "db_port": 5432,
+            "db_user": "",
+            "db_table": "__ONTASK_TEST_TABLE",
+            "conn_type": "postgresql",
+            "conn_driver": "",
+            "db_password": ""
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "superuser@bogus.com"
+        ],
+        "created": "2019-12-30T21:22:48.294Z",
+        "modified": "2019-12-30T21:22:48.294Z",
+        "name": "sql_connection_edit",
+        "workflow": null,
+        "payload": {
+            "id": 3,
+            "name": "remote server 2",
+            "db_host": "localhost",
+            "db_name": "ontask_b",
+            "db_port": 5432,
+            "db_user": "",
+            "db_table": "__ONTASK_TEST_TABLE",
+            "conn_type": "postgresql",
+            "conn_driver": "",
+            "db_password": ""
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "superuser@bogus.com"
+        ],
+        "created": "2019-12-30T21:25:39.624Z",
+        "modified": "2019-12-30T21:25:39.624Z",
+        "name": "sql_connection_edit",
+        "workflow": null,
+        "payload": {
+            "id": 3,
+            "name": "remote server 2",
+            "db_host": "localhost",
+            "db_name": "ontask_b",
+            "db_port": 5432,
+            "db_user": "",
+            "db_table": "__ONTASK_TEST_TABLE",
+            "conn_type": "postgresql",
+            "conn_driver": "",
+            "db_password": ""
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "superuser@bogus.com"
+        ],
+        "created": "2019-12-30T21:26:11.673Z",
+        "modified": "2019-12-30T21:26:11.673Z",
+        "name": "sql_connection_edit",
+        "workflow": null,
+        "payload": {
+            "id": 2,
+            "name": "remote server 3",
+            "db_host": "localhost",
+            "db_name": "ontask_b",
+            "db_port": 5432,
+            "db_user": "",
+            "db_table": null,
+            "conn_type": "postgresql",
+            "conn_driver": "",
+            "db_password": ""
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "superuser@bogus.com"
+        ],
+        "created": "2019-12-30T21:27:04.875Z",
+        "modified": "2019-12-30T21:27:04.875Z",
+        "name": "athena_connection_toggle",
+        "workflow": null,
+        "payload": {
+            "id": 1,
+            "name": "athena connection",
+            "enabled": false,
+            "table_name": "",
+            "aws_file_path": "[FILE PATH WITHIN BUCKET HERE]",
+            "aws_access_key": "[YOUR AWS ACCESS KEY HERE]",
+            "aws_bucket_name": "[S3 BUCKET NAME HERE]",
+            "aws_region_name": "[AWS REGION NAME HERE]"
+        }
     }
 },
 {
@@ -3799,7 +4156,7 @@
     "fields": {
         "name": "athena connection",
         "description_text": "Connection to amazon athena server",
-        "enabled": true,
+        "enabled": false,
         "aws_access_key": "[YOUR AWS ACCESS KEY HERE]",
         "aws_secret_access_key": "[YOUR AWS SECRET ACCESS KEY HERE]",
         "aws_session_token": "",
@@ -4149,13 +4506,14 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 4,
+        "task": 1,
         "payload": {
-            "item_column": 2,
-            "exclude_values": [],
             "subject": "subject",
             "cc_email": "ccemail@bogus.com",
             "bcc_email": "gccemail@bogus.com",
             "track_read": false,
+            "item_column": 2,
+            "exclude_values": [],
             "send_confirmation": false
         }
     }
@@ -4179,13 +4537,14 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 8,
+        "task": 2,
         "payload": {
-            "item_column": 2,
-            "exclude_values": [],
             "subject": "rubric subject",
             "cc_email": "",
             "bcc_email": "",
             "track_read": false,
+            "item_column": 2,
+            "exclude_values": [],
             "send_confirmation": false
         }
     }
@@ -4209,6 +4568,7 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 9,
+        "task": 3,
         "payload": {
             "subject": "Email subject",
             "cc_email": "",
@@ -4236,10 +4596,11 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 5,
+        "task": 4,
         "payload": {
+            "token": "fake token",
             "item_column": 2,
-            "exclude_values": [],
-            "token": "fake token"
+            "exclude_values": []
         }
     }
 },
@@ -4262,6 +4623,7 @@
         "last_executed_log": null,
         "workflow": 1,
         "action": 10,
+        "task": 5,
         "payload": {
             "token": "TOKEN"
         }
@@ -4288,13 +4650,30 @@
     "model": "ontask.sqlconnection",
     "pk": 2,
     "fields": {
-        "name": "remote server2",
-        "description_text": "Server with student records2",
+        "name": "remote server 3",
+        "description_text": "Points to localhost / no table name",
         "enabled": true,
         "conn_type": "postgresql",
         "conn_driver": "",
         "db_user": "",
-        "db_password": "",
+        "db_password": null,
+        "db_host": "localhost",
+        "db_port": 5432,
+        "db_name": "ontask_b",
+        "db_table": null
+    }
+},
+{
+    "model": "ontask.sqlconnection",
+    "pk": 3,
+    "fields": {
+        "name": "remote server 2",
+        "description_text": "Points to localhost / __ONTASK_TEST_TABLE",
+        "enabled": true,
+        "conn_type": "postgresql",
+        "conn_driver": "",
+        "db_user": "",
+        "db_password": null,
         "db_host": "localhost",
         "db_port": 5432,
         "db_name": "ontask_b",
