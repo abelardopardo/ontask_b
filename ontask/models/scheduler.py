@@ -130,10 +130,6 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         null=True,
         verbose_name=_('payload'))
 
-    def item_column_name(self) -> Optional[str]:
-        """Column name or None."""
-        return self.item_column.name if self.item_column else None
-
     @staticmethod
     def validate_times(execute, frequency, execute_until) -> Optional[str]:
         """Verify that the execute, frequency and execute_until are correct.
