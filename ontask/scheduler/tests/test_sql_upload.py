@@ -150,9 +150,7 @@ class SchedulerViewCreateSQLUpload(tests.OnTaskTestCase):
             self.assertTrue(sql_conn.name in str(resp.content))
 
         # Get the connection pointing to localhost
-        sql_conn = models.SQLConnection.objects.filter(
-            db_host='localhost').first()
-        self.assertIsNotNone(sql_conn)
+        sql_conn = models.SQLConnection.objects.get(name='remote server 2')
 
         # Modify connection to point to the test DB
         sql_conn.db_name = settings.DATABASE_URL['NAME']

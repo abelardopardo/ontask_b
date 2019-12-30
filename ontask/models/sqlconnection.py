@@ -58,8 +58,7 @@ class SQLConnection(Connection):
         verbose_name=_('Password'),
         null=True,
         blank=True,
-        help_text=_('Leave empty to enter at execution')
-    )
+        help_text=_('Leave empty to enter at execution'))
 
     # DB host
     db_host = models.CharField(
@@ -87,7 +86,8 @@ class SQLConnection(Connection):
         verbose_name=_('Database table'),
         default='',
         null=True,
-        blank=True)
+        blank=True,
+        help_text=_('Leave empty to enter at execution'))
 
     clone_event = Log.SQL_CONNECTION_CLONE
     create_event = Log.SQL_CONNECTION_CREATE

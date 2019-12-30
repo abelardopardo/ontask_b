@@ -19,26 +19,21 @@
     $(document).ready(function() {
       var action_table = $('#action-table').DataTable({
         "autoWidth": false,
-        "search": {
-          "caseInsensitive": true,
-        },
+        "search": {"caseInsensitive": true},
         "stateSave": true,
         "stateSaveParams": function (settings, data) {
           delete data.search;
+          delete data.ColReorder;
         },
-        "language": {
-          "url": location.protocol + getLanguage()
-        },
+        "language": {"url": location.protocol + getLanguage()},
+        "order": [[1, 'asc']],
         "columnDefs": [
           {"className": "dt-center", "targets": [1, 2, 4]},
           {"orderable": false, "targets": [0, 2]},
-          {"searchable": false, "targets": [0]},
+          {"searchable": false, "targets": [0, 2]},
         ],
         "colReorder": false,
         "rowReorder": false,
-      });
-      action_table.columns().iterator('column', function (ctx, idx) {
-        $(action_table.column(idx).header()).append('<span class="sort-icon"/>');
       });
     });
   </script>
