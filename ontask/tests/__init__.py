@@ -81,6 +81,8 @@ class ElementHasFullOpacity:
 class OnTaskBasicTestCase(TransactionTestCase):
     """Basic test case to prepare/dismantle tests."""
 
+    reset_sequences = True
+
     fixtures = []
     filename = None
 
