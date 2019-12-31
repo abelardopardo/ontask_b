@@ -429,7 +429,7 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
 
         # Rename second attribute
         self.selenium.find_element_by_xpath(
-            "//tr/td[2][normalize-space() = 'key2']/../td[1]/div/a"
+            "//tr/td[2][normalize-space() = 'key2']/../td[1]/div/button[1]"
         ).click()
         self.wait_for_modal_open()
         self.selenium.find_element_by_id('id_key').clear()
