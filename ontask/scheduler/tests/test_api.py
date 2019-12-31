@@ -32,179 +32,6 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         token = Token.objects.get(user__email='instructor01@bogus.com')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-    def test_schedule_email(self):
-        action_name = 'simple action'
-
-        s_subject = 'subject'
-        # Get list of workflows
-        response = self.client.get(reverse('scheduler:api_scheduled_email'))
-
-        self.assertEqual(response.data['count'], 0)
-        self.assertEqual(response.data['next'], None)
-        self.assertEqual(response.data['previous'], None)
-
-        # Get the action
-        action = models.Action.objects.get(
-            name=action_name,
-            workflow__name='wflow1')
-
-        # Schedule one of the actions
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': self.s_name,
-                'description_text': self.s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'subject': s_subject,
-                    'cc_email': '',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False,
-                },
-            },
-            format='json')
-
-        # Element has been scheduled
-        self.assertEqual(response.status_code, 201)
-
-        sch_item = models.ScheduledOperation.objects.get(action=action)
-        self.assertEqual(sch_item.name, self.s_name)
-        self.assertEqual(sch_item.description_text, self.s_desc)
-        self.assertEqual(sch_item.action, action)
-        self.assertEqual(sch_item.payload['subject'], s_subject)
-
-        # Update the element
-        response = self.client.put(
-            reverse('scheduler:api_rud_email', kwargs={'pk': sch_item.id}),
-            {
-                'name': self.s_name + '2',
-                'description_text': self.s_desc,
-                'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'subject': s_subject,
-                    'cc_email': '',
-                    'bcc_email': '',
-                    'track_read': False,
-                    'send_confirmation': False}},
-            format='json'
-        )
-
-        # Element has been scheduled
-        self.assertTrue(status.is_success(response.status_code))
-
-        sch_item = models.ScheduledOperation.objects.get(action=action)
-        self.assertEqual(sch_item.name, self.s_name + '2')
-
-        # Delete the element
-        response = self.client.delete(
-            reverse('scheduler:api_rud_email', kwargs={'pk': sch_item.id})
-        )
-        self.assertEqual(response.status_code, 204)
-
-    def test_schedule_json(self):
-        action_name = 'json action'
-        # Get list of workflows
-        response = self.client.get(reverse('scheduler:api_scheduled_json'))
-
-        self.assertEqual(response.data['count'], 0)
-        self.assertEqual(response.data['next'], None)
-        self.assertEqual(response.data['previous'], None)
-
-        # Get the action
-        action = models.Action.objects.get(
-            name=action_name,
-            workflow__name='wflow1')
-
-        # Schedule one of the actions
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_json'),
-            {
-                'name': self.s_name,
-                'description_text': self.s_desc,
-                'operation_type': 'action_run_personalized_json',
-                'workflow': action.workflow.id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'token': 'whatever',
-                    'field1': 'value1',
-                    'field2': 'value2',
-                },
-            },
-            format='json')
-
-        # Element has been created
-        self.assertEqual(response.status_code, 201)
-
-        sch_item = models.ScheduledOperation.objects.get(action=action)
-        self.assertEqual(sch_item.name, self.s_name)
-        self.assertEqual(sch_item.description_text, self.s_desc)
-        self.assertEqual(sch_item.action, action)
-
-        # Update the element
-        response = self.client.put(
-            reverse('scheduler:api_rud_json', kwargs={'pk': sch_item.id}),
-            {
-                'name': self.s_name + '2',
-                'description_text': self.s_desc,
-                'operation_type': 'action_run_personalized_json',
-                'workflow': action.workflow.id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'token': 'whatever',
-                    'field1': 'value1',
-                    'field2': 'value2',
-                },
-            },
-            format='json'
-        )
-
-        # Element has been scheduled
-        self.assertTrue(status.is_success(response.status_code))
-
-        sch_item = models.ScheduledOperation.objects.get(action=action)
-        self.assertEqual(sch_item.name, self.s_name + '2')
-
-        # Delete the element
-        response = self.client.delete(
-            reverse('scheduler:api_rud_json', kwargs={'pk': sch_item.id})
-        )
-        self.assertEqual(response.status_code, 204)
-
-        # Schedule the action with the wrong function
-        response = self.client.post(
-            reverse('scheduler:api_scheduled_email'),
-            {
-                'name': self.s_name,
-                'description_text': self.s_desc,
-                'operation_type': 'action_run_personalized_json',
-                'workflow': action.workflow.id,
-                'action': action.id,
-                'execute': self.s_execute,
-                'payload': {
-                    'item_column': 'email',
-                    'token': 'whatever',
-                    'field1': 'value1',
-                    'field2': 'value2',
-                },
-            },
-            format='json')
-
-        # Element has been created
-        self.assertEqual(response.status_code, 500)
-
     def test_action_from_other_user(self):
         action_name = 'email action'
 
@@ -546,3 +373,176 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         self.assertTrue(
             'must be a space-separated list of emails'
             in response.data['detail'])
+
+    def test_schedule_email(self):
+        action_name = 'simple action'
+
+        s_subject = 'subject'
+        # Get list of workflows
+        response = self.client.get(reverse('scheduler:api_scheduled_email'))
+
+        self.assertEqual(response.data['count'], 0)
+        self.assertEqual(response.data['next'], None)
+        self.assertEqual(response.data['previous'], None)
+
+        # Get the action
+        action = models.Action.objects.get(
+            name=action_name,
+            workflow__name='wflow1')
+
+        # Schedule one of the actions
+        response = self.client.post(
+            reverse('scheduler:api_scheduled_email'),
+            {
+                'name': self.s_name,
+                'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
+                'action': action.id,
+                'execute': self.s_execute,
+                'payload': {
+                    'item_column': 'email',
+                    'subject': s_subject,
+                    'cc_email': '',
+                    'bcc_email': '',
+                    'track_read': False,
+                    'send_confirmation': False,
+                },
+            },
+            format='json')
+
+        # Element has been scheduled
+        self.assertEqual(response.status_code, 201)
+
+        sch_item = models.ScheduledOperation.objects.get(action=action)
+        self.assertEqual(sch_item.name, self.s_name)
+        self.assertEqual(sch_item.description_text, self.s_desc)
+        self.assertEqual(sch_item.action, action)
+        self.assertEqual(sch_item.payload['subject'], s_subject)
+
+        # Update the element
+        response = self.client.put(
+            reverse('scheduler:api_rud_email', kwargs={'pk': sch_item.id}),
+            {
+                'name': self.s_name + '2',
+                'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_email',
+                'workflow': action.workflow.id,
+                'action': action.id,
+                'execute': self.s_execute,
+                'payload': {
+                    'item_column': 'email',
+                    'subject': s_subject,
+                    'cc_email': '',
+                    'bcc_email': '',
+                    'track_read': False,
+                    'send_confirmation': False}},
+            format='json'
+        )
+
+        # Element has been scheduled
+        self.assertTrue(status.is_success(response.status_code))
+
+        sch_item = models.ScheduledOperation.objects.get(action=action)
+        self.assertEqual(sch_item.name, self.s_name + '2')
+
+        # Delete the element
+        response = self.client.delete(
+            reverse('scheduler:api_rud_email', kwargs={'pk': sch_item.id})
+        )
+        self.assertEqual(response.status_code, 204)
+
+    def test_schedule_json(self):
+        action_name = 'json action'
+        # Get list of workflows
+        response = self.client.get(reverse('scheduler:api_scheduled_json'))
+
+        self.assertEqual(response.data['count'], 0)
+        self.assertEqual(response.data['next'], None)
+        self.assertEqual(response.data['previous'], None)
+
+        # Get the action
+        action = models.Action.objects.get(
+            name=action_name,
+            workflow__name='wflow1')
+
+        # Schedule one of the actions
+        response = self.client.post(
+            reverse('scheduler:api_scheduled_json'),
+            {
+                'name': self.s_name,
+                'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_json',
+                'workflow': action.workflow.id,
+                'action': action.id,
+                'execute': self.s_execute,
+                'payload': {
+                    'item_column': 'email',
+                    'token': 'whatever',
+                    'field1': 'value1',
+                    'field2': 'value2',
+                },
+            },
+            format='json')
+
+        # Element has been created
+        self.assertEqual(response.status_code, 201)
+
+        sch_item = models.ScheduledOperation.objects.get(action=action)
+        self.assertEqual(sch_item.name, self.s_name)
+        self.assertEqual(sch_item.description_text, self.s_desc)
+        self.assertEqual(sch_item.action, action)
+
+        # Update the element
+        response = self.client.put(
+            reverse('scheduler:api_rud_json', kwargs={'pk': sch_item.id}),
+            {
+                'name': self.s_name + '2',
+                'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_json',
+                'workflow': action.workflow.id,
+                'action': action.id,
+                'execute': self.s_execute,
+                'payload': {
+                    'item_column': 'email',
+                    'token': 'whatever',
+                    'field1': 'value1',
+                    'field2': 'value2',
+                },
+            },
+            format='json'
+        )
+
+        # Element has been scheduled
+        self.assertTrue(status.is_success(response.status_code))
+
+        sch_item = models.ScheduledOperation.objects.get(action=action)
+        self.assertEqual(sch_item.name, self.s_name + '2')
+
+        # Delete the element
+        response = self.client.delete(
+            reverse('scheduler:api_rud_json', kwargs={'pk': sch_item.id})
+        )
+        self.assertEqual(response.status_code, 204)
+
+        # Schedule the action with the wrong function
+        response = self.client.post(
+            reverse('scheduler:api_scheduled_email'),
+            {
+                'name': self.s_name,
+                'description_text': self.s_desc,
+                'operation_type': 'action_run_personalized_json',
+                'workflow': action.workflow.id,
+                'action': action.id,
+                'execute': self.s_execute,
+                'payload': {
+                    'item_column': 'email',
+                    'token': 'whatever',
+                    'field1': 'value1',
+                    'field2': 'value2',
+                },
+            },
+            format='json')
+
+        # Element has NOT been created
+        self.assertEqual(response.status_code, 500)
