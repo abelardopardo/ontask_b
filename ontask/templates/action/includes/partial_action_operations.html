@@ -1,13 +1,14 @@
 {% load i18n %}
 <div aria-label="Button group with nested dropdown" class="btn-group btn-group-sm"
      role="group">
-  <a href="{% url 'action:edit' id %}" class="btn btn-secondary btn-light spin"
-     type="button" data-toggle="tooltip" title="{% trans 'Edit the action' %}"
-     role="button"><span class="fa fa-pencil"></span></a>
-  <a href="{% url 'action:run' id %}"
-     class="btn btn-secondary btn-light spin {% if not is_executable %}disabled{% endif %}"
-     data-toggle="tooltip" role="button" type="button"
-     title="{% if action_tval == 'survey' or action_tval == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action_tval == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span></a>
+  <button class="btn btn-secondary btn-light spin"
+          onclick="location.href='{% url 'action:edit' id %}'"
+          type="button" data-toggle="tooltip" title="{% trans 'Edit the action' %}"
+          role="button"><span class="fa fa-pencil"></span></button>
+  <button onclick="location.href='{% url 'action:run' id %}'"
+          class="btn btn-secondary btn-light spin {% if not is_executable %}disabled{% endif %}"
+          data-toggle="tooltip" role="button" type="button"
+          title="{% if action_tval == 'survey' or action_tval == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action_tval == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span></button>
   <div class="btn-group dropright" role="group">
     <button id="actionMoreOperations" type="button"
             class="btn btn-secondary btn-light dropdown-toggle" data-toggle="dropdown"
