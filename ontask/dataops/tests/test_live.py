@@ -149,7 +149,7 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
 
         # Click in the RUN link of the action in
         element = self.search_action('action in')
-        element.find_element_by_xpath('td[1]/div/a[2]').click()
+        element.find_element_by_xpath('td[1]/div/button[2]').click()
         # Wait for paging widget
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
