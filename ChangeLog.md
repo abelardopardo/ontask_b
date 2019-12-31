@@ -1,3 +1,31 @@
+## 7.0 (2020-01-)
+
+### Added
+
+- Schedule the repeated exectuion of actions. The actions can be executed during a time window and with a frequency expressed using the crontab syntax.
+
+- Scheduled SQL updates from a remote database
+
+- Scheduled task to clean up the session database table
+
+- API calls to schedule operations.
+
+### Changed
+
+- Unified table rendering to always have the buttons for operations in the left side. Avoid links in table rows unless the meaning is unique and clearly understood.
+
+- Substantial code refactoring to reduce duplication when executing actions and various operations.
+
+- Revamp of how events are logged.
+
+- Scheduled tasks are now implemented using djanto_celery_beat and PeriodicTasks
+
+- Upgraded to use Django 2.2.8 (and some additional libraries)
+
+### Fixed
+
+- Removed pages to fix the change password in admin (Issue #176)
+
 ## 6.1.3 (2019-11-4)
 
 ### Fixed
