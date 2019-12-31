@@ -1,8 +1,8 @@
 {% load i18n %}
 <div class="btn-group btn-group-sm" role="group">
   <button type="button" class="btn btn-secondary btn-light js-attribute-edit"
-     data-url="{% url 'workflow:attribute_edit' id %}"
-    data-toggle="tooltip" title="{% trans 'Edit the attribute' %}">
+          data-url="{% url 'workflow:attribute_edit' id %}"
+          data-toggle="tooltip" title="{% trans 'Edit the attribute' %}">
     <span class="fa fa-pencil"></span></button>
   <button type="button" class="btn btn-secondary btn-light js-attribute-delete"
           data-url="{% url 'workflow:attribute_delete' id %}"
