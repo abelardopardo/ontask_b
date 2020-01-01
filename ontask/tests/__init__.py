@@ -935,7 +935,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def go_to_table_views(self):
         self.go_to_table()
-        self.selenium.find_element_by_link_text('Views').click()
+        self.selenium.find_element_by_xpath(
+            '//button[normalize-space()="Views"]').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-view-add'))
         )
@@ -1334,7 +1335,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.selenium.find_element_by_xpath(
             '//table[@id="action-table"]'
             '//td[2][normalize-space() = "{0}"]/'
-            '../td[1]/div/a[1]'.format(name)).click()
+            '../td[1]/div/button[1]'.format(name)).click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[contains(@class, "js-action-preview")]')
@@ -1353,7 +1354,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def open_action_email(self, name):
         element = self.search_action(name)
-        element.find_element_by_xpath('td[1]/div/a[2]').click()
+        element.find_element_by_xpath('td[1]/div/button[2]').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[contains(@class, "js-action-preview")]')
@@ -1362,7 +1363,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def open_action_canvas_email(self, name):
         element = self.search_action(name)
-        element.find_element_by_xpath('td[1]/div/a[2]').click()
+        element.find_element_by_xpath('td[1]/div/button[2]').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH,
@@ -1389,12 +1390,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def open_action_json_run(self, name):
         element = self.search_action(name)
-        element.find_element_by_xpath('td[1]/div/a[2]').click()
+        element.find_element_by_xpath('td[1]/div/button[2]').click()
         self.wait_for_page(element_id='json-action-request-data')
 
     def open_action_run(self, name, is_action_in=False):
         element = self.search_action(name)
-        element.find_element_by_xpath('td[1]/div/a[2]').click()
+        element.find_element_by_xpath('td[1]/div/button[2]').click()
         if is_action_in:
             self.wait_for_datatable('actioninrun-data_previous')
         else:
@@ -1506,7 +1507,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
         element = self.search_table_row_by_string('view-table', 2, vname)
         element.find_element_by_xpath(
-            'td[1]/div/a/span[contains(@class, "fa-eye")]'
+            'td[1]/div/button/span[contains(@class, "fa-eye")]'
         ).click()
         self.wait_for_datatable('table-data_previous')
 
@@ -1787,7 +1788,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.selenium.find_element_by_xpath(
             '//table[@id="attribute-table"]'
             '//tr/td[2][normalize-space() = "{0}"]/'
-            '../td[1]/div/a[1]'.format(attribute_key)
+            '../td[1]/div/button[1]'.format(attribute_key)
         ).click()
         self.wait_for_modal_open()
 

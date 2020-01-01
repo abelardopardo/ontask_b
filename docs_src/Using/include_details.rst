@@ -6,7 +6,7 @@ Workflow Operations
     "The details are not the details. They make the design"
     -- Charles Eames
 
-The *Workflow Operations* page is available through the |fa-cog| *More* link at the top-bar menu. The page shows the information as illustrated by the following figure.
+The *Workflow Operations* page is available through the *More* link at the top-bar menu. The page shows the information as illustrated by the following figure.
 
 .. figure:: /scaptures/workflow_attributes.png
    :align: center
@@ -70,7 +70,7 @@ Attributes
   .. figure:: /scaptures/workflow_attributes.png
      :align: center
 
-  The |fa-plus| *Attribute* button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The name of the attribute is a link that opens the form to edit its content. The |fa-trash| icon on the right deletes the attribute.
+  The |fa-plus| *Attribute* button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The |fa-pencil| icon opens the form to edit its content. The |fa-trash| icon deletes the attribute.
 
   The use of these attributes is to facilitate a single point of change when a value appears in multiple locations. For example, every personalized text actino is singed with the name of the instructor. If that name changes, all actions need to be edited. On the other hand, if the actions contain the name of an attribute, just changing the attribute value propagates the change to all actions.
 
@@ -88,7 +88,7 @@ Share
 Column Operations
 =================
 
-The *Column Operations* page is available through the |fa-cog| *More* link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.
+The *Column Operations* page is available through the *More* link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.
 
 .. figure:: /scaptures/workflow_details.png
    :align: center
@@ -137,23 +137,11 @@ Below the buttons to perform these operations the workflow columns are shown. If
 Position (#)
   A number starting at 1. The position is used when :ref:`visualizing the table <table>`.
 
-Name
-  Unique name for the workflow that cannot contain the quotes *'* or *"* or start with *__*.
-
-Description
-  Description of the column.
-
-Type
-  One of integer, string, double, boolean or date/time.
-
-Key?
-  Field stating if it is a **key column**, that is, the values are different or unique for all rows. OnTask detects automatically this property when the data for a new column is loaded. You may edit and change this properly as long as the two requirements are satisfied: the values have to be unique for all rows, and there must be at least one key column per workflow.
-
 Operations
   The operations available for columns are:
 
   |fa-pencil| Edit
-    Available by clicking in the column name. It allows you to change the name, tunique and values allowed in the column. If the field *Has unique values per row* property is modified, OnTask checks if the values satisfy this condition.
+    Change the name, description, unique and values allowed in the column. If the field *Has unique values per row* property is modified, OnTask checks if the values satisfy this condition.
 
     .. figure:: /scaptures/workflow_column_edit.png
        :align: center
@@ -178,5 +166,17 @@ Operations
 
   |fa-step-forward| Make last column
     Move this column to the last position in the workflow
+
+Name
+  Unique name for the workflow that cannot contain the quotes *'* or *"* or start with *__*.
+
+Description
+  Description of the column.
+
+Type
+  One of integer, string, double, boolean or date/time.
+
+Key?
+  Field stating if it is a **key column**, that is, the values are different or unique for all rows. OnTask detects automatically this property when the data for a new column is loaded. You may edit and change this properly as long as the two requirements are satisfied: the values have to be unique for all rows, and there must be at least one key column per workflow.
 
 The position of the columns can also be changed by dragging by the number (left-most column) and dropping them in the new position.

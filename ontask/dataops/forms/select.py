@@ -7,7 +7,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 
-class MergeForm(forms.Form):
+class   MergeForm(forms.Form):
     """Form to choose the merge method for data frames."""
 
     how_merge_choices = [
@@ -26,9 +26,9 @@ class MergeForm(forms.Form):
 
     def __init__(self, *args, **kargs):
         """Adjust the choices for the select fields."""
+        given_how = kargs.pop('how_merge', None)
         self.how_merge_initial = next((
-            mrg for mrg in self.how_merge_choices
-            if kargs.pop('how_merge', None) == mrg[0]),
+            mrg for mrg in self.how_merge_choices if given_how == mrg[0]),
             None)
 
         super().__init__(*args, **kargs)
@@ -151,3 +151,5 @@ class SelectKeysForm(MergeForm):
             required=True,
             label=_('Key Column in New Table'),
             help_text=self.src_help)
+
+        self.order_fields(['dst_key', 'src_key', 'how_merge'])

@@ -53,7 +53,7 @@ master_doc = 'index'
 # built documents.
 #
 # The short X.Y version.
-version = u'B.6.1.3'
+version = u'B.7.0'
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -299,11 +299,17 @@ rst_prolog += """
 .. |fa-cogs| raw:: html
 
    <span class="fa fa-cogs"></span>
+
+.. |fa-star-o| raw:: html
+
+   <span class="fa fa-star-o"></span>
 """
 
 
 def setup(app):
+    """Add additional stylesheets."""
     app.add_stylesheet('css/custom.css')  # may also be an URL
     app.add_stylesheet(
-        'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
+        'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/'
+        'css/font-awesome.min.css'
     )

@@ -55,8 +55,7 @@
       </div>
     {% endif %}
     {% url 'action:index' as actionindex %}
-    <p class="text-left small mt-3"><strong><super>*</super></strong>{% blocktrans %}The execution of some of
-      the operations can be scheduled for a time in the future. This page shows the operations scheduled for execution. To schedule the
+    <p class="text-left small mt-3"><strong><super>*</super></strong>{% blocktrans %}This page shows the operations scheduled for execution in the future. To schedule the
       execution of an action, go to the <a href="{{ actionindex }}">Actions</a> page and select the operation <i>Schedule</i> for the appropriate action.{% endblocktrans %}</p>
   </div>
   {% include 'modal.html' %}
