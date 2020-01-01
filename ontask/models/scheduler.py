@@ -121,7 +121,7 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name=_('scheduled_operation'))
+        related_name='scheduled_operation')
 
     # JSON element with additional information
     payload = JSONField(
@@ -159,7 +159,7 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
         # Start and end are given, but there is no frequency.
         if execute and not frequency and execute_until:
             # Case 6
-            return _('Frequency of execution is mission.')
+            return _('Frequency of execution is missing.')
 
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
         if execute_until and execute_until < now:
