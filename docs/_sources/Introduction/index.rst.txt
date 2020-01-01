@@ -46,7 +46,7 @@ The rest of the document is divided into the following blocks:
 Research
 ********
 
-There are several platforms that implement similar functionality or follow a similar approach. OnTask has been implemented with numerous ideas initially present in the Student Relationship Engagement System `SRES <http://sres.io>`_) and subsequent versions. The common idea among them is the positive impact that personalized communication may have when supporting learners. There are a few scientific publications that document the ideas and processes that inspired the creation of OnTask:
+There are several platforms that implement similar functionality or follow a similar approach. OnTask has been implemented with numerous ideas initially present in the Student Relationship Engagement System (`SRES <http://sres.io>`__) and subsequent versions. The common idea among them is the positive impact that personalized communication may have when supporting learners. There are a few scientific publications that document the ideas and processes that inspired the creation of OnTask:
 
 - Pardo, A., Bartimote-Aufflick, K., Buckingham Shum, S., Dawson, S., Gao, J., Gašević , D., . . . Vigentini, L. (2018). OnTask: Delivering Data-Informed Personalized Learning Support Actions. Journal of Learning Analytics, 5(3), 235-249.
 

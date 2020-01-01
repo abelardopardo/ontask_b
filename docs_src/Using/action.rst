@@ -29,8 +29,8 @@ The buttons at the top of the page offer the following operations:
 
 The actions in the workflow are shown in a tabular format. For each action the following main operations are offered:
 
-Edit
-  Click in the name action to edit its content.
+|fa-pencil| Edit
+  Edit the content of the action
 
 |fa-rocket| Run
   Use the action to either provide personalized content or run a survey (see :ref:`running_actions` for more information)
@@ -217,9 +217,9 @@ The personalized rubric feedback action is created and modified using the screen
    :align: center
    :width: 100%
 
-Three tabs are available in this screen. From left to right, the first one is the ref:`personalized text editor <personalizez_text_editor>`. It offers the same functionality as described for the `personalized text action <personalized_content>` with the difference that the only personalized content allowed is the comments extracted from the rubric. Place the cursor in the location in the email and click the buttom *Insert rubric text* to insert the mark that will be replaced by the rubric text.
+Three tabs are available in this screen. From left to right, the first one is the :ref:`personalized text editor <personalized_text_editor>`. It offers the same functionality as described for the `personalized text action <personalized_content>` with the difference that the only personalized content allowed is the comments extracted from the rubric. Place the cursor in the location in the email and click the buttom *Insert rubric text* to insert the mark that will be replaced by the rubric text.
 
-The second tab is identical to the one in the ref:`personalized text action <personalized_content>` to select a subset of learners to consider for this action. The right-most tab is where the rubric table is manipulated. The criteria in the rubric are either already existing columns with a common set of pre-defined values, or you can create the criteria specifying these values. The following figure shows an example of rubric with two criteria (*Presentation* and *Structure*) and each of them with three levels of attainment (*High*, *Medium* and *Poor*).
+The second tab is identical to the one in the :ref:`personalized text action <personalized_content>` to select a subset of learners to consider for this action. The right-most tab is where the rubric table is manipulated. The criteria in the rubric are either already existing columns with a common set of pre-defined values, or you can create the criteria specifying these values. The following figure shows an example of rubric with two criteria (*Presentation* and *Structure*) and each of them with three levels of attainment (*High*, *Medium* and *Poor*).
 
 .. figure:: /scaptures/rubric_edit_table_tab.png
    :align: center

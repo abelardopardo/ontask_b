@@ -3,7 +3,7 @@
 Column operations
 *****************
 
-Log into the platform and open a workflow that has data in the table. Click in the |fa-cog| *More* link in the top-bar menu. Select the option *Column operations*. The next page shows the information about the columns:
+Log into the platform and open a workflow that has data in the table. Click in the *More* link in the top-bar menu. Select the option *Column operations*. The next page shows the information about the columns:
 
 .. figure:: /scaptures/tutorial_details_1.png
    :align: center

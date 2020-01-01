@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>2. Installation process &#8212; OnTask (B.6.1.3) B.6.1.3 documentation</title>
+    <title>2. Installation process &#8212; OnTask (B.7.0) B.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -17,7 +17,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3. Using OnTask" href="../Using/index.html" />
+    <link rel="next" title="2.1. Requirements" href="requirements.html" />
     <link rel="prev" title="1. What is OnTask" href="../Introduction/index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -37,10 +37,10 @@
     <ul>
         <li>
           &larr;
-          <a href="../Introduction/index.html" title="Previous document">1. What is OnTask</a>
+          <a href="../Introduction/index.html" title="Previous document"><span class="section-number">1. </span>What is OnTask</a>
         </li>
         <li>
-          <a href="../Using/index.html" title="Next document">3. Using OnTask</a>
+          <a href="requirements.html" title="Next document"><span class="section-number">2.1. </span>Requirements</a>
           &rarr;
         </li>
     </ul>
@@ -51,903 +51,44 @@
           <div class="body" role="main">
             
   <div class="section" id="installation-process">
-<span id="install"></span><h1>2. Installation process<a class="headerlink" href="#installation-process" title="Permalink to this headline">¶</a></h1>
+<span id="install"></span><h1><span class="section-number">2. </span>Installation process<a class="headerlink" href="#installation-process" title="Permalink to this headline">¶</a></h1>
 <p>OnTask is a Web application that manages data about learners to offer them personalized support. For this reason the installation process includes a set of tight security restrictions. Some of them lie within the scope of the tool, but others are part of the environment in which the application is installed. We strongly recommend to install OnTask in a web server that uses TTL encryption (HTTPS) to serve all the pages. The application requires exchanging sensitive information about your session with the browser, so the information should be encrypted.</p>
-<div class="section" id="requirements">
-<h2>2.1. Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
-<p>OnTask has been developed as a <a class="reference external" href="https://www.djangoproject.com/">Django</a> application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. As many other web applications, OnTask requires a set of additional libraries for its execution, namely:</p>
-<ul class="simple">
-<li><p>Python 3.7</p></li>
-<li><p>Django 2.2</p></li>
-<li><p>Additional Django modules listed in the file <code class="docutils literal notranslate"><span class="pre">requirements/base.txt</span></code></p></li>
-<li><p>Redis</p></li>
-<li><p>PostgreSQL (version 9.5 or later)</p></li>
-</ul>
-<p>Some of these requirements are handled using <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a> (Python’s package index application).</p>
-<p>If you are upgrading OnTask from a version lower than 2.8 to 2.8 or later, you need to disable the <code class="docutils literal notranslate"><span class="pre">crontab</span></code> used to execute tasks asynchronously from the web server. Starting in version 2.8 those tasks are executed by an application called <code class="docutils literal notranslate"><span class="pre">celery</span></code> that is managed using <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> (see <a class="reference internal" href="#scheduling-tasks"><span class="std std-ref">Configure the Distributed Task Queue</span></a>).</p>
-</div>
-<div class="section" id="are-you-upgrading-from-version-4-0-to-4-2">
-<h2>2.2. Are you upgrading from version &lt; 4.0 to 4.2?<a class="headerlink" href="#are-you-upgrading-from-version-4-0-to-4-2" title="Permalink to this headline">¶</a></h2>
-<p>The upgrade to 4.0 or later requires version 2.7 and 3.6 both installed and available in the system. Django versions 2.0 and later require Python 3 but certain additional libraries used by OnTask have not been fully ported yet and still require the use of Python 2.7. Make sure both versions are available before proceeding to the upgrade.</p>
-</div>
-<div class="section" id="are-you-upgrading-from-version-4-3-to-4-3">
-<h2>2.3. Are you upgrading from version &lt; 4.3 to 4.3?<a class="headerlink" href="#are-you-upgrading-from-version-4-3-to-4-3" title="Permalink to this headline">¶</a></h2>
-<p>The  upgrade to 4.3 or later no longer requires two versions of Python. It only requires Python 3. Make sure the application is only using version 3.</p>
-</div>
-<div class="section" id="are-you-upgrading-to-version-5-2">
-<h2>2.4. Are you upgrading to version 5.2?<a class="headerlink" href="#are-you-upgrading-to-version-5-2" title="Permalink to this headline">¶</a></h2>
-<p>Version 5.2 contains a significant reorganization of the file structure in the tool, and as a consequence there are several files that need to be manually relocated:</p>
-<ul class="simple">
-<li><p>The <a class="reference internal" href="#configuration-file"><span class="std std-ref">configuration file</span></a> needs to be moved from <code class="docutils literal notranslate"><span class="pre">src/ontask/settings</span></code> to <code class="docutils literal notranslate"><span class="pre">settings</span></code>.</p></li>
-<li><p>The files in the <code class="docutils literal notranslate"><span class="pre">media</span></code> folder need to be moved to <code class="docutils literal notranslate"><span class="pre">ontask/media</span></code>.</p></li>
-</ul>
-</div>
-<div class="section" id="required-tools">
-<h2>2.5. Required tools<a class="headerlink" href="#required-tools" title="Permalink to this headline">¶</a></h2>
-<p>The following installation steps assume that you are deploying OnTask in a production web server capable of serving pages using the HTTPS protocol.</p>
-<div class="section" id="install-and-configure-redis">
-<span id="install-redis"></span><h3>2.5.1. Install and Configure Redis<a class="headerlink" href="#install-and-configure-redis" title="Permalink to this headline">¶</a></h3>
-<p>Django requires Redis to execute as a daemon in the same machine to cache information about the sessions. No specific changes are required in the code, simply have the server running in the background.</p>
-<ol class="arabic">
-<li><p>Download and install <a class="reference external" href="https://redis.io/">redis</a>.</p>
-<p>Follow the instructions to configure it to be used by Django.</p>
-</li>
-<li><p>Test that it is executing properly in the background (use the <code class="docutils literal notranslate"><span class="pre">ping</span></code> command in the command line interface.</p></li>
-</ol>
-</div>
-<div class="section" id="install-and-configure-postgresql">
-<span id="install-postgresql"></span><h3>2.5.2. Install and Configure PostgreSQL<a class="headerlink" href="#install-and-configure-postgresql" title="Permalink to this headline">¶</a></h3>
-<ol class="arabic">
-<li><p>Download and install <a class="reference external" href="https://www.postgresql.org/">postgresql</a>.</p></li>
-<li><p>Create the role <code class="docutils literal notranslate"><span class="pre">ontask</span></code> with the command <code class="docutils literal notranslate"><span class="pre">createuser</span></code>. The role should be able to create new databases but not new roles and you should define a password for the user (use <code class="docutils literal notranslate"><span class="pre">createuser</span> <span class="pre">--interactive</span> <span class="pre">-W</span></code>).</p></li>
-<li><p>Adjust the access configuration in postgresql (in the configuration file <code class="docutils literal notranslate"><span class="pre">pg_hba.conf</span></code>) to allow the newly created user to access databases locally.</p></li>
-<li><p>Create a new database with name <code class="docutils literal notranslate"><span class="pre">ontask</span></code> with the <code class="docutils literal notranslate"><span class="pre">createdb</span></code> command.</p></li>
-<li><p>Use the client application <code class="docutils literal notranslate"><span class="pre">psql</span></code> to verify that the user has access the newly created database and can create and delete a new table and run regular queries. Test the connection with the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="o">-</span><span class="n">h</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">-</span><span class="n">U</span> <span class="n">ontask</span> <span class="o">-</span><span class="n">W</span> <span class="n">ontask</span>
-</pre></div>
-</div>
-<p>If the client does not connect to the database, review your configuration options.</p>
-</li>
-<li><p>The libraries required by OnTask will install some Python packages compiling the soure and one of them uses the development libraries from PostgreSQL. If you are using a linux distribution, make sure you install the package <code class="docutils literal notranslate"><span class="pre">postgresql-server-dev-all</span></code>.</p></li>
-</ol>
-</div>
-<div class="section" id="install-python-3">
-<h3>2.5.3. Install Python 3<a class="headerlink" href="#install-python-3" title="Permalink to this headline">¶</a></h3>
-<p>In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreter for version 3.</p>
-<ol class="arabic simple">
-<li><p>Install <a class="reference external" href="https://www.python.org/">python</a></p></li>
-<li><p>Verify that the interpreter can run and has the right version (3) using the command line interpreter (either <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">--version</span></code> or <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">--version</span></code>).</p></li>
-<li><p>Install <a class="reference external" href="https://pip.pypa.io/en/stable/">pip</a> (the package may be called <code class="docutils literal notranslate"><span class="pre">python3-pip</span></code> for Python 3). This tool will be used to install additional libraries required to execute OnTask.</p></li>
-<li><p>Some python libraries will require compiling source code, so make sure the package python3.7-dev is also installed.</p></li>
-</ol>
-</div>
-</div>
-<div class="section" id="download-install-and-configure-ontask">
-<h2>2.6. Download, install and configure OnTask<a class="headerlink" href="#download-install-and-configure-ontask" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic">
-<li><p>Download or clone a copy of <a class="reference external" href="https://github.com/abelardopardo/ontask_b">OnTask</a>.</p></li>
-<li><p>Using a command interpreter, go to the OnTask folder and locate a folder inside it with name <code class="docutils literal notranslate"><span class="pre">requirements</span></code>. Verify that it contains the files <code class="docutils literal notranslate"><span class="pre">base.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">production.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">development.txt</span></code>. The first file contains a list of python modules that are required by OnTask. The second is a set of additional modules to run a <em>production</em> instance, and the third is the same list if you intend to run a <em>development</em> instance.</p></li>
-<li><p>If you plan to run a production instance of OnTask execute the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
-<p>You may need administrative privileges to execute this command.</p>
-<p>If you plan to run a development instance of OnTask, execute the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
-<p>This command downloads  a set of libraries and modules and installs them as
-part of the python libraries in the system.</p>
-</li>
-</ol>
-<div class="section" id="ontask-configuration">
-<h3>2.6.1. OnTask Configuration<a class="headerlink" href="#ontask-configuration" title="Permalink to this headline">¶</a></h3>
-<p>The next steps describe the configuration of the Django environment to run OnTask. This configuration is divided into in three groups of variables:</p>
-<p>Environment variables (<em>env</em> level)</p>
-<blockquote>
-<div><p>These are variables defined by the operating system and available to OnTask upon execution. The values are obtained at the start of the deployment. Changing these variables usually requires re-deploying the platform (for example if you are using a container platform like docker). These variables can only store strings.</p>
-</div></blockquote>
-<p>Configuration file (<em>conf</em> level)</p>
-<blockquote>
-<div><p>The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file and kept within the system file readable by the application (in the <code class="docutils literal notranslate"><span class="pre">settings</span></code> folder). This variables can store strings, booleans, basic lists and dictionaries.</p>
-</div></blockquote>
-<p>Configuration script (<em>script</em> level)</p>
-<blockquote>
-<div><p>This is a python file that is read first by Django during its start-up procedure. The variables in this script can be defined using any python expression and may have arbitrarily complex expressions and operations (even function calls).</p>
-</div></blockquote>
-<p>OnTask processes the variables in these context in the following stages:</p>
-<ol class="arabic simple">
-<li><p>The environment variables are loaded (if present)</p></li>
-<li><p>The configuration file is loaded. If the file contains a definition for an environment variable, this is considered only if there is no value provided by the environment. In other words, an empty set of environment variables can be written in the configuration file and their values are considered. On the opposite side, if all environment variables are defined, any additional definition in the configuration file is ignored.</p></li>
-<li><p>The initialization script is loaded with all the variables previously defined available.</p></li>
-</ol>
-<div class="section" id="environment-variables">
-<span id="configuration-environment"></span><h4>2.6.1.1. Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h4>
-<p>The following variables, if defined in the environment, are considered by OnTask upon start.</p>
-<dl>
-<dt><code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code></dt><dd><p>Amazon Web Services access key id. This value is used when the static files in the server are served from a S3 bucket.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">AWS_SECRET_ACCESS_KEY</span></code></dt><dd><p>Amazon Web Services secret attached to the given Access Key.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">AWS_STORAGE_BUCKET_NAME</span></code></dt><dd><p>Name of the S3 Bucket used to serve the static content</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">AWS_LOCATION</span></code></dt><dd><p>Path within the AWS S3 Bucket where the static files are located</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">static</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">BASE_URL</span></code></dt><dd><p>Suffix that follows the host name when accessing OnTask once deployed. This is to allow OnTask to be deployed as part of a larger web server when the application is accessed as, for example, <code class="docutils literal notranslate"><span class="pre">hostname.com/suffix/ontask</span></code>.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DATAOPS_MAX_UPLOAD_SIZE</span></code></dt><dd><p>Maximum file size for uploads</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">209715200</span></code> (200 Mb)</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DATAOPS_PLUGIN_DIRECTORY</span></code></dt><dd><p>Folder in the local file system containing the OnTask plugins.</p>
-<p>Default: <cite>plugins</cite></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code></dt><dd><p>Python expression pointing to the configuration script or initial module (python file) to execute on start up. Two of these modules are provided in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>. The file <code class="docutils literal notranslate"><span class="pre">development.py</span></code> provides definitions recommended for a development environment. The file <code class="docutils literal notranslate"><span class="pre">production.py</span></code> provides the suggested definitions for a production deployment. Both scripts load the definitions in the module <code class="docutils literal notranslate"><span class="pre">base.py</span></code>. These scripts contain configuration definitions described in <a class="reference internal" href="#configuration-script"><span class="std std-ref">Configuration script</span></a>.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">settings.production</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME</span></code></dt><dd><p>Host name used to serve the application.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">localhost</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code></dt><dd><p>Name for the configuration file. It must be in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code></p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">local.env</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">LANGUAGE_CODE</span></code></dt><dd><p>Official ISO 639-1 language code to use in the platform. Check the available languages in the file base.py.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">en-us</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">LOG_FOLDER</span></code></dt><dd><p>Folder where to store the logs produced by the tool</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">logs</span></code> folder at the root of the project</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">MEDIA_LOCATION</span></code></dt><dd><p>URL suffix to be used by OnTask to access the media files in folder <code class="docutils literal notranslate"><span class="pre">media</span></code>.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">/media/</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">RDS_DB_NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_DB_USERNAME</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_DB_PASSWORD</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_DB_HOSTNAME</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_DB_PORT</span></code></dt><dd><p>Parameters to access the platform database: database name, username, password, host name and port respectively.</p>
-<p>Default: All empty strings.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">SCHEDULER_MINUTE_STEP</span></code></dt><dd><p>Step in minutes to offer when scheduling action executions</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">15</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">SECRET_KEY</span></code> <strong>(Required)</strong></dt><dd><p>Random string of characters used to generate internal hashes. It should be kept secret. If not defined the platform will raise an error upon start.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">STATIC_URL_SUFFIX</span></code></dt><dd><p>URL suffix to be used by OnTask to access the static files. This definition is ignored if <code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code> is defined as it is assumed that the static content is served through AWS. Make sure this value is not terminated by a slash.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">static</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">TIME_ZONE</span></code></dt><dd><p>String provided by the package <code class="docutils literal notranslate"><span class="pre">pytz</span></code> to identify the time zone in which the server is running. If you want to know the name of the time zone used by your platform execute the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import tzlocal; print(tzlocal.get_localzone().zone)&#39;</span>
-</pre></div>
-</div>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">UTC</span></code></p>
-</dd>
-</dl>
-<p>Remember that if any of these variables is undefined in the execution environment, they still can be defined in the configuration file.</p>
-</div>
-<div class="section" id="configuration-file">
-<span id="id1"></span><h4>2.6.1.2. Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h4>
-<p>Using a plain text editor create a file with name <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in folder <code class="docutils literal notranslate"><span class="pre">settings</span></code> (or a file with the name assigned to the environment variable <code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code> as described in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>). Include in this file either:</p>
-<ul class="simple">
-<li><p>the assignment of a variable from those described in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a> that has no environment definition, or</p></li>
-<li><p>the assignment of any of the following variables for which you want a value different than the default.</p></li>
-</ul>
-<p>The variables suitable to be included in the configuration file are:</p>
-<dl>
-<dt><code class="docutils literal notranslate"><span class="pre">ALLOWED_HOSTS</span></code></dt><dd><p>Comma-separated list of host names used to validate the HTTP requests received by the platform. It helps to avoid processing requests that fake their Host headers. If OnTask is going to be hosted in <code class="docutils literal notranslate"><span class="pre">www.yoursite.com</span></code>, then you may want to define it as <code class="docutils literal notranslate"><span class="pre">www.yoursite.com,yoursite.com</span></code>. By default the platform allows request with any Host header.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">[*]</span></code> (any connection from any host)</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DATABASE_URL</span></code> <strong>(Required)</strong></dt><dd><p>URL encoding the connection to the database. String of the format <code class="docutils literal notranslate"><span class="pre">postgres://username:password&#64;host:port/database</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code></dt><dd><p>Flag to control if the execution is in DEBUG mode.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EXECUTE_ACTION_JSON_TRANSFER</span></code></dt><dd><p>Boolean stating if the JSON transfers should be executed when sending persnalized text.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">REDIS_URL</span></code></dt><dd><p>List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as <code class="docutils literal notranslate"><span class="pre">'rediscache://master:6379,slave1:6379,slave2:6379/1'</span></code> (see <a class="reference external" href="https://github.com/joke2k/django-environ">Django Environ</a>)</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">rediscache:://localhost:6379??client_class=django_redis.client.DefaultClient&amp;timeout=1000&amp;key_prefix=ontask</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">SHOW_HOME_FOOTER_IMAGE</span></code></dt><dd><p>Boolean to control the appearance of a footer image in the home page. If true, the file <code class="docutils literal notranslate"><span class="pre">footer_image.gif</span></code> is shown from the media folder.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">USE_SSL</span></code></dt><dd><p>Boolean to control if the server should use SSL for communication. There are several security features that are enabled with using SSL.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-</dl>
-<p>There are additional variables to configure <a class="reference internal" href="#email-config"><span class="std std-ref">Email</span></a> and <a class="reference internal" href="#canvas-email-config"><span class="std std-ref">Canvas Email</span></a>.</p>
-<p>Here is an example of a minimalistic configuration file (note there is no space between variable names and the equal signs):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALLOWED_HOSTS</span><span class="o">=</span><span class="n">HOSTNAME1</span><span class="p">,</span><span class="n">HOSTNAME2</span>
-<span class="n">BASE_URL</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-<span class="c1"># syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database</span>
-<span class="n">DATABASE_URL</span><span class="o">=</span><span class="n">postgres</span><span class="p">:</span><span class="o">//</span><span class="p">[</span><span class="n">PSQLUSERNAME</span><span class="p">]:[</span><span class="n">PSQLPWD</span><span class="p">]</span><span class="o">@</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">ontask</span>
-<span class="n">DEBUG</span><span class="o">=</span><span class="kc">False</span>
-<span class="n">DOMAIN_NAME</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">DOMAIN</span> <span class="n">NAME</span><span class="p">]</span>
-<span class="n">EXECUTE_ACTION_JSON_TRANSFER</span><span class="o">=</span><span class="kc">True</span>
-<span class="n">REDIS_URL</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">REDIS</span> <span class="n">URL</span><span class="p">]</span>
-<span class="n">TIME_ZONE</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">LOCAL</span> <span class="n">PYTHON</span> <span class="n">TIME</span> <span class="n">ZONE</span><span class="p">]</span>
-<span class="n">USE_SSL</span><span class="o">=</span><span class="kc">True</span>
-<span class="n">SECRET_KEY</span><span class="o">=</span><span class="p">[</span><span class="n">SEE</span> <span class="n">BELOW</span><span class="p">]</span>
-</pre></div>
-</div>
-<ol class="arabic">
-<li><p>Replace <code class="docutils literal notranslate"><span class="pre">HOSTNAME1</span></code>, <code class="docutils literal notranslate"><span class="pre">HOSTNAME2</span></code> with a comma-separated list of hostnames of the platform hosting the tool.</p></li>
-<li><p>If OnTask is going to be served from a location different from the root of your server (for example <code class="docutils literal notranslate"><span class="pre">myhost.com/ontask</span></code>, then modify the value of the variable <code class="docutils literal notranslate"><span class="pre">BASE_URL</span></code> with the suffix that should follow the domain name (in the example, <code class="docutils literal notranslate"><span class="pre">/ontask</span></code>).</p></li>
-<li><p>Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DATABASE_URL=</span></code> and change the
-field <code class="docutils literal notranslate"><span class="pre">[PSQLUSERNAME]</span></code> with the name of the Postgresql user created in the
-previous step (the one that could access the ontask database and run
-queries). If you decided to use a different name for the database, adjust
-the last part of the line accordingly (replace <em>ontask</em> by the name of
-your database).</p></li>
-<li><p>Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME=</span></code> and change the field <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">DOMAIN</span> <span class="pre">NAME</span></code>] with the domain name of the machine hosting OnTask.</p></li>
-<li><p>Replace the string <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">REDIS</span> <span class="pre">URL]</span></code> with the URL where Redis can be
-accessed. This is typically something similar to
-<code class="docutils literal notranslate"><span class="pre">redis://127.0.0.1:6379/1</span></code>.</p></li>
-<li><p>Replace <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">LOCAL</span> <span class="pre">PYTHON</span> <span class="pre">TIME</span> <span class="pre">ZONE]</span></code> with the description of your time zone (see the definition of the variable <code class="docutils literal notranslate"><span class="pre">TIME_ZONE</span></code> in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>.</p></li>
-<li><p>Open a command interpreter and execute the following python command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import random; import string; print(&quot;&quot;.join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))&#39;</span>
-</pre></div>
-</div>
-<p>Copy the long string produced as output and add it at the end of the last
-line of the file <code class="docutils literal notranslate"><span class="pre">local.env</span></code>. It should look something like (with
-different content after the equal sign):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SECRET_KEY</span><span class="o">=</span><span class="mi">4</span><span class="n">o93jf0572094jv</span><span class="o">...</span>
-</pre></div>
-</div>
-</li>
-</ol>
-<p>The configuration file may include additional variables to configure functionality such as <a class="reference internal" href="#ims-lti-config"><span class="std std-ref">IMS LTI</span></a>, <a class="reference internal" href="#ldap-config"><span class="std std-ref">LDAP Authentication</span></a>, <a class="reference internal" href="#email-config"><span class="std std-ref">Email configuration</span></a>, or <a class="reference internal" href="#canvas-email-config"><span class="std std-ref">Canvas Email Configuration</span></a>.</p>
-</div>
-<div class="section" id="configuration-script">
-<span id="id2"></span><h4>2.6.1.3. Configuration script<a class="headerlink" href="#configuration-script" title="Permalink to this headline">¶</a></h4>
-<p>The are some additional configuration variables that directly defined in the modules <code class="docutils literal notranslate"><span class="pre">base.py</span></code>, <code class="docutils literal notranslate"><span class="pre">development.py</span></code> and <code class="docutils literal notranslate"><span class="pre">production.py</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>. Modify the python code to perform additional configuration considering:</p>
-<ol class="arabic simple">
-<li><p>The script <code class="docutils literal notranslate"><span class="pre">base.py</span></code> is always executed first</p></li>
-<li><p>The choice between <code class="docutils literal notranslate"><span class="pre">develoment.py</span></code> or <code class="docutils literal notranslate"><span class="pre">production.py</span></code> is decided based on the environment variable <code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code> and the default value is <code class="docutils literal notranslate"><span class="pre">production.py</span></code></p></li>
-</ol>
-</div>
-<div class="section" id="log-directory">
-<span id="id3"></span><h4>2.6.1.4. Log directory<a class="headerlink" href="#log-directory" title="Permalink to this headline">¶</a></h4>
-<p>Create a new folder with name <code class="docutils literal notranslate"><span class="pre">logs</span></code> in the OnTask top folder, next to the <code class="docutils literal notranslate"><span class="pre">requirements</span></code> folder, or in the location defined in the variable <code class="docutils literal notranslate"><span class="pre">LOG_FOLDER</span></code>. This folder <strong>is different</strong> from the folder with the same name in the <code class="docutils literal notranslate"><span class="pre">ontask</span></code> folder.</p>
-</div>
-</div>
-<div class="section" id="ontask-installation">
-<h3>2.6.2. OnTask Installation<a class="headerlink" href="#ontask-installation" title="Permalink to this headline">¶</a></h3>
-<p>Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next steps create the documentation, initial database configuration, additional site files, and deploy. To generate the documentation go to the folder <code class="docutils literal notranslate"><span class="pre">docs_src</span></code>, make sure it contains the sub-folders with names <code class="docutils literal notranslate"><span class="pre">_static</span></code> and <code class="docutils literal notranslate"><span class="pre">_templates</span></code> and execute the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span> <span class="n">html</span> <span class="n">copy_to_docs</span>
-</pre></div>
-</div>
-<p>The documentation is created by the application <code class="docutils literal notranslate"><span class="pre">sphinx-doc</span></code> and stored in the directory <code class="docutils literal notranslate"><span class="pre">_build</span></code> which is then copied to the <code class="docutils literal notranslate"><span class="pre">../docs</span></code> folder. Once the documentation has been created, the next steps configure the database. If at some point during the following steps you want to reset the content of the database, run the commands <code class="docutils literal notranslate"><span class="pre">dropdb</span></code> and <code class="docutils literal notranslate"><span class="pre">createdb</span></code> explained in <a class="reference internal" href="#install-postgresql"><span class="std std-ref">Install and Configure PostgreSQL</span></a>. The following commands have to be execute from the project folder.</p>
-<ol class="arabic">
-<li><p>Execute the following command to create the database internal structure:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
-</pre></div>
-</div>
-<p>A few messages should appear on the screen related to the initialization of the database.</p>
-</li>
-<li><p>Execute the following command to upload to the platform some initial data structures:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">initialize_db</span>
-</pre></div>
-</div>
-<p>The command should run without any error or exception. If you need to create additional users before deploying the platform, read the section <a class="reference internal" href="#bulk-user-creation"><span class="std std-ref">Creating users in Bulk</span></a>.</p>
-</li>
-<li><p>Execute the command to create a superuser account in OnTask:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
-</pre></div>
-</div>
-<p>Remember the data that you enter in this step so that you use it when you enter OnTask with your browser.</p>
-</li>
-<li><p>Execute the following command to collect and install the static content:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
-</pre></div>
-</div>
-<p>The static files are collected from the folder in the main project older with the name stored in the variable <code class="docutils literal notranslate"><span class="pre">STATIC_URL_SUFFIX</span></code> and placed, together with the static content from the folder <code class="docutils literal notranslate"><span class="pre">ontask/static</span></code> in the folder  <code class="docutils literal notranslate"><span class="pre">&lt;base_dir&gt;/site/static</span></code>. This last folder is the only one that contains all the required files to be served statically by the application. Following the suggestions given in the Django project, the content in this folder should be served directly by the web server and not through the WSGI interface. The typical approach for this is to <em>synchronize</em> the content of this folder with the location from where the server takes the files. Make sure you do not make any changes to the folders <code class="docutils literal notranslate"><span class="pre">&lt;base_dir&gt;/static</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;base_dir&gt;/ontask/static</span></code> as they only contain a subset of the files.</p>
-</li>
-<li><p>If you are running a production instance, execute the following command to check the status of the platform:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="o">--</span><span class="n">deploy</span>
-</pre></div>
-</div>
-<p>The command should print just one warning about the configuration variable
-X_FRAME_OPTIONS. If you are running a development instance, you will get
-various additional warning that are derived most of them from running the
-instance without HTTPS.</p>
-</li>
-<li><p>Execute the following command to start the OnTask server:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
-</pre></div>
-</div>
-<p>If there are no errors, the message on the screen should say that your
-server is running in the url 127.0.0.1:8000. However, if you open your
-browser in that URL, an error will be shown. This error is normal and it
-is because the production version requires the pages to be served through
-SSL with a valid certificate in a conventional server.</p>
-</li>
-<li><p>If OnTask is going to be accessed through a web server like Apache or Nginx,
-stop the application and configure the web server accordingly.</p></li>
-<li><p>If you want to use the server in development mode through the URL
-<code class="docutils literal notranslate"><span class="pre">127.0.0.1:8000</span></code> you have to perform two more steps. First, edit the file
-<code class="docutils literal notranslate"><span class="pre">manage.py</span></code> and change these three lines to look like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span> <span class="s2">&quot;settings.development&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Second, execute the following command from the project folder:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
-<p>Now, the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
-</pre></div>
-</div>
-<p>will start the server in the URL 127.0.0.1:8000 and you should be able to
-access it normally with the browser.</p>
-<div class="admonition-warning admonition">
-<p class="admonition-title">Warning</p>
-<p>The development version of OnTask is <strong>not suited</strong> to be used in
-production because it disables several security features. Make sure you
-only deploy a <strong>production</strong> version.</p>
-</div>
-</li>
-</ol>
-</div>
-<div class="section" id="configure-the-distributed-task-queue">
-<span id="scheduling-tasks"></span><h3>2.6.3. Configure the Distributed Task Queue<a class="headerlink" href="#configure-the-distributed-task-queue" title="Permalink to this headline">¶</a></h3>
-<p>There are various tasks that need to be executed by OnTask outside the web
-server. The solution adopted is to use <a class="reference external" href="http://www.celeryproject.org/">Celery</a>, <a class="reference external" href="http://supervisord.org/">Supervisor</a> (a process control system) and <a class="reference external" href="https://redis.io/">Redis</a>. Redis has been configured in a previous step. This section explains how to set up the distributed task queue and make sure it is continuously executing in parallel with the web server.</p>
-<ol class="arabic">
-<li><p>Install the application <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> using <strong>pip3</strong>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">supervisor</span>
-</pre></div>
-</div>
-<p>This application makes sure the task queue program  Celery is continuously running in the background and in communication with the server.</p>
-</li>
-<li><p>Check that the binaries <code class="docutils literal notranslate"><span class="pre">supervisord</span></code>, <code class="docutils literal notranslate"><span class="pre">supervisorctl</span></code> and <code class="docutils literal notranslate"><span class="pre">celery</span></code>
-are installed in your system.</p></li>
-<li><p>Go to the folder <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> in the top of the project and edit the file
-<code class="docutils literal notranslate"><span class="pre">supervisor.conf</span></code>.</p></li>
-<li><p>The file configures <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> to run in the background and prepare
-two sets of processes for OnTask. You have two options to use this file:</p>
-<ol class="loweralpha">
-<li><p>Use environment variables.</p>
-<p>The file uses internally the value of two environment variables:</p>
+<div class="toctree-wrapper compound">
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">PROJECT_PATH</span></code>: Full path to the root of the project (the top
-folder containing the file <code class="docutils literal notranslate"><span class="pre">LICENSE</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">CELERY_BIN</span></code>: Full path to the executable <code class="docutils literal notranslate"><span class="pre">celery</span></code> in your system
-(typically <code class="docutils literal notranslate"><span class="pre">/usr/local/bin/celery</span></code> or similar).</p></li>
-<li><p>Set these variables in your environment to the correct values and make
-sure they are properly exported and visible when running other
-commands. For example, in <code class="docutils literal notranslate"><span class="pre">bash</span></code>, this operation would be achieve
-by two commands similar to:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export PROJECT_PATH=/full/path/to/OnTask/root/folder
-$ export CELERY_BIN=/full/path/to/celery/executable
-</pre></div>
-</div>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">2.1. Requirements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="requirements.html#install-and-configure-redis">2.1.1. Install and Configure Redis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="requirements.html#install-and-configure-postgresql">2.1.2. Install and Configure PostgreSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="requirements.html#install-python-3">2.1.3. Install Python 3</a></li>
 </ul>
 </li>
-<li><p>Change the file <code class="docutils literal notranslate"><span class="pre">supervisor.conf</span></code>.</p>
-<ul class="simple">
-<li><p>replace any appearance of the string <code class="docutils literal notranslate"><span class="pre">%(ENV_PROJECT_PATH)s</span></code> by the
-full path to the project folder.</p></li>
-<li><p>replace any appearance of the string <code class="docutils literal notranslate"><span class="pre">%(ENV_CELERY_BIN)s</span></code> by the
-full path to the <code class="docutils literal notranslate"><span class="pre">celery</span></code> binary program.</p></li>
+<li class="toctree-l1"><a class="reference internal" href="install_ontask.html">2.2. Download, install and configure OnTask</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install_ontask.html#ontask-configuration">2.2.1. OnTask Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_ontask.html#ontask-installation">2.2.2. OnTask Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_ontask.html#configure-the-distributed-task-queue">2.2.3. Configure the Distributed Task Queue</a></li>
 </ul>
 </li>
-</ol>
-</li>
-</ol>
-<ol class="arabic" start="4">
-<li><p>Start the process control system with the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ supervisord -c supervisor.conf
-</pre></div>
-</div>
-<p>The command starts the process control application <code class="docutils literal notranslate"><span class="pre">supervisord</span></code>
-which executes a set of process in the background.</p>
-</li>
-<li><p>Check that the process control system is working with the command
-(executed from the <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> folder):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ supervisorctl -c supervisor.conf status
-</pre></div>
-</div>
-<p>The output of this command should show a message similar to:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ontask</span><span class="o">-</span><span class="n">beat</span><span class="o">-</span><span class="n">celery</span>               <span class="n">RUNNING</span>   <span class="n">pid</span> <span class="mi">28579</span><span class="p">,</span> <span class="n">uptime</span> <span class="mi">1</span> <span class="n">day</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mi">36</span>
-<span class="n">ontask</span><span class="o">-</span><span class="n">celery</span>                    <span class="n">RUNNING</span>   <span class="n">pid</span> <span class="mi">28578</span><span class="p">,</span> <span class="n">uptime</span> <span class="mi">1</span> <span class="n">day</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mi">36</span>
-</pre></div>
-</div>
-<p>If the status of the two processes is <code class="docutils literal notranslate"><span class="pre">STARTING</span></code> wait a few seconds and
-execute the command again. The names <code class="docutils literal notranslate"><span class="pre">ontask-beat-celery</span></code> and
-<code class="docutils literal notranslate"><span class="pre">ontask-celery</span></code> are the names of the two processes that OnTask uses for
-asynchronous task execution.</p>
-<p>You may use this command to check if <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> is still running. The
-application is configured to write its messages to the file <code class="docutils literal notranslate"><span class="pre">celery.log</span></code>
-in the logs folder at the top of the project.</p>
-</li>
-<li><p>If you are upgrading OnTask from a previous version (less than 2.8), you
-need to edit the <code class="docutils literal notranslate"><span class="pre">crontab</span></code> entry and remove the command to execute the
-script <code class="docutils literal notranslate"><span class="pre">scheduler_script.py</span></code>.</p></li>
-</ol>
-</div>
-</div>
-<div class="section" id="upgrading-ontask">
-<span id="upgrading"></span><h2>2.7. Upgrading OnTask<a class="headerlink" href="#upgrading-ontask" title="Permalink to this headline">¶</a></h2>
-<p>If you have OnTask already configured and running, here are the steps to follow to upgrade to a new version:</p>
-<ul>
-<li><p>Create a backup of the database to be able to restore the state of the tool before the upgrade process.</p></li>
-<li><p>Stop the apache web server.</p></li>
-<li><p>Open a terminal and use a command interpreter to execute the following commands.</p></li>
-<li><p>Set the current folder of the interpreter to the main project folder.</p></li>
-<li><p>Verify that the <a class="reference internal" href="#configuration-file"><span class="std std-ref">configuration file</span></a> is in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>.</p></li>
-<li><p>Pull the code for the new version from the repository:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">pull</span>
-</pre></div>
-</div>
-</li>
-<li><p>Refresh the list of requirements:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">txt</span>
-</pre></div>
-</div>
-</li>
-<li><p>Go to the sub-folder containing the tool documentation:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs_src</span>
-</pre></div>
-</div>
-</li>
-<li><p>Re-create the tool documentation and place it in the appropriate folder:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span> <span class="n">html</span> <span class="n">copy_to_docs</span>
-</pre></div>
-</div>
-</li>
-<li><p>Go back to the project folder:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">..</span>
-</pre></div>
-</div>
-</li>
-<li><p>Collect all files to be served statically:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
-</pre></div>
-</div>
-</li>
-<li><p>Apply the migrations to the database:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
-</pre></div>
-</div>
-</li>
-<li><p>Check that the configuration is ready to run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="o">--</span><span class="n">deploy</span>
-</pre></div>
-</div>
-</li>
-<li><p>Restart the <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> configuration:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">supervisorctl</span> <span class="o">-</span><span class="n">c</span> <span class="o">../</span><span class="n">supervisor</span><span class="o">.</span><span class="n">conf</span> <span class="n">reload</span>
-</pre></div>
-</div>
-</li>
-<li><p>Flush the cache:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">redis</span><span class="o">-</span><span class="n">cli</span> <span class="n">flushall</span>
-</pre></div>
-</div>
-</li>
-<li><p>Restart the apache web server and check the new version is properly
-installed.</p></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade.html">2.3. Upgrading OnTask</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#are-you-upgrading-from-version-4-0-to-4-2">2.3.1. Are you upgrading from version &lt; 4.0 to 4.2?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#are-you-upgrading-from-version-4-3-to-4-3">2.3.2. Are you upgrading from version &lt; 4.3 to 4.3?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#are-you-upgrading-to-version-5-2">2.3.3. Are you upgrading to version 5.2?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#upgrade-steps">2.3.4. Upgrade Steps</a></li>
 </ul>
-</div>
-<div class="section" id="the-administration-pages">
-<span id="admin-pages"></span><h2>2.8. The Administration Pages<a class="headerlink" href="#the-administration-pages" title="Permalink to this headline">¶</a></h2>
-<p>OnTask uses the administration pages offered by Django. The account created with
-the command <code class="docutils literal notranslate"><span class="pre">createsuperuser</span></code> has complete access to those pages through a
-link in the upper right corner of the screen.</p>
-<p>These pages offer access to several important operations:</p>
-<ul class="simple">
-<li><p>The elements of each of the models stored in the database (workflows,
-actions, conditions, columns, etc). Each model has its corresponding page
-allowing the creation, update and deletion of any object.</p></li>
-<li><p>The user information. This is a special model representing the users, their
-name, credentials, etc. The platform allows the creation of user accounts.</p></li>
-<li><p>The group information. The platform differentiates users based on groups.
-Each group has different functionalities.</p></li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="admin_pages.html">2.4. The Administration Pages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">2.5. Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html#ldap-authentication">2.5.1. LDAP Authentication</a></li>
 </ul>
-<p>Once the instance is running, visit these pages and configure the platform to
-your needs.</p>
-</div>
-<div class="section" id="authentication">
-<span id="id5"></span><h2>2.9. Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
-<p>OnTask comes with the following authentication mechanisms: IMS-LTI,
-<code class="docutils literal notranslate"><span class="pre">REMOTE_USER</span></code> variable, basic authentication, and LDAP. The first three
-(IMS-LTI, <code class="docutils literal notranslate"><span class="pre">REMOTE_USER</span></code> and basic authentication) are enabled by default and used in that order whenever an unauthenticated request is received. It follows a brief description of how to configure them.</p>
-<ul id="ims-lti-config">
-<li><p><a class="reference external" href="http://www.imsglobal.org/activity/learning-tools-interoperability">IMS Learning Tools Interoperability (IMS-LTI)</a>. LTI
-is a standard developed by the IMS Global Learning Consortium to integrate
-multiple tools within a learning environment. In LTI terms, OnTask is
-configured to behave as a <em>tool provider</em> and assumes a <em>tool consumer</em> such
-as a Learning Management System to invoke its functionality. Any URL in
-OnTask can be given to the LTI consumer as the point of access.</p>
-<p>Ontask only provides two points of access for LTI requests coming from the
-consumer. One is the URL with suffix <code class="docutils literal notranslate"><span class="pre">/lti_entry</span></code> and the second is the
-URL provided by the actions to serve the personalized content (accessible
-through the <code class="docutils literal notranslate"><span class="pre">Actions</span></code> menu.</p>
-<p>To allow LTI access you need:</p>
-<ol class="arabic">
-<li><p>A tool consumer that can be configured to connect with OnTask. This type
-of configuration is beyond the scope of this manual.</p></li>
-<li><p>A set of pairs key,value in OnTask to be given to the tool consumers so that together with the URL, they are ready to send the requests. The key/value pairs need to be included as an additional variables in the file <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code> together with other local configuration variables. For example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LTI_OAUTH_CREDENTIALS</span><span class="o">=</span><span class="n">key1</span><span class="o">=</span><span class="n">secret1</span><span class="p">,</span><span class="n">key2</span><span class="o">=</span><span class="n">secret2</span>
-</pre></div>
-</div>
 </li>
-<li><p>OnTask needs to identify those roles from the external tool mapped to the instructor role. This mapping is provided through a list of those roles in the following configuration variable:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LTI_INSTRUCTOR_GROUP_ROLES</span><span class="o">=</span><span class="n">Instructor</span>
-</pre></div>
-</div>
-</li>
-</ol>
-<p>If you change the values of these variables, you need to restart the server so that the new values are in effect. This authentication has only basic functionality and it is assumed to be used only for learners (not for instructors).</p>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">REMOTE_USER</span></code>. The second method uses <a class="reference external" href="https://docs.djangoproject.com/en/2.1/howto/auth-remote-user/#authentication-using-remote-user">the variable REMOTE_USER</a> that is assumed to be defined by an external application. This method is ideal for environments in which users are already authenticated and are redirected to the OnTask pages (for example, using SAML). If OnTask receives a request from a non-existent user through this channel, it automatically and transparently creates a new user in the platform with the user name stored in the <code class="docutils literal notranslate"><span class="pre">REMOTE_USER</span></code> variable. OnTask relies on emails to identify different user names, so if you plan to use this authentication method make sure the value of <code class="docutils literal notranslate"><span class="pre">REMOTE_USER</span></code> is the email.</p>
-<p>Additionally, this mode of authentication will be enforced in all requests reaching OnTask. However, this configuration prevents the recording of email reads. Read the section <a class="reference internal" href="#email-config"><span class="std std-ref">Email Configuration</span></a> to configure the server to allow such functionality to be properly configured.</p>
-</li>
-<li><p>Basic authentication. If the variable <code class="docutils literal notranslate"><span class="pre">REMOTE_USER</span></code> is not set in the internal environment of Django where the web requests are served, OnTask resorts to conventional authentication requiring email and password. These credentials are stored in the internal database managed by OnTask.</p></li>
+<li class="toctree-l1"><a class="reference internal" href="email_config.html">2.6. Email Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="email_config.html#tracking-email-reads">2.6.1. Tracking Email Reads</a></li>
 </ul>
-<p>The API can be accessed using through token authentication. The token can be generated manually through the user profile page. This type of authentication may need some special configuration in the web server (Apache or similar) so that the <code class="docutils literal notranslate"><span class="pre">HTTP_AUTHORIZATION</span></code> header is not removed.</p>
-<div class="section" id="ldap-authentication">
-<span id="ldap-config"></span><h3>2.9.1. LDAP Authentication<a class="headerlink" href="#ldap-authentication" title="Permalink to this headline">¶</a></h3>
-<p>OnTask may also be configured to use LDAP to authenticate users. This is done
-through the external package <a class="reference external" href="https://bitbucket.org/illocution/django-auth-ldap">django-auth-ldap</a>. In its current version,
-this authentication mode cannot be combined with the previous ones (this
-requires some non-trivial code changes). The following instructions describe
-the basic configuration to enable LDAP authentication. For more details check
-the <a class="reference external" href="https://django-auth-ldap.readthedocs.io/en/latest/">documentation of the django-auth-ldap module</a>.</p>
-<ul>
-<li><p>Stop OnTask (if it is running)</p></li>
-<li><p>Make sure your server has installed the development files for OpenLDAP. In
-Debian/Ubuntu, the required packages are:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">libsasl2</span><span class="o">-</span><span class="n">dev</span> <span class="n">python</span><span class="o">-</span><span class="n">dev</span> <span class="n">libldap2</span><span class="o">-</span><span class="n">dev</span> <span class="n">libssl</span><span class="o">-</span><span class="n">dev</span>
-</pre></div>
-</div>
-<p>In RedHat/CentOS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span><span class="o">-</span><span class="n">devel</span> <span class="n">openldap</span><span class="o">-</span><span class="n">devel</span>
-</pre></div>
-</div>
 </li>
-<li><p>Install the module <code class="docutils literal notranslate"><span class="pre">django-auth-ldap</span></code></p></li>
-<li><p>Edit the configuration file <code class="docutils literal notranslate"><span class="pre">local.env</span></code> and add the following two variable definitions:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AUTH_LDAP_SERVER_URI</span><span class="o">=</span><span class="p">[</span><span class="n">uri</span> <span class="n">pointing</span> <span class="n">to</span> <span class="n">your</span> <span class="n">ldap</span> <span class="n">server</span><span class="p">]</span>
-<span class="n">AUTH_LDAP_PASSWORD</span><span class="o">=</span><span class="p">[</span><span class="n">Password</span> <span class="n">to</span> <span class="n">connect</span> <span class="n">to</span> <span class="n">the</span> <span class="n">server</span><span class="p">]</span>
-</pre></div>
-</div>
-</li>
-<li><p>Edit the  file <code class="docutils literal notranslate"><span class="pre">settings/base.py</span></code> and uncomment the lines that import the <code class="docutils literal notranslate"><span class="pre">ldap</span></code> library (<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">ldap</span></code>) and the lines that import three methods from the <code class="docutils literal notranslate"><span class="pre">django_auth_ldap.config</span></code> module (<code class="docutils literal notranslate"><span class="pre">LDAPSearch</span></code>, <code class="docutils literal notranslate"><span class="pre">GroupOfNamesType</span></code> and <code class="docutils literal notranslate"><span class="pre">LDAPGroupQuery</span></code>)</p></li>
-<li><p>Locate the section in the file <code class="docutils literal notranslate"><span class="pre">settings/base.py</span></code> that contains the variables to configure <em>LDAP AUTHENTICATION</em>.</p></li>
-<li><p>Uncomment the ones needed for your configuration. Make sure all the information is included to connect to the server, perform the binding, search, and if needed, assign fields to user and group attributes.</p></li>
-<li><p>Locate the variable <code class="docutils literal notranslate"><span class="pre">AUTHENTICATION_BACKENDS</span></code> in the same file.</p></li>
-<li><p>Comment the lines referring to the back-ends <code class="docutils literal notranslate"><span class="pre">LTIAuthBackend</span></code> and
-<code class="docutils literal notranslate"><span class="pre">RemoteUserBackend</span></code>.</p></li>
-<li><p>Uncomment the line referring to <code class="docutils literal notranslate"><span class="pre">LDAPBackend</span></code>.</p></li>
-<li><p>Make sure the LDAP server contains the data about the users in the right
-format</p></li>
-<li><p>Start the OnTask server.</p></li>
+<li class="toctree-l1"><a class="reference internal" href="canvas_email_config.html">2.7. Canvas Email Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">2.8. Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sql_connections.html">2.9. SQL Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bulk_user_create.html">2.10. Creating users in Bulk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker_server.html">2.11. Creating a Development Server using Docker</a></li>
 </ul>
-</div>
-</div>
-<div class="section" id="email-configuration">
-<span id="email-config"></span><h2>2.10. Email Configuration<a class="headerlink" href="#email-configuration" title="Permalink to this headline">¶</a></h2>
-<p>OnTask relies on the functionality included in Django to send emails from the application. The following variables can be used in the configuration file:</p>
-<dl>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_HOST</span></code></dt><dd><p>Host providing the SMTP service.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_PORT</span></code></dt><dd><p>Port to communicate with the host</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_HOST_USER</span></code></dt><dd><p>User account to log into the email host</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_HOST_PASSWORD</span></code></dt><dd><p>Password for the account to log into the email host</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_USE_TLS</span></code></dt><dd><p>Boolean stating if the communication should use TLS</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_USE_SSL</span></code></dt><dd><p>Boolean stating if the communication should use SSL</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_ACTION_NOTIFICATION_SENDER</span></code></dt><dd><p>Address to use when sending notifications</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_HTML_ONLY</span></code></dt><dd><p>Send HTML text only, or alternatively, send text and HTML as an attachment</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">True</span></code> (send HTML only)</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_BURST</span></code></dt><dd><p>Number of consecutive emails to send before pausing (to adapt to potential throttling of the SMTP server)</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_BURST_PAUSE</span></code></dt><dd><p>Number of seconds to wait between bursts.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
-</dd>
-</dl>
-<p>An example of the content in the configuration is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EMAIL_HOST</span><span class="o">=</span><span class="n">smtp</span><span class="o">.</span><span class="n">yourinstitution</span><span class="o">.</span><span class="n">org</span>
-<span class="n">EMAIL_PORT</span><span class="o">=</span><span class="mi">334</span>
-<span class="n">EMAIL_HOST_USER</span><span class="o">=</span><span class="n">mailmaster</span>
-<span class="n">EMAIL_HOST_PASSWORD</span><span class="o">=</span><span class="n">somepassword</span>
-<span class="n">EMAIL_USE_TLS</span><span class="o">=</span><span class="kc">False</span>
-<span class="n">EMAIL_USE_SSL</span><span class="o">=</span><span class="kc">False</span>
-<span class="n">EMAIL_ACTION_NOTIFICATION_SENDER</span><span class="o">=</span><span class="n">ontaskmaster</span><span class="nd">@yourinstitution</span><span class="o">.</span><span class="n">org</span>
-<span class="n">EMAIL_BURST</span><span class="o">=</span><span class="mi">500</span>
-<span class="n">EMAIL_BURST_PAUSE</span><span class="o">=</span><span class="mi">43200</span>
-</pre></div>
-</div>
-<p>Set theses variables in the configuration file to the appropriate values
-before starting the application. Make sure the server is running <strong>in production mode</strong>. The development mode is configured to <strong>not send</strong> emails but show their content in the console instead.</p>
-<div class="section" id="tracking-email-reads">
-<h3>2.10.1. Tracking Email Reads<a class="headerlink" href="#tracking-email-reads" title="Permalink to this headline">¶</a></h3>
-<p>If OnTask is deployed using SAML, all URLs are likely to be configured to go through the authentication layer. This configuration prevents OnTask from receiving the email read confirmations. In this case, the web server needs to be configured so that the SAML authentication is removed for the URL <code class="docutils literal notranslate"><span class="pre">trck</span></code> (the one receiving the email read tracking). In Apache, this can be achieved by the following directive:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">Location</span> <span class="o">/</span><span class="n">trck</span><span class="o">&gt;</span>
-  <span class="n">Require</span> <span class="nb">all</span> <span class="n">granted</span>
-<span class="o">&lt;/</span><span class="n">Location</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<p>If OnTask is not served from the root of your web server, make sure you include the absolute URL to <code class="docutils literal notranslate"><span class="pre">trck</span></code>. For example, if OnTask is available through the URL <code class="docutils literal notranslate"><span class="pre">my.server.com/somesuffix/ontask</span></code>, then the URL to use in the previous configuration is <code class="docutils literal notranslate"><span class="pre">my.server.com/somesuffix/ontask/trck</span></code>.</p>
-</div>
-</div>
-<div class="section" id="canvas-email-configuration">
-<span id="canvas-email-config"></span><h2>2.11. Canvas Email Configuration<a class="headerlink" href="#canvas-email-configuration" title="Permalink to this headline">¶</a></h2>
-<p>OnTask allows to send personalized emails to users’s inbox in an instance of a <a class="reference external" href="https://www.canvaslms.com.au/">Canvas Learning Management System</a> using its API. Configuring this functionality requires permission from Canvas to access its API using OAuth2 authentication. Once this authorization is obtained, the following variables need to be defined in the file configuration file:</p>
-<dl>
-<dt><code class="docutils literal notranslate"><span class="pre">CANVAS_INFO_DICT</span></code></dt><dd><p>A dictionary with elements pairs containing the identifier for a Canvas instance that will be shown to the user and a dictionary with the following configuration parameters:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">domain_port</span></code>: A string containing the domain and port (if needed) of the Canvas host.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">client_id</span></code>: This value is provided by the administrator of the Canvas instance once permission to use the API has been granted.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">client_secret</span></code>: This value is provided together with the <code class="docutils literal notranslate"><span class="pre">client_id</span></code> once the permission to use the API is granted. It is typically a large random sequence of characters.</p></li>
-</ul>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">authorize_url</span></code>: URL template to access the first step of the authorization. This is usually <code class="docutils literal notranslate"><span class="pre">https://{0}/login/oauth2/auth</span></code>. The string <code class="docutils literal notranslate"><span class="pre">{0}</span></code> is replaced internally with the value of <code class="docutils literal notranslate"><span class="pre">domain_port</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">access_token_url</span></code>: URL template to access the token. This is usually <code class="docutils literal notranslate"><span class="pre">https://{0}/login/oauth2/token</span></code>. The string <code class="docutils literal notranslate"><span class="pre">{0}</span></code> is replaced internally with the value of <code class="docutils literal notranslate"><span class="pre">domain_port</span></code>.</p></li>
-</ul>
-</div></blockquote>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">conversation_URL</span></code>: Similar to the previous two values, it is the entry point in the API to create a conversation (equivalent to send an email). This is usually <code class="docutils literal notranslate"><span class="pre">https://{0}/api/v1/conversations</span></code>. The string <code class="docutils literal notranslate"><span class="pre">{0}</span></code> is replaced internally with the value of <code class="docutils literal notranslate"><span class="pre">domain_port</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">aux_params</span></code>: A dictionary with additional parameters. The dictionary may include a value for the key <code class="docutils literal notranslate"><span class="pre">burst</span></code> to limit the number of consecutive API invocations (to prevent throttling) and a value for the key <code class="docutils literal notranslate"><span class="pre">pause</span></code> with the number of seconds to separate bursts. Here is an example of the definition of this variable in the <code class="docutils literal notranslate"><span class="pre">local.env</span></code> file:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CANVAS_INFO_DICT</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;Server one&quot;</span><span class="p">:</span>
-        <span class="p">{</span><span class="s2">&quot;domain_port&quot;</span><span class="p">:</span> <span class="s2">&quot;yourcanvasdomain.edu&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;10000000000001&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="s2">&quot;YZnGjbkopt9MpSq2fujUO&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;authorize_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://</span><span class="si">{0}</span><span class="s2">/login/oauth2/auth&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;access_token_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://</span><span class="si">{0}</span><span class="s2">/login/oauth2/token&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;conversation_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://</span><span class="si">{0}</span><span class="s2">/api/v1/conversations&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;aux_params&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;burst&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;pause&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}}</span>
- <span class="p">}</span>
-</pre></div>
-</div>
-</li>
-</ul>
-<p>Make sure you include this informtion <strong>all in a single line in the configuration file</strong>.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">{}</span></code> (Empty dictionary)</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">CANVAS_TOKEN_EXPIRY_SLACK</span></code></dt><dd><p>The number of seconds to renew a token before it expires. For example, if the variable is 300, any API call performed with a token five minutes before it expires will prompt a token refresh. Here is an example of such definition in <code class="docutils literal notranslate"><span class="pre">local.env</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CANVAS_TOKEN_EXPIRY_SLACK</span><span class="o">=</span><span class="mi">300</span>
-</pre></div>
-</div>
-<p>Default: 600</p>
-</dd>
-</dl>
-<p>After defining these variables, restart the application for the values to be considered. To test the configuration open a workflow, create an action of type <code class="docutils literal notranslate"><span class="pre">Personalized</span> <span class="pre">canvas</span> <span class="pre">email</span></code> and email those messages.</p>
-</div>
-<div class="section" id="plugins">
-<span id="plugin-install"></span><h2>2.12. Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
-<p>OnTask allows also the inclusion of arbitrary Python modules to execute and transform the data stored in a workflow. The Python code in the plugins is executed the same interpreter and execution environment as the rest of the platform. Thus, <strong>use this functionality to execute only code that is fully trusted</strong>. There is nothing preventing a plugin to run malicious code, so use at your own risk. To configure the execution of plugins follow these steps:</p>
-<ol class="arabic">
-<li><p>Create a folder at any location in your instance of OnTask to store the Python modules. OnTask assumes that each directory in that folder contains a Python module (that is, a folder with a file <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> inside).</p></li>
-<li><p>Open the administration page of OnTask as superuser and go to the section with title <cite>Data Upload/Merge Operations</cite>.</p></li>
-<li><p>Select the <cite>Preferences</cite> section.</p></li>
-<li><p>Modify the field <cite>Folder where plugins are installed</cite> to contain the absolute path to the folder created in your systems.</p></li>
-<li><p>Make sure that the Python interpreter that is currently executing the Django code is also capable of accessing and executing the code in the plugin folder.</p></li>
-<li><p>Restart the server to make sure this variable is properly updated.</p></li>
-<li><p>To create a new plugin first create a folder in the plugin space previously configured.</p></li>
-<li><p>Inside this new folder create a Python file with name <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code>. The file has to have a structure a shown in <a class="reference download internal" download="" href="../_downloads/8f06f11ffe60a56dc05e6f185e031ae7/__init__.py"><code class="xref download docutils literal notranslate"><span class="pre">the</span> <span class="pre">following</span> <span class="pre">template</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">from</span> <span class="nn">ontask.dataops.plugin</span> <span class="kn">import</span> <span class="n">OnTaskTransformation</span>
-
-<span class="c1"># The field class_name contains the name of the class to load to execute the</span>
-<span class="c1"># plugin.</span>
-<span class="n">class_name</span> <span class="o">=</span> <span class="s1">&#39;OnTaskTestPlugin&#39;</span>
-
-
-<span class="k">class</span> <span class="nc">OntaskTestPlugin</span><span class="p">(</span><span class="n">OnTaskTransformation</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Example of a class that implements the OnTask plugin interface. The</span>
-<span class="sd">    objects of this class have to provide the following elements:</span>
-
-<span class="sd">    1. Field name: Plugin name show to the users.</span>
-
-<span class="sd">    2. Field description_text: A string with the detailed description of what</span>
-<span class="sd">    the plugin does</span>
-
-<span class="sd">    3. Field input_column_names: A potentially empty list of column names </span>
-<span class="sd">    (strings). If the list is empty, the columns are selected by the user at</span>
-<span class="sd">    execution time.</span>
-
-<span class="sd">    4. Field output_column_names: List of names (strings) of the</span>
-<span class="sd">    columns to be used for the output of the transformation. If the list is</span>
-<span class="sd">    empty, the column names will be taken from the input list with an optional</span>
-<span class="sd">    suffix to be added.</span>
-
-<span class="sd">    5. Field output_column_suffix: (optionally empty) string to add to the name</span>
-<span class="sd">    of the output columns</span>
-
-<span class="sd">    6. Field parameters: an optionally empty list with tuples with the following</span>
-<span class="sd">    structure:</span>
-
-<span class="sd">      (&#39;name&#39;, type, [list of allowed values], initial value, help_text)</span>
-
-<span class="sd">      These elements will be requested from the user before executing the</span>
-<span class="sd">      plugin through a form. The conditions on these values are:</span>
-
-<span class="sd">      - name must be a string</span>
-<span class="sd">      - type must be a string equal to &quot;integer&quot;, &quot;double&quot;, &quot;string&quot;, </span>
-<span class="sd">        &quot;datetime&quot; or &quot;boolean&quot;. </span>
-<span class="sd">      - The list of values is to restrict the</span>
-<span class="sd">        possible values</span>
-<span class="sd">      - The initial value must be of the type specified by the second </span>
-<span class="sd">        element.</span>
-<span class="sd">      - Help_text a string to show as help text</span>
-
-<span class="sd">    7. Method &quot;run&quot; that receives:</span>
-<span class="sd">       - a pandas data frame with the data to process</span>
-<span class="sd">       - a string with the name of the key column that will be used to merge</span>
-<span class="sd">       the result.</span>
-<span class="sd">       - A dictionary of pairs (name, value) with the parameters described in</span>
-<span class="sd">       the previous element.</span>
-
-<span class="sd">       and returns a result Pandas data frame. This frame **must** have one</span>
-<span class="sd">       column with the key column name provided so that it can be properly</span>
-<span class="sd">       merged with the existing data.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
-        <span class="c1"># Call the constructor in the superclass</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Plugin Template&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description_text</span> <span class="o">=</span> <span class="s1">&#39;Example of plugin description&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RESULT 1&#39;</span><span class="p">,</span> <span class="s1">&#39;RESULT 2&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="s1">&#39;param string&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="s1">&#39;v2&#39;</span><span class="p">],</span> <span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="s1">&#39;help param string&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param integer&#39;</span><span class="p">,</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;help param integer&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param double&#39;</span><span class="p">,</span> <span class="s1">&#39;double&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span>
-                             <span class="s1">&#39;help param double&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param boolean&#39;</span><span class="p">,</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;help param boolean&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param datetime&#39;</span><span class="p">,</span> <span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;2018-05-25 18:03:00+09:30&#39;</span><span class="p">,</span>
-                               <span class="s1">&#39;help param datetime&#39;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s1">&#39;param datetime2&#39;</span><span class="p">,</span> <span class="s1">&#39;datetime&#39;</span><span class="p">,</span> 
-                                <span class="p">[],</span>
-                                <span class="s1">&#39;2018-05-25 18:03:00+09:30&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;help param datetime&#39;</span><span class="p">),</span>
-        <span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_frame</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Method to overwrite. Receives a data frame wih a number of columns</span>
-<span class="sd">        stipulated by the num_column_input pair, the name of a key column and a</span>
-<span class="sd">        dictionary with parameters of the form name, value.</span>
-
-<span class="sd">        Runs the algorithm and returns a pandas data frame structure that is</span>
-<span class="sd">        merged with the existing data frame in the workflow using the merge_key.</span>
-
-<span class="sd">        :param data_frame: Input data for the plugin</span>
-<span class="sd">        :param parameters: Dictionary with (name, value) pairs.</span>
-<span class="sd">        :return: a Pandas data_frame to merge with the existing one (must</span>
-<span class="sd">        contain a column with name merge_key)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Extract the key column from the given data frame</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">data_frame</span><span class="o">.</span><span class="n">deep_copy</span><span class="p">()</span>
-
-        <span class="c1"># Process the given data and create the result</span>
-        <span class="n">result</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">result</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">2</span>
-
-        <span class="k">return</span> <span class="n">result</span>
-</pre></div>
-</div>
-</li>
-<li><p>The menu <em>Dataops</em> at the top of the platform includes the page <em>Transform</em> that provides access to the plugins and its invocation with the current workflow.</p></li>
-</ol>
-<blockquote>
-<div></div></blockquote>
-</div>
-<div class="section" id="sql-connections">
-<span id="id6"></span><h2>2.13. SQL Connections<a class="headerlink" href="#sql-connections" title="Permalink to this headline">¶</a></h2>
-<p>One of the key functionalities of OnTask is to be able to merge data from multiple sources. Section <a class="reference internal" href="../Using/index.html#dataops"><span class="std std-ref">Data</span></a> describes the functionality available to perform these operations. Some of them, however, require special configuration from the tool administrator. This is the case when uploading and merging data from a remote database that allows SQL connections. These connections must be first defined by the administrator and are then are available to the instructors.</p>
-<p>The screen to manage these connections is accessed clicking in the item <em>SQL Connections</em> at the top menu bar. This link is only available for those users with the administration role.</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_sql_connections_index.png" src="../_images/workflow_sql_connections_index.png" />
-</div>
-<p>Each connection can be defined with the following parameters:</p>
-<div class="figure align-center">
-<img alt="../_images/workflow_superuser_sql_edit.png" src="../_images/workflow_superuser_sql_edit.png" />
-</div>
-<dl class="simple">
-<dt>Name (required)</dt><dd><p>Name of the connection for reference purposes within the platform. This name must be unique across the entire platform.</p>
-</dd>
-<dt>Description</dt><dd><p>A paragraph or two explaining more detail about this connection.</p>
-</dd>
-<dt>Type (required)</dt><dd><p>Type of database connection to be used. Typical types include <em>postgres</em>, <em>mysql</em>, etc.</p>
-</dd>
-<dt>Driver</dt><dd><p>Driver to be used for the connection. OnTask assumes that these drivers are properly installed and available to the underlying Python interpreter running Django.</p>
-</dd>
-<dt>User</dt><dd><p>User name to connect to the remote database.</p>
-</dd>
-<dt>Requires password</dt><dd><p>Flag denoting if the connection requires password. If it does, the password will be required at execution time. This feature allows OnTask to avoid storing DB passwords.</p>
-</dd>
-<dt>Host</dt><dd><p>Host name or IP storing the remote database</p>
-</dd>
-<dt>Port</dt><dd><p>Port to use to connect to the remote host</p>
-</dd>
-<dt>DB Name (required)</dt><dd><p>Name of the remote database</p>
-</dd>
-<dt>Table (required)</dt><dd><p>Name of the table stored in the remote database and containing the data to upload/merge</p>
-</dd>
-</dl>
-<p>Once a connection is defined, as described in <a class="reference internal" href="../Using/index.html#sql-connection-run"><span class="std std-ref">SQL connection</span></a>, all the data in the table will be accessed and loaded/merged into the current workflow.</p>
-<p>The operations allowed for each connection are:</p>
-<dl class="simple">
-<dt>Edit</dt><dd><p>Change any of the parameters of the connection</p>
-</dd>
-<dt>Clone</dt><dd><p>Create a duplicate of the connection (useful to reuse configuration parameters)</p>
-</dd>
-<dt>Delete</dt><dd><p>Remove the connection from the platform.</p>
-</dd>
-</dl>
-</div>
-<div class="section" id="creating-users-in-bulk">
-<span id="bulk-user-creation"></span><h2>2.14. Creating users in Bulk<a class="headerlink" href="#creating-users-in-bulk" title="Permalink to this headline">¶</a></h2>
-<p>OnTask offers the possibility of creating users in bulk through given the
-data in a CSV file through the following steps:</p>
-<ol class="arabic">
-<li><p>Create a CSV file (plain text) with the initial line containing only the
-word <code class="docutils literal notranslate"><span class="pre">email</span></code> (name of the column). Include then one email address per
-user per line. You may check the file <code class="docutils literal notranslate"><span class="pre">initial_learners.csv</span></code> provided in
-the folder <code class="docutils literal notranslate"><span class="pre">scripts</span></code>.</p></li>
-<li><p>From the top level folder run the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 manage.py initialize_db scripts/initial_learners.csv&quot;
-</pre></div>
-</div>
-<p>If you have the user emails in a file with a different column name, you
-may provide the script that name (instead of the default <code class="docutils literal notranslate"><span class="pre">email</span></code> using
-the option <code class="docutils literal notranslate"><span class="pre">-e</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 manage.py initialize_db -e your_email_column_name scripts/initial_learners.csv&quot;
-</pre></div>
-</div>
-<p>If you want to create user accounts for instructors, you need to specify
-this with the option <code class="docutils literal notranslate"><span class="pre">-i</span></code> in the script:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 manage.py initialize_db -e your_email_column_name -i scripts/initial_learners.csv&quot;
-</pre></div>
-</div>
-</li>
-</ol>
-</div>
-<div class="section" id="creating-a-development-server-using-docker">
-<h2>2.15. Creating a Development Server using Docker<a class="headerlink" href="#creating-a-development-server-using-docker" title="Permalink to this headline">¶</a></h2>
-<p>You may use <a class="reference external" href="https://docker.com">Docker</a> to create a set of containers that run a <strong>development</strong> server. The file <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> and the folder <code class="docutils literal notranslate"><span class="pre">docker</span></code> contains the configuration files to create the required images and instantiate them as containers. The current configuration creates the following containers:</p>
-<dl class="simple">
-<dt>OnTask Server</dt><dd><p>Built on top of an ubuntu instance with Python 3, Django and Apache installed. The application is installed internally on port 80 in the container mapped to port 8080 of the local machine.</p>
-</dd>
-<dt>Message Queue</dt><dd><p>Built on top of an ubuntu instance with Python 3, Django and an the OnTask source code. It executes a Celery daemon to receive execution requests.</p>
-</dd>
-<dt>Relational Database</dt><dd><p>Built on top of the latest postgres docker image. It contains the database server with the data being stored in a separated volume (preserved among executions).</p>
-</dd>
-<dt>Redis</dt><dd><p>Built on top of the latest redis docker image. It contains the cache server and broker for the message passing between Django and Celery.</p>
-</dd>
-</dl>
-<p>The file <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> contains the parameters to build the four containers and start the execution of OnTask.</p>
-<p>After installing the Docker environment in your computer and creating the configuration file for the server running in the container, the sequence of commands to start the server is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">build</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span>
-</pre></div>
-</div>
-<p>The process creates the containers and the server will be accessible through port 8080 in the host machine.</p>
 </div>
 </div>
 
@@ -959,10 +100,10 @@ this with the option <code class="docutils literal notranslate"><span class="pre
     <ul>
         <li>
           &larr;
-          <a href="../Introduction/index.html" title="Previous document">1. What is OnTask</a>
+          <a href="../Introduction/index.html" title="Previous document"><span class="section-number">1. </span>What is OnTask</a>
         </li>
         <li>
-          <a href="../Using/index.html" title="Next document">3. Using OnTask</a>
+          <a href="requirements.html" title="Next document"><span class="section-number">2.1. </span>Requirements</a>
           &rarr;
         </li>
     </ul>
@@ -998,21 +139,17 @@ this with the option <code class="docutils literal notranslate"><span class="pre
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">1. What is OnTask</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installation process</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#requirements">2.1. Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#are-you-upgrading-from-version-4-0-to-4-2">2.2. Are you upgrading from version &lt; 4.0 to 4.2?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#are-you-upgrading-from-version-4-3-to-4-3">2.3. Are you upgrading from version &lt; 4.3 to 4.3?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#are-you-upgrading-to-version-5-2">2.4. Are you upgrading to version 5.2?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#required-tools">2.5. Required tools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#download-install-and-configure-ontask">2.6. Download, install and configure OnTask</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#upgrading-ontask">2.7. Upgrading OnTask</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-administration-pages">2.8. The Administration Pages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#authentication">2.9. Authentication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#email-configuration">2.10. Email Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#canvas-email-configuration">2.11. Canvas Email Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plugins">2.12. Plugins</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sql-connections">2.13. SQL Connections</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-users-in-bulk">2.14. Creating users in Bulk</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-a-development-server-using-docker">2.15. Creating a Development Server using Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">2.1. Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_ontask.html">2.2. Download, install and configure OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html">2.3. Upgrading OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_pages.html">2.4. The Administration Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html">2.5. Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email_config.html">2.6. Email Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="canvas_email_config.html">2.7. Canvas Email Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">2.8. Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_connections.html">2.9. SQL Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_user_create.html">2.10. Creating users in Bulk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker_server.html">2.11. Creating a Development Server using Docker</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Using/index.html">3. Using OnTask</a></li>
@@ -1025,8 +162,8 @@ this with the option <code class="docutils literal notranslate"><span class="pre
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../Introduction/index.html" title="previous chapter">1. What is OnTask</a></li>
-      <li>Next: <a href="../Using/index.html" title="next chapter">3. Using OnTask</a></li>
+      <li>Previous: <a href="../Introduction/index.html" title="previous chapter"><span class="section-number">1. </span>What is OnTask</a></li>
+      <li>Next: <a href="requirements.html" title="next chapter"><span class="section-number">2.1. </span>Requirements</a></li>
   </ul></li>
 </ul>
 </div>

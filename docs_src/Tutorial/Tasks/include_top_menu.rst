@@ -9,7 +9,7 @@ The menu contains the following links:
 |fa-table| Table
   Operations to visualize and manipulate the table (search for values, add a row, add a column)
 
-|fa-cog| More
+More
   Additional operations to view:
 
   Workflow operations
@@ -27,5 +27,5 @@ The menu contains the following links:
 |fa-user| User profile
   Link to the user profile and logout
 
-|fa-book| Manual
-  Link to the OnTask manual (this document)
+|fa-book| Manual & API documentation
+  Link to the OnTask manual (this document) and the API documentation

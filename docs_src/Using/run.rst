@@ -10,7 +10,7 @@ Once an action has been created, it can be *run*. The meaning of this term is di
 Sending personalized emails (Personalized Text Actions)
 =======================================================
 
-Once you created a personalized text action and verified its content using the *Preview* button, save its content. The right-most column has a button with name *Run*.
+Once you created a personalized text action and verified its content using the *Preview* button, save its content. The second operation in the left column *runs the action*.
 
 .. figure:: /scaptures/action_action_ops.png
    :align: center
@@ -22,11 +22,11 @@ If selected, the next page is a form requesting information about how to send th
 
 The fields in this form are:
 
-Email subject
-  A line to be included as subject of all the emails.
-
 Column to use for target email address
   OnTask needs to know where to send the email. It assumes that you have a column containing that information for each learner and it needs you to select that column.
+
+Email subject
+  A line to be included as subject of all the emails.
 
 Comma separated list of CC emails
   A comma-separated list of emails to include in the *carbon copy* or *CC* email field.

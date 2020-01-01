@@ -14,7 +14,7 @@ Version |ontask_version|
 
 .. toctree::
    :numbered:
-   :maxdepth: 2
+   :maxdepth: 3
 
    Introduction/index
    Install/index
