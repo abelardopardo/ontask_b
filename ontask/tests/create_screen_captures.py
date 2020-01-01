@@ -297,6 +297,7 @@ class ScreenTestFixture(ScreenTests):
         # Ops/Edit Column
         #
         self.open_column_edit('SID')
+        self.wait_for_modal_open()
         self.modal_ss('workflow_column_edit.png')
 
         # Click in the cancel button
@@ -957,9 +958,10 @@ class ScreenTestFixture(ScreenTests):
         # Open Workflows page
         self.access_workflow_from_home_page(self.workflow_name)
 
-        #
+        self.go_to_attribute_page()
+        self.create_attribute('akey', 'avalue')
+
         # Logs
-        #
         self.go_to_logs()
 
         # Take picture of the body

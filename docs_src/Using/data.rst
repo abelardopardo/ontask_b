@@ -34,7 +34,7 @@ Upload Data
 
 These operations are provided to upload the initial set of data into the workflow table using a variety of sources.
 
-.. figure:: /scaptures/dataops_datauploadmerge2.png
+.. figure:: /scaptures/dataops_datauploadmerge.png
    :align: center
 
 Upload CSV Files
