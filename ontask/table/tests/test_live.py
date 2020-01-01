@@ -362,12 +362,12 @@ class TableViews(tests.OnTaskLiveTestCase):
         self.go_to_table()
 
         # Open the Views menu
-        self.selenium.find_element_by_link_text("Views").click()
+        self.selenium.find_element_by_xpath(
+            '//button[normalize-space()="Views"]').click()
 
         # Button to add a view
         self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='View']"
-        ).click()
+            "//button[normalize-space()='View']").click()
         self.wait_for_modal_open()
 
         # Insert data to create the first view
@@ -417,7 +417,8 @@ class TableViews(tests.OnTaskLiveTestCase):
             self.selenium.page_source)
 
         # Go back to the views page
-        self.selenium.find_element_by_link_text("Views").click()
+        self.selenium.find_element_by_xpath(
+            '//button[normalize-space()="Views"]').click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('view-table_previous')
 
@@ -479,9 +480,10 @@ class TableViews(tests.OnTaskLiveTestCase):
 
         # Click in views button and go back to the full table
         self.selenium.find_element_by_xpath(
-            "//div[@id='table-operation-buttons']/div/div[2]/button"
-        ).click()
-        self.selenium.find_element_by_link_text("Full table").click()
+            '//button[normalize-space()="Views"]').click()
+        self.wait_for_datatable('view-table_previous')
+
+        self.selenium.find_element_by_link_text("Full Table").click()
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
@@ -498,7 +500,8 @@ class TableViews(tests.OnTaskLiveTestCase):
             self.selenium.page_source)
 
         # Go back to the view management
-        self.selenium.find_element_by_link_text("Views").click()
+        self.selenium.find_element_by_xpath(
+            '//button[normalize-space()="Views"]').click()
         # Wait for the table to be refreshed
         self.wait_for_datatable('view-table_previous')
 
@@ -608,7 +611,7 @@ class TableInsertRow(tests.OnTaskLiveTestCase):
         element = self.selenium.find_element_by_xpath(
             "//table[@id='table-data']"
             "//tr/td[2][normalize-space() = '100']/"
-            "../td[1]/div/button"
+            "../td[1]/div/button[3]"
         )
         ActionChains(self.selenium).move_to_element(element).click().perform()
         self.wait_for_modal_open()

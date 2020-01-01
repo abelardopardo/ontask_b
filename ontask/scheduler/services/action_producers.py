@@ -131,7 +131,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
         except Exception as exc:
             messages.error(
                 request,
-                str(_('Unable to create scheduled operation ({0})')).format(
+                str(_('Unable to create scheduled operation: {0}')).format(
                     str(exc)))
             return redirect('action:index')
 
