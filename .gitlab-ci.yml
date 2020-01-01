@@ -31,11 +31,6 @@ test:
     - coverage run -a ./manage.py test -v 2 ontask.tests
     - coverage run -a ./manage.py test -v 2 ontask.scheduler
     - coverage run -a ./manage.py test -v 2 ontask.tasks
-  artifacts:
-    paths:
-      - htmlcov
-      - .coverage
-    expire_in: 60 days
 
 build_doc:
   stage: Build doc
@@ -57,7 +52,7 @@ build_doc:
     paths:
       - htmlcov
       - .coverage
-      - test/images
+      - ontask/tests/images
       - docs
 
 #variables:
