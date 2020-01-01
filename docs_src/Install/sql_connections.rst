@@ -30,8 +30,8 @@ Driver
 User
   User name to connect to the remote database.
 
-Requires password
-  Flag denoting if the connection requires password. If it does, the password will be required at execution time. This feature allows OnTask to avoid storing DB passwords.
+Password
+  Password for the database. If not give, it will be required at execution time.
 
 Host
   Host name or IP storing the remote database
@@ -42,19 +42,22 @@ Port
 DB Name (required)
   Name of the remote database
 
-Table (required)
-  Name of the table stored in the remote database and containing the data to upload/merge
+Table
+  Name of the table in the remote database containing the data to upload/merge. If not give, it will be requested at execution time.
 
 Once a connection is defined, as described in :ref:`sql_connection_run`, all the data in the table will be accessed and loaded/merged into the current workflow.
 
 The operations allowed for each connection are:
 
-Edit
+|fa-pencil| Edit
   Change any of the parameters of the connection
 
-Clone
+|fa-eye| View
+  View the values of the connection
+
+|fa-clone| Clone
   Create a duplicate of the connection (useful to reuse configuration parameters)
 
-Delete
+|fa-trash| Delete
   Remove the connection from the platform.
 

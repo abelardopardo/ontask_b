@@ -65,6 +65,9 @@ The icons in the bottom of this element allow you to perform the following opera
 |fa-trash| *Delete the workflow*
   Delete the workflow from the system.
 
+|fa-star-o| *Mark as favourite*
+  Mark the workflow as favourite to be shown at the top of the screen.
+
 When a workflow is open, the top-bar menu appears with the structure shown in the following figure.
 
 .. figure:: /scaptures/tutorial_top_menu_bar.png

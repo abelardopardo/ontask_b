@@ -61,8 +61,8 @@ When creating a view you need to provide a name (required), a description, a sub
 
 Once a view is created, the following operations are available:
 
-Edit
-  Click in the view name to edit its elements (name, description, set of columns to show and row filter)
+|fa-pencil| Edit
+  Edit the elements in the view (name, description, set of columns to show and row filter)
 
 |fa-eye| Show
   Show the subset of the table selected by the view
