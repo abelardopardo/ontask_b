@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-19 20:59+1030\n"
-"PO-Revision-Date: 2019-10-19 20:59+1030\n"
+"POT-Creation-Date: 2020-01-01 10:58+1030\n"
+"PO-Revision-Date: 2020-01-01 11:03+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: Abelardo Paro\n"
 "Language: es\n"
@@ -18,36 +18,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.2.4\n"
 
-#: ontask/__init__.py:53
+#: ontask/__init__.py:151
 msgid "The symbol ' cannot be used in the name."
 msgstr "El símbolo ' no se puede utilizar en el nombre."
 
-#: ontask/__init__.py:56
+#: ontask/__init__.py:154
 msgid "The symbol \" cannot be used in the name."
 msgstr "El símbolo \" no se puede utilizar en el nombre."
 
-#: ontask/__init__.py:59
+#: ontask/__init__.py:157
 msgid "The name cannot start with \"__\""
 msgstr "El nombre no puede comenzar con “__”"
 
-#: ontask/__init__.py:66
+#: ontask/__init__.py:164
 msgid "Copy of "
 msgstr "Copia de "
 
-#: ontask/accounts/forms.py:20
+#: ontask/accounts/forms.py:19
 msgid "Email address"
 msgstr "Dirección de correo"
 
-#: ontask/accounts/forms.py:23
+#: ontask/accounts/forms.py:22
 msgid "Enter Email"
 msgstr "Introducir correo"
 
-#: ontask/accounts/forms.py:24
+#: ontask/accounts/forms.py:23
 msgid "Enter Password"
 msgstr "Introducir clave"
 
-#: ontask/accounts/forms.py:25 ontask/templates/accounts/signup.html:11
-#: templates/registration/password_reset_complete.html:13
+#: ontask/accounts/forms.py:24 ontask/templates/accounts/signup.html:11
 msgid "Log in"
 msgstr "Iniciar sesión"
 
@@ -57,411 +56,432 @@ msgid ""
 msgstr ""
 "Tu clave ha cambiado, por tanto la sesión ha terminado. Re-inicie la sesión"
 
-#: ontask/action/evaluate/action.py:262
+#: ontask/action/evaluate/action.py:253
 msgid "Incorrect type of action"
 msgstr "Tipo de acción incorrecta"
 
-#: ontask/action/evaluate/template.py:277
-#: ontask/action/evaluate/template.py:281
+#: ontask/action/evaluate/template.py:279
+#: ontask/action/evaluate/template.py:283
 #, python-brace-format
 msgid "Name {0} is reserved."
 msgstr "El nombre {0} está reservado."
 
-#: ontask/action/forms/crud.py:55
+#: ontask/action/forms/crud.py:47
 msgid "There is already an action with this name."
 msgstr "Ya hay una acción con este nombre."
 
-#: ontask/action/forms/crud.py:148
+#: ontask/action/forms/crud.py:138
 msgid "Name cannot be empty"
 msgstr "El nombre no puede ser vacío"
 
-#: ontask/action/forms/crud.py:162
+#: ontask/action/forms/crud.py:152
 msgid "There is already a condition with this name."
 msgstr "Ya hay una condición con este nombre."
 
-#: ontask/action/forms/crud.py:169
+#: ontask/action/forms/crud.py:159
 msgid "The workflow has a column with this name."
 msgstr "Ya hay un flujo con este nombre."
 
-#: ontask/action/forms/crud.py:176
+#: ontask/action/forms/crud.py:166
 msgid "The workflow has an attribute with this name."
 msgstr "El flujo tiene un atributo con este nombre."
 
-#: ontask/action/forms/crud.py:194
+#: ontask/action/forms/crud.py:184
 msgid "File with previously exported OnTask actions"
 msgstr "Fichero que contiene acciones previamente exportada"
 
-#: ontask/action/forms/crud.py:195
+#: ontask/action/forms/crud.py:185
 msgid "File containing a previously exported action"
 msgstr "Fichero que contiene una acción previamente exportada"
 
-#: ontask/action/forms/crud.py:215
+#: ontask/action/forms/crud.py:205
 msgid "Comma separated list of levels of attainment"
 msgstr "Lista de valores permitidos separados por comas"
 
-#: ontask/action/forms/crud.py:238
+#: ontask/action/forms/crud.py:228
 msgid "The number of levels cannot change."
 msgstr "El número de niveles no puede cambiar."
 
-#: ontask/action/forms/edit.py:100
+#: ontask/action/forms/edit.py:45
 msgid "Target URL"
 msgstr "URL Destino"
 
-#: ontask/action/forms/edit.py:107
+#: ontask/action/forms/edit.py:52
 msgid "URL to send the JSON object"
 msgstr "URL para enviar el objeto JSON"
 
-#: ontask/action/forms/edit.py:117
+#: ontask/action/forms/edit.py:62
 msgid "Write a JSON object"
 msgstr "Introduzca un objeto JSON"
 
-#: ontask/action/forms/edit.py:127
+#: ontask/action/forms/edit.py:72
 msgid "Write a plain text message"
 msgstr "Escriba un mensaje en texto plano"
 
-#: ontask/action/forms/run.py:55 ontask/action/forms/run.py:532
-#: ontask/scheduler/forms.py:86
-msgid "Email subject"
-msgstr "Asunto del correo"
-
-#: ontask/action/forms/run.py:59
-msgid "Space-separated list of CC emails"
-msgstr "Lista de emails en copia separados por espacios"
-
-#: ontask/action/forms/run.py:63
-msgid "Space-separated list of BCC emails"
-msgstr "Lista de emails en copia oculta separados por espacios"
-
-#: ontask/action/forms/run.py:70 ontask/action/forms/run.py:433
+#: ontask/action/forms/run.py:64
 msgid "Download a snapshot of the workflow?"
 msgstr "¿Descargar un fichero con el estado actual del flujo?"
 
-#: ontask/action/forms/run.py:71
+#: ontask/action/forms/run.py:65
 msgid "A zip file is useful to review the emails sent."
 msgstr "El fichero zip es útil para revisar los mensajes que se envían."
 
-#: ontask/action/forms/run.py:109 ontask/action/forms/run.py:119
+#: ontask/action/forms/run.py:86
+msgid "Email subject"
+msgstr "Asunto del correo"
+
+#: ontask/action/forms/run.py:109
+msgid "Space-separated list of CC emails"
+msgstr "Lista de emails en copia separados por espacios"
+
+#: ontask/action/forms/run.py:113
+msgid "Space-separated list of BCC emails"
+msgstr "Lista de emails en copia oculta separados por espacios"
+
+#: ontask/action/forms/run.py:143 ontask/action/forms/run.py:152
 msgid "Field needs a space-separated list of emails."
 msgstr "Este campo necesita una lista de valores separados por espacios."
 
-#: ontask/action/forms/run.py:128
-msgid "Column to use for target email address"
-msgstr "Columna con la dirección de correo"
+#: ontask/action/forms/run.py:167
+msgid "Check/exclude items before sending?"
+msgstr "¿Comprobar/excluir elementos antes de enviarlos?"
 
-#: ontask/action/forms/run.py:135
-msgid "Check/exclude email addresses before sending?"
-msgstr "¿Comprobar/excluir direcciones de email antes de enviar?"
+#: ontask/action/forms/run.py:169
+msgid "Allows a last minute check and select some elements to be excluded."
+msgstr "Permite eliminar algunos elementos antes de ejecutar."
 
-#: ontask/action/forms/run.py:141
+#: ontask/action/forms/run.py:209
+msgid "Column needs to have all unique values (no empty cells)"
+msgstr "La columna no tiene valores únicos en cada celda."
+
+#: ontask/action/forms/run.py:220
+msgid "Authentication Token"
+msgstr "Ficha de autenticación"
+
+#: ontask/action/forms/run.py:231
+msgid "Authentication token provided by the external platform."
+msgstr "Ficha de autenticación obtenida de la plataforma externa."
+
+#: ontask/action/forms/run.py:250
 msgid "Send you a summary message?"
 msgstr "¿Enviar un mensaje con el resúmen de envios?"
 
-#: ontask/action/forms/run.py:147
+#: ontask/action/forms/run.py:255
 msgid "Track email reading in an extra column?"
 msgstr "¿Rastrear la lectura del correo en una columna extra?"
 
-#: ontask/action/forms/run.py:211 ontask/action/forms/run.py:216
-#: ontask/scheduler/forms.py:209 ontask/scheduler/forms.py:213
-#: ontask/scheduler/serializers.py:221 ontask/scheduler/serializers.py:224
+#: ontask/action/forms/run.py:256
+msgid "Adds an extra column to the workflow. Results are aproximate."
+msgstr "Añade una columna extra al flujo. Los resultados son aproximados."
+
+#: ontask/action/forms/run.py:264 ontask/action/forms/run.py:316
+msgid "Column to use for target email address"
+msgstr "Columna con la dirección de correo"
+
+#: ontask/action/forms/run.py:299 ontask/action/forms/run.py:303
+#: ontask/scheduler/serializers.py:172 ontask/scheduler/serializers.py:175
 msgid "The column with email addresses has incorrect values."
 msgstr "La columna con las direcciones de correo tiene valores incorrectos."
 
-#: ontask/action/forms/run.py:231 ontask/scheduler/forms.py:326
+#: ontask/action/forms/run.py:332
 msgid "Recipient"
 msgstr "Destinatario"
 
-#: ontask/action/forms/run.py:254
+#: ontask/action/forms/run.py:353
 msgid "Field needs a valid email address."
 msgstr "Este campo necesita una dirección de correo válida."
 
-#: ontask/action/forms/run.py:265
-msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
-msgstr ""
-"Columna clave de la que extraer el prefijo del nombre de fichero "
-"(“Participant id” si el ZIP es para Moodle)"
-
-#: ontask/action/forms/run.py:272
+#: ontask/action/forms/run.py:378
 msgid "Column to use for file name prefix (Full name if Moodle ZIP)"
 msgstr ""
 "Columna a usar para el prefijo de fichero (“Full name” si el ZIP es para "
 "Moodle)"
 
-#: ontask/action/forms/run.py:287
+#: ontask/action/forms/run.py:390
 msgid "This ZIP will be uploaded to Moodle as feedback"
 msgstr "Este ZIP será cargado en Moodle como feedback"
 
-#: ontask/action/forms/run.py:293
-msgid "Check/exclude users before sending?"
-msgstr "¿Comprobar/excluir usuarios antes de enviar?"
+#: ontask/action/forms/run.py:397
+msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
+msgstr ""
+"Columna clave de la que extraer el prefijo del nombre de fichero "
+"(“Participant id” si el ZIP es para Moodle)"
 
-#: ontask/action/forms/run.py:357
-msgid "Column needs to have all unique values (no empty cells)"
-msgstr "La columna no tiene valores únicos en cada celda."
-
-#: ontask/action/forms/run.py:365
+#: ontask/action/forms/run.py:448
 msgid "The two columns must be different"
 msgstr "Las dos columnas deben ser diferentes"
 
-#: ontask/action/forms/run.py:374
+#: ontask/action/forms/run.py:456
 msgid "A Moodle ZIP requires two column names"
 msgstr "Un ZIP para Moodle requiere dos columnas"
 
-#: ontask/action/forms/run.py:389
+#: ontask/action/forms/run.py:470
 msgid "Values in column must have format \"Participant [number]\""
 msgstr ""
 "Los valores en la columna deben tener el formato “Participant [número]”"
 
-#: ontask/action/forms/run.py:403
-msgid "Values to exclude"
-msgstr "Valores a excluir"
-
-#: ontask/action/forms/run.py:434
-msgid "A zip file is useful to review the action."
-msgstr "El fichero zip es útil para revisar la acción."
-
-#: ontask/action/forms/run.py:458 ontask/scheduler/forms.py:235
-msgid "Authentication Token"
-msgstr "Ficha de autenticación"
-
-#: ontask/action/forms/run.py:475 ontask/scheduler/forms.py:238
-msgid "Authentication token provided by the external platform."
-msgstr "Ficha de autenticación obtenida de la plataforma externa."
-
-#: ontask/action/forms/run.py:494
-msgid "Check/exclude items before sending?"
-msgstr "¿Comprobar/excluir elementos antes de enviarlos?"
-
-#: ontask/action/forms/run.py:553
+#: ontask/action/forms/run.py:493
 msgid "Canvas Host"
 msgstr "Servidor Canvas"
 
-#: ontask/action/forms/run.py:554
+#: ontask/action/forms/run.py:494
 msgid "Name of the Canvas host to send the messages"
 msgstr "Nombre del servidor Canvas al que mandar los mensajes"
 
-#: ontask/action/forms/run.py:559
+#: ontask/action/forms/run.py:498
 msgid "Column with the Canvas ID"
 msgstr "Columna con identificadores de usuario Canvas"
 
-#: ontask/action/forms/run.py:561
+#: ontask/action/forms/run.py:500
 msgid "Check/Exclude Canvas IDs before sending?"
 msgstr "¿Comprobar/excluir identificadores de Canvas antes de enviar?"
 
-#: ontask/action/forms/run.py:588
+#: ontask/action/forms/run.py:522
 msgid "No Canvas Service available for this action."
 msgstr "No hay ningún servicio Canvas disponible para esta acción."
 
-#: ontask/action/forms/run.py:608
+#: ontask/action/forms/run.py:532
+msgid "The column does not contain valid Canvas IDs."
+msgstr "La columna no contiene identificadores de Canvas válidos."
+
+#: ontask/action/forms/run.py:559
 msgid "Column to exclude objects to send (empty to skip step)"
 msgstr "Columna para excluir objetos del envío (vacío para saltar este paso)"
 
-#: ontask/action/forms/run.py:635 ontask/action/forms/run.py:639
-#: ontask/workflow/forms/column.py:146 ontask/workflow/forms/column.py:147
+#: ontask/action/forms/run.py:599
+msgid "Values to exclude"
+msgstr "Valores a excluir"
+
+#: ontask/action/forms/run.py:634 ontask/action/forms/run.py:637
+#: ontask/workflow/forms/column.py:140 ontask/workflow/forms/column.py:141
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
-#: ontask/action/send/canvasemail.py:53
-msgid "Unable to find OAuth Information Record"
-msgstr "No se ha encontrado información de OAuth para este elemento"
-
-#: ontask/action/send/canvasemail.py:62
-msgid "Incorrect execution due to absence of token"
-msgstr "Ejecución incorrecta debido a la ausencia de token"
-
-#: ontask/action/send/canvasemail.py:144
-msgid "OAuth token refreshed"
-msgstr "Autenticador OAuth renovado"
-
-#: ontask/action/send/canvasemail.py:203
-msgid "Message successfuly sent"
-msgstr "Mensaje enviado"
-
-#: ontask/action/send/canvasemail.py:226
-#, python-brace-format
-msgid "Unable to deliver message (code {0})"
-msgstr "No se puede enviar el mensaje: (código {0})"
-
-#: ontask/action/send/email.py:65
-#, python-brace-format
-msgid "Syntax error in notification template ({0})"
-msgstr "Error de sintaxis detectado en la plantilla ({0})"
-
-#: ontask/action/send/email.py:90
-#, python-brace-format
-msgid "Error when sending the notification: {0}"
-msgstr "Se ha producido un error al enviar la notificación: {0}"
-
-#: ontask/action/send/email.py:109
-msgid "Invalid email address in cc email"
-msgstr "Dirección de correo incorrecta en el CC"
-
-#: ontask/action/send/email.py:111
-msgid "Invalid email address in bcc email"
-msgstr "Dirección de correo incorrecta en el BCC"
-
-#: ontask/action/send/email.py:410
-#, python-brace-format
-msgid "Error when sending the list email: {0}"
-msgstr "Se ha producido un error al enviar el correo: {0}"
-
-#: ontask/action/serializers.py:65
+#: ontask/action/serializers.py:63
 msgid "Unable to create column data"
 msgstr "Imposible crear los datos para la columna"
 
-#: ontask/action/serializers.py:100
+#: ontask/action/serializers.py:98
 #, python-brace-format
 msgid "Incorrect column name {0}."
 msgstr "Nombre de columna incorrecto {0}."
 
-#: ontask/action/serializers.py:109
+#: ontask/action/serializers.py:107
 #, python-brace-format
 msgid "Action contains non-existing key column \"{0}\""
 msgstr "La nueva acción tiene una columna “{0}” que no existe"
 
-#: ontask/action/serializers.py:123
+#: ontask/action/serializers.py:121
 #, python-brace-format
 msgid "Imported column {0} is different from existing one."
 msgstr "La columna importada {0} es diferente de la ya existente."
 
-#: ontask/action/serializers.py:169 ontask/table/serializers/view.py:46
+#: ontask/action/serializers.py:168 ontask/table/serializers/view.py:46
 msgid "Incorrect column data"
 msgstr "Dato de columna incorrecto"
 
-#: ontask/action/serializers.py:338
+#: ontask/action/serializers.py:344
 msgid "Invalid column data"
 msgstr "Dato de columna inválido"
 
-#: ontask/action/serializers.py:349
+#: ontask/action/serializers.py:355
 msgid "Invalid column condition pair data"
 msgstr "Datos con un par columna, condición incorrecto"
 
-#: ontask/action/serializers.py:360
+#: ontask/action/serializers.py:366
 msgid "Invalid rubric cell data"
 msgstr "Datos incorrectos en la celda de la rúbrica"
 
-#: ontask/action/serializers.py:404
+#: ontask/action/serializers.py:411
 msgid "Invalid condition data"
 msgstr "Dato de condición incorrecto"
 
-#: ontask/action/serializers.py:445
+#: ontask/action/serializers.py:452
 msgid "Unable to import action  in a workflow with and empty data table"
 msgstr "La acción no se puede importar en un flujo sin datos en la tabla"
 
-#: ontask/action/views/action.py:37 ontask/action/views/edit_survey.py:34
-#: ontask/models/connection.py:21 ontask/scheduler/views/crud.py:59
-#: ontask/table/views/table_view.py:28
-#: ontask/templates/dataops/upload_s2.html:38
-#: ontask/templates/workflow/detail.html:98
-#: ontask/workflow/forms/attribute_shared.py:22
-#: ontask/workflow/views/workflow_ops.py:34
+#: ontask/action/services/action_table.py:19
+#: ontask/action/services/survey.py:26
+#: ontask/scheduler/services/scheduler_table.py:26
+#: ontask/table/services/view.py:17 ontask/templates/dataops/upload_s2.html:38
+#: ontask/templates/workflow/detail.html:99
+#: ontask/workflow/forms/attribute_shared.py:21
+#: ontask/workflow/services/workflow_ops.py:23
 msgid "Name"
 msgstr "Nombre"
 
-#: ontask/action/views/action.py:39 ontask/dataops/views/plugin_admin.py:30
-#: ontask/dataops/views/transform.py:38 ontask/models/connection.py:28
-#: ontask/table/views/table_view.py:32
+#: ontask/action/services/action_table.py:21
+#: ontask/dataops/services/plugin_admin.py:29
+#: ontask/dataops/services/plugin_run.py:28 ontask/table/services/view.py:21
 #: ontask/templates/action/includes/partial_rubriccell.html:2
 #: ontask/templates/dataops/includes/partial_plugin_long_description.html:4
 #: ontask/templates/dataops/plugin_info_for_run.html:62
 #: ontask/templates/dataops/uploadmerge.html:17
-#: ontask/templates/workflow/detail.html:99
+#: ontask/templates/workflow/detail.html:100
 msgid "Description"
 msgstr "Descripción"
 
-#: ontask/action/views/action.py:43 ontask/models/sqlconnection.py:34
+#: ontask/action/services/action_table.py:25 ontask/models/sqlconnection.py:34
+#: ontask/scheduler/services/scheduler_table.py:28
 #: ontask/templates/dataops/upload_s2.html:40
-#: ontask/templates/workflow/detail.html:100
+#: ontask/templates/workflow/detail.html:101
 msgid "Type"
 msgstr "Tipo"
 
-#: ontask/action/views/action.py:46 ontask/dataops/views/plugin_admin.py:34
-#: ontask/dataops/views/transform.py:42
+#: ontask/action/services/action_table.py:28
+#: ontask/dataops/services/plugin_admin.py:33
+#: ontask/dataops/services/plugin_run.py:32
 msgid "Last executed"
 msgstr "Última ejecución"
 
-#: ontask/action/views/clone.py:181
-msgid "Action successfully cloned."
-msgstr "Acción duplicada con éxito."
+#: ontask/action/services/canvas_email.py:66
+msgid "OAuth token refreshed"
+msgstr "Autenticador OAuth renovado"
 
-#: ontask/action/views/clone.py:210
-msgid "Incorrect action id."
-msgstr "Identificador de acción incorrecto."
+#: ontask/action/services/canvas_email.py:115
+msgid "Unable to obtain Canvas OAuth information"
+msgstr "Incapaz de obtener la información de Canvas OAuth"
 
-#: ontask/action/views/clone.py:232
-msgid "Condition successfully cloned."
-msgstr "La condiciono ha sido duplicada con éxito."
-
-#: ontask/action/views/edit_rubric.py:32
-msgid "Criterion"
-msgstr "Criterio"
-
-#: ontask/action/views/edit_rubric.py:162
-msgid "Inconsistent LOA in rubric criteria"
-msgstr "El nivel alcanzado es inconsistente en el criterio de la rúbrica"
-
-#: ontask/action/views/edit_rubric.py:320
+#: ontask/action/services/canvas_email.py:143
 #, python-brace-format
-msgid "Incorrect level of attainment values ({0})."
-msgstr "Los valores de nivel alcanzado son incorrectos ({0})."
+msgid "Error when invoking Canvas API: {0}."
+msgstr "Error al invocar Canvas API: {0}"
 
-#: ontask/action/views/edit_survey.py:36
-msgid "Description (shown to learners)"
-msgstr "Descripción (se muestra a los estudiantes)"
+#: ontask/action/services/canvas_email.py:165
+msgid "Message successfuly sent"
+msgstr "Mensaje enviado"
 
-#: ontask/action/views/edit_survey.py:40
-msgid "Allow change?"
-msgstr "¿Se puede cambiar?"
+#: ontask/action/services/canvas_email.py:187
+#, python-brace-format
+msgid "Unable to deliver message (code {0})"
+msgstr "No se puede enviar el mensaje: (código {0})"
 
-#: ontask/action/views/edit_survey.py:43
-#: ontask/templates/action/includes/partial_condition_tab_body.html:10
-msgid "Condition"
-msgstr "Condición"
+#: ontask/action/services/canvas_email.py:206
+#: ontask/action/services/run_manager.py:96
+#: ontask/templates/action/action_zip_step1.html:35
+#: ontask/templates/action/request_email_data.html:36
+#: ontask/templates/action/request_email_list_data.html:27
+#: ontask/templates/action/request_json_data.html:36
+#: ontask/templates/action/request_json_list_data.html:27
+msgid "Send"
+msgstr "Enviar"
 
-#: ontask/action/views/edit_survey.py:64
-msgid "Edit the question"
-msgstr "Editar pregunta"
+#: ontask/action/services/canvas_email.py:257
+msgid "Unable to find OAuth Information Record"
+msgstr "No se ha encontrado información de OAuth para este elemento"
 
-#: ontask/action/views/edit_survey.py:356
-#: ontask/action/views/edit_survey.py:362
-#: ontask/dataops/views/connection_admin.py:209
-msgid "Incorrect invocation of toggle question change function."
-msgstr ""
-"Invocación incorrecta de la función para cambiar si una pregunta se puede "
-"modificar."
+#: ontask/action/services/canvas_email.py:266
+msgid "Incorrect execution due to absence of token"
+msgstr "Ejecución incorrecta debido a la ausencia de token"
 
-#: ontask/action/views/import_export.py:46 ontask/workflow/import_export.py:103
+#: ontask/action/services/email.py:68
+#, python-brace-format
+msgid "Syntax error in notification template ({0})"
+msgstr "Error de sintaxis detectado en la plantilla ({0})"
+
+#: ontask/action/services/email.py:93
+#, python-brace-format
+msgid "Error when sending the notification: {0}"
+msgstr "Se ha producido un error al enviar la notificación: {0}"
+
+#: ontask/action/services/email.py:108
+msgid "Invalid email address."
+msgstr "Dirección de correo incorrecta."
+
+#: ontask/action/services/email.py:457
+#, python-brace-format
+msgid "Error when sending the list email: {0}"
+msgstr "Se ha producido un error al enviar el correo: {0}"
+
+#: ontask/action/services/import_export.py:34
+#: ontask/workflow/services/import_export.py:104
 msgid "Incorrect file. Expecting a GZIP file (exported workflow)."
 msgstr "Fichero incorrect. Es espera un fichero GZIP (flujo exportado)."
 
-#: ontask/action/views/import_export.py:61
+#: ontask/action/services/import_export.py:49
 #, python-brace-format
 msgid "Unable to import action: {0}"
 msgstr "No se puede importar la acción: {0}"
 
-#: ontask/action/views/import_export.py:92
-msgid "Incorrect form (it does not have a file attached)"
-msgstr "Formulario incorrecto (no tiene un fichero adjunto)"
-
-#: ontask/action/views/import_export.py:106
-msgid "Unable to import file. Incorrect fields."
-msgstr "No se ha podido importar el fichero. Campos incorrectos."
-
-#: ontask/action/views/import_export.py:113
-#, python-brace-format
-msgid "Unable to import file: {0}"
-msgstr "No se ha podido importar el fichero: {0}"
-
-#: ontask/action/views/import_export.py:119
-#, python-brace-format
-msgid "Actions imported: {0}"
-msgstr "Acciones importadas: {0}"
-
-#: ontask/action/views/preview.py:113
+#: ontask/action/services/preview.py:151
 #, python-brace-format
 msgid "Error while retrieving content for student {0}"
 msgstr "Error al acceder al contenido para el estudiante {0}"
 
-#: ontask/action/views/run.py:67
+#: ontask/action/services/rubric.py:22
+msgid "Criterion"
+msgstr "Criterio"
+
+#: ontask/action/services/rubric.py:127
+msgid "Inconsistent LOA in rubric criteria"
+msgstr "El nivel alcanzado es inconsistente en el criterio de la rúbrica"
+
+#: ontask/action/services/serve_action.py:51
+#: ontask/action/services/serve_action.py:70
+#, python-brace-format
+msgid "Error when evaluating conditions for user {0}"
+msgstr "Error al evaluar las condiciones para el usuario {0}"
+
+#: ontask/action/services/serve_action.py:116
+msgid "Data not found in the table"
+msgstr "No se han encontrado datos en la tabla"
+
+#: ontask/action/services/survey.py:29
+msgid "Description (shown to learners)"
+msgstr "Descripción (se muestra a los estudiantes)"
+
+#: ontask/action/services/survey.py:33
+msgid "Allow change?"
+msgstr "¿Se puede cambiar?"
+
+#: ontask/action/services/survey.py:36
+#: ontask/templates/action/includes/partial_condition_tab_body.html:10
+msgid "Condition"
+msgstr "Condición"
+
+#: ontask/action/services/survey.py:264 ontask/dataops/services/athena.py:83
+#: ontask/dataops/services/connections_sql.py:65
+#: ontask/table/services/view.py:24 ontask/templates/workflow/detail.html:98
+#: ontask/workflow/services/workflow_ops.py:53
+msgid "Operations"
+msgstr "Operaciones"
+
+#: ontask/action/views/clone.py:50
+msgid "Action successfully cloned."
+msgstr "Acción duplicada con éxito."
+
+#: ontask/action/views/clone.py:82
+msgid "Incorrect action id."
+msgstr "Identificador de acción incorrecto."
+
+#: ontask/action/views/clone.py:99
+msgid "Condition successfully cloned."
+msgstr "La condiciono ha sido duplicada con éxito."
+
+#: ontask/action/views/edit_rubric.py:121
+#, python-brace-format
+msgid "Incorrect level of attainment values ({0})."
+msgstr "Los valores de nivel alcanzado son incorrectos ({0})."
+
+#: ontask/action/views/import_export.py:42
+msgid "Incorrect form (it does not have a file attached)"
+msgstr "Formulario incorrecto (no tiene un fichero adjunto)"
+
+#: ontask/action/views/import_export.py:56
+msgid "Unable to import file. Incorrect fields."
+msgstr "No se ha podido importar el fichero. Campos incorrectos."
+
+#: ontask/action/views/import_export.py:63
+#, python-brace-format
+msgid "Unable to import file: {0}"
+msgstr "No se ha podido importar el fichero: {0}"
+
+#: ontask/action/views/import_export.py:69
+#, python-brace-format
+msgid "Actions imported: {0}"
+msgstr "Acciones importadas: {0}"
+
+#: ontask/action/views/run.py:108
 msgid ""
 "Unable to execute actions due to a misconfiguration. Ask your system "
 "administrator to enable message queueing."
@@ -469,117 +489,77 @@ msgstr ""
 "No es posible ejecutar la acción debido a una configuración incorrecta. Pida "
 "al administrador que habilite la cola de mensajes."
 
-#: ontask/action/views/run.py:75
-msgid "Execution for this action is not allowed."
-msgstr "La ejecución de esta acción no está permitida."
+#: ontask/action/views/run.py:131
+msgid "Incorrect action run invocation."
+msgstr "Invocación incorrecta al ejecutar la acción."
 
-#: ontask/action/views/run.py:171 ontask/action/views/run.py:191
-#, python-brace-format
-msgid "Error when evaluating conditions for user {0}"
-msgstr "Error al evaluar las condiciones para el usuario {0}"
-
-#: ontask/action/views/run.py:185
-#, python-brace-format
-msgid "Action not enabled for user {0}"
-msgstr "Acción no permitida para el usuario {0}"
-
-#: ontask/action/views/run.py:222
+#: ontask/action/views/run.py:287 ontask/action/views/run.py:296
 msgid "Incorrect item filter invocation."
 msgstr "Invocación incorrecta del filtro."
 
-#: ontask/action/views/run_canvas_email.py:71
-#: ontask/action/views/run_email.py:69 ontask/action/views/run_json.py:59
-#: ontask/templates/action/action_zip_step1.html:35
-#: ontask/templates/action/request_email_data.html:36
-#: ontask/templates/action/request_json_data.html:36
-#: ontask/templates/action/request_json_list_data.html:27
-#: ontask/templates/action/request_send_list_data.html:27
-msgid "Send"
-msgstr "Enviar"
-
-#: ontask/action/views/run_canvas_email.py:121
-msgid "Unable to obtain Canvas OAuth information"
-msgstr "Incapaz de obtener la información de Canvas OAuth"
-
-#: ontask/action/views/run_canvas_email.py:149
-#, python-brace-format
-msgid "Error when invoking Canvas API: {0}."
-msgstr "Error al invocar Canvas API: {0}"
-
-#: ontask/action/views/run_canvas_email.py:179
-msgid "Incorrect canvas email action invocation."
-msgstr "Invocación de acción email Canvas incorrecta."
-
-#: ontask/action/views/run_email.py:113
-msgid "Incorrect email action invocation."
-msgstr "Invocación de acción email incorrecta."
-
-#: ontask/action/views/run_json.py:106
-msgid "Incorrect JSON action invocation."
-msgstr "Invocación incorrecta de acción JSON."
-
-#: ontask/action/views/run_survey.py:82 ontask/table/views/table_display.py:110
-#: ontask/workflow/views/workflow_ops.py:208
-msgid "Incorrect request. Unable to process"
-msgstr "Petición incorrecta. No es posible procesarla"
-
-#: ontask/action/views/run_zip.py:67
-msgid "Create ZIP"
-msgstr "Crear ZIP"
-
-#: ontask/action/views/run_zip.py:111 ontask/action/views/run_zip.py:152
+#: ontask/action/views/run.py:338
 msgid "Incorrect ZIP action invocation."
 msgstr "Invocación incorrecta de acción ZIP."
 
-#: ontask/action/views/serve_survey.py:70
-msgid "Data not found in the table"
-msgstr "No se han encontrado datos en la tabla"
+#: ontask/action/views/run.py:349 ontask/action/views/run.py:361
+msgid "Incorrect payload in ZIP action invocation"
+msgstr "Invocación incorrecta de acción ZIP"
+
+#: ontask/action/views/run.py:404 ontask/table/services/display.py:94
+#: ontask/workflow/views/workflow_ops.py:119
+msgid "Incorrect request. Unable to process"
+msgstr "Petición incorrecta. No es posible procesarla"
 
 #: ontask/apps.py:9
 msgid "OnTask"
 msgstr "OnTask"
 
-#: ontask/core/decorators.py:106 ontask/core/decorators.py:166
-#: ontask/core/decorators.py:227 ontask/core/decorators.py:291
-#: ontask/core/decorators.py:353 ontask/workflow/views/workflow_ops.py:295
+#: ontask/core/checks.py:109
+#, python-brace-format
+msgid "The new data does not preserve the key property of column \"{0}\""
+msgstr "Los datos nuevos no conservan la propiedad clave de la columna “{0}"
+
+#: ontask/core/decorators.py:148 ontask/core/decorators.py:198
+#: ontask/core/decorators.py:249 ontask/core/decorators.py:303
+#: ontask/core/decorators.py:354 ontask/workflow/views/workflow_ops.py:151
 msgid "Workflow has no data. Go to \"Manage table data\" to upload data."
 msgstr ""
 "El flujo no tiene datos. Ir a \"Gestión de datos de la tabla\" para cargar "
 "los datos."
 
-#: ontask/core/forms.py:53
+#: ontask/core/forms.py:54
 #, python-format
 msgid "File size must be under %(max)s. Current file size is %(current)s."
 msgstr "El tamaño del fichero (%(current)s) ha de ser menor que %(max)s."
 
-#: ontask/core/forms.py:61
+#: ontask/core/forms.py:62
 #, python-brace-format
 msgid "File type ({0}) is not supported."
 msgstr "Los ficheros de tipo ({0}) no se pueden procesar."
 
-#: ontask/dataops/forms/dataframeupload.py:424 ontask/table/api.py:314
+#: ontask/core/session_ops.py:172
 #, python-brace-format
-msgid "Unable to perform merge operation: {0}"
-msgstr "No se ha podido ejecutar la operación de mezcla: {0}"
+msgid "The workflow is being modified by user {0}"
+msgstr "El flujo está siendo modificado por el usuario {0}"
 
-#: ontask/dataops/forms/plugin.py:21
+#: ontask/dataops/forms/plugin.py:23
 msgid "Input Columns (to read data)"
 msgstr "Columnas de entrada (leer datos)"
 
-#: ontask/dataops/forms/plugin.py:24
+#: ontask/dataops/forms/plugin.py:25
 msgid "To select a subset of the table to pass to the plugin"
 msgstr "Para seleccionar la porción de la tabla que utiliza el plugin"
 
-#: ontask/dataops/forms/plugin.py:66
+#: ontask/dataops/forms/plugin.py:72
 #, python-brace-format
 msgid "Name for result column \"{0}\""
 msgstr "Nombre de la columna resultado \"{0}\""
 
-#: ontask/dataops/forms/plugin.py:72
+#: ontask/dataops/forms/plugin.py:78
 msgid "Suffix to add to result columns (empty to ignore)"
 msgstr "Sufijo a añadir a las columnas resultado (vacío se ignora)"
 
-#: ontask/dataops/forms/plugin.py:76
+#: ontask/dataops/forms/plugin.py:82
 msgid ""
 "Added to all output column names. Useful to keep results from several "
 "executions in separated columns."
@@ -587,226 +567,234 @@ msgstr ""
 "Añadido a los nombres de las columnas de salida. Útil para mantener "
 "resultados de varias ejecuciones en columnas diferentes."
 
-#: ontask/dataops/forms/plugin.py:127 ontask/dataops/forms/plugin.py:129
+#: ontask/dataops/forms/plugin.py:132 ontask/dataops/forms/plugin.py:134
 msgid "Select column"
 msgstr "Seleccionar columna"
 
-#: ontask/dataops/forms/plugin.py:130
+#: ontask/dataops/forms/plugin.py:135
 #, python-brace-format
 msgid "Column for input {0}"
 msgstr "Columna para entrada {0}"
 
-#: ontask/dataops/forms/plugin.py:142
+#: ontask/dataops/forms/plugin.py:147
 msgid "Key column for merging"
 msgstr "Columna clave para mezclar"
 
-#: ontask/dataops/forms/plugin.py:145
+#: ontask/dataops/forms/plugin.py:150
 msgid "One of the existing key columns to merge the results"
 msgstr "Una de las columnas clave para mezclar los resultados"
 
-#: ontask/dataops/forms/plugin.py:164
+#: ontask/dataops/forms/plugin.py:169
 msgid "The plugin needs at least one input column"
 msgstr "El plugin necesita al menos una columna de entrada"
 
-#: ontask/dataops/forms/select.py:13
+#: ontask/dataops/forms/select.py:14
 msgid "- Choose row selection method -"
 msgstr "- Elige el método de selección de filas -"
 
-#: ontask/dataops/forms/select.py:14
+#: ontask/dataops/forms/select.py:15
 msgid "1) Select all rows in both the existing and new table"
 msgstr "1) Selecciona todas las filas en ambas tablas, existente y nueva"
 
-#: ontask/dataops/forms/select.py:16
+#: ontask/dataops/forms/select.py:17
 msgid ""
 "2) Select only the rows with keys present in both the existing and new table"
 msgstr ""
 "2) Selecciona sólo las filas con clave en ambas tablas, existente y nueva"
 
-#: ontask/dataops/forms/select.py:18
+#: ontask/dataops/forms/select.py:19
 msgid "3) Select only the rows with keys in the existing table"
 msgstr "3) Selecciona sólo las filas con clave en la tabla existente"
 
-#: ontask/dataops/forms/select.py:19
+#: ontask/dataops/forms/select.py:20
 msgid "4) Select only the rows with keys in the new table"
 msgstr "4) Selecciona sólo las filas con la clave en la tabla nueva"
 
-#: ontask/dataops/forms/select.py:22
+#: ontask/dataops/forms/select.py:23
 msgid "Select one method to see detailed information"
 msgstr "Selecciona un método para ver más información"
 
-#: ontask/dataops/forms/select.py:38 ontask/dataops/forms/upload.py:510
-msgid "Method to select rows to merge/update"
-msgstr "Método para seleccionar las filas a mezclar/actualizar"
+#: ontask/dataops/forms/select.py:40 ontask/dataops/forms/upload.py:518
+msgid "Method to select rows to merge"
+msgstr "Método para seleccionar filas para mezclar"
 
-#: ontask/dataops/forms/select.py:106
+#: ontask/dataops/forms/select.py:107
 msgid "No unique column specified"
 msgstr "No se ha especificado ninguna columna clave"
 
-#: ontask/dataops/forms/select.py:115
+#: ontask/dataops/forms/select.py:116
 msgid "Key column in the existing table to match with the new table."
 msgstr "Columna clave en la tabla existente para emparejar con la tabla nueva."
 
-#: ontask/dataops/forms/select.py:118
+#: ontask/dataops/forms/select.py:119
 msgid "Key column in the new table to match with the existing table."
 msgstr "Columna clave en la tabla nueva a emparejar con la tabla existente."
 
-#: ontask/dataops/forms/select.py:136
+#: ontask/dataops/forms/select.py:137
 msgid "- Select merge option -"
 msgstr "- Selecciona la opción de mezcla -"
 
-#: ontask/dataops/forms/select.py:144 ontask/dataops/forms/upload.py:503
+#: ontask/dataops/forms/select.py:145 ontask/dataops/forms/upload.py:511
 msgid "Key Column in Existing Table"
 msgstr "Columna clave en la tabla existente"
 
-#: ontask/dataops/forms/select.py:151
+#: ontask/dataops/forms/select.py:152
 msgid "Key Column in New Table"
 msgstr "Columna clave en la nueva tabla"
 
-#: ontask/dataops/forms/upload.py:76
+#: ontask/dataops/forms/upload.py:65
 #, python-brace-format
 msgid "Unable to process file ({0})."
 msgstr "No es posible procesar el fichero ({0})"
 
-#: ontask/dataops/forms/upload.py:94
+#: ontask/dataops/forms/upload.py:83
 msgid ""
 "File in CSV format (typically produced by a statistics package or Excel)"
 msgstr ""
 "Fichero en formato CSV (tipicamente creado por Excel o un paquete estadístico"
 
-#: ontask/dataops/forms/upload.py:98 ontask/dataops/forms/upload.py:214
-#: ontask/dataops/forms/upload.py:298
+#: ontask/dataops/forms/upload.py:87 ontask/dataops/forms/upload.py:203
+#: ontask/dataops/forms/upload.py:287
 msgid "Lines to skip at the top"
 msgstr "Ignorar líneas al comienzo"
 
-#: ontask/dataops/forms/upload.py:100 ontask/dataops/forms/upload.py:216
-#: ontask/dataops/forms/upload.py:300
+#: ontask/dataops/forms/upload.py:89 ontask/dataops/forms/upload.py:205
+#: ontask/dataops/forms/upload.py:289
 msgid "Number of lines to skip at the top when reading the file"
 msgstr "Número de líneas a ignorar al comienzo del fichero"
 
-#: ontask/dataops/forms/upload.py:105 ontask/dataops/forms/upload.py:221
-#: ontask/dataops/forms/upload.py:305
+#: ontask/dataops/forms/upload.py:94 ontask/dataops/forms/upload.py:210
+#: ontask/dataops/forms/upload.py:294
 msgid "Lines to skip at the bottom"
 msgstr "Ignorar líneas al final"
 
-#: ontask/dataops/forms/upload.py:107 ontask/dataops/forms/upload.py:223
-#: ontask/dataops/forms/upload.py:307
+#: ontask/dataops/forms/upload.py:96 ontask/dataops/forms/upload.py:212
+#: ontask/dataops/forms/upload.py:296
 msgid "Number of lines to skip at the bottom when reading the file"
 msgstr "Número de líneas a ignorar al final del fichero"
 
-#: ontask/dataops/forms/upload.py:121 ontask/dataops/forms/upload.py:128
-#: ontask/dataops/forms/upload.py:237 ontask/dataops/forms/upload.py:243
-#: ontask/dataops/forms/upload.py:321 ontask/dataops/forms/upload.py:328
+#: ontask/dataops/forms/upload.py:110 ontask/dataops/forms/upload.py:117
+#: ontask/dataops/forms/upload.py:226 ontask/dataops/forms/upload.py:232
+#: ontask/dataops/forms/upload.py:310 ontask/dataops/forms/upload.py:317
 msgid "This number has to be zero or positive"
 msgstr "Este número debe ser positivo o zero"
 
-#: ontask/dataops/forms/upload.py:143
+#: ontask/dataops/forms/upload.py:132
 #, python-brace-format
 msgid "File could not be processed ({0})"
 msgstr "No se ha podido procesar el fichero ({0})"
 
-#: ontask/dataops/forms/upload.py:165
+#: ontask/dataops/forms/upload.py:154
 msgid "File in Excel format (.xls or .xlsx)"
 msgstr "Fichero en formato Excel (.xls o .xlsx)"
 
-#: ontask/dataops/forms/upload.py:171
+#: ontask/dataops/forms/upload.py:160
 msgid "Sheet within the excelsheet to upload"
 msgstr "Hoja a cargar dentro del fichero"
 
-#: ontask/dataops/forms/upload.py:188 ontask/dataops/forms/upload.py:254
+#: ontask/dataops/forms/upload.py:177 ontask/dataops/forms/upload.py:243
 #, python-brace-format
 msgid "File could not be processed: {0}"
 msgstr "No se ha podido procesar el fichero {0}"
 
-#: ontask/dataops/forms/upload.py:210
-#: ontask/templates/action/includes/partial_action_operations.html:21
+#: ontask/dataops/forms/upload.py:199
+#: ontask/templates/action/includes/partial_action_operations.html:29
 msgid "URL"
 msgstr "URL"
 
-#: ontask/dataops/forms/upload.py:211
+#: ontask/dataops/forms/upload.py:200
 msgid "URL to access the Google Spreadsheet in CSV format"
 msgstr "URL para acceder a una Google Spreadsheet en formato CSV"
 
-#: ontask/dataops/forms/upload.py:277
+#: ontask/dataops/forms/upload.py:266
 msgid "AWS S3 Bucket access key"
 msgstr "Usuario de acceso para AWS S3 Bucket"
 
-#: ontask/dataops/forms/upload.py:283
+#: ontask/dataops/forms/upload.py:272
 msgid "AWS S3 Bucket secret access key"
 msgstr "Clave secreta de acceso para AWL S3 Bucket"
 
-#: ontask/dataops/forms/upload.py:289
+#: ontask/dataops/forms/upload.py:278
 msgid "AWS S3 Bucket name"
 msgstr "Nombre del AWS S3 Bucket"
 
-#: ontask/dataops/forms/upload.py:295 ontask/models/athenaconnection.py:79
+#: ontask/dataops/forms/upload.py:284 ontask/models/athenaconnection.py:79
 msgid "AWS S3 Bucket file path"
 msgstr "Ruta de fichero en el AWS S3 Bucket"
 
-#: ontask/dataops/forms/upload.py:344
+#: ontask/dataops/forms/upload.py:333
 #, python-brace-format
 msgid "S3 bucket file could not be processed: {0}"
 msgstr "No se ha podido procesar el fichero S3 Bucket: {0}"
 
-#: ontask/dataops/forms/upload.py:379 ontask/dataops/forms/upload.py:442
+#: ontask/dataops/forms/upload.py:368 ontask/dataops/forms/upload.py:450
 msgid "There is already a connection with this name."
 msgstr "Ya hay una conexión con este nombre."
 
-#: ontask/dataops/forms/upload.py:416
+#: ontask/dataops/forms/upload.py:406 ontask/models/sqlconnection.py:58
+msgid "Password"
+msgstr "Clave"
+
+#: ontask/dataops/forms/upload.py:409
 msgid "Authentication for the database connection"
 msgstr "Autenticación para la base de datos"
 
-#: ontask/dataops/forms/upload.py:422 ontask/dataops/forms/upload.py:490
+#: ontask/dataops/forms/upload.py:414 ontask/models/athenaconnection.py:95
+msgid "Table name"
+msgstr "Nombre de la tabla"
+
+#: ontask/dataops/forms/upload.py:416 ontask/dataops/forms/upload.py:498
 msgid "Table to load"
 msgstr "Tabla a cargar"
 
-#: ontask/dataops/forms/upload.py:477
+#: ontask/dataops/forms/upload.py:485
 msgid "Authentication for the connection"
 msgstr "Autenticación para la conexión"
 
-#: ontask/dataops/forms/upload.py:484
+#: ontask/dataops/forms/upload.py:492
 msgid "Authentication for the session"
 msgstr "Autenticación para la sesión"
 
-#: ontask/dataops/formula/operands.py:463
+#: ontask/dataops/formula/operands.py:425
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador LESS"
 
-#: ontask/dataops/formula/operands.py:504
+#: ontask/dataops/formula/operands.py:463
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS OR EQUAL"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador LESS OR "
 "EQUAL"
 
-#: ontask/dataops/formula/operands.py:546
+#: ontask/dataops/formula/operands.py:506
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador GREATER"
 
-#: ontask/dataops/formula/operands.py:587
+#: ontask/dataops/formula/operands.py:548
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER OR EQUAL"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador GREATER "
 "OR EQUAL"
 
-#: ontask/dataops/formula/operands.py:629
-#: ontask/dataops/formula/operands.py:680
+#: ontask/dataops/formula/operands.py:591
+#: ontask/dataops/formula/operands.py:643
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador BETWEEN"
 
-#: ontask/dataops/pandas/database.py:181 ontask/dataops/pandas/database.py:279
-#: ontask/dataops/sql/column_queries.py:156
+#: ontask/dataops/pandas/database.py:161 ontask/dataops/pandas/database.py:204
+#: ontask/dataops/sql/column_queries.py:142
 #, python-brace-format
 msgid "Column name is longer than {0} characters"
 msgstr "El nombre de la columna el más largo de {0} letras"
 
-#: ontask/dataops/pandas/database.py:273
+#: ontask/dataops/pandas/database.py:198
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -814,7 +802,7 @@ msgstr ""
 "Los datos no tienen ninguna columna con valores únicos por cada fila. Al "
 "menos debe haber una columna con valores únicos."
 
-#: ontask/dataops/pandas/dataframe.py:74
+#: ontask/dataops/pandas/dataframe.py:62
 #, python-brace-format
 msgid ""
 "Column {0} looses its \"key\" property through this merge. Either remove "
@@ -825,41 +813,60 @@ msgstr ""
 "borra esta propiedad de la columna, o borra las filas que causan este "
 "problema en los datos nuevos"
 
-#: ontask/dataops/pandas/dataframe.py:94 ontask/dataops/pandas/dataframe.py:107
+#: ontask/dataops/pandas/dataframe.py:82 ontask/dataops/pandas/dataframe.py:95
 #, python-brace-format
 msgid "New values in column {0} are not of type {1}"
 msgstr "Los nuevos valores en la columna {0} no son de tipo {1}"
 
-#: ontask/dataops/pandas/dataframe.py:102
+#: ontask/dataops/pandas/dataframe.py:90
 #, python-brace-format
 msgid "New values in column {0} are not of type number"
 msgstr "Los nuevos valores en la columna {0} no son de tipo numérico"
 
-#: ontask/dataops/pandas/dataframe.py:117
+#: ontask/dataops/pandas/dataframe.py:105
 #, python-brace-format
 msgid "New values in column {0} are not in categories {1}"
 msgstr "Los nuevos valores en la columna {0} no están en la categoría {1}"
 
-#: ontask/dataops/pandas/dataframe.py:224
-#: ontask/dataops/pandas/dataframe.py:229
-#: ontask/dataops/pandas/dataframe.py:231
+#: ontask/dataops/pandas/dataframe.py:197
+#: ontask/dataops/pandas/dataframe.py:202
+#: ontask/dataops/pandas/dataframe.py:204
 msgid "Internal error while processing database."
 msgstr "Error interno durante el proceso de la base de datos."
 
-#: ontask/dataops/pandas/dataframe.py:255
+#: ontask/dataops/pandas/dataframe.py:228
 msgid "Invalid column drop operation."
 msgstr "Operación de borrado de columna incorrecta."
 
-#: ontask/dataops/pandas/dataframe.py:352
+#: ontask/dataops/pandas/dataframe.py:319
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "No se ha encontrado el tipo {0}"
 
-#: ontask/dataops/pandas/merge.py:308
+#: ontask/dataops/pandas/merge.py:191
+msgid "Merge method must be one of left, right, outer or inner"
+msgstr "El método de mezcla debe ser uno de left, right, outer o inner"
+
+#: ontask/dataops/pandas/merge.py:196
+#, python-brace-format
+msgid "Column {0} not found in current data frame"
+msgstr "La columna {0} no es parte del data frame"
+
+#: ontask/dataops/pandas/merge.py:199 ontask/dataops/pandas/merge.py:207
+#, python-brace-format
+msgid "Column {0} is not a unique key."
+msgstr "La columna {0} no es una clave única."
+
+#: ontask/dataops/pandas/merge.py:203
+#, python-brace-format
+msgid "Column {0} not found in new data frame"
+msgstr "La columna {0} no está presente en el nuevo data frame"
+
+#: ontask/dataops/pandas/merge.py:322
 msgid "Merge operation produced a result with no rows"
 msgstr "La operación de mecla ha producido un resultado sin filas"
 
-#: ontask/dataops/pandas/merge.py:314
+#: ontask/dataops/pandas/merge.py:328
 msgid ""
 "Merge operation produced a result without any key columns. Review the key "
 "columns in the data to upload."
@@ -867,27 +874,83 @@ msgstr ""
 "La operación de mezcla a producido un resultado sin columnas clave. Revise "
 "las columnas clave the los datos a mezclar."
 
-#: ontask/dataops/plugin/ontask_plugin.py:69
+#: ontask/dataops/plugin/ontask_plugin.py:66
 msgid "This method should be implemented!"
 msgstr "¡Este método se debería haber implementado!"
 
-#: ontask/dataops/plugin/plugin_manager.py:36
+#: ontask/dataops/services/connections.py:17
+#: ontask/scheduler/services/scheduler_table.py:37
+msgid "Enabled?"
+msgstr "¿Activado?"
+
+#: ontask/dataops/services/connections.py:116
+msgid "Incorrect invocation of toggle question change function."
+msgstr ""
+"Invocación incorrecta de la función para cambiar si una pregunta se puede "
+"modificar."
+
+#: ontask/dataops/services/dataframeupload.py:332 ontask/table/api.py:299
+#, python-brace-format
+msgid "Unable to perform merge operation: {0}"
+msgstr "No se ha podido ejecutar la operación de mezcla: {0}"
+
+#: ontask/dataops/services/increase_track.py:44
+msgid "Non-GET request received in Track URL"
+msgstr "Request de tipo no GET recibido en Track URL"
+
+#: ontask/dataops/services/increase_track.py:48
+msgid "No dictionary in Track URL"
+msgstr "No se ha encontrado el diccionario en la URL de Track"
+
+#: ontask/dataops/services/increase_track.py:53
+msgid "No track_id found in request"
+msgstr "No se ha encontrado track_id en el Request"
+
+#: ontask/dataops/services/increase_track.py:59
+msgid "Bad signature in track_id"
+msgstr "Signatura incorrecta in track_id"
+
+#: ontask/dataops/services/increase_track.py:69
+#, python-format
+msgid "Incorrect user email %s"
+msgstr "Correo de usuario incorrecto %s"
+
+#: ontask/dataops/services/increase_track.py:75
+#, python-format
+msgid "Incorrect action id %s"
+msgstr "Identificador de acción incorrecto %s"
+
+#: ontask/dataops/services/increase_track.py:86
+#, python-format
+msgid "Column %s does not exist"
+msgstr "La columna %s no existe"
+
+#: ontask/dataops/services/plugin_admin.py:35
+#: ontask/templates/dataops/transform_model.html:49
+msgid "Folder"
+msgstr "Carpeta"
+
+#: ontask/dataops/services/plugin_admin.py:38
+msgid "Executions"
+msgstr "Ejecuciones"
+
+#: ontask/dataops/services/plugin_admin.py:126
 msgid "Class inherits from OnTaskTransformation or OnTaskModel"
 msgstr "Clase hereda de OnTaskTransformation u OnTaskModel"
 
-#: ontask/dataops/plugin/plugin_manager.py:37
+#: ontask/dataops/services/plugin_admin.py:127
 msgid "Class has a non-empty documentation string"
 msgstr "La clase tiene un text de documentación no vacío"
 
-#: ontask/dataops/plugin/plugin_manager.py:38
+#: ontask/dataops/services/plugin_admin.py:128
 msgid "Class has a non-empty string field with name \"name\""
 msgstr "La clase tiene un campo no vacío de tipo string con nombre \"name"
 
-#: ontask/dataops/plugin/plugin_manager.py:39
+#: ontask/dataops/services/plugin_admin.py:129
 msgid "Class has a string field with name \"description_text\""
 msgstr "La clase tiene un campo de tipo string con nombre “description_txt"
 
-#: ontask/dataops/plugin/plugin_manager.py:41
+#: ontask/dataops/services/plugin_admin.py:131
 msgid ""
 "Class has a field with name \"input_column_names\" storing a (possible "
 "empty) list of strings"
@@ -895,7 +958,7 @@ msgstr ""
 "La clase tiene un campo con nombre “input_column_names” que almacena una "
 "lista de strings (puede que sea vacía)"
 
-#: ontask/dataops/plugin/plugin_manager.py:44
+#: ontask/dataops/services/plugin_admin.py:134
 msgid ""
 "Class has a field with name \"output_column_names\" storing a (possibly "
 "empty) list of strings"
@@ -903,7 +966,7 @@ msgstr ""
 "La clase tiene un campo con nombre “output_column_names” que almacena una "
 "lista de strings (puede que sea vacía)"
 
-#: ontask/dataops/plugin/plugin_manager.py:47
+#: ontask/dataops/services/plugin_admin.py:137
 msgid ""
 "Class has a (possible empty) list of tuples with name \"parameters\". The "
 "tuples must have six elements: name (a string), type (one of \"double\", "
@@ -918,7 +981,7 @@ msgstr ""
 "inicial del tipo adecuado (o None), y un mensaje de ayuda que se muestra al "
 "pedir esta información."
 
-#: ontask/dataops/plugin/plugin_manager.py:56
+#: ontask/dataops/services/plugin_admin.py:146
 msgid ""
 "Class has a method with name run receiving a data frame and a dictionary "
 "with parameters."
@@ -926,222 +989,260 @@ msgstr ""
 "La clase tiene un método con nombre run que recibe un data Frame y un "
 "diccionario con parámetros."
 
-#: ontask/dataops/plugin/plugin_manager.py:117
-#: ontask/dataops/plugin/plugin_manager.py:125
-#: ontask/dataops/plugin/plugin_manager.py:133
-#: ontask/dataops/plugin/plugin_manager.py:140
-#: ontask/dataops/plugin/plugin_manager.py:152
-#: ontask/dataops/plugin/plugin_manager.py:164
-#: ontask/dataops/plugin/plugin_manager.py:226
+#: ontask/dataops/services/plugin_admin.py:206
+#: ontask/dataops/services/plugin_admin.py:214
+#: ontask/dataops/services/plugin_admin.py:222
+#: ontask/dataops/services/plugin_admin.py:232
+#: ontask/dataops/services/plugin_admin.py:245
+#: ontask/dataops/services/plugin_admin.py:258
+#: ontask/dataops/services/plugin_admin.py:323
 #: ontask/templates/action/includes/partial_action_showurl.html:29
-#: templates/base.html:232
+#: ontask/templates/base.html:232
 msgid "Ok"
 msgstr "De acuerdo"
 
-#: ontask/dataops/plugin/plugin_manager.py:119
+#: ontask/dataops/services/plugin_admin.py:208
 msgid "Incorrect parent class"
 msgstr "Superclasse incorrecta"
 
-#: ontask/dataops/plugin/plugin_manager.py:127
+#: ontask/dataops/services/plugin_admin.py:216
 msgid "Class is not documented"
 msgstr "La clase no contiene documentación"
 
-#: ontask/dataops/plugin/plugin_manager.py:131
-#: ontask/dataops/plugin/plugin_manager.py:138
-#: ontask/dataops/plugin/plugin_manager.py:145
-#: ontask/dataops/plugin/plugin_manager.py:157
-#: ontask/dataops/plugin/plugin_manager.py:169
+#: ontask/dataops/services/plugin_admin.py:220
+#: ontask/dataops/services/plugin_admin.py:227
+#: ontask/dataops/services/plugin_admin.py:237
+#: ontask/dataops/services/plugin_admin.py:250
+#: ontask/dataops/services/plugin_admin.py:263
 msgid "Not found"
 msgstr "No encontrado"
 
-#: ontask/dataops/plugin/plugin_manager.py:135
-#: ontask/dataops/plugin/plugin_manager.py:142
-#: ontask/dataops/plugin/plugin_manager.py:154
-#: ontask/dataops/plugin/plugin_manager.py:171
+#: ontask/dataops/services/plugin_admin.py:224
+#: ontask/dataops/services/plugin_admin.py:234
+#: ontask/dataops/services/plugin_admin.py:247
+#: ontask/dataops/services/plugin_admin.py:268
 msgid "Incorrect type"
 msgstr "Tipo incorrecto"
 
-#: ontask/dataops/plugin/plugin_manager.py:166
+#: ontask/dataops/services/plugin_admin.py:260
 msgid "Incorrect type/value"
 msgstr "Tipo/valor incorrecto"
 
-#: ontask/dataops/plugin/plugin_manager.py:178
+#: ontask/dataops/services/plugin_admin.py:275
 msgid "Key values should be strings"
 msgstr "Los valores de la clave deben ser strings"
 
-#: ontask/dataops/plugin/plugin_manager.py:184
+#: ontask/dataops/services/plugin_admin.py:281
 msgid "First tuple element should be as string"
 msgstr "El primer elemento de la tupla debe ser un string"
 
-#: ontask/dataops/plugin/plugin_manager.py:191
+#: ontask/dataops/services/plugin_admin.py:288
 #, python-brace-format
 msgid "Incorrect type \"{0}\" in parameter"
 msgstr "Tipo \"{0}\" incorrecto en parámetro"
 
-#: ontask/dataops/plugin/plugin_manager.py:198
+#: ontask/dataops/services/plugin_admin.py:295
 msgid "Parameter of type datetime cannot have list of allowed values"
 msgstr "Parámetro de tipo fecha/hora no puede tener una lista de valores"
 
-#: ontask/dataops/plugin/plugin_manager.py:203
+#: ontask/dataops/services/plugin_admin.py:300
 msgid "Incorrect list of allowed value"
 msgstr "La lista de valores permitidos es incorrecta"
 
-#: ontask/dataops/plugin/plugin_manager.py:207
-#: ontask/workflow/forms/column.py:208
+#: ontask/dataops/services/plugin_admin.py:304
+#: ontask/workflow/forms/column.py:201
 msgid "Incorrect initial value"
 msgstr "Valor inicial incorrecto"
 
-#: ontask/dataops/plugin/plugin_manager.py:213
+#: ontask/dataops/services/plugin_admin.py:310
 msgid "Help text must be as string"
 msgstr "El texto de ayuda debe ser un string"
 
-#: ontask/dataops/plugin/plugin_manager.py:228
+#: ontask/dataops/services/plugin_admin.py:325
 msgid "Incorrect run method"
 msgstr "El método run es incorrecto"
 
-#: ontask/dataops/plugin/plugin_manager.py:298
-msgid "Class instantiation"
-msgstr "Instanciación de la clase"
+#: ontask/dataops/services/plugin_admin.py:396
+#: ontask/dataops/services/plugin_admin.py:399
+msgid "Error while instantiating the plugin class"
+msgstr "Error al instancia la clase del plugin"
 
-#: ontask/dataops/plugin/plugin_manager.py:300
-msgid "Instance creation"
-msgstr "Creación de la instancia"
-
-#: ontask/dataops/plugin/plugin_manager.py:354
+#: ontask/dataops/services/plugin_admin.py:453
 #, python-brace-format
 msgid "Unable to load plugin in folder \"{0}\"."
 msgstr "No es posible cargar el plugin en la carpeta \"{0}\"."
 
-#: ontask/dataops/plugin/plugin_manager.py:393
-#: ontask/dataops/views/transform.py:234
+#: ontask/dataops/services/plugin_execute.py:45
+#: ontask/dataops/views/transform.py:85
 #, python-brace-format
 msgid "Unable to instantiate plugin \"{0}\""
 msgstr "No es posible instanciar el plugi \"{0}\""
 
-#: ontask/dataops/plugin/plugin_manager.py:406
+#: ontask/dataops/services/plugin_execute.py:58
 #, python-brace-format
 msgid "Inconsistent number of inputs when invoking plugin \"{0}\""
 msgstr "Número de entradas inconsistente al invocar plugin “{0}”"
 
-#: ontask/dataops/plugin/plugin_manager.py:419
+#: ontask/dataops/services/plugin_execute.py:71
 #, python-brace-format
 msgid "Inconsistent number of outputs when invoking plugin \"{0}\""
 msgstr "Número de salidas inconsistente al invocar plugin “{0}”"
 
-#: ontask/dataops/plugin/plugin_manager.py:429
+#: ontask/dataops/services/plugin_execute.py:81
 #, python-brace-format
 msgid "Exception when retrieving the data frame from workflow: {0}"
 msgstr ""
 "Ha habido una excepción mientras se accedía al data frame del flujo: {0}"
 
-#: ontask/dataops/plugin/plugin_manager.py:447
+#: ontask/dataops/services/plugin_execute.py:99
 #, python-brace-format
 msgid "Error when creating data frame for plugin: {0}"
 msgstr "Error al crear un dataframe para el plugin: {0}"
 
-#: ontask/dataops/plugin/plugin_manager.py:455
+#: ontask/dataops/services/plugin_execute.py:107
 #, python-brace-format
 msgid "Error while executing plugin: {0}"
 msgstr "Error al ejecutar el plugin: {0}"
 
-#: ontask/dataops/plugin/plugin_manager.py:462
+#: ontask/dataops/services/plugin_execute.py:114
 msgid "Plugin executed but did not return a pandas data frame."
 msgstr "El plugin a ejecutado pero no ha devuelto un data frame en pandas."
 
-#: ontask/dataops/plugin/plugin_manager.py:471
+#: ontask/dataops/services/plugin_execute.py:123
 #, python-brace-format
 msgid "Incorrect number of rows ({0}) in result data frame."
 msgstr "Número de filas incorrecto ({0}) en el data Frame resultante."
 
-#: ontask/dataops/plugin/plugin_manager.py:479
+#: ontask/dataops/services/plugin_execute.py:131
 #, python-brace-format
 msgid "Column name {0} cannot be in the result data frame."
 msgstr "La columna {0} no puede estar en el data frame resultado."
 
-#: ontask/dataops/plugin/plugin_manager.py:485
+#: ontask/dataops/services/plugin_execute.py:137
 msgid "Incorrect columns in result data frame."
 msgstr "Número de columnas incorrecto en el data frame."
 
-#: ontask/dataops/plugin/plugin_manager.py:507
-#: ontask/dataops/plugin/plugin_manager.py:512
+#: ontask/dataops/services/plugin_execute.py:159
+#: ontask/dataops/services/plugin_execute.py:164
 #, python-brace-format
 msgid "Error while merging result: {0}."
 msgstr "Error al mezclar el resultado: {0}."
 
-#: ontask/dataops/views/athenaupload.py:57
-msgid "Athena connection"
-msgstr "Conexión a Athena"
-
-#: ontask/dataops/views/connection_admin.py:31
-msgid "Enabled?"
-msgstr "¿Activado?"
-
-#: ontask/dataops/views/connection_admin.py:257
-#: ontask/dataops/views/connection_instructor.py:103 templates/base.html:148
-msgid "SQL Connections"
-msgstr "Conexiones SQL"
-
-#: ontask/dataops/views/connection_admin.py:299
-#: ontask/dataops/views/connection_instructor.py:141
-msgid "Athena Connections"
-msgstr "Conexiones a Athena"
-
-#: ontask/dataops/views/csvupload.py:51
-msgid "CSV upload form is not multiform"
-msgstr "El formulario de carga CSV no es multiform"
-
-#: ontask/dataops/views/csvupload.py:78
-msgid "CSV file"
-msgstr "Fichero CSV"
-
-#: ontask/dataops/views/excelupload.py:51
-msgid "Excel upload form is not multiform"
-msgstr "El formulario de carga Excel no es multiform"
-
-#: ontask/dataops/views/googlesheetupload.py:68
-msgid "Google Sheet URL"
-msgstr "URL de Google Sheet"
-
-#: ontask/dataops/views/plugin_admin.py:36
-#: ontask/templates/dataops/transform_model.html:49
-msgid "Folder"
-msgstr "Carpeta"
-
-#: ontask/dataops/views/plugin_admin.py:39
-msgid "Executions"
-msgstr "Ejecuciones"
-
-#: ontask/dataops/views/row.py:113
-msgid "Unable to update table row"
-msgstr "No oes posible actualizar la fila en la tabla"
-
-#: ontask/dataops/views/s3upload.py:68
-msgid "S3 CSV file"
-msgstr "Fichero S3 CSV"
-
-#: ontask/dataops/views/sqlupload.py:66
-msgid "SQL connection"
-msgstr "Conexión SQL"
-
-#: ontask/dataops/views/sqlupload.py:72
-msgid "<PROTECTED>"
-msgstr "<PROTEGIDO>"
-
-#: ontask/dataops/views/sqlupload.py:92
+#: ontask/dataops/services/plugin_execute.py:222
 #, python-brace-format
-msgid "Unable to obtain data: {0}"
-msgstr "No es posible obtener los datos: {0}"
+msgid "Unable to load plugin with id {pid}"
+msgstr "No es posible cargar el plugin con el identificador {pid}"
 
-#: ontask/dataops/views/sqlupload.py:104
-msgid "The data from this connection cannot be processed."
-msgstr "Los datos de esta conexión no se pueden procesar."
+#: ontask/dataops/services/plugin_execute.py:245
+#: ontask/workflow/services/luser_update.py:96
+#, python-brace-format
+msgid "Error: {0}"
+msgstr "Error: {0}"
 
-#: ontask/dataops/views/transform.py:58
+#: ontask/dataops/services/plugin_run.py:49
 #: ontask/templates/dataops/plugin_info_for_run.html:35
 msgid "Execute the transformation"
 msgstr "Ejecutar la transformación"
 
-#: ontask/dataops/views/transform.py:215
+#: ontask/dataops/services/sql_upload.py:133
+msgid "Incorrect connection identifier."
+msgstr "Identificador de conexión incorrecto."
+
+#: ontask/dataops/services/sql_upload.py:147
+msgid "Unable to acquire access to workflow."
+msgstr "No se ha podido acceder al flujo."
+
+#: ontask/dataops/services/sql_upload.py:166
+msgid "Missing key column name of existing table."
+msgstr ""
+"No se ha especificado el nombre de una columna clave en la tabla existente."
+
+#: ontask/dataops/services/sql_upload.py:173
+msgid "Missing key column name of new table."
+msgstr "No se ha especificado la columna clave en la nueva tabla."
+
+#: ontask/dataops/services/sql_upload.py:180
+msgid "Missing merge method."
+msgstr "No se ha especificado el método de mezcla."
+
+#: ontask/dataops/services/upload_steps.py:145
+#: ontask/dataops/services/upload_steps.py:148
+msgid " (Ignored)"
+msgstr " (Ignorada)"
+
+#: ontask/dataops/services/upload_steps.py:155
+msgid " (New)"
+msgstr " (Nueva)"
+
+#: ontask/dataops/services/upload_steps.py:157
+msgid " (Update)"
+msgstr " (Actualizar)"
+
+#: ontask/dataops/services/upload_steps.py:161
+msgid " (Renamed)"
+msgstr " (Renombrada)"
+
+#: ontask/dataops/services/upload_steps.py:189
+msgid "Exception while loading data frame"
+msgstr "Ha habido una excepción mientras se cargaba el data frame"
+
+#: ontask/dataops/services/upload_steps.py:208
+msgid "Merge operation failed. "
+msgstr "La operación de mezcla ha fallado. "
+
+#: ontask/dataops/views/athenaupload.py:74
+msgid "Athena connection"
+msgstr "Conexión a Athena"
+
+#: ontask/dataops/views/connection_admin.py:32
+#: ontask/dataops/views/connection_instructor.py:33
+#: ontask/scheduler/views/index.py:59 ontask/templates/base.html:146
+msgid "SQL Connections"
+msgstr "Conexiones SQL"
+
+#: ontask/dataops/views/connection_admin.py:49
+#: ontask/dataops/views/connection_instructor.py:55
+msgid "Athena Connections"
+msgstr "Conexiones a Athena"
+
+#: ontask/dataops/views/csvupload.py:50
+msgid "CSV upload form is not multiform"
+msgstr "El formulario de carga CSV no es multiform"
+
+#: ontask/dataops/views/csvupload.py:77
+msgid "CSV file"
+msgstr "Fichero CSV"
+
+#: ontask/dataops/views/excelupload.py:50
+msgid "Excel upload form is not multiform"
+msgstr "El formulario de carga Excel no es multiform"
+
+#: ontask/dataops/views/googlesheetupload.py:67
+msgid "Google Sheet URL"
+msgstr "URL de Google Sheet"
+
+#: ontask/dataops/views/row.py:88
+msgid "Unable to update table row"
+msgstr "No oes posible actualizar la fila en la tabla"
+
+#: ontask/dataops/views/s3upload.py:67
+msgid "S3 CSV file"
+msgstr "Fichero S3 CSV"
+
+#: ontask/dataops/views/sql_upload.py:62
+msgid "SQL connection"
+msgstr "Conexión SQL"
+
+#: ontask/dataops/views/sql_upload.py:68
+msgid "<PROTECTED>"
+msgstr "<PROTEGIDO>"
+
+#: ontask/dataops/views/sql_upload.py:90
+#, python-brace-format
+msgid "Unable to obtain data: {0}"
+msgstr "No es posible obtener los datos: {0}"
+
+#: ontask/dataops/views/transform.py:66
 msgid ""
 "Unable to run plugins due to a misconfiguration. Ask your system "
 "administrator to enable queueing."
@@ -1149,44 +1250,20 @@ msgstr ""
 "No es posible ejecutar plugins debido a una configuración incorrecta. "
 "Contacte con el administrador para activar la cola de ejecución."
 
-#: ontask/dataops/views/upload.py:184
+#: ontask/dataops/views/upload.py:155
 #, python-brace-format
 msgid "Unable to upload the data: {0}"
 msgstr "No es posible cargar los datos: {0}"
 
-#: ontask/dataops/views/upload.py:212
+#: ontask/dataops/views/upload.py:170
 msgid "Finish"
 msgstr "Terminar"
 
-#: ontask/dataops/views/upload.py:391
-msgid "Exception while loading data frame"
-msgstr "Ha habido una excepción mientras se cargaba el data frame"
-
-#: ontask/dataops/views/upload.py:412
-msgid "Merge operation failed. "
-msgstr "La operación de mezcla ha fallado. "
-
-#: ontask/dataops/views/upload.py:490 ontask/dataops/views/upload.py:493
-msgid " (Ignored)"
-msgstr " (Ignorada)"
-
-#: ontask/dataops/views/upload.py:500
-msgid " (New)"
-msgstr " (Nueva)"
-
-#: ontask/dataops/views/upload.py:502
-msgid " (Update)"
-msgstr " (Actualizar)"
-
-#: ontask/dataops/views/upload.py:506
-msgid " (Renamed)"
-msgstr " (Renombrada)"
-
-#: ontask/django_auth_lti/middleware.py:33
+#: ontask/django_auth_lti/middleware.py:31
 msgid "improperly configured: requeset has no user attr"
 msgstr "configuración incorrecta: request no tiene atributo de usuario"
 
-#: ontask/django_auth_lti/middleware.py:35
+#: ontask/django_auth_lti/middleware.py:33
 msgid ""
 "The Django LTI auth middleware requires the authentication middleware to be "
 "installed.  Edit your MIDDLEWARE_CLASSES setting to insert 'django.contrib."
@@ -1197,20 +1274,20 @@ msgstr ""
 "'django.contrib.auth.middleware.AuthenticationMiddleware' antes de la clase "
 "PINAuthMiddleware."
 
-#: ontask/django_auth_lti/middleware.py:43
+#: ontask/django_auth_lti/middleware.py:41
 msgid "received a basic-lti-launch-request - authenticating the user"
 msgstr "recibido un basic-lti-launch-request - autenticando el usuario"
 
-#: ontask/django_auth_lti/middleware.py:49
+#: ontask/django_auth_lti/middleware.py:47
 #, python-format
 msgid "authenticate() took %s s"
 msgstr "authentiate() tardó %s s"
 
-#: ontask/django_auth_lti/middleware.py:56
+#: ontask/django_auth_lti/middleware.py:54
 msgid "user was successfully authenticated; now log them in"
 msgstr "usuario autenticado con éxito, ahora coenzar sesión"
 
-#: ontask/django_auth_lti/middleware.py:118
+#: ontask/django_auth_lti/middleware.py:116
 msgid ""
 "user could not be authenticated via LTI params; let the request continue in "
 "case another auth plugin is configured"
@@ -1218,32 +1295,32 @@ msgstr ""
 "el usuario no ha podido ser autenticado vía LTI params; el request continua "
 "por si otro plugin de autenticación está configurado"
 
-#: ontask/django_auth_lti/middleware.py:128
+#: ontask/django_auth_lti/middleware.py:126
 msgid "Could not find LTI launch parameters"
 msgstr "No se han encontrado los parámetros para arrancar LTI"
 
-#: ontask/django_auth_lti/middleware.py:139
+#: ontask/django_auth_lti/middleware.py:137
 #, python-brace-format
 msgid "calling the backend {0} clean_username with {1}"
 msgstr "invocando el backend {0} clean_username con {1}"
 
-#: ontask/django_auth_lti/middleware.py:143
+#: ontask/django_auth_lti/middleware.py:141
 #, python-brace-format
 msgid "cleaned username is {0}"
 msgstr "el nombre de usuario limpio es {0}"
 
-#: ontask/django_auth_lti/mixins.py:28
+#: ontask/django_auth_lti/mixins.py:26
 msgid "'LTIRoleRestrictionMixin' requires 'allowed_roles' attribute to be set."
 msgstr ""
 "'LTIRoleRestrictionMixin' requiere que el atributo 'allowed_roles' esté "
 "asignado."
 
-#: ontask/django_auth_lti/templatetags/lti.py:23
+#: ontask/django_auth_lti/templatetags/lti.py:24
 #, python-format
 msgid "Failed to find resource_link_id in request context %s"
 msgstr "Fallo al buscar el resource_link_id en el contexto solicitado %s"
 
-#: ontask/django_auth_lti/templatetags/lti.py:28
+#: ontask/django_auth_lti/templatetags/lti.py:29
 msgid "Failed to get current request from thread_local"
 msgstr "Fallo al obtener el request actual de thread_local"
 
@@ -1279,34 +1356,23 @@ msgstr "Enviar Lista  en JSON"
 msgid "TODO List"
 msgstr "Lista"
 
-#: ontask/models/action.py:97 ontask/models/condition.py:38
-#: ontask/models/scheduler.py:57
-msgid "name"
-msgstr "nombre"
-
-#: ontask/models/action.py:104 ontask/models/column.py:50
-#: ontask/models/condition.py:44 ontask/models/rubriccell.py:60
-#: ontask/models/scheduler.py:63
-msgid "description"
-msgstr "descripción"
-
-#: ontask/models/action.py:129
-msgid "URL available to users?"
-msgstr "¿URL disponible a los usuarios?"
-
-#: ontask/models/action.py:136
+#: ontask/models/action.py:105
 msgid "Action available from"
 msgstr "Acción disponible desde"
 
-#: ontask/models/action.py:143
+#: ontask/models/action.py:111
 msgid "Action available until"
 msgstr "Acción disponible hasta"
 
-#: ontask/models/action.py:172 ontask/templates/action/edit_in.html:143
+#: ontask/models/action.py:259
+msgid "URL available to users?"
+msgstr "¿URL disponible a los usuarios?"
+
+#: ontask/models/action.py:379 ontask/templates/action/edit_in.html:143
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
-#: ontask/models/actioncolumnconditiontuple.py:56
+#: ontask/models/actioncolumnconditiontuple.py:55
 msgid "Allow changes?"
 msgstr "¿Permitir cambios?"
 
@@ -1335,371 +1401,364 @@ msgstr "Nombre del AWS S3 Bucket (sin prefijo s3://)"
 msgid "AWS region name"
 msgstr "Nombre de la región AWS"
 
-#: ontask/models/athenaconnection.py:95
-msgid "Table name"
-msgstr "Nombre de la tabla"
-
-#: ontask/models/athenaconnection.py:125 ontask/models/athenaconnection.py:129
-#: ontask/models/sqlconnection.py:108
+#: ontask/models/athenaconnection.py:124 ontask/models/athenaconnection.py:128
+#: ontask/models/sqlconnection.py:110
 msgid "REMOVED"
 msgstr "OCULTADO"
 
-#: ontask/models/column.py:44
-msgid "column name"
-msgstr "nombre de columna"
-
-#: ontask/models/column.py:69
+#: ontask/models/column.py:53
 msgid "type of data to store in the column"
 msgstr "tipo de dato almacenado en la columna"
 
-#: ontask/models/column.py:74
+#: ontask/models/column.py:58
 msgid "has unique values per row"
 msgstr "tiene valores únicos por fila"
 
-#: ontask/models/column.py:80
+#: ontask/models/column.py:64
 msgid "column position (zero to insert last)"
 msgstr "posición de la columna (cero para insertar última)"
 
-#: ontask/models/column.py:89
+#: ontask/models/column.py:73
 msgid "include in visualization"
 msgstr "incluir en visualizaciones"
 
-#: ontask/models/column.py:99
+#: ontask/models/column.py:83
 msgid "comma separated list of values allowed"
 msgstr "lista de valores permitidos separados por comas"
 
-#: ontask/models/column.py:103
+#: ontask/models/column.py:87
 msgid "Column active from"
 msgstr "Columna activa desde"
 
-#: ontask/models/column.py:109
+#: ontask/models/column.py:93
 msgid "Column active until"
 msgstr "Columna activa hasta"
 
-#: ontask/models/column.py:208
+#: ontask/models/column.py:188
 #, python-format
 msgid "Unsupported type %(type)s"
 msgstr "Typo de datos %(type)s no soportado"
 
-#: ontask/models/condition.py:50
+#: ontask/models/common.py:35 ontask/models/condition.py:37
+msgid "name"
+msgstr "nombre"
+
+#: ontask/models/common.py:42 ontask/models/condition.py:43
+#: ontask/models/rubriccell.py:58
+msgid "description"
+msgstr "descripción"
+
+#: ontask/models/condition.py:49
 msgid "formula"
 msgstr "fórmula"
 
-#: ontask/models/condition.py:57
+#: ontask/models/condition.py:56
 msgid "formula text"
 msgstr "fórmula"
 
-#: ontask/models/condition.py:62
+#: ontask/models/condition.py:61
 msgid "Columns present in this condition"
 msgstr "Columnas presentes en esta condición"
 
-#: ontask/models/condition.py:67
+#: ontask/models/condition.py:66
 msgid "Number of rows selected"
 msgstr "Número de filas seleccionadas"
 
-#: ontask/models/connection.py:36
+#: ontask/models/connection.py:22
 msgid "Available to users?"
 msgstr "¿Disponible a los usuarios?"
 
-#: ontask/models/logs.py:121
-msgid "Canvas Emails sent"
-msgstr "Mensajes Canvas enviados"
-
-#: ontask/models/logs.py:122
+#: ontask/models/logs.py:125
 msgid "Action cloned"
 msgstr "Acción clonada"
 
-#: ontask/models/logs.py:123
+#: ontask/models/logs.py:126
 msgid "Action created"
 msgstr "Acción creada"
 
-#: ontask/models/logs.py:124
+#: ontask/models/logs.py:127
 msgid "Action deleted"
 msgstr "Acción borrada"
 
-#: ontask/models/logs.py:125
+#: ontask/models/logs.py:128
 msgid "Download a ZIP with one file per text"
 msgstr "Descargar un ZIP con un fichero por texto"
 
-#: ontask/models/logs.py:126
+#: ontask/models/logs.py:129
 msgid "Notification email sent"
 msgstr "Mensaje de notificación enviado"
 
-#: ontask/models/logs.py:127
+#: ontask/models/logs.py:130
 msgid "Email read"
 msgstr "Lectura de mensaje"
 
-#: ontask/models/logs.py:128 ontask/models/logs.py:130
+#: ontask/models/logs.py:131 ontask/models/logs.py:133
 msgid "Emails sent"
 msgstr "Mensajes enviados"
 
-#: ontask/models/logs.py:129
+#: ontask/models/logs.py:132
 msgid "Action imported"
 msgstr "Acción importada"
 
-#: ontask/models/logs.py:131
+#: ontask/models/logs.py:134
 msgid "Email with data list sent"
 msgstr "Mensaje con la lista enviado"
 
-#: ontask/models/logs.py:132
+#: ontask/models/logs.py:135
 msgid "Question added"
 msgstr "Pregunta añadida"
 
-#: ontask/models/logs.py:133
+#: ontask/models/logs.py:136
 msgid "Question toggle changes"
 msgstr "Cambiar si la pregunta se puede modificar"
 
-#: ontask/models/logs.py:134
+#: ontask/models/logs.py:137
 msgid "Add a rubric criterion"
 msgstr "Añadir criterio a la rúbrica"
 
-#: ontask/models/logs.py:135
+#: ontask/models/logs.py:138
 msgid "Edit rubric criterion"
 msgstr "Editar el criterio de la rúbrica"
 
-#: ontask/models/logs.py:136
+#: ontask/models/logs.py:139
 msgid "Delete rubric criterion"
 msgstr "Borrar criterio de la rúbrica"
 
-#: ontask/models/logs.py:137
+#: ontask/models/logs.py:140
 msgid "Rubric cell edit"
 msgstr "Editar celda de la rúbrica"
 
-#: ontask/models/logs.py:138
+#: ontask/models/logs.py:141
 msgid "Rubric level of attainment edit"
 msgstr "Editar nivel alcanzado en la rúbrica"
 
-#: ontask/models/logs.py:139
+#: ontask/models/logs.py:143
 msgid "Execute scheduled canvas email action"
 msgstr "Ejecución de la acción de email Canvas planificada"
 
-#: ontask/models/logs.py:140
+#: ontask/models/logs.py:144
 msgid "Execute scheduled email action"
 msgstr "Ejecución de la acción de email planificada"
 
-#: ontask/models/logs.py:141
+#: ontask/models/logs.py:145
 msgid "Execute scheduled JSON action"
 msgstr "Ejecutar acción JSON planificada"
 
-#: ontask/models/logs.py:142
+#: ontask/models/logs.py:146
 msgid "Execute scheduled JSON list action"
 msgstr "Ejecutar acción de envío de lista en JSON planificada"
 
-#: ontask/models/logs.py:143
+#: ontask/models/logs.py:147
 msgid "Execute scheduled send list action"
 msgstr "Ejecución de la acción de envío de una lista"
 
-#: ontask/models/logs.py:144
+#: ontask/models/logs.py:148
+msgid "Create a zip with personalized content"
+msgstr "Crear un fichero ZIP con el contenido personalizado"
+
+#: ontask/models/logs.py:149
 msgid "Action URL toggled"
 msgstr "La URL de la acción se ha modificado"
 
-#: ontask/models/logs.py:145
+#: ontask/models/logs.py:150
 msgid "Action served"
 msgstr "Acción accedida"
 
-#: ontask/models/logs.py:146
+#: ontask/models/logs.py:151
 msgid "Survey data input"
 msgstr "Entrada de datos de cuestionario"
 
-#: ontask/models/logs.py:147
+#: ontask/models/logs.py:152
 msgid "Action updated"
 msgstr "Acción actualizada"
 
-#: ontask/models/logs.py:148
+#: ontask/models/logs.py:153
 msgid "Athena connection cloned"
 msgstr "Conexión a Athena colgada"
 
-#: ontask/models/logs.py:149
+#: ontask/models/logs.py:154
 msgid "Athena connection created"
 msgstr "Conexión a Athena creada"
 
-#: ontask/models/logs.py:150
+#: ontask/models/logs.py:155
 msgid "Athena connection deleted"
 msgstr "Conexión a Athena borrada"
 
-#: ontask/models/logs.py:151
+#: ontask/models/logs.py:156
 msgid "Athena connection updated"
 msgstr "Conexión a Athena actualizada"
 
-#: ontask/models/logs.py:152 ontask/models/logs.py:184
-msgid "SQL connection toggled"
-msgstr "Conexión SQL alternada"
+#: ontask/models/logs.py:157
+msgid "Athena connection toggled"
+msgstr "Conexión a Athena conmutada"
 
-#: ontask/models/logs.py:153
+#: ontask/models/logs.py:158
 msgid "Column added"
 msgstr "Columna añadida"
 
-#: ontask/models/logs.py:154
+#: ontask/models/logs.py:159
 msgid "Column with formula created"
 msgstr "Creada la columna con fórmula"
 
-#: ontask/models/logs.py:155
+#: ontask/models/logs.py:160
 msgid "Column with random values created"
 msgstr "Se ha creado la columna con los valores aleatorios"
 
-#: ontask/models/logs.py:156
+#: ontask/models/logs.py:161
 msgid "Column cloned"
 msgstr "Columna clonada"
 
-#: ontask/models/logs.py:157
+#: ontask/models/logs.py:162
 msgid "Column deleted"
 msgstr "Columna borrada"
 
-#: ontask/models/logs.py:158
+#: ontask/models/logs.py:163
 msgid "Column edited"
 msgstr "Columna editada"
 
-#: ontask/models/logs.py:159
+#: ontask/models/logs.py:164
 msgid "Column restricted"
 msgstr "Columna restringida"
 
-#: ontask/models/logs.py:160
+#: ontask/models/logs.py:165
 msgid "Condition cloned"
 msgstr "Condición clonada"
 
-#: ontask/models/logs.py:161
+#: ontask/models/logs.py:166
 msgid "Condition created"
 msgstr "Condición creada"
 
-#: ontask/models/logs.py:162
+#: ontask/models/logs.py:167
 msgid "Condition deleted"
 msgstr "Condición borrada"
 
-#: ontask/models/logs.py:163
+#: ontask/models/logs.py:168
 msgid "Condition updated"
 msgstr "Condición actualizada"
 
-#: ontask/models/logs.py:164
+#: ontask/models/logs.py:169
 msgid "Plugin created"
 msgstr "Plugin creado"
 
-#: ontask/models/logs.py:165
+#: ontask/models/logs.py:170
 msgid "Plugin deleted"
 msgstr "Plugin borrado"
 
-#: ontask/models/logs.py:166
+#: ontask/models/logs.py:171
 msgid "Plugin executed"
 msgstr "Plugin ejecutado"
 
-#: ontask/models/logs.py:167
+#: ontask/models/logs.py:172
 msgid "Plugin updated"
 msgstr "Plugin actualizado"
 
-#: ontask/models/logs.py:169
-msgid "Edit scheduled canvas email action"
-msgstr "Editar la ejecución de la acción de email Canvas planificada"
-
-#: ontask/models/logs.py:171
-msgid "Delete scheduled canvas email action"
-msgstr "Borrar la acción email Canvas planificada"
-
-#: ontask/models/logs.py:172
-msgid "Edit scheduled email action"
-msgstr "Edición de la acción de email planificada"
-
 #: ontask/models/logs.py:173
-msgid "Delete scheduled email action"
-msgstr "Borrada la acción de email planificada"
+msgid "Create scheduled operation"
+msgstr "Crear operación planificada"
 
 #: ontask/models/logs.py:174
-msgid "Edit scheduled JSON action"
-msgstr "Editar acción JSON planificada"
+msgid "Edit scheduled operation"
+msgstr "Editar la operación planificada"
 
 #: ontask/models/logs.py:175
-msgid "Delete scheduled JSON action"
-msgstr "Borrar acción JSON planificada"
+msgid "Delete scheduled operation"
+msgstr "Borrar la operación planificada"
 
 #: ontask/models/logs.py:176
-msgid "Edit scheduled JSON list action"
-msgstr "Editar acción de envío de una lista en JSON planificada"
-
-#: ontask/models/logs.py:177
-msgid "Delete scheduled JSON list action"
-msgstr "Borrar acción de envío de JSON planificada"
-
-#: ontask/models/logs.py:178
-msgid "Edit scheduled send list action"
-msgstr "Edición de la acción para enviar una lista"
-
-#: ontask/models/logs.py:179
-msgid "Delete scheduled send list action"
-msgstr "Borrada la acción para enviar una lista"
-
-#: ontask/models/logs.py:180
 msgid "SQL connection cloned"
 msgstr "Conexión a SQL clonada"
 
-#: ontask/models/logs.py:181
+#: ontask/models/logs.py:177
 msgid "SQL connection created"
 msgstr "Conexión a SQL creada"
 
-#: ontask/models/logs.py:182
+#: ontask/models/logs.py:178
 msgid "SQL connection deleted"
 msgstr "Conexión a SQL borrada"
 
-#: ontask/models/logs.py:183
+#: ontask/models/logs.py:179
 msgid "SQL connection updated"
 msgstr "Conexión a SQL actualizada"
 
-#: ontask/models/logs.py:185
+#: ontask/models/logs.py:180
+msgid "SQL connection toggled"
+msgstr "Conexión SQL alternada"
+
+#: ontask/models/logs.py:181
 msgid "Table view created"
 msgstr "Creada vista de tabla"
 
-#: ontask/models/logs.py:186
+#: ontask/models/logs.py:182
 msgid "Table view edited"
 msgstr "Editada vista de tabla"
 
-#: ontask/models/logs.py:187
+#: ontask/models/logs.py:183
 msgid "Table view deleted"
 msgstr "Borrada vista de tabla"
 
-#: ontask/models/logs.py:188
+#: ontask/models/logs.py:184
 msgid "Table view cloned"
 msgstr "Clonada vista de tabla"
 
-#: ontask/models/logs.py:189
+#: ontask/models/logs.py:185
 msgid "New attribute in workflow"
 msgstr "Nuevo atributo en el flujo"
 
-#: ontask/models/logs.py:190
+#: ontask/models/logs.py:186
 msgid "Attributes updated in workflow"
 msgstr "Actualizados los atributos del flujo"
 
-#: ontask/models/logs.py:191
+#: ontask/models/logs.py:187
 msgid "Attribute deleted"
 msgstr "Attributo borrado"
 
-#: ontask/models/logs.py:192
+#: ontask/models/logs.py:188
 msgid "Workflow cloned"
 msgstr "Flujo clonado"
 
-#: ontask/models/logs.py:193
+#: ontask/models/logs.py:189
 msgid "Workflow created"
 msgstr "Flujo creado"
 
-#: ontask/models/logs.py:194
+#: ontask/models/logs.py:190
 msgid "Failed data merge into workflow"
 msgstr "Fallo en la mezcla de datos en el flujo"
 
-#: ontask/models/logs.py:195
+#: ontask/models/logs.py:191
 msgid "Workflow data flushed"
 msgstr "Borrados los datos del flujo"
 
-#: ontask/models/logs.py:196
-msgid "Data merged into workflow"
-msgstr "Datos mezclados en el flujo"
-
-#: ontask/models/logs.py:197
+#: ontask/models/logs.py:192
 msgid "Table row created"
 msgstr "Creada fila en la tabla"
 
-#: ontask/models/logs.py:198
+#: ontask/models/logs.py:193
 msgid "Table row updated"
 msgstr "Actualizada fila en la tabla"
 
-#: ontask/models/logs.py:199
+#: ontask/models/logs.py:194
 msgid "Data uploaded to workflow"
 msgstr "Datos cargados en el flujo"
+
+#: ontask/models/logs.py:195
+msgid "Upload Data from CSV File"
+msgstr "Cargar datos de un fichero CSV"
+
+#: ontask/models/logs.py:196
+msgid "Upload Data from Excel Sheet"
+msgstr "Cargar datos de una hoja Excel"
+
+#: ontask/models/logs.py:197
+msgid "Upload Data from Google Sheet"
+msgstr "Cargar datos de un documento Google Sheet"
+
+#: ontask/models/logs.py:198
+msgid "Upload Data from S3 CSV source"
+msgstr "Cargar datos de fichero S3 CSV"
+
+#: ontask/models/logs.py:199
+msgid "Upload Data from SQL source"
+msgstr "Cargar datos a través de una conexión SQL"
 
 #: ontask/models/logs.py:200
 msgid "Workflow deleted"
@@ -1712,46 +1771,50 @@ msgid "Import workflow"
 msgstr "Importar un flujo"
 
 #: ontask/models/logs.py:202
+msgid "Increase workflow track count."
+msgstr "Incrementar el contador de acceso en el workflow."
+
+#: ontask/models/logs.py:203
 msgid "User share added"
 msgstr "Añadido usuario a compartir"
 
-#: ontask/models/logs.py:203
+#: ontask/models/logs.py:204
 msgid "User share deleted"
 msgstr "Usuaro borrado de la compartición"
 
-#: ontask/models/logs.py:204
+#: ontask/models/logs.py:205
 msgid "Toggle workflow star"
 msgstr "Cambiar favorito"
 
-#: ontask/models/logs.py:205
+#: ontask/models/logs.py:206
 msgid "Workflow updated"
 msgstr "Flujo actualizado"
 
-#: ontask/models/logs.py:206
+#: ontask/models/logs.py:207
 msgid "Update list of workflow users"
 msgstr "Actualizar la lista de usuarios del flujo"
 
-#: ontask/models/logs.py:238 ontask/models/scheduler.py:142
+#: ontask/models/logs.py:232 ontask/models/scheduler.py:131
 msgid "payload"
 msgstr "datos adicionales"
 
-#: ontask/models/oauth.py:42
+#: ontask/models/oauth.py:34
 msgid "Token valid until"
 msgstr "Token válido hasta"
 
-#: ontask/models/plugin.py:43
+#: ontask/models/plugin.py:28
 msgid "Is a model"
 msgstr "Es un modelo"
 
-#: ontask/models/plugin.py:51
+#: ontask/models/plugin.py:36
 msgid "Ready to run"
 msgstr "Listo para ejecutar"
 
-#: ontask/models/plugin.py:59
+#: ontask/models/plugin.py:44
 msgid "Enabled"
 msgstr "Activado"
 
-#: ontask/models/plugin.py:66
+#: ontask/models/plugin.py:51
 msgid "Last verified"
 msgstr "Última verificación"
 
@@ -1763,61 +1826,70 @@ msgstr "Foto del usuario"
 msgid "Email verified"
 msgstr "Correo verificado"
 
-#: ontask/models/profiles.py:33
+#: ontask/models/profiles.py:37
 msgid "{}'s profile"
 msgstr "Perfil de {}'s"
 
-#: ontask/models/rubriccell.py:53
+#: ontask/models/rubriccell.py:51
 msgid "level of attainment"
 msgstr "nivel alzanzado"
 
-#: ontask/models/rubriccell.py:65
+#: ontask/models/rubriccell.py:63
 msgid "feedback"
 msgstr "comentario"
 
-#: ontask/models/scheduler.py:33
+#: ontask/models/scheduler.py:31
 msgid "Creating"
 msgstr "Creando"
 
-#: ontask/models/scheduler.py:34
+#: ontask/models/scheduler.py:32
 msgid "Pending"
 msgstr "Pendiente"
 
-#: ontask/models/scheduler.py:35
+#: ontask/models/scheduler.py:33
 msgid "Executing"
 msgstr "Ejecutando"
 
-#: ontask/models/scheduler.py:36
+#: ontask/models/scheduler.py:34
 msgid "Finished"
 msgstr "Finalizado"
 
-#: ontask/models/scheduler.py:37
+#: ontask/models/scheduler.py:35
 msgid "Finished with error"
 msgstr "Terminado con error"
 
-#: ontask/models/scheduler.py:43
-msgid "Run action"
-msgstr "Ejecutar acción"
-
-#: ontask/models/scheduler.py:79
+#: ontask/models/scheduler.py:69
 msgid "When to execute this action"
 msgstr "Cuando ejecutar esta acción"
 
-#: ontask/models/scheduler.py:85
-msgid "End of execution period (if executing multiple times)"
-msgstr "Final del período de ejecución (si se ejecuta múltiples veces)"
+#: ontask/models/scheduler.py:83
+msgid "End of execution period (Optional)"
+msgstr "Final del período de ejecución (Opcional)"
 
-#: ontask/models/scheduler.py:93
+#: ontask/models/scheduler.py:91
 msgid "Execution Status"
 msgstr "Estado de la ejecición"
 
-#: ontask/models/scheduler.py:128
-msgid "Column to select the elements for the action"
-msgstr "Columna para seleccionar los elementos de la acción"
+#: ontask/models/scheduler.py:157
+msgid "Incorrect execution time specification."
+msgstr "Tiempo de ejecución incorrecto."
 
-#: ontask/models/scheduler.py:135
-msgid "exclude values"
-msgstr "valores a excluir"
+#: ontask/models/scheduler.py:162
+msgid "Frequency of execution is missing."
+msgstr "No se ha especificado la frecuencia de ejecución."
+
+#: ontask/models/scheduler.py:167
+msgid "Execution times in the past. No execution possible."
+msgstr ""
+"No es posible ejecutar la operación. Los tiempos de ejecución ha pasado."
+
+#: ontask/models/scheduler.py:171
+msgid "Execution time is in the past. No execution possible."
+msgstr "No es posible ejecutar la operación. El tiempo de ejecución ha pasado."
+
+#: ontask/models/scheduler.py:174
+msgid "Incorrect execution dates."
+msgstr "Fechas de ejecución incorrectas."
 
 #: ontask/models/sqlconnection.py:37
 msgid "Postgresql, Mysql, etc."
@@ -1831,82 +1903,79 @@ msgstr "Driver"
 msgid "Driver implementing the DBAPI"
 msgstr "Driver que implementat DBAPI"
 
-#: ontask/models/sqlconnection.py:49 ontask/workflow/views/workflow_ops.py:71
+#: ontask/models/sqlconnection.py:49
+#: ontask/workflow/services/workflow_ops.py:46
 msgid "User"
 msgstr "Usuario"
 
-#: ontask/models/sqlconnection.py:58
-msgid "Password"
-msgstr "Clave"
-
-#: ontask/models/sqlconnection.py:61
+#: ontask/models/sqlconnection.py:61 ontask/models/sqlconnection.py:90
 msgid "Leave empty to enter at execution"
 msgstr "En blanco para obtenerlo al ejecutar"
 
-#: ontask/models/sqlconnection.py:66
+#: ontask/models/sqlconnection.py:65
 msgid "Host"
 msgstr "Nodo"
 
-#: ontask/models/sqlconnection.py:73
+#: ontask/models/sqlconnection.py:72
 msgid "Port"
 msgstr "Puerto"
 
-#: ontask/models/sqlconnection.py:80
+#: ontask/models/sqlconnection.py:79
 msgid "Database name"
 msgstr "Nombre de la base de datos"
 
-#: ontask/models/sqlconnection.py:87
+#: ontask/models/sqlconnection.py:86
 msgid "Database table"
 msgstr "Tabla de la base de datos"
 
-#: ontask/models/view.py:49
+#: ontask/models/view.py:36
 msgid "Subset of columns to show"
 msgstr "Subconjunto de columnas a mostrar"
 
-#: ontask/models/view.py:55
+#: ontask/models/view.py:42
 msgid "Subset of rows to show"
 msgstr "Subconjunto de filas a mostrar"
 
-#: ontask/models/view.py:59
+#: ontask/models/view.py:46
 msgid "Preselect rows satisfying this condition"
 msgstr "Preseleccionar las filas que satisfacen esta condición"
 
-#: ontask/models/workflow.py:63
+#: ontask/models/workflow.py:53
 msgid "number of rows"
 msgstr "número de filas"
 
-#: ontask/models/workflow.py:71
+#: ontask/models/workflow.py:61
 msgid "number of columns"
 msgstr "número de columnas"
 
-#: ontask/oauth/views.py:109
+#: ontask/oauth/services.py:106
 msgid "Unable to refresh OAuth token."
 msgstr "Imposible renovar el token de acceso de OAuth."
 
-#: ontask/oauth/views.py:142
-msgid "Incorrect Canvas callback invocation."
-msgstr "Invocación incorrecta de la función callback de Canvas."
-
-#: ontask/oauth/views.py:150
-#, python-brace-format
-msgid "Error in OAuth2 step 1 ({0})"
-msgstr "Error en el paso 1 de OAuth2 ({0})"
-
-#: ontask/oauth/views.py:160
+#: ontask/oauth/services.py:136
 msgid "Inconsistent OAuth response. Unable to authorize"
 msgstr "Respuesta de OAuth inconsistente. No es posible autorizar"
 
-#: ontask/oauth/views.py:168
+#: ontask/oauth/services.py:140
 msgid "Internal error. Empty OAuth Instance name"
 msgstr "Error interno. El nombre de la instancia OAuth está vacío"
 
-#: ontask/oauth/views.py:175
+#: ontask/oauth/services.py:144
 msgid "Internal error. Invalid OAuth Dict element"
 msgstr "Error interno. El diccionario OAuth es incorrecto"
 
-#: ontask/oauth/views.py:193
+#: ontask/oauth/services.py:157
 msgid "Unable to obtain access token from OAuth"
 msgstr "No se a podido obtener el token de acceso de OAuth"
+
+#: ontask/oauth/views.py:33
+msgid "Incorrect Canvas callback invocation."
+msgstr "Invocación incorrecta de la función callback de Canvas."
+
+#: ontask/oauth/views.py:41
+#, python-brace-format
+msgid "Error in OAuth2 step 1 ({0})"
+msgstr "Error en el paso 1 de OAuth2 ({0})"
 
 #: ontask/profiles/views.py:58
 msgid "There was a problem with the form. Please check the details."
@@ -1916,191 +1985,161 @@ msgstr "Ha habido un problema con el formulario. Compruebe los detalles."
 msgid "Profile details saved!"
 msgstr "¡Se han guardado los detalles del perfil!"
 
-#: ontask/scheduler/forms.py:57
-msgid "Date/time must be in the future"
-msgstr "Fecha/hora debe ser en el futuro"
+#: ontask/scheduler/forms/basic.py:35
+msgid "Multiple executions?"
+msgstr "¿Ejecución múltiple?"
 
-#: ontask/scheduler/forms.py:63
-msgid "Final execution date/time must be after the previous one"
-msgstr "La fecha/hora de ejecución final debe ser después de la anterior"
+#: ontask/scheduler/forms/basic.py:36
+msgid "Select if you want to execute multiple times."
+msgstr "Seleccionar si se quiere ejecutar múltiples veces."
 
-#: ontask/scheduler/forms.py:68
-msgid "Final execution date/time must be in the future"
-msgstr "La fecha/hora de ejecución debe ser en el futuro"
+#: ontask/scheduler/forms/basic.py:86
+msgid "There is an operation scheduled with this name"
+msgstr "Ya hay una ejecución planificada con este nombre"
 
-#: ontask/scheduler/forms.py:105
-msgid "CC Emails (separated by spaces)"
-msgstr "Emails CC (separados por espacios)"
+#: ontask/scheduler/forms/sql.py:35
+msgid ""
+"Key column in the existing table. Leave empty if uploading to empty workflow"
+msgstr ""
+"Columna clave en la tabla existente. Dejar vacío si el flujo no contiene "
+"datos"
 
-#: ontask/scheduler/forms.py:111
-msgid "List of BCC Emails (separated by spaces)"
-msgstr "Lista de emails BCC (separados por espacios)"
+#: ontask/scheduler/forms/sql.py:43
+msgid "Key column in new table. Leave empty if uploading to empty workflow"
+msgstr ""
+"Columna clave en la tabla nueva. Dejar en blanco si el flujo no tiene datos"
 
-#: ontask/scheduler/forms.py:149 ontask/scheduler/forms.py:156
-msgid "This field must be a comma-separated list of emails."
-msgstr "Este campo debe tener una lista de emails separados por comas."
+#: ontask/scheduler/forms/sql.py:68
+msgid "The operation requires the names of two key columns."
+msgstr "La operación requiere los nombres de dos columnas clave."
 
-#: ontask/scheduler/forms.py:168
-msgid "Check/exclude email addresses before scheduling?"
-msgstr "Comprobar/excluir direcciones de correo antes de enviar?"
+#: ontask/scheduler/forms/sql.py:75
+msgid "The column selected is not a key column."
+msgstr "La columna seleccionada no es una columna clave."
 
-#: ontask/scheduler/forms.py:244
-msgid "Authentication token to be sent with the JSON object."
-msgstr "Ficha de autenticación a enviar con el objeto JSON."
+#: ontask/scheduler/forms/sql.py:80
+msgid "The operation requires a merge method."
+msgstr "La operación necesita un método de mezcla."
 
-#: ontask/scheduler/forms.py:282
-msgid "Send you a confirmation email"
-msgstr "Enviarte un mensaje de confirmación"
+#: ontask/scheduler/serializers.py:45
+msgid "Incorrect permission to manipulate workflow"
+msgstr "Permiso incorrecto para manipular el flujo"
 
-#: ontask/scheduler/forms.py:287
-msgid "Track if emails are read?"
-msgstr "¿Rastrear si se leen los emails?"
-
-#: ontask/scheduler/forms.py:296
-msgid "Column in the table containing the email"
-msgstr "Columna en la tabla con la dirección de correo"
-
-#: ontask/scheduler/forms.py:355
-msgid "This field must be a valid email address."
-msgstr "Este campo debe tener un email correcto."
-
-#: ontask/scheduler/forms.py:399
-msgid "Column in the table containing the Canvas ID"
-msgstr "Columna en la tabla con el identificador Canvas"
-
-#: ontask/scheduler/serializers.py:99
+#: ontask/scheduler/serializers.py:51
 msgid "Incorrect permission to manipulate action."
 msgstr "Permiso incorrecto para manipular la acción."
 
-#: ontask/scheduler/serializers.py:105
-msgid "Invalid date/time for execution"
-msgstr "Fecha/hora de ejecución incorrecta"
+#: ontask/scheduler/serializers.py:64
+msgid "Scheduled objects need a payload."
+msgstr "Los objetos planificados necesitan un payload."
 
-#: ontask/scheduler/serializers.py:115
+#: ontask/scheduler/serializers.py:74
 msgid "Invalid column name for selecting items"
 msgstr "Nombre de columna incorrecto para seleccionar elementos"
 
-#: ontask/scheduler/serializers.py:120
+#: ontask/scheduler/serializers.py:79
 msgid "Exclude_values must be a list"
 msgstr "La exclusión de valores debe ser una lista"
 
-#: ontask/scheduler/serializers.py:124
-msgid "Exclude items needs a value in item_column"
-msgstr "La exclusión de elementos necesita un valor en item_column"
+#: ontask/scheduler/serializers.py:84
+msgid "Exclude items needs a column in item_column"
+msgstr "La exclusión de elementos necesita una columna en item_column"
 
-#: ontask/scheduler/serializers.py:129
-msgid "Scheduled objects needs a payload."
-msgstr "El objeto planificado necesita un payload."
-
-#: ontask/scheduler/serializers.py:148
+#: ontask/scheduler/serializers.py:96
 #, python-brace-format
 msgid "Scheduled action could not be created: {0}"
 msgstr "No se ha podido crear la acción planificada: {0}"
 
-#: ontask/scheduler/serializers.py:172
+#: ontask/scheduler/serializers.py:111
 #, python-brace-format
 msgid "Unable to update scheduled action: {0}"
 msgstr "No se puede actualizar la acción planificada: {0}"
 
-#: ontask/scheduler/serializers.py:202 ontask/scheduler/serializers.py:261
+#: ontask/scheduler/serializers.py:146 ontask/scheduler/serializers.py:216
+msgid "Personalized text need a column name in payload field item_column."
+msgstr ""
+"El texto personalizado necesita un nombre de columna en el campo item_column "
+"del payload."
+
+#: ontask/scheduler/serializers.py:153 ontask/scheduler/serializers.py:223
+msgid "Incorrect column name in field item_column."
+msgstr "Nombre de columna incorrecto en el campo item_column."
+
+#: ontask/scheduler/serializers.py:156 ontask/scheduler/serializers.py:210
 msgid "Incorrect type of action to schedule."
 msgstr "Tipo incorrecto de acción a planificar."
 
-#: ontask/scheduler/serializers.py:206
+#: ontask/scheduler/serializers.py:160
 msgid "Personalized text needs a subject."
 msgstr "El texto personalizado necesita un asunto."
 
-#: ontask/scheduler/serializers.py:209
-msgid "Personalized text needs an item_column"
-msgstr "El texto personalizado necesita un item_column"
+#: ontask/scheduler/serializers.py:184 ontask/scheduler/serializers.py:187
+msgid "cc_email must be a space-separated list of emails."
+msgstr "cc_email debe tener una lista de emails separados por espacios."
 
-#: ontask/scheduler/serializers.py:233 ontask/scheduler/serializers.py:236
-msgid "cc_email must be a comma-separated list of emails."
-msgstr "cc_email debe tener una lista de emails separados por comas."
+#: ontask/scheduler/serializers.py:195 ontask/scheduler/serializers.py:198
+msgid "bcc_email must be a space-separated list of emails."
+msgstr "bcc_email debe tener una lista de emails separados por espacios."
 
-#: ontask/scheduler/serializers.py:244 ontask/scheduler/serializers.py:247
-msgid "bcc_email must be a comma-separated list of emails."
-msgstr "bcc_email debe tener una lista de emails separados por comas."
-
-#: ontask/scheduler/serializers.py:265
+#: ontask/scheduler/serializers.py:228
 msgid "Personalized JSON needs a token in payload."
 msgstr "El JSON personalizado necesita una ficha en el payload."
 
-#: ontask/scheduler/views/crud.py:39 ontask/templates/action/index.html:60
-#: ontask/templates/action/timeline.html:19
-#: ontask/templates/workflow/export.html:34
-msgid "Action"
-msgstr "Acción"
+#: ontask/scheduler/services/action_producers.py:52
+msgid "Schedule Action Execution"
+msgstr "Planificar la ejecución de una acción"
 
-#: ontask/scheduler/views/crud.py:47
-msgid "Edit the action scheduled for execution"
-msgstr "Editar la acción planificada para ejecutar"
+#: ontask/scheduler/services/action_producers.py:69
+#: ontask/templates/action/includes/partial_action_operations.html:49
+#: ontask/templates/scheduler/edit.html:71
+msgid "Schedule"
+msgstr "Planificar"
 
-#: ontask/scheduler/views/crud.py:62
-msgid "Scheduled"
-msgstr "Planificado"
+#: ontask/scheduler/services/action_producers.py:106
+#: ontask/scheduler/services/sql_producer.py:90
+msgid "Incorrect request for operation scheduling"
+msgstr "Petición incorrecta de acción planificada"
 
-#: ontask/scheduler/views/crud.py:65
+#: ontask/scheduler/services/action_producers.py:134
+#, python-brace-format
+msgid "Unable to create scheduled operation: {0}"
+msgstr "No se puede crear la acción planificada: {0}"
+
+#: ontask/scheduler/services/items.py:77
+msgid "Starting at "
+msgstr "Comienza a las "
+
+#: ontask/scheduler/services/scheduler_table.py:30
+msgid "From"
+msgstr "Desde"
+
+#: ontask/scheduler/services/scheduler_table.py:32
+msgid "Frequency"
+msgstr "Frecuencia"
+
+#: ontask/scheduler/services/scheduler_table.py:34
 msgid "Until"
 msgstr "Hasta"
 
-#: ontask/scheduler/views/crud.py:68
+#: ontask/scheduler/services/scheduler_table.py:42
 #: ontask/templates/dataops/includes/partial_diagnostics.html:13
 msgid "Status"
 msgstr "Estado"
 
-#: ontask/scheduler/views/crud.py:77
-#: ontask/templates/scheduler/includes/partial_show_schedule_action.html:29
-msgid "Edit this scheduled action execution"
-msgstr "Editar esta ejecución planificada"
+#: ontask/scheduler/services/sql_producer.py:41
+msgid "Schedule SQL Upload"
+msgstr "Planificar una carga de datos de SQL"
 
-#: ontask/scheduler/views/crud.py:191
-msgid "This action does not support scheduling"
-msgstr "Esta acción no admite la programación"
-
-#: ontask/scheduler/views/crud.py:335
-msgid "Under implementation"
-msgstr "En construcción"
-
-#: ontask/scheduler/views/save.py:73
+#: ontask/scheduler/services/sql_producer.py:108
 #, python-brace-format
-msgid "{0} years"
-msgstr "{0} años"
+msgid "Unable to create scheduled operation ({0})"
+msgstr "No se puede crear la acción planificada: {0}"
 
-#: ontask/scheduler/views/save.py:76
-#, python-brace-format
-msgid "{0} days"
-msgstr "{0} días"
-
-#: ontask/scheduler/views/save.py:79
-#, python-brace-format
-msgid "{0} hours"
-msgstr "{0} horas"
-
-#: ontask/scheduler/views/save.py:82
-#, python-brace-format
-msgid "{0} minutes"
-msgstr "{0} minutos"
-
-#: ontask/scheduler/views/save.py:117 ontask/scheduler/views/save.py:214
-#: ontask/templates/action/includes/partial_action_operations.html:41
-#: ontask/templates/scheduler/edit.html:40
-msgid "Schedule"
-msgstr "Planificar"
-
-#: ontask/scheduler/views/save.py:304
+#: ontask/scheduler/views/crud.py:156
 msgid "Incorrect action scheduling invocation."
 msgstr "Datos incorrectos para planificar una acción."
 
-#: ontask/scheduler/views/save.py:337
-msgid "Incorrect request in action scheduling"
-msgstr "Petición incorrecta para planificar la acción"
-
-#: ontask/scheduler/views/save.py:368
-msgid "This type of actions cannot be scheduled"
-msgstr "Este tipo de acciones no pueden programarse"
-
-#: ontask/settings.py:43 settings/base.py:540
+#: ontask/settings.py:42 settings/base.py:604
 msgid "OnTask: Action executed"
 msgstr "OnTask: Acción ejecutada"
 
@@ -2156,28 +2195,14 @@ msgstr "Varios"
 msgid "URL prefix to access the documentation"
 msgstr "URL Prefijo para acceder a la documentación"
 
-#: ontask/signals/user.py:27
+#: ontask/signals.py:29
 #, python-format
 msgid "New ontask user profile for %s created"
 msgstr "Nuevo perfil de usuario OnTask creado para %s"
 
-#: ontask/table/api.py:109
+#: ontask/table/api.py:103
 msgid "Post request requires workflow without a table"
 msgstr "El post necesita un flujo sin tabla"
-
-#: ontask/table/api.py:277
-msgid "how must be one of left, right, outer or inner"
-msgstr "how debe ser uno de left, right, outer o inner"
-
-#: ontask/table/api.py:282 ontask/table/api.py:294
-#, python-brace-format
-msgid "column {0} does not contain a unique key."
-msgstr "columna {0} no contiene una clave única."
-
-#: ontask/table/api.py:289
-#, python-brace-format
-msgid "column {0} not found in data frame"
-msgstr "la columna {0} no está presente en el data frame"
 
 #: ontask/table/forms.py:26
 msgid "View name"
@@ -2203,39 +2228,39 @@ msgstr "Debe haber al menos una columna que sea clave"
 msgid "There is already a view with this name."
 msgstr "Ya hay una vista con este nombre."
 
-#: ontask/table/serializers/json.py:15
+#: ontask/table/serializers/json.py:14
 msgid "JSON string encoding a pandas data frame"
 msgstr "String en formato JSON codificando un data frame de pandas"
 
-#: ontask/table/serializers/merge.py:45
+#: ontask/table/serializers/merge.py:44
 msgid "One of the following values: inner, outer, left or right"
 msgstr "Uno de los siguientes valores: inner, outer, left o right"
 
-#: ontask/table/serializers/merge.py:52
+#: ontask/table/serializers/merge.py:51
 msgid "ID of the column in destination data frame with unique key"
 msgstr "Identificador de la columna clave en el data frame destino"
 
-#: ontask/table/serializers/merge.py:57
+#: ontask/table/serializers/merge.py:56
 msgid "ID of column in source data frame with unique key"
 msgstr "Identificador de la columna clave en el data frame fuente"
 
-#: ontask/table/serializers/merge.py:65
+#: ontask/table/serializers/merge.py:64
 msgid "Field must be a JSON string encoding a pandas data frame"
 msgstr "Este campo debe ser un pandas data frame codificado como string JSON"
 
-#: ontask/table/serializers/merge.py:74
-#: ontask/workflow/serialize_workflow.py:81
+#: ontask/table/serializers/merge.py:73
+#: ontask/workflow/serialize_workflow.py:80
 msgid ""
 "This field must be the Base64 encoded result of pandas.to_pickle() function"
 msgstr ""
 "Este campo debe ser el resultado de la función pandas.to_pickle() codificado "
 "como Base64"
 
-#: ontask/table/serializers/pandas.py:25
+#: ontask/table/serializers/pandas.py:24
 msgid "Unable to create data frame"
 msgstr "No se ha podido crear un data frame"
 
-#: ontask/table/serializers/pandas.py:35
+#: ontask/table/serializers/pandas.py:34
 msgid ""
 "This field must be the Base64 encoded result of the pandas.to_pickle() "
 "function"
@@ -2243,100 +2268,101 @@ msgstr ""
 "Este campo debe contener el resultado de la función pandas.to_pickle() "
 "codificado en Base64"
 
-#: ontask/table/views/stats.py:250
-msgid "Unable to provide visualisation without data."
-msgstr "No hay datos para crear la visualización."
-
-#: ontask/table/views/stats.py:266
-msgid "Unable to visualize table row"
-msgstr "Imposible visualizar esta fila de la tabla"
-
-#: ontask/table/views/stats.py:294
-msgid "No values in this column"
-msgstr "Columna sin datos"
-
-#: ontask/table/views/stats.py:299
-msgid "No value in this column"
-msgstr "Esta columna no tiene datos"
-
-#: ontask/table/views/table_display.py:237
-msgid "There is no data in the table"
-msgstr "No hay datos en la tabla"
-
-#: ontask/table/views/table_display.py:327
+#: ontask/table/services/display.py:195
 msgid "Incorrect URL invoked to delete a row"
 msgstr "URL incorrecta invocada para borrar una fila"
 
-#: ontask/table/views/table_view.py:47
-msgid "Change the columns present in the view"
-msgstr "Cambiar las columnas presentes en esta vista"
+#: ontask/table/services/stats.py:185
+msgid "No values in this column"
+msgstr "Columna sin datos"
 
-#: ontask/table/views/table_view.py:154
+#: ontask/table/services/stats.py:190
+msgid "No value in this column"
+msgstr "Esta columna no tiene datos"
+
+#: ontask/table/services/view.py:78
+msgid "Error while cloning table view."
+msgstr "Error al clonar la vista de  la tabla."
+
+#: ontask/table/views/stats.py:112
+msgid "Unable to provide visualisation without data."
+msgstr "No hay datos para crear la visualización."
+
+#: ontask/table/views/stats.py:122
+msgid "Unable to visualize table row"
+msgstr "Imposible visualizar esta fila de la tabla"
+
+#: ontask/table/views/table_display.py:61
+msgid "There is no data in the table"
+msgstr "No hay datos en la tabla"
+
+#: ontask/table/views/table_view.py:66
 msgid "Cannot add a view to a workflow without data"
 msgstr "No se puede añadir una vista a un flujo sin datos"
 
-#: ontask/tasks/basic.py:37
-#, python-format
-msgid "Incorrect execution request with log_id %s"
-msgstr "Petición de ejecución incorrecta con log_id %s"
-
-#: ontask/tasks/basic.py:64
+#: ontask/tasks/execute_factory.py:75
 #, python-brace-format
 msgid "Unable to find user with id {0}"
 msgstr "No se ha encontrado el usuario con identificador \"{0}\""
 
-#: ontask/tasks/basic.py:72
+#: ontask/tasks/execute_factory.py:85
 #, python-brace-format
 msgid "Unable to find workflow with id {0}"
 msgstr "No se ha podido encontrar el flujo con identificador {0}"
 
-#: ontask/tasks/basic.py:83
+#: ontask/tasks/execute_factory.py:96
 #, python-brace-format
 msgid "Unable to find action with id {0}"
 msgstr "No se ha encontrado una acción con identificador {0}"
 
-#: ontask/tasks/basic.py:150 ontask/tasks/dataupload.py:58
-#: ontask/tasks/run_plugin.py:77 ontask/tasks/workflow_update_luser.py:42
+#: ontask/tasks/execute_factory.py:147
 #, python-brace-format
-msgid "Error: {0}"
-msgstr "Error: {0}"
+msgid "Error executing operation: {0}"
+msgstr "Error al ejecutar operación: {0}"
 
-#: ontask/tasks/dataupload.py:42
-#, python-brace-format
-msgid "Unable to find connection with id {0}"
-msgstr "No se ha encontrado una conexión con identificador {0}"
+#: ontask/templates/400.html:4
+msgid "Bad request"
+msgstr "Petición incorrecta"
 
-#: ontask/tasks/increase_track.py:27
-msgid "Non-GET request received in Track URL"
-msgstr "Request de tipo no GET recibido en Track URL"
+#: ontask/templates/400.html:7
+msgid "Bad request received"
+msgstr "Recibida una petición incorrecta"
 
-#: ontask/tasks/increase_track.py:33
-msgid "No track_id found in request"
-msgstr "No se ha encontrado track_id en el Request"
+#: ontask/templates/400.html:8
+msgid "The application received an incorrect request."
+msgstr "La aplicación ha recibido una petición incorrecta."
 
-#: ontask/tasks/increase_track.py:41
-msgid "Bad signature in track_id"
-msgstr "Signatura incorrecta in track_id"
+#: ontask/templates/403.html:4 ontask/templates/403.html:7
+msgid "Permission denied"
+msgstr "Permiso denegado"
 
-#: ontask/tasks/increase_track.py:50
-#, python-format
-msgid "Incorrect user email %s"
-msgstr "Correo de usuario incorrecto %s"
+#: ontask/templates/403.html:8
+msgid "No permission for the requested operation."
+msgstr "No se dispone de permiso para la operación requerida."
 
-#: ontask/tasks/increase_track.py:56
-#, python-format
-msgid "Incorrect action id %s"
-msgstr "Identificador de acción incorrecto %s"
+#: ontask/templates/404.html:4 ontask/templates/404.html:7
+msgid "Page not found"
+msgstr "Página no encontrada"
 
-#: ontask/tasks/increase_track.py:68
-#, python-format
-msgid "Column %s does not exist"
-msgstr "La columna %s no existe"
+#: ontask/templates/404.html:8
+msgid "The page you requested was not found in the application."
+msgstr "La página requerida no se ha encontrado en esta aplicación."
 
-#: ontask/tasks/run_plugin.py:55
-#, python-brace-format
-msgid "Unable to load plugin with id {pid}"
-msgstr "No es posible cargar el plugin con el identificador {pid}"
+#: ontask/templates/500.html:4 ontask/templates/500.html:7
+msgid "System error"
+msgstr "Error del sistema"
+
+#: ontask/templates/500.html:9
+msgid ""
+"Oops! The platform had an internal error. We are sorry. We hope to\n"
+"    address this anomaly soon."
+msgstr ""
+"¡Vaya! La plataforma ha tenido un error interno. Lo lamentamos. Esperamos  "
+"solventar esta anomalía pronto."
+
+#: ontask/templates/_navbar.html:3 ontask/templates/base.html:173
+msgid "About"
+msgstr "Conózcanos"
 
 #: ontask/templates/accounts/auth_base.html:8
 msgid "OnTask Login"
@@ -2491,12 +2517,6 @@ msgid "Password Reset"
 msgstr "Cambio de clave"
 
 #: ontask/templates/accounts/password-reset.html:5
-#: templates/registration/password_reset_confirm.html:14
-#: templates/registration/password_reset_confirm.html:15
-#: templates/registration/password_reset_done.html:6
-#: templates/registration/password_reset_form.html:9
-#: templates/registration/password_reset_form.html:13
-#: templates/registration/password_reset_form.html:14
 msgid "Password reset"
 msgstr "Cambio de clave"
 
@@ -2512,49 +2532,16 @@ msgstr "Cuenta gratuita"
 msgid "Already signed up?"
 msgstr "¿Has creado ya una cuenta?"
 
-#: ontask/templates/action/action_done.html:4
-#: ontask/templates/action/action_zip_done.html:4
-msgid "Action execution"
-msgstr "Ejecución de la acción"
-
-#: ontask/templates/action/action_done.html:14
-msgid "Action scheduled for execution"
-msgstr "Acción planificada para su ejecución"
-
-#: ontask/templates/action/action_done.html:16
-#: ontask/templates/dataops/operation_done.html:9
-#, python-format
-msgid ""
-"You may check the status in\n"
-"      log number %(log_id)s."
-msgstr ""
-"Puedes comprobar el estado de la ejecución en el registro número %(log_id)s."
-
-#: ontask/templates/action/action_done.html:20
-#: ontask/templates/action/action_zip_done.html:15
-#: ontask/templates/action/item_filter.html:27
-#: ontask/templates/action/run_survey.html:69
-#: ontask/templates/action/run_survey_row.html:21
-#: ontask/templates/action/run_survey_row.html:32
-#: ontask/templates/action/timeline.html:34
-#: ontask/templates/dataops/includes/upload_buttons.html:6
-#: ontask/templates/dataops/operation_done.html:13
-#: ontask/templates/scheduler/schedule_done.html:12
-#: ontask/templates/table/stat_column.html:27
-#: ontask/templates/table/stat_column.html:33
-#: ontask/templates/table/stat_row.html:24
-#: ontask/templates/table/stat_row.html:34
-#: ontask/templates/table/stat_view.html:29
-#: ontask/templates/table/stat_view.html:43
-#: ontask/templates/workflow/export_done.html:19 templates/thanks.html:10
-msgid "Back"
-msgstr "Atrás"
-
 #: ontask/templates/action/action_unavailable.html:2
 msgid ""
 "This action is not available for you\n"
 "    at this time"
 msgstr "Esta acción no está disponible para tí en este momento"
+
+#: ontask/templates/action/action_zip_done.html:4
+#: ontask/templates/action/run_done.html:4
+msgid "Action execution"
+msgstr "Ejecución de la acción"
 
 #: ontask/templates/action/action_zip_done.html:12
 msgid "Action ZIP creation"
@@ -2563,6 +2550,25 @@ msgstr "Acción ZIP creada"
 #: ontask/templates/action/action_zip_done.html:13
 msgid "Your ZIP will start to download shortly."
 msgstr "El fichero ZIP se descargará en breve."
+
+#: ontask/templates/action/action_zip_done.html:15
+#: ontask/templates/action/item_filter.html:27
+#: ontask/templates/action/run_done.html:20
+#: ontask/templates/action/run_survey.html:69
+#: ontask/templates/action/run_survey_row.html:21
+#: ontask/templates/action/run_survey_row.html:32
+#: ontask/templates/action/timeline.html:34
+#: ontask/templates/dataops/includes/upload_buttons.html:6
+#: ontask/templates/dataops/operation_done.html:13
+#: ontask/templates/table/stat_column.html:27
+#: ontask/templates/table/stat_column.html:33
+#: ontask/templates/table/stat_row.html:24
+#: ontask/templates/table/stat_row.html:34
+#: ontask/templates/table/stat_view.html:29
+#: ontask/templates/table/stat_view.html:43 ontask/templates/thanks.html:9
+#: ontask/templates/workflow/export_done.html:19
+msgid "Back"
+msgstr "Atrás"
 
 #: ontask/templates/action/action_zip_step1.html:7
 msgid "ZIP action"
@@ -2585,16 +2591,16 @@ msgstr "Se creará un ZIP con %(n)s ficheros."
 #: ontask/templates/action/item_filter.html:25
 #: ontask/templates/action/request_canvas_email_data.html:27
 #: ontask/templates/action/request_email_data.html:27
+#: ontask/templates/action/request_email_list_data.html:21
 #: ontask/templates/action/request_json_data.html:27
 #: ontask/templates/action/request_json_list_data.html:21
-#: ontask/templates/action/request_send_list_data.html:21
 #: ontask/templates/dataops/includes/upload_buttons.html:3
 #: ontask/templates/dataops/plugin_info_for_run.html:32
 #: ontask/templates/dataops/row_create.html:23
 #: ontask/templates/dataops/row_create.html:33
 #: ontask/templates/dataops/row_filter.html:24
 #: ontask/templates/dataops/row_filter.html:34
-#: ontask/templates/scheduler/edit.html:31
+#: ontask/templates/scheduler/edit.html:60
 #: ontask/templates/workflow/export.html:60
 #: ontask/templates/workflow/import.html:20
 msgid "Cancel"
@@ -2606,10 +2612,10 @@ msgstr "Cancelar"
 #: ontask/templates/action/includes/partial_preview.html:7
 #: ontask/templates/action/request_canvas_email_data.html:30
 #: ontask/templates/action/request_email_data.html:30
+#: ontask/templates/action/request_email_list_data.html:24
 #: ontask/templates/action/request_json_data.html:30
 #: ontask/templates/action/request_json_list_data.html:24
-#: ontask/templates/action/request_send_list_data.html:24
-#: ontask/templates/scheduler/edit.html:34
+#: ontask/templates/scheduler/edit.html:64
 msgid "Preview"
 msgstr "Vista previa"
 
@@ -2619,7 +2625,7 @@ msgstr "Vista previa"
 #: ontask/templates/action/request_email_data.html:33
 #: ontask/templates/action/request_json_data.html:33
 #: ontask/templates/dataops/includes/upload_buttons.html:10
-#: ontask/templates/scheduler/edit.html:37
+#: ontask/templates/scheduler/edit.html:68
 msgid "Next"
 msgstr "Siguiente"
 
@@ -2741,7 +2747,7 @@ msgid "Edit Rubric"
 msgstr "Editar Rúbrica"
 
 #: ontask/templates/action/import.html:7 ontask/templates/action/import.html:13
-#: ontask/templates/action/index.html:66
+#: ontask/templates/action/index.html:61
 msgid "Import actions"
 msgstr "Importar acciones"
 
@@ -2819,107 +2825,97 @@ msgid_plural "%(n)s users have all conditions equal to FALSE"
 msgstr[0] "%(n)s usuario tiene todas las condiciones igual a FALSO"
 msgstr[1] "%(n)s usuarios tienen todas las condiciones igual a FALSO"
 
-#: ontask/templates/action/includes/partial_action_name.html:3
+#: ontask/templates/action/includes/partial_action_name.html:5
+msgid "The action has some anomalies. Edit to review them"
+msgstr "La acción tiene anomalías. Revise su contenido"
+
+#: ontask/templates/action/includes/partial_action_operations.html:6
 msgid "Edit the action"
 msgstr "Editar acción"
 
-#: ontask/templates/action/includes/partial_action_name.html:7
-msgid "The action cannot be executed"
-msgstr "La acción no se puede ejecutar"
-
-#: ontask/templates/action/includes/partial_action_operations.html:6
+#: ontask/templates/action/includes/partial_action_operations.html:11
 msgid "Enter data manually"
 msgstr "Introducir data manualmente"
 
-#: ontask/templates/action/includes/partial_action_operations.html:6
+#: ontask/templates/action/includes/partial_action_operations.html:11
 msgid "Send personalised JSONs"
 msgstr "Enviar objetos JSON personalizados"
 
-#: ontask/templates/action/includes/partial_action_operations.html:6
+#: ontask/templates/action/includes/partial_action_operations.html:11
 msgid "Send personalised text"
 msgstr "Enviar mensajes personalizados"
 
-#: ontask/templates/action/includes/partial_action_operations.html:6
-#: ontask/templates/dataops/includes/partial_athenaconn_runop.html:4
-#: ontask/templates/dataops/includes/partial_connection_run.html:4
-#: ontask/templates/dataops/includes/partial_sqlconn_runop.html:4
-#: ontask/templates/dataops/plugin_info_for_run.html:36
-msgid "Run"
-msgstr "Ejecutar"
-
-#: ontask/templates/action/includes/partial_action_operations.html:17
+#: ontask/templates/action/includes/partial_action_operations.html:25
 msgid "URL for learners to access the personalised text"
 msgstr "URL para que los estudiantes accedan al texto personalizado"
 
-#: ontask/templates/action/includes/partial_action_operations.html:19
+#: ontask/templates/action/includes/partial_action_operations.html:27
 msgid "URL for learners to introduce data"
 msgstr "URL para que los estudiantes introduzcan los datos"
 
-#: ontask/templates/action/includes/partial_action_operations.html:30
+#: ontask/templates/action/includes/partial_action_operations.html:38
 msgid "Create a ZIP with each personalised text in a file"
 msgstr "Crear un ZIP con un fichero para cada texto personalizado"
 
-#: ontask/templates/action/includes/partial_action_operations.html:31
+#: ontask/templates/action/includes/partial_action_operations.html:39
 msgid "ZIP"
 msgstr "ZIP"
 
-#: ontask/templates/action/includes/partial_action_operations.html:35
+#: ontask/templates/action/includes/partial_action_operations.html:43
 msgid "See when this action was executed"
 msgstr "Ver cuando se ha ejecutado esta acción"
 
-#: ontask/templates/action/includes/partial_action_operations.html:36
-#: ontask/templates/action/index.html:74
+#: ontask/templates/action/includes/partial_action_operations.html:44
+#: ontask/templates/action/index.html:69
 #: ontask/templates/action/timeline.html:4
 #: ontask/templates/action/timeline.html:7
 msgid "Timeline"
 msgstr "Cronología"
 
-#: ontask/templates/action/includes/partial_action_operations.html:40
+#: ontask/templates/action/includes/partial_action_operations.html:48
 msgid "Schedule the execution of the action"
 msgstr "Planificar la ejecución de la acción"
 
-#: ontask/templates/action/includes/partial_action_operations.html:46
+#: ontask/templates/action/includes/partial_action_operations.html:54
 msgid "Change name and/or description"
 msgstr "Cambiar el nombre y/o la descripción"
 
-#: ontask/templates/action/includes/partial_action_operations.html:47
+#: ontask/templates/action/includes/partial_action_operations.html:55
 #: ontask/templates/workflow/includes/workflow_basic_buttons.html:8
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:13
 msgid "Rename"
 msgstr "Renombrar"
 
-#: ontask/templates/action/includes/partial_action_operations.html:52
+#: ontask/templates/action/includes/partial_action_operations.html:60
 msgid "Create an identical action"
 msgstr "Crear una acción idéntica"
 
-#: ontask/templates/action/includes/partial_action_operations.html:53
+#: ontask/templates/action/includes/partial_action_operations.html:61
 #: ontask/templates/workflow/includes/workflow_basic_buttons.html:15
-#: ontask/templates/workflow/includes/workflow_column_operations.html:12
+#: ontask/templates/workflow/includes/workflow_column_operations.html:21
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:19
 msgid "Clone"
 msgstr "Clonar"
 
-#: ontask/templates/action/includes/partial_action_operations.html:57
+#: ontask/templates/action/includes/partial_action_operations.html:65
 msgid "Export the content of this action"
 msgstr "Exportar el contenido de esta acción"
 
-#: ontask/templates/action/includes/partial_action_operations.html:58
+#: ontask/templates/action/includes/partial_action_operations.html:66
 #: ontask/templates/workflow/export.html:63
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:6
 msgid "Export"
 msgstr "Exportar"
 
-#: ontask/templates/action/includes/partial_action_operations.html:62
+#: ontask/templates/action/includes/partial_action_operations.html:70
 msgid "Delete the action"
 msgstr "Borrar la acción"
 
-#: ontask/templates/action/includes/partial_action_operations.html:63
-#: ontask/templates/dataops/includes/partial_connection_adminop.html:14
+#: ontask/templates/action/includes/partial_action_operations.html:71
 #: ontask/templates/profiles/show_profile.html:68
 #: ontask/templates/scheduler/includes/partial_scheduler_delete.html:18
 #: ontask/templates/workflow/includes/partial_share_delete.html:15
 #: ontask/templates/workflow/includes/workflow_basic_buttons.html:28
-#: ontask/templates/workflow/includes/workflow_column_operations.html:35
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:33
 msgid "Delete"
 msgstr "Borrar"
@@ -2983,11 +2979,15 @@ msgstr "Actualizar acción"
 msgid "Always shown"
 msgstr "Siempre visible"
 
-#: ontask/templates/action/includes/partial_column_selected_operations.html:4
+#: ontask/templates/action/includes/partial_column_selected_operations.html:5
+msgid "Edit the question"
+msgstr "Editar pregunta"
+
+#: ontask/templates/action/includes/partial_column_selected_operations.html:10
 msgid "Create an exact duplicate of this question"
 msgstr "Crear un duplicado exacto de esta pregunta"
 
-#: ontask/templates/action/includes/partial_column_selected_operations.html:9
+#: ontask/templates/action/includes/partial_column_selected_operations.html:15
 msgid "Remove question from this survey"
 msgstr "Borrar la pregunta del cuestionario"
 
@@ -3223,27 +3223,27 @@ msgstr "Editar esta celda"
 msgid "Rubric cell content"
 msgstr "Contenido de la celda de la rúbrica"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:9
+#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:10
 msgid "Insert rubric text"
 msgstr "Insertar texto de la rúbrica"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:14
+#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:16
 msgid "Insert Column as List"
 msgstr "Insertar columna como lista"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:16
+#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:18
 msgid "Insert Column Value"
 msgstr "Añadir valor de columna"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:33
+#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:35
 msgid "Use condition in highlighted text"
 msgstr "Utilizar condición en el texto resaltado"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:35
+#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:37
 msgid "Insert condition in text"
 msgstr "Insertar condición en el texto"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:53
+#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:55
 msgid "Insert Attribute"
 msgstr "Añadir attributo"
 
@@ -3267,12 +3267,12 @@ msgstr ""
 "Revise las condiciones en la acción \n"
 " o utilice un filtro para excluir estas filas."
 
-#: ontask/templates/action/index.html:8 ontask/templates/action/index.html:48
-#: templates/base.html:65
+#: ontask/templates/action/index.html:8 ontask/templates/action/index.html:43
+#: ontask/templates/base.html:65
 msgid "Actions"
 msgstr "Acciones"
 
-#: ontask/templates/action/index.html:52
+#: ontask/templates/action/index.html:47
 msgid ""
 "<strong>Next Step:</strong> Click in the <span class=\"fa fa-plus\"></span> "
 "<i>Action</i> below to create a new\n"
@@ -3282,23 +3282,29 @@ msgstr ""
 "span><i>Nueva acción</b> debajo  para crear una nueva acción y ejecutarla "
 "con los datos en la tabla."
 
-#: ontask/templates/action/index.html:59
+#: ontask/templates/action/index.html:54
 msgid "New action to collect data from learners"
 msgstr "Nueva acción para obtener datos de los estudiantes"
 
-#: ontask/templates/action/index.html:65
+#: ontask/templates/action/index.html:55
+#: ontask/templates/action/timeline.html:19
+#: ontask/templates/workflow/export.html:34
+msgid "Action"
+msgstr "Acción"
+
+#: ontask/templates/action/index.html:60
 msgid "Import action previously exported"
 msgstr "Importar acción previamente exportada"
 
-#: ontask/templates/action/index.html:69
+#: ontask/templates/action/index.html:64
 msgid "Choose and export actions"
 msgstr "Escoger y exportar acciones"
 
-#: ontask/templates/action/index.html:70
+#: ontask/templates/action/index.html:65
 msgid "Export actions"
 msgstr "Exportar acciones"
 
-#: ontask/templates/action/index.html:73
+#: ontask/templates/action/index.html:68
 msgid "See when the actions were executed"
 msgstr "Ver cuando se han ejecutado las acciones"
 
@@ -3340,6 +3346,14 @@ msgid ""
 "      action \"%(n)s\""
 msgstr "Enviar mensajes de la acción \"%(n)s\""
 
+#: ontask/templates/action/request_email_list_data.html:7
+msgid "Send List action"
+msgstr "Enviar una lista por correo"
+
+#: ontask/templates/action/request_email_list_data.html:13
+msgid "Send List by Email"
+msgstr "Enviar lista por email"
+
 #: ontask/templates/action/request_json_data.html:7
 msgid "JSON action"
 msgstr "Acción JSON"
@@ -3366,13 +3380,18 @@ msgstr "Enviar JSON con lista"
 msgid "Send single JSON object"
 msgstr "Enviar un objeto JSON"
 
-#: ontask/templates/action/request_send_list_data.html:7
-msgid "Send List action"
-msgstr "Enviar una lista por correo"
+#: ontask/templates/action/run_done.html:14
+msgid "Action scheduled for execution"
+msgstr "Acción planificada para su ejecución"
 
-#: ontask/templates/action/request_send_list_data.html:13
-msgid "Send List by Email"
-msgstr "Enviar lista por email"
+#: ontask/templates/action/run_done.html:16
+#: ontask/templates/dataops/operation_done.html:9
+#, python-format
+msgid ""
+"You may check the status in\n"
+"      log number %(log_id)s."
+msgstr ""
+"Puedes comprobar el estado de la ejecución en el registro número %(log_id)s."
 
 #: ontask/templates/action/run_survey.html:8
 msgid "Run Action In"
@@ -3396,6 +3415,217 @@ msgstr ""
 " un error de sintaxis en el texto de la acción. El siguiente\n"
 " mensaje puede ofrecer información para localizar el problema."
 
+#: ontask/templates/admin/admin_title.html:1
+#: ontask/templates/admin/base_site.html:5
+#: ontask/templates/admin/base_site.html:7 ontask/templates/base.html:129
+msgid "Admin"
+msgstr "Admin"
+
+#: ontask/templates/admin/base_site.html:11
+msgid "Switch to Site"
+msgstr "Volver al sitio"
+
+#: ontask/templates/base.html:55
+msgid "Your workflows"
+msgstr "Tus flujos"
+
+#: ontask/templates/base.html:55 ontask/templates/workflow/index.html:8
+#: ontask/templates/workflow/index.html:27
+msgid "Workflows"
+msgstr "Flujos"
+
+#: ontask/templates/base.html:64
+msgid "Messages and Surveys"
+msgstr "Mensajes y Questionarios"
+
+#: ontask/templates/base.html:70 ontask/templates/table/display.html:8
+#: ontask/templates/table/display.html:99
+msgid "Table"
+msgstr "Tabla"
+
+#: ontask/templates/base.html:76
+msgid "View the complete table"
+msgstr "Mostrar la tabla completa"
+
+#: ontask/templates/base.html:77
+msgid "Full view"
+msgstr "Vista completa"
+
+#: ontask/templates/base.html:81 ontask/templates/table/display.html:121
+msgid "Views available for this table"
+msgstr "Vistas disponibles en esta tabla"
+
+#: ontask/templates/base.html:82
+msgid "Partial Views"
+msgstr "Vistas parciales de la tabla"
+
+#: ontask/templates/base.html:86
+msgid "Upload or merge data into the workflow table"
+msgstr "Cargar o mezclar datos en la tabla del flujo"
+
+#: ontask/templates/base.html:87
+msgid "Upload or merge data"
+msgstr "Cargar o mezclar datos"
+
+#: ontask/templates/base.html:91
+#: ontask/templates/dataops/transform_model.html:78
+msgid "Apply a transformation to the data"
+msgstr "Aplicar una transformación a la tabla"
+
+#: ontask/templates/base.html:92
+#: ontask/templates/dataops/plugin_info_for_run.html:8
+#: ontask/templates/dataops/plugin_info_for_run.html:23
+msgid "Run Transformation"
+msgstr "Ejecutar transformación"
+
+#: ontask/templates/base.html:96
+#: ontask/templates/dataops/transform_model.html:87
+msgid "Execute a model with the existing data"
+msgstr "Ejecutar un modelo con la tabla existente"
+
+#: ontask/templates/base.html:97
+#: ontask/templates/dataops/plugin_info_for_run.html:21
+msgid "Run Model"
+msgstr "Ejecutar modelo"
+
+#: ontask/templates/base.html:102
+#: ontask/templates/workflow/includes/partial_workflow_card.html:34
+#: ontask/templates/workflow/includes/workflow_basic_buttons.html:20
+#: ontask/templates/workflow/includes/workflow_operation_buttons.html:25
+msgid "Delete the data in the table of this workflow"
+msgstr "Borrar los datos en la tabla de este flujo"
+
+#: ontask/templates/base.html:103
+#: ontask/templates/workflow/includes/workflow_operation_buttons.html:26
+msgid "Flush data table"
+msgstr "Borrar datos"
+
+#: ontask/templates/base.html:109
+msgid "More"
+msgstr "Más"
+
+#: ontask/templates/base.html:112
+msgid "Workflow operations"
+msgstr "Operaciones para el flujo"
+
+#: ontask/templates/base.html:113
+msgid "Column operations"
+msgstr "Operaciones para las columnas"
+
+#: ontask/templates/base.html:114 ontask/templates/scheduler/index.html:8
+#: ontask/templates/scheduler/schedule_done.html:12
+msgid "Scheduled operations"
+msgstr "Operaciones planificadas"
+
+#: ontask/templates/base.html:115
+msgid "View logs"
+msgstr "Ver eventos"
+
+#: ontask/templates/base.html:135
+msgid "Change platform configuration parameters"
+msgstr "Cambiar los parámetros de configuración de la plataforma"
+
+#: ontask/templates/base.html:136
+msgid "Settings"
+msgstr "Configuración"
+
+#: ontask/templates/base.html:140
+msgid "Manage the platform database"
+msgstr "Gestión de base de datos"
+
+#: ontask/templates/base.html:141
+msgid "DB Admin"
+msgstr "Admin Base de Datos"
+
+#: ontask/templates/base.html:145
+msgid "Connections to SQL databases"
+msgstr "Conexiones a bases de datos SQL"
+
+#: ontask/templates/base.html:158
+msgid "Available Plugins"
+msgstr "Plugins disponibles"
+
+#: ontask/templates/base.html:159 ontask/templates/dataops/plugin_admin.html:43
+msgid "Plugins"
+msgstr "Plugins"
+
+#: ontask/templates/base.html:168 ontask/templates/profiles/edit_profile.html:6
+#: ontask/templates/profiles/show_profile.html:5
+#: ontask/templates/profiles/show_profile.html:24
+msgid "Profile"
+msgstr "Perfil"
+
+#: ontask/templates/base.html:169 ontask/templates/base.html:260
+msgid "Logout"
+msgstr "Desconectar"
+
+#: ontask/templates/base.html:175
+msgid "Contact"
+msgstr "Contacte"
+
+#: ontask/templates/base.html:181
+msgid "Manual"
+msgstr "Manual"
+
+#: ontask/templates/base.html:182
+msgid "API Docs"
+msgstr "Documentación de la API"
+
+#: ontask/templates/base.html:211
+msgid "This functionality has not been implemented yet."
+msgstr "Esta función todavía no se ha implementatdo."
+
+#: ontask/templates/base.html:223
+msgid "Your session is about to expire"
+msgstr "Su sesión está a punto de expirar"
+
+#: ontask/templates/base.html:226
+msgid "Your session will expire in"
+msgstr "Su sesión va a expirar en"
+
+#: ontask/templates/base.html:227
+msgid "seconds."
+msgstr "segundos."
+
+#: ontask/templates/base.html:243
+msgid "OnTask Project"
+msgstr "Proyecto OnTask"
+
+#: ontask/templates/base.html:243
+msgid "Version:"
+msgstr "Versión:"
+
+#: ontask/templates/base.html:259
+msgid "Your session is about to expire."
+msgstr "Su sesión está a punto de expirar."
+
+#: ontask/templates/base.html:261
+msgid "Remain Connected"
+msgstr "Mantener la sesión"
+
+#: ontask/templates/critical_error.html:4 ontask/templates/error.html:4
+#: ontask/templates/error.html:8
+msgid "Error"
+msgstr "Error"
+
+#: ontask/templates/critical_error.html:7
+msgid "Internal Error"
+msgstr "Error interno"
+
+#: ontask/templates/critical_error.html:10
+msgid "Oops. We have detected an internal error."
+msgstr "¡Vaya! Hemos detectado un error interno."
+
+#: ontask/templates/critical_error.html:14
+msgid ""
+"The following message is trying to explain what\n"
+"        happened."
+msgstr "El siguiente mensaje intenta explicar lo que ha pasado."
+
+#: ontask/templates/critical_error.html:21
+msgid "Referrer:"
+msgstr "Referencia:"
+
 #: ontask/templates/dataops/athenaupload_start.html:7
 #: ontask/templates/dataops/sqlupload_start.html:7
 #, python-format
@@ -3404,8 +3634,8 @@ msgstr "Cargar/Mezclar %(n)s"
 
 #: ontask/templates/dataops/athenaupload_start.html:14
 #, python-format
-msgid "Establish an %(n)s"
-msgstr "Establecer una %(n)s"
+msgid "Upload/Merge using %(n)s"
+msgstr "Cargar/Mezclar usando %(n)s"
 
 #: ontask/templates/dataops/athenaupload_start.html:16
 #: ontask/templates/dataops/sqlupload_start.html:16
@@ -3484,10 +3714,6 @@ msgstr "Añadir una conexión"
 msgid "Connection"
 msgstr "Conexión"
 
-#: ontask/templates/dataops/includes/partial_athenaconn_runop.html:3
-msgid "Obtain the data from the Athena connection"
-msgstr "Obtener data de la conexión Athena"
-
 #: ontask/templates/dataops/includes/partial_connection_addedit.html:9
 #: ontask/templates/dataops/includes/partial_connection_addedit.html:22
 msgid "Add connection"
@@ -3497,13 +3723,21 @@ msgstr "Añadir conexión"
 msgid "Edit connection"
 msgstr "Editar conexión"
 
-#: ontask/templates/dataops/includes/partial_connection_adminop.html:4
-msgid "View details"
-msgstr "Ver detalles"
+#: ontask/templates/dataops/includes/partial_connection_adminop.html:5
+msgid "Edit the connection"
+msgstr "Editar la conexión"
 
 #: ontask/templates/dataops/includes/partial_connection_adminop.html:9
-msgid "Create an exact duplicate"
-msgstr "Crear un duplicado"
+msgid "View connection details"
+msgstr "Ver detalles de la conexión"
+
+#: ontask/templates/dataops/includes/partial_connection_adminop.html:13
+msgid "Create an exact duplicate of this connection"
+msgstr "Crear un duplicado exacto de esta conexión"
+
+#: ontask/templates/dataops/includes/partial_connection_adminop.html:17
+msgid "Delete the connection"
+msgstr "Borrar la conexión"
 
 #: ontask/templates/dataops/includes/partial_connection_clone.html:5
 msgid "Confirm connection cloning"
@@ -3535,9 +3769,9 @@ msgstr "¿Está seguro de que quiere borrar la conexión <strong>%(n)s</strong>?
 msgid "Delete connection"
 msgstr "Borrar conexión"
 
-#: ontask/templates/dataops/includes/partial_connection_run.html:3
-msgid "Obtain the data from the connection"
-msgstr "Obtener data de la conexión"
+#: ontask/templates/dataops/includes/partial_connection_select.html:4
+msgid "View the details of this connection"
+msgstr "Ver los detalles de esta conexión"
 
 #: ontask/templates/dataops/includes/partial_diagnostics.html:4
 #: ontask/templates/dataops/transform_model.html:50
@@ -3561,10 +3795,6 @@ msgstr "Mostrar errores para este plugin"
 #: ontask/templates/dataops/transform_model.html:63
 msgid "Diagnose"
 msgstr "Diagnosticar"
-
-#: ontask/templates/dataops/includes/partial_sqlconn_runop.html:3
-msgid "Obtain the data from the SQL connection"
-msgstr "Obtener data de la conexión SQL"
 
 #: ontask/templates/dataops/merge_help.html:3
 msgid ""
@@ -3660,17 +3890,13 @@ msgid "Data operation execution"
 msgstr "Ejecución de la operación de datos"
 
 #: ontask/templates/dataops/operation_done.html:7
-#: ontask/templates/scheduler/schedule_done.html:8
+#: ontask/templates/scheduler/schedule_done.html:7
 msgid "Operation scheduled for execution"
 msgstr "Operación planificada para su ejecución"
 
 #: ontask/templates/dataops/plugin_admin.html:8
 msgid "Plugin Admin"
 msgstr "Administración de plugins"
-
-#: ontask/templates/dataops/plugin_admin.html:43 templates/base.html:161
-msgid "Plugins"
-msgstr "Plugins"
 
 #: ontask/templates/dataops/plugin_execution_report.html:6
 msgid "Plugin Execution"
@@ -3691,14 +3917,9 @@ msgstr "Puedes comprobar el estado en el registro número %(log_id)s."
 msgid "Continue"
 msgstr "Continuar"
 
-#: ontask/templates/dataops/plugin_info_for_run.html:8
-#: ontask/templates/dataops/plugin_info_for_run.html:23 templates/base.html:92
-msgid "Run Transformation"
-msgstr "Ejecutar transformación"
-
-#: ontask/templates/dataops/plugin_info_for_run.html:21 templates/base.html:97
-msgid "Run Model"
-msgstr "Ejecutar modelo"
+#: ontask/templates/dataops/plugin_info_for_run.html:36
+msgid "Run"
+msgstr "Ejecutar"
 
 #: ontask/templates/dataops/plugin_info_for_run.html:44
 msgid "Input columns to transformation"
@@ -3825,18 +4046,10 @@ msgstr "Carpeta con pluings incorrectos"
 msgid "Models"
 msgstr "Modelos"
 
-#: ontask/templates/dataops/transform_model.html:78 templates/base.html:91
-msgid "Apply a transformation to the data"
-msgstr "Aplicar una transformación a la tabla"
-
 #: ontask/templates/dataops/transform_model.html:79
 #: ontask/templates/dataops/transform_model.html:82
 msgid "Transformations"
 msgstr "Transformaciones"
-
-#: ontask/templates/dataops/transform_model.html:87 templates/base.html:96
-msgid "Execute a model with the existing data"
-msgstr "Ejecutar un modelo con la tabla existente"
 
 #: ontask/templates/dataops/upload1.html:7
 #: ontask/templates/dataops/upload_s3.html:7
@@ -4046,11 +4259,9 @@ msgstr ""
 "Cargar datos almacenados en una base de datos remota mediante una conexión "
 "SQL ya definida."
 
-#: ontask/templates/profiles/edit_profile.html:6
-#: ontask/templates/profiles/show_profile.html:5
-#: ontask/templates/profiles/show_profile.html:24 templates/base.html:170
-msgid "Profile"
-msgstr "Perfil"
+#: ontask/templates/error.html:12
+msgid "The operation returned an undocumented error."
+msgstr "La operación ha devuelto un error sin documentación."
 
 #: ontask/templates/profiles/edit_profile.html:9
 #: ontask/templates/profiles/show_profile.html:13
@@ -4122,14 +4333,14 @@ msgstr "Credencial de autenticación de"
 msgid "Scheduled Execution"
 msgstr "Ejecución planificada"
 
-#: ontask/templates/scheduler/edit.html:21
-msgid "Schedule Operation Execution"
-msgstr "Planificar la ejecución de una operación"
-
-#: ontask/templates/scheduler/edit.html:23
+#: ontask/templates/scheduler/edit.html:44
 #, python-format
 msgid "Time now is %(n)s"
 msgstr "Hora actual %(n)s"
+
+#: ontask/templates/scheduler/edit.html:48
+msgid "Edit the action scheduled for execution"
+msgstr "Editar la acción planificada para ejecutar"
 
 #: ontask/templates/scheduler/includes/add_op_menu.html:11
 msgid "Schedule a SQL upload/merge operation"
@@ -4154,42 +4365,44 @@ msgstr ""
 "     <strong>%(n)s</strong>?"
 
 #: ontask/templates/scheduler/includes/partial_scheduler_operations.html:4
+msgid "Edit this scheduled operation"
+msgstr "Editar esta operación planificada"
+
+#: ontask/templates/scheduler/includes/partial_scheduler_operations.html:10
 msgid "View the details of this scheduled operation"
 msgstr "Ver los detalles de esta acción planificada"
 
-#: ontask/templates/scheduler/includes/partial_scheduler_operations.html:8
+#: ontask/templates/scheduler/includes/partial_scheduler_operations.html:14
 msgid "Delete this scheduled operation"
 msgstr "Borrar la operación planificada"
 
 #: ontask/templates/scheduler/includes/partial_show_schedule_action.html:3
-msgid "Scheduled action"
+msgid "Scheduled operation"
 msgstr "Operación planificada"
 
 #: ontask/templates/scheduler/includes/partial_show_schedule_action.html:10
 #, python-format
-msgid "Action will execute in %(t)s"
-msgstr "La acción se ejecutará en %(t)s"
+msgid "Execution: %(t)s"
+msgstr "Ejecuciones: %(t)s"
 
-#: ontask/templates/scheduler/index.html:8
-msgid "Scheduled operations"
-msgstr "Operaciones planificadas"
+#: ontask/templates/scheduler/includes/partial_show_schedule_action.html:29
+msgid "Edit this scheduled action execution"
+msgstr "Editar esta ejecución planificada"
 
 #: ontask/templates/scheduler/index.html:43
 msgid "Scheduled Operations"
 msgstr "Operaciones planificadas"
 
-#: ontask/templates/scheduler/index.html:61
+#: ontask/templates/scheduler/index.html:58
 #, python-format
 msgid ""
-"The execution of some of\n"
-"      the operations can be scheduled for a time in the future. This page "
-"shows those planned executions. To schedule the\n"
-"      execution of one action, go to the <a href=\"%(actionindex)s"
-"\">Actions</a> menu and select the operation <i>Schedule</i>."
+"This page shows the operations scheduled for execution in the future. To "
+"schedule the\n"
+"      execution of an action, go to the <a href=\"%(actionindex)s\">Actions</"
+"a> page and select the operation <i>Schedule</i> for the appropriate action."
 msgstr ""
-"La ejecución de algunas de las\n"
-"     operaciones se puede planificar para un cierto tiempo en el futuro. "
-"Esta página muestra esas  ejecuciones planificadas. Para planificar\n"
+"Esta página muestra las operaciones a ejecutar en el futuro. Para "
+"planificar\n"
 "    la ejecución de una acción, ir al menú  <a href=\"%(actionindex)s"
 "\">Acciones</a> y selecciona la operación  <i>Planificar</i> en una de ellas."
 
@@ -4199,68 +4412,59 @@ msgstr "Operación planificada"
 
 #: ontask/templates/scheduler/schedule_done.html:9
 #, python-format
-msgid "The operation will start executing in %(n)s"
-msgstr "La operación se ejecutará en %(n)s"
+msgid "Operation execution: %(n)s"
+msgstr "Ejecución de la operación: %(n)s"
 
-#: ontask/templates/table/display.html:8
-#: ontask/templates/table/display.html:101 templates/base.html:70
-msgid "Table"
-msgstr "Tabla"
-
-#: ontask/templates/table/display.html:114
+#: ontask/templates/table/display.html:112
 msgid "Add a new row to the table"
 msgstr "Añadir una nueva fila a la tabla"
 
-#: ontask/templates/table/display.html:115
+#: ontask/templates/table/display.html:113
 msgid "Row"
 msgstr "Fila"
 
-#: ontask/templates/table/display.html:124 templates/base.html:81
-msgid "Views available for this table"
-msgstr "Vistas disponibles en esta tabla"
-
-#: ontask/templates/table/display.html:125
+#: ontask/templates/table/display.html:122
 msgid "Views"
 msgstr "Vistas"
 
-#: ontask/templates/table/display.html:142
+#: ontask/templates/table/display.html:139
 msgid "Full table"
 msgstr "Tabla completa"
 
-#: ontask/templates/table/display.html:153
+#: ontask/templates/table/display.html:150
 msgid "Change elements in view"
 msgstr "Cambiar los elementos en la vista"
 
-#: ontask/templates/table/display.html:154
+#: ontask/templates/table/display.html:151
 #: ontask/templates/table/includes/partial_view_edit.html:8
 msgid "Edit view"
 msgstr "Editar vista"
 
-#: ontask/templates/table/display.html:159
+#: ontask/templates/table/display.html:156
 msgid "Dashboard created with the view data"
 msgstr "Tablero de control creado con los datos de esta vista"
 
-#: ontask/templates/table/display.html:160
-#: ontask/templates/table/display.html:174
+#: ontask/templates/table/display.html:157
+#: ontask/templates/table/display.html:171
 #: ontask/templates/table/stat_view.html:24
 msgid "Dashboard"
 msgstr "Tablero de control"
 
-#: ontask/templates/table/display.html:166
-#: ontask/templates/table/display.html:180
+#: ontask/templates/table/display.html:163
+#: ontask/templates/table/display.html:177
 msgid "Download a CSV file containing this table"
 msgstr "Descarga un fichero CSV con esta tabla"
 
-#: ontask/templates/table/display.html:167
-#: ontask/templates/table/display.html:181
+#: ontask/templates/table/display.html:164
+#: ontask/templates/table/display.html:178
 msgid "CSV Download"
 msgstr "Descarga CSV"
 
-#: ontask/templates/table/display.html:173
+#: ontask/templates/table/display.html:170
 msgid "Dashboard created with the table data"
 msgstr "Tablero de control creado con los datos de la tabla"
 
-#: ontask/templates/table/display.html:202
+#: ontask/templates/table/display.html:199
 msgid ""
 "You may drag and drop a column header to change its position in the table"
 msgstr ""
@@ -4292,15 +4496,15 @@ msgstr "¿Está seguro de que quiere borrar esta fila?"
 msgid "Delete row"
 msgstr "Borrar fila"
 
-#: ontask/templates/table/includes/partial_row_ops.html:3
+#: ontask/templates/table/includes/partial_row_ops.html:5
 msgid "Edit the values in this row"
 msgstr "Editar los datos en esta fila"
 
-#: ontask/templates/table/includes/partial_row_ops.html:6
+#: ontask/templates/table/includes/partial_row_ops.html:8
 msgid "Compare values in the row with the rest of the table"
 msgstr "Comparar los valores en esta fila con el resto de la tabla"
 
-#: ontask/templates/table/includes/partial_row_ops.html:10
+#: ontask/templates/table/includes/partial_row_ops.html:12
 msgid "Delete this row"
 msgstr "Borrar esta fila"
 
@@ -4351,14 +4555,18 @@ msgid "Save view"
 msgstr "Guardar vista"
 
 #: ontask/templates/table/includes/partial_view_operations.html:5
+msgid "Change the columns present in the view"
+msgstr "Cambiar las columnas presentes en esta vista"
+
+#: ontask/templates/table/includes/partial_view_operations.html:9
 msgid "Access the table with this view"
 msgstr "Acceder a la tabla con esta vista"
 
-#: ontask/templates/table/includes/partial_view_operations.html:11
+#: ontask/templates/table/includes/partial_view_operations.html:15
 msgid "Create an identical view"
 msgstr "Crear una vista idéntica"
 
-#: ontask/templates/table/includes/partial_view_operations.html:18
+#: ontask/templates/table/includes/partial_view_operations.html:22
 msgid "Delete the view"
 msgstr "Borrar vista"
 
@@ -4368,7 +4576,7 @@ msgstr "Columna: "
 
 #: ontask/templates/table/stat_row.html:8
 #: ontask/templates/table/stat_view.html:8
-#: ontask/templates/workflow/includes/workflow_column_operations.html:20
+#: ontask/templates/workflow/includes/workflow_column_operations.html:29
 msgid "Statistics"
 msgstr "Estadísticas"
 
@@ -4411,6 +4619,18 @@ msgstr ""
 "Crear vistas seleccionando un subconjunto de filas y columnas\n"
 " de la tabla para mostrar."
 
+#: ontask/templates/thanks.html:6
+msgid "Thanks"
+msgstr "Gracias"
+
+#: ontask/templates/under_construction.html:4
+msgid "Under construction"
+msgstr "En construcción"
+
+#: ontask/templates/under_construction.html:7
+msgid "This functionality is under construction."
+msgstr "Esta función todavía no se ha implementatdo."
+
 #: ontask/templates/workflow/detail.html:8
 #: ontask/templates/workflow/operations.html:8
 msgid "Details"
@@ -4420,7 +4640,7 @@ msgstr "Detalles"
 msgid "Column Operations"
 msgstr "Operaciones para las columnas"
 
-#: ontask/templates/workflow/detail.html:101
+#: ontask/templates/workflow/detail.html:102
 msgid "Key?"
 msgstr "¿Clave?"
 
@@ -4620,7 +4840,11 @@ msgstr "Editar attributo"
 msgid "Update attribute"
 msgstr "Actualizar attributo"
 
-#: ontask/templates/workflow/includes/partial_attribute_operations.html:6
+#: ontask/templates/workflow/includes/partial_attribute_operations.html:5
+msgid "Edit the attribute"
+msgstr "Editar attributo"
+
+#: ontask/templates/workflow/includes/partial_attribute_operations.html:9
 msgid "Delete pair name/value"
 msgstr "Borrar el par nombre/valor"
 
@@ -4672,7 +4896,7 @@ msgid "These conditions will also be deleted."
 msgstr "Estas condiciones también se borrarán."
 
 #: ontask/templates/workflow/includes/partial_column_delete.html:22
-#: ontask/templates/workflow/includes/workflow_column_operations.html:34
+#: ontask/templates/workflow/includes/workflow_column_operations.html:9
 msgid "Delete column"
 msgstr "Borrar columna"
 
@@ -4699,15 +4923,15 @@ msgstr "Añadir criterio"
 msgid "Edit criterion <strong>%(n)s</strong>"
 msgstr "Editar criterio <strong>%(n)s</strong>"
 
-#: ontask/templates/workflow/includes/partial_criterion_cell.html:8
+#: ontask/templates/workflow/includes/partial_criterion_cell.html:9
 msgid "Edit this criterion"
 msgstr "Editar criterio"
 
-#: ontask/templates/workflow/includes/partial_criterion_cell.html:13
+#: ontask/templates/workflow/includes/partial_criterion_cell.html:14
 msgid "Show stats about this criteria"
 msgstr "Estadísticas sobre estos criterios"
 
-#: ontask/templates/workflow/includes/partial_criterion_cell.html:18
+#: ontask/templates/workflow/includes/partial_criterion_cell.html:19
 msgid "Remove this criterion"
 msgstr "Borrar criterio"
 
@@ -4801,13 +5025,6 @@ msgstr "Cambiar el nombre y la descripción de este flujo"
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:18
 msgid "Create a duplicate of this workflow"
 msgstr "Crear un duplicado de este flujo"
-
-#: ontask/templates/workflow/includes/partial_workflow_card.html:34
-#: ontask/templates/workflow/includes/workflow_basic_buttons.html:20
-#: ontask/templates/workflow/includes/workflow_operation_buttons.html:25
-#: templates/base.html:102
-msgid "Delete the data in the table of this workflow"
-msgstr "Borrar los datos en la tabla de este flujo"
 
 #: ontask/templates/workflow/includes/partial_workflow_card.html:40
 #: ontask/templates/workflow/includes/workflow_basic_buttons.html:27
@@ -4926,7 +5143,7 @@ msgstr ""
 msgid "Instructor"
 msgstr "Instructor"
 
-#: ontask/templates/workflow/includes/share.html:20
+#: ontask/templates/workflow/includes/share.html:18
 msgid ""
 "You may select instructors by their email\n"
 "  so that they can manage this workflow."
@@ -4938,43 +5155,37 @@ msgstr ""
 msgid "Flush Data"
 msgstr "Borrar datos"
 
-#: ontask/templates/workflow/includes/workflow_column_operations.html:10
+#: ontask/templates/workflow/includes/workflow_column_operations.html:5
+msgid "Edit the parameters of this column"
+msgstr "Editar los parámetros de esta columna"
+
+#: ontask/templates/workflow/includes/workflow_column_operations.html:19
 msgid "Create an exact duplicate of this column"
 msgstr "Crear un duplicado exacto de esta columna"
 
-#: ontask/templates/workflow/includes/workflow_column_operations.html:18
+#: ontask/templates/workflow/includes/workflow_column_operations.html:27
 msgid "Statistics about this column"
 msgstr "Estadísticas sobre esta columna"
 
-#: ontask/templates/workflow/includes/workflow_column_operations.html:25
+#: ontask/templates/workflow/includes/workflow_column_operations.html:34
 msgid "Restrict the use of values to the ones already in the column"
 msgstr "Restringir los valores a los que ya están en la columna"
 
-#: ontask/templates/workflow/includes/workflow_column_operations.html:27
+#: ontask/templates/workflow/includes/workflow_column_operations.html:36
 msgid "Restrict values"
 msgstr "Restringir valores"
 
-#: ontask/templates/workflow/includes/workflow_column_operations.html:41
+#: ontask/templates/workflow/includes/workflow_column_operations.html:43
 msgid "Make first column"
 msgstr "Mover a la primera posición"
 
-#: ontask/templates/workflow/includes/workflow_column_operations.html:45
+#: ontask/templates/workflow/includes/workflow_column_operations.html:47
 msgid "Make last column"
 msgstr "Mover a la última posición"
 
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:5
 msgid "Export the workflow and its actions"
 msgstr "Exportar el flujo y sus acciones"
-
-#: ontask/templates/workflow/includes/workflow_operation_buttons.html:26
-#: templates/base.html:103
-msgid "Flush data table"
-msgstr "Borrar datos"
-
-#: ontask/templates/workflow/index.html:8
-#: ontask/templates/workflow/index.html:27 templates/base.html:55
-msgid "Workflows"
-msgstr "Flujos"
 
 #: ontask/templates/workflow/index.html:38
 msgid "Provide the name and description for a new workflow"
@@ -5029,49 +5240,44 @@ msgstr ""
 "elementos en una página que puede ser enviada por email, ofrecida a través \n"
 "de una URL, o enviada a otro servicio."
 
-#: ontask/templates/workflow/operations.html:47
+#: ontask/templates/workflow/operations.html:68
 msgid "Workflow Operations"
 msgstr "Operaciones del flujo"
 
-#: ontask/templates/workflow/operations.html:60
+#: ontask/templates/workflow/operations.html:81
 msgid "Attributes"
 msgstr "Attributos"
 
-#: ontask/templates/workflow/operations.html:65
+#: ontask/templates/workflow/operations.html:86
 msgid "Share with Instructors"
 msgstr "Compartir con otros instructores"
 
-#: ontask/templates/workflow/operations.html:70
+#: ontask/templates/workflow/operations.html:91
 msgid "Learners"
 msgstr "Estudiantes"
 
-#: ontask/visualizations/plotly.py:93 ontask/visualizations/plotly.py:100
+#: ontask/visualizations/plotly.py:99 ontask/visualizations/plotly.py:106
 msgid "Your value"
 msgstr "Tu valor"
 
-#: ontask/visualizations/templatetags/vis_include.py:23
+#: ontask/visualizations/templatetags/vis_include.py:20
 msgid "Action object not found when processing tag"
 msgstr "No se ha encontrado el objeto acción al procesar esta etiqueta"
 
-#: ontask/visualizations/templatetags/vis_include.py:28
+#: ontask/visualizations/templatetags/vis_include.py:25
 #, python-brace-format
 msgid "Column {0} does not exist"
 msgstr "La columna {0} no existe"
 
-#: ontask/workflow/access.py:118
-#, python-brace-format
-msgid "The workflow is being modified by user {0}"
-msgstr "El flujo está siendo modificado por el usuario {0}"
-
-#: ontask/workflow/forms/attribute_shared.py:55
+#: ontask/workflow/forms/attribute_shared.py:56
 msgid "Name has to be different from all existing ones."
 msgstr "El nombre ha de ser diferente a los ya existentes."
 
-#: ontask/workflow/forms/attribute_shared.py:63
+#: ontask/workflow/forms/attribute_shared.py:64
 msgid "There is a column with this name. Please change."
 msgstr "Ya hay una columna con este nombre. Por favor, cámbielo."
 
-#: ontask/workflow/forms/attribute_shared.py:76
+#: ontask/workflow/forms/attribute_shared.py:77
 msgid "There is a condition already with this name."
 msgstr "Ya hay una condición con este nombre."
 
@@ -5091,87 +5297,91 @@ msgstr "No necesitas añadirte a la lista para compartir"
 msgid "User already in the list"
 msgstr "El usuario ya está en la lista"
 
-#: ontask/workflow/forms/column.py:28
+#: ontask/workflow/forms/column.py:27
 msgid "Comma separated list of values allowed in this column"
 msgstr "Lista de valores permitidos separados por comas"
 
-#: ontask/workflow/forms/column.py:87
+#: ontask/workflow/forms/column.py:81
 msgid "There is a column already with this name"
 msgstr "Ya hay una columna con este nombre"
 
-#: ontask/workflow/forms/column.py:120
+#: ontask/workflow/forms/column.py:114
 msgid "Incorrect list of values"
 msgstr "La lista de valores es incorrecta"
 
-#: ontask/workflow/forms/column.py:134
+#: ontask/workflow/forms/column.py:128
 msgid "The values in the column are not compatible  with these ones."
 msgstr "Los valores en la columna no son compatibles con estos."
 
-#: ontask/workflow/forms/column.py:184
+#: ontask/workflow/forms/column.py:177
 msgid "Value to assign to all cells in the column"
 msgstr "Valor a asignar a toda la columna"
 
-#: ontask/workflow/forms/column.py:215
+#: ontask/workflow/forms/column.py:208
 msgid "This value is not in the list of allowed values"
 msgstr "Este valor no está en la lista de valores permitidos"
 
-#: ontask/workflow/forms/column.py:239
+#: ontask/workflow/forms/column.py:232
 msgid "Question name"
 msgstr "Nombre de la pregunta"
 
-#: ontask/workflow/forms/column.py:241
+#: ontask/workflow/forms/column.py:234
 msgid "Description (shown to the learners)"
 msgstr "Descripción (se muestra a los estudiantes)"
 
-#: ontask/workflow/forms/column.py:243
+#: ontask/workflow/forms/column.py:236
 msgid "Question position (zero to insert last)"
 msgstr "Posición de la pregunta (cero para insertar última)"
 
-#: ontask/workflow/forms/column.py:244
+#: ontask/workflow/forms/column.py:237
 msgid "Question active from"
 msgstr "Pregunta activa desde"
 
-#: ontask/workflow/forms/column.py:245
+#: ontask/workflow/forms/column.py:238
 msgid "Question active until"
 msgstr "Pregunta activa hasta"
 
-#: ontask/workflow/forms/column.py:273
+#: ontask/workflow/forms/column.py:266
 msgid "Criterion name"
 msgstr "Nombre del criterio"
 
-#: ontask/workflow/forms/column.py:275
+#: ontask/workflow/forms/column.py:268
 msgid "Criterion Description"
 msgstr "Descripción del criterio"
 
-#: ontask/workflow/forms/column.py:284
+#: ontask/workflow/forms/column.py:277
 msgid "Comma-separated list of levels of attainment"
 msgstr "Lista de niveles alcanzados separados por comas"
 
-#: ontask/workflow/forms/column.py:301
+#: ontask/workflow/forms/column.py:294
 msgid "The criterion needs a non-empty set of values"
 msgstr "El criterio necesita un conjunto de  valores no vacío"
 
-#: ontask/workflow/forms/column.py:341
+#: ontask/workflow/forms/column.py:334
 msgid "There must be at least one column with unique values"
 msgstr "Debe haber una columna con valores únicos (clave)"
 
-#: ontask/workflow/forms/column.py:352
+#: ontask/workflow/forms/column.py:346
 msgid "The column does not have unique values for each row."
 msgstr "La columna no tiene valores únicos en cada celda."
 
-#: ontask/workflow/forms/column.py:382
+#: ontask/workflow/forms/column.py:376
 msgid "Columns to combine*"
 msgstr "Columnas a combinar*"
 
-#: ontask/workflow/forms/column.py:418
+#: ontask/workflow/forms/column.py:408
+msgid "A column with that name already exists"
+msgstr "Una columna con este nombre ya existe"
+
+#: ontask/workflow/forms/column.py:416
 msgid "You need to select the columns to combine"
 msgstr "Se necesita seleccionar las columnas a combinar"
 
-#: ontask/workflow/forms/column.py:438
+#: ontask/workflow/forms/column.py:436
 msgid "Incorrect data type for the selected operand"
 msgstr "Tipo de datos incorrecto para el operando seleccionado"
 
-#: ontask/workflow/forms/column.py:470
+#: ontask/workflow/forms/column.py:468
 msgid ""
 "Number (values from 1 to N, interval m - n) or comma separated list of "
 "values."
@@ -5179,64 +5389,32 @@ msgstr ""
 "Número (valores de 1 a N, intervalo m - n) o lista de valores separados por "
 "comas."
 
-#: ontask/workflow/forms/workflow.py:32
+#: ontask/workflow/forms/workflow.py:31
 msgid "You need to provide a name for the workflow."
 msgstr "Necesita introducir un nombre para el flujo."
 
-#: ontask/workflow/forms/workflow.py:44 ontask/workflow/forms/workflow.py:97
+#: ontask/workflow/forms/workflow.py:43 ontask/workflow/forms/workflow.py:95
 msgid "A workflow with this name already exists"
 msgstr "Ya existe un flujo con este nombre"
 
-#: ontask/workflow/forms/workflow.py:71
+#: ontask/workflow/forms/workflow.py:69
 msgid "File"
 msgstr "Fichero"
 
-#: ontask/workflow/forms/workflow.py:72
+#: ontask/workflow/forms/workflow.py:70
 msgid "File containing a previously exported workflow"
 msgstr "Fichero que contiene un flujo previamente exportado"
 
-#: ontask/workflow/forms/workflow.py:87
+#: ontask/workflow/forms/workflow.py:85
 msgid "Incorrect form request (it is not multipart)"
 msgstr "Petición de formulario incorrecta (no es multiplart)"
 
-#: ontask/workflow/import_export.py:105
-#, python-brace-format
-msgid "Unable to import workflow. Exception: {0}"
-msgstr "No se ha podido importar el flujo. Excepción: {0}"
-
-#: ontask/workflow/import_export.py:107
-#, python-brace-format
-msgid "Unable to import workflow. Validation error: {0}"
-msgstr "No se ha podido importar el flujo debido a un error de validación: {0}"
-
-#: ontask/workflow/import_export.py:111
-msgid "Workflow data with incorrect structure."
-msgstr "Los datos del flujo tienen una estructura incorrecta."
-
-#: ontask/workflow/import_export.py:113
-#, python-brace-format
-msgid "Unable to import workflow: {0}"
-msgstr "No se ha podido importar el flujo: {0}"
-
-#: ontask/workflow/ops.py:103
-msgid "Column has no meaningful values"
-msgstr "La columna no tienen valores correctos"
-
-#: ontask/workflow/ops.py:161
-msgid "Learner emails successfully updated."
-msgstr "Emails de los estudiantes actualizados con éxito."
-
-#: ontask/workflow/ops.py:255
-#, python-brace-format
-msgid "The new data does not preserve the key property of column \"{0}\""
-msgstr "Los datos nuevos no conservan la propiedad clave de la columna “{0}"
-
-#: ontask/workflow/serialize_column.py:32
+#: ontask/workflow/serialize_column.py:29
 #, python-brace-format
 msgid "Incorrect data type {0}."
 msgstr "Tipo de dato incorrecto {0}."
 
-#: ontask/workflow/serialize_column.py:60
+#: ontask/workflow/serialize_column.py:57
 #, python-brace-format
 msgid "Incorrect date/times in the active window for column {0}"
 msgstr "Fechas/horas incorrectas en la ventana activa de la columna {0}"
@@ -5253,15 +5431,15 @@ msgstr "Los atributos deen ser un diccionario (string, string)"
 msgid "Workflow could not be created."
 msgstr "No se ha podido crear el flujo."
 
-#: ontask/workflow/serialize_workflow.py:94
+#: ontask/workflow/serialize_workflow.py:93
 msgid "To guarantee compability"
 msgstr "Para garantizar compatibilidad"
 
-#: ontask/workflow/serialize_workflow.py:122
+#: ontask/workflow/serialize_workflow.py:121
 msgid "Unexpected empty workflow name."
 msgstr "Inesperado nombre de flujo vacío."
 
-#: ontask/workflow/serialize_workflow.py:129
+#: ontask/workflow/serialize_workflow.py:128
 msgid ""
 "There is a workflow with this name. Please provide a workflow name in the "
 "import page."
@@ -5269,538 +5447,206 @@ msgstr ""
 "Ya hay un flujo con este nombre. Por favor, introduzca un nombre nuevo en la "
 "página de importación."
 
-#: ontask/workflow/serialize_workflow.py:155
-#: ontask/workflow/serialize_workflow.py:193
-#: ontask/workflow/serialize_workflow.py:204
+#: ontask/workflow/serialize_workflow.py:154
+#: ontask/workflow/serialize_workflow.py:192
+#: ontask/workflow/serialize_workflow.py:203
 msgid "Unable to save column information"
 msgstr "Incapaz de guardar la información de la columna"
 
-#: ontask/workflow/views/column_crud.py:40
+#: ontask/workflow/services/column_crud.py:92
+#, python-brace-format
+msgid "Unable to add element: {0}"
+msgstr "Imposible añadir elemento: {0}"
+
+#: ontask/workflow/services/column_crud.py:148
+#, python-brace-format
+msgid "Unable to add column: {0}"
+msgstr "Imposible añadir columna: {0}"
+
+#: ontask/workflow/services/column_crud.py:181
+msgid "The integer value has to be larger than 1"
+msgstr "El valor numérico debe ser mayor que 1"
+
+#: ontask/workflow/services/column_crud.py:212
+#, python-brace-format
+msgid "Unable to add the column: {0}"
+msgstr "Imposible añadir la columna: {0}"
+
+#: ontask/workflow/services/import_export.py:107
+#, python-brace-format
+msgid "Unable to import workflow. Exception: {0}"
+msgstr "No se ha podido importar el flujo. Excepción: {0}"
+
+#: ontask/workflow/services/import_export.py:110
+#, python-brace-format
+msgid "Unable to import workflow. Validation error: {0}"
+msgstr "No se ha podido importar el flujo debido a un error de validación: {0}"
+
+#: ontask/workflow/services/import_export.py:115
+msgid "Workflow data with incorrect structure."
+msgstr "Los datos del flujo tienen una estructura incorrecta."
+
+#: ontask/workflow/services/import_export.py:118
+#, python-brace-format
+msgid "Unable to import workflow: {0}"
+msgstr "No se ha podido importar el flujo: {0}"
+
+#: ontask/workflow/services/luser_update.py:88
+msgid "Learner emails successfully updated."
+msgstr "Emails de los estudiantes actualizados con éxito."
+
+#: ontask/workflow/services/restrict.py:28
+msgid "The column has no meaningful values"
+msgstr "La columna tiene valores incorrectos"
+
+#: ontask/workflow/services/workflow_crud.py:157
+#, python-brace-format
+msgid "Error while cloning workflow: {0}"
+msgstr "Error al clonar el flujo: {0}"
+
+#: ontask/workflow/services/workflow_ops.py:25
+msgid "Value"
+msgstr "Valor"
+
+#: ontask/workflow/services/workflow_ops.py:138
+msgid "The selected column does not contain email addresses."
+msgstr "La columna seleccionada no contiene direcciones de correo."
+
+#: ontask/workflow/views/column_crud.py:25
 msgid "sum: Sum selected columns"
 msgstr "sum: Suma de columnas seleccionadas"
 
-#: ontask/workflow/views/column_crud.py:43
+#: ontask/workflow/views/column_crud.py:28
 msgid "prod: Product of the selected columns"
 msgstr "prod: Producto de columnas seleccionadas"
 
-#: ontask/workflow/views/column_crud.py:45
+#: ontask/workflow/views/column_crud.py:30
 msgid "max: Maximum of the selected columns"
 msgstr "max: Máximo de las columnas seleccionadas"
 
-#: ontask/workflow/views/column_crud.py:46
+#: ontask/workflow/views/column_crud.py:31
 msgid "min: Minimum of the selected columns"
 msgstr "min: Mínimo de las columnas seleccionadas"
 
-#: ontask/workflow/views/column_crud.py:47
+#: ontask/workflow/views/column_crud.py:32
 msgid "mean: Mean of the selected columns"
 msgstr "mean: Media de las columnas seleccionadas"
 
-#: ontask/workflow/views/column_crud.py:50
+#: ontask/workflow/views/column_crud.py:35
 msgid "median: Median of the selected columns"
 msgstr "median: Mediana de las columnas seleccionadas"
 
-#: ontask/workflow/views/column_crud.py:54
+#: ontask/workflow/views/column_crud.py:39
 msgid "std: Standard deviation over the selected columns"
 msgstr "std: Desviación estándar de las columnas seleccionadas"
 
-#: ontask/workflow/views/column_crud.py:58
+#: ontask/workflow/views/column_crud.py:43
 msgid "all: True when all elements in selected columns are true"
 msgstr ""
 "all: Cierto si todos los elementos en las columnas seleccionadas son ciertos"
 
-#: ontask/workflow/views/column_crud.py:62
+#: ontask/workflow/views/column_crud.py:47
 msgid "any: True when any element in selected columns is true"
 msgstr "any: Cierto si algún elemento de las columnas seleccionadas es cierto"
+
+#: ontask/workflow/views/column_crud.py:68
+#: ontask/workflow/views/column_crud.py:180
+#: ontask/workflow/views/column_crud.py:230
+msgid "Cannot add column to a workflow without data"
+msgstr "No es posible añadir una columna a un flujo sin datos"
 
 #: ontask/workflow/views/column_crud.py:119
 msgid "Cannot add question to a workflow without data"
 msgstr "No es posible añadir una pregunta a un flujo sin datos"
 
-#: ontask/workflow/views/column_crud.py:124
-#: ontask/workflow/views/column_crud.py:240
-#: ontask/workflow/views/column_crud.py:343
-msgid "Cannot add column to a workflow without data"
-msgstr "No es posible añadir una columna a un flujo sin datos"
-
-#: ontask/workflow/views/column_crud.py:137
+#: ontask/workflow/views/column_crud.py:128
 msgid "Cannot find action to add question."
 msgstr "No se ha encontrado la acción a la que añadir la pregunta."
 
-#: ontask/workflow/views/column_crud.py:185
-#, python-brace-format
-msgid "Unable to add column: {0}"
-msgstr "Imposible añadir columna: {0}"
-
 #: ontask/workflow/views/column_crud.py:262
-#: ontask/workflow/views/column_crud.py:364
-msgid "A column with that name already exists"
-msgstr "Una columna con este nombre ya existe"
-
-#: ontask/workflow/views/column_crud.py:284
-#: ontask/workflow/views/column_crud.py:421
 #, python-brace-format
-msgid "Unable to add the column: {0}"
-msgstr "Imposible añadir la columna: {0}"
+msgid "Unable to add random column: {0}"
+msgstr "Imposible añadir columna con números aleatorios: {0}"
 
-#: ontask/workflow/views/column_crud.py:308
-#: ontask/workflow/views/column_crud.py:621
+#: ontask/workflow/views/column_crud.py:360
+msgid "You cannot delete the only key column"
+msgstr "No es posible borrar la única columna clave"
+
+#: ontask/workflow/views/column_crud.py:428
 #, python-brace-format
 msgid "Unable to clone column: {0}"
 msgstr "Imposible clonar la columna: {0}"
 
-#: ontask/workflow/views/column_crud.py:384
-msgid "The integer value has to be larger than 1"
-msgstr "El valor numérico debe ser mayor que 1"
-
-#: ontask/workflow/views/column_crud.py:553
-msgid "You cannot delete the only key column"
-msgstr "No es posible borrar la única columna clave"
-
-#: ontask/workflow/views/column_ops.py:125
+#: ontask/workflow/views/column_ops.py:122
 msgid "You cannot restrict a key column"
 msgstr "No es posible restringir una columna clave"
 
-#: ontask/workflow/views/criterion_crud.py:48
+#: ontask/workflow/views/criterion_crud.py:46
 msgid "Operation only valid or Rubric actions"
 msgstr "Operación válida sólo para acciones de tipo Rúbrica"
 
-#: ontask/workflow/views/criterion_crud.py:55
+#: ontask/workflow/views/criterion_crud.py:53
 msgid "Cannot add criteria to a workflow without data"
 msgstr "No se puede añadir un criterio a un flujo sin datos"
 
-#: ontask/workflow/views/criterion_crud.py:111
-#, python-brace-format
-msgid "Unable to add criterion: {0}"
-msgstr "Imposible añadir criterio: {0}"
-
-#: ontask/workflow/views/criterion_crud.py:155
+#: ontask/workflow/views/criterion_crud.py:116
 msgid "Incorrect invocation of criterion edit function"
 msgstr "Llamada incorrecta a la función para editar un criterio"
 
-#: ontask/workflow/views/criterion_crud.py:240
+#: ontask/workflow/views/criterion_crud.py:178
 msgid "Incorrect invocation of criterion delete function"
 msgstr "Llamada incorrecta a la función para borrar un criterio"
 
-#: ontask/workflow/views/criterion_crud.py:290
+#: ontask/workflow/views/criterion_crud.py:226
 msgid "Incorrect invocation of criterion insert operation."
 msgstr "Invocación incorrecta de la operación para añadir un criterio."
 
-#: ontask/workflow/views/criterion_crud.py:298
+#: ontask/workflow/views/criterion_crud.py:236
 msgid "Criterion does not have the correct levels of attainment"
 msgstr "El criterio no tiene los niveles alcanzados correctos"
 
-#: ontask/workflow/views/criterion_crud.py:305
+#: ontask/workflow/views/criterion_crud.py:243
 msgid "The column needs to have a fixed set of possible values"
 msgstr "La columna ha de tener un conjunto fijo de valores"
 
-#: ontask/workflow/views/workflow_crud.py:259
+#: ontask/workflow/views/workflow_crud.py:108
 msgid ""
 "WARNING: Celery is not currently running. Please configure it correctly."
 msgstr "AVISO: Celery no está ejecutando. Por favor, revise la configuración."
 
-#: ontask/workflow/views/workflow_crud.py:299
+#: ontask/workflow/views/workflow_crud.py:139
 msgid "You can only rename workflows you created."
 msgstr "Sólo se pueden renombrar los flujos que ha creado."
 
-#: ontask/workflow/views/workflow_crud.py:358
-#, python-brace-format
-msgid "Unable to clone workflow: {0}"
-msgstr "Imposible clonar flujo: {0}"
-
-#: ontask/workflow/views/workflow_crud.py:370
+#: ontask/workflow/views/workflow_crud.py:225
 msgid "Workflow successfully cloned."
 msgstr "Flujo clonado con éxito."
 
-#: ontask/workflow/views/workflow_ops.py:36
-msgid "Value"
-msgstr "Valor"
-
-#: ontask/workflow/views/workflow_ops.py:54
-msgid "Edit the attribute"
-msgstr "Editar attributo"
-
-#: ontask/workflow/views/workflow_ops.py:249
-msgid "Edit the parameters of this column"
-msgstr "Editar los parámetros de esta columna"
-
-#: ontask/workflow/views/workflow_ops.py:317
-msgid "The selected column does not contain email addresses."
-msgstr "La columna seleccionada no contiene direcciones de correo."
-
-#: ontask/workflow/views/workflow_ops.py:346
+#: ontask/workflow/views/workflow_ops.py:163
 msgid "The list of workflow users will be updated shortly."
 msgstr "La lista de usuarios se actualizará en breve."
 
-#: settings/base.py:391
+#: settings/base.py:400
 msgid "English"
 msgstr "Inglés"
 
-#: settings/base.py:392
+#: settings/base.py:401
 msgid "Spanish"
 msgstr "Español"
 
-#: settings/base.py:393
+#: settings/base.py:402
 msgid "Chinese"
 msgstr "Chino"
 
-#: settings/base.py:394
+#: settings/base.py:403
 msgid "Finnish"
 msgstr "Finés"
 
-#: settings/base.py:395
+#: settings/base.py:404
 msgid "Russian"
 msgstr "Ruso"
 
-#: templates/400.html:4
-msgid "OnTask Bad request"
-msgstr "OnTask petición incorrecta"
-
-#: templates/400.html:7
-msgid "Bad request received"
-msgstr "Recibida una petición incorrecta"
-
-#: templates/400.html:8
-msgid "The application received an incorrect request."
-msgstr "La aplicación ha recibido una petición incorrecta."
-
-#: templates/403.html:4
-msgid "OnTask Permission denied"
-msgstr "OnTask permiso denegado"
-
-#: templates/403.html:7
-msgid "Permission denied"
-msgstr "Permiso denegado"
-
-#: templates/403.html:8
-msgid "No permission for the requested operation."
-msgstr "No se dispone de permiso para la operación requerida."
-
-#: templates/404.html:4
-msgid "OnTask page not found"
-msgstr "Página no encontrada en OnTask"
-
-#: templates/404.html:7
-msgid "Page not found"
-msgstr "Página no encontrada"
-
-#: templates/404.html:8
-msgid "The page you requested was not found in the application."
-msgstr "La página requerida no se ha encontrado en esta aplicación."
-
-#: templates/500.html:4
-msgid "OnTask system error"
-msgstr "Error del sistema en OnTask"
-
-#: templates/500.html:7
-msgid "System error"
-msgstr "Error del sistema"
-
-#: templates/500.html:9
-msgid ""
-"Oops! The platform had an internal error. We are sorry. We hope to\n"
-"    address this anomaly soon."
-msgstr ""
-"¡Vaya! La plataforma ha tenido un error interno. Lo lamentamos. Esperamos  "
-"solventar esta anomalía pronto."
-
-#: templates/_navbar.html:3 templates/base.html:175
-msgid "About"
-msgstr "Conózcanos"
-
-#: templates/admin/admin_title.html:1 templates/admin/base_site.html:5
-#: templates/admin/base_site.html:7 templates/base.html:131
-msgid "Admin"
-msgstr "Admin"
-
-#: templates/admin/base_site.html:11
-msgid "Switch to Site"
-msgstr "Volver al sitio"
-
-#: templates/base.html:55
-msgid "Your workflows"
-msgstr "Tus flujos"
-
-#: templates/base.html:64
-msgid "Messages and Surveys"
-msgstr "Mensajes y Questionarios"
-
-#: templates/base.html:76
-msgid "View the complete table"
-msgstr "Mostrar la tabla completa"
-
-#: templates/base.html:77
-msgid "Full view"
-msgstr "Vista completa"
-
-#: templates/base.html:82
-msgid "Partial Views"
-msgstr "Vistas parciales de la tabla"
-
-#: templates/base.html:86
-msgid "Upload or merge data into the workflow table"
-msgstr "Cargar o mezclar datos en la tabla del flujo"
-
-#: templates/base.html:87
-msgid "Upload or merge data"
-msgstr "Cargar o mezclar datos"
-
-#: templates/base.html:110
-msgid "More"
-msgstr "Más"
-
-#: templates/base.html:114
-msgid "Workflow operations"
-msgstr "Operaciones para el flujo"
-
-#: templates/base.html:115
-msgid "Column operations"
-msgstr "Operaciones para las columnas"
-
-#: templates/base.html:116
-msgid "Scheduled actions"
-msgstr "Operaciones planificadas"
-
-#: templates/base.html:117
-msgid "View logs"
-msgstr "Ver eventos"
-
-#: templates/base.html:137
-msgid "Change platform configuration parameters"
-msgstr "Cambiar los parámetros de configuración de la plataforma"
-
-#: templates/base.html:138
-msgid "Settings"
-msgstr "Configuración"
-
-#: templates/base.html:142
-msgid "Manage the platform database"
-msgstr "Gestión de base de datos"
-
-#: templates/base.html:143
-msgid "DB Admin"
-msgstr "Admin Base de Datos"
-
-#: templates/base.html:147
-msgid "Connections to SQL databases"
-msgstr "Conexiones a bases de datos SQL"
-
-#: templates/base.html:160
-msgid "Available Plugins"
-msgstr "Plugins disponibles"
-
-#: templates/base.html:171 templates/base.html:260
-msgid "Logout"
-msgstr "Desconectar"
-
-#: templates/base.html:177
-msgid "Contact"
-msgstr "Contacte"
-
-#: templates/base.html:183
-msgid "Read the manual"
-msgstr "Acceso al manual"
-
-#: templates/base.html:211
-msgid "This functionality has not been implemented yet."
-msgstr "Esta función todavía no se ha implementatdo."
-
-#: templates/base.html:223
-msgid "Your session is about to expire"
-msgstr "Su sesión está a punto de expirar"
-
-#: templates/base.html:226
-msgid "Your session will expire in"
-msgstr "Su sesión va a expirar en"
-
-#: templates/base.html:227
-msgid "seconds."
-msgstr "segundos."
-
-#: templates/base.html:243
-msgid "OnTask Project"
-msgstr "Proyecto OnTask"
-
-#: templates/base.html:243
-msgid "Version:"
-msgstr "Versión:"
-
-#: templates/base.html:259
-msgid "Your session is about to expire."
-msgstr "Su sesión está a punto de expirar."
-
-#: templates/base.html:261
-msgid "Remain Connected"
-msgstr "Mantener la sesión"
-
-#: templates/critical_error.html:4 templates/error.html:4
-msgid "OnTask Error"
-msgstr "Error OnTask"
-
-#: templates/critical_error.html:7
-msgid "Internal Error"
-msgstr "Error interno"
-
-#: templates/critical_error.html:10
-msgid "Oops. We have detected an internal error."
-msgstr "¡Vaya! Hemos detectado un error interno."
-
-#: templates/critical_error.html:14
-msgid ""
-"The following message is trying to explain what\n"
-"        happened."
-msgstr "El siguiente mensaje intenta explicar lo que ha pasado."
-
-#: templates/critical_error.html:21
-msgid "Referrer:"
-msgstr "Referencia:"
-
-#: templates/error.html:8
-msgid "Error"
-msgstr "Error"
-
-#: templates/error.html:12
-msgid "The operation returned an undocumented error."
-msgstr "La operación ha devuelto un error sin documentación."
-
-#: templates/registration/logged_out.html:9
-msgid "Thanks for spending some quality time with the Web site today."
-msgstr "Gracias por utilizar la aplicación."
-
-#: templates/registration/logged_out.html:11
-msgid "Log in again"
-msgstr "Inicie nueva sesión"
-
-#: templates/registration/password_change_done.html:5
-#: templates/registration/password_change_form.html:7
-#: templates/registration/password_reset_complete.html:5
-#: templates/registration/password_reset_confirm.html:9
-#: templates/registration/password_reset_done.html:5
-#: templates/registration/password_reset_form.html:8
-msgid "Home"
-msgstr "Inicio"
-
-#: templates/registration/password_change_done.html:6
-#: templates/registration/password_change_form.html:3
-#: templates/registration/password_change_form.html:8
-#: templates/registration/password_change_form.html:11
-msgid "Password change"
-msgstr "Cambio de clave"
-
-#: templates/registration/password_change_done.html:9
-#: templates/registration/password_change_done.html:10
-msgid "Password change successful"
-msgstr "Cambio de clave realizado"
-
-#: templates/registration/password_change_done.html:12
-msgid "Your password was changed."
-msgstr "Su clave ha cambiado."
-
-#: templates/registration/password_change_form.html:16
-msgid "Please correct the error below."
-msgstr "Por favor, corrija el error."
-
-#: templates/registration/password_change_form.html:16
-msgid "Please correct the errors below."
-msgstr "Por favor, corrija los errores."
-
-#: templates/registration/password_change_form.html:20
-msgid ""
-"Please enter your old password, for security's sake, and then enter your new "
-"password twice so we can verify you typed it in correctly."
-msgstr ""
-"Por favor, por seguridad, introduzca su clave antigua y luego introduzca su "
-"clave nueva dos veces para que podamos verificar que la ha tecleado "
-"correctamente."
-
-#: templates/registration/password_change_form.html:60
-#: templates/registration/password_reset_confirm.html:45
-msgid "Change my password"
-msgstr "Cambiar la clave"
-
-#: templates/registration/password_reset_complete.html:6
-#: templates/registration/password_reset_complete.html:9
-#: templates/registration/password_reset_complete.html:10
-msgid "Password reset complete"
-msgstr "Cambio de clave completo"
-
-#: templates/registration/password_reset_complete.html:12
-msgid "Your password has been set.  You may go ahead and log in now."
-msgstr "Su clave ha sido asignada. Ya puede iniciar una sesión."
-
-#: templates/registration/password_reset_confirm.html:10
-msgid "Password reset confirmation"
-msgstr "Cambio de clave confirmado"
-
-#: templates/registration/password_reset_confirm.html:21
-msgid "Enter new password"
-msgstr "Entre la clave nueva"
-
-#: templates/registration/password_reset_confirm.html:23
-msgid ""
-"Please enter your new password twice so we can verify you typed it in "
-"correctly."
-msgstr ""
-"Escriba la clave nueva dos veces para que podamos verificar que la ha "
-"tecleado correctamente."
-
-#: templates/registration/password_reset_confirm.html:28
-msgid "New password:"
-msgstr "Nueva clave:"
-
-#: templates/registration/password_reset_confirm.html:37
-msgid "Confirm password:"
-msgstr "Confirme la clave:"
-
-#: templates/registration/password_reset_confirm.html:51
-msgid "Password reset unsuccessful"
-msgstr "No se ho podido reasignar la clave"
-
-#: templates/registration/password_reset_confirm.html:53
-msgid ""
-"The password reset link was invalid, possibly because it has already been "
-"used.  Please request a new password reset."
-msgstr ""
-"El enlace para reasignar la clave es incorrect, probablemente porque ya ha "
-"sido utilizado. Por favor, pida una nueva reasignación de clave."
-
-#: templates/registration/password_reset_done.html:9
-#: templates/registration/password_reset_done.html:10
-msgid "Password reset successful"
-msgstr "Cambio de clave realizado"
-
-#: templates/registration/password_reset_done.html:12
-msgid ""
-"We've emailed you instructions for setting your password to the email "
-"address you submitted. You should be receiving it shortly."
-msgstr ""
-"Hemos enviado pore mail las instrucciones para asignar su clave a la "
-"dirección dada. Debería recibir este mensaje en breve."
-
-#: templates/registration/password_reset_form.html:18
-msgid ""
-"Forgotten your password? Enter your email address below, and we'll email "
-"instructions for setting a new one."
-msgstr ""
-"¿Ha olvidado su clave? Introduzca su dirección de email y le mandamos por "
-"email las instrucciones para asignar una nueva."
-
-#: templates/registration/password_reset_form.html:23
-msgid "Email address:"
-msgstr "Dirección de email:"
-
-#: templates/registration/password_reset_form.html:32
-msgid "Reset my password"
-msgstr "Reiniciar mi clave"
-
-#: templates/thanks.html:7
-msgid "Thanks"
-msgstr "Gracias"
-
-#: templates/under_construction.html:7
-msgid "This functionality is under construction."
-msgstr "Esta función todavía no se ha implementatdo."
-
-#: urls.py:34
+#: urls.py:27
 msgid ""
 "The OnTask API offers functionality to manipulate workflows, tables and "
 "logs. The interface provides CRUD operations over these objects."
@@ -5808,3 +5654,308 @@ msgstr ""
 "La API de OnTask ofrece funcionalidad para manipular los flujos, tablas y "
 "registros. El interfaz provee operaciones CRUD (crear, leer, actualizar y "
 "borrar) sobre estos objetos."
+
+#, fuzzy
+#~| msgid "Scheduled operations"
+#~ msgid "scheduled_operation"
+#~ msgstr "Operaciones planificadas"
+
+#~ msgid "Check/exclude email addresses before sending?"
+#~ msgstr "¿Comprobar/excluir direcciones de email antes de enviar?"
+
+#~ msgid "Check/exclude users before sending?"
+#~ msgstr "¿Comprobar/excluir usuarios antes de enviar?"
+
+#~ msgid "A zip file is useful to review the action."
+#~ msgstr "El fichero zip es útil para revisar la acción."
+
+#~ msgid "Invalid email address in bcc email"
+#~ msgstr "Dirección de correo incorrecta en el BCC"
+
+#~ msgid "Execution for this action is not allowed."
+#~ msgstr "La ejecución de esta acción no está permitida."
+
+#~ msgid "Action not enabled for user {0}"
+#~ msgstr "Acción no permitida para el usuario {0}"
+
+#~ msgid "Incorrect canvas email action invocation."
+#~ msgstr "Invocación de acción email Canvas incorrecta."
+
+#~ msgid "Incorrect email action invocation."
+#~ msgstr "Invocación de acción email incorrecta."
+
+#~ msgid "Incorrect JSON action invocation."
+#~ msgstr "Invocación incorrecta de acción JSON."
+
+#~ msgid "Create ZIP"
+#~ msgstr "Crear ZIP"
+
+#~ msgid "Class instantiation"
+#~ msgstr "Instanciación de la clase"
+
+#~ msgid "Instance creation"
+#~ msgstr "Creación de la instancia"
+
+#~ msgid "The data from this connection cannot be processed."
+#~ msgstr "Los datos de esta conexión no se pueden procesar."
+
+#~ msgid "column name"
+#~ msgstr "nombre de columna"
+
+#~ msgid "Canvas Emails sent"
+#~ msgstr "Mensajes Canvas enviados"
+
+#~ msgid "Edit scheduled canvas email action"
+#~ msgstr "Editar la ejecución de la acción de email Canvas planificada"
+
+#~ msgid "Delete scheduled canvas email action"
+#~ msgstr "Borrar la acción email Canvas planificada"
+
+#~ msgid "Delete scheduled email action"
+#~ msgstr "Borrada la acción de email planificada"
+
+#~ msgid "Edit scheduled JSON action"
+#~ msgstr "Editar acción JSON planificada"
+
+#~ msgid "Delete scheduled JSON action"
+#~ msgstr "Borrar acción JSON planificada"
+
+#~ msgid "Edit scheduled JSON list action"
+#~ msgstr "Editar acción de envío de una lista en JSON planificada"
+
+#~ msgid "Delete scheduled JSON list action"
+#~ msgstr "Borrar acción de envío de JSON planificada"
+
+#~ msgid "Edit scheduled send list action"
+#~ msgstr "Edición de la acción para enviar una lista"
+
+#~ msgid "Delete scheduled send list action"
+#~ msgstr "Borrada la acción para enviar una lista"
+
+#~ msgid "Data merged into workflow"
+#~ msgstr "Datos mezclados en el flujo"
+
+#~ msgid "Run action"
+#~ msgstr "Ejecutar acción"
+
+#~ msgid "Column to select the elements for the action"
+#~ msgstr "Columna para seleccionar los elementos de la acción"
+
+#~ msgid "exclude values"
+#~ msgstr "valores a excluir"
+
+#~ msgid "Date/time must be in the future"
+#~ msgstr "Fecha/hora debe ser en el futuro"
+
+#~ msgid "Final execution date/time must be after the previous one"
+#~ msgstr "La fecha/hora de ejecución final debe ser después de la anterior"
+
+#~ msgid "Final execution date/time must be in the future"
+#~ msgstr "La fecha/hora de ejecución debe ser en el futuro"
+
+#~ msgid "CC Emails (separated by spaces)"
+#~ msgstr "Emails CC (separados por espacios)"
+
+#~ msgid "List of BCC Emails (separated by spaces)"
+#~ msgstr "Lista de emails BCC (separados por espacios)"
+
+#~ msgid "This field must be a comma-separated list of emails."
+#~ msgstr "Este campo debe tener una lista de emails separados por comas."
+
+#~ msgid "Check/exclude email addresses before scheduling?"
+#~ msgstr "Comprobar/excluir direcciones de correo antes de enviar?"
+
+#~ msgid "Authentication token to be sent with the JSON object."
+#~ msgstr "Ficha de autenticación a enviar con el objeto JSON."
+
+#~ msgid "Send you a confirmation email"
+#~ msgstr "Enviarte un mensaje de confirmación"
+
+#~ msgid "Track if emails are read?"
+#~ msgstr "¿Rastrear si se leen los emails?"
+
+#~ msgid "Column in the table containing the email"
+#~ msgstr "Columna en la tabla con la dirección de correo"
+
+#~ msgid "This field must be a valid email address."
+#~ msgstr "Este campo debe tener un email correcto."
+
+#~ msgid "Column in the table containing the Canvas ID"
+#~ msgstr "Columna en la tabla con el identificador Canvas"
+
+#~ msgid "Invalid date/time for execution"
+#~ msgstr "Fecha/hora de ejecución incorrecta"
+
+#~ msgid "Scheduled"
+#~ msgstr "Planificado"
+
+#~ msgid "This action does not support scheduling"
+#~ msgstr "Esta acción no admite la programación"
+
+#~ msgid "Under implementation"
+#~ msgstr "En construcción"
+
+#~ msgid "{0} years"
+#~ msgstr "{0} años"
+
+#~ msgid "{0} days"
+#~ msgstr "{0} días"
+
+#~ msgid "{0} hours"
+#~ msgstr "{0} horas"
+
+#~ msgid "{0} minutes"
+#~ msgstr "{0} minutos"
+
+#~ msgid "This type of actions cannot be scheduled"
+#~ msgstr "Este tipo de acciones no pueden programarse"
+
+#~ msgid "Incorrect execution request with log_id %s"
+#~ msgstr "Petición de ejecución incorrecta con log_id %s"
+
+#~ msgid "Unable to find connection with id {0}"
+#~ msgstr "No se ha encontrado una conexión con identificador {0}"
+
+#~ msgid "The action cannot be executed"
+#~ msgstr "La acción no se puede ejecutar"
+
+#~ msgid "Establish an %(n)s"
+#~ msgstr "Establecer una %(n)s"
+
+#~ msgid "Obtain the data from the Athena connection"
+#~ msgstr "Obtener data de la conexión Athena"
+
+#~ msgid "Create an exact duplicate"
+#~ msgstr "Crear un duplicado"
+
+#~ msgid "Obtain the data from the connection"
+#~ msgstr "Obtener data de la conexión"
+
+#~ msgid "Obtain the data from the SQL connection"
+#~ msgstr "Obtener data de la conexión SQL"
+
+#~ msgid "Scheduled action"
+#~ msgstr "Operación planificada"
+
+#~ msgid "Action will execute in %(t)s"
+#~ msgstr "La acción se ejecutará en %(t)s"
+
+#~ msgid "The operation will start executing in %(n)s"
+#~ msgstr "La operación se ejecutará en %(n)s"
+
+#~ msgid "Unable to add criterion: {0}"
+#~ msgstr "Imposible añadir criterio: {0}"
+
+#~ msgid "Unable to clone workflow: {0}"
+#~ msgstr "Imposible clonar flujo: {0}"
+
+#~ msgid "OnTask Permission denied"
+#~ msgstr "OnTask permiso denegado"
+
+#~ msgid "OnTask page not found"
+#~ msgstr "Página no encontrada en OnTask"
+
+#~ msgid "OnTask system error"
+#~ msgstr "Error del sistema en OnTask"
+
+#~ msgid "Scheduled actions"
+#~ msgstr "Operaciones planificadas"
+
+#~ msgid "Read the manual"
+#~ msgstr "Acceso al manual"
+
+#~ msgid "OnTask Error"
+#~ msgstr "Error OnTask"
+
+#~ msgid "Thanks for spending some quality time with the Web site today."
+#~ msgstr "Gracias por utilizar la aplicación."
+
+#~ msgid "Log in again"
+#~ msgstr "Inicie nueva sesión"
+
+#~ msgid "Home"
+#~ msgstr "Inicio"
+
+#~ msgid "Password change"
+#~ msgstr "Cambio de clave"
+
+#~ msgid "Password change successful"
+#~ msgstr "Cambio de clave realizado"
+
+#~ msgid "Your password was changed."
+#~ msgstr "Su clave ha cambiado."
+
+#~ msgid "Please correct the error below."
+#~ msgstr "Por favor, corrija el error."
+
+#~ msgid "Please correct the errors below."
+#~ msgstr "Por favor, corrija los errores."
+
+#~ msgid ""
+#~ "Please enter your old password, for security's sake, and then enter your "
+#~ "new password twice so we can verify you typed it in correctly."
+#~ msgstr ""
+#~ "Por favor, por seguridad, introduzca su clave antigua y luego introduzca "
+#~ "su clave nueva dos veces para que podamos verificar que la ha tecleado "
+#~ "correctamente."
+
+#~ msgid "Change my password"
+#~ msgstr "Cambiar la clave"
+
+#~ msgid "Password reset complete"
+#~ msgstr "Cambio de clave completo"
+
+#~ msgid "Your password has been set.  You may go ahead and log in now."
+#~ msgstr "Su clave ha sido asignada. Ya puede iniciar una sesión."
+
+#~ msgid "Password reset confirmation"
+#~ msgstr "Cambio de clave confirmado"
+
+#~ msgid "Enter new password"
+#~ msgstr "Entre la clave nueva"
+
+#~ msgid ""
+#~ "Please enter your new password twice so we can verify you typed it in "
+#~ "correctly."
+#~ msgstr ""
+#~ "Escriba la clave nueva dos veces para que podamos verificar que la ha "
+#~ "tecleado correctamente."
+
+#~ msgid "New password:"
+#~ msgstr "Nueva clave:"
+
+#~ msgid "Confirm password:"
+#~ msgstr "Confirme la clave:"
+
+#~ msgid "Password reset unsuccessful"
+#~ msgstr "No se ho podido reasignar la clave"
+
+#~ msgid ""
+#~ "The password reset link was invalid, possibly because it has already been "
+#~ "used.  Please request a new password reset."
+#~ msgstr ""
+#~ "El enlace para reasignar la clave es incorrect, probablemente porque ya "
+#~ "ha sido utilizado. Por favor, pida una nueva reasignación de clave."
+
+#~ msgid "Password reset successful"
+#~ msgstr "Cambio de clave realizado"
+
+#~ msgid ""
+#~ "We've emailed you instructions for setting your password to the email "
+#~ "address you submitted. You should be receiving it shortly."
+#~ msgstr ""
+#~ "Hemos enviado pore mail las instrucciones para asignar su clave a la "
+#~ "dirección dada. Debería recibir este mensaje en breve."
+
+#~ msgid ""
+#~ "Forgotten your password? Enter your email address below, and we'll email "
+#~ "instructions for setting a new one."
+#~ msgstr ""
+#~ "¿Ha olvidado su clave? Introduzca su dirección de email y le mandamos por "
+#~ "email las instrucciones para asignar una nueva."
+
+#~ msgid "Email address:"
+#~ msgstr "Dirección de email:"
+
+#~ msgid "Reset my password"
+#~ msgstr "Reiniciar mi clave"
