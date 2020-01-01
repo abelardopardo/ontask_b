@@ -46,7 +46,7 @@ If you have OnTask already configured and running, here are the steps to follow 
 
 - Refresh the list of requirements::
 
-    pip3 install -r requirements/production.txt
+    python3 -m pip install -r requirements/production.txt
 
 - Go to the sub-folder containing the tool documentation::
 

@@ -5,23 +5,18 @@ Requirements
 
 OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ application. Django is a high-level, python-based web framework that supports a rich set of functionality typically required in applications like OnTask. As many other web applications, OnTask requires a set of additional libraries for its execution, namely:
 
+- Redis
+- PostgreSQL (version 9.5 or later)
 - Python 3.7
 - Django 2.2
 - Additional Django modules listed in the file ``requirements/base.txt``
-- Redis
-- PostgreSQL (version 9.5 or later)
 
 Some of these requirements are handled using `pip <https://pypi.python.org/pypi/pip>`__ (Python's package index application).
-
-Required tools
-==============
-
-The following installation steps assume that you are deploying OnTask in a production web server capable of serving pages using the HTTPS protocol.
 
 .. _install_redis:
 
 Install and Configure Redis
----------------------------
+===========================
 
 Django requires Redis to execute as a daemon in the same machine to cache information about the sessions. No specific changes are required in the code, simply have the server running in the background.
 
@@ -34,7 +29,7 @@ Django requires Redis to execute as a daemon in the same machine to cache inform
 .. _install_postgresql:
 
 Install and Configure PostgreSQL
---------------------------------
+================================
 
 1. Download and install `postgresql <https://www.postgresql.org/>`_.
 
@@ -55,7 +50,7 @@ Install and Configure PostgreSQL
 .. _install_python:
 
 Install Python 3
-----------------
+================
 
 In the following sections we assume that you can open a command line interpreter and you can execute the two python interpreter for version 3.
 

@@ -9,13 +9,13 @@ Download, install and configure OnTask
 
 #. If you plan to run a production instance of OnTask execute the command::
 
-     pip3 install -r requirements/production.txt
+     python3 -m pip install -r requirements/production.txt
 
    You may need administrative privileges to execute this command.
 
    If you plan to run a development instance of OnTask, execute the command::
 
-     pip3 install -r requirements/development.txt
+     python3 -m pip install -r requirements/development.txt
 
    This command downloads  a set of libraries and modules and installs them as
    part of the python libraries in the system.
@@ -326,7 +326,7 @@ The documentation is created by the application ``sphinx-doc`` and stored in the
 
    Second, execute the following command from the project folder::
 
-     pip3 install -r requirements/development.txt
+     python3 -m pip install -r requirements/development.txt
 
    Now, the command::
 
@@ -349,9 +349,9 @@ Configure the Distributed Task Queue
 There are various tasks that need to be executed by OnTask outside the web
 server. The solution adopted is to use `Celery <http://www.celeryproject.org/>`_, `Supervisor <http://supervisord.org/>`_ (a process control system) and `Redis <https://redis.io/>`_. Redis has been configured in a previous step. This section explains how to set up the distributed task queue and make sure it is continuously executing in parallel with the web server.
 
-1. Install the application ``supervisor`` using **pip3**::
+1. Install the application ``supervisor`` using **pip**::
 
-     pip3 install supervisor
+     python3 -m pip install supervisor
 
    This application makes sure the task queue program  Celery is continuously running in the background and in communication with the server.
 
