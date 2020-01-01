@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scheduledoperation',
             name='periodic_task',
-            field=models.ForeignKey(default=2, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_op', to='django_celery_beat.PeriodicTask'),
+            field=models.ForeignKey(null=True, default=None, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_op', to='django_celery_beat.PeriodicTask'),
             preserve_default=False,
         ),
     ]
