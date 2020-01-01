@@ -34,7 +34,7 @@ def country(country_code) -> str:
 def ontask_jquery() -> str:
     """Provide the JQuery URL."""
     return format_html(
-        '<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>'
+        '<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>'
         + '<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19'
           '.0/jquery.validate.min.js"></script>'
         + '<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19'
