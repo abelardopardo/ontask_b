@@ -160,10 +160,8 @@ class TutorialCaptures(ScreenTests):
         element = self.search_table_row_by_string('table-data',
                                                   2,
                                                   'ckrn7263@bogus.com')
-        stat_page = element.find_element_by_xpath(
-            'td//a[contains(@href, "stat_table")]'
-        ).get_attribute('href')
-        self.selenium.get(stat_page)
+        element = element.find_element_by_xpath('td[1]/div/button[2]')
+        self.selenium.execute_script(element.get_attribute('onclick'))
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH,
@@ -665,6 +663,7 @@ class TutorialCaptures(ScreenTests):
         )
 
         # Show the editor
+        self.select_questions_tab()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located((By.ID, 'insert-questions'))
         )
