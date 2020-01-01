@@ -935,7 +935,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def go_to_table_views(self):
         self.go_to_table()
-        self.selenium.find_element_by_link_text('Views').click()
+        self.selenium.find_element_by_xpath(
+            '//button[normalize-space()="Views"]').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-view-add'))
         )
@@ -1506,7 +1507,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
         element = self.search_table_row_by_string('view-table', 2, vname)
         element.find_element_by_xpath(
-            'td[1]/div/a/span[contains(@class, "fa-eye")]'
+            'td[1]/div/button/span[contains(@class, "fa-eye")]'
         ).click()
         self.wait_for_datatable('table-data_previous')
 
