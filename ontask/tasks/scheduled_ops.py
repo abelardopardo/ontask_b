@@ -83,7 +83,7 @@ def execute_scheduled_operation(s_item_id: int):
             # Create and update the log
             log_item = s_item.workflow.log(s_item.user, s_item.operation_type)
             s_item.last_executed_log = log_item
-            s_item.save()
+            s_item.save(update_fields=['last_executed_log'])
 
             payload = s_item.payload
 

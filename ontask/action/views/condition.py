@@ -203,14 +203,13 @@ def delete_filter(
     action_content = request.POST.get('action_content')
     if action_content:
         condition.action.set_text_content(action_content)
-        condition.action.save()
 
     condition.log(request.user, models.Log.CONDITION_DELETE)
     action = condition.action
     condition.delete()
     action.update_n_rows_selected()
     action.rows_all_false = None
-    action.save()
+    action.save(update_fields=['rows_all_false'])
     return JsonResponse({'html_redirect': ''})
 
 
@@ -239,12 +238,11 @@ def delete_condition(
         action_content = request.POST.get('action_content')
         if action_content:
             action.set_text_content(action_content)
-            action.save()
 
         condition.log(request.user, models.Log.CONDITION_DELETE)
         condition.delete()
         action.rows_all_false = None
-        action.save()
+        action.save(update_fields=['rows_all_false'])
         return JsonResponse({'html_redirect': ''})
 
     return JsonResponse({

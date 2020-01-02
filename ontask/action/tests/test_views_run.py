@@ -497,7 +497,7 @@ class ActionServe(tests.OnTaskTestCase):
         """Test the serve_action view."""
         action = self.workflow.actions.get(name='simple action')
         action.serve_enabled = True
-        action.save()
+        action.save(update_fields=['serve_enabled'])
 
         resp = self.get_response(
             'action:serve',
@@ -526,7 +526,7 @@ class ActionServeSurvey(tests.OnTaskTestCase):
         """Test the serve_action view."""
         action = self.workflow.actions.get(name='Check registration')
         action.serve_enabled = True
-        action.save()
+        action.save(update_fields=['serve_enabled'])
 
         resp = self.get_response(
             'action:serve',

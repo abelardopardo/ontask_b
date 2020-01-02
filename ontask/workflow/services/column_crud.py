@@ -78,7 +78,7 @@ def add_column_to_workflow(
     workflow.refresh_from_db()
     workflow.ncols += 1
     workflow.set_query_builder_ops()
-    workflow.save()
+    workflow.save(update_fields=['ncols', 'query_builder_ops'])
 
     # Add the new column to the DB
     try:
@@ -149,7 +149,8 @@ def add_formula_column(
             to_delete=[column])
 
     workflow.ncols = workflow.columns.count()
-    workflow.save()
+    workflow.set_query_builder_ops()
+    workflow.save(update_fields=['ncols', 'query_builder_ops'])
     column.log(user, models.Log.COLUMN_ADD_FORMULA)
 
 
@@ -213,7 +214,8 @@ def add_random_column(
             to_delete=[column])
 
     workflow.ncols = workflow.columns.count()
-    workflow.save()
+    workflow.set_query_builder_ops()
+    workflow.save(update_fields=['ncols', 'query_builder_ops'])
 
     # Log the event
     column.log(user, models.Log.COLUMN_ADD_RANDOM)
@@ -263,9 +265,7 @@ def update_column(
 
     # Changes in column require rebuilding the query_builder_ops
     workflow.set_query_builder_ops()
-
-    # Save the workflow
-    workflow.save()
+    workflow.save(update_fields=['query_builder_ops'])
 
     if action_column_item:
         action_column_item.log(user, action_column_event)
@@ -305,7 +305,7 @@ def delete_column(
 
     # Update the information in the workflow
     workflow.ncols = workflow.ncols - 1
-    workflow.save()
+    workflow.save(update_fields=['ncols'])
 
     if not cond_to_delete:
         # The conditions to delete are not given, so calculate them
@@ -353,7 +353,7 @@ def clone_column(user, column: models.Column) -> models.Column:
 
     # Update the number of columns in the workflow
     workflow.ncols += 1
-    workflow.save()
+    workflow.save(update_fields=['ncols'])
     workflow.refresh_from_db()
 
     # Reposition the new column at the end

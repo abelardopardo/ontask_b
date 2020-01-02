@@ -200,7 +200,7 @@ def perform_row_delete(
 
     # Update rowcount
     workflow.nrows -= 1
-    workflow.save()
+    workflow.save(update_fields=['nrows'])
 
     # Update the value of all the conditions in the actions
     # TODO: Explore how to do this asynchronously (or lazy)

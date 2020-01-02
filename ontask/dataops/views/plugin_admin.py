@@ -50,13 +50,13 @@ def diagnose(
     """
     del workflow
     # Action being used
-    plugin = models.Plugin.objects.filter(id=pk).first()
+    plugin = models.Plugin.objects.filter(id=pk).first().values('filename')
     if not plugin:
         return http.JsonResponse({'html_redirect': reverse('home')})
 
     # Reload the plugin to get the messages stored in the right place.
     try:
-        pinstance, msgs = services.load_plugin(plugin.filename)
+        pinstance, msgs = services.load_plugin(plugin['filename'])
     except OnTaskServiceException as exc:
         exc.message_to_error(request)
         return http.JsonResponse({
@@ -65,8 +65,7 @@ def diagnose(
     # If the new instance is now properly verified, simply redirect to the
     # transform page
     if pinstance:
-        plugin.is_verified = True
-        plugin.save()
+        models.Plugin.objects.filter(id=pk).update(is_verified=True)
         return http.JsonResponse({
             'html_redirect': reverse('dataops:plugin_admin')})
 

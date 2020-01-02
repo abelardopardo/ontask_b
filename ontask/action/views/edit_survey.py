@@ -133,7 +133,7 @@ def select_condition_for_question(
 
     # Assign the condition to the tuple and save
     cc_tuple.condition = condition
-    cc_tuple.save()
+    cc_tuple.save(update_fields=['condition'])
 
     # Refresh the page to show the column in the list.
     return JsonResponse({'html_redirect': ''})
@@ -141,7 +141,7 @@ def select_condition_for_question(
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_action(pf_related='actions')
+@get_action()
 def shuffle_questions(
     request: HttpRequest,
     pk: int,
@@ -157,16 +157,15 @@ def shuffle_questions(
     :return: HTML response
     """
     del request, pk, workflow
-    # Check if the workflow is locked
     action.shuffle = not action.shuffle
-    action.save()
+    action.save(update_fields=['shuffle'])
 
     return JsonResponse({'is_checked': action.shuffle})
 
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_workflow(pf_related='actions')
+@get_workflow()
 @get_columncondition()
 def toggle_question_change(
     request: HttpRequest,
@@ -185,7 +184,7 @@ def toggle_question_change(
     """
     del pk, workflow
     cc_tuple.changes_allowed = not cc_tuple.changes_allowed
-    cc_tuple.save()
+    cc_tuple.save(update_fields=['changes_allowed'])
     cc_tuple.log(request.user, models.Log.ACTION_QUESTION_TOGGLE_CHANGES)
 
     return JsonResponse({'is_checked': cc_tuple.changes_allowed})
@@ -193,7 +192,7 @@ def toggle_question_change(
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_action(pf_related='actions')
+@get_action()
 def edit_description(
     request: HttpRequest,
     pk: int,
@@ -218,7 +217,7 @@ def edit_description(
         if not form.has_changed():
             return JsonResponse({'html_redirect': None})
 
-        action.save()
+        action.save(update_fields=['name', 'description_text'])
 
         action.log(request.user, 'update')
 

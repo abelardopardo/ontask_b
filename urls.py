@@ -110,10 +110,9 @@ pandas.set_engine()
 
 # Make sure the Site has the right information
 try:
-    site = Site.objects.get(id=settings.SITE_ID)
-    site.domain = settings.DOMAIN_NAME
-    site.name = settings.DOMAIN_NAME
-    site.save()
+    Site.objects.filter(id=settings.SITE_ID).update(
+        domain=settings.DOMAIN_NAME,
+        name=settings.DOMAIN_NAME)
 except Exception:
     # To bypass the migrate command execution that fails because the Site
     # table is not created yet.

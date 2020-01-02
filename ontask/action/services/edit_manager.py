@@ -149,7 +149,7 @@ class ActionOutEditManager(ActionEditManager):
             action.set_text_content(form.cleaned_data['text_content'])
             if 'target_url' in form.cleaned_data:
                 action.target_url = form.cleaned_data['target_url']
-            action.save()
+                action.save(update_fields=['target_url'])
 
             if request.POST['Submit'] == 'Submit':
                 return redirect(request.get_full_path())

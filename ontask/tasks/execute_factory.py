@@ -128,7 +128,7 @@ def execute_operation(
         if log_id:
             log_item = models.Log.objects.get(pk=log_id)
             log_item.payload['status'] = 'Executing'
-            log_item.save()
+            log_item.save(update_fields=['payload'])
 
         task_execute_factory.execute_operation(
             operation_type=operation_type,
@@ -140,7 +140,7 @@ def execute_operation(
 
         if log_id:
             log_item.payload['status'] = 'Finished'
-            log_item.save()
+            log_item.save(update_fields=['payload'])
 
     except Exception as exc:
         CELERY_LOGGER.error(

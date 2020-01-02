@@ -76,7 +76,7 @@ def get_detail_context(workflow: models.Workflow) -> Dict:
         # At least a column has index equal to zero, so reset all of them
         for idx, col in enumerate(columns):
             col.position = idx + 1
-            col.save()
+            col.save(update_fields=['position'])
 
     return context
 

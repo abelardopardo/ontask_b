@@ -258,7 +258,7 @@ def store_workflow_table(
     # Step 5: Update workflow fields and save
     workflow.nrows = sql.get_num_rows(workflow.get_data_frame_table_name())
     workflow.set_query_builder_ops()
-    workflow.save()
+    workflow.save(update_fields=['nrows', 'query_builder_ops'])
 
 
 def get_table_row_by_index(
@@ -346,7 +346,7 @@ def rename_df_column(
             view.formula,
             old_name,
             new_name)
-        view.save()
+        view.save(update_fields='formula')
 
 
 def get_subframe(

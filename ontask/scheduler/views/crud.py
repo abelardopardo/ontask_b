@@ -217,5 +217,5 @@ def schedule_toggle(
         return http.JsonResponse({})
 
     sch_item.task.enabled = not sch_item.task.enabled
-    sch_item.task.save()
+    sch_item.task.save(update_fields=['enabled'])
     return http.JsonResponse({'is_checked': sch_item.task.enabled})

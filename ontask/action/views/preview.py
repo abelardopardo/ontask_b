@@ -89,7 +89,6 @@ def preview_response(
     action_content = request.POST.get('action_content')
     if action_content:
         action.set_text_content(action_content)
-        action.save()
 
     # Initial context to render the response page.
     context = {'action': action, 'index': idx}

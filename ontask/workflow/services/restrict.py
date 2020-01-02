@@ -29,7 +29,6 @@ def restrict_column(user, column: models.Column):
 
     # Set categories
     column.set_categories(list(cat_values))
-    column.save()
 
     # Re-evaluate the operands in the workflow
     column.log(user, models.Log.COLUMN_RESTRICT)

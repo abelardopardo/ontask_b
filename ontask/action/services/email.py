@@ -143,7 +143,7 @@ def _create_track_column(action: models.Action) -> str:
 
     # Increase the number of columns in the workflow
     action.workflow.ncols += 1
-    action.workflow.save()
+    action.workflow.save(update_fields=['ncols'])
 
     # Add the column to the DB table
     sql.add_column_to_db(
@@ -365,7 +365,7 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
             track_col_name = _create_track_column(action)
             # Get the log item payload to store the tracking column
             log_item.payload['track_column'] = track_col_name
-            log_item.save()
+            log_item.save(update_fields=['payload'])
 
         msgs = _create_messages(
             user,
@@ -382,7 +382,7 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
             _send_confirmation_message(user, action, len(msgs))
 
         action.last_executed_log = log_item
-        action.save()
+        action.save(update_fields=['last_executed_log'])
 
         # Update excluded items in payload
         self._update_excluded_items(payload, [msg.to[0] for msg in msgs])
@@ -470,4 +470,4 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
             user,
             models.Log.ACTION_EMAIL_SENT,
             **context)
-        action.save()
+        action.save(update_fields=['last_executed_log'])

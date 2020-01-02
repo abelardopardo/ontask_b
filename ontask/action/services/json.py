@@ -94,7 +94,7 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
                 headers)
 
         action.last_executed_log = log_item
-        action.save()
+        action.save(update_fields=['last_executed_log'])
 
         # Update excluded items in payload
         self._update_excluded_items(
@@ -142,4 +142,4 @@ class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
             })
 
         action.last_executed_log = log_item
-        action.save()
+        action.save(update_fields=['last_executed_log'])

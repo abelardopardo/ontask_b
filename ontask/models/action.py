@@ -189,7 +189,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                 cond_list.values_list('formula', flat=True),
             )
 
-            self.save()
+            self.save(update_fields=['rows_all_false'])
 
         return self.rows_all_false
 
@@ -293,13 +293,13 @@ class ActionDataOut(ActionBase):  # noqa Z214
                 ) + ' }}',
                 self.text_content,
             )
-            self.save()
+            self.save(update_fields=['text_content'])
 
         # Rename the variable in all conditions
         for cond in self.conditions.all():
             cond.formula = formula.rename_variable(
                 cond.formula, old_name, new_name)
-            cond.save()
+            cond.save(update_fields=['formula'])
 
     def get_used_conditions(self) -> List[str]:
         """Get list of conditions that are used in the text_content.
@@ -363,6 +363,8 @@ class ActionDataOut(ActionBase):  # noqa Z214
                 column=col,
                 condition=None,
             )
+
+        self.save(update_fields=['text_content'])
 
     class Meta:
         """Make this class abstract."""

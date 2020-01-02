@@ -130,6 +130,8 @@ class Column(NameAndDescription):
         else:
             self.categories = to_store
 
+        self.save(update_fields=['categories'])
+
     def get_simplified_data_type(self) -> str:
         """Get a data type name to show to users.
 
@@ -158,7 +160,7 @@ class Column(NameAndDescription):
         """
         self.workflow.reposition_columns(self.position, to_idx)
         self.position = to_idx
-        self.save()
+        self.save(update_fields=['position'])
 
     @classmethod
     def validate_column_value(cls, data_type, col_value) -> Any:

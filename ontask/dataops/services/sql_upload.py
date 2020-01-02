@@ -132,7 +132,7 @@ class ExecuteSQLUpload:
         if not conn:
             msg = _('Incorrect connection identifier.')
             log_item.payload['error'] = msg
-            log_item.save()
+            log_item.save(update_fields=['payload'])
             raise ontask.OnTaskException(msg)
 
         # Get the dataframe from the connection
@@ -146,7 +146,7 @@ class ExecuteSQLUpload:
         if not workflow:
             msg = _('Unable to acquire access to workflow.')
             log_item.payload['error'] = msg
-            log_item.save()
+            log_item.save(update_fields=['payload'])
             raise ontask.OnTaskException(msg)
 
         # IDEA: How to deal with failure to acquire access?
@@ -165,21 +165,21 @@ class ExecuteSQLUpload:
         if not dst_key:
             msg = _('Missing key column name of existing table.')
             log_item.payload['error'] = msg
-            log_item.save()
+            log_item.save(update_fields=['payload'])
             raise ontask.OnTaskException(msg)
 
         src_key = payload.get('src_key')
         if not src_key:
             msg = _('Missing key column name of new table.')
             log_item.payload['error'] = msg
-            log_item.save()
+            log_item.save(update_fields=['payload'])
             raise ontask.OnTaskException(msg)
 
         how_merge = payload.get('how_merge')
         if not how_merge:
             msg = _('Missing merge method.')
             log_item.payload['error'] = msg
-            log_item.save()
+            log_item.save(update_fields=['payload'])
             raise ontask.OnTaskException(msg)
 
         # Check additional correctness properties in the parameters
@@ -191,7 +191,7 @@ class ExecuteSQLUpload:
             src_key)
         if error:
             log_item.payload['error'] = error
-            log_item.save()
+            log_item.save(update_fields=['payload'])
             raise ontask.OnTaskException(error)
 
         merge_info = {
@@ -209,4 +209,4 @@ class ExecuteSQLUpload:
             merge_info)
 
         log_item.payload = merge_info
-        log_item.save()
+        log_item.save(update_fields=['payload'])

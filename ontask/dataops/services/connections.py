@@ -117,6 +117,6 @@ def toggle(
         return JsonResponse({}, status=404)
 
     conn.enabled = not conn.enabled
-    conn.save()
+    conn.save(update_fields=['enabled'])
     conn.log(request.user, conn.toggle_event, enabled=conn.enabled)
     return JsonResponse({'is_checked': conn.enabled, 'toggle_url': toggle_url})

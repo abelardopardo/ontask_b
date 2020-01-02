@@ -28,7 +28,7 @@ def _propagate_changes(condition, changed_data, old_name, is_new):
     if is_new or 'formula' in changed_data:
         # Reset the counter of rows with all conditions false
         condition.action.rows_all_false = None
-        condition.action.save()
+        condition.action.save(update_fields=['rows_all_false'])
 
         if condition.is_filter:
             # This update must propagate to the rest of conditions
@@ -46,7 +46,7 @@ def _propagate_changes(condition, changed_data, old_name, is_new):
         condition.action.text_content = condition.action.text_content.replace(
             escape(replacing.format(old_name)),
             escape(replacing.format(condition.name)))
-        condition.action.save()
+        condition.action.save(update_fields=['text_content'])
 
 
 def save_condition_form(

@@ -46,7 +46,7 @@ def save_attribute_form(
         wf_attributes[form.cleaned_data['key']] = form.cleaned_data[
             'attr_value']
         workflow.attributes = wf_attributes
-        workflow.save()
+        workflow.save(update_fields=['attributes'])
         workflow.log(
             request.user,
             models.Log.WORKFLOW_ATTRIBUTE_CREATE,

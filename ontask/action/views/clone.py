@@ -88,9 +88,8 @@ def clone_condition(
     action_content = request.POST.get('action_content')
     if action_content:
         condition.action.set_text_content(action_content)
-        condition.action.save()
 
-    condition = services.do_clone_condition(
+    services.do_clone_condition(
         request.user,
         condition,
         new_action=action,

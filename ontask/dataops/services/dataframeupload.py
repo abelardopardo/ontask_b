@@ -304,7 +304,7 @@ def batch_load_df_from_athenaconnection(
         log_item.payload['column_unique'] = is_key
         log_item.payload['num_rows'] = workflow.nrows
         log_item.payload['num_cols'] = workflow.ncols
-        log_item.save()
+        log_item.save(update_fields='payload')
         return
 
     # Merge operation
@@ -338,4 +338,4 @@ def batch_load_df_from_athenaconnection(
     log_item.payload['column_unique'] = is_key
     log_item.payload['num_rows'] = workflow.nrows
     log_item.payload['num_cols'] = workflow.ncols
-    log_item.save()
+    log_item.save(update_fields='payload')

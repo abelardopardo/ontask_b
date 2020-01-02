@@ -128,9 +128,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         """
         with cache.lock('ONTASK_WORKFLOW_{0}'.format(wid)):
             try:
-                workflow = Workflow.objects.get(id=wid)
-                # Workflow exists, unlock
-                workflow.unlock()
+                Workflow.objects.filter(id=wid).update(session_key='')
             except Workflow.DoesNotExist:
                 return
             except Exception:
@@ -148,7 +146,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         """
         if not self.data_frame_table_name:
             self.data_frame_table_name = self.df_table_prefix.format(self.id)
-            self.save()
+            self.save(update_fields=['data_frame_table_name'])
         return self.data_frame_table_name
 
     def get_upload_table_name(self):
@@ -158,7 +156,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         """
         if not self.data_frame_table_name:
             self.data_frame_table_name = self.df_table_prefix.format(self.id)
-            self.save()
+            self.save(update_fields=['data_frame_table_name'])
         return self.upload_table_prefix.format(self.id)
 
     def has_table(self) -> bool:
@@ -302,7 +300,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
             # Trivial case, the request has a legit session, so use it for
             # the lock.
             self.session_key = session.session_key
-            self.save()
+            self.save(update_fields=['session_key'])
 
         # The request has a temporary session (non persistent). This is the
         # case when the API is invoked. There are four possible case:
@@ -324,7 +322,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
             session['_auth_user_id'] = user.id
             session.save()
             self.session_key = session.session_key
-            self.save()
+            self.save(update_fields=['session_key'])
             return
 
         # Cases 3 and 4. Update the existing session
@@ -339,7 +337,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         :return: Nothing
         """
         self.session_key = ''
-        self.save()
+        self.save(update_fields=['session_key'])
 
     def get_user_locking_workflow(self):
         """Get the user that is locking a workflow.
@@ -414,7 +412,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
                 position=position))
         Column.objects.bulk_create(bulk_list)
         self.ncols = position
-        self.save()
+        self.save(update_fields=['ncols'])
 
     def reposition_columns(self, from_idx: int, to_idx: int):
         """Relocate the columns from one index to another.
@@ -441,7 +439,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # Update the positions of the appropriate columns
         for col in cols:
             col.position = col.position + step
-            col.save()
+            col.save(update_fields=['position'])
 
     def __str__(self) -> str:
         """Render as string."""

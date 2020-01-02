@@ -325,7 +325,7 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
             to_emails.append(msg_to)
 
         action.last_executed_log = log_item
-        action.save()
+        action.save(update_fields=['last_executed_log'])
 
         # Update excluded items in payload
         self._update_excluded_items(payload, to_emails)

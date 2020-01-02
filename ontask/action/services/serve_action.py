@@ -157,7 +157,7 @@ def update_row_values(
 
     # Modify the time of execution for the action
     action.last_executed_log = log_item
-    action.save()
+    action.save(update_fields=['last_executed_log'])
 
 
 def extract_survey_questions(

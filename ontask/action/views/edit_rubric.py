@@ -41,7 +41,6 @@ def edit_rubric_cell(
     action_content = request.POST.get('action_content')
     if action_content:
         action.set_text_content(action_content)
-        action.save()
 
     form = forms.RubricCellForm(
         request.POST or None,
@@ -95,7 +94,6 @@ def edit_rubric_loas(
     action_content = request.POST.get('action_content')
     if action_content:
         action.set_text_content(action_content)
-        action.save()
 
     form = forms.RubricLOAForm(
         request.POST or None,

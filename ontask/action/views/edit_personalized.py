@@ -41,7 +41,6 @@ def save_text(
     action_content = request.POST.get('action_content')
     if action_content:
         action.set_text_content(action_content)
-        action.save()
 
     return JsonResponse({'html_redirect': ''})
 

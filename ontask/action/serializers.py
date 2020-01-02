@@ -73,9 +73,9 @@ def _create_columns(new_columns, context):
         # Update the column position and count in the workflow
         workflow.ncols = workflow.ncols + 1
         col.position = workflow.ncols
-        col.save()
+        col.save(update_fields=['position'])
 
-    workflow.save()
+    workflow.save(update_fields=['ncols'])
 
     return new_columns
 
