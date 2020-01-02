@@ -180,7 +180,9 @@ def add_random_column(
             raise services.OnTaskWorkflowIntegerLowerThanOne(
                 field_name='values',
                 message=_('The integer value has to be larger than 1'))
-        column.set_categories([idx + 1 for idx in range(int_value)])
+        column.set_categories(
+            [idx + 1 for idx in range(int_value)],
+            update=False)
     except (ValueError, TypeError, IndexError):
         pass
 

@@ -131,7 +131,7 @@ class ColumnBasicForm(forms.ModelForm):
             else:
                 valid_values = []
 
-            self.instance.set_categories(valid_values)
+            self.instance.set_categories(valid_values, update=False)
 
         # Check the datetimes. One needs to be after the other
         a_from = self.cleaned_data.get('active_from')

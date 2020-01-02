@@ -111,8 +111,7 @@ def edit_rubric_loas(
         try:
             with transaction.atomic():
                 for acc in action.column_condition_pair.all():
-                    acc.column.set_categories(loas, True)
-                    acc.column.save()
+                    acc.column.set_categories(loas, validate=True)
         except Exception as exc:
             messages.error(
                 request,
