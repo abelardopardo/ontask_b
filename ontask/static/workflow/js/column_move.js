@@ -32,8 +32,8 @@ var row_reordered = function(e, details, edit) {
   }
   send_column_reorder(
     $(this),
-    {'from_name': $(details[idx].oldData).text().trim(),
-     'to_name': $(details[idx].newData).text().trim()});
+    {'from_name': details[idx].oldData.trim(),
+     'to_name': details[idx].newData.trim()});
 };
 var column_move = function () {
     $.ajax({

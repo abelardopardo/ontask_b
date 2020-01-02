@@ -42,6 +42,7 @@ class ColumnSerializer(serializers.ModelSerializer):
                 active_from=validated_data.get('active_from'),
                 active_to=validated_data.get('active_to'),
             )
+            column_obj.save()
 
             # Set the categories if they exists
             column_obj.set_categories(
