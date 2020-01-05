@@ -3,7 +3,6 @@
 """Functions to do data frame merging."""
 from typing import Dict, Optional
 
-from django.db.models import F
 from django.utils.translation import gettext
 import pandas as pd
 
@@ -168,12 +167,13 @@ def _update_is_key_field(merge_info: Dict, workflow):
             # Column is not uploaded, nothing to process
             continue
 
+        col = workflow.columns.get(name=cname)
+
         # Process the is_key property. The is_key property has been
         # recalculated during the store, now it needs to be updated looking at
         # the keep_key value.
-        workflow.columns.filter(name=cname).update(
-            is_key=F('is_key') and keep_key)
-
+        col.is_key = col.is_key and keep_key
+        col.save(update_fields=['is_key'])
 
 def validate_merge_parameters(
     dst_df: pd.DataFrame,
