@@ -212,7 +212,7 @@ def create_survey_table(
         dt_page,
     )
 
-    filtered = query_set.count()
+    filtered = len(query_set)
 
     # Get the subset of the qs to show in the table
     query_set = _create_table_qsdata(
