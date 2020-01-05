@@ -274,9 +274,7 @@ def batch_load_df_from_athenaconnection(
         s3_staging_dir=staging_dir,
         region_name=conn.aws_region_name)
 
-    data_frame = pd.read_sql(
-        'SELECT * FROM {0}'.format(run_params['table_name']),
-        cursor)
+    data_frame = pd.read_sql_table(run_params['table_name'], cursor)
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
