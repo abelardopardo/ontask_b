@@ -43,7 +43,6 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('lti_entry', views.lti_entry, name='lti_entry'),
     path('not_authorized', views.home, name='not_authorized'),
-    path('about', views.AboutPage.as_view(), name='about'),
     path(
         'under_construction',
         TemplateView.as_view(template_name='under_construction.html'),
