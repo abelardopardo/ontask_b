@@ -18,12 +18,6 @@ from ontask.django_auth_lti.decorators import lti_role_required
 from ontask.workflow.views import index
 
 
-class AboutPage(generic.TemplateView):
-    """About page."""
-
-    template_name = 'about.html'
-
-
 class ToBeDone(UserIsInstructor, generic.TemplateView):
     """Page showing the to be done."""
 
