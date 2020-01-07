@@ -22,6 +22,10 @@ def schedule_task(s_item: models.ScheduledOperation):
 
     If the s_item status is not PENDING, no new task is created.
     """
+    enabled = True
+    if s_item.task:
+        # Preserve the enabled flag in the old task, otherwise is reset
+        enabled = s_item.task.enabled
     s_item.delete_task()
 
     msg = s_item.are_times_valid()
@@ -37,7 +41,8 @@ def schedule_task(s_item: models.ScheduledOperation):
             clocked=clocked_item,
             name=ONTASK_SCHEDULED_TASK_NAME_TEMPLATE.format(s_item.id),
             task='ontask.tasks.scheduled_ops.execute_scheduled_operation',
-            args=json.dumps([s_item.id]))
+            args=json.dumps([s_item.id]),
+            enabled = enabled)
     else:
         # Cases 3, 4, 7 and 8: crontab execution
         crontab_items = s_item.frequency.split()
@@ -52,7 +57,8 @@ def schedule_task(s_item: models.ScheduledOperation):
             crontab=crontab_item,
             name=ONTASK_SCHEDULED_TASK_NAME_TEMPLATE.format(s_item.id),
             task='ontask.tasks.scheduled_ops.execute_scheduled_operation',
-            args=json.dumps([s_item.id]))
+            args=json.dumps([s_item.id]),
+            enabled = enabled)
 
     models.ScheduledOperation.objects.filter(pk=s_item.id).update(task=task_id)
     s_item.refresh_from_db(fields=['task'])

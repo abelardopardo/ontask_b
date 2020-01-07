@@ -11,9 +11,9 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskServiceException, models
+from ontask.column import forms, services
 from ontask.core import ajax_required, get_column, get_workflow, is_instructor
 from ontask.dataops.formula import evaluation
-from ontask.workflow import forms, services
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -266,7 +266,7 @@ def random_column_add(
 
     return JsonResponse({
         'html_form': render_to_string(
-            'workflow/includes/partial_random_add.html',
+            'column/includes/partial_random_add.html',
             {'form': form},
             request=request),
     })

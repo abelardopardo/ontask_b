@@ -13,9 +13,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
 from ontask import OnTaskServiceException, models
+from ontask.column import services
 from ontask.core import ajax_required, get_column, get_workflow, is_instructor
 from ontask.dataops import pandas
-from ontask.workflow import services
 
 
 @user_passes_test(is_instructor)

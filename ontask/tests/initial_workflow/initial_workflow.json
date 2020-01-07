@@ -16,11 +16,193 @@
     }
 },
 {
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 1,
+    "fields": {
+        "clocked_time": "2119-12-07T11:13:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 2,
+    "fields": {
+        "clocked_time": "2119-12-07T11:18:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 3,
+    "fields": {
+        "clocked_time": "2119-12-07T11:20:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 4,
+    "fields": {
+        "clocked_time": "2119-12-07T11:22:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.clockedschedule",
+    "pk": 5,
+    "fields": {
+        "clocked_time": "2119-12-07T11:25:00Z",
+        "enabled": true
+    }
+},
+{
+    "model": "django_celery_beat.periodictasks",
+    "pk": 1,
+    "fields": {
+        "last_update": "2020-01-07T00:49:59.968Z"
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 1,
+    "fields": {
+        "name": "___ontask___scheduled_2",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 1,
+        "args": "[2]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": false,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2020-01-07T00:47:03.805Z",
+        "description": ""
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 2,
+    "fields": {
+        "name": "___ontask___scheduled_3",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 2,
+        "args": "[3]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": false,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2020-01-07T00:47:03.818Z",
+        "description": ""
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 3,
+    "fields": {
+        "name": "___ontask___scheduled_4",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 3,
+        "args": "[4]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": false,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2020-01-07T00:47:03.826Z",
+        "description": ""
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 4,
+    "fields": {
+        "name": "___ontask___scheduled_5",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 4,
+        "args": "[5]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": false,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2020-01-07T00:47:03.836Z",
+        "description": ""
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 5,
+    "fields": {
+        "name": "___ontask___scheduled_6",
+        "task": "ontask.tasks.scheduled_ops.execute_scheduled_operation",
+        "interval": null,
+        "crontab": null,
+        "solar": null,
+        "clocked": 5,
+        "args": "[6]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": false,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2020-01-07T00:47:03.845Z",
+        "description": ""
+    }
+},
+{
     "model": "authtools.user",
     "pk": 1,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VlpTV3RVZUU5dkh1$iFEi/ej6nCIXpLiOgRLdVA",
-        "last_login": "2020-01-06T07:45:55.155Z",
+        "last_login": "2020-01-07T00:49:42.228Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -380,7 +562,7 @@
     "pk": 21,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$STBhcmlYNGIweGtn$SDlxz/4KX/mP5TrzHUTVwQ",
-        "last_login": "2019-12-30T21:17:12.655Z",
+        "last_login": "2020-01-07T00:49:25.696Z",
         "is_superuser": true,
         "email": "superuser@bogus.com",
         "is_staff": true,
@@ -3795,7 +3977,7 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "",
+        "session_key": "4nksx8gudutjsooa9sbnrx0188msku2x",
         "luser_email_column": null,
         "luser_email_column_md5": "",
         "lusers_is_outdated": false,

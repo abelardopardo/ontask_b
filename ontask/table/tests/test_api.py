@@ -10,9 +10,9 @@ import pandas as pd
 from rest_framework.authtoken.models import Token
 
 from ontask import models, tests
+from ontask.column.services import delete_column
 from ontask.dataops import pandas
 from ontask.table import serializers
-from ontask.workflow.services import delete_column
 
 
 class TableApiBase(tests.OnTaskApiTestCase):
