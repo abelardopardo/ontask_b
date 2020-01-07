@@ -4,10 +4,10 @@
 {{ form.media }}
 <form method="post"
   {% if add %}
-    action="{% url 'workflow:column_add' %}"
+    action="{% url 'column:create' %}"
     class="js-workflow-column-add-form">
   {% else %}
-    action="{% url 'workflow:column_edit' pk %}"
+    action="{% url 'column:column_edit' pk %}"
     class="js-column-edit-form">
   {% endif %}
   {% csrf_token %}

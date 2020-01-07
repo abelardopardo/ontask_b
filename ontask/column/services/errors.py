@@ -4,13 +4,13 @@
 from ontask import OnTaskServiceException
 
 
-class OnTaskWorkflowStoreError(OnTaskServiceException):
+class OnTaskColumnAddError(OnTaskServiceException):
     """Raised when an error appears in store_dataframe."""
 
 
-class OnTaskWorkflowImportError(OnTaskServiceException):
+class OnTaskColumnCategoryValueError(OnTaskServiceException):
     """Raised when an error appears in store_dataframe."""
 
 
-class OnTaskWorkflowEmailError(OnTaskServiceException):
-    """Raised when an error appears in store_dataframe."""
+class OnTaskColumnIntegerLowerThanOneError(OnTaskServiceException):
+    """Raised when an integer value incorrect."""

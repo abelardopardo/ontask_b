@@ -11,11 +11,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskServiceException, create_new_name, models
 from ontask.action.services.clone import do_clone_action
+from ontask.column.services import do_clone_column_only
 from ontask.core import store_workflow_in_session
 from ontask.dataops import sql
 from ontask.table.services import do_clone_view
 from ontask.workflow import forms
-from ontask.workflow.services.column_crud import do_clone_column_only
 
 
 def save_workflow_form(
@@ -47,38 +47,6 @@ def save_workflow_form(
 
     workflow_item.log(request.user, log_type)
     return http.JsonResponse({'html_redirect': redirect_url})
-
-
-def get_detail_context(workflow: models.Workflow) -> Dict:
-    """Create the context to render the details page.
-
-    :param workflow: Workflow being manipulated
-    :return: Dictionary to render the details page
-    """
-    context = {
-        'workflow': workflow,
-        'table_info': None}
-    if workflow.has_table():
-        context['table_info'] = {
-            'num_rows': workflow.nrows,
-            'num_cols': workflow.ncols,
-            'num_actions': workflow.actions.count(),
-            'num_attributes': len(workflow.attributes)}
-
-    # put the number of key columns in the context
-    context['num_key_columns'] = workflow.columns.filter(
-        is_key=True,
-    ).count()
-
-    # Guarantee that column position is set for backward compatibility
-    columns = workflow.columns.all()
-    if any(col.position == 0 for col in columns):
-        # At least a column has index equal to zero, so reset all of them
-        for idx, col in enumerate(columns):
-            col.position = idx + 1
-            col.save(update_fields=['position'])
-
-    return context
 
 
 def get_index_context(user) -> Dict:

@@ -71,7 +71,7 @@ def column_move_top(
     if column.position > 1:
         column.reposition_and_update_df(1)
 
-    return redirect('workflow:detail')
+    return redirect('column:index')
 
 
 @user_passes_test(is_instructor)
@@ -95,7 +95,7 @@ def column_move_bottom(
     if column.position < workflow.ncols:
         column.reposition_and_update_df(workflow.ncols)
 
-    return redirect('workflow:detail')
+    return redirect('column:index')
 
 
 @user_passes_test(is_instructor)
@@ -120,7 +120,7 @@ def column_restrict_values(
     # the operation
     if column.is_key:
         messages.error(request, _('You cannot restrict a key column'))
-        return http.JsonResponse({'html_redirect': reverse('workflow:detail')})
+        return http.JsonResponse({'html_redirect': reverse('column:index')})
 
     if request.method == 'POST':
         try:
@@ -128,12 +128,12 @@ def column_restrict_values(
         except OnTaskServiceException as exc:
             exc.message_to_error(request)
 
-        return http.JsonResponse({'html_redirect': reverse('workflow:detail')})
+        return http.JsonResponse({'html_redirect': reverse('column:index')})
 
     df = pandas.load_table(workflow.get_data_frame_table_name())
     return http.JsonResponse({
         'html_form': render_to_string(
-            'workflow/includes/partial_column_restrict.html',
+            'column/includes/partial_column_restrict.html',
             {
                 'pk': pk,
                 'cname': column.name,

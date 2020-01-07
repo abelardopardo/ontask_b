@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 
 from ontask import models
 from ontask.core import UserIsInstructor, get_workflow
-from ontask.workflow.serialize_workflow import (
+from ontask.workflow.serializers import (
     WorkflowListSerializer, WorkflowLockSerializer,
 )
 

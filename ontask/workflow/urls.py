@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""URLs to manipulate workflows, attributes, columns and shared."""
+"""URLs to manipulate workflows, attributes and shared."""
 from django.urls import path, re_path
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -11,17 +11,14 @@ from ontask.workflow import api, services, views
 app_name = 'workflow'
 
 urlpatterns = [
+    # CRUD
     path('create/', views.WorkflowCreateView.as_view(), name='create'),
     path('<int:wid>/clone/', views.clone_workflow, name='clone'),
     path('<int:wid>/update/', views.update, name='update'),
     path('<int:wid>/delete/', views.delete, name='delete'),
     path('<int:wid>/flush/', views.flush, name='flush'),
     path('<int:wid>/star/', views.star, name='star'),
-    path('detail/', views.detail, name='detail'),
     path('operations/', views.operations, name='operations'),
-
-    # Column table manipulation
-    path('column_ss/', views.column_ss, name='column_ss'),
 
     # Import Export
     path(
@@ -66,65 +63,7 @@ urlpatterns = [
         views.assign_luser_column,
         name='assign_luser_column'),
 
-    # Column manipulation
-    path('column_add/', views.column_add, name='column_add'),
-    path('<int:pk>/question_add/', views.question_add, name='question_add'),
-    path(
-        '<int:pk>/criterion_create/',
-        views.criterion_create,
-        name='criterion_create'),
-    path(
-        '<int:pk>/criterion_remove',
-        views.criterion_remove,
-        name='criterion_remove'),
-
-    path(
-        'formula_column_add',
-        views.formula_column_add,
-        name='formula_column_add'),
-    path(
-        'random_column_add/',
-        views.random_column_add,
-        name='random_column_add'),
-    path(
-        '<int:pk>/column_delete/',
-        views.column_delete,
-        name='column_delete'),
-    path('<int:pk>/column_edit/', views.column_edit, name='column_edit'),
-    path(
-        '<int:pk>/question_edit/',
-        views.column_edit,
-        name='question_edit'),
-    path(
-        '<int:pk>/criterion_edit/',
-        views.criterion_edit,
-        name='criterion_edit'),
-    path(
-        '<int:pk>/<int:cpk>/criterion_insert/',
-        views.criterion_insert,
-        name='criterion_insert'),
-    path(
-        '<int:pk>/column_clone/',
-        views.column_clone,
-        name='column_clone'),
-
-    # Column movement
-    path('column_move/', views.column_move, name='column_move'),
-    path(
-        '<int:pk>/column_move_top/',
-        views.column_move_top,
-        name='column_move_top'),
-    path(
-        '<int:pk>/column_move_bottom/',
-        views.column_move_bottom,
-        name='column_move_bottom'),
-    path(
-        '<int:pk>/column_restrict/',
-        views.column_restrict_values,
-        name='column_restrict'),
-
     # API
-
     # Listing and creating workflows
     path(
         'workflows/',

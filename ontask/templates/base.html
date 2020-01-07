@@ -56,7 +56,7 @@
                   </li>
                 {% endif %}
                 {% if request.session.ontask_workflow_id %}
-                  {% url 'workflow:detail' as workflow_detail %}
+                  {% url 'column:index' as workflow_detail %}
                   {% url 'workflow:operations' as workflow_ops %}
                   <li class="nav-item">
                     <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}"

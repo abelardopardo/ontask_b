@@ -4,7 +4,7 @@
 <div class="text-center">
   <div class="btn-group btn-group-sm" role="group">
     <button type="button" class="btn btn-primary btn-light js-criterion-edit"
-            data-url="{% url 'workflow:criterion_edit' criterion.id %}"
+            data-url="{% url 'column:criterion_edit' criterion.id %}"
             data-toggle="tooltip"
             title="{% trans 'Edit this criterion' %}">
       <span class="fa fa-pencil"></span></button>
@@ -14,7 +14,7 @@
             title="{% trans 'Show stats about this criteria' %}">
       <span class="fa fa-bar-chart"></span></button>
     <button type="button" class="btn btn-primary btn-light  js-criterion-remove"
-            data-url="{% url 'workflow:criterion_remove' criterion.id %}"
+            data-url="{% url 'column:criterion_remove' criterion.id %}"
             data-toggle="tooltip"
             title="{% trans 'Remove this criterion' %}">
       <span class="fa fa-trash"></span></button>

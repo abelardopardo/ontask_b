@@ -13,14 +13,14 @@
           <div class="shadow dropdown-menu scrollable-menu">
             {% for column in columns_to_insert %}
               <button type="button" class="dropdown-item js-workflow-criterion-insert"
-                      data-url="{% url 'workflow:criterion_insert' action.id column.id %}">{{ column.name }}</button>
+                      data-url="{% url 'column:criterion_insert' action.id column.id %}">{{ column.name }}</button>
             {% endfor %}
           </div>
         </div>
       {% endif %}
       <button type="button"
               class="btn btn-outline-dark js-workflow-criterion-add"
-              data-url="{% url 'workflow:criterion_create' action.id %}"
+              data-url="{% url 'column:criterion_create' action.id %}"
               data-toggle="tooltip"
               title="{% trans 'Add a new criterion to the rubric' %}">
         <span class="fa fa-plus"></span> {% trans 'Create criterion/column' %}

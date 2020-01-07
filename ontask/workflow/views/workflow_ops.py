@@ -15,7 +15,7 @@ from django.views.decorators.http import require_http_methods
 
 from ontask import OnTaskServiceException, models
 from ontask.core import (
-    DataTablesServerSidePaging, ajax_required, get_column, get_workflow,
+    ajax_required, get_column, get_workflow,
     is_instructor)
 from ontask.workflow import services
 
@@ -92,34 +92,6 @@ def star(
 
     workflow.log(request.user, models.Log.WORKFLOW_STAR)
     return JsonResponse({})
-
-
-@user_passes_test(is_instructor)
-@csrf_exempt
-@ajax_required
-@require_http_methods(['POST'])
-@get_workflow(pf_related='columns')
-def column_ss(
-    request: HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> JsonResponse:
-    """Render the server side page for the table of columns.
-
-    Given the workflow id and the request, return to DataTable the proper
-    list of columns to be rendered.
-
-    :param request: Http request received from DataTable
-    :param workflow: Workflow being manipulated.
-    :return: Data to visualize in the table
-    """
-    # Check that the GET parameter are correctly given
-    dt_page = DataTablesServerSidePaging(request)
-    if not dt_page.is_valid:
-        return JsonResponse(
-            {'error': _('Incorrect request. Unable to process')},
-        )
-
-    return JsonResponse(services.column_table_server_side(dt_page, workflow))
 
 
 @user_passes_test(is_instructor)

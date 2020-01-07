@@ -10,8 +10,8 @@ from django.utils.translation import ugettext_lazy as _
 import pandas as pd
 
 from ontask import create_new_name, models
+from ontask.column.services import errors
 from ontask.dataops import pandas, sql
-from ontask.workflow import services
 
 _op_distrib = {
     'sum': lambda operand: operand.sum(axis=1, skipna=False),
@@ -88,7 +88,7 @@ def add_column_to_workflow(
             column.data_type,
             initial=column_initial_value)
     except Exception as exc:
-        raise services.OnTaskWorkflowAddColumn(
+        raise errors.OnTaskColumnAddError(
             message=_('Unable to add element: {0}').format(str(exc)),
             to_delete=[column])
 
@@ -144,7 +144,7 @@ def add_formula_column(
     try:
         pandas.store_dataframe(df, workflow)
     except Exception as exc:
-        raise services.OnTaskWorkflowAddColumn(
+        raise errors.OnTaskColumnAddError(
             message=_('Unable to add column: {0}').format(str(exc)),
             to_delete=[column])
 
@@ -177,7 +177,7 @@ def add_random_column(
     try:
         int_value = int(column.categories[0])
         if int_value <= 1:
-            raise services.OnTaskWorkflowIntegerLowerThanOne(
+            raise errors.OnTaskColumnIntegerLowerThanOneError(
                 field_name='values',
                 message=_('The integer value has to be larger than 1'))
         column.set_categories(
@@ -211,7 +211,7 @@ def add_random_column(
     try:
         pandas.store_dataframe(data_frame, workflow)
     except Exception as exc:
-        raise services.OnTaskWorkflowStoreError(
+        raise errors.OnTaskColumnAddError(
             message=_('Unable to add the column: {0}').format(str(exc)),
             to_delete=[column])
 

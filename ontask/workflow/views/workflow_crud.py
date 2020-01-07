@@ -4,7 +4,6 @@
 from typing import Optional
 
 from django import http
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
@@ -17,7 +16,7 @@ from django.views import generic
 from ontask import OnTaskServiceException, models
 from ontask.celery import celery_is_up
 from ontask.core import (
-    UserIsInstructor, ajax_required, check_wf_df, get_workflow, is_instructor,
+    UserIsInstructor, ajax_required, get_workflow, is_instructor,
     remove_workflow_from_session)
 from ontask.workflow import forms, services
 
@@ -65,28 +64,6 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
                 {'form': form},
                 request=request),
         })
-
-
-@user_passes_test(is_instructor)
-@get_workflow(pf_related=['columns', 'shared'])
-def detail(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow],
-) -> http.HttpResponse:
-    """Http request to serve the details page for the workflow.
-
-    :param request: HTTP Request
-    :param workflow: Workflow being manipulated
-    :return: Http response with the page rendering
-    """
-    # Safety check for consistency (only in development)
-    if settings.DEBUG:
-        check_wf_df(workflow)
-
-    return render(
-        request,
-        'workflow/detail.html',
-        services.get_detail_context(workflow))
 
 
 @user_passes_test(is_instructor)

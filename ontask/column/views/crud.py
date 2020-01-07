@@ -52,7 +52,7 @@ _formula_column_operands = [
 @user_passes_test(is_instructor)
 @ajax_required
 @get_workflow(pf_related=['actions', 'columns'])
-def column_add(
+def create(
     request: HttpRequest,
     workflow: Optional[models.Workflow] = None,
 ) -> JsonResponse:
@@ -89,7 +89,7 @@ def column_add(
 
     return JsonResponse({
         'html_form': render_to_string(
-            'workflow/includes/partial_column_addedit.html',
+            'column/includes/partial_addedit.html',
             {
                 'form': form,
                 'is_question': False,
@@ -205,7 +205,7 @@ def formula_column_add(
 
     return JsonResponse({
         'html_form': render_to_string(
-            'workflow/includes/partial_formula_column_add.html',
+            'column/includes/partial_formula_add.html',
             {'form': form},
             request=request)})
 
@@ -245,11 +245,11 @@ def random_column_add(
                 column,
                 form.data_frame)
             form.save_m2m()
-        except services.OnTaskWorkflowIntegerLowerThanOne as exc:
+        except services.OnTaskColumnIntegerLowerThanOneError as exc:
             form.add_error(exc.field_name, str(exc))
             return JsonResponse({
                 'html_form': render_to_string(
-                    'workflow/includes/partial_random_column_add.html',
+                    'column/includes/partial_random_add.html',
                     {'form': form},
                     request=request),
             })
@@ -266,7 +266,7 @@ def random_column_add(
 
     return JsonResponse({
         'html_form': render_to_string(
-            'workflow/includes/partial_random_column_add.html',
+            'workflow/includes/partial_random_add.html',
             {'form': form},
             request=request),
     })
@@ -323,7 +323,7 @@ def column_edit(
     if is_question:
         template = 'workflow/includes/partial_question_addedit.html'
     else:
-        template = 'workflow/includes/partial_column_addedit.html'
+        template = 'column/includes/partial_addedit.html'
     return JsonResponse({
         'html_form': render_to_string(
             template,
@@ -337,7 +337,7 @@ def column_edit(
 @user_passes_test(is_instructor)
 @ajax_required
 @get_column(pf_related=['columns', 'actions'])
-def column_delete(
+def delete(
     request: HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
@@ -358,7 +358,7 @@ def column_delete(
     if column.is_key and len([col for col in unique_column if col]) == 1:
         # This is the only key column
         messages.error(request, _('You cannot delete the only key column'))
-        return JsonResponse({'html_redirect': reverse('workflow:detail')})
+        return JsonResponse({'html_redirect': reverse('column:index')})
 
     # Get the name of the column to delete
     context = {'pk': pk, 'cname': column.name}
@@ -380,11 +380,11 @@ def column_delete(
         if from_url.endswith(reverse('table:display')):
             return JsonResponse({'html_redirect': reverse('table:display')})
 
-        return JsonResponse({'html_redirect': reverse('workflow:detail')})
+        return JsonResponse({'html_redirect': reverse('column:index')})
 
     return JsonResponse({
         'html_form': render_to_string(
-            'workflow/includes/partial_column_delete.html',
+            'column/includes/partial_delete.html',
             context,
             request=request),
     })
@@ -414,7 +414,7 @@ def column_clone(
     if request.method == 'GET':
         return JsonResponse({
             'html_form': render_to_string(
-                'workflow/includes/partial_column_clone.html',
+                'column/includes/partial_clone.html',
                 context,
                 request=request),
         })

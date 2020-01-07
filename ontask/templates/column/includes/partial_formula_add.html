@@ -1,11 +1,11 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-<form method="post" action="{% url 'workflow:random_column_add' %}"
-      class="js-workflow-random-column-add-form">
+<form method="post" action="{% url 'column:formula_column_add' %}"
+      class="js-workflow-formula-column-add-form">
   {% csrf_token %}
   <div class="modal-header">
-    <h4 class="modal-title">{% trans 'Add random column' %}</h4>
+    <h4 class="modal-title">{% trans 'Add derived column' %}</h4>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -15,6 +15,6 @@
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-outline-primary">
-      <span class="fa fa-check"></span> {% trans 'Add random column' %}</button>
+      <span class="fa fa-check"></span> {% trans 'Add derived column' %}</button>
   </div>
 </form>

@@ -28,10 +28,11 @@ class BackToHome(tests.OnTaskTestCase):
         """Loop over all URLs and check they redirect appropriately."""
         redirect = [
             # Workflow
-            reverse('workflow:detail'),
             reverse('workflow:operations'),
-            reverse('workflow:column_move_top', kwargs={'pk': 1}),
-            reverse('workflow:column_move_bottom', kwargs={'pk': 1}),
+            # Column
+            reverse('column:index'),
+            reverse('column:column_move_bottom', kwargs={'pk': 1}),
+            reverse('column:column_move_top', kwargs={'pk': 1}),
             # Action
             reverse('action:index'),
             reverse('action:timeline'),
@@ -79,23 +80,21 @@ class BackToHome(tests.OnTaskTestCase):
 
         bad_request = [
             # Workflow
-            reverse('workflow:column_ss'),
             reverse('workflow:attribute_create'),
             reverse('workflow:attribute_edit', kwargs={'pk': 0}),
             reverse('workflow:attribute_delete', kwargs={'pk': 0}),
             reverse('workflow:share_create'),
-            # 'workflow:share_delete',
-            reverse('workflow:column_add'),
-            # 'workflow:question_add',
-            reverse('workflow:question_add', kwargs={'pk': 1}),
-            reverse('workflow:formula_column_add'),
-            reverse('workflow:random_column_add'),
-            reverse('workflow:column_delete', kwargs={'pk': 1}),
-            reverse('workflow:column_edit', kwargs={'pk': 1}),
-            # 'workflow:question_edit',
-            reverse('workflow:column_clone', kwargs={'pk': 1}),
-            reverse('workflow:column_move'),
-            reverse('workflow:column_restrict', kwargs={'pk': 1}),
+            # Column
+            reverse('column:index_ss'),
+            reverse('column:create'),
+            reverse('column:question_add', kwargs={'pk': 1}),
+            reverse('column:formula_column_add'),
+            reverse('column:random_column_add'),
+            reverse('column:delete', kwargs={'pk': 1}),
+            reverse('column:column_edit', kwargs={'pk': 1}),
+            reverse('column:column_clone', kwargs={'pk': 1}),
+            reverse('column:column_move'),
+            reverse('column:column_restrict', kwargs={'pk': 1}),
             # Action
             reverse('action:create'),
             reverse('action:save_text', kwargs={'pk': 1}),

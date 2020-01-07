@@ -10,9 +10,9 @@ from rest_framework.exceptions import APIException
 
 from ontask import models
 from ontask.action.serializers import ActionSerializer
+from ontask.column.serializers import ColumnSerializer
 from ontask.dataops import pandas
 from ontask.table.serializers import DataFramePandasField, ViewSerializer
-from ontask.workflow.serialize_column import ColumnSerializer
 
 try:
     profile  # noqa: Z444

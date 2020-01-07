@@ -7,10 +7,10 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
-from ontask.dataops import formula, sql
-from ontask.workflow.serialize_column import (
+from ontask.column.serializers import (
     ColumnNameSerializer, ColumnSerializer,
 )
+from ontask.dataops import formula, sql
 
 try:
     profile  # noqa: Z444

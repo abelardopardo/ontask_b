@@ -4,8 +4,8 @@
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.column.services import errors
 from ontask.dataops import pandas
-from ontask.workflow import services
 
 
 def restrict_column(user, column: models.Column):
@@ -24,7 +24,7 @@ def restrict_column(user, column: models.Column):
 
     cat_values = set(data_frame[column.name].dropna())
     if not cat_values:
-        raise services.OnTaskWorkflowNoCategoryValues(
+        raise errors.OnTaskColumnCategoryValueError(
             message=_('The column has no meaningful values'))
 
     # Set categories

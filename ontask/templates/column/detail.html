@@ -15,7 +15,7 @@
     {% ontask_datetimepicker_js %}
     <script src="{% static 'js/sol.js' %}"></script>
     <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
-    <script src="{% static 'workflow/js/column_move.js' %}?v={% ontask_version %}"></script>
+    <script src="{% static 'column/js/column_move.js' %}?v={% ontask_version %}"></script>
     {% ontask_datatables_jquery_js %}
     {% ontask_datatables_bootstrap_js %}
     <script type="text/javascript">
@@ -33,7 +33,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-              url: "{% url 'workflow:column_ss' %}",
+              url: "{% url 'column:index_ss' %}",
               type: 'POST',
             },
             columns: [
@@ -85,13 +85,13 @@
     {% endif %}
     <div class="text-center mb-3">
       {% if workflow.nrows != 0 %}
-        {% include 'workflow/includes/add_column_menu.html' %}
+        {% include 'column/includes/add_menu.html' %}
       {% endif %}
     </div>
     {% if table_info %}
       <div class="justify-content-center">
         <table class="table table-hover table-bordered shadow"
-               id="column-table" data-url="{% url 'workflow:column_move' %}">
+               id="column-table" data-url="{% url 'column:column_move' %}">
           <thead>
             <tr>
               <th>#</th>

@@ -27,17 +27,17 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
 
     workflow_name = 'BIOL1011'
 
-    def test_column_add(self):
+    def test_column_create(self):
         """Add a column."""
         column_name = 'cname'
         column_description = 'column description'
         column_categories = '   a,b,c,d   '
 
         # Adding a new column of type integer
-        resp = self.get_response('workflow:column_add', is_ajax=True)
+        resp = self.get_response('column:create', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         resp = self.get_response(
-            'workflow:column_add',
+            'column:create',
             method='POST',
             req_params={
                 'name': column_name,
@@ -63,14 +63,14 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
 
         # GET the form
         resp = self.get_response(
-            'workflow:question_add',
+            'column:question_add',
             {'pk': survey.id},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
-            'workflow:question_add',
+            'column:question_add',
             {'pk': survey.id},
             method='POST',
             req_params={
@@ -90,14 +90,14 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         old_name = column.name
         # GET the form
         resp = self.get_response(
-            'workflow:question_edit',
+            'column:question_edit',
             {'pk': column.id},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
-            'workflow:question_edit',
+            'column:question_edit',
             {'pk': column.id},
             method='POST',
             req_params={
@@ -115,12 +115,12 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
     def test_formula_column_add(self):
         """Test adding a formula column."""
         # GET the form
-        resp = self.get_response('workflow:formula_column_add', is_ajax=True)
+        resp = self.get_response('column:formula_column_add', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
-            'workflow:formula_column_add',
+            'column:formula_column_add',
             method='POST',
             req_params={
                 'name': 'FORMULA COLUMN',
@@ -139,12 +139,12 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
     def test_random_column_add(self):
         """Test adding a random column."""
         # GET the form
-        resp = self.get_response('workflow:random_column_add', is_ajax=True)
+        resp = self.get_response('column:random_column_add', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': 'RANDOM COLUMN',
@@ -162,14 +162,14 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         """Test adding a random column."""
         column = self.workflow.columns.get(name='Q01')
         resp = self.get_response(
-            'workflow:column_clone',
+            'column:column_clone',
             {'pk': column.id},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
         # Create the new question
         resp = self.get_response(
-            'workflow:column_clone',
+            'column:column_clone',
             {'pk': column.id},
             method='POST',
             is_ajax=True)
@@ -184,13 +184,13 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         self.assertEqual(column.categories, [])
 
         resp = self.get_response(
-            'workflow:column_restrict',
+            'column:column_restrict',
             {'pk': column.id},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
         resp = self.get_response(
-            'workflow:column_restrict',
+            'column:column_restrict',
             {'pk': column.id},
             method='POST',
             is_ajax=True)
