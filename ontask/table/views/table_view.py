@@ -52,7 +52,7 @@ def view_index(
 def view_add(
     request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> http.http.JsonResponse:
+) -> http.JsonResponse:
     """Create a new view.
 
     :param request: Request object
@@ -64,22 +64,22 @@ def view_add(
         messages.error(
             request,
             _('Cannot add a view to a workflow without data'))
-        return http.http.JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
     form = forms.ViewAddForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return http.http.JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         view = form.save(commit=False)
         services.save_view_form(request.user, workflow, view)
         form.save_m2m()  # Needed to propagate the save effect to M2M relations
 
-        return http.http.JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return http.http.JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'table/includes/partial_view_add.html',
             {'form': form, 'id': form.instance.id},
@@ -95,7 +95,7 @@ def view_edit(
     pk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
     view: Optional[models.View] = None,
-) -> http.http.JsonResponse:
+) -> http.JsonResponse:
     """Edit the content of a view.
 
     :param request: Request object
@@ -110,15 +110,15 @@ def view_edit(
         instance=view, workflow=workflow)
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return http.http.JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         view = form.save(commit=False)
         services.save_view_form(request.user, workflow, view)
         form.save_m2m()  # Needed to propagate the save effect to M2M relations
 
-        return http.http.JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return http.http.JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'table/includes/partial_view_edit.html',
             {'form': form, 'id': form.instance.id},
@@ -134,7 +134,7 @@ def view_delete(
     pk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
     view: Optional[models.View] = None,
-) -> http.http.JsonResponse:
+) -> http.JsonResponse:
     """Delete a view.
 
     AJAX processor for the delete view operation
@@ -149,9 +149,9 @@ def view_delete(
     if request.method == 'POST':
         view.log(request.user, models.Log.VIEW_DELETE)
         view.delete()
-        return http.http.JsonResponse({'html_redirect': reverse('table:view_index')})
+        return http.JsonResponse({'html_redirect': reverse('table:view_index')})
 
-    return http.http.JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'table/includes/partial_view_delete.html',
             {'view': view},
@@ -166,7 +166,7 @@ def view_clone(
     pk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
     view: Optional[models.View] = None,
-) -> http.http.JsonResponse:
+) -> http.JsonResponse:
     """Clone a view.
 
     :param request: HTTP request
@@ -176,7 +176,7 @@ def view_clone(
     :return: AJAX response
     """
     if request.method == 'GET':
-        return http.http.JsonResponse({
+        return http.JsonResponse({
             'html_form': render_to_string(
                 'table/includes/partial_view_clone.html',
                 {'pk': pk, 'vname': view.name},
@@ -192,4 +192,4 @@ def view_clone(
     except OnTaskServiceException as exc:
         exc.message_to_error(request)
         exc.delete()
-    return http.http.JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})

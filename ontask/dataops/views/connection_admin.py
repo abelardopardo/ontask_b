@@ -57,7 +57,7 @@ def athena_connection_admin_index(
 def sql_connection_view(
     request: http.HttpRequest, 
     pk: int,
-) -> http.http.JsonResponse:
+) -> http.JsonResponse:
     """Show the SQL connection in a modal.
 
     :param request: Request object

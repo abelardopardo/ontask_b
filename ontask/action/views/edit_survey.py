@@ -144,7 +144,7 @@ def select_condition_for_question(
 @ajax_required
 @get_action()
 def shuffle_questions(
-    request: http.http.HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
