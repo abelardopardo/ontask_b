@@ -6,7 +6,8 @@ from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
 from ontask.models.athenaconnection import AthenaConnection
 from ontask.models.column import Column
 from ontask.models.common import (
-    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CHAR_FIELD_SMALL_SIZE, Owner)
+    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CHAR_FIELD_SMALL_SIZE, Owner,
+)
 from ontask.models.condition import Condition
 from ontask.models.connection import Connection
 from ontask.models.logs import Log

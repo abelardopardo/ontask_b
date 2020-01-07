@@ -12,7 +12,8 @@ from django.views import generic
 from ontask import models
 from ontask.action import forms, services
 from ontask.core import (
-    UserIsInstructor, ajax_required, get_action, get_condition, is_instructor)
+    UserIsInstructor, ajax_required, get_action, get_condition, is_instructor,
+)
 
 
 class ConditionFilterCreateViewBase(UserIsInstructor, generic.TemplateView):

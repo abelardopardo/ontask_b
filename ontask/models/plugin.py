@@ -5,7 +5,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.models.common import (
-    CHAR_FIELD_LONG_SIZE, CreateModifyFields, NameAndDescription)
+    CHAR_FIELD_LONG_SIZE, CreateModifyFields, NameAndDescription,
+)
 from ontask.models.logs import Log
 
 

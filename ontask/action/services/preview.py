@@ -13,8 +13,8 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import models
 from ontask.action import forms
 from ontask.action.evaluate import (
-    action_condition_evaluation,
-    evaluate_row_action_out, get_action_evaluation_context, get_row_values,
+    action_condition_evaluation, evaluate_row_action_out,
+    get_action_evaluation_context, get_row_values,
 )
 
 

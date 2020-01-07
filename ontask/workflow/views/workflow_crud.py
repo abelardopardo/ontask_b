@@ -17,7 +17,8 @@ from ontask import OnTaskServiceException, models
 from ontask.celery import celery_is_up
 from ontask.core import (
     UserIsInstructor, ajax_required, get_workflow, is_instructor,
-    remove_workflow_from_session)
+    remove_workflow_from_session,
+)
 from ontask.workflow import forms, services
 
 

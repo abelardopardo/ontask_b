@@ -21,8 +21,7 @@ from ontask import (
     simplify_datetime_str,
 )
 from ontask.action.evaluate.action import (
-    evaluate_action,
-    evaluate_row_action_out, get_action_evaluation_context,
+    evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.run_manager import ActionRunManager

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """Functions to support download a table in CSV format."""
-import pandas as pd
-
 from django import http
+import pandas as pd
 
 
 def create_response_with_csv(data_frame: pd.DataFrame) -> http.HttpResponse:

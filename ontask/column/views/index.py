@@ -15,7 +15,8 @@ from ontask import models
 from ontask.column import services
 from ontask.core import (
     DataTablesServerSidePaging, ajax_required, check_wf_df, get_workflow,
-    is_instructor)
+    is_instructor,
+)
 
 
 @user_passes_test(is_instructor)

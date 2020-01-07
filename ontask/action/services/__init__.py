@@ -7,28 +7,29 @@ from ontask.action.services.clone import do_clone_action, do_clone_condition
 from ontask.action.services.condition import save_condition_form
 from ontask.action.services.edit_save import save_action_form
 from ontask.action.services.email import (
-    ActionManagerEmail,
-    ActionManagerEmailList,
+    ActionManagerEmail, ActionManagerEmailList,
 )
 from ontask.action.services.errors import (
     OnTaskActionRubricIncorrectContext, OnTaskActionSurveyDataNotFound,
-    OnTaskActionSurveyNoTableData)
+    OnTaskActionSurveyNoTableData,
+)
 from ontask.action.services.import_export import do_import_action
-from ontask.action.services.json import ActionManagerJSON, ActionManagerJSONList
+from ontask.action.services.json import (
+    ActionManagerJSON, ActionManagerJSONList,
+)
 from ontask.action.services.manager_factory import (
-    ACTION_PROCESS_FACTORY, ActionManagementFactory)
+    ACTION_PROCESS_FACTORY, ActionManagementFactory,
+)
 from ontask.action.services.preview import (
-    create_list_preview_context,
-    create_row_preview_context,
+    create_list_preview_context, create_row_preview_context,
 )
 from ontask.action.services.rubric import ActionManagerRubric
 from ontask.action.services.run_manager import ActionRunManager
 from ontask.action.services.serve_action import (
-    extract_survey_questions,
-    get_survey_context, serve_action_out, update_row_values,
+    extract_survey_questions, get_survey_context, serve_action_out,
+    update_row_values,
 )
 from ontask.action.services.survey import (
-    ActionManagerSurvey,
-    create_survey_table,
+    ActionManagerSurvey, create_survey_table,
 )
 from ontask.action.services.zip import ActionManagerZip, create_and_send_zip

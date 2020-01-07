@@ -11,12 +11,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.action.evaluate import (
-    evaluate_row_action_out,
-    get_action_evaluation_context, get_row_values,
+    evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.services.errors import (
-    OnTaskActionSurveyDataNotFound,
-    OnTaskActionSurveyNoTableData,
+    OnTaskActionSurveyDataNotFound, OnTaskActionSurveyNoTableData,
 )
 from ontask.dataops import sql
 

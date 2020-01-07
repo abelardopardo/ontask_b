@@ -14,9 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from ontask import OnTaskServiceException, models
-from ontask.core import (
-    ajax_required, get_column, get_workflow,
-    is_instructor)
+from ontask.core import ajax_required, get_column, get_workflow, is_instructor
 from ontask.workflow import services
 
 

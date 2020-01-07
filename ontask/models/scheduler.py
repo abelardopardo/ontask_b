@@ -15,7 +15,8 @@ import pytz
 from ontask import simplify_datetime_str
 from ontask.models.action import Action
 from ontask.models.common import (
-    CHAR_FIELD_MID_SIZE, CreateModifyFields, NameAndDescription, Owner)
+    CHAR_FIELD_MID_SIZE, CreateModifyFields, NameAndDescription, Owner,
+)
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 

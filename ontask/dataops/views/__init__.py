@@ -23,4 +23,5 @@ from ontask.dataops.views.s3upload import s3upload_start
 from ontask.dataops.views.sql_upload import sqlupload_start
 from ontask.dataops.views.transform import plugin_invoke, transform_model
 from ontask.dataops.views.upload import (
-    upload_s2, upload_s3, upload_s4, uploadmerge)
+    upload_s2, upload_s3, upload_s4, uploadmerge,
+)

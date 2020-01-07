@@ -8,8 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import models
 from ontask.core import OperationsColumn
 from ontask.dataops.services.connections import (
-    ConnectionTableAdmin,
-    ConnectionTableSelect,
+    ConnectionTableAdmin, ConnectionTableSelect,
 )
 
 

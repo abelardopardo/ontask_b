@@ -17,8 +17,8 @@ from ontask import models
 from ontask.action import forms, services
 from ontask.celery import celery_is_up
 from ontask.core import (
-    DataTablesServerSidePaging, SessionPayload,
-    ajax_required, get_action, get_workflow, has_access, is_instructor,
+    DataTablesServerSidePaging, SessionPayload, ajax_required, get_action,
+    get_workflow, has_access, is_instructor,
 )
 from ontask.core.services import ontask_handler404
 

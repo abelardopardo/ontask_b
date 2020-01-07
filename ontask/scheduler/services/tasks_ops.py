@@ -4,7 +4,8 @@
 import json
 
 from django_celery_beat.models import (
-    ClockedSchedule, CrontabSchedule, PeriodicTask)
+    ClockedSchedule, CrontabSchedule, PeriodicTask,
+)
 
 from ontask import models
 from ontask.core import ONTASK_SCHEDULED_TASK_NAME_TEMPLATE

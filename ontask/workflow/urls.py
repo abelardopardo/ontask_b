@@ -88,4 +88,3 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 task_execute_factory.register_producer(
     models.Log.WORKFLOW_UPDATE_LUSERS,
     services.ExecuteUpdateWorkflowLUser())
-

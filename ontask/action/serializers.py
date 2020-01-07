@@ -7,9 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
-from ontask.column.serializers import (
-    ColumnNameSerializer, ColumnSerializer,
-)
+from ontask.column.serializers import ColumnNameSerializer, ColumnSerializer
 from ontask.dataops import formula, sql
 
 try:
