@@ -3,8 +3,8 @@
 """Common functions to handle connections."""
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -17,7 +17,7 @@ from ontask.dataops import forms, services
 
 
 @user_passes_test(is_admin)
-def sql_connection_admin_index(request: HttpRequest) -> HttpResponse:
+def sql_connection_admin_index(request: http.HttpRequest) -> http.HttpResponse:
     """Show and handle the SQL connections.
 
     :param request: Request
@@ -34,7 +34,9 @@ def sql_connection_admin_index(request: HttpRequest) -> HttpResponse:
 
 
 @user_passes_test(is_admin)
-def athena_connection_admin_index(request: HttpRequest) -> HttpResponse:
+def athena_connection_admin_index(
+    request: http.HttpRequest,
+) -> http.HttpResponse:
     """Show and handle the connections.
 
     :param request: Request
@@ -52,7 +54,10 @@ def athena_connection_admin_index(request: HttpRequest) -> HttpResponse:
 
 @user_passes_test(is_instructor)
 @ajax_required
-def sql_connection_view(request: HttpRequest, pk: int) -> JsonResponse:
+def sql_connection_view(
+    request: http.HttpRequest, 
+    pk: int,
+) -> http.http.JsonResponse:
     """Show the SQL connection in a modal.
 
     :param request: Request object
@@ -62,10 +67,10 @@ def sql_connection_view(request: HttpRequest, pk: int) -> JsonResponse:
     c_obj = models.SQLConnection.objects.filter(pk=pk).first()
     if not c_obj:
         # Connection object not found, go to table of Athena connections
-        return JsonResponse({
+        return http.JsonResponse({
             'html_redirect': reverse('dataops:sqlconns_admin_index')})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'dataops/includes/partial_connection_show.html',
             {'c_vals': c_obj.get_display_dict(), 'id': c_obj.id},
@@ -74,7 +79,7 @@ def sql_connection_view(request: HttpRequest, pk: int) -> JsonResponse:
 
 @user_passes_test(is_instructor)
 @ajax_required
-def athena_connection_view(request: HttpRequest, pk: int) -> JsonResponse:
+def athena_connection_view(request: http.HttpRequest, pk: int) -> http.JsonResponse:
     """Show the Athena connection in a modal.
 
     :param request: Request object
@@ -84,10 +89,10 @@ def athena_connection_view(request: HttpRequest, pk: int) -> JsonResponse:
     c_obj = models.AthenaConnection.objects.filter(pk=pk).first()
     if not c_obj:
         # Connection object not found, go to table of Athena connections
-        return JsonResponse({
+        return http.JsonResponse({
             'html_redirect': reverse('dataops:athenaconns_admin_index')})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'dataops/includes/partial_connection_show.html',
             {'c_vals': c_obj.get_display_dict(), 'id': c_obj.id},
@@ -97,9 +102,9 @@ def athena_connection_view(request: HttpRequest, pk: int) -> JsonResponse:
 @user_passes_test(is_admin)
 @ajax_required
 def sql_connection_edit(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: Optional[int] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Respond to the request to create/edit an SQL connection object.
 
     :param request: HTML request
@@ -115,23 +120,23 @@ def sql_connection_edit(
         action_url = reverse('dataops:sqlconn_edit', kwargs={'pk': pk})
         conn = models.SQLConnection.objects.filter(pk=pk).first()
         if not conn:
-            return JsonResponse({'html_redirect': reverse('home')})
+            return http.JsonResponse({'html_redirect': reverse('home')})
 
     form = form_class(request.POST or None, instance=conn)
 
     # If it is a POST and it is correct
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
         conn = form.save()
         if is_add:
             conn.log(request.user, conn.create_event)
         else:
             conn.log(request.user, conn.edit_event)
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     # Request is a GET
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'dataops/includes/partial_connection_addedit.html',
             {
@@ -145,9 +150,9 @@ def sql_connection_edit(
 @user_passes_test(is_admin)
 @ajax_required
 def athena_connection_edit(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: Optional[int] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Respond to the request to create/edit an Athena connection object.
 
     :param request: HTML request
@@ -163,22 +168,22 @@ def athena_connection_edit(
         action_url = reverse('dataops:athenaconn_edit', kwargs={'pk': pk})
         conn = models.AthenaConnection.objects.filter(pk=pk).first()
         if not conn:
-            return JsonResponse({'html_redirect': reverse('home')})
+            return http.JsonResponse({'html_redirect': reverse('home')})
 
     form = form_class(request.POST or None, instance=conn)
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
         conn = form.save()
         if is_add:
             conn.log(request.user, conn.create_event)
         else:
             conn.log(request.user, conn.edit_event)
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     # Request is a GET
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'dataops/includes/partial_connection_addedit.html',
             {
@@ -191,7 +196,7 @@ def athena_connection_edit(
 
 @user_passes_test(is_admin)
 @ajax_required
-def sql_connection_clone(request: HttpRequest, pk: int) -> JsonResponse:
+def sql_connection_clone(request: http.HttpRequest, pk: int) -> http.JsonResponse:
     """AJAX handshake to clone an SQL connection.
 
     :param request: HTTP request
@@ -201,9 +206,9 @@ def sql_connection_clone(request: HttpRequest, pk: int) -> JsonResponse:
     conn = models.SQLConnection.objects.filter(pk=pk).first()
     if not conn:
         # The view is not there. Redirect to workflow detail
-        return JsonResponse({'html_redirect': reverse('home')})
+        return http.JsonResponse({'html_redirect': reverse('home')})
 
-    return services.clone(
+    return services.clone_connection(
         request,
         conn,
         models.SQLConnection.objects,
@@ -212,7 +217,7 @@ def sql_connection_clone(request: HttpRequest, pk: int) -> JsonResponse:
 
 @user_passes_test(is_admin)
 @ajax_required
-def athena_connection_clone(request: HttpRequest, pk: int) -> JsonResponse:
+def athena_connection_clone(request: http.HttpRequest, pk: int) -> http.JsonResponse:
     """AJAX handshake to clone an Athena connection.
 
     :param request: HTTP request
@@ -222,9 +227,9 @@ def athena_connection_clone(request: HttpRequest, pk: int) -> JsonResponse:
     conn = models.AthenaConnection.objects.filter(pk=pk).first()
     if not conn:
         # The view is not there. Redirect to workflow detail
-        return JsonResponse({'html_redirect': reverse('home')})
+        return http.JsonResponse({'html_redirect': reverse('home')})
 
-    return services.clone(
+    return services.clone_connection(
         request,
         conn,
         models.AthenaConnection.objects,
@@ -233,7 +238,7 @@ def athena_connection_clone(request: HttpRequest, pk: int) -> JsonResponse:
 
 @user_passes_test(is_admin)
 @ajax_required
-def sql_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
+def sql_connection_delete(request: http.HttpRequest, pk: int) -> http.JsonResponse:
     """AJAX processor for the delete SQL connection operation.
 
     :param request: AJAX request
@@ -243,7 +248,7 @@ def sql_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
     conn = models.SQLConnection.objects.filter(pk=pk).first()
     if not conn:
         # The view is not there. Redirect to workflow detail
-        return JsonResponse({'html_redirect': reverse('home')})
+        return http.JsonResponse({'html_redirect': reverse('home')})
 
     return services.delete(
         request,
@@ -253,7 +258,7 @@ def sql_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
 
 @user_passes_test(is_admin)
 @ajax_required
-def athena_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
+def athena_connection_delete(request: http.HttpRequest, pk: int) -> http.JsonResponse:
     """AJAX processor for the delete an Athena connection operation.
 
     :param request: AJAX request
@@ -263,7 +268,7 @@ def athena_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
     conn = models.AthenaConnection.objects.filter(pk=pk).first()
     if not conn:
         # The view is not there. Redirect to workflow detail
-        return JsonResponse({'html_redirect': reverse('home')})
+        return http.JsonResponse({'html_redirect': reverse('home')})
 
     return services.delete(
         request,
@@ -274,9 +279,9 @@ def athena_connection_delete(request: HttpRequest, pk: int) -> JsonResponse:
 @user_passes_test(is_instructor)
 @ajax_required
 def sqlconn_toggle(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Enable/Disable an SQL connection.
 
     :param request: Request object
@@ -294,9 +299,9 @@ def sqlconn_toggle(
 @user_passes_test(is_instructor)
 @ajax_required
 def athenaconn_toggle(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Enable/Disable an Athena connection.
 
     :param request: Request object

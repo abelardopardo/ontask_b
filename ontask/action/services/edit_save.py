@@ -3,8 +3,7 @@
 """Service to save the action when editing."""
 from typing import Optional, Union
 
-from django.http.request import HttpRequest
-from django.http.response import JsonResponse
+from django import http
 from django.template.loader import render_to_string
 from django.urls import reverse
 
@@ -13,11 +12,11 @@ from ontask.action import forms
 
 
 def save_action_form(
-    request: HttpRequest,
+    request: http.HttpRequest,
     form: Union[forms.ActionForm, forms.ActionUpdateForm],
     template_name: str,
     workflow: Optional[models.Workflow] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Save information from the form to manipulate condition/filter.
 
     Function to process JSON POST requests when creating a new action. It
@@ -33,11 +32,11 @@ def save_action_form(
     if request.method == 'POST' and form.is_valid():
 
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         if models.Action.TODO_LIST == form.cleaned_data.get('action_type'):
             # To be implemented
-            return JsonResponse(
+            return http.JsonResponse(
                 {'html_redirect': reverse('under_construction')})
 
         # Fill in the fields of the action (without saving to DB)_
@@ -55,9 +54,9 @@ def save_action_form(
             return_url = reverse('action:index')
 
         action_item.log(request.user, log_type)
-        return JsonResponse({'html_redirect': return_url})
+        return http.JsonResponse({'html_redirect': return_url})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             template_name,
             {'form': form},

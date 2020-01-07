@@ -3,8 +3,8 @@
 """First step for CSV upload."""
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -17,9 +17,9 @@ from ontask.dataops import forms
 @user_passes_test(is_instructor)
 @get_workflow()
 def csvupload_start(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Upload the CSV file as first step.
 
     The four step process will populate the following dictionary with name

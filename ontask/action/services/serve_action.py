@@ -6,7 +6,6 @@ import random
 from typing import Any, Dict, List, Tuple
 
 from django import http
-from django.http.request import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
@@ -119,7 +118,7 @@ def get_survey_context(
 
 
 def update_row_values(
-    request: HttpRequest,
+    request: http.HttpRequest,
     action: models.Action,
     row_data: Tuple[List, List, str, Any],
 ):

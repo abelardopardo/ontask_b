@@ -7,7 +7,6 @@ from typing import Optional
 from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http.response import HttpResponse
 from django.shortcuts import redirect, render, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
@@ -114,7 +113,7 @@ def export(
         workflow.logs.filter(user=request.user))
 
     # Create the response as a csv download
-    response = HttpResponse(dataset.csv, content_type='text/csv')
+    response = http.HttpResponse(dataset.csv, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="logs.csv"'
 
     return response

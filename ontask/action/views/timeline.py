@@ -4,8 +4,8 @@
 import json
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
 from ontask import models
@@ -15,10 +15,10 @@ from ontask.core import get_workflow, is_instructor
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='logs')
 def show_timeline(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Show a vertical timeline of action executions.
 
     :param request: HTTP request

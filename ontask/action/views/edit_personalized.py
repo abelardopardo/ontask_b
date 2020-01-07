@@ -3,8 +3,8 @@
 """Views to edit actions that send personalized information."""
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -19,11 +19,11 @@ from ontask.core import ajax_required, get_action, is_instructor
 @ajax_required
 @get_action(pf_related='actions')
 def save_text(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Save text content of the action.
 
     :param request: HTTP request (POST)
@@ -35,25 +35,25 @@ def save_text(
     del pk, workflow
     # Wrong type of action.
     if action.is_in:
-        return JsonResponse({'html_redirect': reverse('home')})
+        return http.JsonResponse({'html_redirect': reverse('home')})
 
     # If the request has the 'action_content', update the action
     action_content = request.POST.get('action_content')
     if action_content:
         action.set_text_content(action_content)
 
-    return JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
 @ajax_required
 @get_action()
 def showurl(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Create page to show URL to access action.
 
     Function that given a JSON request with an action pk returns the URL used
@@ -79,12 +79,13 @@ def showurl(
                 models.Log.ACTION_SERVE_TOGGLED,
                 served_enabled=action.serve_enabled)
 
-            return JsonResponse({'html_redirect': reverse('action:index')})
+            return http.JsonResponse(
+                {'html_redirect': reverse('action:index')})
 
-        return JsonResponse({'html_redirect': None})
+        return http.JsonResponse({'html_redirect': None})
 
     # Render the page with the absolute URI
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_action_showurl.html',
             {'url_text': request.build_absolute_uri(

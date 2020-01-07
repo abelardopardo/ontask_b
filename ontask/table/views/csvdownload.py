@@ -3,8 +3,8 @@
 """Views  to download a table in CSV format."""
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
 
 from ontask import models
 from ontask.core import get_view, get_workflow, is_instructor
@@ -15,9 +15,9 @@ from ontask.table import services
 @user_passes_test(is_instructor)
 @get_workflow(pf_related=['columns'])
 def csvdownload(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Download the data in the workflow.
 
     :param request: HTML request
@@ -35,11 +35,11 @@ def csvdownload(
 @user_passes_test(is_instructor)
 @get_view(pf_related=['columns', 'views'])
 def csvdownload_view(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     view: Optional[models.View] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Download the data in a given view.
 
     :param request: HTML request

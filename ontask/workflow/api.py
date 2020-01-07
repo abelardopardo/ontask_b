@@ -3,8 +3,8 @@
 """API classes to manipulate workflows."""
 from typing import Optional
 
+from django import http
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
 from django.utils.decorators import method_decorator
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -112,11 +112,11 @@ class WorkflowAPILock(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def get(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         pk: int,
         format=None,    # noqa: 132
         workflow: Optional[models.Workflow] = None,
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Return the serialized value of the lock property in the wflow."""
         del request, pk, format
         serializer = self.serializer_class({'lock': workflow.is_locked()})
@@ -125,11 +125,11 @@ class WorkflowAPILock(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def post(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         pk: int,
         format=None,    # noqa: 132
         workflow: Optional[models.Workflow] = None,
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Set the lock for a workflow."""
         del request, pk, format, workflow
         return Response(status=status.HTTP_201_CREATED)
@@ -137,11 +137,11 @@ class WorkflowAPILock(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def delete(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         pk: int,
         format=None,  # noqa: 132
         workflow: Optional[models.Workflow] = None,
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Remove the lock in a workflow."""
         del request, pk, format
         workflow.unlock()

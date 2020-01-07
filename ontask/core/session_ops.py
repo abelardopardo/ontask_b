@@ -4,12 +4,12 @@
 from importlib import import_module
 from typing import List, Optional, Union
 
+from django import http
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.db.models.query_utils import Q
-from django.http.request import HttpRequest
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -53,7 +53,7 @@ def _store_workflow_nrows_in_session(
     session.save()
 
 
-def remove_workflow_from_session(request: HttpRequest):
+def remove_workflow_from_session(request: http.HttpRequest):
     """Remove the workflowid, name and number of fows from the session."""
     wid = request.session.pop('ontask_workflow_id', None)
     # If removing workflow from session, mark it as available for sharing

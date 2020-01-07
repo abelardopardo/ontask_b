@@ -3,9 +3,9 @@
 """Views for create/rename/update/delete columns."""
 from typing import Optional
 
+from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -53,9 +53,9 @@ _formula_column_operands = [
 @ajax_required
 @get_workflow(pf_related=['actions', 'columns'])
 def create(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Add a column.
 
     :param request: Http Request
@@ -67,7 +67,7 @@ def create(
             request,
             _('Cannot add column to a workflow without data'),
         )
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     form = forms.ColumnAddForm(request.POST or None, workflow=workflow)
 
@@ -85,9 +85,9 @@ def create(
             exc.message_to_error(request)
             exc.delete()
 
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'column/includes/partial_addedit.html',
             {
@@ -102,10 +102,10 @@ def create(
 @ajax_required
 @get_workflow(pf_related=['actions', 'columns'])
 def question_add(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Add a column.
 
     :param request: Http Request
@@ -118,7 +118,7 @@ def question_add(
             request,
             _('Cannot add question to a workflow without data'),
         )
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     # Get the action and the columns
     action = workflow.actions.filter(pk=pk).first()
@@ -127,7 +127,7 @@ def question_add(
             request,
             _('Cannot find action to add question.'),
         )
-        return JsonResponse({'html_redirect': reverse('action:index')})
+        return http.JsonResponse({'html_redirect': reverse('action:index')})
     form = forms.QuestionForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
@@ -146,9 +146,9 @@ def question_add(
             exc.message_to_error(request)
             exc.delete()
 
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'workflow/includes/partial_question_addedit.html',
             {
@@ -164,21 +164,21 @@ def question_add(
 @ajax_required
 @get_workflow(pf_related='columns')
 def formula_column_add(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Add a formula column.
 
-    :param request: HttpRequest
+    :param request: http.HttpRequest
     :param workflow: Workflow being manipulated
-    :return: JsonResponse
+    :return: http.JsonResponse
     """
     # Get the workflow element
     if workflow.nrows == 0:
         messages.error(
             request,
             _('Cannot add column to a workflow without data'))
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
     form = forms.FormulaColumnAddForm(
@@ -201,9 +201,9 @@ def formula_column_add(
             exc.message_to_error(request)
             exc.delete()
 
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'column/includes/partial_formula_add.html',
             {'form': form},
@@ -214,9 +214,9 @@ def formula_column_add(
 @ajax_required
 @get_workflow(pf_related='columns')
 def random_column_add(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Create a column with random values (Modal).
 
     :param request: Http request
@@ -228,7 +228,7 @@ def random_column_add(
         messages.error(
             request,
             _('Cannot add column to a workflow without data'))
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
     form = forms.RandomColumnAddForm(
@@ -247,7 +247,7 @@ def random_column_add(
             form.save_m2m()
         except services.OnTaskColumnIntegerLowerThanOneError as exc:
             form.add_error(exc.field_name, str(exc))
-            return JsonResponse({
+            return http.JsonResponse({
                 'html_form': render_to_string(
                     'column/includes/partial_random_add.html',
                     {'form': form},
@@ -262,9 +262,9 @@ def random_column_add(
                 _('Unable to add random column: {0}').format(str(exc)))
 
         # The form has been successfully processed
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'column/includes/partial_random_add.html',
             {'form': form},
@@ -276,11 +276,11 @@ def random_column_add(
 @ajax_required
 @get_column(pf_related=['columns', 'views', 'actions'])
 def column_edit(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     column: Optional[models.Column] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Edit a column.
 
     :param request: Http Request received
@@ -306,7 +306,7 @@ def column_edit(
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         column = form.save(commit=False)
         services.update_column(
@@ -318,13 +318,13 @@ def column_edit(
         form.save_m2m()
 
         # Done processing the correct POST request
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     if is_question:
         template = 'workflow/includes/partial_question_addedit.html'
     else:
         template = 'column/includes/partial_addedit.html'
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             template,
             {'form': form,
@@ -338,11 +338,11 @@ def column_edit(
 @ajax_required
 @get_column(pf_related=['columns', 'actions'])
 def delete(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     column: Optional[models.Column] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Delete a column in the table attached to a workflow.
 
     :param request: HTTP request
@@ -358,7 +358,7 @@ def delete(
     if column.is_key and len([col for col in unique_column if col]) == 1:
         # This is the only key column
         messages.error(request, _('You cannot delete the only key column'))
-        return JsonResponse({'html_redirect': reverse('column:index')})
+        return http.JsonResponse({'html_redirect': reverse('column:index')})
 
     # Get the name of the column to delete
     context = {'pk': pk, 'cname': column.name}
@@ -378,11 +378,11 @@ def delete(
         # There are various points of return
         from_url = request.META['HTTP_REFERER']
         if from_url.endswith(reverse('table:display')):
-            return JsonResponse({'html_redirect': reverse('table:display')})
+            return http.JsonResponse({'html_redirect': reverse('table:display')})
 
-        return JsonResponse({'html_redirect': reverse('column:index')})
+        return http.JsonResponse({'html_redirect': reverse('column:index')})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'column/includes/partial_delete.html',
             context,
@@ -394,11 +394,11 @@ def delete(
 @ajax_required
 @get_column(pf_related='columns')
 def column_clone(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     column: Optional[models.Column] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Clone a column in the table attached to a workflow.
 
     :param request: HTTP request
@@ -412,7 +412,7 @@ def column_clone(
     context = {'pk': pk, 'cname': column.name}
 
     if request.method == 'GET':
-        return JsonResponse({
+        return http.JsonResponse({
             'html_form': render_to_string(
                 'column/includes/partial_clone.html',
                 context,
@@ -426,6 +426,6 @@ def column_clone(
         messages.error(
             request,
             _('Unable to clone column: {0}').format(str(exc)))
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})

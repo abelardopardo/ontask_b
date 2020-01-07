@@ -3,8 +3,8 @@
 """Views to preview resulting text in the action."""
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -19,12 +19,12 @@ from ontask.core import ajax_required, get_action, is_instructor
 @ajax_required
 @get_action(pf_related='actions')
 def preview_next_all_false(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: Optional[int] = None,
     idx: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Preview message with all conditions evaluating to false.
 
     Previews the message that has all conditions incorrect in the position
@@ -47,7 +47,7 @@ def preview_next_all_false(
 
     if not idx_list:
         # If empty, or None, something went wrong.
-        return JsonResponse({'html_redirect': reverse('home')})
+        return http.JsonResponse({'html_redirect': reverse('home')})
 
     # Search for the next element bigger than idx
     next_idx = next((nxt for nxt in idx_list if nxt > idx), None)
@@ -65,12 +65,12 @@ def preview_next_all_false(
 @ajax_required
 @get_action(pf_related='actions')
 def preview_response(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     idx: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Preview content of action.
 
     HTML request and the primary key of an action to preview one of its
@@ -82,7 +82,7 @@ def preview_response(
     :param idx: Index of the reponse to preview
     :param workflow: Current workflow being manipulated
     :param action: Might have been fetched already
-    :return: JsonResponse
+    :return: http.JsonResponse
     """
     del pk, workflow
     # If the request has the 'action_content', update the action
@@ -104,7 +104,7 @@ def preview_response(
             context,
             request.GET.get('subject_content'))
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_preview.html',
             context,

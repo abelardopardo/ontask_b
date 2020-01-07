@@ -3,9 +3,9 @@
 """Views to manipulate the transformations and models."""
 from typing import Optional
 
+from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render, reverse
 from django.urls import resolve
 from django.utils.translation import ugettext_lazy as _
@@ -19,9 +19,9 @@ from ontask.dataops import forms, services
 @user_passes_test(is_instructor)
 @get_workflow()
 def transform_model(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Show the table of models.
 
     :param request: HTTP Request
@@ -47,10 +47,10 @@ def transform_model(
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='columns')
 def plugin_invoke(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Render the view for the first step of plugin execution.
 
     :param request: HTTP request received

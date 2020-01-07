@@ -6,7 +6,7 @@ import gzip
 from io import BytesIO
 from typing import Dict, List, Optional
 
-from django.http import HttpResponse
+from django import http
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
@@ -149,7 +149,7 @@ def do_export_workflow_parse(
 def do_export_workflow(
     workflow: models.Workflow,
     selected_actions: Optional[List[int]] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Proceed with the workflow export.
 
     :param workflow: Workflow record to export be included.
@@ -162,7 +162,7 @@ def do_export_workflow(
     suffix = datetime.now().strftime('%y%m%d_%H%M%S')
     # Attach the compressed value to the response and send
     compressed_content = zbuf.getvalue()
-    response = HttpResponse(compressed_content)
+    response = http.HttpResponse(compressed_content)
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Transfer-Encoding'] = 'binary'
     response['Content-Disposition'] = (

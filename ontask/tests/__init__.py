@@ -8,13 +8,13 @@ import subprocess
 from typing import Dict, Mapping, Optional
 
 from PIL import Image
+from django import http
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.db import connection
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import reverse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from django.urls import resolve
@@ -34,9 +34,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from ontask import OnTaskSharedState, models
 from ontask.core import GROUP_NAMES
 from ontask.core.checks import sanity_checks
-from ontask.core.manage_session import (
-    SessionPayload
-)
+from ontask.core.manage_session import SessionPayload
 from ontask.dataops import pandas
 
 standard_library.install_aliases()
@@ -194,7 +192,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
                 name=self.workflow_name)
         self.last_request = None
 
-    def add_middleware(self, request: HttpRequest) -> HttpRequest:
+    def add_middleware(self, request: http.HttpRequest) -> http.HttpRequest:
         request.user = self.user
         # adding session
         SessionMiddleware().process_request(request)
@@ -216,7 +214,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         is_ajax: Optional[bool] = False,
         session_payload: Optional[Dict] = None,
         **kwargs
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Create a request and send it to a processing function.
 
         :param url_name: URL name as defined in urls.py
@@ -237,7 +235,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
             req_params = {}
 
         if is_ajax:
-            kwargs['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
+            kwargs['HTTP_X_REQUESTED_WITH'] = 'XML.HttpRequest'
         if method == 'GET':
             request = self.factory.get(url_str, req_params, **kwargs)
         elif method == 'POST':

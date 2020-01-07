@@ -3,8 +3,7 @@
 """Service to manage condition operations."""
 from typing import Optional
 
-from django.http.request import HttpRequest
-from django.http.response import JsonResponse
+from django import http
 from django.utils.html import escape
 
 from ontask import models
@@ -50,11 +49,11 @@ def _propagate_changes(condition, changed_data, old_name, is_new):
 
 
 def save_condition_form(
-    request: HttpRequest,
+    request: http.HttpRequest,
     form,
     action: models.Action,
     is_filter: Optional[bool] = False,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Process the AJAX form POST to create and update conditions and filters.
 
     :param request: HTTP request
@@ -65,7 +64,7 @@ def save_condition_form(
     """
     if is_filter and form.instance.id is None and action.get_filter():
         # Should not happen. Go back to editing the action
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     is_new = form.instance.id is None
 
@@ -92,4 +91,4 @@ def save_condition_form(
     else:
         log_type = models.Log.CONDITION_UPDATE
     condition.log(request.user, log_type)
-    return JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})

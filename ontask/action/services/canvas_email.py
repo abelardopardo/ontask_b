@@ -12,7 +12,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -95,7 +94,7 @@ def _canvas_get_or_set_oauth_token(
     request: WSGIRequest,
     oauth_instance_name: str,
     continue_url: str,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Check for OAuth token, if not present, request a new one.
 
     Function that checks if the user has a Canvas OAuth token. If there is a

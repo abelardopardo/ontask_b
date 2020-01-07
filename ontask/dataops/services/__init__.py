@@ -5,7 +5,7 @@ from ontask.dataops.services.athena import (
     create_athena_connection_admintable,
     create_athena_connection_runtable)
 from ontask.dataops.services.connections import (
-    ConnectionTableAdmin, ConnectionTableSelect, clone, delete, toggle)
+    ConnectionTableAdmin, ConnectionTableSelect, clone_connection, delete, toggle)
 from ontask.dataops.services.connections_sql import (
     create_sql_connection_admintable,
     sql_connection_select_table)

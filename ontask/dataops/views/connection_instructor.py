@@ -3,8 +3,8 @@
 """Classes and functions to show connections to regular users."""
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
@@ -16,9 +16,9 @@ from ontask.dataops import services
 @user_passes_test(is_instructor)
 @get_workflow()
 def sql_connection_index(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Render a page showing a table with the available SQL connections.
 
     :param request: HTML request
@@ -36,9 +36,9 @@ def sql_connection_index(
 @user_passes_test(is_instructor)
 @get_workflow()
 def athena_connection_instructor_index(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow],
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Render a page showing a table with the available Athena connections.
 
     :param request: HTML request

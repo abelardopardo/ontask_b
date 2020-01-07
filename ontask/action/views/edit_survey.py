@@ -3,8 +3,8 @@
 """Views for editing Surveys and TODO_list actions."""
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -25,13 +25,13 @@ from ontask.core import (
 @require_http_methods(['POST'])
 @get_action(pf_related=['columns', 'actions'])
 def select_column_action(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     cpk: Optional[int] = -1,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
     key: Optional[bool] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Operation to add a column to a survey.
 
     :param request: Request object
@@ -46,12 +46,12 @@ def select_column_action(
     if cpk == -1:
         # Unsetting key column
         action.column_condition_pair.filter(column__is_key=True).delete()
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     # Get the column
     column = workflow.columns.filter(pk=cpk).first()
     if not column:
-        return JsonResponse({'html_redirect': reverse('action:index')})
+        return http.JsonResponse({'html_redirect': reverse('action:index')})
 
     # Parameters are correct, so add the column to the action.
     if key:
@@ -68,18 +68,18 @@ def select_column_action(
         acc.log(request.user, models.Log.ACTION_QUESTION_ADD)
 
     # Refresh the page to show the column in the list.
-    return JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
 @get_action(pf_related=['actions', 'columns'])
 def unselect_column_action(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     cpk: Optional[int] = -1,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Unselect a column from action in.
 
     :param request: Request object
@@ -107,12 +107,12 @@ def unselect_column_action(
 @require_http_methods(['POST'])
 @get_columncondition(pf_related=['columns', 'actions'])
 def select_condition_for_question(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     condpk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
     cc_tuple: Optional[models.ActionColumnConditionTuple] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Select condition for a question in a survey.
 
     :param request: Request object
@@ -129,25 +129,26 @@ def select_condition_for_question(
         # Get the condition
         condition = cc_tuple.action.conditions.filter(pk=condpk).first()
         if not condition:
-            return JsonResponse({'html_redirect': reverse('action:index')})
+            return http.JsonResponse(
+                {'html_redirect': reverse('action:index')})
 
     # Assign the condition to the tuple and save
     cc_tuple.condition = condition
     cc_tuple.save(update_fields=['condition'])
 
     # Refresh the page to show the column in the list.
-    return JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
 @ajax_required
 @get_action()
 def shuffle_questions(
-    request: HttpRequest,
+    request: http.http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Enable/Disable the shuffle question flag a survey.
 
     :param request: Request object
@@ -160,7 +161,7 @@ def shuffle_questions(
     action.shuffle = not action.shuffle
     action.save(update_fields=['shuffle'])
 
-    return JsonResponse({'is_checked': action.shuffle})
+    return http.JsonResponse({'is_checked': action.shuffle})
 
 
 @user_passes_test(is_instructor)
@@ -168,11 +169,11 @@ def shuffle_questions(
 @get_workflow()
 @get_columncondition()
 def toggle_question_change(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     cc_tuple: Optional[models.ActionColumnConditionTuple] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Enable/Disable changes in the question.
 
     :param request: Request object
@@ -187,18 +188,18 @@ def toggle_question_change(
     cc_tuple.save(update_fields=['changes_allowed'])
     cc_tuple.log(request.user, models.Log.ACTION_QUESTION_TOGGLE_CHANGES)
 
-    return JsonResponse({'is_checked': cc_tuple.changes_allowed})
+    return http.JsonResponse({'is_checked': cc_tuple.changes_allowed})
 
 
 @user_passes_test(is_instructor)
 @ajax_required
 @get_action()
 def edit_description(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Edit the description attached to an action.
 
     :param request: AJAX request
@@ -215,16 +216,16 @@ def edit_description(
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         action.save(update_fields=['name', 'description_text'])
 
         action.log(request.user, 'update')
 
         # Request is correct
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_action_edit_description.html',
             {'form': form, 'action': action},

@@ -3,8 +3,8 @@
 """Functions for Condition CRUD."""
 from typing import Optional, Type
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -25,11 +25,16 @@ class ConditionFilterCreateViewBase(UserIsInstructor, generic.TemplateView):
     @method_decorator(user_passes_test(is_instructor))
     @method_decorator(ajax_required)
     @method_decorator(get_action(pf_related=['actions', 'columns']))
-    def get(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+    def get(
+        self,
+        request: http.HttpRequest,
+        *args,
+        **kwargs
+    ) -> http.JsonResponse:
         """Process GET request to create a filter."""
         action = kwargs.get('action')
         form = self.form_class(action=action)
-        return JsonResponse({
+        return http.JsonResponse({
             'html_form': render_to_string(
                 self.template_name,
                 {
@@ -42,7 +47,12 @@ class ConditionFilterCreateViewBase(UserIsInstructor, generic.TemplateView):
     @method_decorator(user_passes_test(is_instructor))
     @method_decorator(ajax_required)
     @method_decorator(get_action(pf_related=['actions', 'columns']))
-    def post(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+    def post(
+        self,
+        request: http.HttpRequest,
+        *args,
+        **kwargs
+    ) -> http.JsonResponse:
         """Process POST request to  create a filter."""
         del args
         action = kwargs.get('action')
@@ -50,7 +60,7 @@ class ConditionFilterCreateViewBase(UserIsInstructor, generic.TemplateView):
         if request.method == 'POST' and form.is_valid():
 
             if not form.has_changed():
-                return JsonResponse({'html_redirect': None})
+                return http.JsonResponse({'html_redirect': None})
 
             return services.save_condition_form(
                 request,
@@ -58,7 +68,7 @@ class ConditionFilterCreateViewBase(UserIsInstructor, generic.TemplateView):
                 action,
                 is_filter=isinstance(self, FilterCreateView))
 
-        return JsonResponse({
+        return http.JsonResponse({
             'html_form': render_to_string(
                 self.template_name,
                 {
@@ -87,11 +97,11 @@ class ConditionCreateView(ConditionFilterCreateViewBase):
 @ajax_required
 @get_condition(pf_related='columns', is_filter=True)
 def edit_filter(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     condition: Optional[models.Condition] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Edit the filter of an action through AJAX.
 
     :param request: HTTP request
@@ -109,7 +119,7 @@ def edit_filter(
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         return services.save_condition_form(
             request,
@@ -117,7 +127,7 @@ def edit_filter(
             condition.action,
             is_filter=True)
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_filter_addedit.html',
             {
@@ -132,11 +142,11 @@ def edit_filter(
 @ajax_required
 @get_condition(pf_related=['columns'])
 def edit_condition(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     condition: Optional[models.Condition] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Handle the AJAX request to edit a condition.
 
     :param request: AJAX request
@@ -154,7 +164,7 @@ def edit_condition(
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         return services.save_condition_form(
             request,
@@ -162,7 +172,7 @@ def edit_condition(
             condition.action,
             is_filter=False)
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_condition_addedit.html',
             {
@@ -177,11 +187,11 @@ def edit_condition(
 @ajax_required
 @get_condition(pf_related='columns', is_filter=True)
 def delete_filter(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     condition: Optional[models.Condition] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Handle the AJAX request to delete a filter.
 
     :param request: AJAX request
@@ -192,7 +202,7 @@ def delete_filter(
     """
     del pk, workflow
     if request.method == 'GET':
-        return JsonResponse({
+        return http.JsonResponse({
             'html_form': render_to_string(
                 'action/includes/partial_filter_delete.html',
                 {'id': condition.id},
@@ -210,18 +220,18 @@ def delete_filter(
     action.update_n_rows_selected()
     action.rows_all_false = None
     action.save(update_fields=['rows_all_false'])
-    return JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})
 
 
 @user_passes_test(is_instructor)
 @ajax_required
 @get_condition(pf_related='columns')
 def delete_condition(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     condition: Optional[models.Condition] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Handle the AJAX request to delete a condition.
 
     :param request: HTTP request
@@ -243,9 +253,9 @@ def delete_condition(
         condition.delete()
         action.rows_all_false = None
         action.save(update_fields=['rows_all_false'])
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_condition_delete.html',
             {'condition_id': condition.id},
