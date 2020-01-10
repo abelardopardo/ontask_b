@@ -235,7 +235,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
             req_params = {}
 
         if is_ajax:
-            kwargs['HTTP_X_REQUESTED_WITH'] = 'XML.HttpRequest'
+            kwargs['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'
         if method == 'GET':
             request = self.factory.get(url_str, req_params, **kwargs)
         elif method == 'POST':
