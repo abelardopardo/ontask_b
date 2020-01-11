@@ -17,12 +17,7 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
     """Tests to check how the derived columns are created."""
 
     fixtures = ['derived_column']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'derived_column.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'derived_column.sql')
 
     wflow_name = 'combine columns'
 
@@ -341,12 +336,7 @@ class TableViews(tests.OnTaskLiveTestCase):
     """Test Table views."""
     
     fixtures = ['derived_column']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'derived_column.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'derived_column.sql')
 
     wflow_name = 'combine columns'
 
@@ -541,12 +531,7 @@ class TableViews(tests.OnTaskLiveTestCase):
 
 class TableInsertRow(tests.OnTaskLiveTestCase):
     fixtures = ['derived_column']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'derived_column.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'derived_column.sql')
 
     wflow_name = 'combine columns'
 

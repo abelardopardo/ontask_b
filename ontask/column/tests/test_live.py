@@ -15,12 +15,7 @@ from ontask.core.checks import check_wf_df
 
 class WorkflowModify(tests.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
 
     def test_02_workflow_column_create_delete(self):
         new_cols = [

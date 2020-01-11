@@ -27,12 +27,7 @@ class DataopsUpload(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the data
-        filename = os.path.join(
-            settings.BASE_DIR(),
-            'ontask',
-            'fixtures',
-            'simple.csv',
-        )
+        filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple.csv')
         with open(filename) as fp:
             resp = self.get_response(
                 'dataops:csvupload_start',
@@ -52,11 +47,8 @@ class DataopsUpload(tests.OnTaskTestCase):
 
         # POST the data
         filename = os.path.join(
-            settings.BASE_DIR(),
-            'ontask',
-            'fixtures',
-            'excel_upload.xlsx',
-        )
+            settings.ONTASK_FIXTURE_DIR,
+            'excel_upload.xlsx')
         with open(filename, 'rb') as fp:
             resp = self.get_response(
                 'dataops:excelupload_start',
@@ -72,12 +64,7 @@ class DataopsUpload(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the data
-        filename = os.path.join(
-            settings.BASE_DIR(),
-            'ontask',
-            'fixtures',
-            'simple.csv',
-        )
+        filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple.csv')
         resp = self.get_response(
             'dataops:googlesheetupload_start',
             method='POST',
@@ -95,10 +82,7 @@ class DataopsUpload(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the data
-        filepath = os.path.join(
-            settings.BASE_DIR(),
-            'ontask',
-            'fixtures','simple.csv')
+        filepath = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple.csv')
         resp = self.get_response(
             'dataops:s3upload_start',
             method='POST',

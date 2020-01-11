@@ -42,11 +42,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
 
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
-            os.path.join(
-                settings.BASE_DIR(),
-                'ontask',
-                'fixtures',
-                'simple.csv')
+            os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple.csv')
         )
 
         # Click on the NEXT button
@@ -100,11 +96,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
 
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
-            os.path.join(
-                settings.BASE_DIR(),
-                'ontask',
-                'fixtures',
-                'simple2.csv')
+            os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple2.csv')
         )
 
         # Click on the NEXT button
@@ -197,9 +189,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(
-                settings.BASE_DIR(),
-                'ontask',
-                'fixtures',
+                settings.ONTASK_FIXTURE_DIR,
                 'csv_with_prelude_postlude.csv'),
         )
         # Set the prelude to 6 lines and postlude to 3
@@ -243,12 +233,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
 
 class WorkflowAttribute(tests.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
 
     def test_workflow_attributes(self):
         pass
@@ -341,12 +326,7 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
 
 class WorkflowShare(tests.OnTaskLiveTestCase):
     fixtures = ['simple_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
 
     def test_workflow_share(self):
         # Login
@@ -478,11 +458,8 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
 class WorkflowImport(tests.OnTaskLiveTestCase):
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow_export.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_workflow_export.sql')
 
     def test_import_complete(self):
 
@@ -501,9 +478,7 @@ class WorkflowImport(tests.OnTaskLiveTestCase):
         wname.send_keys('newwf')
         wfile = self.selenium.find_element_by_id('id_wf_file')
         wfile.send_keys(os.path.join(
-            settings.BASE_DIR(),
-            'ontask',
-            'fixtures',
+            settings.ONTASK_FIXTURE_DIR,
             'ontask_workflow.gz'))
 
         # Click in the submit

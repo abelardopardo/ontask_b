@@ -19,12 +19,7 @@ class TableApiBase(tests.OnTaskApiTestCase):
     """Basic function and data for testing the API."""
 
     fixtures = ['simple_table']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_table.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     new_table = {
         "email": ["student04@bogus.com",

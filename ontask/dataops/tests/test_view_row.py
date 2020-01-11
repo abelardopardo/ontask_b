@@ -16,11 +16,8 @@ class DataopsViewsRow(tests.OnTaskTestCase):
 
     fixtures = ['test_condition_evaluation']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_condition_evaluation.sql',
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'test_condition_evaluation.sql')
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 

@@ -30,11 +30,8 @@ class DataopsTransform(tests.OnTaskTestCase):
 
     fixtures = ['plugin_execution']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'plugin_execution.sql',
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'plugin_execution.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'

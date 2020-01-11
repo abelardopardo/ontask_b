@@ -481,12 +481,7 @@ class ActionServe(tests.OnTaskTestCase):
     """Test the view to serve an action."""
 
     fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql',
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     user_email = 'student01@bogus.com'
     user_pwd = 'boguspwd'
@@ -511,11 +506,8 @@ class ActionServeSurvey(tests.OnTaskTestCase):
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow_two_actions.sql',
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_workflow_two_actions.sql')
 
     user_email = 'student01@bogus.com'
     user_pwd = 'boguspwd'

@@ -23,11 +23,8 @@ class WorkflowImportExport(tests.OnTaskTestCase):
     """Test import export functionality."""
     fixtures = ['simple_workflow_export']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow_export.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_workflow_export.sql')
 
     def test_export(self):
         """Test the export functionality."""
@@ -186,12 +183,7 @@ class WorkflowImportExportCycle(tests.OnTaskTestCase):
 
 class WorkflowDelete(tests.OnTaskTestCase):
     fixtures = ['test_merge']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_merge.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'

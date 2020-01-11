@@ -19,11 +19,10 @@ if DEBUG:
 
 if ONTASK_TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
-    FIXTURE_DIRS = [os.path.join(
-        BASE_DIR,
-        'ontask',
-        'tests',
-        'initial_workflow')]
+    ONTASK_FIXTURE_DIR = os.path.join(BASE_DIR, 'ontask', 'tests', 'fixtures')
+    FIXTURE_DIRS = [
+        os.path.join(BASE_DIR, 'ontask', 'tests', 'initial_workflow'),
+        ONTASK_FIXTURE_DIR]
     EXECUTE_ACTION_JSON_TRANSFER = False
 else:
     # Show emails to console in DEBUG mode

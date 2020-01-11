@@ -17,11 +17,8 @@ class EmailActionTracking(tests.OnTaskTestCase):
 
     fixtures = ['simple_email_action']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_email_action.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_email_action.sql')
 
     trck_tokens = [
         "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0by"
@@ -66,11 +63,8 @@ class ActionImport(tests.OnTaskTestCase):
 
     fixtures = ['simple_email_action']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_email_action.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_email_action.sql')
 
     wflow_name = 'wflow1'
 
@@ -79,12 +73,12 @@ class ActionImport(tests.OnTaskTestCase):
         user = get_user_model().objects.get(email='instructor01@bogus.com')
         wflow = models.Workflow.objects.get(name=self.wflow_name)
 
-        with open(os.path.join(
-            settings.BASE_DIR(),
-            'ontask',
-            'fixtures',
-            'survey_to_import.gz'
-        ), 'rb') as file_obj:
+        with open(
+            os.path.join(
+                settings.ONTASK_FIXTURE_DIR,
+                'survey_to_import.gz'),
+            'rb'
+        ) as file_obj:
             services.do_import_action(user, workflow=wflow, file_item=file_obj)
 
         models.Action.objects.get(name='Initial survey')

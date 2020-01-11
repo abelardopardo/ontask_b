@@ -21,11 +21,8 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
 
     fixtures = ['schedule_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'schedule_actions.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'schedule_actions.sql')
 
     tdelta = timedelta(minutes=2)
 

@@ -13,12 +13,7 @@ from ontask import models, tests
 class WorkflowApiCreate(tests.OnTaskApiTestCase):
     fixtures = ['simple_workflow']
 
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
 
     def setUp(self):
         super().setUp()

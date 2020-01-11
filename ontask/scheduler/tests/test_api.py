@@ -15,12 +15,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
     """Test schedule creation through API"""
 
     fixtures = ['three_actions']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'three_actions.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'three_actions.sql')
 
     s_name = 'Scheduling first JSON'
     s_desc = 'First JSON intervention'

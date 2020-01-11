@@ -19,12 +19,7 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
 
     action_name = 'simple action'
     fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     wflow_name = 'wflow1'
     wflow_desc = 'description text for workflow 1'
@@ -566,11 +561,8 @@ class ActionActionInCreate(tests.OnTaskLiveTestCase):
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow_two_actions.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_workflow_two_actions.sql')
 
     wflow_name = 'wflow2'
     wflow_desc = 'Simple workflow structure with two type of actions'
@@ -651,11 +643,8 @@ class ActionActionInPersonalized(tests.OnTaskLiveTestCase):
     """Class to test survey with conditions controlling questions."""
     fixtures = ['test_personalized_survey']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_personalized_survey.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'test_personalized_survey.sql')
 
     wflow_name = 'Test personalized survey'
 
@@ -768,9 +757,7 @@ class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
+        settings.ONTASK_FIXTURE_DIR,
         'simple_workflow_two_actions.sql')
 
     wflow_name = 'wflow2'
@@ -895,11 +882,8 @@ class ActionActionZip(tests.OnTaskLiveTestCase):
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow_two_actions.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_workflow_two_actions.sql')
 
     wflow_name = 'wflow2'
 
@@ -974,12 +958,7 @@ class ActionActionDetectAllFalseRows(tests.OnTaskLiveTestCase):
     """Test the detection of all false rows."""
     action_name = 'simple action'
     fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     wflow_name = 'wflow1'
     wflow_desc = 'description text for workflow 1'
@@ -1057,12 +1036,7 @@ class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
 
     action_name = 'Test1'
     fixtures = ['all_key_columns']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'all_key_columns.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'all_key_columns.sql')
 
     wflow_name = 'all key columns'
 
@@ -1093,12 +1067,7 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
     """Test sending a list of values."""
 
     fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     wflow_name = 'wflow1'
     wflow_desc = 'description text for workflow 1'
@@ -1188,12 +1157,7 @@ class ActionJSONListActionCreate(tests.OnTaskLiveTestCase):
     """Test the JSON List action."""
 
     fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     wflow_name = 'wflow1'
     wflow_desc = 'description text for workflow 1'
@@ -1266,12 +1230,7 @@ class ActionJSONListActionCreate(tests.OnTaskLiveTestCase):
 class ActionServeLongSurvey(tests.OnTaskLiveTestCase):
     """Test the view to serve a survey."""
     fixtures = ['long_survey']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'long_survey.sql',
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'long_survey.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
@@ -1303,12 +1262,7 @@ class ActionServeLongSurvey(tests.OnTaskLiveTestCase):
 class ActionCreateRubric(tests.OnTaskLiveTestCase):
     """Test the view to serve a survey."""
     fixtures = ['test_rubric']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_rubric.sql',
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_rubric.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'

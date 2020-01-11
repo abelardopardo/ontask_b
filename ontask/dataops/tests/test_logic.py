@@ -16,12 +16,7 @@ from ontask.dataops import formula, pandas, services, sql
 
 class DataopsMatrixManipulation(tests.OnTaskTestCase):
     fixtures = ['test_merge']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_merge.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
 
     table_name = 'DUMP_BOGUS_TABLE'
 
@@ -646,11 +641,8 @@ class FormulaEvaluation(tests.OnTaskTestCase):
 class ConditionSetEvaluation(tests.OnTaskTestCase):
     fixtures = ['test_condition_evaluation']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_condition_evaluation.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'test_condition_evaluation.sql')
     action_name = 'Test action'
 
     def test_eval_conditions(self):
@@ -700,11 +692,8 @@ class ConditionSetEvaluation(tests.OnTaskTestCase):
 class ConditionNameWithSymbols(tests.OnTaskTestCase):
     fixtures = ['symbols_in_condition_name']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'symbols_in_condition_name.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'symbols_in_condition_name.sql')
     action_name1 = 'bug 1'
     action_name2 = 'bug 2'
 

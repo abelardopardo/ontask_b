@@ -16,11 +16,8 @@ class ActionViewExport(tests.OnTaskTestCase):
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow_two_actions.sql',
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_workflow_two_actions.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
