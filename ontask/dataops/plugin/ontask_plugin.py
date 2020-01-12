@@ -3,8 +3,10 @@
 """Abstract class to use to inherit a plugin."""
 from abc import ABCMeta
 from builtins import object
+from typing import Dict, Optional
 
 from django.utils.translation import ugettext_lazy as _
+import pandas as pd
 
 
 class OnTaskPluginAbstract(object, metaclass=ABCMeta):
@@ -51,7 +53,7 @@ class OnTaskPluginAbstract(object, metaclass=ABCMeta):
         """Access the parameters."""
         return self.parameters
 
-    def run(self, data_frame, parameters=dict):
+    def run(self, data_frame: pd.DataFrame, parameters: Optional[Dict] = dict):
         """Overwrite this method.
 
         Receives a data frame wih a number of columns

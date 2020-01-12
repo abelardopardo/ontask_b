@@ -50,13 +50,13 @@ def diagnose(
     """
     del workflow
     # Action being used
-    plugin = models.Plugin.objects.filter(id=pk).first().values('filename')
+    plugin = models.Plugin.objects.filter(id=pk).first()
     if not plugin:
         return http.JsonResponse({'html_redirect': reverse('home')})
 
     # Reload the plugin to get the messages stored in the right place.
     try:
-        pinstance, msgs = services.load_plugin(plugin['filename'])
+        pinstance, msgs = services.load_plugin(plugin.filename)
     except OnTaskServiceException as exc:
         exc.message_to_error(request)
         return http.JsonResponse({

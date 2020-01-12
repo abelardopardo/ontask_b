@@ -48,7 +48,7 @@ class LTIAuthBackend(ModelBackend):
         request_key = request.POST.get('oauth_consumer_key')
 
         if request_key is None:
-            LOGGER.error(
+            LOGGER.debug(
                 'Request does not contain an oauth_consumer_key. Stopping')
             return None
 
