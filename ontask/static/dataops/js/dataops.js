@@ -43,20 +43,8 @@ $(function () {
   $("#transform-table, #plugin-admin-table").on(
   "click", ".js-plugin-show-description", loadForm);
 
-  // Connection add, edit, delete and clone
-  $("#connection-admin").on("click", ".js-connection-view", loadForm);
-  $("#connection-instructor").on("click", ".js-connection-view", loadForm);
-  $("#connection-admin").on("click", ".js-connection-addedit", loadForm);
-  $("#modal-item").on("submit", ".js-connection-addedit-form", saveForm);
-  $("#connection-admin, #modal-item").on("click", ".js-connection-delete", loadForm);
-  $("#modal-item").on("submit", ".js-connection-delete-form", saveForm);
-  $("#connection-admin, #modal-item").on("click", ".js-connection-clone", loadForm);
-  $("#modal-item").on("submit", ".js-connection-clone-form", saveForm);
-
   // Toggle plugin is_enabled
   $("#plugin-admin-table").on("change", ".plugin-toggle", toggleCheckBox);
-  // Toggle enable connections
-  $("#connection-admin-table").on("change", ".toggle-checkbox", toggleCheckBox);
 });
 
 window.onload = function(){
