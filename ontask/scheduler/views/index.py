@@ -9,8 +9,8 @@ from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.connection.services import sql_connection_select_table
 from ontask.core import SessionPayload, get_workflow, is_instructor
-from ontask.dataops.services import sql_connection_select_table
 from ontask.scheduler import services
 
 
@@ -55,5 +55,5 @@ def sql_connection_index(
     table = sql_connection_select_table('scheduler:sqlupload')
     return render(
         request,
-        'dataops/connections.html',
+        'connection/index.html',
         {'table': table, 'is_sql': True, 'title': _('SQL Connections')})

@@ -48,6 +48,8 @@ class BackToHome(tests.OnTaskTestCase):
                 'action:unselect_column_action',
                 kwargs={'pk': 1, 'cpk': 1}),
             reverse('action:run_survey_row', kwargs={'pk': 1}),
+            # Connection
+            reverse('connection:sqlconns_index'),
             # Dataops
             reverse('dataops:uploadmerge'),
             reverse('dataops:transform'),
@@ -62,7 +64,6 @@ class BackToHome(tests.OnTaskTestCase):
             reverse('dataops:upload_s2'),
             reverse('dataops:upload_s3'),
             reverse('dataops:upload_s4'),
-            reverse('dataops:sqlconns_index'),
             # reverse('dataops:athenaconns_instructor_index'),
             reverse('dataops:sqlupload_start', kwargs={'pk': 1}),
             # reverse('dataops:athenaupload_start', kwargs={'pk': 1}),
@@ -125,10 +126,11 @@ class BackToHome(tests.OnTaskTestCase):
             reverse(
                 'action:clone_condition',
                 kwargs={'pk': 1, 'action_pk': 1}),
+            # Connection
+            reverse('connection:sqlconn_view', kwargs={'pk': 1}),
             # Dataops
             reverse('dataops:plugin_diagnose', kwargs={'pk': 1}),
             reverse('dataops:plugin_moreinfo', kwargs={'pk': 1}),
-            reverse('dataops:sqlconn_view', kwargs={'pk': 1}),
             # reverse('dataops:athenaconn_view', kwargs={'pk': 1}),
             # Logs
             reverse('logs:display_ss'),

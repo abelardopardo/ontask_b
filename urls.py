@@ -41,6 +41,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     # Home Page!
     path('', views.home, name='home'),
+    path('', include('ontask.accounts.urls', namespace='accounts')),
     path('lti_entry', views.lti_entry, name='lti_entry'),
     path('not_authorized', views.home, name='not_authorized'),
     path(
@@ -51,9 +52,11 @@ urlpatterns = [
     path('ota', admin.site.urls),
     path('trck', views.trck, name='trck'),
     path('keep_alive', views.keep_alive, name='keep_alive'),
-    path('', include('ontask.accounts.urls', namespace='accounts')),
     path('workflow/', include('ontask.workflow.urls', namespace='workflow')),
     path('column/', include('ontask.column.urls', namespace='column')),
+    path(
+        'connection/',
+        include('ontask.connection.urls', namespace='connection')),
     path('dataops/', include('ontask.dataops.urls', namespace='dataops')),
     path('action/', include('ontask.action.urls', namespace='action')),
     path('table/', include('ontask.table.urls', namespace='table')),

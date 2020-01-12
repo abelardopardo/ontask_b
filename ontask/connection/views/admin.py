@@ -11,9 +11,9 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.connection import forms, services
 from ontask.core import ajax_required, is_admin, is_instructor
 from ontask.core.session_ops import remove_workflow_from_session
-from ontask.dataops import forms, services
 
 
 @user_passes_test(is_admin)
@@ -26,11 +26,11 @@ def sql_connection_admin_index(request: http.HttpRequest) -> http.HttpResponse:
     remove_workflow_from_session(request)
     return render(
         request,
-        'dataops/connections_admin.html',
+        'connection/index_admin.html',
         {
             'table': services.create_sql_connection_admintable(),
             'title': _('SQL Connections'),
-            'data_url': reverse('dataops:sqlconn_add')})
+            'data_url': reverse('connection:sqlconn_add')})
 
 
 @user_passes_test(is_admin)
@@ -45,7 +45,7 @@ def athena_connection_admin_index(
     remove_workflow_from_session(request)
     return render(
         request,
-        'dataops/connections_admin.html',
+        'connection/index_admin.html',
         {
             'table': services.create_athena_connection_admintable(),
             'title': _('Athena Connections'),
@@ -68,18 +68,21 @@ def sql_connection_view(
     if not c_obj:
         # Connection object not found, go to table of Athena connections
         return http.JsonResponse({
-            'html_redirect': reverse('dataops:sqlconns_admin_index')})
+            'html_redirect': reverse('connection:sqlconns_admin_index')})
 
     return http.JsonResponse({
         'html_form': render_to_string(
-            'dataops/includes/partial_connection_show.html',
+            'connection/includes/partial_show.html',
             {'c_vals': c_obj.get_display_dict(), 'id': c_obj.id},
             request=request)})
 
 
 @user_passes_test(is_instructor)
 @ajax_required
-def athena_connection_view(request: http.HttpRequest, pk: int) -> http.JsonResponse:
+def athena_connection_view(
+    request: http.HttpRequest,
+    pk: int
+) -> http.JsonResponse:
     """Show the Athena connection in a modal.
 
     :param request: Request object
@@ -94,7 +97,7 @@ def athena_connection_view(request: http.HttpRequest, pk: int) -> http.JsonRespo
 
     return http.JsonResponse({
         'html_form': render_to_string(
-            'dataops/includes/partial_connection_show.html',
+            'connection/includes/partial_show.html',
             {'c_vals': c_obj.get_display_dict(), 'id': c_obj.id},
             request=request)})
 
@@ -115,9 +118,9 @@ def sql_connection_edit(
     is_add = pk is None
     form_class = forms.SQLConnectionForm
     if is_add:
-        action_url = reverse('dataops:sqlconn_add')
+        action_url = reverse('connection:sqlconn_add')
     else:
-        action_url = reverse('dataops:sqlconn_edit', kwargs={'pk': pk})
+        action_url = reverse('connection:sqlconn_edit', kwargs={'pk': pk})
         conn = models.SQLConnection.objects.filter(pk=pk).first()
         if not conn:
             return http.JsonResponse({'html_redirect': reverse('home')})
@@ -138,7 +141,7 @@ def sql_connection_edit(
     # Request is a GET
     return http.JsonResponse({
         'html_form': render_to_string(
-            'dataops/includes/partial_connection_addedit.html',
+            'connection/includes/partial_addedit.html',
             {
                 'form': form,
                 'id': form.instance.id,
@@ -185,7 +188,7 @@ def athena_connection_edit(
     # Request is a GET
     return http.JsonResponse({
         'html_form': render_to_string(
-            'dataops/includes/partial_connection_addedit.html',
+            'connection/includes/partial_addedit.html',
             {
                 'form': form,
                 'id': form.instance.id,
@@ -196,7 +199,10 @@ def athena_connection_edit(
 
 @user_passes_test(is_admin)
 @ajax_required
-def sql_connection_clone(request: http.HttpRequest, pk: int) -> http.JsonResponse:
+def sql_connection_clone(
+    request: http.HttpRequest,
+    pk: int
+) -> http.JsonResponse:
     """AJAX handshake to clone an SQL connection.
 
     :param request: HTTP request
@@ -212,12 +218,15 @@ def sql_connection_clone(request: http.HttpRequest, pk: int) -> http.JsonRespons
         request,
         conn,
         models.SQLConnection.objects,
-        reverse('dataops:sqlconn_clone', kwargs={'pk': conn.id}))
+        reverse('connection:sqlconn_clone', kwargs={'pk': conn.id}))
 
 
 @user_passes_test(is_admin)
 @ajax_required
-def athena_connection_clone(request: http.HttpRequest, pk: int) -> http.JsonResponse:
+def athena_connection_clone(
+    request: http.HttpRequest,
+    pk: int
+) -> http.JsonResponse:
     """AJAX handshake to clone an Athena connection.
 
     :param request: HTTP request
@@ -238,7 +247,10 @@ def athena_connection_clone(request: http.HttpRequest, pk: int) -> http.JsonResp
 
 @user_passes_test(is_admin)
 @ajax_required
-def sql_connection_delete(request: http.HttpRequest, pk: int) -> http.JsonResponse:
+def sql_connection_delete(
+    request: http.HttpRequest,
+    pk: int
+) -> http.JsonResponse:
     """AJAX processor for the delete SQL connection operation.
 
     :param request: AJAX request
@@ -253,12 +265,15 @@ def sql_connection_delete(request: http.HttpRequest, pk: int) -> http.JsonRespon
     return services.delete(
         request,
         conn,
-        reverse('dataops:sqlconn_delete', kwargs={'pk': conn.id}))
+        reverse('connection:sqlconn_delete', kwargs={'pk': conn.id}))
 
 
 @user_passes_test(is_admin)
 @ajax_required
-def athena_connection_delete(request: http.HttpRequest, pk: int) -> http.JsonResponse:
+def athena_connection_delete(
+    request: http.HttpRequest,
+    pk: int
+) -> http.JsonResponse:
     """AJAX processor for the delete an Athena connection operation.
 
     :param request: AJAX request
@@ -293,7 +308,7 @@ def sqlconn_toggle(
     return services.toggle(
         request,
         conn,
-        reverse('dataops:sqlconn_toggle', kwargs={'pk': conn.id}))
+        reverse('connection:sqlconn_toggle', kwargs={'pk': conn.id}))
 
 
 @user_passes_test(is_instructor)

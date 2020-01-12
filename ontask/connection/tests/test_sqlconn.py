@@ -22,7 +22,7 @@ class DataopsViewSQLConnections(tests.OnTaskTestCase):
 
     def test_sql_views_instructor(self):
         """Test the view to filter items."""
-        resp = self.get_response('dataops:sqlconns_index')
+        resp = self.get_response('connection:sqlconns_index')
         self.assertTrue(status.is_success(resp.status_code))
 
 
@@ -38,15 +38,15 @@ class DataopsViewSQLConnectionsAdmin(tests.OnTaskTestCase):
 
     def test_sql_views_admin(self):
         """Test the view to filter items."""
-        resp = self.get_response('dataops:sqlconns_admin_index')
+        resp = self.get_response('connection:sqlconns_admin_index')
         self.assertTrue(status.is_success(resp.status_code))
 
         # Add a new connection (GET)
-        resp = self.get_response('dataops:sqlconn_add', is_ajax=True)
+        resp = self.get_response('connection:sqlconn_add', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         # Add a new connection (POST)
         resp = self.get_response(
-            'dataops:sqlconn_add',
+            'connection:sqlconn_add',
             method='POST',
             req_params={
                 'name': 'conn name',
@@ -65,20 +65,20 @@ class DataopsViewSQLConnectionsAdmin(tests.OnTaskTestCase):
 
         # Request to view
         resp = self.get_response(
-            'dataops:sqlconn_view',
+            'connection:sqlconn_view',
             {'pk': sqlconn.id},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
         # Request to edit (GET)
         resp = self.get_response(
-            'dataops:sqlconn_edit',
+            'connection:sqlconn_edit',
             {'pk': sqlconn.id},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         # Edit a connection (POST)
         resp = self.get_response(
-            'dataops:sqlconn_edit',
+            'connection:sqlconn_edit',
             {'pk': sqlconn.id},
             method='POST',
             req_params={
@@ -98,13 +98,13 @@ class DataopsViewSQLConnectionsAdmin(tests.OnTaskTestCase):
 
         # Clone get
         resp = self.get_response(
-            'dataops:sqlconn_clone',
+            'connection:sqlconn_clone',
             {'pk': sqlconn.id},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         # Clone post
         resp = self.get_response(
-            'dataops:sqlconn_clone',
+            'connection:sqlconn_clone',
             {'pk': sqlconn.id},
             method='POST',
             is_ajax=True)
@@ -119,13 +119,13 @@ class DataopsViewSQLConnectionsAdmin(tests.OnTaskTestCase):
 
         # Delete get
         resp = self.get_response(
-            'dataops:sqlconn_delete',
+            'connection:sqlconn_delete',
             {'pk': sqlconn.id},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         # Delete post
         resp = self.get_response(
-            'dataops:sqlconn_delete',
+            'connection:sqlconn_delete',
             {'pk': sqlconn.id},
             method='POST',
             is_ajax=True)

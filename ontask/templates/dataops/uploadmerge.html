@@ -101,7 +101,7 @@
         </tr>
         <tr>
           <td class="text-center" style="vertical-align: middle;">
-            <a href="{% url 'dataops:sqlconns_index' %}" class="btn btn-outline-primary {% if not sql_enabled %}disabled{% endif %}">
+            <a href="{% url 'connection:sqlconns_index' %}" class="btn btn-outline-primary {% if not sql_enabled %}disabled{% endif %}">
               <span class="fa fa-plus"></span>
               {% trans 'SQL Connection' %}
             </a>

@@ -6,10 +6,10 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.core import OperationsColumn
-from ontask.dataops.services.connections import (
+from ontask.connection.services.crud import (
     ConnectionTableAdmin, ConnectionTableSelect,
 )
+from ontask.core import OperationsColumn
 
 
 class AthenaConnectionTableAdmin(ConnectionTableAdmin):
@@ -19,7 +19,7 @@ class AthenaConnectionTableAdmin(ConnectionTableAdmin):
     def render_enabled(record):
         """Render the boolean to allow changes."""
         return render_to_string(
-            'dataops/includes/partial_connection_enable.html',
+            'connection/includes/partial_enable.html',
             {
                 'id': record['id'],
                 'enabled': record['enabled'],
@@ -47,7 +47,7 @@ def create_athena_connection_admintable() -> AthenaConnectionTableAdmin:
     """
     op_column = OperationsColumn(
         verbose_name='',
-        template_file='dataops/includes/partial_connection_adminop.html',
+        template_file='connection/includes/partial_adminop.html',
         template_context=lambda record: {
             'id': record['id'],
             'edit_url': reverse(
@@ -80,7 +80,7 @@ def create_athena_connection_runtable() -> AthenaConnectionTableSelect:
     """
     operation_column = OperationsColumn(
         verbose_name=_('Operations'),
-        template_file='dataops/includes/partial_connection_select.html',
+        template_file='connection/includes/partial_select.html',
         template_context=lambda record: {
             'id': record['id'],
             'run_url': reverse(

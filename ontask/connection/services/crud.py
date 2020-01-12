@@ -59,7 +59,7 @@ def clone_connection(
     if request.method == 'GET':
         return http.JsonResponse({
             'html_form': render_to_string(
-                'dataops/includes/partial_connection_clone.html',
+                'connection/includes/partial_clone.html',
                 {'pk': conn.id, 'cname': conn.name, 'clone_url': clone_url},
                 request=request)})
 
@@ -97,7 +97,7 @@ def delete(
     # This is a GET request
     return http.JsonResponse({
         'html_form': render_to_string(
-            'dataops/includes/partial_connection_delete.html',
+            'connection/includes/partial_delete.html',
             {'name': conn.name, 'delete_url': delete_url},
             request=request),
     })

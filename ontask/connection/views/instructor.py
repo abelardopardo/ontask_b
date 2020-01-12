@@ -9,8 +9,8 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 from ontask import models
+from ontask.connection import services
 from ontask.core import get_workflow, is_instructor
-from ontask.dataops import services
 
 
 @user_passes_test(is_instructor)
@@ -29,7 +29,7 @@ def sql_connection_index(
     table = services.sql_connection_select_table('dataops:sqlupload_start')
     return render(
         request,
-        'dataops/connections.html',
+        'connection/index.html',
         {'table': table, 'is_sql': True, 'title': _('SQL Connections')})
 
 
@@ -48,7 +48,7 @@ def athena_connection_instructor_index(
     del workflow
     return render(
         request,
-        'dataops/connections.html',
+        'connection/index.html',
         {
             'table': services.create_athena_connection_runtable(),
             'is_athena': True,

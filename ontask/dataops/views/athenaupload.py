@@ -10,8 +10,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+import ontask.connection.forms
 from ontask.core import get_workflow, is_instructor
-from ontask.dataops import forms
 
 
 @user_passes_test(is_instructor)
@@ -37,7 +37,7 @@ def athenaupload_start(
         return redirect(
             'dataops:athenaconns_instructor_index_instructor_index')
 
-    form = forms.AthenaRequestConnectionParam(
+    form = ontask.connection.forms.AthenaRequestConnectionParam(
         request.POST or None,
         workflow=workflow,
         instance=conn)

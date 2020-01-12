@@ -1,16 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Services to process dataframes."""
-from ontask.dataops.services.athena import (
-    create_athena_connection_admintable, create_athena_connection_runtable,
-)
-from ontask.dataops.services.connections import (
-    ConnectionTableAdmin, ConnectionTableSelect, clone_connection, delete,
-    toggle,
-)
-from ontask.dataops.services.connections_sql import (
-    create_sql_connection_admintable, sql_connection_select_table,
-)
 from ontask.dataops.services.dataframeupload import (
     batch_load_df_from_athenaconnection, load_df_from_csvfile,
     load_df_from_excelfile, load_df_from_googlesheet, load_df_from_s3,

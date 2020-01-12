@@ -11,8 +11,9 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+import ontask.connection.forms
 from ontask.core import get_workflow, is_instructor
-from ontask.dataops import forms, services
+from ontask.dataops import services
 
 
 @user_passes_test(is_instructor)
@@ -45,13 +46,13 @@ def sqlupload_start(
     conn = models.SQLConnection.objects.filter(
         pk=pk).filter(enabled=True).first()
     if not conn:
-        return redirect('dataops:sqlconns_index')
+        return redirect('connection:sqlconns_index')
 
     form = None
     missing_field = conn.has_missing_fields()
     if missing_field:
         # The connection needs a password  to operate
-        form = forms.SQLRequestConnectionParam(
+        form = ontask.connection.forms.SQLRequestConnectionParam(
             request.POST or None,
             connection=conn)
 
@@ -61,7 +62,7 @@ def sqlupload_start(
         'dtype': 'SQL',
         'dtype_select': _('SQL connection'),
         'valuerange': range(5) if workflow.has_table() else range(3),
-        'prev_step': reverse('dataops:sqlconns_index'),
+        'prev_step': reverse('connection:sqlconns_index'),
         'conn_type': conn.conn_type,
         'conn_driver': conn.conn_driver,
         'db_user': conn.db_user,

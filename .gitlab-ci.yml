@@ -24,7 +24,7 @@ stages:
 test:
   stage: Run tests
   script:
-    - coverage run ./manage.py test -v 2 ontask.workflow ontask.column ontask.dataops ontask.table ontask.action ontask.tests ontask.scheduler ontask.tasks
+    - coverage run ./manage.py test -v 2 ontask.workflow ontask.column ontask.dataops ontask.connection ontask.table ontask.action ontask.tests ontask.scheduler ontask.tasks
   artifacts:
     paths:
       - htmlcov

@@ -8,10 +8,10 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.core import OperationsColumn
-from ontask.dataops.services.connections import (
+from ontask.connection.services.crud import (
     ConnectionTableAdmin, ConnectionTableSelect,
 )
+from ontask.core import OperationsColumn
 
 
 class SQLConnectionTableAdmin(ConnectionTableAdmin):
@@ -21,12 +21,12 @@ class SQLConnectionTableAdmin(ConnectionTableAdmin):
     def render_enabled(record):
         """Render the boolean to allow changes."""
         return render_to_string(
-            'dataops/includes/partial_connection_enable.html',
+            'connection/includes/partial_enable.html',
             {
                 'id': record['id'],
                 'enabled': record['enabled'],
                 'toggle_url': reverse(
-                    'dataops:sqlconn_toggle',
+                    'connection:sqlconn_toggle',
                     kwargs={'pk': record['id']})})
 
     class Meta(ConnectionTableAdmin.Meta):
@@ -63,20 +63,20 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
     """
     op_column = OperationsColumn(
         verbose_name=_('Operations'),
-        template_file='dataops/includes/partial_connection_adminop.html',
+        template_file='connection/includes/partial_adminop.html',
         template_context=lambda record: {
             'id': record['id'],
             'edit_url': reverse(
-                'dataops:sqlconn_edit',
+                'connection:sqlconn_edit',
                 kwargs={'pk': record['id']}),
             'view_url': reverse(
-                'dataops:sqlconn_view',
+                'connection:sqlconn_view',
                 kwargs={'pk': record['id']}),
             'clone_url': reverse(
-                'dataops:sqlconn_clone',
+                'connection:sqlconn_clone',
                 kwargs={'pk': record['id']}),
             'delete_url': reverse(
-                'dataops:sqlconn_delete',
+                'connection:sqlconn_delete',
                 kwargs={'pk': record['id']})})
     return SQLConnectionTableAdmin(
         models.SQLConnection.objects.values(
@@ -97,11 +97,11 @@ def sql_connection_select_table(select_url: str) -> SQLConnectionTableSelect:
     """
     operation_column = OperationsColumn(
         verbose_name='',
-        template_file='dataops/includes/partial_connection_select.html',
+        template_file='connection/includes/partial_select.html',
         template_context=lambda record: {
             'id': record['id'],
             'view_url': reverse(
-                'dataops:sqlconn_view',
+                'connection:sqlconn_view',
                 kwargs={'pk': record['id']})})
 
     return SQLConnectionTableSelect(

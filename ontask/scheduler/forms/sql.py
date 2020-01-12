@@ -7,6 +7,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+import ontask.connection.forms
 from ontask.dataops import forms as dataops_forms
 from ontask.scheduler.forms import ScheduleBasicForm
 
@@ -14,7 +15,7 @@ from ontask.scheduler.forms import ScheduleBasicForm
 class ScheduleSQLUploadForm(
     ScheduleBasicForm,
     dataops_forms.MergeForm,
-    dataops_forms.SQLRequestConnectionParam):
+    ontask.connection.forms.SQLRequestConnectionParam):
     """Form to request info for the SQL scheduled upload
 
     Three blocks of information are requested:
