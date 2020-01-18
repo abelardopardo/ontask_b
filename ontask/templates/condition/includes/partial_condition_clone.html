@@ -7,7 +7,7 @@
     <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="condition-clone">
       {% for condition in conditions_to_clone %}
         <button type="button" class="dropdown-item js-condition-clone"
-                data-url="{% url 'action:clone_condition' condition.id action.id %}">{{ condition.name }}</button>
+                data-url="{% url 'condition:clone_condition' condition.id action.id %}">{{ condition.name }}</button>
       {% endfor %}
     </div>
   </div>

@@ -5,11 +5,7 @@ from ontask.action.views.action import (
     ActionCreateView, ActionUpdateView, action_index, delete_action,
     edit_action,
 )
-from ontask.action.views.clone import clone_action, clone_condition
-from ontask.action.views.condition import (
-    ConditionCreateView, FilterCreateView, delete_condition, delete_filter,
-    edit_condition, edit_filter,
-)
+from ontask.action.views.clone import clone_action
 from ontask.action.views.edit_personalized import save_text, showurl
 from ontask.action.views.edit_rubric import edit_rubric_cell, edit_rubric_loas
 from ontask.action.views.edit_survey import (

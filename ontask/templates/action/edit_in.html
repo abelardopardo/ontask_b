@@ -18,6 +18,7 @@
   {% endwith %}
   <script src="{% static 'js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'condition/js/condition.js' %}?v={% ontask_version %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
@@ -96,8 +97,8 @@
            id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
       </li>
       {% include 'action/includes/partial_questions_tab_li.html' %}
-      {% include 'action/includes/partial_filter_tab_li.html' %}
-      {% include 'action/includes/partial_condition_tab_li.html' %}
+      {% include 'condition/includes/partial_filter_tab_li.html' %}
+      {% include 'condition/includes/partial_condition_tab_li.html' %}
     </ul>
     <div class="tab-content" id="edit-survey-tab-content">
       <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
@@ -152,8 +153,8 @@
         </div>
       </div>
       {% include 'action/includes/partial_questions_tab_body.html' %}
-      {% include 'action/includes/partial_filter_tab_body.html' %}
-      {% include 'action/includes/partial_condition_tab_body.html' %}
+      {% include 'condition/includes/partial_filter_tab_body.html' %}
+      {% include 'condition/includes/partial_condition_tab_body.html' %}
     </div>
   </div>
   {% include 'modal.html' %}

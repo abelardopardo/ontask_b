@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'action:delete_filter' id %}" class="js-filter-delete-form">
+<form method="post" action="{% url 'condition:delete_filter' id %}" class="js-filter-delete-form">
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm filter deletion' %}</h4>

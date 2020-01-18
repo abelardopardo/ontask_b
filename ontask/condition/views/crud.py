@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 
 from ontask import models
-from ontask.action import forms, services
+from ontask.condition import forms, services
 from ontask.core import (
     UserIsInstructor, ajax_required, get_action, get_condition, is_instructor,
 )
@@ -84,14 +84,14 @@ class FilterCreateView(ConditionFilterCreateViewBase):
     """Process AJAX request to create a filter through AJAX calls."""
 
     form_class = forms.FilterForm
-    template_name = 'action/includes/partial_filter_addedit.html'
+    template_name = 'condition/includes/partial_filter_addedit.html'
 
 
 class ConditionCreateView(ConditionFilterCreateViewBase):
     """Handle AJAX requests to create a non-filter condition."""
 
     form_class = forms.ConditionForm
-    template_name = 'action/includes/partial_condition_addedit.html'
+    template_name = 'condition/includes/partial_condition_addedit.html'
 
 
 @user_passes_test(is_instructor)
@@ -130,7 +130,7 @@ def edit_filter(
 
     return http.JsonResponse({
         'html_form': render_to_string(
-            'action/includes/partial_filter_addedit.html',
+            'condition/includes/partial_filter_addedit.html',
             {
                 'form': form,
                 'action_id': condition.action.id,
@@ -175,7 +175,7 @@ def edit_condition(
 
     return http.JsonResponse({
         'html_form': render_to_string(
-            'action/includes/partial_condition_addedit.html',
+            'condition/includes/partial_condition_addedit.html',
             {
                 'form': form,
                 'action_id': condition.action.id,
@@ -205,7 +205,7 @@ def delete_filter(
     if request.method == 'GET':
         return http.JsonResponse({
             'html_form': render_to_string(
-                'action/includes/partial_filter_delete.html',
+                'condition/includes/partial_filter_delete.html',
                 {'id': condition.id},
                 request=request),
         })
@@ -258,7 +258,7 @@ def delete_condition(
 
     return http.JsonResponse({
         'html_form': render_to_string(
-            'action/includes/partial_condition_delete.html',
+            'condition/includes/partial_condition_delete.html',
             {'condition_id': condition.id},
             request=request),
     })

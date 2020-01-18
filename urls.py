@@ -59,6 +59,8 @@ urlpatterns = [
         include('ontask.connection.urls', namespace='connection')),
     path('dataops/', include('ontask.dataops.urls', namespace='dataops')),
     path('action/', include('ontask.action.urls', namespace='action')),
+    path('condition/',
+        include('ontask.condition.urls', namespace='condition')),
     path('table/', include('ontask.table.urls', namespace='table')),
     path(
         'scheduler/',

@@ -18,6 +18,7 @@
     <script src="{% static 'js/query-builder.'|add:country|add:'.js' %}"></script>
   {% endwith %}
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'condition/js/condition.js' %}?v={% ontask_version %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
@@ -70,12 +71,12 @@
         <ul class="nav nav-tabs border-0 justify-content-center"
             id="edit-personalized-text-tabs" role="tablist">
           {% include 'action/includes/partial_text_summernote_tab_li.html' %}
-          {% include 'action/includes/partial_filter_tab_li.html' %}
+          {% include 'condition/includes/partial_filter_tab_li.html' %}
           {% include 'action/includes/partial_rubric_tab_li.html' %}
         </ul>
         <div class="tab-content" id="edit-personalized-text-tab-content">
           {% include 'action/includes/partial_text_summernote_tab_body.html' %}
-          {% include 'action/includes/partial_filter_tab_body.html' %}
+          {% include 'condition/includes/partial_filter_tab_body.html' %}
           {% include 'action/includes/partial_rubric_tab_body.html' %}
         </div>
       </div>

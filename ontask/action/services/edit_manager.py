@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from ontask import models
-from ontask.action import forms as action_forms
+from ontask.condition import forms as condition_forms
 from ontask.visualizations.plotly import PlotlyHandler
 
 
@@ -74,7 +74,7 @@ class ActionEditManager:
     def get_render_context(
         action: models.Action,
         form: Optional[Type[forms.ModelForm]] = None,
-        form_filter: Optional[action_forms.FilterForm] = None,
+        form_filter: Optional[condition_forms.FilterForm] = None,
     ) -> Dict:
         """Get the initial context to render the response."""
         filter_condition = action.get_filter()
@@ -130,7 +130,7 @@ class ActionOutEditManager(ActionEditManager):
         """Process the action edit request."""
         form = self.edit_form_class(request.POST or None, instance=action)
 
-        form_filter = action_forms.FilterForm(
+        form_filter = condition_forms.FilterForm(
             request.POST or None,
             instance=action.get_filter(),
             action=action
