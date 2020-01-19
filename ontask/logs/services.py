@@ -78,10 +78,9 @@ def log_table_server_side(
     # Order and select values
     qs = qs.order_by(F('created').desc()).values_list(
         'id',
-        'created',
-        'user__email',
         'name',
-    )
+        'created',
+        'user__email')
     records_filtered = qs.count()
 
     final_qs = []
@@ -94,8 +93,8 @@ def log_table_server_side(
                 ugettext('View log content'),
                 log_item[0],
             ),
-            simplify_datetime_str(log_item[1]),
-            log_item[2],
+            models.Log.LOG_TYPES[log_item[1]],
+            simplify_datetime_str(log_item[2]),
             log_item[3],
         ]
 

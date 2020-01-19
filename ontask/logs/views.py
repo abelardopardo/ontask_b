@@ -37,9 +37,9 @@ def display(
             'workflow': workflow,
             'column_names': [
                 _('ID'),
+                _('Event type'),
                 _('Date/Time'),
-                _('User'),
-                _('Event type')]})
+                _('User')]})
 
 
 @user_passes_test(is_instructor)

@@ -32,8 +32,7 @@ if settings.DEBUG:
         application = DebuggedApplication(
             application,
             evalex=True,
-            # Turning off pin security as
-            # DEBUG is True
+            # Turning off pin security as DEBUG is True
             pin_security=False)
     except ImportError:
         pass
