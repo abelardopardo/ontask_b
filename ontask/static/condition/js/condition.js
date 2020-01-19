@@ -52,4 +52,4 @@ $(function () {
   // Delete Filter
   $("#filter").on("click", ".js-filter-delete", loadForm);
   $("#modal-item").on("submit", ".js-filter-delete-form", saveForm);
-}
+})

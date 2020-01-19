@@ -5,7 +5,7 @@
     action="{% url 'condition:create_filter' action_id %}"
     class="js-filter-create-form"
   {% else %}
-    action="{% url 'conditionn:edit_filter' condition.id %}"
+    action="{% url 'condition:edit_filter' condition.id %}"
     class="js-filter-edit-form"
   {% endif %}>
   {% csrf_token %}
