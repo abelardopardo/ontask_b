@@ -8,6 +8,7 @@ from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render, reverse
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -62,12 +63,13 @@ def display_ss(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
 def view(
     request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
+) -> http.JsonResponse:
     """View the content of one of the logs.
 
     :param request: Http Request received
@@ -83,15 +85,49 @@ def view(
         messages.error(request, _('Incorrect log number requested'))
         return redirect(reverse('logs:index'))
 
-    return render(
-        request,
-        'logs/view.html',
-        {
-            'log_item': log_item,
-            'json_pretty': json.dumps(
-                log_item.payload,
-                sort_keys=True,
-                indent=4)})
+    return http.JsonResponse({
+        'html_form': render_to_string(
+            'logs/includes/partial_show.html',
+            {
+                'log_item': log_item,
+                'json_pretty': json.dumps(
+                    log_item.payload,
+                    sort_keys=True,
+                    indent=4)},
+            request=request)})
+
+
+# @user_passes_test(is_instructor)
+# @get_workflow()
+# def view(
+#     request: http.HttpRequest,
+#     pk: int,
+#     workflow: Optional[models.Workflow] = None,
+# ) -> http.HttpResponse:
+#     """View the content of one of the logs.
+#
+#     :param request: Http Request received
+#     :param pk: Primary key of the log to view
+#     :param workflow: Workflow being manipulated (set by the decorators)
+#     :return: Http response rendering the view.html
+#     """
+#     # Get the log item
+#     log_item = workflow.logs.filter(pk=pk, user=request.user).first()
+#
+#     # If the log item is not there, flag!
+#     if not log_item:
+#         messages.error(request, _('Incorrect log number requested'))
+#         return redirect(reverse('logs:index'))
+#
+#     return render(
+#         request,
+#         'logs/view.html',
+#         {
+#             'log_item': log_item,
+#             'json_pretty': json.dumps(
+#                 log_item.payload,
+#                 sort_keys=True,
+#                 indent=4)})
 
 
 @user_passes_test(is_instructor)

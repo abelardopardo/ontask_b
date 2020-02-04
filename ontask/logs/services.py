@@ -86,10 +86,11 @@ def log_table_server_side(
     final_qs = []
     for log_item in qs[dt_page.start:dt_page.start + dt_page.length]:
         row = [
-            '<a href="{0}" class="spin"'.format(
+            '<button type="button" data-url="{0}"'.format(
                 reverse('logs:view', kwargs={'pk': log_item[0]}),
             )
-            + ' data-toggle="tooltip" title="{0}">{1}</a>'.format(
+            + ' class="btn btn-sm btn-light js-log-view"'
+            + ' data-toggle="tooltip" title="{0}">{1}</button>'.format(
                 ugettext('View log content'),
                 log_item[0],
             ),
