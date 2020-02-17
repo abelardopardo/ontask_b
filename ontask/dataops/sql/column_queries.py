@@ -19,7 +19,7 @@ sql_to_ontask_datatype_names = {
     'double precision': 'double',
     'boolean': 'boolean',
     'timestamp with time zone': 'datetime',
-}
+    'timestamp without time zone': 'datetime'}
 
 ontask_to_sql_datatype_names = {
     # Translation between OnTask data type names and SQL
