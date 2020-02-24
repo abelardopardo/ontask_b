@@ -17,7 +17,7 @@ argon2==0.1.10
 argon2-cffi==19.2.0
 backcall==0.1.0
 billiard==3.6.1.0
-bleach==3.1.0
+bleach==3.1.1
 boto3==1.10.45
 botocore==1.13.45
 celery==4.4.0
