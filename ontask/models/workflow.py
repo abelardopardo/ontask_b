@@ -238,7 +238,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
 
             if column.get_categories():
                 op_item['input'] = 'select'
-                op_item['values'] = column.get_categories()
+                op_item['values'] = column.categories
                 op_item['operators'] = [
                     'equal',
                     'not_equal',

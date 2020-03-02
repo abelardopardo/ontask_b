@@ -238,6 +238,10 @@ def random_column_add(
 
     if request.method == 'POST' and form.is_valid():
         column = form.save(commit=False)
+        column.workflow = workflow
+        column.is_key = False
+        column.save()
+
         try:
             services.add_random_column(
                 request.user,

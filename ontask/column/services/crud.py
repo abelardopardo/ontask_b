@@ -5,6 +5,7 @@ import copy
 import random
 from typing import Any, List, Optional
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 import pandas as pd
@@ -24,6 +25,13 @@ _op_distrib = {
     'all': lambda operand: operand.all(axis=1, skipna=False),
     'any': lambda operand: operand.any(axis=1, skipna=False),
 }
+
+_ontask_type_to_pd_type = {
+    'string': 'object',
+    'integer': 'int64',
+    'double':  'float64',
+    'boolean': 'bool',
+    'datetime': 'datetime64[ns]'}
 
 
 def _partition(list_in: List[Any], num: int) -> List[List[Any]]:
@@ -168,40 +176,30 @@ def add_random_column(
     :param data_frame: Data frame of the current workflow
     :return: Column is added to the workflow
     """
-    # Save the column object attached to the form and add additional fields
-    column.workflow = workflow
-    column.is_key = False
-
-    # Detect the case of a single integer as initial value so that it is
-    # expanded
-    try:
-        int_value = int(column.categories[0])
-        if int_value <= 1:
-            raise errors.OnTaskColumnIntegerLowerThanOneError(
-                field_name='values',
-                message=_('The integer value has to be larger than 1'))
-        column.set_categories(
             [idx + 1 for idx in range(int_value)],
             update=False)
-    except (ValueError, TypeError, IndexError):
-        pass
-
-    column.save()
-
     # Empty new column
     new_column = [None] * workflow.nrows
+    categories = column.get_categories()
     # Create the random partitions
     partitions = _partition(
         [idx for idx in range(workflow.nrows)],
-        len(column.categories))
+        len(categories))
 
     # Assign values to partitions
     for idx, indexes in enumerate(partitions):
         for col_idx in indexes:
-            new_column[col_idx] = column.categories[idx]
+            new_column[col_idx] = categories[idx]
 
     # Assign the new column to the data frame
-    data_frame[column.name] = new_column
+    data_frame[column.name] = pd.Series(
+        new_column,
+        dtype=_ontask_type_to_pd_type[column.data_type],
+        index=data_frame.index)
+
+    if column.data_type == 'datetime':
+        data_frame[column.name] = data_frame[column.name].dt.tz_localize(
+            settings.TIME_ZONE)
 
     # Update the positions of the appropriate columns
     workflow.reposition_columns(workflow.ncols + 1, column.position)
