@@ -1,3 +1,11 @@
+## 7.0.1 (2020-02-17)
+
+### Fixed
+
+- Bug when merging a data frame with a column with no data and is detected as datetime without timezone.
+
+- Increased Django version requirement to deal with vulnerability
+
 ## 7.0 (2020-01-01)
 
 ### Added

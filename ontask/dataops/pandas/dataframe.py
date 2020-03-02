@@ -98,7 +98,7 @@ def _verify_dataframe_columns(
         # Condition 3: If there are categories, the new values should be
         # compatible with them.
         if col.categories and not all(
-            row_val in col.categories for row_val in data_frame[col.name]
+            row_val in col.get_categories() for row_val in data_frame[col.name]
             if row_val and not pd.isnull(row_val)
         ):
             raise Exception(gettext(

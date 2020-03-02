@@ -637,11 +637,10 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_id(
             'id_raw_categories'
         ).send_keys(
-            'less than 2 hours',
-            'between 2 and 4 hours',
-            'between 4 and 6 hours',
-            'more than 6 hours'
-        )
+            'less than 2 hours,'
+            'between 2 and 4 hours,'
+            'between 4 and 6 hours,'
+            'more than 6 hours')
 
         # Click on the Submit button
         self.selenium.find_element_by_xpath(

@@ -15,7 +15,7 @@ from ontask.dataops import pandas
 
 INITIAL_VALUE_LENGTH = 512
 
-INTERVAL_PATTERN = '-?(?P<from>\\d+)\\s-\\s-?(?P<to>\\d+)'
+INTERVAL_PATTERN = '(?P<from>-?\\d+)\\s+-\\s+(?P<to>-?\\d+)'
 
 
 class ColumnBasicForm(forms.ModelForm):
@@ -84,14 +84,18 @@ class ColumnBasicForm(forms.ModelForm):
         # Categories must be valid types
         if 'raw_categories' in self.changed_data:
             if form_data['raw_categories']:
-                # Condition 1: Values must be valid for the type of the column
-                if self.allow_interval_as_initial and re.search(
+                # Detect if an interval syntax is used (number column)
+                match = re.search(
                     INTERVAL_PATTERN,
-                    form_data['raw_categories']
+                    form_data['raw_categories'])
+                if (
+                    self.allow_interval_as_initial
+                    and (
+                        form_data['data_type'] == 'double'
+                        or form_data['data_type'] == 'integer')
+                    and match
                 ):
-                    match = re.search(
-                        INTERVAL_PATTERN,
-                        form_data['raw_categories'])
+                    # If it is a number column, and there is an interval string
                     from_val = int(match.group('from'))
                     to_val = int(match.group('to'))
                     if from_val > to_val:
@@ -104,6 +108,15 @@ class ColumnBasicForm(forms.ModelForm):
                     category_values = [
                         cat.strip()
                         for cat in form_data['raw_categories'].split(',')]
+
+                # Condition 1: There must be more than one value
+                if len(category_values) < 2:
+                    self.add_error(
+                        'raw_categories',
+                        _('More than a single value needed.'))
+                    return form_data
+
+                # Condition 2: Values must be valid for the type of the column
                 try:
                     valid_values = models.Column.validate_column_values(
                         form_data['data_type'],
@@ -115,7 +128,7 @@ class ColumnBasicForm(forms.ModelForm):
                     )
                     return form_data
 
-                # Condition 2: The values in the dataframe column must be in
+                # Condition 3: The values in the dataframe column must be in
                 # these categories (only if the column is being edited, though
                 if self.instance.name and not all(
                     vval in valid_values
@@ -465,5 +478,5 @@ class RandomColumnAddForm(ColumnBasicForm):
         super().__init__(*args, **kwargs)
 
         self.fields['raw_categories'].label = _(
-            'Number (values from 1 to N, interval m - n) '
-            + 'or comma separated list of values.')
+            'Comma-separated list of values. If a number, m - n means integer '
+            'values from that interval.')
