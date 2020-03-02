@@ -151,7 +151,7 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
                 'description_text': 'RANDOM COLUMN DESC',
                 'data_type': 'integer',
                 'position': '0',
-                'raw_categories': '12'},
+                'raw_categories': '1 - 12'},
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
