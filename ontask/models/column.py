@@ -125,10 +125,10 @@ class Column(NameAndDescription):
         else:
             to_store = cat_values
 
-        if self.data_type == 'datetime':
-            self.categories = [cat_val.isoformat() for cat_val in to_store]
-        else:
-            self.categories = to_store
+        if any(isinstance(elem, datetime.datetime) for elem in cat_values):
+            to_store = [cat_val.isoformat() for cat_val in to_store]
+
+        self.categories = to_store
 
     def get_simplified_data_type(self) -> str:
         """Get a data type name to show to users.
