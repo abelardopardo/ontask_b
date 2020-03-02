@@ -35,6 +35,7 @@ def schedule_task(s_item: models.ScheduledOperation):
             clocked_time=s_item.execute)
         task_id = PeriodicTask.objects.create(
             clocked=clocked_item,
+            one_off=True,
             name=ONTASK_SCHEDULED_TASK_NAME_TEMPLATE.format(s_item.id),
             task='ontask.tasks.scheduled_ops.execute_scheduled_operation',
             args=json.dumps([s_item.id]))
