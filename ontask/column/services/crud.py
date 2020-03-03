@@ -176,8 +176,6 @@ def add_random_column(
     :param data_frame: Data frame of the current workflow
     :return: Column is added to the workflow
     """
-            [idx + 1 for idx in range(int_value)],
-            update=False)
     # Empty new column
     new_column = [None] * workflow.nrows
     categories = column.get_categories()
