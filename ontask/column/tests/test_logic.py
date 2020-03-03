@@ -10,19 +10,14 @@ from rest_framework import status
 
 from ontask import models, tests
 from ontask.dataops import pandas
-from ontask.workflow import services
+from ontask.column import services
 
 
 class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
     """Test the creation of random columns."""
 
     fixtures = ['simple_table']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_table.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
@@ -40,7 +35,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with string value
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -59,7 +54,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with a single integer
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -78,7 +73,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with a multiple strings
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -97,7 +92,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with a interval integer
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -124,7 +119,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with an integer list
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -158,7 +153,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with string value
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -177,7 +172,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with a string list
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -212,7 +207,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with string value
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -231,7 +226,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with string value
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -257,7 +252,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with a string list
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -291,7 +286,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with incorrect string value
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -310,7 +305,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
         # JSON POST request for column creation with a single integer
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
@@ -332,7 +327,7 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
             parse_datetime('2020-09-11 12:04:43+0930'),
             parse_datetime('2020-09-12 12:04:43+0930')]
         resp = self.get_response(
-            'workflow:random_column_add',
+            'column:random_column_add',
             method='POST',
             req_params={
                 'name': cname,
