@@ -484,8 +484,8 @@ SUMMERNOTE_CONFIG = {
         'lineNumbers': True,
         'lineWrapping': True,
     },
-    # Disable attachment feature.
-    'disable_attachment': False,
+    # Disable attachment feature so all images are inlined
+    'disable_attachment': True,
     'lazy': True,
 }
 
