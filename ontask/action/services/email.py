@@ -17,9 +17,8 @@ import html2text
 import pytz
 
 from ontask import (
-    are_correct_emails, models, settings as ontask_settings,
-    simplify_datetime_str,
-)
+    get_incorrect_email, models, settings as ontask_settings,
+    simplify_datetime_str)
 from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
@@ -103,8 +102,10 @@ def _check_email_list(email_list_string: str) -> List[str]:
         return []
 
     email_list = email_list_string.split()
-    if not are_correct_emails(email_list):
-        raise Exception(_('Invalid email address.'))
+    incorrect_email = get_incorrect_email(email_list)
+    if incorrect_email:
+        raise Exception(_('Invalid email address "{0}".').format(
+            incorrect_email))
 
     return email_list
 

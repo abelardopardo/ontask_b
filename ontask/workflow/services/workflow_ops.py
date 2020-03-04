@@ -7,7 +7,7 @@ from django import http
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
-from ontask import core, is_correct_email, models, tasks
+from ontask import core, get_incorrect_email, models, tasks
 from ontask.dataops import sql
 from ontask.workflow import services
 
@@ -130,9 +130,11 @@ def update_luser_email_column(
     emails = sql.get_rows(table_name, column_names=[column.name])
 
     # Verify that the column as a valid set of emails
-    if not all(is_correct_email(row[column.name]) for row in emails):
+    incorrect_email = get_incorrect_email([row[column.name] for row in emails])
+    if incorrect_email:
         raise services.OnTaskWorkflowEmailError(
-            message=_('The selected column does not contain email addresses.'))
+            message=_('Incorrect email addresses "{0}".').format(
+                incorrect_email))
 
     # Update the column
     workflow.luser_email_column = column
