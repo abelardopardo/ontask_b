@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-01 10:58+1030\n"
+"POT-Creation-Date: 2020-03-04 19:13+1030\n"
 "PO-Revision-Date: 2019-09-14 19:37+0930\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -253,7 +253,7 @@ msgid "Values to exclude"
 msgstr "排除值"
 
 #: ontask/action/forms/run.py:634 ontask/action/forms/run.py:637
-#: ontask/workflow/forms/column.py:140 ontask/workflow/forms/column.py:141
+#: ontask/workflow/forms/column.py:153 ontask/workflow/forms/column.py:154
 msgid "Incorrect date/time window"
 msgstr "错误的日期/时间窗口"
 
@@ -1066,7 +1066,7 @@ msgid "Incorrect list of allowed value"
 msgstr "允许值不正确的列表"
 
 #: ontask/dataops/services/plugin_admin.py:304
-#: ontask/workflow/forms/column.py:201
+#: ontask/workflow/forms/column.py:214
 msgid "Incorrect initial value"
 msgstr "初始值不正确"
 
@@ -5497,95 +5497,97 @@ msgstr "本列中允许的逗号分隔列表值"
 msgid "There is a column already with this name"
 msgstr "已存在以此命名的列"
 
-#: ontask/workflow/forms/column.py:114
+#: ontask/workflow/forms/column.py:116
+msgid "More than a single value needed."
+msgstr ""
+
+#: ontask/workflow/forms/column.py:127
 msgid "Incorrect list of values"
 msgstr "不正确的列表值"
 
-#: ontask/workflow/forms/column.py:128
+#: ontask/workflow/forms/column.py:141
 msgid "The values in the column are not compatible  with these ones."
 msgstr "列中的值与这些值不兼容。"
 
-#: ontask/workflow/forms/column.py:177
+#: ontask/workflow/forms/column.py:190
 msgid "Value to assign to all cells in the column"
 msgstr "分配给列中所有单元格的值"
 
-#: ontask/workflow/forms/column.py:208
+#: ontask/workflow/forms/column.py:221
 msgid "This value is not in the list of allowed values"
 msgstr "此值不在允许值列表中"
 
-#: ontask/workflow/forms/column.py:232
+#: ontask/workflow/forms/column.py:245
 msgid "Question name"
 msgstr "问题名称"
 
-#: ontask/workflow/forms/column.py:234
+#: ontask/workflow/forms/column.py:247
 msgid "Description (shown to the learners)"
 msgstr "描述(显示给学习者)"
 
-#: ontask/workflow/forms/column.py:236
+#: ontask/workflow/forms/column.py:249
 msgid "Question position (zero to insert last)"
 msgstr "问题位置(最后插入零)"
 
-#: ontask/workflow/forms/column.py:237
+#: ontask/workflow/forms/column.py:250
 msgid "Question active from"
 msgstr "问题活跃于"
 
-#: ontask/workflow/forms/column.py:238
+#: ontask/workflow/forms/column.py:251
 msgid "Question active until"
 msgstr "问题活跃直到"
 
-#: ontask/workflow/forms/column.py:266
+#: ontask/workflow/forms/column.py:279
 #, fuzzy
 #| msgid "Question name"
 msgid "Criterion name"
 msgstr "问题名称"
 
-#: ontask/workflow/forms/column.py:268
+#: ontask/workflow/forms/column.py:281
 #, fuzzy
 #| msgid "View Description"
 msgid "Criterion Description"
 msgstr "视图描述"
 
-#: ontask/workflow/forms/column.py:277
+#: ontask/workflow/forms/column.py:290
 #, fuzzy
 #| msgid "Comma-separated list of CC Emails"
 msgid "Comma-separated list of levels of attainment"
 msgstr "抄送邮件的逗号分隔列表"
 
-#: ontask/workflow/forms/column.py:294
+#: ontask/workflow/forms/column.py:307
 msgid "The criterion needs a non-empty set of values"
 msgstr ""
 
-#: ontask/workflow/forms/column.py:334
+#: ontask/workflow/forms/column.py:347
 msgid "There must be at least one column with unique values"
 msgstr "必须至少有一个具有唯一值的列"
 
-#: ontask/workflow/forms/column.py:346
+#: ontask/workflow/forms/column.py:359
 msgid "The column does not have unique values for each row."
 msgstr "该列对每个行没有唯一值。"
 
-#: ontask/workflow/forms/column.py:376
+#: ontask/workflow/forms/column.py:389
 msgid "Columns to combine*"
 msgstr "待合并的列*"
 
-#: ontask/workflow/forms/column.py:408
+#: ontask/workflow/forms/column.py:421
 msgid "A column with that name already exists"
 msgstr "具有该名称的列已经存在"
 
-#: ontask/workflow/forms/column.py:416
+#: ontask/workflow/forms/column.py:429
 msgid "You need to select the columns to combine"
 msgstr "选择要合并的列"
 
-#: ontask/workflow/forms/column.py:436
+#: ontask/workflow/forms/column.py:449
 msgid "Incorrect data type for the selected operand"
 msgstr "所选操作数的不正确数据类型"
 
-#: ontask/workflow/forms/column.py:468
-#, fuzzy
-#| msgid "Number (values from 1 to N) or comma separated list of values."
+#: ontask/workflow/forms/column.py:481
 msgid ""
-"Number (values from 1 to N, interval m - n) or comma separated list of "
-"values."
-msgstr "数值(从1到n的值)或逗号分隔的值列表。"
+"Comma-separated list of values. If a number, m - n means integer values from "
+"that interval."
+msgstr ""
 
 #: ontask/workflow/forms/workflow.py:31
 msgid "You need to provide a name for the workflow."
@@ -5649,22 +5651,18 @@ msgstr "已有一个同名的工作流。请在导入页中提供工作流名称
 msgid "Unable to save column information"
 msgstr "无法保存列信息"
 
-#: ontask/workflow/services/column_crud.py:92
+#: ontask/workflow/services/column_crud.py:100
 #, fuzzy, python-brace-format
 #| msgid "Unable to add column: {0}"
 msgid "Unable to add element: {0}"
 msgstr "无法添加列： {0}"
 
-#: ontask/workflow/services/column_crud.py:148
+#: ontask/workflow/services/column_crud.py:156
 #, python-brace-format
 msgid "Unable to add column: {0}"
 msgstr "无法添加列： {0}"
 
-#: ontask/workflow/services/column_crud.py:181
-msgid "The integer value has to be larger than 1"
-msgstr "整数值必须大于1"
-
-#: ontask/workflow/services/column_crud.py:212
+#: ontask/workflow/services/column_crud.py:210
 #, python-brace-format
 msgid "Unable to add the column: {0}"
 msgstr "无法添加列： {0}"
@@ -5762,17 +5760,17 @@ msgstr "无法向没有数据的工作流添加问题"
 msgid "Cannot find action to add question."
 msgstr "无法找到添加问题的操作。"
 
-#: ontask/workflow/views/column_crud.py:262
+#: ontask/workflow/views/column_crud.py:266
 #, fuzzy, python-brace-format
 #| msgid "Unable to add column: {0}"
 msgid "Unable to add random column: {0}"
 msgstr "无法添加列： {0}"
 
-#: ontask/workflow/views/column_crud.py:360
+#: ontask/workflow/views/column_crud.py:364
 msgid "You cannot delete the only key column"
 msgstr "不能删除唯一的键列"
 
-#: ontask/workflow/views/column_crud.py:428
+#: ontask/workflow/views/column_crud.py:432
 #, python-brace-format
 msgid "Unable to clone column: {0}"
 msgstr "无法克隆列： {0}"
@@ -5864,6 +5862,16 @@ msgid ""
 "logs. The interface provides CRUD operations over these objects."
 msgstr ""
 "OnTask API提供操作工作流、表和日志的功能。该接口提供对这些对象的CRUD操作。"
+
+#, fuzzy
+#~| msgid "Number (values from 1 to N) or comma separated list of values."
+#~ msgid ""
+#~ "Number (values from 1 to N, interval m - n) or comma separated list of "
+#~ "values."
+#~ msgstr "数值(从1到n的值)或逗号分隔的值列表。"
+
+#~ msgid "The integer value has to be larger than 1"
+#~ msgstr "整数值必须大于1"
 
 #, fuzzy
 #~| msgid "Scheduled operations"
