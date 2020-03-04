@@ -1,3 +1,11 @@
+## 7.0.2 (2020-03-04)
+
+### Fixed
+
+- Misconfiguration of image inlining in summernote (#183)
+
+- Fixed creation of a random column
+
 ## 7.0.1 (2020-02-17)
 
 ### Fixed

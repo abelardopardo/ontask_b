@@ -31,7 +31,7 @@ __all__ = [
     'OnTaskSharedState',
     'simplify_datetime_str']
 
-__version__ = 'B.7.0.1'
+__version__ = 'B.7.0.2'
 
 app_config = 'ontask.apps.OnTaskConfig'
 
