@@ -1,0 +1,14 @@
+{% load i18n %}
+<div class="modal-header" style="border-bottom: unset;">
+  <h4 class="modal-title">{% trans 'Log' %} {{ log_item.id }}: {{ log_item }}</h4>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  {% if log_item.workflow %}
+    <h4 class="text-center">{% trans 'Workflow' %}: {{ log_item.workflow.name }}</h4>
+  {% endif %}
+  <p class="text-center">{% trans 'Last modified' %}: {{ log_item.modified }}</p>
+  <pre class="shadow border border-dark">{{ json_pretty }}</pre>
+</div>
