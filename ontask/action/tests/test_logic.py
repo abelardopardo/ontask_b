@@ -6,9 +6,11 @@ import os
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
+from rest_framework import status
 
 from ontask import models, tests
 from ontask.action import services
+from ontask.core import SessionPayload
 from ontask.dataops import pandas
 
 
@@ -82,3 +84,38 @@ class ActionImport(tests.OnTaskTestCase):
             services.do_import_action(user, workflow=wflow, file_item=file_obj)
 
         models.Action.objects.get(name='Initial survey')
+
+class EmailActionDetectIncorrectEmail(tests.OnTaskTestCase):
+    """Test if incorrect email addresses are detected."""
+
+    fixtures = ['wrong_email']
+    filename = os.path.join(
+        settings.ONTASK_FIXTURE_DIR,
+        'wrong_email.sql')
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    workflow_name = 'wflow1'
+
+    def test_send_with_incorrect_email(self):
+        """Test the do_import_action functionality."""
+        user = get_user_model().objects.get(email='instructor01@bogus.com')
+        wflow = models.Workflow.objects.get(name=self.workflow_name)
+        email_column = wflow.columns.get(name='email')
+        action = wflow.actions.first()
+
+        # POST a send operation with the wrong email
+        resp = self.get_response(
+            'action:run',
+            url_params={'pk': action.id},
+            method='POST',
+            req_params={
+                'item_column': email_column.pk,
+                'subject': 'message subject'})
+        payload = SessionPayload.get_session_payload(self.last_request)
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertTrue(
+            'Incorrect email address ' in str(resp.content))
+        self.assertTrue(
+            'incorrectemail.com' in str(resp.content))
