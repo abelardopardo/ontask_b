@@ -263,7 +263,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
 
         self.assertEqual(response.status_code, 500)
         self.assertTrue(
-            'addresses has incorrect values' in response.data['detail'])
+            'Incorrect email value "1"' in response.data['detail'])
 
         # Schedule with incorrect values in cc_email
         response = self.client.post(
