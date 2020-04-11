@@ -16,5 +16,4 @@ urlpatterns = [
 
     path('<int:wid>/export/', views.export, name='export'),
 
-    path('list/', api.LogAPIList.as_view()),
-]
+    path('list/', api.LogAPIList.as_view())]

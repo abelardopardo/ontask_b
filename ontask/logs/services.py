@@ -57,9 +57,7 @@ def log_table_server_side(
     """
     dt_page = DataTablesServerSidePaging(request)
     if not dt_page.is_valid:
-        return http.JsonResponse(
-            {'error': _('Incorrect request. Unable to process')},
-        )
+        return {'error': _('Incorrect request. Unable to process')}
 
     # Get the logs
     qs = workflow.logs
@@ -106,5 +104,4 @@ def log_table_server_side(
         'draw': dt_page.draw,
         'recordsTotal': records_total,
         'recordsFiltered': records_filtered,
-        'data': final_qs,
-    }
+        'data': final_qs}
