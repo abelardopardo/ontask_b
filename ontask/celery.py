@@ -39,6 +39,10 @@ def celery_is_up() -> bool:
 
     :return: Boolean encoding if the process is running
     """
+    if settings.CELERY_TASK_ALWAYS_EAGER:
+        # Always running
+        return True
+
     # Verify that celery is running!
     try:
         inspect().stats()
