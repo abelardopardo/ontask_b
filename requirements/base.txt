@@ -19,7 +19,7 @@ backcall==0.1.0
 billiard==3.6.2.0
 bleach==3.1.1
 boto3==1.12.0
-botocore==1.15.0
+botocore==1.15.39
 celery==4.4.0
 certifi==2019.11.28
 cffi==1.14.0
@@ -44,7 +44,7 @@ django-etc==1.2.0
 django-extensions==2.2.8
 django-fernet-fields==0.6
 django-formtools==2.2
-django-import-export==2.0.1
+django-import-export==2.0.2
 django-jquery==3.1.0
 django-modeltranslation==0.14.3
 django-redis==4.11.0
@@ -55,7 +55,7 @@ django-tables2==2.2.1
 django-timezone-field==4.0
 django-widget-tweaks==1.4.5
 djangorestframework==3.11.0
-docutils==0.16
+docutils==0.15.2
 drf-yasg==1.17.1
 easy-thumbnails==2.7
 email-validator==1.0.5
@@ -67,7 +67,6 @@ httplib2==0.17.0
 idna==2.8
 Image==1.5.28
 imagesize==1.2.0
-ims-lti-py==0.6
 ipykernel==5.1.4
 ipywidgets==7.5.1
 itypes==1.1.0
@@ -107,7 +106,8 @@ python-dateutil==2.8.1
 pytz==2019.3
 pyzmq==18.1.1
 qtconsole==4.6.0
-redis==3.4.1
+redis==3.0.0
+redis-py-cluster==2.0.0
 requests==2.22.0
 requests[security]==2.22.0
 s3fs==0.4.0
