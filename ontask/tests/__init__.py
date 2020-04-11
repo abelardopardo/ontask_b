@@ -312,7 +312,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     viewport_width = 1024
     device_pixel_ratio = 1
     max_image_height = 1440
-    headless = False
+    headless = True
 
     class_and_text_xpath = \
         '//{0}[contains(@class, "{1}") and normalize-space(text()) = "{2}"]'
@@ -1654,6 +1654,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
 
     def select_parameters_tab(self):
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.ID, 'parameters-tab')
