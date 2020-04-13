@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from rest_framework import status
 
 from ontask import models
 from ontask.core import ajax_required, get_workflow, is_instructor
@@ -65,11 +66,42 @@ def display_ss(
 @user_passes_test(is_instructor)
 @ajax_required
 @get_workflow()
-def view(
+def modal_view(
     request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
 ) -> http.JsonResponse:
+    """View the content of one of the logs in a modal.
+
+    :param request: Http Request received
+    :param pk: Primary key of the log to view
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :return: JSON response to render in a modal
+    """
+    # Get the log item
+    log_item = workflow.logs.filter(pk=pk, user=request.user).first()
+
+    # If the log item is not there, flag!
+    if not log_item:
+        messages.error(request, _('Incorrect log number requested'))
+        return http.JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
+
+    return http.JsonResponse({
+        'html_form': render_to_string(
+            'logs/includes/partial_show.html',
+            {
+                'log_item': log_item,
+                'c_vals': log_item.payload},
+            request=request)})
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def page_view(
+    request: http.HttpRequest,
+    pk: int,
+    workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
     """View the content of one of the logs.
 
     :param request: Http Request received
@@ -85,16 +117,15 @@ def view(
         messages.error(request, _('Incorrect log number requested'))
         return redirect(reverse('logs:index'))
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'logs/includes/partial_show.html',
-            {
-                'log_item': log_item,
-                'json_pretty': json.dumps(
-                    log_item.payload,
-                    sort_keys=True,
-                    indent=4)},
-            request=request)})
+    return render(
+        request,
+        'logs/view.html',
+        {
+            'log_item': log_item,
+            'json_pretty': json.dumps(
+                log_item.payload,
+                sort_keys=True,
+                indent=4)})
 
 
 @user_passes_test(is_instructor)

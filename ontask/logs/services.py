@@ -85,7 +85,7 @@ def log_table_server_side(
     for log_item in qs[dt_page.start:dt_page.start + dt_page.length]:
         row = [
             '<button type="button" data-url="{0}"'.format(
-                reverse('logs:view', kwargs={'pk': log_item[0]}),
+                reverse('logs:modal_view', kwargs={'pk': log_item[0]}),
             )
             + ' class="btn btn-sm btn-light js-log-view"'
             + ' data-toggle="tooltip" title="{0}">{1}</button>'.format(

@@ -74,7 +74,7 @@ class ScheduleActionTable(tables.Table):
         # At this point, the object is not pending. Produce a link
         return format_html(
             '<a class="spin" href="{0}">{1}</a>',
-            reverse('logs:view', kwargs={'pk': log_item.id}),
+            reverse('logs:page_view', kwargs={'pk': log_item.id}),
             record.get_status_display())
 
     class Meta:

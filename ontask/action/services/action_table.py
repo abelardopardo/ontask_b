@@ -27,7 +27,7 @@ class ActionTable(tables.Table):
     last_executed_log = tables.LinkColumn(
         verbose_name=_('Last executed'),
         empty_values=['', None],
-        viewname='logs:view',
+        viewname='logs:page_view',
         text=lambda record: simplify_datetime_str(
             record.last_executed_log.modified),
         kwargs={'pk': tables.A('last_executed_log.id')},

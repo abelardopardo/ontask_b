@@ -12,7 +12,9 @@ urlpatterns = [
 
     path('display_ss/', views.display_ss, name='display_ss'),
 
-    path('<int:pk>/view/', views.view, name='view'),
+    path('<int:pk>/modal_view/', views.modal_view, name='modal_view'),
+
+    path('<int:pk>/page_view/', views.page_view, name='page_view'),
 
     path('<int:wid>/export/', views.export, name='export'),
 
