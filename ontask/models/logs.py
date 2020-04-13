@@ -37,6 +37,7 @@ class Log(Owner):
     @DynamicAttrs
     """
 
+    ACTION_CANVAS_EMAIL_SENT = 'action_canvas_email_sent'
     ACTION_CLONE = 'action_clone'
     ACTION_CREATE = 'action_create'
     ACTION_DELETE = 'action_delete'
@@ -122,6 +123,7 @@ class Log(Owner):
     WORKFLOW_UPDATE_LUSERS = 'workflow_update_lusers'
 
     LOG_TYPES = {
+        ACTION_CANVAS_EMAIL_SENT: _('Canvas emails sent'),
         ACTION_CLONE: _('Action cloned'),
         ACTION_CREATE: _('Action created'),
         ACTION_DELETE: _('Action deleted'),
