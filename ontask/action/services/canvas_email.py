@@ -11,7 +11,7 @@ from django import http
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -53,9 +53,8 @@ def _refresh_and_retry_send(
 ):
     """Refresh OAuth token and retry send.
 
-    :param target_url: URL to use as target
     :param oauth_info: Object with the oauth information
-    :param conversation_urL: URL to send the conversation
+    :param conversation_url: URL to send the conversation
     :param canvas_email_payload: Dictionary with additional information
     :return:
     """
@@ -91,7 +90,7 @@ def _refresh_and_retry_send(
 
 @user_passes_test(is_instructor)
 def _canvas_get_or_set_oauth_token(
-    request: WSGIRequest,
+    request: HttpRequest,
     oauth_instance_name: str,
     continue_url: str,
 ) -> http.HttpResponse:
@@ -154,7 +153,6 @@ def _send_single_canvas_message(
 ) -> Tuple[str, int]:
     """Send a single email to Canvas using the API.
 
-    :param target_url: Target URL in the canvas server
     :param conversation_url: URL pointing to the conversation object
     :param canvas_email_payload: Email message
     :param headers: HTTP headers for the request
@@ -320,7 +318,10 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
             context['email_sent_datetime'] = str(
                 datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
             )
-            action.log(user, models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL, **context)
+            action.log(
+                user,
+                models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL,
+                **context)
             to_emails.append(msg_to)
 
         action.last_executed_log = log_item

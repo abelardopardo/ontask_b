@@ -21,6 +21,7 @@ __all__ = [
     'entity_prefix',
     'is_legal_name',
     'is_correct_email',
+    'get_incorrect_email',
     'LOGGER',
     'OnTaskDataFrameNoKey',
     'OnTaskDBIdentifier',
