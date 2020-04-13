@@ -252,6 +252,10 @@ services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.PERSONALIZED_CANVAS_EMAIL,
     CANVAS_EMAIL_PRODUCER)
 
+tasks.task_execute_factory.register_producer(
+    models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL,
+    CANVAS_EMAIL_PRODUCER)
+
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.action.ZIP_OPERATION,
     services.ActionManagerZip(
