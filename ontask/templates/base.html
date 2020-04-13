@@ -160,12 +160,20 @@
                     </li>
                   {% endif %}
                   <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle profile-menu" data-toggle="dropdown">
+                    <a href="#"
+                       class="nav-link dropdown-toggle profile-menu"
+                       data-toggle="dropdown">
                      <span class="fa fa-user"></span>
                     </a>
                     <div class="shadow dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a>
-                      <a class="dropdown-item spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a>
+                      <a class="dropdown-item spin"
+                         href="{% url 'profiles:show_self' %}"
+                         data-toggle="tooltip"
+                         title="{% trans 'User Profile' %}">{% trans 'Profile' %}</a>
+                      <a class="dropdown-item spin"
+                         href="{% url 'accounts:logout' %}"
+                         data-toggle="tooltip"
+                         title="{% trans 'Logout' %}">{% trans 'Logout' %}</a>
                     </div>
                   </li>
                 {% else %}
@@ -174,11 +182,19 @@
                     {% trans 'Contact' %}</a></li>
                 {% endif %}
                 <li class="nav-item">
-                    <a href="#" class="nav-link dropdown-toggle help-menu" data-toggle="dropdown">
+                    <a href="#"
+                       class="nav-link dropdown-toggle help-menu"
+                       data-toggle="dropdown">
                       <span class="fa fa-book"></span></a>
                     <div class="shadow dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item spin" href="{% static ONTASK_HELP_URL %}">{% trans 'Manual' %}</a>
-                      <a class="dropdown-item spin" href="{% url 'ontask-api-doc' %}">{% trans 'API Docs' %}</a>
+                      <a class="dropdown-item spin"
+                         href="{% static ONTASK_HELP_URL %}"
+                         data-toggle="tooltip"
+                         title="{% trans 'OnTask Manual' %}">{% trans 'Manual' %}</a>
+                      <a class="dropdown-item spin"
+                         href="{% url 'ontask-api-doc' %}"
+                         data-toggle="tooltip"
+                         title="{% trans 'API documentation' %}">{% trans 'API Docs' %}</a>
 
                     </div>
                 </li>
