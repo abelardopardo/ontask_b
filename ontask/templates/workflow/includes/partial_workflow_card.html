@@ -26,7 +26,7 @@
          class="btn btn-light btn-sm js-workflow-clone align-middle"
               data-url="{% url 'workflow:clone' wflow.id %}" data-toggle="tooltip"
               title="{% trans 'Create a duplicate of this workflow' %}">
-        <span class="fa fa fa-clone"></span>
+        <span class="fa fa-clone"></span>
       </button>
       <button type="button"
               class="btn btn-light btn-sm js-workflow-flush{% if workflow.nrows == 0 %} disabled{% endif %}"

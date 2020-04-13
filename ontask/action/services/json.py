@@ -49,6 +49,7 @@ def _send_and_log_json(
     action.log(
         user,
         models.Log.ACTION_JSON_SENT,
+        action=action.id,
         object=json.dumps(json_obj),
         status=status_val,
         json_sent_datetime=str(datetime.datetime.now(pytz.timezone(
@@ -124,7 +125,7 @@ class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
         :return: Empty list (there are no column values for multiple sends)
         """
         if log_item is None:
-            action.log(user, self.log_event, **payload)
+            action.log(user, self.log_event, action=action.id, **payload)
 
         action_text = evaluate_row_action_out(
             action,

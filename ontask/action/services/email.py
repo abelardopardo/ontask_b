@@ -214,11 +214,7 @@ def _create_messages(
     :return:
     """
     # Context to log the events (one per email)
-    context = {
-        'email_sent_datetime': str(
-            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
-        ),
-    }
+    context = {'action': action.id}
 
     cc_email = _check_email_list(payload['cc_email'])
     bcc_email = _check_email_list(payload['bcc_email'])
@@ -264,6 +260,8 @@ def _create_messages(
         context['body'] = msg.body
         context['from_email'] = msg.from_email
         context['to_email'] = msg.to[0]
+        context['email_sent_datetime'] = str(
+            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
         if track_str:
             context['track_id'] = track_str
         action.log(user, models.Log.ACTION_EMAIL_SENT, **context)
@@ -459,13 +457,13 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
 
         # Log the event
         context = {
-            'email_sent_datetime': str(
-                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
-            ),
+            'action': action.id,
             'subject': msg.subject,
             'body': msg.body,
             'from_email': msg.from_email,
-            'to_email': msg.to[0]}
+            'to_email': msg.to[0],
+            'email_sent_datetime': str(
+                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))}
         action.last_executed_log = action.log(
             user,
             models.Log.ACTION_EMAIL_SENT,

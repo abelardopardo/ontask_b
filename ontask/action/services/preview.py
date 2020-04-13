@@ -148,7 +148,7 @@ def create_row_preview_context(
         action_content = _evaluate_row_action_in(action, eval_context)
     if action_content is None:
         action_content = _(
-            'Error while retrieving content for student {0}',
+            'Error while retrieving content (index: {0})',
         ).format(idx)
     else:
         # Get the conditions used in the action content

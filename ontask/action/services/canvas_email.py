@@ -269,9 +269,7 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
         }
 
         # Create the context for the log events
-        context = {
-            'action': action.id,
-        }
+        context = {'action': action.id}
 
         # Send the objects to the given URL
         idx = 1
@@ -312,15 +310,17 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
                 response_status = 200
 
             # Log message sent
-            context['object'] = json.dumps(canvas_email_payload)
-            context['status'] = response_status
-            context['result'] = result_msg
+            context['subject'] = canvas_email_payload['subject']
+            context['body'] = canvas_email_payload['body']
+            context['from_email'] = user.email
+            context['to_email'] = canvas_email_payload['recipients[]']
             context['email_sent_datetime'] = str(
-                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
-            )
+                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
+            context['response_status'] = response_status
+            context['result_msg'] = result_msg
             action.log(
                 user,
-                models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL,
+                models.Log.ACTION_CANVAS_EMAIL_SENT,
                 **context)
             to_emails.append(msg_to)
 

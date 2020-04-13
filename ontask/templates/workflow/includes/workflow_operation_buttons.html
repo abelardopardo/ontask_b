@@ -16,7 +16,7 @@
             class="shadow btn btn-outline-dark js-workflow-clone"
             data-url="{% url 'workflow:clone' workflow.id %}" data-toggle="tooltip"
             title="{% trans 'Create a duplicate of this workflow' %}">
-      <span class="fa fa fa-clone"></span> {% trans 'Clone' %}
+      <span class="fa fa-clone"></span> {% trans 'Clone' %}
     </button>
     {% if workflow.nrows %}
       <button type="button"
