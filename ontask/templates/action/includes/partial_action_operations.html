@@ -16,6 +16,13 @@
     </button>
     <div class="dropdown-menu dropdown-menu-right shadow"
          aria-labelledby="actionMoreOperations">
+      <button type="button"
+              class="dropdown-item js-action-preview "
+              data-url="{% url 'action:preview' id 1 %}"
+              data-toggle="tooltip"
+              title="See how is the content shown to each learner">
+        <span class="fa fa-eye"></span> Preview
+      </button>
       {% if action_tval == 'personalized_text' or action_tval == 'personalized_canvas_email' or action_tval == 'survey' %}
         <button type="button"
                 class="dropdown-item js-action-showurl"

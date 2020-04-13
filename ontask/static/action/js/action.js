@@ -184,6 +184,7 @@ $(function () {
   $("#email-schedule-send").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);
+  $("#action-index").on("click", ".js-action-preview", loadForm);
 
   // Show URL
   $("#action-table").on("click", ".js-action-showurl", loadForm);
