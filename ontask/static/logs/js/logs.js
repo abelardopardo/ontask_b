@@ -20,4 +20,7 @@ let loadLogView = function () {
 $(function () {
   // Preview
   $("#log-table").on("click", ".js-log-view", loadLogView);
+
+  // Timeline
+  $("#timeline").on("click", ".js-log-view", loadLogView);
 });

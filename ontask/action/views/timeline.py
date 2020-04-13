@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """View to implement the timeline visualization."""
-import json
 from typing import Optional
 
 from django import http
@@ -37,6 +36,7 @@ def show_timeline(
     else:
         logs = workflow.logs
 
+    logs = logs.order_by('created')
     event_names = [
         models.Log.ACTION_DOWNLOAD,
         models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL,
@@ -51,17 +51,7 @@ def show_timeline(
 
     # Filter the logs to display and transform into values (process the json
     # and the long value for the log name
-    logs = [
-        {'id': log.id,
-         'name': log.get_name_display(),
-         'modified': log.modified,
-         'payload': json.dumps(log.payload, indent=2),
-         'action_name': log.payload['action'],
-         'action_id': log.payload['action_id']}
-        for log in logs.filter(
-            name__in=event_names
-        ).exclude(payload__action=None)
-    ]
+    logs = logs.filter(name__in=event_names).exclude(payload__action=None)
 
     return render(
         request,
