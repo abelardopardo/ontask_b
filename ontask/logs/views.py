@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views to show logs and log table."""
-import json
 from typing import Optional
 
 from django import http
@@ -89,9 +88,7 @@ def modal_view(
     return http.JsonResponse({
         'html_form': render_to_string(
             'logs/includes/partial_show.html',
-            {
-                'log_item': log_item,
-                'c_vals': log_item.payload},
+            {'log_item': log_item, 'c_vals': log_item.payload},
             request=request)})
 
 
@@ -120,12 +117,7 @@ def page_view(
     return render(
         request,
         'logs/view.html',
-        {
-            'log_item': log_item,
-            'json_pretty': json.dumps(
-                log_item.payload,
-                sort_keys=True,
-                indent=4)})
+        {'log_item': log_item, 'c_vals': log_item.payload})
 
 
 @user_passes_test(is_instructor)

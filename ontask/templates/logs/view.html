@@ -10,7 +10,11 @@
   {% endif %}
   <p class="text-center">{% trans 'Last modified' %}: {{ log_item.modified }}</p>
   <p class="text-center">{% trans 'Payload:' %}</p>
-  <pre class="shadow border border-dark">{{ json_pretty }}</pre>
+  <table class="table shadow" width="100%">
+    {% for c_key, c_val in c_vals.items %}
+      <tr><td>{{ c_key }}</td><td>{% if c_val %}{{ c_val }}{% endif %}</td></tr>
+    {% endfor %}
+  </table>
   <div class="text-center">
     <a class="shadow btn btn-outline-dark spin" href="{% url 'logs:index' %}">{% trans 'Logs' %}</a>
   </div>

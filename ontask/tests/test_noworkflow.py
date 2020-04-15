@@ -68,6 +68,7 @@ class BackToHome(tests.OnTaskTestCase):
             reverse('dataops:sqlupload_start', kwargs={'pk': 1}),
             # reverse('dataops:athenaupload_start', kwargs={'pk': 1}),
             # Logs
+            reverse('logs:page_view', kwargs={'pk': 1}),
             # Table
             reverse('table:display_view', kwargs={'pk': 1}),
             reverse('table:view_index'),
@@ -134,7 +135,6 @@ class BackToHome(tests.OnTaskTestCase):
             # reverse('dataops:athenaconn_view', kwargs={'pk': 1}),
             # Logs
             reverse('logs:display_ss'),
-            reverse('logs:page_view', kwargs={'pk': 1}),
             reverse('logs:modal_view', kwargs={'pk': 1}),
             # Table
             reverse('table:display_ss'),
