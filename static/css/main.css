@@ -467,3 +467,7 @@ ul.timeline > li:before {
     height: 20px;
     z-index: 400;
 }
+
+.btn:focus {
+  background-color: #b9dbff !important;
+}
