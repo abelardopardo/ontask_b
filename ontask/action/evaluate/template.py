@@ -45,6 +45,7 @@ def make_xlat(*args, **kwds) -> Callable:
     re_exec = re.compile(r'|'.join(map(re.escape, adict)))
 
     def one_xlat(match: str) -> str:
+        """Translate match."""
         return adict[match.group(0)]
 
     def xlat(text: str) -> str:
