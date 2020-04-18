@@ -2,7 +2,7 @@
 {% load django_tables2 %}
 <h3 class="text-center">{% trans 'Instructors that can manage this workflow' %}</h3>
 {% if not share_table.data|length %}
-  <p class="lead text-center">{% blocktrans %}Click in the <i>Add Intructor</i> button below and provide the email for the user
+  <p class="lead text-center">{% blocktrans %}Click in the "Add Intructor" button below and provide the email for the user
     with whom you want to share the workflow.{% endblocktrans %}</p>
 {% endif %}
 <div class="row justify-content-center mb-3">
