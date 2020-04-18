@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>3.6. Additional Workflow Operations &#8212; OnTask (B.7.0.2) B.7.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.7. Transforming the data with your own code" href="plugins.html" />
+    <link rel="prev" title="3.5. Running actions" href="run.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="run.html" title="Previous document"><span class="section-number">3.5. </span>Running actions</a>
+        </li>
+        <li>
+          <a href="plugins.html" title="Next document"><span class="section-number">3.7. </span>Transforming the data with your own code</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="additional-workflow-operations">
+<span id="workflow-settings"></span><h1><span class="section-number">3.6. </span>Additional Workflow Operations<a class="headerlink" href="#additional-workflow-operations" title="Permalink to this headline">¶</a></h1>
+<p>In addition to the operations described in the previous sections to upload and merge data, create actions, and run these actions, there are additional operations for the workflow that can be accessed through the <em>More</em> pull-down menu in the top-bar menu. The settings pages offer information about: workflow operations (export, rename, clone, etc.), column operations (change column type, rename, clone, etc.), scheduled actions, and view logs.</p>
+<div class="section" id="workflow-operations">
+<span id="details"></span><h2><span class="section-number">3.6.1. </span>Workflow Operations<a class="headerlink" href="#workflow-operations" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>“The details are not the details. They make the design”
+– Charles Eames</p>
+</div></blockquote>
+<p>The <em>Workflow Operations</em> page is available through the <em>More</em> link at the top-bar menu. The page shows the information as illustrated by the following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/workflow_attributes.png" src="../_images/workflow_attributes.png" />
+</div>
+<p>The buttons at the top of the page offer the following operations:</p>
+<dl id="details-export">
+<dt><span class="fa fa-download"></span> Export</dt><dd><p>This functionality allows you to take a snapshot of the content of the workflow and store it in a file for your records. You may select which actions are included in the exported file</p>
+<div class="figure align-center">
+<img alt="../_images/workflow_export.png" src="../_images/workflow_export.png" />
+</div>
+<p>The menu offers the possibility of exporting only the data, or the data <strong>and</strong> the <a class="reference internal" href="action.html#action"><span class="std std-ref">action</span></a> in the workflow.</p>
+</dd>
+</dl>
+<dl id="details-rename">
+<dt><span class="fa fa-pencil"></span> Rename</dt><dd><p>This functionality allows to change either the name or the description of the workflow.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_rename.png"><img alt="../_images/workflow_rename.png" src="../_images/workflow_rename.png" style="width: 60%;" /></a>
+</div>
+</dd>
+</dl>
+<dl class="simple" id="details-clone">
+<dt><span class="fa fa-clone"></span> Clone</dt><dd><p>This function creates a new workflow duplicating the data, actions and conditions of the current workflow. The new workflow will have the same name with the prefix <em>Copy of</em>.</p>
+</dd>
+</dl>
+<dl id="details-flush-data">
+<dt>Flush data table</dt><dd><p>This operation deletes all the data attached to the workflow, but preserves the workflow structure (that is, the name and the description only).</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_flush.png"><img alt="../_images/workflow_flush.png" src="../_images/workflow_flush.png" style="width: 60%;" /></a>
+</div>
+<p>Given the destructive nature of this operation the platform requires you to confirm this step.</p>
+</dd>
+</dl>
+<dl id="details-delete">
+<dt><span class="fa fa-trash"></span> Delete</dt><dd><p>Operation similar to the previous one, but now the whole workflow is deleted and therefore unselected. If executed, the platform will go back to the list of workflows as this one is no longer available for operations.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_delete.png"><img alt="../_images/workflow_delete.png" src="../_images/workflow_delete.png" style="width: 60%;" /></a>
+</div>
+<p>As in the previous case, the platform asks for confirmation before carrying out the delete operation.</p>
+</dd>
+</dl>
+<p>In addition to the buttons at the top, the <em>Workflow Operations</em> page offers two additional operations shown in separated tabs.</p>
+<dl id="details-attributes">
+<dt>Attributes</dt><dd><p>This tab shows the operations to manage a dictionary of pairs <code class="docutils literal notranslate"><span class="pre">(name,</span> <span class="pre">value)</span></code>. The names can e used in personalized text and they are replaced by the <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
+<div class="figure align-center">
+<img alt="../_images/workflow_attributes.png" src="../_images/workflow_attributes.png" />
+</div>
+<p>The <span class="fa fa-plus"></span> <em>Attribute</em> button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The <span class="fa fa-pencil"></span> icon opens the form to edit its content. The <span class="fa fa-trash"></span> icon deletes the attribute.</p>
+<p>The use of these attributes is to facilitate a single point of change when a value appears in multiple locations. For example, every personalized text actino is singed with the name of the instructor. If that name changes, all actions need to be edited. On the other hand, if the actions contain the name of an attribute, just changing the attribute value propagates the change to all actions.</p>
+</dd>
+</dl>
+<dl id="details-sharing">
+<dt>Share</dt><dd><p>The <em>Share</em> tab on the right of the page is used to manage the list of users that have access to this workflow. The <span class="fa fa-plus"></span> <em>User</em> button opens a form to introduce a the id of the user to share the workflow.</p>
+<div class="figure align-center">
+<img alt="../_images/workflow_share.png" src="../_images/workflow_share.png" />
+</div>
+</dd>
+</dl>
+</div>
+<div class="section" id="column-operations">
+<span id="columns"></span><h2><span class="section-number">3.6.2. </span>Column Operations<a class="headerlink" href="#column-operations" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Column Operations</em> page is available through the <em>More</em> link at the top-bar menu.  Columns in OnTask have substantial information and operations that is condensed in this page. The information is shown as illustrated by the following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/workflow_details.png" src="../_images/workflow_details.png" />
+</div>
+<p>The buttons at the top of the page offer the following operations</p>
+<dl class="simple">
+<dt><span class="fa fa-plus"></span> Column</dt><dd><p>This menu opens three options: create a regular column, create a column combining the values of two existing columns, or create a new column with random values.</p>
+</dd>
+</dl>
+<blockquote id="details-add-column">
+<div><dl>
+<dt>Add a regular column</dt><dd><p>Opens a dialog to create a new column in the table with the following fields:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_add_column.png"><img alt="../_images/workflow_add_column.png" src="../_images/workflow_add_column.png" style="width: 60%;" /></a>
+</div>
+<ul class="simple">
+<li><p>Name (mandatory): column name (shown in the table)</p></li>
+<li><p>Description: text that will be shown to the learners if the column is part of a survey action.</p></li>
+<li><p>Data type (mandatory: The possible data types are <em>number</em> (representing both integers or real numbers), <em>string</em>, <em>boolean</em> (only possible values are <em>true</em> and <em>false</em>), and <em>datetime</em> (a date and time together).</p></li>
+<li><p>An integer (mandatory) representing the position of the column in the table (a value zero will insert it at the end of the table).</p></li>
+<li><p>Two date/time values to control the visibility of the column.</p></li>
+<li><p>Comma-separated list of possible values. This field is to restrict the values in the column. The values have to be compatible with the specified data type.</p></li>
+<li><p>Initial value to assign to all cells in the column.</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<blockquote id="details-add-formula-column">
+<div><dl class="simple">
+<dt>Add a formula-derived column</dt><dd><p>This column is created by combining the values of existing columns using one of the operations addition, product, maximum, minimum, mean, median, standard deviation, conjunction or disjunction. The formula is only applied when the column is
+created the current values of the other columns. The column is not refreshed if the operand change in the future.</p>
+</dd>
+</dl>
+</div></blockquote>
+<blockquote id="details-add-random-column">
+<div><dl class="simple">
+<dt>Add a column with random values</dt><dd><p>This is useful to create columns for A/B testing. The new column is created with a random value from either a numeric range (starting at 0) or a set of strings.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Below the buttons to perform these operations the workflow columns are shown. If the number of columns is large, the information is divided into pages. The field at the top right of this list performs searches in all fields of all columns (name, type, etc). Each column has the following information (from left to right):</p>
+<dl>
+<dt>Position (#)</dt><dd><p>A number starting at 1. The position is used when <a class="reference internal" href="table.html#table"><span class="std std-ref">visualizing the table</span></a>.</p>
+</dd>
+<dt>Operations</dt><dd><p>The operations available for columns are:</p>
+<dl>
+<dt><span class="fa fa-pencil"></span> Edit</dt><dd><p>Change the name, description, unique and values allowed in the column. If the field <em>Has unique values per row</em> property is modified, OnTask checks if the values satisfy this condition.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/workflow_column_edit.png"><img alt="../_images/workflow_column_edit.png" src="../_images/workflow_column_edit.png" style="width: 60%;" /></a>
+</div>
+<p>The column may also have a <em>validity window</em> defined by two date/times. This validity is used when executing <em>action in</em> tasks.</p>
+</dd>
+<dt><span class="fa fa-clone"></span> Clone</dt><dd><p>Clones the column in the workflow changing its name adding the prefix <em>Copy of</em> to the name.</p>
+</dd>
+<dt><span class="fa fa-bar-chart"></span> Statistics (only for non-key columns)</dt><dd><p>Shows a statistical summary of the values in the column. If the data type is <em>number</em>, the summary includes information about quartiles, a boxplot, and a histogram. For the rest of data types, the summary only includes the histogram.</p>
+</dd>
+<dt><span class="fa fa-compress"></span> Restrict</dt><dd><p>Assigns as <em>allowed values</em> for the column those currently stored. This operation is useful to transform a generic column into one with values limited to the current ones.</p>
+</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt><dd><p>Deletes the column from the workflow. If there are conditions in the actions that use this column, those conditions will be removed from the action.</p>
+</dd>
+<dt><span class="fa fa-step-backward"></span> Make first column</dt><dd><p>Move this column to the first position in the workflow</p>
+</dd>
+<dt><span class="fa fa-step-forward"></span> Make last column</dt><dd><p>Move this column to the last position in the workflow</p>
+</dd>
+</dl>
+</dd>
+<dt>Name</dt><dd><p>Unique name for the workflow that cannot contain the quotes <em>‘</em> or <em>“</em> or start with <em>__</em>.</p>
+</dd>
+<dt>Description</dt><dd><p>Description of the column.</p>
+</dd>
+<dt>Type</dt><dd><p>One of integer, string, double, boolean or date/time.</p>
+</dd>
+<dt>Key?</dt><dd><p>Field stating if it is a <strong>key column</strong>, that is, the values are different or unique for all rows. OnTask detects automatically this property when the data for a new column is loaded. You may edit and change this properly as long as the two requirements are satisfied: the values have to be unique for all rows, and there must be at least one key column per workflow.</p>
+</dd>
+</dl>
+<p>The position of the columns can also be changed by dragging by the number (left-most column) and dropping them in the new position.</p>
+</div>
+<div class="section" id="scheduled-actions">
+<span id="scheduler"></span><h2><span class="section-number">3.6.3. </span>Scheduled Actions<a class="headerlink" href="#scheduled-actions" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>“I have no regular schedule. I get up whenever I can.”
+– Jimmy Wales</p>
+</div></blockquote>
+<p>The <a class="reference internal" href="action.html#personalized-content"><span class="std std-ref">personalized text</span></a>, <a class="reference internal" href="action.html#personalized-canvas-email"><span class="std std-ref">personalized canvas email</span></a>, <a class="reference internal" href="action.html#email-list-action"><span class="std std-ref">send list through email</span></a>, <a class="reference internal" href="action.html#personalized-json"><span class="std std-ref">personalized JSON object</span></a> and <a class="reference internal" href="action.html#json-list-action"><span class="std std-ref">send JSON list</span></a> actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the <span class="fa fa-comments"></span> <em>Actions</em> page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation <span class="fa fa-calendar"></span> <em>Schedule</em>.</p>
+<p>When scheduling the execution of an operation, the following fields are always requested at the top of the form:</p>
+<dl class="simple">
+<dt>Name</dt><dd><p>A name to identify this scheduling (a user may have several of these actions pending in a workflow)</p>
+</dd>
+<dt>Description</dt><dd><p>A brief description explaining this scheduled action (for example, “send reminder before the exam”)</p>
+</dd>
+<dt>When to execute the action</dt><dd><p>A date/time in the future when the action will be executed.</p>
+</dd>
+<dt>Multiple executions?</dt><dd><p>Check this box if you want the action to execute more than once. You may define the a start and stop date, and a expression with the frequency of execution.</p>
+</dd>
+</dl>
+<div class="section" id="scheduling-a-personalized-text-action">
+<span id="schedule-email"></span><h3><span class="section-number">3.6.3.1. </span>Scheduling a Personalized Text Action<a class="headerlink" href="#scheduling-a-personalized-text-action" title="Permalink to this headline">¶</a></h3>
+<p>The following figure shows the information requested to schedule the execution of a personalized text action (sending emails to learners):</p>
+<div class="figure align-center">
+<img alt="../_images/schedule_action_email.png" src="../_images/schedule_action_email.png" />
+</div>
+<p>The additional fields in this form are:</p>
+<dl class="simple">
+<dt>Column containing email</dt><dd><p>The column in the table used to fill out the destination email. OnTask will check that the values in that column are proper email addresses.</p>
+</dd>
+<dt>Email subject</dt><dd><p>The text to be included in the email subjects.</p>
+</dd>
+<dt>Comma separated list of CC emails</dt><dd><p>A comma separated list of emails to include in the <em>carbon copy</em> (or CC) field of the email.</p>
+</dd>
+<dt>Comma separated list of BCC emails</dt><dd><p>A comma separated list of emails to include in the <em>blind carbon copy</em> (or BCC) field of the email.</p>
+</dd>
+<dt>Send confirmation email</dt><dd><p>Select this option if you want a confirmation email sent to you.</p>
+</dd>
+<dt>Track when emails are read</dt><dd><p>Try to detect if the email is read. OnTask adds an extra column to the table to store the number of times the message is opened. This detection relies on how the email client processes the message, therefore, the information in this column may not be accurate.</p>
+</dd>
+<dt>Check/exclude emails</dt><dd><p>If selected, this option inserts an extra step showing the emails and offering the possibility to eliminate them from the action. This option is useful to perform a final check and remove emails that cannot be removed with the action filter.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="scheduling-a-personalized-json-action">
+<span id="schedule-json"></span><h3><span class="section-number">3.6.3.2. </span>Scheduling a Personalized JSON Action<a class="headerlink" href="#scheduling-a-personalized-json-action" title="Permalink to this headline">¶</a></h3>
+<p>The following figure shows the information requested to schedule the execution of a personalized JSON action (sending JSON object to another platform):</p>
+<div class="figure align-center">
+<img alt="../_images/schedule_action_json.png" src="../_images/schedule_action_json.png" />
+</div>
+<p>The additional fields in this form are:</p>
+<dl class="simple">
+<dt>Column to select elements</dt><dd><p>A column to show its values and allow to review and exclude some of the entries. This option is useful to perform a final check and remove entries that cannot be removed with the action filter.</p>
+</dd>
+<dt>Authentication Token</dt><dd><p>The string to be use to authenticate with the external platform.</p>
+</dd>
+</dl>
+<span class="target" id="schedule-canvas"></span></div>
+<div class="section" id="table-with-scheduled-actions">
+<span id="scheduler-menu"></span><h3><span class="section-number">3.6.3.3. </span>Table with Scheduled Actions<a class="headerlink" href="#table-with-scheduled-actions" title="Permalink to this headline">¶</a></h3>
+<p>The table showing all the action scheduling operations can be access through the <em>More</em> link in the top-bar menu selecting the <span class="fa fa-calendar"></span> <em>Scheduled operations</em> link. The list of scheduled actions is shown as illustrated in the following figure.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/schedule.png"><img alt="../_images/schedule.png" src="../_images/schedule.png" style="width: 100%;" /></a>
+</div>
+<p>The operations available for each scheduled execution are:</p>
+<dl class="simple">
+<dt><span class="fa fa-pencil"></span> Edit</dt><dd><p>Edit the elements in the scheduled operation.</p>
+</dd>
+<dt><span class="fa fa-eye"></span> View details</dt><dd><p>View all the details for this scheduled execution (includes values in the payload)</p>
+</dd>
+<dt><span class="fa fa-trash"></span> Delete</dt><dd><p>Delete the scheduled execution.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="view-logs">
+<span id="logs"></span><h2><span class="section-number">3.6.4. </span>View logs<a class="headerlink" href="#view-logs" title="Permalink to this headline">¶</a></h2>
+<p>The platform keeps a log of most of the operations that are executed when managing a workflow. These records are available through the <em>View Logs</em> link in the <em>More</em> pull down menu at the top-bar menu. The page shows information about the records in tabular form. The following figure shows an example.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/logs.png"><img alt="../_images/logs.png" src="../_images/logs.png" style="width: 100%;" /></a>
+</div>
+<p>The <span class="fa fa-download"></span> <em>CSV Download</em> button allows to download the logs in CSV format for further processing. Additionally, the content of the table is paginated and the links to access each page are shown at the botton. The records can be searched using the box at the top right corner of the table.</p>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="run.html" title="Previous document"><span class="section-number">3.5. </span>Running actions</a>
+        </li>
+        <li>
+          <a href="plugins.html" title="Next document"><span class="section-number">3.7. </span>Transforming the data with your own code</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/ontask-logo-1.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=abelardopardo&repo=ontask_b&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">1. What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install/index.html">2. Installation process</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Using OnTask</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="workflow.html">3.1. Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">3.2. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="table.html">3.3. Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action.html">3.4. Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html">3.5. Running actions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.6. Additional Workflow Operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#workflow-operations">3.6.1. Workflow Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#column-operations">3.6.2. Column Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scheduled-actions">3.6.3. Scheduled Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-logs">3.6.4. View logs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">3.7. Transforming the data with your own code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">4. Use Scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">5. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">6. Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html"><span class="section-number">3. </span>Using OnTask</a><ul>
+      <li>Previous: <a href="run.html" title="previous chapter"><span class="section-number">3.5. </span>Running actions</a></li>
+      <li>Next: <a href="plugins.html" title="next chapter"><span class="section-number">3.7. </span>Transforming the data with your own code</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 4.0.
+      
+      |
+      <a href="../_sources/Using/workflow_ops.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/abelardopardo/ontask_b" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>2.4. The Administration Pages &#8212; OnTask (B.7.0.2) B.7.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.5. Authentication" href="authentication.html" />
+    <link rel="prev" title="2.3. Upgrading OnTask" href="upgrade.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="upgrade.html" title="Previous document"><span class="section-number">2.3. </span>Upgrading OnTask</a>
+        </li>
+        <li>
+          <a href="authentication.html" title="Next document"><span class="section-number">2.5. </span>Authentication</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="the-administration-pages">
+<span id="admin-pages"></span><h1><span class="section-number">2.4. </span>The Administration Pages<a class="headerlink" href="#the-administration-pages" title="Permalink to this headline">¶</a></h1>
+<p>OnTask uses the administration pages offered by Django. The account created with
+the command <code class="docutils literal notranslate"><span class="pre">createsuperuser</span></code> has complete access to those pages through a
+link in the upper right corner of the screen.</p>
+<p>These pages offer access to several important operations:</p>
+<ul class="simple">
+<li><p>The elements of each of the models stored in the database (workflows,
+actions, conditions, columns, etc). Each model has its corresponding page
+allowing the creation, update and deletion of any object.</p></li>
+<li><p>The user information. This is a special model representing the users, their
+name, credentials, etc. The platform allows the creation of user accounts.</p></li>
+<li><p>The group information. The platform differentiates users based on groups.
+Each group has different functionalities.</p></li>
+</ul>
+<p>Once the instance is running, visit these pages and configure the platform to
+your needs.</p>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="upgrade.html" title="Previous document"><span class="section-number">2.3. </span>Upgrading OnTask</a>
+        </li>
+        <li>
+          <a href="authentication.html" title="Next document"><span class="section-number">2.5. </span>Authentication</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/ontask-logo-1.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=abelardopardo&repo=ontask_b&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">1. What is OnTask</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. Installation process</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">2.1. Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_ontask.html">2.2. Download, install and configure OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html">2.3. Upgrading OnTask</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.4. The Administration Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html">2.5. Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email_config.html">2.6. Email Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="canvas_email_config.html">2.7. Canvas Email Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">2.8. Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_connections.html">2.9. SQL Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_user_create.html">2.10. Creating users in Bulk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker_server.html">2.11. Creating a Development Server using Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Using/index.html">3. Using OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">4. Use Scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">5. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">6. Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html"><span class="section-number">2. </span>Installation process</a><ul>
+      <li>Previous: <a href="upgrade.html" title="previous chapter"><span class="section-number">2.3. </span>Upgrading OnTask</a></li>
+      <li>Next: <a href="authentication.html" title="next chapter"><span class="section-number">2.5. </span>Authentication</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 4.0.
+      
+      |
+      <a href="../_sources/Install/admin_pages.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/abelardopardo/ontask_b" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

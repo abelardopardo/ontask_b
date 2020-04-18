@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>5.26. Write your own data processing code &#8212; OnTask (B.7.0.2) B.7.0.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="5.27. Browsing the API" href="api_browse.html" />
+    <link rel="prev" title="5.25. Uploading Data from a Remote Database" href="database_upload.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="database_upload.html" title="Previous document"><span class="section-number">5.25. </span>Uploading Data from a Remote Database</a>
+        </li>
+        <li>
+          <a href="api_browse.html" title="Next document"><span class="section-number">5.27. </span>Browsing  the API</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="write-your-own-data-processing-code">
+<span id="plugin-write"></span><h1><span class="section-number">5.26. </span>Write your own data processing code<a class="headerlink" href="#write-your-own-data-processing-code" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="example-a-predictive-model">
+<h2><span class="section-number">5.26.1. </span>Example: A Predictive Model<a class="headerlink" href="#example-a-predictive-model" title="Permalink to this headline">¶</a></h2>
+<p>Suppose that your favorite data analyst has processed the data set and created a predictive model that estimates the score of the final exam based on the value of the column <em>Contributions</em> applying the following linear equation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">final</span> <span class="n">exam</span> <span class="n">score</span> <span class="o">=</span> <span class="mf">3.73</span> <span class="o">*</span> <span class="n">Contributions</span> <span class="o">+</span> <span class="mf">25.4</span>
+</pre></div>
+</div>
+<p>You would like to incorporate this model to the workflow and use the predicted final exam score as another column to create conditions and personalize content. One way to achieve this is by creating a plugin that given the two coefficients of a linear model (in the example 3.73 and 25.4) returns a new data set with a column with the values obtained using the corresponding equation. In order for the plugin to comply with the  <a class="reference internal" href="../../Using/plugins.html#plugin-requirements"><span class="std std-ref">requirements</span></a>, one possible definition would be:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">ontask.dataops.plugin</span> <span class="kn">import</span> <span class="n">OnTaskModel</span>
+
+<span class="n">class_name</span> <span class="o">=</span> <span class="s1">&#39;LinearModel&#39;</span>
+
+
+<span class="k">class</span> <span class="nc">LinearModel</span><span class="p">(</span><span class="n">OnTaskModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plugin to execute the linear model y = 3.73 * Contribution + 25.4</span>
+
+<span class="sd">    The result is stored in column &#39;Final Exam Predict&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize all the fields.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Linear Model&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description_text</span> <span class="o">=</span> <span class="s2">&quot;Obtain a prediction of the final exam score.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Contribution&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Final Exam Predict&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_frame</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="nb">dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the parameters to guarantee that they were correct, and if so,</span>
+<span class="sd">        returns the dataframe with the resulting linear model.</span>
+
+<span class="sd">        :param data_frame: Input data for the plugin</span>
+<span class="sd">        :param parameters: Dictionary with (name, value) pairs.</span>
+<span class="sd">        :return: a Pandas data_frame to merge with the existing one </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="mf">3.73</span> <span class="o">*</span> <span class="n">data_frame</span><span class="p">[</span><span class="s1">&#39;Contribution&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mf">25.4</span><span class="p">)</span>
+        <span class="n">new_dataframe</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_column_names</span>
+
+        <span class="k">return</span> <span class="n">new_dataframe</span>
+</pre></div>
+</div>
+<p>The steps to <em>run the model</em> are:</p>
+<ul class="simple">
+<li><p>Click in the <span class="fa fa-table"></span> <em>Table</em> icon in the top menu and select the option <em>Run model</em>. The table will include those models ready for execution.</p></li>
+</ul>
+<div class="figure align-center">
+<img alt="../../_images/dataops_model_list.png" src="../../_images/dataops_model_list.png" />
+</div>
+<ul>
+<li><p>Click in the name of the model. The next screen contains four tabs:</p>
+<dl class="simple">
+<dt>Input columns to transformation</dt><dd><p>Select the columns to use as input data for the model.</p>
+</dd>
+<dt>Columns to store the result</dt><dd><p>Provide a set of columns to store the result of running the model and one key column to merge the results with the existing table (<strong>mandatory</strong>).</p>
+</dd>
+<dt>Parameters</dt><dd><p>A set of parameters to execute the model (could be empty).</p>
+</dd>
+<dt>Description</dt><dd><p>A more detailed description of what the model does.</p>
+</dd>
+</dl>
+</li>
+<li><p>Select the appropriate elements and click on the <span class="fa fa-rocket"></span> <em>Run</em> button above the form.</p></li>
+<li><p>The model is executed in the background (it may take some time to execute) and the result is merged into the workflow table.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="database_upload.html" title="Previous document"><span class="section-number">5.25. </span>Uploading Data from a Remote Database</a>
+        </li>
+        <li>
+          <a href="api_browse.html" title="Next document"><span class="section-number">5.27. </span>Browsing  the API</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/ontask-logo-1.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=abelardopardo&repo=ontask_b&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction/index.html">1. What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Install/index.html">2. Installation process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Using/index.html">3. Using OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Scenarios/index.html">4. Use Scenarios</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">5. Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="the_scenario.html">5.1. The Scenario</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_dataset.html">5.2. The Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explore_dataset_with_excel.html">5.3. Exploring the data with a spreadsheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_concepts.html">5.4. Main elements in OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_workflow.html">5.5. Create an empty workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="top_menu.html">5.6. The Top Menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_upload.html">5.7. Data Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="table.html">5.8. Browsing the data table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html">5.9. Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_personalized_text.html">5.10. Personalized text action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="send_email.html">5.11. Sending Personalized Text through Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email_example.html">5.12. Example of Personalized Messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="personalized_text_url.html">5.13. Making content available through OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_rubric.html">5.14. Personalized Rubric Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_survey.html">5.15. Surveys and/or Polls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_survey.html">5.16. Run a survey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="personalized_text_and_surveys.html">5.17. Combining personalized text and surveys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="survey_import.html">5.18. Import a pre-defined survey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow_operations.html">5.19. Workflow operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow_details.html">5.20. Column operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_personalized_json.html">5.21. Personalized JSON action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scheduling.html">5.22. Scheduling Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merging.html">5.23. Merging Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zip_download.html">5.24. Download a ZIP (and upload it in Moodle)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database_upload.html">5.25. Uploading Data from a Remote Database</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.26. Write your own data processing code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-a-predictive-model">5.26.1. Example: A Predictive Model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_browse.html">5.27. Browsing  the API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Advanced/index.html">6. Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html"><span class="section-number">5. </span>Tutorial</a><ul>
+      <li>Previous: <a href="database_upload.html" title="previous chapter"><span class="section-number">5.25. </span>Uploading Data from a Remote Database</a></li>
+      <li>Next: <a href="api_browse.html" title="next chapter"><span class="section-number">5.27. </span>Browsing  the API</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 4.0.
+      
+      |
+      <a href="../../_sources/Tutorial/Tasks/plugin_write.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/abelardopardo/ontask_b" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
