@@ -468,6 +468,6 @@ ul.timeline > li:before {
     z-index: 400;
 }
 
-.btn:focus {
-  background-color: #b9dbff !important;
+:focus {
+  background-color: LightBlue !important;
 }
