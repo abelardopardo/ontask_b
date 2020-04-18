@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>5.24. Download a ZIP (and upload it in Moodle) &#8212; OnTask (B.7.0.2) B.7.0.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="5.25. Uploading Data from a Remote Database" href="database_upload.html" />
+    <link rel="prev" title="5.23. Merging Data" href="merging.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="merging.html" title="Previous document"><span class="section-number">5.23. </span>Merging Data</a>
+        </li>
+        <li>
+          <a href="database_upload.html" title="Next document"><span class="section-number">5.25. </span>Uploading Data from a Remote Database</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="download-a-zip-and-upload-it-in-moodle">
+<span id="tut-download-zip"></span><h1><span class="section-number">5.24. </span>Download a ZIP (and upload it in Moodle)<a class="headerlink" href="#download-a-zip-and-upload-it-in-moodle" title="Permalink to this headline">¶</a></h1>
+<p>Log into the platform, open a workflow that contains data and a personalized action, click on the <em>Actions</em> link in the top menu.</p>
+<p>The <a class="reference internal" href="action_personalized_text.html#tut-personalized-text-action"><span class="std std-ref">personalized text actions</span></a> allow you to define a text with parts that are included/excluded depending on the value of the conditions. OnTask then allows you to <a class="reference internal" href="send_email.html#tut-send-personalized-email"><span class="std std-ref">send those texts as individual emails</span></a>. However, you may want to extract those texts in HTML and process them with a different platform (for example Moodle). You can do this clicking in the <em>Zip</em> button shown in the <em>Operations</em> column for some of the actions.</p>
+<p>Click in this button for any of the personalized text action. The next page includes a form to collect the following information:</p>
+<div class="figure align-center">
+<img alt="../../_images/tutorial_action_zip.png" src="../../_images/tutorial_action_zip.png" />
+</div>
+<ol class="arabic simple">
+<li><p>One of the key columns (unique values in all rows) to use as file name prefix.</p></li>
+<li><p>Second (optional) column to use in the file name.</p></li>
+<li><p>The file name suffix. If it is left empty <code class="docutils literal notranslate"><span class="pre">feedback.html</span></code> will be used.</p></li>
+<li><p>Check the next field <strong>if the ZIP is going to be used to be uploaded as Moodle feedback</strong>.</p></li>
+<li><p>Check the last field if you want to review the users for which the file will be included in the ZIP (see <a class="reference internal" href="send_email.html#tut-exclude-action-items"><span class="std std-ref">Final look before pushing the GO button</span></a>).</p></li>
+</ol>
+<p>Click in the button <em>Preview</em> at the bottom of the page to see the final appearance of the text in the file and the values of the columns used to configure the text. Click in the arrows next to the <em>Close</em> button to traverse the files and verify that they are properly composed.</p>
+<div class="section" id="use-the-zip-file-to-upload-feedback-in-moodle">
+<span id="tut-moodle-upload"></span><h2><span class="section-number">5.24.1. </span>Use the ZIP file to upload feedback in Moodle<a class="headerlink" href="#use-the-zip-file-to-upload-feedback-in-moodle" title="Permalink to this headline">¶</a></h2>
+<p>If the ZIP created using this functionality has the file names created with certain specific structure, it can be used to upload the personalized messages as part of a Moodle assignment. The workflow data table must have two columns: one with name <code class="docutils literal notranslate"><span class="pre">Identifier</span></code> with values with structure <code class="docutils literal notranslate"><span class="pre">Participant</span> <span class="pre">N</span></code> where N is a unique number per row, and a column with name <code class="docutils literal notranslate"><span class="pre">Full</span> <span class="pre">name</span></code> with the learner’s full name. These columns can be obtained <a class="reference internal" href="../../Using/run.html#upload-feedback-to-moodle"><span class="std std-ref">downloading</span></a> the <em>grading worksheet</em> from the screen showing all the submissions in a Moodle assignment.</p>
+<div class="figure align-center">
+<img alt="../../_images/downloadgradingworksheet.png" src="../../_images/downloadgradingworksheet.png" />
+</div>
+<p>Store the <a class="reference download internal" download="" href="../../_downloads/c12e7a9d0d6f3e460c6fc303feb55fe9/moodle_grades.csv"><code class="xref download docutils literal notranslate"><span class="pre">CSV</span> <span class="pre">file</span> <span class="pre">obtained</span> <span class="pre">from</span> <span class="pre">this</span> <span class="pre">page</span></code></a>. We are now going to <a class="reference internal" href="merging.html#merging"><span class="std std-ref">merge</span></a> the content of the Moodle CSV with the data already existing in the data table. In the <em>Actions</em> page, click on the link with name <em>Manage table data</em> and then in the <em>Upload or merge</em> option. Next, click on the <em>CSV Upload/Merge</em> button. Select the <a class="reference download internal" download="" href="../../_downloads/c12e7a9d0d6f3e460c6fc303feb55fe9/moodle_grades.csv"><code class="xref download docutils literal notranslate"><span class="pre">CSV</span> <span class="pre">grading</span> <span class="pre">sheet</span> <span class="pre">downloaded</span> <span class="pre">from</span> <span class="pre">Moodle</span></code></a>.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/tutorial_moodle_merge_step1.png"><img alt="../../_images/tutorial_moodle_merge_step1.png" src="../../_images/tutorial_moodle_merge_step1.png" style="width: 100%;" /></a>
+</div>
+<p>Go to the next step and select only the columns <code class="docutils literal notranslate"><span class="pre">Identifier</span></code>, <code class="docutils literal notranslate"><span class="pre">Full</span> <span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">Email</span> <span class="pre">address</span></code>. This last one we will use as the key column to merge with the existing <code class="docutils literal notranslate"><span class="pre">email</span></code> column. In order not to create an extra column, rename <code class="docutils literal notranslate"><span class="pre">Email</span> <span class="pre">address</span></code> to <code class="docutils literal notranslate"><span class="pre">email</span></code> as shown in the next figure:</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/tutorial_moodle_merge_step2.png"><img alt="../../_images/tutorial_moodle_merge_step2.png" src="../../_images/tutorial_moodle_merge_step2.png" style="width: 100%;" /></a>
+</div>
+<p>Select <code class="docutils literal notranslate"><span class="pre">email</span></code> as the key for the existing table and <code class="docutils literal notranslate"><span class="pre">Email</span> <span class="pre">address</span></code> as the key column for the new table.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/tutorial_moodle_merge_step3.png"><img alt="../../_images/tutorial_moodle_merge_step3.png" src="../../_images/tutorial_moodle_merge_step3.png" style="width: 100%;" /></a>
+</div>
+<p>Verify that you are merging two columns and using <code class="docutils literal notranslate"><span class="pre">email</span></code> as the key.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/tutorial_moodle_merge_step4.png"><img alt="../../_images/tutorial_moodle_merge_step4.png" src="../../_images/tutorial_moodle_merge_step4.png" style="width: 100%;" /></a>
+</div>
+<p>Click finish and verify that the table in the workflow contains two additional columns: <code class="docutils literal notranslate"><span class="pre">Identifier</span></code> and <code class="docutils literal notranslate"><span class="pre">Full</span> <span class="pre">name</span></code>. Go to the <em>Actions</em> page and click on the link to generate a ZIP file for one of the personalized text actions. Select now the column <code class="docutils literal notranslate"><span class="pre">Identifier</span></code> as the first name prefix and the column <code class="docutils literal notranslate"><span class="pre">Full</span> <span class="pre">name</span></code> as the second column prefix. Choose additional file name suffix (or leave it empty), and <em>click the option for the ZIP to be uploaded to Moodle</em>.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../_images/tutorial_action_zip.png"><img alt="../../_images/tutorial_action_zip.png" src="../../_images/tutorial_action_zip.png" style="width: 100%;" /></a>
+</div>
+<p>Once created, go to the page showing the submissions for an assignment in Moodle and choose the option to <em>Upload multiple feedback files in a zip</em>.</p>
+<div class="figure align-center">
+<img alt="../../_images/multiplefeedbackzip.png" src="../../_images/multiplefeedbackzip.png" />
+</div>
+<p>Upload the zip just created and each file will be placed as the feedback file for each student (independently if there is a submission or not).</p>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="merging.html" title="Previous document"><span class="section-number">5.23. </span>Merging Data</a>
+        </li>
+        <li>
+          <a href="database_upload.html" title="Next document"><span class="section-number">5.25. </span>Uploading Data from a Remote Database</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/ontask-logo-1.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=abelardopardo&repo=ontask_b&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction/index.html">1. What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Install/index.html">2. Installation process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Using/index.html">3. Using OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Scenarios/index.html">4. Use Scenarios</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">5. Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="the_scenario.html">5.1. The Scenario</a></li>
+<li class="toctree-l2"><a class="reference internal" href="the_dataset.html">5.2. The Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explore_dataset_with_excel.html">5.3. Exploring the data with a spreadsheet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_concepts.html">5.4. Main elements in OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_workflow.html">5.5. Create an empty workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="top_menu.html">5.6. The Top Menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_upload.html">5.7. Data Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="table.html">5.8. Browsing the data table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.html">5.9. Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_personalized_text.html">5.10. Personalized text action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="send_email.html">5.11. Sending Personalized Text through Email</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email_example.html">5.12. Example of Personalized Messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="personalized_text_url.html">5.13. Making content available through OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_rubric.html">5.14. Personalized Rubric Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_survey.html">5.15. Surveys and/or Polls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_survey.html">5.16. Run a survey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="personalized_text_and_surveys.html">5.17. Combining personalized text and surveys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="survey_import.html">5.18. Import a pre-defined survey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow_operations.html">5.19. Workflow operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow_details.html">5.20. Column operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_personalized_json.html">5.21. Personalized JSON action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scheduling.html">5.22. Scheduling Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merging.html">5.23. Merging Data</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.24. Download a ZIP (and upload it in Moodle)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#use-the-zip-file-to-upload-feedback-in-moodle">5.24.1. Use the ZIP file to upload feedback in Moodle</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="database_upload.html">5.25. Uploading Data from a Remote Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugin_write.html">5.26. Write your own data processing code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_browse.html">5.27. Browsing  the API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Advanced/index.html">6. Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html"><span class="section-number">5. </span>Tutorial</a><ul>
+      <li>Previous: <a href="merging.html" title="previous chapter"><span class="section-number">5.23. </span>Merging Data</a></li>
+      <li>Next: <a href="database_upload.html" title="next chapter"><span class="section-number">5.25. </span>Uploading Data from a Remote Database</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 4.0.
+      
+      |
+      <a href="../../_sources/Tutorial/Tasks/zip_download.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/abelardopardo/ontask_b" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

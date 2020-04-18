@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>3.2. Data &#8212; OnTask (B.7.0.2) B.7.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.3. Table" href="table.html" />
+    <link rel="prev" title="3.1. Workflow" href="workflow.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="workflow.html" title="Previous document"><span class="section-number">3.1. </span>Workflow</a>
+        </li>
+        <li>
+          <a href="table.html" title="Next document"><span class="section-number">3.3. </span>Table</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="data">
+<span id="dataops"></span><h1><span class="section-number">3.2. </span>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>“May be stories are are just data without a soul”
+– Brené Brown</p>
+</div></blockquote>
+<p>This section describes the operations to either upload the first set of data into the table, or merge additional data with the one already stored. This step may be done automatically before you work with a workflow. If this is the case, you may skip this section or revisit it when you need to manipulate the existing data.</p>
+<p>The data operations are divided into the following categories:</p>
+<dl class="simple">
+<dt>Upload</dt><dd><p>Load the first data set in an empty table.</p>
+</dd>
+<dt>Merge</dt><dd><p>Combine the existing data with new data</p>
+</dd>
+<dt>Run a Transformation</dt><dd><p>Execute an operation in the existing data and store the result as additional columns.</p>
+</dd>
+<dt>Run a model</dt><dd><p>Use the existing data to <strong>predict</strong> additional values.</p>
+</dd>
+</dl>
+<p>These operations are available after selecting a workflow for manipulation under the top menu option <strong>Table</strong>.</p>
+<p>If the workflow table is empty, OnTask will request the parameters required to <a class="reference internal" href="#upload-data"><span class="std std-ref">upload data</span></a> from a given data source. On the other hand, if the workflow table already contains data, OnTask will request the parameters to perform a <em>merge operation</em> in which the existing data is combined with the data extracted from the given source.</p>
+<div class="section" id="upload-data">
+<span id="id1"></span><h2><span class="section-number">3.2.1. </span>Upload Data<a class="headerlink" href="#upload-data" title="Permalink to this headline">¶</a></h2>
+<p>These operations are provided to upload the initial set of data into the workflow table using a variety of sources.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_datauploadmerge.png" src="../_images/dataops_datauploadmerge.png" />
+</div>
+<div class="section" id="upload-csv-files">
+<h3><span class="section-number">3.2.1.1. </span>Upload CSV Files<a class="headerlink" href="#upload-csv-files" title="Permalink to this headline">¶</a></h3>
+<p>CSV or “comma separated value” files are plain text files in which the first line contains a comma-separated list of column names, and every subsequent line contains the values of these columns for each row. It is a popular format to exchange data that can be represented as a table (Microsoft Excel allows to save one sheet in a spreadsheet file into this format). The following figure shows the first step to perform this operation.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_csvupload.png" src="../_images/dataops_csvupload.png" />
+</div>
+<p>In some cases, the file with comma-separated values contains several lines at either the top or the bottom of that need to be skipped when processing the data. The page to upload the CSV file allows you to specify the number of lines to skip at the start and end of the file.</p>
+</div>
+<div class="section" id="upload-excel-files">
+<h3><span class="section-number">3.2.1.2. </span>Upload Excel Files<a class="headerlink" href="#upload-excel-files" title="Permalink to this headline">¶</a></h3>
+<p>OnTask is also capable of uploading the data from one sheet of a Excel file. The following figure shows the first step to perform this operation.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_upload_excel.png" src="../_images/dataops_upload_excel.png" />
+</div>
+<p>In this case the file is assumed to have multiple <em>Sheets</em> and one of them
+has to be selected to upload the data.</p>
+</div>
+<div class="section" id="upload-google-spreadsheet-files">
+<span id="google-spreadsheet-file"></span><h3><span class="section-number">3.2.1.3. </span>Upload Google Spreadsheet Files<a class="headerlink" href="#upload-google-spreadsheet-files" title="Permalink to this headline">¶</a></h3>
+<p>OnTask allows you to upload a data table stored in a Google Spreadsheet that is publicly accessible.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_upload_gsheet.png" src="../_images/dataops_upload_gsheet.png" />
+</div>
+</div>
+<div class="section" id="upload-a-csv-file-stored-in-amazon-s3-bucket">
+<span id="s3-bucket-file"></span><h3><span class="section-number">3.2.1.4. </span>Upload a CSV file stored in Amazon S3 Bucket<a class="headerlink" href="#upload-a-csv-file-stored-in-amazon-s3-bucket" title="Permalink to this headline">¶</a></h3>
+<p>Amazon Simple Storage Service (S3) offers the possibility of storing files in <em>buckets</em>. The service offers an API to access these files. This page in OnTask requests the credentials required to access the CSV file stored in a bucket and process its content.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_upload_s3.png" src="../_images/dataops_upload_s3.png" />
+</div>
+</div>
+<div class="section" id="sql-connection">
+<span id="sql-connection-run"></span><h3><span class="section-number">3.2.1.5. </span>SQL connection<a class="headerlink" href="#sql-connection" title="Permalink to this headline">¶</a></h3>
+<p>This operation uploads the data into the current workflow table using a SQL connection to a remote database. These connections have to be <a class="reference internal" href="../Install/sql_connections.html#sql-connections"><span class="std std-ref">previously defined and configured by the system administrator</span></a>. Instructors can use them to access the content of a previously defined table in a remote database. Once selected, the platform shows the SQL connections available and the possibility to view the connection parameters (click on the connection name), or <em>Run</em> the connection to upload the data as shown in the following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_SQL_available.png" src="../_images/dataops_SQL_available.png" />
+</div>
+<p>When <em>running</em> a SQL connection the platform shows the configuration parameters and requests the password to access the remote database (if required).</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_SQL_run.png" src="../_images/dataops_SQL_run.png" />
+</div>
+</div>
+<div class="section" id="confirmation-step-to-upload-data">
+<h3><span class="section-number">3.2.1.6. </span>Confirmation step to upload data<a class="headerlink" href="#confirmation-step-to-upload-data" title="Permalink to this headline">¶</a></h3>
+<p>When uploading data for the first time, the values are prepared to be assigned as the initial content of the workflow table. But before this assignment is done, the platform needs you to verify some information. Upon reading the new data, OnTask will automatically detect the data type in each column and those columns that have unique values (no repetitions) and mark them as <strong>keys</strong>. Key columns are very important because their values (as they are different for every row) are required for several operations. The workflow table <strong>must have at least one key column</strong>. If here are several columns with this property, OnTask <a class="reference internal" href="workflow_ops.html#details"><span class="std std-ref">allows you to *unmark* some of them as non-key</span></a> as long as there is always one of them wih such mark. Additionally, you may <a class="reference internal" href="workflow_ops.html#details"><span class="std std-ref">mark any column as a key column</span></a> if the values are all different. The operations to manipulate column information is described in the section <a class="reference internal" href="workflow_ops.html#details"><span class="std std-ref">Workflow Operations</span></a>.</p>
+<p>Before finishing the upload step and storing the data in the table, OnTask also allows you to change the name of the columns or change the <strong>Key</strong> attribute as shown in the following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_upload_merge_step2.png" src="../_images/dataops_upload_merge_step2.png" />
+</div>
+<p>After this step the data is stored and the platform shows the <a class="reference internal" href="table.html#table"><span class="std std-ref">Table</span></a> page.</p>
+</div>
+</div>
+<div class="section" id="data-merge">
+<span id="id2"></span><h2><span class="section-number">3.2.2. </span>Data Merge<a class="headerlink" href="#data-merge" title="Permalink to this headline">¶</a></h2>
+<div class="sidebar">
+<p class="sidebar-title">Merge a.k.a “Join”</p>
+<p>Merging is a common operation in databases and is commonly known as <em>join</em>. There are several variants of join operations depending how the differences between the key columns are handled. These same variants exist in OnTask when combining the data already existing in the table. The operation relies on the <strong>key column</strong> to merge the two sources.</p>
+</div>
+<p>A merge operation is executed when data is uploading and the workflow <strong>already has data in its table</strong>. Although this operation is common in data science contexts, it has several variants that make it challenging to use properly. These variants derive mostly from the method used to specify how the values in the new columns are <em>matched</em> with respect to the ones already existing in the table. In other words, each new column has a set of values, but they need to be in the right order so that the information is matched appropriately for every row. For example, if the table contains a column with the age of the learners, and a new column with the gender is merged, the rows of the new column need to correspond with the learners in the existing table. The way to address this issue is to use a <strong>key column* in the existing table and another ** key column</strong> in the new data. These columns uniquely distinguish each row with a value so they are used to make sure that the information for the rows with matching values in these columns are merged. These operations are executed in a set of additional steps. The first step of the merge operation is identical to the upload operation. After detecting the column data types, the key columns and offering the option of changing their names, the next steps identify the key columns to use in the merge, the variant to merge, and shows a summary of the changes that will result from the operation.</p>
+<div class="section" id="step-four-select-keys-and-merge-option">
+<h3><span class="section-number">3.2.2.1. </span>Step four: select keys and merge option<a class="headerlink" href="#step-four-select-keys-and-merge-option" title="Permalink to this headline">¶</a></h3>
+<p>The following figure shows the third step of the merge operation.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/dataops_upload_merge_step3.png"><img alt="../_images/dataops_upload_merge_step3.png" src="../_images/dataops_upload_merge_step3.png" style="width: 100%;" /></a>
+</div>
+<p>The form requires the following fields:</p>
+<dl class="simple">
+<dt>Key columns</dt><dd><p>A key column in the external table about to be merged and a key column in the existing table (both fields are required).</p>
+</dd>
+<dt>Merge method</dt><dd><p>After choosing a merge method, a figure and explanation are shown below.</p>
+</dd>
+</dl>
+<p>There are four possible merge variants:</p>
+<ol class="arabic">
+<li><p><strong>Select only the rows with keys in both existing and new table</strong>.
+It will select only the rows for which values in both key columns are present. Or in other words, any row for which there is no value in either of the key columns <strong>will be dropped</strong>.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/merge_inner1.png"><img alt="../_images/merge_inner1.png" src="../_images/merge_inner1.png" style="width: 50%;" /></a>
+</div>
+</li>
+<li><p><strong>Select all rows in either the existing or new table</strong>.</p>
+<p>All rows in both tables will be considered. You have to be careful with this option because it may produce columns that are no longer unique as a result.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/merge_outer1.png"><img alt="../_images/merge_outer1.png" src="../_images/merge_outer1.png" style="width: 50%;" /></a>
+</div>
+</li>
+<li><p><strong>Select the rows with keys in the existing table</strong>.</p>
+<p>Only the rows in the new table with a value in the key column that is present in the existing table will be considered, the rest will be dropped.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/merge_left1.png"><img alt="../_images/merge_left1.png" src="../_images/merge_left1.png" style="width: 50%;" /></a>
+</div>
+</li>
+<li><p><strong>Select the rows with keys in the new table</strong>.</p>
+<p>Only the rows in the existing table with a value in the key column that is present in the key column from the new table will be considered, the rest will be dropped.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/merge_right1.png"><img alt="../_images/merge_right1.png" src="../_images/merge_right1.png" style="width: 50%;" /></a>
+</div>
+</li>
+</ol>
+<p>In any of these variants, for those columns that are present in both the existing table and the new table, the values of the second will update the existing ones in the first. This update may introduce non-values in some of the rows (for example in columns for with the new data does not provide any value). Additionally, extra care needs to be taken when performing this operation as some of the merge variants may eliminate data in the existing table. In the extreme case, if you try to merge a table with a key column with no values in common with the existing key and you select the method that considers rows with keys in both the existing and new table, the result is an empty table.</p>
+</div>
+<div class="section" id="step-five-verify-upcoming-changes">
+<h3><span class="section-number">3.2.2.2. </span>Step five: verify upcoming changes<a class="headerlink" href="#step-five-verify-upcoming-changes" title="Permalink to this headline">¶</a></h3>
+<p>After selecting these parameters the last step is to review the effect of the operation and proceed with the merge as shown in the following figure.</p>
+<div class="figure align-center">
+<img alt="../_images/dataops_upload_merge_step4.png" src="../_images/dataops_upload_merge_step4.png" />
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="workflow.html" title="Previous document"><span class="section-number">3.1. </span>Workflow</a>
+        </li>
+        <li>
+          <a href="table.html" title="Next document"><span class="section-number">3.3. </span>Table</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/ontask-logo-1.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=abelardopardo&repo=ontask_b&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">1. What is OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Install/index.html">2. Installation process</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Using OnTask</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="workflow.html">3.1. Workflow</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.2. Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#upload-data">3.2.1. Upload Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-merge">3.2.2. Data Merge</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="table.html">3.3. Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action.html">3.4. Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html">3.5. Running actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow_ops.html">3.6. Additional Workflow Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">3.7. Transforming the data with your own code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">4. Use Scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">5. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">6. Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html"><span class="section-number">3. </span>Using OnTask</a><ul>
+      <li>Previous: <a href="workflow.html" title="previous chapter"><span class="section-number">3.1. </span>Workflow</a></li>
+      <li>Next: <a href="table.html" title="next chapter"><span class="section-number">3.3. </span>Table</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 4.0.
+      
+      |
+      <a href="../_sources/Using/data.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/abelardopardo/ontask_b" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

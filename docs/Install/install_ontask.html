@@ -1,0 +1,523 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>2.2. Download, install and configure OnTask &#8212; OnTask (B.7.0.2) B.7.0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2.3. Upgrading OnTask" href="upgrade.html" />
+    <link rel="prev" title="2.1. Requirements" href="requirements.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="requirements.html" title="Previous document"><span class="section-number">2.1. </span>Requirements</a>
+        </li>
+        <li>
+          <a href="upgrade.html" title="Next document"><span class="section-number">2.3. </span>Upgrading OnTask</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="download-install-and-configure-ontask">
+<span id="install-ontask"></span><h1><span class="section-number">2.2. </span>Download, install and configure OnTask<a class="headerlink" href="#download-install-and-configure-ontask" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic">
+<li><p>Download or clone a copy of <a class="reference external" href="https://github.com/abelardopardo/ontask_b">OnTask</a>.</p></li>
+<li><p>Using a command interpreter, go to the OnTask folder and locate a folder inside it with name <code class="docutils literal notranslate"><span class="pre">requirements</span></code>. Verify that it contains the files <code class="docutils literal notranslate"><span class="pre">base.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">production.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">development.txt</span></code>. The first file contains a list of python modules that are required by OnTask. The second is a set of additional modules to run a <em>production</em> instance, and the third is the same list if you intend to run a <em>development</em> instance.</p></li>
+<li><p>If you plan to run a production instance of OnTask execute the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>You may need administrative privileges to execute this command.</p>
+<p>If you plan to run a development instance of OnTask, execute the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>This command downloads  a set of libraries and modules and installs them as
+part of the python libraries in the system.</p>
+</li>
+</ol>
+<div class="section" id="ontask-configuration">
+<h2><span class="section-number">2.2.1. </span>OnTask Configuration<a class="headerlink" href="#ontask-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The next steps describe the configuration of the Django environment to run OnTask. This configuration is divided into in three groups of variables:</p>
+<p>Environment variables (<em>env</em> level)</p>
+<blockquote>
+<div><p>These are variables defined by the operating system and available to OnTask upon execution. The values are obtained at the start of the deployment. Changing these variables usually requires re-deploying the platform (for example if you are using a container platform like docker). These variables can only store strings.</p>
+</div></blockquote>
+<p>Configuration file (<em>conf</em> level)</p>
+<blockquote>
+<div><p>The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file and kept within the system file readable by the application (in the <code class="docutils literal notranslate"><span class="pre">settings</span></code> folder). This variables can store strings, booleans, basic lists and dictionaries.</p>
+</div></blockquote>
+<p>Configuration script (<em>script</em> level)</p>
+<blockquote>
+<div><p>This is a python file that is read first by Django during its start-up procedure. The variables in this script can be defined using any python expression and may have arbitrarily complex expressions and operations (even function calls).</p>
+</div></blockquote>
+<p>OnTask processes the variables in these context in the following stages:</p>
+<ol class="arabic simple">
+<li><p>The environment variables are loaded (if present)</p></li>
+<li><p>The configuration file is loaded. If the file contains a definition for an environment variable, this is considered only if there is no value provided by the environment. In other words, an empty set of environment variables can be written in the configuration file and their values are considered. On the opposite side, if all environment variables are defined, any additional definition in the configuration file is ignored.</p></li>
+<li><p>The initialization script is loaded with all the variables previously defined available.</p></li>
+</ol>
+<div class="section" id="environment-variables">
+<span id="configuration-environment"></span><h3><span class="section-number">2.2.1.1. </span>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>The following variables, if defined in the environment, are considered by OnTask upon start.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code></dt><dd><p>Amazon Web Services access key id. This value is used when the static files in the server are served from a S3 bucket.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AWS_SECRET_ACCESS_KEY</span></code></dt><dd><p>Amazon Web Services secret attached to the given Access Key.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AWS_STORAGE_BUCKET_NAME</span></code></dt><dd><p>Name of the S3 Bucket used to serve the static content</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AWS_LOCATION</span></code></dt><dd><p>Path within the AWS S3 Bucket where the static files are located</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">static</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BASE_URL</span></code></dt><dd><p>Suffix that follows the host name when accessing OnTask once deployed. This is to allow OnTask to be deployed as part of a larger web server when the application is accessed as, for example, <code class="docutils literal notranslate"><span class="pre">hostname.com/suffix/ontask</span></code>.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATAOPS_MAX_UPLOAD_SIZE</span></code></dt><dd><p>Maximum file size for uploads</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">209715200</span></code> (200 Mb)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATAOPS_PLUGIN_DIRECTORY</span></code></dt><dd><p>Folder in the local file system containing the OnTask plugins.</p>
+<p>Default: <cite>plugins</cite></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code></dt><dd><p>Python expression pointing to the configuration script or initial module (python file) to execute on start up. Two of these modules are provided in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>. The file <code class="docutils literal notranslate"><span class="pre">development.py</span></code> provides definitions recommended for a development environment. The file <code class="docutils literal notranslate"><span class="pre">production.py</span></code> provides the suggested definitions for a production deployment. Both scripts load the definitions in the module <code class="docutils literal notranslate"><span class="pre">base.py</span></code>. These scripts contain configuration definitions described in <a class="reference internal" href="#configuration-script"><span class="std std-ref">Configuration script</span></a>.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">settings.production</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME</span></code></dt><dd><p>Host name used to serve the application.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">localhost</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code></dt><dd><p>Name for the configuration file. It must be in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code></p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">local.env</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LANGUAGE_CODE</span></code></dt><dd><p>Official ISO 639-1 language code to use in the platform. Check the available languages in the file base.py.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">en-us</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LOG_FOLDER</span></code></dt><dd><p>Folder where to store the logs produced by the tool</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">logs</span></code> folder at the root of the project</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MEDIA_LOCATION</span></code></dt><dd><p>URL suffix to be used by OnTask to access the media files in folder <code class="docutils literal notranslate"><span class="pre">media</span></code>.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">/media/</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">RDS_DB_NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_DB_USERNAME</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_DB_PASSWORD</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_DB_HOSTNAME</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_DB_PORT</span></code></dt><dd><p>Parameters to access the platform database: database name, username, password, host name and port respectively.</p>
+<p>Default: All empty strings.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SCHEDULER_MINUTE_STEP</span></code></dt><dd><p>Step in minutes to offer when scheduling action executions</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">15</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SECRET_KEY</span></code> <strong>(Required)</strong></dt><dd><p>Random string of characters used to generate internal hashes. It should be kept secret. If not defined the platform will raise an error upon start.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SESSION_CLEANUP_CRONTAB</span></code></dt><dd><p>Crontab string specifying the frequency to run the <code class="docutils literal notranslate"><span class="pre">cleansessions</span></code> command.</p>
+<p>Default <cite>‘05 5 6 * *’</cite></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STATIC_URL_SUFFIX</span></code></dt><dd><p>URL suffix to be used by OnTask to access the static files. This definition is ignored if <code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code> is defined as it is assumed that the static content is served through AWS. Make sure this value is not terminated by a slash.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">static</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TIME_ZONE</span></code></dt><dd><p>String provided by the package <code class="docutils literal notranslate"><span class="pre">pytz</span></code> to identify the time zone in which the server is running. If you want to know the name of the time zone used by your platform execute the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import tzlocal; print(tzlocal.get_localzone().zone)&#39;</span>
+</pre></div>
+</div>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">UTC</span></code></p>
+</dd>
+</dl>
+<p>Remember that if any of these variables is undefined in the execution environment, they still can be defined in the configuration file.</p>
+</div>
+<div class="section" id="configuration-file">
+<span id="id1"></span><h3><span class="section-number">2.2.1.2. </span>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h3>
+<p>Using a plain text editor create a file with name <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in folder <code class="docutils literal notranslate"><span class="pre">settings</span></code> (or a file with the name assigned to the environment variable <code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code> as described in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>). Include in this file either:</p>
+<ul class="simple">
+<li><p>the assignment of a variable from those described in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a> that has no environment definition, or</p></li>
+<li><p>the assignment of any of the following variables for which you want a value different than the default.</p></li>
+</ul>
+<p>The variables suitable to be included in the configuration file are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">ALLOWED_HOSTS</span></code></dt><dd><p>Comma-separated list of host names used to validate the HTTP requests received by the platform. It helps to avoid processing requests that fake their Host headers. If OnTask is going to be hosted in <code class="docutils literal notranslate"><span class="pre">www.yoursite.com</span></code>, then you may want to define it as <code class="docutils literal notranslate"><span class="pre">www.yoursite.com,yoursite.com</span></code>. By default the platform allows request with any Host header.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">[*]</span></code> (any connection from any host)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATABASE_URL</span></code> <strong>(Required)</strong></dt><dd><p>URL encoding the connection to the database. String of the format <code class="docutils literal notranslate"><span class="pre">postgres://username:password&#64;host:port/database</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code></dt><dd><p>Flag to control if the execution is in DEBUG mode.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EXECUTE_ACTION_JSON_TRANSFER</span></code></dt><dd><p>Boolean stating if the JSON transfers should be executed when sending persnalized text.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">REDIS_URL</span></code></dt><dd><p>List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as <code class="docutils literal notranslate"><span class="pre">'rediscache://master:6379,slave1:6379,slave2:6379/1'</span></code> (see <a class="reference external" href="https://github.com/joke2k/django-environ">Django Environ</a>)</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">rediscache:://localhost:6379??client_class=django_redis.client.DefaultClient&amp;timeout=1000&amp;key_prefix=ontask</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHOW_HOME_FOOTER_IMAGE</span></code></dt><dd><p>Boolean to control the appearance of a footer image in the home page. If true, the file <code class="docutils literal notranslate"><span class="pre">footer_image.gif</span></code> is shown from the media folder.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">USE_SSL</span></code></dt><dd><p>Boolean to control if the server should use SSL for communication. There are several security features that are enabled with using SSL.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+</dl>
+<p>There are additional variables to configure <a class="reference internal" href="email_config.html#email-config"><span class="std std-ref">Email</span></a> and <a class="reference internal" href="canvas_email_config.html#canvas-email-config"><span class="std std-ref">Canvas Email</span></a>.</p>
+<p>Here is an example of a minimalistic configuration file (note there is no space between variable names and the equal signs):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALLOWED_HOSTS</span><span class="o">=</span><span class="n">HOSTNAME1</span><span class="p">,</span><span class="n">HOSTNAME2</span>
+<span class="n">BASE_URL</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="c1"># syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database</span>
+<span class="n">DATABASE_URL</span><span class="o">=</span><span class="n">postgres</span><span class="p">:</span><span class="o">//</span><span class="p">[</span><span class="n">PSQLUSERNAME</span><span class="p">]:[</span><span class="n">PSQLPWD</span><span class="p">]</span><span class="o">@</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">ontask</span>
+<span class="n">DEBUG</span><span class="o">=</span><span class="kc">False</span>
+<span class="n">DOMAIN_NAME</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">DOMAIN</span> <span class="n">NAME</span><span class="p">]</span>
+<span class="n">EXECUTE_ACTION_JSON_TRANSFER</span><span class="o">=</span><span class="kc">True</span>
+<span class="n">REDIS_URL</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">REDIS</span> <span class="n">URL</span><span class="p">]</span>
+<span class="n">TIME_ZONE</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">LOCAL</span> <span class="n">PYTHON</span> <span class="n">TIME</span> <span class="n">ZONE</span><span class="p">]</span>
+<span class="n">USE_SSL</span><span class="o">=</span><span class="kc">True</span>
+<span class="n">SECRET_KEY</span><span class="o">=</span><span class="p">[</span><span class="n">SEE</span> <span class="n">BELOW</span><span class="p">]</span>
+</pre></div>
+</div>
+<ol class="arabic">
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">HOSTNAME1</span></code>, <code class="docutils literal notranslate"><span class="pre">HOSTNAME2</span></code> with a comma-separated list of hostnames of the platform hosting the tool.</p></li>
+<li><p>If OnTask is going to be served from a location different from the root of your server (for example <code class="docutils literal notranslate"><span class="pre">myhost.com/ontask</span></code>, then modify the value of the variable <code class="docutils literal notranslate"><span class="pre">BASE_URL</span></code> with the suffix that should follow the domain name (in the example, <code class="docutils literal notranslate"><span class="pre">/ontask</span></code>).</p></li>
+<li><p>Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DATABASE_URL=</span></code> and change the
+field <code class="docutils literal notranslate"><span class="pre">[PSQLUSERNAME]</span></code> with the name of the Postgresql user created in the
+previous step (the one that could access the ontask database and run
+queries). If you decided to use a different name for the database, adjust
+the last part of the line accordingly (replace <em>ontask</em> by the name of
+your database).</p></li>
+<li><p>Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME=</span></code> and change the field <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">DOMAIN</span> <span class="pre">NAME</span></code>] with the domain name of the machine hosting OnTask.</p></li>
+<li><p>Replace the string <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">REDIS</span> <span class="pre">URL]</span></code> with the URL where Redis can be
+accessed. This is typically something similar to
+<code class="docutils literal notranslate"><span class="pre">redis://127.0.0.1:6379/1</span></code>.</p></li>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">LOCAL</span> <span class="pre">PYTHON</span> <span class="pre">TIME</span> <span class="pre">ZONE]</span></code> with the description of your time zone (see the definition of the variable <code class="docutils literal notranslate"><span class="pre">TIME_ZONE</span></code> in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>.</p></li>
+<li><p>Open a command interpreter and execute the following python command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import random; import string; print(&quot;&quot;.join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))&#39;</span>
+</pre></div>
+</div>
+<p>Copy the long string produced as output and add it at the end of the last
+line of the file <code class="docutils literal notranslate"><span class="pre">local.env</span></code>. It should look something like (with
+different content after the equal sign):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SECRET_KEY</span><span class="o">=</span><span class="mi">4</span><span class="n">o93jf0572094jv</span><span class="o">...</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The configuration file may include additional variables to configure functionality such as <a class="reference internal" href="authentication.html#ims-lti-config"><span class="std std-ref">IMS LTI</span></a>, <a class="reference internal" href="authentication.html#ldap-config"><span class="std std-ref">LDAP Authentication</span></a>, <a class="reference internal" href="email_config.html#email-config"><span class="std std-ref">Email configuration</span></a>, or <a class="reference internal" href="canvas_email_config.html#canvas-email-config"><span class="std std-ref">Canvas Email Configuration</span></a>.</p>
+</div>
+<div class="section" id="configuration-script">
+<span id="id2"></span><h3><span class="section-number">2.2.1.3. </span>Configuration script<a class="headerlink" href="#configuration-script" title="Permalink to this headline">¶</a></h3>
+<p>The are some additional configuration variables that directly defined in the modules <code class="docutils literal notranslate"><span class="pre">base.py</span></code>, <code class="docutils literal notranslate"><span class="pre">development.py</span></code> and <code class="docutils literal notranslate"><span class="pre">production.py</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>. Modify the python code to perform additional configuration considering:</p>
+<ol class="arabic simple">
+<li><p>The script <code class="docutils literal notranslate"><span class="pre">base.py</span></code> is always executed first</p></li>
+<li><p>The choice between <code class="docutils literal notranslate"><span class="pre">develoment.py</span></code> or <code class="docutils literal notranslate"><span class="pre">production.py</span></code> is decided based on the environment variable <code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code> and the default value is <code class="docutils literal notranslate"><span class="pre">production.py</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="log-directory">
+<span id="id3"></span><h3><span class="section-number">2.2.1.4. </span>Log directory<a class="headerlink" href="#log-directory" title="Permalink to this headline">¶</a></h3>
+<p>Create a new folder with name <code class="docutils literal notranslate"><span class="pre">logs</span></code> in the OnTask top folder, next to the <code class="docutils literal notranslate"><span class="pre">requirements</span></code> folder, or in the location defined in the variable <code class="docutils literal notranslate"><span class="pre">LOG_FOLDER</span></code>. This folder <strong>is different</strong> from the folder with the same name in the <code class="docutils literal notranslate"><span class="pre">ontask</span></code> folder.</p>
+</div>
+</div>
+<div class="section" id="ontask-installation">
+<h2><span class="section-number">2.2.2. </span>OnTask Installation<a class="headerlink" href="#ontask-installation" title="Permalink to this headline">¶</a></h2>
+<p>Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next steps create the documentation, initial database configuration, additional site files, and deploy. To generate the documentation go to the folder <code class="docutils literal notranslate"><span class="pre">docs_src</span></code>, make sure it contains the sub-folders with names <code class="docutils literal notranslate"><span class="pre">_static</span></code> and <code class="docutils literal notranslate"><span class="pre">_templates</span></code> and execute the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span> <span class="n">html</span> <span class="n">copy_to_docs</span>
+</pre></div>
+</div>
+<p>The documentation is created by the application <code class="docutils literal notranslate"><span class="pre">sphinx-doc</span></code> and stored in the directory <code class="docutils literal notranslate"><span class="pre">_build</span></code> which is then copied to the <code class="docutils literal notranslate"><span class="pre">../docs</span></code> folder. Once the documentation has been created, the next steps configure the database. If at some point during the following steps you want to reset the content of the database, run the commands <code class="docutils literal notranslate"><span class="pre">dropdb</span></code> and <code class="docutils literal notranslate"><span class="pre">createdb</span></code> explained in <a class="reference internal" href="requirements.html#install-postgresql"><span class="std std-ref">Install and Configure PostgreSQL</span></a>. The following commands have to be execute from the project folder.</p>
+<ol class="arabic">
+<li><p>Execute the following command to create the database internal structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
+</pre></div>
+</div>
+<p>A few messages should appear on the screen related to the initialization of the database.</p>
+</li>
+<li><p>Execute the following command to upload to the platform some initial data structures:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">initialize_db</span>
+</pre></div>
+</div>
+<p>The command should run without any error or exception. If you need to create additional users before deploying the platform, read the section <a class="reference internal" href="bulk_user_create.html#bulk-user-creation"><span class="std std-ref">Creating users in Bulk</span></a>.</p>
+</li>
+<li><p>Execute the command to create a superuser account in OnTask:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
+</pre></div>
+</div>
+<p>Remember the data that you enter in this step so that you use it when you enter OnTask with your browser.</p>
+</li>
+<li><p>Execute the following command to collect and install the static content:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
+</pre></div>
+</div>
+<p>The static files are collected from the folder in the main project older with the name stored in the variable <code class="docutils literal notranslate"><span class="pre">STATIC_URL_SUFFIX</span></code> and placed, together with the static content from the folder <code class="docutils literal notranslate"><span class="pre">ontask/static</span></code> in the folder  <code class="docutils literal notranslate"><span class="pre">&lt;base_dir&gt;/site/static</span></code>. This last folder is the only one that contains all the required files to be served statically by the application. Following the suggestions given in the Django project, the content in this folder should be served directly by the web server and not through the WSGI interface. The typical approach for this is to <em>synchronize</em> the content of this folder with the location from where the server takes the files. Make sure you do not make any changes to the folders <code class="docutils literal notranslate"><span class="pre">&lt;base_dir&gt;/static</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;base_dir&gt;/ontask/static</span></code> as they only contain a subset of the files.</p>
+</li>
+<li><p>If you are running a production instance, execute the following command to check the status of the platform:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="o">--</span><span class="n">deploy</span>
+</pre></div>
+</div>
+<p>The command should print just one warning about the configuration variable
+X_FRAME_OPTIONS. If you are running a development instance, you will get
+various additional warning that are derived most of them from running the
+instance without HTTPS.</p>
+</li>
+<li><p>Execute the following command to start the OnTask server:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
+</pre></div>
+</div>
+<p>If there are no errors, the message on the screen should say that your
+server is running in the url 127.0.0.1:8000. However, if you open your
+browser in that URL, an error will be shown. This error is normal and it
+is because the production version requires the pages to be served through
+SSL with a valid certificate in a conventional server.</p>
+</li>
+<li><p>If OnTask is going to be accessed through a web server like Apache or Nginx,
+stop the application and configure the web server accordingly.</p></li>
+<li><p>If you want to use the server in development mode through the URL
+<code class="docutils literal notranslate"><span class="pre">127.0.0.1:8000</span></code> you have to perform two more steps. First, edit the file
+<code class="docutils literal notranslate"><span class="pre">manage.py</span></code> and change these three lines to look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span> <span class="s2">&quot;settings.development&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Second, execute the following command from the project folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">/</span><span class="n">development</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>Now, the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
+</pre></div>
+</div>
+<p>will start the server in the URL 127.0.0.1:8000 and you should be able to
+access it normally with the browser.</p>
+<div class="admonition-warning admonition">
+<p class="admonition-title">Warning</p>
+<p>The development version of OnTask is <strong>not suited</strong> to be used in
+production because it disables several security features. Make sure you
+only deploy a <strong>production</strong> version.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="configure-the-distributed-task-queue">
+<span id="scheduling-tasks"></span><h2><span class="section-number">2.2.3. </span>Configure the Distributed Task Queue<a class="headerlink" href="#configure-the-distributed-task-queue" title="Permalink to this headline">¶</a></h2>
+<p>There are various tasks that need to be executed by OnTask outside the web
+server. The solution adopted is to use <a class="reference external" href="http://www.celeryproject.org/">Celery</a>, <a class="reference external" href="http://supervisord.org/">Supervisor</a> (a process control system) and <a class="reference external" href="https://redis.io/">Redis</a>. Redis has been configured in a previous step. This section explains how to set up the distributed task queue and make sure it is continuously executing in parallel with the web server.</p>
+<ol class="arabic">
+<li><p>Install the application <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> using <strong>pip</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">supervisor</span>
+</pre></div>
+</div>
+<p>This application makes sure the task queue program  Celery is continuously running in the background and in communication with the server.</p>
+</li>
+<li><p>Check that the binaries <code class="docutils literal notranslate"><span class="pre">supervisord</span></code>, <code class="docutils literal notranslate"><span class="pre">supervisorctl</span></code> and <code class="docutils literal notranslate"><span class="pre">celery</span></code>
+are installed in your system.</p></li>
+<li><p>Go to the folder <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> in the top of the project and edit the file
+<code class="docutils literal notranslate"><span class="pre">supervisor.conf</span></code>.</p></li>
+<li><p>The file configures <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> to run in the background and prepare
+two sets of processes for OnTask. You have two options to use this file:</p>
+<ol class="loweralpha">
+<li><p>Use environment variables.</p>
+<p>The file uses internally the value of two environment variables:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">PROJECT_PATH</span></code>: Full path to the root of the project (the top
+folder containing the file <code class="docutils literal notranslate"><span class="pre">LICENSE</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CELERY_BIN</span></code>: Full path to the executable <code class="docutils literal notranslate"><span class="pre">celery</span></code> in your system
+(typically <code class="docutils literal notranslate"><span class="pre">/usr/local/bin/celery</span></code> or similar).</p></li>
+<li><p>Set these variables in your environment to the correct values and make
+sure they are properly exported and visible when running other
+commands. For example, in <code class="docutils literal notranslate"><span class="pre">bash</span></code>, this operation would be achieve
+by two commands similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export PROJECT_PATH=/full/path/to/OnTask/root/folder
+$ export CELERY_BIN=/full/path/to/celery/executable
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Change the file <code class="docutils literal notranslate"><span class="pre">supervisor.conf</span></code>.</p>
+<ul class="simple">
+<li><p>replace any appearance of the string <code class="docutils literal notranslate"><span class="pre">%(ENV_PROJECT_PATH)s</span></code> by the
+full path to the project folder.</p></li>
+<li><p>replace any appearance of the string <code class="docutils literal notranslate"><span class="pre">%(ENV_CELERY_BIN)s</span></code> by the
+full path to the <code class="docutils literal notranslate"><span class="pre">celery</span></code> binary program.</p></li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<ol class="arabic" start="4">
+<li><p>Start the process control system with the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ supervisord -c supervisor.conf
+</pre></div>
+</div>
+<p>The command starts the process control application <code class="docutils literal notranslate"><span class="pre">supervisord</span></code>
+which executes a set of process in the background.</p>
+</li>
+<li><p>Check that the process control system is working with the command
+(executed from the <code class="docutils literal notranslate"><span class="pre">supervisor</span></code> folder):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ supervisorctl -c supervisor.conf status
+</pre></div>
+</div>
+<p>The output of this command should show a message similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ontask</span><span class="o">-</span><span class="n">beat</span><span class="o">-</span><span class="n">celery</span>               <span class="n">RUNNING</span>   <span class="n">pid</span> <span class="mi">28579</span><span class="p">,</span> <span class="n">uptime</span> <span class="mi">1</span> <span class="n">day</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mi">36</span>
+<span class="n">ontask</span><span class="o">-</span><span class="n">celery</span>                    <span class="n">RUNNING</span>   <span class="n">pid</span> <span class="mi">28578</span><span class="p">,</span> <span class="n">uptime</span> <span class="mi">1</span> <span class="n">day</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">07</span><span class="p">:</span><span class="mi">36</span>
+</pre></div>
+</div>
+<p>If the status of the two processes is <code class="docutils literal notranslate"><span class="pre">STARTING</span></code> wait a few seconds and
+execute the command again. The names <code class="docutils literal notranslate"><span class="pre">ontask-beat-celery</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ontask-celery</span></code> are the names of the two processes that OnTask uses for
+asynchronous task execution.</p>
+<p>You may use this command to check if <code class="docutils literal notranslate"><span class="pre">supervisord</span></code> is still running. The
+application is configured to write its messages to the file <code class="docutils literal notranslate"><span class="pre">celery.log</span></code>
+in the logs folder at the top of the project.</p>
+</li>
+<li><p>If you are upgrading OnTask from a previous version (less than 2.8), you
+need to edit the <code class="docutils literal notranslate"><span class="pre">crontab</span></code> entry and remove the command to execute the
+script <code class="docutils literal notranslate"><span class="pre">scheduler_script.py</span></code>.</p></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="requirements.html" title="Previous document"><span class="section-number">2.1. </span>Requirements</a>
+        </li>
+        <li>
+          <a href="upgrade.html" title="Next document"><span class="section-number">2.3. </span>Upgrading OnTask</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/ontask-logo-1.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=abelardopardo&repo=ontask_b&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction/index.html">1. What is OnTask</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. Installation process</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">2.1. Requirements</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.2. Download, install and configure OnTask</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ontask-configuration">2.2.1. OnTask Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ontask-installation">2.2.2. OnTask Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-the-distributed-task-queue">2.2.3. Configure the Distributed Task Queue</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html">2.3. Upgrading OnTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="admin_pages.html">2.4. The Administration Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authentication.html">2.5. Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email_config.html">2.6. Email Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="canvas_email_config.html">2.7. Canvas Email Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">2.8. Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_connections.html">2.9. SQL Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bulk_user_create.html">2.10. Creating users in Bulk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker_server.html">2.11. Creating a Development Server using Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Using/index.html">3. Using OnTask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Scenarios/index.html">4. Use Scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorial/index.html">5. Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Advanced/index.html">6. Advanced Features</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html"><span class="section-number">2. </span>Installation process</a><ul>
+      <li>Previous: <a href="requirements.html" title="previous chapter"><span class="section-number">2.1. </span>Requirements</a></li>
+      <li>Next: <a href="upgrade.html" title="next chapter"><span class="section-number">2.3. </span>Upgrading OnTask</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Content Licensed under Creative Commons BY 4.0.
+      
+      |
+      <a href="../_sources/Install/install_ontask.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/abelardopardo/ontask_b" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
