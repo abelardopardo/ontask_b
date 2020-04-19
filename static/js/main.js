@@ -1,3 +1,4 @@
+let previousActiveElement = null;
 let dtp_opts = {
     format:'YYYY-MM-DD HH:mm',
     stepping: 1,
@@ -43,49 +44,54 @@ let get_id_text_content = function() {
   return value;
 };
 let loadForm = function () {
-    let btn = $(this);
-    if ($(this).is("[class*='disabled']")) {
-      return;
-    }
-    data = {};
-    if (document.getElementById("id_subject") != null) {
-      data["subject_content"] = $("#id_subject").val();
-    }
-    $.ajax({
-      url: btn.attr("data-url"),
-      type: "get",
-      dataType: "json",
-      data: data,
-      beforeSend: function() {
-        $("#modal-item .modal-body").html("");
-        $("#modal-item").modal("show");
-      },
-      success: function(data) {
-        if (typeof data.html_redirect != 'undefined') {
-          if (data.html_redirect == "") {
-            $("#div-spinner").show();
-            window.location.reload(true);
-          } else {
-            location.href = data.html_redirect;
-          }
-          return;
+  let btn = $(this);
+  previousActiveElement = btn;
+  if (btn.is("[class*='dropdown-item']")) {
+    previousActiveElement =  btn.parent().siblings()[0];
+  }
+  if ($(this).is("[class*='disabled']")) {
+    return;
+  }
+  data = {};
+  if (document.getElementById("id_subject") != null) {
+    data["subject_content"] = $("#id_subject").val();
+  }
+  $.ajax({
+    url: btn.attr("data-url"),
+    type: "get",
+    dataType: "json",
+    data: data,
+    beforeSend: function() {
+      $("#modal-item .modal-body").html("");
+      $("#modal-item").modal("show");
+    },
+    success: function(data) {
+      if (typeof data.html_redirect != 'undefined') {
+        if (data.html_redirect == "") {
+          $("#div-spinner").show();
+          window.location.reload(true);
+        } else {
+          location.href = data.html_redirect;
         }
-        $("#modal-item .modal-content").html(data.html_form);
-        if ($('#modal-item .ontask-datetimepicker').length != 0) {
-          $('#modal-item .ontask-datetimepicker').datetimepicker(dtp_opts);
-        }
-        if (document.getElementById("id_formula") != null) {
-          set_qbuilder('#id_formula', qbuilder_options);
-        }
-        if (document.getElementById("id_columns") != null) {
-          set_element_select("#id_columns");
-        }
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        $("#div-spinner").show();
-        location.reload(true);
+        return;
       }
-    });
+      $("#modal-item .modal-content").html(data.html_form);
+      if ($('#modal-item .ontask-datetimepicker').length != 0) {
+        $('#modal-item .ontask-datetimepicker').datetimepicker(dtp_opts);
+      }
+      if (document.getElementById("id_formula") != null) {
+        set_qbuilder('#id_formula', qbuilder_options);
+      }
+      if (document.getElementById("id_columns") != null) {
+        set_element_select("#id_columns");
+      }
+      $("#modal_item_label .close").focus();
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      $("#div-spinner").show();
+      location.reload(true);
+    }
+  });
 };
 let saveForm = function () {
     let form = $(this);
@@ -247,6 +253,11 @@ $('#modal-item').on('hide.bs.modal', function (e) {
     delete qbuilder_options['rules'];
   }
 })
+$('#modal-item').on('hidden.bs.modal', function (e) {
+  if (previousActiveElement != 'undefined' && previousActiveElement != "null") {
+      previousActiveElement.focus();
+  }
+})
 // Detect workflow name before operation
 $(document).on("keyup", '.textEnable', function() {
   $(".button-enable").prop( "disabled", $(this).val() != $(this).attr('data-value'));
@@ -256,3 +267,4 @@ $(function () {
   $(".js-workflow-flush").on("click", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 })
+

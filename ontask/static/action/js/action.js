@@ -86,6 +86,7 @@ let ajax_post = function(url, data, req_type) {
         return;
       }
       $("#modal-item .modal-content").html(data.html_form);
+      $("#modal_item_label .close").focus();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       $('#div-spinner').show();
@@ -95,6 +96,10 @@ let ajax_post = function(url, data, req_type) {
 }
 let loadFormPost = function () {
   let btn = $(this);
+  previousActiveElement = btn;
+  if (btn.is("[class*='dropdown-item']")) {
+    previousActiveElement =  btn.parent().siblings()[0];
+  }
   if ($(this).is('[class*="disabled"]')) {
     return;
   }
