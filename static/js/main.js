@@ -253,6 +253,9 @@ $('#modal-item').on('hide.bs.modal', function (e) {
     delete qbuilder_options['rules'];
   }
 })
+$('#modal-item').on('shown.bs.modal', function () {
+  $("#modal_item_label .close").focus();
+})
 $('#modal-item').on('hidden.bs.modal', function (e) {
   if (previousActiveElement != 'undefined' && previousActiveElement != "null") {
       previousActiveElement.focus();

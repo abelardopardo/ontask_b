@@ -173,7 +173,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                     'Workflow without DF in get_table_row_count_all_false')
 
             # Separate filter from conditions
-            filter_item = self.conditions.filter(is_filter=True).first()
+            filter_item = self.get_filter()
             cond_list = self.conditions.filter(is_filter=False)
 
             if not cond_list:

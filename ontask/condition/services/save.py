@@ -35,7 +35,8 @@ def _propagate_changes(condition, changed_data, old_name, is_new):
             condition.refresh_from_db(fields=['n_rows_selected'])
         else:
             # Update the number of rows selected in the condition
-            condition.update_n_rows_selected()
+            condition.update_n_rows_selected(
+                filter_formula=condition.action.get_filter_formula())
 
     # If condition name has changed, rename appearances in the content
     # field of the action.

@@ -56,9 +56,14 @@
         {{ action_content }}
       {% endif %}
     </div>
-    {% if show_values %}
+    {% if show_values or show_conditions %}
       <div id="preview-variables" class="modal-body shadow border border-dark">
-        <strong>{% trans 'Values:' %}</strong> {{ show_values }}
+        {% if show_values %}
+          <div><strong>{% trans 'Values:' %}</strong> {{ show_values }}</div>
+        {% endif %}
+        {% if show_conditions %}
+          <div><strong>{% trans 'Conditions:' %}</strong> {{ show_conditions }}</div>
+        {% endif %}
       </div>
     {% endif %}
   </div>

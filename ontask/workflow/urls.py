@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 
 """URLs to manipulate workflows, attributes and shared."""
 from django.urls import path, re_path
@@ -7,8 +7,14 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from ontask import models
 from ontask.tasks import task_execute_factory
 from ontask.workflow import api, services, views
+ from django.urls import path, re_path
+ from rest_framework.urlpatterns import format_suffix_patterns
 
-app_name = 'workflow'
+ from ontask import models
+ from ontask.tasks import task_execute_factory
+ from ontask.workflow import api, services, views
+
+ app_name = 'workflow'
 
 urlpatterns = [
     # CRUD

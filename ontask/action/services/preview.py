@@ -184,6 +184,9 @@ def create_row_preview_context(
         'prv': prv,
         'incorrect_json': incorrect_json,
         'show_values': show_values,
+        'show_conditions': ', '.join(['"{0}" = {1}'.format(
+            cond_name, str(cond_value))
+            for cond_name, cond_value in condition_evaluation.items()]),
         'all_false': all_false,
         'prelude': prelude,
         'action_content': action_content,

@@ -4019,11 +4019,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "rows_all_false": [
-            2,
-            10,
-            11
-        ],
+        "rows_all_false": [],
         "serve_enabled": false,
         "text_content": "<p>Dear {{ GivenName }}<br></p><p>Here are some comments about the preparation videos for this week.</p><p style=\"\">{% if No Video 1 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Genes and Proteins Activity</h4><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{% endif %}</p><p>{% if No Video 2 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p>Regards<br><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Coordinator name }}</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Course name }}<br></p>",
         "target_url": "",
