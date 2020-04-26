@@ -32,14 +32,11 @@
     {% block navbar %}
       <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
         {% block navbar-brand %}
-          {% cache 3600 site-navbar-brand LANGUAGE_CODE %}
-            <a class="navbar-brand" href="#">
-              <img src="{% static 'img/logo.png' %}" height="30" alt="logo">
-            </a>
+          {% cache 3600 site-navbar-brand %}
+            <img src="{% static 'img/logo.png' %}" height="30" alt="logo">
           {% endcache %}
         {% endblock %}
         {% block navbar-menu %}
-
           <button class="navbar-toggler" type="button" data-toggle="collapse"
                   data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                   aria-expanded="false" aria-label="Toggle navigation">

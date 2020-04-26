@@ -85,7 +85,9 @@ let loadForm = function () {
       if (document.getElementById("id_columns") != null) {
         set_element_select("#id_columns");
       }
-      $("#modal_item_label .close").focus();
+      if ($('#modal-item').hasClass('show')) {
+        $("#modal_item_label .close").focus();
+      }
     },
     error: function(jqXHR, textStatus, errorThrown) {
       $("#div-spinner").show();

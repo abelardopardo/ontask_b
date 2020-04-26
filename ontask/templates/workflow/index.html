@@ -14,12 +14,6 @@
   {% ontask_datatables_bootstrap_js %}
   <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
   <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
-  <script type="text/javascript">
-    $('#modal-item').on('hide.bs.modal', function (e) {
-      $('#div-spinner').show();
-      location.reload();
-    })
-  </script>
 {% endblock %}
 {% block container %}
   <div class="container" id="workflow-index">
