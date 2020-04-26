@@ -154,24 +154,18 @@ def create_row_preview_context(
         # Get the conditions used in the action content
         act_cond = action.get_used_conditions()
         # Get the variables/columns from the conditions
-        act_vars = set().union(
-            *[
-                cond.columns.all()
-                for cond in action.conditions.filter(name__in=act_cond)
-            ],
-        )
+        act_vars = set().union(*[
+            cond.columns.all()
+            for cond in action.conditions.filter(name__in=act_cond)])
 
         act_vars = act_vars.union({
             triplet.column
             for triplet in action.column_condition_pair.all()})
 
         # Sort the variables/columns  by position and get the name
-        show_values = ', '.join(
-            [
-                '{0} = {1}'.format(col.name, row_values[col.name])
-                for col in act_vars
-            ],
-        )
+        show_values = ', '.join([
+            '"{0}" = {1}'.format(col.name, row_values[col.name])
+            for col in act_vars])
 
     uses_plain_text = (
         action.action_type == models.Action.PERSONALIZED_CANVAS_EMAIL

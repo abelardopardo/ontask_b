@@ -40,8 +40,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
             'html_form': render_to_string(
                 self.template_name,
                 {'form': self.form_class(workflow_user=request.user)},
-                request=request),
-        })
+                request=request)})
 
     @method_decorator(ajax_required)
     def post(
@@ -63,8 +62,7 @@ class WorkflowCreateView(UserIsInstructor, generic.TemplateView):
             'html_form': render_to_string(
                 self.template_name,
                 {'form': form},
-                request=request),
-        })
+                request=request)})
 
 
 @user_passes_test(is_instructor)

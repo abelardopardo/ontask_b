@@ -142,7 +142,7 @@ EXECUTE_ACTION_JSON_TRANSFER = env.bool(
 # CACHE
 REDIS_URL = env.cache(
     'REDIS_URL',
-    default='rediscache://localhost:6379/'
+    default='redis://localhost:6379/'
             + '?client_class=django_redis.client.DefaultClient'
             + '&timeout=1000'
             + '&key_prefix=ontask'
