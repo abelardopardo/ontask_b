@@ -55,15 +55,18 @@ let insertRubricTextInContent = function() {
   $(this).val(this.defaultSelected);
 }
 let insertColumnListInContent = function() {
-  let val = $(this).text();
-  if (val == '') {
+  let report_column_list = $('#id_columns').val();
+  if (report_column_list == '') {
     return;
   }
   if (typeof $('#id_text_content').summernote != 'undefined') {
-    $("#id_text_content").summernote('createRange');
+    $('#id_text_content').summernote('restoreRange')
   }
-  insertText('id_text_content', '{% ot_insert_column_list "' + val + '" %}');
-  $(this).val(this.defaultSelected);
+  insertText(
+    'id_text_content',
+    '{% ot_insert_column_list "' + report_column_list.join('" "') + '" %}');
+  $(".modal-body").html("");
+  $("#modal-item").modal('hide');
 }
 let ajax_post = function(url, data, req_type) {
   $.ajax({
@@ -150,8 +153,9 @@ $(function () {
 
   // Insert column name in content
   $("#insert-elements-in-editor").on("click", ".js-insert-column-name", insertAttributeInContent);
-  // Insert column LIST in content
-  $("#insert-elements-in-editor").on("click", ".js-insert-column-list", insertColumnListInContent);
+  // Insert column REPORT in content
+  $("#insert-elements-in-editor").on("click", ".js-table-select", loadForm);
+  $("#modal-item").on("click", ".js-table-insert", insertColumnListInContent);
   // Insert condition blurb in the editor
   $("#insert-elements-in-editor").on("click", ".js-insert-condition-name", insertConditionInContent);
   // Insert attribute in content
@@ -239,13 +243,15 @@ $(function () {
   $("#id_confirm_items").on("change", function(e) {
     select_next_button($(this));
   })
+  $('#modal-item').on('show.bs.modal', function (e) {
+    if ($("#id_text_content").summernote != null) {
+      $("#id_text_content").summernote('saveRange');
+    }
+  });
 });
 window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {
     set_element_select("#id_exclude_values");
-  }
-  if (document.getElementById("column-select") != null) {
-    set_element_select("#column-select");
   }
   setDateTimePickers();
 };

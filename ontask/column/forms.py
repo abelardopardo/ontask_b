@@ -499,5 +499,5 @@ class ColumnSelectForm(forms.Form):
 
         # Populate the column choices
         self.fields['columns'].choices = [
-            (idx, col.name) for idx, col in enumerate(self.wf_columns)
+            (col.name, col.name) for idx, col in enumerate(self.wf_columns)
         ]

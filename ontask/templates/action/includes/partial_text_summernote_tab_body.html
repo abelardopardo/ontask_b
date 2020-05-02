@@ -3,41 +3,34 @@
 <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
      id="text" role="tabpanel" aria-labelledby="text-tab">
   <div id="html-editor">
-    <div id="column-selector" class="text-center my-3">
+    <div id="insert-elements-in-editor" class="text-center my-3">
       {% if is_rubric %}
         <button class="btn btn-outline-dark js-insert-rubric-text col-md-auto"
                 type="button">{% trans 'Insert rubric text' %}</button>
       {% elif is_email_report %}
-        {% comment %}<div class="row col-md-auto">{% endcomment %}
-          <select id="column-select" class="col-sm-auto" name="character" multiple="multiple" style="width:200px;">
-            {% for column in columns %}
-              <option value="{{ column.name }}">{{ column.name }}</option>
-            {% endfor %}
-          </select>
-          <button type="button" class="btn btn-outline-dark col-sm-auto">{% trans 'Insert in text' %}</button>
-        {% comment %}</div>{% endcomment %}
+        <button type="button" data-url="{% url 'column:select' %}"
+                class="btn btn-outline-dark js-table-select col-sm-auto">
+          {% trans 'Insert table' %}</button>
       {% endif %}
-      <div class="dropdown btn-group col-md-auto">
-        <button type="button" class="btn btn-outline-dark dropdown-toggle"
-                data-toggle="dropdown">
-          {% if is_email_report %}
-            {% trans 'Insert Column as List' %}
-          {% else %}
+        {% if not is_email_report %}
+        <div class="dropdown btn-group col-md-auto">
+          <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                  data-toggle="dropdown">
             {% trans 'Insert Column Value' %}
-          {% endif %}
-        </button>
-        <div class="shadow dropdown-menu scrollable-menu">
-          {% if is_email_report %}
-            {% for column in columns %}
-              <button type="button" class="dropdown-item js-insert-column-list">{{ column.name }}</button>
-            {% endfor %}
-          {% else %}
-            {% for column in columns %}
-              <button type="button" class="dropdown-item js-insert-column-name">{{ column.name }}</button>
-            {% endfor %}
-          {% endif %}
+          </button>
+          <div class="shadow dropdown-menu scrollable-menu">
+            {% if is_email_report %}
+              {% for column in columns %}
+                <button type="button" class="dropdown-item js-insert-column-list">{{ column.name }}</button>
+              {% endfor %}
+            {% else %}
+              {% for column in columns %}
+                <button type="button" class="dropdown-item js-insert-column-name">{{ column.name }}</button>
+              {% endfor %}
+            {% endif %}
+          </div>
         </div>
-      </div>
+      {% endif %}
       {% if conditions|length %}
         {% if is_personalized_text %}
           {% trans 'Use condition in highlighted text' as header %}
