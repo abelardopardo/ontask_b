@@ -179,12 +179,12 @@ EMAIL_PRODUCER = services.ActionManagerEmail(
     run_template='action/request_email_data.html',
     log_event=models.Log.ACTION_RUN_PERSONALIZED_EMAIL)
 
-EMAIL_LIST_PRODUCER = services.ActionManagerEmailList(
+EMAIL_REPORT_PRODUCER = services.ActionManagerEmailReport(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_out.html',
     run_form_class=forms.SendListActionRunForm,
-    run_template='action/request_email_list_data.html',
-    log_event=models.Log.ACTION_RUN_EMAIL_LIST)
+    run_template='action/request_email_report_data.html',
+    log_event=models.Log.ACTION_RUN_EMAIL_REPORT)
 
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.PERSONALIZED_TEXT,
@@ -194,11 +194,11 @@ tasks.task_execute_factory.register_producer(
     EMAIL_PRODUCER)
 
 services.ACTION_PROCESS_FACTORY.register_producer(
-    models.Action.EMAIL_LIST,
-    EMAIL_LIST_PRODUCER)
+    models.Action.EMAIL_REPORT,
+    EMAIL_REPORT_PRODUCER)
 tasks.task_execute_factory.register_producer(
-    models.Log.ACTION_RUN_EMAIL_LIST,
-    EMAIL_LIST_PRODUCER)
+    models.Log.ACTION_RUN_EMAIL_REPORT,
+    EMAIL_REPORT_PRODUCER)
 
 RUBRIC_PRODUCER = services.ActionManagerRubric(
     edit_form_class=forms.EditActionOutForm,
@@ -218,12 +218,12 @@ JSON_PRODUCER = services.ActionManagerJSON(
     run_template='action/request_json_data.html',
     log_event=models.Log.ACTION_RUN_PERSONALIZED_JSON)
 
-JSON_LIST_PRODUCER = services.ActionManagerJSONList(
+JSON_REPORT_PRODUCER = services.ActionManagerJSONReport(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_out.html',
-    run_form_class=forms.JSONListActionRunForm,
-    run_template='action/request_json_list_data.html',
-    log_event=models.Log.ACTION_RUN_JSON_LIST)
+    run_form_class=forms.JSONReportActionRunForm,
+    run_template='action/request_json_report_data.html',
+    log_event=models.Log.ACTION_RUN_JSON_REPORT)
 
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.PERSONALIZED_JSON,
@@ -234,12 +234,12 @@ tasks.task_execute_factory.register_producer(
     JSON_PRODUCER)
 
 services.ACTION_PROCESS_FACTORY.register_producer(
-    models.Action.JSON_LIST,
-    JSON_LIST_PRODUCER)
+    models.Action.JSON_REPORT,
+    JSON_REPORT_PRODUCER)
 
 tasks.task_execute_factory.register_producer(
-    models.Log.ACTION_RUN_JSON_LIST,
-    JSON_LIST_PRODUCER)
+    models.Log.ACTION_RUN_JSON_REPORT,
+    JSON_REPORT_PRODUCER)
 
 CANVAS_EMAIL_PRODUCER = services.ActionManagerCanvasEmail(
     edit_form_class=forms.EditActionOutForm,

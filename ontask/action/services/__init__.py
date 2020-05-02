@@ -6,7 +6,7 @@ from ontask.action.services.canvas_email import ActionManagerCanvasEmail
 from ontask.action.services.clone import do_clone_action
 from ontask.action.services.edit_save import save_action_form
 from ontask.action.services.email import (
-    ActionManagerEmail, ActionManagerEmailList,
+    ActionManagerEmail, ActionManagerEmailReport,
 )
 from ontask.action.services.errors import (
     OnTaskActionRubricIncorrectContext, OnTaskActionSurveyDataNotFound,
@@ -14,7 +14,7 @@ from ontask.action.services.errors import (
 )
 from ontask.action.services.import_export import do_import_action
 from ontask.action.services.json import (
-    ActionManagerJSON, ActionManagerJSONList,
+    ActionManagerJSON, ActionManagerJSONReport,
 )
 from ontask.action.services.manager_factory import (
     ACTION_PROCESS_FACTORY, ActionManagementFactory,

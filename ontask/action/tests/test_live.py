@@ -667,7 +667,7 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
     action_name = 'Send to someone'
     action_text = 'Dear sir/madam\\nHere is the student list: '
 
-    def test_email_list_create_edit(self):
+    def test_email_report_create_edit(self):
         """Send list action after creating and editing."""
         # Login
         self.login('instructor01@bogus.com')
@@ -678,7 +678,7 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.create_new_email_list_action(self.action_name, '')
+        self.create_new_email_report_action(self.action_name, '')
 
         # insert the action text
         WebDriverWait(self.selenium, 10).until(
@@ -721,7 +721,7 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_id('id_email_to').send_keys(
             'recipient@bogus.com')
         self.selenium.find_element_by_id('id_subject').send_keys(
-            'Send List Email Subject')
+            'Send Report Email Subject')
         self.selenium.find_element_by_id('id_cc_email').send_keys(
             'tutor1@example.com tutor2@example.com')
         self.selenium.find_element_by_id('id_bcc_email').send_keys(
@@ -745,8 +745,8 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionJSONListActionCreate(tests.OnTaskLiveTestCase):
-    """Test the JSON List action."""
+class ActionJSONReportActionCreate(tests.OnTaskLiveTestCase):
+    """Test the JSON Report action."""
 
     fixtures = ['simple_action']
     filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
@@ -754,10 +754,10 @@ class ActionJSONListActionCreate(tests.OnTaskLiveTestCase):
     wflow_name = 'wflow1'
     wflow_desc = 'description text for workflow 1'
 
-    action_name = 'JSON LIST'
+    action_name = 'JSON REPORT'
     action_text = '{ "student_list": {% ot_insert_column_list "email" %} }'
 
-    def test_json_list_create_edit(self):
+    def test_json_report_create_edit(self):
         """Create and edit a list action."""
         # Login
         self.login('instructor01@bogus.com')
@@ -768,7 +768,7 @@ class ActionJSONListActionCreate(tests.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.create_new_JSON_list_action(self.action_name, '')
+        self.create_new_JSON_report_action(self.action_name, '')
 
         # insert the action text
         WebDriverWait(self.selenium, 10).until_not(

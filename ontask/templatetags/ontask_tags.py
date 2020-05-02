@@ -14,6 +14,8 @@ from ontask import models
 from ontask.action import evaluate
 from ontask.dataops import sql
 
+ACTION_CONTEXT_VAR = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
+
 register = template.Library()
 
 
@@ -143,18 +145,27 @@ def ontask_datetimepicker_js() -> str:
 
 
 @register.simple_tag(takes_context=True)
-def ot_insert_column_list(context, column_name) -> str:
+def ot_insert_column_list(context, *args) -> str:
     """Insert in the text a column list."""
-    action = context['ONTASK_ACTION_CONTEXT_VARIABLE___']
-    column_values = [
-        str(citem[0]) for citem in sql.get_rows(
-            action.workflow.get_data_frame_table_name(),
-            column_names=[column_name],
-            filter_formula=action.get_filter_formula())]
-    if action.action_type == models.Action.JSON_LIST:
-        return mark_safe(json.dumps(column_values))
+    action = context[ACTION_CONTEXT_VAR]
+    all_column_values = []
+    for column_name in args:
+        all_column_values.append([
+            str(citem[0]) for citem in sql.get_rows(
+                action.workflow.get_data_frame_table_name(),
+                column_names=[column_name],
+                filter_formula=action.get_filter_formula())])
 
-    return ', '.join(column_values)
+    if action.action_type == models.Action.JSON_REPORT:
+        return mark_safe(json.dumps({
+            cname: cval for cname, cval in zip(args, all_column_values)}))
+
+    # return ', '.join(column_values)
+    return render_to_string(
+        'table.html',
+        {
+            'column_names': args,
+            'rows': zip(*all_column_values)})
 
 
 @register.simple_tag(takes_context=True)
@@ -164,7 +175,7 @@ def ot_insert_rubric_feedback(context) -> str:
         'action/includes/partial_rubric_message.html',
         context={
             'text_sources': evaluate.render_rubric_criteria(
-                context['ONTASK_ACTION_CONTEXT_VARIABLE___'], context)})
+                context[ACTION_CONTEXT_VAR], context)})
 
 
 @register.simple_tag

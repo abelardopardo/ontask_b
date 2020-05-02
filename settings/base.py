@@ -511,8 +511,8 @@ DISABLED_ACTIONS = [
     # 'models.Action.PERSONALIZED_TEXT',
     # 'models.Action.PERSONALIZED_JSON',
     # 'models.Action.PERSONALIZED_CANVAS_EMAIL',
-    # 'models.Action.EMAIL_LIST',
-    # 'models.Action.JSON_LIST',
+    # 'models.Action.EMAIL_REPORT',
+    # 'models.Action.JSON_REPORT',
     # 'models.Action.SURVEY',
     'models.Action.TODO_LIST',
 ]

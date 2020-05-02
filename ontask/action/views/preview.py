@@ -93,8 +93,8 @@ def preview_response(
     # Initial context to render the response page.
     context = {'action': action, 'index': idx}
     if (
-        action.action_type == models.Action.EMAIL_LIST
-        or action.action_type == models.Action.JSON_LIST
+        action.action_type == models.Action.EMAIL_REPORT
+        or action.action_type == models.Action.JSON_REPORT
     ):
         services.create_list_preview_context(action, context)
     else:

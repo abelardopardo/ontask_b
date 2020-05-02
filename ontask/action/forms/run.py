@@ -30,9 +30,9 @@
 
 14) JSONActionRunForm: 13 + 1
 
-15) JSONListActionForm: 5
+15) JSONReportActionForm: 5
 
-16) JSONListActionForm: 15 + 1
+16) JSONReportActionForm: 15 + 1
 
 17) ValueExcludeForm: Form to select some items to exclude from the processing
 
@@ -577,12 +577,12 @@ class JSONActionRunForm(JSONActionForm, ExportWorkflowBase):
             'export_wf'])
 
 
-class JSONListActionForm(JSONTokenForm):
+class JSONReportActionForm(JSONTokenForm):
     """Use a synonym for consistency with the other classes"""
 
 
-class JSONListActionRunForm(JSONListActionForm, ExportWorkflowBase):
-    """Form to edit information to run JSON List action"""
+class JSONReportActionRunForm(JSONReportActionForm, ExportWorkflowBase):
+    """Form to edit information to run JSON Report."""
 
     def __init__(self, *args, **kwargs):
         """Modify the fields with the adequate information."""

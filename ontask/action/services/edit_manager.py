@@ -95,9 +95,9 @@ class ActionEditManager:
             'selected_rows':
                 filter_condition.n_rows_selected
                 if filter_condition else -1,
-            'is_email_list': (
-                action.action_type == models.Action.EMAIL_LIST
-                or action.action_type == models.Action.JSON_LIST),
+            'is_email_report': (
+                action.action_type == models.Action.EMAIL_REPORT
+                or action.action_type == models.Action.JSON_REPORT),
             'is_personalized_text': (
                 action.action_type == models.Action.PERSONALIZED_TEXT),
             'is_rubric': action.action_type == models.Action.RUBRIC_TEXT,
@@ -111,7 +111,7 @@ class ActionEditManager:
             # Page elements
             'load_summernote': (
                 action.action_type == models.Action.PERSONALIZED_TEXT
-                or action.action_type == models.Action.EMAIL_LIST
+                or action.action_type == models.Action.EMAIL_REPORT
                 or action.action_type == models.Action.RUBRIC_TEXT
             ),
             'query_builder_ops': action.workflow.get_query_builder_ops_as_str(),

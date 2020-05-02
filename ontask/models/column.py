@@ -29,7 +29,7 @@ class Column(NameAndDescription):
 
     The data type is computed by Pandas upon reading the data.
 
-    The categories field is to provide a finite set of values as a JSON list
+    The categories field is to provide a finite set of values as a JSON report
 
     @DynamicAttrs
     """

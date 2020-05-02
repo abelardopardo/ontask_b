@@ -169,7 +169,7 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
         self.assertEqual(resp.url, reverse('action:run_done'))
 
 
-class ActionViewRunEmailListAction(tests.OnTaskTestCase):
+class ActionViewRunEmailReportAction(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
@@ -352,7 +352,7 @@ class ActionViewRunJSONAction(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionViewRunJSONListAction(tests.OnTaskTestCase):
+class ActionViewRunJSONReportAction(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
@@ -369,7 +369,7 @@ class ActionViewRunJSONListAction(tests.OnTaskTestCase):
 
     workflow_name = 'BIOL1011'
 
-    def test_run_json_list_action(self):
+    def test_run_json_report_action(self):
         """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
         action = self.workflow.actions.get(name='Send list through JSON')

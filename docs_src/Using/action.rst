@@ -310,51 +310,51 @@ The field *Target URL* is to introduce the URL where the object will be sent.
 
 The preview button in the personalized JSON action shows the resulting object after verifying that the structure after evaluating the corresponding expressions is a valid JSON object.
 
-.. _email_list_action:
+.. _email_report_action:
 
-Send Column data as List in Email
-=================================
+Send a data report in Email
+===========================
 
 This type of action sends a single email including data in some of the columns in the workflow. Creating these actions is almost identical to creating a :ref:`Personalized Text <personalized_content>`, action with the difference it is not possible to use conditions (there is a single email), and including a column in the text means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
 
-.. figure:: /scaptures/action_email_list_create.png
+.. figure:: /scaptures/action_email_report_create.png
    :align: center
    :width: 60%
 
 The page to edit this action is similar to the one to edit a :ref:`Personalized Text action <personalized_content>` but only two tabs are present: *Text* and *Select Learners*.
  In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the text. The following figure shows the resulting text with the inclusion of the data in the *email* column.
 
-.. figure:: /scaptures/action_email_list_edit.png
+.. figure:: /scaptures/action_email_report_edit.png
    :align: center
    :width: 100%
 
 Using the *Preview* button shows how the message is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
 
-.. figure:: /scaptures/action_email_list_preview.png
+.. figure:: /scaptures/action_email_report_preview.png
    :align: center
    :width: 100%
 
-.. _json_list_action:
+.. _json_report_action:
 
-Send Column data as List in JSON
-================================
+Send Column data as Report in JSON
+==================================
 
 This type of action sends a JSON object with data in some of the columns in the workflow to a pre-defined third party platform through a URL. Creating these actions is almost identical to creating a :ref:`Personalized JSON content <personalized_json>`, action with the difference it is not possible to use conditions (there is a single object sent), and including a column in the object means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
 
-.. figure:: /scaptures/action_json_list_create.png
+.. figure:: /scaptures/action_json_report_create.png
    :align: center
    :width: 60%
 
 The page to edit this action is similar to the one to edit a :ref:`Personalized JSON content <personalized_json>` but only two tabs are present: *Text* and *Select Learners*.
  In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the object. The following figure shows the resulting object with the inclusion of the data in the *email* column.
 
-.. figure:: /scaptures/action_json_list_edit.png
+.. figure:: /scaptures/action_json_report_edit.png
    :align: center
    :width: 100%
 
 Using the *Preview* button shows how the object is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
 
-.. figure:: /scaptures/action_json_list_preview.png
+.. figure:: /scaptures/action_json_report_preview.png
    :align: center
    :width: 100%
 

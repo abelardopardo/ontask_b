@@ -208,6 +208,6 @@ def create_list_preview_context(
         action,
         get_action_evaluation_context(action, {}))
     context['action_content'] = action_final_text
-    if action.action_type == models.Action.JSON_LIST:
+    if action.action_type == models.Action.JSON_REPORT:
         incorrect_json = not _check_json_is_correct(action_final_text)
         context['incorrect_json'] = incorrect_json

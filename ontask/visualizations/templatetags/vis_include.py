@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.action import evaluate
 from ontask.dataops import pandas
+from ontask.templatetags.ontask_tags import ACTION_CONTEXT_VAR
 from ontask.visualizations import plotly
 
 register = template.Library()
@@ -15,7 +16,7 @@ register = template.Library()
 def vis_html_content(context, column_name):
     """Create the HTML visualization code."""
     # Get the action
-    action = context.get(evaluate.ACTION_CONTEXT_VAR)
+    action = context.get(ACTION_CONTEXT_VAR)
     if not action:
         raise Exception(_('Action object not found when processing tag'))
     workflow = action.workflow

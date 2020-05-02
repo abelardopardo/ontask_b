@@ -65,4 +65,7 @@ urlpatterns = [
         '<int:pk>/column_restrict/',
         views.column_restrict_values,
         name='column_restrict'),
+
+    # Column selection
+    path('select/', views.column_selection, name='select'),
 ]

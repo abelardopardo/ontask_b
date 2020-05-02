@@ -13,8 +13,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
 from ontask import OnTaskServiceException, models
-from ontask.column import services
-from ontask.core import ajax_required, get_column, get_workflow, is_instructor
+from ontask.column import services, forms
+from ontask.core import (
+    ajax_required, get_column, get_workflow, is_instructor)
 from ontask.dataops import pandas
 
 
@@ -140,3 +141,26 @@ def column_restrict_values(
                 'values': ', '.join(set(df[column.name]))},
             request=request),
     })
+
+
+@user_passes_test(is_instructor)
+@get_workflow(pf_related='columns')
+def column_selection(
+    request: http.HttpRequest,
+    workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
+    """Move column to the first position.
+
+    :param request: HTTP request to move a column to the top of the list
+    :param workflow: Workflow being manipulated
+    :return: Once done, redirects to the column page
+    """
+    form = forms.ColumnSelectForm(
+        request.POST or None,
+        columns=workflow.columns.all())
+
+    return http.JsonResponse({
+        'html_form': render_to_string(
+            'column/includes/partial_select.html',
+            {'form': form},
+            request=request)})

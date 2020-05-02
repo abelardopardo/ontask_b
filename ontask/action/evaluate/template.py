@@ -13,7 +13,8 @@ from ontask import models
 
 # Variable name to store the action ID in the context used to render a
 # template
-ACTION_CONTEXT_VAR = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
+from ontask.templatetags import ACTION_CONTEXT_VAR
+
 VIZ_NUMBER_CONTEXT_VAR = 'ONTASK_VIZ_NUMBER_CONTEXT_VARIABLE___'
 
 # Regular expression and replacements replace whitespace surrounding condition

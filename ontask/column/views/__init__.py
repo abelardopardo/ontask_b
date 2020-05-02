@@ -11,4 +11,4 @@ from ontask.column.views.crud import (
 from ontask.column.views.index import index, index_ss
 from ontask.column.views.ops import (
     column_move, column_move_bottom, column_move_top, column_restrict_values,
-)
+    column_selection)

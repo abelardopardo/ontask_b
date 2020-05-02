@@ -102,7 +102,7 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
             [column_value for __, column_value in action_evals])
 
 
-class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
+class ActionManagerJSONReport(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
 
     def execute_operation(

@@ -1,3 +1,15 @@
+## 7.1 ()
+
+### Fixed
+
+- Error when showing number of table rows with all conditions false.
+
+### Added
+
+- Action preview now shows the value of each condition.
+
+- Additional features to simplify keyboard navigation (#190)
+
 ## 7.0.2 (2020-03-04)
 
 ### Fixed

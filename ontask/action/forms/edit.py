@@ -30,14 +30,14 @@ class EditActionOutForm(forms.ModelForm):
         if (
             self.instance.action_type == models.Action.PERSONALIZED_TEXT
             or self.instance.action_type == models.Action.RUBRIC_TEXT
-            or self.instance.action_type == models.Action.EMAIL_LIST
+            or self.instance.action_type == models.Action.EMAIL_REPORT
         ):
             self.fields['text_content'].widget = SummernoteInplaceWidget()
 
         # Add the Target URL field
         if (
             self.instance.action_type == models.Action.PERSONALIZED_JSON
-            or self.instance.action_type == models.Action.JSON_LIST
+            or self.instance.action_type == models.Action.JSON_REPORT
         ):
             # Add the target_url field
             self.fields['target_url'] = forms.CharField(

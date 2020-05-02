@@ -12,14 +12,14 @@
         <div class="dropdown btn-group">
           <button type="button" class="btn btn-outline-dark dropdown-toggle"
                   data-toggle="dropdown">
-            {% if is_email_list %}
+            {% if is_email_report %}
               {% trans 'Insert Column as List' %}
             {% else %}
               {% trans 'Insert Column Value' %}
             {% endif %}
           </button>
           <div class="shadow dropdown-menu scrollable-menu">
-            {% if is_email_list %}
+            {% if is_email_report %}
               {% for column in columns %}
                 <button type="button" class="dropdown-item js-insert-column-list">{{ column.name }}</button>
               {% endfor %}

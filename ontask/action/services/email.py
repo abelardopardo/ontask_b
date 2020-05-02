@@ -386,7 +386,7 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         self._update_excluded_items(payload, [msg.to[0] for msg in msgs])
 
 
-class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
+class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
 
     def extend_edit_context(

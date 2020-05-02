@@ -480,3 +480,24 @@ class RandomColumnAddForm(ColumnBasicForm):
         self.fields['raw_categories'].label = _(
             'Comma-separated list of values. If a number, m - n means integer '
             'values from that interval.')
+
+
+class ColumnSelectForm(forms.Form):
+    """Form to select a subset of columns."""
+
+    columns = forms.MultipleChoiceField(
+        choices=[],
+        required=True,
+        label=_('Columns to insert'))
+
+    def __init__(self, form_data, *args, **kwargs):
+        """Store the workflow columns and operands."""
+        # Workflow columns
+        self.wf_columns = kwargs.pop('columns')
+
+        super().__init__(form_data, *args, **kwargs)
+
+        # Populate the column choices
+        self.fields['columns'].choices = [
+            (idx, col.name) for idx, col in enumerate(self.wf_columns)
+        ]

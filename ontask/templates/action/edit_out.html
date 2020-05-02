@@ -6,6 +6,7 @@
 {% block title %}{{ block.super }}{% trans 'Edit Action' %}{% endblock %}
 {% block extrahead %}
   <link href="{% static 'css/query-builder.default.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/sol.css' %}" rel="stylesheet">
   {% ontask_datetimepicker_css %}
   {{ form.media.css }}
 {% endblock extrahead %}
@@ -16,6 +17,7 @@
   {% with country=LANGUAGE_CODE|country %}
     <script src="{% static 'js/query-builder.'|add:country|add:'.js' %}"></script>
   {% endwith %}
+  <script src="{% static 'js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
   <script src="{% static 'condition/js/condition.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
@@ -53,14 +55,14 @@
             id="edit-personalized-text-tabs" role="tablist">
           {% include 'action/includes/partial_text_summernote_tab_li.html' %}
           {% include 'condition/includes/partial_filter_tab_li.html' %}
-          {% if not is_email_list %}
+          {% if not is_email_report %}
             {% include 'condition/includes/partial_condition_tab_li.html' %}
           {% endif %}
         </ul>
         <div class="tab-content" id="edit-personalized-text-tab-content">
           {% include 'action/includes/partial_text_summernote_tab_body.html' %}
           {% include 'condition/includes/partial_filter_tab_body.html' %}
-          {% if not is_email_list %}
+          {% if not is_email_report %}
             {% include 'condition/includes/partial_condition_tab_body.html' %}
           {% endif %}
         </div>

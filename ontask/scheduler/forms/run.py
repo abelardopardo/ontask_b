@@ -72,8 +72,8 @@ class ScheduleJSONForm(ScheduleBasicForm, action_forms.JSONActionForm):
             'token'])
 
 
-class ScheduleJSONListForm(ScheduleBasicForm, action_forms.JSONListActionForm):
-    """Form to edit ScheduleAction of types JSON List."""
+class ScheduleJSONReportForm(ScheduleBasicForm, action_forms.JSONReportActionForm):
+    """Form to edit ScheduleAction of types JSON Report."""
 
     def __init__(self, form_data, *args, **kwargs):
         """Set field order."""

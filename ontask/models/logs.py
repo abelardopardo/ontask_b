@@ -47,7 +47,7 @@ class Log(Owner):
     ACTION_EMAIL_SENT = 'action_email_sent'
     ACTION_IMPORT = 'action_import'
     ACTION_JSON_SENT = 'action_json_sent'
-    ACTION_LIST_EMAIL_SENT = 'action_list_email_sent'
+    ACTION_REPORT_EMAIL_SENT = 'action_report_email_sent'
     ACTION_QUESTION_ADD = 'question_add'
     ACTION_QUESTION_TOGGLE_CHANGES = 'question_toggle_changes'
     ACTION_RUBRIC_CRITERION_ADD = 'action_rubric_criterion_add'
@@ -55,8 +55,8 @@ class Log(Owner):
     ACTION_RUBRIC_CRITERION_DELETE = 'action_rubric_criterion_delete'
     ACTION_RUBRIC_CELL_EDIT = 'action_rubriccell_edit'
     ACTION_RUBRIC_LOA_EDIT = 'action_rubric_loa_edit'
-    ACTION_RUN_EMAIL_LIST = 'action_run_email_list'
-    ACTION_RUN_JSON_LIST = 'action_run_json_list'
+    ACTION_RUN_EMAIL_REPORT = 'action_run_email_report'
+    ACTION_RUN_JSON_REPORT = 'action_run_json_report'
     ACTION_RUN_PERSONALIZED_CANVAS_EMAIL = (
         'action_run_personalized_canvas_email')
     ACTION_RUN_PERSONALIZED_EMAIL = 'action_run_personalized_email'
@@ -133,7 +133,7 @@ class Log(Owner):
         ACTION_EMAIL_SENT: _('Emails sent'),
         ACTION_IMPORT: _('Action imported'),
         ACTION_JSON_SENT: _('Emails sent'),
-        ACTION_LIST_EMAIL_SENT: _('Email with data list sent'),
+        ACTION_REPORT_EMAIL_SENT: _('Email with data report sent'),
         ACTION_QUESTION_ADD: _('Question added'),
         ACTION_QUESTION_TOGGLE_CHANGES: _('Question toggle changes'),
         ACTION_RUBRIC_CRITERION_ADD: _('Add a rubric criterion'),
@@ -145,8 +145,8 @@ class Log(Owner):
             _('Execute scheduled canvas email action'),
         ACTION_RUN_PERSONALIZED_EMAIL: _('Execute scheduled email action'),
         ACTION_RUN_PERSONALIZED_JSON: _('Execute scheduled JSON action'),
-        ACTION_RUN_JSON_LIST: _('Execute scheduled JSON list action'),
-        ACTION_RUN_EMAIL_LIST: _('Execute scheduled send list action'),
+        ACTION_RUN_JSON_REPORT: _('Execute scheduled JSON report action'),
+        ACTION_RUN_EMAIL_REPORT: _('Execute scheduled send report action'),
         ACTION_ZIP: _('Create a zip with personalized content'),
         ACTION_SERVE_TOGGLED: _('Action URL toggled'),
         ACTION_SERVED_EXECUTE: _('Action served'),
