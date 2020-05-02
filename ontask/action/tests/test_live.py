@@ -646,10 +646,8 @@ class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
         # There should be four elements (all key column) in the drop-down
         self.assertEqual(
             len(self.selenium.find_elements_by_xpath(
-                '//div[@id="column-selector"]/div/div/button'
-            )),
-            4
-        )
+                '//div[@id="column-selector"]/div/div/button')),
+            4)
 
         # End of session
         self.logout()
@@ -692,8 +690,26 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
              "{0}");""".format(self.action_text)
         )
 
-        # Insert the reference to the column
-        self.click_dropdown_option('//div[@id="column-selector"]', 'email')
+        # Open the column selection and select two columns
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Insert Table']").click()
+        self.wait_for_modal_open()
+        self.selenium.find_element_by_css_selector(
+            "div.sol-input-container > input[type=\"text\"]"
+        ).click()
+        self.selenium.find_element_by_name("columns").click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[2]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[3]"
+        ).click()
+        # self.selenium.find_element_by_css_selector("div.modal-body").click()
+        # Close the modal
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']//button[normalize-space()='Select']"
+        ).click()
+        self.wait_for_modal_close()
 
         # Create filter
         self.create_filter("The filter", [('another', 'equal', 'bbb')])
@@ -704,9 +720,8 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         # Click in the preview
         self.open_browse_preview(close=False)
 
-        self.assertIn(
-            'student01@bogus.com, student03@bogus.com',
-            self.selenium.page_source)
+        self.assertIn('student01@bogus.com', self.selenium.page_source)
+        self.assertIn('student03@bogus.com', self.selenium.page_source)
 
         # Close the preview
         self.cancel_modal()
@@ -738,8 +753,8 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
 
         # Check that the email has been properly stored
         assert len(mail.outbox) == 1
-        assert (
-            'student01@bogus.com, student03@bogus.com' in mail.outbox[0].body)
+        assert('student01@bogus.com' in mail.outbox[0].body)
+        assert('student03@bogus.com' in mail.outbox[0].body)
 
         # End of session
         self.logout()

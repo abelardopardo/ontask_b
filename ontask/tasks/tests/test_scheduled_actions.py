@@ -143,8 +143,8 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_DONE
         assert len(mail.outbox) == 1
-        assert (
-            'student01@bogus.com, student03@bogus.com' in mail.outbox[0].body)
+        assert('student01@bogus.com' in mail.outbox[0].body)
+        assert('student03@bogus.com' in mail.outbox[0].body)
 
     def test_scheduled_json_report_action(self):
         """Create a scheduled send report action and execute it."""
