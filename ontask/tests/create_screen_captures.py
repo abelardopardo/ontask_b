@@ -762,7 +762,7 @@ class ScreenTestFixture(ScreenTests):
 
         # Set the name, description and type of the action
         self.selenium.find_element_by_id('id_name').send_keys(
-            'Send list through JSON'
+            'Send report through JSON'
         )
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type

@@ -372,7 +372,7 @@ class ActionViewRunJSONReportAction(tests.OnTaskTestCase):
     def test_run_json_report_action(self):
         """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
-        action = self.workflow.actions.get(name='Send list through JSON')
+        action = self.workflow.actions.get(name='Send report through JSON')
 
         # Step 1 invoke the form
         resp = self.get_response(
