@@ -726,7 +726,7 @@ class ScreenTestFixture(ScreenTests):
 
         # Set the name, description and type of the action
         self.selenium.find_element_by_id('id_name').send_keys(
-            'Send Email with list'
+            'Send Email with report'
         )
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
@@ -740,7 +740,7 @@ class ScreenTestFixture(ScreenTests):
         self.cancel_modal()
 
         # Open the action
-        self.open_action_edit('Send Email with list')
+        self.open_action_edit('Send Email with report')
         self.body_ss('action_email_report_edit.png')
         self.open_preview()
         self.modal_ss('action_email_report_preview.png')
@@ -762,7 +762,7 @@ class ScreenTestFixture(ScreenTests):
 
         # Set the name, description and type of the action
         self.selenium.find_element_by_id('id_name').send_keys(
-            'Send report through JSON'
+            'Send JSON report'
         )
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
@@ -778,7 +778,7 @@ class ScreenTestFixture(ScreenTests):
         self.cancel_modal()
 
         # Open the action
-        self.open_action_edit('Send report through JSON')
+        self.open_action_edit('Send JSON report')
         self.body_ss('action_json_report_edit.png')
         self.open_preview()
         self.modal_ss('action_json_report_preview.png')

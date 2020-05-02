@@ -9,7 +9,7 @@ let dtp_opts = {
     sideBySide: true};
 let set_qbuilder = function (element_id, qbuilder_options) {
     let id_formula_value = $(element_id).val();
-    if (id_formula_value != "null" && id_formula_value != "{}") {
+    if (id_formula_value != null && id_formula_value != "{}") {
       qbuilder_options["rules"] = JSON.parse(id_formula_value);
     }
     $("#builder").queryBuilder(qbuilder_options);
@@ -259,7 +259,7 @@ $('#modal-item').on('shown.bs.modal', function () {
   $("#modal_item_label .close").focus();
 })
 $('#modal-item').on('hidden.bs.modal', function (e) {
-  if (previousActiveElement != 'undefined' && previousActiveElement != "null") {
+  if (previousActiveElement != 'undefined' && previousActiveElement != null) {
       previousActiveElement.focus();
   }
 })

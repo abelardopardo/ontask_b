@@ -202,7 +202,7 @@ class ActionViewRunEmailReportAction(tests.OnTaskTestCase):
 
     def test_run_action_email_no_filter(self):
         """Run sequence of request to send email list ."""
-        action = self.workflow.actions.get(name='Send Email with list')
+        action = self.workflow.actions.get(name='Send Email with report')
 
         # Step 1 invoke the form
         resp = self.get_response(
@@ -372,7 +372,7 @@ class ActionViewRunJSONReportAction(tests.OnTaskTestCase):
     def test_run_json_report_action(self):
         """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
-        action = self.workflow.actions.get(name='Send report through JSON')
+        action = self.workflow.actions.get(name='Send JSON report')
 
         # Step 1 invoke the form
         resp = self.get_response(

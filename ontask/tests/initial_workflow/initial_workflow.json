@@ -4170,7 +4170,7 @@
     "model": "ontask.action",
     "pk": 10,
     "fields": {
-        "name": "Send report through JSON",
+        "name": "Send JSON report",
         "description_text": "Send the list of inactive students in week 2 to another platform",
         "created": "2019-09-03T10:41:07.348Z",
         "modified": "2019-09-03T10:42:39.438Z",
