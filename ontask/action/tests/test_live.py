@@ -646,7 +646,7 @@ class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
         # There should be four elements (all key column) in the drop-down
         self.assertEqual(
             len(self.selenium.find_elements_by_xpath(
-                '//div[@id="column-selector"]/div/div/button')),
+                '//div[@id="column-selector"]/div/button')),
             4)
 
         # End of session
