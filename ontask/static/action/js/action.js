@@ -244,6 +244,9 @@ window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {
     set_element_select("#id_exclude_values");
   }
+  if (document.getElementById("column-select") != null) {
+    set_element_select("#column-select");
+  }
   setDateTimePickers();
 };
 $(document).ready(function() {
