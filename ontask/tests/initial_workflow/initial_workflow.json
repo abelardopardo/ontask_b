@@ -59,7 +59,7 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2020-01-07T00:49:59.968Z"
+        "last_update": "2020-05-02T23:00:20.225Z"
     }
 },
 {
@@ -80,12 +80,13 @@
         "headers": "{}",
         "priority": null,
         "expires": null,
-        "one_off": false,
+        "expire_seconds": null,
+        "one_off": true,
         "start_time": null,
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-01-07T00:47:03.805Z",
+        "date_changed": "2020-05-02T23:00:20.170Z",
         "description": ""
     }
 },
@@ -107,12 +108,13 @@
         "headers": "{}",
         "priority": null,
         "expires": null,
-        "one_off": false,
+        "expire_seconds": null,
+        "one_off": true,
         "start_time": null,
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-01-07T00:47:03.818Z",
+        "date_changed": "2020-05-02T23:00:20.184Z",
         "description": ""
     }
 },
@@ -134,12 +136,13 @@
         "headers": "{}",
         "priority": null,
         "expires": null,
-        "one_off": false,
+        "expire_seconds": null,
+        "one_off": true,
         "start_time": null,
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-01-07T00:47:03.826Z",
+        "date_changed": "2020-05-02T23:00:20.200Z",
         "description": ""
     }
 },
@@ -161,12 +164,13 @@
         "headers": "{}",
         "priority": null,
         "expires": null,
-        "one_off": false,
+        "expire_seconds": null,
+        "one_off": true,
         "start_time": null,
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-01-07T00:47:03.836Z",
+        "date_changed": "2020-05-02T23:00:20.215Z",
         "description": ""
     }
 },
@@ -188,12 +192,13 @@
         "headers": "{}",
         "priority": null,
         "expires": null,
-        "one_off": false,
+        "expire_seconds": null,
+        "one_off": true,
         "start_time": null,
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-01-07T00:47:03.845Z",
+        "date_changed": "2020-05-02T23:00:20.227Z",
         "description": ""
     }
 },
@@ -202,7 +207,7 @@
     "pk": 1,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VlpTV3RVZUU5dkh1$iFEi/ej6nCIXpLiOgRLdVA",
-        "last_login": "2020-01-07T00:49:42.228Z",
+        "last_login": "2020-05-02T23:01:35.773Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -3977,7 +3982,7 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "4nksx8gudutjsooa9sbnrx0188msku2x",
+        "session_key": "",
         "luser_email_column": null,
         "luser_email_column_md5": "",
         "lusers_is_outdated": false,
@@ -4161,7 +4166,7 @@
         "active_to": null,
         "rows_all_false": null,
         "serve_enabled": false,
-        "text_content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_column_list \"email\" %}</p><p>Regards</p><p>Josh<br></p>",
+        "text_content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_column_list \"email\" \"Surname\" \"GivenName\" %}<br></p><p>Regards</p><p>Josh<br></p>",
         "target_url": "",
         "shuffle": false
     }
@@ -4207,9 +4212,9 @@
     "pk": 7,
     "fields": {
         "name": "Linear Model",
-        "description_text": "Execute a linear model",
+        "description_text": "Obtain a prediction of the final exam score.",
         "created": "2018-05-28T01:00:41.649Z",
-        "modified": "2018-05-28T01:00:42.649Z",
+        "modified": "2020-05-02T23:03:17.389Z",
         "filename": "linear_model",
         "is_model": true,
         "is_verified": true,
@@ -4221,12 +4226,12 @@
     "model": "ontask.plugin",
     "pk": 8,
     "fields": {
-        "name": "Test Plungin 2 Name",
-        "description_text": "Test Plugin 2 Description Text",
+        "name": "Test Plugin 2 Name",
+        "description_text": "Create addition and subtraction of the given columns",
         "created": "2018-05-28T01:00:41.649Z",
-        "modified": "2018-05-28T01:00:42.649Z",
+        "modified": "2020-05-02T23:03:17.566Z",
         "filename": "test_plugin_2",
-        "is_model": null,
+        "is_model": false,
         "is_verified": true,
         "is_enabled": true,
         "executed": null
@@ -4236,14 +4241,59 @@
     "model": "ontask.plugin",
     "pk": 9,
     "fields": {
-        "name": "Test Plungin 1 Name",
-        "description_text": "Test Plugin 1 Description Text",
+        "name": "Test Plugin 1 Name",
+        "description_text": "Create two columns with constants 1 and 2",
         "created": "2018-05-28T01:00:41.598Z",
-        "modified": "2018-05-28T01:00:42.598Z",
+        "modified": "2020-05-02T23:03:17.477Z",
         "filename": "test_plugin_1",
-        "is_model": null,
+        "is_model": false,
         "is_verified": true,
         "is_enabled": true,
+        "executed": null
+    }
+},
+{
+    "model": "ontask.plugin",
+    "pk": 10,
+    "fields": {
+        "name": "SPQ Score calculation",
+        "description_text": "Plugin to calculate the scores of SPQ\n        The names of the columns must be SPQ_Q01 to SPQ_Q44.",
+        "created": "2020-05-02T23:03:17.671Z",
+        "modified": "2020-05-02T23:03:17.671Z",
+        "filename": "spq",
+        "is_model": false,
+        "is_verified": true,
+        "is_enabled": false,
+        "executed": null
+    }
+},
+{
+    "model": "ontask.plugin",
+    "pk": 11,
+    "fields": {
+        "name": "Round column",
+        "description_text": "Round the values in pre-selected columns.",
+        "created": "2020-05-02T23:03:17.749Z",
+        "modified": "2020-05-02T23:03:17.749Z",
+        "filename": "round_column",
+        "is_model": false,
+        "is_verified": true,
+        "is_enabled": false,
+        "executed": null
+    }
+},
+{
+    "model": "ontask.plugin",
+    "pk": 12,
+    "fields": {
+        "name": "MSLQ Score calculation",
+        "description_text": "Plugin to calculate the scores of MSLQ \n        The names of the columns must be MSLQ_Q01 to MSLQ_Q44.",
+        "created": "2020-05-02T23:03:17.820Z",
+        "modified": "2020-05-02T23:03:17.820Z",
+        "filename": "mslq",
+        "is_model": false,
+        "is_verified": true,
+        "is_enabled": false,
         "executed": null
     }
 },
