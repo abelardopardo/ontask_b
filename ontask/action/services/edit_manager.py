@@ -106,8 +106,6 @@ class ActionEditManager:
                 for cond in action.conditions.all()),
             'rows_all_false': action.get_row_all_false_count(),
 
-            # Column elements
-
             # Page elements
             'load_summernote': (
                 action.action_type == models.Action.PERSONALIZED_TEXT
@@ -119,7 +117,7 @@ class ActionEditManager:
 
 
 class ActionOutEditManager(ActionEditManager):
-    """Base class to provide edit methods for the actions out."""
+    """Class to provide edit methods for the actions out."""
 
     def process_edit_request(
         self,
