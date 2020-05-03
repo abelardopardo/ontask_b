@@ -9,7 +9,7 @@ from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
 
 from ontask import OnTaskServiceException, models
 from ontask.core import ajax_required, get_view, get_workflow, is_instructor
@@ -44,7 +44,7 @@ def display(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_workflow(pf_related='columns')
 def display_ss(
     request: http.HttpRequest,
@@ -97,7 +97,7 @@ def display_view(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_view(pf_related='views')
 def display_view_ss(
     request: http.HttpRequest,

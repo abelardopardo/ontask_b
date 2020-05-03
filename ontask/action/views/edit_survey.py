@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
 
 from ontask import models
 from ontask.action import forms
@@ -22,7 +22,7 @@ from ontask.core import (
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_action(pf_related=['columns', 'actions'])
 def select_column_action(
     request: http.HttpRequest,
@@ -104,7 +104,7 @@ def unselect_column_action(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_columncondition(pf_related=['columns', 'actions'])
 def select_condition_for_question(
     request: http.HttpRequest,

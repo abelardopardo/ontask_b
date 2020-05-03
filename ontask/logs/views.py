@@ -10,7 +10,7 @@ from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
 from rest_framework import status
 
 from ontask import models
@@ -46,7 +46,7 @@ def display(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_workflow(pf_related='logs')
 def display_ss(
     request: http.HttpRequest,

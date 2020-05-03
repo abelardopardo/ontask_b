@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
 
 from ontask import OnTaskServiceException, models
 from ontask.core import ajax_required, get_column, get_workflow, is_instructor
@@ -95,7 +95,7 @@ def star(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_column()
 def assign_luser_column(
     request: http.HttpRequest,

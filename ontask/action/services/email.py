@@ -319,13 +319,9 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         :param context: Initial dictionary to extend
         :return: Nothing
         """
-        context.update({
-            'conditions': action.conditions.filter(is_filter=False),
-            'conditions_to_clone': models.Condition.objects.filter(
-                action__workflow=workflow, is_filter=False,
-            ).exclude(action=action),
-            'columns_show_stat': workflow.columns.filter(is_key=False),
-        })
+        self.add_conditions(action, context)
+        self.add_conditions_to_clone(action, context)
+        self.add_columns_show_stats(action, context)
 
     def execute_operation(
         self,
@@ -395,7 +391,7 @@ class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
         action: models.Action,
         context: Dict,
     ):
-        """Get the context dictionary to render the GET request.
+        """Extend the context dictionary to render the GET request.
 
         :param workflow: Workflow being used
         :param action: Action being used

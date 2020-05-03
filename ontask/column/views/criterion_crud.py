@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
 
 from ontask import OnTaskServiceException, models
 from ontask.column import forms, services
@@ -193,7 +193,7 @@ def criterion_remove(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_action(pf_related=['columns', 'actions'])
 def criterion_insert(
     request: http.HttpRequest,

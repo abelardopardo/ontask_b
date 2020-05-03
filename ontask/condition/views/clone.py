@@ -8,17 +8,17 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
 
 from ontask import create_new_name, models
-from ontask.action import services
+from ontask.condition import services as condition_services
 from ontask.core import ajax_required, get_condition, is_instructor
 
 
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_condition(pf_related='actions', is_filter=None)
 def clone_condition(
     request: http.HttpRequest,

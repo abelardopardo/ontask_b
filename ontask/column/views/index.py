@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
 
 from ontask import models
 from ontask.column import services
@@ -44,7 +44,7 @@ def index(
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_workflow(pf_related='columns')
 def index_ss(
     request: http.HttpRequest,

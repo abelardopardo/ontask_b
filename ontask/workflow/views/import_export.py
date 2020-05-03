@@ -8,7 +8,7 @@ from django import http
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET
 
 from ontask import OnTaskServiceException, models
 from ontask.core import get_workflow, is_instructor
@@ -92,7 +92,7 @@ def export_ask(
 
 
 @user_passes_test(is_instructor)
-@require_http_methods(['GET'])
+@require_GET
 @get_workflow(pf_related='actions')
 def export(
     request: http.HttpRequest,

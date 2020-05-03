@@ -53,16 +53,16 @@ class View(NameAndDescription, CreateModifyFields):
 
     @property
     def num_columns(self):
-        """
-        Number of columns considered by this view
+        """Number of columns considered by this view.
+
         :return: Number of elements in the columns relation
         """
         return self.columns.count()
 
     @property
     def num_rows(self):
-        """
-        Number of rows considered by this view
+        """Number of rows considered by this view.
+
         :return: Number of rows resulting from using the formula
         """
         if not self.nrows:

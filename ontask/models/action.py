@@ -260,7 +260,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
         null=False,
         blank=False)
 
-    # Text to be personalised
+    # Text to be personalised email/email report, etc.
     text_content = models.TextField(default='', blank=True)
 
     # URL for PERSONALIZED_JSON actions

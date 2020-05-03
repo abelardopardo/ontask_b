@@ -68,37 +68,6 @@ let insertColumnListInContent = function() {
   $(".modal-body").html("");
   $("#modal-item").modal('hide');
 }
-let ajax_post = function(url, data, req_type) {
-  $.ajax({
-    url: url,
-    data: data,
-    type: req_type,
-    dataType: 'json',
-    beforeSend: function() {
-      $(".modal-body").html("");
-      $("#modal-item").modal("show");
-    },
-    success: function(data) {
-      if (typeof data.html_redirect != 'undefined') {
-        if (data.html_redirect == "") {
-          $('#div-spinner').show();
-          window.location.reload(true);
-        } else {
-          location.href = data.html_redirect;
-        }
-        return;
-      }
-      $("#modal-item .modal-content").html(data.html_form);
-      if ($('#modal-item').hasClass('in')) {
-        $("#modal_item_label .close").focus();
-      }
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      $('#div-spinner').show();
-      location.reload(true);
-    }
-  });
-}
 let loadFormPost = function () {
   let btn = $(this);
   previousActiveElement = btn;
@@ -108,7 +77,7 @@ let loadFormPost = function () {
   if ($(this).is('[class*="disabled"]')) {
     return;
   }
-  ajax_post(
+  ajaxPost(
     $(this).attr("data-url"),
     [{'name': 'action_content', 'value': get_id_text_content()}],
     'post'
@@ -165,13 +134,13 @@ $(function () {
 
 
   // Insert columns in action in
-  $("#insert-questions").on("click", ".js-insert-question", assignColumn);
+  $("#insert-questions").on("click", ".js-insert-question", ajaxSimplePost);
 
   // Insert columns in action in
-  $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", assignColumn);
+  $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", ajaxSimplePost);
 
   // Insert columns in action in
-  $("#edit-survey-tab-content").on("click", ".js-select-condition", assignColumn);
+  $("#edit-survey-tab-content").on("click", ".js-select-condition", ajaxSimplePost);
 
   // Toggle shuffle question
   $("#action-in-editor").on("change", "#toggle-checkbox", toggleCheckBox);
@@ -203,7 +172,7 @@ $(function () {
 
   // Column Add
   $("#edit-survey-tab-content").on("click", ".js-workflow-question-add", loadForm);
-  $("#insert-criterion").on("click", ".js-workflow-criterion-insert", assignColumn);
+  $("#insert-criterion").on("click", ".js-workflow-criterion-insert", ajaxSimplePost);
   $("#insert-criterion").on("click", ".js-workflow-criterion-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-question-add-form", saveForm);
   $("#modal-item").on("submit", ".js-workflow-criterion-add-form", saveForm);
