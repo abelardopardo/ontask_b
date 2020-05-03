@@ -1,0 +1,31 @@
+{% load i18n %}
+<div class="shadow rounded tab-pane px-3 fade show border border-dark"
+     id="attachments" role="tabpanel" aria-labelledby="attachments-tab">
+  <div id="attachment-set-header" class="text-center my-3">
+    {% include 'table/includes/partial_attachment_selector.html' %}
+  </div>
+  <div id="attachment-set" class="card-deck justify-content-center my-3">
+    {% for attachment in attachments %}
+      <div class="shadow card ontask-ccard text-center mb-3 mx-2">
+        <h5 class="card-header">{{ attachment.name }}</h5>
+        <div class="card-body" style="min-height: 100px;">
+          <p class="card-text">{{ attachment.description_text }}</p>
+          <p class="card-text"><strong>{% trans 'Columns' %}</strong><br/>
+            {{ attachment.column_names|join:", " }}</p>
+        </div>
+        <div class="cond-buttons">
+          <button type="button"
+                  class="btn btn-light btn-sm js-attachment-delete"
+                  data-url="{% url 'action:remove_attachment' attachment.id action.id %}"
+                  data-toggle="tooltip"
+                  title="{% trans 'Remove the attachment' %}">
+            <span class="fa fa-trash"></span>
+          </button>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center">
+        {% blocktrans %}You can attach any existing table view to the email.{% endblocktrans %}</p>
+    {% endfor %}
+  </div>
+</div>

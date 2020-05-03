@@ -19,6 +19,7 @@ from ontask.dataops import formula, sql
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
 from ontask.models.common import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
+from ontask.models.view import View
 from ontask.models.workflow import Workflow
 
 # Regular expressions detecting the use of a variable, or the
@@ -265,6 +266,21 @@ class ActionDataOut(ActionBase):  # noqa Z214
 
     # URL for PERSONALIZED_JSON actions
     target_url = models.TextField(default='', blank=True)
+
+    # Set of views attached to a EMAIL_REPORT action
+    attachments = models.ManyToManyField(
+        View,
+        verbose_name=_("Email attachments"),
+        related_name='attached_to'
+    )
+
+    @property
+    def attachment_names(self):
+        """List of attachment names.
+
+        :return: List of attachment names
+        """
+        return [attachment.name for attachment in self.attachments.all()]
 
     @property
     def has_html_text(self) -> bool:

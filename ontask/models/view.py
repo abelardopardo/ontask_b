@@ -73,6 +73,14 @@ class View(NameAndDescription, CreateModifyFields):
 
         return self.nrows
 
+    @property
+    def column_names(self):
+        """List of column names.
+
+        :return: List of column names
+        """
+        return [column.name for column in self.columns.all()]
+
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""
         payload = {

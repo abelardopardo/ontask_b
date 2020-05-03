@@ -183,6 +183,10 @@ $(function () {
     loadForm);
   $("#modal-item").on("submit", ".js-question-edit-form", saveForm);
 
+  // Attachment operations
+  $("#attachment-selector").on("click", ".js-attachment-insert", ajaxSimplePost);
+  $("#attachment-set").on("click", ".js-attachment-delete", ajaxSimplePost);
+
   // Rubric operations
   $("#rubric").on("click", ".js-criterion-edit", loadForm);
   $("#modal-item").on("submit", ".js-criterion-edit-form", saveForm);

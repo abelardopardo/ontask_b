@@ -8,10 +8,11 @@ from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from ontask import models
 from ontask.action import forms
-from ontask.core import ajax_required, get_action, is_instructor
+from ontask.core import ajax_required, get_action, get_view, is_instructor
 
 
 @user_passes_test(is_instructor)
@@ -94,3 +95,87 @@ def showurl(
              'action': action},
             request=request),
     })
+
+
+@user_passes_test(is_instructor)
+@csrf_exempt
+@ajax_required
+@require_POST
+@get_view()
+def add_attachment(
+    request: http.HttpRequest,
+    pk: int,
+    action_id: int,
+    workflow: Optional[models.Workflow] = None,
+    view: Optional[models.View] = None,
+) -> http.JsonResponse:
+    """Add a View to an Email Report action
+
+    Function that given a JSON request with an action pk returns the URL used
+    to retrieve the personalised message.
+
+    :param request: Json request
+    :param pk: Primary key of the view to attach to the action
+    :param action_id: Action being manipulated
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param view: View object to be attached to the action
+    :return: Json response that prompts refresh after operation
+    """
+    del pk
+    # Get the action
+    action = workflow.actions.filter(pk=action_id).first()
+    if not action or action.action_type != models.Action.EMAIL_REPORT:
+        return http.JsonResponse({'html_rediret': reverse('action:index')})
+
+    # If the request has 'action_content', update the action
+    action_content = request.POST.get('action_content')
+    if action_content:
+        action.set_text_content(action_content)
+
+    action.attachments.add(view)
+    action.save()
+
+    # Refresh the page to show the column in the list.
+    return http.JsonResponse({'html_redirect': ''})
+
+
+@user_passes_test(is_instructor)
+@csrf_exempt
+@ajax_required
+@require_POST
+@get_view()
+def remove_attachment(
+    request: http.HttpRequest,
+    pk: int,
+    action_id: int,
+    workflow: Optional[models.Workflow] = None,
+    view: Optional[models.View] = None,
+) -> http.JsonResponse:
+    """Remove a view from an Email Report action
+
+    Function that given a JSON request with an action pk returns the URL used
+    to retrieve the personalised message.
+
+    :param request: Json request
+    :param pk: Primary key of the view to attach to the action
+    :param action_id: Action being manipulated
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :param view: View object to be attached to the action
+    :return: Json response that prompts refresh after operation
+    """
+    del pk
+    # Get the action
+    action = workflow.actions.filter(pk=action_id).first()
+    if not action or action.action_type != models.Action.EMAIL_REPORT:
+        return http.JsonResponse({'html_rediret': reverse('action:index')})
+
+    # If the request has 'action_content', update the action
+    action_content = request.POST.get('action_content')
+    if action_content:
+        action.set_text_content(action_content)
+
+    action.attachments.remove(view)
+    action.save()
+
+    # Refresh the page to show the column in the list.
+    return http.JsonResponse({'html_redirect': ''})

@@ -60,6 +60,18 @@ urlpatterns = [
     path('item_filter/', views.run_action_item_filter, name='item_filter'),
 
     #
+    # Handling attachments in EMAIL REPORT
+    #
+    path(
+        '<int:pk>/<int:action_id>/add_attachment/',
+        views.add_attachment,
+        name='add_attachment'),
+    path(
+        '<int:pk>/<int:action_id>/remove_attachment/',
+        views.remove_attachment,
+        name='remove_attachment'),
+
+    #
     # URL to use when action finishes run
     #
     path('run_done/', views.run_done, name='run_done'),

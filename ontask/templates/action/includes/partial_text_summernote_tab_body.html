@@ -7,19 +7,19 @@
       {% if is_rubric %}
         <button class="btn btn-outline-dark js-insert-rubric-text col-md-auto"
                 type="button">{% trans 'Insert rubric text' %}</button>
-      {% elif is_email_report %}
+      {% elif is_report %}
         <button type="button" data-url="{% url 'column:select' %}"
                 class="btn btn-outline-dark js-table-select col-sm-auto">
           {% trans 'Insert Table' %}</button>
       {% endif %}
-        {% if not is_email_report %}
+        {% if not is_report %}
         <div id="column-selector" class="dropdown btn-group col-md-auto">
           <button type="button" class="btn btn-outline-dark dropdown-toggle"
                   data-toggle="dropdown">
             {% trans 'Insert Column Value' %}
           </button>
           <div class="shadow dropdown-menu scrollable-menu">
-            {% if is_email_report %}
+            {% if is_report %}
               {% for column in columns %}
                 <button type="button" class="dropdown-item js-insert-column-list">{{ column.name }}</button>
               {% endfor %}

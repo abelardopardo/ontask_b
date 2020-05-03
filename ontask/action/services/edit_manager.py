@@ -95,7 +95,9 @@ class ActionEditManager:
             'selected_rows':
                 filter_condition.n_rows_selected
                 if filter_condition else -1,
-            'is_email_report': (
+            'is_email_report':
+                action.action_type == models.Action.EMAIL_REPORT,
+            'is_report': (
                 action.action_type == models.Action.EMAIL_REPORT
                 or action.action_type == models.Action.JSON_REPORT),
             'is_personalized_text': (

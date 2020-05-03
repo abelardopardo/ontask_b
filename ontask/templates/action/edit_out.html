@@ -55,14 +55,18 @@
             id="edit-personalized-text-tabs" role="tablist">
           {% include 'action/includes/partial_text_summernote_tab_li.html' %}
           {% include 'condition/includes/partial_filter_tab_li.html' %}
-          {% if not is_email_report %}
+          {% if is_email_report %}
+            {% include 'table/includes/partial_attachment_tab_li.html' %}
+          {% elif not is_report %}
             {% include 'condition/includes/partial_condition_tab_li.html' %}
           {% endif %}
         </ul>
         <div class="tab-content" id="edit-personalized-text-tab-content">
           {% include 'action/includes/partial_text_summernote_tab_body.html' %}
           {% include 'condition/includes/partial_filter_tab_body.html' %}
-          {% if not is_email_report %}
+          {% if is_email_report %}
+            {% include 'table/includes/partial_attachment_tab_body.html' %}
+          {% elif not is_report %}
             {% include 'condition/includes/partial_condition_tab_body.html' %}
           {% endif %}
         </div>

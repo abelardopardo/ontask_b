@@ -56,13 +56,16 @@
         {{ action_content }}
       {% endif %}
     </div>
-    {% if show_values or show_conditions %}
+    {% if show_values or show_conditions or action.attachments %}
       <div id="preview-variables" class="modal-body shadow border border-dark">
         {% if show_values %}
           <div><strong>{% trans 'Values:' %}</strong> {{ show_values }}</div>
         {% endif %}
         {% if show_conditions %}
           <div><strong>{% trans 'Conditions:' %}</strong> {{ show_conditions }}</div>
+        {% endif %}
+        {% if action.attachments %}
+          <div><strong>{% trans 'Attachments:' %}</strong> {{ action.attachment_names|join:", " }}</div>
         {% endif %}
       </div>
     {% endif %}

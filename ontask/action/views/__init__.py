@@ -6,7 +6,8 @@ from ontask.action.views.action import (
     edit_action,
 )
 from ontask.action.views.clone import clone_action
-from ontask.action.views.edit_personalized import save_text, showurl
+from ontask.action.views.edit_personalized import (
+    add_attachment, remove_attachment, save_text, showurl)
 from ontask.action.views.edit_rubric import edit_rubric_cell, edit_rubric_loas
 from ontask.action.views.edit_survey import (
     edit_description, select_column_action, select_condition_for_question,

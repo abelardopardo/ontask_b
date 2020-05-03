@@ -83,7 +83,7 @@ $(function () {
   $("#modal-item").on("submit", ".js-column-restrict-form", saveForm);
 
   // Insert columns in workflow operation
-  $("#workflow-detail").on("click", ".js-select-key-column-name", assignColumn);
+  $("#workflow-detail").on("click", ".js-select-key-column-name", ajaxSimplePost);
 
   $(".card").hover(function(){
     $(this).css("background-color", "lightgray");

@@ -393,14 +393,17 @@ class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
     ):
         """Extend the context dictionary to render the GET request.
 
+        It adds the attachments in the action, and the views available to
+        attach (those in the workflow not in the action)
+
         :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
         :return: Nothing
         """
-        self.add_conditions(action, context)
-        self.add_conditions_to_clone(action, context)
-        self.add_columns_show_stats(action, context)
+        context['attachments'] = action.attachments.all()
+        context['available_views'] = workflow.views.exclude(
+            id__in=action.attachments.all())
 
     def execute_operation(
         self,
