@@ -200,18 +200,19 @@ def _create_single_message(
         )
         msg.attach_alternative(msg_body_sbj_to[0] + track_str, 'text/html')
 
-    for attachment in attachments:
-        data_frame = pandas.get_subframe(
-            attachment.workflow.get_data_frame_table_name(),
-            filter_formula,
-            [col.name for col in attachment.columns.all()])
+    if attachments:
+        for attachment in attachments:
+            data_frame = pandas.get_subframe(
+                attachment.workflow.get_data_frame_table_name(),
+                filter_formula,
+                [col.name for col in attachment.columns.all()])
 
-        mime_obj = MIMEText(data_frame.to_csv(), 'csv')
-        mime_obj.add_header(
-            'Content-Disposition',
-            'attachment',
-            filename=attachment.name + '.csv')
-        msg.attach(mime_obj)
+            mime_obj = MIMEText(data_frame.to_csv(), 'csv')
+            mime_obj.add_header(
+                'Content-Disposition',
+                'attachment',
+                filename=attachment.name + '.csv')
+            msg.attach(mime_obj)
 
     return msg
 

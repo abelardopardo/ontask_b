@@ -410,8 +410,10 @@ class ActionDataOut(ActionBase):  # noqa Z214
 
         # Columns from {{ colname }} in text content
         for match in VAR_USE_RES[0].finditer(self.text_content):
-            column_list.append(
-                self.workflow.columns.get(name=match.group('vname')))
+            var_name = match.group('vname')
+            column = self.workflow.columns.filter(name=var_name).first()
+            if column:
+                column_list.append(column)
         # Columns from {% ot_insert_report "c1" "c2" %}
         for match in VAR_USE_RES[2].finditer(self.text_content):
             column_list.extend([
