@@ -3,7 +3,8 @@
 """Action model."""
 import datetime
 import re
-from typing import List
+import shlex
+from typing import List, Optional
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
@@ -17,7 +18,9 @@ import pytz
 import ontask
 from ontask.dataops import formula, sql
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
+from ontask.models.column import Column
 from ontask.models.common import CreateModifyFields, NameAndDescription
+from ontask.models.condition import Condition
 from ontask.models.logs import Log
 from ontask.models.view import View
 from ontask.models.workflow import Workflow
@@ -25,8 +28,14 @@ from ontask.models.workflow import Workflow
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)
 VAR_USE_RES = [
+    # {{ varnane }}
     re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
-    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')]
+    # {% if column name %}
+    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})'),
+    # {% ot_insert_report "c1" "c2" "c3" %}
+    re.compile(
+        r'(?P<mup_pre>{%\s+ot_insert_report\s+)'
+        r'(?P<args>(".+?"\s+)+)(?P<mup_post>%\})')]
 
 ACTION_TYPE_LENGTH = 64
 
@@ -307,8 +316,18 @@ class ActionDataOut(ActionBase):  # noqa Z214
                     new_name if match.group('vname') == html.escape(old_name)
                     else match.group('vname')
                 ) + ' }}',
-                self.text_content,
-            )
+                self.text_content)
+
+            # Need to change the name if it appears in other macros
+            self.text_content = VAR_USE_RES[2].sub(
+                lambda match:
+                match.group('mup_pre')
+                + ' '.join(['"' + (
+                    new_name if vname == html.escape(old_name) else vname
+                ) + '"' for vname in shlex.split(match.group('args'))])
+                + ' ' + match.group('mup_post'),
+            self.text_content)
+
             self.save(update_fields=['text_content'])
 
         # Rename the variable in all conditions
@@ -325,12 +344,10 @@ class ActionDataOut(ActionBase):  # noqa Z214
 
         :return: List of condition names
         """
-        cond_names = []
-        for rexpr in VAR_USE_RES:
-            cond_names += [
-                match.group('vname')
-                for match in rexpr.finditer(self.text_content)
-            ]
+        cond_names = [
+            match.group('vname')
+            for match in VAR_USE_RES[1].finditer(self.text_content)
+        ]
 
         if self.has_html_text:
             cond_names = [
@@ -381,6 +398,36 @@ class ActionDataOut(ActionBase):  # noqa Z214
             )
 
         self.save(update_fields=['text_content'])
+
+
+    def used_columns(self) -> List[Column]:
+        """Extend the used columns with those in the attachments.
+
+        :return: List of column objects
+        """
+        # Columns from base case
+        column_list = super().used_columns()
+
+        # Columns from {{ colname }} in text content
+        for match in VAR_USE_RES[0].finditer(self.text_content):
+            column_list.append(
+                self.workflow.columns.get(name=match.group('vname')))
+        # Columns from {% ot_insert_report "c1" "c2" %}
+        for match in VAR_USE_RES[2].finditer(self.text_content):
+            column_list.extend([
+                col for col in self.workflow.columns.filter(
+                    name__in=shlex.split(match.group('args')))])
+
+        # Columns from the attachment
+        for attachment in self.attachments.all():
+            column_list.extend([col for col in attachment.columns.all()])
+            attachment_formula = attachment.formula
+            if attachment_formula:
+                column_list.extend([
+                    col for col in self.workflow.columns.filter(
+                        name__in=formula.get_variables(attachment_formula))])
+
+        return list(set(column_list))
 
     class Meta:
         """Make this class abstract."""

@@ -2,6 +2,7 @@
 
 """Manipulate template text within OnTask and evaluat it s content."""
 import re
+import shlex
 import string
 from typing import Callable, Dict, List, Mapping
 
@@ -10,7 +11,6 @@ from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-
 # Variable name to store the action ID in the context used to render a
 # template
 from ontask.templatetags import ACTION_CONTEXT_VAR
@@ -58,45 +58,44 @@ def make_xlat(*args, **kwds) -> Callable:
 
 # Dictionary to translate non alphanumeric symbols into alphanumeric pairs
 # 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
-# !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
-# abcdefghijklmnopqrstuvwxyzABCDEFG
-TR_ITEM = make_xlat(
-    {
-        '!': '_a',
-        '"': '_b',
-        '#': '_c',
-        '$': '_d',
-        '%': '_e',
-        '&': '_f',
-        "'": '_g',
-        '(': '_h',
-        ')': '_i',
-        '*': '_j',
-        '+': '_k',
-        ',': '_l',
-        '-': '_m',
-        '.': '_n',
-        '/': '_o',
-        ':': '_p',
-        ';': '_q',
-        '<': '_r',
-        '=': '_s',
-        '>': '_t',
-        '?': '_u',
-        '@': '_v',
-        '[': '_w',
-        '\\': '_x',
-        ']': '_y',
-        '^': '_z',
-        '_': '_0',
-        '`': '_1',
-        '{': '_2',
-        '|': '_3',
-        '}': '_4',
-        '~': '_5',
-        ' ': '_6',
-    },
-)
+# !#$%&()*+,-./:;<=>?@[\]^_`{|}~
+# abcdefghijklmnopqrstuvwxyz01234
+TR_DICT = {
+    '!': '_a',
+    '#': '_b',
+    '$': '_c',
+    '%': '_d',
+    '&': '_e',
+    '(': '_f',
+    ')': '_g',
+    '*': '_h',
+    '+': '_i',
+    ',': '_j',
+    '-': '_k',
+    '.': '_l',
+    '/': '_m',
+    ':': '_n',
+    ';': '_o',
+    '<': '_p',
+    '=': '_q',
+    '>': '_r',
+    '?': '_s',
+    '@': '_t',
+    '[': '_u',
+    '\\': '_v',
+    ']': '_w',
+    '^': '_x',
+    '_': '_y',
+    '`': '_z',
+    '{': '_0',
+    '|': '_1',
+    '}': '_2',
+    '~': '_3',
+    ' ': '_4',
+}
+
+TR_ITEM = make_xlat(TR_DICT)
+RTR_ITEM = make_xlat(dict((val, key) for key, val in TR_DICT.items()))
 
 
 def _change_vname(match) -> str:
@@ -105,6 +104,17 @@ def _change_vname(match) -> str:
     :param match:
     :return: String with the variable name translated
     """
+    re_dict = match.groupdict()
+
+    if 'ot_insert_report' in re_dict.get('mup_pre'):
+        # Match is a ot_insert_report macro
+        args = shlex.split(re_dict['args'])
+        return (
+            match.group('mup_pre')
+            + ' '.join(['"' + _translate(cname) + '"' for cname in args])
+            + match.group('mup_post')
+        )
+
     return (
         match.group('mup_pre')
         + _translate(match.group('vname'))
@@ -118,6 +128,25 @@ def _change_unescape_vname(match) -> str:
     :param match:
     :return: String with the variable name translated
     """
+    re_dict = match.groupdict()
+
+    if 'ot_insert_report' in re_dict.get('mup_pre'):
+        # Match is a ot_insert_report macro
+        args = [
+            arg.replace(
+                '&amp;', '&').replace(
+                '&lt;', '<').replace(
+                '&gt;', '>').replace(
+                '&quot;', '"').replace(
+                '&#39;', "'")
+            for arg in shlex.split(re_dict['args'])]
+
+        return (
+            match.group('mup_pre')
+            + ' '.join(['"' + _translate(cname) + '"' for cname in args])
+            + match.group('mup_post')
+        )
+
     var_name = match.group('vname').replace(
         '&amp;', '&').replace(
         '&lt;', '<').replace(
