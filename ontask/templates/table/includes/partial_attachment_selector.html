@@ -11,4 +11,9 @@
       {% endfor %}
     </div>
   </div>
+{% else %}
+  {% if not attachments %}
+    <p class="text-center">
+      {% blocktrans %}Create table views that can then be attached to the email in this action.{% endblocktrans %}</p>
+  {% endif %}
 {% endif %}

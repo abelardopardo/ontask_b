@@ -2,6 +2,7 @@
 
 """Send Email Messages with the rendered content in the action."""
 import datetime
+from email.mime.text import MIMEText
 from time import sleep
 from typing import Dict, List, Optional, Union
 
@@ -25,7 +26,7 @@ from ontask.action.evaluate.action import (
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.run_manager import ActionRunManager
 from ontask.celery import get_task_logger
-from ontask.dataops import sql
+from ontask.dataops import pandas, sql
 
 LOGGER = get_task_logger('celery_execution')
 
@@ -161,6 +162,8 @@ def _create_single_message(
     from_email: str,
     cc_email_list: List[str],
     bcc_email_list: List[str],
+    attachments: Optional[List[models.View]] = None,
+    filter_formula: Optional[Dict] = None,
 ) -> Union[EmailMessage, EmailMultiAlternatives]:
     """Create either an EmailMessage or EmailMultiAlternatives object.
 
@@ -169,6 +172,8 @@ def _create_single_message(
     :param from_email: From email
     :param cc_email_list: CC list
     :param bcc_email_list: BCC list
+    :param attachments: List of views to attach to the message (optional)
+    :param filter_formula: Filter attached ot the action (optional)
     :return: Either EmailMessage or EmailMultiAlternatives
     """
     if settings.EMAIL_HTML_ONLY:
@@ -194,6 +199,20 @@ def _create_single_message(
             cc=cc_email_list,
         )
         msg.attach_alternative(msg_body_sbj_to[0] + track_str, 'text/html')
+
+    for attachment in attachments:
+        data_frame = pandas.get_subframe(
+            attachment.workflow.get_data_frame_table_name(),
+            filter_formula,
+            [col.name for col in attachment.columns.all()])
+
+        mime_obj = MIMEText(data_frame.to_csv(), 'csv')
+        mime_obj.add_header(
+            'Content-Disposition',
+            'attachment',
+            filename=attachment.name + '.csv')
+        msg.attach(mime_obj)
+
     return msg
 
 
@@ -443,7 +462,8 @@ class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
             user.email,
             cc_email,
             bcc_email,
-        )
+            attachments=action.attachments.all(),
+            filter_formula=action.get_filter_formula())
 
         try:
             # Send email out

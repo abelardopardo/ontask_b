@@ -24,8 +24,10 @@
         </div>
       </div>
     {% empty %}
-      <p class="text-center">
-        {% blocktrans %}You can attach any existing table view to the email.{% endblocktrans %}</p>
+      {% if available_views %}
+        <p class="text-center">
+          {% blocktrans %}You can attach any existing table view to the email.{% endblocktrans %}</p>
+      {% endif %}
     {% endfor %}
   </div>
 </div>
