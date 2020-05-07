@@ -180,6 +180,17 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
                 workflow_obj.save()
 
+            # Create the views pointing to the workflow
+            view_data = ViewSerializer(
+                data=validated_data.get('views', []),
+                many=True,
+                context={'workflow': workflow_obj, 'columns': columns})
+
+            if view_data.is_valid():
+                view_data.save()
+            else:
+                raise Exception(_('Unable to save view information'))
+
             # Create the actions pointing to the workflow
             action_data = ActionSerializer(
                 data=validated_data.get('actions', []),
@@ -191,16 +202,6 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             else:
                 raise Exception(_('Unable to save column information'))
 
-            # Create the views pointing to the workflow
-            view_data = ViewSerializer(
-                data=validated_data.get('views', []),
-                many=True,
-                context={'workflow': workflow_obj, 'columns': columns})
-
-            if view_data.is_valid():
-                view_data.save()
-            else:
-                raise Exception(_('Unable to save column information'))
         except Exception:
             # Get rid of the objects created
             if workflow_obj:

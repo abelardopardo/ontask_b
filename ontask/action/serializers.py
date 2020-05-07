@@ -9,6 +9,7 @@ from ontask.column.serializers import ColumnNameSerializer, ColumnSerializer
 from ontask.condition.serializers import (
     ConditionNameSerializer, ConditionSerializer)
 from ontask.dataops import sql
+from ontask.table.serializers import ViewNameSerializer, ViewSerializer
 
 try:
     profile  # noqa: Z444
@@ -198,10 +199,13 @@ class ActionSerializer(serializers.ModelSerializer):
 
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
+
     content = serializers.CharField(  # noqa Z110
         required=False,
         initial='',
         allow_blank=True)
+
+    attachments = ViewNameSerializer(required=False, many=True)
 
     @staticmethod
     def create_column_condition_pairs(
@@ -301,6 +305,19 @@ class ActionSerializer(serializers.ModelSerializer):
             )
             action_obj.save()
 
+            # Load the attachments in the action
+            attachments = ViewNameSerializer(
+                data=validated_data.get('attachments', []),
+                many=True,
+                required=False)
+            if attachments.is_valid():
+                view_names = [item['name'] for item in attachments.data]
+                action_obj.attachments.set([
+                    view for view in self.context['workflow'].views.all()
+                    if view.name in view_names
+                ])
+                action_obj.save()
+
             # Load the conditions pointing to the action
             condition_data = ConditionSerializer(
                 data=validated_data.get('conditions', []),
@@ -344,6 +361,8 @@ class ActionSelfcontainedSerializer(ActionSerializer):
     """Full Action serializer traversing conditions AND columns."""
 
     used_columns = ColumnSerializer(many=True, required=False)
+
+    attachments = ViewSerializer(many=True, required=False)
 
     def create(self, validated_data, **kwargs):
         """Create the Action object with the validated data."""

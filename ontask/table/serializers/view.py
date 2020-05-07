@@ -61,3 +61,12 @@ class ViewSerializer(serializers.ModelSerializer):
             'workflow',
             'created',
             'modified')
+
+class ViewNameSerializer(serializers.ModelSerializer):
+    """Trivial serializer to dump only the name of the view."""
+
+    class Meta:
+        """Select the model and the only field required."""
+
+        model = models.View
+        fields = ('name',)
