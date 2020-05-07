@@ -1262,6 +1262,24 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
         )
 
+    def create_attachment(self, attachment_name):
+        # Make sure we are in the Filter tab
+        self.select_attachment_tab()
+
+        self.click_dropdown_option(
+            '//*[@id="attachment-selector"]',
+            attachment_name)
+
+        # Make sure the page refreshes and shows again the filter tab
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'attachments')
+            )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+
     def create_view(self, vname, vdesc, cols):
         self.go_to_table_views()
 
@@ -1595,6 +1613,25 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.CLASS_NAME, 'js-condition-create')
+            )
+        )
+
+    def select_attachment_tab(self):
+        """
+        Assuming we are editing an Email Report action, click on the link to
+        open the attachment tab
+        :return:
+        """
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.ID, 'attachments-tab'))
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+        self.selenium.find_element_by_id('attachments-tab').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'attachments')
             )
         )
 

@@ -653,7 +653,7 @@ class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
+class ActionSendReportActionCreate(tests.OnTaskLiveTestCase):
     """Test sending a list of values."""
 
     fixtures = ['simple_action']
@@ -666,7 +666,10 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
     action_text = 'Dear sir/madam\\nHere is the student list: '
 
     def test_email_report_create_edit(self):
-        """Send list action after creating and editing."""
+        """Send Report action after creating and editing."""
+        workflow = models.Workflow.objects.get(name=self.wflow_name)
+        view = workflow.views.all().first()
+
         # Login
         self.login('instructor01@bogus.com')
 
@@ -704,7 +707,6 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//input[@name='columns'])[3]"
         ).click()
-        # self.selenium.find_element_by_css_selector("div.modal-body").click()
         # Close the modal
         self.selenium.find_element_by_xpath(
             "//div[@id='modal-item']//button[normalize-space()='Select']"
@@ -717,11 +719,19 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         # There should be 2 of three learners selected
         self.assertIn('2 learners of 3', self.selenium.page_source)
 
+        # Add attachment
+        self.create_attachment(view.name)
+
         # Click in the preview
         self.open_browse_preview(close=False)
 
-        self.assertIn('student01@bogus.com', self.selenium.page_source)
-        self.assertIn('student03@bogus.com', self.selenium.page_source)
+        preview_body = self.selenium.find_element_by_id('preview-body').text
+        self.assertIn('student01@bogus.com', preview_body)
+        self.assertIn('student03@bogus.com', preview_body)
+        self.assertEqual(
+            self.selenium.find_element_by_xpath(
+                '//*[@id="preview-variables"]').text,
+            'Attachments: ' + view.name)
 
         # Close the preview
         self.cancel_modal()
@@ -751,10 +761,17 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
                 'Action scheduled for execution')
         )
 
-        # Check that the email has been properly stored
+        # Check that the email has the correct elements
         assert len(mail.outbox) == 1
-        assert('student01@bogus.com' in mail.outbox[0].body)
-        assert('student03@bogus.com' in mail.outbox[0].body)
+        msg = mail.outbox[0]
+        assert('student01@bogus.com' in msg.body)
+        assert('student02@bogus.com' not in msg.body)
+        assert('student03@bogus.com' in msg.body)
+        assert len(msg.attachments) == 1
+        attachment = msg.attachments[0]
+        assert attachment.get_content_type() == 'text/csv'
+        assert attachment.get_content_disposition() == 'attachment'
+        assert attachment.get_filename() == view.name + '.csv'
 
         # End of session
         self.logout()
