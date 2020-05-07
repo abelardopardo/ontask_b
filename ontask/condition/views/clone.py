@@ -52,7 +52,7 @@ def clone_condition(
     if action_content:
         condition.action.set_text_content(action_content)
 
-    services.do_clone_condition(
+    condition_services.do_clone_condition(
         request.user,
         condition,
         new_action=action,
