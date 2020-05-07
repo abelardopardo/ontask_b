@@ -59,7 +59,7 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2020-05-03T06:08:17.966Z"
+        "last_update": "2020-05-07T08:12:43.487Z"
     }
 },
 {
@@ -86,7 +86,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-03T06:08:17.924Z",
+        "date_changed": "2020-05-07T08:12:43.443Z",
         "description": ""
     }
 },
@@ -114,7 +114,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-03T06:08:17.934Z",
+        "date_changed": "2020-05-07T08:12:43.454Z",
         "description": ""
     }
 },
@@ -142,7 +142,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-03T06:08:17.946Z",
+        "date_changed": "2020-05-07T08:12:43.466Z",
         "description": ""
     }
 },
@@ -170,7 +170,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-03T06:08:17.957Z",
+        "date_changed": "2020-05-07T08:12:43.477Z",
         "description": ""
     }
 },
@@ -198,7 +198,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-03T06:08:17.967Z",
+        "date_changed": "2020-05-07T08:12:43.488Z",
         "description": ""
     }
 },
@@ -207,7 +207,7 @@
     "pk": 1,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VlpTV3RVZUU5dkh1$iFEi/ej6nCIXpLiOgRLdVA",
-        "last_login": "2020-05-03T06:09:46.016Z",
+        "last_login": "2020-05-07T09:48:38.379Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -4056,7 +4056,7 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "7dzdtdmhl81dx74rjxxy32ggqlw4j3ox",
+        "session_key": "",
         "luser_email_column": null,
         "luser_email_column_md5": "",
         "lusers_is_outdated": false,
