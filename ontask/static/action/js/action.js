@@ -64,7 +64,7 @@ let insertColumnListInContent = function() {
   }
   insertText(
     'id_text_content',
-    '{% ot_insert_column_list "' + report_column_list.join('" "') + '" %}');
+    '{% ot_insert_report "' + report_column_list.join('" "') + '" %}');
   $(".modal-body").html("");
   $("#modal-item").modal('hide');
 }
@@ -208,7 +208,7 @@ $(function () {
   $("#action-index").on("click", ".js-workflow-flush", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 
-  $(".card").hover(function(){
+  $(".card:not(.nohover)").hover(function(){
     $(this).css("background-color", "lightgray");
   }, function(){
     $(this).css("background-color", "white");

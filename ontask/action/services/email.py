@@ -251,8 +251,7 @@ def _create_messages(
             track_str,
             user.email,
             cc_email,
-            bcc_email,
-        )
+            bcc_email)
         msgs.append(msg)
 
         # Log the event

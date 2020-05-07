@@ -4166,7 +4166,7 @@
         "active_to": null,
         "rows_all_false": null,
         "serve_enabled": false,
-        "text_content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_column_list \"email\" \"Surname\" \"GivenName\" %}<br></p><p>Regards</p><p>Josh<br></p>",
+        "text_content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_report \"email\" \"Surname\" \"GivenName\" %}<br></p><p>Regards</p><p>Josh<br></p>",
         "target_url": "",
         "shuffle": false
     }
@@ -4186,7 +4186,7 @@
         "active_to": null,
         "rows_all_false": null,
         "serve_enabled": false,
-        "text_content": "{\r\n    \"inactive_students\": {% ot_insert_column_list \"email\" %}\r\n}",
+        "text_content": "{\r\n    \"inactive_students\": {% ot_insert_report \"email\" %}\r\n}",
         "target_url": "https://anotherinternalserver.yourinstution.edu",
         "shuffle": false
     }

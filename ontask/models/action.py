@@ -203,7 +203,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
         return self.rows_all_false
 
-    def update_n_rows_selected(self, column=None):
+    def update_n_rows_selected(self, column: Optional[Column] = None):
         """Reset the field n_rows_selected in all conditions.
 
         If the column argument is present, select only those conditions that
@@ -230,7 +230,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                 column=column,
                 filter_formula=filter_formula)
 
-    def used_columns(self):
+    def used_columns(self) -> List[Column]:
         """List of column used in the action.
 
         These are those that are used in any condition + those used

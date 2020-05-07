@@ -770,7 +770,7 @@ class ActionJSONReportActionCreate(tests.OnTaskLiveTestCase):
     wflow_desc = 'description text for workflow 1'
 
     action_name = 'JSON REPORT'
-    action_text = '{ "student_list": {% ot_insert_column_list "email" %} }'
+    action_text = '{ "student_list": {% ot_insert_report "email" %} }'
 
     def test_json_report_create_edit(self):
         """Create and edit a list action."""

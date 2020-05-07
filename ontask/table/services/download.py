@@ -13,8 +13,7 @@ def create_response_with_csv(data_frame: pd.DataFrame) -> http.HttpResponse:
     """
     # Create the response object
     response = http.HttpResponse(content_type='text/csv')
-    response[
-        'Content-Disposition'] = 'attachment; filename="ontask_table.csv"'
+    response['Content-Disposition'] = 'attachment; filename="ontask_table.csv"'
 
     # Dump the data frame as the content of the response object
     data_frame.to_csv(

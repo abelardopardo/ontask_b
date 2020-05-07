@@ -3083,7 +3083,7 @@
         "active_from": null,
         "active_to": null,
         "rows_all_false": null,
-        "text_content": "<p>Dear madam/sir</p><p>Here is the list of students: {% ot_insert_column_list 'email' %}<br></p>",
+        "text_content": "<p>Dear madam/sir</p><p>Here is the list of students: {% ot_insert_report 'email' %}<br></p>",
         "target_url": "",
         "shuffle": false
     }
@@ -3123,7 +3123,7 @@
         "active_from": null,
         "active_to": null,
         "rows_all_false": null,
-        "text_content": "{\r\n    \"students\": {% ot_insert_column_list \"email\" %}\r\n}",
+        "text_content": "{\r\n    \"students\": {% ot_insert_report \"email\" %}\r\n}",
         "target_url": "",
         "shuffle": false
     }
