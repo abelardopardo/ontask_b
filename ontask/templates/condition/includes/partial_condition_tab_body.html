@@ -3,7 +3,7 @@
      id="conditions" role="tabpanel" aria-labelledby="conditions-tab">
   <div id="condition-set-header" class="text-center my-3">
     <button type="button"
-            class="btn btn-outline-dark js-condition-create{% if not has_data %} disabled{% endif %}"
+            class="btn btn-outline-dark col-md-auto js-condition-create{% if not has_data %} disabled{% endif %}"
             data-url="{% url 'condition:create_condition' action.id %}"
             data-toggle="tooltip"
             title="{% trans 'Define a condition to use in this action.' %}">

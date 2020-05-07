@@ -742,6 +742,10 @@ class ScreenTestFixture(ScreenTests):
         # Open the action
         self.open_action_edit('Send Email with report')
         self.body_ss('action_email_report_edit.png')
+
+        self.select_attachment_tab()
+        self.body_ss('action_email_report_attachments.png')
+
         self.open_preview()
         self.modal_ss('action_email_report_preview.png')
         self.cancel_modal()
