@@ -468,6 +468,6 @@ ul.timeline > li:before {
     z-index: 400;
 }
 
-:not(.note-editable):not(.note-codable):not(#id_text_content):focus {
+:not(.note-editable):not(.note-codable):not(#id_text_content):not(#modal-item):focus {
   background-color: LightBlue !important;
 }
