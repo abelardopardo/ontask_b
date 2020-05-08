@@ -9,7 +9,7 @@ let dtp_opts = {
     sideBySide: true};
 let set_qbuilder = function (element_id, qbuilder_options) {
     let id_formula_value = $(element_id).val();
-    if (id_formula_value != "null" && id_formula_value != "{}") {
+    if (id_formula_value != null && id_formula_value != "{}") {
       qbuilder_options["rules"] = JSON.parse(id_formula_value);
     }
     $("#builder").queryBuilder(qbuilder_options);
@@ -43,24 +43,43 @@ let get_id_text_content = function() {
   }
   return value;
 };
-let loadForm = function () {
-  let btn = $(this);
-  previousActiveElement = btn;
-  if (btn.is("[class*='dropdown-item']")) {
-    previousActiveElement =  btn.parent().siblings()[0];
-  }
-  if ($(this).is("[class*='disabled']")) {
-    return;
-  }
-  data = {};
-  if (document.getElementById("id_subject") != null) {
-    data["subject_content"] = $("#id_subject").val();
+let ajaxSimplePost = function () {
+  $('#div-spinner').show();
+  let data = []
+  if (document.getElementById("id_text_content") != null) {
+    value = get_id_text_content();
+    data.push({"name": "action_content", "value": value});
   }
   $.ajax({
-    url: btn.attr("data-url"),
-    type: "get",
-    dataType: "json",
+    url: $(this).attr('data-url'),
+    type: 'post',
     data: data,
+    dataType: 'json',
+    success: function (data) {
+      if (typeof data.html_redirect != 'undefined') {
+        if (data.html_redirect == "") {
+          $('#div-spinner').show();
+          window.location.reload(true);
+        } else {
+          location.href = data.html_redirect;
+        }
+      } else {
+        $('#div-spinner').hide();
+      }
+      // Remove option from menu
+      $(this).remove();
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      location.reload(true);
+    }
+  });
+}
+let ajaxPost = function(url, data, req_type) {
+  $.ajax({
+    url: url,
+    type: req_type,
+    data: data,
+    dataType: 'json',
     beforeSend: function() {
       $("#modal-item .modal-body").html("");
       $("#modal-item").modal("show");
@@ -68,7 +87,7 @@ let loadForm = function () {
     success: function(data) {
       if (typeof data.html_redirect != 'undefined') {
         if (data.html_redirect == "") {
-          $("#div-spinner").show();
+          $('#div-spinner').show();
           window.location.reload(true);
         } else {
           location.href = data.html_redirect;
@@ -85,13 +104,33 @@ let loadForm = function () {
       if (document.getElementById("id_columns") != null) {
         set_element_select("#id_columns");
       }
-      $("#modal_item_label .close").focus();
+      if ($('#modal-item').hasClass('show')) {
+        $("#modal_item_label .close").focus();
+      }
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      $("#div-spinner").show();
+      $('#div-spinner').show();
       location.reload(true);
     }
   });
+}
+let loadForm = function () {
+  let btn = $(this);
+  previousActiveElement = btn;
+  if (btn.is("[class*='dropdown-item']")) {
+    previousActiveElement =  btn.parent().siblings()[0];
+  }
+  if ($(this).is("[class*='disabled']")) {
+    return;
+  }
+  data = {};
+  if (document.getElementById("id_subject") != null) {
+    data["subject_content"] = $("#id_subject").val();
+  }
+  ajaxPost(
+    btn.attr("data-url"),
+    data,
+    'get');
 };
 let saveForm = function () {
     let form = $(this);
@@ -124,15 +163,14 @@ let saveForm = function () {
           } else {
             $("#modal-item").modal('hide');
           }
+          return;
         }
-        else {
-          $("#modal-item .modal-content").html(data.html_form);
-          if (document.getElementById("id_formula") != null) {
-            set_qbuilder('#id_formula', qbuilder_options);
-          }
-          if (document.getElementById("id_columns") != null) {
-            set_element_select("#id_columns");
-          }
+        $("#modal-item .modal-content").html(data.html_form);
+        if (document.getElementById("id_formula") != null) {
+          set_qbuilder('#id_formula', qbuilder_options);
+        }
+        if (document.getElementById("id_columns") != null) {
+          set_element_select("#id_columns");
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -147,37 +185,6 @@ let setDateTimePickers = function() {
     $('.ontask-datetimepicker').datetimepicker(dtp_opts);
   }
 };
-let assignColumn = function () {
-  $('#div-spinner').show();
-  let data = []
-  if (document.getElementById("id_text_content") != null) {
-    value = get_id_text_content();
-    data.push({"name": "action_content", "value": value});
-  }
-  $.ajax({
-    url: $(this).attr('data-url'),
-    type: 'post',
-    data: data,
-    dataType: 'json',
-    success: function (data) {
-      if (typeof data.html_redirect != 'undefined') {
-        if (data.html_redirect == "") {
-          $('#div-spinner').show();
-          window.location.reload(true);
-        } else {
-          location.href = data.html_redirect;
-        }
-      } else {
-        $('#div-spinner').hide();
-      }
-      // Remove option from menu
-      $(this).remove();
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      location.reload(true);
-    }
-  });
-}
 let select_next_button = function(e) {
   if (e.is('input')) {
     val = !e.is(":checked");
@@ -253,8 +260,11 @@ $('#modal-item').on('hide.bs.modal', function (e) {
     delete qbuilder_options['rules'];
   }
 })
+$('#modal-item').on('shown.bs.modal', function () {
+  $("#modal_item_label .close").focus();
+})
 $('#modal-item').on('hidden.bs.modal', function (e) {
-  if (previousActiveElement != 'undefined' && previousActiveElement != "null") {
+  if (previousActiveElement != 'undefined' && previousActiveElement != null) {
       previousActiveElement.focus();
   }
 })

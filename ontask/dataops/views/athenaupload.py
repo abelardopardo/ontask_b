@@ -3,24 +3,24 @@
 """Function to upload a data frame from an Athena connection object."""
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+import ontask.connection.forms
 from ontask.core import get_workflow, is_instructor
-from ontask.dataops import forms
 
 
 @user_passes_test(is_instructor)
 @get_workflow()
 def athenaupload_start(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Load a data frame using an Athena connection.
 
     The parameters are obtained and if valid, an operation is scheduled for
@@ -37,7 +37,7 @@ def athenaupload_start(
         return redirect(
             'dataops:athenaconns_instructor_index_instructor_index')
 
-    form = forms.AthenaRequestConnectionParam(
+    form = ontask.connection.forms.AthenaRequestConnectionParam(
         request.POST or None,
         workflow=workflow,
         instance=conn)

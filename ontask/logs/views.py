@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
 """Views to show logs and log table."""
-import json
 from typing import Optional
 
 from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http.response import HttpResponse
 from django.shortcuts import redirect, render, reverse
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
+from rest_framework import status
 
 from ontask import models
 from ontask.core import ajax_required, get_workflow, is_instructor
@@ -38,15 +38,15 @@ def display(
             'workflow': workflow,
             'column_names': [
                 _('ID'),
+                _('Event type'),
                 _('Date/Time'),
-                _('User'),
-                _('Event type')]})
+                _('User')]})
 
 
 @user_passes_test(is_instructor)
 @csrf_exempt
 @ajax_required
-@require_http_methods(['POST'])
+@require_POST
 @get_workflow(pf_related='logs')
 def display_ss(
     request: http.HttpRequest,
@@ -63,8 +63,38 @@ def display_ss(
 
 
 @user_passes_test(is_instructor)
+@ajax_required
 @get_workflow()
-def view(
+def modal_view(
+    request: http.HttpRequest,
+    pk: int,
+    workflow: Optional[models.Workflow] = None,
+) -> http.JsonResponse:
+    """View the content of one of the logs in a modal.
+
+    :param request: Http Request received
+    :param pk: Primary key of the log to view
+    :param workflow: Workflow being manipulated (set by the decorators)
+    :return: JSON response to render in a modal
+    """
+    # Get the log item
+    log_item = workflow.logs.filter(pk=pk, user=request.user).first()
+
+    # If the log item is not there, flag!
+    if not log_item:
+        messages.error(request, _('Incorrect log number requested'))
+        return http.JsonResponse({}, status=status.HTTP_400_BAD_REQUEST)
+
+    return http.JsonResponse({
+        'html_form': render_to_string(
+            'logs/includes/partial_show.html',
+            {'log_item': log_item, 'c_vals': log_item.payload},
+            request=request)})
+
+
+@user_passes_test(is_instructor)
+@get_workflow()
+def page_view(
     request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
@@ -87,12 +117,7 @@ def view(
     return render(
         request,
         'logs/view.html',
-        {
-            'log_item': log_item,
-            'json_pretty': json.dumps(
-                log_item.payload,
-                sort_keys=True,
-                indent=4)})
+        {'log_item': log_item, 'c_vals': log_item.payload})
 
 
 @user_passes_test(is_instructor)
@@ -114,7 +139,7 @@ def export(
         workflow.logs.filter(user=request.user))
 
     # Create the response as a csv download
-    response = HttpResponse(dataset.csv, content_type='text/csv')
+    response = http.HttpResponse(dataset.csv, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="logs.csv"'
 
     return response

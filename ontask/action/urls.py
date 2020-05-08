@@ -60,6 +60,18 @@ urlpatterns = [
     path('item_filter/', views.run_action_item_filter, name='item_filter'),
 
     #
+    # Handling attachments in EMAIL REPORT
+    #
+    path(
+        '<int:pk>/<int:action_id>/add_attachment/',
+        views.add_attachment,
+        name='add_attachment'),
+    path(
+        '<int:pk>/<int:action_id>/remove_attachment/',
+        views.remove_attachment,
+        name='remove_attachment'),
+
+    #
     # URL to use when action finishes run
     #
     path('run_done/', views.run_done, name='run_done'),
@@ -169,42 +181,6 @@ urlpatterns = [
         '<int:pk>/edit_description/',
         views.edit_description,
         name='edit_description'),
-
-    #
-    # FILTERS
-    #
-    path(
-        '<int:pk>/create_filter/',
-        views.FilterCreateView.as_view(),
-        name='create_filter'),
-    path('<int:pk>/edit_filter/', views.edit_filter, name='edit_filter'),
-    path('<int:pk>/delete_filter/', views.delete_filter, name='delete_filter'),
-
-    #
-    # CONDITIONS
-    #
-    path(
-        '<int:pk>/create_condition/',
-        views.ConditionCreateView.as_view(),
-        name='create_condition'),
-    path(
-        '<int:pk>/edit_condition/',
-        views.edit_condition,
-        name='edit_condition'),
-    path(
-        '<int:pk>/delete_condition/',
-        views.delete_condition,
-        name='delete_condition'),
-
-    # Clone the condition
-    path(
-        '<int:pk>/clone_condition/',
-        views.clone_condition,
-        name='clone_condition'),
-    path(
-        '<int:pk>/<int:action_pk>/clone_condition/',
-        views.clone_condition,
-        name='clone_condition'),
 ]
 
 
@@ -215,12 +191,12 @@ EMAIL_PRODUCER = services.ActionManagerEmail(
     run_template='action/request_email_data.html',
     log_event=models.Log.ACTION_RUN_PERSONALIZED_EMAIL)
 
-EMAIL_LIST_PRODUCER = services.ActionManagerEmailList(
+EMAIL_REPORT_PRODUCER = services.ActionManagerEmailReport(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_out.html',
     run_form_class=forms.SendListActionRunForm,
-    run_template='action/request_email_list_data.html',
-    log_event=models.Log.ACTION_RUN_EMAIL_LIST)
+    run_template='action/request_email_report_data.html',
+    log_event=models.Log.ACTION_RUN_EMAIL_REPORT)
 
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.PERSONALIZED_TEXT,
@@ -230,11 +206,11 @@ tasks.task_execute_factory.register_producer(
     EMAIL_PRODUCER)
 
 services.ACTION_PROCESS_FACTORY.register_producer(
-    models.Action.EMAIL_LIST,
-    EMAIL_LIST_PRODUCER)
+    models.Action.EMAIL_REPORT,
+    EMAIL_REPORT_PRODUCER)
 tasks.task_execute_factory.register_producer(
-    models.Log.ACTION_RUN_EMAIL_LIST,
-    EMAIL_LIST_PRODUCER)
+    models.Log.ACTION_RUN_EMAIL_REPORT,
+    EMAIL_REPORT_PRODUCER)
 
 RUBRIC_PRODUCER = services.ActionManagerRubric(
     edit_form_class=forms.EditActionOutForm,
@@ -254,12 +230,12 @@ JSON_PRODUCER = services.ActionManagerJSON(
     run_template='action/request_json_data.html',
     log_event=models.Log.ACTION_RUN_PERSONALIZED_JSON)
 
-JSON_LIST_PRODUCER = services.ActionManagerJSONList(
+JSON_REPORT_PRODUCER = services.ActionManagerJSONReport(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_out.html',
-    run_form_class=forms.JSONListActionRunForm,
-    run_template='action/request_json_list_data.html',
-    log_event=models.Log.ACTION_RUN_JSON_LIST)
+    run_form_class=forms.JSONReportActionRunForm,
+    run_template='action/request_json_report_data.html',
+    log_event=models.Log.ACTION_RUN_JSON_REPORT)
 
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.PERSONALIZED_JSON,
@@ -270,12 +246,12 @@ tasks.task_execute_factory.register_producer(
     JSON_PRODUCER)
 
 services.ACTION_PROCESS_FACTORY.register_producer(
-    models.Action.JSON_LIST,
-    JSON_LIST_PRODUCER)
+    models.Action.JSON_REPORT,
+    JSON_REPORT_PRODUCER)
 
 tasks.task_execute_factory.register_producer(
-    models.Log.ACTION_RUN_JSON_LIST,
-    JSON_LIST_PRODUCER)
+    models.Log.ACTION_RUN_JSON_REPORT,
+    JSON_REPORT_PRODUCER)
 
 CANVAS_EMAIL_PRODUCER = services.ActionManagerCanvasEmail(
     edit_form_class=forms.EditActionOutForm,
@@ -286,6 +262,10 @@ CANVAS_EMAIL_PRODUCER = services.ActionManagerCanvasEmail(
 
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.PERSONALIZED_CANVAS_EMAIL,
+    CANVAS_EMAIL_PRODUCER)
+
+tasks.task_execute_factory.register_producer(
+    models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL,
     CANVAS_EMAIL_PRODUCER)
 
 services.ACTION_PROCESS_FACTORY.register_producer(

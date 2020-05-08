@@ -7,8 +7,6 @@ from ontask.dataops.forms.select import (
     MergeForm, SelectColumnUploadForm, SelectKeysForm,
 )
 from ontask.dataops.forms.upload import (
-    AthenaConnectionForm, AthenaRequestConnectionParam,
-    ConnectionForm, SQLConnectionForm, SQLRequestConnectionParam,
-    UploadCSVFileForm, UploadExcelFileForm, UploadGoogleSheetForm,
-    UploadS3FileForm,
+    UploadCSVFileForm,
+    UploadExcelFileForm, UploadGoogleSheetForm, UploadS3FileForm,
 )

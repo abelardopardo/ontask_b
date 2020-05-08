@@ -29,7 +29,7 @@ class Column(NameAndDescription):
 
     The data type is computed by Pandas upon reading the data.
 
-    The categories field is to provide a finite set of values as a JSON list
+    The categories field is to provide a finite set of values as a JSON report
 
     @DynamicAttrs
     """
@@ -105,7 +105,7 @@ class Column(NameAndDescription):
 
         return self.categories
 
-    def set_categories(self, cat_values, validate=False):
+    def set_categories(self, cat_values, validate=False, update=True):
         """Set the categories available in a column.
 
         The function checks that the values are compatible with the declared
@@ -115,6 +115,7 @@ class Column(NameAndDescription):
 
         :param cat_values: List of category values
         :param validate: Boolean to enable validation of the given values
+        :param update: Boolean to control if the field is updated
         :return: Nothing. Sets the value in the object
         """
         # Calculate the values to store
@@ -129,6 +130,9 @@ class Column(NameAndDescription):
             to_store = [cat_val.isoformat() for cat_val in to_store]
 
         self.categories = to_store
+
+        if update:
+            self.save(update_fields=['categories'])
 
     def get_simplified_data_type(self) -> str:
         """Get a data type name to show to users.
@@ -158,7 +162,7 @@ class Column(NameAndDescription):
         """
         self.workflow.reposition_columns(self.position, to_idx)
         self.position = to_idx
-        self.save()
+        self.save(update_fields=['position'])
 
     @classmethod
     def validate_column_value(cls, data_type, col_value) -> Any:

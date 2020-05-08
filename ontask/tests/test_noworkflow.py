@@ -28,10 +28,11 @@ class BackToHome(tests.OnTaskTestCase):
         """Loop over all URLs and check they redirect appropriately."""
         redirect = [
             # Workflow
-            reverse('workflow:detail'),
             reverse('workflow:operations'),
-            reverse('workflow:column_move_top', kwargs={'pk': 1}),
-            reverse('workflow:column_move_bottom', kwargs={'pk': 1}),
+            # Column
+            reverse('column:index'),
+            reverse('column:column_move_bottom', kwargs={'pk': 1}),
+            reverse('column:column_move_top', kwargs={'pk': 1}),
             # Action
             reverse('action:index'),
             reverse('action:timeline'),
@@ -47,6 +48,8 @@ class BackToHome(tests.OnTaskTestCase):
                 'action:unselect_column_action',
                 kwargs={'pk': 1, 'cpk': 1}),
             reverse('action:run_survey_row', kwargs={'pk': 1}),
+            # Connection
+            reverse('connection:sqlconns_index'),
             # Dataops
             reverse('dataops:uploadmerge'),
             reverse('dataops:transform'),
@@ -61,12 +64,11 @@ class BackToHome(tests.OnTaskTestCase):
             reverse('dataops:upload_s2'),
             reverse('dataops:upload_s3'),
             reverse('dataops:upload_s4'),
-            reverse('dataops:sqlconns_index'),
             # reverse('dataops:athenaconns_instructor_index'),
             reverse('dataops:sqlupload_start', kwargs={'pk': 1}),
             # reverse('dataops:athenaupload_start', kwargs={'pk': 1}),
             # Logs
-            reverse('logs:view', kwargs={'pk': 1}),
+            reverse('logs:page_view', kwargs={'pk': 1}),
             # Table
             reverse('table:display_view', kwargs={'pk': 1}),
             reverse('table:view_index'),
@@ -79,23 +81,21 @@ class BackToHome(tests.OnTaskTestCase):
 
         bad_request = [
             # Workflow
-            reverse('workflow:column_ss'),
             reverse('workflow:attribute_create'),
             reverse('workflow:attribute_edit', kwargs={'pk': 0}),
             reverse('workflow:attribute_delete', kwargs={'pk': 0}),
             reverse('workflow:share_create'),
-            # 'workflow:share_delete',
-            reverse('workflow:column_add'),
-            # 'workflow:question_add',
-            reverse('workflow:question_add', kwargs={'pk': 1}),
-            reverse('workflow:formula_column_add'),
-            reverse('workflow:random_column_add'),
-            reverse('workflow:column_delete', kwargs={'pk': 1}),
-            reverse('workflow:column_edit', kwargs={'pk': 1}),
-            # 'workflow:question_edit',
-            reverse('workflow:column_clone', kwargs={'pk': 1}),
-            reverse('workflow:column_move'),
-            reverse('workflow:column_restrict', kwargs={'pk': 1}),
+            # Column
+            reverse('column:index_ss'),
+            reverse('column:create'),
+            reverse('column:question_add', kwargs={'pk': 1}),
+            reverse('column:formula_column_add'),
+            reverse('column:random_column_add'),
+            reverse('column:delete', kwargs={'pk': 1}),
+            reverse('column:column_edit', kwargs={'pk': 1}),
+            reverse('column:column_clone', kwargs={'pk': 1}),
+            reverse('column:column_move'),
+            reverse('column:column_restrict', kwargs={'pk': 1}),
             # Action
             reverse('action:create'),
             reverse('action:save_text', kwargs={'pk': 1}),
@@ -116,23 +116,26 @@ class BackToHome(tests.OnTaskTestCase):
             reverse('action:preview_all_false', kwargs={'pk': 1, 'idx': 0}),
             reverse('action:showurl', kwargs={'pk': 1}),
             reverse('action:edit_description', kwargs={'pk': 1}),
-            reverse('action:create_filter', kwargs={'pk': 1}),
-            reverse('action:edit_filter', kwargs={'pk': 1}),
-            reverse('action:delete_filter', kwargs={'pk': 1}),
-            reverse('action:create_condition', kwargs={'pk': 1}),
-            reverse('action:edit_condition', kwargs={'pk': 1}),
-            reverse('action:delete_condition', kwargs={'pk': 1}),
-            reverse('action:clone_condition', kwargs={'pk': 1}),
+            # Condition
+            reverse('condition:create_filter', kwargs={'pk': 1}),
+            reverse('condition:edit_filter', kwargs={'pk': 1}),
+            reverse('condition:delete_filter', kwargs={'pk': 1}),
+            reverse('condition:create_condition', kwargs={'pk': 1}),
+            reverse('condition:edit_condition', kwargs={'pk': 1}),
+            reverse('condition:delete_condition', kwargs={'pk': 1}),
+            reverse('condition:clone_condition', kwargs={'pk': 1}),
             reverse(
-                'action:clone_condition',
+                'condition:clone_condition',
                 kwargs={'pk': 1, 'action_pk': 1}),
+            # Connection
+            reverse('connection:sqlconn_view', kwargs={'pk': 1}),
             # Dataops
             reverse('dataops:plugin_diagnose', kwargs={'pk': 1}),
             reverse('dataops:plugin_moreinfo', kwargs={'pk': 1}),
-            reverse('dataops:sqlconn_view', kwargs={'pk': 1}),
             # reverse('dataops:athenaconn_view', kwargs={'pk': 1}),
             # Logs
             reverse('logs:display_ss'),
+            reverse('logs:modal_view', kwargs={'pk': 1}),
             # Table
             reverse('table:display_ss'),
             reverse('table:display_view_ss', kwargs={'pk': 1}),

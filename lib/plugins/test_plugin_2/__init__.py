@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from typing import Dict, Optional
 
 import pandas as pd
 
@@ -102,7 +103,7 @@ class OnTaskTestPlugin(OnTaskTransformation):
                                 'help param datetime'),
         ]
 
-    def run(self, data_frame, parameters=dict):
+    def run(self, data_frame: pd.DataFrame, parameters: Optional[Dict] = dict):
         """
         Method to overwrite. Receives a data frame wih a number of columns
         stipulated by the num_column_input pair and a

@@ -91,7 +91,7 @@ scripts/initial_instructors.csv
 scripts/initial_learners.csv
 celerybeat-schedule
 celerybeat.pid
-ontask/*/fixtures/*.gz
+ontask/tests/fixtures/*.gz
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

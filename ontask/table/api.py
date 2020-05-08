@@ -3,7 +3,7 @@
 """Functions implementing the API calls to manipulate the table."""
 from typing import Optional
 
-from django.http import HttpRequest, HttpResponse
+from django import http
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import status
@@ -33,11 +33,11 @@ class TableBasicOps(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def override(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         wid: int,
         format=None,
         workflow: Optional[models.Workflow] = None,
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Override the content in the workflow.
 
         :param request: Received request object
@@ -76,11 +76,11 @@ class TableBasicOps(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def get(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         wid: int,
         format=None,
         workflow: Optional[models.Workflow] = None,
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Retrieve the existing data frame."""
         del request, wid, format
         serializer = self.serializer_class(
@@ -92,11 +92,11 @@ class TableBasicOps(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def post(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         wid: int,
         format=None,
         workflow: Optional[models.Workflow] = None,
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Create a new data frame."""
         if pandas.load_table(workflow.get_data_frame_table_name()) is not None:
             raise APIException(
@@ -110,7 +110,7 @@ class TableBasicOps(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def put(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         wid: int,
         format=None,
         workflow: Optional[models.Workflow] = None,
@@ -126,11 +126,11 @@ class TableBasicOps(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def delete(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         wid: int,
         format=None,
         workflow: Optional[models.Workflow] = None,
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Flush the data in the data frame."""
         del request, wid, format
         workflow.flush()
@@ -232,11 +232,11 @@ class TableBasicMerge(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def get(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         wid: int,
         format=None,
         workflow: Optional[models.Workflow] = None,
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Process the GET request."""
         del request, wid, format
         # Try to retrieve the wflow to check for permissions
@@ -251,11 +251,11 @@ class TableBasicMerge(APIView):
     @method_decorator(get_workflow(pf_related='columns'))
     def put(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         wid: int,
         format=None,
         workflow: Optional[models.Workflow] = None,
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Process the put request."""
         del wid, format
         # Get the dst_df

@@ -41,9 +41,13 @@ schema_view = get_schema_view(
 urlpatterns = [
     # Home Page!
     path('', views.home, name='home'),
+    path('', include('ontask.accounts.urls', namespace='accounts')),
     path('lti_entry', views.lti_entry, name='lti_entry'),
     path('not_authorized', views.home, name='not_authorized'),
-    path('about', views.AboutPage.as_view(), name='about'),
+    path(
+        'accessibility',
+        TemplateView.as_view(template_name='accessibility-statement.html'),
+        name='accessibility'),
     path(
         'under_construction',
         TemplateView.as_view(template_name='under_construction.html'),
@@ -52,10 +56,15 @@ urlpatterns = [
     path('ota', admin.site.urls),
     path('trck', views.trck, name='trck'),
     path('keep_alive', views.keep_alive, name='keep_alive'),
-    path('', include('ontask.accounts.urls', namespace='accounts')),
     path('workflow/', include('ontask.workflow.urls', namespace='workflow')),
+    path('column/', include('ontask.column.urls', namespace='column')),
+    path(
+        'connection/',
+        include('ontask.connection.urls', namespace='connection')),
     path('dataops/', include('ontask.dataops.urls', namespace='dataops')),
     path('action/', include('ontask.action.urls', namespace='action')),
+    path('condition/',
+        include('ontask.condition.urls', namespace='condition')),
     path('table/', include('ontask.table.urls', namespace='table')),
     path(
         'scheduler/',
@@ -110,10 +119,9 @@ pandas.set_engine()
 
 # Make sure the Site has the right information
 try:
-    site = Site.objects.get(id=settings.SITE_ID)
-    site.domain = settings.DOMAIN_NAME
-    site.name = settings.DOMAIN_NAME
-    site.save()
+    Site.objects.filter(id=settings.SITE_ID).update(
+        domain=settings.DOMAIN_NAME,
+        name=settings.DOMAIN_NAME)
 except Exception:
     # To bypass the migrate command execution that fails because the Site
     # table is not created yet.

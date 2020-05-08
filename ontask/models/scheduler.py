@@ -15,7 +15,8 @@ import pytz
 from ontask import simplify_datetime_str
 from ontask.models.action import Action
 from ontask.models.common import (
-    CHAR_FIELD_MID_SIZE, CreateModifyFields, NameAndDescription, Owner)
+    CHAR_FIELD_MID_SIZE, CreateModifyFields, NameAndDescription, Owner,
+)
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
 
@@ -40,8 +41,8 @@ OPERATION_TYPES = {
         Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_EMAIL],
     Log.ACTION_RUN_PERSONALIZED_JSON:
         Log.LOG_TYPES[Log.ACTION_RUN_PERSONALIZED_JSON],
-    Log.ACTION_RUN_JSON_LIST: Log.LOG_TYPES[Log.ACTION_RUN_JSON_LIST],
-    Log.ACTION_RUN_EMAIL_LIST: Log.LOG_TYPES[Log.ACTION_RUN_EMAIL_LIST],
+    Log.ACTION_RUN_JSON_REPORT: Log.LOG_TYPES[Log.ACTION_RUN_JSON_REPORT],
+    Log.ACTION_RUN_EMAIL_REPORT: Log.LOG_TYPES[Log.ACTION_RUN_EMAIL_REPORT],
     Log.WORKFLOW_INCREASE_TRACK_COUNT: Log.LOG_TYPES[
         Log.WORKFLOW_INCREASE_TRACK_COUNT],
     Log.PLUGIN_EXECUTE: Log.LOG_TYPES[Log.PLUGIN_EXECUTE],

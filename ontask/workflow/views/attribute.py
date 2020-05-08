@@ -101,7 +101,7 @@ def attribute_delete(
             request.user,
             models.Log.WORKFLOW_ATTRIBUTE_DELETE,
             **wf_attributes)
-        workflow.save()
+        workflow.save(update_fields=['attributes'])
         return http.JsonResponse({'html_redirect': ''})
 
     return http.JsonResponse({

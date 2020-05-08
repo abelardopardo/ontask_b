@@ -65,8 +65,7 @@ def diagnose(
     # If the new instance is now properly verified, simply redirect to the
     # transform page
     if pinstance:
-        plugin.is_verified = True
-        plugin.save()
+        models.Plugin.objects.filter(id=pk).update(is_verified=True)
         return http.JsonResponse({
             'html_redirect': reverse('dataops:plugin_admin')})
 

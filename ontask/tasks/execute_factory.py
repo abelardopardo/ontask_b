@@ -118,17 +118,17 @@ def execute_operation(
     :param payload: Rest of parameters.
     :return: Nothing
     """
+    log_item = None
     try:
         user, workflow, action = _get_execution_items(
             user_id=user_id,
             workflow_id=workflow_id,
             action_id=action_id)
 
-        log_item = None
         if log_id:
             log_item = models.Log.objects.get(pk=log_id)
             log_item.payload['status'] = 'Executing'
-            log_item.save()
+            log_item.save(update_fields=['payload'])
 
         task_execute_factory.execute_operation(
             operation_type=operation_type,
@@ -138,10 +138,15 @@ def execute_operation(
             payload=payload,
             log_item=log_item)
 
-        if log_id:
-            log_item.payload['status'] = 'Finished'
-            log_item.save()
-
     except Exception as exc:
+        if log_item is None:
+            log_item.payload['status'] = 'Error'
+            log_item.save(update_fields=['payload'])
+
         CELERY_LOGGER.error(
             ugettext('Error executing operation: {0}').format(exc))
+
+    if log_item:
+        log_item.payload['status'] = 'Finished'
+        log_item.save(update_fields=['payload'])
+

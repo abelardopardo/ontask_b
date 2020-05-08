@@ -8,7 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 from ontask.dataops import formula as dataops_formula, sql
 from ontask.models.column import Column
 from ontask.models.common import (
-    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CreateModifyFields)
+    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CreateModifyFields,
+)
 from ontask.models.logs import Log
 
 
@@ -106,10 +107,10 @@ class Condition(CreateModifyFields):
             # false. Needs to be recalculated because there is at least one
             # condition that has changed its count. Flush the field to None
             self.action.rows_all_false = None
-            self.action.save()
+            self.action.save(update_fields=['rows_all_false'])
 
         self.n_rows_selected = new_count
-        self.save()
+        self.save(update_fields=['n_rows_selected'])
 
     def get_formula_text(self):
         """Translate the formula to plain text.
@@ -121,7 +122,7 @@ class Condition(CreateModifyFields):
             self.formula_text = dataops_formula.evaluate(
                 self.formula,
                 dataops_formula.EVAL_TXT)
-            self.save()
+            self.save(update_fields=['formula_text'])
         return self.formula_text
 
     def __str__(self) -> str:

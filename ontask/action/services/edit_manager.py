@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from ontask import models
-from ontask.action import forms as action_forms
+from ontask.condition import forms as condition_forms
 from ontask.visualizations.plotly import PlotlyHandler
 
 
@@ -74,7 +74,7 @@ class ActionEditManager:
     def get_render_context(
         action: models.Action,
         form: Optional[Type[forms.ModelForm]] = None,
-        form_filter: Optional[action_forms.FilterForm] = None,
+        form_filter: Optional[condition_forms.FilterForm] = None,
     ) -> Dict:
         """Get the initial context to render the response."""
         filter_condition = action.get_filter()
@@ -95,9 +95,11 @@ class ActionEditManager:
             'selected_rows':
                 filter_condition.n_rows_selected
                 if filter_condition else -1,
-            'is_email_list': (
-                action.action_type == models.Action.EMAIL_LIST
-                or action.action_type == models.Action.JSON_LIST),
+            'is_email_report':
+                action.action_type == models.Action.EMAIL_REPORT,
+            'is_report': (
+                action.action_type == models.Action.EMAIL_REPORT
+                or action.action_type == models.Action.JSON_REPORT),
             'is_personalized_text': (
                 action.action_type == models.Action.PERSONALIZED_TEXT),
             'is_rubric': action.action_type == models.Action.RUBRIC_TEXT,
@@ -106,12 +108,10 @@ class ActionEditManager:
                 for cond in action.conditions.all()),
             'rows_all_false': action.get_row_all_false_count(),
 
-            # Column elements
-
             # Page elements
             'load_summernote': (
                 action.action_type == models.Action.PERSONALIZED_TEXT
-                or action.action_type == models.Action.EMAIL_LIST
+                or action.action_type == models.Action.EMAIL_REPORT
                 or action.action_type == models.Action.RUBRIC_TEXT
             ),
             'query_builder_ops': action.workflow.get_query_builder_ops_as_str(),
@@ -119,7 +119,7 @@ class ActionEditManager:
 
 
 class ActionOutEditManager(ActionEditManager):
-    """Base class to provide edit methods for the actions out."""
+    """Class to provide edit methods for the actions out."""
 
     def process_edit_request(
         self,
@@ -130,7 +130,7 @@ class ActionOutEditManager(ActionEditManager):
         """Process the action edit request."""
         form = self.edit_form_class(request.POST or None, instance=action)
 
-        form_filter = action_forms.FilterForm(
+        form_filter = condition_forms.FilterForm(
             request.POST or None,
             instance=action.get_filter(),
             action=action
@@ -149,7 +149,7 @@ class ActionOutEditManager(ActionEditManager):
             action.set_text_content(form.cleaned_data['text_content'])
             if 'target_url' in form.cleaned_data:
                 action.target_url = form.cleaned_data['target_url']
-            action.save()
+                action.save(update_fields=['target_url'])
 
             if request.POST['Submit'] == 'Submit':
                 return redirect(request.get_full_path())

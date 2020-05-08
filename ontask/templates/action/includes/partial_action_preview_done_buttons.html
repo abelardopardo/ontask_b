@@ -6,7 +6,7 @@
           data-url="{% url 'action:preview' action.id 1 %}"
           data-toggle="tooltip"
       title="{% trans 'See how is the content shown to each learner' %}">
-    <span class="fa fa fa-eye"></span> {% trans 'Preview' %}
+    <span class="fa fa-eye"></span> {% trans 'Preview' %}
   </button>
   {% cache 3600 partial_action_preview_done_buttons LANGUAGE_CODE %}
     <button type="submit" name="Submit" value="Submit"

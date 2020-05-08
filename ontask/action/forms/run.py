@@ -30,9 +30,9 @@
 
 14) JSONActionRunForm: 13 + 1
 
-15) JSONListActionForm: 5
+15) JSONReportActionForm: 5
 
-16) JSONListActionForm: 15 + 1
+16) JSONReportActionForm: 15 + 1
 
 17) ValueExcludeForm: Form to select some items to exclude from the processing
 
@@ -47,7 +47,7 @@ from django.conf import settings
 from django.db.models import QuerySet
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import is_correct_email, models
+from ontask import get_incorrect_email, is_correct_email, models
 from ontask.core import ONTASK_SUFFIX_LENGTH, forms as ontask_forms
 from ontask.dataops import sql
 
@@ -135,21 +135,17 @@ class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
                     email.strip()
                     for email in form_data['bcc_email'].split() if email]))])
 
-        all_correct = all(
-            is_correct_email(email) for email in form_data['cc_email'].split())
-        if not all_correct:
+        incorrect_email = get_incorrect_email(form_data['cc_email'].split())
+        if incorrect_email:
             self.add_error(
                 'cc_email',
-                _('Field needs a space-separated list of emails.'))
+                _('Incorrect email value "{0}".').format(incorrect_email))
 
-        all_correct = all(
-            is_correct_email(email)
-            for email in form_data['bcc_email'].split()
-        )
-        if not all_correct:
+        incorrect_email = get_incorrect_email(form_data['bcc_email'].split())
+        if incorrect_email:
             self.add_error(
                 'bcc_email',
-                _('Field needs a space-separated list of emails.'))
+                _('Incorrect email value "{0}".').format(incorrect_email))
 
         return form_data
 
@@ -292,11 +288,14 @@ class EmailActionForm(
             column_data = sql.get_rows(
                 self.action.workflow.get_data_frame_table_name(),
                 column_names=[pcolumn.name])
-            if not all(is_correct_email(iname[0]) for iname in column_data):
+            incorrect_email = get_incorrect_email(
+                [iname[0] for iname in column_data])
+            if incorrect_email:
                 # column has incorrect email addresses
                 self.add_error(
                     'item_column',
-                    _('The column with email addresses has incorrect values.'))
+                    _('Incorrect email address "{0}".').format(
+                        incorrect_email))
         except TypeError:
             self.add_error(
                 'item_column',
@@ -521,12 +520,17 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
                 None,
                 _('No Canvas Service available for this action.'))
 
-        # The given column for email destination has to have integers
+        # The given column for email destination has to have integers or
+        # floats that can be transformed into integers
         user_ids = sql.get_rows(
             self.action.workflow.get_data_frame_table_name(),
             column_names=[form_data['item_column'].name],
             filter_formula=self.action.get_filter_formula())
-        if any(not isinstance(row_item[0], int) for row_item in user_ids):
+        if any(
+            not (
+                isinstance(row_item[0], int) or float.is_integer(row_item[0]))
+            for row_item in user_ids
+        ):
             self.add_error(
                 'item_column',
                 _('The column does not contain valid Canvas IDs.'))
@@ -573,12 +577,12 @@ class JSONActionRunForm(JSONActionForm, ExportWorkflowBase):
             'export_wf'])
 
 
-class JSONListActionForm(JSONTokenForm):
+class JSONReportActionForm(JSONTokenForm):
     """Use a synonym for consistency with the other classes"""
 
 
-class JSONListActionRunForm(JSONListActionForm, ExportWorkflowBase):
-    """Form to edit information to run JSON List action"""
+class JSONReportActionRunForm(JSONReportActionForm, ExportWorkflowBase):
+    """Form to edit information to run JSON Report."""
 
     def __init__(self, *args, **kwargs):
         """Modify the fields with the adequate information."""

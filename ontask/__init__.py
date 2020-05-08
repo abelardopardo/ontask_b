@@ -15,13 +15,13 @@ import pytz
 from ontask.celery import app as celery_app
 
 __all__ = [
-    'are_correct_emails',
     'celery_app',
     'CELERY_LOGGER',
     'create_new_name',
     'entity_prefix',
     'is_legal_name',
     'is_correct_email',
+    'get_incorrect_email',
     'LOGGER',
     'OnTaskDataFrameNoKey',
     'OnTaskDBIdentifier',
@@ -31,7 +31,7 @@ __all__ = [
     'OnTaskSharedState',
     'simplify_datetime_str']
 
-__version__ = 'B.7.0.2'
+__version__ = 'B.7.1'
 
 app_config = 'ontask.apps.OnTaskConfig'
 
@@ -174,16 +174,20 @@ def is_correct_email(email_txt: str) -> bool:
     return True
 
 
-def are_correct_emails(emails: List[str]) -> bool:
-    """Check if string is a correct email address."""
+def get_incorrect_email(emails: List[str]) -> Optional[str]:
+    """Get the first incorrect email from a list
+
+    :param emails: List of strings with emails
+    :return: The first one that is incorrect or None if all correct.
+    """
+    email_txt = None
     try:
         for email_txt in emails:
             validate_email(email_txt)
     except (ValueError, AttributeError):
-        return False
+        return email_txt
 
-    return True
-
+    return None
 
 def simplify_datetime_str(dtime: datetime) -> str:
     """Transform datetime object into string."""

@@ -7,7 +7,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
-from ontask import is_correct_email, models
+from ontask import get_incorrect_email, models
 from ontask.dataops import sql
 from ontask.scheduler.services import schedule_crud_factory
 
@@ -164,35 +164,35 @@ class ScheduledEmailSerializer(ScheduledOperationSerializer):
             column_data = sql.get_rows(
                 action.workflow.get_data_frame_table_name(),
                 column_names=[item_column.name])
-            if not all(
-                is_correct_email(row[item_column.name]) for row in column_data
-            ):
+            incorrect_email = get_incorrect_email(
+                [row[item_column.name] for row in column_data])
+            if incorrect_email:
                 # column has incorrect email addresses
                 raise APIException(
-                    _('The column with email addresses has incorrect values.'))
+                    _('Incorrect email value "{0}".').format(incorrect_email))
         except TypeError:
             raise APIException(
                 _('The column with email addresses has incorrect values.'))
         payload['item_column'] = item_column.id
 
         try:
-            if not all(
-                is_correct_email(email)
-                for email in payload.get('cc_email', '').split() if email
-            ):
+            incorrect_email = get_incorrect_email(
+                [email for email in payload.get('cc_email', '').split()
+                 if email])
+            if incorrect_email:
                 raise APIException(
-                    _('cc_email must be a space-separated list of emails.'))
+                    _('Incorrect email value "{0}".').format(incorrect_email))
         except Exception:
             raise APIException(
                 _('cc_email must be a space-separated list of emails.'))
 
         try:
-            if not all(
-                is_correct_email(email)
-                for email in payload.get('bcc_email', '').split() if email
-            ):
+            incorrect_email = get_incorrect_email(
+                [email for email in payload.get('bcc_email', '').split()
+                 if email])
+            if incorrect_email:
                 raise APIException(
-                    _('bcc_email must be a space-separated list of emails.'))
+                    _('Incorrect email value "{0}".').format(incorrect_email))
         except Exception:
             raise APIException(
                 _('bcc_email must be a space-separated list of emails.'))

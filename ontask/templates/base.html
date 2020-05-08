@@ -4,7 +4,7 @@
 {% load thumbnail %}
 {% load i18n %}
 {% load cache %}
-<html{% if LANGUAGE_CODE %} lang="{{ LANGUAGE_CODE }}"{% endif %}>
+<html {% if LANGUAGE_CODE %}lang="{{ LANGUAGE_CODE }}"{% endif %}>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,14 +32,11 @@
     {% block navbar %}
       <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
         {% block navbar-brand %}
-          {% cache 3600 site-navbar-brand LANGUAGE_CODE %}
-            <a class="navbar-brand" href="#">
-              <img src="{% static 'img/logo.png' %}" height="30" alt="logo">
-            </a>
+          {% cache 3600 site-navbar-brand %}
+            <img src="{% static 'img/logo.png' %}" height="30" alt="logo">
           {% endcache %}
         {% endblock %}
         {% block navbar-menu %}
-
           <button class="navbar-toggler" type="button" data-toggle="collapse"
                   data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                   aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +53,7 @@
                   </li>
                 {% endif %}
                 {% if request.session.ontask_workflow_id %}
-                  {% url 'workflow:detail' as workflow_detail %}
+                  {% url 'column:index' as workflow_detail %}
                   {% url 'workflow:operations' as workflow_ops %}
                   <li class="nav-item">
                     <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}"
@@ -139,7 +136,7 @@
                            data-toggle="tooltip"
                            title="{% trans 'Manage the platform database' %}">
                           {% trans 'DB Admin' %}</a>
-                        <a href="{% url 'dataops:sqlconns_admin_index' %}"
+                        <a href="{% url 'connection:sqlconns_admin_index' %}"
                            class="btn dropdown-item spin"
                            data-toggle="tooltip"
                            title="{% trans 'Connections to SQL databases' %}">
@@ -160,12 +157,20 @@
                     </li>
                   {% endif %}
                   <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle profile-menu" data-toggle="dropdown">
+                    <a href="#"
+                       class="nav-link dropdown-toggle profile-menu"
+                       data-toggle="dropdown">
                      <span class="fa fa-user"></span>
                     </a>
                     <div class="shadow dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item spin" href="{% url 'profiles:show_self' %}">{% trans 'Profile' %}</a>
-                      <a class="dropdown-item spin" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a>
+                      <a class="dropdown-item spin"
+                         href="{% url 'profiles:show_self' %}"
+                         data-toggle="tooltip"
+                         title="{% trans 'User Profile' %}">{% trans 'Profile' %}</a>
+                      <a class="dropdown-item spin"
+                         href="{% url 'accounts:logout' %}"
+                         data-toggle="tooltip"
+                         title="{% trans 'Logout' %}">{% trans 'Logout' %}</a>
                     </div>
                   </li>
                 {% else %}
@@ -174,11 +179,19 @@
                     {% trans 'Contact' %}</a></li>
                 {% endif %}
                 <li class="nav-item">
-                    <a href="#" class="nav-link dropdown-toggle help-menu" data-toggle="dropdown">
+                    <a href="#"
+                       class="nav-link dropdown-toggle help-menu"
+                       data-toggle="dropdown">
                       <span class="fa fa-book"></span></a>
                     <div class="shadow dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item spin" href="{% static ONTASK_HELP_URL %}">{% trans 'Manual' %}</a>
-                      <a class="dropdown-item spin" href="{% url 'ontask-api-doc' %}">{% trans 'API Docs' %}</a>
+                      <a class="dropdown-item spin"
+                         href="{% static ONTASK_HELP_URL %}"
+                         data-toggle="tooltip"
+                         title="{% trans 'OnTask Manual' %}">{% trans 'Manual' %}</a>
+                      <a class="dropdown-item spin"
+                         href="{% url 'ontask-api-doc' %}"
+                         data-toggle="tooltip"
+                         title="{% trans 'API documentation' %}">{% trans 'API Docs' %}</a>
 
                     </div>
                 </li>
@@ -239,7 +252,7 @@
     {% block footer %}
       {% cache 3600 site-footer LANGUAGE_CODE %}
         <nav class="navbar navbar-light bg-light" id="base_footer">
-          <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %}</span>
+          <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %} | <a href="{% url 'accessibility' %}">{% trans 'Accessibility' %}</a></span>
         </nav>
       {% endcache %}
     {% endblock %}

@@ -24,13 +24,7 @@ stages:
 test:
   stage: Run tests
   script:
-    - coverage run ./manage.py test -v 2 ontask.workflow
-    - coverage run -a ./manage.py test -v 2 ontask.dataops
-    - coverage run -a ./manage.py test -v 2 ontask.table
-    - coverage run -a ./manage.py test -v 2 ontask.action
-    - coverage run -a ./manage.py test -v 2 ontask.tests
-    - coverage run -a ./manage.py test -v 2 ontask.scheduler
-    - coverage run -a ./manage.py test -v 2 ontask.tasks
+    - coverage run ./manage.py test -v 2 ontask.workflow ontask.column ontask.dataops ontask.connection ontask.table ontask.condition ontask.action ontask.tests ontask.scheduler ontask.tasks
   artifacts:
     paths:
       - htmlcov
@@ -39,12 +33,7 @@ test:
 build_doc:
   stage: Build doc
   script:
-    - coverage run -a ./manage.py test -v 2 ontask.tests.create_screen_captures
-    - coverage run -a ./manage.py test -v 2 ontask.tests.scenario_01_captures
-    - coverage run -a ./manage.py test -v 2 ontask.tests.scenario_02_captures
-    - coverage run -a ./manage.py test -v 2 ontask.tests.scenario_03_captures
-    - coverage run -a ./manage.py test -v 2 ontask.tests.tutorial_captures
-    - coverage run -a ./manage.py test -v 2 ontask.tests.create_api_captures
+    - coverage run -a ./manage.py test -v 2 ontask.tests.create_screen_captures ontask.tests.scenario_01_captures ontask.tests.scenario_02_captures ontask.tests.scenario_03_captures ontask.tests.tutorial_captures ontask.tests.create_api_captures
     - cd ontask/tests/images
     - bash push.sh
     - cd ../../..

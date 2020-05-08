@@ -55,44 +55,18 @@ let insertRubricTextInContent = function() {
   $(this).val(this.defaultSelected);
 }
 let insertColumnListInContent = function() {
-  let val = $(this).text();
-  if (val == '') {
+  let report_column_list = $('#id_columns').val();
+  if (report_column_list == '') {
     return;
   }
   if (typeof $('#id_text_content').summernote != 'undefined') {
-    $("#id_text_content").summernote('createRange');
+    $('#id_text_content').summernote('restoreRange')
   }
-  insertText('id_text_content', '{% ot_insert_column_list "' + val + '" %}');
-  $(this).val(this.defaultSelected);
-}
-let ajax_post = function(url, data, req_type) {
-  $.ajax({
-    url: url,
-    data: data,
-    type: req_type,
-    dataType: 'json',
-    beforeSend: function() {
-      $(".modal-body").html("");
-      $("#modal-item").modal("show");
-    },
-    success: function(data) {
-      if (typeof data.html_redirect != 'undefined') {
-        if (data.html_redirect == "") {
-          $('#div-spinner').show();
-          window.location.reload(true);
-        } else {
-          location.href = data.html_redirect;
-        }
-        return;
-      }
-      $("#modal-item .modal-content").html(data.html_form);
-      $("#modal_item_label .close").focus();
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      $('#div-spinner').show();
-      location.reload(true);
-    }
-  });
+  insertText(
+    'id_text_content',
+    '{% ot_insert_report "' + report_column_list.join('" "') + '" %}');
+  $(".modal-body").html("");
+  $("#modal-item").modal('hide');
 }
 let loadFormPost = function () {
   let btn = $(this);
@@ -103,7 +77,7 @@ let loadFormPost = function () {
   if ($(this).is('[class*="disabled"]')) {
     return;
   }
-  ajax_post(
+  ajaxPost(
     $(this).attr("data-url"),
     [{'name': 'action_content', 'value': get_id_text_content()}],
     'post'
@@ -120,29 +94,6 @@ let transferFormula = function () {
     $("#id_formula").val(f_text);
    }
    return true;
-}
-let conditionClone = function() {
-  $('#div-spinner').show();
-  $.ajax({
-    url: $(this).attr("data-url"),
-    data: [{'name': 'action_content', 'value': get_id_text_content()}],
-    type: 'post',
-    dataType: 'json',
-    success: function (data) {
-      if (typeof data.html_redirect != 'undefined') {
-        if (data.html_redirect == '') {
-          location.reload(true);
-        } else {
-          location.href = data.html_redirect;
-        }
-        return;
-      }
-      $('#div-spinner').hide();
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      location.reload(true);
-    },
-  });
 }
 $(function () {
   $("#checkAll").click(function () {
@@ -169,41 +120,11 @@ $(function () {
   $("#action-in-editor").on("click", ".js-description-edit", loadForm);
   $("#modal-item").on("submit", ".js-description-edit-form", saveForm);
 
-  // Create filter
-  $("#filter-set-header").on("click", ".js-filter-create", loadForm);
-  $("#modal-item").on("submit", ".js-filter-create-form", saveForm);
-
-  // Edit Filter
-  $("#filter-set").on("click", ".js-filter-edit", loadForm);
-  $("#modal-item").on("submit", ".js-filter-edit-form", saveForm);
-
-  // Update Filter
-  $("#filter").on("submit", ".js-filter-update-form", transferFormula);
-
-  // Delete Filter
-  $("#filter").on("click", ".js-filter-delete", loadForm);
-  $("#modal-item").on("submit", ".js-filter-delete-form", saveForm);
-
-  // Create Condition
-  $("#condition-set-header").on("click", ".js-condition-create", loadForm);
-  $("#modal-item").on("submit", ".js-condition-create-form", saveForm);
-
-  // Edit Condition
-  $("#condition-set").on("click", ".js-condition-edit", loadForm);
-  $("#modal-item").on("submit", ".js-condition-edit-form", saveForm);
-
-  // Clone Condition
-  $("#condition-set").on("click", ".js-condition-clone", conditionClone);
-  $("#condition-clone").on("click", ".js-condition-clone", conditionClone);
-
-  // Delete Condition
-  $("#condition-set").on("click", ".js-condition-delete", loadForm);
-  $("#modal-item").on("submit", ".js-condition-delete-form", saveForm);
-
   // Insert column name in content
   $("#insert-elements-in-editor").on("click", ".js-insert-column-name", insertAttributeInContent);
-  // Insert column LIST in content
-  $("#insert-elements-in-editor").on("click", ".js-insert-column-list", insertColumnListInContent);
+  // Insert column REPORT in content
+  $("#insert-elements-in-editor").on("click", ".js-table-select", loadForm);
+  $("#modal-item").on("click", ".js-table-insert", insertColumnListInContent);
   // Insert condition blurb in the editor
   $("#insert-elements-in-editor").on("click", ".js-insert-condition-name", insertConditionInContent);
   // Insert attribute in content
@@ -213,13 +134,13 @@ $(function () {
 
 
   // Insert columns in action in
-  $("#insert-questions").on("click", ".js-insert-question", assignColumn);
+  $("#insert-questions").on("click", ".js-insert-question", ajaxSimplePost);
 
   // Insert columns in action in
-  $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", assignColumn);
+  $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", ajaxSimplePost);
 
   // Insert columns in action in
-  $("#edit-survey-tab-content").on("click", ".js-select-condition", assignColumn);
+  $("#edit-survey-tab-content").on("click", ".js-select-condition", ajaxSimplePost);
 
   // Toggle shuffle question
   $("#action-in-editor").on("change", "#toggle-checkbox", toggleCheckBox);
@@ -243,6 +164,7 @@ $(function () {
   $("#email-schedule-send").on("click", ".js-action-preview", loadForm);
   $(".modal-content").on("click", ".js-action-preview-nxt", loadForm);
   $(".modal-content").on("click", ".js-action-preview-prv", loadForm);
+  $("#action-index").on("click", ".js-action-preview", loadForm);
 
   // Show URL
   $("#action-table").on("click", ".js-action-showurl", loadForm);
@@ -250,7 +172,7 @@ $(function () {
 
   // Column Add
   $("#edit-survey-tab-content").on("click", ".js-workflow-question-add", loadForm);
-  $("#insert-criterion").on("click", ".js-workflow-criterion-insert", assignColumn);
+  $("#insert-criterion").on("click", ".js-workflow-criterion-insert", ajaxSimplePost);
   $("#insert-criterion").on("click", ".js-workflow-criterion-add", loadForm);
   $("#modal-item").on("submit", ".js-workflow-question-add-form", saveForm);
   $("#modal-item").on("submit", ".js-workflow-criterion-add-form", saveForm);
@@ -260,6 +182,10 @@ $(function () {
     ".js-workflow-question-edit",
     loadForm);
   $("#modal-item").on("submit", ".js-question-edit-form", saveForm);
+
+  // Attachment operations
+  $("#attachment-selector").on("click", ".js-attachment-insert", ajaxSimplePost);
+  $("#attachment-set").on("click", ".js-attachment-delete", ajaxSimplePost);
 
   // Rubric operations
   $("#rubric").on("click", ".js-criterion-edit", loadForm);
@@ -282,7 +208,7 @@ $(function () {
   $("#action-index").on("click", ".js-workflow-flush", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 
-  $(".card").hover(function(){
+  $(".card:not(.nohover)").hover(function(){
     $(this).css("background-color", "lightgray");
   }, function(){
     $(this).css("background-color", "white");
@@ -290,6 +216,11 @@ $(function () {
   $("#id_confirm_items").on("change", function(e) {
     select_next_button($(this));
   })
+  $('#modal-item').on('show.bs.modal', function (e) {
+    if ($("#id_text_content").summernote != null) {
+      $("#id_text_content").summernote('saveRange');
+    }
+  });
 });
 window.onload = function(){
   if (document.getElementById("id_exclude_values") != null) {

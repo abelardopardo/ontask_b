@@ -11,8 +11,7 @@ from django import http
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
+from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -54,9 +53,8 @@ def _refresh_and_retry_send(
 ):
     """Refresh OAuth token and retry send.
 
-    :param target_url: URL to use as target
     :param oauth_info: Object with the oauth information
-    :param conversation_urL: URL to send the conversation
+    :param conversation_url: URL to send the conversation
     :param canvas_email_payload: Dictionary with additional information
     :return:
     """
@@ -92,10 +90,10 @@ def _refresh_and_retry_send(
 
 @user_passes_test(is_instructor)
 def _canvas_get_or_set_oauth_token(
-    request: WSGIRequest,
+    request: HttpRequest,
     oauth_instance_name: str,
     continue_url: str,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Check for OAuth token, if not present, request a new one.
 
     Function that checks if the user has a Canvas OAuth token. If there is a
@@ -155,7 +153,6 @@ def _send_single_canvas_message(
 ) -> Tuple[str, int]:
     """Send a single email to Canvas using the API.
 
-    :param target_url: Target URL in the canvas server
     :param conversation_url: URL pointing to the conversation object
     :param canvas_email_payload: Email message
     :param headers: HTTP headers for the request
@@ -272,9 +269,7 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
         }
 
         # Create the context for the log events
-        context = {
-            'action': action.id,
-        }
+        context = {'action': action.id}
 
         # Send the objects to the given URL
         idx = 1
@@ -315,17 +310,22 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
                 response_status = 200
 
             # Log message sent
-            context['object'] = json.dumps(canvas_email_payload)
-            context['status'] = response_status
-            context['result'] = result_msg
+            context['subject'] = canvas_email_payload['subject']
+            context['body'] = canvas_email_payload['body']
+            context['from_email'] = user.email
+            context['to_email'] = canvas_email_payload['recipients[]']
             context['email_sent_datetime'] = str(
-                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
-            )
-            action.log(user, models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL, **context)
+                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
+            context['response_status'] = response_status
+            context['result_msg'] = result_msg
+            action.log(
+                user,
+                models.Log.ACTION_CANVAS_EMAIL_SENT,
+                **context)
             to_emails.append(msg_to)
 
         action.last_executed_log = log_item
-        action.save()
+        action.save(update_fields=['last_executed_log'])
 
         # Update excluded items in payload
         self._update_excluded_items(payload, to_emails)

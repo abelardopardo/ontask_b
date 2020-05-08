@@ -3,8 +3,8 @@
 """Functions to update and create a row in the dataframe."""
 from typing import Optional
 
+from django import http
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -17,9 +17,9 @@ from ontask.dataops import forms, services, sql
 @user_passes_test(is_instructor)
 @get_workflow(pf_related=['columns', 'actions'])
 def row_create(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Process POST request to create a new row in the data table.
 
     :param request: Request object with all the data.
@@ -67,9 +67,9 @@ def row_create(
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='columns')
 def row_update(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Process POST request to update a row in the data table.
 
     :param request: Request object with all the data.

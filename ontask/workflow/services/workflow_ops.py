@@ -4,15 +4,10 @@
 from typing import Dict
 
 from django import http
-from django.db.models import Q
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import django_tables2 as tables
 
-from ontask import is_correct_email, models, tasks
-from ontask.core import (
-    DataTablesServerSidePaging, OperationsColumn,
-    store_workflow_in_session)
+from ontask import core, get_incorrect_email, models, tasks
 from ontask.dataops import sql
 from ontask.workflow import services
 
@@ -24,7 +19,7 @@ class AttributeTable(tables.Table):
 
     value = tables.Column(verbose_name=_('Value'))  # noqa Z110
 
-    operations = OperationsColumn(
+    operations = core.OperationsColumn(
         verbose_name='',
         template_file='workflow/includes/partial_attribute_operations.html',
         template_context=lambda record: {'id': record['id']},
@@ -46,7 +41,7 @@ class WorkflowShareTable(tables.Table):
         verbose_name=_('User'),
     )
 
-    operations = OperationsColumn(
+    operations = core.OperationsColumn(
         orderable=False,
         template_file='workflow/includes/partial_share_operations.html',
         template_context=lambda elems: {'id': elems['id']},
@@ -102,7 +97,7 @@ def check_luser_email_column_outdated(workflow: models.Workflow):
         if md5_hash != workflow.luser_email_column_md5:
             # Information is outdated
             workflow.lusers_is_outdated = True
-            workflow.save()
+            workflow.save(update_fields=['lusers_is_outdated'])
 
 
 def update_luser_email_column(
@@ -124,7 +119,9 @@ def update_luser_email_column(
         workflow.luser_email_column = None
         workflow.luser_email_column_md5 = ''
         workflow.lusers.set([])
-        workflow.save()
+        workflow.save(update_fields=[
+            'luser_email_column',
+            'luser_email_column_md5'])
         return
 
     table_name = workflow.get_data_frame_table_name()
@@ -133,13 +130,15 @@ def update_luser_email_column(
     emails = sql.get_rows(table_name, column_names=[column.name])
 
     # Verify that the column as a valid set of emails
-    if not all(is_correct_email(row[column.name]) for row in emails):
-        raise services.OnTaskWorkflowIncorrectEmail(
-            message=_('The selected column does not contain email addresses.'))
+    incorrect_email = get_incorrect_email([row[column.name] for row in emails])
+    if incorrect_email:
+        raise services.OnTaskWorkflowEmailError(
+            message=_('Incorrect email addresses "{0}".').format(
+                incorrect_email))
 
     # Update the column
     workflow.luser_email_column = column
-    workflow.save()
+    workflow.save(update_fields=['luser_email_column'])
 
     # Calculate the MD5 value
     md5_hash = sql.get_text_column_hash(table_name, column.name)
@@ -149,6 +148,7 @@ def update_luser_email_column(
 
     # Change detected, run the update in batch mode
     workflow.luser_email_column_md5 = md5_hash
+    workflow.save(update_fields=['luser_email_column_md5'])
 
     # Log the event with the status "preparing updating"
     log_item = workflow.log(user, models.Log.WORKFLOW_UPDATE_LUSERS)
@@ -172,66 +172,5 @@ def do_flush(request: http.HttpRequest, workflow: models.Workflow):
     workflow.flush()
     workflow.refresh_from_db()
     # update the request object with the new number of rows
-    store_workflow_in_session(request.session, workflow)
+    core.store_workflow_in_session(request.session, workflow)
     workflow.log(request.user, models.Log.WORKFLOW_DATA_FLUSH)
-
-
-def column_table_server_side(
-    dt_page: DataTablesServerSidePaging,
-    workflow: models.Workflow,
-) -> Dict:
-    """Create the server side object to render a page of the table of columns.
-
-    :param dt_page: Table structure for paging a query set.
-    :param workflow: Workflow being manipulated
-    :return: Dictionary to return to the server to render the sub-page
-    """
-    # Get the initial set
-    qs = workflow.columns.all()
-    records_total = qs.count()
-    records_filtered = records_total
-
-    # Reorder if required
-    if dt_page.order_col:
-        col_name = [
-            'position',
-            'name',
-            'description_text',
-            'data_type',
-            'is_key'][dt_page.order_col]
-        if dt_page.order_dir == 'desc':
-            col_name = '-' + col_name
-        qs = qs.order_by(col_name)
-
-    if dt_page.search_value:
-        qs = qs.filter(
-            Q(name__icontains=dt_page.search_value)
-            | Q(data_type__icontains=dt_page.search_value))
-        records_filtered = qs.count()
-
-    # Creating the result
-    final_qs = []
-    for col in qs[dt_page.start:dt_page.start + dt_page.length]:
-        ops_string = render_to_string(
-            'workflow/includes/workflow_column_operations.html',
-            {'id': col.id, 'is_key': col.is_key},
-        )
-
-        final_qs.append({
-            'number': col.position,
-            'name': col.name,
-            'description': col.description_text,
-            'type': col.get_simplified_data_type(),
-            'key': '<span class="true">✔</span>' if col.is_key else '',
-            'operations': ops_string,
-        })
-
-        if len(final_qs) == dt_page.length:
-            break
-
-    return {
-        'draw': dt_page.draw,
-        'recordsTotal': records_total,
-        'recordsFiltered': records_filtered,
-        'data': final_qs,
-    }

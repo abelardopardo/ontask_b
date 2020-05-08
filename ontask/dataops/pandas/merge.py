@@ -173,7 +173,7 @@ def _update_is_key_field(merge_info: Dict, workflow):
         # recalculated during the store, now it needs to be updated looking at
         # the keep_key value.
         col.is_key = col.is_key and keep_key
-        col.save()
+        col.save(update_fields=['is_key'])
 
 def validate_merge_parameters(
     dst_df: pd.DataFrame,

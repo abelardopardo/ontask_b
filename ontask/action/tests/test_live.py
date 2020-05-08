@@ -19,12 +19,7 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
 
     action_name = 'simple action'
     fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     wflow_name = 'wflow1'
     wflow_desc = 'description text for workflow 1'
@@ -58,227 +53,6 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
 
         action_element = self.search_action(self.action_name + suffix)
         self.assertTrue(action_element)
-
-        # End of session
-        self.logout()
-
-    # Test operations with the filter
-    def test_filter(self):
-        # Login
-        self.login('instructor01@bogus.com')
-
-        # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(self.wflow_name)
-
-        # Goto the action page
-        self.go_to_actions()
-
-        # click on EDIT action link
-        self.open_action_edit(self.action_name)
-
-        # Click in the add filter button
-        self.select_filter_tab()
-        self.selenium.find_element_by_class_name('js-filter-create').click()
-        # Wait for the form to appear
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='modal-item']//form")
-            )
-        )
-
-        # Add the description
-        self.selenium.find_element_by_id(
-            'id_description_text').send_keys('fdesc')
-
-        # Select the age filter
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_filter'))
-        sel.select_by_value('age')
-        # Wait for the select elements to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//select[@name='builder_rule_0_filter']")
-            )
-        )
-
-        # There should only be eight operands
-        filter_ops = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_0_operator']/option"
-        )
-        self.assertEqual(len(filter_ops), 10)
-
-        # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_0_operator'))
-        sel.select_by_value('less_or_equal')
-
-        # Set the value to 12.1
-        self.selenium.find_element_by_name(
-            'builder_rule_0_value_0').send_keys('12.1')
-
-        # Click in the "update filter"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']//button[@type='submit']"
-        ).click()
-        # MODAL WAITING
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Preview button clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
-            )
-        )
-        # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
-
-        # Check that the filter is selecting 2 out of 3 rows
-        self.assertIn('2 learners of 3', self.selenium.page_source)
-
-        # Add a second clause to the filter
-        # Click in the edit filter button
-        self.selenium.find_element_by_class_name('js-filter-edit').click()
-        # Wait for the form to modify the filter
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='modal-item']//form")
-            )
-        )
-
-        # Click in the Add rule of the filter builder button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='builder_group_0']/div/div/button[1]"
-        ).click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//div[@id='builder_group_0']/div/div/button[1]")
-            )
-        )
-
-        # Select the when filter
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_1_filter'))
-        sel.select_by_value('when')
-        # Wait for the select elements to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//select[@name='builder_rule_1_operator']")
-            )
-        )
-
-        # There should only be eight operands
-        filter_ops = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_1_operator']/option"
-        )
-        self.assertEqual(len(filter_ops), 10)
-
-        # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
-            'builder_rule_1_operator'))
-        sel.select_by_value('less_or_equal')
-
-        # Set the value to 2017-10-11T00:32:44
-        self.selenium.find_element_by_name(
-            'builder_rule_1_value_0').send_keys('2017-10-11T00:32:44+1300')
-
-        # Click in the "update filter"
-        self.selenium.find_element_by_xpath(
-            "//div[@id='modal-item']//button[@type='submit']"
-        ).click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, 'modal-open')
-            )
-        )
-        # Wait for page to reload
-        # Preview button clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
-            )
-        )
-        # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
-
-        # Check that the filter is selecting 2 out of 3 rows
-        self.assertIn('1 learner of 3', self.selenium.page_source)
-
-        # End of session
-        self.logout()
-
-    # Test operations with the conditions and the email preview
-    def test_condition(self):
-        # Login
-        self.login('instructor01@bogus.com')
-
-        # Open workflow page
-        self.access_workflow_from_home_page(self.wflow_name)
-
-        # Edit the action
-        self.open_action_edit(self.action_name)
-
-        # Add condition
-        self.select_condition_tab()
-        self.create_condition(
-            'c1',
-            'cdesc1',
-            [('age', 'less or equal', '12.1')])
-
-        # Click in the add a second condition
-        self.select_condition_tab()
-        self.create_condition(
-            'c2',
-            'cdesc2',
-            [('age', 'greater', '12.1')])
-
-        # Action now has two complementary conditions, add the conditions to
-        # the message
-        self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
-        self.selenium.execute_script(
-            """$('#id_text_content').summernote(
-                   'editor.insertText',
-                   "{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}")""")
-
-        # Click the preview button
-        self.open_browse_preview(close=False)
-
-        # First value should be high age
-        self.assertIn('Low', self.selenium.page_source)
-
-        # Click in the next button
-        self.selenium.find_element_by_class_name(
-            'js-action-preview-nxt').click()
-
-        self.wait_for_modal_open(
-            "//div[@id='modal-item']//div[@id='preview-body']"
-        )
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-action-preview-nxt')
-            )
-        )
-
-        # First value should be high age
-        self.assertIn('Low', self.selenium.page_source)
-
-        # Click in the next button
-        self.selenium.find_element_by_class_name(
-            'js-action-preview-nxt').click()
-
-        self.wait_for_modal_open(
-            "//div[@id='modal-item']//div[@id='preview-body']"
-        )
-
-        # First value should be high age
-        self.assertIn('High', self.selenium.page_source)
 
         # End of session
         self.logout()
@@ -566,11 +340,8 @@ class ActionActionInCreate(tests.OnTaskLiveTestCase):
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow_two_actions.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_workflow_two_actions.sql')
 
     wflow_name = 'wflow2'
     wflow_desc = 'Simple workflow structure with two type of actions'
@@ -647,119 +418,6 @@ class ActionActionInCreate(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionInPersonalized(tests.OnTaskLiveTestCase):
-    """Class to test survey with conditions controlling questions."""
-    fixtures = ['test_personalized_survey']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_personalized_survey.sql'
-    )
-
-    wflow_name = 'Test personalized survey'
-
-    # Test operations with the filter
-    def test_condition_and_run(self):
-        # Login
-        self.login('instructor01@bogus.com')
-
-        # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(self.wflow_name)
-
-        # Goto the action page
-        self.go_to_actions()
-
-        # Open action in
-        self.open_action_edit('Survey')
-
-        # Select the condition tab
-        self.select_condition_tab()
-
-        # Create two conditions
-        self.create_condition('Text 1 is null', '',
-            [('text1', 'is null', None)])
-        self.create_condition('Text 2 is null', '',
-            [('text2', 'is null', None)])
-
-        # Go back to the questions
-        self.select_questions_tab()
-
-        # Select conditions to both questions
-        self.select_questions_condition('text1', 'Text 1 is null')
-        self.select_questions_condition('text2', 'Text 2 is null')
-
-        # Click the preview buttion
-        self.open_preview()
-
-        # Check there is a single field and click on next
-        for __ in range(8):
-            # There should be a single form field in the preview
-            inputs = self.selenium.find_elements_by_xpath(
-                "//div[@class='js-action-preview-form']//input"
-            )
-            self.assertEqual(len(inputs), 1)
-
-            # Click in the next button
-            self.selenium.find_element_by_class_name(
-                'js-action-preview-nxt').click()
-
-            WebDriverWait(self.selenium, 10).until(
-                EC.element_to_be_clickable(
-                    (By.CLASS_NAME, 'js-action-preview-nxt')
-                )
-            )
-
-        # Close the modal
-        self.cancel_modal()
-
-        # Done. Back to the table of actions
-        self.selenium.find_element_by_link_text('Done').click()
-        self.wait_for_datatable('action-table_previous')
-
-        # Run the action
-        self.open_action_run('Survey', True)
-
-        # Click in the first element of the survey and wait for form
-        self.selenium.find_element_by_link_text('1.0').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '2')
-            )
-        )
-
-        # There should be only three fields here (csrf, key, field)
-        inputs = self.selenium.find_elements_by_xpath(
-            "//div[@id='action-row-datainput']//input"
-        )
-        self.assertEqual(len(inputs), 3)
-
-        # Enter text in the third field
-        inputs[2].clear()
-        inputs[2].send_keys('text')
-
-        # Click in the update button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='action-row-datainput']//form//button[@type = 'submit']"
-        ).click()
-        self.wait_for_datatable('actioninrun-data_previous')
-
-        # Click in the same link
-        self.selenium.find_element_by_link_text('1.0').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'action-row-datainput')
-            )
-        )
-
-        # There should be a "No responses required message"
-        self.assertIn('No responses required at this time',
-            self.selenium.page_source)
-
-        # End of session
-        self.logout()
-
-
 class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
     """This test case is to check the effect of renaming columns, attributes
        and conditions. These name changes need to propagate throughout various
@@ -768,9 +426,7 @@ class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
+        settings.ONTASK_FIXTURE_DIR,
         'simple_workflow_two_actions.sql')
 
     wflow_name = 'wflow2'
@@ -895,11 +551,8 @@ class ActionActionZip(tests.OnTaskLiveTestCase):
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow_two_actions.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_workflow_two_actions.sql')
 
     wflow_name = 'wflow2'
 
@@ -970,99 +623,12 @@ class ActionActionZip(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionDetectAllFalseRows(tests.OnTaskLiveTestCase):
-    """Test the detection of all false rows."""
-    action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql'
-    )
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
-
-    action_text = "Cond 1 = {{ cond 1 }}\\n" + \
-                  "Cond 2 = {{ cond 2 }}\\n" + \
-                  "{% if cond 1 %}Cond 1 is true{% endif %}\\n" + \
-                  "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
-
-    def test_detect_all_false_rows(self):
-        """Test action rename."""
-        # Login
-        self.login('instructor01@bogus.com')
-
-        # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(self.wflow_name)
-
-        # Create a new action
-        self.create_new_personalized_text_action("action out", '')
-
-        # Create three conditions
-        self.select_condition_tab()
-        self.create_condition("cond 1", '', [('another', 'equal', 'bbb')])
-        self.create_condition("cond 2", '', [('age', 'greater', '12.1')])
-
-        # The action should now flag that one user has all conditions equal to
-        # False
-        self.assertIn('user has all conditions equal to FALSE',
-            self.selenium.page_source)
-
-        # insert the action text (not needed, but...)
-        self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
-        self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "{0}");""".format(self.action_text)
-        )
-
-        # Click in the preview and circle around the 12 rows
-        self.open_browse_preview(1, close=False)
-
-        # The preview should now flag that this user has all conditions equal to
-        # False
-        self.assertIn('All conditions evaluate to FALSE',
-            self.selenium.page_source)
-
-        # Close the preview
-        self.cancel_modal()
-
-        # Create filter
-        self.create_filter("The filter", [('another', 'equal', 'bbb')])
-
-        # The action should NOT flag that a user has all conditions equal to
-        # False
-        self.assertNotIn('user has all conditions equal to FALSE',
-            self.selenium.page_source)
-
-        # Remove the filter
-        self.delete_filter()
-
-        # Message show now appear
-        # The action should NOT flag that a user has all conditions equal to
-        # False
-        self.assertIn(
-            'user has all conditions equal to FALSE',
-            self.selenium.page_source)
-
-        # End of session
-        self.logout()
-
-
 class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
     """Test the case of all key columns in a workflow."""
 
     action_name = 'Test1'
     fixtures = ['all_key_columns']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'all_key_columns.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'all_key_columns.sql')
 
     wflow_name = 'all key columns'
 
@@ -1080,25 +646,18 @@ class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
         # There should be four elements (all key column) in the drop-down
         self.assertEqual(
             len(self.selenium.find_elements_by_xpath(
-                '//div[@id="column-selector"]/div/div/button'
-            )),
-            4
-        )
+                '//div[@id="column-selector"]/div/button')),
+            4)
 
         # End of session
         self.logout()
 
 
-class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
+class ActionSendReportActionCreate(tests.OnTaskLiveTestCase):
     """Test sending a list of values."""
 
     fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     wflow_name = 'wflow1'
     wflow_desc = 'description text for workflow 1'
@@ -1106,8 +665,11 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
     action_name = 'Send to someone'
     action_text = 'Dear sir/madam\\nHere is the student list: '
 
-    def test_email_list_create_edit(self):
-        """Send list action after creating and editing."""
+    def test_email_report_create_edit(self):
+        """Send Report action after creating and editing."""
+        workflow = models.Workflow.objects.get(name=self.wflow_name)
+        view = workflow.views.all().first()
+
         # Login
         self.login('instructor01@bogus.com')
 
@@ -1117,7 +679,7 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.create_new_email_list_action(self.action_name, '')
+        self.create_new_email_report_action(self.action_name, '')
 
         # insert the action text
         WebDriverWait(self.selenium, 10).until(
@@ -1131,8 +693,25 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
              "{0}");""".format(self.action_text)
         )
 
-        # Insert the reference to the column
-        self.click_dropdown_option('//div[@id="column-selector"]', 'email')
+        # Open the column selection and select two columns
+        self.selenium.find_element_by_xpath(
+            "//button[normalize-space()='Insert Table']").click()
+        self.wait_for_modal_open()
+        self.selenium.find_element_by_css_selector(
+            "div.sol-input-container > input[type=\"text\"]"
+        ).click()
+        self.selenium.find_element_by_name("columns").click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[2]"
+        ).click()
+        self.selenium.find_element_by_xpath(
+            "(//input[@name='columns'])[3]"
+        ).click()
+        # Close the modal
+        self.selenium.find_element_by_xpath(
+            "//div[@id='modal-item']//button[normalize-space()='Select']"
+        ).click()
+        self.wait_for_modal_close()
 
         # Create filter
         self.create_filter("The filter", [('another', 'equal', 'bbb')])
@@ -1140,12 +719,19 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         # There should be 2 of three learners selected
         self.assertIn('2 learners of 3', self.selenium.page_source)
 
+        # Add attachment
+        self.create_attachment(view.name)
+
         # Click in the preview
         self.open_browse_preview(close=False)
 
-        self.assertIn(
-            'student01@bogus.com, student03@bogus.com',
-            self.selenium.page_source)
+        preview_body = self.selenium.find_element_by_id('preview-body').text
+        self.assertIn('student01@bogus.com', preview_body)
+        self.assertIn('student03@bogus.com', preview_body)
+        self.assertEqual(
+            self.selenium.find_element_by_xpath(
+                '//*[@id="preview-variables"]').text,
+            'Attachments: ' + view.name)
 
         # Close the preview
         self.cancel_modal()
@@ -1160,7 +746,7 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_id('id_email_to').send_keys(
             'recipient@bogus.com')
         self.selenium.find_element_by_id('id_subject').send_keys(
-            'Send List Email Subject')
+            'Send Report Email Subject')
         self.selenium.find_element_by_id('id_cc_email').send_keys(
             'tutor1@example.com tutor2@example.com')
         self.selenium.find_element_by_id('id_bcc_email').send_keys(
@@ -1175,33 +761,35 @@ class ActionSendListActionCreate(tests.OnTaskLiveTestCase):
                 'Action scheduled for execution')
         )
 
-        # Check that the email has been properly stored
+        # Check that the email has the correct elements
         assert len(mail.outbox) == 1
-        assert (
-            'student01@bogus.com, student03@bogus.com' in mail.outbox[0].body)
+        msg = mail.outbox[0]
+        assert('student01@bogus.com' in msg.body)
+        assert('student02@bogus.com' not in msg.body)
+        assert('student03@bogus.com' in msg.body)
+        assert len(msg.attachments) == 1
+        attachment = msg.attachments[0]
+        assert attachment.get_content_type() == 'text/csv'
+        assert attachment.get_content_disposition() == 'attachment'
+        assert attachment.get_filename() == view.name + '.csv'
 
         # End of session
         self.logout()
 
 
-class ActionJSONListActionCreate(tests.OnTaskLiveTestCase):
-    """Test the JSON List action."""
+class ActionJSONReportActionCreate(tests.OnTaskLiveTestCase):
+    """Test the JSON Report action."""
 
     fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     wflow_name = 'wflow1'
     wflow_desc = 'description text for workflow 1'
 
-    action_name = 'JSON LIST'
-    action_text = '{ "student_list": {% ot_insert_column_list "email" %} }'
+    action_name = 'JSON REPORT'
+    action_text = '{ "student_list": {% ot_insert_report "email" %} }'
 
-    def test_json_list_create_edit(self):
+    def test_json_report_create_edit(self):
         """Create and edit a list action."""
         # Login
         self.login('instructor01@bogus.com')
@@ -1212,7 +800,7 @@ class ActionJSONListActionCreate(tests.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.create_new_JSON_list_action(self.action_name, '')
+        self.create_new_JSON_report_action(self.action_name, '')
 
         # insert the action text
         WebDriverWait(self.selenium, 10).until_not(
@@ -1266,12 +854,7 @@ class ActionJSONListActionCreate(tests.OnTaskLiveTestCase):
 class ActionServeLongSurvey(tests.OnTaskLiveTestCase):
     """Test the view to serve a survey."""
     fixtures = ['long_survey']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'long_survey.sql',
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'long_survey.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
@@ -1303,12 +886,7 @@ class ActionServeLongSurvey(tests.OnTaskLiveTestCase):
 class ActionCreateRubric(tests.OnTaskLiveTestCase):
     """Test the view to serve a survey."""
     fixtures = ['test_rubric']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_rubric.sql',
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_rubric.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'

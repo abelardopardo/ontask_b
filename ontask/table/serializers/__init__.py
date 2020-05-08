@@ -6,5 +6,7 @@ from ontask.table.serializers.merge import (
     DataFrameJSONMergeSerializer, DataFramePandasMergeSerializer,
 )
 from ontask.table.serializers.pandas import (
-    DataFramePandasField, DataFramePandasSerializer, df_to_string, string_to_df)
-from ontask.table.serializers.view import ViewSerializer
+    DataFramePandasField, DataFramePandasSerializer, df_to_string,
+    string_to_df,
+)
+from ontask.table.serializers.view import ViewNameSerializer, ViewSerializer

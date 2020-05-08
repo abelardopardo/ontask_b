@@ -154,7 +154,7 @@ class SchedulerViewCreateSQLUpload(tests.OnTaskTestCase):
 
         # Modify connection to point to the test DB
         sql_conn.db_name = settings.DATABASE_URL['NAME']
-        sql_conn.save()
+        sql_conn.save(update_fields=['db_name'])
 
         # GET the form to create the scheduled SQL operation
         resp = self.get_response(

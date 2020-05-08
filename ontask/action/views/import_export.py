@@ -6,11 +6,10 @@ import gzip
 from io import BytesIO
 from typing import Optional
 
+from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
-from django.http.request import HttpRequest
-from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.renderers import JSONRenderer
@@ -23,9 +22,9 @@ from ontask.core import get_workflow, is_instructor
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def action_import(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Import one action given in a gz file.
 
     :param request: Http request
@@ -79,10 +78,10 @@ def action_import(
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='actions')
 def export(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pklist: str,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Export the actions given as comma separated list of ids.
 
     :param request:
@@ -110,7 +109,7 @@ def export(
 
     # Attach the compressed value to the response and send
     compressed_content = zbuf.getvalue()
-    response = HttpResponse(compressed_content)
+    response = http.HttpResponse(compressed_content)
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Transfer-Encoding'] = 'binary'
     response['Content-Disposition'] = (

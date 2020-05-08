@@ -101,8 +101,7 @@ def save_view_form(
     :return: AJAX Response
     """
     view.workflow = workflow
-    is_new = view.id is None
     view.save()
     view.log(
         user,
-        models.Log.VIEW_CREATE if is_new else models.Log.VIEW_EDIT)
+        models.Log.VIEW_CREATE if view.id is None else models.Log.VIEW_EDIT)

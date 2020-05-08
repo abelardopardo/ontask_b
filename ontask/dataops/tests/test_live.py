@@ -17,12 +17,7 @@ from ontask.dataops import pandas, sql
 
 class DataopsSymbols(tests.OnTaskLiveTestCase):
     fixtures = ['wflow_symbols']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'wflow_symbols.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'wflow_symbols.sql')
 
     def test_01_symbols(self):
         symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
@@ -389,10 +384,7 @@ class DataopsExcelUpload(tests.OnTaskLiveTestCase):
 
         # Upload file
         self.selenium.find_element_by_id("id_data_file").send_keys(
-            os.path.join(settings.BASE_DIR(),
-                'ontask',
-                'fixtures',
-                'excel_upload.xlsx')
+            os.path.join(settings.ONTASK_FIXTURE_DIR, 'excel_upload.xlsx')
         )
         self.selenium.find_element_by_id("id_sheet").click()
         self.selenium.find_element_by_id("id_sheet").clear()
@@ -432,10 +424,7 @@ class DataopsExcelUploadSheet(tests.OnTaskLiveTestCase):
 
         # Upload the file
         self.selenium.find_element_by_id("id_data_file").send_keys(
-            os.path.join(settings.BASE_DIR(),
-                'ontask',
-                'fixtures',
-                'excel_upload.xlsx')
+            os.path.join(settings.ONTASK_FIXTURE_DIR, 'excel_upload.xlsx')
         )
         self.selenium.find_element_by_id("id_sheet").click()
         self.selenium.find_element_by_id("id_sheet").clear()
@@ -483,11 +472,9 @@ class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
 
         # Select file and upload
         self.selenium.find_element_by_id("id_data_file").send_keys(
-            os.path.join(settings.BASE_DIR(),
-                'ontask',
-                'fixtures',
-                'test_df_merge_update_df1.csv')
-        )
+            os.path.join(
+                settings.ONTASK_FIXTURE_DIR,
+                'test_df_merge_update_df1.csv'))
         self.selenium.find_element_by_name("Submit").click()
         self.wait_for_page()
 
@@ -502,9 +489,8 @@ class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
 
         # Select the second file and submit
         self.selenium.find_element_by_id("id_data_file").send_keys(
-            os.path.join(settings.BASE_DIR(),
-                'ontask',
-                'fixtures',
+            os.path.join(
+                settings.ONTASK_FIXTURE_DIR,
                 'test_df_merge_update_df2.csv')
         )
         self.selenium.find_element_by_name("Submit").click()
@@ -567,11 +553,8 @@ class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
 class DataopsPluginExecution(tests.OnTaskLiveTestCase):
     fixtures = ['plugin_execution']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'plugin_execution.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'plugin_execution.sql')
 
     def test_01_first_plugin(self):
         # Login
@@ -869,18 +852,10 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
 class DataopsMerge(DataopsMergeBasic):
     wf_name = 'Testing Merge'
     fixtures = ['test_merge']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_merge.sql'
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
     merge_file = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_df_merge_update_df2.csv'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'test_df_merge_update_df2.csv')
 
     def test_01_merge_inner(self):
         self.template_merge('inner')
@@ -977,17 +952,11 @@ class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
     wf_name = 'Test Empty Key after Merge'
     fixtures = ['test_empty_key_after_merge']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_empty_key_after_merge.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'test_empty_key_after_merge.sql')
     merge_file = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'test_empty_key_after_merge.csv'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'test_empty_key_after_merge.csv')
 
     def test_merge(self):
         self.template_merge('outer', rename=False)

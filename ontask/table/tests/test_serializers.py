@@ -16,12 +16,7 @@ class TableTestSerializers(tests.OnTaskTestCase):
     """Test stat views."""
 
     fixtures = ['simple_table']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_table.sql',
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'

@@ -13,7 +13,6 @@ let loadLogView = function () {
     },
     success: function(data) {
       $("#modal-item .modal-content").html(data.html_form);
-      $("#modal_item_label .close").focus();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       $('#div-spinner').show();
@@ -25,4 +24,7 @@ let loadLogView = function () {
 $(function () {
   // Preview
   $("#log-table").on("click", ".js-log-view", loadLogView);
+
+  // Timeline
+  $("#timeline").on("click", ".js-log-view", loadLogView);
 });

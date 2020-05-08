@@ -12,8 +12,7 @@ import requests
 
 from ontask import OnTaskSharedState, models
 from ontask.action.evaluate import (
-    evaluate_action, evaluate_row_action_out,
-    get_action_evaluation_context,
+    evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.run_manager import ActionRunManager
@@ -50,6 +49,7 @@ def _send_and_log_json(
     action.log(
         user,
         models.Log.ACTION_JSON_SENT,
+        action=action.id,
         object=json.dumps(json_obj),
         status=status_val,
         json_sent_datetime=str(datetime.datetime.now(pytz.timezone(
@@ -94,7 +94,7 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
                 headers)
 
         action.last_executed_log = log_item
-        action.save()
+        action.save(update_fields=['last_executed_log'])
 
         # Update excluded items in payload
         self._update_excluded_items(
@@ -102,7 +102,7 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
             [column_value for __, column_value in action_evals])
 
 
-class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
+class ActionManagerJSONReport(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
 
     def execute_operation(
@@ -125,7 +125,7 @@ class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
         :return: Empty list (there are no column values for multiple sends)
         """
         if log_item is None:
-            action.log(user, self.log_event, **payload)
+            action.log(user, self.log_event, action=action.id, **payload)
 
         action_text = evaluate_row_action_out(
             action,
@@ -142,4 +142,4 @@ class ActionManagerJSONList(ActionOutEditManager, ActionRunManager):
             })
 
         action.last_executed_log = log_item
-        action.save()
+        action.save(update_fields=['last_executed_log'])

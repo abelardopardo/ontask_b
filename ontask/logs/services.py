@@ -57,9 +57,7 @@ def log_table_server_side(
     """
     dt_page = DataTablesServerSidePaging(request)
     if not dt_page.is_valid:
-        return http.JsonResponse(
-            {'error': _('Incorrect request. Unable to process')},
-        )
+        return {'error': _('Incorrect request. Unable to process')}
 
     # Get the logs
     qs = workflow.logs
@@ -78,24 +76,24 @@ def log_table_server_side(
     # Order and select values
     qs = qs.order_by(F('created').desc()).values_list(
         'id',
-        'created',
-        'user__email',
         'name',
-    )
+        'created',
+        'user__email')
     records_filtered = qs.count()
 
     final_qs = []
     for log_item in qs[dt_page.start:dt_page.start + dt_page.length]:
         row = [
-            '<a href="{0}" class="spin"'.format(
-                reverse('logs:view', kwargs={'pk': log_item[0]}),
+            '<button type="button" data-url="{0}"'.format(
+                reverse('logs:modal_view', kwargs={'pk': log_item[0]}),
             )
-            + ' data-toggle="tooltip" title="{0}">{1}</a>'.format(
+            + ' class="btn btn-sm btn-light js-log-view"'
+            + ' data-toggle="tooltip" title="{0}">{1}</button>'.format(
                 ugettext('View log content'),
                 log_item[0],
             ),
-            simplify_datetime_str(log_item[1]),
-            log_item[2],
+            models.Log.LOG_TYPES[log_item[1]],
+            simplify_datetime_str(log_item[2]),
             log_item[3],
         ]
 
@@ -106,5 +104,4 @@ def log_table_server_side(
         'draw': dt_page.draw,
         'recordsTotal': records_total,
         'recordsFiltered': records_filtered,
-        'data': final_qs,
-    }
+        'data': final_qs}

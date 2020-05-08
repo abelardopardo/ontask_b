@@ -21,11 +21,8 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
 
     fixtures = ['schedule_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'schedule_actions.sql'
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'schedule_actions.sql')
 
     tdelta = timedelta(minutes=2)
 
@@ -115,8 +112,8 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         assert all(item['target'] == action.target_url for item in json_outbox)
         assert all(token in item['auth'] for item in json_outbox)
 
-    def test_scheduled_email_list(self):
-        """Create a scheduled send list action and execute it."""
+    def test_scheduled_email_report(self):
+        """Create a scheduled send report action and execute it."""
 
         user = get_user_model().objects.get(email='instructor01@bogus.com')
 
@@ -127,7 +124,7 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
         scheduled_item = models.ScheduledOperation(
             user=user,
-            operation_type=models.Log.ACTION_RUN_EMAIL_LIST,
+            operation_type=models.Log.ACTION_RUN_EMAIL_REPORT,
             name='send list scheduled action',
             workflow=action.workflow,
             action=action,
@@ -146,11 +143,11 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         scheduled_item.refresh_from_db()
         assert scheduled_item.status == models.scheduler.STATUS_DONE
         assert len(mail.outbox) == 1
-        assert (
-            'student01@bogus.com, student03@bogus.com' in mail.outbox[0].body)
+        assert('student01@bogus.com' in mail.outbox[0].body)
+        assert('student03@bogus.com' in mail.outbox[0].body)
 
-    def test_scheduled_json_list_action(self):
-        """Create a scheduled send list action and execute it."""
+    def test_scheduled_json_report_action(self):
+        """Create a scheduled send report action and execute it."""
 
         token = 'false token'
         settings.EXECUTE_ACTION_JSON_TRANSFER = False
@@ -160,13 +157,13 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
 
         # User must exist
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
-        action = models.Action.objects.get(name='send json list')
+        action = models.Action.objects.get(name='send json report')
 
         now = datetime.now(pytz.timezone(settings.TIME_ZONE))
         scheduled_item = models.ScheduledOperation(
             user=user,
-            operation_type=models.Log.ACTION_RUN_JSON_LIST,
-            name='JSON List scheduled action',
+            operation_type=models.Log.ACTION_RUN_JSON_REPORT,
+            name='JSON Report scheduled action',
             workflow=action.workflow,
             action=action,
             execute=now + timedelta(minutes=2),

@@ -1,38 +1,35 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load ontask_tags %}
 {% load static %}
 {% block title %}{{ block.super }}{% trans 'Timeline' %}{% endblock %}
+{% block scripts %}
+  <script src="{% static 'logs/js/logs.js' %}?v={% ontask_version %}"></script>
+{% endblock %}
 {% block container %}
-<div class="container my-3">
+<div id="timeline" class="container my-3">
   <h1 class="text-center">{% trans 'Timeline' %}</h1>
   {% if action %}
-    <h3 class="text-center">{{ action.name }}</h3>
+    <h3 class="text-center">
+      <a href="{% url 'action:edit' action.id %}">{{ action.name }}</a>
+    </h3>
   {% endif %}
   {% if event_list %}
     <ul class="timeline">
       {% for event in event_list %}
         <li>
-          <a href="{% url 'logs:view' event.id %}" class="float-right">{{ event.modified }}</a>
-          <div>{{ event.name }}</a></div>
-          {% if not action %}
-            <div>
-              <b>{% trans 'Action' %}</b> <a
-                href="{% url 'action:edit' event.action_id %}">
-              {{ event.action_name }}</a>
-            </div>
-          {% endif %}
-          <div style="white-space: pre-wrap;">{{ event.payload }}</div>
+          {{ event.modified }} <button
+            type="button"
+            data-url="{% url 'logs:modal_view' event.id %}"
+            class="btn btn-sm btn-light js-log-view"
+            data-toggle="tooltip" title="{% trans 'View log content' %}">
+            {{ event.get_name_display }}</button>
         </li>
       {% endfor %}
     </ul>
   {% else %}
     <p class="text-center">No action executions have been registered so far.</p>
   {% endif %}
-  <div class="text-center">
-    <a href="{% url 'action:index' %}"
-       class="shadow btn btn-outline-dark spin">
-      <span class="fa fa-triangle-left"></span> {% trans 'Back' %}
-    </a>
-  </div>
+  {% include 'modal.html' %}
 </div>
 {% endblock container %}

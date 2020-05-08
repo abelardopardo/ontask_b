@@ -169,7 +169,7 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
         self.assertEqual(resp.url, reverse('action:run_done'))
 
 
-class ActionViewRunEmailListAction(tests.OnTaskTestCase):
+class ActionViewRunEmailReportAction(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
@@ -202,7 +202,7 @@ class ActionViewRunEmailListAction(tests.OnTaskTestCase):
 
     def test_run_action_email_no_filter(self):
         """Run sequence of request to send email list ."""
-        action = self.workflow.actions.get(name='Send Email with list')
+        action = self.workflow.actions.get(name='Send Email with report')
 
         # Step 1 invoke the form
         resp = self.get_response(
@@ -352,7 +352,7 @@ class ActionViewRunJSONAction(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionViewRunJSONListAction(tests.OnTaskTestCase):
+class ActionViewRunJSONReportAction(tests.OnTaskTestCase):
     """Test the view to run actio item filter, json and email."""
 
     fixtures = ['initial_workflow']
@@ -369,10 +369,10 @@ class ActionViewRunJSONListAction(tests.OnTaskTestCase):
 
     workflow_name = 'BIOL1011'
 
-    def test_run_json_list_action(self):
+    def test_run_json_report_action(self):
         """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
-        action = self.workflow.actions.get(name='Send list through JSON')
+        action = self.workflow.actions.get(name='Send JSON report')
 
         # Step 1 invoke the form
         resp = self.get_response(
@@ -481,12 +481,7 @@ class ActionServe(tests.OnTaskTestCase):
     """Test the view to serve an action."""
 
     fixtures = ['simple_action']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_action.sql',
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     user_email = 'student01@bogus.com'
     user_pwd = 'boguspwd'
@@ -497,7 +492,7 @@ class ActionServe(tests.OnTaskTestCase):
         """Test the serve_action view."""
         action = self.workflow.actions.get(name='simple action')
         action.serve_enabled = True
-        action.save()
+        action.save(update_fields=['serve_enabled'])
 
         resp = self.get_response(
             'action:serve',
@@ -511,11 +506,8 @@ class ActionServeSurvey(tests.OnTaskTestCase):
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'simple_workflow_two_actions.sql',
-    )
+        settings.ONTASK_FIXTURE_DIR,
+        'simple_workflow_two_actions.sql')
 
     user_email = 'student01@bogus.com'
     user_pwd = 'boguspwd'
@@ -526,7 +518,7 @@ class ActionServeSurvey(tests.OnTaskTestCase):
         """Test the serve_action view."""
         action = self.workflow.actions.get(name='Check registration')
         action.serve_enabled = True
-        action.save()
+        action.save(update_fields=['serve_enabled'])
 
         resp = self.get_response(
             'action:serve',

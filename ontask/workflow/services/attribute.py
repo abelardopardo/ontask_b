@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
 
 """Pages to manipulate attributes."""
+from django import http
 from django.forms import forms
-from django.http.request import HttpRequest
-from django.http.response import JsonResponse
 from django.template.loader import render_to_string
 
 from ontask import models
 
 
 def save_attribute_form(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: models.Workflow,
     template: str,
     form: forms.Form,
     attr_idx: int,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Process the AJAX request to create or update an attribute.
 
     :param request: Request object received
@@ -28,7 +27,7 @@ def save_attribute_form(
     if request.method == 'POST' and form.is_valid():
         # Correct form submitted
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         # proceed with updating the attributes.
         wf_attributes = workflow.attributes
@@ -46,14 +45,14 @@ def save_attribute_form(
         wf_attributes[form.cleaned_data['key']] = form.cleaned_data[
             'attr_value']
         workflow.attributes = wf_attributes
-        workflow.save()
+        workflow.save(update_fields=['attributes'])
         workflow.log(
             request.user,
             models.Log.WORKFLOW_ATTRIBUTE_CREATE,
             **wf_attributes)
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             template,
             {'form': form,

@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.core.session_ops import (SessionStore, acquire_workflow_access)
+from ontask.core.session_ops import SessionStore, acquire_workflow_access
 
 
 def _get_requested_workflow(

@@ -1,0 +1,12 @@
+<table class="table table-hover table-bordered">
+  <thead>
+    <tr>
+      {% for cname in column_names %}<th>{{ cname }}</th>{% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+      <tr>{% for cvalue in row %}<td>{{ cvalue }}</td>{% endfor %}</tr>
+    {% endfor %}
+  </tbody>
+</table>

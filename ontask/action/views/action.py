@@ -15,7 +15,8 @@ from ontask import models
 from ontask.action import forms, services
 from ontask.core import (
     SessionPayload, UserIsInstructor, ajax_required, get_action, get_workflow,
-    is_instructor)
+    is_instructor,
+)
 
 
 @user_passes_test(is_instructor)

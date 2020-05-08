@@ -22,7 +22,7 @@
   {% endwith %}
   <script src="{% static 'js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
-  <script src="{% static 'workflow/js/column_move.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'column/js/column_move.js' %}?v={% ontask_version %}"></script>
   <script type="text/javascript">
     if (document.getElementById("table-data") != null) {
       // Required for DataTables
@@ -112,14 +112,15 @@
              title="{% trans 'Add a new row to the table' %}">
             <span class="fa fa-plus"></span> {% trans 'Row' %}
           </a>
-          {% include 'workflow/includes/add_column_menu.html' %}
+          {% include 'column/includes/add_menu.html' %}
         {% endif %}
         {% if columns %}
           <div class="dropdown btn-group shadow">
             <button onclick="location.href='{% url 'table:view_index' %}'"
-                    class="btn btn-outline-dark spin" data-toggle="tooltip"
+                    class="btn btn-outline-dark spin"
+                    data-toggle="tooltip"
                     title="{% trans 'Views available for this table' %}">
-              <span class="fa fa fa-eye"></span> {% trans 'Views' %}
+              <span class="fa fa-eye"></span> {% trans 'Views' %}
             </button>
             {% if views %}
               <button type="button"
@@ -183,7 +184,7 @@
     </div>
     {% if columns %}
       <table class="table table-hover table-bordered shadow w-100"
-             id="table-data" data-url="{% url 'workflow:column_move' %}">
+             id="table-data" data-url="{% url 'column:column_move' %}">
         <thead>
           <tr>
             <th></th>

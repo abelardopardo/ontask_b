@@ -13,8 +13,8 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import models
 from ontask.action import forms
 from ontask.action.evaluate import (
-    action_condition_evaluation,
-    evaluate_row_action_out, get_action_evaluation_context, get_row_values,
+    action_condition_evaluation, evaluate_row_action_out,
+    get_action_evaluation_context, get_row_values,
 )
 
 
@@ -148,30 +148,24 @@ def create_row_preview_context(
         action_content = _evaluate_row_action_in(action, eval_context)
     if action_content is None:
         action_content = _(
-            'Error while retrieving content for student {0}',
+            'Error while retrieving content (index: {0})',
         ).format(idx)
     else:
         # Get the conditions used in the action content
         act_cond = action.get_used_conditions()
         # Get the variables/columns from the conditions
-        act_vars = set().union(
-            *[
-                cond.columns.all()
-                for cond in action.conditions.filter(name__in=act_cond)
-            ],
-        )
+        act_vars = set().union(*[
+            cond.columns.all()
+            for cond in action.conditions.filter(name__in=act_cond)])
 
         act_vars = act_vars.union({
             triplet.column
             for triplet in action.column_condition_pair.all()})
 
         # Sort the variables/columns  by position and get the name
-        show_values = ', '.join(
-            [
-                '{0} = {1}'.format(col.name, row_values[col.name])
-                for col in act_vars
-            ],
-        )
+        show_values = ', '.join([
+            '"{0}" = {1}'.format(col.name, row_values[col.name])
+            for col in act_vars])
 
     uses_plain_text = (
         action.action_type == models.Action.PERSONALIZED_CANVAS_EMAIL
@@ -190,6 +184,9 @@ def create_row_preview_context(
         'prv': prv,
         'incorrect_json': incorrect_json,
         'show_values': show_values,
+        'show_conditions': ', '.join(['"{0}" = {1}'.format(
+            cond_name, str(cond_value))
+            for cond_name, cond_value in condition_evaluation.items()]),
         'all_false': all_false,
         'prelude': prelude,
         'action_content': action_content,
@@ -211,6 +208,6 @@ def create_list_preview_context(
         action,
         get_action_evaluation_context(action, {}))
     context['action_content'] = action_final_text
-    if action.action_type == models.Action.JSON_LIST:
+    if action.action_type == models.Action.JSON_REPORT:
         incorrect_json = not _check_json_is_correct(action_final_text)
         context['incorrect_json'] = incorrect_json

@@ -1,16 +1,15 @@
 # -*- coding: UTF-8 -*-#
 
-"""Classes to serialize Actions and Conditions."""
-from typing import Optional
-
+"""Classes to serialize Actions."""
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
-from ontask.dataops import formula, sql
-from ontask.workflow.serialize_column import (
-    ColumnNameSerializer, ColumnSerializer,
-)
+from ontask.column.serializers import ColumnNameSerializer, ColumnSerializer
+from ontask.condition.serializers import (
+    ConditionNameSerializer, ConditionSerializer)
+from ontask.dataops import sql
+from ontask.table.serializers import ViewNameSerializer, ViewSerializer
 
 try:
     profile  # noqa: Z444
@@ -18,26 +17,6 @@ except NameError:
     def profile(bogus: int) -> int:
         """Useless, to prevent an emtpy exception handler"""
         return bogus  # noqa E731
-
-
-def _create_condition(validated_data, action):
-    """Create a new condition with the validated data.
-
-    :param validated_data: Dictionary with the data validated by the serializer
-    :param action: Action object to use as parent object.
-    :return: reference to new condition object.
-    """
-    condition_obj = models.Condition(
-        action=action,
-        name=validated_data['name'],
-        description_text=validated_data['description_text'],
-        formula=validated_data['formula'],
-        n_rows_selected=validated_data.get('n_rows_selected', -1),
-        is_filter=validated_data['is_filter'],
-    )
-    condition_obj.save()
-
-    return condition_obj
 
 
 def _create_columns(new_columns, context):
@@ -73,9 +52,9 @@ def _create_columns(new_columns, context):
         # Update the column position and count in the workflow
         workflow.ncols = workflow.ncols + 1
         col.position = workflow.ncols
-        col.save()
+        col.save(update_fields=['position'])
 
-    workflow.save()
+    workflow.save(update_fields=['ncols'])
 
     return new_columns
 
@@ -126,83 +105,6 @@ def _process_columns(validated_data, context):
         col.set_categories(citem['categories'])
 
     return _create_columns(new_columns, context)
-
-
-class ConditionSerializer(serializers.ModelSerializer):
-    """Class to serialize a Condition."""
-
-    # The columns field needs a nested serializer because at this point,
-    # the column objects must contain only the name (not the entire model).
-    # An action is connected to a workflow which has a set of columns
-    # attached to it. Thus, the column records are created through the
-    # workflow structure, and at this point in the model, only the names are
-    # required to restore the many to many relationship.
-    columns = ColumnNameSerializer(required=False, many=True)
-
-    @profile
-    def create(self, validated_data, **kwargs) -> Optional[models.Condition]:
-        """Create a new condition object based on the validated_data.
-
-        :param validated_data: Validated data obtained by the parser
-        :param kwargs: Additional arguments (unused)
-        :return: Condition object
-        """
-        del kwargs
-        condition_obj = None
-        try:
-            condition_obj = _create_condition(
-                validated_data,
-                self.context['action'])
-
-            # Process columns
-            if validated_data.get('columns'):
-                # Load the columns pointing to the action (if any)
-                columns = ColumnNameSerializer(
-                    data=validated_data.get('columns'),
-                    many=True,
-                    required=False,
-                )
-                if columns.is_valid():
-                    cnames = [cdata['name'] for cdata in columns.data]
-                else:
-                    raise Exception(_('Incorrect column data'))
-            else:
-                cnames = formula.get_variables(condition_obj.formula)
-
-            # Set the condition values
-            condition_obj.columns.set(
-                self.context['action'].workflow.columns.filter(
-                    name__in=cnames),
-            )
-
-            # If n_rows_selected is -1, reevaluate
-            if condition_obj.n_rows_selected == -1:
-                condition_obj.update_n_rows_selected()
-
-            # Save condition object
-            condition_obj.save()
-        except Exception:
-            if condition_obj and condition_obj.id:
-                condition_obj.delete()
-            raise
-
-        return condition_obj
-
-    class Meta:
-        """Define object condition and select fields to serialize."""
-
-        model = models.Condition
-        exclude = ('id', 'action', 'created', 'modified')
-
-
-class ConditionNameSerializer(serializers.ModelSerializer):
-    """Trivial serializer to dump only the name of the column."""
-
-    class Meta:
-        """Select the model and the only field required."""
-
-        model = models.Condition
-        fields = ('name',)
 
 
 class ColumnConditionNameSerializer(serializers.ModelSerializer):
@@ -297,10 +199,13 @@ class ActionSerializer(serializers.ModelSerializer):
 
     # Needed for backward compatibility
     is_out = serializers.BooleanField(required=False, initial=True)
+
     content = serializers.CharField(  # noqa Z110
         required=False,
         initial='',
         allow_blank=True)
+
+    attachments = ViewNameSerializer(required=False, many=True)
 
     @staticmethod
     def create_column_condition_pairs(
@@ -400,6 +305,19 @@ class ActionSerializer(serializers.ModelSerializer):
             )
             action_obj.save()
 
+            # Load the attachments in the action
+            attachments = ViewNameSerializer(
+                data=validated_data.get('attachments', []),
+                many=True,
+                required=False)
+            if attachments.is_valid():
+                view_names = [item['name'] for item in attachments.data]
+                action_obj.attachments.set([
+                    view for view in self.context['workflow'].views.all()
+                    if view.name in view_names
+                ])
+                action_obj.save()
+
             # Load the conditions pointing to the action
             condition_data = ConditionSerializer(
                 data=validated_data.get('conditions', []),
@@ -443,6 +361,8 @@ class ActionSelfcontainedSerializer(ActionSerializer):
     """Full Action serializer traversing conditions AND columns."""
 
     used_columns = ColumnSerializer(many=True, required=False)
+
+    attachments = ViewSerializer(many=True, required=False)
 
     def create(self, validated_data, **kwargs):
         """Create the Action object with the validated data."""

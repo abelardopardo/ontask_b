@@ -6,18 +6,15 @@ import random
 from typing import Any, Dict, List, Tuple
 
 from django import http
-from django.http.request import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.action.evaluate import (
-    evaluate_row_action_out,
-    get_action_evaluation_context, get_row_values,
+    evaluate_row_action_out, get_action_evaluation_context, get_row_values,
 )
 from ontask.action.services.errors import (
-    OnTaskActionSurveyDataNotFound,
-    OnTaskActionSurveyNoTableData,
+    OnTaskActionSurveyDataNotFound, OnTaskActionSurveyNoTableData,
 )
 from ontask.dataops import sql
 
@@ -119,7 +116,7 @@ def get_survey_context(
 
 
 def update_row_values(
-    request: HttpRequest,
+    request: http.HttpRequest,
     action: models.Action,
     row_data: Tuple[List, List, str, Any],
 ):
@@ -157,7 +154,7 @@ def update_row_values(
 
     # Modify the time of execution for the action
     action.last_executed_log = log_item
-    action.save()
+    action.save(update_fields=['last_executed_log'])
 
 
 def extract_survey_questions(

@@ -167,7 +167,7 @@ def _execute_plugin(
     plugin_info.executed = datetime.now(
         pytz.timezone(settings.TIME_ZONE),
     )
-    plugin_info.save()
+    plugin_info.save(update_fields=['executed'])
 
     return True
 
@@ -225,7 +225,7 @@ class ExecuteRunPlugin:
 
             # Set the status to "executing" before calling the function
             log_item.payload['status'] = 'Executing'
-            log_item.save()
+            log_item.save(update_fields=['payload'])
 
             # Invoke plugin execution
             _execute_plugin(
@@ -239,8 +239,8 @@ class ExecuteRunPlugin:
 
             # Reflect status in the log event
             log_item.payload['status'] = 'Execution finished successfully'
-            log_item.save()
+            log_item.save(update_fields=['payload'])
         except Exception as exc:
             log_item.payload['status'] = ugettext(
                 'Error: {0}').format(str(exc))
-            log_item.save()
+            log_item.save(update_fields=['payload'])

@@ -4,12 +4,12 @@
 from time import time
 from typing import Mapping, Optional
 
+from django import http
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
-from django.http import HttpRequest
 import oauth2
 
 from ontask import LOGGER
@@ -31,7 +31,7 @@ class LTIAuthBackend(ModelBackend):
 
     def authenticate(
         self,
-        request: HttpRequest,
+        request: http.HttpRequest,
         username: Optional[str] = None,
         password: Optional[str] = None,
         **kwargs: Mapping,
@@ -48,7 +48,7 @@ class LTIAuthBackend(ModelBackend):
         request_key = request.POST.get('oauth_consumer_key')
 
         if request_key is None:
-            LOGGER.error(
+            LOGGER.debug(
                 'Request does not contain an oauth_consumer_key. Stopping')
             return None
 

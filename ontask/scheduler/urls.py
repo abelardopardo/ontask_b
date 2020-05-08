@@ -88,12 +88,12 @@ services.schedule_crud_factory.register_producer(
     services.ScheduledOperationSaveJSON())
 
 services.schedule_crud_factory.register_producer(
-    models.Action.EMAIL_LIST,
-    services.ScheduledOperationSaveEmailList())
+    models.Action.EMAIL_REPORT,
+    services.ScheduledOperationSaveEmailReport())
 
 services.schedule_crud_factory.register_producer(
-    models.Action.JSON_LIST,
-    services.ScheduledOperationSaveJSONList())
+    models.Action.JSON_REPORT,
+    services.ScheduledOperationSaveJSONReport())
 
 services.schedule_crud_factory.register_producer(
     models.Log.WORKFLOW_DATA_SQL_UPLOAD,

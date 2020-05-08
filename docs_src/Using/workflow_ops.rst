@@ -16,7 +16,7 @@ Scheduled Actions
    -- Jimmy Wales
 
 
-The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref:`send list through email <email_list_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON list <json_list_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
+The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref:`send list through email <email_report_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON report <json_report_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
 
 When scheduling the execution of an operation, the following fields are always requested at the top of the form:
 

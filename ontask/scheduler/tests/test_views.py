@@ -18,12 +18,7 @@ class SchedulerForms(tests.OnTaskTestCase):
     user_pwd = 'boguspwd'  # noqa: S105
 
     fixtures = ['three_actions']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'fixtures',
-        'three_actions.sql',
-    )
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'three_actions.sql')
 
     workflow_name = 'wflow1'
 

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import Dict, Optional
+
 import pandas as pd
 
 from ontask.dataops.plugin import OnTaskModel
@@ -21,7 +23,7 @@ class LinearModel(OnTaskModel):
         self.input_column_names = ['Contribution']
         self.output_column_names = ['Final Exam Predict']
 
-    def run(self, data_frame, parameters=dict):
+    def run(self, data_frame: pd.DataFrame, parameters: Optional[Dict] = dict):
         """
         Parse the parameters to guarantee that they were correct, and if so,
         returns the dataframe with the resulting linear model.

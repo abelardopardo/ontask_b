@@ -3,10 +3,10 @@
 """View to edit rubric actions."""
 from typing import Optional
 
+from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
-from django.http import HttpRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
@@ -19,13 +19,13 @@ from ontask.core import ajax_required, get_action, is_instructor
 @ajax_required
 @get_action(pf_related=['columns'])
 def edit_rubric_cell(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     cid: int,
     loa_pos: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Edit a cell in a rubric.
 
     :param request:
@@ -41,7 +41,6 @@ def edit_rubric_cell(
     action_content = request.POST.get('action_content')
     if action_content:
         action.set_text_content(action_content)
-        action.save()
 
     form = forms.RubricCellForm(
         request.POST or None,
@@ -51,7 +50,7 @@ def edit_rubric_cell(
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         cell = form.save(commit=False)
         if cell.id is None:
@@ -61,9 +60,9 @@ def edit_rubric_cell(
             cell.loa_position = loa_pos
         cell.save()
         cell.log(request.user, models.Log.ACTION_RUBRIC_CELL_EDIT)
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_rubriccell_edit.html',
             {'form': form,
@@ -77,11 +76,11 @@ def edit_rubric_cell(
 @ajax_required
 @get_action(pf_related=['columns'])
 def edit_rubric_loas(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
     action: Optional[models.Action] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Edit a cell in a rubric.
 
     :param request:
@@ -95,7 +94,6 @@ def edit_rubric_loas(
     action_content = request.POST.get('action_content')
     if action_content:
         action.set_text_content(action_content)
-        action.save()
 
     form = forms.RubricLOAForm(
         request.POST or None,
@@ -103,7 +101,7 @@ def edit_rubric_loas(
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         loas = [
             loa.strip()
@@ -113,8 +111,7 @@ def edit_rubric_loas(
         try:
             with transaction.atomic():
                 for acc in action.column_condition_pair.all():
-                    acc.column.set_categories(loas, True)
-                    acc.column.save()
+                    acc.column.set_categories(loas, validate=True)
         except Exception as exc:
             messages.error(
                 request,
@@ -128,9 +125,9 @@ def edit_rubric_loas(
             new_loas=loas)
 
         # Done processing the correct POST request
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'action/includes/partial_rubric_loas_edit.html',
             {'form': form, 'pk': pk},

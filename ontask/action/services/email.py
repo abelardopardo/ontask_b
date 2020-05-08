@@ -2,6 +2,7 @@
 
 """Send Email Messages with the rendered content in the action."""
 import datetime
+from email.mime.text import MIMEText
 from time import sleep
 from typing import Dict, List, Optional, Union
 
@@ -17,17 +18,15 @@ import html2text
 import pytz
 
 from ontask import (
-    are_correct_emails, models, settings as ontask_settings,
-    simplify_datetime_str,
-)
+    get_incorrect_email, models, settings as ontask_settings,
+    simplify_datetime_str)
 from ontask.action.evaluate.action import (
-    evaluate_action,
-    evaluate_row_action_out, get_action_evaluation_context,
+    evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
 from ontask.action.services.edit_manager import ActionOutEditManager
 from ontask.action.services.run_manager import ActionRunManager
 from ontask.celery import get_task_logger
-from ontask.dataops import sql
+from ontask.dataops import pandas, sql
 
 LOGGER = get_task_logger('celery_execution')
 
@@ -104,8 +103,10 @@ def _check_email_list(email_list_string: str) -> List[str]:
         return []
 
     email_list = email_list_string.split()
-    if not are_correct_emails(email_list):
-        raise Exception(_('Invalid email address.'))
+    incorrect_email = get_incorrect_email(email_list)
+    if incorrect_email:
+        raise Exception(_('Invalid email address "{0}".').format(
+            incorrect_email))
 
     return email_list
 
@@ -143,7 +144,7 @@ def _create_track_column(action: models.Action) -> str:
 
     # Increase the number of columns in the workflow
     action.workflow.ncols += 1
-    action.workflow.save()
+    action.workflow.save(update_fields=['ncols'])
 
     # Add the column to the DB table
     sql.add_column_to_db(
@@ -161,6 +162,8 @@ def _create_single_message(
     from_email: str,
     cc_email_list: List[str],
     bcc_email_list: List[str],
+    attachments: Optional[List[models.View]] = None,
+    filter_formula: Optional[Dict] = None,
 ) -> Union[EmailMessage, EmailMultiAlternatives]:
     """Create either an EmailMessage or EmailMultiAlternatives object.
 
@@ -169,6 +172,8 @@ def _create_single_message(
     :param from_email: From email
     :param cc_email_list: CC list
     :param bcc_email_list: BCC list
+    :param attachments: List of views to attach to the message (optional)
+    :param filter_formula: Filter attached ot the action (optional)
     :return: Either EmailMessage or EmailMultiAlternatives
     """
     if settings.EMAIL_HTML_ONLY:
@@ -194,6 +199,21 @@ def _create_single_message(
             cc=cc_email_list,
         )
         msg.attach_alternative(msg_body_sbj_to[0] + track_str, 'text/html')
+
+    if attachments:
+        for attachment in attachments:
+            data_frame = pandas.get_subframe(
+                attachment.workflow.get_data_frame_table_name(),
+                filter_formula,
+                [col.name for col in attachment.columns.all()])
+
+            mime_obj = MIMEText(data_frame.to_csv(), 'csv')
+            mime_obj.add_header(
+                'Content-Disposition',
+                'attachment',
+                filename=attachment.name + '.csv')
+            msg.attach(mime_obj)
+
     return msg
 
 
@@ -214,11 +234,7 @@ def _create_messages(
     :return:
     """
     # Context to log the events (one per email)
-    context = {
-        'email_sent_datetime': str(
-            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
-        ),
-    }
+    context = {'action': action.id}
 
     cc_email = _check_email_list(payload['cc_email'])
     bcc_email = _check_email_list(payload['bcc_email'])
@@ -255,8 +271,7 @@ def _create_messages(
             track_str,
             user.email,
             cc_email,
-            bcc_email,
-        )
+            bcc_email)
         msgs.append(msg)
 
         # Log the event
@@ -264,6 +279,8 @@ def _create_messages(
         context['body'] = msg.body
         context['from_email'] = msg.from_email
         context['to_email'] = msg.to[0]
+        context['email_sent_datetime'] = str(
+            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
         if track_str:
             context['track_id'] = track_str
         action.log(user, models.Log.ACTION_EMAIL_SENT, **context)
@@ -321,13 +338,9 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         :param context: Initial dictionary to extend
         :return: Nothing
         """
-        context.update({
-            'conditions': action.conditions.filter(is_filter=False),
-            'conditions_to_clone': models.Condition.objects.filter(
-                action__workflow=workflow, is_filter=False,
-            ).exclude(action=action),
-            'columns_show_stat': workflow.columns.filter(is_key=False),
-        })
+        self.add_conditions(action, context)
+        self.add_conditions_to_clone(action, context)
+        self.add_columns_show_stats(action, context)
 
     def execute_operation(
         self,
@@ -365,7 +378,7 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
             track_col_name = _create_track_column(action)
             # Get the log item payload to store the tracking column
             log_item.payload['track_column'] = track_col_name
-            log_item.save()
+            log_item.save(update_fields=['payload'])
 
         msgs = _create_messages(
             user,
@@ -382,13 +395,13 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
             _send_confirmation_message(user, action, len(msgs))
 
         action.last_executed_log = log_item
-        action.save()
+        action.save(update_fields=['last_executed_log'])
 
         # Update excluded items in payload
         self._update_excluded_items(payload, [msg.to[0] for msg in msgs])
 
 
-class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
+class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
 
     def extend_edit_context(
@@ -397,16 +410,19 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
         action: models.Action,
         context: Dict,
     ):
-        """Get the context dictionary to render the GET request.
+        """Extend the context dictionary to render the GET request.
+
+        It adds the attachments in the action, and the views available to
+        attach (those in the workflow not in the action)
 
         :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
         :return: Nothing
         """
-        self.add_conditions(action, context)
-        self.add_conditions_to_clone(action, context)
-        self.add_columns_show_stats(action, context)
+        context['attachments'] = action.attachments.all()
+        context['available_views'] = workflow.views.exclude(
+            id__in=action.attachments.all())
 
     def execute_operation(
         self,
@@ -447,7 +463,8 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
             user.email,
             cc_email,
             bcc_email,
-        )
+            attachments=action.attachments.all(),
+            filter_formula=action.get_filter_formula())
 
         try:
             # Send email out
@@ -459,15 +476,15 @@ class ActionManagerEmailList(ActionOutEditManager, ActionRunManager):
 
         # Log the event
         context = {
-            'email_sent_datetime': str(
-                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)),
-            ),
+            'action': action.id,
             'subject': msg.subject,
             'body': msg.body,
             'from_email': msg.from_email,
-            'to_email': msg.to[0]}
+            'to_email': msg.to[0],
+            'email_sent_datetime': str(
+                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))}
         action.last_executed_log = action.log(
             user,
             models.Log.ACTION_EMAIL_SENT,
             **context)
-        action.save()
+        action.save(update_fields=['last_executed_log'])

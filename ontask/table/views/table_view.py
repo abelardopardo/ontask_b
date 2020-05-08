@@ -3,9 +3,9 @@
 """Functions to implement CRUD views for Views."""
 from typing import Optional
 
+from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -19,9 +19,9 @@ from ontask.table import forms, services
 @user_passes_test(is_instructor)
 @get_workflow(pf_related='views')
 def view_index(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> HttpResponse:
+) -> http.HttpResponse:
     """Render the list of views attached to a workflow.
 
     :param request: Http request received.
@@ -50,9 +50,9 @@ def view_index(
 @ajax_required
 @get_workflow(pf_related='columns')
 def view_add(
-    request: HttpRequest,
+    request: http.HttpRequest,
     workflow: Optional[models.Workflow] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Create a new view.
 
     :param request: Request object
@@ -64,22 +64,22 @@ def view_add(
         messages.error(
             request,
             _('Cannot add a view to a workflow without data'))
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
     # Form to read/process data
     form = forms.ViewAddForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         view = form.save(commit=False)
         services.save_view_form(request.user, workflow, view)
         form.save_m2m()  # Needed to propagate the save effect to M2M relations
 
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'table/includes/partial_view_add.html',
             {'form': form, 'id': form.instance.id},
@@ -91,11 +91,11 @@ def view_add(
 @ajax_required
 @get_view(pf_related='views')
 def view_edit(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
     view: Optional[models.View] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Edit the content of a view.
 
     :param request: Request object
@@ -110,15 +110,15 @@ def view_edit(
         instance=view, workflow=workflow)
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
-            return JsonResponse({'html_redirect': None})
+            return http.JsonResponse({'html_redirect': None})
 
         view = form.save(commit=False)
         services.save_view_form(request.user, workflow, view)
         form.save_m2m()  # Needed to propagate the save effect to M2M relations
 
-        return JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({'html_redirect': ''})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'table/includes/partial_view_edit.html',
             {'form': form, 'id': form.instance.id},
@@ -130,11 +130,11 @@ def view_edit(
 @ajax_required
 @get_view(pf_related='views')
 def view_delete(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
     view: Optional[models.View] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Delete a view.
 
     AJAX processor for the delete view operation
@@ -149,9 +149,9 @@ def view_delete(
     if request.method == 'POST':
         view.log(request.user, models.Log.VIEW_DELETE)
         view.delete()
-        return JsonResponse({'html_redirect': reverse('table:view_index')})
+        return http.JsonResponse({'html_redirect': reverse('table:view_index')})
 
-    return JsonResponse({
+    return http.JsonResponse({
         'html_form': render_to_string(
             'table/includes/partial_view_delete.html',
             {'view': view},
@@ -162,11 +162,11 @@ def view_delete(
 @ajax_required
 @get_view(pf_related='views')
 def view_clone(
-    request: HttpRequest,
+    request: http.HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
     view: Optional[models.View] = None,
-) -> JsonResponse:
+) -> http.JsonResponse:
     """Clone a view.
 
     :param request: HTTP request
@@ -176,7 +176,7 @@ def view_clone(
     :return: AJAX response
     """
     if request.method == 'GET':
-        return JsonResponse({
+        return http.JsonResponse({
             'html_form': render_to_string(
                 'table/includes/partial_view_clone.html',
                 {'pk': pk, 'vname': view.name},
@@ -192,4 +192,4 @@ def view_clone(
     except OnTaskServiceException as exc:
         exc.message_to_error(request)
         exc.delete()
-    return JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({'html_redirect': ''})

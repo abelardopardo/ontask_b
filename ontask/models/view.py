@@ -53,16 +53,16 @@ class View(NameAndDescription, CreateModifyFields):
 
     @property
     def num_columns(self):
-        """
-        Number of columns considered by this view
+        """Number of columns considered by this view.
+
         :return: Number of elements in the columns relation
         """
         return self.columns.count()
 
     @property
     def num_rows(self):
-        """
-        Number of rows considered by this view
+        """Number of rows considered by this view.
+
         :return: Number of rows resulting from using the formula
         """
         if not self.nrows:
@@ -72,6 +72,14 @@ class View(NameAndDescription, CreateModifyFields):
             )
 
         return self.nrows
+
+    @property
+    def column_names(self):
+        """List of column names.
+
+        :return: List of column names
+        """
+        return [column.name for column in self.columns.all()]
 
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""

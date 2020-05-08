@@ -4,22 +4,22 @@
      id="text" role="tabpanel" aria-labelledby="text-tab">
   <div id="html-editor">
     <div id="insert-elements-in-editor" class="text-center my-3">
-      <div id="column-selector">
-        {% if is_rubric %}
-          <button class="btn btn-outline-dark js-insert-rubric-text"
-                  type="button">{% trans 'Insert rubric text' %}</button>
-        {% endif %}
-        <div class="dropdown btn-group">
+      {% if is_rubric %}
+        <button class="btn btn-outline-dark js-insert-rubric-text"
+                type="button">{% trans 'Insert rubric text' %}</button>
+      {% elif is_report %}
+        <button type="button" data-url="{% url 'column:select' %}"
+                class="btn btn-outline-dark js-table-select col-sm-auto">
+          {% trans 'Insert Table' %}</button>
+      {% endif %}
+        {% if not is_report %}
+        <div id="column-selector" class="dropdown btn-group">
           <button type="button" class="btn btn-outline-dark dropdown-toggle"
                   data-toggle="dropdown">
-            {% if is_email_list %}
-              {% trans 'Insert Column as List' %}
-            {% else %}
-              {% trans 'Insert Column Value' %}
-            {% endif %}
+            {% trans 'Insert Column Value' %}
           </button>
           <div class="shadow dropdown-menu scrollable-menu">
-            {% if is_email_list %}
+            {% if is_report %}
               {% for column in columns %}
                 <button type="button" class="dropdown-item js-insert-column-list">{{ column.name }}</button>
               {% endfor %}
@@ -30,38 +30,38 @@
             {% endif %}
           </div>
         </div>
-        {% if conditions|length %}
-          {% if is_personalized_text %}
-            {% trans 'Use condition in highlighted text' as header %}
-          {% else %}
-            {% trans 'Insert condition in text' as header %}
-          {% endif %}
-          <div id="condition-selector" class="dropdown btn-group">
-            <button type="button" class="btn btn-outline-dark dropdown-toggle"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{ header }}
-            </button>
-            <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="condition-selector">
-              {% for cond_name in conditions %}
-                <button type="button" class="dropdown-item js-insert-condition-name">{{ cond_name }}</button>
-              {% endfor %}
-            </div>
-          </div>
+      {% endif %}
+      {% if conditions|length %}
+        {% if is_personalized_text %}
+          {% trans 'Use condition in highlighted text' as header %}
+        {% else %}
+          {% trans 'Insert condition in text' as header %}
         {% endif %}
-        {% if attribute_names %}
-          <div id="attribute-selector" class="dropdown btn-group">
-            <button type="button" class="btn btn-outline-dark dropdown-toggle"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {% trans 'Insert Attribute' %}
-            </button>
-            <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="attribute-selector">
-              {% for attr in attribute_names %}
-                <button type="button" class="dropdown-item js-insert-attribute-name">{{ attr }}</button>
-              {% endfor %}
-            </div>
+        <div id="condition-selector" class="dropdown btn-group">
+          <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ header }}
+          </button>
+          <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="condition-selector">
+            {% for cond_name in conditions %}
+              <button type="button" class="dropdown-item js-insert-condition-name">{{ cond_name }}</button>
+            {% endfor %}
           </div>
-        {% endif %}
-      </div>
+        </div>
+      {% endif %}
+      {% if attribute_names %}
+        <div id="attribute-selector" class="dropdown btn-group">
+          <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {% trans 'Insert Attribute' %}
+          </button>
+          <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="attribute-selector">
+            {% for attr in attribute_names %}
+              <button type="button" class="dropdown-item js-insert-attribute-name">{{ attr }}</button>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
     </div>
     {{ form|crispy|safe }}
   </div>

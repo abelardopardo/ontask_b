@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{{ form.media }}
+<form id="column-select-form" action="">
+  <div class="modal-header">
+    <h4 class="modal-title">{% trans 'Select columns' %}</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{ form|crispy }}
+  </div>
+  <div class="modal-footer">
+    <button type="button"
+            class="btn btn-outline-primary js-table-insert">
+       <span class="fa fa-check"></span> {% trans 'Select' %}
+    </button>
+  </div>
+</form>

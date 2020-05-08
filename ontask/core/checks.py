@@ -13,7 +13,7 @@ def _check_logs(workflow: models.Workflow) -> bool:
     :param workflow: Workflow being processed.
     :result: True or a failed assertion
     """
-    assert (workflow.logs.exclude(name__in=models.Log.LOG_TYPES).count() == 0)
+    assert(workflow.logs.exclude(name__in=models.Log.LOG_TYPES).count() == 0)
     return True
 
 

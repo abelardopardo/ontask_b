@@ -88,7 +88,7 @@ def get_row(
 def insert_row(
     table_name: str,
     keys: List[str],
-    values: List,
+    column_values: List,
 ):
     """Insert a row with a set of pairs.
 
@@ -96,7 +96,7 @@ def insert_row(
 
     :param table_name: Table name
     :param keys: List of column names
-    :param values: List of column values
+    :param column_values: List of column values
     :return: Nothing. Effect reflected in the database.
     """
     ncols = len(keys)
@@ -105,12 +105,11 @@ def insert_row(
         sql.SQL(', ').join([
             OnTaskDBIdentifier(key) for key in keys
         ]),
-        sql.SQL(', ').join([sql.Placeholder()] * ncols)
-    )
+        sql.SQL(', ').join([sql.Placeholder()] * ncols))
 
     # Execute the query
     with connection.connection.cursor() as cursor:
-        cursor.execute(query, values)
+        cursor.execute(query, column_values)
 
 
 def update_row(
@@ -197,8 +196,7 @@ def select_ids_all_false(
     """
     # Prelude for the query
     query = sql.SQL(
-        'SELECT t.position from ('
-        + 'SELECT *, ROW_NUMBER() OVER () '
+        'SELECT t.position from (SELECT *, ROW_NUMBER() OVER () '
         + 'AS position FROM {0}) AS t',
     ).format(sql.Identifier(table_name))
 
@@ -219,7 +217,7 @@ def select_ids_all_false(
             filter_formula,
             formula.EVAL_SQL,
         )
-        query = query + sql.SQL(' AND ') + filter_query
+        query = query + sql.SQL(' AND ({0})').format(filter_query)
         query_fields += filter_fields
 
     # Run the query and return the list

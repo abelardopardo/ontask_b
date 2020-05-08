@@ -6,7 +6,7 @@
   <div class="container text-center" id="action-run-done">
     <h1 class="text-center">{% trans 'Operation scheduled for execution' %}</h1>
     <div class="text-center my-3">
-      <a href="{% url 'logs:view' log_id %}">{% blocktrans %}You may check the status in
+      <a href="{% url 'logs:page_view' log_id %}">{% blocktrans %}You may check the status in
       log number {{ log_id }}.{% endblocktrans %}</a>
     </div>
     <div class="text-center">

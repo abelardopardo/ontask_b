@@ -142,7 +142,7 @@ EXECUTE_ACTION_JSON_TRANSFER = env.bool(
 # CACHE
 REDIS_URL = env.cache(
     'REDIS_URL',
-    default='rediscache://localhost:6379/'
+    default='redis://localhost:6379/'
             + '?client_class=django_redis.client.DefaultClient'
             + '&timeout=1000'
             + '&key_prefix=ontask'
@@ -511,8 +511,8 @@ DISABLED_ACTIONS = [
     # 'models.Action.PERSONALIZED_TEXT',
     # 'models.Action.PERSONALIZED_JSON',
     # 'models.Action.PERSONALIZED_CANVAS_EMAIL',
-    # 'models.Action.EMAIL_LIST',
-    # 'models.Action.JSON_LIST',
+    # 'models.Action.EMAIL_REPORT',
+    # 'models.Action.JSON_REPORT',
     # 'models.Action.SURVEY',
     'models.Action.TODO_LIST',
 ]

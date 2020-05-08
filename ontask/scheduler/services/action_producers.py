@@ -158,10 +158,10 @@ class ScheduledOperationSaveEmail(ScheduledOperationSaveActionRun):
     form_class = forms.ScheduleEmailForm
 
 
-class ScheduledOperationSaveEmailList(ScheduledOperationSaveActionRun):
-    """Process Email List."""
+class ScheduledOperationSaveEmailReport(ScheduledOperationSaveActionRun):
+    """Process Email Report."""
 
-    operation_type = models.Log.ACTION_RUN_EMAIL_LIST
+    operation_type = models.Log.ACTION_RUN_EMAIL_REPORT
     form_class = forms.ScheduleSendListForm
 
 
@@ -172,8 +172,8 @@ class ScheduledOperationSaveJSON(ScheduledOperationSaveActionRun):
     form_class = forms.ScheduleJSONForm
 
 
-class ScheduledOperationSaveJSONList(ScheduledOperationSaveActionRun):
-    """Process JSON List."""
+class ScheduledOperationSaveJSONReport(ScheduledOperationSaveActionRun):
+    """Process JSON Report."""
 
-    operation_type = models.Log.ACTION_RUN_JSON_LIST
-    form_class = forms.ScheduleJSONListForm
+    operation_type = models.Log.ACTION_RUN_JSON_REPORT
+    form_class = forms.ScheduleJSONReportForm

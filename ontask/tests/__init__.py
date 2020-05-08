@@ -8,13 +8,13 @@ import subprocess
 from typing import Dict, Mapping, Optional
 
 from PIL import Image
+from django import http
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.db import connection
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import reverse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from django.urls import resolve
@@ -34,9 +34,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from ontask import OnTaskSharedState, models
 from ontask.core import GROUP_NAMES
 from ontask.core.checks import sanity_checks
-from ontask.core.manage_session import (
-    SessionPayload
-)
+from ontask.core.manage_session import SessionPayload
 from ontask.dataops import pandas
 
 standard_library.install_aliases()
@@ -194,7 +192,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
                 name=self.workflow_name)
         self.last_request = None
 
-    def add_middleware(self, request: HttpRequest) -> HttpRequest:
+    def add_middleware(self, request: http.HttpRequest) -> http.HttpRequest:
         request.user = self.user
         # adding session
         SessionMiddleware().process_request(request)
@@ -216,7 +214,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         is_ajax: Optional[bool] = False,
         session_payload: Optional[Dict] = None,
         **kwargs
-    ) -> HttpResponse:
+    ) -> http.HttpResponse:
         """Create a request and send it to a processing function.
 
         :param url_name: URL name as defined in urls.py
@@ -963,6 +961,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 'id_initial_value'
             ).send_keys(col_init)
         if index:
+            self.selenium.find_element_by_id('id_position').clear()
             self.selenium.find_element_by_id('id_position').send_keys(
                 str(index)
             )
@@ -1057,13 +1056,13 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             models.Action.PERSONALIZED_CANVAS_EMAIL,
             adesc)
 
-    def create_new_email_list_action(self, aname, adesc=''):
+    def create_new_email_report_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            models.Action.EMAIL_LIST, adesc)
+            models.Action.EMAIL_REPORT, adesc)
 
-    def create_new_JSON_list_action(self, aname, adesc=''):
-        self.create_new_action_out_basic(aname, models.Action.JSON_LIST, adesc)
+    def create_new_JSON_report_action(self, aname, adesc=''):
+        self.create_new_action_out_basic(aname, models.Action.JSON_REPORT, adesc)
 
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog
@@ -1261,6 +1260,24 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[contains(@class, "js-action-preview")]'),
             )
+        )
+
+    def create_attachment(self, attachment_name):
+        # Make sure we are in the Filter tab
+        self.select_attachment_tab()
+
+        self.click_dropdown_option(
+            '//*[@id="attachment-selector"]',
+            attachment_name)
+
+        # Make sure the page refreshes and shows again the filter tab
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'attachments')
+            )
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
 
     def create_view(self, vname, vdesc, cols):
@@ -1599,6 +1616,25 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
         )
 
+    def select_attachment_tab(self):
+        """
+        Assuming we are editing an Email Report action, click on the link to
+        open the attachment tab
+        :return:
+        """
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable((By.ID, 'attachments-tab'))
+        )
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+        self.selenium.find_element_by_id('attachments-tab').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'attachments')
+            )
+        )
+
     def select_share_tab(self):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1655,6 +1691,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
 
     def select_parameters_tab(self):
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.ID, 'parameters-tab')

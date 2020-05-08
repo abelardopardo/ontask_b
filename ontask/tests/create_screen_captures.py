@@ -726,24 +726,28 @@ class ScreenTestFixture(ScreenTests):
 
         # Set the name, description and type of the action
         self.selenium.find_element_by_id('id_name').send_keys(
-            'Send Email with list'
+            'Send Email with report'
         )
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(models.Action.EMAIL_LIST)
+        select.select_by_value(models.Action.EMAIL_REPORT)
         desc.send_keys('Send email with column values as list')
 
-        self.modal_ss('action_email_list_create.png')
+        self.modal_ss('action_email_report_create.png')
 
         # Cancel creation
         self.cancel_modal()
 
         # Open the action
-        self.open_action_edit('Send Email with list')
-        self.body_ss('action_email_list_edit.png')
+        self.open_action_edit('Send Email with report')
+        self.body_ss('action_email_report_edit.png')
+
+        self.select_attachment_tab()
+        self.body_ss('action_email_report_attachments.png')
+
         self.open_preview()
-        self.modal_ss('action_email_list_preview.png')
+        self.modal_ss('action_email_report_preview.png')
         self.cancel_modal()
 
         # Save action and back to action index
@@ -753,7 +757,7 @@ class ScreenTestFixture(ScreenTests):
         self.wait_for_datatable('action-table_previous')
 
         #
-        # SEND JSON LIST action
+        # SEND JSON REPORT action
         #
         # click on the create action button and create an action
         self.selenium.find_element_by_class_name('js-create-action').click()
@@ -762,26 +766,26 @@ class ScreenTestFixture(ScreenTests):
 
         # Set the name, description and type of the action
         self.selenium.find_element_by_id('id_name').send_keys(
-            'Send list through JSON'
+            'Send JSON report'
         )
         desc = self.selenium.find_element_by_id('id_description_text')
         # Select the action type
         select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(models.Action.JSON_LIST)
+        select.select_by_value(models.Action.JSON_REPORT)
         desc.send_keys(
             'Send the list of inactive students '
             'in week 2 to another platform')
 
-        self.modal_ss('action_json_list_create.png')
+        self.modal_ss('action_json_report_create.png')
 
         # Cancel creation
         self.cancel_modal()
 
         # Open the action
-        self.open_action_edit('Send list through JSON')
-        self.body_ss('action_json_list_edit.png')
+        self.open_action_edit('Send JSON report')
+        self.body_ss('action_json_report_edit.png')
         self.open_preview()
-        self.modal_ss('action_json_list_preview.png')
+        self.modal_ss('action_json_report_preview.png')
         self.cancel_modal()
 
         # Save action and back to action index

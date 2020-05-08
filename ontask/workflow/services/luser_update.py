@@ -87,11 +87,11 @@ class ExecuteUpdateWorkflowLUser:
             log_item.payload['status'] = ugettext(
                 'Learner emails successfully updated.',
             )
-            log_item.save()
+            log_item.save(update_fields=['payload'])
 
             # Reflect status in the log event
             log_item.payload['status'] = 'Execution finished successfully'
-            log_item.save()
+            log_item.save(update_fields=['payload'])
         except Exception as exc:
             log_item.payload['status'] = ugettext('Error: {0}').format(exc)
-            log_item.save()
+            log_item.save(update_fields=['payload'])

@@ -56,7 +56,7 @@ class ActionViewTimeline(tests.OnTaskTestCase):
         self.assertNotIn(
             'No action executions have been registered',
             str(resp.content))
-        self.assertIn(action.name, str(resp.content))
+        self.assertIn('Execute scheduled email action', str(resp.content))
 
         # Step 4 Get the action timeline page.
         # Should have information about one execution
@@ -71,7 +71,7 @@ class ActionViewTimeline(tests.OnTaskTestCase):
 
         # Step 5 send POST to execute the JSON action
         action2 = self.workflow.actions.get(name='Send JSON to remote server')
-        resp = self.get_response(
+        self.get_response(
             'action:run',
             url_params={'pk': action2.id},
             method='POST',
@@ -85,8 +85,8 @@ class ActionViewTimeline(tests.OnTaskTestCase):
         self.assertNotIn(
             'No action executions have been registered',
             str(resp.content))
-        self.assertIn(action.name, str(resp.content))
-        self.assertIn(action2.name, str(resp.content))
+        self.assertIn('Execute scheduled email action', str(resp.content))
+        self.assertIn('Execute scheduled JSON action', str(resp.content))
 
         # Step 7 Get the second action timeline page.
         # Should have information about one execution

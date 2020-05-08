@@ -3,7 +3,8 @@
 """Action model."""
 import datetime
 import re
-from typing import List
+import shlex
+from typing import List, Optional
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
@@ -17,15 +18,24 @@ import pytz
 import ontask
 from ontask.dataops import formula, sql
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
+from ontask.models.column import Column
 from ontask.models.common import CreateModifyFields, NameAndDescription
+from ontask.models.condition import Condition
 from ontask.models.logs import Log
+from ontask.models.view import View
 from ontask.models.workflow import Workflow
 
 # Regular expressions detecting the use of a variable, or the
 # presence of a "{% MACRONAME variable %} construct in a string (template)
 VAR_USE_RES = [
+    # {{ varnane }}
     re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
-    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})')]
+    # {% if column name %}
+    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})'),
+    # {% ot_insert_report "c1" "c2" "c3" %}
+    re.compile(
+        r'(?P<mup_pre>{%\s+ot_insert_report\s+)'
+        r'(?P<args>(".+?"\s+)+)(?P<mup_post>%\})')]
 
 ACTION_TYPE_LENGTH = 64
 
@@ -38,8 +48,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
     @DynamicAttrs
     """
 
-    EMAIL_LIST = 'email_list'
-    JSON_LIST = 'json_list'
+    EMAIL_REPORT = 'email_report'
+    JSON_REPORT = 'json_report'
     PERSONALIZED_CANVAS_EMAIL = 'personalized_canvas_email'
     PERSONALIZED_TEXT = 'personalized_text'
     PERSONALIZED_JSON = 'personalized_json'
@@ -53,8 +63,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         SURVEY: _('Survey'),
         PERSONALIZED_JSON: _('Personalized JSON'),
         RUBRIC_TEXT: _('Rubric feedback'),
-        EMAIL_LIST: _('Send List'),
-        JSON_LIST: _('Send List as JSON'),
+        EMAIL_REPORT: _('Send Report'),
+        JSON_REPORT: _('Send Report as JSON'),
         TODO_LIST: _('TODO List')}
 
     ACTION_IS_DATA_IN = {
@@ -62,8 +72,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         PERSONALIZED_CANVAS_EMAIL: False,
         PERSONALIZED_JSON: False,
         RUBRIC_TEXT: False,
-        EMAIL_LIST: False,
-        JSON_LIST: False,
+        EMAIL_REPORT: False,
+        JSON_REPORT: False,
         SURVEY: True,
         TODO_LIST: True}
 
@@ -72,8 +82,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         PERSONALIZED_CANVAS_EMAIL: False,
         PERSONALIZED_JSON: False,
         RUBRIC_TEXT: True,
-        EMAIL_LIST: True,
-        JSON_LIST: False,
+        EMAIL_REPORT: True,
+        JSON_REPORT: False,
         SURVEY: False,
         TODO_LIST: False}
 
@@ -142,7 +152,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
             (self.active_from and now < self.active_from)
             or (self.active_to and self.active_to < now))
 
-    def get_filter(self):
+    def get_filter(self) -> Optional[Condition]:
         """Get filter condition."""
         return self.conditions.filter(is_filter=True).first()
 
@@ -173,7 +183,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                     'Workflow without DF in get_table_row_count_all_false')
 
             # Separate filter from conditions
-            filter_item = self.conditions.filter(is_filter=True).first()
+            filter_item = self.get_filter()
             cond_list = self.conditions.filter(is_filter=False)
 
             if not cond_list:
@@ -189,11 +199,11 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                 cond_list.values_list('formula', flat=True),
             )
 
-            self.save()
+            self.save(update_fields=['rows_all_false'])
 
         return self.rows_all_false
 
-    def update_n_rows_selected(self, column=None):
+    def update_n_rows_selected(self, column: Optional[Column] = None):
         """Reset the field n_rows_selected in all conditions.
 
         If the column argument is present, select only those conditions that
@@ -220,7 +230,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                 column=column,
                 filter_formula=filter_formula)
 
-    def used_columns(self):
+    def used_columns(self) -> List[Column]:
         """List of column used in the action.
 
         These are those that are used in any condition + those used
@@ -260,11 +270,26 @@ class ActionDataOut(ActionBase):  # noqa Z214
         null=False,
         blank=False)
 
-    # Text to be personalised
+    # Text to be personalised email/email report, etc.
     text_content = models.TextField(default='', blank=True)
 
     # URL for PERSONALIZED_JSON actions
     target_url = models.TextField(default='', blank=True)
+
+    # Set of views attached to a EMAIL_REPORT action
+    attachments = models.ManyToManyField(
+        View,
+        verbose_name=_("Email attachments"),
+        related_name='attached_to'
+    )
+
+    @property
+    def attachment_names(self):
+        """List of attachment names.
+
+        :return: List of attachment names
+        """
+        return [attachment.name for attachment in self.attachments.all()]
 
     @property
     def has_html_text(self) -> bool:
@@ -273,7 +298,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
             self.text_content
             and (
                 self.action_type == self.PERSONALIZED_TEXT
-                or self.action_type == self.EMAIL_LIST))
+                or self.action_type == self.EMAIL_REPORT))
 
     def rename_variable(self, old_name: str, new_name: str) -> None:
         """Rename a variable present in the action content.
@@ -291,15 +316,25 @@ class ActionDataOut(ActionBase):  # noqa Z214
                     new_name if match.group('vname') == html.escape(old_name)
                     else match.group('vname')
                 ) + ' }}',
-                self.text_content,
-            )
-            self.save()
+                self.text_content)
+
+            # Need to change the name if it appears in other macros
+            self.text_content = VAR_USE_RES[2].sub(
+                lambda match:
+                match.group('mup_pre')
+                + ' '.join(['"' + (
+                    new_name if vname == html.escape(old_name) else vname
+                ) + '"' for vname in shlex.split(match.group('args'))])
+                + ' ' + match.group('mup_post'),
+            self.text_content)
+
+            self.save(update_fields=['text_content'])
 
         # Rename the variable in all conditions
         for cond in self.conditions.all():
             cond.formula = formula.rename_variable(
                 cond.formula, old_name, new_name)
-            cond.save()
+            cond.save(update_fields=['formula'])
 
     def get_used_conditions(self) -> List[str]:
         """Get list of conditions that are used in the text_content.
@@ -309,12 +344,10 @@ class ActionDataOut(ActionBase):  # noqa Z214
 
         :return: List of condition names
         """
-        cond_names = []
-        for rexpr in VAR_USE_RES:
-            cond_names += [
-                match.group('vname')
-                for match in rexpr.finditer(self.text_content)
-            ]
+        cond_names = [
+            match.group('vname')
+            for match in VAR_USE_RES[1].finditer(self.text_content)
+        ]
 
         if self.has_html_text:
             cond_names = [
@@ -364,6 +397,40 @@ class ActionDataOut(ActionBase):  # noqa Z214
                 condition=None,
             )
 
+        self.save(update_fields=['text_content'])
+
+
+    def used_columns(self) -> List[Column]:
+        """Extend the used columns with those in the attachments.
+
+        :return: List of column objects
+        """
+        # Columns from base case
+        column_list = super().used_columns()
+
+        # Columns from {{ colname }} in text content
+        for match in VAR_USE_RES[0].finditer(self.text_content):
+            var_name = match.group('vname')
+            column = self.workflow.columns.filter(name=var_name).first()
+            if column:
+                column_list.append(column)
+        # Columns from {% ot_insert_report "c1" "c2" %}
+        for match in VAR_USE_RES[2].finditer(self.text_content):
+            column_list.extend([
+                col for col in self.workflow.columns.filter(
+                    name__in=shlex.split(match.group('args')))])
+
+        # Columns from the attachment
+        for attachment in self.attachments.all():
+            column_list.extend([col for col in attachment.columns.all()])
+            attachment_formula = attachment.formula
+            if attachment_formula:
+                column_list.extend([
+                    col for col in self.workflow.columns.filter(
+                        name__in=formula.get_variables(attachment_formula))])
+
+        return list(set(column_list))
+
     class Meta:
         """Make this class abstract."""
 
@@ -399,8 +466,8 @@ class Action(ActionDataOut, ActionDataIn):
         for_out = (
             self.action_type == Action.PERSONALIZED_TEXT
             or self.action_type == Action.RUBRIC_TEXT
-            or self.action_type == Action.EMAIL_LIST
-            or self.action_type == Action.JSON_LIST
+            or self.action_type == Action.EMAIL_REPORT
+            or self.action_type == Action.JSON_REPORT
             or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
                 and settings.CANVAS_INFO_DICT is not None)
         )

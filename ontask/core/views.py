@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """Basic views to render error."""
+from django import http
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.http.request import HttpRequest
-from django.http.response import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import generic
@@ -18,19 +16,13 @@ from ontask.django_auth_lti.decorators import lti_role_required
 from ontask.workflow.views import index
 
 
-class AboutPage(generic.TemplateView):
-    """About page."""
-
-    template_name = 'about.html'
-
-
 class ToBeDone(UserIsInstructor, generic.TemplateView):
     """Page showing the to be done."""
 
     template_name = 'base.html'
 
 
-def home(request: HttpRequest) -> HttpResponse:
+def home(request: http.HttpRequest) -> http.HttpResponse:
     """Render the home page.
 
     :param request: Received HTTP Request
@@ -50,7 +42,7 @@ def home(request: HttpRequest) -> HttpResponse:
 @csrf_exempt
 @xframe_options_exempt
 @lti_role_required(['Instructor', 'Learner'])
-def lti_entry(request: HttpRequest) -> HttpResponse:
+def lti_entry(request: http.HttpRequest) -> http.HttpResponse:
     """Responde through LTI entry."""
     del request
     return redirect('home')
@@ -58,7 +50,7 @@ def lti_entry(request: HttpRequest) -> HttpResponse:
 
 # No permissions in this URL as it is supposed to be wide open to track email
 # reads.
-def trck(request: HttpRequest) -> HttpResponse:
+def trck(request: http.HttpRequest) -> http.HttpResponse:
     """Receive a request with a token from email read tracking.
 
     :param request: Request object
@@ -70,17 +62,17 @@ def trck(request: HttpRequest) -> HttpResponse:
         operation_type=models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
         payload={'method': request.method, 'get_dict': request.GET})
 
-    return HttpResponse(status=200)
+    return http.HttpResponse(status=200)
 
 
 @login_required
 @csrf_exempt
 @ajax_required
-def keep_alive(request: HttpRequest) -> JsonResponse:
+def keep_alive(request: http.HttpRequest) -> http.JsonResponse:
     """Return empty response to keep session alive.
 
     :param request:
     :return: Empty JSON response
     """
     del request
-    return JsonResponse({})
+    return http.JsonResponse({})

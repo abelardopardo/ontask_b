@@ -33,7 +33,7 @@ def create_row(workflow: models.Workflow, row_values: List[Any]):
 
     # Update number of rows
     workflow.nrows += 1
-    workflow.save()
+    workflow.save(update_fields=['nrows'])
 
     # Recompute all the values of the conditions in each of the actions
     # TODO: Explore how to do this asynchronously (or lazy)

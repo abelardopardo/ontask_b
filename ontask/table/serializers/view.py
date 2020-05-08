@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
-from ontask.workflow.serialize_column import ColumnNameSerializer
+from ontask.column.serializers import ColumnNameSerializer
 
 
 class ViewSerializer(serializers.ModelSerializer):
@@ -61,3 +61,12 @@ class ViewSerializer(serializers.ModelSerializer):
             'workflow',
             'created',
             'modified')
+
+class ViewNameSerializer(serializers.ModelSerializer):
+    """Trivial serializer to dump only the name of the view."""
+
+    class Meta:
+        """Select the model and the only field required."""
+
+        model = models.View
+        fields = ('name',)

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Details' %}{% endblock %}
+{% block extrahead %}
+  {% ontask_datatables_bootstrap_css %}
+  <link href="{% static 'css/sol.css' %}" rel="stylesheet">
+{% endblock extrahead %}
+{% block scripts %}
+  {% if workflow %}
+    {% ontask_datetimepicker_js %}
+    <script src="{% static 'js/sol.js' %}"></script>
+    <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
+    <script src="{% static 'column/js/column_move.js' %}?v={% ontask_version %}"></script>
+    {% ontask_datatables_jquery_js %}
+    {% ontask_datatables_bootstrap_js %}
+    <script type="text/javascript">
+      if (document.getElementById("column-table") != null) {
+        $(document).ready(function() {
+          var column_table = $('#column-table').DataTable({
+            autoWidth: false,
+            language: {
+              url: location.protocol + getLanguage()
+            },
+            stateSave: true,
+            stateSaveParams: function (settings, data) {
+              delete data.search;
+            },
+            processing: true,
+            serverSide: true,
+            ajax: {
+              url: "{% url 'column:index_ss' %}",
+              type: 'POST',
+            },
+            columns: [
+              {"data": "number", "class": "dt-center"},
+              {"data": "operations", "class": "dt-center"},
+              {"data": "name", "class": "dt-center"},
+              {"data": "description"},
+              {"data": "type", "class": "dt-center"},
+              {"data": "key", "class": "dt-center"},
+            ],
+            columnDefs: [
+              {"targets": 4,
+               createdCell: function(td, cellData, rowData, row, col){
+                 if (cellData == 'Text') {
+                   $(td).addClass('column-type-string');
+                 } else if (cellData == 'Number') {
+                   $(td).addClass('column-type-number');
+                 } else if (cellData == 'True/False') {
+                   $(td).addClass('column-type-boolean');
+                 } else {
+                   $(td).addClass('column-type-datetime');
+                 }
+               }
+              },
+              {"orderable": false, "targets": 1},
+              {"searchable": false, "targets": "operations"},
+            ],
+            drawCallback: function(settings) {
+              $('[data-toggle="tooltip"]').tooltip({ trigger: "hover"});
+            },
+            colReorder: false,
+            rowReorder: { dataSrc: 'name' },
+
+          });
+          // Process the column reorder events
+          column_table.on("row-reordered", row_reordered);
+        });
+      }
+    </script>
+  {% endif %}
+{% endblock %}
+{% block container %}
+  <div class="container" id="workflow-detail">
+    <h1 class="text-center">{% trans 'Column Operations' %}</h1>
+    {% if not table_info %}
+      {% include 'workflow/includes/no_data.html' %}
+    {% elif not table_info.num_actions %}
+      {% include 'workflow/includes/no_actions.html' %}
+    {% endif %}
+    <div class="text-center mb-3">
+      {% if workflow.nrows != 0 %}
+        {% include 'column/includes/add_menu.html' %}
+      {% endif %}
+    </div>
+    {% if table_info %}
+      <div class="justify-content-center">
+        <table class="table table-hover table-bordered shadow"
+               id="column-table" data-url="{% url 'column:column_move' %}">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{% trans 'Operations' %}</th>
+              <th>{% trans 'Name' %}</th>
+              <th>{% trans 'Description' %}</th>
+              <th>{% trans 'Type' %}</th>
+              <th>{% trans 'Key?' %}</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      {% include 'table/includes/partial_type_legend.html' %}
+      <p class="text-center">{% blocktrans %}You may drag and drop the columns from the left-most cell to change their position in the workflow.{% endblocktrans %}</p>
+    {% endif %}
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}
+

@@ -86,10 +86,9 @@ def compare_views(v1, v2):
 def compare_tuples(t1, t2):
     """Compare action, condition, column tuples."""
     assert t1.action.name == t2.action.name
-    assert (
+    assert(
         t1.condition == t2.condition
-        or t1.condition.name == t2.condition.name
-    )
+        or t1.condition.name == t2.condition.name)
     assert t1.column.name == t2.column.name
 
 
@@ -116,7 +115,6 @@ def are_identical_dataframes(m1: pd.DataFrame, m2: pd.DataFrame):
         dfvals = m2[cname].values
 
         # Compare removing the NaN, otherwise, the comparison breaks.
-        assert (
+        assert(
             [jval for jval in list(jvals) if not pd.isnull(jval)]
-            == [dfval for dfval in list(dfvals) if not pd.isnull(dfval)]
-        )
+            == [dfval for dfval in list(dfvals) if not pd.isnull(dfval)])
