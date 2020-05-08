@@ -14,61 +14,6 @@ from ontask import models
 from ontask.dataops import pandas, sql
 
 
-def process_object_column(data_frame: pd.DataFrame) -> pd.DataFrame:
-    """Perform additional steps in every object dataframe column.
-
-    The process includes:
-
-    1) Strip empty spaces
-
-    2) Try date/time conversion
-
-    3) If the previous fails, replace NaN with None as it will be done once it
-    is dumped and reloaded from the DB
-
-    :param data_frame:
-
-    :return: new data frame
-    """
-    for column in list(data_frame.columns):
-        if data_frame[column].dtype.name == 'object':
-            if all(
-                isinstance(x, bool) or pd.isna(x) for x in data_frame[column]
-            ):
-                # Column contains booleans + NaN, skip
-                continue
-
-            # Column is a string! Remove the leading and trailing white
-            # space
-            data_frame[column] = data_frame[column].str.strip().fillna(
-                data_frame[column])
-
-            # Try the datetime conversion
-            try:
-                series = pd.to_datetime(
-                    data_frame[column],
-                    infer_datetime_format=True,
-                    utc=True)
-            except (ValueError, TypeError):
-                # Datetime failed. Rows with no value may be read as NaN from
-                # the read CSV but will turn into None when looping through the
-                # DB, so ensure consistency.
-                data_frame[column] = data_frame[column].where(
-                    pd.notnull(data_frame[column]),
-                    None)
-            else:
-                # Datetime conversion worked!
-                # If the series has not time zone information, locaize it
-                if series.dt.tz is None:
-                    data_frame[column] = series.dt.tz_localize(
-                        'UTC').dt.tz_convert(settings.TIME_ZONE)
-                # Make sure the series is in local time.
-                data_frame[column] = series.dt.tz_convert(
-                    settings.TIME_ZONE)
-
-    return data_frame
-
-
 def load_df_from_csvfile(
     file_obj,
     skiprows: Optional[int] = 0,
@@ -99,7 +44,7 @@ def load_df_from_csvfile(
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return process_object_column(data_frame)
+    return pandas.detect_datetime_columns(data_frame)
 
 
 def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
@@ -124,7 +69,7 @@ def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return process_object_column(data_frame)
+    return pandas.detect_datetime_columns(data_frame)
 
 
 def load_df_from_s3(
@@ -177,7 +122,7 @@ def load_df_from_s3(
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return process_object_column(data_frame)
+    return pandas.detect_datetime_columns(data_frame)
 
 
 def load_df_from_googlesheet(
@@ -278,7 +223,7 @@ def batch_load_df_from_athenaconnection(
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    data_frame = process_object_column(data_frame)
+    data_frame = pandas.detect_datetime_columns(data_frame)
 
     pandas.verify_data_frame(data_frame)
 

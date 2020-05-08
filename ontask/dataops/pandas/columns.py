@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
 """Data types considered in OnTask and its relation with Pandas data types"""
-from typing import Dict, List
+from typing import Dict, List, Optional
 
+from django.conf import settings
 import pandas as pd
 
 from ontask.dataops import pandas
 
 
-def get_column_statistics(df_column) -> Dict:
+def get_column_statistics(df_column) -> Optional[Dict]:
     """Calculate a set of statistics or a DataFrame column.
 
     Given a data frame with a single column, return a set of statistics
@@ -106,21 +107,42 @@ def detect_datetime_columns(data_frame: pd.DataFrame) -> pd.DataFrame:
     :param data_frame: Pandas dataframe to detect datetime columns
     :return: The modified data frame
     """
-    # Strip white space from all string columns and try to convert to
-    # datetime just in case
     for column in list(data_frame.columns):
         if data_frame[column].dtype.name == 'object':
-            # Column is a string!
-            data_frame[column] = data_frame[column].str.strip()
+            if all(
+                isinstance(x, bool) or pd.isna(x) for x in data_frame[column]
+            ):
+                # Column contains booleans + NaN, skip
+                continue
+
+            # Column is a string! Remove the leading and trailing white
+            # space
+            data_frame[column] = data_frame[column].str.strip().fillna(
+                data_frame[column])
 
             # Try the datetime conversion
             try:
-                series = pd.to_datetime(
+                data_frame[column] = pd.to_datetime(
                     data_frame[column],
-                    infer_datetime_format=True)
-                # Datetime conversion worked! Update the data_frame
-                data_frame[column] = series
-            except ValueError:
-                pass
+                    infer_datetime_format=True,
+                    utc=True)
+            except (ValueError, TypeError):
+                # Datetime failed. Rows with no value may be read as NaN from
+                # the read CSV but will turn into None when looping through the
+                # DB, so ensure consistency.
+                data_frame[column] = data_frame[column].where(
+                    pd.notnull(data_frame[column]),
+                    None)
+                continue
+
+        # Process either an existing datetime column, or one that has just been
+        # transformed by the previous block
+        if pd.api.types.is_datetime64_any_dtype(data_frame[column]):
+            # If the series has not time zone information, localize it
+            if data_frame[column].dt.tz is None:
+                data_frame[column] = data_frame[column].dt.tz_localize(
+                    settings.TIME_ZONE)
+            # Make sure the series is in local time.
+            data_frame[column] = data_frame[column].dt.tz_convert('UTC')
 
     return data_frame

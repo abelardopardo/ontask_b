@@ -13,7 +13,7 @@ import pandas as pd
 import ontask
 from ontask import models
 from ontask.core.session_ops import acquire_workflow_access
-from ontask.dataops import pandas, services
+from ontask.dataops import pandas
 
 SESSION_STORE = import_module(settings.SESSION_ENGINE).SessionStore
 
@@ -54,7 +54,7 @@ def _load_df_from_sqlconnection(
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
-    return services.process_object_column(data_frame)
+    return pandas.detect_datetime_columns(data_frame)
 
 
 def sql_upload_step_one(
