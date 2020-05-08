@@ -682,7 +682,7 @@ class TutorialCaptures(ScreenTests):
         self.wait_for_datatable('action-table_previous')
 
         #
-        # Create an new action combining existing data with survey ata
+        # Create an new action combining existing data with survey data
         #
         self.create_new_personalized_text_action('More Strategies', '')
 
@@ -691,7 +691,7 @@ class TutorialCaptures(ScreenTests):
         topics = [x.strip() for x in question_values.split(',')]
         for topic in topics:
             self.create_condition(
-                topic[0:4] + ' - Fail',
+                topic[0:4].stip() + ' - Fail',
                 '',
                 [('Survey Q1', 'equal', topic),
                  ('Total', 'less', 50)]
@@ -699,7 +699,7 @@ class TutorialCaptures(ScreenTests):
         # Create the conditions for those that passed the exam
         for topic in topics:
             self.create_condition(
-                topic[0:4] + ' - Passed',
+                topic[0:4].strip() + ' - Passed',
                 '',
                 [('Survey Q1', 'equal', topic),
                  ('Total', 'greater or equal', 50)]
@@ -717,14 +717,16 @@ class TutorialCaptures(ScreenTests):
         for topic in topics:
             self.selenium.find_element_by_class_name('note-editable').send_keys(
                 ('{{% if {0} - Fail %}} Tips about {0} ' +
-                 'for those that failed.{{% endif %}}\n').format(topic[0:4])
+                 'for those that failed.{{% endif %}}\n').format(
+                    topic[0:4].strip())
             )
 
         # Add the text for those that passed
         for topic in topics:
             self.selenium.find_element_by_class_name('note-editable').send_keys(
                 ('{{% if {0} - Passed %}}Tips about {0} ' +
-                 'for those that passed.{{% endif %}}\n').format(topic[0:4])
+                 'for those that passed.{{% endif %}}\n').format(
+                    topic[0:4].strip())
             )
 
         self.selenium.find_element_by_class_name('note-editable').send_keys(
