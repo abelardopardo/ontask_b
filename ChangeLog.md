@@ -8,7 +8,7 @@
 
 - Error when merging data through the API with datetime columns
 
-### Changned
+### Changed
 
 - Email and JSON report actions now allow to include multiple columns (#185)
 

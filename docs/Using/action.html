@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>3.4. Actions &#8212; OnTask (B.7.0.2) B.7.0.2 documentation</title>
+    <title>3.4. Actions &#8212; OnTask (B.7.1) B.7.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
@@ -78,9 +78,13 @@ vision”
 </dd>
 <dt><span class="fa fa-rocket"></span> Run</dt><dd><p>Use the action to either provide personalized content or run a survey (see <a class="reference internal" href="run.html#running-actions"><span class="std std-ref">Running actions</span></a> for more information)</p>
 </dd>
+<dt><span class="fa fa-eye"></span> Preview</dt><dd><p>See the content of the action when considered for each user (if applicable)</p>
+</dd>
 <dt><span class="fa fa-link"></span> URL</dt><dd><p>Provide access to learners to the content of the action through a link (only available for actions of type Personalized Text)</p>
 </dd>
 <dt><span class="fa fa-file-archive-o"></span> ZIP</dt><dd><p>Download a ZIP file with as many files as selected learners in the action. Each file contains the personalized document for the learner (only available for Personalized Text actions)</p>
+</dd>
+<dt><span class="fa fa-clock-o"></span> Timeline</dt><dd><p>See when the action has been executed</p>
 </dd>
 <dt><span class="fa fa-calendar"></span> Schedule</dt><dd><p>Schedule the execution of the action for some time in the future</p>
 </dd>
@@ -275,40 +279,38 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <p>The field <em>Target URL</em> is to introduce the URL where the object will be sent.</p>
 <p>The preview button in the personalized JSON action shows the resulting object after verifying that the structure after evaluating the corresponding expressions is a valid JSON object.</p>
 </div>
-<div class="section" id="send-column-data-as-list-in-email">
-<span id="email-list-action"></span><h2><span class="section-number">3.4.5. </span>Send Column data as List in Email<a class="headerlink" href="#send-column-data-as-list-in-email" title="Permalink to this headline">¶</a></h2>
-<p>This type of action sends a single email including data in some of the columns in the workflow. Creating these actions is almost identical to creating a <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Text</span></a>, action with the difference it is not possible to use conditions (there is a single email), and including a column in the text means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.</p>
+<div class="section" id="send-a-data-report-in-email">
+<span id="email-report-action"></span><h2><span class="section-number">3.4.5. </span>Send a data report in Email<a class="headerlink" href="#send-a-data-report-in-email" title="Permalink to this headline">¶</a></h2>
+<p>This type of action sends a single email with data in a subset of columns in the workflow. Creating these actions is almost identical to creating a <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Text</span></a>, action with the difference it is not possible to use conditions (there is a single email), and the columns are included as a table with values. The email can also include as attachment the data selected by (previously created) <a class="reference internal" href="table.html#table-views"><span class="std std-ref">Table Views</span></a>. The action is created selecting the corresponding action type as shown in the following figure.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_email_list_create.png"><img alt="../_images/action_email_list_create.png" src="../_images/action_email_list_create.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_email_report_create.png"><img alt="../_images/action_email_report_create.png" src="../_images/action_email_report_create.png" style="width: 60%;" /></a>
 </div>
-<dl class="simple">
-<dt>The page to edit this action is similar to the one to edit a <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Text action</span></a> but only two tabs are present: <em>Text</em> and <em>Select Learners</em>.</dt><dd><p>In the <em>Text</em> tab, when you select one column from the pull down menu <em>Insert Column as List</em>, a placeholder is inserted in the text. The following figure shows the resulting text with the inclusion of the data in the <em>email</em> column.</p>
-</dd>
-</dl>
+<p>The page to edit this action is similar to the one to edit a <a class="reference internal" href="#personalized-content"><span class="std std-ref">Personalized Text action</span></a> with three tabs: <em>Text</em>, <em>Select Learners</em> and <em>Attachments</em>. In the <em>Text</em> tab, when you select a subset of columns from the pull down menu <em>Insert Table</em>, a placeholder is inserted in the text. The following figure shows the resulting text with the inclusion of the data in the <em>email</em>, <em>Surname</em> and <em>GivenName</em> columns.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_email_list_edit.png"><img alt="../_images/action_email_list_edit.png" src="../_images/action_email_list_edit.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_email_report_edit.png"><img alt="../_images/action_email_report_edit.png" src="../_images/action_email_report_edit.png" style="width: 100%;" /></a>
 </div>
-<p>Using the <em>Preview</em> button shows how the message is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.</p>
+<p>In addition, the single email sent by this action can have as attachment any of the table subsets defined by the <a class="reference internal" href="table.html#table-views"><span class="std std-ref">Table Views</span></a>. The <em>Attachments</em> tab in the screen shows the table views currently selected as well as the button <em>Select Attachment</em> with the table views available (if any). The following figure shows the attachment selected for the given example.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_email_list_preview.png"><img alt="../_images/action_email_list_preview.png" src="../_images/action_email_list_preview.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_email_report_attachments.png"><img alt="../_images/action_email_report_attachments.png" src="../_images/action_email_report_attachments.png" style="width: 100%;" /></a>
+</div>
+<p>Using the <em>Preview</em> button shows how the message is created by replacing the placeholder with the table with the values in those columns. The following figure shows the result for the previous example.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/action_email_report_preview.png"><img alt="../_images/action_email_report_preview.png" src="../_images/action_email_report_preview.png" style="width: 100%;" /></a>
 </div>
 </div>
-<div class="section" id="send-column-data-as-list-in-json">
-<span id="json-list-action"></span><h2><span class="section-number">3.4.6. </span>Send Column data as List in JSON<a class="headerlink" href="#send-column-data-as-list-in-json" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="send-column-data-as-report-in-json">
+<span id="json-report-action"></span><h2><span class="section-number">3.4.6. </span>Send Column data as Report in JSON<a class="headerlink" href="#send-column-data-as-report-in-json" title="Permalink to this headline">¶</a></h2>
 <p>This type of action sends a JSON object with data in some of the columns in the workflow to a pre-defined third party platform through a URL. Creating these actions is almost identical to creating a <a class="reference internal" href="#personalized-json"><span class="std std-ref">Personalized JSON content</span></a>, action with the difference it is not possible to use conditions (there is a single object sent), and including a column in the object means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_json_list_create.png"><img alt="../_images/action_json_list_create.png" src="../_images/action_json_list_create.png" style="width: 60%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_json_report_create.png"><img alt="../_images/action_json_report_create.png" src="../_images/action_json_report_create.png" style="width: 60%;" /></a>
 </div>
-<dl class="simple">
-<dt>The page to edit this action is similar to the one to edit a <a class="reference internal" href="#personalized-json"><span class="std std-ref">Personalized JSON content</span></a> but only two tabs are present: <em>Text</em> and <em>Select Learners</em>.</dt><dd><p>In the <em>Text</em> tab, when you select one column from the pull down menu <em>Insert Column as List</em>, a placeholder is inserted in the object. The following figure shows the resulting object with the inclusion of the data in the <em>email</em> column.</p>
-</dd>
-</dl>
+<p>The page to edit this action is similar to the one to edit a <a class="reference internal" href="#personalized-json"><span class="std std-ref">Personalized JSON content</span></a> but only two tabs are present: <em>Text</em> and <em>Select Learners</em>. In the <em>Text</em> tab, when you select one column from the pull down menu <em>Insert Table</em>, a placeholder is inserted in the object. The following figure shows the resulting object with the inclusion of the data in the <em>SID</em> and <em>email</em> columns.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_json_list_edit.png"><img alt="../_images/action_json_list_edit.png" src="../_images/action_json_list_edit.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_json_report_edit.png"><img alt="../_images/action_json_report_edit.png" src="../_images/action_json_report_edit.png" style="width: 100%;" /></a>
 </div>
-<p>Using the <em>Preview</em> button shows how the object is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.</p>
+<p>Using the <em>Preview</em> button shows how the object is created by replacing the placeholder with the lists of values in those columns. The following figure shows the result for the previous example.</p>
 <div class="figure align-center">
-<a class="reference internal image-reference" href="../_images/action_json_list_preview.png"><img alt="../_images/action_json_list_preview.png" src="../_images/action_json_list_preview.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/action_json_report_preview.png"><img alt="../_images/action_json_report_preview.png" src="../_images/action_json_report_preview.png" style="width: 100%;" /></a>
 </div>
 </div>
 <div class="section" id="personalized-canvas-email">
@@ -381,8 +383,8 @@ braces is the way OnTask has to mark that text to be personalized or replaced by
 <li class="toctree-l3"><a class="reference internal" href="#personalized-rubric-feedback">3.4.2. Personalized Rubric Feedback</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#surveys">3.4.3. Surveys</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#personalized-json-object">3.4.4. Personalized JSON Object</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#send-column-data-as-list-in-email">3.4.5. Send Column data as List in Email</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#send-column-data-as-list-in-json">3.4.6. Send Column data as List in JSON</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#send-a-data-report-in-email">3.4.5. Send a data report in Email</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#send-column-data-as-report-in-json">3.4.6. Send Column data as Report in JSON</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#personalized-canvas-email">3.4.7. Personalized Canvas Email</a></li>
 </ul>
 </li>

@@ -13,20 +13,20 @@
   {% if show_navigation %}
     <div class="modal-body text-center">
       <button type="button"
-              class="shadow btn btn-outline-primary js-action-preview-prv col-md-auto"
+              class="shadow btn btn-outline-primary js-action-preview-prv"
               data-url="{% url 'action:preview' action.id prv %}"
               data-toggle="tooltip"
               title="{% trans 'Preview previous message' %}">
         <span class="fa fa-angle-left"></span>  {% trans 'Previous' %}
       </button>
-      <button type="button" class="shadow btn btn-outline-primary js-action-preview-nxt col-md-auto"
+      <button type="button" class="shadow btn btn-outline-primary js-action-preview-nxt"
               data-url="{% url 'action:preview' action.id nxt %}"
               data-toggle="tooltip"
               title="{% trans 'Preview next message' %}">
         {% trans 'Next' %} <span class="fa fa-angle-right"></span>
       </button>
       {% if action.rows_all_false|length %}
-        <button type="button" class="shadow btn btn-outline-danger js-action-preview-nxt col-md-auto"
+        <button type="button" class="shadow btn btn-outline-danger js-action-preview-nxt"
                 data-url="{% url 'action:preview_all_false' action.id index %}"
                 data-toggle="tooltip"
                 title="{% trans 'Preview next message with all conditions false' %}">

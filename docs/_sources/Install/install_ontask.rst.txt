@@ -117,7 +117,7 @@ The following variables, if defined in the environment, are considered by OnTask
 
   Default: ``/media/``
 
-``RDS_DB_NAME``, ``RDS_DB_USERNAME``, ``RDS_DB_PASSWORD``, ``RDS_DB_HOSTNAME``, ``RDS_DB_PORT``
+``RDS_DB_NAME``, ``RDS_USERNAME``, ``RDS_PASSWORD``, ``RDS_HOSTNAME``, ``RDS_PORT``
   Parameters to access the platform database: database name, username, password, host name and port respectively.
 
   Default: All empty strings.

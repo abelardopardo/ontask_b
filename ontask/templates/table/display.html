@@ -107,7 +107,7 @@
       <div class="text-center mb-3">
         {% if columns %}
           <a href="{% url 'dataops:rowcreate' %}"
-             class="shadow btn btn-outline-dark spin col-md-auto"
+             class="shadow btn btn-outline-dark spin"
              data-toggle="tooltip"
              title="{% trans 'Add a new row to the table' %}">
             <span class="fa fa-plus"></span> {% trans 'Row' %}
@@ -117,18 +117,18 @@
         {% if columns %}
           <div class="dropdown btn-group shadow">
             <button onclick="location.href='{% url 'table:view_index' %}'"
-                    class="btn btn-outline-dark spin col-md-auto"
+                    class="btn btn-outline-dark spin"
                     data-toggle="tooltip"
                     title="{% trans 'Views available for this table' %}">
               <span class="fa fa-eye"></span> {% trans 'Views' %}
             </button>
             {% if views %}
               <button type="button"
-                      class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split col-md-auto"
+                      class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="sr-only">Toggle Dropdown</span>
               </button>
-              <div class="shadow dropdown-menu dropdown-menu-right col-md-auto">
+              <div class="shadow dropdown-menu dropdown-menu-right">
                 {% for v in views %}
                   {% if v != view %}
                     <a href="{% url 'table:display_view' v.id %}"
@@ -146,34 +146,34 @@
         {% if columns %}
           {% if view %}
             <button type="button"
-                    class="shadow btn btn-outline-dark js-view-edit align-middle col-md-auto"
+                    class="shadow btn btn-outline-dark js-view-edit align-middle"
                     data-url="{% url 'table:view_edit' view.id %}"
                     data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
               <span class="fa fa-pencil"></span> {% trans 'Edit view' %}
             </button>
             <a href="{% url 'table:stat_table_view' view.id %}"
-               class="shadow btn btn-outline-dark spin col-md-auto"
+               class="shadow btn btn-outline-dark spin"
                data-toggle="tooltip"
                title="{% trans 'Dashboard created with the view data' %}">
               <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
             </a>
             {% include 'table/includes/partial_column_stats_selector.html' %}
             <a href="{% url 'table:csvdownload_view' view.id %}" download
-               class="shadow btn btn-outline-dark js-logs-download col-md-auto"
+               class="shadow btn btn-outline-dark js-logs-download"
                data-toggle="tooltip"
                title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
             </a>
           {% else %}
             <a href="{% url 'table:stat_table' %}"
-               class="shadow btn btn-outline-dark spin col-md-auto"
+               class="shadow btn btn-outline-dark spin"
                data-toggle="tooltip"
                title="{% trans 'Dashboard created with the table data' %}">
               <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
             </a>
             {% include 'table/includes/partial_column_stats_selector.html' %}
             <a href="{% url 'table:csvdownload' %}"
-               class="shadow btn btn-outline-dark col-md-auto"
+               class="shadow btn btn-outline-dark"
                data-toggle="tooltip"
                title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}

@@ -5,7 +5,7 @@
   <div id="html-editor">
     <div id="insert-elements-in-editor" class="text-center my-3">
       {% if is_rubric %}
-        <button class="btn btn-outline-dark js-insert-rubric-text col-md-auto"
+        <button class="btn btn-outline-dark js-insert-rubric-text"
                 type="button">{% trans 'Insert rubric text' %}</button>
       {% elif is_report %}
         <button type="button" data-url="{% url 'column:select' %}"
@@ -13,7 +13,7 @@
           {% trans 'Insert Table' %}</button>
       {% endif %}
         {% if not is_report %}
-        <div id="column-selector" class="dropdown btn-group col-md-auto">
+        <div id="column-selector" class="dropdown btn-group">
           <button type="button" class="btn btn-outline-dark dropdown-toggle"
                   data-toggle="dropdown">
             {% trans 'Insert Column Value' %}
@@ -37,7 +37,7 @@
         {% else %}
           {% trans 'Insert condition in text' as header %}
         {% endif %}
-        <div id="condition-selector" class="dropdown btn-group col-md-auto">
+        <div id="condition-selector" class="dropdown btn-group">
           <button type="button" class="btn btn-outline-dark dropdown-toggle"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ header }}
@@ -50,7 +50,7 @@
         </div>
       {% endif %}
       {% if attribute_names %}
-        <div id="attribute-selector" class="dropdown btn-group col-md-auto">
+        <div id="attribute-selector" class="dropdown btn-group">
           <button type="button" class="btn btn-outline-dark dropdown-toggle"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {% trans 'Insert Attribute' %}

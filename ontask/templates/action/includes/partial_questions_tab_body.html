@@ -4,7 +4,7 @@
      id="questions" role="tabpanel" aria-labelledby="questions-tab">
   <div id="insert-questions" class="text-center mt-3">
     <div id="column-selector">
-      <div class="dropdown btn-group col-md-auto">
+      <div class="dropdown btn-group">
         <button type="button" class="btn btn-outline-dark dropdown-toggle"
                 data-toggle="dropdown">
           {% trans 'Insert existing question' %}
@@ -17,7 +17,7 @@
         </div>
       </div>
       <button type="button"
-              class="btn btn-outline-dark js-workflow-question-add col-md-auto"
+              class="btn btn-outline-dark js-workflow-question-add"
               data-url="{% url 'column:question_add' action.id %}"
               data-toggle="tooltip"
               title="{% trans 'Add a new question to the action' %}">

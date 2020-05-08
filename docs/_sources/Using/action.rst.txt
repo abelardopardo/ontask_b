@@ -35,11 +35,17 @@ The actions in the workflow are shown in a tabular format. For each action the f
 |fa-rocket| Run
   Use the action to either provide personalized content or run a survey (see :ref:`running_actions` for more information)
 
+|fa-eye| Preview
+  See the content of the action when considered for each user (if applicable)
+
 |fa-link| URL
   Provide access to learners to the content of the action through a link (only available for actions of type Personalized Text)
 
 |fa-file-archive-o| ZIP
   Download a ZIP file with as many files as selected learners in the action. Each file contains the personalized document for the learner (only available for Personalized Text actions)
+
+|fa-clock-o| Timeline
+  See when the action has been executed
 
 |fa-calendar| Schedule
   Schedule the execution of the action for some time in the future
@@ -310,51 +316,55 @@ The field *Target URL* is to introduce the URL where the object will be sent.
 
 The preview button in the personalized JSON action shows the resulting object after verifying that the structure after evaluating the corresponding expressions is a valid JSON object.
 
-.. _email_list_action:
+.. _email_report_action:
 
-Send Column data as List in Email
-=================================
+Send a data report in Email
+===========================
 
-This type of action sends a single email including data in some of the columns in the workflow. Creating these actions is almost identical to creating a :ref:`Personalized Text <personalized_content>`, action with the difference it is not possible to use conditions (there is a single email), and including a column in the text means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
+This type of action sends a single email with data in a subset of columns in the workflow. Creating these actions is almost identical to creating a :ref:`Personalized Text <personalized_content>`, action with the difference it is not possible to use conditions (there is a single email), and the columns are included as a table with values. The email can also include as attachment the data selected by (previously created) :ref:`table_views`. The action is created selecting the corresponding action type as shown in the following figure.
 
-.. figure:: /scaptures/action_email_list_create.png
+.. figure:: /scaptures/action_email_report_create.png
    :align: center
    :width: 60%
 
-The page to edit this action is similar to the one to edit a :ref:`Personalized Text action <personalized_content>` but only two tabs are present: *Text* and *Select Learners*.
- In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the text. The following figure shows the resulting text with the inclusion of the data in the *email* column.
+The page to edit this action is similar to the one to edit a :ref:`Personalized Text action <personalized_content>` with three tabs: *Text*, *Select Learners* and *Attachments*. In the *Text* tab, when you select a subset of columns from the pull down menu *Insert Table*, a placeholder is inserted in the text. The following figure shows the resulting text with the inclusion of the data in the *email*, *Surname* and *GivenName* columns.
 
-.. figure:: /scaptures/action_email_list_edit.png
+.. figure:: /scaptures/action_email_report_edit.png
    :align: center
    :width: 100%
 
-Using the *Preview* button shows how the message is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
+In addition, the single email sent by this action can have as attachment any of the table subsets defined by the :ref:`table_views`. The *Attachments* tab in the screen shows the table views currently selected as well as the button *Select Attachment* with the table views available (if any). The following figure shows the attachment selected for the given example.
 
-.. figure:: /scaptures/action_email_list_preview.png
+.. figure:: /scaptures/action_email_report_attachments.png
    :align: center
    :width: 100%
 
-.. _json_list_action:
+Using the *Preview* button shows how the message is created by replacing the placeholder with the table with the values in those columns. The following figure shows the result for the previous example.
 
-Send Column data as List in JSON
-================================
+.. figure:: /scaptures/action_email_report_preview.png
+   :align: center
+   :width: 100%
+
+.. _json_report_action:
+
+Send Column data as Report in JSON
+==================================
 
 This type of action sends a JSON object with data in some of the columns in the workflow to a pre-defined third party platform through a URL. Creating these actions is almost identical to creating a :ref:`Personalized JSON content <personalized_json>`, action with the difference it is not possible to use conditions (there is a single object sent), and including a column in the object means including a list with its values. The action is created selecting the corresponding action type as shown in the following figure.
 
-.. figure:: /scaptures/action_json_list_create.png
+.. figure:: /scaptures/action_json_report_create.png
    :align: center
    :width: 60%
 
-The page to edit this action is similar to the one to edit a :ref:`Personalized JSON content <personalized_json>` but only two tabs are present: *Text* and *Select Learners*.
- In the *Text* tab, when you select one column from the pull down menu *Insert Column as List*, a placeholder is inserted in the object. The following figure shows the resulting object with the inclusion of the data in the *email* column.
+The page to edit this action is similar to the one to edit a :ref:`Personalized JSON content <personalized_json>` but only two tabs are present: *Text* and *Select Learners*. In the *Text* tab, when you select one column from the pull down menu *Insert Table*, a placeholder is inserted in the object. The following figure shows the resulting object with the inclusion of the data in the *SID* and *email* columns.
 
-.. figure:: /scaptures/action_json_list_edit.png
+.. figure:: /scaptures/action_json_report_edit.png
    :align: center
    :width: 100%
 
-Using the *Preview* button shows how the object is created by replacing the placeholder with the list of values in that column. The following figure shows the result for the previous example.
+Using the *Preview* button shows how the object is created by replacing the placeholder with the lists of values in those columns. The following figure shows the result for the previous example.
 
-.. figure:: /scaptures/action_json_list_preview.png
+.. figure:: /scaptures/action_json_report_preview.png
    :align: center
    :width: 100%
 
