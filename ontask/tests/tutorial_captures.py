@@ -691,7 +691,7 @@ class TutorialCaptures(ScreenTests):
         topics = [x.strip() for x in question_values.split(',')]
         for topic in topics:
             self.create_condition(
-                topic[0:4].stip() + ' - Fail',
+                topic[0:4].strip() + ' - Fail',
                 '',
                 [('Survey Q1', 'equal', topic),
                  ('Total', 'less', 50)]
