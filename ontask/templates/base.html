@@ -252,7 +252,7 @@
     {% block footer %}
       {% cache 3600 site-footer LANGUAGE_CODE %}
         <nav class="navbar navbar-light bg-light" id="base_footer">
-          <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %}</span>
+          <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %} | <a href="{% url 'accessibility' %}">{% trans 'Accessibility' %}</a></span>
         </nav>
       {% endcache %}
     {% endblock %}
