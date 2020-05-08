@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 import pandas as pd
+from rest_framework import status
 from rest_framework.authtoken.models import Token
 
 from ontask import models, tests
@@ -384,8 +385,8 @@ class TableApiMerge(TableApiBase):
             format='json')
 
         self.assertEqual(response.data['detail'],
-                         'Unable to perform merge operation: '
-                         + 'Merge operation produced a result with no rows')
+            'Unable to perform merge operation: '
+            + 'Merge operation produced a result with no rows')
 
     # Merge with inner values
     def test_table_JSON_merge_to_inner(self):
@@ -533,7 +534,7 @@ class TableApiMerge(TableApiBase):
 
         dframe = pandas.load_table(workflow.get_data_frame_table_name())
         self.assertEqual(dframe[dframe['sid'] == 1]['newcol'].values[0],
-                         self.src_df['newcol'][0])
+            self.src_df['newcol'][0])
 
     def test_table_pandas_merge_to_left(self):
         # Get the only workflow in the fixture
@@ -561,7 +562,7 @@ class TableApiMerge(TableApiBase):
 
         dframe = pandas.load_table(workflow.get_data_frame_table_name())
         self.assertEqual(dframe[dframe['sid'] == 1]['newcol'].values[0],
-                         self.src_df['newcol'][0])
+            self.src_df['newcol'][0])
 
     # Merge with outer values but producing NaN everywhere
     def test_table_JSON_merge_to_outer_NaN(self):
@@ -671,3 +672,57 @@ class TableApiMerge(TableApiBase):
 
         # Compare both elements and check wf df consistency
         self.compare_tables(dframe, new_df)
+
+    # Merge a single row with non-localised date/time fields.
+    def test_table_JSON_merge_datetimes(self):
+        # Get the only workflow in the fixture
+        workflow = models.Workflow.objects.all()[0]
+
+        # Get the data through the API
+        response = self.client.put(
+            reverse('table:api_merge', kwargs={'wid': workflow.id}),
+            {
+                "how": "outer",
+                "left_on": "sid",
+                "right_on": "sid",
+                "src_df": {
+                    "sid": {"0": 4},
+                    "email": {"0": "student04@bogus.com"},
+                    "age": {"0": 14},
+                    "tstamp1": {"0": ""},
+                    "tstamp2": {"0": "2019-05-10 20:40:48.269638"},
+                    "tstamp3": {"0": "2019-06-03 15:28:59.787917"},
+                    "tstamp4": {"0": "2019-06-03 15:28:59.787917+09:30"},
+                },
+            },
+            format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        workflow = models.Workflow.objects.all()[0]
+        dst_df = pandas.load_table(workflow.get_data_frame_table_name())
+
+        self.assertEqual(workflow.nrows, 4)
+
+        self.assertEqual(
+            workflow.columns.get(name='tstamp2').data_type,
+            'datetime')
+
+        self.assertTrue(all(
+            elem.tzinfo is not None and elem.tzinfo.utcoffset(elem) is not None
+            for elem in dst_df['tstamp2'].dropna()))
+
+        self.assertEqual(
+            workflow.columns.get(name='tstamp3').data_type,
+            'datetime')
+
+        self.assertTrue(all(
+            elem.tzinfo is not None and elem.tzinfo.utcoffset(elem) is not None
+            for elem in dst_df['tstamp3'].dropna()))
+
+        self.assertEqual(
+            workflow.columns.get(name='tstamp4').data_type,
+            'datetime')
+
+        self.assertTrue(all(
+            elem.tzinfo is not None and elem.tzinfo.utcoffset(elem) is not None
+            for elem in dst_df['tstamp4'].dropna()))

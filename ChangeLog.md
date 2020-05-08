@@ -1,14 +1,24 @@
-## 7.1 ()
+## 7.1 (2020-05-09)
 
 ### Fixed
 
 - Error when showing number of table rows with all conditions false.
+
+- Error when cloning a condition from another action.
+
+- Error when merging data through the API with datetime columns
+
+### Changned
+
+- Email and JSON report actions now allow to include multiple columns (#185)
 
 ### Added
 
 - Action preview now shows the value of each condition.
 
 - Additional features to simplify keyboard navigation (#190)
+
+- Accessibility statement (#191)
 
 ## 7.0.2 (2020-03-04)
 

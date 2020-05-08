@@ -98,10 +98,6 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
             pd.notnull(df_source['bool2']),
             None)
 
-        # Datetime need to be localized to the local timezone
-        df_dst['date1'] = df_dst['date1'].dt.tz_convert(settings.TIME_ZONE)
-        df_dst['date2'] = df_dst['date2'].dt.tz_convert(settings.TIME_ZONE)
-
         # Data frames mut be identical
         assert df_source.equals(df_dst)
 
