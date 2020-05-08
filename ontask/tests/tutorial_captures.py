@@ -717,14 +717,14 @@ class TutorialCaptures(ScreenTests):
         for topic in topics:
             self.selenium.find_element_by_class_name('note-editable').send_keys(
                 ('{{% if {0} - Fail %}} Tips about {0} ' +
-                 'for those that failed.{{% endif %}}\n').format(topic)
+                 'for those that failed.{{% endif %}}\n').format(topic[0:4])
             )
 
         # Add the text for those that passed
         for topic in topics:
             self.selenium.find_element_by_class_name('note-editable').send_keys(
                 ('{{% if {0} - Passed %}}Tips about {0} ' +
-                 'for those that passed.{{% endif %}}\n').format(topic)
+                 'for those that passed.{{% endif %}}\n').format(topic[0:4])
             )
 
         self.selenium.find_element_by_class_name('note-editable').send_keys(
