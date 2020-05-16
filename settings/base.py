@@ -1,14 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-Django settings for ontask project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/dev/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/dev/ref/settings/
-"""
+"""Django settings for ontask project."""
 import json
 import os
 from os.path import dirname, exists, join
@@ -35,11 +27,8 @@ else:
     sys.exit(1)
 
 
-###############################################################################
-#
 # DUMP CONFIG IN DEBUG
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 def dump_config() -> None:
     """Print the configuration in the console."""
     print('ALLOWED_HOSTS:', ALLOWED_HOSTS)
@@ -81,11 +70,8 @@ def get_from_os_or_env(key: str, env_obj, default_value=''):
 #     LDAPGroupQuery
 # )
 
-###############################################################################
-#
 # CONFIGURATION VARIABLES (Os Environment)
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 AWS_ACCESS_KEY_ID = get_from_os_or_env('AWS_ACCESS_KEY_ID', env)
 AWS_SECRET_ACCESS_KEY = get_from_os_or_env('AWS_SECRET_ACCESS_KEY', env)
 AWS_STORAGE_BUCKET_NAME = get_from_os_or_env('AWS_STORAGE_BUCKET_NAME', env)
@@ -125,11 +111,8 @@ STATIC_URL_SUFFIX = get_from_os_or_env('STATIC_URL_SUFFIX', env, 'static')
 
 TIME_ZONE = get_from_os_or_env('TIME_ZONE', env, 'UTC')
 
-###############################################################################
-#
 # CONFIGURATION VARIABLES (Conf File)
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 DATABASE_URL = env.db()
 DEBUG = env.bool('DEBUG', default=False)
@@ -154,11 +137,8 @@ SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
 # USE SSL
 USE_SSL = env.bool('USE_SSL', default=False)
 
-###############################################################################
-#
 # Additional variables
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 # Path to the src folder
 BASE_DIR = environ.Path(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -382,19 +362,12 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 SITE_ID = 1
 
-###############################################################################
-#
 # Authentication Settings
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 AUTH_USER_MODEL = 'authtools.User'
 
-###############################################################################
-#
 # Internationalization
-# https://docs.djangoproject.com/en/dev/topics/i18n/
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
 LANGUAGES = (
     ('en-us', _('English')),
@@ -404,11 +377,8 @@ LANGUAGES = (
     ('ru', _('Russian')),
 )
 
-###############################################################################
-#
-# LOGGER (modified further in development/production)
-#
-###############################################################################
+# LOGGER (modified further in development.py/production.py)
+# ------------------------------------------------------------------------------
 LOGGING_CONFIG = None
 LOGGING = {
     'version': 1,
@@ -457,11 +427,8 @@ LOGGING = {
     },
 }
 
-###############################################################################
-#
 # SUMMERNOTE CONFIGURATION
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 SUMMERNOTE_THEME = 'bs4'
 SUMMERNOTE_CONFIG = {
     'iframe': False,
@@ -489,11 +456,8 @@ SUMMERNOTE_CONFIG = {
     'lazy': True,
 }
 
-###############################################################################
-#
 # DATA UPLOAD FILES
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", ' \
                         '"application/gzip", "application/x-gzip", ' \
                         '"application/vnd.ms-excel"]'
@@ -502,11 +466,8 @@ DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE', default=209715200)
 # Raise because default of 1000 is too short
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
-###############################################################################
-#
 # Disabled actions
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 DISABLED_ACTIONS = [
     # 'models.Action.PERSONALIZED_TEXT',
     # 'models.Action.PERSONALIZED_JSON',
@@ -517,19 +478,13 @@ DISABLED_ACTIONS = [
     'models.Action.TODO_LIST',
 ]
 
-###############################################################################
-#
 # Log configuration
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 LOGS_MAX_LIST_SIZE = 200
 SHORT_DATETIME_FORMAT = 'r'
 
-###############################################################################
-#
 # CELERY parameters
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 CELERY_BROKER_URL = REDIS_URL['LOCATION']
 CELERY_RESULT_BACKEND = REDIS_URL['LOCATION']
 CELERY_ACCEPT_CONTENT = ['application/json', 'pickle']
@@ -554,11 +509,8 @@ CELERY_BEAT_SCHEDULE = {
 }
 CELERY_TASK_ALWAYS_EAGER = ONTASK_TESTING
 
-###############################################################################
-#
 # Email sever configuration
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 # Host, port, user and password to open the communication thorugh SMTP
 # EMAIL
 EMAIL_HOST = env('EMAIL_HOST', default='')
@@ -605,13 +557,11 @@ EMAIL_ACTION_NOTIFICATION_SUBJECT = _('OnTask: Action executed')
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
                      '0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 
-###############################################################################
-#
 # LTI Authentication
+# ------------------------------------------------------------------------------
 #
 # In the next variable define a dictionary with name:secret pairs.
 #
-###############################################################################
 LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS', default={})
 LTI_INSTRUCTOR_GROUP_ROLES = env.list(
     'LTI_INSTRUCTOR_GROUP_ROLES',
@@ -646,15 +596,13 @@ LTI_INSTRUCTOR_GROUP_ROLES = env.list(
 #         "aux_params": {"burst": 10, "pause": 5}
 #     }
 # }
+# ------------------------------------------------------------------------------
 CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT', default='{}'))
 # Number of seconds left in the token validity to refresh
 CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)
 
-###############################################################################
-#
 # LDAP AUTHENTICATION
-#
-###############################################################################
+# ------------------------------------------------------------------------------
 # Variables taken from local.env
 # AUTH_LDAP_SERVER_URI = get_from_os_or_env('AUTH_LDAP_SERVER_URI', env)
 # AUTH_LDAP_BIND_PASSWORD = get_from_os_or_env('AUTH_LDAP_BIND_PASSWORD', env)
