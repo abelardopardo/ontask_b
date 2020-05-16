@@ -12,12 +12,11 @@ from ontask.scheduler.serializers import (
 
 
 class ScheduledOperationAPIListCreate(generics.ListCreateAPIView):
-    """Class to operate through the
-    get:
-    Return the list of scheduled actions
+    """Class to operate through the list of actions scheduled for a user.
 
-    post:
-    Create a new scheduled action with the given parameters
+    get: Return the list of scheduled actions
+
+    post: Create a new scheduled action with the given parameters
     """
 
     queryset = None
@@ -46,16 +45,14 @@ class ScheduledOperationAPIListCreate(generics.ListCreateAPIView):
 class ScheduledOperationAPIRetrieveUpdateDestroy(
     generics.RetrieveUpdateDestroyAPIView
 ):
-    """
-    get:
-    Returns the information for one of the scheduled actions
+    """Retrieve and update existing scheduled operations
 
-    put:
-    Modifies the scheduled action with the information included in the request
+    get: Returns the information for one of the scheduled actions
+
+    put: Modifies the scheduled action with the information included in the request
     (all fields are overwritten)
 
-    delete:
-    Delete the scheduling
+    delete: Delete the scheduled action.
     """
 
     queryset = None  # Needs to be overwritten
@@ -74,11 +71,9 @@ class ScheduledOperationAPIRetrieveUpdateDestroy(
 
 class ScheduledOperationEmailAPIListCreate(ScheduledOperationAPIListCreate):
     """
-    get:
-    Return the list of scheduled actions
+    get: Return the list of scheduled actions
 
-    post:
-    Create a new scheduled action with the given parameters
+    post: Create a new scheduled action with the given parameters
     """
 
     serializer_class = ScheduledEmailSerializer
@@ -101,11 +96,9 @@ class ScheduledOperationEmailAPIListCreate(ScheduledOperationAPIListCreate):
 
 class ScheduledOperationJSONAPIListCreate(ScheduledOperationAPIListCreate):
     """
-    get:
-    Return the list of scheduled actions
+    get: Return the list of scheduled actions
 
-    post:
-    Create a new scheduled action with the given parameters
+    post: Create a new scheduled action with the given parameters
     """
 
     serializer_class = ScheduledJSONSerializer
