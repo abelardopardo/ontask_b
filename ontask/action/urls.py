@@ -120,7 +120,7 @@ urlpatterns = [
         views.select_condition_for_question,
         name='edit_in_select_condition'),
     path(
-        '<int:tpk>/select_condition/',
+        '<int:pk>/select_condition/',
         views.select_condition_for_question,
         name='edit_in_select_condition'),
 
