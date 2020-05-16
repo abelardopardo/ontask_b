@@ -50,6 +50,7 @@ class BackToHome(tests.OnTaskTestCase):
             reverse('action:run_survey_row', kwargs={'pk': 1}),
             # Connection
             reverse('connection:sqlconns_index'),
+            reverse('connection:athenaconns_index'),
             # Dataops
             reverse('dataops:uploadmerge'),
             reverse('dataops:transform'),
@@ -64,9 +65,8 @@ class BackToHome(tests.OnTaskTestCase):
             reverse('dataops:upload_s2'),
             reverse('dataops:upload_s3'),
             reverse('dataops:upload_s4'),
-            # reverse('dataops:athenaconns_instructor_index'),
             reverse('dataops:sqlupload_start', kwargs={'pk': 1}),
-            # reverse('dataops:athenaupload_start', kwargs={'pk': 1}),
+            reverse('dataops:athenaupload_start', kwargs={'pk': 1}),
             # Logs
             reverse('logs:page_view', kwargs={'pk': 1}),
             # Table
