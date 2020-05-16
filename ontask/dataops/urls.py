@@ -60,6 +60,12 @@ urlpatterns = [
         views.sqlupload_start,
         name='sqlupload_start'),
 
+    # Athena Upload/Merge
+    path(
+        '<int:pk>/athenaupload_start/',
+        views.athenaupload_start,
+        name='athenaupload_start'),
+
     # Upload/Merge
     path('upload_s2/', views.upload_s2, name='upload_s2'),
 

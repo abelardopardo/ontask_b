@@ -35,7 +35,7 @@ def athenaupload_start(
         pk=pk).filter(enabled=True).first()
     if not conn:
         return redirect(
-            'dataops:athenaconns_instructor_index_instructor_index')
+            'connection:athenaconns_index')
 
     form = ontask.connection.forms.AthenaRequestConnectionParam(
         request.POST or None,
@@ -74,4 +74,4 @@ def athenaupload_start(
             'dtype_select': _('Athena connection'),
             'connection': conn,
             'valuerange': range(5) if workflow.has_table() else range(3),
-            'prev_step': reverse('dataops:athenaconns_instructor_index')})
+            'prev_step': reverse('connection:athenaconns_index')})

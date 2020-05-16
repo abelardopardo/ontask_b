@@ -49,48 +49,43 @@ urlpatterns = [
         name='sqlconn_toggle'),
 
     # Athena Connections
-    # path(
-    #     'athenaconns_admin',
-    #     views.athena_connection_admin_index,
-    #     name='athenaconns_admin_index'),
-    #
-    # path(
-    #     'athenaconns_instructor/',
-    #     views.athena_connection_instructor_index,
-    #     name='athenaconns_instructor_index'),
-    #
-    # path(
-    #     'athenaconn_add/',
-    #     views.athena_connection_edit,
-    #     name='athenaconn_add'),
-    #
-    # path(
-    #     '<int:pk>/athenaconn_edit/',
-    #     views.athena_connection_edit,
-    #     name='athenaconn_edit'),
-    #
-    # path(
-    #     '<int:pk>/athenaconn_view/',
-    #     views.athena_connection_view,
-    #     name='athenaconn_view'),
-    #
-    # path(
-    #     '<int:pk>/athenaconn_clone/',
-    #     views.athena_connection_clone,
-    #     name='athenaconn_clone'),
-    #
-    # path(
-    #     '<int:pk>/athenaconn_delete/',
-    #     views.athena_connection_delete,
-    #     name='athenaconn_delete'),
-    #
-    # path(
-    #     '<int:pk>/athenaupload_start/',
-    #     views.athenaupload_start,
-    #     name='athenaupload_start'),
-    #
-    # path(
-    #     '<int:pk>/athenaconn_toggle/',
-    #     views.athenaconn_toggle,
-    #     name='athenaconn_toggle'),
+    path(
+        'athenaconns_admin',
+        views.athena_connection_admin_index,
+        name='athenaconns_admin_index'),
+
+    path(
+        'athenaconns_instructor/',
+        views.athena_connection_instructor_index,
+        name='athenaconns_index'),
+
+    path(
+        'athenaconn_add/',
+        views.athena_connection_edit,
+        name='athenaconn_add'),
+
+    path(
+        '<int:pk>/athenaconn_edit/',
+        views.athena_connection_edit,
+        name='athenaconn_edit'),
+
+    path(
+        '<int:pk>/athenaconn_view/',
+        views.athena_connection_view,
+        name='athenaconn_view'),
+
+    path(
+        '<int:pk>/athenaconn_clone/',
+        views.athena_connection_clone,
+        name='athenaconn_clone'),
+
+    path(
+        '<int:pk>/athenaconn_delete/',
+        views.athena_connection_delete,
+        name='athenaconn_delete'),
+
+    path(
+        '<int:pk>/athenaconn_toggle/',
+        views.athenaconn_toggle,
+        name='athenaconn_toggle'),
 ]

@@ -93,7 +93,7 @@ def athena_connection_view(
     if not c_obj:
         # Connection object not found, go to table of Athena connections
         return http.JsonResponse({
-            'html_redirect': reverse('dataops:athenaconns_admin_index')})
+            'html_redirect': reverse('connnection:athenaconns_admin_index')})
 
     return http.JsonResponse({
         'html_form': render_to_string(
