@@ -95,7 +95,7 @@ def ontask_bootstrap_js() -> str:
 def ontask_datatables_jquery_js() -> str:
     """Provide the datatables JQuery JS URL."""
     return format_html(
-        '<script src="//cdn.datatables.net/1.10.18/js/jquery.dataTables.min'
+        '<script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min'
         '.js"></script>')
 
 
@@ -104,7 +104,7 @@ def ontask_datatables_bootstrap_css() -> str:
     """Provide the datatables bootstrap CSS URL."""
     return format_html(
         '<link rel="stylesheet" type="text/css" '
-        'href="//cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/r-2.2.2/fc-3.2'
+        'href="//cdn.datatables.net/v/bs4/dt-1.10.21/cr-1.5.0/r-2.2.2/fc-3.2'
         '.5/rr-1.2.4/sc-1.5.0/datatables.min.css"/>')
 
 
@@ -113,7 +113,7 @@ def ontask_datatables_bootstrap_js() -> str:
     """Provide the datatables bootstrap JS URL."""
     return format_html(
         '<script type="text/javascript" '
-        'src="//cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/r-2.2.2/fc-3.2.5'
+        'src="//cdn.datatables.net/v/bs4/dt-1.10.21/cr-1.5.0/r-2.2.2/fc-3.2.5'
         '/rr-1.2.4/sc-1.5.0/datatables.min.js"></script>')
 
 
