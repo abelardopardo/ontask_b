@@ -49,7 +49,9 @@ class Log(Owner):
     ACTION_JSON_SENT = 'action_json_sent'
     ACTION_REPORT_EMAIL_SENT = 'action_report_email_sent'
     ACTION_QUESTION_ADD = 'question_add'
+    ACTION_TODOITEM_ADD = 'todoitem_add'
     ACTION_QUESTION_TOGGLE_CHANGES = 'question_toggle_changes'
+    ACTION_TODOITEM_TOGGLE_CHANGES = 'todoitem_toggle_changes'
     ACTION_RUBRIC_CRITERION_ADD = 'action_rubric_criterion_add'
     ACTION_RUBRIC_CRITERION_EDIT = 'action_rubric_criterion_edit'
     ACTION_RUBRIC_CRITERION_DELETE = 'action_rubric_criterion_delete'
@@ -66,6 +68,7 @@ class Log(Owner):
     ACTION_SERVE_TOGGLED = 'action_serve_toggled'
     ACTION_SERVED_EXECUTE = 'action_served_execute'
     ACTION_SURVEY_INPUT = 'survey_input'
+    ACTION_TODO_INPUT = 'todo_input'
     ACTION_UPDATE = 'action_update'
     ACTION_ZIP = 'action_zip'
     ATHENA_CONNECTION_CREATE = 'athena_connection_create'
@@ -137,7 +140,9 @@ class Log(Owner):
         ACTION_JSON_SENT: _('Emails sent'),
         ACTION_REPORT_EMAIL_SENT: _('Email with data report sent'),
         ACTION_QUESTION_ADD: _('Question added'),
+        ACTION_TODOITEM_ADD: _('TODO item added'),
         ACTION_QUESTION_TOGGLE_CHANGES: _('Question toggle changes'),
+        ACTION_TODOITEM_TOGGLE_CHANGES: _('TODO item toggle changes'),
         ACTION_RUBRIC_CRITERION_ADD: _('Add a rubric criterion'),
         ACTION_RUBRIC_CRITERION_EDIT: _('Edit rubric criterion'),
         ACTION_RUBRIC_CRITERION_DELETE: _('Delete rubric criterion'),
@@ -149,12 +154,13 @@ class Log(Owner):
             _('Execute scheduled canvas email action'),
         ACTION_RUN_PERSONALIZED_EMAIL: _('Execute scheduled email action'),
         ACTION_RUN_PERSONALIZED_JSON: _('Execute scheduled JSON action'),
-        ACTION_RUN_JSON_REPORT: _('Execute scheduled JSON report action'),
-        ACTION_RUN_EMAIL_REPORT: _('Execute scheduled send report action'),
+        ACTION_RUN_SURVEY: _('Execute survey'),
+        ACTION_RUN_TODOLIST: _('Execute TODO list'),
         ACTION_ZIP: _('Create a zip with personalized content'),
         ACTION_SERVE_TOGGLED: _('Action URL toggled'),
         ACTION_SERVED_EXECUTE: _('Action served'),
         ACTION_SURVEY_INPUT: _('Survey data input'),
+        ACTION_TODO_INPUT: _('TODO data input'),
         ACTION_UPDATE: _('Action updated'),
         ATHENA_CONNECTION_CLONE: _('Athena connection cloned'),
         ATHENA_CONNECTION_CREATE: _('Athena connection created'),

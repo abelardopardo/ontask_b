@@ -177,7 +177,7 @@ def toggle_question_change(
     """Enable/Disable changes in the question.
 
     :param request: Request object
-    :param pk: Action/Question/Condition PK
+    :param pk: Action/Question-TODOITEM/Condition PK
     :param workflow: Workflow being manipulated (set by the decorators)
     :param cc_tuple: Action/Column/Condition tuple being manipulated (set by
     the decorator)
@@ -186,7 +186,11 @@ def toggle_question_change(
     del pk, workflow
     cc_tuple.changes_allowed = not cc_tuple.changes_allowed
     cc_tuple.save(update_fields=['changes_allowed'])
-    cc_tuple.log(request.user, models.Log.ACTION_QUESTION_TOGGLE_CHANGES)
+    if cc_tuple.action.action_type == models.Action.SURVEY:
+        cc_tuple.log(request.user, models.Log.ACTION_QUESTION_TOGGLE_CHANGES)
+    else:
+        cc_tuple.log(request.user, models.Log.ACTION_TODOITEM_TOGGLE_CHANGES)
+
 
     return http.JsonResponse({'is_checked': cc_tuple.changes_allowed})
 

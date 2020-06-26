@@ -12,7 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskServiceException, models
 from ontask.column import forms, services
-from ontask.core import ajax_required, get_column, get_workflow, is_instructor
+from ontask.core import (
+    ajax_required, get_action, get_column, get_workflow, is_instructor)
 from ontask.dataops.formula import evaluation
 
 # These are the column operands offered through the GUI. They have immediate
@@ -145,6 +146,60 @@ def question_add(
     return http.JsonResponse({
         'html_form': render_to_string(
             'column/includes/partial_question_addedit.html',
+            {
+                'form': form,
+                'action_id': action.id,
+                'add': True},
+            request=request),
+    })
+
+
+@user_passes_test(is_instructor)
+@ajax_required
+@get_action(pf_related=['columns'])
+def todoitem_add(
+    request: http.HttpRequest,
+    pk: Optional[int] = None,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
+) -> http.JsonResponse:
+    """Add an item to the todo list
+
+    :param request: Http Request
+    :param pk: Action ID where to add the question
+    :param workflow: Workflow being manipulated
+    :return: JSON response
+    """
+    if workflow.nrows == 0:
+        messages.error(
+            request,
+            _('Cannot add todo items to a workflow without data'),
+        )
+        return http.JsonResponse({'html_redirect': ''})
+
+    form = forms.TODOItemForm(request.POST or None, workflow=workflow)
+
+    if request.method == 'POST' and form.is_valid():
+        # Save the column object attached to the form
+        column = form.save(commit=False)
+        try:
+            services.add_column_to_workflow(
+                request.user,
+                workflow,
+                column,
+                form.initial_valid_value,
+                models.Log.ACTION_TODOITEM_ADD,
+                action)
+            form.save_m2m()
+        except OnTaskServiceException as exc:
+            exc.message_to_error(request)
+            exc.delete()
+
+        return http.JsonResponse({'html_redirect': ''})
+
+    return http.JsonResponse({
+        'html_form': render_to_string(
+            'column/includes/partial_todoitem_addedit.html',
             {
                 'form': form,
                 'action_id': action.id,
@@ -318,7 +373,7 @@ def column_edit(
         return http.JsonResponse({'html_redirect': ''})
 
     if is_question:
-        template = 'workflow/includes/partial_question_addedit.html'
+        template = 'column/includes/partial_question_addedit.html'
     else:
         template = 'column/includes/partial_addedit.html'
     return http.JsonResponse({

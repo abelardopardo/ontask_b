@@ -103,6 +103,7 @@ class ActionEditManager:
             'is_personalized_text': (
                 action.action_type == models.Action.PERSONALIZED_TEXT),
             'is_rubric': action.action_type == models.Action.RUBRIC_TEXT,
+            'is_survey': action.action_type == models.Action.SURVEY,
             'all_false_conditions': any(
                 cond.n_rows_selected == 0
                 for cond in action.conditions.all()),

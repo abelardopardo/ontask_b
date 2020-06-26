@@ -7,7 +7,11 @@
       <div class="dropdown btn-group">
         <button type="button" class="btn btn-outline-dark dropdown-toggle"
                 data-toggle="dropdown">
-          {% trans 'Insert existing question' %}
+          {% if is_survey %}
+            {% trans 'Insert existing question' %}
+          {% else %}
+            {% trans 'Insert existing TODO item' %}
+          {% endif %}
         </button>
         <div class="shadow dropdown-menu scrollable-menu">
           {% for column in columns_to_insert %}
@@ -16,13 +20,25 @@
           {% endfor %}
         </div>
       </div>
-      <button type="button"
-              class="btn btn-outline-dark js-workflow-question-add"
-              data-url="{% url 'column:question_add' action.id %}"
-              data-toggle="tooltip"
-              title="{% trans 'Add a new question to the action' %}">
-        <span class="fa fa-plus"></span> {% trans 'Create question' %}
-      </button>
+      {% if is_survey %}
+        <button type="button"
+                class="btn btn-outline-dark js-action-question-add"
+                data-url="{% url 'column:question_add' action.id %}"
+                data-toggle="tooltip"
+                title="{% trans 'Add a new question to the action' %}">
+          <span class="fa fa-plus"></span>
+            {% trans 'Create question' %}
+        </button>
+      {% else %}
+        <button type="button"
+                class="btn btn-outline-dark js-action-todoitem-add"
+                data-url="{% url 'column:todoitem_add' action.id %}"
+                data-toggle="tooltip"
+                title="{% trans 'Add a new item to the list' %}">
+          <span class="fa fa-plus"></span>
+            {% trans 'Create item' %}
+        </button>
+      {% endif %}
     </div>
   </div>
   <div class="justify-content-center mb-3">
