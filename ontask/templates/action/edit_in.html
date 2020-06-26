@@ -100,7 +100,13 @@
         id="edit-personalized-text-tabs" role="tablist">
       <li class="nav-item pr-1">
         <a class="nav-link active border border-dark border-bottom-0"
-           id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">Survey parameters</a>
+           id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">
+          {% if is_survey %}
+            {% trans 'Survey parameters' %}
+          {% else %}
+            {% trans 'TODO List parameters' %}
+          {% endif %}
+        </a>
       </li>
       {% include 'action/includes/partial_questions_tab_li.html' %}
       {% include 'condition/includes/partial_filter_tab_li.html' %}
@@ -110,7 +116,7 @@
       <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
            id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
         <div class="my-3">
-          <h5 class="text-center">Survey description (shown to learners)
+          <h5 class="text-center">{% trans 'Description (shown to learners)' %}
             <button type="button"
                     class="btn btn-outline-dark js-description-edit"
                     data-url="{% url 'action:edit_description' action.id %}"

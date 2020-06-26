@@ -2,13 +2,14 @@
 {% cache 3600 action_partial_type_legend LANGUAGE_CODE %}
   <div class="row justify-content-center">
     <div style="display:table">
-      <span class="fa fa-file-text"></span>&nbsp;Personalized Text&nbsp;|&nbsp;
-      <span class="fa fa-share-square"></span>&nbsp;Send Report&nbsp;|&nbsp;
-      <span class="fa fa-tasks"></span>&nbsp;Rubric&nbsp;|&nbsp;
-      <span class="fa fa-question-circle-o"></span>&nbsp;Survey&nbsp;|&nbsp;
-      <span class="fa fa-envelope-square"></span>&nbsp;Personalized Canvas Email&nbsp;|&nbsp;
-      <span class="fa fa-code"></span>&nbsp;Personalized JSON&nbsp;|&nbsp;
-      <span class="fa fa-file-code-o"></span>&nbsp;Send JSON Report
+      <span class="fa fa-file-text"></span>&nbsp;{% trans 'Personalized Text' %}&nbsp;|&nbsp;
+      <span class="fa fa-share-square"></span>&nbsp;{% trans 'Send Report' %}&nbsp;|&nbsp;
+      <span class="fa fa-tasks"></span>&nbsp;{% trans 'Rubric' %}&nbsp;|&nbsp;
+      <span class="fa fa-question-circle-o"></span>&nbsp;{% trans 'Survey' %}&nbsp;|&nbsp;
+      <span class="fa fa-check-square-o"></span>&nbsp;{% trans 'TODO List' %}&nbsp;|&nbsp;
+      <span class="fa fa-envelope-square"></span>&nbsp;{% trans 'Personalized Canvas Email' %}&nbsp;|&nbsp;
+      <span class="fa fa-code"></span>&nbsp;{% trans 'Personalized JSON' %}&nbsp;|&nbsp;
+      <span class="fa fa-file-code-o"></span>&nbsp;{% trans 'Send JSON Report' %}
     </div>
   </div>
 {% endcache %}
