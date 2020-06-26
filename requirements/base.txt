@@ -1,5 +1,5 @@
 Babel==2.8.0
-Django[argon2]==2.2.12
+Django[argon2]==2.2.13
 Jinja2==2.11.2
 Markdown==3.2.1
 MarkupSafe==1.1.1
@@ -63,7 +63,7 @@ entrypoints==0.3
 et-xmlfile==1.0.1
 future==0.18.2
 html2text==2020.1.16
-httplib2==0.17.3
+httplib2==0.18.0
 idna==2.8
 Image==1.5.28
 imagesize==1.2.0
