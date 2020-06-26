@@ -5,7 +5,7 @@
 <form method="post" 
   {% if add %}
     action="{% url 'column:question_add' action_id %}"
-    class="js-workflow-question-add-form">
+    class="js-action-question-add-form">
   {% else %}
     action="{% url 'column:question_edit' pk %}"
     class="js-question-edit-form">

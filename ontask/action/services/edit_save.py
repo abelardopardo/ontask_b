@@ -34,11 +34,6 @@ def save_action_form(
         if not form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
-        if models.Action.TODO_LIST == form.cleaned_data.get('action_type'):
-            # To be implemented
-            return http.JsonResponse(
-                {'html_redirect': reverse('under_construction')})
-
         # Fill in the fields of the action (without saving to DB)_
         action_item = form.save(commit=False)
 

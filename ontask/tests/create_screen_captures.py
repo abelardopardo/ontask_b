@@ -579,7 +579,7 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('action_edit_action_in_question_tab.png')
 
         self.selenium.find_element_by_xpath(
-            "//button[contains(@class, 'js-workflow-question-add')]").click()
+            "//button[contains(@class, 'js-action-question-add')]").click()
         self.wait_for_modal_open()
         self.modal_ss("action_edit_action_in_create_question.png")
         self.cancel_modal()

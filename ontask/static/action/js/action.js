@@ -171,10 +171,12 @@ $(function () {
   $("#modal-item").on("submit", ".js-action-showurl-form", saveForm);
 
   // Column Add
-  $("#edit-survey-tab-content").on("click", ".js-workflow-question-add", loadForm);
+  $("#edit-survey-tab-content").on("click", ".js-action-question-add", loadForm);
+  $("#edit-survey-tab-content").on("click", ".js-action-todoitem-add", loadForm);
   $("#insert-criterion").on("click", ".js-workflow-criterion-insert", ajaxSimplePost);
   $("#insert-criterion").on("click", ".js-workflow-criterion-add", loadForm);
-  $("#modal-item").on("submit", ".js-workflow-question-add-form", saveForm);
+  $("#modal-item").on("submit", ".js-action-question-add-form", saveForm);
+  $("#modal-item").on("submit", ".js-action-todoitem-add-form", saveForm);
   $("#modal-item").on("submit", ".js-workflow-criterion-add-form", saveForm);
 
   // Column Selected Edit
@@ -182,6 +184,7 @@ $(function () {
     ".js-workflow-question-edit",
     loadForm);
   $("#modal-item").on("submit", ".js-question-edit-form", saveForm);
+  $("#modal-item").on("submit", ".js-todoitem-edit-form", saveForm);
 
   // Attachment operations
   $("#attachment-selector").on("click", ".js-attachment-insert", ajaxSimplePost);

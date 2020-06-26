@@ -3,7 +3,13 @@
 {% load ontask_tags %}
 {% load static %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{% trans 'Edit Survey' %}{% endblock %}
+{% block title %}{{ block.super }}
+  {% if is_survey %}
+    {% trans 'Edit Survey' %}
+  {% else %}
+    {% trans 'Edit TODO List' %}
+  {% endif %}
+{% endblock %}
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
   <link href="{% static 'css/sol.css' %}" rel="stylesheet">
@@ -78,10 +84,22 @@
     {% include 'action/includes/partial_action_edit_out_warning.html' %}
     <div class="alert-danger">
       {% if not has_no_key %}
-        <p class="text-center">{% trans 'There must be at least one question (non-key column) in the survey.' %}</p>
+        <p class="text-center">
+          {% if is_survey %}
+            {% trans 'There must be at least one question (non-key column).' %}
+          {% else %}
+            {% trans 'There must be at least one item in the list (non-key column).' %}
+          {% endif %}
+        </p>
       {% endif %}
       {% if any_empty_description %}
-        <p class="text-center">{% trans 'All questions should have non-empty descriptions.' %}</p>
+        <p class="text-center">
+          {% if is_survey %}
+            {% trans 'All questions should have non-empty descriptions.' %}
+          {% else %}
+            {% trans 'All list items should have non-emty descriptions.' %}
+          {% endif %}
+        </p>
       {% endif %}
       {% if not action.description_text %}
         <p class="text-center">
@@ -93,7 +111,13 @@
         </p>
       {% endif %}
       {% if not key_selected %}
-        <p class="shadow alert-danger text-center" style="margin-top:1ex;"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'You need to specify a key column in Survey Parameters' %}</p>
+        <p class="text-center">
+          {% if is_survey %}
+            {% trans 'You need to specify a key column in the  Survey Parameters' %}
+          {% else %}
+            {% trans 'You need to specify a key column in the  TODO List Parameters' %}
+          {% endif %}
+        </p>
       {% endif %}
     </div>
     <ul class="nav nav-tabs border-0 justify-content-center"

@@ -267,11 +267,6 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
                             'id': record.column.id,
                             'aid': action.id}))],
                 condition_list=context['conditions']),
-            'columns_to_insert': workflow.columns.exclude(
-                column_condition_pair__action=action,
-            ).exclude(
-                is_key=True,
-            ).distinct().order_by('position'),
             'any_empty_description': tuples.filter(
                 column__description_text='',
                 column__is_key=False,
@@ -279,6 +274,20 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
             'key_columns': workflow.get_unique_columns(),
             'key_selected': tuples.filter(column__is_key=True).first(),
             'has_no_key': tuples.filter(column__is_key=False).exists()})
+
+        if action.action_type == models.Action.SURVEY:
+            # Add all columns that are not inserted nor key
+            context['columns_to_insert'] = workflow.columns.exclude(
+                column_condition_pair__action=action,
+            ).exclude(
+                is_key=True,
+            ).distinct().order_by('position')
+        else:
+            # Add all columns that are not inserted nor key, and boolean type
+            context['columns_to_insert'] = workflow.columns.exclude(
+                column_condition_pair__action=action,
+            ).exclude(is_key=True).filter(
+                data_type='boolean').distinct().order_by('position')
 
     def process_edit_request(
         self,

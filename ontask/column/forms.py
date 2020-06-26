@@ -265,6 +265,39 @@ class QuestionForm(ColumnBasicForm):
             'active_to']
 
 
+class TODOItemForm(ColumnBasicForm):
+    """Form to add a question."""
+
+    def __init__(self, *args, **kwargs):
+        """Set the appropriate labels."""
+        super().__init__(*args, **kwargs)
+
+        self.fields['name'].label = _('Item name')
+        self.fields['description_text'].label = _(
+            'Description (shown to the learners)')
+        self.fields['position'].label = _(
+            'Item position (zero to insert last)')
+        self.fields['active_from'].label = _('Item active from')
+        self.fields['active_to'].label = _('Item active until')
+
+        self.fields['data_type'].choices = [('boolean', 'boolean')]
+        self.fields['data_type'].initial = 'boolean'
+        self.fields['data_type'].disabled = True
+
+        self.fields['raw_categories'].widget = forms.HiddenInput()
+
+    class Meta(ColumnBasicForm.Meta):
+        """Set the fields."""
+
+        fields = [
+            'name',
+            'description_text',
+            'data_type',
+            'position',
+            'active_from',
+            'active_to']
+
+
 class CriterionForm(ColumnBasicForm):
     """Form to add a question."""
 

@@ -184,6 +184,8 @@ urlpatterns = [
 ]
 
 
+# PERSONALIZED TEXT
+# ------------------------------------------------------------------------------
 EMAIL_PRODUCER = services.ActionManagerEmail(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_out.html',
@@ -205,6 +207,8 @@ tasks.task_execute_factory.register_producer(
     models.Log.ACTION_RUN_PERSONALIZED_EMAIL,
     EMAIL_PRODUCER)
 
+# EMAIL REPORT
+# ------------------------------------------------------------------------------
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.EMAIL_REPORT,
     EMAIL_REPORT_PRODUCER)
@@ -212,6 +216,8 @@ tasks.task_execute_factory.register_producer(
     models.Log.ACTION_RUN_EMAIL_REPORT,
     EMAIL_REPORT_PRODUCER)
 
+# RUBRIC
+# ------------------------------------------------------------------------------
 RUBRIC_PRODUCER = services.ActionManagerRubric(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_rubric.html',
@@ -223,6 +229,8 @@ services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.RUBRIC_TEXT,
     RUBRIC_PRODUCER)
 
+# PERSONALIZED JSON
+# ------------------------------------------------------------------------------
 JSON_PRODUCER = services.ActionManagerJSON(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_out.html',
@@ -245,6 +253,8 @@ tasks.task_execute_factory.register_producer(
     models.Log.ACTION_RUN_PERSONALIZED_JSON,
     JSON_PRODUCER)
 
+# JSON REPORT
+# ------------------------------------------------------------------------------
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.JSON_REPORT,
     JSON_REPORT_PRODUCER)
@@ -253,6 +263,8 @@ tasks.task_execute_factory.register_producer(
     models.Log.ACTION_RUN_JSON_REPORT,
     JSON_REPORT_PRODUCER)
 
+# CANVAS PERSONALIZED EMAIL
+# ------------------------------------------------------------------------------
 CANVAS_EMAIL_PRODUCER = services.ActionManagerCanvasEmail(
     edit_form_class=forms.EditActionOutForm,
     edit_template='action/edit_out.html',
@@ -268,6 +280,8 @@ tasks.task_execute_factory.register_producer(
     models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL,
     CANVAS_EMAIL_PRODUCER)
 
+# ZIP action
+# ------------------------------------------------------------------------------
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.action.ZIP_OPERATION,
     services.ActionManagerZip(
@@ -275,9 +289,20 @@ services.ACTION_PROCESS_FACTORY.register_producer(
         run_template='action/action_zip_step1.html',
         log_event=models.Log.ACTION_ZIP))
 
+# SURVEY
+# ------------------------------------------------------------------------------
 services.ACTION_PROCESS_FACTORY.register_producer(
     models.Action.SURVEY,
     services.ActionManagerSurvey(
         edit_template='action/edit_in.html',
         run_template='action/run_survey.html',
         log_event=models.Log.ACTION_SURVEY_INPUT))
+
+# TODO_LIST action
+# ------------------------------------------------------------------------------
+services.ACTION_PROCESS_FACTORY.register_producer(
+    models.Action.TODO_LIST,
+    services.ActionManagerSurvey(
+        edit_template='action/edit_in.html',
+        run_template='action/run_survey.html',
+        log_event=models.Log.ACTION_TODO_INPUT))

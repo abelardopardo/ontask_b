@@ -150,6 +150,8 @@ def update_row_values(
     log_item = action.log(
         request.user,
         models.Log.ACTION_SURVEY_INPUT,
+        action_id=action.id,
+        action=action.name,
         new_values=json.dumps(dict(zip(keys, values))))
 
     # Modify the time of execution for the action

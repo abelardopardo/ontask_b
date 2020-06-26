@@ -1661,7 +1661,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.selenium.find_element_by_id('questions-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME,
-                                        'js-workflow-question-add'))
+                                        'js-action-question-add'))
         )
 
     def select_questions_condition(self, qname, cname):
@@ -1686,7 +1686,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH,
-                 '//button[contains(@class, "js-workflow-question-add")]')
+                 '//button[contains(@class, "js-action-question-add")]')
             )
         )
 

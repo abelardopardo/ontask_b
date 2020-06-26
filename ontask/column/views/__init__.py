@@ -6,7 +6,7 @@ from ontask.column.views.criterion_crud import (
 )
 from ontask.column.views.crud import (
     column_clone, column_edit, create, delete, formula_column_add,
-    question_add, random_column_add,
+    question_add, random_column_add, todoitem_add
 )
 from ontask.column.views.index import index, index_ss
 from ontask.column.views.ops import (

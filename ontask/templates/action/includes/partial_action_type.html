@@ -7,7 +7,9 @@
     <span class="fa fa-code"></span>
   {% elif record.action_type == record.SURVEY %}
     <span class="fa fa-question-circle-o"></span>
-  {% elif record.action_type == 'email_report' %}
+  {% elif record.action_type == record.TODO_LIST %}
+    <span class="fa fa-check-square-o"></span>
+  {% elif record.action_type == record.EMAIL_REPORT %}
     <span class="fa fa-share-square"></span>
   {% elif record.action_type == record.JSON_REPORT %}
     <span class="fa fa-file-code-o"></span>
