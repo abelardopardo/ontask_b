@@ -84,7 +84,13 @@
         <p class="text-center">{% trans 'All questions should have non-empty descriptions.' %}</p>
       {% endif %}
       {% if not action.description_text %}
-        <p class="shadow text-center alert-danger"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'No description text provided in Survey Parameters' %}</p>
+        <p class="text-center">
+          {% if is_survey %}
+            {% trans 'No description text provided in Survey Parameters' %}
+          {% else %}
+            {% trans 'No description text provided in TODO List Parameters.' %}
+          {% endif %}
+        </p>
       {% endif %}
       {% if not key_selected %}
         <p class="shadow alert-danger text-center" style="margin-top:1ex;"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'You need to specify a key column in Survey Parameters' %}</p>

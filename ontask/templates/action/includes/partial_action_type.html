@@ -1,17 +1,17 @@
 <div data-toggle="tooltip" title="{{ record.get_action_type_display }}">
-  {% if record.action_type == 'personalized_text' %}
+  {% if record.action_type == record.PERSONALIZED_TEXT %}
     <span class="fa fa-file-text"></span>
-  {% elif record.action_type == 'personalized_canvas_email' %}
+  {% elif record.action_type == record.PERSONALIZED_CANVAS_EMAIL %}
     <span class="fa fa-envelope-square"></span>
-  {% elif record.action_type == 'personalized_json' %}
+  {% elif record.action_type == record.PERSONALIZED_JSON %}
     <span class="fa fa-code"></span>
-  {% elif record.action_type == 'survey' %}
+  {% elif record.action_type == record.SURVEY %}
     <span class="fa fa-question-circle-o"></span>
   {% elif record.action_type == 'email_report' %}
     <span class="fa fa-share-square"></span>
-  {% elif record.action_type == 'json_report' %}
+  {% elif record.action_type == record.JSON_REPORT %}
     <span class="fa fa-file-code-o"></span>
-  {% elif record.action_type == 'rubric_text' %}
+  {% elif record.action_type == record.RUBRIC_TEXT %}
     <span class="fa fa-tasks"></span>
   {% endif %}
 </div>

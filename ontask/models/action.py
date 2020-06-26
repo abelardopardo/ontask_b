@@ -139,6 +139,11 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         """Get bool stating if action is outputting data."""
         return not self.is_in
 
+    @functional.cached_property
+    def type_name(self) -> bool:
+        """Get bool stating if action is Survey or similar."""
+        return self.ACTION_TYPES[self.action_type]
+
     @property
     def is_active(self) -> bool:
         """Calculate if the action is ready for execution.

@@ -100,17 +100,19 @@ def create(
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_workflow(pf_related=['actions', 'columns'])
+@get_action(pf_related=['columns'])
 def question_add(
     request: http.HttpRequest,
     pk: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
 ) -> http.JsonResponse:
-    """Add a column.
+    """Add a column to a survey action
 
     :param request: Http Request
     :param pk: Action ID where to add the question
     :param workflow: Workflow being manipulated
+    :param action: Action being manipulated
     :return: JSON response
     """
     if workflow.nrows == 0:
@@ -120,14 +122,6 @@ def question_add(
         )
         return http.JsonResponse({'html_redirect': ''})
 
-    # Get the action and the columns
-    action = workflow.actions.filter(pk=pk).first()
-    if not action:
-        messages.error(
-            request,
-            _('Cannot find action to add question.'),
-        )
-        return http.JsonResponse({'html_redirect': reverse('action:index')})
     form = forms.QuestionForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
@@ -150,10 +144,9 @@ def question_add(
 
     return http.JsonResponse({
         'html_form': render_to_string(
-            'workflow/includes/partial_question_addedit.html',
+            'column/includes/partial_question_addedit.html',
             {
                 'form': form,
-                'is_question': True,
                 'action_id': action.id,
                 'add': True},
             request=request),

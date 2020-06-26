@@ -61,6 +61,8 @@ class Log(Owner):
         'action_run_personalized_canvas_email')
     ACTION_RUN_PERSONALIZED_EMAIL = 'action_run_personalized_email'
     ACTION_RUN_PERSONALIZED_JSON = 'action_run_personalized_json'
+    ACTION_RUN_SURVEY = 'action_run_survey'
+    ACTION_RUN_TODOLIST = 'action_run_todolist'
     ACTION_SERVE_TOGGLED = 'action_serve_toggled'
     ACTION_SERVED_EXECUTE = 'action_served_execute'
     ACTION_SURVEY_INPUT = 'survey_input'
@@ -141,6 +143,8 @@ class Log(Owner):
         ACTION_RUBRIC_CRITERION_DELETE: _('Delete rubric criterion'),
         ACTION_RUBRIC_CELL_EDIT: _('Rubric cell edit'),
         ACTION_RUBRIC_LOA_EDIT: _('Rubric level of attainment edit'),
+        ACTION_RUN_EMAIL_REPORT: _('Execute scheduled send report action'),
+        ACTION_RUN_JSON_REPORT: _('Execute scheduled JSON report action'),
         ACTION_RUN_PERSONALIZED_CANVAS_EMAIL:
             _('Execute scheduled canvas email action'),
         ACTION_RUN_PERSONALIZED_EMAIL: _('Execute scheduled email action'),
