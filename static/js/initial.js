@@ -12,5 +12,5 @@ function getLanguage() {
     if (!(lang in langMap)) {
       lang = 'en';
     }
-    return '//cdn.datatables.net/plug-ins/1.10.19/i18n/'+langMap[lang]+'.json'
+    return '//cdn.datatables.net/plug-ins/1.10.21/i18n/'+langMap[lang]+'.json'
 }
