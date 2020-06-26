@@ -1,6 +1,12 @@
 {% load i18n %}
 <li class="nav-item pr-1">
   <a class="nav-link border border-dark border-bottom-0"
-     id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">Survey Questions</a>
+     id="questions-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="questions" aria-selected="true">
+    {% if is_survey %}
+      {% trans 'Survey Questions' %}
+    {% else %}
+      {% trans 'TODO List Items' %}
+    {% endif %}
+  </a>
 </li>
 
