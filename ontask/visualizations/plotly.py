@@ -21,9 +21,7 @@ class PlotlyHandler(VisHandler):
     html_skel = """<div id="{id}" style="{style}"></div>
         <script>Plotly.newPlot("{id}", {data}, 
         {layout},
-        {{displaylogo: false}});
-        $("#modal-item").on("shown.bs.modal", function (e) {{ 
-          Plotly.relayout("{id}",{layout});}})</script>"""
+        {{displaylogo: false}});</script>"""
 
     def __init__(self, data, *args, **kwargs):
 

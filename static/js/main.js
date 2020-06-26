@@ -262,6 +262,9 @@ $('#modal-item').on('hide.bs.modal', function (e) {
 })
 $('#modal-item').on('shown.bs.modal', function () {
   $("#modal_item_label .close").focus();
+  $.each($("#modal-item div.js-plotly-plot"), function(index, value) {
+    Plotly.relayout(value.getAttribute('id'), value.layout);
+  })
 })
 $('#modal-item').on('hidden.bs.modal', function (e) {
   if (previousActiveElement != 'undefined' && previousActiveElement != null) {
