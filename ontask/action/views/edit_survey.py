@@ -220,7 +220,7 @@ def edit_description(
 
         action.save(update_fields=['name', 'description_text'])
 
-        action.log(request.user, 'update')
+        action.log(request.user, models.Log.ACTION_UPDATE)
 
         # Request is correct
         return http.JsonResponse({'html_redirect': ''})
