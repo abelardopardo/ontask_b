@@ -472,4 +472,5 @@ ul.timeline > li:before {
   background-color: LightBlue !important;
 }
 
+/* Fix error in django-datetimepicker-plus with validation messages */
 .invalid-feedback { display: inherit; }

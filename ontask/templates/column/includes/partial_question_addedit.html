@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {{ form.media }}
-<form method="post" 
+<form method="post"
   {% if add %}
     action="{% url 'column:question_add' action_id %}"
     class="js-action-question-add-form">
