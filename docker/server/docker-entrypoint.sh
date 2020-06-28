@@ -24,7 +24,7 @@ python3 manage.py initialize_db -i $PROJECT_DIR/scripts/initial_instructors.csv
 python3 manage.py initialize_db $PROJECT_DIR/scripts/initial_learners.csv
 
 >&2 echo "Creating superuser "
-python3 manage.py create_superuser
+python3 manage.py create_superuser -u '$SUPERUSER_NAME' -e '$SUPERUSER_EMAIL' -p '$SUPERUSER_PWD'
 
 # Collect static
 >&2 echo "Collecting static"
