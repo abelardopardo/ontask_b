@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
+{{ form.media }}
 <form method="post" 
   {% if add %}
     action="{% url 'column:question_add' action_id %}"

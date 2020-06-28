@@ -4,7 +4,7 @@ html {
 }
 
 body {
-  padding-top: 40px; /* To jump over the fixed nav-bar */
+  padding-top: 35px; /* To jump over the fixed nav-bar */
   margin-bottom: 45px;
 }
 
@@ -471,3 +471,5 @@ ul.timeline > li:before {
 :not(.note-editable):not(.note-codable):not(#id_text_content):not(#modal-item):focus {
   background-color: LightBlue !important;
 }
+
+.invalid-feedback { display: inherit; }
