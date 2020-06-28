@@ -13,18 +13,19 @@ class Command(BaseCommand):
         parser.add_argument(
             '-u',
             '--username',
-            default='Super User',
+            required=True,
             help='Super user name')
 
         parser.add_argument(
             '-e',
             '--email',
-            default='superuser@bogus.com',
+            required=True,
             help='Super user email')
 
         parser.add_argument(
             '-p',
-            default='boguspwd',
+            '--password',
+            required=True,
             help='Super user password')
 
     def handle(self, *args, **options):  # noqa: Z110
