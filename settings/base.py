@@ -123,6 +123,7 @@ EXECUTE_ACTION_JSON_TRANSFER = env.bool(
     default=False)
 
 # CACHE
+# ------------------------------------------------------------------------------
 REDIS_URL = env.cache(
     'REDIS_URL',
     default='redis://localhost:6379/'
