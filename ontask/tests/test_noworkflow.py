@@ -110,7 +110,7 @@ class BackToHome(tests.OnTaskTestCase):
             reverse(
                 'action:edit_in_select_condition',
                 kwargs={'pk': 1, 'condpk': 1}),
-            reverse('action:edit_in_select_condition', kwargs={'tpk': 1}),
+            reverse('action:edit_in_select_condition', kwargs={'pk': 1}),
             reverse('action:show_survey_table_ss', kwargs={'pk': 1}),
             reverse('action:preview', kwargs={'pk': 1, 'idx': 0}),
             reverse('action:preview_all_false', kwargs={'pk': 1, 'idx': 0}),
