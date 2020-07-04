@@ -10,6 +10,8 @@ from ontask import models
 class ViewAdmin(admin.ModelAdmin):
     """Class to admin the views."""
 
+    date_hierarchy = 'modified'
+
     list_display = (
         'id',
         'workflow',
@@ -18,3 +20,5 @@ class ViewAdmin(admin.ModelAdmin):
         'created',
         'modified',
         'formula')
+
+    search_fields = ['workflow', 'name', 'description_text']

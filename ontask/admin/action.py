@@ -10,6 +10,8 @@ from ontask import models
 class ActionAdmin(admin.ModelAdmin):
     """Define Action Admin."""
 
+    date_hierarchy = 'modified'
+
     list_display = (
         'id',
         'workflow',
@@ -20,3 +22,9 @@ class ActionAdmin(admin.ModelAdmin):
         'text_content',
         'serve_enabled',
     )
+
+    search_fields = [
+        'workflow',
+        'name',
+        'description_text',
+        'text_content']

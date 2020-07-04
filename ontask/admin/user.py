@@ -8,4 +8,6 @@ from ontask import models
 
 @admin.register(models.OnTaskUser)
 class OnTaskUserAdmin(admin.ModelAdmin):
-    pass
+    """Admin class for OnTask User objects."""
+
+    search_fields = ['user__email']

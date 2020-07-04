@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-09 08:16+0930\n"
+"POT-Creation-Date: 2020-07-04 14:46+0930\n"
 "PO-Revision-Date: 2020-06-01 19:53+0300\n"
 "Last-Translator: Joonas Pesonen <joonas.pesonen@helsinki.fi>\n"
 "Language-Team: \n"
@@ -417,7 +417,7 @@ msgstr "Virhetilanne soveltaessa ehtoja käyttäjälle {0}"
 msgid "Data not found in the table"
 msgstr "Tietoja ei löydy taulukosta"
 
-#: ontask/action/services/survey.py:29
+#: ontask/action/services/survey.py:29 ontask/templates/action/edit_in.html:143
 msgid "Description (shown to learners)"
 msgstr "Kuvaus (näkyy oppijoille)"
 
@@ -533,7 +533,7 @@ msgstr "Tämä arvo ei ole sallittujen arvojen luettelossa"
 msgid "Question name"
 msgstr "Kysymyksen nimi"
 
-#: ontask/column/forms.py:247
+#: ontask/column/forms.py:247 ontask/column/forms.py:277
 msgid "Description (shown to the learners)"
 msgstr "Kuvaus (näkyy oppijoille)"
 
@@ -549,47 +549,67 @@ msgstr "Kysymys on aktiivinen alkaen"
 msgid "Question active until"
 msgstr "Kysymys on aktiivinen asti"
 
+#: ontask/column/forms.py:275
+#, fuzzy
+#| msgid "View name"
+msgid "Item name"
+msgstr "Näytä nimi"
+
 #: ontask/column/forms.py:279
+msgid "Item position (zero to insert last)"
+msgstr "sarakkeen sijainti (nolla lisätäksesi viimeiseksi)"
+
+#: ontask/column/forms.py:280
+#, fuzzy
+#| msgid "Column active from"
+msgid "Item active from"
+msgstr "Sarake on aktiivinen alkaen"
+
+#: ontask/column/forms.py:281
+msgid "Item active until"
+msgstr "Sarake on aktiivinen asti"
+
+#: ontask/column/forms.py:312
 msgid "Criterion name"
 msgstr "Kriteerin nimi"
 
-#: ontask/column/forms.py:281
+#: ontask/column/forms.py:314
 msgid "Criterion Description"
 msgstr "Kriteeirn kuvaus"
 
-#: ontask/column/forms.py:290
+#: ontask/column/forms.py:323
 msgid "Comma-separated list of levels of attainment"
 msgstr "Pilkuilla eroteltu lista suoriutumistasoista"
 
-#: ontask/column/forms.py:307
+#: ontask/column/forms.py:340
 msgid "The criterion needs a non-empty set of values"
 msgstr "Kriteeri tarvitsee ei-tyhjän arvojoukon"
 
-#: ontask/column/forms.py:347
+#: ontask/column/forms.py:380
 msgid "There must be at least one column with unique values"
 msgstr "On oltava vähintään yksi sarake, jossa on uniikit arvot"
 
-#: ontask/column/forms.py:359
+#: ontask/column/forms.py:392
 msgid "The column does not have unique values for each row."
 msgstr "Sarakkeessa ei ole uniikkeja arvoja kullekin riville."
 
-#: ontask/column/forms.py:389
+#: ontask/column/forms.py:422
 msgid "Columns to combine*"
 msgstr "Yhdistettävät sarakkeet*"
 
-#: ontask/column/forms.py:421
+#: ontask/column/forms.py:454
 msgid "A column with that name already exists"
 msgstr "Samanniminen sarake on jo olemassa"
 
-#: ontask/column/forms.py:429
+#: ontask/column/forms.py:462
 msgid "You need to select the columns to combine"
 msgstr "Sinun on valittava yhdistettävät sarakkeet"
 
-#: ontask/column/forms.py:449
+#: ontask/column/forms.py:482
 msgid "Incorrect data type for the selected operand"
 msgstr "Virheellinen tietotyyppi valitulle operandille"
 
-#: ontask/column/forms.py:481
+#: ontask/column/forms.py:514
 msgid ""
 "Comma-separated list of values. If a number, m - n means integer values from "
 "that interval."
@@ -597,7 +617,7 @@ msgstr ""
 "Pilkuilla erotettu luettelo arvoista. Jos luku, m - n tarkoittaa "
 "kokonaislukuarvoja tältä väliltä."
 
-#: ontask/column/forms.py:491
+#: ontask/column/forms.py:524
 msgid "Columns to insert"
 msgstr "Lisättävät sarakkeet"
 
@@ -658,69 +678,71 @@ msgstr "Kriteerillä ei ole oikeita suoriutumistasoja"
 msgid "The column needs to have a fixed set of possible values"
 msgstr "Sarakkeessa on oltava kiinteä joukko mahdollisia arvoja"
 
-#: ontask/column/views/crud.py:25
+#: ontask/column/views/crud.py:26
 msgid "sum: Sum selected columns"
 msgstr "summa: Valittujen sarakkeiden summa"
 
-#: ontask/column/views/crud.py:28
+#: ontask/column/views/crud.py:29
 msgid "prod: Product of the selected columns"
 msgstr "prod: Valittujen sarakkeiden tulo"
 
-#: ontask/column/views/crud.py:30
+#: ontask/column/views/crud.py:31
 msgid "max: Maximum of the selected columns"
 msgstr "max: Valittujen sarakkeiden maksimi"
 
-#: ontask/column/views/crud.py:31
+#: ontask/column/views/crud.py:32
 msgid "min: Minimum of the selected columns"
 msgstr "min: Valittujen sarakkeiden minimi"
 
-#: ontask/column/views/crud.py:32
+#: ontask/column/views/crud.py:33
 msgid "mean: Mean of the selected columns"
 msgstr "mean: Valittujen sarakkeiden keskiarvo"
 
-#: ontask/column/views/crud.py:35
+#: ontask/column/views/crud.py:36
 msgid "median: Median of the selected columns"
 msgstr "mediaani: Valittujen sarakkeiden mediaani"
 
-#: ontask/column/views/crud.py:39
+#: ontask/column/views/crud.py:40
 msgid "std: Standard deviation over the selected columns"
 msgstr "std: Keskihajonta valituista sarakkeista"
 
-#: ontask/column/views/crud.py:43
+#: ontask/column/views/crud.py:44
 msgid "all: True when all elements in selected columns are true"
 msgstr ""
 "all: Palauttaa arvon tosi, kun kaikki elementit valituissa sarakkeissa ovat "
 "totta"
 
-#: ontask/column/views/crud.py:47
+#: ontask/column/views/crud.py:48
 msgid "any: True when any element in selected columns is true"
 msgstr ""
 "any: Palauttaa arvon tosi, kun jokin elementti valituissa sarakkeissa on "
 "totta"
 
-#: ontask/column/views/crud.py:68 ontask/column/views/crud.py:180
-#: ontask/column/views/crud.py:230
+#: ontask/column/views/crud.py:69 ontask/column/views/crud.py:228
+#: ontask/column/views/crud.py:278
 msgid "Cannot add column to a workflow without data"
 msgstr "Saraketta ei voi lisätä työnkulkuun, jossa ei ole tietoja"
 
-#: ontask/column/views/crud.py:119
+#: ontask/column/views/crud.py:122
 msgid "Cannot add question to a workflow without data"
 msgstr "Kysymystä ei voi lisätä työnkulkuun, jossa ei ole tietoja"
 
-#: ontask/column/views/crud.py:128
-msgid "Cannot find action to add question."
-msgstr "Kysymyksen lisäämisen toimintoa ei löydy."
+#: ontask/column/views/crud.py:176
+#, fuzzy
+#| msgid "Cannot add a view to a workflow without data"
+msgid "Cannot add todo items to a workflow without data"
+msgstr "Et voi lisätä näkymää työnkulkuun ilman tietoja"
 
-#: ontask/column/views/crud.py:266
+#: ontask/column/views/crud.py:314
 #, python-brace-format
 msgid "Unable to add random column: {0}"
 msgstr "Satunnaista saraketta ei voi lisätä: {0}"
 
-#: ontask/column/views/crud.py:364
+#: ontask/column/views/crud.py:412
 msgid "You cannot delete the only key column"
 msgstr "Et voi poistaa ainoaa avainsaraketta"
 
-#: ontask/column/views/crud.py:432
+#: ontask/column/views/crud.py:480
 #, python-brace-format
 msgid "Unable to clone column: {0}"
 msgstr "Ei voitu kloonata saraketta: {0}"
@@ -808,6 +830,7 @@ msgid "SQL Connections"
 msgstr "SQL-yhteydet"
 
 #: ontask/connection/views/admin.py:51 ontask/connection/views/instructor.py:55
+#: ontask/templates/base.html:148
 msgid "Athena Connections"
 msgstr "Athena-yhteydet"
 
@@ -1245,7 +1268,7 @@ msgstr ""
 #: ontask/dataops/services/plugin_admin.py:258
 #: ontask/dataops/services/plugin_admin.py:323
 #: ontask/templates/action/includes/partial_action_showurl.html:29
-#: ontask/templates/base.html:245
+#: ontask/templates/base.html:242
 msgid "Ok"
 msgstr "Ok"
 
@@ -1557,14 +1580,17 @@ msgid "Personalized text"
 msgstr "Personoitu teksti"
 
 #: ontask/models/action.py:62
+#: ontask/templates/action/includes/partial_type_legend.html:11
 msgid "Personalized Canvas Email"
 msgstr "Personoitu Canvas-sähköposti"
 
 #: ontask/models/action.py:63
+#: ontask/templates/action/includes/partial_type_legend.html:9
 msgid "Survey"
 msgstr "Kysely"
 
 #: ontask/models/action.py:64
+#: ontask/templates/action/includes/partial_type_legend.html:12
 msgid "Personalized JSON"
 msgstr "Personoitu JSON"
 
@@ -1573,6 +1599,7 @@ msgid "Rubric feedback"
 msgstr "Rubriikki-palaute"
 
 #: ontask/models/action.py:66
+#: ontask/templates/action/includes/partial_type_legend.html:7
 #: ontask/templates/action/request_email_report_data.html:7
 msgid "Send Report"
 msgstr "Lähetä raportti"
@@ -1582,6 +1609,7 @@ msgid "Send Report as JSON"
 msgstr "Lähetä raportti JSON-muodossa"
 
 #: ontask/models/action.py:68
+#: ontask/templates/action/includes/partial_type_legend.html:10
 msgid "TODO List"
 msgstr "Tehtävälista"
 
@@ -1593,15 +1621,15 @@ msgstr "Toiminto saatavilla alkaen"
 msgid "Action available until"
 msgstr "Toiminto saatavilla saakka"
 
-#: ontask/models/action.py:269
+#: ontask/models/action.py:274
 msgid "URL available to users?"
 msgstr "URL saatavilla käyttäjille?"
 
-#: ontask/models/action.py:282
+#: ontask/models/action.py:287
 msgid "Email attachments"
 msgstr "Sähköpostin liitteet"
 
-#: ontask/models/action.py:446 ontask/templates/action/edit_in.html:144
+#: ontask/models/action.py:451 ontask/templates/action/edit_in.html:180
 msgid "Shuffle questions?"
 msgstr "Sekoita kysymykset?"
 
@@ -1701,337 +1729,363 @@ msgstr "Valittujen rivien määrä"
 msgid "Available to users?"
 msgstr "Saatavilla käyttäjille?"
 
-#: ontask/models/logs.py:126
+#: ontask/models/logs.py:131
 msgid "Canvas emails sent"
 msgstr "Canvas-sähköpostit lähetetty"
 
-#: ontask/models/logs.py:127
+#: ontask/models/logs.py:132
 msgid "Action cloned"
 msgstr "Toiminta kopioitu"
 
-#: ontask/models/logs.py:128
+#: ontask/models/logs.py:133
 msgid "Action created"
 msgstr "Toiminto luotu"
 
-#: ontask/models/logs.py:129
+#: ontask/models/logs.py:134
 msgid "Action deleted"
 msgstr "Toimi poistettu"
 
-#: ontask/models/logs.py:130
+#: ontask/models/logs.py:135
 msgid "Download a ZIP with one file per text"
 msgstr "Lataa ZIP-tiedosto yhdellä tiedostolla tekstiä kohden"
 
-#: ontask/models/logs.py:131
+#: ontask/models/logs.py:136
 msgid "Notification email sent"
 msgstr "Ilmoitusviesti lähetetty"
 
-#: ontask/models/logs.py:132
+#: ontask/models/logs.py:137
 msgid "Email read"
 msgstr "Sähköposti luettu"
 
-#: ontask/models/logs.py:133 ontask/models/logs.py:135
+#: ontask/models/logs.py:138 ontask/models/logs.py:140
 msgid "Emails sent"
 msgstr "Sähköposteja lähetetty"
 
-#: ontask/models/logs.py:134
+#: ontask/models/logs.py:139
 msgid "Action imported"
 msgstr "Toiminto tuotu"
 
-#: ontask/models/logs.py:136
+#: ontask/models/logs.py:141
 msgid "Email with data report sent"
 msgstr "Tietoraportti lähetetty sähköpostitse"
 
-#: ontask/models/logs.py:137
+#: ontask/models/logs.py:142
 msgid "Question added"
 msgstr "Kysymys lisätty"
 
-#: ontask/models/logs.py:138
+#: ontask/models/logs.py:143
+msgid "TODO item added"
+msgstr ""
+
+#: ontask/models/logs.py:144
 msgid "Question toggle changes"
 msgstr "Kysymyskytkimen muutokset"
 
-#: ontask/models/logs.py:139
+#: ontask/models/logs.py:145
+#, fuzzy
+#| msgid "Question toggle changes"
+msgid "TODO item toggle changes"
+msgstr "Kysymyskytkimen muutokset"
+
+#: ontask/models/logs.py:146
 msgid "Add a rubric criterion"
 msgstr "Lisää rubriikin kriteeri"
 
-#: ontask/models/logs.py:140
+#: ontask/models/logs.py:147
 msgid "Edit rubric criterion"
 msgstr "Muokkaa rubriikin kriteeriä"
 
-#: ontask/models/logs.py:141
+#: ontask/models/logs.py:148
 msgid "Delete rubric criterion"
 msgstr "Poista rubriikin kriteeri"
 
-#: ontask/models/logs.py:142
+#: ontask/models/logs.py:149
 msgid "Rubric cell edit"
 msgstr "Rubriikkisolun muokkaus"
 
-#: ontask/models/logs.py:143
+#: ontask/models/logs.py:150
 msgid "Rubric level of attainment edit"
 msgstr "Rubriikin suoriutumistason muokkaus"
 
-#: ontask/models/logs.py:145
-msgid "Execute scheduled canvas email action"
-msgstr "Suorita ajastettu canvas-sähköpostitoiminto"
-
-#: ontask/models/logs.py:146
-msgid "Execute scheduled email action"
-msgstr "Suorita ajastettu sähköpostitoiminto"
-
-#: ontask/models/logs.py:147
-msgid "Execute scheduled JSON action"
-msgstr "Suorita ajastettu JSON-toiminto"
-
-#: ontask/models/logs.py:148
-msgid "Execute scheduled JSON report action"
-msgstr "Suorita ajoitettu JSON-raporttitoiminto"
-
-#: ontask/models/logs.py:149
+#: ontask/models/logs.py:151
 msgid "Execute scheduled send report action"
 msgstr "Suorita ajoitettu raportinlähetystoiminto"
 
-#: ontask/models/logs.py:150
+#: ontask/models/logs.py:152
+msgid "Execute scheduled JSON report action"
+msgstr "Suorita ajoitettu JSON-raporttitoiminto"
+
+#: ontask/models/logs.py:154
+msgid "Execute scheduled canvas email action"
+msgstr "Suorita ajastettu canvas-sähköpostitoiminto"
+
+#: ontask/models/logs.py:155
+msgid "Execute scheduled email action"
+msgstr "Suorita ajastettu sähköpostitoiminto"
+
+#: ontask/models/logs.py:156
+msgid "Execute scheduled JSON action"
+msgstr "Suorita ajastettu JSON-toiminto"
+
+#: ontask/models/logs.py:157
+#| msgid "Execute plugin"
+msgid "Execute survey"
+msgstr "Suorita liitännäinen"
+
+#: ontask/models/logs.py:158
+#| msgid "Execute plugin"
+msgid "Execute TODO list"
+msgstr "Suorita liitännäinen"
+
+#: ontask/models/logs.py:159
 msgid "Create a zip with personalized content"
 msgstr "Luo zip-tiedosto personoidulla sisällöllä"
 
-#: ontask/models/logs.py:151
+#: ontask/models/logs.py:160
 msgid "Action URL toggled"
 msgstr "Toiminnon URL-osoite kytketty"
 
-#: ontask/models/logs.py:152
+#: ontask/models/logs.py:161
 msgid "Action served"
 msgstr "Toiminto suoritettu"
 
-#: ontask/models/logs.py:153
+#: ontask/models/logs.py:162
 msgid "Survey data input"
 msgstr "Kyselyn tietojen syöttö"
 
-#: ontask/models/logs.py:154
+#: ontask/models/logs.py:163
+#, fuzzy
+#| msgid "Survey data input"
+msgid "TODO data input"
+msgstr "Kyselyn tietojen syöttö"
+
+#: ontask/models/logs.py:164
 msgid "Action updated"
 msgstr "Toiminto päivitetty"
 
-#: ontask/models/logs.py:155
+#: ontask/models/logs.py:165
 msgid "Athena connection cloned"
 msgstr "Athena-yhteys kopioitiin"
 
-#: ontask/models/logs.py:156
+#: ontask/models/logs.py:166
 msgid "Athena connection created"
 msgstr "Athena-yhteys luotu"
 
-#: ontask/models/logs.py:157
+#: ontask/models/logs.py:167
 msgid "Athena connection deleted"
 msgstr "Athena-yhteys poistettu"
 
-#: ontask/models/logs.py:158
+#: ontask/models/logs.py:168
 msgid "Athena connection updated"
 msgstr "Athena-yhteys päivitetty"
 
-#: ontask/models/logs.py:159
+#: ontask/models/logs.py:169
 msgid "Athena connection toggled"
 msgstr "Athena-yhteys kytketty"
 
-#: ontask/models/logs.py:160
+#: ontask/models/logs.py:170
 msgid "Column added"
 msgstr "Sarake lisätty"
 
-#: ontask/models/logs.py:161
+#: ontask/models/logs.py:171
 msgid "Column with formula created"
 msgstr "Sarake luotu kaavan avalla"
 
-#: ontask/models/logs.py:162
+#: ontask/models/logs.py:172
 msgid "Column with random values created"
 msgstr "Satunnaisarvoja sisältävä sarake luotu"
 
-#: ontask/models/logs.py:163
+#: ontask/models/logs.py:173
 msgid "Column cloned"
 msgstr "Sarake kopioitu"
 
-#: ontask/models/logs.py:164
+#: ontask/models/logs.py:174
 msgid "Column deleted"
 msgstr "Sarake poistettu"
 
-#: ontask/models/logs.py:165
+#: ontask/models/logs.py:175
 msgid "Column edited"
 msgstr "Sarake muokattu"
 
-#: ontask/models/logs.py:166
+#: ontask/models/logs.py:176
 msgid "Column restricted"
 msgstr "Sarake rajoitettu"
 
-#: ontask/models/logs.py:167
+#: ontask/models/logs.py:177
 msgid "Condition cloned"
 msgstr "Ehto kopioitu"
 
-#: ontask/models/logs.py:168
+#: ontask/models/logs.py:178
 msgid "Condition created"
 msgstr "Ehto luotu"
 
-#: ontask/models/logs.py:169
+#: ontask/models/logs.py:179
 msgid "Condition deleted"
 msgstr "Ehto poistettu"
 
-#: ontask/models/logs.py:170
+#: ontask/models/logs.py:180
 msgid "Condition updated"
 msgstr "Ehto päivitetty"
 
-#: ontask/models/logs.py:171
+#: ontask/models/logs.py:181
 msgid "Plugin created"
 msgstr "Liitännäinen luotu"
 
-#: ontask/models/logs.py:172
+#: ontask/models/logs.py:182
 msgid "Plugin deleted"
 msgstr "Liitännäinen poistettu"
 
-#: ontask/models/logs.py:173
+#: ontask/models/logs.py:183
 msgid "Plugin executed"
 msgstr "Liitännäinen suoritettu"
 
-#: ontask/models/logs.py:174
+#: ontask/models/logs.py:184
 msgid "Plugin updated"
 msgstr "Liitännäinen päivitetty"
 
-#: ontask/models/logs.py:175
+#: ontask/models/logs.py:185
 msgid "Create scheduled operation"
 msgstr "Luo ajastettu toimenpide"
 
-#: ontask/models/logs.py:176
+#: ontask/models/logs.py:186
 msgid "Edit scheduled operation"
 msgstr "Muokkaa ajastettua toimenpidettä"
 
-#: ontask/models/logs.py:177
+#: ontask/models/logs.py:187
 msgid "Delete scheduled operation"
 msgstr "Poista ajastettu toimenpide"
 
-#: ontask/models/logs.py:178
+#: ontask/models/logs.py:188
 msgid "SQL connection cloned"
 msgstr "SQL-yhteys kopioitu"
 
-#: ontask/models/logs.py:179
+#: ontask/models/logs.py:189
 msgid "SQL connection created"
 msgstr "SQL-yhteys luotu"
 
-#: ontask/models/logs.py:180
+#: ontask/models/logs.py:190
 msgid "SQL connection deleted"
 msgstr "SQL-yhteys poistettu"
 
-#: ontask/models/logs.py:181
+#: ontask/models/logs.py:191
 msgid "SQL connection updated"
 msgstr "SQL-yhteys päivitetty"
 
-#: ontask/models/logs.py:182
+#: ontask/models/logs.py:192
 msgid "SQL connection toggled"
 msgstr "SQL-yhteys kytketty"
 
-#: ontask/models/logs.py:183
+#: ontask/models/logs.py:193
 msgid "Table view created"
 msgstr "Taulukkonäkymä luotu"
 
-#: ontask/models/logs.py:184
+#: ontask/models/logs.py:194
 msgid "Table view edited"
 msgstr "Taulukkonäkymää muokattu"
 
-#: ontask/models/logs.py:185
+#: ontask/models/logs.py:195
 msgid "Table view deleted"
 msgstr "Taulukkonäkymä poistettu"
 
-#: ontask/models/logs.py:186
+#: ontask/models/logs.py:196
 msgid "Table view cloned"
 msgstr "Taulukkonäkymä kopioitu"
 
-#: ontask/models/logs.py:187
+#: ontask/models/logs.py:197
 msgid "New attribute in workflow"
 msgstr "Uusi attribuutti työnkulussa"
 
-#: ontask/models/logs.py:188
+#: ontask/models/logs.py:198
 msgid "Attributes updated in workflow"
 msgstr "Työnkulun attribuutit päivitetty"
 
-#: ontask/models/logs.py:189
+#: ontask/models/logs.py:199
 msgid "Attribute deleted"
 msgstr "Attribuutti poistettu"
 
-#: ontask/models/logs.py:190
+#: ontask/models/logs.py:200
 msgid "Workflow cloned"
 msgstr "Työnkulku kopioitu"
 
-#: ontask/models/logs.py:191
+#: ontask/models/logs.py:201
 msgid "Workflow created"
 msgstr "Työnkulku luotu"
 
-#: ontask/models/logs.py:192
+#: ontask/models/logs.py:202
 msgid "Failed data merge into workflow"
 msgstr "Tietojen yhdistäminen työnkulkuun epäonnistui"
 
-#: ontask/models/logs.py:193
+#: ontask/models/logs.py:203
 msgid "Workflow data flushed"
 msgstr "Työnkulun tiedot tyhjennetty"
 
-#: ontask/models/logs.py:194
+#: ontask/models/logs.py:204
 msgid "Table row created"
 msgstr "Taulukon rivi luotu"
 
-#: ontask/models/logs.py:195
+#: ontask/models/logs.py:205
 msgid "Table row updated"
 msgstr "Taulukon rivi päivitetty"
 
-#: ontask/models/logs.py:196
+#: ontask/models/logs.py:206
 msgid "Data uploaded to workflow"
 msgstr "Tietoja ladattu työnkulkuun"
 
-#: ontask/models/logs.py:197
+#: ontask/models/logs.py:207
 msgid "Upload Data from CSV File"
 msgstr "Lähetä tietoja CSV-tiedostosta"
 
-#: ontask/models/logs.py:198
+#: ontask/models/logs.py:208
 msgid "Upload Data from Excel Sheet"
 msgstr "Lähetä tietoja Excel-taulukosta"
 
-#: ontask/models/logs.py:199
+#: ontask/models/logs.py:209
 msgid "Upload Data from Google Sheet"
 msgstr "Lähetä tietoja Google Sheet -taulukosta"
 
-#: ontask/models/logs.py:200
+#: ontask/models/logs.py:210
 msgid "Upload Data from S3 CSV source"
 msgstr "Lähetä tietoja S3 Bucket:ssa olevasta CSV-tiedostosta"
 
-#: ontask/models/logs.py:201
+#: ontask/models/logs.py:211
 msgid "Upload Data from SQL source"
 msgstr "Lähetä tietoja SQL-lähteestä"
 
-#: ontask/models/logs.py:202
+#: ontask/models/logs.py:212
 msgid "Workflow deleted"
 msgstr "Työnkulku poistettu"
 
-#: ontask/models/logs.py:203 ontask/templates/workflow/import.html:7
+#: ontask/models/logs.py:213 ontask/templates/workflow/import.html:7
 #: ontask/templates/workflow/import.html:13
 #: ontask/templates/workflow/index.html:38
 msgid "Import workflow"
 msgstr "Työnkulun tuonti"
 
-#: ontask/models/logs.py:204
+#: ontask/models/logs.py:214
 msgid "Increase workflow track count."
 msgstr "Lisää työnkulun kappaleiden määrää."
 
-#: ontask/models/logs.py:205
+#: ontask/models/logs.py:215
 msgid "User share added"
 msgstr "Käyttäjän osuus lisätty"
 
-#: ontask/models/logs.py:206
+#: ontask/models/logs.py:216
 msgid "User share deleted"
 msgstr "Käyttäjän osuus poistettu"
 
-#: ontask/models/logs.py:207
+#: ontask/models/logs.py:217
 msgid "Toggle workflow star"
 msgstr "Kytke työnkulun tähti"
 
-#: ontask/models/logs.py:208
+#: ontask/models/logs.py:218
 msgid "Workflow updated"
 msgstr "Työnkulku päivitetty"
 
-#: ontask/models/logs.py:209
+#: ontask/models/logs.py:219
 msgid "Update list of workflow users"
 msgstr "Päivitä työnkulun käyttäjien lista"
 
-#: ontask/models/logs.py:234 ontask/models/scheduler.py:132
+#: ontask/models/logs.py:244 ontask/models/scheduler.py:132
 msgid "payload"
 msgstr "sisältö"
 
@@ -2377,59 +2431,59 @@ msgstr "Ajastetun toiminnon luominen ei onnistu ({0})"
 msgid "Incorrect action scheduling invocation."
 msgstr "Virheellinen toimintojen ajastuksen kutsu."
 
-#: ontask/settings.py:42 settings/base.py:604
+#: ontask/settings.py:40 settings/base.py:557
 msgid "OnTask: Action executed"
 msgstr "OnTask: Toiminto suoritettu"
 
-#: ontask/settings.py:102
+#: ontask/settings.py:82
 msgid "Notification Emails"
 msgstr "Sähköposti-ilmoitukset"
 
-#: ontask/settings.py:106
+#: ontask/settings.py:86
 msgid "Template to send email notification"
 msgstr "Viestipohjat sähköposti-ilmoituksiin"
 
-#: ontask/settings.py:111
+#: ontask/settings.py:91
 msgid "Subject line for notification messages"
 msgstr "Aihekenttä ilmoitusviesteihin"
 
-#: ontask/settings.py:116
+#: ontask/settings.py:96
 msgid "\"From:\" field in notification emails"
 msgstr "Lähettäjäkenttä sähköposti-ilmoituksissa"
 
-#: ontask/settings.py:122
+#: ontask/settings.py:102
 msgid "Uploads"
 msgstr "Lataukset"
 
-#: ontask/settings.py:126
+#: ontask/settings.py:106
 msgid "Content types allowed in uploads"
 msgstr "Sallitut sisältötyypit"
 
-#: ontask/settings.py:131
+#: ontask/settings.py:111
 msgid "Maximum size allowed in file uplaods"
 msgstr "Suurin sallittu koko tiedostolatauksissa"
 
-#: ontask/settings.py:137
+#: ontask/settings.py:117
 msgid "Transformations and Models"
 msgstr "Muunnokset ja mallit"
 
-#: ontask/settings.py:141
+#: ontask/settings.py:121
 msgid "Folder where code packages are stored"
 msgstr "Kansio, johon koodipaketit tallennetaan"
 
-#: ontask/settings.py:147
+#: ontask/settings.py:127
 msgid "Logs"
 msgstr "Lokit"
 
-#: ontask/settings.py:151
+#: ontask/settings.py:131
 msgid "Maximum number of logs shown to the user"
 msgstr "Käyttäjälle näytettävien lokien enimmäismäärä"
 
-#: ontask/settings.py:157
+#: ontask/settings.py:137
 msgid "Miscellaneous"
 msgstr "Sekalaiset"
 
-#: ontask/settings.py:162
+#: ontask/settings.py:142
 msgid "URL prefix to access the documentation"
 msgstr "URL-etuliite dokumentaatioon pääsemiseksi"
 
@@ -2596,7 +2650,7 @@ msgstr ""
 "Oho! Alustalla oli sisäinen virhe. Olemme pahoillamme. Pyrimme käsittelemään "
 "tämän poikkeaman pikaisesti."
 
-#: ontask/templates/_navbar.html:3 ontask/templates/base.html:178
+#: ontask/templates/_navbar.html:3 ontask/templates/base.html:175
 msgid "About"
 msgstr "Tietoja"
 
@@ -2845,7 +2899,7 @@ msgid "Cancel"
 msgstr "Peruuta"
 
 #: ontask/templates/action/action_zip_step1.html:29
-#: ontask/templates/action/edit_in.html:69
+#: ontask/templates/action/edit_in.html:75
 #: ontask/templates/action/includes/partial_action_preview_done_buttons.html:9
 #: ontask/templates/action/includes/partial_preview.html:7
 #: ontask/templates/action/request_canvas_email_data.html:30
@@ -2916,61 +2970,108 @@ msgstr ""
 "yhdistämällä ne työnkulkuun ja sitten luomalla ZIP-paketin ja lataamalla sen "
 "Moodleen."
 
-#: ontask/templates/action/edit_in.html:6
+#: ontask/templates/action/edit_in.html:8
 msgid "Edit Survey"
 msgstr "Muokkaa kyselyä"
 
-#: ontask/templates/action/edit_in.html:68
+#: ontask/templates/action/edit_in.html:10
+#, fuzzy
+#| msgid "TODO List"
+msgid "Edit TODO List"
+msgstr "Tehtävälista"
+
+#: ontask/templates/action/edit_in.html:74
 msgid "See the content as shown to each learner"
 msgstr "Katso sisältö sellaisena, kun se näkyy kullekkin oppijalle"
 
-#: ontask/templates/action/edit_in.html:75
+#: ontask/templates/action/edit_in.html:81
 msgid "Save action and go back to action table"
 msgstr "Tallenna toiminto ja palaa toimintotaulukkoon"
 
-#: ontask/templates/action/edit_in.html:76
+#: ontask/templates/action/edit_in.html:82
 #: ontask/templates/action/includes/partial_rubriccell_edit.html:17
 msgid "Done"
 msgstr "Valmis"
 
-#: ontask/templates/action/edit_in.html:81
-msgid "There must be at least one question (non-key column) in the survey."
+#: ontask/templates/action/edit_in.html:89
+#, fuzzy
+#| msgid "There must be at least one question (non-key column) in the survey."
+msgid "There must be at least one question (non-key column)."
 msgstr ""
 "Kyselyssä on oltava vähintään yksi kysymys (sarake, joka ei ole avainsarake)."
 
-#: ontask/templates/action/edit_in.html:84
+#: ontask/templates/action/edit_in.html:91
+#, fuzzy
+#| msgid "There must be at least one question (non-key column) in the survey."
+msgid "There must be at least one item in the list (non-key column)."
+msgstr ""
+"Kyselyssä on oltava vähintään yksi kysymys (sarake, joka ei ole avainsarake)."
+
+#: ontask/templates/action/edit_in.html:98
 msgid "All questions should have non-empty descriptions."
 msgstr "Kaikkien kysymysten kuvausten tulee olla epätyhjiä."
 
-#: ontask/templates/action/edit_in.html:87
+#: ontask/templates/action/edit_in.html:100
+#, fuzzy
+#| msgid "All questions should have non-empty descriptions."
+msgid "All list items should have non-emty descriptions."
+msgstr "Kaikkien kysymysten kuvausten tulee olla epätyhjiä."
+
+#: ontask/templates/action/edit_in.html:107
 msgid "No description text provided in Survey Parameters"
 msgstr "Kuvaustekstiä ei löydy kyselyn parametreista"
 
-#: ontask/templates/action/edit_in.html:90
-msgid "You need to specify a key column in Survey Parameters"
+#: ontask/templates/action/edit_in.html:109
+#, fuzzy
+#| msgid "No description text provided in Survey Parameters"
+msgid "No description text provided in TODO List Parameters."
+msgstr "Kuvaustekstiä ei löydy kyselyn parametreista"
+
+#: ontask/templates/action/edit_in.html:116
+#, fuzzy
+#| msgid "You need to specify a key column in Survey Parameters"
+msgid "You need to specify a key column in the  Survey Parameters"
 msgstr "Sinun on määritettävä avainsarake kyselyn parametreissa"
 
-#: ontask/templates/action/edit_in.html:113
+#: ontask/templates/action/edit_in.html:118
+#, fuzzy
+#| msgid "You need to specify a key column in Survey Parameters"
+msgid "You need to specify a key column in the  TODO List Parameters"
+msgstr "Sinun on määritettävä avainsarake kyselyn parametreissa"
+
+#: ontask/templates/action/edit_in.html:129
+#, fuzzy
+#| msgid "Parameters"
+msgid "Survey parameters"
+msgstr "Parametrit"
+
+#: ontask/templates/action/edit_in.html:131
+#, fuzzy
+#| msgid "TODO List"
+msgid "TODO List parameters"
+msgstr "Tehtävälista"
+
+#: ontask/templates/action/edit_in.html:149
 #: ontask/templates/action/includes/partial_action_edit_description.html:7
 msgid "Edit description"
 msgstr "Muokkaa kuvausta"
 
-#: ontask/templates/action/edit_in.html:114
+#: ontask/templates/action/edit_in.html:150
 #: ontask/templates/action/run_survey.html:55
 #: ontask/templates/scheduler/includes/partial_show_schedule_action.html:30
 #: ontask/templates/scheduler/schedule_done.html:15
 msgid "Edit"
 msgstr "Muokkaa"
 
-#: ontask/templates/action/edit_in.html:120
+#: ontask/templates/action/edit_in.html:156
 msgid "Key column to match the user id"
 msgstr "Avainsarake, joka vastaa käyttäjätunnusta (user id)"
 
-#: ontask/templates/action/edit_in.html:125
+#: ontask/templates/action/edit_in.html:161
 msgid "Please, select Key column"
 msgstr "Valitse avainsarake, kiitos"
 
-#: ontask/templates/action/edit_in.html:133
+#: ontask/templates/action/edit_in.html:169
 msgid "Unset key column"
 msgstr "Asettamaton avainsarake"
 
@@ -3035,12 +3136,13 @@ msgstr "Poista toiminto"
 #: ontask/templates/action/includes/partial_rubric_loas_edit.html:17
 #: ontask/templates/action/run_survey_row.html:36
 #: ontask/templates/column/includes/partial_addedit.html:29
+#: ontask/templates/column/includes/partial_question_addedit.html:29
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:28
 #: ontask/templates/condition/includes/partial_filter_addedit.html:28
 #: ontask/templates/connection/includes/partial_addedit.html:22
 #: ontask/templates/dataops/row_filter.html:28
 #: ontask/templates/dataops/row_filter.html:38
 #: ontask/templates/workflow/includes/partial_criterion_addedit.html:28
-#: ontask/templates/workflow/includes/partial_question_addedit.html:28
 msgid "Update"
 msgstr "Päivitä"
 
@@ -3275,17 +3377,47 @@ msgstr "Ehdot:"
 msgid "Attachments:"
 msgstr "Liitteet:"
 
-#: ontask/templates/action/includes/partial_questions_tab_body.html:10
+#: ontask/templates/action/includes/partial_questions_tab_body.html:11
 msgid "Insert existing question"
 msgstr "Lisää olemassaoleva kysymys"
 
-#: ontask/templates/action/includes/partial_questions_tab_body.html:23
+#: ontask/templates/action/includes/partial_questions_tab_body.html:13
+#, fuzzy
+#| msgid "Insert existing criterion/column"
+msgid "Insert existing TODO item"
+msgstr "Lisää olemassa oleva kriteeri/sarake"
+
+#: ontask/templates/action/includes/partial_questions_tab_body.html:28
 msgid "Add a new question to the action"
 msgstr "Lisää uusi kysymys toimintoon"
 
-#: ontask/templates/action/includes/partial_questions_tab_body.html:24
+#: ontask/templates/action/includes/partial_questions_tab_body.html:30
 msgid "Create question"
 msgstr "Luo uusi kysymys"
+
+#: ontask/templates/action/includes/partial_questions_tab_body.html:37
+#, fuzzy
+#| msgid "Add a new criterion to the rubric"
+msgid "Add a new item to the list"
+msgstr "Lisää uusi kriteeri rubriikkiin"
+
+#: ontask/templates/action/includes/partial_questions_tab_body.html:39
+#, fuzzy
+#| msgid "Create filter"
+msgid "Create item"
+msgstr "Luo suodatin"
+
+#: ontask/templates/action/includes/partial_questions_tab_li.html:6
+#, fuzzy
+#| msgid "Shuffle questions?"
+msgid "Survey Questions"
+msgstr "Sekoita kysymykset?"
+
+#: ontask/templates/action/includes/partial_questions_tab_li.html:8
+#, fuzzy
+#| msgid "TODO List"
+msgid "TODO List Items"
+msgstr "Tehtävälista"
 
 #: ontask/templates/action/includes/partial_rubric_loas_edit.html:7
 msgid "Levels of Attainment"
@@ -3312,6 +3444,7 @@ msgid "Edit levels of attainment"
 msgstr "Muokkaa suoriutumistasoja"
 
 #: ontask/templates/action/includes/partial_rubric_tab_li.html:3
+#: ontask/templates/action/includes/partial_type_legend.html:8
 msgid "Rubric"
 msgstr "Rubriikki"
 
@@ -3354,6 +3487,15 @@ msgstr "Lisää attribuutti"
 #: ontask/templates/action/includes/partial_text_summernote_tab_li.html:5
 msgid "Text"
 msgstr "Teksti"
+
+#: ontask/templates/action/includes/partial_type_legend.html:6
+msgid "Personalized Text"
+msgstr "Personoitu teksti"
+
+#: ontask/templates/action/includes/partial_type_legend.html:13
+#: ontask/templates/action/request_json_report_data.html:7
+msgid "Send JSON Report"
+msgstr "Lähetä JSON-raportti"
 
 #: ontask/templates/action/incorrect_preview.html:2
 msgid ""
@@ -3469,10 +3611,6 @@ msgstr "Lähetä JSON-objektit toiminnolle \"%(n)s\""
 #, python-format
 msgid "%(n)s JSON objects will be sent."
 msgstr "%(n)s JSON-objektia lähetetään."
-
-#: ontask/templates/action/request_json_report_data.html:7
-msgid "Send JSON Report"
-msgstr "Lähetä JSON-raportti"
 
 #: ontask/templates/action/request_json_report_data.html:13
 msgid "Send single JSON object"
@@ -3643,81 +3781,87 @@ msgstr "Tietokannan ylläpito"
 msgid "Connections to SQL databases"
 msgstr "Yhteydet SQL-tietokantoihin"
 
-#: ontask/templates/base.html:155
+#: ontask/templates/base.html:147
+#, fuzzy
+#| msgid "Connections to SQL databases"
+msgid "Connections to Athena databases"
+msgstr "Yhteydet SQL-tietokantoihin"
+
+#: ontask/templates/base.html:152
 msgid "Available Plugins"
 msgstr "Saatavilla olevat liitännäiset"
 
-#: ontask/templates/base.html:156 ontask/templates/dataops/plugin_admin.html:43
+#: ontask/templates/base.html:153 ontask/templates/dataops/plugin_admin.html:43
 msgid "Plugins"
 msgstr "Liitännäiset"
 
-#: ontask/templates/base.html:170
+#: ontask/templates/base.html:167
 msgid "User Profile"
 msgstr "Käyttäjäprofiili"
 
-#: ontask/templates/base.html:170 ontask/templates/profiles/edit_profile.html:6
+#: ontask/templates/base.html:167 ontask/templates/profiles/edit_profile.html:6
 #: ontask/templates/profiles/show_profile.html:5
 #: ontask/templates/profiles/show_profile.html:24
 msgid "Profile"
 msgstr "Profiili"
 
-#: ontask/templates/base.html:174 ontask/templates/base.html:273
+#: ontask/templates/base.html:171 ontask/templates/base.html:270
 msgid "Logout"
 msgstr "Kirjaudu ulos"
 
-#: ontask/templates/base.html:180
+#: ontask/templates/base.html:177
 msgid "Contact"
 msgstr "Ota yhteyttä"
 
-#: ontask/templates/base.html:191
+#: ontask/templates/base.html:188
 msgid "OnTask Manual"
 msgstr "OnTask -käsikirja"
 
-#: ontask/templates/base.html:191
+#: ontask/templates/base.html:188
 msgid "Manual"
 msgstr "Käsikirja"
 
-#: ontask/templates/base.html:195
+#: ontask/templates/base.html:192
 msgid "API documentation"
 msgstr "API-dokumentaatio"
 
-#: ontask/templates/base.html:195
+#: ontask/templates/base.html:192
 msgid "API Docs"
 msgstr "API Docs"
 
-#: ontask/templates/base.html:224
+#: ontask/templates/base.html:221
 msgid "This functionality has not been implemented yet."
 msgstr "Tätä toimintoa ei ole vielä toteutettu."
 
-#: ontask/templates/base.html:236
+#: ontask/templates/base.html:233
 msgid "Your session is about to expire"
 msgstr "Istuntosi on vanhentumassa"
 
-#: ontask/templates/base.html:239
+#: ontask/templates/base.html:236
 msgid "Your session will expire in"
 msgstr "Istunto vanhentuu"
 
-#: ontask/templates/base.html:240
+#: ontask/templates/base.html:237
 msgid "seconds."
 msgstr "sekunnissa."
 
-#: ontask/templates/base.html:256
+#: ontask/templates/base.html:253
 msgid "OnTask Project"
 msgstr "OnTask-projekti"
 
-#: ontask/templates/base.html:256
+#: ontask/templates/base.html:253
 msgid "Version:"
 msgstr "Versio:"
 
-#: ontask/templates/base.html:256
+#: ontask/templates/base.html:253
 msgid "Accessibility"
 msgstr "Saavutettavuus"
 
-#: ontask/templates/base.html:272
+#: ontask/templates/base.html:269
 msgid "Your session is about to expire."
 msgstr "Istuntosi on vanhentumassa."
 
-#: ontask/templates/base.html:274
+#: ontask/templates/base.html:271
 msgid "Remain Connected"
 msgstr "Pysy kirjautuneena"
 
@@ -3873,6 +4017,16 @@ msgstr "Nämä ehdot poistetaan samalla."
 msgid "Add derived column"
 msgstr "Lisää johdettu sarake"
 
+#: ontask/templates/column/includes/partial_question_addedit.html:16
+#: ontask/templates/column/includes/partial_question_addedit.html:29
+msgid "Add question"
+msgstr "Lisää kysymys"
+
+#: ontask/templates/column/includes/partial_question_addedit.html:18
+#, python-format
+msgid "Edit question <strong>%(n)s</strong>"
+msgstr "Muokkaa kysymystä <strong>%(n)s</strong>"
+
 #: ontask/templates/column/includes/partial_random_add.html:8
 #: ontask/templates/column/includes/partial_random_add.html:18
 msgid "Add random column"
@@ -3886,6 +4040,24 @@ msgstr "Valitse sarakkeet"
 #: ontask/templates/dataops/upload1.html:14
 msgid "Select"
 msgstr "Valitse"
+
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:15
+#, fuzzy
+#| msgid "TODO List"
+msgid "Add TODO item"
+msgstr "Tehtävälista"
+
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:17
+#, fuzzy, python-format
+#| msgid "Edit criterion <strong>%(n)s</strong>"
+msgid "Edit TODO item <strong>%(n)s</strong>"
+msgstr "Muokkaa kriteeriä <strong>%(n)s</strong>"
+
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:28
+#, fuzzy
+#| msgid "Add Filter"
+msgid "Add item"
+msgstr "Lisää suodatin"
 
 #: ontask/templates/condition/includes/partial_condition_addedit.html:15
 #: ontask/templates/condition/includes/partial_condition_addedit.html:32
@@ -4665,6 +4837,21 @@ msgstr ""
 "Lataa etätietokantaan tallennetut tiedot käyttämällä ennalta määritettyä SQL-"
 "yhteyttä."
 
+#: ontask/templates/dataops/uploadmerge.html:117
+#, fuzzy
+#| msgid "Athena Connections"
+msgid "Athena Connection"
+msgstr "Athena-yhteydet"
+
+#: ontask/templates/dataops/uploadmerge.html:121
+#| "Upload data stored in a remote database using  pre-defined SQL connection."
+msgid ""
+"Batch upload data stored in a database using a pre-defined Amazon Athena\n"
+"            connection."
+msgstr ""
+"Lataa etätietokantaan tallennetut tiedot käyttämällä ennalta määritettyä SQL-"
+"yhteyttä."
+
 #: ontask/templates/error.html:12
 msgid "The operation returned an undocumented error."
 msgstr "Toimenpide palautti dokumentoimattoman virheen."
@@ -5253,16 +5440,6 @@ msgstr "Haluatko varmasti poistaa kriteerin <strong>%(n)s</strong>?"
 msgid "Remove criterion"
 msgstr "Poista kriteeri"
 
-#: ontask/templates/workflow/includes/partial_question_addedit.html:15
-#: ontask/templates/workflow/includes/partial_question_addedit.html:28
-msgid "Add question"
-msgstr "Lisää kysymys"
-
-#: ontask/templates/workflow/includes/partial_question_addedit.html:17
-#, python-format
-msgid "Edit question <strong>%(n)s</strong>"
-msgstr "Muokkaa kysymystä <strong>%(n)s</strong>"
-
 #: ontask/templates/workflow/includes/partial_share_create.html:6
 msgid "Select user to allow access to the workflow"
 msgstr "Valitse käyttäjä antaaksesi pääsyn työnkulkuun"
@@ -5513,7 +5690,7 @@ msgstr "Jaa opettajien kanssa"
 msgid "Learners"
 msgstr "Oppijat"
 
-#: ontask/visualizations/plotly.py:101 ontask/visualizations/plotly.py:108
+#: ontask/visualizations/plotly.py:99 ontask/visualizations/plotly.py:106
 msgid "Your value"
 msgstr "Sinun arvosi"
 
@@ -5663,23 +5840,23 @@ msgstr "Työnkulku kopioitiin onnistuneesti."
 msgid "The list of workflow users will be updated shortly."
 msgstr "Lista työnkulun käyttäjistä päivitetään pian."
 
-#: settings/base.py:400
+#: settings/base.py:374
 msgid "English"
 msgstr "englanti"
 
-#: settings/base.py:401
+#: settings/base.py:375
 msgid "Spanish"
 msgstr "espanja"
 
-#: settings/base.py:402
+#: settings/base.py:376
 msgid "Chinese"
 msgstr "kiina"
 
-#: settings/base.py:403
+#: settings/base.py:377
 msgid "Finnish"
 msgstr "suomi"
 
-#: settings/base.py:404
+#: settings/base.py:378
 msgid "Russian"
 msgstr "venäjä"
 
@@ -5691,20 +5868,23 @@ msgstr ""
 "OnTask API tarjoaa toimintoja työnkulkujen, taulukoiden ja lokien "
 "käsittelyyn. Rajapinta mahdollistaa CRUD-operaatiot näille kohteille."
 
-msgid "Execution for this action is not allowed."
-msgstr "Tämän toiminnon suorittamista ei ole sallittu."
+#~ msgid "Cannot find action to add question."
+#~ msgstr "Kysymyksen lisäämisen toimintoa ei löydy."
 
-msgid "Final execution date/time must be after the previous one"
-msgstr "Lopullisen suoritusajan on oltava edellistä myöhäisempi"
+#~ msgid "Execution for this action is not allowed."
+#~ msgstr "Tämän toiminnon suorittamista ei ole sallittu."
 
-msgid "CC Emails (separated by spaces)"
-msgstr "CC-sähköpostiosoitteet (välilyönneillä eroteltuna)"
+#~ msgid "Final execution date/time must be after the previous one"
+#~ msgstr "Lopullisen suoritusajan on oltava edellistä myöhäisempi"
 
-msgid "List of BCC Emails (separated by spaces)"
-msgstr "Lista BCC-sähköpostiosoitteista (välilyönneillä eroteltuna)"
+#~ msgid "CC Emails (separated by spaces)"
+#~ msgstr "CC-sähköpostiosoitteet (välilyönneillä eroteltuna)"
 
-msgid "Under implementation"
-msgstr "Toteutus kesken"
+#~ msgid "List of BCC Emails (separated by spaces)"
+#~ msgstr "Lista BCC-sähköpostiosoitteista (välilyönneillä eroteltuna)"
+
+#~ msgid "Under implementation"
+#~ msgstr "Toteutus kesken"
 
 #, fuzzy
 #~| msgid "Field needs a comma-separated list of emails."
@@ -6223,6 +6403,9 @@ msgstr "Toteutus kesken"
 #~ msgid "The value has to be a comma-separated list"
 #~ msgstr "Arvon on oltava pilkulla erotettu lista"
 
+#~ msgid "The value has to be a comma-separated list"
+#~ msgstr "Arvon on oltava pilkulla erotettu lista"
+
 #~ msgid "internal error while processing database."
 #~ msgstr "sisäinen virhe tietokannan prosessoinnissa."
 
@@ -6297,9 +6480,6 @@ msgstr "Toteutus kesken"
 #~| msgid "Incorrect workflow request"
 #~ msgid "Incorrect action request"
 #~ msgstr "Virheellinen työnkulun pyyntö"
-
-#~ msgid "Personalized Text"
-#~ msgstr "Personoitu teksti"
 
 #~ msgid "A condition with that name already exists in this action"
 #~ msgstr "Tässä toiminnossa on jo tämänniminen ehto"
@@ -6386,9 +6566,6 @@ msgstr "Toteutus kesken"
 
 #~ msgid "Execute one of the available plugins"
 #~ msgstr "Suorita jokin käytettävissä olevista liitännäisistä"
-
-#~ msgid "Execute plugin"
-#~ msgstr "Suorita liitännäinen"
 
 #~ msgid "Remove"
 #~ msgstr "Poista"

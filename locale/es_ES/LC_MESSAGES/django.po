@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-09 08:16+0930\n"
-"PO-Revision-Date: 2020-05-09 08:26+0930\n"
+"POT-Creation-Date: 2020-07-04 14:46+0930\n"
+"PO-Revision-Date: 2020-07-04 14:56+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: Abelardo Paro\n"
 "Language: es\n"
@@ -414,7 +414,7 @@ msgstr "Error al evaluar las condiciones para el usuario {0}"
 msgid "Data not found in the table"
 msgstr "No se han encontrado datos en la tabla"
 
-#: ontask/action/services/survey.py:29
+#: ontask/action/services/survey.py:29 ontask/templates/action/edit_in.html:143
 msgid "Description (shown to learners)"
 msgstr "Descripción (se muestra a los estudiantes)"
 
@@ -530,7 +530,7 @@ msgstr "Este valor no está en la lista de valores permitidos"
 msgid "Question name"
 msgstr "Nombre de la pregunta"
 
-#: ontask/column/forms.py:247
+#: ontask/column/forms.py:247 ontask/column/forms.py:277
 msgid "Description (shown to the learners)"
 msgstr "Descripción (se muestra a los estudiantes)"
 
@@ -546,47 +546,63 @@ msgstr "Pregunta activa desde"
 msgid "Question active until"
 msgstr "Pregunta activa hasta"
 
+#: ontask/column/forms.py:275
+msgid "Item name"
+msgstr "Nombre del elemento"
+
 #: ontask/column/forms.py:279
+msgid "Item position (zero to insert last)"
+msgstr "Posición del elemento (cero para insertar al final)"
+
+#: ontask/column/forms.py:280
+msgid "Item active from"
+msgstr "Elemento activo desde"
+
+#: ontask/column/forms.py:281
+msgid "Item active until"
+msgstr "Elemento activo hasta"
+
+#: ontask/column/forms.py:312
 msgid "Criterion name"
 msgstr "Nombre del criterio"
 
-#: ontask/column/forms.py:281
+#: ontask/column/forms.py:314
 msgid "Criterion Description"
 msgstr "Descripción del criterio"
 
-#: ontask/column/forms.py:290
+#: ontask/column/forms.py:323
 msgid "Comma-separated list of levels of attainment"
 msgstr "Lista de niveles alcanzados separados por comas"
 
-#: ontask/column/forms.py:307
+#: ontask/column/forms.py:340
 msgid "The criterion needs a non-empty set of values"
 msgstr "El criterio necesita un conjunto de  valores no vacío"
 
-#: ontask/column/forms.py:347
+#: ontask/column/forms.py:380
 msgid "There must be at least one column with unique values"
 msgstr "Debe haber una columna con valores únicos (clave)"
 
-#: ontask/column/forms.py:359
+#: ontask/column/forms.py:392
 msgid "The column does not have unique values for each row."
 msgstr "La columna no tiene valores únicos en cada celda."
 
-#: ontask/column/forms.py:389
+#: ontask/column/forms.py:422
 msgid "Columns to combine*"
 msgstr "Columnas a combinar*"
 
-#: ontask/column/forms.py:421
+#: ontask/column/forms.py:454
 msgid "A column with that name already exists"
 msgstr "Una columna con este nombre ya existe"
 
-#: ontask/column/forms.py:429
+#: ontask/column/forms.py:462
 msgid "You need to select the columns to combine"
 msgstr "Se necesita seleccionar las columnas a combinar"
 
-#: ontask/column/forms.py:449
+#: ontask/column/forms.py:482
 msgid "Incorrect data type for the selected operand"
 msgstr "Tipo de datos incorrecto para el operando seleccionado"
 
-#: ontask/column/forms.py:481
+#: ontask/column/forms.py:514
 msgid ""
 "Comma-separated list of values. If a number, m - n means integer values from "
 "that interval."
@@ -594,7 +610,7 @@ msgstr ""
 "Lista de valores separados por comas. Si es un numero, m - n significa "
 "valores enteros en este intervalo."
 
-#: ontask/column/forms.py:491
+#: ontask/column/forms.py:524
 msgid "Columns to insert"
 msgstr "Columnas a insertar"
 
@@ -655,66 +671,66 @@ msgstr "El criterio no tiene los niveles alcanzados correctos"
 msgid "The column needs to have a fixed set of possible values"
 msgstr "La columna ha de tener un conjunto fijo de valores"
 
-#: ontask/column/views/crud.py:25
+#: ontask/column/views/crud.py:26
 msgid "sum: Sum selected columns"
 msgstr "sum: Suma de columnas seleccionadas"
 
-#: ontask/column/views/crud.py:28
+#: ontask/column/views/crud.py:29
 msgid "prod: Product of the selected columns"
 msgstr "prod: Producto de columnas seleccionadas"
 
-#: ontask/column/views/crud.py:30
+#: ontask/column/views/crud.py:31
 msgid "max: Maximum of the selected columns"
 msgstr "max: Máximo de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:31
+#: ontask/column/views/crud.py:32
 msgid "min: Minimum of the selected columns"
 msgstr "min: Mínimo de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:32
+#: ontask/column/views/crud.py:33
 msgid "mean: Mean of the selected columns"
 msgstr "mean: Media de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:35
+#: ontask/column/views/crud.py:36
 msgid "median: Median of the selected columns"
 msgstr "median: Mediana de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:39
+#: ontask/column/views/crud.py:40
 msgid "std: Standard deviation over the selected columns"
 msgstr "std: Desviación estándar de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:43
+#: ontask/column/views/crud.py:44
 msgid "all: True when all elements in selected columns are true"
 msgstr ""
 "all: Cierto si todos los elementos en las columnas seleccionadas son ciertos"
 
-#: ontask/column/views/crud.py:47
+#: ontask/column/views/crud.py:48
 msgid "any: True when any element in selected columns is true"
 msgstr "any: Cierto si algún elemento de las columnas seleccionadas es cierto"
 
-#: ontask/column/views/crud.py:68 ontask/column/views/crud.py:180
-#: ontask/column/views/crud.py:230
+#: ontask/column/views/crud.py:69 ontask/column/views/crud.py:228
+#: ontask/column/views/crud.py:278
 msgid "Cannot add column to a workflow without data"
 msgstr "No es posible añadir una columna a un flujo sin datos"
 
-#: ontask/column/views/crud.py:119
+#: ontask/column/views/crud.py:122
 msgid "Cannot add question to a workflow without data"
 msgstr "No es posible añadir una pregunta a un flujo sin datos"
 
-#: ontask/column/views/crud.py:128
-msgid "Cannot find action to add question."
-msgstr "No se ha encontrado la acción a la que añadir la pregunta."
+#: ontask/column/views/crud.py:176
+msgid "Cannot add todo items to a workflow without data"
+msgstr "No se puede añadir un elemento Por Hacer a un flujo sin datos"
 
-#: ontask/column/views/crud.py:266
+#: ontask/column/views/crud.py:314
 #, python-brace-format
 msgid "Unable to add random column: {0}"
 msgstr "Imposible añadir columna con números aleatorios: {0}"
 
-#: ontask/column/views/crud.py:364
+#: ontask/column/views/crud.py:412
 msgid "You cannot delete the only key column"
 msgstr "No es posible borrar la única columna clave"
 
-#: ontask/column/views/crud.py:432
+#: ontask/column/views/crud.py:480
 #, python-brace-format
 msgid "Unable to clone column: {0}"
 msgstr "Imposible clonar la columna: {0}"
@@ -804,6 +820,7 @@ msgid "SQL Connections"
 msgstr "Conexiones SQL"
 
 #: ontask/connection/views/admin.py:51 ontask/connection/views/instructor.py:55
+#: ontask/templates/base.html:148
 msgid "Athena Connections"
 msgstr "Conexiones a Athena"
 
@@ -1243,7 +1260,7 @@ msgstr ""
 #: ontask/dataops/services/plugin_admin.py:258
 #: ontask/dataops/services/plugin_admin.py:323
 #: ontask/templates/action/includes/partial_action_showurl.html:29
-#: ontask/templates/base.html:245
+#: ontask/templates/base.html:242
 msgid "Ok"
 msgstr "De acuerdo"
 
@@ -1559,14 +1576,17 @@ msgid "Personalized text"
 msgstr "Texto personalizado"
 
 #: ontask/models/action.py:62
+#: ontask/templates/action/includes/partial_type_legend.html:11
 msgid "Personalized Canvas Email"
 msgstr "Email Canvas Personalizado"
 
 #: ontask/models/action.py:63
+#: ontask/templates/action/includes/partial_type_legend.html:9
 msgid "Survey"
 msgstr "Questionario"
 
 #: ontask/models/action.py:64
+#: ontask/templates/action/includes/partial_type_legend.html:12
 msgid "Personalized JSON"
 msgstr "Objeto JSON personalizado"
 
@@ -1575,6 +1595,7 @@ msgid "Rubric feedback"
 msgstr "Comentarios de la rúbrica"
 
 #: ontask/models/action.py:66
+#: ontask/templates/action/includes/partial_type_legend.html:7
 #: ontask/templates/action/request_email_report_data.html:7
 msgid "Send Report"
 msgstr "Enviar Informe"
@@ -1584,6 +1605,7 @@ msgid "Send Report as JSON"
 msgstr "Enviar Informe  en JSON"
 
 #: ontask/models/action.py:68
+#: ontask/templates/action/includes/partial_type_legend.html:10
 msgid "TODO List"
 msgstr "Lista"
 
@@ -1595,15 +1617,15 @@ msgstr "Acción disponible desde"
 msgid "Action available until"
 msgstr "Acción disponible hasta"
 
-#: ontask/models/action.py:269
+#: ontask/models/action.py:274
 msgid "URL available to users?"
 msgstr "¿URL disponible a los usuarios?"
 
-#: ontask/models/action.py:282
+#: ontask/models/action.py:287
 msgid "Email attachments"
 msgstr "Adjuntos al mensaje"
 
-#: ontask/models/action.py:446 ontask/templates/action/edit_in.html:144
+#: ontask/models/action.py:451 ontask/templates/action/edit_in.html:180
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
@@ -1703,337 +1725,357 @@ msgstr "Número de filas seleccionadas"
 msgid "Available to users?"
 msgstr "¿Disponible a los usuarios?"
 
-#: ontask/models/logs.py:126
+#: ontask/models/logs.py:131
 msgid "Canvas emails sent"
 msgstr "Mensajes Canvas enviados"
 
-#: ontask/models/logs.py:127
+#: ontask/models/logs.py:132
 msgid "Action cloned"
 msgstr "Acción clonada"
 
-#: ontask/models/logs.py:128
+#: ontask/models/logs.py:133
 msgid "Action created"
 msgstr "Acción creada"
 
-#: ontask/models/logs.py:129
+#: ontask/models/logs.py:134
 msgid "Action deleted"
 msgstr "Acción borrada"
 
-#: ontask/models/logs.py:130
+#: ontask/models/logs.py:135
 msgid "Download a ZIP with one file per text"
 msgstr "Descargar un ZIP con un fichero por texto"
 
-#: ontask/models/logs.py:131
+#: ontask/models/logs.py:136
 msgid "Notification email sent"
 msgstr "Mensaje de notificación enviado"
 
-#: ontask/models/logs.py:132
+#: ontask/models/logs.py:137
 msgid "Email read"
 msgstr "Lectura de mensaje"
 
-#: ontask/models/logs.py:133 ontask/models/logs.py:135
+#: ontask/models/logs.py:138 ontask/models/logs.py:140
 msgid "Emails sent"
 msgstr "Mensajes enviados"
 
-#: ontask/models/logs.py:134
+#: ontask/models/logs.py:139
 msgid "Action imported"
 msgstr "Acción importada"
 
-#: ontask/models/logs.py:136
+#: ontask/models/logs.py:141
 msgid "Email with data report sent"
 msgstr "Mensaje con el informe enviado"
 
-#: ontask/models/logs.py:137
+#: ontask/models/logs.py:142
 msgid "Question added"
 msgstr "Pregunta añadida"
 
-#: ontask/models/logs.py:138
+#: ontask/models/logs.py:143
+msgid "TODO item added"
+msgstr "Añadido elemento Por Hacer"
+
+#: ontask/models/logs.py:144
 msgid "Question toggle changes"
 msgstr "Cambiar si la pregunta se puede modificar"
 
-#: ontask/models/logs.py:139
+#: ontask/models/logs.py:145
+msgid "TODO item toggle changes"
+msgstr "Permitir cambios en elemento de lista Por Hacer"
+
+#: ontask/models/logs.py:146
 msgid "Add a rubric criterion"
 msgstr "Añadir criterio a la rúbrica"
 
-#: ontask/models/logs.py:140
+#: ontask/models/logs.py:147
 msgid "Edit rubric criterion"
 msgstr "Editar el criterio de la rúbrica"
 
-#: ontask/models/logs.py:141
+#: ontask/models/logs.py:148
 msgid "Delete rubric criterion"
 msgstr "Borrar criterio de la rúbrica"
 
-#: ontask/models/logs.py:142
+#: ontask/models/logs.py:149
 msgid "Rubric cell edit"
 msgstr "Editar celda de la rúbrica"
 
-#: ontask/models/logs.py:143
+#: ontask/models/logs.py:150
 msgid "Rubric level of attainment edit"
 msgstr "Editar nivel alcanzado en la rúbrica"
 
-#: ontask/models/logs.py:145
-msgid "Execute scheduled canvas email action"
-msgstr "Ejecución de la acción de email Canvas planificada"
-
-#: ontask/models/logs.py:146
-msgid "Execute scheduled email action"
-msgstr "Ejecución de la acción de email planificada"
-
-#: ontask/models/logs.py:147
-msgid "Execute scheduled JSON action"
-msgstr "Ejecutar acción JSON planificada"
-
-#: ontask/models/logs.py:148
-msgid "Execute scheduled JSON report action"
-msgstr "Ejecutar acción informe JSON planificada"
-
-#: ontask/models/logs.py:149
+#: ontask/models/logs.py:151
 msgid "Execute scheduled send report action"
 msgstr "Ejecución planificada de envío de informe"
 
-#: ontask/models/logs.py:150
+#: ontask/models/logs.py:152
+msgid "Execute scheduled JSON report action"
+msgstr "Ejecutar acción informe JSON planificada"
+
+#: ontask/models/logs.py:154
+msgid "Execute scheduled canvas email action"
+msgstr "Ejecución de la acción de email Canvas planificada"
+
+#: ontask/models/logs.py:155
+msgid "Execute scheduled email action"
+msgstr "Ejecución de la acción de email planificada"
+
+#: ontask/models/logs.py:156
+msgid "Execute scheduled JSON action"
+msgstr "Ejecutar acción JSON planificada"
+
+#: ontask/models/logs.py:157
+msgid "Execute survey"
+msgstr "Ejecutar questionario"
+
+#: ontask/models/logs.py:158
+msgid "Execute TODO list"
+msgstr "Ejecutar la lista Por Hacer"
+
+#: ontask/models/logs.py:159
 msgid "Create a zip with personalized content"
 msgstr "Crear un fichero ZIP con el contenido personalizado"
 
-#: ontask/models/logs.py:151
+#: ontask/models/logs.py:160
 msgid "Action URL toggled"
 msgstr "La URL de la acción se ha modificado"
 
-#: ontask/models/logs.py:152
+#: ontask/models/logs.py:161
 msgid "Action served"
 msgstr "Acción accedida"
 
-#: ontask/models/logs.py:153
+#: ontask/models/logs.py:162
 msgid "Survey data input"
 msgstr "Entrada de datos de cuestionario"
 
-#: ontask/models/logs.py:154
+#: ontask/models/logs.py:163
+msgid "TODO data input"
+msgstr "Entrada de datos de lista Por Hacer"
+
+#: ontask/models/logs.py:164
 msgid "Action updated"
 msgstr "Acción actualizada"
 
-#: ontask/models/logs.py:155
+#: ontask/models/logs.py:165
 msgid "Athena connection cloned"
 msgstr "Conexión a Athena colgada"
 
-#: ontask/models/logs.py:156
+#: ontask/models/logs.py:166
 msgid "Athena connection created"
 msgstr "Conexión a Athena creada"
 
-#: ontask/models/logs.py:157
+#: ontask/models/logs.py:167
 msgid "Athena connection deleted"
 msgstr "Conexión a Athena borrada"
 
-#: ontask/models/logs.py:158
+#: ontask/models/logs.py:168
 msgid "Athena connection updated"
 msgstr "Conexión a Athena actualizada"
 
-#: ontask/models/logs.py:159
+#: ontask/models/logs.py:169
 msgid "Athena connection toggled"
 msgstr "Conexión a Athena conmutada"
 
-#: ontask/models/logs.py:160
+#: ontask/models/logs.py:170
 msgid "Column added"
 msgstr "Columna añadida"
 
-#: ontask/models/logs.py:161
+#: ontask/models/logs.py:171
 msgid "Column with formula created"
 msgstr "Creada la columna con fórmula"
 
-#: ontask/models/logs.py:162
+#: ontask/models/logs.py:172
 msgid "Column with random values created"
 msgstr "Se ha creado la columna con los valores aleatorios"
 
-#: ontask/models/logs.py:163
+#: ontask/models/logs.py:173
 msgid "Column cloned"
 msgstr "Columna clonada"
 
-#: ontask/models/logs.py:164
+#: ontask/models/logs.py:174
 msgid "Column deleted"
 msgstr "Columna borrada"
 
-#: ontask/models/logs.py:165
+#: ontask/models/logs.py:175
 msgid "Column edited"
 msgstr "Columna editada"
 
-#: ontask/models/logs.py:166
+#: ontask/models/logs.py:176
 msgid "Column restricted"
 msgstr "Columna restringida"
 
-#: ontask/models/logs.py:167
+#: ontask/models/logs.py:177
 msgid "Condition cloned"
 msgstr "Condición clonada"
 
-#: ontask/models/logs.py:168
+#: ontask/models/logs.py:178
 msgid "Condition created"
 msgstr "Condición creada"
 
-#: ontask/models/logs.py:169
+#: ontask/models/logs.py:179
 msgid "Condition deleted"
 msgstr "Condición borrada"
 
-#: ontask/models/logs.py:170
+#: ontask/models/logs.py:180
 msgid "Condition updated"
 msgstr "Condición actualizada"
 
-#: ontask/models/logs.py:171
+#: ontask/models/logs.py:181
 msgid "Plugin created"
 msgstr "Plugin creado"
 
-#: ontask/models/logs.py:172
+#: ontask/models/logs.py:182
 msgid "Plugin deleted"
 msgstr "Plugin borrado"
 
-#: ontask/models/logs.py:173
+#: ontask/models/logs.py:183
 msgid "Plugin executed"
 msgstr "Plugin ejecutado"
 
-#: ontask/models/logs.py:174
+#: ontask/models/logs.py:184
 msgid "Plugin updated"
 msgstr "Plugin actualizado"
 
-#: ontask/models/logs.py:175
+#: ontask/models/logs.py:185
 msgid "Create scheduled operation"
 msgstr "Crear operación planificada"
 
-#: ontask/models/logs.py:176
+#: ontask/models/logs.py:186
 msgid "Edit scheduled operation"
 msgstr "Editar la operación planificada"
 
-#: ontask/models/logs.py:177
+#: ontask/models/logs.py:187
 msgid "Delete scheduled operation"
 msgstr "Borrar la operación planificada"
 
-#: ontask/models/logs.py:178
+#: ontask/models/logs.py:188
 msgid "SQL connection cloned"
 msgstr "Conexión a SQL clonada"
 
-#: ontask/models/logs.py:179
+#: ontask/models/logs.py:189
 msgid "SQL connection created"
 msgstr "Conexión a SQL creada"
 
-#: ontask/models/logs.py:180
+#: ontask/models/logs.py:190
 msgid "SQL connection deleted"
 msgstr "Conexión a SQL borrada"
 
-#: ontask/models/logs.py:181
+#: ontask/models/logs.py:191
 msgid "SQL connection updated"
 msgstr "Conexión a SQL actualizada"
 
-#: ontask/models/logs.py:182
+#: ontask/models/logs.py:192
 msgid "SQL connection toggled"
 msgstr "Conexión SQL alternada"
 
-#: ontask/models/logs.py:183
+#: ontask/models/logs.py:193
 msgid "Table view created"
 msgstr "Creada vista de tabla"
 
-#: ontask/models/logs.py:184
+#: ontask/models/logs.py:194
 msgid "Table view edited"
 msgstr "Editada vista de tabla"
 
-#: ontask/models/logs.py:185
+#: ontask/models/logs.py:195
 msgid "Table view deleted"
 msgstr "Borrada vista de tabla"
 
-#: ontask/models/logs.py:186
+#: ontask/models/logs.py:196
 msgid "Table view cloned"
 msgstr "Clonada vista de tabla"
 
-#: ontask/models/logs.py:187
+#: ontask/models/logs.py:197
 msgid "New attribute in workflow"
 msgstr "Nuevo atributo en el flujo"
 
-#: ontask/models/logs.py:188
+#: ontask/models/logs.py:198
 msgid "Attributes updated in workflow"
 msgstr "Actualizados los atributos del flujo"
 
-#: ontask/models/logs.py:189
+#: ontask/models/logs.py:199
 msgid "Attribute deleted"
 msgstr "Attributo borrado"
 
-#: ontask/models/logs.py:190
+#: ontask/models/logs.py:200
 msgid "Workflow cloned"
 msgstr "Flujo clonado"
 
-#: ontask/models/logs.py:191
+#: ontask/models/logs.py:201
 msgid "Workflow created"
 msgstr "Flujo creado"
 
-#: ontask/models/logs.py:192
+#: ontask/models/logs.py:202
 msgid "Failed data merge into workflow"
 msgstr "Fallo en la mezcla de datos en el flujo"
 
-#: ontask/models/logs.py:193
+#: ontask/models/logs.py:203
 msgid "Workflow data flushed"
 msgstr "Borrados los datos del flujo"
 
-#: ontask/models/logs.py:194
+#: ontask/models/logs.py:204
 msgid "Table row created"
 msgstr "Creada fila en la tabla"
 
-#: ontask/models/logs.py:195
+#: ontask/models/logs.py:205
 msgid "Table row updated"
 msgstr "Actualizada fila en la tabla"
 
-#: ontask/models/logs.py:196
+#: ontask/models/logs.py:206
 msgid "Data uploaded to workflow"
 msgstr "Datos cargados en el flujo"
 
-#: ontask/models/logs.py:197
+#: ontask/models/logs.py:207
 msgid "Upload Data from CSV File"
 msgstr "Cargar datos de un fichero CSV"
 
-#: ontask/models/logs.py:198
+#: ontask/models/logs.py:208
 msgid "Upload Data from Excel Sheet"
 msgstr "Cargar datos de una hoja Excel"
 
-#: ontask/models/logs.py:199
+#: ontask/models/logs.py:209
 msgid "Upload Data from Google Sheet"
 msgstr "Cargar datos de un documento Google Sheet"
 
-#: ontask/models/logs.py:200
+#: ontask/models/logs.py:210
 msgid "Upload Data from S3 CSV source"
 msgstr "Cargar datos de fichero S3 CSV"
 
-#: ontask/models/logs.py:201
+#: ontask/models/logs.py:211
 msgid "Upload Data from SQL source"
 msgstr "Cargar datos a través de una conexión SQL"
 
-#: ontask/models/logs.py:202
+#: ontask/models/logs.py:212
 msgid "Workflow deleted"
 msgstr "Flujo borrado"
 
-#: ontask/models/logs.py:203 ontask/templates/workflow/import.html:7
+#: ontask/models/logs.py:213 ontask/templates/workflow/import.html:7
 #: ontask/templates/workflow/import.html:13
 #: ontask/templates/workflow/index.html:38
 msgid "Import workflow"
 msgstr "Importar un flujo"
 
-#: ontask/models/logs.py:204
+#: ontask/models/logs.py:214
 msgid "Increase workflow track count."
 msgstr "Incrementar el contador de acceso en el workflow."
 
-#: ontask/models/logs.py:205
+#: ontask/models/logs.py:215
 msgid "User share added"
 msgstr "Añadido usuario a compartir"
 
-#: ontask/models/logs.py:206
+#: ontask/models/logs.py:216
 msgid "User share deleted"
 msgstr "Usuaro borrado de la compartición"
 
-#: ontask/models/logs.py:207
+#: ontask/models/logs.py:217
 msgid "Toggle workflow star"
 msgstr "Cambiar favorito"
 
-#: ontask/models/logs.py:208
+#: ontask/models/logs.py:218
 msgid "Workflow updated"
 msgstr "Flujo actualizado"
 
-#: ontask/models/logs.py:209
+#: ontask/models/logs.py:219
 msgid "Update list of workflow users"
 msgstr "Actualizar la lista de usuarios del flujo"
 
-#: ontask/models/logs.py:234 ontask/models/scheduler.py:132
+#: ontask/models/logs.py:244 ontask/models/scheduler.py:132
 msgid "payload"
 msgstr "datos adicionales"
 
@@ -2378,59 +2420,59 @@ msgstr "No se puede crear la acción planificada: {0}"
 msgid "Incorrect action scheduling invocation."
 msgstr "Datos incorrectos para planificar una acción."
 
-#: ontask/settings.py:42 settings/base.py:604
+#: ontask/settings.py:40 settings/base.py:557
 msgid "OnTask: Action executed"
 msgstr "OnTask: Acción ejecutada"
 
-#: ontask/settings.py:102
+#: ontask/settings.py:82
 msgid "Notification Emails"
 msgstr "Mensajes de notificación"
 
-#: ontask/settings.py:106
+#: ontask/settings.py:86
 msgid "Template to send email notification"
 msgstr "Plantilla para enviar el mensaje de notificación"
 
-#: ontask/settings.py:111
+#: ontask/settings.py:91
 msgid "Subject line for notification messages"
 msgstr "Asunto para los mensajes de notificación"
 
-#: ontask/settings.py:116
+#: ontask/settings.py:96
 msgid "\"From:\" field in notification emails"
 msgstr "Destinatario en los correos de notificación"
 
-#: ontask/settings.py:122
+#: ontask/settings.py:102
 msgid "Uploads"
 msgstr "Datos subidos"
 
-#: ontask/settings.py:126
+#: ontask/settings.py:106
 msgid "Content types allowed in uploads"
 msgstr "Typos de contenidos permitidos en las cargas"
 
-#: ontask/settings.py:131
+#: ontask/settings.py:111
 msgid "Maximum size allowed in file uplaods"
 msgstr "Tamaño máximo de fichero permitido en las cargas"
 
-#: ontask/settings.py:137
+#: ontask/settings.py:117
 msgid "Transformations and Models"
 msgstr "Transformaciones y Modelos"
 
-#: ontask/settings.py:141
+#: ontask/settings.py:121
 msgid "Folder where code packages are stored"
 msgstr "Carpeta en la que se almacenan los paquetes"
 
-#: ontask/settings.py:147
+#: ontask/settings.py:127
 msgid "Logs"
 msgstr "Registro"
 
-#: ontask/settings.py:151
+#: ontask/settings.py:131
 msgid "Maximum number of logs shown to the user"
 msgstr "Número máximo de registros mostrados al usuario"
 
-#: ontask/settings.py:157
+#: ontask/settings.py:137
 msgid "Miscellaneous"
 msgstr "Varios"
 
-#: ontask/settings.py:162
+#: ontask/settings.py:142
 msgid "URL prefix to access the documentation"
 msgstr "URL Prefijo para acceder a la documentación"
 
@@ -2598,7 +2640,7 @@ msgstr ""
 "¡Vaya! La plataforma ha tenido un error interno. Lo lamentamos. Esperamos  "
 "solventar esta anomalía pronto."
 
-#: ontask/templates/_navbar.html:3 ontask/templates/base.html:178
+#: ontask/templates/_navbar.html:3 ontask/templates/base.html:175
 msgid "About"
 msgstr "Conózcanos"
 
@@ -2844,7 +2886,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: ontask/templates/action/action_zip_step1.html:29
-#: ontask/templates/action/edit_in.html:69
+#: ontask/templates/action/edit_in.html:75
 #: ontask/templates/action/includes/partial_action_preview_done_buttons.html:9
 #: ontask/templates/action/includes/partial_preview.html:7
 #: ontask/templates/action/request_canvas_email_data.html:30
@@ -2917,61 +2959,91 @@ msgstr ""
 "los datos en el flujo y usándolos para crear el fichero ZIP y subirlo.\n"
 "    "
 
-#: ontask/templates/action/edit_in.html:6
+#: ontask/templates/action/edit_in.html:8
 msgid "Edit Survey"
 msgstr "Editar Questionario"
 
-#: ontask/templates/action/edit_in.html:68
+#: ontask/templates/action/edit_in.html:10
+msgid "Edit TODO List"
+msgstr "Editar lista Por Hacer"
+
+#: ontask/templates/action/edit_in.html:74
 msgid "See the content as shown to each learner"
 msgstr "Ver el contenido como se muestra al estudiante"
 
-#: ontask/templates/action/edit_in.html:75
+#: ontask/templates/action/edit_in.html:81
 msgid "Save action and go back to action table"
 msgstr "Guardar acción y volver a la tabla de acciones"
 
-#: ontask/templates/action/edit_in.html:76
+#: ontask/templates/action/edit_in.html:82
 #: ontask/templates/action/includes/partial_rubriccell_edit.html:17
 msgid "Done"
 msgstr "Terminar"
 
-#: ontask/templates/action/edit_in.html:81
-msgid "There must be at least one question (non-key column) in the survey."
-msgstr "Debe haber al menos una pregunta en el cuestionario."
+#: ontask/templates/action/edit_in.html:89
+msgid "There must be at least one question (non-key column)."
+msgstr "Debe haber al menos una pregunta (columna no-clave)"
 
-#: ontask/templates/action/edit_in.html:84
+#: ontask/templates/action/edit_in.html:91
+msgid "There must be at least one item in the list (non-key column)."
+msgstr "Debe haber al menos una elemento en la lista (columna no única)"
+
+#: ontask/templates/action/edit_in.html:98
 msgid "All questions should have non-empty descriptions."
 msgstr "Todas las preguntas deben tener descripciones."
 
-#: ontask/templates/action/edit_in.html:87
+#: ontask/templates/action/edit_in.html:100
+msgid "All list items should have non-emty descriptions."
+msgstr "Todos los elementos deben tener descripciones no vacías."
+
+#: ontask/templates/action/edit_in.html:107
 msgid "No description text provided in Survey Parameters"
 msgstr "No hay una descripción en los Parámetros del Cuestionario"
 
-#: ontask/templates/action/edit_in.html:90
-msgid "You need to specify a key column in Survey Parameters"
+#: ontask/templates/action/edit_in.html:109
+msgid "No description text provided in TODO List Parameters."
+msgstr "No hay una descripción en los parámetros de la lista Por Hacer."
+
+#: ontask/templates/action/edit_in.html:116
+msgid "You need to specify a key column in the  Survey Parameters"
 msgstr ""
 "Se necesita especificar una columna clave en los Parámetros del Cuestionario"
 
-#: ontask/templates/action/edit_in.html:113
+#: ontask/templates/action/edit_in.html:118
+msgid "You need to specify a key column in the  TODO List Parameters"
+msgstr ""
+"Se necesita especificar una columna clave en los Parámetros de la lista Por "
+"Hacer"
+
+#: ontask/templates/action/edit_in.html:129
+msgid "Survey parameters"
+msgstr "Parámetros del cuestionario"
+
+#: ontask/templates/action/edit_in.html:131
+msgid "TODO List parameters"
+msgstr "Parámetros de la lista Por Hacer"
+
+#: ontask/templates/action/edit_in.html:149
 #: ontask/templates/action/includes/partial_action_edit_description.html:7
 msgid "Edit description"
 msgstr "Editar descripción"
 
-#: ontask/templates/action/edit_in.html:114
+#: ontask/templates/action/edit_in.html:150
 #: ontask/templates/action/run_survey.html:55
 #: ontask/templates/scheduler/includes/partial_show_schedule_action.html:30
 #: ontask/templates/scheduler/schedule_done.html:15
 msgid "Edit"
 msgstr "Editar"
 
-#: ontask/templates/action/edit_in.html:120
+#: ontask/templates/action/edit_in.html:156
 msgid "Key column to match the user id"
 msgstr "Columna clave para emparejar el identificador de usuario"
 
-#: ontask/templates/action/edit_in.html:125
+#: ontask/templates/action/edit_in.html:161
 msgid "Please, select Key column"
 msgstr "Seleccione una columna clave"
 
-#: ontask/templates/action/edit_in.html:133
+#: ontask/templates/action/edit_in.html:169
 msgid "Unset key column"
 msgstr "Ninguna columna"
 
@@ -3038,12 +3110,13 @@ msgstr "Borrar acción"
 #: ontask/templates/action/includes/partial_rubric_loas_edit.html:17
 #: ontask/templates/action/run_survey_row.html:36
 #: ontask/templates/column/includes/partial_addedit.html:29
+#: ontask/templates/column/includes/partial_question_addedit.html:29
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:28
 #: ontask/templates/condition/includes/partial_filter_addedit.html:28
 #: ontask/templates/connection/includes/partial_addedit.html:22
 #: ontask/templates/dataops/row_filter.html:28
 #: ontask/templates/dataops/row_filter.html:38
 #: ontask/templates/workflow/includes/partial_criterion_addedit.html:28
-#: ontask/templates/workflow/includes/partial_question_addedit.html:28
 msgid "Update"
 msgstr "Actualizar"
 
@@ -3277,17 +3350,37 @@ msgstr "Condiciones:"
 msgid "Attachments:"
 msgstr "Adjuntos:"
 
-#: ontask/templates/action/includes/partial_questions_tab_body.html:10
+#: ontask/templates/action/includes/partial_questions_tab_body.html:11
 msgid "Insert existing question"
 msgstr "Insertar pregunta ya creada"
 
-#: ontask/templates/action/includes/partial_questions_tab_body.html:23
+#: ontask/templates/action/includes/partial_questions_tab_body.html:13
+msgid "Insert existing TODO item"
+msgstr "Insertar elemento Por Hacer existente"
+
+#: ontask/templates/action/includes/partial_questions_tab_body.html:28
 msgid "Add a new question to the action"
 msgstr "Añadir una nueva pregunta a la acción"
 
-#: ontask/templates/action/includes/partial_questions_tab_body.html:24
+#: ontask/templates/action/includes/partial_questions_tab_body.html:30
 msgid "Create question"
 msgstr "Crear pregunta"
+
+#: ontask/templates/action/includes/partial_questions_tab_body.html:37
+msgid "Add a new item to the list"
+msgstr "Añadir un elemento a la lista"
+
+#: ontask/templates/action/includes/partial_questions_tab_body.html:39
+msgid "Create item"
+msgstr "Crear elemento"
+
+#: ontask/templates/action/includes/partial_questions_tab_li.html:6
+msgid "Survey Questions"
+msgstr "Preguntas del cuestionario"
+
+#: ontask/templates/action/includes/partial_questions_tab_li.html:8
+msgid "TODO List Items"
+msgstr "Elementos de la lista Por Hacer"
 
 #: ontask/templates/action/includes/partial_rubric_loas_edit.html:7
 msgid "Levels of Attainment"
@@ -3314,6 +3407,7 @@ msgid "Edit levels of attainment"
 msgstr "Editar los niveles alcanzados"
 
 #: ontask/templates/action/includes/partial_rubric_tab_li.html:3
+#: ontask/templates/action/includes/partial_type_legend.html:8
 msgid "Rubric"
 msgstr "Rúbrica"
 
@@ -3356,6 +3450,15 @@ msgstr "Añadir attributo"
 #: ontask/templates/action/includes/partial_text_summernote_tab_li.html:5
 msgid "Text"
 msgstr "Texto"
+
+#: ontask/templates/action/includes/partial_type_legend.html:6
+msgid "Personalized Text"
+msgstr "Texto personalizado"
+
+#: ontask/templates/action/includes/partial_type_legend.html:13
+#: ontask/templates/action/request_json_report_data.html:7
+msgid "Send JSON Report"
+msgstr "Enviar un informe JSON"
 
 #: ontask/templates/action/incorrect_preview.html:2
 msgid ""
@@ -3472,10 +3575,6 @@ msgstr ""
 #, python-format
 msgid "%(n)s JSON objects will be sent."
 msgstr "Se enviarán %(n)s objetos JSON."
-
-#: ontask/templates/action/request_json_report_data.html:7
-msgid "Send JSON Report"
-msgstr "Enviar un informe JSON"
 
 #: ontask/templates/action/request_json_report_data.html:13
 msgid "Send single JSON object"
@@ -3646,81 +3745,85 @@ msgstr "Admin Base de Datos"
 msgid "Connections to SQL databases"
 msgstr "Conexiones a bases de datos SQL"
 
-#: ontask/templates/base.html:155
+#: ontask/templates/base.html:147
+msgid "Connections to Athena databases"
+msgstr "Conexiones a bases de datos Athena"
+
+#: ontask/templates/base.html:152
 msgid "Available Plugins"
 msgstr "Plugins disponibles"
 
-#: ontask/templates/base.html:156 ontask/templates/dataops/plugin_admin.html:43
+#: ontask/templates/base.html:153 ontask/templates/dataops/plugin_admin.html:43
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ontask/templates/base.html:170
+#: ontask/templates/base.html:167
 msgid "User Profile"
 msgstr "Perfil de usuario"
 
-#: ontask/templates/base.html:170 ontask/templates/profiles/edit_profile.html:6
+#: ontask/templates/base.html:167 ontask/templates/profiles/edit_profile.html:6
 #: ontask/templates/profiles/show_profile.html:5
 #: ontask/templates/profiles/show_profile.html:24
 msgid "Profile"
 msgstr "Perfil"
 
-#: ontask/templates/base.html:174 ontask/templates/base.html:273
+#: ontask/templates/base.html:171 ontask/templates/base.html:270
 msgid "Logout"
 msgstr "Desconectar"
 
-#: ontask/templates/base.html:180
+#: ontask/templates/base.html:177
 msgid "Contact"
 msgstr "Contacte"
 
-#: ontask/templates/base.html:191
+#: ontask/templates/base.html:188
 msgid "OnTask Manual"
 msgstr "Manual de OnTask"
 
-#: ontask/templates/base.html:191
+#: ontask/templates/base.html:188
 msgid "Manual"
 msgstr "Manual"
 
-#: ontask/templates/base.html:195
+#: ontask/templates/base.html:192
 msgid "API documentation"
 msgstr "Documentación de la API"
 
-#: ontask/templates/base.html:195
+#: ontask/templates/base.html:192
 msgid "API Docs"
 msgstr "Documentación de la API"
 
-#: ontask/templates/base.html:224
+#: ontask/templates/base.html:221
 msgid "This functionality has not been implemented yet."
 msgstr "Esta función todavía no se ha implementatdo."
 
-#: ontask/templates/base.html:236
+#: ontask/templates/base.html:233
 msgid "Your session is about to expire"
 msgstr "Su sesión está a punto de expirar"
 
-#: ontask/templates/base.html:239
+#: ontask/templates/base.html:236
 msgid "Your session will expire in"
 msgstr "Su sesión va a expirar en"
 
-#: ontask/templates/base.html:240
+#: ontask/templates/base.html:237
 msgid "seconds."
 msgstr "segundos."
 
-#: ontask/templates/base.html:256
+#: ontask/templates/base.html:253
 msgid "OnTask Project"
 msgstr "Proyecto OnTask"
 
-#: ontask/templates/base.html:256
+#: ontask/templates/base.html:253
 msgid "Version:"
 msgstr "Versión:"
 
-#: ontask/templates/base.html:256
+#: ontask/templates/base.html:253
 msgid "Accessibility"
 msgstr "Accesibilidad"
 
-#: ontask/templates/base.html:272
+#: ontask/templates/base.html:269
 msgid "Your session is about to expire."
 msgstr "Su sesión está a punto de expirar."
 
-#: ontask/templates/base.html:274
+#: ontask/templates/base.html:271
 msgid "Remain Connected"
 msgstr "Mantener la sesión"
 
@@ -3877,6 +3980,16 @@ msgstr "Estas condiciones también se borrarán."
 msgid "Add derived column"
 msgstr "Añadir column derivada"
 
+#: ontask/templates/column/includes/partial_question_addedit.html:16
+#: ontask/templates/column/includes/partial_question_addedit.html:29
+msgid "Add question"
+msgstr "Añadir pregunta"
+
+#: ontask/templates/column/includes/partial_question_addedit.html:18
+#, python-format
+msgid "Edit question <strong>%(n)s</strong>"
+msgstr "Editar pregunta <strong>%(n)s</strong>"
+
 #: ontask/templates/column/includes/partial_random_add.html:8
 #: ontask/templates/column/includes/partial_random_add.html:18
 msgid "Add random column"
@@ -3890,6 +4003,19 @@ msgstr "Seleccionar columnas"
 #: ontask/templates/dataops/upload1.html:14
 msgid "Select"
 msgstr "Seleccionar"
+
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:15
+msgid "Add TODO item"
+msgstr "Añadir elemento a Por Hacer"
+
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:17
+#, python-format
+msgid "Edit TODO item <strong>%(n)s</strong>"
+msgstr "Editar elemento Por Hacer <strong>%(n)s</strong>"
+
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:28
+msgid "Add item"
+msgstr "Añadir elemento"
 
 #: ontask/templates/condition/includes/partial_condition_addedit.html:15
 #: ontask/templates/condition/includes/partial_condition_addedit.html:32
@@ -4670,6 +4796,19 @@ msgstr ""
 "Cargar datos almacenados en una base de datos remota mediante una conexión "
 "SQL ya definida."
 
+#: ontask/templates/dataops/uploadmerge.html:117
+msgid "Athena Connection"
+msgstr "Conexión a Athena"
+
+#: ontask/templates/dataops/uploadmerge.html:121
+msgid ""
+"Batch upload data stored in a database using a pre-defined Amazon Athena\n"
+"            connection."
+msgstr ""
+"Cargar datos almacenados en una base de datos utilizando una conexión a "
+"Amazon Athena\n"
+"        Predefinida."
+
 #: ontask/templates/error.html:12
 msgid "The operation returned an undocumented error."
 msgstr "La operación ha devuelto un error sin documentación."
@@ -5265,16 +5404,6 @@ msgstr "¿Está seguro de que quiere borrar el criterio <strong>%(n)s</strong>?"
 msgid "Remove criterion"
 msgstr "Borrar criterio"
 
-#: ontask/templates/workflow/includes/partial_question_addedit.html:15
-#: ontask/templates/workflow/includes/partial_question_addedit.html:28
-msgid "Add question"
-msgstr "Añadir pregunta"
-
-#: ontask/templates/workflow/includes/partial_question_addedit.html:17
-#, python-format
-msgid "Edit question <strong>%(n)s</strong>"
-msgstr "Editar pregunta <strong>%(n)s</strong>"
-
 #: ontask/templates/workflow/includes/partial_share_create.html:6
 msgid "Select user to allow access to the workflow"
 msgstr "Seleccione el usuario al que dar acceso al flujo"
@@ -5536,7 +5665,7 @@ msgstr "Compartir con otros instructores"
 msgid "Learners"
 msgstr "Estudiantes"
 
-#: ontask/visualizations/plotly.py:101 ontask/visualizations/plotly.py:108
+#: ontask/visualizations/plotly.py:99 ontask/visualizations/plotly.py:106
 msgid "Your value"
 msgstr "Tu valor"
 
@@ -5687,23 +5816,23 @@ msgstr "Flujo clonado con éxito."
 msgid "The list of workflow users will be updated shortly."
 msgstr "La lista de usuarios se actualizará en breve."
 
-#: settings/base.py:400
+#: settings/base.py:374
 msgid "English"
 msgstr "Inglés"
 
-#: settings/base.py:401
+#: settings/base.py:375
 msgid "Spanish"
 msgstr "Español"
 
-#: settings/base.py:402
+#: settings/base.py:376
 msgid "Chinese"
 msgstr "Chino"
 
-#: settings/base.py:403
+#: settings/base.py:377
 msgid "Finnish"
 msgstr "Finés"
 
-#: settings/base.py:404
+#: settings/base.py:378
 msgid "Russian"
 msgstr "Ruso"
 
@@ -5715,6 +5844,9 @@ msgstr ""
 "La API de OnTask ofrece funcionalidad para manipular los flujos, tablas y "
 "registros. El interfaz provee operaciones CRUD (crear, leer, actualizar y "
 "borrar) sobre estos objetos."
+
+#~ msgid "Cannot find action to add question."
+#~ msgstr "No se ha encontrado la acción a la que añadir la pregunta."
 
 #~ msgid "Field needs a space-separated list of emails."
 #~ msgstr "Este campo necesita una lista de valores separados por espacios."

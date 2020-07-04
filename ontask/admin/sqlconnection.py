@@ -22,3 +22,15 @@ class SQLConnectionAdmin(admin.ModelAdmin):
         'db_port',
         'db_name',
         'db_table')
+
+    search_fields = [
+        'name',
+        'description_text',
+        'conn_type',
+        'conn_driver',
+        'db_user',
+        'db_password',
+        'db_host',
+        'db_port',
+        'db_name',
+        'db_table']
