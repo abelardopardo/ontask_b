@@ -2,10 +2,21 @@
 
 ### Fixed
 
+- Wrong python version in apache configuration for docker
+
+- Removed default values for script creating the superuser account
+
+- Error in date/time field when adding questions to a questionnaire 
+
 ### Changed
+
+- Updated various packages (Django, Celery, dataTables, redis, django-redis, etc.)
 
 ### Added
 
+- Enabled the functionality to pull data from an Athena connection
+
+- Functionality to create TODO actions (still in Beta)
 
 ## 7.1 (2020-05-09)
 
