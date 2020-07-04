@@ -31,7 +31,7 @@ __all__ = [
     'OnTaskSharedState',
     'simplify_datetime_str']
 
-__version__ = 'B.7.1'
+__version__ = 'B.7.2'
 
 app_config = 'ontask.apps.OnTaskConfig'
 
@@ -189,6 +189,7 @@ def get_incorrect_email(emails: List[str]) -> Optional[str]:
 
     return None
 
+
 def simplify_datetime_str(dtime: datetime) -> str:
     """Transform datetime object into string."""
     if dtime is None:
@@ -211,6 +212,7 @@ def create_new_name(old_name: str, obj_manager) -> str:
         new_name = entity_prefix() + new_name
 
     return new_name
+
 
 def get_country_code(language_code: str) -> str:
     """Extract the country code from the language code."""
