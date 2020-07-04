@@ -10,6 +10,8 @@ from ontask import models
 class PluginRegistryAdmin(admin.ModelAdmin):
     """Admin for the plugin registry."""
 
+    date_hierarchy = 'modified'
+
     list_display = (
         'id',
         'filename',
@@ -17,3 +19,5 @@ class PluginRegistryAdmin(admin.ModelAdmin):
         'name',
         'description_text',
         'executed')
+
+    search_fields = ['filename', 'name', 'description_text']

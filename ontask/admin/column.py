@@ -17,3 +17,9 @@ class ColumnAdmin(admin.ModelAdmin):
         'is_key',
         'categories',
         'workflow')
+
+    search_fields = [
+        'name',
+        'data_type',
+        'categories',
+        'workflow']

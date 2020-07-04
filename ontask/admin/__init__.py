@@ -8,7 +8,7 @@ from ontask.admin.logs import LogAdmin
 from ontask.admin.oauth import OAuthUserTokenAdmin
 from ontask.admin.plugin import PluginRegistryAdmin
 from ontask.admin.profiles import NewUserAdmin, UserProfileInline
-from ontask.admin.scheduler import ScheduledEmailActionAdmin
+from ontask.admin.scheduler import ScheduledOperationAdmin
 from ontask.admin.sqlconnection import SQLConnectionAdmin
 from ontask.admin.user import OnTaskUserAdmin
 from ontask.admin.view import ViewAdmin

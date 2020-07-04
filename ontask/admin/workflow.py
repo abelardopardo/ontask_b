@@ -10,6 +10,8 @@ from ontask import models
 class WorkflowAdmin(admin.ModelAdmin):
     """Workflow admin app."""
 
+    date_hierarchy = 'modified'
+
     list_display = (
         'id',
         'name',
@@ -22,5 +24,13 @@ class WorkflowAdmin(admin.ModelAdmin):
         'query_builder_ops',
         'data_frame_table_name',
         'session_key')
+
+    search_fields = [
+        'name',
+        'description_text',
+        'attributes',
+        'query_builder_ops',
+        'data_frame_table_name',
+        'session_key']
 
     filter_horizontal = ('shared',)

@@ -7,6 +7,8 @@ from ontask import models
 
 @admin.register(models.OAuthUserToken)
 class OAuthUserTokenAdmin(admin.ModelAdmin):
+    date_hierarchy = 'modified'
+
     list_display = (
         'user',
         'instance_name',
@@ -15,3 +17,5 @@ class OAuthUserTokenAdmin(admin.ModelAdmin):
         'created',
         'modified',
         'valid_until')
+
+    search_fields = ['user', 'instance_name']

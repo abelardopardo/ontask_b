@@ -19,3 +19,5 @@ class ConditionAdmin(admin.ModelAdmin):
         'n_rows_selected',
         'is_filter',
     )
+
+    search_fields = ['name', 'action', 'description_text']
