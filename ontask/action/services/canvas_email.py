@@ -190,6 +190,23 @@ def _send_single_canvas_message(
 class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
     """Class to serve running an email action."""
 
+    def extend_edit_context(
+        self,
+        workflow: models.Workflow,
+        action: models.Action,
+        context: Dict,
+    ):
+        """Get the context dictionary to render the GET request.
+
+        :param workflow: Workflow being used
+        :param action: Action being used
+        :param context: Initial dictionary to extend
+        :return: Nothing
+        """
+        self.add_conditions(action, context)
+        self.add_conditions_to_clone(action, context)
+        self.add_columns_show_stats(action, context)
+
     def process_run_post(
         self,
         request: http.HttpRequest,
