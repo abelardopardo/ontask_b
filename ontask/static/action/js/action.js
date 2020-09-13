@@ -122,6 +122,9 @@ $(function () {
 
   // Set view as filter
   $("#view-as-filter-selector").on("click", ".js-set-view-as-filter", loadForm);
+  // View edit (when in the filter tab)
+  $("#filter-set").on("click", ".js-view-edit", loadForm);
+  $("#modal-item").on("submit", ".js-view-edit-form", saveForm);
 
   // Insert column name in content
   $("#insert-elements-in-editor").on("click", ".js-insert-column-name", insertAttributeInContent);
