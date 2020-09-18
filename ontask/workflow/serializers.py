@@ -85,7 +85,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
     views = ViewSerializer(many=True, required=False)
 
-    version = core.OnTaskVersionField()
+    version = core.OnTaskVersionField(required=False)
 
     def get_actions(self, workflow: models.Workflow) -> List[models.Action]:
         """Get the list of selected actions."""
