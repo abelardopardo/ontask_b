@@ -16,8 +16,8 @@ from ontask import (
 from ontask.core import SessionPayload
 
 
-class ActionViewRunEmailAction(tests.OnTaskTestCase):
-    """Test the view to run action item filter, json and email."""
+class ActionViewRunBasic(tests.OnTaskTestCase):
+    """Test the view to run email action with no filter."""
 
     fixtures = ['initial_workflow']
     filename = os.path.join(
@@ -49,7 +49,17 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
             and 'user04@bogus.com' in message.bcc
             for message in mail.outbox))
 
-    def test_run_action_email_no_filter(self):
+    def _verify_json_content(self):
+        """Verify the content of the messages received."""
+        self.assertTrue(all(
+            json_item['auth'] == 'Bearer fake token'
+            for json_item in OnTaskSharedState.json_outbox))
+
+
+class ActionViewRunEmailActionNoFilter(ActionViewRunBasic):
+    """Test the view to run email action with no filter."""
+
+    def test(self):
         """Run sequence of request to send email without filtering users."""
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
@@ -84,9 +94,14 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
         self._verify_content()
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_run_action_email_override_from(self):
+
+class ActionViewRunEmailActionOverrideFrom(ActionViewRunBasic):
+    """Test the view to run email action and override FROM."""
+
+    def test(self):
         """Run sequence of request to send email overwriting the from."""
         # Modify the database with a new value
+        old_override_from = ontask_settings.OVERRIDE_FROM_ADDRESS
         override_from = 'override@bogus.com'
         ontask_settings.OVERRIDE_FROM_ADDRESS = override_from
 
@@ -123,7 +138,14 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
         self._verify_content(from_email=override_from)
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_email_with_filter(self):
+        # Restore the default value
+        ontask_settings.OVERRIDE_FROM_ADDRESS = old_override_from
+
+
+class ActionViewRunEmailWithFilter(ActionViewRunBasic):
+    """Test the view to run email action with an item filter."""
+
+    def test(self):
         """Run sequence of request to send email filtering users."""
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
@@ -184,7 +206,11 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
                 action.get_rows_selected() - len(exclude_values)))
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_run_action_item_filter(self):
+
+class ActionViewRunEmailWithItemFilter(ActionViewRunBasic):
+    """Test the view to run email action with an item filter."""
+
+    def test(self):
         """Test the view to filter items."""
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
@@ -213,37 +239,23 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
         self.assertEqual(resp.url, reverse('action:run_done'))
 
 
-class ActionViewRunEmailReportAction(tests.OnTaskTestCase):
-    """Test the view to run action item filter, json and email."""
+class ActionViewRunEmailReportAction(ActionViewRunBasic):
+    """Test the view to run a report action."""
 
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
+    # def _verify_outbox_content(self, from_email='instructor01@bogus.com'):
+    #     """Verify the content of the messages received."""
+    #     self.assertTrue(
+    #         mail.outbox[0].from_email == from_email
+    #         and mail.outbox[0].subject == 'Email to instructor'
+    #         and 'The emails of those students that ' in mail.outbox[0].body
+    #         and 'instructor02@bogus.com' in mail.outbox[0].cc
+    #         and 'Email to instructor' in mail.outbox[0].subject
+    #         and 'user01@bogus.com' in mail.outbox[0].cc
+    #         and 'user02@bogus.com' in mail.outbox[0].cc
+    #         and 'user03@bogus.com' in mail.outbox[0].bcc
+    #         and 'user04@bogus.com' in mail.outbox[0].bcc)
 
-    user_email = 'instructor01@bogus.com'
-    user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
-
-    def _verify_content(self):
-        """Verify the content of the messages received."""
-        self.assertTrue(
-            mail.outbox[0].from_email == 'instructor01@bogus.com'
-            and mail.outbox[0].subject == 'Email to instructor'
-            and 'The emails of those students that ' in mail.outbox[0].body
-            and 'instructor02@bogus.com' in mail.outbox[0].cc
-            and 'Email to instructor' in mail.outbox[0].subject
-            and 'user01@bogus.com' in mail.outbox[0].cc
-            and 'user02@bogus.com' in mail.outbox[0].cc
-            and 'user03@bogus.com' in mail.outbox[0].bcc
-            and 'user04@bogus.com' in mail.outbox[0].bcc)
-
-    def test_run_action_email_no_filter(self):
+    def test(self):
         """Run sequence of request to send email list ."""
         action = self.workflow.actions.get(name='Send Email with report')
 
@@ -277,30 +289,10 @@ class ActionViewRunEmailReportAction(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionViewRunJSONAction(tests.OnTaskTestCase):
-    """Test the view to run action item filter, json and email."""
+class ActionViewRunJSONActionNoFilter(ActionViewRunBasic):
+    """Test the view to run a JSON action with no filter."""
 
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
-
-    user_email = 'instructor01@bogus.com'
-    user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
-
-    def _verify_content(self):
-        """Verify the content of the messages received."""
-        self.assertTrue(all(
-            json_item['auth'] == 'Bearer fake token'
-            for json_item in OnTaskSharedState.json_outbox))
-
-    def test_run_json_action_no_filter(self):
+    def test(self):
         """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
         action = self.workflow.actions.get(name='Send JSON to remote server')
@@ -332,10 +324,14 @@ class ActionViewRunJSONAction(tests.OnTaskTestCase):
         self.assertTrue(payload == {})
         self.assertTrue(
             len(OnTaskSharedState.json_outbox) == action.get_rows_selected())
-        self._verify_content()
+        self._verify_json_content()
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_json_action_with_filter(self):
+
+class ActionViewRunJSONActionWithFilter(ActionViewRunBasic):
+    """Test the view to run a JSON action filtering elements."""
+
+    def test(self):
         """Test JSON action without using the filter execution."""
         OnTaskSharedState.json_outbox = None
         action = self.workflow.actions.get(name='Send JSON to remote server')
@@ -395,24 +391,10 @@ class ActionViewRunJSONAction(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionViewRunJSONReportAction(tests.OnTaskTestCase):
-    """Test the view to run action item filter, json and email."""
+class ActionViewRunJSONReportAction(ActionViewRunBasic):
+    """Test the view to run a JSON report action."""
 
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
-
-    user_email = 'instructor01@bogus.com'
-    user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
-
-    def test_run_json_report_action(self):
+    def test(self):
         """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
         action = self.workflow.actions.get(name='Send JSON report')
@@ -446,24 +428,10 @@ class ActionViewRunJSONReportAction(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionViewRunCanvasEmailAction(tests.OnTaskTestCase):
-    """Test the view to run action item filter, json and email."""
+class ActionViewRunCanvasEmailAction(ActionViewRunBasic):
+    """Test the view to run a Canvas email action."""
 
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
-
-    user_email = 'instructor01@bogus.com'
-    user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
-
-    def test_run_canvas_email_action(self):
+    def test(self):
         """Test Canvas Email action execution."""
         action = self.workflow.actions.get(name='Initial motivation')
         column = action.workflow.columns.get(name='SID')
@@ -489,7 +457,11 @@ class ActionViewRunCanvasEmailAction(tests.OnTaskTestCase):
             })
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
-    def test_run_canvas_email_done(self):
+
+class ActionViewRunCanvasEmailDone(ActionViewRunBasic):
+    """Test the view to run a Canvas email action DONE."""
+
+    def test(self):
         """Test last step of sending canvas emails."""
         user = get_user_model().objects.get(email=self.user_email)
         utoken = models.OAuthUserToken(

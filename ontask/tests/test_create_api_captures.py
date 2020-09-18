@@ -26,7 +26,7 @@ class ScreenAPITutorialTest(ScreenTests):
         'initial_workflow.sql'
     )
 
-    def test_api(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 

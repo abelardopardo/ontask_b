@@ -10,7 +10,7 @@ from rest_framework import status
 from ontask import tests
 
 
-class DataopsUpload(tests.OnTaskTestCase):
+class DataopsUploadBasic(tests.OnTaskTestCase):
     """Test the upload code."""
 
     fixtures = ['empty_wflow']
@@ -20,7 +20,11 @@ class DataopsUpload(tests.OnTaskTestCase):
 
     workflow_name = 'wflow1'
 
-    def test_csv_upload(self):
+
+class DataopsCSVUpload(DataopsUploadBasic):
+    """Test the upload code."""
+
+    def test(self):
         """Test the CSV upload."""
         # Get the regular form
         resp = self.get_response('dataops:csvupload_start')
@@ -38,6 +42,10 @@ class DataopsUpload(tests.OnTaskTestCase):
                     'skip_lines_at_bottom': 0})
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('dataops:upload_s2'))
+
+
+class DataopsExcelUpload(DataopsUploadBasic):
+    """Test the excel upload code."""
 
     def test_excel_upload(self):
         """Test the excel upload."""
@@ -57,6 +65,10 @@ class DataopsUpload(tests.OnTaskTestCase):
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('dataops:upload_s2'))
 
+
+class DataopsGoogleUpload(DataopsUploadBasic):
+    """Test the Google upload code."""
+
     def test_google_sheet_upload(self):
         """Test the Google Sheet upload."""
         # Get the regular form
@@ -75,7 +87,11 @@ class DataopsUpload(tests.OnTaskTestCase):
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('dataops:upload_s2'))
 
-    def test_s3_upload(self):
+
+class DataopsS3Upload(DataopsUploadBasic):
+    """Test the S3 upload code."""
+
+    def test(self):
         """Test the S3 upload."""
         # Get the regular form
         resp = self.get_response('dataops:s3upload_start')

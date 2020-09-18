@@ -11,7 +11,7 @@ from rest_framework import status
 from ontask import models, tests
 
 
-class SchedulerForms(tests.OnTaskTestCase):
+class SchedulerFormsBasic(tests.OnTaskTestCase):
     """Test schedule creation through forms."""
 
     user_email = 'instructor01@bogus.com'
@@ -26,7 +26,11 @@ class SchedulerForms(tests.OnTaskTestCase):
     s_desc = 'First JSON intervention'
     s_execute = '2119-05-03 12:32:18+10:30'
 
-    def test_schedule_forms(self):
+
+class SchedulerForms(SchedulerFormsBasic):
+    """Test schedule creation through forms."""
+
+    def test(self):
         """Test the use of forms in to schedule actions."""
         # Index of all scheduled actions
         resp = self.get_response('scheduler:index')
@@ -116,6 +120,10 @@ class SchedulerForms(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
+
+class SchedulerJSONForms(SchedulerFormsBasic):
+    """Test schedule creation through forms."""
+
     def test_schedule_json_action(self):
         """Test creation of a scheduled execution of json action."""
         # Index of all scheduled actions
@@ -199,7 +207,11 @@ class SchedulerForms(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
-    def test_schedule_times_in_forms(self):
+
+class SchedulerTimesInForms(SchedulerFormsBasic):
+    """Test schedule creation through forms."""
+
+    def test(self):
         """Test the date_time when scheduling actions"""
         # Index of all scheduled actions
         resp = self.get_response('scheduler:index')

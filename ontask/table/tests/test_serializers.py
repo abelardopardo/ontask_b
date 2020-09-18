@@ -12,7 +12,7 @@ from ontask import tests
 from ontask.table import serializers
 
 
-class TableTestSerializers(tests.OnTaskTestCase):
+class TableTestSerializersBasic(tests.OnTaskTestCase):
     """Test stat views."""
 
     fixtures = ['simple_table']
@@ -23,7 +23,11 @@ class TableTestSerializers(tests.OnTaskTestCase):
 
     workflow_name = 'wflow1'
 
-    def test_serializer_view(self):
+
+class TableTestSerializersView(TableTestSerializersBasic):
+    """Test stat views."""
+
+    def test(self):
         """Test the view serialization."""
         # Try to create a view with a name that already exists.
         try:
@@ -36,11 +40,6 @@ class TableTestSerializers(tests.OnTaskTestCase):
                         {"name": "when"}],
                     "name": "simple view",
                     "description_text": "",
-                    "_formula": {
-                        "not": False,
-                        "rules": [],
-                        "valid": True,
-                        "condition": "AND"},
                 }],
                 many=True,
                 context={
@@ -49,9 +48,12 @@ class TableTestSerializers(tests.OnTaskTestCase):
                 },
             )
             self.assertTrue(views.is_valid())
-            views.save()
-        except IntegrityError as exc:
-            self.assertTrue('duplicate key value violates' in str(exc))
+            view = serializers.ViewSerializer.create_view(
+                views.validated_data[0],
+                views.context)
+        except Exception as exc:
+            self.assertTrue(
+                'View with name simple view already exists' in str(exc))
         else:
             raise Exception('Incorrect serializer operation.')
 
@@ -65,11 +67,6 @@ class TableTestSerializers(tests.OnTaskTestCase):
                     {"name": "when"}],
                 "name": "simple view 2",
                 "description_text": "",
-                "_formula": {
-                    "not": False,
-                    "rules": [],
-                    "valid": True,
-                    "condition": "AND"},
             }],
             many=True,
             context={
@@ -78,11 +75,17 @@ class TableTestSerializers(tests.OnTaskTestCase):
             },
         )
         self.assertTrue(views.is_valid())
-        views.save()
+        view = serializers.ViewSerializer.create_view(
+            views.validated_data[0],
+            views.context)
 
         self.assertEqual(self.workflow.views.count(), 2)
 
-    def test_serializer_pandas(self):
+
+class TableTestSerializersPandas(TableTestSerializersBasic):
+    """Test stat views."""
+
+    def test(self):
         """Test the data frame serialization."""
 
         df = pd.DataFrame(
@@ -108,7 +111,11 @@ class TableTestSerializers(tests.OnTaskTestCase):
 
         self.assertTrue(df.equals(new_df))
 
-    def test_serializer_json(self):
+
+class TableTestSerializersJSON(TableTestSerializersBasic):
+    """Test stat views."""
+
+    def test(self):
         """Test the data frame serialization with a json object"""
 
         df = pd.DataFrame(

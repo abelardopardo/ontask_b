@@ -15,11 +15,14 @@ from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.dataops import pandas, sql
 
 
-class DataopsSymbols(tests.OnTaskLiveTestCase):
+class DataopsSymbolsBasic(tests.OnTaskLiveTestCase):
     fixtures = ['wflow_symbols']
     filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'wflow_symbols.sql')
 
-    def test_01_symbols(self):
+
+class DataopsSymbols1(DataopsSymbolsBasic):
+
+    def test(self):
         symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
 
         # Login
@@ -226,7 +229,10 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_02_symbols(self):
+
+class DataopsSymbols2(DataopsSymbolsBasic):
+
+    def test(self):
         symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
 
         # Login
@@ -365,7 +371,7 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
 class DataopsExcelUpload(tests.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
-    def test_01_excelupload(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -405,7 +411,7 @@ class DataopsExcelUpload(tests.OnTaskLiveTestCase):
 class DataopsExcelUploadSheet(tests.OnTaskLiveTestCase):
     fixtures = ['empty_wflow']
 
-    def test_01_excelupload_sheet(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -448,7 +454,7 @@ class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
                   "{% if bool2 cond %}Bool 2 is true{% endif %}\\n" + \
                   "{% if bool3 cond %}Bool 3 is true{% endif %}\\n"
 
-    def test_01_nan_manipulation(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -543,13 +549,16 @@ class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsPluginExecution(tests.OnTaskLiveTestCase):
+class DataopsPluginExecutionBasic(tests.OnTaskLiveTestCase):
     fixtures = ['plugin_execution']
     filename = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'plugin_execution.sql')
 
-    def test_01_first_plugin(self):
+
+class DataopsPluginExecution1(DataopsPluginExecutionBasic):
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -694,7 +703,10 @@ class DataopsPluginExecution(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_02_second_plugin(self):
+
+class DataopsPluginExecution2(DataopsPluginExecutionBasic):
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -842,7 +854,7 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
         self.wait_for_datatable('table-data_previous')
 
 
-class DataopsMerge(DataopsMergeBasic):
+class DataopsMergeInner(DataopsMergeBasic):
     wf_name = 'Testing Merge'
     fixtures = ['test_merge']
     filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
@@ -850,7 +862,7 @@ class DataopsMerge(DataopsMergeBasic):
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
 
-    def test_01_merge_inner(self):
+    def test(self):
         self.template_merge('inner')
 
         # Assert the content of the dataframe
@@ -867,7 +879,15 @@ class DataopsMerge(DataopsMergeBasic):
         # End of session
         self.logout()
 
-    def test_02_merge_outer(self):
+class DataopsMergeOuter(DataopsMergeBasic):
+    wf_name = 'Testing Merge'
+    fixtures = ['test_merge']
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
+    merge_file = os.path.join(
+        settings.ONTASK_FIXTURE_DIR,
+        'test_df_merge_update_df2.csv')
+
+    def test(self):
         self.template_merge('outer', False)
 
         # Assert the content of the dataframe
@@ -884,7 +904,16 @@ class DataopsMerge(DataopsMergeBasic):
         # End of session
         self.logout()
 
-    def test_03_merge_left(self):
+
+class DataopsMergeLeft(DataopsMergeBasic):
+    wf_name = 'Testing Merge'
+    fixtures = ['test_merge']
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
+    merge_file = os.path.join(
+        settings.ONTASK_FIXTURE_DIR,
+        'test_df_merge_update_df2.csv')
+
+    def test(self):
         self.template_merge('left')
 
         # Assert the content of the dataframe
@@ -901,7 +930,16 @@ class DataopsMerge(DataopsMergeBasic):
         # End of session
         self.logout()
 
-    def test_04_merge_right(self):
+
+class DataopsMergeRight(DataopsMergeBasic):
+    wf_name = 'Testing Merge'
+    fixtures = ['test_merge']
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
+    merge_file = os.path.join(
+        settings.ONTASK_FIXTURE_DIR,
+        'test_df_merge_update_df2.csv')
+
+    def test(self):
         self.template_merge('right', rename=False)
 
         # Assert the content of the dataframe
@@ -917,7 +955,16 @@ class DataopsMerge(DataopsMergeBasic):
         # End of session
         self.logout()
 
-    def test_05_merge_outer_fail(self):
+
+class DataopsMergeOuterFail(DataopsMergeBasic):
+    wf_name = 'Testing Merge'
+    fixtures = ['test_merge']
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
+    merge_file = os.path.join(
+        settings.ONTASK_FIXTURE_DIR,
+        'test_df_merge_update_df2.csv')
+
+    def test(self):
         self.template_merge('outer')
 
         # Assert that the error is at the top of the page
@@ -951,7 +998,7 @@ class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
         settings.ONTASK_FIXTURE_DIR,
         'test_empty_key_after_merge.csv')
 
-    def test_merge(self):
+    def test(self):
         self.template_merge('outer', rename=False)
 
         # Assert the presence of the error in the page

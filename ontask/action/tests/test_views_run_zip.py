@@ -9,8 +9,7 @@ from rest_framework import status
 
 from ontask import tests
 
-
-class ActionViewRunZIP(tests.OnTaskTestCase):
+class ActionViewZIPBasic(tests.OnTaskTestCase):
     """Test the view run a ZIP action."""
 
     fixtures = ['initial_workflow']
@@ -27,7 +26,11 @@ class ActionViewRunZIP(tests.OnTaskTestCase):
 
     workflow_name = 'BIOL1011'
 
-    def test_run_zip(self):
+
+class ActionViewRunZIP(ActionViewZIPBasic):
+    """Test the view run a ZIP action."""
+
+    def test(self):
         """Run the zip action."""
         # Get the object first
         action = self.workflow.actions.get(name='Suggestions about the forum')
@@ -51,7 +54,11 @@ class ActionViewRunZIP(tests.OnTaskTestCase):
             })
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_run_zip_export(self):
+
+class ActionViewRunZIPExport(ActionViewZIPBasic):
+    """Test the view run a ZIP action."""
+
+    def test(self):
         """Test the ZIP export view."""
         action = self.workflow.actions.get(name='Suggestions about the forum')
         column = action.workflow.columns.get(name='SID')

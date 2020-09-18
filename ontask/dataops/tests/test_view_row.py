@@ -11,7 +11,7 @@ from ontask import tests
 from ontask.dataops import sql, views
 
 
-class DataopsViewsRow(tests.OnTaskTestCase):
+class DataopsViewsRowBasic(tests.OnTaskTestCase):
     """Test the views to create and update the row values."""
 
     fixtures = ['test_condition_evaluation']
@@ -23,7 +23,10 @@ class DataopsViewsRow(tests.OnTaskTestCase):
 
     workflow_name = 'Testing Eval Conditions'
 
-    def test_row_create(self):
+
+class DataopsViewsRowCreate(DataopsViewsRowBasic):
+
+    def test(self):
         """Test the view to filter items."""
         nrows = self.workflow.nrows
 
@@ -79,7 +82,10 @@ class DataopsViewsRow(tests.OnTaskTestCase):
         self.assertEqual(row_val['double1'], 22)
         self.assertEqual(row_val['double2'], 23)
 
-    def test_row_edit(self):
+
+class DataopsViewsRowEdit(DataopsViewsRowBasic):
+
+    def test(self):
         """Test the view to filter items."""
         # Row edit (GET)
         resp = self.get_response(

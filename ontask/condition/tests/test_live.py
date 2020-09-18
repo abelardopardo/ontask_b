@@ -11,8 +11,7 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from ontask import tests
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 
-
-class ConditionEdit(tests.OnTaskLiveTestCase):
+class ConditionTestBasic(tests.OnTaskLiveTestCase):
     """Test Filter/Condition Edit."""
 
     action_name = 'simple action'
@@ -23,8 +22,12 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
     wflow_desc = 'description text for workflow 1'
     wflow_empty = 'The workflow does not have data'
 
+
+class FilterLiveTest(ConditionTestBasic):
+    """Test Filter Edit."""
+
     # Test operations with the filter
-    def test_filter(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -174,8 +177,12 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+
+class ConditionLiveTest(ConditionTestBasic):
+    """Test Condition Edit."""
+
     # Test operations with the conditions and the email preview
-    def test_condition(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -245,6 +252,79 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         self.logout()
 
 
+class ConditionDetectAllFalseRows(ConditionTestBasic):
+    """Test the detection of all false rows."""
+
+    action_text = "Cond 1 = {{ cond 1 }}\\n" + \
+                  "Cond 2 = {{ cond 2 }}\\n" + \
+                  "{% if cond 1 %}Cond 1 is true{% endif %}\\n" + \
+                  "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
+
+    def test(self):
+        """Test action rename."""
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Create a new action
+        self.create_new_personalized_text_action("action out", '')
+
+        # Create three conditions
+        self.select_condition_tab()
+        self.create_condition("cond 1", '', [('another', 'equal', 'bbb')])
+        self.create_condition("cond 2", '', [('age', 'greater', '12.1')])
+
+        # The action should now flag that one user has all conditions equal to
+        # False
+        self.assertIn(
+            'user has all conditions equal to FALSE',
+            self.selenium.page_source)
+
+        # insert the action text (not needed, but...)
+        self.select_text_tab()
+        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.execute_script(
+            """$('#id_text_content').summernote('editor.insertText', 
+            "{0}");""".format(self.action_text)
+        )
+
+        # Click in the preview and circle around the 12 rows
+        self.open_browse_preview(1, close=False)
+
+        # The preview should now flag that this user has all conditions equal
+        # to False
+        self.assertIn(
+            'All conditions evaluate to FALSE',
+            self.selenium.page_source)
+
+        # Close the preview
+        self.cancel_modal()
+
+        # Create filter
+        self.create_filter("The filter", [('another', 'equal', 'bbb')])
+
+        # The action should NOT flag that a user has all conditions equal to
+        # False
+        self.assertNotIn(
+            'user has all conditions equal to FALSE',
+            self.selenium.page_source)
+
+        # Remove the filter
+        self.delete_filter()
+
+        # Message show now appear
+        # The action should NOT flag that a user has all conditions equal to
+        # False
+        self.assertIn(
+            'user has all conditions equal to FALSE',
+            self.selenium.page_source)
+
+        # End of session
+        self.logout()
+
+
 class ConditionInActionIn(tests.OnTaskLiveTestCase):
     """Class to test survey with conditions controlling questions."""
     fixtures = ['test_personalized_survey']
@@ -255,7 +335,7 @@ class ConditionInActionIn(tests.OnTaskLiveTestCase):
     wflow_name = 'Test personalized survey'
 
     # Test operations with the filter
-    def test_condition_and_run(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -352,86 +432,6 @@ class ConditionInActionIn(tests.OnTaskLiveTestCase):
         # There should be a "No responses required message"
         self.assertIn(
             'No responses required at this time',
-            self.selenium.page_source)
-
-        # End of session
-        self.logout()
-
-
-class ConditionDetectAllFalseRows(tests.OnTaskLiveTestCase):
-    """Test the detection of all false rows."""
-    action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
-
-    action_text = "Cond 1 = {{ cond 1 }}\\n" + \
-                  "Cond 2 = {{ cond 2 }}\\n" + \
-                  "{% if cond 1 %}Cond 1 is true{% endif %}\\n" + \
-                  "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
-
-    def test_detect_all_false_rows(self):
-        """Test action rename."""
-        # Login
-        self.login('instructor01@bogus.com')
-
-        # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(self.wflow_name)
-
-        # Create a new action
-        self.create_new_personalized_text_action("action out", '')
-
-        # Create three conditions
-        self.select_condition_tab()
-        self.create_condition("cond 1", '', [('another', 'equal', 'bbb')])
-        self.create_condition("cond 2", '', [('age', 'greater', '12.1')])
-
-        # The action should now flag that one user has all conditions equal to
-        # False
-        self.assertIn(
-            'user has all conditions equal to FALSE',
-            self.selenium.page_source)
-
-        # insert the action text (not needed, but...)
-        self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
-        self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "{0}");""".format(self.action_text)
-        )
-
-        # Click in the preview and circle around the 12 rows
-        self.open_browse_preview(1, close=False)
-
-        # The preview should now flag that this user has all conditions equal
-        # to False
-        self.assertIn(
-            'All conditions evaluate to FALSE',
-            self.selenium.page_source)
-
-        # Close the preview
-        self.cancel_modal()
-
-        # Create filter
-        self.create_filter("The filter", [('another', 'equal', 'bbb')])
-
-        # The action should NOT flag that a user has all conditions equal to
-        # False
-        self.assertNotIn(
-            'user has all conditions equal to FALSE',
-            self.selenium.page_source)
-
-        # Remove the filter
-        self.delete_filter()
-
-        # Message show now appear
-        # The action should NOT flag that a user has all conditions equal to
-        # False
-        self.assertIn(
-            'user has all conditions equal to FALSE',
             self.selenium.page_source)
 
         # End of session

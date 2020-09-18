@@ -14,7 +14,7 @@ from ontask import models, tests
 from ontask.dataops import formula, pandas, services, sql
 
 
-class DataopsMatrixManipulation(tests.OnTaskTestCase):
+class DataopsMatrixBasic(tests.OnTaskTestCase):
     fixtures = ['test_merge']
     filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
 
@@ -49,6 +49,7 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
         'how_merge': None
     }
 
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.workflow = None
@@ -76,13 +77,13 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
 
         return df_dst, df_src
 
-    def test_df_equivalent_after_sql(self):
+
+class DataopsMatrixEquivalentAfterSQL(DataopsMatrixBasic):
+
+    def test(self):
 
         # Parse the CSV
-        df_source = services.load_df_from_csvfile(
-            io.StringIO(self.csv1),
-            0,
-            0)
+        df_source = services.load_df_from_csvfile(io.StringIO(self.csv1), 0, 0)
 
         # Store the DF in the DB
         pandas.store_table(df_source, self.table_name)
@@ -101,7 +102,10 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
         # Data frames mut be identical
         assert df_source.equals(df_dst)
 
-    def test_merge_inner(self):
+
+class DataopsMatrixMergeInner(DataopsMatrixBasic):
+
+    def test(self):
 
         # Get the workflow
         self.workflow = models.Workflow.objects.all()[0]
@@ -257,6 +261,9 @@ class FormulaEvaluation(tests.OnTaskTestCase):
                 self.skel)
             self.assertEqual(data_frame.shape[0], row_no)
             formula.evaluate(self.skel, formula.EVAL_TXT)
+
+
+class FormulaTestEvaluation(FormulaEvaluation):
 
     def test_eval_node(self):
         #
@@ -507,7 +514,10 @@ class FormulaEvaluation(tests.OnTaskTestCase):
             None,
             datetime.datetime(2018, 9, 15, 0, 3, 4))
 
-    def test_eval_sql(self):
+
+class FormulaTestSQLEvaluation(FormulaEvaluation):
+
+    def test(self):
 
         # Create the dataframe with the variables
         df = pd.DataFrame(
@@ -641,7 +651,7 @@ class ConditionSetEvaluation(tests.OnTaskTestCase):
         'test_condition_evaluation.sql')
     action_name = 'Test action'
 
-    def test_eval_conditions(self):
+    def test(self):
         # Get the action first
         self.action = models.Action.objects.get(name=self.action_name)
 
@@ -693,7 +703,7 @@ class ConditionNameWithSymbols(tests.OnTaskTestCase):
     action_name1 = 'bug 1'
     action_name2 = 'bug 2'
 
-    def test_action_1_preview(self):
+    def test(self):
         """Test that first action renders correctly."""
         self.workflow = models.Workflow.objects.all().first()
         self.user = get_user_model().objects.filter(
@@ -730,7 +740,7 @@ class ConditionNameWithSymbols(tests.OnTaskTestCase):
 class ColumnNameTooLarge(tests.OnTaskTestCase):
     """Test the storage of a dataframe with column that are too large."""
 
-    csv = """key,text1,text2,double1,double2,bool1,bool2,date1,date2
+    csv = """key,text1,text2,double1,double2,{0},bool2,date1,date2
               1.0,"d1_t1_1",,111.0,,True,,1/1/18 01:00:00+00:00,
               2.0,"d2_t1_2",,112.0,,False,,1/1/18 02:00:00+00:00,
               3.0,"",d1_t2_3,,123.0,,False,,1/2/18 03:00:00+00:00
@@ -738,9 +748,10 @@ class ColumnNameTooLarge(tests.OnTaskTestCase):
               5.0,"d1_t1_5",,115.0,,False,,1/1/18 05:00:00+00:00,
               6.0,"d1_t1_6",,116.0,,True,,1/1/18 06:00:00+00:00,
               7.0,,d1_t2_7,,126.0,,True,,1/2/18 07:00:00+00:00
-              8.0,,d1_t2_8,,127.0,,False,,1/2/18 08:00:00+00:00"""
+              8.0,,d1_t2_8,,127.0,,False,,1/2/18 08:00:00+00:00""".format(
+        'a' * (sql.COLUMN_NAME_SIZE + 1))
 
-    def upload_column_name_too_long(self):
+    def test(self):
         """Use the table store to detect column names that are too long."""
         data_frame = services.load_df_from_csvfile(io.StringIO(self.csv), 0, 0)
 

@@ -19,7 +19,7 @@ standard_library.install_aliases()
 
 class ScreenTutorialTest(ScreenTests):
 
-    def test_ss_00(self):
+    def test(self):
         """
         Create a workflow, upload data and merge
         :return:
@@ -59,7 +59,7 @@ class ScreenTutorialTest(ScreenTests):
 
 class ScreenImportTest(ScreenTests):
 
-    def test_ss_01(self):
+    def test(self):
         """
         Create a workflow, upload data and merge
         :return:
@@ -98,7 +98,7 @@ class ScreenImportTest(ScreenTests):
         self.logout()
 
 
-class ScreenTestFixture(ScreenTests):
+class ScreenTestFixtureBasic(ScreenTests):
     fixtures = ['ontask/tests/initial_workflow/initial_workflow.json']
     filename = os.path.join(
         settings.BASE_DIR(),
@@ -139,7 +139,10 @@ class ScreenTestFixture(ScreenTests):
     #     )
     #     athenac.save()
 
-    def test_sql_admin(self):
+
+class ScreenTestSQLAdmin(ScreenTestFixtureBasic):
+
+    def test(self):
         # Login
         self.login('superuser@bogus.com')
         self.body_ss('workflow_superuser_index.png')
@@ -196,7 +199,10 @@ class ScreenTestFixture(ScreenTests):
     #     # Close the db_engine
     #     destroy_db_engine()
 
-    def test_ss_workflow(self):
+
+class ScreenTestWorkflow(ScreenTestFixtureBasic):
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -279,7 +285,10 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-    def test_ss_details(self):
+
+class ScreenTestDetails(ScreenTestFixtureBasic):
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -306,7 +315,10 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-    def test_ss_dataops(self):
+
+class ScreenTestDataops(ScreenTestFixtureBasic):
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -496,7 +508,10 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-    def test_ss_table(self):
+
+class ScreenTestTable(ScreenTestFixtureBasic):
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -545,7 +560,10 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-    def test_ss_action(self):
+
+class ScreenTestAction(ScreenTestFixtureBasic):
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -869,7 +887,10 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-    def test_ss_scheduler(self):
+
+class ScreenTestScheduler(ScreenTestFixtureBasic):
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -963,7 +984,10 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-    def test_ss_logs(self):
+
+class ScreenTestLogs(ScreenTestFixtureBasic):
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -982,7 +1006,9 @@ class ScreenTestFixture(ScreenTests):
         # End of session
         self.logout()
 
-    def test_rubric(self):
+class ScreenTestRubric(ScreenTestFixtureBasic):
+
+    def test(self):
         action_name = 'Project feedback'
         # Login
         self.login('instructor01@bogus.com')

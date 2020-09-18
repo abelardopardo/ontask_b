@@ -21,7 +21,7 @@ class TableTestStatView(tests.OnTaskTestCase):
 
     workflow_name = 'wflow1'
 
-    def test_stats(self):
+    def test(self):
         """Test the use of forms in to schedule actions."""
         # Remove is_key from column 'age'
         col = self.workflow.columns.get(name='age')

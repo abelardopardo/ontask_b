@@ -21,7 +21,7 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
 
     wflow_name = 'combine columns'
 
-    def test_create_derived_columns(self):
+    def test(self):
         """Test operations to create derived columns."""
         # Login
         self.login('instructor01@bogus.com')
@@ -341,7 +341,7 @@ class TableViews(tests.OnTaskLiveTestCase):
     wflow_name = 'combine columns'
 
     # Test operations with all derived columns
-    def test_table_views(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -488,7 +488,7 @@ class TableInsertRow(tests.OnTaskLiveTestCase):
 
     wflow_name = 'combine columns'
 
-    def test_table_insert_row(self):
+    def test(self):
         """Test operations  with derived columns."""
         # Login
         self.login('instructor01@bogus.com')

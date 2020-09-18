@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 from ontask import models, tests
 
 
-class ScheduleApiCreate(tests.OnTaskApiTestCase):
+class ScheduleApiBasic(tests.OnTaskApiTestCase):
     """Test schedule creation through API"""
 
     fixtures = ['three_actions']
@@ -27,7 +27,11 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         token = Token.objects.get(user__email='instructor01@bogus.com')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-    def test_action_from_other_user(self):
+
+class ScheduleApiCreate(ScheduleApiBasic):
+    """Test schedule creation through API"""
+
+    def test(self):
         action_name = 'email action'
 
         # Get list of workflows
@@ -67,7 +71,11 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         self.assertEqual(response.status_code, 500)
         self.assertTrue('Incorrect permission' in response.data['detail'])
 
-    def test_anomalies(self):
+
+class ScheduleApiAnomalies(ScheduleApiBasic):
+    """Test schedule creation through API"""
+
+    def test(self):
         action_name = 'simple action'
 
         s_name = 'Scheduling first email'
@@ -369,7 +377,11 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             'must be a space-separated list of emails'
             in response.data['detail'])
 
-    def test_schedule_email(self):
+
+class ScheduleApiEmail(ScheduleApiBasic):
+    """Test schedule creation through API"""
+
+    def test(self):
         action_name = 'simple action'
 
         s_subject = 'subject'
@@ -447,7 +459,11 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         )
         self.assertEqual(response.status_code, 204)
 
-    def test_schedule_json(self):
+
+class ScheduleApiJSON(ScheduleApiBasic):
+    """Test schedule creation through API"""
+
+    def test(self):
         action_name = 'json action'
         # Get list of workflows
         response = self.client.get(reverse('scheduler:api_scheduled_json'))

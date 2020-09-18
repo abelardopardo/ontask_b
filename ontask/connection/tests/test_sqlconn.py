@@ -10,7 +10,7 @@ from rest_framework import status
 from ontask import models, tests
 
 
-class DataopsViewSQLConnections(tests.OnTaskTestCase):
+class DataopsSQLConnectionsBasic(tests.OnTaskTestCase):
     """Test the SQL connection views."""
 
     fixtures = ['empty_wflow']
@@ -20,23 +20,22 @@ class DataopsViewSQLConnections(tests.OnTaskTestCase):
 
     workflow_name = 'wflow1'
 
-    def test_sql_views_instructor(self):
+
+class DataopsViewSQLConnections(DataopsSQLConnectionsBasic):
+    """Test the SQL connection views."""
+
+    def test(self):
         """Test the view to filter items."""
         resp = self.get_response('connection:sqlconns_index')
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class DataopsViewSQLConnectionsAdmin(tests.OnTaskTestCase):
+class DataopsViewSQLConnectionsAdmin(DataopsSQLConnectionsBasic):
     """Test the SQL connection views."""
 
-    fixtures = ['empty_wflow']
-
     user_email = 'superuser@bogus.com'
-    user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
-
-    def test_sql_views_admin(self):
+    def test(self):
         """Test the view to filter items."""
         resp = self.get_response('connection:sqlconns_admin_index')
         self.assertTrue(status.is_success(resp.status_code))
@@ -152,7 +151,7 @@ class DataopsRunSQLConnections(tests.OnTaskTestCase):
 
     workflow_name = 'BIOL1011'
 
-    def test_sql_run(self):
+    def test(self):
         """Execute the RUN step."""
 
         sql_conn = models.SQLConnection.objects.get(pk=1)

@@ -122,7 +122,7 @@ class SchedulerViewCreateSQLUpload(tests.OnTaskTestCase):
 
     workflow_name = 'BIOL1011'
 
-    def test_sql_update_create(self):
+    def test(self):
         """Create a new SQL Scheduled operation."""
 
         initial_df = self.workflow.data_frame()

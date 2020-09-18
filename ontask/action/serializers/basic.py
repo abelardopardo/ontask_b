@@ -223,7 +223,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
         :param validated_data: Object with the parsed column items
         :return: List of new columns
         """
-        new_columns = []
+        new_column_data = []
         for citem in validated_data:
             cname = citem.get('name')
             if not cname:
@@ -239,7 +239,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
                     raise Exception(_(
                         'Action contains non-existing key column "{0}"'
                     ).format(cname))
-                new_columns.append(citem)
+                new_column_data.append(citem)
                 continue
 
             # Processing an existing column. Check data type compatibility
@@ -253,9 +253,12 @@ class ActionSelfcontainedSerializer(ActionSerializer):
                     'Imported column {0} is different from existing '
                     + 'one.').format(cname))
 
-        return [
+        self.context['add_to_df_table'] = True
+        new_columns = [
             ColumnSerializer.create_column(new_column_info, self.context)
-            for new_column_info in new_columns]
+            for new_column_info in new_column_data]
+        self.context.pop('add_to_df_table')
+        return new_columns
 
     def _process_views(self, validated_data: List) -> List:
         """Process the used_views field of a serializer.

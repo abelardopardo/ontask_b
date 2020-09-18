@@ -38,7 +38,7 @@ class DataopsTransform(tests.OnTaskTestCase):
 
     workflow_name = 'Plugin test'
 
-    def test_transform_model(self):
+    def test(self):
         """Test the view to filter items."""
         # Make sure the plugins are reloaded
         models.Plugin.objects.all().delete()

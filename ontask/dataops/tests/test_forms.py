@@ -9,7 +9,7 @@ from rest_framework import status
 from ontask import tests
 
 
-class DataopsTestFormErrorsEmptyWorkflow(tests.OnTaskTestCase):
+class DataopsTestFormErrorsBasic(tests.OnTaskTestCase):
     """Test the form error detection."""
 
     fixtures = ['empty_wflow']
@@ -19,7 +19,11 @@ class DataopsTestFormErrorsEmptyWorkflow(tests.OnTaskTestCase):
 
     workflow_name = 'wflow1'
 
-    def test_csv_upload(self):
+
+class DataopsTestCSVFormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):
+    """Test the form error detection."""
+
+    def test(self):
         """Test the CSV upload."""
         # Get the regular form
         resp = self.get_response('dataops:csvupload_start')
@@ -46,7 +50,11 @@ class DataopsTestFormErrorsEmptyWorkflow(tests.OnTaskTestCase):
                     'skip_lines_at_bottom': -1})
             self.assertNotEqual(resp.status_code, status.HTTP_302_FOUND)
 
-    def test_google_sheet_upload(self):
+
+class DataopsTestGoogleFormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):
+    """Test the form error detection."""
+
+    def test(self):
         """Test the Google Sheet upload."""
         # Get the regular form
         resp = self.get_response('dataops:googlesheetupload_start')
@@ -71,7 +79,11 @@ class DataopsTestFormErrorsEmptyWorkflow(tests.OnTaskTestCase):
                 'skip_lines_at_bottom': -1})
         self.assertNotEqual(resp.status_code, status.HTTP_302_FOUND)
 
-    def test_s3_upload(self):
+
+class DataopsTestS3FormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):
+    """Test the form error detection."""
+
+    def test(self):
         """Test the S3 upload."""
         # Get the regular form
         resp = self.get_response('dataops:s3upload_start')

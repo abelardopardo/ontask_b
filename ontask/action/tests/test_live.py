@@ -14,7 +14,7 @@ from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.dataops import formula
 
 
-class ActionActionEdit(tests.OnTaskLiveTestCase):
+class ActionActionRename(tests.OnTaskLiveTestCase):
     """Test Action Edit."""
 
     action_name = 'simple action'
@@ -56,6 +56,18 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
 
         # End of session
         self.logout()
+
+class ActionActionSendEmail(tests.OnTaskLiveTestCase):
+    """Test Action Edit."""
+
+    action_name = 'simple action'
+    fixtures = ['simple_action']
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR,
+        'simple_action.sql')
+
+    wflow_name = 'wflow1'
+    wflow_desc = 'description text for workflow 1'
+    wflow_empty = 'The workflow does not have data'
 
     # Test send_email operation
     def test_send_email(self):
@@ -118,7 +130,19 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_save_action_with_buttons(self):
+class ActionActionSave(tests.OnTaskLiveTestCase):
+    """Test Action Edit."""
+
+    action_name = 'simple action'
+    fixtures = ['simple_action']
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR,
+        'simple_action.sql')
+
+    wflow_name = 'wflow1'
+    wflow_desc = 'description text for workflow 1'
+    wflow_empty = 'The workflow does not have data'
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -247,6 +271,19 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+
+class ActionJsonAction(tests.OnTaskLiveTestCase):
+    """Test Action Edit."""
+
+    action_name = 'simple action'
+    fixtures = ['simple_action']
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR,
+        'simple_action.sql')
+
+    wflow_name = 'wflow1'
+    wflow_desc = 'description text for workflow 1'
+    wflow_empty = 'The workflow does not have data'
+
     # Test operations with the filter
     def test_json_action(self):
         action_name = 'JSON action'
@@ -284,7 +321,19 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_action_url(self):
+class ActionActionURL(tests.OnTaskLiveTestCase):
+    """Test Action Edit."""
+
+    action_name = 'simple action'
+    fixtures = ['simple_action']
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR,
+        'simple_action.sql')
+
+    wflow_name = 'wflow1'
+    wflow_desc = 'description text for workflow 1'
+    wflow_empty = 'The workflow does not have data'
+
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -335,7 +384,7 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionInCreate(tests.OnTaskLiveTestCase):
+class ActionActionInDataEntry(tests.OnTaskLiveTestCase):
     """Class to test survey creation."""
 
     fixtures = ['simple_workflow_two_actions']
@@ -492,7 +541,8 @@ class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
         self.go_to_attribute_page()
 
         # Change the name of the attribute and submit
-        self.edit_attribute('attribute name',
+        self.edit_attribute(
+            'attribute name',
             'attribute name new',
             'attribute value')
 
