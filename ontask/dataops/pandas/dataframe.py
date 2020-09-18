@@ -234,7 +234,7 @@ def store_workflow_table(
             sql.db_rename_column(db_table, old_n, new_n)
 
             if current_col:
-                rename_df_column(workflow, old_n, new_n)
+                rename_column(workflow, old_n, new_n)
 
         if current_col:
             if current_col.data_type != data_type:
@@ -324,7 +324,7 @@ def add_column_to_df(
     return df
 
 
-def rename_df_column(
+def rename_column(
     workflow,
     old_name: str,
     new_name: str,

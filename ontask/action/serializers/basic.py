@@ -214,7 +214,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
 
     attachments = ViewNameSerializer(many=True, required=False)
 
-    def _process_columns(self, validated_data) -> List:
+    def _process_columns(self, validated_data: List) -> List:
         """Process the used_columns field of a serializer.
 
         Verifies if the column is new or not. If not new, it verifies that is
@@ -257,7 +257,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
             ColumnSerializer.create_column(new_column_info, self.context)
             for new_column_info in new_columns]
 
-    def _process_views(self, validated_data: Dict) -> List:
+    def _process_views(self, validated_data: List) -> List:
         """Process the used_views field of a serializer.
 
         Verifies that views are all new (no name collisions) and creates
@@ -302,8 +302,10 @@ class ActionSelfcontainedSerializer(ActionSerializer):
             new_columns = self._process_columns(
                 validated_data.pop('used_columns'))
 
-            new_views = self._process_views(validated_data.pop('used_views'))
+            new_views = self._process_views(
+                 validated_data.pop('used_views', []))
 
+            # Contains attachment/view names, to be processed later
             attachments_data = validated_data.pop('attachments', [])
 
             # Create the action, conditions and columns/condition-column pairs

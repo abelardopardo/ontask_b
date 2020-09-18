@@ -142,7 +142,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         blank=True,
         null=True,
         default=None,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name='action')
 
     @functional.cached_property
@@ -175,6 +175,9 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
     def get_filter(self) -> Optional[Filter]:
         """Get filter condition."""
+        if getattr(self, 'filter', None) is None:
+            return None
+
         return self.filter
 
     def get_filter_formula(self):

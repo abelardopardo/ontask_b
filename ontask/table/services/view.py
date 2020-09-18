@@ -77,6 +77,7 @@ def save_view_form(
     :return: AJAX Response
     """
     view.workflow = workflow
+
     if filter:
         filter.workflow = workflow
         filter.save()

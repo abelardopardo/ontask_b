@@ -10,7 +10,7 @@ from ontask.dataops.pandas.database import (
     set_engine, store_table, verify_data_frame,
 )
 from ontask.dataops.pandas.dataframe import (
-    add_column_to_df, get_subframe, get_table_row_by_index, rename_df_column,
+    add_column_to_df, get_subframe, get_table_row_by_index, rename_column,
     store_dataframe, store_temporary_dataframe, store_workflow_table,
 )
 from ontask.dataops.pandas.datatypes import datatype_names
