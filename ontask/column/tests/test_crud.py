@@ -10,7 +10,7 @@ from ontask import models, tests
 from ontask.dataops import pandas
 
 
-class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
+class WorkflowTestViewColumnCrudBasic(tests.OnTaskTestCase):
     """Test column views."""
 
     fixtures = ['initial_workflow']
@@ -27,7 +27,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
 
     workflow_name = 'BIOL1011'
 
-    def test_column_create(self):
+
+class WorkflowTestViewColumnCreate(WorkflowTestViewColumnCrudBasic):
+    """Test column views."""
+
+    def test(self):
         """Add a column."""
         column_name = 'cname'
         column_description = 'column description'
@@ -56,6 +60,10 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
             len(new_col.categories),
             len([txt.strip() for txt in column_categories.split(',')]))
 
+
+class WorkflowTestViewQuestionAdd(WorkflowTestViewColumnCrudBasic):
+    """Test Question Add."""
+
     def test_question_add(self):
         """Test adding a question to a survey."""
         # Get the survey action
@@ -82,7 +90,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_question_rename(self):
+
+class WorkflowTestViewQuestionRename(WorkflowTestViewColumnCrudBasic):
+    """Test Question Rename."""
+
+    def test(self):
         """Test renaming a question in a survey."""
         # Get the survey action and the first of the columns
         survey = self.workflow.actions.get(action_type=models.Action.SURVEY)
@@ -112,7 +124,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         column.refresh_from_db()
         self.assertEqual(column.name, old_name + '2')
 
-    def test_formula_column_add(self):
+
+class WorkflowTestViewAddFormulaColumn(WorkflowTestViewColumnCrudBasic):
+    """Test adding a new column with a formula."""
+
+    def test(self):
         """Test adding a formula column."""
         # GET the form
         resp = self.get_response('column:formula_column_add', is_ajax=True)
@@ -136,7 +152,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         self.assertTrue(
             df['FORMULA COLUMN'].equals(df['Q01'] + df['Q02']))
 
-    def test_random_column_add(self):
+
+class WorkflowTestViewAddRandomColumn(WorkflowTestViewColumnCrudBasic):
+    """Test adding a random colum."""
+
+    def test(self):
         """Test adding a random column."""
         # GET the form
         resp = self.get_response('column:random_column_add', is_ajax=True)
@@ -158,7 +178,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         df = pandas.load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(all(0 < num < 13 for num in df['RANDOM COLUMN']))
 
-    def test_column_clone(self):
+
+class WorkflowTestViewCloneColumn(WorkflowTestViewColumnCrudBasic):
+    """Test cloning a column."""
+
+    def test(self):
         """Test adding a random column."""
         column = self.workflow.columns.get(name='Q01')
         resp = self.get_response(
@@ -178,7 +202,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         df = pandas.load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(df['Copy of Q01'].equals(df['Q01']))
 
-    def test_column_restrict(self):
+
+class WorkflowTestViewRestrictColumn(WorkflowTestViewColumnCrudBasic):
+    """Test restricting values in a column."""
+
+    def test(self):
         """Test Column restriction."""
         column = self.workflow.columns.get(name='Gender')
         self.assertEqual(column.categories, [])
@@ -199,7 +227,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         column.refresh_from_db()
         self.assertEqual(set(column.categories), {'female', 'male'})
 
-    def test_assign_luser_column(self):
+
+class WorkflowTestViewAssignLUser(WorkflowTestViewColumnCrudBasic):
+    """Test assign luser view."""
+
+    def test(self):
         """Test assign luser column option."""
         column = self.workflow.columns.get(name='email')
         self.assertEqual(self.workflow.luser_email_column, None)

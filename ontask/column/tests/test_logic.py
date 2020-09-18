@@ -13,7 +13,7 @@ from ontask.dataops import pandas
 from ontask.column import services
 
 
-class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
+class ColumnAddRandomColumnFormBasic(tests.OnTaskTestCase):
     """Test the creation of random columns."""
 
     fixtures = ['simple_table']
@@ -24,7 +24,11 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
 
     workflow_name = 'wflow1'
 
-    def test_create_random_column_number_form(self):
+
+class ColumnAddRandomNumberColumnForm(ColumnAddRandomColumnFormBasic):
+    """Test the creation of random columns."""
+
+    def test(self):
         """Create a random number column with no values"""
         # Get the workflow first
         self.workflow = models.Workflow.objects.all().first()
@@ -142,6 +146,10 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
         self.assertTrue(all(
             element in [17, 18, 19] for element in data_frame[cname]))
 
+
+class ColumnAddRandomStringColumnForm(ColumnAddRandomColumnFormBasic):
+    """Test the creation of random columns."""
+
     def test_create_random_column_string_form(self):
         """Create a random string column"""
         # Get the workflow first
@@ -196,7 +204,11 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
             element in ['one', 'two', 'three']
             for element in data_frame[cname]))
 
-    def test_create_random_column_boolean_form(self):
+
+class ColumnAddRandomBooleanColumnForm(ColumnAddRandomColumnFormBasic):
+    """Test the creation of random boolean column."""
+
+    def test(self):
         """Create a random string column"""
         # Get the workflow first
         self.workflow = models.Workflow.objects.all().first()
@@ -275,7 +287,11 @@ class ColumnAddRandomColumnForm(tests.OnTaskTestCase):
         self.assertTrue(all(
             element in [True, False] for element in data_frame[cname]))
 
-    def test_create_random_column_datetime_form(self):
+
+class ColumnAddRandomDatetimeColumnForm(ColumnAddRandomColumnFormBasic):
+    """Test the creation of random datetime column."""
+
+    def test(self):
         """Create a random number column with no values"""
         # Get the workflow first
         self.workflow = models.Workflow.objects.all().first()

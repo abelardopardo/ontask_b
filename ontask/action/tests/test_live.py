@@ -26,7 +26,7 @@ class ActionActionRename(tests.OnTaskLiveTestCase):
     wflow_empty = 'The workflow does not have data'
 
     # Test action rename
-    def test_rename(self):
+    def test(self):
         suffix = ' 2'
 
         # Login
@@ -70,7 +70,7 @@ class ActionActionSendEmail(tests.OnTaskLiveTestCase):
     wflow_empty = 'The workflow does not have data'
 
     # Test send_email operation
-    def test_send_email(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -285,7 +285,7 @@ class ActionJsonAction(tests.OnTaskLiveTestCase):
     wflow_empty = 'The workflow does not have data'
 
     # Test operations with the filter
-    def test_json_action(self):
+    def test(self):
         action_name = 'JSON action'
         content_txt = '{ "name": 3 }'
         target_url = 'https://bogus.com'
@@ -397,7 +397,7 @@ class ActionActionInDataEntry(tests.OnTaskLiveTestCase):
     wflow_empty = 'The workflow does not have data'
 
     # Test operations with the filter
-    def test_action_01_data_entry(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -477,7 +477,7 @@ class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
     wflow_name = 'wflow2'
 
     # Test operations with the filter
-    def test_rename_column_condition_attribute(self):
+    def test(self):
         # First get objects for future checks
         workflow = models.Workflow.objects.get(name=self.wflow_name)
         column = workflow.columns.get(name='registered')
@@ -602,7 +602,7 @@ class ActionActionZip(tests.OnTaskLiveTestCase):
 
     wflow_name = 'wflow2'
 
-    def test_action_01_zip(self):
+    def test(self):
         """Test ZIP action."""
         # Login
         self.login('instructor01@bogus.com')
@@ -679,7 +679,7 @@ class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
     wflow_name = 'all key columns'
 
     # Test action rename
-    def test_action_insert_column_value(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -711,7 +711,7 @@ class ActionSendReportActionCreate(tests.OnTaskLiveTestCase):
     action_name = 'Send to someone'
     action_text = 'Dear sir/madam\\nHere is the student list: '
 
-    def test_email_report_create_edit(self):
+    def test(self):
         """Send Report action after creating and editing."""
         workflow = models.Workflow.objects.get(name=self.wflow_name)
         view = workflow.views.all().first()
@@ -835,7 +835,7 @@ class ActionJSONReportActionCreate(tests.OnTaskLiveTestCase):
     action_name = 'JSON REPORT'
     action_text = '{ "student_list": {% ot_insert_report "email" %} }'
 
-    def test_json_report_create_edit(self):
+    def test(self):
         """Create and edit a list action."""
         # Login
         self.login('instructor01@bogus.com')
@@ -908,7 +908,7 @@ class ActionServeLongSurvey(tests.OnTaskLiveTestCase):
     workflow_name = 'Test survey run pages'
     action_name = 'survey'
 
-    def test_serve_long_survey(self):
+    def test(self):
         """Test the serve_action view with a long number of entries."""
         # Login
         self.login('instructor01@bogus.com')
@@ -940,7 +940,7 @@ class ActionCreateRubric(tests.OnTaskLiveTestCase):
     workflow_name = 'test rubric'
     action_name = 'survey'
 
-    def test_create_rubric_action(self):
+    def test(self):
         """Test the creation of a rubric action."""
         # Login
         self.login('instructor01@bogus.com')

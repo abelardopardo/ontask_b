@@ -13,11 +13,16 @@ from ontask import models, tests
 from ontask.core.checks import check_workflow
 
 
-class WorkflowModify(tests.OnTaskLiveTestCase):
+class ColumnTestCrudLive(tests.OnTaskLiveTestCase):
+    """Testing column creation/deletion"""
     fixtures = ['simple_workflow']
     filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
 
-    def test_02_workflow_column_create_delete(self):
+
+class ColumnTestCreateDelete(ColumnTestCrudLive):
+    """Testing column creation/deletion"""
+
+    def test(self):
         new_cols = [
             ('newc1', 'string', 'male,female', ''),
             ('newc2', 'boolean', '', 'True'),
@@ -85,7 +90,10 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_03_workflow_column_rename(self):
+class ColumnTestRename(ColumnTestCrudLive):
+    """Testing column rename"""
+
+    def test(self):
         categories = 'aaa, bbb, ccc'
         action_name = 'simple action'
         action_desc = 'action description text'

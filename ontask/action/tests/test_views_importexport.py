@@ -11,8 +11,8 @@ from ontask import tests
 from ontask.action.views import action_import
 
 
-class ActionViewExport(tests.OnTaskTestCase):
-    """Test the view to run actio item filter, json and email."""
+class ActionViewExportBasic(tests.OnTaskTestCase):
+    """Basic class to test the action export view."""
 
     fixtures = ['simple_workflow_two_actions']
     filename = os.path.join(
@@ -24,7 +24,11 @@ class ActionViewExport(tests.OnTaskTestCase):
 
     workflow_name = 'wflow2'
 
-    def test_export_ask(self):
+
+class ActionViewExport(ActionViewExportBasic):
+    """Test the action export view."""
+
+    def test(self):
         """Test the export views."""
         action = self.workflow.actions.get(name='Detecting age')
 
@@ -52,7 +56,11 @@ class ActionViewExport(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(resp['Content-Type'], 'application/octet-stream')
 
-    def test_action_import(self):
+
+class ActionViewImport(ActionViewExportBasic):
+    """Test the view to import a workflow."""
+
+    def test(self):
         """Test the import ."""
         # Get request
         resp = self.get_response(
