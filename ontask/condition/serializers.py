@@ -8,6 +8,7 @@ from rest_framework import serializers
 from ontask import models
 from ontask.column.serializers import ColumnNameSerializer
 from ontask.core import OnTaskObjectIdField
+from ontask.dataops import formula
 
 try:
     profile  # noqa: Z444
@@ -39,8 +40,13 @@ class ConditionBaseSerializer(serializers.ModelSerializer):
         :param columns_data: Serialized column name information
         :return: Nothing. Side effects on the object
         """
+        if not columns_data:
+            # Columns data has no element, recompute from scratch
+            col_names = formula.get_variables(cond_obj.formula)
+        else:
+            col_names = [c_data['name'] for c_data in columns_data]
+
         # Set the columns in the condition
-        col_names = [c_data['name'] for c_data in columns_data]
         cond_obj.columns.set(
             cond_obj.workflow.columns.filter(name__in=col_names))
 

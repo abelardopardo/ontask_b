@@ -242,16 +242,15 @@ def update_column(
     :return: Nothing. Side effect in the workflow.
     """
     # If there is a new name, rename the data frame columns
+    if old_position != column.position:
+        # Update the positions of the appropriate columns
+        workflow.reposition_columns(old_position, column.position)
+
     if old_name != column.name:
         sql.db_rename_column(
             workflow.get_data_frame_table_name(),
             old_name,
             column.name)
-        pandas.rename_df_column(workflow, old_name, column.name)
-
-    if old_position != column.position:
-        # Update the positions of the appropriate columns
-        workflow.reposition_columns(old_position, column.position)
 
     column.save()
 
@@ -260,6 +259,10 @@ def update_column(
     workflow = models.Workflow.objects.prefetch_related('columns').get(
         id=workflow.id,
     )
+
+    # Propagate the rename to the other actions and views
+    if old_name != column.name:
+        pandas.rename_column(workflow, old_name, column.name)
 
     # Changes in column require rebuilding the query_builder_ops
     workflow.set_query_builder_ops()

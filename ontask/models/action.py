@@ -371,18 +371,18 @@ class ActionDataOut(ActionBase):  # noqa Z214
 
             self.save(update_fields=['text_content'])
 
-        # Rename the variable in all conditions
-        for cond in self.conditions.all():
-            cond.formula = formula.rename_variable(
-                cond.formula, old_name, new_name)
-            cond.save(update_fields=['_formula'])
-
         # Rename the variable in the filter
         filter_obj = self.get_filter()
         if filter_obj:
             filter_obj.formula = formula.rename_variable(
                 filter_obj.formula, old_name, new_name)
             filter_obj.save()
+
+        # Rename the variable in all conditions
+        for cond in self.conditions.all():
+            cond.formula = formula.rename_variable(
+                cond.formula, old_name, new_name)
+            cond.save(update_fields=['_formula'])
 
     def get_used_conditions(self) -> List[str]:
         """Get list of conditions that are used in the text_content.

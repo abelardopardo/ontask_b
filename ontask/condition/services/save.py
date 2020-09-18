@@ -79,6 +79,9 @@ def save_condition_form(
     condition.columns.set(workflow.columns.filter(
         name__in=formula.get_variables(condition.formula),
     ))
+    if is_filter:
+        action.filter = condition
+        action.save()
 
     _propagate_changes(condition, form.changed_data, form.old_name)
 
