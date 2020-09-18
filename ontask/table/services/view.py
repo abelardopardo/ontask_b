@@ -7,6 +7,7 @@ from typing import Optional
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
+from ontask.dataops import formula
 from ontask.table.services.errors import OnTaskTableCloneError
 from ontask.condition.services import do_clone_filter
 
@@ -78,7 +79,7 @@ def save_view_form(
     """
     view.workflow = workflow
 
-    if filter:
+    if not formula.is_empty(filter.formula):
         filter.workflow = workflow
         filter.save()
         view.filter = filter

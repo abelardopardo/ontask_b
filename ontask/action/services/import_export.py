@@ -61,14 +61,15 @@ def run_compatibility_patches(json_data: List) -> List:
         if not conditions:
             continue
 
+        action_obj['conditions'] = [
+            cond for cond in conditions if not cond.get('is_filter', False)]
+
         filter_obj = [
             cond for cond in conditions if cond.get('is_filter', False)]
         if not filter_obj:
             continue
 
-        action_obj['conditions'] = [
-            cond for cond in conditions if not cond.get('is_filter', False)]
-        action_obj['filter'] = filter_obj
+        action_obj['filter'] = filter_obj[0]
 
     # move filter condition to its own list
     for action_obj in json_data:
