@@ -48,7 +48,10 @@
     <h1 class="text-center">{{ action.name }}</h1>
     <form action="" enctype="multipart/form-data" method="POST">
       {% csrf_token %}
-      {% include 'action/includes/partial_action_preview_done_buttons.html' %}
+      <div id="action-preview-done" class="text-center my-2">
+        {% include 'table/includes/partial_column_stats_selector.html' %}
+        {% include 'action/includes/partial_action_preview_done_buttons.html' %}
+      </div>
       {% include 'action/includes/partial_action_edit_out_warning.html' %}
       <div class="my-3">
         <ul class="nav nav-tabs border-0 justify-content-center"

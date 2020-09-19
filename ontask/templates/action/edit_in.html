@@ -67,6 +67,7 @@
   <div class="container" id="action-in-editor">
     <h1 class="text-center">{{ action.name }}</h1>
     <div class="text-center my-3">
+      {% include 'table/includes/partial_column_stats_selector.html' %}
       <button type="button"
               class="shadow btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
               data-url="{% url 'action:preview' action.id 1 %}"

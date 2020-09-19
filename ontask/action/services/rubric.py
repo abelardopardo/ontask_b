@@ -145,4 +145,6 @@ class ActionManagerRubric(ActionManagerEmail):
                 if column.categories]
         context['columns_to_insert'] = columns_to_insert
 
+        self.add_columns_show_stats(action, context)
+
         return None
