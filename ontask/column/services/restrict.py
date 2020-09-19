@@ -22,13 +22,13 @@ def restrict_column(user, column: models.Column):
     data_frame = pandas.load_table(
         column.workflow.get_data_frame_table_name())
 
-    cat_values = set(data_frame[column.name].dropna())
+    cat_values = list(data_frame[column.name].dropna().unique())
     if not cat_values:
         raise errors.OnTaskColumnCategoryValueError(
             message=_('The column has no meaningful values'))
 
     # Set categories
-    column.set_categories(list(cat_values))
+    column.set_categories(cat_values)
 
     # Re-evaluate the operands in the workflow
     column.log(user, models.Log.COLUMN_RESTRICT)

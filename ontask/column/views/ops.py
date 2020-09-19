@@ -138,7 +138,9 @@ def column_restrict_values(
             {
                 'pk': pk,
                 'cname': column.name,
-                'values': ', '.join(set(df[column.name]))},
+                'values': ', '.join([
+                    str(item)
+                    for item in sorted(df[column.name].dropna().unique())])},
             request=request),
     })
 

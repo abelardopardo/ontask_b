@@ -227,23 +227,23 @@ class WorkflowTestViewRestrictColumn(WorkflowTestViewColumnCrudBasic):
         column.refresh_from_db()
         self.assertEqual(set(column.categories), {'female', 'male'})
 
-
-class WorkflowTestViewAssignLUser(WorkflowTestViewColumnCrudBasic):
-    """Test assign luser view."""
-
-    def test(self):
-        """Test assign luser column option."""
-        column = self.workflow.columns.get(name='email')
-        self.assertEqual(self.workflow.luser_email_column, None)
+        # Try again with a column with float values
+        column = self.workflow.columns.get(name='Q01')
+        df = self.workflow.data_frame()
+        values = sorted(df[column.name].dropna().unique())
 
         resp = self.get_response(
-            'workflow:assign_luser_column',
+            'column:column_restrict',
+            {'pk': column.id},
+            is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertIn('to the values 0.0, 1.0?', str(resp.content))
+
+        resp = self.get_response(
+            'column:column_restrict',
             {'pk': column.id},
             method='POST',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
-
-        column = self.workflow.columns.get(name='email')
-        self.workflow.refresh_from_db()
-        self.assertEqual(self.workflow.luser_email_column, column)
-        self.assertEqual(self.workflow.lusers.count(), self.workflow.nrows)
+        column.refresh_from_db()
+        self.assertTrue(sorted(column.get_categories()) == sorted(values))
