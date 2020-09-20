@@ -983,7 +983,9 @@
                 ],
                 "operators": [
                     "equal",
-                    "not_equal"
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
                 ]
             },
             {
@@ -999,7 +1001,9 @@
                 ],
                 "operators": [
                     "equal",
-                    "not_equal"
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
                 ]
             },
             {
@@ -1026,7 +1030,9 @@
                 ],
                 "operators": [
                     "equal",
-                    "not_equal"
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
                 ]
             },
             {

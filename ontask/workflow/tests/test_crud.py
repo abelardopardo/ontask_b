@@ -28,7 +28,7 @@ class WorkflowCrudBasic(tests.OnTaskTestCase):
     workflow_name = 'BIOL1011'
 
 
-class WorkflowCrudUpdate(tests.OnTaskTestCase):
+class WorkflowCrudUpdate(WorkflowCrudBasic):
     """Test workflow update."""
 
     def test(self):
