@@ -117,7 +117,7 @@ class ActionEditManager:
                 or action.action_type == models.Action.EMAIL_REPORT
                 or action.action_type == models.Action.RUBRIC_TEXT
             ),
-            'query_builder_ops': action.workflow.get_query_builder_ops_as_str(),
+            'query_builder_ops': action.workflow.get_query_builder_ops(),
             'vis_scripts': PlotlyHandler.get_engine_scripts()}
 
 

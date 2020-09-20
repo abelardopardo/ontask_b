@@ -39,7 +39,6 @@ class ActionViewExport(ActionViewExportBasic):
         self.assertTrue(action.name in str(resp.content))
 
         # Get export done
-        # BROKEN!!!
         resp = self.get_response(
             'workflow:export_list_ask',
             {'wid': action.workflow.id},

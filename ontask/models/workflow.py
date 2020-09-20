@@ -253,6 +253,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
                     'not_equal',
                     'is_null',
                     'is_not_null']
+
             # TODO: Filter is_null and is_not_null out of string columns if
             # NULL values are avoided.
 
@@ -260,7 +261,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
 
         self.query_builder_ops = json_value
 
-    def get_query_builder_ops_as_str(self) -> str:
+    def get_query_builder_ops(self) -> str:
         """Obtain the query builder operands as a string.
 
         :return: Query builder ops structure as string (JSON dumps)

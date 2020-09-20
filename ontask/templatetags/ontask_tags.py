@@ -34,6 +34,28 @@ def country(country_code) -> str:
 
 
 @register.simple_tag
+def ontask_query_builder_js() -> str:
+    """Provide the queryBuilder Static files."""
+    return format_html(
+        '<script src="{0}"></script>'.format(
+            static('js/moment.js'))
+        + '<script src="{0}"></script>'.format(
+            static('js/query-builder.standalone.min.js'))
+        + '<script src="{0}"></script>'.format(
+            static(
+                'js/query-builder.{0}.js'.format(ontask.get_country_code(
+                    settings.LANGUAGE_CODE)))))
+
+
+@register.simple_tag
+def ontask_query_builder_css() -> str:
+    """Provide the queryBuilder CSS files"""
+    return format_html(
+        '<link rel="stylesheet" href="{0}">'.format(
+            static('css/query-builder.default.min.css')))
+
+
+@register.simple_tag
 def ontask_jquery() -> str:
     """Provide the JQuery URL."""
     return format_html(
@@ -64,19 +86,6 @@ def ontask_jqcron_css() -> str:
 
 
 @register.simple_tag
-def ontask_bootstrap_css() -> str:
-    """Provide bootstrap CSS."""
-    return format_html(
-        '<link rel="stylesheet" '
-        'href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min'
-        '.css" integrity="sha384-MCw98'
-        '/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" '
-        'crossorigin="anonymous">'
-        + '<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font'
-          '-awesome.min.css" rel="stylesheet">')
-
-
-@register.simple_tag
 def ontask_bootstrap_js() -> str:
     """Provide the bootstrap JS."""
     return format_html(
@@ -90,6 +99,19 @@ def ontask_bootstrap_js() -> str:
           'integrity="sha384-ChfqqxuZUCnJSK3'
           '+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" '
           'crossorigin="anonymous"></script>')
+
+
+@register.simple_tag
+def ontask_bootstrap_css() -> str:
+    """Provide bootstrap CSS."""
+    return format_html(
+        '<link rel="stylesheet" '
+        'href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min'
+        '.css" integrity="sha384-MCw98'
+        '/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" '
+        'crossorigin="anonymous">'
+        + '<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font'
+          '-awesome.min.css" rel="stylesheet">')
 
 
 @register.simple_tag
@@ -139,7 +161,7 @@ def ontask_datetimepicker_js() -> str:
         + 'src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4'
         + '.17.47/js/bootstrap-datetimepicker.min.js"></script><script '
         + 'type="text/javascript" src="{0}"></script>'.format(
-        static('bootstrap_datepicker_plus/js/datepicker-widget.js')))
+            static('bootstrap_datepicker_plus/js/datepicker-widget.js')))
 
 
 @register.simple_tag(takes_context=True)

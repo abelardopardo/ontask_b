@@ -10,7 +10,7 @@ from ontask import entity_prefix, models, tests
 from ontask.tests.compare import compare_workflows
 
 
-class WorkflowUpdate(tests.OnTaskTestCase):
+class WorkflowCrudBasic(tests.OnTaskTestCase):
     """Test workflow views."""
 
     fixtures = ['initial_workflow']
@@ -27,7 +27,11 @@ class WorkflowUpdate(tests.OnTaskTestCase):
 
     workflow_name = 'BIOL1011'
 
-    def test_workflow_update(self):
+
+class WorkflowCrudUpdate(tests.OnTaskTestCase):
+    """Test workflow update."""
+
+    def test(self):
         """Update the name and description of the workflow."""
         # Update name and description
         resp = self.get_response(
@@ -49,24 +53,10 @@ class WorkflowUpdate(tests.OnTaskTestCase):
         self.assertEqual(self.workflow.description_text, 'description')
 
 
-class WorkflowCloneDelete(tests.OnTaskTestCase):
-    """Test workflow views."""
+class WorkflowCloneDelete(WorkflowCrudBasic):
+    """Test workflow clone and delete."""
 
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
-
-    user_email = 'instructor01@bogus.com'
-    user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
-
-    def test_workflow_clone_and_delete(self):
+    def test(self):
         """Clone a workflow."""
         # Invoke the clone function
         resp = self.get_response(
@@ -127,3 +117,24 @@ class WorkflowCloneDelete(tests.OnTaskTestCase):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(models.Workflow.objects.count(), 1)
+
+
+class WorkflowCrudAssignLUser(WorkflowCrudBasic):
+    """Test assign luser view."""
+
+    def test(self):
+        """Test assign luser column option."""
+        column = self.workflow.columns.get(name='email')
+        self.assertEqual(self.workflow.luser_email_column, None)
+
+        resp = self.get_response(
+            'workflow:assign_luser_column',
+            {'pk': column.id},
+            method='POST',
+            is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+
+        column = self.workflow.columns.get(name='email')
+        self.workflow.refresh_from_db()
+        self.assertEqual(self.workflow.luser_email_column, column)
+        self.assertEqual(self.workflow.lusers.count(), self.workflow.nrows)

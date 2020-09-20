@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Functions to support the display of a view."""
-import copy
 from typing import Optional
 
 from django.utils.translation import ugettext_lazy as _
@@ -67,22 +66,22 @@ def save_view_form(
     user,
     workflow: models.Workflow,
     view: models.View,
-    filter: Optional[models.Filter] = None,
+    filter_obj: Optional[models.Filter] = None,
 ):
     """Save the data attached to a view.
 
     :param user: user requesting the operation
     :param workflow: Workflow being processed
     :param view: View being processed.
-    :param filter: Filter object containing the formula
+    :param filter_obj: Filter object containing the formula
     :return: AJAX Response
     """
     view.workflow = workflow
 
-    if not formula.is_empty(filter.formula):
-        filter.workflow = workflow
-        filter.save()
-        view.filter = filter
+    if not formula.is_empty(filter_obj.formula):
+        filter_obj.workflow = workflow
+        filter_obj.save()
+        view.filter = filter_obj
 
     view.save()
     view.log(

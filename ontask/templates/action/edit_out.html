@@ -5,18 +5,15 @@
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Edit Action' %}{% endblock %}
 {% block extrahead %}
-  <link href="{% static 'css/query-builder.default.min.css' %}" rel="stylesheet">
+  {% ontask_query_builder_css %}
   <link href="{% static 'css/sol.css' %}" rel="stylesheet">
   {% ontask_datetimepicker_css %}
   {{ form.media.css }}
 {% endblock extrahead %}
 {% block scripts %}
+  {% ontask_query_builder_js %}
   {% ontask_datetimepicker_js %}
   {{ form.media.js }}
-  <script src="{% static 'js/query-builder.standalone.min.js' %}"></script>
-  {% with country=LANGUAGE_CODE|country %}
-    <script src="{% static 'js/query-builder.'|add:country|add:'.js' %}"></script>
-  {% endwith %}
   <script src="{% static 'js/sol.js' %}"></script>
   <script src="{% static 'action/js/action.js' %}"></script>
   <script src="{% static 'condition/js/condition.js' %}"></script>

@@ -8,18 +8,15 @@
 {% block title %}{{ block.super }}{% trans 'Table' %}{% endblock %}
 {% block extrahead %}
   {% ontask_datatables_bootstrap_css %}
-  <link href="{% static 'css/query-builder.default.min.css' %}" rel="stylesheet">
+  {% ontask_query_builder_css %}
   {% ontask_datetimepicker_css %}
   <link href="{% static 'css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
+  {% ontask_query_builder_js %}
   {% ontask_datetimepicker_js %}
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
-  <script src="{% static 'js/query-builder.standalone.min.js' %}" ></script>
-  {% with country=LANGUAGE_CODE|country %}
-    <script src="{% static 'js/query-builder.'|add:country|add:'.js' %}"></script>
-  {% endwith %}
   <script src="{% static 'js/sol.js' %}"></script>
   <script src="{% static 'table/js/table.js' %}"></script>
   <script src="{% static 'column/js/column_move.js' %}"></script>

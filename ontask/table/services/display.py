@@ -42,7 +42,7 @@ def render_table_display_page(
     # Create the initial context
     context = {
         'workflow': workflow,
-        'query_builder_ops': workflow.get_query_builder_ops_as_str(),
+        'query_builder_ops': workflow.get_query_builder_ops(),
         'ajax_url': ajax_url,
         'views': workflow.views.all(),
         'no_actions': workflow.actions.count() == 0,

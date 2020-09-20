@@ -10,7 +10,7 @@ from ontask import models, tests
 from ontask.dataops import pandas
 
 
-class WorkflowTestViewColumnCrudBasic(tests.OnTaskTestCase):
+class ColumnCrudBasic(tests.OnTaskTestCase):
     """Test column views."""
 
     fixtures = ['initial_workflow']
@@ -28,7 +28,7 @@ class WorkflowTestViewColumnCrudBasic(tests.OnTaskTestCase):
     workflow_name = 'BIOL1011'
 
 
-class WorkflowTestViewColumnCreate(WorkflowTestViewColumnCrudBasic):
+class ColumnCreate(ColumnCrudBasic):
     """Test column views."""
 
     def test(self):
@@ -61,7 +61,7 @@ class WorkflowTestViewColumnCreate(WorkflowTestViewColumnCrudBasic):
             len([txt.strip() for txt in column_categories.split(',')]))
 
 
-class WorkflowTestViewQuestionAdd(WorkflowTestViewColumnCrudBasic):
+class ColumnCrudQuestionAdd(ColumnCrudBasic):
     """Test Question Add."""
 
     def test_question_add(self):
@@ -91,7 +91,7 @@ class WorkflowTestViewQuestionAdd(WorkflowTestViewColumnCrudBasic):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class WorkflowTestViewQuestionRename(WorkflowTestViewColumnCrudBasic):
+class ColumnCrudQuestionRename(ColumnCrudBasic):
     """Test Question Rename."""
 
     def test(self):
@@ -125,7 +125,7 @@ class WorkflowTestViewQuestionRename(WorkflowTestViewColumnCrudBasic):
         self.assertEqual(column.name, old_name + '2')
 
 
-class WorkflowTestViewAddFormulaColumn(WorkflowTestViewColumnCrudBasic):
+class ColumnCrudAddFormulaColumn(ColumnCrudBasic):
     """Test adding a new column with a formula."""
 
     def test(self):
@@ -153,7 +153,7 @@ class WorkflowTestViewAddFormulaColumn(WorkflowTestViewColumnCrudBasic):
             df['FORMULA COLUMN'].equals(df['Q01'] + df['Q02']))
 
 
-class WorkflowTestViewAddRandomColumn(WorkflowTestViewColumnCrudBasic):
+class ColumnCrudAddRandomColumn(ColumnCrudBasic):
     """Test adding a random colum."""
 
     def test(self):
@@ -179,7 +179,7 @@ class WorkflowTestViewAddRandomColumn(WorkflowTestViewColumnCrudBasic):
         self.assertTrue(all(0 < num < 13 for num in df['RANDOM COLUMN']))
 
 
-class WorkflowTestViewCloneColumn(WorkflowTestViewColumnCrudBasic):
+class ColumnCrudClone(ColumnCrudBasic):
     """Test cloning a column."""
 
     def test(self):
@@ -203,7 +203,7 @@ class WorkflowTestViewCloneColumn(WorkflowTestViewColumnCrudBasic):
         self.assertTrue(df['Copy of Q01'].equals(df['Q01']))
 
 
-class WorkflowTestViewRestrictColumn(WorkflowTestViewColumnCrudBasic):
+class ColumnCrudRestrict(ColumnCrudBasic):
     """Test restricting values in a column."""
 
     def test(self):

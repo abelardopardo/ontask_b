@@ -24,7 +24,7 @@ def evaluate(
     node,
     eval_type: str,
     given_variables: Optional[Dict] = None,
-) -> Union[bool, Tuple[str, List]]:
+) -> Union[bool, Tuple[Union[str, sql.Composed], List], str]:
     """Evaluate a node depending on the type and with the given variables.
 
     Given a node representing a formula, and a dictionary with (name, values),

@@ -61,8 +61,7 @@ class ViewAddForm(forms.ModelForm):
         if name_exists:
             self.add_error(
                 'name',
-                _('There is already a view with this name.'),
-            )
+                _('There is already a view with this name.'))
 
         return form_data
 
