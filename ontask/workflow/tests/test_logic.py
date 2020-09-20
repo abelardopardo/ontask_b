@@ -52,7 +52,6 @@ class WorkflowImportExport(tests.OnTaskTestCase):
         self.assertEqual(workflow.nrows, data['nrows'])
         self.assertEqual(workflow.ncols, data['ncols'])
         self.assertEqual(workflow.attributes, data['attributes'])
-        self.assertEqual(workflow.query_builder_ops, data['query_builder_ops'])
 
 
 class WorkflowImportExportCycle(tests.OnTaskTestCase):
