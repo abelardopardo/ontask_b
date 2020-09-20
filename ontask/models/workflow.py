@@ -236,6 +236,15 @@ class Workflow(NameAndDescription, CreateModifyFields):
                 # integer
                 op_item['validation'] = {'step': 'any'}
 
+            if column.data_type == 'datetime':
+                op_item['validation'] = {
+                    'format': [
+                        'YYYY-MM-DD HH:mm:ss',
+                        'YYYY-MM-DD HH:mm:ssZ',
+                        'YYYY-MM-DD HH:mm:ss Z'],
+                        'messages': {
+                        'format': 'Date required format YYYY-MM-DD HH:mm:ss'}}
+
             if column.get_categories():
                 op_item['input'] = 'select'
                 op_item['values'] = column.categories

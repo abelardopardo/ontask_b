@@ -598,7 +598,13 @@
             },
             {
                 "id": "when",
-                "type": "datetime"
+                "type": "datetime",
+                "validation": {
+                    "format": ["YYYY-MM-DD HH:mm:ss","YYYY-MM-DD HH:mm:ssZ","YYYY-MM-DD HH:mm:ss Z"],
+                    "messages": {
+                        "format": "Date required format YYYY-MM-DD HH:mm:ss"
+                    }
+                }
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_5",
