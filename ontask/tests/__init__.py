@@ -1068,6 +1068,31 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             models.Action.JSON_REPORT,
             adesc)
 
+    def create_new_survey_action(self, aname, adesc=''):
+        # click on the create action button
+        self.selenium.find_element_by_class_name('js-create-action').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.presence_of_element_located((By.ID, 'id_name')))
+
+        # Set the name, description and type of the action
+        self.selenium.find_element_by_id('id_name').send_keys(aname)
+        desc = self.selenium.find_element_by_id('id_description_text')
+        # Select the action type
+        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select.select_by_value(models.Action.SURVEY)
+        desc.send_keys(adesc)
+        desc.send_keys(Keys.RETURN)
+        # Wait for the spinner to disappear, and then for the button to be
+        # clickable
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.visibility_of_element_located((By.ID, 'div-spinner'))
+        )
+        WebDriverWait(self.selenium, 10).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, '//*[@id="action-in-editor"]')
+            )
+        )
+
     def create_attribute(self, attribute_key, attribute_value):
         # Click in the new attribute dialog
         self.selenium.find_element_by_class_name('js-attribute-create').click()
@@ -1092,31 +1117,6 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
         # Wait for modal to close and for table to refresh
         self.wait_close_modal_refresh_table('attribute-table_previous')
-
-    def create_new_survey_action(self, aname, adesc=''):
-        # click on the create action button
-        self.selenium.find_element_by_class_name('js-create-action').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located((By.ID, 'id_name')))
-
-        # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys(aname)
-        desc = self.selenium.find_element_by_id('id_description_text')
-        # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
-        select.select_by_value(models.Action.SURVEY)
-        desc.send_keys(adesc)
-        desc.send_keys(Keys.RETURN)
-        # Wait for the spinner to disappear, and then for the button to be
-        # clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//*[@id="action-in-editor"]')
-            )
-        )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
 
     def create_filter(self, cdesc, rule_tuples):
         # Make sure we are in the Filter tab
