@@ -8,7 +8,7 @@ from ontask import models, tests
 from ontask.dataops import pandas
 
 
-class ColumnCrudBasic(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
+class ColumnCrudBasic(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
     """Test column views."""
 
     user_email = 'instructor01@bogus.com'

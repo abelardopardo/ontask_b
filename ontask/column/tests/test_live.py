@@ -31,7 +31,7 @@ class ColumnTestCreateDelete(
         self.login('instructor01@bogus.com')
 
         # Go to the details page
-        self.access_workflow_from_home_page(tests.wflow_name)
+        self.access_workflow_from_home_page(tests.WORKFLOW_NAME)
 
         # Go to column details
         self.go_to_details()
@@ -86,7 +86,7 @@ class ColumnTestCreateDelete(
         self.logout()
 
 
-class ColumnTestRename(tests.OnTaskLiveTestCase, tests.SimpleWorkflowFixture):
+class ColumnTestRename(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
     """Testing column rename"""
 
     def test(self):
@@ -98,7 +98,7 @@ class ColumnTestRename(tests.OnTaskLiveTestCase, tests.SimpleWorkflowFixture):
         self.login('instructor01@bogus.com')
 
         # Open the workflow
-        self.access_workflow_from_home_page(tests.wflow_name)
+        self.access_workflow_from_home_page(tests.WORKFLOW_NAME)
 
         # Go to the details page
         self.go_to_details()

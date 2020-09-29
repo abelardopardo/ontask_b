@@ -9,7 +9,7 @@ from psycopg2 import sql
 from ontask import tests
 
 
-class ColumnCreate(tests.OnTaskTestCase, tests.EmptyWorkflowFixture):
+class ColumnCreate(tests.EmptyWorkflowFixture, tests.OnTaskTestCase):
     """Test column views."""
 
     user_email = 'instructor01@bogus.com'

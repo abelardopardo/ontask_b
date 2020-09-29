@@ -8,7 +8,7 @@ from rest_framework import status
 from ontask import tests
 
 
-class ActionViewZIPBasic(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
+class ActionViewZIPBasic(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
     """Test the view run a ZIP action."""
 
     user_email = 'instructor01@bogus.com'

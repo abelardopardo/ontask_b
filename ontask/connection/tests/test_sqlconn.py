@@ -133,8 +133,8 @@ class DataopsViewSQLConnectionsAdmin(DataopsSQLConnectionsBasic):
 
 
 class DataopsRunSQLConnections(
-    tests.OnTaskTestCase,
     tests.InitialWorkflowFixture,
+    tests.OnTaskTestCase,
 ):
     """Test the SQL connection run."""
 

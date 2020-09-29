@@ -13,7 +13,7 @@ from ontask import models, tests
 from ontask.dataops import pandas
 
 
-class TableDerivedColumns(tests.OnTaskLiveTestCase, tests.DerivedColumnFixture):
+class TableDerivedColumns(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
     """Tests to check how the derived columns are created."""
 
     def test(self):
@@ -327,7 +327,7 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase, tests.DerivedColumnFixture):
         self.logout()
 
 
-class TableViews(tests.OnTaskLiveTestCase, tests.DerivedColumnFixture):
+class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
     """Test Table views."""
     
     def test(self):
@@ -472,7 +472,7 @@ class TableViews(tests.OnTaskLiveTestCase, tests.DerivedColumnFixture):
         self.logout()
 
 
-class TableInsertRow(tests.OnTaskLiveTestCase, tests.DerivedColumnFixture):
+class TableInsertRow(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
 
     def test(self):
         """Test operations  with derived columns."""

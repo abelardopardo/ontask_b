@@ -12,7 +12,7 @@ from ontask import models, tests
 from ontask.dataops import formula, pandas, services, sql
 
 
-class DataopsMatrixBasic(tests.OnTaskTestCase, tests.TestMergeFixture):
+class DataopsMatrixBasic(tests.TestMergeFixture, tests.OnTaskTestCase):
     table_name = 'DUMP_BOGUS_TABLE'
 
     csv1 = """key,text1,text2,double1,double2,bool1,bool2,date1,date2

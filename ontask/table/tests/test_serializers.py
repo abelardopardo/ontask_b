@@ -9,7 +9,7 @@ from ontask import tests
 from ontask.table import serializers
 
 
-class TableTestSerializersBasic(tests.OnTaskTestCase, tests.SimpleTableFixture):
+class TableTestSerializersBasic(tests.SimpleTableFixture, tests.OnTaskTestCase):
     """Test stat views."""
 
     user_email = 'instructor01@bogus.com'

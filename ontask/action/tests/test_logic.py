@@ -14,7 +14,7 @@ from ontask.core import SessionPayload
 from ontask.dataops import pandas
 
 
-class EmailActionTracking(tests.OnTaskTestCase, tests.SimpleEmailActionFixture):
+class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
     """Test Email tracking."""
 
     trck_tokens = [
@@ -52,7 +52,7 @@ class EmailActionTracking(tests.OnTaskTestCase, tests.SimpleEmailActionFixture):
                 )
 
 
-class ActionImport(tests.OnTaskTestCase, tests.SimpleEmailActionFixture):
+class ActionImport(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
     """Test action import."""
 
     def test_do_import(self):
@@ -72,8 +72,8 @@ class ActionImport(tests.OnTaskTestCase, tests.SimpleEmailActionFixture):
 
 
 class EmailActionDetectIncorrectEmail(
-    tests.OnTaskTestCase,
     tests.WrongEmailFixture,
+    tests.OnTaskTestCase,
 ):
     """Test if incorrect email addresses are detected."""
 

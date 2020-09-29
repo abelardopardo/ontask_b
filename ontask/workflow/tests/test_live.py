@@ -30,7 +30,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Create the workflow
-        self.create_new_workflow(tests.wflow_name, tests.wflow_desc)
+        self.create_new_workflow(tests.WORKFLOW_NAME, tests.WORKFLOW_DESC)
 
         # Go to CSV Upload/Merge
         self.selenium.find_element_by_xpath(
@@ -176,7 +176,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Create the workflow
-        self.create_new_workflow(tests.wflow_name, tests.wflow_desc)
+        self.create_new_workflow(tests.WORKFLOW_NAME, tests.WORKFLOW_DESC)
 
         # Go to the CSV upload step 1
         self.selenium.find_element_by_xpath(
@@ -232,7 +232,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowAttribute(tests.OnTaskLiveTestCase, tests.SimpleWorkflowFixture):
+class WorkflowAttribute(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
 
     def test(self):
         pass
@@ -241,7 +241,7 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase, tests.SimpleWorkflowFixture):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(tests.wflow_name)
+        self.access_workflow_from_home_page(tests.WORKFLOW_NAME)
 
         # Click on the more-ops and then attributes button
         self.go_to_attribute_page()
@@ -323,14 +323,14 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase, tests.SimpleWorkflowFixture):
         self.logout()
 
 
-class WorkflowShare(tests.OnTaskLiveTestCase, tests.SimpleWorkflowFixture):
+class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
 
     def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(tests.wflow_name)
+        self.access_workflow_from_home_page(tests.WORKFLOW_NAME)
 
         # Click on the share
         self.go_to_workflow_share()
@@ -490,7 +490,7 @@ class WorkflowImport(
         )
 
         # Check elements in workflow and in newwf
-        w1 = models.Workflow.objects.get(name=tests.wflow_name)
+        w1 = models.Workflow.objects.get(name=tests.WORKFLOW_NAME)
         w2 = models.Workflow.objects.get(name='newwf')
 
         compare_workflows(w1, w2)

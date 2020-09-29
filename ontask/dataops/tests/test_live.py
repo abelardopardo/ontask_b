@@ -15,7 +15,7 @@ from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.dataops import pandas, sql
 
 
-class DataopsSymbols1(tests.OnTaskLiveTestCase, tests.WflowSymbolsFixture):
+class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
 
     def test(self):
         symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
@@ -227,7 +227,7 @@ class DataopsSymbols1(tests.OnTaskLiveTestCase, tests.WflowSymbolsFixture):
         self.logout()
 
 
-class DataopsSymbols2(tests.OnTaskLiveTestCase, tests.WflowSymbolsFixture):
+class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
 
     def test(self):
         symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
@@ -371,7 +371,7 @@ class DataopsSymbols2(tests.OnTaskLiveTestCase, tests.WflowSymbolsFixture):
         self.logout()
 
 
-class DataopsExcelUpload(tests.OnTaskLiveTestCase, tests.EmptyWorkflowFixture):
+class DataopsExcelUpload(tests.EmptyWorkflowFixture, tests.OnTaskLiveTestCase):
 
     def test(self):
         # Login
@@ -557,8 +557,8 @@ class DataopsNaNProcessing(
 
 
 class DataopsPluginExecution1(
-    tests.OnTaskLiveTestCase,
     tests.PluginExecutionFixture,
+    tests.OnTaskLiveTestCase,
 ):
 
     def test(self):
@@ -709,8 +709,8 @@ class DataopsPluginExecution1(
 
 
 class DataopsPluginExecution2(
-    tests.OnTaskLiveTestCase,
     tests.PluginExecutionFixture,
+    tests.OnTaskLiveTestCase,
 ):
 
     def test(self):
@@ -862,7 +862,7 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
         self.wait_for_datatable('table-data_previous')
 
 
-class DataopsMergeInner(DataopsMergeBasic, tests.TestMergeFixture):
+class DataopsMergeInner(tests.TestMergeFixture, DataopsMergeBasic):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -885,7 +885,7 @@ class DataopsMergeInner(DataopsMergeBasic, tests.TestMergeFixture):
         self.logout()
 
 
-class DataopsMergeOuter(DataopsMergeBasic, tests.TestMergeFixture):
+class DataopsMergeOuter(tests.TestMergeFixture, DataopsMergeBasic):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -908,7 +908,7 @@ class DataopsMergeOuter(DataopsMergeBasic, tests.TestMergeFixture):
         self.logout()
 
 
-class DataopsMergeLeft(DataopsMergeBasic, tests.TestMergeFixture):
+class DataopsMergeLeft(tests.TestMergeFixture, DataopsMergeBasic):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -931,7 +931,7 @@ class DataopsMergeLeft(DataopsMergeBasic, tests.TestMergeFixture):
         self.logout()
 
 
-class DataopsMergeRight(DataopsMergeBasic, tests.TestMergeFixture):
+class DataopsMergeRight(tests.TestMergeFixture, DataopsMergeBasic):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -953,7 +953,7 @@ class DataopsMergeRight(DataopsMergeBasic, tests.TestMergeFixture):
         self.logout()
 
 
-class DataopsMergeOuterFail(DataopsMergeBasic, tests.TestMergeFixture):
+class DataopsMergeOuterFail(tests.TestMergeFixture, DataopsMergeBasic):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -983,8 +983,8 @@ class DataopsMergeOuterFail(DataopsMergeBasic, tests.TestMergeFixture):
 
 
 class DataopsEmptyKeyAfterMerge(
-    DataopsMergeBasic,
     tests.TestEmptyKeyAfterMergeFixture,
+    DataopsMergeBasic,
 ):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,

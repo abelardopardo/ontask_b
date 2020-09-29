@@ -7,7 +7,7 @@ from rest_framework import status
 from ontask import tests
 
 
-class ActionViewTimeline(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
+class ActionViewTimeline(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
     """Test the view to show the timeline for actions."""
 
     user_email = 'instructor01@bogus.com'

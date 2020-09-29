@@ -10,8 +10,8 @@ from ontask.dataops import sql, views
 
 
 class DataopsViewsRowBasic(
-    tests.OnTaskTestCase,
     tests.TestConditionEvaluationFixture,
+    tests.OnTaskTestCase,
 ):
     """Test the views to create and update the row values."""
 

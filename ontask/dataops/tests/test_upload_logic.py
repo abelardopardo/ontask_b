@@ -10,7 +10,7 @@ from rest_framework import status
 from ontask import tests
 
 
-class DataopsUploadBasic(tests.OnTaskTestCase, tests.EmptyWorkflowFixture):
+class DataopsUploadBasic(tests.EmptyWorkflowFixture, tests.OnTaskTestCase):
     """Test the upload code."""
 
     user_email = 'instructor01@bogus.com'

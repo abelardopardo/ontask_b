@@ -105,8 +105,8 @@ SQL_QUERIES = [
 
 
 class SchedulerViewCreateSQLUpload(
-    tests.OnTaskTestCase,
     tests.InitialWorkflowFixture,
+    tests.OnTaskTestCase,
 ):
     """Test the creation of a SQL Upload operation."""
 

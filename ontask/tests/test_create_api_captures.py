@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from ontask import models, tests
 
 
-class ScreenAPITutorialTest(tests.ScreenTests, tests.InitialWorkflowFixture):
+class ScreenAPITutorialTest(tests.InitialWorkflowFixture, tests.ScreenTests):
     def test(self):
         # Login
         self.login('instructor01@bogus.com')

@@ -6,7 +6,7 @@ from rest_framework import status
 from ontask import tests
 
 
-class APIDocumentationTest(tests.OnTaskTestCase, tests.InitialDBFixture):
+class APIDocumentationTest(tests.InitialDBFixture, tests.OnTaskTestCase):
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 

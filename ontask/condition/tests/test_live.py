@@ -10,7 +10,7 @@ from ontask import tests
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 
 
-class ConditionTestBasic(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
+class ConditionTestBasic(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
     """Test Filter/Condition Edit."""
 
     action_name = 'simple action'

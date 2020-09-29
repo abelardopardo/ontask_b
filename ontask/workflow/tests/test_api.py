@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from ontask import models, tests
 
 
-class WorkflowApiBasic(tests.OnTaskApiTestCase, tests.SimpleWorkflowFixture):
+class WorkflowApiBasic(tests.SimpleWorkflowFixture, tests.OnTaskApiTestCase):
     def setUp(self):
         super().setUp()
         # Get the token for authentication and set credentials in client
@@ -40,7 +40,7 @@ class WorkflowApiCreate(WorkflowApiBasic):
         # Trying to create an existing wflow and detecting its duplication
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': tests.wflow_name})
+            {'name': tests.WORKFLOW_NAME})
 
         # Message should flag the existence of the wflow
         self.assertIn(
@@ -50,11 +50,11 @@ class WorkflowApiCreate(WorkflowApiBasic):
         # Create a second one
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.WORKFLOW_NAME + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Compare the workflows
-        workflow = models.Workflow.objects.get(name=tests.wflow_name + '2')
+        workflow = models.Workflow.objects.get(name=tests.WORKFLOW_NAME + '2')
         self.compare_wflows(response.data, workflow)
 
 
@@ -66,7 +66,7 @@ class WorkflowApiNoPost(WorkflowApiBasic):
             reverse(
                 'workflow:api_rud',
                 kwargs={'pk': 1}),
-            {'name': tests.wflow_name + '2'})
+            {'name': tests.WORKFLOW_NAME + '2'})
 
         # Verify that the method post is not allowed
         self.assertIn('Method "POST" not allowed', response.data['detail'])
@@ -78,15 +78,15 @@ class WorkflowApiUpdate(WorkflowApiBasic):
         # Run the update (PUT) method
         response = self.client.put(
             reverse('workflow:api_rud', kwargs={'pk': 1}),
-            {'name': tests.wflow_name + '2',
-             'description_text': tests.wflow_desc + '2',
+            {'name': tests.WORKFLOW_NAME + '2',
+             'description_text': tests.WORKFLOW_DESC + '2',
              'attributes': {'k1': 'v1'}},
             format='json')
 
         # Get the workflow and verify
         wflow_id = response.data['id']
         workflow = models.Workflow.objects.get(id=wflow_id)
-        self.assertEqual(workflow.name, tests.wflow_name + '2')
+        self.assertEqual(workflow.name, tests.WORKFLOW_NAME + '2')
 
 
 class WorkflowApiDelete(WorkflowApiBasic):

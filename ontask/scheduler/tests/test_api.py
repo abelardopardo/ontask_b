@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from ontask import models, tests
 
 
-class ScheduleApiBasic(tests.OnTaskApiTestCase, tests.ThreeActionsFixture):
+class ScheduleApiBasic(tests.ThreeActionsFixture, tests.OnTaskApiTestCase):
     """Test schedule creation through API"""
 
     s_name = 'Scheduling first JSON'

@@ -115,7 +115,7 @@ class WorkflowImportExportCycle(
         compare_workflows(workflow, workflow2)
 
 
-class WorkflowDelete(tests.OnTaskTestCase, tests.TestMergeFixture):
+class WorkflowDelete(tests.TestMergeFixture, tests.OnTaskTestCase):
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 

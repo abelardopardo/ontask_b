@@ -6,8 +6,8 @@ from ontask.action.serializers import ActionSelfcontainedSerializer
 
 
 class ActionTestSerializers(
-    tests.OnTaskTestCase,
     tests.SimpleWorkflowTwoActionsFixture,
+    tests.OnTaskTestCase,
 ):
     """Test stat views."""
 

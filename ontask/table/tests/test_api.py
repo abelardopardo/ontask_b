@@ -14,7 +14,7 @@ from ontask.dataops import pandas
 from ontask.table import serializers
 
 
-class TableApiBase(tests.OnTaskApiTestCase, tests.SimpleTableFixture):
+class TableApiBase(tests.SimpleTableFixture, tests.OnTaskApiTestCase):
     """Basic function and data for testing the API."""
 
     new_table = {
@@ -172,7 +172,7 @@ class TableApiJSONCreate(TableApiBase):
         # Create a second workflow
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.WORKFLOW_NAME + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Get the only workflow in the fixture
@@ -204,7 +204,7 @@ class TableApiJSONCreateError(TableApiBase):
         # Create a second workflow
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.WORKFLOW_NAME + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Get the only workflow in the fixture
@@ -229,7 +229,7 @@ class TableApiPandasCreate(TableApiBase):
         # Create a second workflow
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.WORKFLOW_NAME + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Get the only workflow in the fixture

@@ -20,6 +20,5 @@ from ontask.tests.fixture_classes import (
 standard_library.install_aliases()
 
 # Workflow elements used in various tests
-wflow_name = 'wflow1'
-wflow_desc = 'description text for workflow 1'
-wflow_empty = 'The workflow does not have data'
+WORKFLOW_NAME = 'wflow1'
+WORKFLOW_DESC = 'description text for workflow 1'

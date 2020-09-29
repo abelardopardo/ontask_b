@@ -23,7 +23,7 @@ class BogusPlugin2(OnTaskModel):
         self.parameters = 3
 
 
-class DataopsTransform(tests.OnTaskTestCase, tests.PluginExecutionFixture):
+class DataopsTransform(tests.PluginExecutionFixture, tests.OnTaskTestCase):
     """Test the transformation views."""
 
     user_email = 'instructor01@bogus.com'

@@ -8,7 +8,7 @@ from ontask import tests
 from ontask.dataops import pandas
 
 
-class TableTestStatView(tests.OnTaskTestCase, tests.SimpleTableFixture):
+class TableTestStatView(tests.SimpleTableFixture, tests.OnTaskTestCase):
     """Test stat views."""
 
     user_email = 'instructor01@bogus.com'

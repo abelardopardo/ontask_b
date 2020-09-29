@@ -15,7 +15,7 @@ from ontask import (
 from ontask.core import SessionPayload
 
 
-class ActionViewRunBasic(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
+class ActionViewRunBasic(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
     """Test the view to run email action with no filter."""
 
     user_email = 'instructor01@bogus.com'
@@ -480,7 +480,7 @@ class ActionViewRunCanvasEmailDone(ActionViewRunBasic):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionServe(tests.OnTaskTestCase, tests.SimpleActionFixture):
+class ActionServe(tests.SimpleActionFixture, tests.OnTaskTestCase):
     """Test the view to serve an action."""
 
     user_email = 'student01@bogus.com'

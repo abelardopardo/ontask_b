@@ -10,7 +10,7 @@ from rest_framework import status
 from ontask import models, tests
 
 
-class SchedulerFormsBasic(tests.OnTaskTestCase, tests.ThreeActionsFixture):
+class SchedulerFormsBasic(tests.ThreeActionsFixture, tests.OnTaskTestCase):
     """Test schedule creation through forms."""
 
     user_email = 'instructor01@bogus.com'

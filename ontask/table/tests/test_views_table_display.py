@@ -10,7 +10,7 @@ from ontask.dataops import pandas
 from ontask.table import views
 
 
-class TableTestViewTableDisplay(tests.OnTaskTestCase, tests.SimpleTableFixture):
+class TableTestViewTableDisplay(tests.SimpleTableFixture, tests.OnTaskTestCase):
     """Test stat views."""
 
     user_email = 'instructor01@bogus.com'

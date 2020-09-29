@@ -12,7 +12,7 @@ from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.dataops import formula
 
 
-class ActionActionRename(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
+class ActionActionRename(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
     """Test Action Edit."""
 
     action_name = 'simple action'
@@ -119,7 +119,7 @@ class ActionActionSendEmail(
         self.logout()
 
 
-class ActionActionSave(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
+class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
     """Test Action Edit."""
 
     action_name = 'simple action'
@@ -255,7 +255,7 @@ class ActionActionSave(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
         self.logout()
 
 
-class ActionJsonAction(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
+class ActionJsonAction(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
     """Test Action Edit."""
 
     action_name = 'simple action'
@@ -298,7 +298,7 @@ class ActionJsonAction(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
         self.logout()
 
 
-class ActionActionURL(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
+class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
     """Test Action Edit."""
 
     action_name = 'simple action'
@@ -554,8 +554,8 @@ class ActionActionRenameEffect(
 
 
 class ActionActionZip(
-    tests.OnTaskLiveTestCase,
     tests.SimpleWorkflowTwoActionsFixture,
+    tests.OnTaskLiveTestCase,
 ):
     """
     This test case is to check if the ZIP opeation is correct
@@ -632,7 +632,7 @@ class ActionActionZip(
         self.logout()
 
 
-class ActionAllKeyColumns(tests.OnTaskLiveTestCase, tests.AllKeyColumnsFixture):
+class ActionAllKeyColumns(tests.AllKeyColumnsFixture, tests.OnTaskLiveTestCase):
     """Test the case of all key columns in a workflow."""
 
     action_name = 'Test1'
@@ -850,7 +850,7 @@ class ActionJSONReportActionCreate(
         self.logout()
 
 
-class ActionServeLongSurvey(tests.OnTaskLiveTestCase, tests.LongSurveyFixture):
+class ActionServeLongSurvey(tests.LongSurveyFixture, tests.OnTaskLiveTestCase):
     """Test the view to serve a survey."""
 
     user_email = 'instructor01@bogus.com'
@@ -878,7 +878,7 @@ class ActionServeLongSurvey(tests.OnTaskLiveTestCase, tests.LongSurveyFixture):
         self.logout()
 
 
-class ActionCreateRubric(tests.OnTaskLiveTestCase, tests.TestRubricFixture):
+class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
     """Test the view to serve a survey."""
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'

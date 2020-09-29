@@ -8,7 +8,7 @@ from ontask import entity_prefix, models, tests
 from ontask.tests.compare import compare_workflows
 
 
-class WorkflowCrudBasic(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
+class WorkflowCrudBasic(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
     """Test workflow views."""
 
     user_email = 'instructor01@bogus.com'
