@@ -1,28 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """Tests redirection to home when no workflow is selected."""
-import os
 
-from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
 from ontask import tests
 
 
-class BackToHome(tests.OnTaskTestCase):
+class BackToHome(
+    tests.OnTaskTestCase,
+    tests.InitialWorkflowFixture
+):
     """Test redirection to home page when no workflow is set."""
-
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql'
-    )
-
-    wflow_name = 'wflow2'
 
     def test(self):
         """Loop over all URLs and check they redirect appropriately."""

@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask.tests import ElementHasFullOpacity, ScreenTests
+from ontask.tests.basic import ElementHasFullOpacity, ScreenTests
 
 
 class Scenario1Captures(ScreenTests):

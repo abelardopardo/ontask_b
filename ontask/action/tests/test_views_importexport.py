@@ -11,18 +11,14 @@ from ontask import tests
 from ontask.action.views import action_import
 
 
-class ActionViewExportBasic(tests.OnTaskTestCase):
+class ActionViewExportBasic(
+    tests.OnTaskTestCase,
+    tests.SimpleWorkflowTwoActionsFixture
+):
     """Basic class to test the action export view."""
-
-    fixtures = ['simple_workflow_two_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_two_actions.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow2'
 
 
 class ActionViewExport(ActionViewExportBasic):

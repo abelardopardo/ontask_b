@@ -1,30 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """Test views to run ZIP actions."""
-import os
 
-from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework import status
 
 from ontask import tests
 
-class ActionViewZIPBasic(tests.OnTaskTestCase):
-    """Test the view run a ZIP action."""
 
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
+class ActionViewZIPBasic(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
+    """Test the view run a ZIP action."""
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
 
 
 class ActionViewRunZIP(ActionViewZIPBasic):

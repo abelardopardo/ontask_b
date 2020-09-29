@@ -1,20 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """Test the Workflow API."""
-import os
 
-from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework.authtoken.models import Token
 
 from ontask import models, tests
 
 
-class WorkflowApiBasic(tests.OnTaskApiTestCase):
-    fixtures = ['simple_workflow']
-
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
-
+class WorkflowApiBasic(tests.OnTaskApiTestCase, tests.SimpleWorkflowFixture):
     def setUp(self):
         super().setUp()
         # Get the token for authentication and set credentials in client
@@ -23,7 +17,8 @@ class WorkflowApiBasic(tests.OnTaskApiTestCase):
 
 
 class WorkflowApiList(WorkflowApiBasic):
-    def test_workflow_list(self):
+
+    def test(self):
         # Get list of workflows
         response = self.client.get(reverse('workflow:api_workflows'))
 
@@ -41,14 +36,15 @@ class WorkflowApiList(WorkflowApiBasic):
 
 class WorkflowApiCreate(WorkflowApiBasic):
 
-    def test_workflow_create(self):
+    def test(self):
         # Trying to create an existing wflow and detecting its duplication
         response = self.client.post(
             reverse('workflow:api_workflows'),
             {'name': tests.wflow_name})
 
         # Message should flag the existence of the wflow
-        self.assertIn('Workflow could not be created.',
+        self.assertIn(
+            'Workflow could not be created.',
             response.data.get('detail', ''))
 
         # Create a second one
@@ -78,10 +74,10 @@ class WorkflowApiNoPost(WorkflowApiBasic):
 
 class WorkflowApiUpdate(WorkflowApiBasic):
 
-    def test_workflow_update(self):
+    def test(self):
         # Run the update (PUT) method
-        response = self.client.put(reverse('workflow:api_rud',
-            kwargs={'pk': 1}),
+        response = self.client.put(
+            reverse('workflow:api_rud', kwargs={'pk': 1}),
             {'name': tests.wflow_name + '2',
              'description_text': tests.wflow_desc + '2',
              'attributes': {'k1': 'v1'}},
@@ -94,7 +90,8 @@ class WorkflowApiUpdate(WorkflowApiBasic):
 
 
 class WorkflowApiDelete(WorkflowApiBasic):
-    def test_workflow_delete(self):
+
+    def test(self):
         # Run the update delete
         self.client.delete(reverse('workflow:api_rud', kwargs={'pk': 1}))
 

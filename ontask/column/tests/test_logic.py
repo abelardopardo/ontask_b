@@ -2,27 +2,23 @@
 
 """Test column basic operations"""
 import json
-import os
 
-from django.conf import settings
 from django.utils.dateparse import parse_datetime
 from rest_framework import status
 
 from ontask import models, tests
-from ontask.dataops import pandas
 from ontask.column import services
+from ontask.dataops import pandas
 
 
-class ColumnAddRandomColumnFormBasic(tests.OnTaskTestCase):
+class ColumnAddRandomColumnFormBasic(
+    tests.OnTaskTestCase,
+    tests.SimpleTableFixture
+):
     """Test the creation of random columns."""
-
-    fixtures = ['simple_table']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow1'
 
 
 class ColumnAddRandomNumberColumnForm(ColumnAddRandomColumnFormBasic):

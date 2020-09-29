@@ -1,30 +1,17 @@
 # -*- coding: utf-8 -*-
 
 """Test views to show the timeline."""
-import os
 
-from django.conf import settings
 from rest_framework import status
 
 from ontask import tests
 
 
-class ActionViewTimeline(tests.OnTaskTestCase):
+class ActionViewTimeline(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
     """Test the view to show the timeline for actions."""
-
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
 
     def test_view_timeline(self):
         """Run sequence of request to the timeline view."""

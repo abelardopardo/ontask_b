@@ -1,31 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the column pages."""
-import os
 
-from django.conf import settings
 from rest_framework import status
 
 from ontask import models, tests
 from ontask.dataops import pandas
 
 
-class ColumnCrudBasic(tests.OnTaskTestCase):
+class ColumnCrudBasic(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
     """Test column views."""
-
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
 
 
 class ColumnCreate(ColumnCrudBasic):
@@ -154,7 +141,7 @@ class ColumnCrudAddFormulaColumn(ColumnCrudBasic):
 
 
 class ColumnCrudAddRandomColumn(ColumnCrudBasic):
-    """Test adding a random colum."""
+    """Test adding a random column."""
 
     def test(self):
         """Test adding a random column."""

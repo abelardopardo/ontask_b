@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test the table API.s"""
-import os
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 import pandas as pd
@@ -16,11 +14,8 @@ from ontask.dataops import pandas
 from ontask.table import serializers
 
 
-class TableApiBase(tests.OnTaskApiTestCase):
+class TableApiBase(tests.OnTaskApiTestCase, tests.SimpleTableFixture):
     """Basic function and data for testing the API."""
-
-    fixtures = ['simple_table']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     new_table = {
         "email": ["student04@bogus.com",
@@ -433,7 +428,8 @@ class TableApiPandasMergeToEmpty(TableApiBase):
             },
             format='json')
 
-        self.assertEqual(response.data['detail'],
+        self.assertEqual(
+            response.data['detail'],
             'Unable to perform merge operation: '
             + 'Merge operation produced a result with no rows')
 
@@ -597,8 +593,10 @@ class TableApiJSONMergeLeft(TableApiBase):
         self.assertEqual(workflow.nrows, 3)
 
         dframe = pandas.load_table(workflow.get_data_frame_table_name())
-        self.assertEqual(dframe[dframe['sid'] == 1]['newcol'].values[0],
+        self.assertEqual(
+            dframe[dframe['sid'] == 1]['newcol'].values[0],
             self.src_df['newcol'][0])
+
 
 class TableApiPandasMergeLeft(TableApiBase):
 
@@ -627,11 +625,12 @@ class TableApiPandasMergeLeft(TableApiBase):
         self.assertEqual(workflow.nrows, 3)
 
         dframe = pandas.load_table(workflow.get_data_frame_table_name())
-        self.assertEqual(dframe[dframe['sid'] == 1]['newcol'].values[0],
+        self.assertEqual(
+            dframe[dframe['sid'] == 1]['newcol'].values[0],
             self.src_df['newcol'][0])
 
 
-class TableApiJSONMergeOuter(TableApiBase):
+class TableApiJSONMergeOuterNaN(TableApiBase):
 
     # Merge with outer values but producing NaN everywhere
     def test(self):
@@ -689,7 +688,7 @@ class TableApiJSONMergeOuter(TableApiBase):
         self.compare_tables(dframe, new_df)
 
 
-class TableApiJSONMergeOuterNaN(TableApiBase):
+class TableApiJSONMergeOuterNaNSerializer(TableApiBase):
 
     def test_table_pandas_merge_to_outer_NaN(self):
         # Get the only workflow in the fixture

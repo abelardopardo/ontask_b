@@ -2,7 +2,6 @@
 
 """Test to verify that the scheduled actions are properly executed."""
 from datetime import datetime, timedelta
-import os
 
 from celery.contrib.testing.worker import start_worker
 from django.conf import settings
@@ -16,13 +15,11 @@ from ontask import OnTaskSharedState, models, tasks, tests
 from ontask.celery import app
 
 
-class ScheduledOperationTaskBasic(tests.OnTaskTestCase):
+class ScheduledOperationTaskBasic(
+    tests.OnTaskTestCase,
+    tests.ScheduleActionsFixture
+):
     """Test the functions to execute through celery."""
-
-    fixtures = ['schedule_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'schedule_actions.sql')
 
     tdelta = timedelta(minutes=2)
 

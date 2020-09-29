@@ -14,13 +14,8 @@ from ontask.core import SessionPayload
 from ontask.dataops import pandas
 
 
-class EmailActionTracking(tests.OnTaskTestCase):
+class EmailActionTracking(tests.OnTaskTestCase, tests.SimpleEmailActionFixture):
     """Test Email tracking."""
-
-    fixtures = ['simple_email_action']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_email_action.sql')
 
     trck_tokens = [
         "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0by"
@@ -33,10 +28,6 @@ class EmailActionTracking(tests.OnTaskTestCase):
         "N0dWRlbnQwM0Bib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl9kc3Qi"
         "OiJFbWFpbFJlYWRfMSJ9:1hCeQr:5LuQISOvahDaiYuOYUufdfYRT_o"
     ]
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
 
     def test_tracking(self):
         """Test that tracking hits are properly stored."""
@@ -60,15 +51,9 @@ class EmailActionTracking(tests.OnTaskTestCase):
                     idx
                 )
 
-class ActionImport(tests.OnTaskTestCase):
+
+class ActionImport(tests.OnTaskTestCase, tests.SimpleEmailActionFixture):
     """Test action import."""
-
-    fixtures = ['simple_email_action']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_email_action.sql')
-
-    wflow_name = 'wflow1'
 
     def test_do_import(self):
         """Test the do_import_action functionality."""
@@ -85,23 +70,20 @@ class ActionImport(tests.OnTaskTestCase):
 
         models.Action.objects.get(name='Initial survey')
 
-class EmailActionDetectIncorrectEmail(tests.OnTaskTestCase):
-    """Test if incorrect email addresses are detected."""
 
-    fixtures = ['wrong_email']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'wrong_email.sql')
+class EmailActionDetectIncorrectEmail(
+    tests.OnTaskTestCase,
+    tests.WrongEmailFixture,
+):
+    """Test if incorrect email addresses are detected."""
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
-
     def test_send_with_incorrect_email(self):
         """Test the do_import_action functionality."""
         user = get_user_model().objects.get(email='instructor01@bogus.com')
-        wflow = models.Workflow.objects.get(name=self.workflow_name)
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
         email_column = wflow.columns.get(name='email')
         action = wflow.actions.first()
 

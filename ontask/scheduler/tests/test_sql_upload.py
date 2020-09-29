@@ -39,7 +39,6 @@ subset of the fields
 
 Execute the merge
 """
-import os
 
 from django.conf import settings
 from django.db import connection
@@ -105,22 +104,14 @@ SQL_QUERIES = [
         [])]
 
 
-class SchedulerViewCreateSQLUpload(tests.OnTaskTestCase):
+class SchedulerViewCreateSQLUpload(
+    tests.OnTaskTestCase,
+    tests.InitialWorkflowFixture,
+):
     """Test the creation of a SQL Upload operation."""
-
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
 
     def test(self):
         """Create a new SQL Scheduled operation."""
@@ -261,7 +252,7 @@ class SchedulerViewCreateSQLUpload(tests.OnTaskTestCase):
         self.workflow.refresh_from_db()
 
         # Identical number of tasks pending than at the start
-        self.assertEqual(current_tasks + 1 , PeriodicTask.objects.count())
+        self.assertEqual(current_tasks + 1, PeriodicTask.objects.count())
 
         # Operation must have status equal to DONE
         self.assertEqual(s_item.status, models.scheduler.STATUS_DONE)

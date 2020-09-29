@@ -2,26 +2,18 @@
 
 """Test the views for the scheduler pages."""
 import json
-import os
 
-from django.conf import settings
-from django.db import IntegrityError
 import pandas as pd
 
 from ontask import tests
 from ontask.table import serializers
 
 
-class TableTestSerializersBasic(tests.OnTaskTestCase):
+class TableTestSerializersBasic(tests.OnTaskTestCase, tests.SimpleTableFixture):
     """Test stat views."""
-
-    fixtures = ['simple_table']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow1'
 
 
 class TableTestSerializersView(TableTestSerializersBasic):
@@ -48,7 +40,7 @@ class TableTestSerializersView(TableTestSerializersBasic):
                 },
             )
             self.assertTrue(views.is_valid())
-            view = serializers.ViewSerializer.create_view(
+            serializers.ViewSerializer.create_view(
                 views.validated_data[0],
                 views.context)
         except Exception as exc:
@@ -75,7 +67,7 @@ class TableTestSerializersView(TableTestSerializersBasic):
             },
         )
         self.assertTrue(views.is_valid())
-        view = serializers.ViewSerializer.create_view(
+        serializers.ViewSerializer.create_view(
             views.validated_data[0],
             views.context)
 

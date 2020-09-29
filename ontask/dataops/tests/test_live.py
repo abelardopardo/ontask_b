@@ -15,12 +15,7 @@ from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.dataops import pandas, sql
 
 
-class DataopsSymbolsBasic(tests.OnTaskLiveTestCase):
-    fixtures = ['wflow_symbols']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'wflow_symbols.sql')
-
-
-class DataopsSymbols1(DataopsSymbolsBasic):
+class DataopsSymbols1(tests.OnTaskLiveTestCase, tests.WflowSymbolsFixture):
 
     def test(self):
         symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
@@ -66,7 +61,8 @@ class DataopsSymbols1(DataopsSymbolsBasic):
 
         # There should be a message saying that the name of this column already
         # exists
-        self.assertIn('There is a column already with this name',
+        self.assertIn(
+            'There is a column already with this name',
             self.selenium.page_source)
 
         # Click again in the name and introduce something different
@@ -204,7 +200,8 @@ class DataopsSymbols1(DataopsSymbolsBasic):
         self.click_dropdown_option('column-selector', symbols + '2')
 
         # Create new condition
-        self.create_condition(symbols + "4",
+        self.create_condition(
+            symbols + "4",
             '',
             [(symbols, "begins with", "C")])
 
@@ -230,7 +227,7 @@ class DataopsSymbols1(DataopsSymbolsBasic):
         self.logout()
 
 
-class DataopsSymbols2(DataopsSymbolsBasic):
+class DataopsSymbols2(tests.OnTaskLiveTestCase, tests.WflowSymbolsFixture):
 
     def test(self):
         symbols = '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~'
@@ -271,11 +268,14 @@ class DataopsSymbols2(DataopsSymbolsBasic):
 
         # Verify that everything appears normally
         self.assertIn(escape(symbols), self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">12</td>',
+        self.assertIn(
+            '<td class=" dt-center">12</td>',
             self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">12.1</td>',
+        self.assertIn(
+            '<td class=" dt-center">12.1</td>',
             self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">13.2</td>',
+        self.assertIn(
+            '<td class=" dt-center">13.2</td>',
             self.selenium.page_source)
 
         # Go to the actions page
@@ -357,19 +357,21 @@ class DataopsSymbols2(DataopsSymbolsBasic):
         self.go_to_table()
 
         # Assert the new values
-        self.assertIn('<td class=" dt-center">14</td>',
+        self.assertIn(
+            '<td class=" dt-center">14</td>',
             self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">15</td>',
+        self.assertIn(
+            '<td class=" dt-center">15</td>',
             self.selenium.page_source)
-        self.assertIn('<td class=" dt-center">16</td>',
+        self.assertIn(
+            '<td class=" dt-center">16</td>',
             self.selenium.page_source)
 
         # End of session
         self.logout()
 
 
-class DataopsExcelUpload(tests.OnTaskLiveTestCase):
-    fixtures = ['empty_wflow']
+class DataopsExcelUpload(tests.OnTaskLiveTestCase, tests.EmptyWorkflowFixture):
 
     def test(self):
         # Login
@@ -408,8 +410,10 @@ class DataopsExcelUpload(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsExcelUploadSheet(tests.OnTaskLiveTestCase):
-    fixtures = ['empty_wflow']
+class DataopsExcelUploadSheet(
+    tests.OnTaskLiveTestCase,
+    tests.EmptyWorkflowFixture
+):
 
     def test(self):
         # Login
@@ -445,8 +449,10 @@ class DataopsExcelUploadSheet(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
-    fixtures = ['empty_wflow']
+class DataopsNaNProcessing(
+    tests.OnTaskLiveTestCase,
+    tests.EmptyWorkflowFixture
+):
     action_text = "Bool1 = {{ bool1 }}\\n" + \
                   "Bool2 = {{ bool2 }}\\n" + \
                   "Bool3 = {{ bool3 }}\\n" + \
@@ -494,7 +500,8 @@ class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
         )
         self.selenium.find_element_by_name("Submit").click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//body/div/h1"),
                 'Select Columns')
         )
 
@@ -549,14 +556,10 @@ class DataopsNaNProcessing(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class DataopsPluginExecutionBasic(tests.OnTaskLiveTestCase):
-    fixtures = ['plugin_execution']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'plugin_execution.sql')
-
-
-class DataopsPluginExecution1(DataopsPluginExecutionBasic):
+class DataopsPluginExecution1(
+    tests.OnTaskLiveTestCase,
+    tests.PluginExecutionFixture,
+):
 
     def test(self):
         # Login
@@ -632,7 +635,8 @@ class DataopsPluginExecution1(DataopsPluginExecutionBasic):
         self.go_to_transform()
 
         # Click in the first plugin
-        element = self.search_table_row_by_string('transform-table',
+        element = self.search_table_row_by_string(
+            'transform-table',
             1,
             'Test Plugin 1 Name')
         element.find_element_by_link_text('Test Plugin 1 Name').click()
@@ -704,7 +708,10 @@ class DataopsPluginExecution1(DataopsPluginExecutionBasic):
         self.logout()
 
 
-class DataopsPluginExecution2(DataopsPluginExecutionBasic):
+class DataopsPluginExecution2(
+    tests.OnTaskLiveTestCase,
+    tests.PluginExecutionFixture,
+):
 
     def test(self):
         # Login
@@ -717,7 +724,8 @@ class DataopsPluginExecution2(DataopsPluginExecutionBasic):
         self.go_to_transform()
 
         # Click in the second plugin
-        element = self.search_table_row_by_string('transform-table',
+        element = self.search_table_row_by_string(
+            'transform-table',
             1,
             'Test Plugin 2 Name')
         element.find_element_by_link_text('Test Plugin 2 Name').click()
@@ -781,7 +789,7 @@ class DataopsPluginExecution2(DataopsPluginExecutionBasic):
 class DataopsMergeBasic(tests.OnTaskLiveTestCase):
     """Basic class to test various merge variations."""
 
-    wf_name = None
+    wflow_name = None
     merge_file = ''
 
     def template_merge(self, method, rename=True):
@@ -790,7 +798,7 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(self.wf_name)
+        self.access_workflow_from_home_page(self.wflow_name)
 
         # Go to the upload/merge page
         self.go_to_upload_merge()
@@ -854,10 +862,7 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
         self.wait_for_datatable('table-data_previous')
 
 
-class DataopsMergeInner(DataopsMergeBasic):
-    wf_name = 'Testing Merge'
-    fixtures = ['test_merge']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
+class DataopsMergeInner(DataopsMergeBasic, tests.TestMergeFixture):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -866,7 +871,7 @@ class DataopsMergeInner(DataopsMergeBasic):
         self.template_merge('inner')
 
         # Assert the content of the dataframe
-        wflow = models.Workflow.objects.get(name=self.wf_name)
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
         df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
@@ -879,10 +884,8 @@ class DataopsMergeInner(DataopsMergeBasic):
         # End of session
         self.logout()
 
-class DataopsMergeOuter(DataopsMergeBasic):
-    wf_name = 'Testing Merge'
-    fixtures = ['test_merge']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
+
+class DataopsMergeOuter(DataopsMergeBasic, tests.TestMergeFixture):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -891,7 +894,7 @@ class DataopsMergeOuter(DataopsMergeBasic):
         self.template_merge('outer', False)
 
         # Assert the content of the dataframe
-        wflow = models.Workflow.objects.get(name=self.wf_name)
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
         df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
@@ -905,10 +908,7 @@ class DataopsMergeOuter(DataopsMergeBasic):
         self.logout()
 
 
-class DataopsMergeLeft(DataopsMergeBasic):
-    wf_name = 'Testing Merge'
-    fixtures = ['test_merge']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
+class DataopsMergeLeft(DataopsMergeBasic, tests.TestMergeFixture):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -917,7 +917,7 @@ class DataopsMergeLeft(DataopsMergeBasic):
         self.template_merge('left')
 
         # Assert the content of the dataframe
-        wflow = models.Workflow.objects.get(name=self.wf_name)
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
         df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
@@ -931,10 +931,7 @@ class DataopsMergeLeft(DataopsMergeBasic):
         self.logout()
 
 
-class DataopsMergeRight(DataopsMergeBasic):
-    wf_name = 'Testing Merge'
-    fixtures = ['test_merge']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
+class DataopsMergeRight(DataopsMergeBasic, tests.TestMergeFixture):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -943,7 +940,7 @@ class DataopsMergeRight(DataopsMergeBasic):
         self.template_merge('right', rename=False)
 
         # Assert the content of the dataframe
-        wflow = models.Workflow.objects.get(name=self.wf_name)
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
         df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
@@ -956,10 +953,7 @@ class DataopsMergeRight(DataopsMergeBasic):
         self.logout()
 
 
-class DataopsMergeOuterFail(DataopsMergeBasic):
-    wf_name = 'Testing Merge'
-    fixtures = ['test_merge']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
+class DataopsMergeOuterFail(DataopsMergeBasic, tests.TestMergeFixture):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_df_merge_update_df2.csv')
@@ -974,7 +968,7 @@ class DataopsMergeOuterFail(DataopsMergeBasic):
         )
 
         # Assert the content of the dataframe
-        wflow = models.Workflow.objects.get(name=self.wf_name)
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
         df = pandas.load_table(wflow.get_data_frame_table_name())
 
         self.assertTrue('key' in set(df.columns))
@@ -988,12 +982,10 @@ class DataopsMergeOuterFail(DataopsMergeBasic):
         self.logout()
 
 
-class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
-    wf_name = 'Test Empty Key after Merge'
-    fixtures = ['test_empty_key_after_merge']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'test_empty_key_after_merge.sql')
+class DataopsEmptyKeyAfterMerge(
+    DataopsMergeBasic,
+    tests.TestEmptyKeyAfterMergeFixture,
+):
     merge_file = os.path.join(
         settings.ONTASK_FIXTURE_DIR,
         'test_empty_key_after_merge.csv')
@@ -1005,9 +997,11 @@ class DataopsEmptyKeyAfterMerge(DataopsMergeBasic):
         self.assertIn('Merge operation failed.', self.selenium.page_source)
 
         # Assert additional properties
-        wflow = models.Workflow.objects.get(name=self.wf_name)
-        self.assertTrue(wflow.columns.get(name='key1').is_key,
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
+        self.assertTrue(
+            wflow.columns.get(name='key1').is_key,
             'Column key1 has lost is key property')
-        self.assertTrue(wflow.columns.get(name='key2').is_key,
+        self.assertTrue(
+            wflow.columns.get(name='key2').is_key,
             'Column key2 has lost is key property')
         self.logout()

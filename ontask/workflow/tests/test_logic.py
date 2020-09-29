@@ -17,14 +17,13 @@ from ontask.tests.compare import compare_workflows
 from ontask.workflow import services
 
 
-class WorkflowImportExport(tests.OnTaskTestCase):
+class WorkflowImportExport(
+    tests.OnTaskTestCase,
+    tests.SimpleWorkflowExportFixture
+):
     """Test import export functionality."""
-    fixtures = ['simple_workflow_export']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_export.sql')
 
-    def test_export(self):
+    def test(self):
         """Test the export functionality."""
         # Get the only workflow
         workflow = models.Workflow.objects.get(name='wflow1')
@@ -34,7 +33,8 @@ class WorkflowImportExport(tests.OnTaskTestCase):
             workflow,
             workflow.actions.all())
 
-        self.assertEqual(response.get('Content-Type'),
+        self.assertEqual(
+            response.get('Content-Type'),
             'application/octet-stream')
         self.assertEqual(response['Content-Transfer-Encoding'], 'binary')
         self.assertTrue(
@@ -54,9 +54,10 @@ class WorkflowImportExport(tests.OnTaskTestCase):
         self.assertEqual(workflow.attributes, data['attributes'])
 
 
-class WorkflowImportExportCycle(tests.OnTaskTestCase):
-    fixtures = ['initial_db']
-
+class WorkflowImportExportCycle(
+    tests.OnTaskTestCase,
+    tests.InitialDBFixture
+):
     gz_filename = os.path.join(
         settings.BASE_DIR(),
         'initial_workflow.gz')
@@ -69,7 +70,7 @@ class WorkflowImportExportCycle(tests.OnTaskTestCase):
         super().__init__(*args, **kwargs)
         self.workflow = None
 
-    def test_01_cycle(self):
+    def test(self):
         # Obtain user
         user = get_user_model().objects.filter(
             email='instructor01@bogus.com'
@@ -114,15 +115,12 @@ class WorkflowImportExportCycle(tests.OnTaskTestCase):
         compare_workflows(workflow, workflow2)
 
 
-class WorkflowDelete(tests.OnTaskTestCase):
-    fixtures = ['test_merge']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
-
+class WorkflowDelete(tests.OnTaskTestCase, tests.TestMergeFixture):
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    def test_delete(self):
-        """Test invokation of delete table"""
+    def test(self):
+        """Test invocation of delete table"""
         # Get the workflow first
         self.workflow = models.Workflow.objects.all().first()
 

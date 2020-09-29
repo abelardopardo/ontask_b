@@ -10,15 +10,11 @@ from rest_framework import status
 from ontask import tests
 
 
-class DataopsUploadBasic(tests.OnTaskTestCase):
+class DataopsUploadBasic(tests.OnTaskTestCase, tests.EmptyWorkflowFixture):
     """Test the upload code."""
-
-    fixtures = ['empty_wflow']
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow1'
 
 
 class DataopsCSVUpload(DataopsUploadBasic):

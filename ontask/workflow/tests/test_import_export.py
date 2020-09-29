@@ -1,32 +1,22 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for import export."""
-import os
 
-from django.conf import settings
 from rest_framework import status
 
 from ontask import tests
 
 
-class WorkflowTestViewImportExport(tests.OnTaskTestCase):
+class WorkflowTestViewImportExport(
+    tests.OnTaskTestCase,
+    tests.InitialWorkflowFixture
+):
     """Test column views."""
-
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'BIOL1011'
-
-    def test_export(self):
+    def test(self):
         """Export ask followed by export request."""
         resp = self.get_response(
             'workflow:export_ask',

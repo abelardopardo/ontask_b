@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test the views to update or create new rews."""
-import os
 
-from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
@@ -11,17 +9,14 @@ from ontask import tests
 from ontask.dataops import sql, views
 
 
-class DataopsViewsRowBasic(tests.OnTaskTestCase):
+class DataopsViewsRowBasic(
+    tests.OnTaskTestCase,
+    tests.TestConditionEvaluationFixture,
+):
     """Test the views to create and update the row values."""
 
-    fixtures = ['test_condition_evaluation']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'test_condition_evaluation.sql')
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'Testing Eval Conditions'
 
 
 class DataopsViewsRowCreate(DataopsViewsRowBasic):

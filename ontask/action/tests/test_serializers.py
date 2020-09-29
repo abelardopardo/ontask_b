@@ -1,26 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the scheduler pages."""
-import os
-
-from django.conf import settings
-
 from ontask import tests
 from ontask.action.serializers import ActionSelfcontainedSerializer
 
 
-class ActionTestSerializers(tests.OnTaskTestCase):
+class ActionTestSerializers(
+    tests.OnTaskTestCase,
+    tests.SimpleWorkflowTwoActionsFixture,
+):
     """Test stat views."""
-
-    fixtures = ['simple_workflow_two_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_two_actions.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow2'
 
     action_obj = {
         "filter": {

@@ -2,7 +2,6 @@
 
 """Test the views for the scheduler pages."""
 from datetime import datetime, timedelta
-import os
 
 from django.conf import settings
 import pytz
@@ -11,16 +10,11 @@ from rest_framework import status
 from ontask import models, tests
 
 
-class SchedulerFormsBasic(tests.OnTaskTestCase):
+class SchedulerFormsBasic(tests.OnTaskTestCase, tests.ThreeActionsFixture):
     """Test schedule creation through forms."""
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'  # noqa: S105
-
-    fixtures = ['three_actions']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'three_actions.sql')
-
-    workflow_name = 'wflow1'
 
     s_name = 'Scheduling first JSON'
     s_desc = 'First JSON intervention'

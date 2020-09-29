@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test live execution of action operations."""
-import os
 
-from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
@@ -11,16 +9,11 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from ontask import tests
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 
-class ConditionTestBasic(tests.OnTaskLiveTestCase):
+
+class ConditionTestBasic(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
     """Test Filter/Condition Edit."""
 
     action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
 
 
 class FilterLiveTest(ConditionTestBasic):
@@ -326,16 +319,12 @@ class ConditionDetectAllFalseRows(ConditionTestBasic):
         self.logout()
 
 
-class ConditionInActionIn(tests.OnTaskLiveTestCase):
+class ConditionInActionIn(
+    tests.OnTaskLiveTestCase,
+    tests.TestPersonalisedSurveyFixture
+):
     """Class to test survey with conditions controlling questions."""
-    fixtures = ['test_personalized_survey']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'test_personalized_survey.sql')
 
-    wflow_name = 'Test personalized survey'
-
-    # Test operations with the filter
     def test(self):
         # Login
         self.login('instructor01@bogus.com')

@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test live execution of action operations."""
-import os
 
-from django.conf import settings
 from django.core import mail
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -14,16 +12,10 @@ from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 from ontask.dataops import formula
 
 
-class ActionActionRename(tests.OnTaskLiveTestCase):
+class ActionActionRename(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
     """Test Action Edit."""
 
     action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
 
     # Test action rename
     def test(self):
@@ -57,17 +49,13 @@ class ActionActionRename(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-class ActionActionSendEmail(tests.OnTaskLiveTestCase):
+
+class ActionActionSendEmail(
+    tests.OnTaskLiveTestCase, tests.SimpleActionFixture
+):
     """Test Action Edit."""
 
     action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR,
-        'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
 
     # Test send_email operation
     def test(self):
@@ -130,17 +118,11 @@ class ActionActionSendEmail(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-class ActionActionSave(tests.OnTaskLiveTestCase):
+
+class ActionActionSave(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
     """Test Action Edit."""
 
     action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR,
-        'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
 
     def test(self):
         # Login
@@ -217,7 +199,8 @@ class ActionActionSave(tests.OnTaskLiveTestCase):
         )
 
         # Create condition. Click in the add condition button
-        self.create_condition('fname',
+        self.create_condition(
+            'fname',
             'fdesc',
             [('age', 'less or equal', '12.1')])
 
@@ -272,17 +255,10 @@ class ActionActionSave(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionJsonAction(tests.OnTaskLiveTestCase):
+class ActionJsonAction(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
     """Test Action Edit."""
 
     action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR,
-        'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
 
     # Test operations with the filter
     def test(self):
@@ -321,17 +297,11 @@ class ActionJsonAction(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-class ActionActionURL(tests.OnTaskLiveTestCase):
+
+class ActionActionURL(tests.OnTaskLiveTestCase, tests.SimpleActionFixture):
     """Test Action Edit."""
 
     action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR,
-        'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
 
     def test(self):
         # Login
@@ -384,17 +354,11 @@ class ActionActionURL(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionInDataEntry(tests.OnTaskLiveTestCase):
+class ActionActionInDataEntry(
+    tests.OnTaskLiveTestCase,
+    tests.SimpleWorkflowTwoActionsFixture
+):
     """Class to test survey creation."""
-
-    fixtures = ['simple_workflow_two_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_two_actions.sql')
-
-    wflow_name = 'wflow2'
-    wflow_desc = 'Simple workflow structure with two type of actions'
-    wflow_empty = 'The workflow does not have data'
 
     # Test operations with the filter
     def test(self):
@@ -463,18 +427,16 @@ class ActionActionInDataEntry(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
-    """This test case is to check the effect of renaming columns, attributes
-       and conditions. These name changes need to propagate throughout various
-       elements attached to the workflow
+class ActionActionRenameEffect(
+    tests.OnTaskLiveTestCase,
+    tests.SimpleWorkflowTwoActionsFixture
+):
+    """Renaming columns.
+
+    This test case is to check the effect of renaming columns, attributes and
+    conditions. These name changes need to propagate throughout various
+    elements attached to the workflow
     """
-
-    fixtures = ['simple_workflow_two_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_two_actions.sql')
-
-    wflow_name = 'wflow2'
 
     # Test operations with the filter
     def test(self):
@@ -569,7 +531,8 @@ class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
         # Condition name is the correct one
         self.assertEqual(condition.name, 'Registered new')
         # Attribute name is the correct one
-        self.assertEqual(attributes['attribute name new'],
+        self.assertEqual(
+            attributes['attribute name new'],
             'attribute value')
         # Column name is present in condition formula
         self.assertFalse(formula.has_variable(
@@ -590,17 +553,13 @@ class ActionActionRenameEffect(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionActionZip(tests.OnTaskLiveTestCase):
+class ActionActionZip(
+    tests.OnTaskLiveTestCase,
+    tests.SimpleWorkflowTwoActionsFixture,
+):
     """
     This test case is to check if the ZIP opeation is correct
     """
-
-    fixtures = ['simple_workflow_two_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_two_actions.sql')
-
-    wflow_name = 'wflow2'
 
     def test(self):
         """Test ZIP action."""
@@ -614,10 +573,13 @@ class ActionActionZip(tests.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Click in the page to send email
-        self.open_action_operation('Detecting age', 'ZIP', 'zip-action-request-data')
+        self.open_action_operation(
+            'Detecting age', 'ZIP',
+            'zip-action-request-data')
 
         # The zip should include 2 files
-        self.assertIn('A ZIP with 2 files will be created',
+        self.assertIn(
+            'A ZIP with 2 files will be created',
             self.selenium.page_source)
 
         # Set column 1
@@ -636,7 +598,8 @@ class ActionActionZip(tests.OnTaskLiveTestCase):
         self.wait_for_page(element_id='zip-action-request-data')
 
         # Anomaly detected
-        self.assertIn('The two columns must be different',
+        self.assertIn(
+            'The two columns must be different',
             self.selenium.page_source)
 
         # Set column 2
@@ -669,14 +632,10 @@ class ActionActionZip(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
+class ActionAllKeyColumns(tests.OnTaskLiveTestCase, tests.AllKeyColumnsFixture):
     """Test the case of all key columns in a workflow."""
 
     action_name = 'Test1'
-    fixtures = ['all_key_columns']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'all_key_columns.sql')
-
-    wflow_name = 'all key columns'
 
     # Test action rename
     def test(self):
@@ -699,14 +658,11 @@ class ActionAllKeyColumns(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionSendReportActionCreate(tests.OnTaskLiveTestCase):
+class ActionSendReportActionCreate(
+    tests.OnTaskLiveTestCase,
+    tests.SimpleActionFixture
+):
     """Test sending a list of values."""
-
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
 
     action_name = 'Send to someone'
     action_text = 'Dear sir/madam\\nHere is the student list: '
@@ -810,9 +766,9 @@ class ActionSendReportActionCreate(tests.OnTaskLiveTestCase):
         # Check that the email has the correct elements
         assert len(mail.outbox) == 1
         msg = mail.outbox[0]
-        assert('student01@bogus.com' in msg.body)
-        assert('student02@bogus.com' not in msg.body)
-        assert('student03@bogus.com' in msg.body)
+        assert ('student01@bogus.com' in msg.body)
+        assert ('student02@bogus.com' not in msg.body)
+        assert ('student03@bogus.com' in msg.body)
         assert len(msg.attachments) == 1
         attachment = msg.attachments[0]
         assert attachment.get_content_type() == 'text/csv'
@@ -823,14 +779,11 @@ class ActionSendReportActionCreate(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionJSONReportActionCreate(tests.OnTaskLiveTestCase):
+class ActionJSONReportActionCreate(
+    tests.OnTaskLiveTestCase,
+    tests.SimpleActionFixture
+):
     """Test the JSON Report action."""
-
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
 
     action_name = 'JSON REPORT'
     action_text = '{ "student_list": {% ot_insert_report "email" %} }'
@@ -897,15 +850,11 @@ class ActionJSONReportActionCreate(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionServeLongSurvey(tests.OnTaskLiveTestCase):
+class ActionServeLongSurvey(tests.OnTaskLiveTestCase, tests.LongSurveyFixture):
     """Test the view to serve a survey."""
-    fixtures = ['long_survey']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'long_survey.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'Test survey run pages'
     action_name = 'survey'
 
     def test(self):
@@ -914,7 +863,7 @@ class ActionServeLongSurvey(tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(self.workflow_name)
+        self.access_workflow_from_home_page(self.wflow_name)
 
         # Goto the action page
         self.go_to_actions()
@@ -929,15 +878,10 @@ class ActionServeLongSurvey(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class ActionCreateRubric(tests.OnTaskLiveTestCase):
+class ActionCreateRubric(tests.OnTaskLiveTestCase, tests.TestRubricFixture):
     """Test the view to serve a survey."""
-    fixtures = ['test_rubric']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_rubric.sql')
-
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'test rubric'
     action_name = 'survey'
 
     def test(self):
@@ -945,9 +889,9 @@ class ActionCreateRubric(tests.OnTaskLiveTestCase):
         # Login
         self.login('instructor01@bogus.com')
 
-        workflow = models.Workflow.objects.get(name=self.workflow_name)
+        workflow = models.Workflow.objects.get(name=self.wflow_name)
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(self.workflow_name)
+        self.access_workflow_from_home_page(self.wflow_name)
 
         # Create new action
         self.create_new_rubric_action(self.action_name)

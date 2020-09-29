@@ -9,15 +9,14 @@ from rest_framework import status
 from ontask import tests
 
 
-class DataopsTestFormErrorsBasic(tests.OnTaskTestCase):
+class DataopsTestFormErrorsBasic(
+    tests.OnTaskTestCase,
+    tests.EmptyWorkflowFixture
+):
     """Test the form error detection."""
-
-    fixtures = ['empty_wflow']
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow1'
 
 
 class DataopsTestCSVFormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):

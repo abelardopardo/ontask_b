@@ -652,7 +652,7 @@
     "model": "ontask.workflow",
     "pk": 149,
     "fields": {
-        "name": "sss",
+        "name": "wflow1",
         "description_text": "",
         "created": "2017-12-20T18:07:15.222Z",
         "modified": "2017-12-21T10:11:16.367Z",

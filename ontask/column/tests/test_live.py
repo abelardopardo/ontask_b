@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test live execution of operations related to columns."""
-import os
 
-from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
@@ -13,13 +11,10 @@ from ontask import models, tests
 from ontask.core.checks import check_workflow
 
 
-class ColumnTestCrudLive(tests.OnTaskLiveTestCase):
-    """Testing column creation/deletion"""
-    fixtures = ['simple_workflow']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
-
-
-class ColumnTestCreateDelete(ColumnTestCrudLive):
+class ColumnTestCreateDelete(
+    tests.OnTaskLiveTestCase,
+    tests.SimpleWorkflowFixture
+):
     """Testing column creation/deletion"""
 
     def test(self):
@@ -90,7 +85,8 @@ class ColumnTestCreateDelete(ColumnTestCrudLive):
         # End of session
         self.logout()
 
-class ColumnTestRename(ColumnTestCrudLive):
+
+class ColumnTestRename(tests.OnTaskLiveTestCase, tests.SimpleWorkflowFixture):
     """Testing column rename"""
 
     def test(self):

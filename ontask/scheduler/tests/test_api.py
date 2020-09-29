@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test scheduler API."""
-import os
 
-from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -11,11 +9,8 @@ from rest_framework.authtoken.models import Token
 from ontask import models, tests
 
 
-class ScheduleApiBasic(tests.OnTaskApiTestCase):
+class ScheduleApiBasic(tests.OnTaskApiTestCase, tests.ThreeActionsFixture):
     """Test schedule creation through API"""
-
-    fixtures = ['three_actions']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'three_actions.sql')
 
     s_name = 'Scheduling first JSON'
     s_desc = 'First JSON intervention'

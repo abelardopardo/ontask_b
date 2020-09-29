@@ -12,7 +12,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
-from ontask.tests import ElementHasFullOpacity, ScreenTests
+from ontask.tests.basic import ElementHasFullOpacity, ScreenTests
 
 
 class TutorialCaptures(ScreenTests):

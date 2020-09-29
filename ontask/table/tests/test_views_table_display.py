@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the scheduler pages."""
-import os
 
-from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
@@ -12,16 +10,11 @@ from ontask.dataops import pandas
 from ontask.table import views
 
 
-class TableTestViewTableDisplay(tests.OnTaskTestCase):
+class TableTestViewTableDisplay(tests.OnTaskTestCase, tests.SimpleTableFixture):
     """Test stat views."""
-
-    fixtures = ['simple_table']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow1'
 
     def test(self):
         """Test the use of forms in to schedule actions."""

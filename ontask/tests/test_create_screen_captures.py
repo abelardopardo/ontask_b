@@ -4,20 +4,16 @@
 import os
 
 from django.conf import settings
-from future import standard_library
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-from ontask import models
-from ontask.tests import ElementHasFullOpacity, ScreenTests
-
-standard_library.install_aliases()
+from ontask import models, tests
 
 
-class ScreenTutorialTest(ScreenTests):
+class ScreenTutorialTest(tests.ScreenTests):
 
     def test(self):
         """
@@ -57,7 +53,7 @@ class ScreenTutorialTest(ScreenTests):
         self.logout()
 
 
-class ScreenImportTest(ScreenTests):
+class ScreenImportTest(tests.ScreenTests):
 
     def test(self):
         """
@@ -98,18 +94,11 @@ class ScreenImportTest(ScreenTests):
         self.logout()
 
 
-class ScreenTestFixtureBasic(ScreenTests):
-    fixtures = ['ontask/tests/initial_workflow/initial_workflow.json']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql'
-    )
-
-    wflow_name = 'combine columns'
-
+class ScreenTestFixtureBasic(
+    tests.ScreenTests,
+    tests.InitialWorkflowFixture
+):
+    pass
     # def setUp(self):
     #     super().setUp()
     #     # Insert a SQL Connection
@@ -138,6 +127,7 @@ class ScreenTestFixtureBasic(ScreenTests):
     #         aws_region_name='[AWS REGION NAME HERE]',
     #     )
     #     athenac.save()
+    #
 
 
 class ScreenTestSQLAdmin(ScreenTestFixtureBasic):
@@ -664,7 +654,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.selenium.find_element_by_class_name('js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
-            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+            tests.ElementHasFullOpacity(
+                (By.XPATH, "//div[@id='modal-item']"))
         )
 
         # Take picture of the modal
@@ -693,7 +684,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
             "//button[normalize-space()='Preview']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
+            tests.ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))
         )
         self.modal_ss('action_action_out_preview.png')
         self.cancel_modal()
@@ -1005,6 +996,7 @@ class ScreenTestLogs(ScreenTestFixtureBasic):
 
         # End of session
         self.logout()
+
 
 class ScreenTestRubric(ScreenTestFixtureBasic):
 

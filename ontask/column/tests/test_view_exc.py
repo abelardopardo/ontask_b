@@ -1,29 +1,19 @@
 # -*- coding: utf-8 -*-
 
 """Test error generation when handling columns."""
-import os
 
-from django.db import connection
-from django.conf import settings
 from django.contrib import messages
+from django.db import connection
 from psycopg2 import sql
 
 from ontask import tests
 
 
-class ColumnCrudEmptyWflow(tests.OnTaskTestCase):
-    """Test Exceptions when creating views"""
-
-    fixtures = ['empty_wflow']
+class ColumnCreate(tests.OnTaskTestCase, tests.EmptyWorkflowFixture):
+    """Test column views."""
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow1'
-
-
-class ColumnCreate(ColumnCrudEmptyWflow):
-    """Test column views."""
 
     def test(self):
         """Add a column."""
@@ -39,18 +29,14 @@ class ColumnCreate(ColumnCrudEmptyWflow):
             str(msgs[0]))
 
 
-class ColumnCrudCreatePostError(tests.OnTaskTestCase):
+class ColumnCrudCreatePostError(
+    tests.OnTaskTestCase,
+    tests.SimpleWorkflowFixture
+):
     """Test Exceptions when creating columns"""
-
-    fixtures = ['simple_workflow']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow1'
 
     def test(self):
         """Try to create a column when the DB returns an error."""
@@ -82,4 +68,3 @@ class ColumnCrudCreatePostError(tests.OnTaskTestCase):
             sql.SQL('ALTER TABLE {0} RENAME TO {1}').format(
                 sql.Identifier('TEMPORARY_TABLE_NAME'),
                 sql.Identifier(self.workflow.data_frame_table_name)))
-

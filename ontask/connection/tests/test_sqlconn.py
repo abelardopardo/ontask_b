@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Test views to manipulate the SQL connections."""
-import os
 
 from django.conf import settings
 from django.urls import reverse
@@ -10,15 +9,14 @@ from rest_framework import status
 from ontask import models, tests
 
 
-class DataopsSQLConnectionsBasic(tests.OnTaskTestCase):
+class DataopsSQLConnectionsBasic(
+    tests.OnTaskTestCase,
+    tests.EmptyWorkflowFixture
+):
     """Test the SQL connection views."""
-
-    fixtures = ['empty_wflow']
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'wflow1'
 
 
 class DataopsViewSQLConnections(DataopsSQLConnectionsBasic):
@@ -134,22 +132,14 @@ class DataopsViewSQLConnectionsAdmin(DataopsSQLConnectionsBasic):
         self.assertEqual(models.SQLConnection.objects.count(), 1)
 
 
-class DataopsRunSQLConnections(tests.OnTaskTestCase):
+class DataopsRunSQLConnections(
+    tests.OnTaskTestCase,
+    tests.InitialWorkflowFixture,
+):
     """Test the SQL connection run."""
-
-    fixtures = ['ontask/tests/initial_workflow/initial_workflow.json']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql'
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
 
     def test(self):
         """Execute the RUN step."""

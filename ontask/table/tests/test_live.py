@@ -13,13 +13,8 @@ from ontask import models, tests
 from ontask.dataops import pandas
 
 
-class TableDerivedColumns(tests.OnTaskLiveTestCase):
+class TableDerivedColumns(tests.OnTaskLiveTestCase, tests.DerivedColumnFixture):
     """Tests to check how the derived columns are created."""
-
-    fixtures = ['derived_column']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'derived_column.sql')
-
-    wflow_name = 'combine columns'
 
     def test(self):
         """Test operations to create derived columns."""
@@ -332,16 +327,11 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class TableViews(tests.OnTaskLiveTestCase):
+class TableViews(tests.OnTaskLiveTestCase, tests.DerivedColumnFixture):
     """Test Table views."""
     
-    fixtures = ['derived_column']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'derived_column.sql')
-
-    wflow_name = 'combine columns'
-
-    # Test operations with all derived columns
     def test(self):
+        """Test operations with all derived columns."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -482,11 +472,7 @@ class TableViews(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class TableInsertRow(tests.OnTaskLiveTestCase):
-    fixtures = ['derived_column']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'derived_column.sql')
-
-    wflow_name = 'combine columns'
+class TableInsertRow(tests.OnTaskLiveTestCase, tests.DerivedColumnFixture):
 
     def test(self):
         """Test operations  with derived columns."""

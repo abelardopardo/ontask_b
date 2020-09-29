@@ -20,7 +20,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         super().setUp()
         self.create_users()
 
-    def test_01_workflow_create_upload_merge_column_edit(self):
+    def test_01(self):
         """
         Create a workflow, upload data and merge
         :return:
@@ -166,7 +166,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_02_workflow_create_upload_with_prelude(self):
+    def test_02(self):
         """
         Create a workflow, upload data and merge
         :return:
@@ -232,11 +232,9 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowAttribute(tests.OnTaskLiveTestCase):
-    fixtures = ['simple_workflow']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
+class WorkflowAttribute(tests.OnTaskLiveTestCase, tests.SimpleWorkflowFixture):
 
-    def test_workflow_attributes(self):
+    def test(self):
         pass
 
         # Login
@@ -325,11 +323,9 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowShare(tests.OnTaskLiveTestCase):
-    fixtures = ['simple_workflow']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
+class WorkflowShare(tests.OnTaskLiveTestCase, tests.SimpleWorkflowFixture):
 
-    def test_workflow_share(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -456,13 +452,12 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowImport(tests.OnTaskLiveTestCase):
-    fixtures = ['simple_workflow_export']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_export.sql')
+class WorkflowImport(
+    tests.OnTaskLiveTestCase,
+    tests.SimpleWorkflowExportFixture
+):
 
-    def test_import_complete(self):
+    def test(self):
 
         # Login and wait for the table of workflows
         self.login('instructor01@bogus.com')

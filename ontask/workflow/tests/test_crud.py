@@ -1,31 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """Test the views for the workflow pages."""
-import os
 
-from django.conf import settings
 from rest_framework import status
 
 from ontask import entity_prefix, models, tests
 from ontask.tests.compare import compare_workflows
 
 
-class WorkflowCrudBasic(tests.OnTaskTestCase):
+class WorkflowCrudBasic(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
     """Test workflow views."""
-
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
 
 
 class WorkflowCrudUpdate(WorkflowCrudBasic):
@@ -49,7 +36,7 @@ class WorkflowCrudUpdate(WorkflowCrudBasic):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         self.workflow.refresh_from_db()
-        self.assertEqual(self.workflow_name + '2', self.workflow.name)
+        self.assertEqual(self.wflow_name + '2', self.workflow.name)
         self.assertEqual(self.workflow.description_text, 'description')
 
 
@@ -74,7 +61,7 @@ class WorkflowCloneDelete(WorkflowCrudBasic):
         self.assertEqual(models.Workflow.objects.count(), 2)
 
         new_wf = models.Workflow.objects.get(
-            name=entity_prefix() + self.workflow_name)
+            name=entity_prefix() + self.wflow_name)
         compare_workflows(self.workflow, new_wf)
 
         # Flush the workflow

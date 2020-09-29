@@ -2,7 +2,6 @@
 
 """Test views to run actions."""
 from datetime import timedelta
-import os
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -12,26 +11,15 @@ from django.utils import timezone
 from rest_framework import status
 
 from ontask import (
-    OnTaskSharedState, models, tests, settings as ontask_settings)
+    OnTaskSharedState, models, settings as ontask_settings, tests)
 from ontask.core import SessionPayload
 
 
-class ActionViewRunBasic(tests.OnTaskTestCase):
+class ActionViewRunBasic(tests.OnTaskTestCase, tests.InitialWorkflowFixture):
     """Test the view to run email action with no filter."""
-
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
-
-    workflow_name = 'BIOL1011'
 
     def _verify_content(self, from_email='instructor01@bogus.com'):
         """Verify the content of the messages received.
@@ -492,18 +480,13 @@ class ActionViewRunCanvasEmailDone(ActionViewRunBasic):
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class ActionServe(tests.OnTaskTestCase):
+class ActionServe(tests.OnTaskTestCase, tests.SimpleActionFixture):
     """Test the view to serve an action."""
-
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
     user_email = 'student01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
-
-    def test_serve_action(self):
+    def test(self):
         """Test the serve_action view."""
         action = self.workflow.actions.get(name='simple action')
         action.serve_enabled = True
@@ -516,20 +499,16 @@ class ActionServe(tests.OnTaskTestCase):
         self.assertTrue('Oct. 10, 2017, 10:03 p.m.' in str(resp.content))
 
 
-class ActionServeSurvey(tests.OnTaskTestCase):
+class ActionServeSurvey(
+    tests.OnTaskTestCase,
+    tests.SimpleWorkflowTwoActionsFixture
+):
     """Test the view to serve a survey."""
-
-    fixtures = ['simple_workflow_two_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_two_actions.sql')
 
     user_email = 'student01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow2'
-
-    def test_serve_survey(self):
+    def test(self):
         """Test the serve_action view."""
         action = self.workflow.actions.get(name='Check registration')
         action.serve_enabled = True
