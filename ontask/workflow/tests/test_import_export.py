@@ -8,8 +8,8 @@ from ontask import tests
 
 
 class WorkflowTestViewImportExport(
+    tests.InitialWorkflowFixture,
     tests.OnTaskTestCase,
-    tests.InitialWorkflowFixture
 ):
     """Test column views."""
 

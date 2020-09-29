@@ -12,8 +12,8 @@ from ontask.action.views import action_import
 
 
 class ActionViewExportBasic(
+    tests.SimpleWorkflowTwoActionsFixture,
     tests.OnTaskTestCase,
-    tests.SimpleWorkflowTwoActionsFixture
 ):
     """Basic class to test the action export view."""
 

@@ -10,8 +10,8 @@ from ontask import models, tests
 
 
 class DataopsSQLConnectionsBasic(
+    tests.EmptyWorkflowFixture,
     tests.OnTaskTestCase,
-    tests.EmptyWorkflowFixture
 ):
     """Test the SQL connection views."""
 

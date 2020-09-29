@@ -10,8 +10,8 @@ from ontask import tests
 
 
 class DataopsTestFormErrorsBasic(
-    tests.OnTaskTestCase,
-    tests.EmptyWorkflowFixture
+    tests.EmptyWorkflowFixture,
+    tests.OnTaskTestCase
 ):
     """Test the form error detection."""
 

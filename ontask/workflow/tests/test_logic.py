@@ -18,8 +18,8 @@ from ontask.workflow import services
 
 
 class WorkflowImportExport(
+    tests.SimpleWorkflowExportFixture,
     tests.OnTaskTestCase,
-    tests.SimpleWorkflowExportFixture
 ):
     """Test import export functionality."""
 
@@ -55,8 +55,8 @@ class WorkflowImportExport(
 
 
 class WorkflowImportExportCycle(
+    tests.InitialDBFixture,
     tests.OnTaskTestCase,
-    tests.InitialDBFixture
 ):
     gz_filename = os.path.join(
         settings.BASE_DIR(),

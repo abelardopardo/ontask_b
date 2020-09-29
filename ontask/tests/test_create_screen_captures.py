@@ -95,8 +95,8 @@ class ScreenImportTest(tests.ScreenTests):
 
 
 class ScreenTestFixtureBasic(
+    tests.InitialWorkflowFixture,
     tests.ScreenTests,
-    tests.InitialWorkflowFixture
 ):
     pass
     # def setUp(self):

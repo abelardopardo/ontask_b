@@ -30,8 +30,8 @@ class ColumnCreate(tests.EmptyWorkflowFixture, tests.OnTaskTestCase):
 
 
 class ColumnCrudCreatePostError(
+    tests.SimpleWorkflowFixture,
     tests.OnTaskTestCase,
-    tests.SimpleWorkflowFixture
 ):
     """Test Exceptions when creating columns"""
 

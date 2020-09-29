@@ -12,8 +12,8 @@ from ontask.dataops import pandas
 
 
 class ColumnAddRandomColumnFormBasic(
+    tests.SimpleTableFixture,
     tests.OnTaskTestCase,
-    tests.SimpleTableFixture
 ):
     """Test the creation of random columns."""
 

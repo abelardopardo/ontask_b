@@ -9,8 +9,8 @@ from ontask import tests
 
 
 class BackToHome(
-    tests.OnTaskTestCase,
-    tests.InitialWorkflowFixture
+    tests.InitialWorkflowFixture,
+    tests.OnTaskTestCase
 ):
     """Test redirection to home page when no workflow is set."""
 

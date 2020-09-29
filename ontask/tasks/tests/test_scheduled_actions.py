@@ -16,8 +16,8 @@ from ontask.celery import app
 
 
 class ScheduledOperationTaskBasic(
-    tests.OnTaskTestCase,
-    tests.ScheduleActionsFixture
+    tests.ScheduleActionsFixture,
+    tests.OnTaskTestCase
 ):
     """Test the functions to execute through celery."""
 

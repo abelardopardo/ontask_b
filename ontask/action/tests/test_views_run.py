@@ -500,8 +500,8 @@ class ActionServe(tests.SimpleActionFixture, tests.OnTaskTestCase):
 
 
 class ActionServeSurvey(
-    tests.OnTaskTestCase,
-    tests.SimpleWorkflowTwoActionsFixture
+    tests.SimpleWorkflowTwoActionsFixture,
+    tests.OnTaskTestCase
 ):
     """Test the view to serve a survey."""
 

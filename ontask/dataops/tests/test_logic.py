@@ -652,8 +652,8 @@ class FormulaTestSQLEvaluation(FormulaEvaluation):
 
 
 class ConditionSetEvaluation(
+    tests.TestConditionEvaluationFixture,
     tests.OnTaskTestCase,
-    tests.TestConditionEvaluationFixture
 ):
     action_name = 'Test action'
 
@@ -702,8 +702,8 @@ class ConditionSetEvaluation(
 
 
 class ConditionNameWithSymbols(
+    tests.SymbolsInConditionNameFixture,
     tests.OnTaskTestCase,
-    tests.SymbolsInConditionNameFixture
 ):
     action_name1 = 'bug 1'
     action_name2 = 'bug 2'
