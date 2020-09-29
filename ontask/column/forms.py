@@ -121,7 +121,7 @@ class ColumnBasicForm(forms.ModelForm):
                     valid_values = models.Column.validate_column_values(
                         form_data['data_type'],
                         category_values)
-                except ValueError:
+                except (ValueError, KeyError):
                     self.add_error(
                         'raw_categories',
                         _('Incorrect list of values'),

@@ -78,16 +78,6 @@ def add_column_to_workflow(
     column.workflow = workflow
     column.is_key = False
 
-    # Update the positions of the appropriate columns
-    workflow.reposition_columns(workflow.ncols + 1, column.position)
-
-    # Save column, refresh workflow, and increase number of columns
-    column.save()
-    workflow.refresh_from_db()
-    workflow.ncols += 1
-    workflow.set_query_builder_ops()
-    workflow.save(update_fields=['ncols', 'query_builder_ops'])
-
     # Add the new column to the DB
     try:
         sql.add_column_to_db(
@@ -97,8 +87,17 @@ def add_column_to_workflow(
             initial=column_initial_value)
     except Exception as exc:
         raise errors.OnTaskColumnAddError(
-            message=_('Unable to add element: {0}').format(str(exc)),
-            to_delete=[column])
+            message=_('Unable to add element: {0}').format(str(exc)))
+
+    # Update the positions of the appropriate columns
+    workflow.reposition_columns(workflow.ncols + 1, column.position)
+
+    # Save column, refresh workflow, and increase number of columns
+    column.save()
+    workflow.refresh_from_db()
+    workflow.ncols += 1
+    workflow.set_query_builder_ops()
+    workflow.save(update_fields=['ncols', 'query_builder_ops'])
 
     if action_column_event:
         acc, __ = models.ActionColumnConditionTuple.objects.get_or_create(
