@@ -116,13 +116,6 @@ def question_add(
     :param action: Action being manipulated
     :return: JSON response
     """
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Cannot add question to a workflow without data'),
-        )
-        return http.JsonResponse({'html_redirect': ''})
-
     form = forms.QuestionForm(request.POST or None, workflow=workflow)
 
     if request.method == 'POST' and form.is_valid():
