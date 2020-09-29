@@ -12,8 +12,8 @@ from ontask.core.checks import check_workflow
 
 
 class ColumnTestCreateDelete(
+    tests.SimpleWorkflowFixture,
     tests.OnTaskLiveTestCase,
-    tests.SimpleWorkflowFixture
 ):
     """Testing column creation/deletion"""
 

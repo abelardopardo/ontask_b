@@ -51,7 +51,8 @@ class ActionActionRename(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
 
 
 class ActionActionSendEmail(
-    tests.OnTaskLiveTestCase, tests.SimpleActionFixture
+    tests.SimpleActionFixture,
+    tests.OnTaskLiveTestCase
 ):
     """Test Action Edit."""
 
@@ -355,8 +356,8 @@ class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
 
 
 class ActionActionInDataEntry(
+    tests.SimpleWorkflowTwoActionsFixture,
     tests.OnTaskLiveTestCase,
-    tests.SimpleWorkflowTwoActionsFixture
 ):
     """Class to test survey creation."""
 
@@ -428,8 +429,8 @@ class ActionActionInDataEntry(
 
 
 class ActionActionRenameEffect(
+    tests.SimpleWorkflowTwoActionsFixture,
     tests.OnTaskLiveTestCase,
-    tests.SimpleWorkflowTwoActionsFixture
 ):
     """Renaming columns.
 
@@ -659,8 +660,8 @@ class ActionAllKeyColumns(tests.AllKeyColumnsFixture, tests.OnTaskLiveTestCase):
 
 
 class ActionSendReportActionCreate(
+    tests.SimpleActionFixture,
     tests.OnTaskLiveTestCase,
-    tests.SimpleActionFixture
 ):
     """Test sending a list of values."""
 
@@ -780,8 +781,8 @@ class ActionSendReportActionCreate(
 
 
 class ActionJSONReportActionCreate(
+    tests.SimpleActionFixture,
     tests.OnTaskLiveTestCase,
-    tests.SimpleActionFixture
 ):
     """Test the JSON Report action."""
 

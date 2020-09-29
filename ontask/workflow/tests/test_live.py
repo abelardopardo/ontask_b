@@ -453,8 +453,8 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
 
 
 class WorkflowImport(
+    tests.SimpleWorkflowExportFixture,
     tests.OnTaskLiveTestCase,
-    tests.SimpleWorkflowExportFixture
 ):
 
     def test(self):

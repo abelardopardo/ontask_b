@@ -411,8 +411,8 @@ class DataopsExcelUpload(tests.EmptyWorkflowFixture, tests.OnTaskLiveTestCase):
 
 
 class DataopsExcelUploadSheet(
+    tests.EmptyWorkflowFixture,
     tests.OnTaskLiveTestCase,
-    tests.EmptyWorkflowFixture
 ):
 
     def test(self):
@@ -450,8 +450,8 @@ class DataopsExcelUploadSheet(
 
 
 class DataopsNaNProcessing(
+    tests.EmptyWorkflowFixture,
     tests.OnTaskLiveTestCase,
-    tests.EmptyWorkflowFixture
 ):
     action_text = "Bool1 = {{ bool1 }}\\n" + \
                   "Bool2 = {{ bool2 }}\\n" + \

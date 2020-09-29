@@ -320,8 +320,8 @@ class ConditionDetectAllFalseRows(ConditionTestBasic):
 
 
 class ConditionInActionIn(
+    tests.TestPersonalisedSurveyFixture,
     tests.OnTaskLiveTestCase,
-    tests.TestPersonalisedSurveyFixture
 ):
     """Class to test survey with conditions controlling questions."""
 
