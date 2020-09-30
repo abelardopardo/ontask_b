@@ -24,7 +24,7 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Open the workflow
-        self.access_workflow_from_home_page('sss')
+        self.access_workflow_from_home_page('wflow1')
 
         # Go to the column details
         self.go_to_details()
@@ -236,7 +236,7 @@ class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page('sss')
+        self.access_workflow_from_home_page('wflow1')
 
         # Go to column details
         self.go_to_details()
