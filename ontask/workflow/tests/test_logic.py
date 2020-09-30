@@ -63,7 +63,7 @@ class WorkflowImportExportCycle(
         'initial_workflow.gz')
     tmp_filename = os.path.join('tmp')
 
-    wflow_name = 'initial workflow'
+    wflow_name1 = 'initial workflow'
     wflow_name2 = 'initial workflow2'
 
     def __init__(self, *args, **kwargs):
@@ -83,15 +83,15 @@ class WorkflowImportExportCycle(
         self.assertFalse(
             models.Workflow.objects.filter(
                 user__email='instructor01@bogus.com',
-                name=self.wflow_name
+                name=self.wflow_name1
             ).exists(),
             'A workflow with this name already exists')
 
         with open(self.gz_filename, 'rb') as f:
-            services.do_import_workflow_parse(user, self.wflow_name, f)
+            services.do_import_workflow_parse(user, self.wflow_name1, f)
 
         # Get the new workflow
-        workflow = models.Workflow.objects.filter(name=self.wflow_name).first()
+        workflow = models.Workflow.objects.filter(name=self.wflow_name1).first()
         self.assertIsNotNone(workflow, 'Incorrect import operation')
 
         # Do the export now
