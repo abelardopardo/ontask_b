@@ -15,7 +15,7 @@ from ontask.settings import MAX_UPLOAD_SIZE
 DATE_TIME_WIDGET_OPTIONS = {
     'locale': settings.LANGUAGE_CODE,
     'icons': {
-        'time': 'fa fa-clock-o',
+        'time': 'fa fa-clock',
         'date': 'fa fa-calendar',
         'up': 'fa fa-angle-up',
         'down': 'fa fa-angle-down',

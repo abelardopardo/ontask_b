@@ -10,7 +10,7 @@
             class="shadow btn btn-outline-dark js-workflow-update"
             data-url="{% url 'workflow:update' workflow.id %}" data-toggle="tooltip"
       title="{% trans 'Change the name and description of this workflow' %}">
-        <span class="fa fa-pencil"></span> {% trans 'Rename' %}
+        <span class="fa fa-pencil-alt"></span> {% trans 'Rename' %}
     </button>
     <button type="button"
             class="shadow btn btn-outline-dark js-workflow-clone"
@@ -23,7 +23,7 @@
               class="shadow btn btn-outline-dark js-workflow-flush"
               data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
               title="{% trans 'Delete the data in the table of this workflow' %}">
-        <span class="fa fa-floppy-remove"></span> {% trans 'Flush data table' %}
+        <span class="fa fa-minus-square"></span> {% trans 'Flush data table' %}
       </button>
     {% endif %}
     <button type="button"

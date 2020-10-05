@@ -7,12 +7,12 @@
             data-url="{% url 'column:criterion_edit' criterion.id %}"
             data-toggle="tooltip"
             title="{% trans 'Edit this criterion' %}">
-      <span class="fa fa-pencil"></span></button>
+      <span class="fa fa-pencil-alt"></span></button>
     <button type="button" class="btn btn-primary btn-light js-show-stats"
             data-url="{% url 'table:stat_column_JSON' criterion.column.id %}"
             data-toggle="tooltip"
             title="{% trans 'Show stats about this criteria' %}">
-      <span class="fa fa-bar-chart"></span></button>
+      <span class="fa fa-chart-bar"></span></button>
     <button type="button" class="btn btn-primary btn-light  js-criterion-remove"
             data-url="{% url 'column:criterion_remove' criterion.id %}"
             data-toggle="tooltip"

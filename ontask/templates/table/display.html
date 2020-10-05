@@ -96,7 +96,7 @@
           <button type="button" data-url="{% url 'table:view_edit' view.id %}"
              class="btn btn-primary btn-light js-view-edit" data-toggle="tooltip"
              title="{% trans 'Change the columns present in the view' %}">
-             <span class="fa fa-pencil"></span></button>
+             <span class="fa fa-pencil-alt"></span></button>
           <button type="button"
                   class="btn btn-primary btn-light js-view-clone"
                   data-url="{% url 'table:view_clone' view.id %}"
@@ -167,7 +167,7 @@
               title="{% trans 'Dashboard created with the table data' %}"
             {% endif %}
             data-toggle="tooltip">
-            <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
+            <span class="fa fa-chart-line"></span> {% trans 'Dashboard' %}
           </a>
           {% include 'table/includes/partial_column_stats_selector.html' %}
           <a

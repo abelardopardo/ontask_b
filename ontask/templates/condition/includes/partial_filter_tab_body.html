@@ -27,7 +27,7 @@
                     data-url="{% url 'condition:edit_filter' filter_condition.id %}"
                     {% endif %}
                     data-toggle="tooltip"
-                    title="{% blocktrans with n=filter_condition.selected_count %}Edit the filter ({{ n }} rows satisfy this condition){% endblocktrans %}"><span class="fa fa-pencil"></span>
+                    title="{% blocktrans with n=filter_condition.selected_count %}Edit the filter ({{ n }} rows satisfy this condition){% endblocktrans %}"><span class="fa fa-pencil-alt"></span>
             </button>
             <button type="button"
                     class="btn btn-light btn-sm js-filter-delete"

@@ -3,10 +3,10 @@
   <button type="button" class="btn btn-secondary btn-light spin"
           onclick="location.href='{{ edit_url }}'"
           title="{% trans 'Edit the values in this row' %}">
-    <span class="fa fa-pencil"></span></button>
+    <span class="fa fa-pencil-alt"></span></button>
   <button onclick="location.href='{{ stat_url }}'" class="btn btn-secondary btn-light spin"
           title="{% trans 'Compare values in the row with the rest of the table' %}">
-    <span class="fa fa-bar-chart"></span></button>
+    <span class="fa fa-chart-bar"></span></button>
   <button type="button" class="btn btn-secondary btn-light js-row-delete"
      data-url="{% url 'table:row_delete' %}{{ delete_key }}"
      title="{% trans 'Delete this row' %}">
