@@ -6,6 +6,7 @@ html {
 body {
   padding-top: 35px; /* To jump over the fixed nav-bar */
   margin-bottom: 45px;
+  background-color: #fff;
 }
 
 #base_footer {
@@ -345,7 +346,7 @@ div[aria-labelledby="rowMoreOperations"] > button {
 /* Wflow name */
 #wflow-name {
     padding: 0ex;
-    background: #b9dbff;
+    background: #eebdaa;
 }
 
 mark {
@@ -469,7 +470,7 @@ ul.timeline > li:before {
 }
 
 :not(.note-editable):not(.note-codable):not(#id_text_content):not(#modal-item):focus {
-  background-color: LightBlue !important;
+  background-color: #eebdaaff !important;
 }
 
 /* Fix error in django-datetimepicker-plus with validation messages */
