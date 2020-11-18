@@ -244,6 +244,17 @@ $(document).ready(function() {
     location.hash = this.getAttribute("href");
   });
   select_next_button($("#id_confirm_items"));
+  $("#action-show-display").change(function(){
+    $(this).find("option:selected").each(function(){
+      var optionValue = $(this).attr("value");
+      $(".ontask-acard").hide();
+      if (optionValue) {
+        $("div." + optionValue).show(300);
+      } else {
+        $(".ontask-acard").show(300);
+      }
+    })
+  });
 });
 $(window).on("popstate", function() {
   let anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");

@@ -44,6 +44,14 @@
            class="shadow btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'See when the actions were executed' %}">
           <span class="fa fa-clock"></span> {% trans 'Timeline' %}</a>
+        {% if actions|length %}
+          Show <select class="shadow btn btn-outline-dark" id="action-show-display">
+            <option selected value="">All actions</option>
+            {% for c_key, c_val in action_types.items %}
+              <option value="{{ c_key }}">{{ c_val }}</option>
+            {% endfor %}
+          </select>
+        {% endif %}
       </div>
     {% endif %}
     <div id="action-cards" class="card-deck justify-content-center my-3">

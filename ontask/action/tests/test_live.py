@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Test live execution of action operations."""
+from time import sleep
 
 from django.core import mail
 from selenium.webdriver.common.by import By
@@ -982,3 +983,48 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
 
         column.refresh_from_db()
         self.assertEqual(column.categories, [loa + '2' for loa in loas])
+
+
+class ActionIndexSelector(
+    tests.InitialWorkflowFixture,
+    tests.OnTaskLiveTestCase,
+):
+    """Test the action selector in the main action page."""
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    def test(self):
+        """Test the action selector."""
+
+        self.login('instructor01@bogus.com')
+        workflow = models.Workflow.objects.get(name=self.wflow_name)
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Loop over all the action types
+        select = Select(
+            self.selenium.find_element_by_id('action-show-display'))
+        for atype in models.Action.AVAILABLE_ACTION_TYPES.keys():
+            select.select_by_value(atype)
+            sleep(0.5)
+            self.assertEqual(
+                workflow.actions.filter(action_type=atype).count(),
+                len(self.selenium.find_elements_by_xpath(
+                    '//*[@id="action-cards"]/'
+                    'div[not(contains(@style,"display: none"))]')))
+
+        # Select all of them
+        select.select_by_value('')
+        self.assertEqual(
+            workflow.actions.count(),
+            len(self.selenium.find_elements_by_xpath(
+                '//*[@id="action-cards"]/'
+                'div[not(contains(@style,"display: none"))]')))
+
+        # End of session
+        self.logout()
