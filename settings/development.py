@@ -13,7 +13,7 @@ else:
     CELERY_TASK_ALWAYS_EAGER = True
 
 # Django Debug Toolbar
-if DEBUG:
+if DEBUG and not ONTASK_TESTING:
     INSTALLED_APPS += ['debug_toolbar']
     TEMPLATES[0]['OPTIONS']['debug'] = True
 
