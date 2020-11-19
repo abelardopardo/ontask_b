@@ -19,40 +19,35 @@
     "model": "django_celery_beat.clockedschedule",
     "pk": 1,
     "fields": {
-        "clocked_time": "2119-12-07T11:13:00Z",
-        "enabled": true
+        "clocked_time": "2119-12-07T11:13:00Z"
     }
 },
 {
     "model": "django_celery_beat.clockedschedule",
     "pk": 2,
     "fields": {
-        "clocked_time": "2119-12-07T11:18:00Z",
-        "enabled": true
+        "clocked_time": "2119-12-07T11:18:00Z"
     }
 },
 {
     "model": "django_celery_beat.clockedschedule",
     "pk": 3,
     "fields": {
-        "clocked_time": "2119-12-07T11:20:00Z",
-        "enabled": true
+        "clocked_time": "2119-12-07T11:20:00Z"
     }
 },
 {
     "model": "django_celery_beat.clockedschedule",
     "pk": 4,
     "fields": {
-        "clocked_time": "2119-12-07T11:22:00Z",
-        "enabled": true
+        "clocked_time": "2119-12-07T11:22:00Z"
     }
 },
 {
     "model": "django_celery_beat.clockedschedule",
     "pk": 5,
     "fields": {
-        "clocked_time": "2119-12-07T11:25:00Z",
-        "enabled": true
+        "clocked_time": "2119-12-07T11:25:00Z"
     }
 },
 {
