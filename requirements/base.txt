@@ -63,7 +63,7 @@ entrypoints==0.3
 et-xmlfile==1.0.1
 future==0.18.2
 html2text==2020.1.16
-httplib2==0.18.0
+httplib2==0.19.0
 idna==2.8
 Image==1.5.28
 imagesize==1.2.0
