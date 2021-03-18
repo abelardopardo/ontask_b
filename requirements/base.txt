@@ -3,7 +3,7 @@ Django[argon2]==2.2.13
 Jinja2==2.11.2
 Markdown==3.2.1
 MarkupSafe==1.1.1
-Pillow==7.1.2
+Pillow==8.1.1
 PyAthena==1.10.5
 PyYAML==5.3.1
 Pygments==2.6.1
