@@ -54,7 +54,7 @@ django-summernote==0.8.11.6
 django-tables2==2.3.1
 django-timezone-field==4.0
 django-widget-tweaks==1.4.8
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 docutils==0.15.2
 drf-yasg==1.17.1
 easy-thumbnails==2.7
