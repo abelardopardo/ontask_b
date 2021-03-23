@@ -115,7 +115,7 @@ class PluginAdminTable(tables.Table):
             'td': {'style': 'vertical-align: middle'}}
 
 
-type_function = {
+TYPE_FUNCTION = {
     'integer': int,
     'double': float,
     'string': str,
@@ -281,7 +281,7 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
                     'First tuple element should be as string')
                 return list(zip(diag, _checks))
 
-            t_func = type_function.get(ptype)
+            t_func = TYPE_FUNCTION.get(ptype)
             if not t_func:
                 # This is an incorrect data type
                 diag[check_idx] = _(
@@ -325,7 +325,8 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
             diag[check_idx] = _('Incorrect run method')
         check_idx += 1
 
-    except Exception:
+    except Exception as exc:
+        diag[check_idx] = str(exc)
         return list(zip(diag, _checks))
 
     return list(zip(diag, _checks))

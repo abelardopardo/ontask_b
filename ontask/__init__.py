@@ -33,8 +33,6 @@ __all__ = [
 
 __version__ = '8.0'
 
-app_config = 'ontask.apps.OnTaskConfig'
-
 LOGGER = logging.getLogger('ontask')
 
 CELERY_LOGGER = logging.getLogger('celery_execution')
@@ -66,6 +64,7 @@ class OnTaskException(Exception):
 
     def __init__(self, message, value=0):
         """Store message and value."""
+        super().__init__()
         self.message = message
         self.value = value
 

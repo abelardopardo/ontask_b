@@ -60,8 +60,7 @@ class ElementHasFullOpacity:
         element = driver.find_element(*self.locator)
         if element.value_of_css_property('opacity') == '1':
             return element
-        else:
-            return False
+        return False
 
 
 class OnTaskBasicTestCase(TransactionTestCase):
@@ -118,7 +117,6 @@ class OnTaskBasicTestCase(TransactionTestCase):
 
         # To make sure the table is dropped.
         connection.commit()
-        return
 
     @staticmethod
     def create_groups():
@@ -129,7 +127,7 @@ class OnTaskBasicTestCase(TransactionTestCase):
     def create_users(self):
         """Create all the users based in the user_info."""
         self.create_groups()
-        for uname, uemail, glist, suser in user_info:
+        for uname, uemail, glist, __ in user_info:
             uobj = get_user_model().objects.filter(email=uemail).first()
             if not uobj:
                 uobj = get_user_model().objects.create_user(
@@ -182,6 +180,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         self.last_request = None
 
     def add_middleware(self, request: http.HttpRequest) -> http.HttpRequest:
+        """Add middleware values to the request."""
         request.user = self.user
         # adding session
         SessionMiddleware().process_request(request)
@@ -264,27 +263,31 @@ class OnTaskApiTestCase(OnTaskBasicTestCase, APITransactionTestCase):
         dattr = workflow.attributes
         self.assertEqual(set(jattr.items()), set(dattr.items()))
 
-    def compare_tables(self, m1: pd.DataFrame, m2: pd.DataFrame):
+    def compare_tables(self, dframe1: pd.DataFrame, dframe2: pd.DataFrame):
         """Compare two pandas data frames.
 
-        :param m1: Pandas data frame
-        :param m2: Pandas data frame
+        :param dframe1: Pandas data frame
+        :param dframe2: Pandas data frame
         :return: Nothing. Assert various properties.
         """
         # If both are empty, done.
-        if m2 is None and m1 is None:
+        if dframe2 is None and dframe1 is None:
             return
 
         # Assert that the number of columns are identical
-        self.assertEqual(len(list(m1.columns)), len(list(m2.columns)))
+        self.assertEqual(
+            len(list(dframe1.columns)),
+            len(list(dframe2.columns)))
 
         # The names of the columns have to be identical
-        self.assertEqual(set(list(m1.columns)), set(list(m2.columns)))
+        self.assertEqual(
+            set(list(dframe1.columns)),
+            set(list(dframe2.columns)))
 
         # Check the values of every column
-        for cname in list(m1.columns):
-            jvals = m1[cname].values
-            dfvals = m2[cname].values
+        for cname in list(dframe1.columns):
+            jvals = dframe1[cname].values
+            dfvals = dframe2[cname].values
 
             # Compare removing the NaN, otherwise, the comparison breaks.
             self.assertEqual(

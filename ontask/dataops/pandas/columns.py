@@ -48,7 +48,7 @@ def get_column_statistics(df_column) -> Optional[Dict]:
 
     data_type = pandas.datatype_names.get(df_column.dtype.name)
 
-    if data_type == 'integer' or data_type == 'double':
+    if data_type in ['integer', 'double']:
         quantiles = df_column.quantile([0, .25, .5, .75, 1])
         to_return['min'] = '{0:g}'.format(quantiles[0])
         to_return['q1'] = '{0:g}'.format(quantiles[.25])

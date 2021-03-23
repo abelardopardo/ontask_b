@@ -39,12 +39,12 @@ def _load_df_from_sqlconnection(
         table_name = run_params['db_table']
 
     db_engine = pandas.create_db_engine(
-        conn_item.conn_type,
-        conn_item.conn_driver,
-        conn_item.db_user,
-        password,
-        conn_item.db_host,
-        conn_item.db_name)
+        dialect=conn_item.conn_type,
+        driver=conn_item.conn_driver,
+        username=conn_item.db_user,
+        password=password,
+        host=conn_item.db_host,
+        dbname=conn_item.db_name)
 
     # Try to fetch the data
     data_frame = pd.read_sql_table(table_name, db_engine)
@@ -155,7 +155,7 @@ class ExecuteSQLUpload:
         if not workflow.has_data_frame():
             # Simple upload
             pandas.store_dataframe(src_df, workflow)
-            return []
+            return
 
         # At this point the operation is a merge
 
