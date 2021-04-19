@@ -1,4 +1,4 @@
 -r base.txt
 Werkzeug==1.0.1
-django-debug-toolbar==2.2
+django-debug-toolbar==2.2.1
 selenium==3.141.0
