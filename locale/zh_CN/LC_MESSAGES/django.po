@@ -2642,7 +2642,7 @@ msgid "Content types allowed in uploads"
 msgstr "允许上传的内容类型"
 
 #: ontask/settings.py:84
-msgid "Maximum size allowed in file uplaods"
+msgid "Maximum size allowed in file uploads"
 msgstr "允许上传的最大文件尺寸"
 
 #: ontask/settings.py:90

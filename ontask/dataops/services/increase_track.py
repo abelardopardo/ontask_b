@@ -34,7 +34,7 @@ class ExecuteIncreaseTrackCount:
         :param action: Optional action object
         :param payload: has fields method and get_dict with the request
         method and the get dictionary.
-        :param log_item: Optional logitem object.
+        :param log_item: Optional log item object.
         :return: Nothing
         """
         del user, workflow, action, log_item

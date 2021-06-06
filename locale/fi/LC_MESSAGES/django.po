@@ -2481,7 +2481,7 @@ msgid "Content types allowed in uploads"
 msgstr "Sallitut sisältötyypit"
 
 #: ontask/settings.py:84
-msgid "Maximum size allowed in file uplaods"
+msgid "Maximum size allowed in file uploads"
 msgstr "Suurin sallittu koko tiedostolatauksissa"
 
 #: ontask/settings.py:90

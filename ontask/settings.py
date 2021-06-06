@@ -81,7 +81,7 @@ register_prefs(
                 field=models.TextField(blank=True)),
             pref(
                 MAX_UPLOAD_SIZE,
-                verbose_name=_('Maximum size allowed in file uplaods'),
+                verbose_name=_('Maximum size allowed in file uploads'),
                 static=False,
                 field=models.IntegerField(blank=True)),
         ),
