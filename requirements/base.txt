@@ -96,7 +96,7 @@ plotly==5.1.0
 ply==3.11
 prometheus-client==0.11.0
 prompt-toolkit==3.0.19
-psycopg2==2.9.1
+psycopg2==2.8.6
 ptyprocess==0.7.0
 pycparser==2.20
 pyparsing==2.4.7
