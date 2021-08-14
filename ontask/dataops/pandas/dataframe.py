@@ -127,12 +127,14 @@ def store_temporary_dataframe(
     # Store the table in the DB
     pandas.store_table(data_frame, table_name)
 
-    # Get the column types
-    df_column_types = sql.get_df_column_types(table_name)
+    # Get the column nnames: types
+    column_name_types = sql.get_df_column_types(table_name)
+
+    column_names, column_types = zip(*column_name_types.items())
 
     # Return a list with three list with information about the
     # data frame that will be needed in the next steps
-    return [list(data_frame.columns), df_column_types, column_unique]
+    return [column_names, column_types, column_unique]
 
 
 def store_dataframe(

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """DB queries to manipulate columns."""
-from typing import List
+from typing import List, Dict
 
 from django.db import connection
 from django.utils.translation import ugettext_lazy as _
@@ -113,20 +113,22 @@ def is_column_unique(table_name: str, column_name: str) -> bool:
         return cursor.fetchone()[0]
 
 
-def get_df_column_types(table_name: str) -> List[str]:
-    """Get the list of data types in the given table.
+def get_df_column_types(table_name: str) -> Dict[str, str]:
+    """Get a dictionary of column names and data types in the given table.
 
     :param table_name: Table name
-    :return: List of SQL types
+    :return: Dictionary of column name: SQL Type
     """
     with connection.connection.cursor() as cursor:
         cursor.execute(sql.SQL(
-            'SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS '
+            'SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS '
             + 'WHERE TABLE_NAME = {0}').format(sql.Literal(table_name)))
 
-        type_names = cursor.fetchall()
+        type_names = dict(cursor.fetchall())
 
-    return [sql_to_ontask_datatype_names[dtype[0]] for dtype in type_names]
+    return {
+        col_name: sql_to_ontask_datatype_names[dtype]
+        for col_name, dtype in type_names.items()}
 
 
 def db_rename_column(table: str, old_name: str, new_name: str):
