@@ -59,7 +59,11 @@ def check_workflow(workflow: models.Workflow) -> bool:
             continue
 
         assert col.data_type == df_dt, (
-            'Inconsistent data type {0}'.format(col.name)
+            'Inconsistent data type {0}: workflow = {1}, data = {2}'.format(
+                col.name,
+                col.data_type,
+                df_dt
+            )
         )
 
     # Verify that the columns marked as unique are preserved
