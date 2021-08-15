@@ -365,7 +365,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
         )
 
-        self.assertIn('reate a workflow', self.selenium.page_source)
+        self.assertIn('Create a workflow', self.selenium.page_source)
 
     def logout(self):
         self.open(reverse('accounts:logout'))
