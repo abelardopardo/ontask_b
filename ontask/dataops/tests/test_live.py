@@ -83,6 +83,8 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
             '//table[@id="attribute-table"]'
             '//tr[1]/td[1]//button[contains(@class, "js-attribute-delete")]'
         ).click()
+        self.wait_for_modal_open()
+
         # Click in the delete confirm button
         self.selenium.find_element_by_xpath(
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
