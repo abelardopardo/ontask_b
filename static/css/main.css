@@ -331,6 +331,10 @@ div[aria-labelledby="rowMoreOperations"] > button {
 .note-editor.note-frame.panel .note-editing-area .note-editable {
     text-align: left;
 }
+/* Disable file upload in Summernote */
+.note-group-select-from-files {
+  display: none;
+}
 
 /*
 .dropdown-menu .btn {
