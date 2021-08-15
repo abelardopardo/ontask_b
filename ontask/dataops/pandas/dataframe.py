@@ -130,7 +130,8 @@ def store_temporary_dataframe(
     # Get the column nnames: types
     column_name_types = sql.get_df_column_types(table_name)
 
-    column_names, column_types = zip(*column_name_types.items())
+    column_names = list(data_frame.columns)
+    column_types = [column_name_types[col_name] for col_name in column_names]
 
     # Return a list with three list with information about the
     # data frame that will be needed in the next steps
