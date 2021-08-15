@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """DB queries to manipulate columns."""
-from typing import List, Dict
+from typing import Dict
 
 from django.db import connection
 from django.utils.translation import ugettext_lazy as _

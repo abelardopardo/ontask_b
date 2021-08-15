@@ -175,6 +175,7 @@ def _update_is_key_field(merge_info: Dict, workflow):
         col.is_key = col.is_key and keep_key
         col.save(update_fields=['is_key'])
 
+
 def validate_merge_parameters(
     dst_df: pd.DataFrame,
     src_df: pd.DataFrame,

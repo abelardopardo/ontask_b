@@ -139,12 +139,13 @@ def execute_operation(
             log_item=log_item)
 
     except Exception as exc:
-        if log_item is None:
+        if log_item is not None:
             log_item.payload['status'] = 'Error'
             log_item.save(update_fields=['payload'])
 
         CELERY_LOGGER.error(
             ugettext('Error executing operation: {0}').format(exc))
+        return
 
     if log_item:
         log_item.payload['status'] = 'Finished'
