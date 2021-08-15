@@ -242,6 +242,9 @@ class ConditionLiveTest(ConditionTestBasic):
         # First value should be high age
         self.assertIn('High', self.selenium.page_source)
 
+        # Close the preview
+        self.cancel_modal()
+
         # End of session
         self.logout()
 
