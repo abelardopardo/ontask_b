@@ -369,7 +369,7 @@ class TutorialCaptures(ScreenTests):
             '//button[normalize-space()="Preview"]'
         ).click()
         # Wail until the data-dismiss element appears in the modal
-        WebDriverWait(self.selenium, 10).until_not(
+        WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
                 (By.XPATH,
                  '//div[@id="modal-item"]//button[@data-dismiss="modal"]')
