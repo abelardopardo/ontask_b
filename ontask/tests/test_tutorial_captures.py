@@ -368,8 +368,12 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             '//button[normalize-space()="Preview"]'
         ).click()
-        WebDriverWait(self.selenium, 10).until(
-            ElementHasFullOpacity((By.XPATH, '//div[@id="modal-item"]'))
+        # Wail until the data-dismiss element appears in the modal
+        WebDriverWait(self.selenium, 10).until_not(
+            EC.presence_of_element_located(
+                (By.XPATH,
+                 '//div[@id="modal-item"]//button[@data-dismiss="modal"]')
+            )
         )
         self.modal_ss('tutorial_personalized_text_preview.png')
 
