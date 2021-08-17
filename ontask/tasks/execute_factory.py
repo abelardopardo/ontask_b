@@ -127,8 +127,9 @@ def execute_operation(
 
         if log_id:
             log_item = models.Log.objects.get(pk=log_id)
+            log_item.workflow = workflow
             log_item.payload['status'] = 'Executing'
-            log_item.save(update_fields=['payload'])
+            log_item.save(update_fields=['payload', 'workflow'])
 
         task_execute_factory.execute_operation(
             operation_type=operation_type,

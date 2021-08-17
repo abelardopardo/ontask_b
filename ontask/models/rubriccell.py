@@ -79,7 +79,11 @@ class RubricCell(models.Model):
             'feedback': self.feedback_text}
 
         payload.update(kwargs)
-        return Log.objects.register(user, operation_type, None, payload)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.action.workflow,
+            payload)
 
     class Meta:
         """Define unique criteria and ordering.
