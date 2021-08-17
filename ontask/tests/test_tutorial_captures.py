@@ -366,13 +366,10 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             '//button[normalize-space()="Preview"]'
         ).click()
-        # Wail until the data-dismiss element appears in the modal
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.XPATH,
-                 '//div[@id="modal-item"]//button[@data-dismiss="modal"]')
-            )
-        )
+
+        # Wail until the preview modal appears
+        self.wait_for_modal_open('//div[@id="preview-body"]')
+
         self.modal_ss('tutorial_personalized_text_preview.png')
 
         self.cancel_modal()
