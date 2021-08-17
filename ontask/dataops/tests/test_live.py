@@ -89,6 +89,7 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
+
         # MODAL WAITING
         self.wait_for_page(element_id='workflow-detail')
 
@@ -127,14 +128,10 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         # Set some parameters
         self.select_parameters_tab()
         self.click_dropdown_option('select-key-column-name', 'sid')
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.select_parameters_tab()
         self.click_dropdown_option('select-key-column-name', 'email')
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Save action-in
         self.select_questions_tab()
@@ -285,9 +282,7 @@ class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.select_parameters_tab()
         self.click_dropdown_option('select-key-column-name', 'email' + symbols)
         # This wait is incorrect. Don't know how to wait for an AJAX call.
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Done editing the action in
         self.select_questions_tab()
@@ -391,9 +386,7 @@ class DataopsExcelUpload(tests.EmptyWorkflowFixture, tests.OnTaskLiveTestCase):
             EC.element_to_be_clickable(
                 (By.ID, 'checkAll'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_name("Submit").click()
         self.wait_for_id_and_spinner('table-data_previous')
 
@@ -729,9 +722,7 @@ class DataopsPluginExecution2(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
         # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Provide the execution data (input columns and merge key
         self.selenium.find_element_by_id(

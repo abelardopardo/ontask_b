@@ -93,9 +93,7 @@ class ActionActionSendEmail(
                 (By.XPATH, "//body/div/h1"),
                 'Action scheduled for execution')
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # There should be a message on that page
         self.assertTrue(
@@ -388,9 +386,7 @@ class ActionActionInDataEntry(
         self.click_dropdown_option('select-key-column-name', 'email')
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         self.select_questions_tab()
         self.click_dropdown_option('column-selector', 'registered')

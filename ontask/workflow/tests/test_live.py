@@ -210,9 +210,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
                 (By.XPATH, "//body/div/h1"),
                 'Select Columns')
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Click on the FINISH button
         self.selenium.find_element_by_xpath(

@@ -90,9 +90,7 @@ class FilterLiveTest(ConditionTestBasic):
             )
         )
         # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Check that the filter is selecting 2 out of 3 rows
         self.assertIn('2 learners of 3', self.selenium.page_source)
@@ -161,9 +159,7 @@ class FilterLiveTest(ConditionTestBasic):
             )
         )
         # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Check that the filter is selecting 2 out of 3 rows
         self.assertIn('1 learner of 3', self.selenium.page_source)

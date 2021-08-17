@@ -348,13 +348,16 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def open(self, url):
         self.selenium.get('%s%s' % (self.live_server_url, url))
 
+    def wait_for_spinner(self):
+        WebDriverWait(self.selenium, 10).until(
+            EC.invisibility_of_element_located((By.ID, 'div-spinner'))
+        )
+
     def login(self, uemail):
         self.open(reverse('accounts:login'))
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_username')))
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('id_username').send_keys(uemail)
         self.selenium.find_element_by_id('id_password').send_keys(boguspwd)
         self.selenium.find_element_by_id('submit-id-sign_in').click()
@@ -374,9 +377,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.XPATH, '//div[@id="div_id_username"]')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
     def wait_for_modal_open(self, xpath='//div[@id="modal-item"]//form'):
         WebDriverWait(self.selenium, 10).until(
@@ -399,9 +400,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, table_id))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
     def wait_close_modal_refresh_table(self, table_id):
         """
@@ -430,7 +429,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
         if element_id:
             WebDriverWait(self.selenium, 10).until(
-                EC.presence_of_element_located((By.ID, element_id))
+                EC.visibility_of_element_located((By.ID, element_id))
             )
 
     def cancel_modal(self):
@@ -482,8 +481,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         if wait_for:
             WebDriverWait(self.selenium, 10).until(
                 EC.presence_of_element_located((By.ID, wait_for)))
-            WebDriverWait(self.selenium, 10).until_not(
-                EC.visibility_of_element_located((By.ID, 'div-spinner')))
+            self.wait_for_spinner()
         else:
             self.wait_for_modal_open()
 
@@ -524,8 +522,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         if wait_for:
             WebDriverWait(self.selenium, 10).until(
                 EC.presence_of_element_located((By.ID, wait_for)))
-            WebDriverWait(self.selenium, 10).until_not(
-                EC.visibility_of_element_located((By.ID, 'div-spinner')))
+            self.wait_for_spinner()
         else:
             self.wait_for_modal_open()
 
@@ -571,9 +568,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'action-index'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
     def go_to_home(self):
         # Goto the action page
@@ -582,17 +577,13 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'workflow-index'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.assertIn('js-create-workflow', self.selenium.page_source)
 
     def go_to_actions(self):
         # Goto the action page
         self.selenium.find_element_by_id('ontask-base-actions').click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH,
@@ -616,9 +607,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'table-content'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         element = self.selenium.find_element_by_id('table-data')
         if element:
             # The table is present!
@@ -640,9 +629,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'workflow-detail'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.assertIn('js-workflow-clone', self.selenium.page_source)
 
     def go_to_details(self):
@@ -659,9 +646,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'workflow-detail'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         element = self.selenium.find_element_by_id('column-table')
         if element:
             # The table is present!
@@ -682,9 +667,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'scheduler-index'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.assertIn('Scheduled Operations', self.selenium.page_source)
 
     def go_to_logs(self):
@@ -710,9 +693,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'connection-admin-table'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
     def go_to_athena_connections(self):
         # Click in the admin dropdown menu and then in the option
@@ -720,9 +701,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'connection-admin-table'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
     def go_to_upload_merge(self):
         # Click in the top menu
@@ -1017,9 +996,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
         # clickable
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, '//*[@id="action-out-editor"]')
@@ -1078,9 +1055,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         desc.send_keys(Keys.RETURN)
         # Wait for the spinner to disappear, and then for the button to be
         # clickable
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
                 (By.XPATH, '//*[@id="action-in-editor"]')
@@ -1127,9 +1102,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.ID, 'filter-set-header')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
     def create_condition(self, cname, cdesc, rule_tuples):
         # Make sure we are in the Text Condition tab
@@ -1250,9 +1223,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
         )
         # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         # Preview button clickable
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1272,9 +1243,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.ID, 'attachments')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
     def create_view(self, vname, vdesc, cols):
         self.go_to_table()
@@ -1343,9 +1312,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[contains(@class, "js-action-preview")]')))
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
     def open_action_email(self, name):
         element = self.search_action(name)
@@ -1396,8 +1363,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         if wait_for:
             WebDriverWait(self.selenium, 10).until(
                 EC.presence_of_element_located((By.ID, wait_for)))
-            WebDriverWait(self.selenium, 10).until_not(
-                EC.visibility_of_element_located((By.ID, 'div-spinner')))
+            self.wait_for_spinner()
         else:
             self.wait_for_modal_open()
 
@@ -1418,9 +1384,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                      '//button[contains(@class, "js-action-preview")]'),
                 )
             )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
     def open_preview(self):
         self.selenium.find_element_by_xpath(
@@ -1519,9 +1483,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.ID, 'text-tab')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1535,9 +1497,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.ID, 'text-tab')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1551,9 +1511,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.ID, 'text-tab')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1570,9 +1528,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.ID, 'filter-tab'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('filter-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1591,9 +1547,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.ID, 'conditions-tab')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('conditions-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1610,9 +1564,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.ID, 'attachments-tab'))
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('attachments-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1626,9 +1578,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.ID, 'share-tab')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('share-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create'))
@@ -1640,9 +1590,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.ID, 'questions-tab')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('questions-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.CLASS_NAME,
@@ -1665,9 +1613,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 cname
             )
         ).click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH,
@@ -1676,9 +1622,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
 
     def select_parameters_tab(self):
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.ID, 'parameters-tab')
@@ -1701,9 +1645,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
                 (By.ID, 'rubric-tab')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.selenium.find_element_by_id('rubric-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -1803,9 +1745,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.selenium.find_element_by_xpath(
             '//div[@id="modal-item"]//button[normalize-space()="Delete filter"]'
         ).click()
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
         self.wait_for_page(element_id='edit-personalized-text-tab-content')
 
     def edit_attribute(self, attribute_key, nkey, nvalue):

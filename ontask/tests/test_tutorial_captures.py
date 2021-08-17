@@ -285,9 +285,7 @@ class TutorialCaptures(ScreenTests):
                 (By.ID, 'action-out-editor')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Action editor
         self.body_ss('tutorial_personalized_text_editor.png')
@@ -514,9 +512,7 @@ class TutorialCaptures(ScreenTests):
                 (By.ID, 'action-out-editor')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         self.create_condition('Less than 50 in the midterm',
             '',
@@ -580,9 +576,7 @@ class TutorialCaptures(ScreenTests):
                 (By.XPATH, '//*[@id="action-in-editor"]')
             )
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Show the editor
         self.body_ss('tutorial_survey_editor.png')
@@ -656,9 +650,7 @@ class TutorialCaptures(ScreenTests):
 
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Show the editor
         self.select_questions_tab()
