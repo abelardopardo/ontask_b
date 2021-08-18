@@ -151,4 +151,3 @@ def execute_operation(
     if log_item:
         log_item.payload['status'] = 'Finished'
         log_item.save(update_fields=['payload'])
-

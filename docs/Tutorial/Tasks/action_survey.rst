@@ -20,7 +20,7 @@ After the survey is created, the following screen is shown
 .. figure:: /scaptures/tutorial_survey_editor.png
    :align: center
 
-The editor contains three tabs:
+The editor contains the following tabs:
 
 Survey Parameters
   This tab contains additional parameters for the survey, more precisely:
@@ -39,10 +39,10 @@ Survey Questions
   question. In this part of the editor you may either use one of the existing columns as question, create a new column (or
   question), or create a new derived one (the initial values are created by combining values from other columns).
 
-Filter learners
+Select learners
   An expression identical to the one used in the personalized text to select a subset of the learners for which the will be available.
 
-Conditions
+Text Conditions
   Set of conditions to control the appearance of questions in the survey.
 
 This page will show you warning messages when it detects a column in the survey with an empty description, the survey has an empty description, there is no key column specified to identify the users, or the conditions are false for some or all the students.

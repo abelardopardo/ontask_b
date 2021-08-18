@@ -9,7 +9,7 @@
     <div class="col-sm-10">
       <h1>{{ show_user.get_full_name }}</h1>
       {% if editable %}
-      <a href="{% url 'profiles:edit_self' %}" class="shadow btn btn-info">
+      <a href="{% url 'profiles:edit_self' %}" class="shadow btn btn-outline-primary">
         {% trans 'Edit Profile' %}</a>
       {% endif %}
     </div>
@@ -57,7 +57,7 @@
         <div class="card-body">
             <strong>{% trans 'API Auth token' %}</strong> {{ api_token }}
           <a href="{% url 'profiles:reset_token' %}"
-             class="shadow btn btn-sm btn-info">{% if api_token %}{% trans 'Reset' %}
+             class="shadow btn btn-sm btn-outline-primary">{% if api_token %}{% trans 'Reset' %}
               {% else %}{% trans 'Create' %}{% endif %}
           </a>
         </div>
