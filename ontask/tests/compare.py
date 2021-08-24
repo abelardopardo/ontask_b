@@ -13,10 +13,10 @@ def compare_workflows(w1, w2):
     assert w1.nrows == w2.nrows, 'Nrows ' + suffix
     assert w1.attributes == w2.attributes, 'Attributes ' + suffix
     assert (
-        w1.data_frame_table_name == w1.df_table_prefix.format(w1.id)
+        w1.get_data_frame_table_name() == w1.df_table_prefix.format(w1.id)
     ), 'data frame table name ' + suffix
     assert (
-        w2.data_frame_table_name == w2.df_table_prefix.format(w2.id)
+        w2.get_data_frame_table_name() == w2.df_table_prefix.format(w2.id)
     ), 'data frame table name ' + suffix
     assert w1.query_builder_ops == w2.query_builder_ops, 'Qbuilder ' + suffix
     assert (
