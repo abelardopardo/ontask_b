@@ -91,7 +91,27 @@ class WorkflowCloneDelete(WorkflowCrudBasic):
             models.View.objects.count(),
             self.workflow.views.count())
 
-        # Delete the workflow
+        # Clone the empty workflow now
+        resp = self.get_response(
+            'workflow:clone',
+            {'wid': new_wf.id},
+            is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+        resp = self.get_response(
+            'workflow:clone',
+            {'wid': new_wf.id},
+            method='POST',
+            is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+
+        self.assertEqual(models.Workflow.objects.count(), 3)
+
+        new_wf.refresh_from_db()
+        new_wf2 = models.Workflow.objects.get(
+            name=entity_prefix() + (entity_prefix() + self.wflow_name))
+        compare_workflows(new_wf, new_wf2)
+
+        # Delete the first cloned workflow
         resp = self.get_response(
             'workflow:delete',
             {'wid': new_wf.id},
@@ -100,6 +120,20 @@ class WorkflowCloneDelete(WorkflowCrudBasic):
         resp = self.get_response(
             'workflow:delete',
             {'wid': new_wf.id},
+            method='POST',
+            is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertEqual(models.Workflow.objects.count(), 2)
+
+        # Delete the second cloned workflow
+        resp = self.get_response(
+            'workflow:delete',
+            {'wid': new_wf2.id},
+            is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+        resp = self.get_response(
+            'workflow:delete',
+            {'wid': new_wf2.id},
             method='POST',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))

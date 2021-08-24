@@ -107,9 +107,10 @@ def do_clone_workflow(user, workflow: models.Workflow) -> models.Workflow:
             )
 
         # Clone the DB table
-        sql.clone_table(
-            workflow.get_data_frame_table_name(),
-            new_workflow.get_data_frame_table_name())
+        if workflow.has_table():
+            sql.clone_table(
+                workflow.get_data_frame_table_name(),
+                new_workflow.get_data_frame_table_name())
 
         for item_obj in workflow.views.all():
             do_clone_view(user, item_obj, new_workflow)
