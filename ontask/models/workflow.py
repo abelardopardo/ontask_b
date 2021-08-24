@@ -391,10 +391,19 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # to the workflow.
         for act in self.actions.all():
             act.conditions.all().delete()
+            if act.filter:
+                act.filter.delete()
+            act.column_condition_pair.all().delete()
+            act.rubric_cells.all().delete()
+            act.scheduled_operations.all().delete()
+
             act.delete()
 
         # Step 3: Delete all the views attached to the workflow
-        self.views.all().delete()
+        for view in self.views.all():
+            if view.filter:
+                view.filter.delete()
+            view.delete()
 
         # Step 4: Delete the columns
         self.columns.all().delete()

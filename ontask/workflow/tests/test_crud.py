@@ -90,6 +90,9 @@ class WorkflowCloneDelete(WorkflowCrudBasic):
         self.assertEqual(
             models.View.objects.count(),
             self.workflow.views.count())
+        self.assertEqual(
+            models.Filter.objects.count(),
+            self.workflow.filters.count())
 
         # Clone the empty workflow now
         resp = self.get_response(
