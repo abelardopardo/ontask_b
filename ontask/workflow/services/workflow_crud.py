@@ -18,55 +18,31 @@ from ontask.table.services import do_clone_view
 from ontask.workflow import forms
 
 
-def save_workflow_form(
+def log_workflow_createupdate(
     request: http.HttpRequest,
-    form: forms.WorkflowForm,
+    workflow: models.Workflow,
+    log_type: str,
 ) -> http.JsonResponse:
-    """Save the workflow to create a form.
+    """Log the workflow creation/update.
 
     :param request: Received HTTP Request
-    :param form: Form used to get the Workflow parameters
+    :param workflow: Workflow being created/modified
+    :param log_type: Type of operation (CREATE or UPDATE)
     :return: JSON Response
     """
-    if form.instance.id:
-        log_type = models.Log.WORKFLOW_UPDATE
+    if log_type == models.Log.WORKFLOW_UPDATE:
         redirect_url = ''
-        # Save the instance
-        workflow_item = form.save()
     else:
         # This is a new instance!
-        form.instance.user = request.user
-        workflow_item = form.save()
-        workflow_item.nrows = 0
-        workflow_item.ncols = 0
-        log_type = models.Log.WORKFLOW_CREATE
+        workflow.nrows = 0
+        workflow.ncols = 0
         redirect_url = reverse('dataops:uploadmerge')
 
         # Store in session
-        store_workflow_in_session(request.session, workflow_item)
+        store_workflow_in_session(request.session, workflow)
 
-    workflow_item.log(request.user, log_type)
+    workflow.log(request.user, log_type)
     return http.JsonResponse({'html_redirect': redirect_url})
-
-
-def get_index_context(user) -> Dict:
-    """Create the context to render the details page.
-
-    :param user: User making the request
-    :return: Dictionary to render the index page
-    """
-    workflows = user.workflows_owner.all() | user.workflows_shared.all()
-    workflows = workflows.distinct()
-
-    # Get the queryset for those with start and those without
-    workflows_star = workflows.filter(star__in=[user])
-    workflows_no_star = workflows.exclude(star__in=[user])
-
-    # We include the table only if it is not empty.
-    return {
-        'workflows_star': workflows_star.order_by('name'),
-        'workflows': workflows_no_star.order_by('name'),
-        'nwflows': len(workflows)}
 
 
 def do_clone_workflow(user, workflow: models.Workflow) -> models.Workflow:

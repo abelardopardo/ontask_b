@@ -17,7 +17,7 @@
 {% endblock %}
 {% block container %}
   <div class="container" id="workflow-index">
-    {% if not nwflows %}
+    {% if not object_list|length %}
       <p class="text-center my-3"><strong>Next Step:</strong> The main element in OnTask is a Workflow. Start by first creating a workflow element using the <i>New Workflow</i> button below, and then upload data in its table.</p>
     {% endif %}
     <div class="text-center my-3">
@@ -33,17 +33,21 @@
         <span class="fa fa-upload"></span>{% trans 'Import workflow' %}</a>
       <input class="shadow btn btn-outline-dark" id="workflow-search" type="text" placeholder="Search..."/>
     </div>
-    {% if workflows_star %}
+    {% if n_star_wflows %}
       <h5 class="text-primary mb-0 pd-0 pl-0">{% trans 'Favourites' %}</h5>
       <div id="workflows-star" class="shadow pt-3 card-deck justify-content-center">
-        {% for wflow in workflows_star %}
-          {% include 'workflow/includes/partial_workflow_card.html' with is_star=True %}
+        {% for wflow in object_list %}
+          {% if wflow.star.exists %}
+            {% include 'workflow/includes/partial_workflow_card.html' with is_star=True %}
+          {% endif %}
         {% endfor %}
       </div>
     {% endif %}
     <div class="card-deck justify-content-center my-3" id="workflow-cards">
-      {% for wflow in workflows %}
-        {% include 'workflow/includes/partial_workflow_card.html' %}
+      {% for wflow in object_list %}
+        {% if not wflow.star.exists %}
+          {% include 'workflow/includes/partial_workflow_card.html' %}
+        {% endif %}
       {% endfor %}
     </div>
     <p class="text-left small mt-3">{% blocktrans %}A workflow contains a table

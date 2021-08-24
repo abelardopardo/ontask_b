@@ -1,112 +1,93 @@
 # -*- coding: utf-8 -*-
 
 """Pages to edit the attributes."""
-from typing import Optional
 
 from django import http
-from django.contrib.auth.decorators import user_passes_test
-from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
+from django.views import generic
 
 from ontask import models
-from ontask.core import ajax_required, get_workflow, is_instructor
+from ontask.core import (
+    JSONFormResponseMixin, RequestWorkflowView, UserIsInstructor,
+    ajax_required)
 from ontask.workflow import forms, services
 
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow()
-def attribute_create(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Render the view to create an attribute.
+@method_decorator(ajax_required, name='dispatch')
+class WorkflowAttributeCreateView(
+    UserIsInstructor,
+    RequestWorkflowView,
+    JSONFormResponseMixin,
+    generic.FormView,
+):
+    """View to create a new attribute in the workflow."""
 
-    :param request: Http request received
-    :param workflow: Workflow being processed
-    :return: HttpResponse
-    """
-    return services.save_attribute_form(
-        request,
-        workflow,
-        'workflow/includes/partial_attribute_create.html',
-        forms.AttributeItemForm(
-            request.POST or None,
-            keys=list(workflow.attributes.keys()),
-            workflow=workflow,
-        ),
-        -1)
+    http_method_names = ['get', 'post']
+    form_class = forms.AttributeItemForm
+    template_name = 'workflow/includes/partial_attribute_create.html'
 
+    def get_context_data(self, **kwargs):
+        """Add pk for the attribute to the context data."""
+        context = super().get_context_data(**kwargs)
+        context['pk'] = self.kwargs.get('pk')
+        return context
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow()
-def attribute_edit(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Render the view to edit an attribute.
+    def get_form_kwargs(self):
+        """Store keys in form_kwargs"""
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['workflow'] = self.workflow
+        keys = list(self.workflow.attributes.keys())
+        form_kwargs['keys'] = keys
+        pk = self.kwargs.get('pk')
+        if pk is not None:
+            form_kwargs['key'] = keys[pk]
+            form_kwargs['value'] = self.workflow.attributes[keys[pk]]
+        return form_kwargs
 
-    :param request: Http request received
-    :param pk: Primery key of the attribute
-    :param workflow: Workflow being processed
-    :return: HttpResponse
-    """
-    # Get the list of keys
-    keys = sorted(workflow.attributes.keys())
-
-    # Get the key/value pair
-    key = keys[int(pk)]
-    attr_value = workflow.attributes[key]
-
-    # Remove the one being edited
-    keys.remove(key)
-
-    return services.save_attribute_form(
-        request,
-        workflow,
-        'workflow/includes/partial_attribute_edit.html',
-        forms.AttributeItemForm(
-            request.POST or None,
-            key=key,
-            value=attr_value,
-            keys=keys,
-            workflow=workflow),
-        int(pk))
+    def form_valid(self, form):
+        """Store the attribute"""
+        return services.save_attribute_form(
+            self.request,
+            self.workflow,
+            form,
+            self.kwargs.get('pk'))
 
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow()
-def attribute_delete(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Delete an attribute attached to the workflow.
+class WorkflowAttributeEditView(WorkflowAttributeCreateView):
+    """View to edit an existing attribute in a workflow."""
 
-    :param request: Request object
-    :param pk: number of the attribute with respect to the sorted list of
-    items.
-    :param workflow: Workflow being processed
-    :return: JSON REsponse
-    """
-    wf_attributes = workflow.attributes
-    key = sorted(wf_attributes.keys())[int(pk)]
+    template_name = 'workflow/includes/partial_attribute_edit.html'
 
-    if request.method == 'POST':
+
+@method_decorator(ajax_required, name='dispatch')
+class WorkflowAttributeDeleteView(
+    UserIsInstructor,
+    RequestWorkflowView,
+    JSONFormResponseMixin,
+    generic.TemplateView,
+):
+    """View to delete an existing attribute in a workflow."""
+
+    http_method_names = ['get', 'post']
+    template_name = 'workflow/includes/partial_attribute_delete.html'
+
+    def get_context_data(self, **kwargs):
+        """Add pk and the key name to the context."""
+        context = super().get_context_data(**kwargs)
+        context['pk'] = kwargs['pk']
+        context['key'], _ = list(
+            self.workflow.attributes.items())[kwargs['pk']]
+        return context
+
+    def post(self, request, *args, **kwargs):
+        """Perform the attribute delete operation."""
+        wf_attributes = self.workflow.attributes
+        key = sorted(wf_attributes.keys())[kwargs['pk']]
         wf_attributes.pop(key, None)
-        workflow.attributes = wf_attributes
-        workflow.log(
+        self.workflow.attributes = wf_attributes
+        self.workflow.log(
             request.user,
             models.Log.WORKFLOW_ATTRIBUTE_DELETE,
             **wf_attributes)
-        workflow.save(update_fields=['attributes'])
+        self.workflow.save(update_fields=['attributes'])
         return http.JsonResponse({'html_redirect': ''})
-
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'workflow/includes/partial_attribute_delete.html',
-            {'pk': pk, 'key': key},
-            request=request),
-    })

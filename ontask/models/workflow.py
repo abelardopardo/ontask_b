@@ -12,6 +12,7 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 import pandas as pd
@@ -166,6 +167,10 @@ class Workflow(NameAndDescription, CreateModifyFields):
         :return: True if the workflow has a table storing the data frame
         """
         return pandas.is_table_in_db(self.get_data_frame_table_name())
+
+    def get_absolute_url(self):
+        """URL to redirect whenever an operation in workflow takes place."""
+        return reverse('home')
 
     def get_column_info(self):
         """Access name, data_type and key for all columns.

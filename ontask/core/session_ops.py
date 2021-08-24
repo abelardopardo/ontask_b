@@ -13,7 +13,7 @@ from django.db.models.query_utils import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from ontask import OnTaskException, models
+from ontask import models
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
@@ -85,7 +85,7 @@ def acquire_workflow_access(
     sid = session.get('ontask_workflow_id')
     if wid is None and sid is None:
         # No key was given and none was found in the session (anomaly)
-        return None
+        raise http.Http404(_('Select a workflow'))
 
     if wid is None:
         # No WID provided, but the session contains one, carry on
@@ -101,7 +101,8 @@ def acquire_workflow_access(
             Q(user=user) | Q(shared__id=user.id)).distinct()
 
         if not workflow:
-            return None
+            raise http.Http404(
+                _('No workflow found matching the query'))
 
         # Apply select and prefetch if given
         if select_related:
@@ -116,7 +117,10 @@ def acquire_workflow_access(
                 workflow = workflow.prefetch_related(prefetch_related)
 
         # Now get the unique element from the query set
-        workflow = workflow.first()
+        try:
+            workflow = workflow.get()
+        except workflow.model.DoesNotExist:
+            raise http.Http404(_('No workflow found matching the query'))
 
         # Step 2: If the workflow is locked by this user session, return
         # correct result (the session_key may be None if using the API)
@@ -167,7 +171,7 @@ def acquire_workflow_access(
         # Step 6: The workflow is locked by an existing session. See if the
         # session is valid
         if old_session.expire_date >= timezone.now():
-            raise OnTaskException(
+            raise http.Http404(
                 _('The workflow is being modified by user {0}').format(
                     owner.email),
             )

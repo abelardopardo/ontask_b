@@ -25,12 +25,8 @@ class WorkflowForm(forms.ModelForm):
         """Check if the name for the workflow is unique."""
         form_data = super().clean()
 
-        if not self.cleaned_data.get('name'):
-            self.add_error(
-                'name',
-                _('You need to provide a name for the workflow.'),
-            )
-            return form_data
+        # Store the user in the instance
+        self.instance.user = self.user
 
         # Check if the name already exists
         name_exists = models.Workflow.objects.filter(
@@ -69,11 +65,11 @@ class WorkflowImportForm(forms.Form):
         label=_('File'),
         help_text=_('File containing a previously exported workflow'))
 
-    def __init__(self, data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Store the user that prompted the request."""
         self.user = kwargs.pop('user', None)
 
-        super().__init__(data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean(self) -> Dict:
         """Check that the name is unique and form multipart."""
@@ -104,31 +100,23 @@ class WorkflowExportRequestForm(forms.Form):
     def __init__(self, *args, **kargs):
         """Set actions, prefix and labels.
 
-        Kargs contain: actions: list of action objects, put_labels: boolean
-        stating if the labels should be included in the form
+        Kargs contain: actions: list of action objects
 
         :param args:
         :param kargs: Additional arguments such as list  of actions,
         field_prefix
         """
-        # List of columns to process and a field prefix
-        self.actions = kargs.pop('actions', [])
-        self.field_prefix = kargs.pop('field_prefix', 'select_')
+        workflow = kargs.pop('workflow')
 
-        # Should the labels be included?
-        self.put_labels = kargs.pop('put_labels')
+        # List of columns to process and a field prefix
+        self.actions = workflow.actions.all()
+        self.field_prefix = kargs.pop('field_prefix', 'select_')
 
         super().__init__(*args, **kargs)
 
-        # Create as many fields as the given columns
+        # Create as many fields as the given actions
         for idx, action in enumerate(self.actions):
-            # Include the labels if requested
-            if self.put_labels:
-                label = action.name
-            else:
-                label = ''
-
             self.fields[self.field_prefix + '%s' % idx] = forms.BooleanField(
-                label=label,
+                label=action.name,
                 label_suffix='',
                 required=False)

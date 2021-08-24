@@ -13,7 +13,7 @@ from ontask import models, tasks
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import UserIsInstructor, is_admin, is_instructor
 from ontask.django_auth_lti.decorators import lti_role_required
-from ontask.workflow.views import index
+from ontask.workflow.views import WorkflowIndexView
 
 
 class ToBeDone(UserIsInstructor, generic.TemplateView):
@@ -32,7 +32,7 @@ def home(request: http.HttpRequest) -> http.HttpResponse:
         return redirect(reverse('accounts:login'))
 
     if is_instructor(request.user) or is_admin(request.user):
-        return index(request)
+        return WorkflowIndexView.as_view()(request)
 
     # Authenticated request from learner, show profile
     return redirect(reverse('profiles:show_self'))

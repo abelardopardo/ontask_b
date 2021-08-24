@@ -13,54 +13,69 @@ app_name = 'workflow'
 urlpatterns = [
     # CRUD
     path('create/', views.WorkflowCreateView.as_view(), name='create'),
-    path('<int:wid>/clone/', views.clone_workflow, name='clone'),
-    path('<int:wid>/update/', views.update, name='update'),
-    path('<int:wid>/delete/', views.delete, name='delete'),
-    path('<int:wid>/flush/', views.flush, name='flush'),
-    path('<int:wid>/star/', views.star, name='star'),
-    path('operations/', views.operations, name='operations'),
+    path(
+        '<int:wid>/update/',
+        views.WorkflowUpdateView.as_view(),
+        name='update'),
+    path(
+        '<int:wid>/delete/',
+        views.WorkflowDeleteView.as_view(),
+        name='delete'),
+    path('<int:wid>/clone/', views.WorkflowCloneView.as_view(), name='clone'),
+    path('<int:wid>/flush/', views.WorkflowFlushView.as_view(), name='flush'),
+    path('<int:wid>/star/', views.WorkflowStar.as_view(), name='star'),
+    path(
+        'operations/',
+        views.WorkflowOperationsView.as_view(),
+        name='operations'),
 
     # Import Export
     path(
         '<int:wid>/export_ask/',
-        views.export_ask,
+        views.WorkflowExportView.as_view(),
         name='export_ask'),
     path(
         '<int:wid>/export_list_ask/',
-        views.export_list_ask,
+        views.WorkflowActionExportView.as_view(),
         name='export_list_ask'),
     re_path(
         r'(?P<page_data>(\d+,)*\d*)/export/',
-        views.export,
+        views.WorkflowExportDoneView.as_view(),
         name='export'),
-    path('import/', views.import_workflow, name='import'),
+    path('import/', views.WorkflowImportView.as_view(), name='import'),
 
     # Attributes
-    path('attribute_create/', views.attribute_create, name='attribute_create'),
+    path(
+        'attribute_create/',
+        views.WorkflowAttributeCreateView.as_view(),
+        name='attribute_create'),
     path(
         '<int:pk>/attribute_edit/',
-        views.attribute_edit,
+        views.WorkflowAttributeEditView.as_view(),
         name='attribute_edit'),
     path(
         '<int:pk>/attribute_delete/',
-        views.attribute_delete,
+        views.WorkflowAttributeDeleteView.as_view(),
         name='attribute_delete'),
 
     # Sharing
-    path('share_create/', views.share_create, name='share_create'),
+    path(
+        'share_create/',
+        views.WorkflowShareCreateView.as_view(),
+        name='share_create'),
     path(
         '<int:pk>/share_delete/',
-        views.share_delete,
+        views.WorkflowShareDeleteView.as_view(),
         name='share_delete'),
 
     # Assign learner user email column
     path(
         'assign_luser_column/',
-        views.assign_luser_column,
-        name='assign_luser_column'),
+        views.WorkflowAssignLUserColumn.as_view(),
+        name='remove_luser_column'),
     path(
         '<int:pk>/assign_luser_column/',
-        views.assign_luser_column,
+        views.WorkflowAssignLUserColumn.as_view(),
         name='assign_luser_column'),
 
     # API

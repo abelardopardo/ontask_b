@@ -23,10 +23,10 @@
           {% endfor %}
         {% endif %}
         {% if not only_action_list %}
-          <p class="text-center">{% trans 'Number of rows/columns:' %} {{ nrows }}/{{ ncols }}</p>
-          <p class="text-center">{% trans 'Number of actions:' %} {{ nactions }}</p>
+          <p class="text-center">{% trans 'Number of rows/columns:' %} {{ workflow.nrows }}/{{ workflow.ncols }}</p>
+          <p class="text-center">{% trans 'Number of actions:' %} {{ workflow.actions.count }}</p>
         {% endif %}
-        {% if nactions > 0 %}
+        {% if workflow.actions.count > 0 %}
           <p class="text-center">{% trans 'Select the actions to export:' %}</p>
           <table class="table dataTable shadow">
             <thead>
