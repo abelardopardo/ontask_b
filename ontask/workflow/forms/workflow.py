@@ -25,6 +25,13 @@ class WorkflowForm(forms.ModelForm):
         """Check if the name for the workflow is unique."""
         form_data = super().clean()
 
+        if not self.cleaned_data.get('name'):
+            self.add_error(
+                'name',
+                _('You need to provide a name for the workflow.'),
+            )
+            return form_data
+
         # Store the user in the instance
         self.instance.user = self.user
 

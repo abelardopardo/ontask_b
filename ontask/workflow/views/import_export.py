@@ -25,13 +25,14 @@ class WorkflowExportView(
     form_class = forms.WorkflowExportRequestForm
     template_name = 'workflow/export.html'
     pf_related = 'actions'
+    only_action_list = False
 
     def get_context_data(self, **kwargs):
         """Store the workflow in the context."""
         context = super().get_context_data(**kwargs)
 
         context['workflow'] = self.workflow
-
+        context['only_action_list'] = self.only_action_list
         return context
 
     def get_form_kwargs(self):
@@ -44,9 +45,6 @@ class WorkflowExportView(
 
     def form_valid(self, form):
         """Render export done page and prepare for download."""
-
-        only_action_list = self.context.get('only_action_list', False)
-
         to_include = []
         for idx, a_id in enumerate(
             self.workflow.actions.values_list('id', flat=True),
@@ -54,34 +52,28 @@ class WorkflowExportView(
             if form.cleaned_data['select_%s' % idx]:
                 to_include.append(str(a_id))
 
-        if not to_include and only_action_list:
+        if not to_include and self.only_action_list:
             return redirect(reverse('action:index'))
 
         # Render the export done page with the url to trigger the download
         return render(
             self.request,
             'workflow/export_done.html',
-            {'include': ','.join(to_include)})
+            {
+                'include': ','.join(to_include),
+                'only_action_list': self.only_action_list})
 
 
 class WorkflowActionExportView(WorkflowExportView):
     """View to request information to export a set of actions."""
+
+    only_action_list = True
 
     def get_context_data(self, **kwargs):
         """Store the workflow in the context."""
         context = super().get_context_data(**kwargs)
         context['only_action_list'] = True
         return context
-
-    def get_form_kwargs(self):
-        """Set some required parameters in the form context."""
-        form_kwargs = super().get_form_kwargs()
-
-        form_kwargs['only_action_list'] = self.context.get(
-            'only_action_list',
-            False)
-
-        return form_kwargs
 
 
 class WorkflowExportDoneView(UserIsInstructor, RequestWorkflowView):

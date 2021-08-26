@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from ontask import OnTaskServiceException, models
 from ontask.core import (
     JSONFormResponseMixin, SingleWorkflowMixin, UserIsInstructor,
-    RequestWorkflowView, ajax_required)
+    RequestWorkflowView, ajax_required, error_redirect)
 from ontask.workflow import services
 
 
@@ -98,10 +98,13 @@ class WorkflowOperationsView(
     def get(self, request, *args, **kwargs):
         """Render the operations page."""
 
-        self.object = self.get_object()
+        try:
+            self.object = self.get_object()
 
-        # Check if lusers is active and if so, if it needs to be refreshed
-        services.check_luser_email_column_outdated(self.object)
+            # Check if lusers is active and if so, if it needs to be refreshed
+            services.check_luser_email_column_outdated(self.object)
+        except Exception as exc:
+            return error_redirect(request, message=str(exc))
 
         return self.render_to_response(
             self.get_context_data(object=self.object))
