@@ -42,13 +42,13 @@ def get_workflow(
         @wraps(func)  # noqa Z430
         def function_wrapper(request, **kwargs):  # noqa Z430
             """Wrapper to get access to the request."""
-            workflow = get_session_workflow(
-                request,
-                kwargs.get('wid'),
-                s_related,
-                pf_related)
-
-            if not workflow:
+            try:
+                workflow = get_session_workflow(
+                    request,
+                    kwargs.get('wid'),
+                    s_related,
+                    pf_related)
+            except Exception:
                 return error_redirect(request)
 
             # Update the session
@@ -73,12 +73,13 @@ def get_column(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             """Wrapper to get access to the request."""
-            workflow = get_session_workflow(
-                request,
-                kwargs.get('wid'),
-                s_related,
-                pf_related)
-            if not workflow:
+            try:
+                workflow = get_session_workflow(
+                    request,
+                    kwargs.get('wid'),
+                    s_related,
+                    pf_related)
+            except Exception:
                 return error_redirect(request)
 
             # Update the session
@@ -123,12 +124,13 @@ def get_action(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             """Wrapper to get access to the request."""
-            workflow = get_session_workflow(
-                request,
-                kwargs.get('wid'),
-                s_related,
-                pf_related)
-            if not workflow:
+            try:
+                workflow = get_session_workflow(
+                    request,
+                    kwargs.get('wid'),
+                    s_related,
+                    pf_related)
+            except Exception:
                 return error_redirect(request)
 
             # Update the session
@@ -173,12 +175,13 @@ def get_condition(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             """Wrapper to get access to the request."""
-            workflow = get_session_workflow(
-                request,
-                kwargs.get('wid'),
-                s_related,
-                pf_related)
-            if not workflow:
+            try:
+                workflow = get_session_workflow(
+                    request,
+                    kwargs.get('wid'),
+                    s_related,
+                    pf_related)
+            except Exception:
                 return error_redirect(request)
 
             # Update the session
@@ -223,12 +226,13 @@ def get_filter(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             """Wrapper to get access to the request."""
-            workflow = get_session_workflow(
-                request,
-                kwargs.get('wid'),
-                s_related,
-                pf_related)
-            if not workflow:
+            try:
+                workflow = get_session_workflow(
+                    request,
+                    kwargs.get('wid'),
+                    s_related,
+                    pf_related)
+            except Exception:
                 return error_redirect(request)
 
             # Update the session
@@ -273,12 +277,13 @@ def get_columncondition(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             """Wrapper to get access to the request."""
-            workflow = get_session_workflow(
-                request,
-                kwargs.get('wid'),
-                s_related,
-                pf_related)
-            if not workflow:
+            try:
+                workflow = get_session_workflow(
+                    request,
+                    kwargs.get('wid'),
+                    s_related,
+                    pf_related)
+            except Exception:
                 return error_redirect(request)
 
             # Update the session
@@ -324,12 +329,13 @@ def get_view(
         @wraps(func)  # noqa: Z430
         def function_wrapper(request, pk, **kwargs):  # noqa Z430
             """Wrapper to get access to the request."""
-            workflow = get_session_workflow(
-                request,
-                kwargs.get('wid'),
-                s_related,
-                pf_related)
-            if not workflow:
+            try:
+                workflow = get_session_workflow(
+                    request,
+                    kwargs.get('wid'),
+                    s_related,
+                    pf_related)
+            except Exception:
                 return error_redirect(request)
 
             # Update the session
