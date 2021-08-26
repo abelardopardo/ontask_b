@@ -132,7 +132,6 @@ class JSONFormResponseMixin(JSONResponseMixin):
 class RequestWorkflowView(base.View):
     """Store session workflow in View."""
     workflow = None
-    pk_url_kwarg = 'wid'
     s_related: Optional[Union[str, List]] = None
     pf_related: Optional[Union[str, List]] = None
 
@@ -140,7 +139,7 @@ class RequestWorkflowView(base.View):
         """Set the workflow object."""
         self.workflow = get_session_workflow(
             request,
-            self.kwargs.get(self.pk_url_kwarg),
+            kwargs.get('wid'),
             self.s_related,
             self.pf_related)
 
@@ -154,15 +153,22 @@ class RequestWorkflowView(base.View):
         return super().dispatch(request, *args, **kwargs)
 
 
-class SingleWorkflowMixin(detail.SingleObjectMixin, RequestWorkflowView):
+class SingleWorkflowMixin(detail.SingleObjectMixin):
     """Class to handle workflow in class-based views"""
     model = models.Workflow
+    pk_url_kwarg = 'wid'
+    s_related: Optional[Union[str, List]] = None
+    pf_related: Optional[Union[str, List]] = None
 
     def get_object(self, queryset=None):
         """Return workflow, and store it in the session."""
 
-        super().set_object(self.request, self.kwargs)
-        return self.workflow
+        obj = get_session_workflow(
+            self.request,
+            self.kwargs.get(self.pk_url_kwarg),
+            self.s_related,
+            self.pf_related)
+        return obj
 
 
 class RequestColumnView(RequestWorkflowView):
