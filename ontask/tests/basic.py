@@ -15,6 +15,7 @@ from django.contrib.auth.models import Group
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.db import connection
+from django.template.response import SimpleTemplateResponse
 from django.test import LiveServerTestCase, RequestFactory, TransactionTestCase
 from django.urls import resolve, reverse
 import pandas as pd
@@ -247,7 +248,12 @@ class OnTaskTestCase(OnTaskBasicTestCase):
 
         SessionPayload(self.last_request.session, old_payload)
 
-        return resolve(url_str).func(self.last_request, **url_params)
+        response = resolve(url_str).func(self.last_request, **url_params)
+
+        if isinstance(response, SimpleTemplateResponse):
+            response.render()
+
+        return response
 
 
 class OnTaskApiTestCase(OnTaskBasicTestCase, APITransactionTestCase):
