@@ -143,7 +143,10 @@ class BackToHome(
 
         for url_name in redirect:
             resp = self.client.get(url_name)
-            self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
+            self.assertEqual(
+                resp.status_code,
+                status.HTTP_302_FOUND,
+                msg='URL name: {0}'.format(url_name))
             self.assertEqual(resp.url, reverse('home'))
 
         for url_name in bad_request:
