@@ -18,8 +18,8 @@ from ontask.workflow import forms
 @method_decorator(ajax_required, name='dispatch')
 class WorkflowShareCreateView(
     UserIsInstructor,
-    RequestWorkflowView,
     JSONFormResponseMixin,
+    RequestWorkflowView,
     generic.FormView,
 ):
     """View to create a new "share" user in the workflow."""
@@ -49,8 +49,8 @@ class WorkflowShareCreateView(
 @method_decorator(ajax_required, name='dispatch')
 class WorkflowShareDeleteView(
     UserIsInstructor,
-    RequestWorkflowView,
     JSONFormResponseMixin,
+    RequestWorkflowView,
     generic.TemplateView,
 ):
     """View to delete a "share" user in the workflow."""

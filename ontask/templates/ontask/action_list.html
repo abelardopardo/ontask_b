@@ -20,7 +20,7 @@
   <div class="container" id="action-index">
     {% if not workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
-    {% elif not workflow.actions.all|length %}
+    {% elif not action_list|length %}
       <p class="lead text-center my-3">{% blocktrans %}<strong>Next Step:</strong> Click in the <span class="fa fa-plus"></span> Action below to create a new
       action to execute based on the data stored in the table.{% endblocktrans %}</p>
     {% endif %}
@@ -44,7 +44,7 @@
            class="shadow btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'See when the actions were executed' %}">
           <span class="fa fa-clock"></span> {% trans 'Timeline' %}</a>
-        {% if actions|length %}
+        {% if action_list|length %}
           Show <select class="shadow btn btn-outline-dark" id="action-show-display">
             <option selected value="">All actions</option>
             {% for c_key, c_val in action_types.items %}
@@ -55,7 +55,7 @@
       </div>
     {% endif %}
     <div id="action-cards" class="card-deck justify-content-center my-3">
-      {% for action in actions %}
+      {% for action in action_list %}
         {% include 'action/includes/partial_action_card.html' %}
       {% endfor %}
     </div>

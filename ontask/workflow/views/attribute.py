@@ -16,8 +16,8 @@ from ontask.workflow import forms, services
 @method_decorator(ajax_required, name='dispatch')
 class WorkflowAttributeCreateView(
     UserIsInstructor,
-    RequestWorkflowView,
     JSONFormResponseMixin,
+    RequestWorkflowView,
     generic.FormView,
 ):
     """View to create a new attribute in the workflow."""
@@ -62,8 +62,8 @@ class WorkflowAttributeEditView(WorkflowAttributeCreateView):
 @method_decorator(ajax_required, name='dispatch')
 class WorkflowAttributeDeleteView(
     UserIsInstructor,
-    RequestWorkflowView,
     JSONFormResponseMixin,
+    RequestWorkflowView,
     generic.TemplateView,
 ):
     """View to delete an existing attribute in a workflow."""

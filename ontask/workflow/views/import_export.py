@@ -102,7 +102,7 @@ class WorkflowImportView(UserIsInstructor, generic.FormView):
     template_name = 'workflow/import.html'
 
     def get_form_kwargs(self):
-        """Store user in form_kwargs"""
+        """Store user in form_kwargs."""
         form_kwargs = super().get_form_kwargs()
         form_kwargs['user'] = self.request.user
         return form_kwargs

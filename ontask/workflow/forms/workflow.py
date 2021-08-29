@@ -18,7 +18,7 @@ class WorkflowForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """Store the user to put as owner of the workflow."""
-        self.user = kwargs.pop('workflow_user', None)
+        self.user = kwargs.pop('request_user', None)
         super().__init__(*args, **kwargs)
 
     def clean(self) -> Dict:

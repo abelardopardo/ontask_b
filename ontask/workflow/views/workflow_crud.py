@@ -76,7 +76,7 @@ class WorkflowCreateView(
     def get_form_kwargs(self):
         """Add the user in the request to the context."""
         kwargs = super().get_form_kwargs()
-        kwargs['workflow_user'] = self.request.user
+        kwargs['request_user'] = self.request.user
         return kwargs
 
     def form_valid(self, form):
@@ -103,7 +103,7 @@ class WorkflowUpdateView(
     def get_form_kwargs(self):
         """Add the user in the request to the context."""
         kwargs = super().get_form_kwargs()
-        kwargs['workflow_user'] = self.request.user
+        kwargs['request_user'] = self.request.user
         return kwargs
 
     def form_valid(self, form):
@@ -137,15 +137,14 @@ class WorkflowDeleteView(
 
         self.object = self.get_object()
 
-        kwargs['name'] = self.object.name
-        kwargs['ncols'] = self.object.ncols
-        kwargs['nrows'] = self.object.nrows
-
         models.Log.objects.register(
             request.user,
             models.Log.WORKFLOW_DELETE,
             self.object,
-            kwargs)
+            {
+                'name': self.object.name,
+                'ncols': self.object.ncols,
+                'nrows': self.object.nrows})
 
         self.object.delete()
 
