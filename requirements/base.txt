@@ -115,7 +115,7 @@ smart-open==3.0.0
 snowballstemmer==2.0.0
 sorl-thumbnail==12.6.3
 sphinxcontrib-websupport==1.2.4
-sqlparse==0.4.1
+sqlparse==0.4.2
 supervisor==4.2.2
 tablib==2.0.0
 terminado==0.9.1
