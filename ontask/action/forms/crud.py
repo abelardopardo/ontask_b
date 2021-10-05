@@ -59,9 +59,9 @@ class ActionUpdateForm(forms.ModelForm):
 class ActionForm(ActionUpdateForm):
     """Edit name, description and action type."""
 
-    def __init__(self, *args: str, **kargs: str):
+    def __init__(self, *args: str, **kwargs: str):
         """Adjust widget choices depending on action type."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         at_field = self.fields['action_type']
         at_field.widget.choices = [

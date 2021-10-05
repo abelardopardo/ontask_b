@@ -89,7 +89,7 @@ class BackToHome(
             reverse('action:create'),
             reverse('action:save_text', kwargs={'pk': 1}),
             reverse('action:update', kwargs={'pk': 1}),
-            reverse('action:clone_action', kwargs={'pk': 1}),
+            reverse('action:clone', kwargs={'pk': 1}),
             reverse('action:delete', kwargs={'pk': 1}),
             reverse(
                 'action:select_key_column_action',
