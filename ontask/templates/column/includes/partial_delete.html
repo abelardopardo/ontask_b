@@ -10,11 +10,11 @@
   <div class="modal-body">
     <p class="lead">{% blocktrans with n=cname %}Are you sure you want to delete column <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     {% if cond_to_delete %}
-      <p>{% trans 'The column is currently used in the following conditions (inside an action):' %}</p>
+      <p>{% trans 'The column is used in the following conditions (inside an action):' %}</p>
       {% for cname in cond_to_delete %}
         <p>{{ cname.name }} ({{ cname.action.name }})</p>
       {% endfor %}
-      <p>{% trans 'These conditions will also be deleted.' %}</p>
+      <p>{% trans 'These conditions will be deleted.' %}</p>
     {% endif %}
   </div>
   <div class="modal-footer">
