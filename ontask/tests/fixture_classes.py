@@ -156,6 +156,12 @@ class ThreeActionsFixture:
     filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'three_actions.sql')
 
 
+class ViewAsFilterFixture:
+    wflow_name = 'View as filter'
+    fixtures = ['view_as_filters']
+    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'view_as_filters.sql')
+
+
 class WflowSymbolsFixture:
     wflow_name = 'wflow1'
     fixtures = ['wflow_symbols']

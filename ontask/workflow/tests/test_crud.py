@@ -15,6 +15,30 @@ class WorkflowCrudBasic(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
     user_pwd = 'boguspwd'
 
 
+class WorkflowCrudCreate(WorkflowCrudBasic):
+    """Test workflow create."""
+
+    def test(self):
+        """Create a workflow giving name and description."""
+        new_name = self.workflow.name + '2'
+        description = 'description'
+
+        resp = self.get_response('workflow:create', is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+        resp = self.get_response(
+            'workflow:create',
+            method='POST',
+            req_params={
+                'name': new_name,
+                'description_text': description},
+            is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertTrue(models.Workflow.objects.all().count() == 2)
+        new_wflow = models.Workflow.objects.get(name=new_name)
+        self.assertEqual(new_wflow.name, new_name)
+        self.assertEqual(new_wflow.description_text, description)
+
+
 class WorkflowCrudUpdate(WorkflowCrudBasic):
     """Test workflow update."""
 
