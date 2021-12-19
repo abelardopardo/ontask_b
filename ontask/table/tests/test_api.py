@@ -646,10 +646,8 @@ class TableApiJSONMergeOuterNaN(TableApiBase):
         email.save()
 
         # Drop the column with booleans because the data type is lost
-        delete_column(
-            self.user,
-            workflow,
-            workflow.columns.get(name='registered'))
+        column = workflow.columns.get(name='registered')
+        delete_column(self.user, workflow, column)
 
         # Transform new table into string
         r_df = pd.DataFrame(self.src_df2)
@@ -703,10 +701,8 @@ class TableApiJSONMergeOuterNaNSerializer(TableApiBase):
         email.save()
 
         # Drop the column with booleans because the data type is lost
-        delete_column(
-            self.user,
-            workflow,
-            workflow.columns.get(name='registered'))
+        column = workflow.columns.get(name='registered')
+        delete_column(self.user, workflow, column)
 
         # Transform new table into string
         r_df = pd.DataFrame(self.src_df2)

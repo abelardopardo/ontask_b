@@ -228,8 +228,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
         return self.rows_all_false
 
-    def update_selected_rows(self, column: Optional[Column] = None):
-        """Reset the field selected_count in all conditions.
+    def update_selected_row_counts(self, column: Optional[Column] = None):
+        """Reset the field selected_count in filter and all conditions.
 
         If the column argument is present, select only those conditions that
         have column as part of their variables.

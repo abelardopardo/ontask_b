@@ -421,7 +421,8 @@ def delete(
         # There are various points of return
         from_url = request.META['HTTP_REFERER']
         if from_url.endswith(reverse('table:display')):
-            return http.JsonResponse({'html_redirect': reverse('table:display')})
+            return http.JsonResponse(
+                {'html_redirect': reverse('table:display')})
 
         return http.JsonResponse({'html_redirect': reverse('column:index')})
 

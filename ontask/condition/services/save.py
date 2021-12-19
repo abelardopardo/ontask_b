@@ -18,7 +18,7 @@ def _propagate_changes(condition, changed_data, old_name):
 
     If the name has changed, the text_content in the action is updated.
 
-    :param condition: Object being manipulated
+    :param condition: Object being manipulated (condition or filter)
     :param changed_data: Non-empty list of fields that have changed
     :param old_name: Previous name of the condition
     :return: Nothing

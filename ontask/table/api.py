@@ -69,7 +69,7 @@ class TableBasicOps(APIView):
 
         # Update all the counters in the conditions
         for action in workflow.actions.all():
-            action.update_selected_rows()
+            action.update_selected_row_counts()
 
         return Response(None, status=status.HTTP_201_CREATED)
 

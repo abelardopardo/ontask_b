@@ -204,4 +204,4 @@ def perform_row_delete(
     # Update the value of all the conditions in the actions
     # TODO: Explore how to do this asynchronously (or lazy)
     for action in workflow.actions.all():
-        action.update_selected_rows()
+        action.update_selected_row_counts()

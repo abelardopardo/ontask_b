@@ -41,9 +41,7 @@ class WorkflowIndexView(UserIsInstructor, generic.ListView):
                     request,
                     _(
                         'WARNING: Celery is not currently running. '
-                        + 'Please configure it correctly.',
-                    ),
-                )
+                        + 'Please configure it correctly.'))
 
     def get_queryset(self):
         """Return the list of workflows available for the user."""
