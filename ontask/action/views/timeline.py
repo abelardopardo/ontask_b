@@ -31,6 +31,7 @@ class ActionShowTimelineView(
                 # The action is not part of the selected workflow
                 raise http.Http404(_(
                     'Action does not belong to current workflow. '))
+            context['action'] = action
             logs = self.workflow.logs.filter(payload__action_id=action.id)
         else:
             logs = self.workflow.logs
