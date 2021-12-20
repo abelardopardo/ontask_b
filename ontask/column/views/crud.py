@@ -14,7 +14,6 @@ from ontask import OnTaskServiceException, models
 from ontask.column import forms, services
 from ontask.core import (
     ajax_required, get_action, get_column, get_workflow, is_instructor)
-from ontask.dataops.formula import evaluation
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes.
@@ -161,6 +160,7 @@ def todoitem_add(
     :param request: Http Request
     :param pk: Action ID where to add the question
     :param workflow: Workflow being manipulated
+    :param action: Action in which the todo item is added
     :return: JSON response
     """
     if workflow.nrows == 0:

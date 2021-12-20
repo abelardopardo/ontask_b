@@ -250,7 +250,6 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                 self.rows_all_false = None
                 self.save(update_fields=['rows_all_false'])
 
-
         # Recalculate for the rest of conditions
         if column:
             cond_to_save = self.conditions.filter(columns=column)
