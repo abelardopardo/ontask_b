@@ -101,7 +101,7 @@ def execute_scheduled_operation(s_item_id: int):
             _update_item_status(s_item)
         except Exception as exc:
             CELERY_LOGGER.error(
-                'Error processing action %s:: %s',
+                'Error processing action %s: %s',
                 s_item.name,
                 str(exc))
             models.ScheduledOperation.objects.filter(pk=s_item.id).update(
