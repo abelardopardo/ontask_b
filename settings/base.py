@@ -347,12 +347,13 @@ INSTALLED_APPS = [
 if AWS_ACCESS_KEY_ID:
     INSTALLED_APPS += ['storages']
 
-LANGUAGES = [
-    ('en-us', _('English')),
-    ('es-es', _('Spanish')),
-    ('zh-cn', _('Chinese')),
-    ('fi', _('Finnish')),
-    ('ru', _('Russian'))]
+LANGUAGES = [('en-us', _('English')), ('es-es', _('Spanish'))]
+
+# No longer actively maintained
+# ('zh-cn', _('Chinese')),
+# ('fi', _('Finnish')),
+# ('ru', _('Russian'))]
+
 LOCALE_PATHS = [join(BASE_DIR(), 'locale')]
 
 LOGGING_CONFIG = None
