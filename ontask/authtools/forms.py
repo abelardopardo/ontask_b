@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from django import forms, VERSION as DJANGO_VERSION
+from django import forms
 from django.forms.utils import flatatt
 from django.contrib.auth.forms import (
     ReadOnlyPasswordHashField, ReadOnlyPasswordHashWidget,
@@ -9,7 +9,8 @@ from django.contrib.auth.forms import (
     AuthenticationForm as DjangoAuthenticationForm,
 )
 from django.contrib.auth import get_user_model, password_validation
-from django.contrib.auth.hashers import identify_hasher, UNUSABLE_PASSWORD_PREFIX
+from django.contrib.auth.hashers import (
+    identify_hasher, UNUSABLE_PASSWORD_PREFIX)
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.html import format_html
 
@@ -17,11 +18,11 @@ User = get_user_model()
 
 
 def is_password_usable(pw):
-    """Decide whether a password is usable only by the unusable password prefix.
+    """Decide if a password is usable only by the unusable password prefix.
 
-    We can't use django.contrib.auth.hashers.is_password_usable either, because
-    it not only checks against the unusable password, but checks for a valid
-    hasher too. We need different error messages in those cases.
+    We can't use django.contrib.auth.hashers.is_password_usable either,
+    because it not only checks against the unusable password, but checks for
+    a valid hash function too. We need different error messages in those cases.
     """
 
     return not pw.startswith(UNUSABLE_PASSWORD_PREFIX)
@@ -57,7 +58,8 @@ class UserCreationForm(forms.ModelForm):
 
     error_messages = {
         'password_mismatch': _("The two password fields didn't match."),
-        'duplicate_username': _("A user with that %(username)s already exists."),
+        'duplicate_username':
+            _("A user with that %(username)s already exists."),
     }
 
     password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
@@ -80,18 +82,20 @@ class UserCreationForm(forms.ModelForm):
                 User._default_manager.get_by_natural_key(value)
             except User.DoesNotExist:
                 return value
-            raise forms.ValidationError(self.error_messages['duplicate_username'] % {
-                'username': User.USERNAME_FIELD,
-            })
+            raise forms.ValidationError(
+                self.error_messages['duplicate_username'] % {
+                    'username': User.USERNAME_FIELD})
 
-        self.fields[User.USERNAME_FIELD].validators.append(validate_uniqueness_of_username_field)
+        self.fields[User.USERNAME_FIELD].validators.append(
+            validate_uniqueness_of_username_field)
 
     def clean_password2(self):
         # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError(self.error_messages['password_mismatch'])
+            raise forms.ValidationError(
+                self.error_messages['password_mismatch'])
         return password2
 
     def _post_clean(self):
@@ -115,36 +119,39 @@ class UserCreationForm(forms.ModelForm):
 
 
 class CaseInsensitiveUsernameFieldCreationForm(UserCreationForm):
+    """Form to handle lower case usernames
+
+    This form is the same as UserCreationForm, except that usernames are
+    changed to lower case before they are saved. This is to disallow the
+    existence of email address usernames which differ only in case.
     """
-    This form is the same as UserCreationForm, except that usernames are lowercased before they
-    are saved. This is to disallow the existence of email address usernames which differ only in
-    case.
-    """
-    def clean_USERNAME_FIELD(self):
+    def clean_username_field(self):
         username = self.cleaned_data.get(User.USERNAME_FIELD)
         if username:
             username = username.lower()
 
         return username
 
-# set the correct clean method on the class so that child classes can override and call super()
+
+# set the correct clean method on the class so that child classes can
+# override and call super()
 setattr(
     CaseInsensitiveUsernameFieldCreationForm,
     'clean_' + User.USERNAME_FIELD,
-    CaseInsensitiveUsernameFieldCreationForm.clean_USERNAME_FIELD
+    CaseInsensitiveUsernameFieldCreationForm.clean_username_field
 )
 
-# alias for the old name for backwards-compatability
+# alias for the old name for backwards-compatibility
 CaseInsensitiveEmailUserCreationForm = CaseInsensitiveUsernameFieldCreationForm
 
 
 class UserChangeForm(forms.ModelForm):
     """
-    A form for updating users. Includes all the fields on
-    the user, but replaces the password field with admin's
-    password hash display field.
+    A form for updating users. Includes all the fields on the user,
+    but replaces the password field with admin password hash display field.
     """
-    password = ReadOnlyPasswordHashField(label=_("Password"),
+    password = ReadOnlyPasswordHashField(
+        label=_("Password"),
         widget=BetterReadOnlyPasswordHashWidget)
 
     class Meta:
