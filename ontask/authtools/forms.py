@@ -1,5 +1,4 @@
-from __future__ import unicode_literals
-
+# -*- coding: utf-8 -*-
 from django import forms
 from django.forms.utils import flatatt
 from django.contrib.auth.forms import (

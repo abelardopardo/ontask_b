@@ -49,20 +49,3 @@ class PasswordChangeView(authviews.PasswordChangeView):
                          _("Your password was changed, "
                            "hence you have been logged out. Please relogin"))
         return super().form_valid(form)
-
-
-class PasswordResetView(authviews.PasswordResetView):
-    form_class = forms.PasswordResetForm
-    template_name = 'accounts/password-reset.html'
-    success_url = reverse_lazy('accounts:password-reset-done')
-    subject_template_name = 'accounts/emails/password-reset-subject.txt'
-    email_template_name = 'accounts/emails/password-reset-email.html'
-
-
-class PasswordResetDoneView(authviews.PasswordResetDoneView):
-    template_name = 'accounts/password-reset-done.html'
-
-
-class PasswordResetConfirmView(authviews.PasswordResetConfirmAndLoginView):
-    template_name = 'accounts/password-reset-confirm.html'
-    form_class = forms.SetPasswordForm

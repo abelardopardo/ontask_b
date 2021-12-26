@@ -1,35 +1,29 @@
+# -*- coding: utf-8 -*-
 """
-Mostly equivalent to the views from django.contrib.auth.views, but
-implemented as class-based views.
-"""
-from __future__ import unicode_literals
 
+Mostly equivalent to the views from django.contrib.auth.views,
+but implemented as class-based views.
+
+"""
 import warnings
 
-from django import VERSION as DJANGO_VERSION
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth import (
-    REDIRECT_FIELD_NAME, get_user_model, login as auth_login,
-    update_session_auth_hash)
+    REDIRECT_FIELD_NAME, get_user_model, update_session_auth_hash)
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import (
-    PasswordChangeForm, PasswordResetForm, SetPasswordForm)
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import (
-    INTERNAL_RESET_SESSION_TOKEN, INTERNAL_RESET_URL_TOKEN,
-    SuccessURLAllowedHostsMixin)
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import SuccessURLAllowedHostsMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, resolve_url
 from django.urls import reverse_lazy
-from django.utils import six
 from django.utils.functional import lazy
-from django.utils.http import is_safe_url, urlsafe_base64_decode
+from django.utils.http import is_safe_url
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, RedirectView, TemplateView
+import six
 
 from .forms import AuthenticationForm
 
@@ -272,167 +266,3 @@ class PasswordChangeView(
 
 class PasswordChangeDoneView(LoginRequiredMixin, TemplateView):
     template_name = 'registration/password_change_done.html'
-
-
-# 4 views for password reset:
-# - PasswordResetView sends the mail
-# - PasswordResetDoneView shows a success message for the above
-# - PasswordResetConfirmView checks the link the user clicked and
-#   prompts for a new password
-# - PasswordResetCompleteView shows a success message for the above
-
-
-class PasswordResetView(CsrfProtectMixin, FormView):
-    template_name = 'registration/password_reset_form.html'
-    token_generator = default_token_generator
-    success_url = reverse_lazy('password_reset_done')
-    domain_override = None
-    subject_template_name = 'registration/password_reset_subject.txt'
-    email_template_name = 'registration/password_reset_email.html'
-    html_email_template_name = None
-    from_email = None
-    form_class = PasswordResetForm
-    extra_email_context = None
-
-    def form_valid(self, form):
-        kwargs = dict(
-            domain_override=self.domain_override,
-            subject_template_name=self.subject_template_name,
-            email_template_name=self.email_template_name,
-            token_generator=self.token_generator,
-            from_email=self.from_email,
-            request=self.request,
-            use_https=self.request.is_secure(),
-            html_email_template_name=self.html_email_template_name,
-        )
-
-        if DJANGO_VERSION[:2] >= (1, 9):
-            kwargs['extra_email_context'] = self.extra_email_context
-
-        form.save(**kwargs)
-
-        return super(PasswordResetView, self).form_valid(form)
-
-
-class PasswordResetDoneView(TemplateView):
-    template_name = 'registration/password_reset_done.html'
-
-
-class PasswordResetConfirmView(AuthDecoratorsMixin, FormView):
-    template_name = 'registration/password_reset_confirm.html'
-    token_generator = default_token_generator
-    form_class = SetPasswordForm
-    success_url = reverse_lazy('password_reset_complete')
-    post_reset_login = False
-    post_reset_login_backend = None
-
-    def dispatch(self, *args, **kwargs):
-        assert self.kwargs.get('token') is not None
-        self.user = self.get_user()
-        self.valid_link = False
-
-        if self.user is not None:
-            # Most of this is copied from django
-            token = kwargs['token']
-            if token == INTERNAL_RESET_URL_TOKEN:
-                session_token = self.request.session.get(
-                    INTERNAL_RESET_SESSION_TOKEN)
-                if self.token_generator.check_token(self.user, session_token):
-                    # If the token is valid, display the password reset form.
-                    self.valid_link = True
-                    return super(
-                        PasswordResetConfirmView, self).dispatch(
-                        *args, **kwargs)
-            else:
-                if self.token_generator.check_token(self.user, token):
-                    # Store the token in the session and redirect to the
-                    # password reset form at a URL without the token. That
-                    # avoids the possibility of leaking the token in the HTTP
-                    # Referer header.
-                    self.request.session[INTERNAL_RESET_SESSION_TOKEN] = token
-                    redirect_url = self.request.path.replace(
-                        token,
-                        INTERNAL_RESET_URL_TOKEN)
-                    return HttpResponseRedirect(redirect_url)
-
-        return super(PasswordResetConfirmView, self).dispatch(*args, **kwargs)
-
-    def get_queryset(self):
-        return User._default_manager.all()
-
-    def get_user(self):
-        uidb64 = self.kwargs.get('uidb64')
-        try:
-            uid = urlsafe_base64_decode(uidb64)
-            return self.get_queryset().get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            return None
-
-    def valid_link(self):
-        user = self.user
-        return user is not None and self.token_generator.check_token(
-            user,
-            self.kwargs.get('token'))
-
-    def get_form_kwargs(self):
-        kwargs = super(PasswordResetConfirmView, self).get_form_kwargs()
-        kwargs['user'] = self.user
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        kwargs = super(PasswordResetConfirmView, self).get_context_data(
-            **kwargs)
-        if self.valid_link:
-            kwargs['valid_link'] = True
-        else:
-            kwargs['valid_link'] = False
-            kwargs['form'] = None
-        return kwargs
-
-    def form_valid(self, form):
-        if not self.valid_link:
-            return self.form_invalid(form)
-
-        user = self.save_form(form)
-
-        if INTERNAL_RESET_SESSION_TOKEN:
-            del self.request.session[INTERNAL_RESET_SESSION_TOKEN]
-
-        if self.post_reset_login:
-            auth_login(self.request, user, self.post_reset_login_backend)
-
-        return super(PasswordResetConfirmView, self).form_valid(form)
-
-    def save_form(self, form):
-        return form.save()
-
-
-class PasswordResetConfirmAndLoginView(PasswordResetConfirmView):
-    success_url = resolve_url_lazy(settings.LOGIN_REDIRECT_URL)
-
-    def save_form(self, form):
-        ret = super(PasswordResetConfirmAndLoginView, self).save_form(form)
-        user = auth.authenticate(
-            username=self.user.get_username(),
-            password=form.cleaned_data['new_password1'])
-
-        # post_reset_login will log the user in. We don't
-        # need to do it here. But we do have to set the backend.
-        self.post_reset_login = True
-        self.post_reset_login_backend = user.backend
-
-        return ret
-
-
-class PasswordResetCompleteView(TemplateView):
-    template_name = 'registration/password_reset_complete.html'
-    login_url = settings.LOGIN_URL
-
-    def get_login_url(self):
-        return resolve_url(self.login_url)
-
-    def get_context_data(self, **kwargs):
-        kwargs = super(PasswordResetCompleteView, self).get_context_data(
-            **kwargs)
-        kwargs['login_url'] = self.get_login_url()
-        return kwargs
