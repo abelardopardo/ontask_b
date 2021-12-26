@@ -71,6 +71,7 @@ inflection==0.5.1
 itypes==1.2.0
 jmespath==0.10.0
 kombu==5.2.2
+lxml==4.7.1
 numpy==1.21.5
 oauth2==1.9.0.post1
 odfpy==1.4.1
