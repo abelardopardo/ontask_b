@@ -15,8 +15,8 @@
           <div class="shadow card ontask-ccard text-center mx-auto mb-3 nohover"
               style="cursor: default;">
             <h5 class="alert-dark" style="margin-bottom:0px;">{% trans 'Table View' %}</h5>
-            <h5 class="card-header">{{ filter_condition.view.name }}</h5>
-            <div class="card-body" style="min-height: 100px;">
+            <h5 class="card-header js-filter-edit">{{ filter_condition.view.name }}</h5>
+            <div class="card-body js-filter-edit" style="min-height: 100px;">
               <p class="card-text">{{ filter_condition.description_text }}</p>
               <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ filter_condition.formula_text|safe }}</p>
             </div>
@@ -32,9 +32,9 @@
           </div>
         {% else %}
           <div class="shadow card ontask-ccard text-center mx-auto mb-3">
-            <h5 class="card-header"
+            <h5 class="card-header js-filter-edit"
                 data-url="{% url 'condition:edit_filter' filter_condition.id %}">{% trans 'Filter' %}</h5>
-            <div class="card-body" style="min-height: 100px;"
+            <div class="card-body js-filter-edit" style="min-height: 100px;"
                  data-url="{% url 'condition:edit_filter' action.id %}">
               <p class="card-text">{{ filter_condition.description_text }}</p>
               <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ filter_condition.formula_text|safe }}</p>

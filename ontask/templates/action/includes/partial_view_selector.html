@@ -1,7 +1,7 @@
 {% load i18n %}
 <div id="view-as-filter-selector" class="dropdown btn-group">
   <button type="button"
-          class="btn btn-outline-dark dropdown-toggle{% if not views %} disabled{% endif %}"
+          class="btn btn-outline-dark dropdown-toggle{% if filter_condition or not views %} disabled{% endif %}"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <span class="fa fa-filter"></span> {% trans 'Set view as filter' %}
   </button>
