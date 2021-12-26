@@ -16,7 +16,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 1,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$UUZJV3l1V08yVXNk$ofTd5pXqH3gU4YiSROQszQ",
@@ -32,7 +32,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 2,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$WWtuVzlESkhXOUpz$f0Sj7bXrOgLZYKmX8GoZ5A",
@@ -48,7 +48,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 3,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$ZThWQ0RLdmM1Zk9o$sgxV3rXp3YunwMPRXXBN2w",
@@ -64,7 +64,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 4,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VEg2NW40dlpnN1Vk$hjnRTfwfx1jbyV9zqi49MA",
@@ -80,7 +80,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 5,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$d0hYelhNOVYyYzdT$gP81w2MJcGExaU9vZCOAJA",
@@ -96,7 +96,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 6,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$WTdMVUlZdUJwNGdx$1HChGuAAKTF42fQPRIREXg",
@@ -112,7 +112,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 7,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VTNycGE3aHMxQTc3$Qkrh3voqX8rHyqVuLPsHNQ",
@@ -128,7 +128,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 8,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$QXpJYXBtWDY1RmZp$uycyTJlrEwsC85Mtol+9Dg",
@@ -144,7 +144,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 9,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Y2VWaVZiOFpzQ2lD$VhlIOSxXOJVrhEy51UFKoA",
@@ -160,7 +160,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 10,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$U1dhbnBRWXlkVHhQ$4N7gToGUZFJSv5zHayyThg",
@@ -176,7 +176,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 11,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$WnBFdTdoUFBQN1lh$Wtd3yl7bIE75cQHL7bkdBg",
@@ -196,7 +196,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 12,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Q1NaNGZnT1BBWTl6$rQ1Y/fdGlMmKDttaJEE/Wg",
@@ -216,7 +216,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 13,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$NmYwZkF3NUVUS0Vr$8mJ5Mp89QNW98ewpnY/Ivg",
@@ -236,7 +236,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 14,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$TW5EWERuSzNVbWJv$x07KqHytM0ntwjhknucSfA",
@@ -256,7 +256,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 15,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VVRObzhidGY0alV2$PgG/QeIHiA3VwxYdP6hgpw",
@@ -276,7 +276,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 16,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$ZFQ5eXFYd0ZSdVBK$0JIqIy9eAa5qGTcbBdRaPg",
@@ -296,7 +296,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 17,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$RUpmZkFRcnlLZmtn$fGyxwQ+cUArii5CXJQpBqA",
@@ -316,7 +316,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 18,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$UzhZMlBvVlk1eEpa$sXjRHcNn1+pZEblHcBOveA",
@@ -336,7 +336,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 19,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$WW9veVE1RWNqd2Ji$1cSP2Eh54IcdCNY10ecKaw",
@@ -356,7 +356,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 20,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$QmZLSzdNSnZNOWVO$Q5ctI5N9vhUJsQ8FkfT/6A",
@@ -376,7 +376,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 21,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$YVgxUDZwaHh6TGRr$9q7LoGeGJGXF+3AtgSw6vw",

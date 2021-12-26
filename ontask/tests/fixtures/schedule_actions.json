@@ -92,7 +92,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$36000$JMX4YPJ3ahxr$Q8DJ+BINVcLXRb9zofOscibKccnux1f4gTWp3TNvPCk=",
@@ -112,7 +112,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 2,
     "fields": {
         "password": "pbkdf2_sha256$36000$yyR4qJnt4C68$u5UIYoLDOo5z7pJ9LEQ5xE/Wg3nw/cyIzKoh4tkP4ZQ=",
@@ -128,7 +128,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 3,
     "fields": {
         "password": "pbkdf2_sha256$36000$udn5nz4eFAvU$hj5La0k48upa6trsCv9TOb2LFOM6Iad3gv5Z8r2OtZ8=",
@@ -144,7 +144,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 4,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$SWp6cUxjdU9VWTRF$NuyZlmzXYsLMWaJY4J/0PQ",
@@ -164,7 +164,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 5,
     "fields": {
         "password": "pbkdf2_sha256$36000$Vi2lBnr5h5ee$awxW9s042y23fISIZHks3h1hHieogLXXroObZsqGv0c=",
@@ -184,7 +184,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 6,
     "fields": {
         "password": "pbkdf2_sha256$36000$QW3s2sNU1cL2$C/soQ1isU0Ogiehr627viw0zHugND6IyrTb/C1JrcXs=",
@@ -204,7 +204,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 7,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$QWxySVJIN242V3dP$LIvr5SElB5lCzdTRU27cgQ",
@@ -224,7 +224,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 8,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$QmExNmF6dXpVcDV1$kkAjR49Gse6OWsAH9L2zvQ",
@@ -244,7 +244,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 9,
     "fields": {
         "password": "boguspwd",
@@ -260,7 +260,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 10,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Skx2YW5lMklRaWsx$Le5eeYv44zdASfFajhK2GA",
