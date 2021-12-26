@@ -3,7 +3,7 @@
 """Generic forms to be used in various placdes in the platform."""
 from typing import Any, List, Optional
 
-from bootstrap_datepicker_plus import DateTimePickerInput
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.template.defaultfilters import filesizeformat

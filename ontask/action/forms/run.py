@@ -41,7 +41,7 @@
 import re
 from typing import Dict, List
 
-from bootstrap_datepicker_plus import DateTimePickerInput
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.db.models import QuerySet
