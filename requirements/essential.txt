@@ -50,3 +50,5 @@ selenium
 coverage
 supervisor
 django-debug-toolbar
+oauth2
+lxml
