@@ -72,11 +72,15 @@ class OnTaskBasicTestCase(TransactionTestCase):
     fixtures = []
     filename = None
 
+    secret_key = 'd$2Jpj*.1fV:0J-s_]1r+~!-X*"sWp:/(pd(7vf2b]{bl3*e`4\'oS/VDuO\ZZ!b?u~K*]Tz?_Mgu-n6icWo9#Lv<82HapCkaI8Sp'
+
     @classmethod
     def setUpClass(cls):
         if cls.filename:
             cls._pg_restore_table(cls.filename)
         super().setUpClass()
+        # Fix the secret key so that tests use the correct one
+        settings.SECRET_KEY = cls.secret_key
 
     @classmethod
     def tearDownClass(cls):
