@@ -35,7 +35,7 @@ django-summernote==0.8.11.6  # Bug detected in 0.8.19 and 0.8.20
 django-jquery
 email-validator
 psycopg2
-pandas==0.25.3  # Hold before migrating to 1.0, breaks NULLs and various others thing
+pandas
 SQLAlchemy
 django-fernet-fields
 django-datetime-widget
