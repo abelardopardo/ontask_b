@@ -251,7 +251,7 @@ def delete_filter(
         action.rows_all_false = None
         action.save(update_fields=['filter', 'rows_all_false'])
 
-        action.update_selected_rows()
+        action.update_selected_row_counts()
 
         return http.JsonResponse({'html_redirect': ''})
 
