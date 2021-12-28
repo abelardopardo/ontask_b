@@ -3,7 +3,7 @@ html {
   min-height:100%;		/* For full height images */
 }
 
-body {
+body.regular-body {
   padding-top: 35px; /* To jump over the fixed nav-bar */
   margin-bottom: 45px;
   background-color: #fff;
