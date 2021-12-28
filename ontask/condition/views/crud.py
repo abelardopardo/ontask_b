@@ -223,7 +223,7 @@ def delete_filter(
     request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-    action: Optional[models.Condition] = None,
+    action: Optional[models.Action] = None,
 ) -> http.JsonResponse:
     """Handle the AJAX request to delete a filter.
 
