@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Condition Model."""
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import JSONField
 from django.utils.translation import ugettext_lazy as _
@@ -150,13 +151,17 @@ class Condition(NameAndDescription, ConditionBase):
 
         super().update_fields()
 
-        changed = self.update_selected_row_count(
-            filter_formula=self.action.get_filter_formula())
+        changed = False
+        try:
+            changed = self.update_selected_row_count(
+                filter_formula=self.action.get_filter_formula())
 
-        if changed:
-            # Number of rows all false is no longer valid.
-            self.action.rows_all_false = None
-            self.action.save(update_fields=['rows_all_false'])
+            if changed:
+                # Number of rows all false is no longer valid.
+                self.action.rows_all_false = None
+                self.action.save(update_fields=['rows_all_false'])
+        except ObjectDoesNotExist:
+            return changed
 
         return changed
 
