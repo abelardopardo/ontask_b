@@ -433,6 +433,13 @@ ROOT_URLCONF = 'urls'
 
 SHORT_DATETIME_FORMAT = 'r'
 
+SITEPREFS_EXPOSE_MODEL_TO_ADMIN = True
+SITEPREFS_DISABLE_AUTODISCOVER = not (
+    'manage' not in sys.argv[0] or
+    (len(sys.argv) > 1) and
+    sys.argv[1] in ['runserver', 'runserver_plus', 'run_gnunicorn', 'celeryd'])
+SITEPREFS_MODULE_NAME = 'settings'
+
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
     'DIRS': [join(BASE_DIR(), 'ontask', 'templates')],
