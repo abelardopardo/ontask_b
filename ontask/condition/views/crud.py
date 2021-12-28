@@ -148,7 +148,7 @@ def set_filter(
     """Set the formula in the view as the action filter
 
     :param request: HTTP request
-    :param pk: View ID
+    :param pk: Action ID
     :param workflow: Workflow being processed
     :param action: Action being used
     :view_id: ID of the view to use as filter
@@ -166,7 +166,8 @@ def set_filter(
 
     # If the action has a filter nuke it.
     action.filter = view.filter
-    action.save(update_fields=['filter'])
+    action.rows_all_false = None
+    action.save(update_fields=['filter', 'rows_all_false'])
 
     # Row counts need to be updated.
     action.update_selected_row_counts()
