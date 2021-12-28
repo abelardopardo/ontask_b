@@ -368,9 +368,7 @@ LOGGING = {
                 + '[%(pathname)s:%(lineno)s] %(message)s'),
             'datefmt': "%d/%b/%Y %H:%M:%S"
         },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
+        'simple': {'format': '%(levelname)s %(message)s'},
     },
     'handlers': {
         'django_log_file': {
