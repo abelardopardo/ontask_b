@@ -98,7 +98,7 @@ class ActionViewCRUDClone(ActionViewCRUDBasic):
 
     def test(self):
         """Clone the action."""
-        name = 'Midterm comments'
+        name = 'Suggestions about the forum'
         action = self.workflow.actions.get(name=name)
         actions_before = self.workflow.actions.count()
         filters_before = self.workflow.filters.count()
