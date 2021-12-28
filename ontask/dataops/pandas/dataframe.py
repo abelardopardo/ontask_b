@@ -291,7 +291,7 @@ def get_table_row_by_index(
 
 
 def add_column_to_df(
-    df: pd.DataFrame,
+    data_frame: pd.DataFrame,
     column,
     initial_value=None,
 ) -> pd.DataFrame:
@@ -301,7 +301,7 @@ def add_column_to_df(
     match the given column. If the initial value is not give, it is decided
     based on the data type stored in the column object.
 
-    :param df: Data frame to modify
+    :param data_frame: Data frame to modify
     :param column: Column object to add
     :param initial_value: initial value in the column
     :return: new data frame with the additional column
@@ -322,9 +322,9 @@ def add_column_to_df(
             raise ValueError(_('Type {0} not found').format(column_type))
 
     # Create the empty column
-    df[column.name] = initial_value
+    data_frame[column.name] = initial_value
 
-    return df
+    return data_frame
 
 
 def rename_column(

@@ -19,8 +19,8 @@ class TableTestSerializersBasic(tests.SimpleTableFixture, tests.OnTaskTestCase):
 class TableTestSerializersView(TableTestSerializersBasic):
     """Test stat views."""
 
+    # Test the view serialization.
     def test(self):
-        """Test the view serialization."""
         # Try to create a view with a name that already exists.
         try:
             views = serializers.ViewSerializer(
@@ -77,9 +77,8 @@ class TableTestSerializersView(TableTestSerializersBasic):
 class TableTestSerializersPandas(TableTestSerializersBasic):
     """Test stat views."""
 
+    # Test the data frame serialization
     def test(self):
-        """Test the data frame serialization."""
-
         df = pd.DataFrame(
             {
                 'key': ['k1', 'k2'],
@@ -107,9 +106,8 @@ class TableTestSerializersPandas(TableTestSerializersBasic):
 class TableTestSerializersJSON(TableTestSerializersBasic):
     """Test stat views."""
 
+    # Test the data frame serialization with a json object
     def test(self):
-        """Test the data frame serialization with a json object"""
-
         df = pd.DataFrame(
             {
                 'key': ['k1', 'k2'],

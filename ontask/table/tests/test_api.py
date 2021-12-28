@@ -327,9 +327,8 @@ class TableApiJSONFlush(TableApiBase):
 
 
 class TableApiPandasFlush(TableApiBase):
-    """Test the api to create a table."""
-
-    def test_table_pandas_flush(self):
+    # Test the api to create a table
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -488,8 +487,8 @@ class TableApiPandasMergeInner(TableApiBase):
 
 class TableApiJSONMergeOuter(TableApiBase):
 
+    # Merge with outer values.
     def test(self):
-        """Merge with outer values."""
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -688,7 +687,7 @@ class TableApiJSONMergeOuterNaN(TableApiBase):
 
 class TableApiJSONMergeOuterNaNSerializer(TableApiBase):
 
-    def test_table_pandas_merge_to_outer_NaN(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -744,7 +743,7 @@ class TableApiJSONMergeOuterNaNSerializer(TableApiBase):
 class TableApiJSONMergeDatetimes(TableApiBase):
 
     # Merge a single row with non-localised date/time fields.
-    def test_table_JSON_merge_datetimes(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
