@@ -51,7 +51,9 @@ class ColumnTestSetFilterRowsSelected(
         # Set the view as filter
         resp = self.get_response(
             'condition:set_filter',
-            url_params={'pk': action.id, 'view_id': view.id})
+            url_params={'pk': action.id, 'view_id': view.id},
+            method='POST',
+            is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
         # Request to edit the action and verify that no warning is present
