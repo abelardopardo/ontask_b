@@ -110,9 +110,8 @@ def create_row_preview_context(
     :return: context is modified to include the appropriate items
     """
     # Get the total number of items
-    filter_obj = action.get_filter()
-    if filter_obj:
-        n_items = filter_obj.selected_count
+    if action.filter:
+        n_items = action.filter.selected_count
     else:
         n_items = action.workflow.nrows
 

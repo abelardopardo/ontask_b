@@ -545,7 +545,7 @@ class WorkflowImport(
         #     self.assertEqual(x.name, y.name)
         #     self.assertEqual(x.description_text, y.description_text)
         #     self.assertEqual(x.text_content, y.text_content)
-        #     compare_filters(x.get_filter(), y.get_filter())
+        #     compare_filters(x.filter, y.filter)
         #     self.assertEqual(
         #         x.conditions.count(),
         #         y.conditions.count())

@@ -173,25 +173,16 @@ class ActionBase(NameAndDescription, CreateModifyFields):
             (self.active_from and now < self.active_from)
             or (self.active_to and self.active_to < now))
 
-    def get_filter(self) -> Optional[Filter]:
-        """Get filter condition."""
-        if getattr(self, 'filter', None) is None:
-            return None
-
-        return self.filter
-
     def get_filter_formula(self):
         """Get filter condition."""
-        f_obj = self.get_filter()
-        return f_obj.formula if f_obj else None
+        return self.filter.formula if self.filter else None
 
     def get_rows_selected(self):
         """Get the number of rows in table selected for this action."""
-        action_filter = self.get_filter()
-        if not action_filter:
+        if not self.filter:
             return self.workflow.nrows
 
-        return action_filter.selected_count
+        return self.filter.selected_count
 
     def get_row_all_false_count(self) -> List[int]:
         """Extract the rows for which  all conditions are false.
@@ -212,7 +203,6 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                 return []
 
             # Separate filter from conditions
-            filter_item = self.get_filter()
             cond_list = self.conditions.all()
 
             # Workflow has a data frame and condition list is non empty
@@ -220,7 +210,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
             # Get the list of indexes
             self.rows_all_false = sql.select_ids_all_false(
                 self.workflow.get_data_frame_table_name(),
-                filter_item.formula if filter_item else None,
+                self.filter.formula if self.filter else None,
                 cond_list.values_list('_formula', flat=True),
             )
 
@@ -388,11 +378,10 @@ class ActionDataOut(ActionBase):  # noqa Z214
             self.save(update_fields=['text_content'])
 
         # Rename the variable in the filter
-        filter_obj = self.get_filter()
-        if filter_obj:
-            filter_obj.formula = formula.rename_variable(
-                filter_obj.formula, old_name, new_name)
-            filter_obj.save()
+        if self.filter:
+            self.filter.formula = formula.rename_variable(
+                self.filter.formula, old_name, new_name)
+            self.filter.save()
 
         # Rename the variable in all conditions
         for cond in self.conditions.all():

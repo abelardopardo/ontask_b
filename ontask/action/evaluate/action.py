@@ -176,9 +176,9 @@ def evaluate_action(
 
     if settings.DEBUG:
         # Check that selected_count is equal to rows.rowcount
-        action_filter = action.get_filter()
-        if action_filter and action_filter.selected_count != rows.rowcount:
-            raise ontask.OnTaskException('Inconsistent selected_count field value')
+        if action.filter and action.filter.selected_count != rows.rowcount:
+            raise ontask.OnTaskException(
+                'Inconsistent selected_count field value')
 
     return list_of_renders
 

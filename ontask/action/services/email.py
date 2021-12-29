@@ -45,13 +45,12 @@ def _send_confirmation_message(
     """
     # Creating the context for the confirmation email
     now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-    cfilter = action.get_filter()
     context = {
         'user': user,
         'action': action,
         'num_messages': nmsgs,
         'email_sent_datetime': now,
-        'filter_present': cfilter is not None,
+        'filter_present': action.filter is not None,
         'num_rows': action.workflow.nrows,
         'num_selected': action.get_rows_selected(),
     }
@@ -71,7 +70,7 @@ def _send_confirmation_message(
     context = {
         'num_messages': nmsgs,
         'email_sent_datetime': str(now),
-        'filter_present': cfilter is not None,
+        'filter_present': action.filter is not None,
         'num_rows': action.workflow.nrows,
         'subject': str(ontask_settings.NOTIFICATION_SUBJECT),
         'body': text_content,

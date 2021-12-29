@@ -71,7 +71,7 @@ def compare_actions(a1, a2):
     for c1, c2 in zip(a1.conditions.all(), a2.conditions.all()):
         compare_conditions(c1, c2)
 
-    compare_filters(a1.get_filter(), a2.get_filter())
+    compare_filters(a1.filter, a2.filter)
 
     for t1, t2 in zip(
         a1.column_condition_pair.all(),

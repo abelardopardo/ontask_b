@@ -76,7 +76,6 @@ class ActionEditManager:
         form_filter: Optional[condition_forms.FilterForm] = None,
     ) -> Dict:
         """Get the initial context to render the response."""
-        filter_condition = action.get_filter()
         return {
             # Workflow elements
             'attribute_names': [
@@ -93,10 +92,10 @@ class ActionEditManager:
             'action': action,
             'form': form,
             'form_filter': form_filter,
-            'filter_condition': filter_condition,
+            'filter_condition': action.filter,
             'selected_rows':
-                filter_condition.selected_count
-                if filter_condition else -1,
+                action.filter.selected_count
+                if action.filter else -1,
             'is_email_report':
                 action.action_type == models.Action.EMAIL_REPORT,
             'is_report': (
@@ -135,7 +134,7 @@ class ActionOutEditManager(ActionEditManager):
 
         form_filter = condition_forms.FilterForm(
             request.POST or None,
-            instance=action.get_filter(),
+            instance=action.filter,
             action=action
         )
 
