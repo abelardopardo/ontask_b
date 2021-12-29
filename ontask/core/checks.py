@@ -2,7 +2,7 @@
 from typing import List, Set
 
 from django import db
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.dataops import pandas, sql

@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
 
 from ontask import models

@@ -3,7 +3,7 @@
 """functions to include the visualization code."""
 from django import template
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask.action import evaluate
 from ontask.dataops import pandas

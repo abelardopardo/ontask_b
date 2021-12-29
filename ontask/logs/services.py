@@ -6,7 +6,7 @@ from typing import Dict, Optional
 from django import http
 from django.db.models import F, Q
 from django.shortcuts import reverse
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from import_export import resources
 
 from ontask import models, simplify_datetime_str
@@ -39,7 +39,7 @@ def get_log_item(log_id: int) -> Optional[models.Log]:
     if not log_item:
         # Not much can be done here. Call has no place to report error...
         LOGGER.error(
-            ugettext('Incorrect execution request with log_id %s'),
+            gettext('Incorrect execution request with log_id %s'),
             str(log_id))
 
     return log_item
@@ -89,7 +89,7 @@ def log_table_server_side(
             )
             + ' class="btn btn-sm btn-light js-log-view"'
             + ' data-toggle="tooltip" title="{0}">{1}</button>'.format(
-                ugettext('View log content'),
+                gettext('View log content'),
                 log_item[0],
             ),
             models.Log.LOG_TYPES[log_item[1]],

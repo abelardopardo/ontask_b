@@ -7,7 +7,7 @@ from typing import Any, List, Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 from ontask import create_new_name, models

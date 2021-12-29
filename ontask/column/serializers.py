@@ -3,7 +3,7 @@
 """Serializers to import/export columns and column names."""
 from typing import Dict, Optional
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models

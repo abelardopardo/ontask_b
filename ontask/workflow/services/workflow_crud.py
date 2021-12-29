@@ -7,7 +7,7 @@ from typing import Dict
 from django import http
 from django.db.models.query_utils import Q
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import OnTaskServiceException, create_new_name, models
 from ontask.action.services.clone import do_clone_action

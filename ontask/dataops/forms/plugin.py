@@ -6,7 +6,7 @@ from typing import Dict, List
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from ontask import models
 from ontask.core import DATE_TIME_WIDGET_OPTIONS, ONTASK_UPLOAD_FIELD_PREFIX
@@ -69,7 +69,7 @@ class PluginInfoForm(forms.Form):
         for idx, cname in enumerate(self.plugin_instance.output_column_names):
             self.fields[self.out_field_pattern % idx] = forms.CharField(
                 initial=cname,
-                label=ugettext('Name for result column "{0}"').format(cname),
+                label=gettext('Name for result column "{0}"').format(cname),
                 strip=True,
                 required=False)
 

@@ -8,7 +8,7 @@ from typing import Dict, Mapping, Optional, Tuple
 from django.template.base import Template
 from django.template.context import Context
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.action import forms

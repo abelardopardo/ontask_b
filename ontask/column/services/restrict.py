@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Function to restrict column values."""
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.column.services import errors

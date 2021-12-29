@@ -6,7 +6,7 @@ from typing import Optional
 from django import http
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from ontask import models
 from ontask.connection import services

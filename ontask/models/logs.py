@@ -7,7 +7,7 @@ from typing import Dict
 from django.db import models
 from django.db.models import JSONField
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask.models.common import CHAR_FIELD_MID_SIZE, Owner
 

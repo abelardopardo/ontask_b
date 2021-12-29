@@ -4,7 +4,7 @@
 from typing import Dict
 
 from django.db import connection
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from psycopg2 import sql
 
 from ontask import OnTaskDBIdentifier

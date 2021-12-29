@@ -14,7 +14,7 @@ from django.db.models.expressions import F
 from django.template.loader import render_to_string
 from django.utils.dateparse import parse_datetime
 from django.utils.html import format_html
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 import django_tables2 as tables
 
 from ontask import models, settings as ontask_settings
@@ -394,10 +394,10 @@ def load_plugin(foldername):
             return None, tests
     except AttributeError:
         raise services.OnTasDataopsPluginInstantiationError(
-            message=ugettext('Error while instantiating the plugin class'))
+            message=gettext('Error while instantiating the plugin class'))
     except Exception:
         raise services.OnTasDataopsPluginInstantiationError(
-            message=ugettext('Error while instantiating the plugin class'))
+            message=gettext('Error while instantiating the plugin class'))
 
     return plugin_instance, tests
 

@@ -5,7 +5,7 @@ from typing import Dict
 
 from django import forms
 from django.core import signing
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.core import forms as ontask_forms

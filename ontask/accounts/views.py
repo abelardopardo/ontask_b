@@ -17,7 +17,7 @@ from django.shortcuts import redirect, resolve_url
 from django.urls import reverse_lazy
 from django.utils.functional import lazy
 from django.utils.http import is_safe_url
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters

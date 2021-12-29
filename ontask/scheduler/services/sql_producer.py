@@ -6,7 +6,7 @@ from typing import Optional
 from django import http
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from ontask import models
 from ontask.core import SessionPayload
@@ -38,7 +38,7 @@ class ScheduledOperationSaveSQLUpload(ScheduledOperationSaveBase):
                 'workflow_id': kwargs.get('workflow').id,
                 'operation_type': self.operation_type,
                 'valuerange': [],
-                'page_title': ugettext('Schedule SQL Upload')})
+                'page_title': gettext('Schedule SQL Upload')})
 
         s_item = kwargs.get('schedule_item')
         if s_item:

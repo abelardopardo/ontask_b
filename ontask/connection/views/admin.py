@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.connection import forms, services

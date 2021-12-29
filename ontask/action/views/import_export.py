@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
 from django.shortcuts import redirect, render
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework.renderers import JSONRenderer
 
 from ontask import models

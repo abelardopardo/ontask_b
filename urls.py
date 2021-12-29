@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.urls import path, re_path
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 from django.views.decorators.cache import cache_page
 from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
@@ -23,7 +23,7 @@ from ontask.core import views
 from ontask.dataops import pandas
 from ontask.templatetags.ontask_tags import ontask_version
 
-api_description = ugettext(
+api_description = gettext(
     'The OnTask API offers functionality to manipulate workflows, tables '
     + 'and logs. The interface provides CRUD operations over these '
     + 'objects.')

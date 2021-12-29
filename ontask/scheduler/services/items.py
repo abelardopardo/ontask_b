@@ -8,7 +8,7 @@ from typing import Dict, Optional
 from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
 from django.conf import settings
 from django.forms.models import model_to_dict
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 import pytz
 
 from ontask import models
@@ -74,7 +74,7 @@ def create_timedelta_string(
     if ftime:
         # Has start time
         result = (
-            ugettext('Starting at ')
+            gettext('Starting at ')
             + ftime.strftime('%H:%M:%S %z %Y/%b/%d')
             + ', ' + result)
 

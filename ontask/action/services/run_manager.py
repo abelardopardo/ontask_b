@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 from django import http
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 
 from ontask import models, tasks
 from ontask.core import SessionPayload
@@ -96,7 +96,7 @@ class ActionRunManager:
         """Process the VALID POST request."""
         if payload.get('confirm_items'):
             # Add information to the session object to execute the next pages
-            payload['button_label'] = ugettext('Send')
+            payload['button_label'] = gettext('Send')
             payload['valuerange'] = 2
             payload['step'] = 2
             payload.store_in_session(request.session)

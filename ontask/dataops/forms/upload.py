@@ -20,7 +20,7 @@ import json
 from typing import Dict, Optional
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 from ontask import OnTaskDataFrameNoKey, models, settings

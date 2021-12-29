@@ -10,7 +10,7 @@ from celery.schedules import crontab
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
 from django.urls import reverse_lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import environ
 
 # import ldap

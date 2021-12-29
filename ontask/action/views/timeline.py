@@ -3,7 +3,7 @@
 """View to implement the timeline visualization."""
 
 from django import http
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import models

@@ -5,7 +5,7 @@ from typing import Dict, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django.conf import settings
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 import pandas as pd
 from pyathena import connect
 import smart_open

@@ -3,7 +3,7 @@
 """Serilizers for frames and merge operations."""
 import json
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 from rest_framework import serializers
 

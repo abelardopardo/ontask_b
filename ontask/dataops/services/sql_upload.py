@@ -7,7 +7,7 @@ from typing import Dict, Optional
 from django import http
 from django.conf import settings
 from django.urls.base import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 import ontask

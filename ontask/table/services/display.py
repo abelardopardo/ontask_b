@@ -10,7 +10,7 @@ from django.conf import settings
 from django.shortcuts import render, reverse
 from django.template.loader import render_to_string
 from django.utils.html import escape, urlencode
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from pytz import timezone
 
 from ontask import models

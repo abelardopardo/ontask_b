@@ -5,7 +5,7 @@ from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_tables2 import A
 import django_tables2 as tables
 

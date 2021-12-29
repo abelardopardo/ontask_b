@@ -5,7 +5,7 @@ from typing import Optional
 
 from django import http
 from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response

@@ -7,7 +7,7 @@ from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.template.defaultfilters import filesizeformat
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pytz
 
 from ontask.settings import MAX_UPLOAD_SIZE

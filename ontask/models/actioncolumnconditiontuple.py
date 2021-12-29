@@ -2,7 +2,7 @@
 
 """Models for a tuple Action/Column/Condition."""
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask.models.column import Column
 from ontask.models.condition import Condition

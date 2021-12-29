@@ -4,7 +4,7 @@
 from typing import Any, Dict, Tuple, Union
 
 from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 import pandas as pd
 from psycopg2 import sql
 
@@ -421,7 +421,7 @@ def less(node, eval_type, given_variables):
         if node['type'] in ('integer', 'double', 'datetime'):
             return (not value_is_null(varvalue)) and varvalue < constant
         raise Exception(
-            ugettext(
+            gettext(
                 'Evaluation error: '
                 + 'Type {0} not allowed with operator LESS',
             ).format(node['type']),
@@ -459,7 +459,7 @@ def less_or_equal(node, eval_type, given_variables):
         if node['type'] in ('integer', 'double', 'datetime'):
             return (not value_is_null(varvalue)) and varvalue <= constant
         raise Exception(
-            ugettext(
+            gettext(
                 'Evaluation error: Type {0} not allowed '
                 + 'with operator LESS OR EQUAL',
             ).format(node['type']),
@@ -502,7 +502,7 @@ def greater(
         if node['type'] in ('integer', 'double', 'datetime'):
             return (not value_is_null(varvalue)) and varvalue > constant
         raise Exception(
-            ugettext(
+            gettext(
                 'Evaluation error: Type {0} not allowed '
                 + 'with operator GREATER',
             ).format(node['type']),
@@ -544,7 +544,7 @@ def greater_or_equal(
         if node['type'] in ('integer', 'double', 'datetime'):
             return (not value_is_null(varvalue)) and varvalue >= constant
         raise Exception(
-            ugettext(
+            gettext(
                 'Evaluation error: Type {0} not allowed '
                 + 'with operator GREATER OR EQUAL',
             ).format(node['type']),
@@ -587,7 +587,7 @@ def between(
 
         if node['type'] not in ('integer', 'double', 'datetime'):
             raise Exception(
-                ugettext(
+                gettext(
                     'Evaluation error: Type {0} not allowed '
                     + 'with operator BETWEEN',
                 ).format(node['type']),
@@ -639,7 +639,7 @@ def not_between(
 
         if node['type'] not in ('integer', 'double', 'datetime'):
             raise Exception(
-                ugettext(
+                gettext(
                     'Evaluation error: Type {0} not allowed '
                     + 'with operator BETWEEN',
                 ).format(node['type']),

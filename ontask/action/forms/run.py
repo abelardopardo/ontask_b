@@ -45,7 +45,7 @@ from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.db.models import QuerySet
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import get_incorrect_email, is_correct_email, models
 from ontask.core import ONTASK_SUFFIX_LENGTH, forms as ontask_forms

@@ -4,7 +4,7 @@
 from typing import Dict, List, Optional
 
 from django.conf import settings
-from django.utils.translation import gettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 import numpy as np
 import pandas as pd
 

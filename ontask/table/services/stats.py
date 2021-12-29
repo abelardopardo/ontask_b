@@ -3,7 +3,7 @@
 """Functions to support stats visualisation."""
 from typing import Any, Dict, List, Optional, Tuple
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from pandas import DataFrame
 
 from ontask import models

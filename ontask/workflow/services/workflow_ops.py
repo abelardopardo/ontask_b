@@ -2,7 +2,7 @@
 
 """Functions to manipulate other workflow ops."""
 from django import http
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
 
 from ontask import core, get_incorrect_email, models, tasks

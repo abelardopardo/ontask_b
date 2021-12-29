@@ -6,7 +6,7 @@ from typing import Any, Dict, Optional, Tuple
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 
 from ontask import models
 
@@ -72,7 +72,7 @@ def _get_execution_items(
         user = get_user_model().objects.filter(id=user_id).first()
         if not user:
             raise Exception(
-                ugettext('Unable to find user with id {0}').format(user_id),
+                gettext('Unable to find user with id {0}').format(user_id),
             )
 
     workflow = None
@@ -82,7 +82,7 @@ def _get_execution_items(
             pk=workflow_id).first()
         if not workflow:
             raise Exception(
-                ugettext('Unable to find workflow with id {0}').format(
+                gettext('Unable to find workflow with id {0}').format(
                     workflow_id))
 
     action = None
@@ -93,7 +93,7 @@ def _get_execution_items(
             pk=action_id).first()
         if not action:
             raise Exception(
-                ugettext('Unable to find action with id {0}').format(
+                gettext('Unable to find action with id {0}').format(
                     action_id))
 
     return user, workflow, action
@@ -145,7 +145,7 @@ def execute_operation(
             log_item.save(update_fields=['payload'])
 
         CELERY_LOGGER.error(
-            ugettext('Error executing operation: {0}').format(exc))
+            gettext('Error executing operation: {0}').format(exc))
         return
 
     if log_item:

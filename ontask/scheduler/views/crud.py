@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext as _, ugettext_lazy as _
+from django.utils.translation import gettext as _, gettext_lazy as _
 
 from ontask import models
 from ontask.core import (

@@ -6,7 +6,7 @@ from typing import Dict, List, Mapping, Optional
 from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 import pandas as pd
 import sqlalchemy
 import sqlalchemy.engine

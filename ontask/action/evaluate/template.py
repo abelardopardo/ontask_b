@@ -8,7 +8,7 @@ from typing import Callable, Dict, List, Mapping
 
 from django.template import Context, Template
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 # Variable name to store the action ID in the context used to render a

@@ -5,7 +5,7 @@ from abc import abstractmethod
 from builtins import str
 import json
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from ontask.dataops import pandas
 from ontask.visualizations import VisHandler

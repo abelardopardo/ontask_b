@@ -7,7 +7,7 @@ from io import BytesIO
 from typing import Dict, List, Optional
 
 from django import http
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer

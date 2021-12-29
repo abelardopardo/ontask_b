@@ -7,7 +7,7 @@ from django import http
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX, get_workflow, is_instructor

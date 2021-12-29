@@ -11,7 +11,7 @@ from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.db.models.query_utils import Q
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 

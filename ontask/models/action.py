@@ -12,7 +12,7 @@ from django.core.validators import URLValidator
 from django.db import models, transaction
 from django.db.models import JSONField
 from django.utils import functional, html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pytz
 
 import ontask

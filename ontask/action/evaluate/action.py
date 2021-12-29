@@ -14,7 +14,7 @@ from typing import Dict, List, Mapping, Optional, Tuple, Union
 from django.conf import settings
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 import ontask
 from ontask import models

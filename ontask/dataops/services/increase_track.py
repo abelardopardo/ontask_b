@@ -5,7 +5,7 @@ from typing import Dict, Optional
 
 from django.contrib.auth import get_user_model
 from django.core import signing
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 
 from ontask import models
 from ontask.dataops import sql
@@ -41,22 +41,22 @@ class ExecuteIncreaseTrackCount:
         method = payload.get('method')
         if method != 'GET':
             # Only GET requests are accepted
-            raise Exception(ugettext('Non-GET request received in Track URL'))
+            raise Exception(gettext('Non-GET request received in Track URL'))
 
         get_dict = payload.get('get_dict')
         if get_dict is None:
-            raise Exception(ugettext('No dictionary in Track URL'))
+            raise Exception(gettext('No dictionary in Track URL'))
 
         # Obtain the track_id from the request
         track_id = get_dict.get('v')
         if not track_id:
-            raise Exception(ugettext('No track_id found in request'))
+            raise Exception(gettext('No track_id found in request'))
 
         # If the track_id is not correctly signed, finish.
         try:
             track_id = signing.loads(track_id)
         except signing.BadSignature:
-            raise Exception(ugettext('Bad signature in track_id'))
+            raise Exception(gettext('Bad signature in track_id'))
 
         # The request is legit and the value has been verified. Track_id has
         # now the dictionary with the tracking information
@@ -66,13 +66,13 @@ class ExecuteIncreaseTrackCount:
             email=track_id['sender']).first()
         if not user:
             raise Exception(
-                ugettext('Incorrect user email %s'),
+                gettext('Incorrect user email %s'),
                 track_id['sender'])
 
         action = models.Action.objects.filter(pk=track_id['action']).first()
         if not action:
             raise Exception(
-                ugettext('Incorrect action id %s'),
+                gettext('Incorrect action id %s'),
                 track_id['action'])
 
         # Extract the relevant fields from the track_id
@@ -83,7 +83,7 @@ class ExecuteIncreaseTrackCount:
         column = action.workflow.columns.filter(name=column_dst).first()
         if not column:
             # If the column does not exist, we are done
-            raise Exception(ugettext('Column %s does not exist'), column_dst)
+            raise Exception(gettext('Column %s does not exist'), column_dst)
 
         log_payload = {
             'to': msg_to,

@@ -7,7 +7,7 @@ from typing import List, Optional
 
 from django import conf
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
 import pytz

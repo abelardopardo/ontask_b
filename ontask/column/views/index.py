@@ -7,7 +7,7 @@ from django import http
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 

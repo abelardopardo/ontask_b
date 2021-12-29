@@ -3,7 +3,7 @@
 """Serialize the scheduled action."""
 from typing import Dict
 
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
@@ -93,7 +93,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
                 validated_data)
         except Exception as exc:
             raise APIException(
-                ugettext('Scheduled action could not be created: {0}').format(
+                gettext('Scheduled action could not be created: {0}').format(
                     str(exc)))
 
         return scheduled_obj
@@ -108,7 +108,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
                 instance)
         except Exception as exc:
             raise APIException(
-                ugettext('Unable to update scheduled action: {0}').format(
+                gettext('Unable to update scheduled action: {0}').format(
                     str(exc)))
 
         return scheduled_obj

@@ -7,7 +7,7 @@ from django import http
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from ontask import models
 from ontask.core import SessionPayload
@@ -49,7 +49,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
                 'valuerange': list(range(2)),
                 'prev_url': kwargs.get('prev_url'),
                 'post_url': reverse('scheduler:finish_scheduling'),
-                'page_title': ugettext('Schedule Action Execution'),
+                'page_title': gettext('Schedule Action Execution'),
             })
         if s_item:
             payload.update(s_item.payload)
@@ -66,7 +66,7 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
         """Process the valid form."""
         if op_payload.get('confirm_items'):
             # Update information to carry to the filtering stage
-            op_payload['button_label'] = ugettext('Schedule')
+            op_payload['button_label'] = gettext('Schedule')
             op_payload['valuerange'] = 2
             op_payload['step'] = 2
             op_payload.store_in_session(request.session)

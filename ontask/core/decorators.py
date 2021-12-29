@@ -7,7 +7,7 @@ from typing import Callable
 from django import http
 from django.contrib import messages
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.core.permissions import (

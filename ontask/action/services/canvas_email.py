@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 import pytz
 import requests
 from rest_framework import status
@@ -61,7 +61,7 @@ def _refresh_and_retry_send(
     # Request rejected due to token expiration. Refresh the
     # token
     user_token = None
-    result_msg = ugettext('OAuth token refreshed')
+    result_msg = gettext('OAuth token refreshed')
     response_status = None
     try:
         user_token = services.refresh_token(user_token, oauth_info)
@@ -159,7 +159,7 @@ def _send_single_canvas_message(
     :param oauth_info: Authentication info
     :return: response message, response status
     """
-    result_msg = ugettext('Message successfuly sent')
+    result_msg = gettext('Message successfuly sent')
 
     # Send the email through the API call
     # First attempt
@@ -180,7 +180,7 @@ def _send_single_canvas_message(
             canvas_email_payload,
         )
     elif response_status != status.HTTP_201_CREATED:
-        result_msg = ugettext(
+        result_msg = gettext(
             'Unable to deliver message (code {0})').format(
             response_status)
 
@@ -217,7 +217,7 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
         if payload.get('confirm_items'):
             # Create a dictionary in the session to carry over all the
             # information to execute the next pages
-            payload['button_label'] = ugettext('Send')
+            payload['button_label'] = gettext('Send')
             payload['valuerange'] = 2
             payload['step'] = 2
             continue_url = 'action:item_filter'

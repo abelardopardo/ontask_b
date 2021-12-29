@@ -4,7 +4,7 @@
 from typing import Dict
 
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedCharField
 
 from ontask.models.common import CHAR_FIELD_LONG_SIZE
