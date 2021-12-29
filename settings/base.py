@@ -475,7 +475,7 @@ AUTHENTICATION_BACKENDS = [
     'ontask.django_auth_lti.backends.LTIAuthBackend',
     'django.contrib.auth.backends.RemoteUserBackend',
     # 'django_auth_ldap.backend.LDAPBackend',
-    'django.contrib.auth.backends.ModelBackend']
+    'ontask.accounts.backends.CaseInsensitiveUsernameFieldModelBackend']
 AUTH_USER_MODEL = 'ontask.User'
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGIN_URL = reverse_lazy('accounts:login')

@@ -6,7 +6,7 @@ Models to manage users.
 This code has been derived from the django_authtools library and modified due
 to its lack of compatibility with Django 3, it has been partially rewritten.
 
-The license of the original code can be found in file authtools/README.md
+The license of the original code can be found in file accounts/README.md
 
 """
 from django.contrib.auth import get_user_model
@@ -101,7 +101,7 @@ class User(AbstractNamedUser):
 
 
 class OnTaskUser(models.Model):
-    """Extend the existing authtools.User with additional fields."""
+    """Extend the platform User with additional fields."""
 
     # OneToOne relationship with the authentication model
     user = models.OneToOneField(

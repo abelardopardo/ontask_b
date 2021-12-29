@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
-from ontask.authtools.forms import UserCreationForm, AdminUserChangeForm
+from ontask.accounts.forms import UserCreationForm, AdminUserChangeForm
 
 USERNAME_FIELD = get_user_model().USERNAME_FIELD
 

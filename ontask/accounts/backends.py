@@ -35,8 +35,3 @@ class CaseInsensitiveUsernameFieldModelBackend(
         CaseInsensitiveUsernameFieldBackendMixin,
         ModelBackend):
     pass
-
-
-# alias for the old name for backwards-compatibility
-CaseInsensitiveEmailBackendMixin = CaseInsensitiveUsernameFieldBackendMixin
-CaseInsensitiveEmailModelBackend = CaseInsensitiveUsernameFieldModelBackend

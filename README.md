@@ -246,8 +246,6 @@ licenses:
 
 - [django-admin-bootstrapped](https://github.com/django-admin-bootstrapped/django-admin-bootstrapped) Apache 2.0
 
-- [django-authtools](https://github.com/fusionbox/django-authtools) BSD
-
 - [django-braces](https://pypi.python.org/pypi/django-braces/1.12.0). BSD 
   License
 
