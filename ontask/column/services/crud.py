@@ -31,7 +31,7 @@ _ontask_type_to_pd_type = {
     'integer': 'int64',
     'double':  'float64',
     'boolean': 'bool',
-    'datetime': 'datetime64[ns]'}
+    'datetime': 'datetime64[ns, {0}]'.format(settings.TIME_ZONE)}
 
 
 def _partition(list_in: List[Any], num: int) -> List[List[Any]]:
@@ -194,7 +194,7 @@ def add_random_column(
         dtype=_ontask_type_to_pd_type[column.data_type],
         index=data_frame.index)
 
-    if column.data_type == 'datetime':
+    if column.data_type == 'datetime' and data_frame[column.name].dt.tz is None:
         data_frame[column.name] = data_frame[column.name].dt.tz_localize(
             settings.TIME_ZONE)
 
