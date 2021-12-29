@@ -23,7 +23,6 @@ class DataopsViewSQLConnections(DataopsSQLConnectionsBasic):
     """Test the SQL connection views."""
 
     def test(self):
-        """Test the view to filter items."""
         resp = self.get_response('connection:sqlconns_index')
         self.assertTrue(status.is_success(resp.status_code))
 
@@ -34,7 +33,6 @@ class DataopsViewSQLConnectionsAdmin(DataopsSQLConnectionsBasic):
     user_email = 'superuser@bogus.com'
 
     def test(self):
-        """Test the view to filter items."""
         resp = self.get_response('connection:sqlconns_admin_index')
         self.assertTrue(status.is_success(resp.status_code))
 

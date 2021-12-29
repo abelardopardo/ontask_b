@@ -19,7 +19,6 @@ class ColumnCreate(ColumnCrudBasic):
     """Test column views."""
 
     def test(self):
-        """Add a column."""
         column_name = 'cname'
         column_description = 'column description'
         column_categories = '   a,b,c,d   '
@@ -51,8 +50,7 @@ class ColumnCreate(ColumnCrudBasic):
 class ColumnCrudQuestionAdd(ColumnCrudBasic):
     """Test Question Add."""
 
-    def test_question_add(self):
-        """Test adding a question to a survey."""
+    def test(self):
         # Get the survey action
         survey = self.workflow.actions.get(action_type=models.Action.SURVEY)
 
@@ -82,7 +80,6 @@ class ColumnCrudQuestionRename(ColumnCrudBasic):
     """Test Question Rename."""
 
     def test(self):
-        """Test renaming a question in a survey."""
         # Get the survey action and the first of the columns
         survey = self.workflow.actions.get(action_type=models.Action.SURVEY)
         column = survey.column_condition_pair.first().column
@@ -116,7 +113,6 @@ class ColumnCrudAddFormulaColumn(ColumnCrudBasic):
     """Test adding a new column with a formula."""
 
     def test(self):
-        """Test adding a formula column."""
         # GET the form
         resp = self.get_response('column:formula_column_add', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
@@ -144,7 +140,6 @@ class ColumnCrudAddRandomColumn(ColumnCrudBasic):
     """Test adding a random column."""
 
     def test(self):
-        """Test adding a random column."""
         # GET the form
         resp = self.get_response('column:random_column_add', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
@@ -170,7 +165,6 @@ class ColumnCrudClone(ColumnCrudBasic):
     """Test cloning a column."""
 
     def test(self):
-        """Test adding a random column."""
         column = self.workflow.columns.get(name='Q01')
         resp = self.get_response(
             'column:column_clone',

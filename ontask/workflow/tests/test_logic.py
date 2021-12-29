@@ -24,7 +24,6 @@ class WorkflowImportExport(
     """Test import export functionality."""
 
     def test(self):
-        """Test the export functionality."""
         # Get the only workflow
         workflow = models.Workflow.objects.get(name='wflow1')
 

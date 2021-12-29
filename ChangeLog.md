@@ -1,5 +1,14 @@
 # 9.0 (2022-)
 
+## Fixed
+
+- Bug restricting the filter edit functionality through click to edit.
+
+- Error in secret_key when executing tests in a different rig
+
+- Prevent execution of django-siteprefs in migrations and fixture creation/uploading
+
+
 ## Changed
 
 - User model is now inside the platform (no longer in authtools library). Migration requires executing the following code directly on the database before `manage.py migrate`
@@ -9,6 +18,18 @@
        INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0003_auto_20160128_0912', CURRENT_TIMESTAMP);
        DELETE FROM django_migrations WHERE app = 'authtools';
        UPDATE django_content_type SET app_label = 'ontask' WHERE app_label = 'authtools' AND model = 'user';
+
+- Full upgrade to Django 3.0 LTS
+
+- Django-authtools is no longer required. Code merged with app accounts
+
+- Removed migrations no longer needed
+
+- 
+
+## Added
+
+- New requirements file to separate essential libraries from dependencies.
 
 # 8.0 (2021-12-21)
 

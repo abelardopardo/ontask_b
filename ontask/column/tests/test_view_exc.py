@@ -16,7 +16,6 @@ class ColumnCreate(tests.EmptyWorkflowFixture, tests.OnTaskTestCase):
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Add a column."""
         # Get the visualization for the whole table
 
         resp = self.get_response('column:create', is_ajax=True)
@@ -39,8 +38,6 @@ class ColumnCrudCreatePostError(
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Try to create a column when the DB returns an error."""
-
         # Inject a table rename to make the next request fail
         connection.connection.cursor().execute(
             sql.SQL('ALTER TABLE {0} RENAME TO {1}').format(

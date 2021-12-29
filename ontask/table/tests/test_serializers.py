@@ -21,7 +21,6 @@ class TableTestSerializersView(TableTestSerializersBasic):
 
     # Test the view serialization.
     def test(self):
-        # Try to create a view with a name that already exists.
         try:
             views = serializers.ViewSerializer(
                 data=[{

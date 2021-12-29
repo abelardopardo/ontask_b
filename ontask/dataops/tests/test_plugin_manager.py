@@ -30,7 +30,6 @@ class DataopsTransform(tests.PluginExecutionFixture, tests.OnTaskTestCase):
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Test the view to filter items."""
         # Make sure the plugins are reloaded
         models.Plugin.objects.all().delete()
         resp = self.get_response('dataops:transform')

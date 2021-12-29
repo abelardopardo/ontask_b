@@ -17,7 +17,6 @@ class ActionViewCRUDCreate(ActionViewCRUDBasic):
     """Test to create a new action."""
 
     def test(self):
-        """Create a new action."""
         new_name = 'new action name'
         description = 'action description'
 
@@ -44,7 +43,6 @@ class ActionViewCRUDUpdate(ActionViewCRUDBasic):
     """Test the view to update a view."""
 
     def test(self):
-        """Update the action."""
         action = self.workflow.actions.get(name='Midterm comments')
         old_name = action.name
         old_description = action.description_text
@@ -73,7 +71,6 @@ class ActionViewCRUDDelete(ActionViewCRUDBasic):
     """Test to delete an action."""
 
     def test(self):
-        """Delete the action."""
         name = 'Midterm comments'
         action = self.workflow.actions.get(name=name)
         actions_before = self.workflow.actions.count()
@@ -97,7 +94,6 @@ class ActionViewCRUDClone(ActionViewCRUDBasic):
     """Test the action clone view."""
 
     def test(self):
-        """Clone the action."""
         name = 'Suggestions about the forum'
         action = self.workflow.actions.get(name=name)
         actions_before = self.workflow.actions.count()

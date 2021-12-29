@@ -48,7 +48,6 @@ class ActionViewRunEmailActionNoFilter(ActionViewRunBasic):
     """Test the view to run email action with no filter."""
 
     def test(self):
-        """Run sequence of request to send email without filtering users."""
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
 
@@ -87,7 +86,6 @@ class ActionViewRunEmailActionOverrideFrom(ActionViewRunBasic):
     """Test the view to run email action and override FROM."""
 
     def test(self):
-        """Run sequence of request to send email overwriting the from."""
         # Modify the database with a new value
         old_override_from = ontask_settings.OVERRIDE_FROM_ADDRESS
         override_from = 'override@bogus.com'
@@ -134,7 +132,6 @@ class ActionViewRunEmailWithFilter(ActionViewRunBasic):
     """Test the view to run email action with an item filter."""
 
     def test(self):
-        """Run sequence of request to send email filtering users."""
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
         exclude_values = ['pzaz8370@bogus.com', 'tdrv2640@bogus.com']
@@ -199,7 +196,6 @@ class ActionViewRunEmailWithItemFilter(ActionViewRunBasic):
     """Test the view to run email action with an item filter."""
 
     def test(self):
-        """Test the view to filter items."""
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
         payload = {
@@ -244,7 +240,6 @@ class ActionViewRunEmailReportAction(ActionViewRunBasic):
     #         and 'user04@bogus.com' in mail.outbox[0].bcc)
 
     def test(self):
-        """Run sequence of request to send email list ."""
         action = self.workflow.actions.get(name='Send Email with report')
 
         # Step 1 invoke the form
@@ -281,7 +276,6 @@ class ActionViewRunJSONActionNoFilter(ActionViewRunBasic):
     """Test the view to run a JSON action with no filter."""
 
     def test(self):
-        """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
         action = self.workflow.actions.get(name='Send JSON to remote server')
         column = action.workflow.columns.get(name='email')
@@ -320,7 +314,6 @@ class ActionViewRunJSONActionWithFilter(ActionViewRunBasic):
     """Test the view to run a JSON action filtering elements."""
 
     def test(self):
-        """Test JSON action without using the filter execution."""
         OnTaskSharedState.json_outbox = None
         action = self.workflow.actions.get(name='Send JSON to remote server')
         column = action.workflow.columns.get(name='email')
@@ -383,7 +376,6 @@ class ActionViewRunJSONReportAction(ActionViewRunBasic):
     """Test the view to run a JSON report action."""
 
     def test(self):
-        """Test JSON action using the filter execution."""
         OnTaskSharedState.json_outbox = None
         action = self.workflow.actions.get(name='Send JSON report')
 
@@ -420,7 +412,6 @@ class ActionViewRunCanvasEmailAction(ActionViewRunBasic):
     """Test the view to run a Canvas email action."""
 
     def test(self):
-        """Test Canvas Email action execution."""
         action = self.workflow.actions.get(name='Initial motivation')
         column = action.workflow.columns.get(name='SID')
         resp = self.get_response('action:run', url_params={'pk': action.id})
@@ -450,7 +441,6 @@ class ActionViewRunCanvasEmailDone(ActionViewRunBasic):
     """Test the view to run a Canvas email action DONE."""
 
     def test(self):
-        """Test last step of sending canvas emails."""
         user = get_user_model().objects.get(email=self.user_email)
         utoken = models.OAuthUserToken(
             user=user,
@@ -487,7 +477,6 @@ class ActionServe(tests.SimpleActionFixture, tests.OnTaskTestCase):
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Test the serve_action view."""
         action = self.workflow.actions.get(name='simple action')
         action.serve_enabled = True
         action.save(update_fields=['serve_enabled'])
@@ -509,7 +498,6 @@ class ActionServeSurvey(
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Test the serve_action view."""
         action = self.workflow.actions.get(name='Check registration')
         action.serve_enabled = True
         action.save(update_fields=['serve_enabled'])

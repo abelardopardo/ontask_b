@@ -206,7 +206,6 @@ class SchedulerTimesInForms(SchedulerFormsBasic):
     """Test schedule creation through forms."""
 
     def test(self):
-        """Test the date_time when scheduling actions"""
         # Index of all scheduled actions
         resp = self.get_response('scheduler:index')
         self.assertTrue(status.is_success(resp.status_code))

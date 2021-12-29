@@ -260,7 +260,7 @@ class FormulaEvaluation(tests.OnTaskTestCase):
 
 class FormulaTestEvaluation(FormulaEvaluation):
 
-    def test_eval_node(self):
+    def test(self):
         #
         # EQUAL
         #
@@ -517,7 +517,6 @@ class FormulaTestEvaluation(FormulaEvaluation):
 class FormulaTestSQLEvaluation(FormulaEvaluation):
 
     def test(self):
-
         # Create the dataframe with the variables
         df = pd.DataFrame(
             [(1, 2.0, True, 'xxx', datetime.datetime(2018, 1, 1, 0, 0, 0)),

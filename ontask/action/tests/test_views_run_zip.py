@@ -19,7 +19,6 @@ class ActionViewRunZIP(ActionViewZIPBasic):
     """Test the view run a ZIP action."""
 
     def test(self):
-        """Run the zip action."""
         # Get the object first
         action = self.workflow.actions.get(name='Suggestions about the forum')
         column = action.workflow.columns.get(name='SID')
@@ -47,7 +46,6 @@ class ActionViewRunZIPExport(ActionViewZIPBasic):
     """Test the view run a ZIP action."""
 
     def test(self):
-        """Test the ZIP export view."""
         action = self.workflow.actions.get(name='Suggestions about the forum')
         column = action.workflow.columns.get(name='SID')
         column_fn = action.workflow.columns.get(name='email')

@@ -13,8 +13,7 @@ class ActionViewTimeline(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    def test_view_timeline(self):
-        """Run sequence of request to the timeline view."""
+    def test(self):
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
 

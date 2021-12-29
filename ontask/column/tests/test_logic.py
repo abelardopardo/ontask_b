@@ -25,7 +25,6 @@ class ColumnAddRandomNumberColumnForm(ColumnAddRandomColumnFormBasic):
     """Test the creation of random columns."""
 
     def test(self):
-        """Create a random number column with no values"""
         # Get the workflow first
         self.workflow = models.Workflow.objects.all().first()
 
@@ -146,8 +145,7 @@ class ColumnAddRandomNumberColumnForm(ColumnAddRandomColumnFormBasic):
 class ColumnAddRandomStringColumnForm(ColumnAddRandomColumnFormBasic):
     """Test the creation of random columns."""
 
-    def test_create_random_column_string_form(self):
-        """Create a random string column"""
+    def test(self):
         # Get the workflow first
         self.workflow = models.Workflow.objects.all().first()
 
@@ -205,7 +203,6 @@ class ColumnAddRandomBooleanColumnForm(ColumnAddRandomColumnFormBasic):
     """Test the creation of random boolean column."""
 
     def test(self):
-        """Create a random string column"""
         # Get the workflow first
         self.workflow = models.Workflow.objects.all().first()
 
@@ -288,7 +285,6 @@ class ColumnAddRandomDatetimeColumnForm(ColumnAddRandomColumnFormBasic):
     """Test the creation of random datetime column."""
 
     def test(self):
-        """Create a random number column with no values"""
         # Get the workflow first
         self.workflow = models.Workflow.objects.all().first()
 

@@ -22,7 +22,6 @@ class DataopsViewsRowBasic(
 class DataopsViewsRowCreate(DataopsViewsRowBasic):
 
     def test(self):
-        """Test the view to filter items."""
         nrows = self.workflow.nrows
 
         # Row create (GET)
@@ -81,7 +80,6 @@ class DataopsViewsRowCreate(DataopsViewsRowBasic):
 class DataopsViewsRowEdit(DataopsViewsRowBasic):
 
     def test(self):
-        """Test the view to filter items."""
         # Row edit (GET)
         resp = self.get_response(
             'dataops:rowupdate',

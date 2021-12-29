@@ -265,7 +265,6 @@ class ConditionDetectAllFalseRows(ConditionTestBasic):
                   "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
 
     def test(self):
-        """Test action rename."""
         # Login
         self.login('instructor01@bogus.com')
 

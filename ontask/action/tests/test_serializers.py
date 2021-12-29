@@ -83,8 +83,6 @@ class ActionTestSerializers(
         "shuffle": False}
 
     def test(self):
-        """Test the self-contained action serializer."""
-        # Try to create a view with a name that already exists.
         action_data = ActionSelfcontainedSerializer(
             data=self.action_obj,
             many=False,

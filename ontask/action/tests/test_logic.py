@@ -29,8 +29,7 @@ class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
         "OiJFbWFpbFJlYWRfMSJ9:1hCeQr:5LuQISOvahDaiYuOYUufdfYRT_o"
     ]
 
-    def test_tracking(self):
-        """Test that tracking hits are properly stored."""
+    def test(self):
         # Repeat the checks two times to test if they are accumulating
         for idx in range(1, 3):
             # Iterate over the tracking items
@@ -56,7 +55,6 @@ class ActionImport(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
     """Test action import."""
 
     def test(self):
-        """Test the do_import_action functionality."""
         user = get_user_model().objects.get(email='instructor01@bogus.com')
         wflow = models.Workflow.objects.get(name=self.wflow_name)
 
@@ -80,8 +78,7 @@ class EmailActionDetectIncorrectEmail(
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    def test_send_with_incorrect_email(self):
-        """Test the do_import_action functionality."""
+    def test(self):
         user = get_user_model().objects.get(email='instructor01@bogus.com')
         wflow = models.Workflow.objects.get(name=self.wflow_name)
         email_column = wflow.columns.get(name='email')

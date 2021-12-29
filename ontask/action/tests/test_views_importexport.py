@@ -25,7 +25,6 @@ class ActionViewExport(ActionViewExportBasic):
     """Test the action export view."""
 
     def test(self):
-        """Test the export views."""
         action = self.workflow.actions.get(name='Detecting age')
 
         resp = self.get_response(
@@ -56,7 +55,6 @@ class ActionViewImport(ActionViewExportBasic):
     """Test the view to import a workflow."""
 
     def test(self):
-        """Test the import ."""
         # Get request
         resp = self.get_response(
             'action:import')

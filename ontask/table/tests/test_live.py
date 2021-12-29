@@ -17,7 +17,6 @@ class TableDerivedColumns(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
     """Tests to check how the derived columns are created."""
 
     def test(self):
-        """Test operations to create derived columns."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -380,7 +379,6 @@ class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
     """Test Table views."""
     
     def test(self):
-        """Test operations with all derived columns."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -538,7 +536,6 @@ class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
 class TableInsertRow(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
 
     def test(self):
-        """Test operations  with derived columns."""
         # Login
         self.login('instructor01@bogus.com')
 
