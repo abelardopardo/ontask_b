@@ -55,7 +55,7 @@ class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
 class ActionImport(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
     """Test action import."""
 
-    def test_do_import(self):
+    def test(self):
         """Test the do_import_action functionality."""
         user = get_user_model().objects.get(email='instructor01@bogus.com')
         wflow = models.Workflow.objects.get(name=self.wflow_name)
