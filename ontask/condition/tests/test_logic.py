@@ -16,7 +16,6 @@ class ColumnTestSetFilterRowsSelected(
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Create a random number column with no values"""
         # Get the workflow
         self.workflow = models.Workflow.objects.all()[0]
 

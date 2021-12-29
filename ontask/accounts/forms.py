@@ -42,7 +42,8 @@ class LoginForm(AuthenticationForm):
         self.helper.layout = Layout(
             Field('username', placeholder=_('Enter Email'), autofocus=''),
             Field('password', placeholder=_('Enter Password')),
-            Submit('sign_in', _('Log in'),
+            Submit(
+                'sign_in', _('Log in'),
                 css_class='btn btn-lg btn-block spin'),
             # HTML('<a href="{}">Forgot Password?</a>'.format(
             #    reverse('accounts:password-reset'))),
@@ -57,11 +58,14 @@ class PasswordChangeForm(authforms.PasswordChangeForm):
         self.helper = FormHelper()
 
         self.helper.layout = Layout(
-            Field('old_password', placeholder='Enter old password',
+            Field(
+                'old_password',
+                placeholder='Enter old password',
                 autofocus=''),
             Field('new_password1', placeholder='Enter new password'),
             Field('new_password2', placeholder='Enter new password (again)'),
-            Submit('pass_change',
+            Submit(
+                'pass_change',
                 'Change Password',
                 css_class='btn-outline-primary'),
         )
@@ -73,7 +77,9 @@ class SetPasswordForm(authforms.SetPasswordForm):
         self.helper = FormHelper()
 
         self.helper.layout = Layout(
-            Field('new_password1', placeholder='Enter new password',
+            Field(
+                'new_password1',
+                placeholder='Enter new password',
                 autofocus=''),
             Field('new_password2', placeholder='Enter new password (again)'),
             Submit(
@@ -86,6 +92,7 @@ class BetterReadOnlyPasswordHashWidget(ReadOnlyPasswordHashWidget):
     """
     A ReadOnlyPasswordHashWidget that has a less intimidating output.
     """
+
     def render(self, name, value, attrs=None, renderer=None):
         final_attrs = flatatt(self.build_attrs(attrs))
 
@@ -100,8 +107,10 @@ class BetterReadOnlyPasswordHashWidget(ReadOnlyPasswordHashWidget):
             else:
                 summary = ugettext('*************')
 
-        return format_html('<div{attrs}><strong>{summary}</strong></div>',
-                           attrs=final_attrs, summary=summary)
+        return format_html(
+            '<div{attrs}><strong>{summary}</strong></div>',
+            attrs=final_attrs,
+            summary=summary)
 
 
 class UserCreationForm(forms.ModelForm):
@@ -207,5 +216,3 @@ class AdminUserChangeForm(UserChangeForm):
         if not self.fields['password'].help_text:
             self.fields['password'].help_text = \
                 DjangoUserChangeForm.base_fields['password'].help_text
-
-
