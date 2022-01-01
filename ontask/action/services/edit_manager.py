@@ -62,7 +62,6 @@ class ActionEditManager:
     ):
         """Get the context dictionary to render the GET request.
 
-        :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
         :return: Nothing.

@@ -13,11 +13,11 @@ from django.views import generic
 from ontask import create_new_name, models
 from ontask.action import forms, services
 from ontask.core import (
-    SessionPayload, UserIsInstructor, ajax_required, RequestWorkflowView,
-    JSONFormResponseMixin, SingleActionMixin)
+    SessionPayload, UserIsInstructor, ajax_required, JSONFormResponseMixin,
+    WorkflowView, ActionView, SingleActionMixin)
 
 
-class ActionIndexView(UserIsInstructor, RequestWorkflowView, generic.ListView):
+class ActionIndexView(UserIsInstructor, WorkflowView, generic.ListView):
     """View to list actions in a workflow."""
 
     http_method_names = ['get']
@@ -30,9 +30,7 @@ class ActionIndexView(UserIsInstructor, RequestWorkflowView, generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'action_types': models.Action.AVAILABLE_ACTION_TYPES,
-            'workflow': self.workflow})
+        context.update({'action_types': models.Action.AVAILABLE_ACTION_TYPES})
         return context
 
     def get(self, request, *args, **kwargs):
@@ -44,7 +42,7 @@ class ActionIndexView(UserIsInstructor, RequestWorkflowView, generic.ListView):
 class ActionCreateView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    RequestWorkflowView,
+    WorkflowView,
     generic.CreateView
 ):
     """Process get/post requests to create an action."""
@@ -98,6 +96,7 @@ class ActionUpdateView(
     UserIsInstructor,
     JSONFormResponseMixin,
     SingleActionMixin,
+    ActionView,
     generic.UpdateView
 ):
     """Process the Action Update view."""
@@ -126,6 +125,7 @@ class ActionDeleteView(
     UserIsInstructor,
     JSONFormResponseMixin,
     SingleActionMixin,
+    ActionView,
     generic.DeleteView
 ):
     """View to delete an action."""
@@ -140,22 +140,19 @@ class ActionDeleteView(
         return http.JsonResponse({'html_redirect': reverse('action:index')})
 
 
-class ActionEditView(UserIsInstructor, SingleActionMixin, generic.UpdateView):
+class ActionEditView(UserIsInstructor, ActionView):
     """View to edit an action."""
 
     http_method_names = ['get', 'post']
     pf_related: Optional[Union[str, List]] = ['actions', 'columns']
-    action = None
 
     def get(self, request, *args, **kwargs):
-        self.action = self.get_object()
         return services.ACTION_PROCESS_FACTORY.process_edit_request(
             self.request,
             self.action.workflow,
             self.action)
 
     def post(self, request, *args, **kwargs):
-        self.action = self.get_object()
         return services.ACTION_PROCESS_FACTORY.process_edit_request(
             self.request,
             self.action.workflow,
@@ -166,8 +163,8 @@ class ActionEditView(UserIsInstructor, SingleActionMixin, generic.UpdateView):
 class ActionCloneView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleActionMixin,
-    generic.DetailView
+    ActionView,
+    generic.TemplateView
 ):
     """Process the Action Update view."""
 
@@ -185,5 +182,4 @@ class ActionCloneView(
             new_name=create_new_name(self.action.name, self.workflow.actions))
 
         messages.success(request, _('Action successfully cloned.'))
-
         return http.JsonResponse({'html_redirect': ''})

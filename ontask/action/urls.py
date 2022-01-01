@@ -52,102 +52,108 @@ urlpatterns = [
     # Action export the file
     re_path(
         r'(?P<pklist>\d+(,\d+)*)/export/',
-        views.export,
+        views.ActionExportView.as_view(),
         name='export'),
 
     # Action import
-    path('import/', views.action_import, name='import'),
+    path('import/', views.ActionImportView.as_view(), name='import'),
 
     # Run action
-    path('<int:pk>/run/', views.run_action, name='run'),
+    path('<int:pk>/run/', views.ActionRunView.as_view(), name='run'),
 
     # Run ZIP action
-    path('<int:pk>/zip/', views.zip_action, name='zip_action'),
+    path('<int:pk>/zip/', views.ActionRunZipView.as_view(), name='zip_action'),
 
     # Personalised text and JSON action steps
-    path('item_filter/', views.run_action_item_filter, name='item_filter'),
+    path(
+        'item_filter/',
+        views.ActionRunActionItemFilterView.as_view(),
+        name='item_filter'),
 
     # Handling attachments in EMAIL REPORT
     path(
-        '<int:pk>/<int:action_id>/add_attachment/',
-        views.add_attachment,
+        '<int:pk>/<int:view_id>/add_attachment/',
+        views.ActionAddRemoveAttachmentView.as_view(is_add_operation=True),
         name='add_attachment'),
     path(
-        '<int:pk>/<int:action_id>/remove_attachment/',
-        views.remove_attachment,
+        '<int:pk>/<int:view_id>/remove_attachment/',
+        views.ActionAddRemoveAttachmentView.as_view(is_add_operation=False),
         name='remove_attachment'),
 
     # URL to use when action finishes run
-    path('run_done/', views.run_done, name='run_done'),
-    path('zip_export/', views.action_zip_export, name='zip_export'),
+    path('run_done/', views.ActionRunDoneView.as_view(), name='run_done'),
+    path(
+        'zip_export/',
+        views.ActionZipExportView.as_view(),
+        name='zip_export'),
 
     # ACTION IN EDIT PAGE
     # Manage columns for action in
     path(
         '<int:pk>/<int:cpk>/<int:key>/select_column_action/',
-        views.select_column_action,
+        views.ActionSelectColumnSurveyView.as_view(),
         name='select_key_column_action'),
     path(
         '<int:pk>/select_column_action/',
-        views.select_column_action,
+        views.ActionSelectColumnSurveyView.as_view(),
         name='unselect_key_column_action'),
 
     # Select column for action in
     path(
         '<int:pk>/<int:cpk>/select_column_action/',
-        views.select_column_action,
+        views.ActionSelectColumnSurveyView.as_view(),
         name='select_column_action'),
 
     # Unselect column for action in
     path(
         '<int:pk>/<int:cpk>/unselect_column_action/',
-        views.unselect_column_action,
+        views.ActionUnselectColumnSurveyView.as_view(),
         name='unselect_column_action'),
 
     # Toggle shuffle action-in
     path(
         '<int:pk>/shuffle_questions/',
-        views.shuffle_questions,
+        views.ActionShuffleQuestionsView.as_view(),
         name='shuffle_questions'),
 
     # Toggle question changes
     path(
         '<int:pk>/toggle_question_change/',
-        views.toggle_question_change,
+        views.ActionToggleQuestionChangeView.as_view(),
         name='toggle_question_change'),
 
     # Select condition for a column/question
     path(
-        '<int:pk>/<int:condpk>/select_condition/',
-        views.select_condition_for_question,
+        '<int:pk>/<int:condition_pk>/select_condition/',
+        views.ActionSelectConditionQuestionView.as_view(),
         name='edit_in_select_condition'),
     path(
         '<int:pk>/select_condition/',
-        views.select_condition_for_question,
+        views.ActionSelectConditionQuestionView.as_view(),
         name='edit_in_select_condition'),
 
     # Rubric URLs
     path(
-        '<int:pk>/<int:cid>/<int:loa_pos>/rubriccell_edit',
-        views.edit_rubric_cell,
-        name='rubriccell_edit'),
+        '<int:pk>/<int:cid>/<int:loa_pos>/rubric_cell_edit',
+        views.ActionEditRubricCellView.as_view(),
+        name='rubric_cell_edit'),
     path(
         '<int:pk>/rubric_loas_edit',
-        views.edit_rubric_loas,
+        views.ActionEditRubricLOAView.as_view(),
         name='rubric_loas_edit'),
 
     # RUN SURVEY
     # Server side update of the run survey page for action in
     path(
         '<int:pk>/show_survey_table_ss/',
-        views.show_survey_table_ss,
+        views.ActionShowSurveyTableSSView.as_view(),
         name='show_survey_table_ss'),
 
     # Run action in a row. Can be executed by the instructor or the
     # learner!!
     path(
         '<int:pk>/run_survey_row/',
-        views.run_survey_row,
+        views.ActionRunSurveyRowView.as_view(),
         name='run_survey_row'),
 
     # Say thanks
@@ -156,24 +162,33 @@ urlpatterns = [
     # Preview action out
     path(
         '<int:pk>/<int:idx>/preview/',
-        views.preview_response,
+        views.ActionPreviewView.as_view(),
         name='preview'),
     path(
         '<int:pk>/<int:idx>/preview_next_all_false/',
-        views.preview_next_all_false,
+        views.ActionPreviewNextAllFalseView.as_view(),
         name='preview_all_false'),
 
     # Allow url on/off toggle
-    path('<int:pk>/showurl/', views.showurl, name='showurl'),
+    path(
+        '<int:pk>/showurl/',
+        views.ActionShowURLView.as_view(),
+        name='showurl'),
 
     # Serve the personalised content
-    path('<int:action_id>/serve/', views.serve_action, name='serve'),
-    path('serve/', views.serve_action_lti, name='serve_lti'),
+    path(
+        '<int:action_id>/serve/',
+        views.ActionServeActionView.as_view(),
+        name='serve'),
+    path(
+        'serve/',
+        views.ActionServeActionLTIView.as_view(),
+        name='serve_lti'),
 
     # Edit action description and name
     path(
         '<int:pk>/edit_description/',
-        views.edit_description,
+        views.ActionEditDescriptionView.as_view(),
         name='edit_description'),
 ]
 

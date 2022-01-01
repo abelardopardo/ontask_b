@@ -7,12 +7,12 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import models
-from ontask.core import UserIsInstructor, RequestWorkflowView
+from ontask.core import UserIsInstructor, WorkflowView
 
 
 class ActionShowTimelineView(
     UserIsInstructor,
-    RequestWorkflowView,
+    WorkflowView,
     generic.TemplateView
 ):
     """View to show the times an action has been executed."""

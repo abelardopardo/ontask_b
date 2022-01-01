@@ -23,7 +23,6 @@ class ActionManagementFactory:
     def process_edit_request(
         self,
         request: http.HttpRequest,
-        workflow: models.Workflow,
         action: models.Action
     ) -> http.HttpResponse:
         """Execute the corresponding function to process an edit request.

@@ -94,7 +94,7 @@ def _create_rubric_table(
                 cell_ctx['feedback_text'] = ''
 
             rubric_row[loa_str] = render_to_string(
-                'action/includes/partial_rubriccell.html',
+                'action/includes/partial_rubric_cell.html',
                 cell_ctx
             )
         table_data.append(rubric_row)

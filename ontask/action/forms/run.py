@@ -602,12 +602,12 @@ class ValueExcludeForm(ontask_forms.FormWithPayload):
         required=False,
         label=_('Values to exclude'))
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Store action, column name and exclude init, adjust fields."""
         self.column_name: str = kwargs.pop('column_name', None)
         self.exclude_init: List[str] = kwargs.pop('exclude_values', list)
 
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['exclude_values'].choices = sql.get_rows(
             self.action.workflow.get_data_frame_table_name(),
