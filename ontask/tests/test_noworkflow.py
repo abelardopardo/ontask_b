@@ -87,7 +87,6 @@ class BackToHome(
             reverse('column:column_restrict', kwargs={'pk': 1}),
             # Action
             reverse('action:create'),
-            reverse('action:save_text', kwargs={'pk': 1}),
             reverse('action:update', kwargs={'pk': 1}),
             reverse('action:clone', kwargs={'pk': 1}),
             reverse('action:delete', kwargs={'pk': 1}),

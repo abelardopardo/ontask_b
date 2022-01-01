@@ -46,9 +46,6 @@ urlpatterns = [
         views.ActionShowTimelineView.as_view(),
         name='timeline'),
 
-    # Save action out content
-    path('<int:pk>/save_text/', views.save_text, name='save_text'),
-
     # Action export the file
     re_path(
         r'(?P<pklist>\d+(,\d+)*)/export/',
