@@ -172,7 +172,6 @@ class ActionCloneView(
 
     def post(self, request, *args, **kwargs):
         """Perform the clone operation."""
-        self.action = self.get_object()
         services.do_clone_action(
             self.request.user,
             self.action,
