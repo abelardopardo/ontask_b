@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from ontask import tests
-from ontask.action.views import action_import
+from ontask.action import services
 
 
 class ActionViewExportBasic(
@@ -76,8 +76,12 @@ class ActionViewImport(ActionViewExportBasic):
         req.META['HTTP_ACCEPT_ENCODING'] = 'gzip, deflate'
         req.FILES['upload_file'].content_type = 'application/x-gzip'
         req = self.add_middleware(req)
-        resp = action_import(req)
 
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
+        services.do_import_action(
+            req.user,
+            self.workflow,
+            req.FILES['upload_file']
+        )
+
         # Fails if the action is not there
         self.workflow.actions.get(name='SPQ')

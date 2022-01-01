@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 <form method="post" action="{% url 'action:rubric_cell_edit' view.action.id view.kwargs.cid view.kwargs.loa_pos %}"
-      class="js-rubric_cell-create-form">
+      class="js-rubric-cell-create-form">
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Rubric cell content' %}</h4>
