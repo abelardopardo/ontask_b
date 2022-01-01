@@ -192,7 +192,6 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
 
     def extend_edit_context(
         self,
-        workflow: models.Workflow,
         action: models.Action,
         context: Dict,
     ):

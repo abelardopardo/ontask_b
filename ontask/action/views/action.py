@@ -149,13 +149,11 @@ class ActionEditView(UserIsInstructor, ActionView):
     def get(self, request, *args, **kwargs):
         return services.ACTION_PROCESS_FACTORY.process_edit_request(
             self.request,
-            self.action.workflow,
             self.action)
 
     def post(self, request, *args, **kwargs):
         return services.ACTION_PROCESS_FACTORY.process_edit_request(
             self.request,
-            self.action.workflow,
             self.action)
 
 

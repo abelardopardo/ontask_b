@@ -236,13 +236,11 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
 
     def extend_edit_context(
         self,
-        workflow: models.Workflow,
         action: models.Action,
         context: Dict,
     ):
         """Get the context dictionary to render the GET request.
 
-        :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
         :return: Nothing.
@@ -271,20 +269,20 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
                 column__description_text='',
                 column__is_key=False,
             ).exists(),
-            'key_columns': workflow.get_unique_columns(),
+            'key_columns': action.workflow.get_unique_columns(),
             'key_selected': tuples.filter(column__is_key=True).first(),
             'has_no_key': tuples.filter(column__is_key=False).exists()})
 
         if action.action_type == models.Action.SURVEY:
             # Add all columns that are not inserted nor key
-            context['columns_to_insert'] = workflow.columns.exclude(
+            context['columns_to_insert'] = action.workflow.columns.exclude(
                 column_condition_pair__action=action,
             ).exclude(
                 is_key=True,
             ).distinct().order_by('position')
         else:
             # Add all columns that are not inserted nor key, and boolean type
-            context['columns_to_insert'] = workflow.columns.exclude(
+            context['columns_to_insert'] = action.workflow.columns.exclude(
                 column_condition_pair__action=action,
             ).exclude(is_key=True).filter(
                 data_type='boolean').distinct().order_by('position')
@@ -292,20 +290,18 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
     def process_edit_request(
         self,
         request: http.HttpRequest,
-        workflow: models.Workflow,
         action: models.Action
     ) -> http.HttpResponse:
         """Process the action edit request.
 
         :param request: Http Request received
-        :param workflow: Workflow being manipulated
         :param action: Action being used as a survey
         :return: Http response with the right edit template.
         """
 
         context = self.get_render_context(action)
         try:
-            self.extend_edit_context(workflow, action, context)
+            self.extend_edit_context(action, context)
         except Exception as exc:
             messages.error(request, str(exc))
             return redirect(reverse('action:index'))

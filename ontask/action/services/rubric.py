@@ -110,13 +110,11 @@ class ActionManagerRubric(ActionManagerEmail):
 
     def extend_edit_context(
         self,
-        workflow: models.Workflow,
         action: models.Action,
         context: Dict,
     ):
         """Get the context dictionary to render the GET request.
 
-        :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
         :return: Nothing

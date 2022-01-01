@@ -334,13 +334,11 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
 
     def extend_edit_context(
         self,
-        workflow: models.Workflow,
         action: models.Action,
         context: Dict,
     ):
         """Get the context dictionary to render the GET request.
 
-        :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
         :return: Nothing
@@ -413,7 +411,6 @@ class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
 
     def extend_edit_context(
         self,
-        workflow: models.Workflow,
         action: models.Action,
         context: Dict,
     ):
@@ -422,13 +419,12 @@ class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
         It adds the attachments in the action, and the views available to
         attach (those in the workflow not in the action)
 
-        :param workflow: Workflow being used
         :param action: Action being used
         :param context: Initial dictionary to extend
         :return: Nothing
         """
         context['attachments'] = action.attachments.all()
-        context['available_views'] = workflow.views.exclude(
+        context['available_views'] = action.workflow.views.exclude(
             id__in=action.attachments.all())
 
     def execute_operation(

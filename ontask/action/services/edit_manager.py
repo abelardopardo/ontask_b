@@ -56,7 +56,6 @@ class ActionEditManager:
 
     def extend_edit_context(
         self,
-        workflow: models.Workflow,
         action: models.Action,
         context: Dict,
     ):
@@ -66,7 +65,7 @@ class ActionEditManager:
         :param context: Initial dictionary to extend
         :return: Nothing.
         """
-        del workflow, action, context
+        del action, context
 
     @staticmethod
     def get_render_context(
@@ -125,7 +124,6 @@ class ActionOutEditManager(ActionEditManager):
     def process_edit_request(
         self,
         request: http.HttpRequest,
-        workflow: models.Workflow,
         action: models.Action
     ) -> http.HttpResponse:
         """Process the action edit request."""
@@ -160,7 +158,7 @@ class ActionOutEditManager(ActionEditManager):
         # This is a GET request or a faulty POST request
         context = self.get_render_context(action, form, form_filter)
         try:
-            self.extend_edit_context(workflow, action, context)
+            self.extend_edit_context(action, context)
         except Exception as exc:
             messages.error(request, str(exc))
             return redirect(reverse('action:index'))

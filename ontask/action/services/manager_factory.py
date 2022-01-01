@@ -28,7 +28,6 @@ class ActionManagementFactory:
         """Execute the corresponding function to process an edit request.
 
         :param request: Http Request received (get or post)
-        :param workflow: Workflow object being processed
         :param action: Action being edited
         :return: HttpResponse
         """
@@ -38,7 +37,6 @@ class ActionManagementFactory:
                 raise ValueError(action.action_type)
             return runner_obj.process_edit_request(
                 request,
-                workflow,
                 action)
         except ValueError:
             return render(request, 'base.html', {})
