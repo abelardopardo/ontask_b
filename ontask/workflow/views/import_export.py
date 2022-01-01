@@ -10,13 +10,13 @@ from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import OnTaskServiceException, models
-from ontask.core import RequestWorkflowView, UserIsInstructor
+from ontask.core import WorkflowView, UserIsInstructor
 from ontask.workflow import forms, services
 
 
-class WorkflowExportView(
+class WorkflowActionExportView(
     UserIsInstructor,
-    RequestWorkflowView,
+    WorkflowView,
     generic.FormView,
 ):
     """View to request information to export a workflow."""
@@ -30,17 +30,13 @@ class WorkflowExportView(
     def get_context_data(self, **kwargs):
         """Store the workflow in the context."""
         context = super().get_context_data(**kwargs)
-
-        context['workflow'] = self.workflow
         context['only_action_list'] = self.only_action_list
         return context
 
     def get_form_kwargs(self):
         """Set some required parameters in the form context."""
         form_kwargs = super().get_form_kwargs()
-
         form_kwargs['workflow'] = self.workflow
-
         return form_kwargs
 
     def form_valid(self, form):
@@ -64,19 +60,7 @@ class WorkflowExportView(
                 'only_action_list': self.only_action_list})
 
 
-class WorkflowActionExportView(WorkflowExportView):
-    """View to request information to export a set of actions."""
-
-    only_action_list = True
-
-    def get_context_data(self, **kwargs):
-        """Store the workflow in the context."""
-        context = super().get_context_data(**kwargs)
-        context['only_action_list'] = True
-        return context
-
-
-class WorkflowExportDoneView(UserIsInstructor, RequestWorkflowView):
+class WorkflowExportDoneView(UserIsInstructor, WorkflowView):
     """View for downloading the exported workflow."""
 
     http_method_names = ['get']

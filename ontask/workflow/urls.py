@@ -32,11 +32,11 @@ urlpatterns = [
     # Import Export
     path(
         '<int:wid>/export_ask/',
-        views.WorkflowExportView.as_view(),
+        views.WorkflowActionExportView.as_view(only_action_list=False),
         name='export_ask'),
     path(
         '<int:wid>/export_list_ask/',
-        views.WorkflowActionExportView.as_view(),
+        views.WorkflowActionExportView.as_view(only_action_list=True),
         name='export_list_ask'),
     re_path(
         r'(?P<page_data>(\d+,)*\d*)/export/',

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Views to create and delete a "share" item for a workflow."""
+from typing import Dict
 
 from django import http
 from django.utils.decorators import method_decorator
@@ -10,7 +11,7 @@ from django.views import generic
 
 from ontask import models
 from ontask.core import (
-    JSONFormResponseMixin, RequestWorkflowView, UserIsInstructor,
+    JSONFormResponseMixin, WorkflowView, UserIsInstructor,
     ajax_required)
 from ontask.workflow import forms
 
@@ -19,7 +20,7 @@ from ontask.workflow import forms
 class WorkflowShareCreateView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    RequestWorkflowView,
+    WorkflowView,
     generic.FormView,
 ):
     """View to create a new "share" user in the workflow."""
@@ -28,14 +29,14 @@ class WorkflowShareCreateView(
     form_class = forms.SharedForm
     template_name = 'workflow/includes/partial_share_create.html'
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self) -> Dict:
         """Store workflow and request.user in kwargs"""
         form_kwargs = super().get_form_kwargs()
         form_kwargs['workflow'] = self.workflow
         form_kwargs['user'] = self.request.user
         return form_kwargs
 
-    def form_valid(self, form):
+    def form_valid(self, form) -> http.JsonResponse:
         """Store the new shared user"""
         self.workflow.shared.add(form.user_obj)
         self.workflow.save()
@@ -50,7 +51,7 @@ class WorkflowShareCreateView(
 class WorkflowShareDeleteView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    RequestWorkflowView,
+    WorkflowView,
     generic.TemplateView,
 ):
     """View to delete a "share" user in the workflow."""

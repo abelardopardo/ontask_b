@@ -13,17 +13,17 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ontask import OnTaskServiceException, models
 from ontask.core import (
-    JSONFormResponseMixin, SingleWorkflowMixin, UserIsInstructor,
-    RequestWorkflowView, ajax_required, error_redirect)
+    JSONFormResponseMixin, JSONResponseMixin, UserIsInstructor, WorkflowView,
+    ajax_required, error_redirect)
 from ontask.workflow import services
 
 
 @method_decorator(ajax_required, name='dispatch')
 class WorkflowFlushView(
     UserIsInstructor,
-    SingleWorkflowMixin,
     JSONFormResponseMixin,
-    generic.DetailView
+    WorkflowView,
+    generic.TemplateView
 ):
     """View to flush a workflow."""
 
@@ -42,34 +42,30 @@ class WorkflowFlushView(
 @method_decorator(ajax_required, name='dispatch')
 class WorkflowStar(
     UserIsInstructor,
-    SingleWorkflowMixin,
-    JSONFormResponseMixin,
-    generic.View
+    JSONResponseMixin,
+    WorkflowView
 ):
-    """Start a workflow."""
+    """Star a workflow."""
 
     http_method_names = ['get']
 
-    def get(self, request, *args, **kwargs):
-        """Add/Remove star and log operation"""
-
-        self.object = self.get_object()
+    def get(self, request, *args, **kwargs) -> http.JsonResponse:
+        """Add/Remove star and log operation."""
 
         # Get the workflows with stars
-        stars = request.user.workflows_star.all()
-        if self.object in stars:
-            self.object.star.remove(request.user)
+        if self.workflow in request.user.workflows_star.all():
+            self.workflow.star.remove(request.user)
         else:
-            self.object.star.add(request.user)
+            self.workflow.star.add(request.user)
 
-        self.object.log(request.user, models.Log.WORKFLOW_STAR)
-        return http.JsonResponse({})
+        self.workflow.log(request.user, models.Log.WORKFLOW_STAR)
+        return self.render_to_response({})
 
 
 class WorkflowOperationsView(
     UserIsInstructor,
-    SingleWorkflowMixin,
-    generic.DetailView
+    WorkflowView,
+    generic.TemplateView,
 ):
     """View workflow operations page."""
 
@@ -81,41 +77,35 @@ class WorkflowOperationsView(
     def get_context_data(self, **kwargs):
         """Add all elements required to view the operations."""
         context = super().get_context_data(**kwargs)
-
-        workflow = context['object']
         context.update({
             'attribute_table': services.AttributeTable([
                 {'id': idx, 'name': key, 'value': kval}
                 for idx, (key, kval) in enumerate(sorted(
-                    workflow.attributes.items()))],
+                    self.workflow.attributes.items()))],
                 orderable=False),
             'share_table': services.WorkflowShareTable(
-                workflow.shared.values('email', 'id').order_by('email')),
-            'unique_columns': workflow.get_unique_columns()})
-
+                self.workflow.shared.values('email', 'id').order_by('email')),
+            'unique_columns': self.workflow.get_unique_columns()})
         return context
 
     def get(self, request, *args, **kwargs):
         """Render the operations page."""
 
         try:
-            self.object = self.get_object()
-
             # Check if lusers is active and if so, if it needs to be refreshed
-            services.check_luser_email_column_outdated(self.object)
+            services.check_luser_email_column_outdated(self.workflow)
         except Exception as exc:
             return error_redirect(request, message=str(exc))
 
-        return self.render_to_response(
-            self.get_context_data(object=self.object))
+        return super().render_to_response(self.get_context_data())
 
 
 @method_decorator(ajax_required, name='dispatch')
 @method_decorator(csrf_exempt, name='dispatch')
 class WorkflowAssignLUserColumn(
     UserIsInstructor,
-    JSONFormResponseMixin,
-    RequestWorkflowView,
+    JSONResponseMixin,
+    WorkflowView,
 ):
     """Assign the value of the LUser column."""
 
@@ -156,4 +146,4 @@ class WorkflowAssignLUserColumn(
         except OnTaskServiceException as exc:
             exc.message_to_error(request)
 
-        return http.JsonResponse({'html_redirect': ''})
+        return self.render_to_response({'html_redirect': ''})

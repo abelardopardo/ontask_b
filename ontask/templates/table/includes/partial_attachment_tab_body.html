@@ -16,7 +16,7 @@
         <div class="cond-buttons">
           <button type="button"
                   class="btn btn-light btn-sm js-attachment-delete"
-                  data-url="{% url 'action:remove_attachment' attachment.id action.id %}"
+                  data-url="{% url 'action:remove_attachment' action.id attachment.id %}"
                   data-toggle="tooltip"
                   title="{% trans 'Remove the attachment' %}">
             <span class="fa fa-trash"></span>

@@ -11,14 +11,12 @@ from ontask import models
 
 def save_attribute_form(
     request: http.HttpRequest,
-    workflow: models.Workflow,
     form: forms.Form,
     attr_idx: Optional[int] = None,
 ) -> http.JsonResponse:
     """Process the AJAX request to create or update an attribute.
 
     :param request: Request object received
-    :param workflow: current workflow being manipulated
     :param form: Form used to ask for data
     :param attr_idx: Index of the attribute being manipulated
     :return: AJAX response
@@ -26,6 +24,7 @@ def save_attribute_form(
     if not form.has_changed():
         return http.JsonResponse({'html_redirect': ''})
 
+    workflow = form.workflow
     # proceed with updating the attributes.
     wf_attributes = workflow.attributes
 

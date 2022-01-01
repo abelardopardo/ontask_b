@@ -5,8 +5,7 @@ from ontask.workflow.views.attribute import (
     WorkflowAttributeCreateView, WorkflowAttributeEditView,
     WorkflowAttributeDeleteView)
 from ontask.workflow.views.import_export import (
-    WorkflowExportView, WorkflowActionExportView, WorkflowImportView,
-    WorkflowExportDoneView)
+    WorkflowActionExportView, WorkflowImportView, WorkflowExportDoneView)
 from ontask.workflow.views.share import (
     WorkflowShareCreateView, WorkflowShareDeleteView)
 from ontask.workflow.views.workflow_crud import (

@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from django.views.generic import base, detail
+from django.views.generic import base, detail, edit
 from rest_framework import permissions
 
 from ontask import models
@@ -115,7 +115,7 @@ class JSONResponseMixin(base.TemplateResponseMixin):
 
     def get_data(self, context):
         """Return the object to serialize and include in the JSON response."""
-        return None
+        return context
 
 
 class JSONFormResponseMixin(JSONResponseMixin):
@@ -129,59 +129,122 @@ class JSONFormResponseMixin(JSONResponseMixin):
             request=self.request)}
 
 
-class RequestWorkflowView(base.View):
-    """Store session workflow in View."""
-    workflow = None
-    s_related: Optional[Union[str, List]] = None
-    pf_related: Optional[Union[str, List]] = None
+class WorkflowView(base.View):
+    """View that sets the workflow attribute."""
+    def __init__(self, **kwargs):
+        """Initialise error field/redirect and the workflow attribute."""
+        super().__init__(**kwargs)
+        self.error_message = None
+        self.error_redirect = 'home'
+        self.workflow = None
 
-    def dispatch(self, request, *args, **kwargs):
-        """Get the workflow, store it in object, and dispatch."""
+    def setup(self, request, *args, **kwargs):
+        """Add workflow attribute to view object.
+
+        If there is any problem, the exception message is stored instead.
+        """
+        super().setup(request, *args, **kwargs)
         try:
             self.workflow = get_session_workflow(
                 request,
                 kwargs.get('wid'),
-                self.s_related,
-                self.pf_related)
+                getattr(self, 's_related', None),
+                getattr(self, 'pf_related', None))
         except Exception as exc:
-            return error_redirect(request, message=str(exc))
+            self.error_message = str(exc)
 
+    def dispatch(self, request, *args, **kwargs):
+        """Intercept if there has been any error."""
+        if self.error_message:
+            return error_redirect(
+                request,
+                where=self.error_redirect,
+                message=self.error_message)
         return super().dispatch(request, *args, **kwargs)
 
 
+class ActionView(WorkflowView):
+    """View that sets the action attribute."""
+    def __init__(self, **kwargs):
+        """Initialise the action attribute."""
+        super().__init__(**kwargs)
+        self.action = None
+
+    def setup(self, request, *args, **kwargs):
+        """Add action attribute to view object."""
+        super().setup(request, *args, **kwargs)
+        if not self.workflow:
+            return
+
+        if self.workflow.nrows == 0:
+            self.error_message = _(
+                'Workflow has no data. '
+                'Go to "Manage table data" to upload data.')
+            self.error_redirect = 'action:index'
+            return
+
+        self.action =  self.workflow.actions.filter(
+                    pk=kwargs.get('pk'),
+                ).filter(
+                    Q(workflow__user=request.user)
+                    | Q(workflow__shared=request.user),
+                ).first()
+        if not self.action:
+            self.error_message = _('Incorrect action.')
+            return
+
+
+class ColumnConditionView(WorkflowView):
+    """View that sets the cc_tutple attribute."""
+    def __init__(self, **kwargs):
+        """Initialise the action attribute."""
+        super().__init__(**kwargs)
+        self.cc_tuple = None
+
+    def setup(self, request, *args, **kwargs):
+        """Add column condition attribute to view object."""
+        super().setup(request, *args, **kwargs)
+        if not self.workflow:
+            return
+
+        if self.workflow.nrows == 0:
+            self.error_message = _(
+                'Workflow has no data. '
+                'Go to "Manage table data" to upload data.')
+            self.error_redirect = 'action:index'
+            return
+
+        self.cc_tuple = models.ActionColumnConditionTuple.objects.filter(
+            pk=kwargs.get('pk')).filter(
+            Q(action__workflow__user=request.user)
+            | Q(action__workflow__shared=request.user),
+            action__workflow=self.workflow,
+        ).select_related('action', 'condition', 'column').first()
+
+        if not self.cc_tuple:
+            self.error_message = _('Incorrect column/condition tuple.')
+            return
+
+
 class SingleWorkflowMixin(detail.SingleObjectMixin):
-    """Class to handle workflow in class-based views"""
+    """Select a workflow in Class-based Views"""
     model = models.Workflow
-    pk_url_kwarg = 'wid'
-    s_related: Optional[Union[str, List]] = None
-    pf_related: Optional[Union[str, List]] = None
 
-    def get_object(self, queryset=None):
-        """Return workflow, and store it in the session."""
-
-        return get_session_workflow(
-            self.request,
-            self.kwargs.get(self.pk_url_kwarg),
-            self.s_related,
-            self.pf_related)
+    def get_object(self, queryset=None) -> models.Workflow:
+        """Return workflow directly from the View."""
+        return self.workflow
 
 
-class SingleActionMixin(detail.SingleObjectMixin, RequestWorkflowView):
-    """Store action in View."""
-
+class SingleActionMixin(detail.SingleObjectMixin):
+    """Select an Action in Class-based Views."""
     model = models.Action
 
     def get_object(self, queryset=None) -> models.Action:
-        """Access the Action verify that belongs to workflow."""
-        act_obj = super().get_object(queryset=queryset)
-        if act_obj.workflow != self.workflow:
-            raise http.Http404(
-                _('Action does not belong to current workflow.'))
-
-        return act_obj
+        """Access the Action in the View."""
+        return self.action
 
 
-class RequestColumnView(RequestWorkflowView):
+class RequestColumnView(WorkflowView):
     """Store column in View."""
     column = None
 
@@ -214,7 +277,7 @@ class RequestColumnView(RequestWorkflowView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class RequestConditionView(RequestWorkflowView):
+class RequestConditionView(WorkflowView):
     """Store Condition in View."""
     condition = None
 
@@ -247,7 +310,7 @@ class RequestConditionView(RequestWorkflowView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class RequestFilterView(RequestWorkflowView):
+class RequestFilterView(WorkflowView):
     """Store Filter in View."""
     filter = None
 
@@ -280,7 +343,7 @@ class RequestFilterView(RequestWorkflowView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class RequestColumnConditionView(RequestWorkflowView):
+class RequestColumnConditionView(WorkflowView):
     """Store ColumnCondition in View."""
     column_condition = None
 

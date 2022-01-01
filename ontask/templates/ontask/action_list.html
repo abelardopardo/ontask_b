@@ -18,13 +18,13 @@
 {% endblock %}
 {% block container %}
   <div class="container" id="action-index">
-    {% if not workflow.nrows %}
+    {% if not view.workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
     {% elif not action_list|length %}
       <p class="lead text-center my-3">{% blocktrans %}<strong>Next Step:</strong> Click in the <span class="fa fa-plus"></span> Action below to create a new
       action to execute based on the data stored in the table.{% endblocktrans %}</p>
     {% endif %}
-    {% if workflow.nrows %}
+    {% if view.workflow.nrows %}
       <div class="text-center my-3">
         <button type="button" class="shadow btn btn-outline-dark js-create-action"
                 data-url="{% url 'action:create' %}"
@@ -36,7 +36,7 @@
            class="shadow spin btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'Import action previously exported' %}">
           <span class="fa fa-upload"></span> {% trans 'Import actions' %}</a>
-        <a href="{% url 'workflow:export_list_ask' workflow.id %}"
+        <a href="{% url 'workflow:export_list_ask' view.workflow.id %}"
            class="shadow spin btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'Choose and export actions' %}">
           <span class="fa fa-download"></span> {% trans 'Export actions' %}</a>

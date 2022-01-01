@@ -50,7 +50,7 @@ class AttributeItemForm(forms.Form):
             self.add_error('key', msg)
             return form_data
 
-        if attr_name in self.keys:
+        if attr_name != self.fields['key'].initial and attr_name in self.keys:
             self.add_error(
                 'key',
                 _('An attribute with this name already exists.'))

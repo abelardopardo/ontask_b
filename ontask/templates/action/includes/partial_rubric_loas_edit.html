@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
-<form method="post" action="{% url 'action:rubric_loas_edit' pk %}"
+<form method="post" action="{% url 'action:rubric_loas_edit' view.action.id %}"
       class="js-rubric-loas-edit-form">
   {% csrf_token %}
   <div class="modal-header">

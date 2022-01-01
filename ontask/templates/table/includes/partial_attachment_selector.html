@@ -7,7 +7,7 @@
     <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="column-stat-selector">
       {% for view in available_views %}
         <button type="button" class="dropdown-item js-attachment-insert"
-                data-url="{% url 'action:add_attachment' view.id action.id %}">{{ view.name }}</button>
+                data-url="{% url 'action:add_attachment' action.id view.id %}">{{ view.name }}</button>
       {% endfor %}
     </div>
   </div>

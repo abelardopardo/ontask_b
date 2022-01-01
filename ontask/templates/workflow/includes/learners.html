@@ -4,10 +4,10 @@
   <p class="text-center">{% blocktrans %}Select a column with the email addresses of the learners to grant them access to the personalized content in this workflow. Select "No access" if such access is not required.{% endblocktrans %}</p>
 {% endif %}
 <h5 class="mb-2 text-center">
-  {% if workflow.lusers.count == 0 %}
+  {% if view.workflow.lusers.count == 0 %}
     {% trans 'Learners do not have access to the content in this workflow' %}
   {% else %}
-    {% blocktrans with n=workflow.lusers.count count counter=workflow.lusers.count %}{{ n }} learner has access to the workflow{% plural %}{{ n }} learners have access to the workflow{% endblocktrans %}
+    {% blocktrans with n=view.workflow.lusers.count count counter=view.workflow.lusers.count %}{{ n }} learner has access to the workflow{% plural %}{{ n }} learners have access to the workflow{% endblocktrans %}
   {% endif %}
 </h5>
 <h5 class="text-center">
@@ -15,19 +15,19 @@
   <div id="select-key-column-name" class="pl-3 dropdown btn-group">
     <button type="button" class="btn btn-outline-dark dropdown-toggle"
             data-toggle="dropdown">
-      {% if not workflow.luser_email_column %}
+      {% if not view.workflow.luser_email_column %}
         {% trans 'Key column' %}
       {% else %}
-        {{ workflow.luser_email_column.name }}
+        {{ view.workflow.luser_email_column.name }}
       {% endif %}
     </button>
     <div class="shadow dropdown-menu scrollable-menu">
-      {% if workflow.luser_email_column %}
+      {% if view.workflow.luser_email_column %}
         <button type="button" class="dropdown-item js-select-key-column-name"
                 data-url="{% url 'workflow:remove_luser_column' %}">{% trans 'No access' %}</button>
       {% endif %}
-      {% for column in workflow.get_unique_columns %}
-        {% if column != workflow.luser_email_column %}
+      {% for column in view.workflow.get_unique_columns %}
+        {% if column != view.workflow.luser_email_column %}
           <button type="button" class="dropdown-item js-select-key-column-name"
                   data-url="{% url 'workflow:assign_luser_column' column.id %}">{{ column.name }}</button>
         {% endif %}
@@ -35,12 +35,12 @@
     </div>
   </div>
 </h5>
-{% if workflow.luser_email_column and workflow.lusers_is_outdated %}
+{% if view.workflow.luser_email_column and view.workflow.lusers_is_outdated %}
   <h5 class="text-center">
     <div class="text-center">
       {% trans 'Learner email information has changed' %}
       <button type="button" class="pl-3 btn btn-outline-danger js-select-key-column-name"
-              data-url="{% url 'workflow:assign_luser_column' workflow.luser_email_column.id %}">
+              data-url="{% url 'workflow:assign_luser_column' view.workflow.luser_email_column.id %}">
         {% trans 'Refresh learner list' %}</button>
     </div>
   </h5>

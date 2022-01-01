@@ -115,14 +115,13 @@ class WorkflowExportRequestForm(forms.Form):
         """
         workflow = kargs.pop('workflow')
 
-        # List of columns to process and a field prefix
-        self.actions = workflow.actions.all()
+        # Set the field prefix
         self.field_prefix = kargs.pop('field_prefix', 'select_')
 
         super().__init__(*args, **kargs)
 
-        # Create as many fields as the given actions
-        for idx, action in enumerate(self.actions):
+        # Create as many fields as the actions in the workflow
+        for idx, action in enumerate(workflow.actions.all()):
             self.fields[self.field_prefix + '%s' % idx] = forms.BooleanField(
                 label=action.name,
                 label_suffix='',

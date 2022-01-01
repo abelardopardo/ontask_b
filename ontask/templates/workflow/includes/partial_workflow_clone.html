@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'workflow:clone' workflow.pk %}" class="js-workflow-clone-form">
+<form method="post" action="{% url 'workflow:clone' view.workflow.pk %}" class="js-workflow-clone-form">
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm workflow cloning' %}</h4>
@@ -8,7 +8,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with n=workflow.name %}Are you sure you want to clone workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+    <p class="lead">{% blocktrans with n=view.workflow.name %}Are you sure you want to clone workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     <p>{% trans 'A new workflow with the prefix "Copy of " will be created' %}</p>
   </div>
   <div class="modal-footer">

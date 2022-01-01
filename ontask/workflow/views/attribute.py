@@ -8,8 +8,7 @@ from django.views import generic
 
 from ontask import models
 from ontask.core import (
-    JSONFormResponseMixin, RequestWorkflowView, UserIsInstructor,
-    ajax_required)
+    JSONFormResponseMixin, WorkflowView, UserIsInstructor, ajax_required)
 from ontask.workflow import forms, services
 
 
@@ -17,7 +16,7 @@ from ontask.workflow import forms, services
 class WorkflowAttributeCreateView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    RequestWorkflowView,
+    WorkflowView,
     generic.FormView,
 ):
     """View to create a new attribute in the workflow."""
@@ -48,7 +47,6 @@ class WorkflowAttributeCreateView(
         """Store the attribute"""
         return services.save_attribute_form(
             self.request,
-            self.workflow,
             form,
             self.kwargs.get('pk'))
 
@@ -63,7 +61,7 @@ class WorkflowAttributeEditView(WorkflowAttributeCreateView):
 class WorkflowAttributeDeleteView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    RequestWorkflowView,
+    WorkflowView,
     generic.TemplateView,
 ):
     """View to delete an existing attribute in a workflow."""

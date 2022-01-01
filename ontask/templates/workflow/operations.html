@@ -66,13 +66,13 @@
 {% block container %}
   <div class="container" id="workflow-detail">
     <h1 class="text-center">{% trans 'Workflow Operations' %}</h1>
-    {% if not workflow.nrows %}
+    {% if not view.workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
-    {% elif not workflow.actions.all|length %}
+    {% elif not view.workflow.actions.all|length %}
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
     {% include 'workflow/includes/workflow_operation_buttons.html' %}
-    {% if request.user == workflow.user %}
+    {% if request.user == view.workflow.user %}
       <ul class="nav nav-tabs border-0 justify-content-center"
           id="workflow-operation-tabs" role="tablist">
         <li class="nav-item pr-1">
