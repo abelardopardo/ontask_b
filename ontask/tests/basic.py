@@ -313,7 +313,6 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     viewport_width = 1024
     device_pixel_ratio = 1
     max_image_height = 1440
-    headless = True
 
     class_and_text_xpath = \
         '//{0}[contains(@class, "{1}") and normalize-space(text()) = "{2}"]'
@@ -322,7 +321,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         options = Options()
-        options.headless = cls.headless
+        options.headless = settings.ONTASK_HEADLESS_TEST
         fp = webdriver.FirefoxProfile()
         fp.set_preference('dom.file.createInChild', True)
         fp.set_preference('font.size.variable.x-western', 14)

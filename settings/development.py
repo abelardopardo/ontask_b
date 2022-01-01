@@ -20,6 +20,9 @@ if DEBUG and not ONTASK_TESTING:
 if ONTASK_TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
     ONTASK_FIXTURE_DIR = os.path.join(BASE_DIR, 'ontask', 'tests', 'fixtures')
+    ONTASK_HEADLESS_TEST = env.bool(
+        'ONTASK_HEADLESS_TEST',
+        default=bool(os.environ.get('ONTASK_HEADLESS_TEST', True)))
     FIXTURE_DIRS = [
         os.path.join(BASE_DIR, 'ontask', 'tests', 'initial_workflow'),
         ONTASK_FIXTURE_DIR]
