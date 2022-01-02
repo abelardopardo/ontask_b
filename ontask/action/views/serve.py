@@ -4,7 +4,7 @@
 from typing import Optional
 
 from django import http
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -14,11 +14,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ontask import models
 from ontask.action import forms, services
-from ontask.core import get_action, has_access, is_instructor
+from ontask.core import ActionView, UserIsInstructor, has_access
 from ontask.core.services import ontask_handler404
-from ontask.core import (
-    ActionView, DataTablesServerSidePaging, SessionPayload,
-    UserIsInstructor, WorkflowView, ajax_required)
 
 
 def _common_run_survey_row(
