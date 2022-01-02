@@ -158,4 +158,4 @@ class ActionRunSurveyRowView(UserIsInstructor, ActionView):
         return _common_run_survey_row(
             request,
             self.action,
-            kwargs.get('uatn', 'email'))
+            request.GET.get('uatn', 'email'))
