@@ -483,7 +483,7 @@ class ActionServe(tests.SimpleActionFixture, tests.OnTaskTestCase):
 
         resp = self.get_response(
             'action:serve',
-            {'action_id': action.id})
+            req_params={'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue('Oct. 10, 2017, 10:03 p.m.' in str(resp.content))
 
@@ -504,7 +504,7 @@ class ActionServeSurvey(
 
         resp = self.get_response(
             'action:serve',
-            {'action_id': action.id})
+            req_params={'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue('id="action-row-datainput"' in str(resp.content))
         self.assertTrue('csrfmiddlewaretoken' in str(resp.content))

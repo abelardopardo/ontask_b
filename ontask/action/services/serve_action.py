@@ -100,14 +100,13 @@ def get_survey_context(
         action,
         get_row_values(
             action,
-            (user_attribute_name, user_attribute_value),
-        ),
-    )
+            (user_attribute_name, user_attribute_value)))
 
     if not context:
         # If the data has not been found, flag
         if not is_manager:
-            raise OnTaskActionSurveyDataNotFound()
+            raise OnTaskActionSurveyDataNotFound(
+                message=_('Unable to find survey data.'))
 
         raise OnTaskActionSurveyNoTableData(
             message=_('Data not found in the table'))
@@ -160,7 +159,8 @@ def update_row_values(
 
 
 def extract_survey_questions(
-    action: models.Action, user_seed: str,
+    action: models.Action,
+    user_seed: str,
 ) -> List[models.ActionColumnConditionTuple]:
     """Extract the set of questions to include in a survey.
 

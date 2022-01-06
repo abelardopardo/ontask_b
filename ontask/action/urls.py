@@ -146,8 +146,7 @@ urlpatterns = [
         views.ActionShowSurveyTableSSView.as_view(),
         name='show_survey_table_ss'),
 
-    # Run action in a row. Can be executed by the instructor or the
-    # learner!!
+    # Run action in a row. Can be executed by the instructor or a regular user
     path(
         '<int:pk>/run_survey_row/',
         views.ActionRunSurveyRowView.as_view(),
@@ -177,6 +176,8 @@ urlpatterns = [
         '<int:pk>/serve/',
         views.ActionServeActionView.as_view(),
         name='serve'),
+    # Serve the personalised content with accessing through LTI. The action
+    # id must be given as parameter to guarantee a single URL point of entry
     path(
         'serve/',
         views.ActionServeActionLTIView.as_view(),
