@@ -38,7 +38,7 @@ class ActionShowURLView(
         """Get context data: The absolute URL for this action."""
         context = super().get_context_data(**kwargs)
         context['url_text'] = self.request.build_absolute_uri(
-                    reverse('action:serve_lti') + '?id=' + str(self.object.id))
+                    reverse('action:serve_lti') + '?pk=' + str(self.object.id))
         return context
 
     def form_valid(self, form) -> http.JsonResponse:

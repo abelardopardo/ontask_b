@@ -174,7 +174,7 @@ urlpatterns = [
 
     # Serve the personalised content
     path(
-        '<int:action_id>/serve/',
+        '<int:pk>/serve/',
         views.ActionServeActionView.as_view(),
         name='serve'),
     path(
