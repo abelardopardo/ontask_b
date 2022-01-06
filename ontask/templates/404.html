@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{{ block.super }}{% trans 'Page not found' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Unable to process page' %}{% endblock %}
 {% block container %}
 <div class="container my-3">
-  <h1 class="text-center">{% trans 'Page not found' %}</h1>
-  <p class="text-center">{% trans 'The page you requested was not found in the application.' %}</p>
+  <h1 class="text-center">{% trans 'Unable to process page' %}</h1>
+  <p class="text-center">{% trans 'The request could not be processed.' %}</p>
+  {% if exception %}
+    <p>{{ exception }}</p>
+  {% endif %}
 </div>
 {% endblock container %}
