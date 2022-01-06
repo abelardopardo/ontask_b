@@ -146,21 +146,18 @@ class EnterActionIn(forms.Form):
         where_value = None
         # Create the SET name = value part of the query
         for idx, colcon in enumerate(self.tuples):
-            if colcon.column.is_key and not self.show_key:
-                # If it is a learner request and a key column, skip
-                continue
-
             # Skip the element if there is a condition and it is false
             if colcon.condition and not self.context[colcon.condition.name]:
                 continue
 
-            field_value = self.cleaned_data[
-                ONTASK_UPLOAD_FIELD_PREFIX + '{0}'.format(idx)]
             if colcon.column.is_key:
                 # Remember one unique key for selecting the row
                 where_field = colcon.column.name
-                where_value = field_value
+                where_value = self.form_values[idx]
                 continue
+
+            field_value = self.cleaned_data[
+                ONTASK_UPLOAD_FIELD_PREFIX + '{0}'.format(idx)]
 
             keys.append(colcon.column.name)
             values.append(field_value)
