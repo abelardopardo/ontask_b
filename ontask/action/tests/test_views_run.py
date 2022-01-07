@@ -503,7 +503,7 @@ class ActionServeSurvey(
         action.save(update_fields=['serve_enabled'])
 
         resp = self.get_response(
-            'action:serve',
+            'action:serve_lti',
             req_params={'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue('id="action-row-datainput"' in str(resp.content))
