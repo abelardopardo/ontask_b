@@ -482,7 +482,7 @@ class ActionServe(tests.SimpleActionFixture, tests.OnTaskTestCase):
         action.save(update_fields=['serve_enabled'])
 
         resp = self.get_response(
-            'action:serve',
+            'action:serve_lti',
             req_params={'pk': action.id})
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue('Oct. 10, 2017, 10:03 p.m.' in str(resp.content))
