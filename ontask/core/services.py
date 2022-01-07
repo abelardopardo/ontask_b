@@ -33,8 +33,7 @@ def ontask_handler404(
     exception,
 ) -> http.HttpResponse:
     """Return error 404."""
-    del exception
-    response = render(request, '404.html', {})
+    response = render(request, '404.html', {'exception': exception})
     response.status_code = 404
     return response
 
