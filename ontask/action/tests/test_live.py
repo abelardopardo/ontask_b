@@ -370,6 +370,7 @@ class ActionActionInDataEntry(
 
     # Test operations with the filter
     def test(self):
+        new_action_name = 'new action in'
         # Login
         self.login('instructor01@bogus.com')
 
@@ -380,7 +381,7 @@ class ActionActionInDataEntry(
         self.go_to_actions()
 
         # Create new action
-        self.create_new_survey_action('new action in', '')
+        self.create_new_survey_action(new_action_name, '')
 
         # Click in the add rule button (the filter is initially empty)
         self.create_filter('', [('registered', 'equal', 'false')])
@@ -407,6 +408,24 @@ class ActionActionInDataEntry(
         # Submit the action
         self.selenium.find_element(By.LINK_TEXT, 'Done').click()
         self.wait_for_id_and_spinner('action-index')
+
+        # Click in the link to enable the URL for the action
+        self.open_action_operation(new_action_name, 'fa-link')
+        self.assertIn(
+            'This URL provides access to the content personalised',
+            self.selenium.page_source)
+
+        # Click to Enable the URL
+        self.selenium.find_element(By.ID, 'id_serve_enabled').click()
+
+        # Click OK
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
+            'div.modal-footer > button.btn.btn-outline-primary'
+        ).click()
+
+        # close modal
+        self.wait_for_modal_close()
 
         # Run the action
         self.open_action_run('new action in', True)
