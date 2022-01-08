@@ -7,7 +7,7 @@
   <h1 class="text-center">{% trans 'Unable to process page' %}</h1>
   <p class="text-center">{% trans 'The request could not be processed.' %}</p>
   {% if exception %}
-    <p>{{ exception }}</p>
+    <p class="text-center">{{ exception }}</p>
   {% endif %}
 </div>
 {% endblock container %}

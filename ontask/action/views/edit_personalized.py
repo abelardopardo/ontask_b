@@ -82,7 +82,7 @@ class ActionAddRemoveAttachmentView(
             return http.JsonResponse({'html_redirect': reverse('action:index')})
 
         # If the request has 'action_content', update the action
-        action_content = self.request.POST.get('action_content')
+        action_content = request.POST.get('action_content')
         if action_content:
             self.action.set_text_content(action_content)
 

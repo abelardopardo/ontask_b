@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Basic functions and classes to check for permissions."""
-from typing import List, Optional, Union
+from typing import Optional
 
 from django import http
 from django.contrib import messages
@@ -11,13 +11,16 @@ from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from django.views.generic import base, detail, edit
+from django.views.generic import base, detail
 from rest_framework import permissions
 
 from ontask import models
 from ontask.core.session_ops import SessionStore, acquire_workflow_access
 
 GROUP_NAMES = ['student', 'instructor']
+
+workflow_no_data_error_message = _(
+    'Workflow has no data. Go to "Manage table data" to upload data.')
 
 
 def error_redirect(
@@ -122,7 +125,7 @@ class JSONFormResponseMixin(JSONResponseMixin):
     """Renders a JSON response with html_form: <FORM HTML CODE>"""
 
     def get_data(self, context):
-        """Return the form serialized to incluce in the JSON response."""
+        """Return the form serialized to include in the JSON response."""
         return {'html_form': render_to_string(
             self.template_name,
             context,
@@ -177,25 +180,18 @@ class ActionView(WorkflowView):
             return
 
         if self.workflow.nrows == 0:
-            self.error_message = _(
-                'Workflow has no data. '
-                'Go to "Manage table data" to upload data.')
+            self.error_message = workflow_no_data_error_message
             self.error_redirect = 'action:index'
             return
 
-        self.action =  self.workflow.actions.filter(
-                    pk=kwargs.get('pk'),
-                ).filter(
-                    Q(workflow__user=request.user)
-                    | Q(workflow__shared=request.user),
-                ).first()
+        self.action = self.workflow.actions.filter(pk=kwargs.get('pk')).first()
         if not self.action:
             self.error_message = _('Incorrect action.')
             return
 
 
 class ColumnConditionView(WorkflowView):
-    """View that sets the cc_tutple attribute."""
+    """View that sets the cc_tuple attribute."""
     def __init__(self, **kwargs):
         """Initialise the action attribute."""
         super().__init__(**kwargs)
@@ -208,9 +204,7 @@ class ColumnConditionView(WorkflowView):
             return
 
         if self.workflow.nrows == 0:
-            self.error_message = _(
-                'Workflow has no data. '
-                'Go to "Manage table data" to upload data.')
+            self.error_message = workflow_no_data_error_message
             self.error_redirect = 'action:index'
             return
 
@@ -253,9 +247,7 @@ class RequestColumnView(WorkflowView):
         super().set_object(request, *args, **kwargs)
 
         if self.workflow.nrows == 0:
-            raise http.Http404(_(
-                'Workflow has no data. '
-                'Go to "Manage table data" to upload data.'))
+            raise http.Http404(workflow_no_data_error_message)
 
         column = self.workflow.columns.filter(
             pk=self.kwargs.get(self.pk_url_kwarg)).filter(
@@ -286,9 +278,7 @@ class RequestConditionView(WorkflowView):
         super().set_object(request, *args, **kwargs)
 
         if self.workflow.nrows == 0:
-            raise http.Http404(_(
-                'Workflow has no data. '
-                'Go to "Manage table data" to upload data.'))
+            raise http.Http404(workflow_no_data_error_message)
 
         condition = models.Condition.objects.filter(
             pk=self.kwargs.get(self.pk_url_kwarg)).filter(
@@ -319,9 +309,7 @@ class RequestFilterView(WorkflowView):
         super().set_object(request, *args, **kwargs)
 
         if self.workflow.nrows == 0:
-            raise http.Http404(_(
-                'Workflow has no data. '
-                'Go to "Manage table data" to upload data.'))
+            raise http.Http404(workflow_no_data_error_message)
 
         filter_obj = models.Filter.objects.filter(
             pk=self.kwargs.get(self.pk_url_kwarg)).filter(
@@ -352,9 +340,7 @@ class RequestColumnConditionView(WorkflowView):
         super().set_object(request, *args, **kwargs)
 
         if self.workflow.nrows == 0:
-            raise http.Http404(_(
-                'Workflow has no data. '
-                'Go to "Manage table data" to upload data.'))
+            raise http.Http404(workflow_no_data_error_message)
 
         cc_tuple = models.ActionColumnConditionTuple.objects.filter(
             pk=self.kwargs.get(self.pk_url_kwarg)).filter(

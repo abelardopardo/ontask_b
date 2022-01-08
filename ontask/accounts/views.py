@@ -186,13 +186,13 @@ class LoginView(
 
     def form_valid(self, form):
         auth.login(self.request, form.get_user())
-        redirect = super().form_valid(form)
+        redirect_response = super().form_valid(form)
         remember_me = form.cleaned_data.get('remember_me')
         if remember_me is True:
             one_month = 30 * 24 * 60 * 60
             expiry = getattr(settings, 'KEEP_LOGGED_DURATION', one_month)
             self.request.session.set_expiry(expiry)
-        return redirect
+        return redirect_response
 
 
 class LogoutView(
