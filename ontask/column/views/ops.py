@@ -1,168 +1,122 @@
 # -*- coding: utf-8 -*-
 
-"""Views to move coumns and restrict values."""
-from typing import Optional
+"""Views to move columns and restrict values."""
 
 from django import http
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect
-from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
+from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 
-from ontask import OnTaskServiceException, models
-from ontask.column import services, forms
+from ontask import OnTaskServiceException
+from ontask.column import forms, services
 from ontask.core import (
-    ajax_required, get_column, get_workflow, is_instructor)
+    ColumnView, JSONFormResponseMixin, UserIsInstructor, WorkflowView,
+    ajax_required)
 from ontask.dataops import pandas
 
 
-@user_passes_test(is_instructor)
-@csrf_exempt
-@ajax_required
-@get_workflow(pf_related='columns')
-def column_move(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Move a column using two names: from_name and to_name (POST params).
+@method_decorator(ajax_required, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
+class ColumnMoveView(UserIsInstructor, WorkflowView):
+    """Move a column using two params: from_name and to_name."""
 
-    The changes are reflected in the DB
+    http_method_names = ['post']
 
-    :param request:
-    :param workflow: Workflow being manipulated
-    :return: AJAX response, empty.
-    """
-    from_name = request.POST.get('from_name')
-    to_name = request.POST.get('to_name')
-    if not from_name or not to_name:
+    def post(self, request, *args, **kwargs):
+        from_name = request.POST.get('from_name')
+        to_name = request.POST.get('to_name')
+        if not from_name or not to_name:
+            return http.JsonResponse({})
+
+        from_col = self.workflow.columns.filter(name=from_name).first()
+        to_col = self.workflow.columns.filter(name=to_name).first()
+
+        if not from_col or not to_col:
+            return http.JsonResponse({})
+
+        from_col.reposition_and_update_df(to_col.position)
+
         return http.JsonResponse({})
 
-    from_col = workflow.columns.filter(name=from_name).first()
-    to_col = workflow.columns.filter(name=to_name).first()
 
-    if not from_col or not to_col:
-        return http.JsonResponse({})
+class ColumnMoveTopView(UserIsInstructor, ColumnView):
+    """Move column to the first position."""
 
-    from_col.reposition_and_update_df(to_col.position)
+    http_method_names = ['get']
 
-    return http.JsonResponse({})
+    def get(self, request, *args, **kwargs):
+        # The column object has been correctly obtained
+        if self.column.position > 1:
+            self.column.reposition_and_update_df(1)
 
-
-@user_passes_test(is_instructor)
-@get_column(pf_related='columns')
-def column_move_top(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    column: Optional[models.Column] = None,
-) -> http.HttpResponse:
-    """Move column to the first position.
-
-    :param request: HTTP request to move a column to the top of the list
-    :param pk: Column ID
-    :param workflow: Workflow being manipulated
-    :param column: Column pointed by the pk
-    :return: Once done, redirects to the column page
-    """
-    del request, pk, workflow
-    # The workflow and column objects have been correctly obtained
-    if column.position > 1:
-        column.reposition_and_update_df(1)
-
-    return redirect('column:index')
+        return redirect('column:index')
 
 
-@user_passes_test(is_instructor)
-@get_column(pf_related='columns')
-def column_move_bottom(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    column: Optional[models.Column] = None,
-) -> http.HttpResponse:
-    """Move column to the last position.
+class ColumnMoveBottomView(UserIsInstructor, ColumnView):
+    """Move column to the last position."""
+    http_method_names = ['get']
 
-    :param request: HTTP request to move a column to end of the list
-    :param pk: Column ID
-    :param workflow: Workflow being used
-    :param column: Column pointed by the pk
-    :return: Once done, redirects to the column page
-    """
-    del request, pk
-    # The workflow and column objects have been correctly obtained
-    if column.position < workflow.ncols:
-        column.reposition_and_update_df(workflow.ncols)
+    def get(self, request, *args, **kwargs):
+        # The column and workflow objects have been correctly obtained
+        if self.column.position < self.workflow.ncols:
+            self.column.reposition_and_update_df(self.workflow.ncols)
 
-    return redirect('column:index')
+        return redirect('column:index')
 
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_column(pf_related='columns')
-def column_restrict_values(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    column: Optional[models.Column] = None,
-) -> http.JsonResponse:
-    """Restrict future values in this column to one of those already present.
+@method_decorator(ajax_required, name='dispatch')
+class ColumnRestrictValuesView(
+    UserIsInstructor,
+    ColumnView,
+    generic.TemplateView
+):
+    """Restrict values in this column to one of those already present."""
 
-    :param request: HTTP request
-    :param pk: ID of the column to restrict. The workflow element is taken
-     from the session.
-    :param workflow: Workflow being used
-    :param column: Column pointed by the pk
-    :return: Render the delete column form
-    """
-    # If the columns is unique and it is the only one, we cannot allow
-    # the operation
-    if column.is_key:
-        messages.error(request, _('You cannot restrict a key column'))
-        return http.JsonResponse({'html_redirect': reverse('column:index')})
+    http_method_names = ['get', 'post']
+    template_name = 'column/includes/partial_column_restrict.html'
 
-    if request.method == 'POST':
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        df = pandas.load_table(self.workflow.get_data_frame_table_name())
+        context['values'] = ', '.join([
+            str(item)
+            for item in sorted(df[self.column.name].dropna().unique())]),
+        return context
+
+    def get(self, request, *args, **kwargs):
+        # If the columns is unique and it is the only one, we cannot allow
+        # the operation
+        if self.column.is_key:
+            messages.error(request, _('You cannot restrict a key column'))
+            return http.JsonResponse({'html_redirect': reverse('column:index')})
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
         try:
-            services.restrict_column(request.user, column)
+            services.restrict_column(request.user, self.column)
         except OnTaskServiceException as exc:
             exc.message_to_error(request)
 
         return http.JsonResponse({'html_redirect': reverse('column:index')})
 
-    df = pandas.load_table(workflow.get_data_frame_table_name())
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'column/includes/partial_column_restrict.html',
-            {
-                'pk': pk,
-                'cname': column.name,
-                'values': ', '.join([
-                    str(item)
-                    for item in sorted(df[column.name].dropna().unique())])},
-            request=request),
-    })
 
+class ColumnSelectView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    WorkflowView,
+    generic.FormView,
+):
+    """Select a subset of columns to process further."""
 
-@user_passes_test(is_instructor)
-@get_workflow(pf_related='columns')
-def column_selection(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Move column to the first position.
+    http_method_names = ['get', 'post']
+    form_class = forms.ColumnSelectForm
+    template_name = 'column/includes/partial_select.html'
 
-    :param request: HTTP request to move a column to the top of the list
-    :param workflow: Workflow being manipulated
-    :return: Once done, redirects to the column page
-    """
-    form = forms.ColumnSelectForm(
-        request.POST or None,
-        columns=workflow.columns.all())
-
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'column/includes/partial_select.html',
-            {'form': form},
-            request=request)})
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['columns'] = self.workflow.columns.all()
+        return kwargs

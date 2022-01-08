@@ -134,9 +134,8 @@ class ActionDeleteView(
     template_name = 'action/includes/partial_action_delete.html'
 
     def delete(self, request, *args, **kwargs):
-        action = self.get_object()
-        action.log(request.user, models.Log.ACTION_DELETE)
-        action.delete()
+        self.action.log(request.user, models.Log.ACTION_DELETE)
+        self.action.delete()
         return http.JsonResponse({'html_redirect': reverse('action:index')})
 
 

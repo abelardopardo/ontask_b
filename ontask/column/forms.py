@@ -131,9 +131,9 @@ class ColumnBasicForm(forms.ModelForm):
                 # Condition 3: The values in the dataframe column must be in
                 # these categories (only if the column is being edited, though
                 if self.instance.name and not all(
-                    vval in valid_values
-                    for vval in self.data_frame[self.instance.name]
-                    if vval and not pd.isnull(vval)
+                    value in valid_values
+                    for value in self.data_frame[self.instance.name]
+                    if value and not pd.isnull(value)
                 ):
                     self.add_error(
                         'raw_categories',
@@ -146,7 +146,7 @@ class ColumnBasicForm(forms.ModelForm):
 
             self.instance.set_categories(valid_values, update=False)
 
-        # Check the datetimes. One needs to be after the other
+        # Check the date and times. One needs to be after the other
         a_from = self.cleaned_data.get('active_from')
         a_to = self.cleaned_data.get('active_to')
         if a_from and a_to and a_from >= a_to:
@@ -523,12 +523,12 @@ class ColumnSelectForm(forms.Form):
         required=True,
         label=_('Columns to insert'))
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Store the workflow columns and operands."""
         # Workflow columns
         self.wf_columns = kwargs.pop('columns')
 
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Populate the column choices
         self.fields['columns'].choices = [

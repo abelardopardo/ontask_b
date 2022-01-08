@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 <form method="post" 
   {% if add %}
-    action="{% url 'column:todoitem_add' action_id %}"
+    action="{% url 'column:todoitem_add' view.action.id %}"
     class="js-action-todoitem-add-form">
   {% else %}
     action="{% url 'column:todoitem_edit' pk %}"

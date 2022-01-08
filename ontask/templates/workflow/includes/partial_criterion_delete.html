@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'column:criterion_remove' pk %}"
+<form method="post" action="{% url 'column:criterion_delete' view.cc_tuple.id %}"
       class="js-criterion-remove-form">
   {% csrf_token %}
   <div class="modal-header">

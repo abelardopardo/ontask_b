@@ -193,7 +193,7 @@ class ActionView(WorkflowView):
 class ColumnConditionView(WorkflowView):
     """View that sets the cc_tuple attribute."""
     def __init__(self, **kwargs):
-        """Initialise the action attribute."""
+        """Initialise the condition/column tuple attribute."""
         super().__init__(**kwargs)
         self.cc_tuple = None
 
@@ -220,6 +220,55 @@ class ColumnConditionView(WorkflowView):
             return
 
 
+class ColumnView(WorkflowView):
+    """View that sets the column attribute."""
+    def __init__(self, **kwargs):
+        """Initialise the column attribute."""
+        super().__init__(**kwargs)
+        self.column = None
+
+    def setup(self, request, *args, **kwargs):
+        """Add column attribute to view object."""
+        super().setup(request, *args, **kwargs)
+        if not self.workflow:
+            return
+
+        if self.workflow.nrows == 0:
+            self.error_message = workflow_no_data_error_message
+            self.error_redirect = 'action:index'
+            return
+
+        self.column = self.workflow.columns.filter(pk=kwargs.get('pk')).first()
+        if not self.column:
+            self.error_message = _('Incorrect column/condition tuple.')
+            return
+
+
+class ConditionView(WorkflowView):
+    """View that sets the condition attribute."""
+    def __init__(self, **kwargs):
+        """Initialise the condition attribute."""
+        super().__init__(**kwargs)
+        self.condition = None
+
+    def setup(self, request, *args, **kwargs):
+        """Add column attribute to view object."""
+        super().setup(request, *args, **kwargs)
+        if not self.workflow:
+            return
+
+        if self.workflow.nrows == 0:
+            self.error_message = workflow_no_data_error_message
+            self.error_redirect = 'action:index'
+            return
+
+        self.condition = self.workflow.conditions.filter(
+            pk=kwargs.get('pk')).first()
+
+        if not self.condition:
+            return error_redirect(request)
+
+
 class SingleWorkflowMixin(detail.SingleObjectMixin):
     """Select a workflow in Class-based Views"""
     model = models.Workflow
@@ -236,6 +285,33 @@ class SingleActionMixin(detail.SingleObjectMixin):
     def get_object(self, queryset=None) -> models.Action:
         """Access the Action in the View."""
         return self.action
+
+
+class SingleColumnMixin(detail.SingleObjectMixin):
+    """Select a Column in Class-based Views."""
+    model = models.Column
+
+    def get_object(self, queryset=None) -> models.Column:
+        """Access the column in the View."""
+        return self.column
+
+
+class SingleColumnConditionMixin(detail.SingleObjectMixin):
+    """Select a Column in Class-based Views."""
+    model = models.ActionColumnConditionTuple
+
+    def get_object(self, queryset=None) -> models.ActionColumnConditionTuple:
+        """Access the column/condition tuple in the View."""
+        return self.cc_tuple
+
+
+class SingleConditionMixin(detail.SingleObjectMixin):
+    """Select a Condition in Class-based Views."""
+    model = models.Condition
+
+    def get_object(self, queryset=None) -> models.Condition:
+        """Access the condition tuple in the View."""
+        return self.condition
 
 
 class RequestColumnView(WorkflowView):

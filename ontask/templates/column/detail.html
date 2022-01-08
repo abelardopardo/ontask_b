@@ -11,7 +11,7 @@
   <link href="{% static 'css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
-  {% if workflow %}
+  {% if view.workflow %}
     {% ontask_datetimepicker_js %}
     <script src="{% static 'js/sol.js' %}"></script>
     <script src="{% static 'workflow/js/workflow.js' %}"></script>
@@ -84,7 +84,7 @@
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
     <div class="text-center mb-3">
-      {% if workflow.nrows != 0 %}
+      {% if view.workflow.nrows != 0 %}
         {% include 'column/includes/add_menu.html' %}
       {% endif %}
     </div>

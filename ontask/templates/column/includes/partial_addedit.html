@@ -7,7 +7,7 @@
     action="{% url 'column:create' %}"
     class="js-workflow-column-add-form">
   {% else %}
-    action="{% url 'column:column_edit' pk %}"
+    action="{% url 'column:column_edit' view.column.id %}"
     class="js-column-edit-form">
   {% endif %}
   {% csrf_token %}
@@ -15,7 +15,7 @@
     {% if add %}
       <h4 class="modal-title">{% trans 'Add column' %}</h4>
     {% else %}
-      <h4 class="modal-title">{% blocktrans with n=cname %}Edit column <strong>{{ n }}</strong>{% endblocktrans %}</h4>
+      <h4 class="modal-title">{% blocktrans with n=view.column.name %}Edit column <strong>{{ n }}</strong>{% endblocktrans %}</h4>
     {% endif %}
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>

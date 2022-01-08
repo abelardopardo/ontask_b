@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'column:column_restrict' pk %}" class="js-column-restrict-form">
+<form method="post" action="{% url 'column:column_restrict' view.column.id %}" class="js-column-restrict-form">
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm column deletion' %}</h4>
@@ -8,7 +8,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with n=cname v=values %}Are you sure you want to restrict column 
+    <p class="lead">{% blocktrans with n=view.column.name v=values %}Are you sure you want to restrict column
       <strong>{{ n }}</strong> to the values {{ v }}?{% endblocktrans %}
     </p>
   </div>

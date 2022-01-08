@@ -335,6 +335,7 @@ class ConditionInActionIn(
     """Class to test survey with conditions controlling questions."""
 
     def test(self):
+        action_name = 'Survey'
         # Login
         self.login('instructor01@bogus.com')
 
@@ -345,7 +346,7 @@ class ConditionInActionIn(
         self.go_to_actions()
 
         # Open action in
-        self.open_action_edit('Survey')
+        self.open_action_edit(action_name)
 
         # Select the condition tab
         self.select_condition_tab()
@@ -365,7 +366,7 @@ class ConditionInActionIn(
         self.select_questions_condition('text1', 'Text 1 is null')
         self.select_questions_condition('text2', 'Text 2 is null')
 
-        # Click the preview buttion
+        # Click the preview button
         self.open_preview()
 
         # Check there is a single field and click on next
@@ -413,7 +414,7 @@ class ConditionInActionIn(
         self.wait_for_modal_close()
 
         # Run the action
-        self.open_action_run('Survey', True)
+        self.open_action_run(action_name, True)
 
         # Click in the first element of the survey and wait for form
         self.selenium.find_element(By.LINK_TEXT, '1.0').click()

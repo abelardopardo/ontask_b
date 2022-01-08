@@ -1,16 +1,16 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 <form method="post" 
-  {% if condition.id is None %}
-    action="{% url 'condition:create_filter' action_id %}"
+  {% if form.instance.id is None %}
+    action="{% url 'condition:create_filter' view.action.id %}"
     class="js-filter-create-form"
   {% else %}
-    action="{% url 'condition:edit_filter' action_id %}"
+    action="{% url 'condition:edit_filter' view.action.id %}"
     class="js-filter-edit-form"
   {% endif %}>
   {% csrf_token %}
   <div class="modal-header">
-    <h4 class="modal-title">{% if condition.id is None %}{% trans 'Create filter' %}{% else %}{% trans 'Update filter' %}{% endif %}</h4>
+    <h4 class="modal-title">{% if form.instance.id is None %}{% trans 'Create filter' %}{% else %}{% trans 'Update filter' %}{% endif %}</h4>
     <button type="button" class="close" data-dismiss="modal" arial-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -22,7 +22,7 @@
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-outline-primary">
-      {% if condition.id is None %}
+      {% if form.instance.id is None %}
         <span class="glyphicon glyphicon-ok"></span> {% trans 'Create filter' %}</button>
       {% else %}
         <span class="glyphicon glyphicon-ok"></span> {% trans 'Update' %}</button>

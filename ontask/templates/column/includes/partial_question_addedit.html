@@ -4,10 +4,10 @@
 {{ form.media }}
 <form method="post"
   {% if add %}
-    action="{% url 'column:question_add' action_id %}"
+    action="{% url 'column:question_add' view.action.id %}"
     class="js-action-question-add-form">
   {% else %}
-    action="{% url 'column:question_edit' pk %}"
+    action="{% url 'column:question_edit' view.column.id %}"
     class="js-question-edit-form">
   {% endif %}
   {% csrf_token %}
@@ -15,7 +15,7 @@
     {% if add %}
       <h4 class="modal-title">{% trans 'Add question' %}</h4>
     {% else %}
-      <h4 class="modal-title">{% blocktrans with n=cname %}Edit question <strong>{{ n }}</strong>{% endblocktrans %}</h4>
+      <h4 class="modal-title">{% blocktrans with n=view.column.name %}Edit question <strong>{{ n }}</strong>{% endblocktrans %}</h4>
     {% endif %}
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>

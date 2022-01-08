@@ -18,8 +18,10 @@ from ontask.core.manage_session import SessionPayload
 from ontask.core.permissions import (
     GROUP_NAMES, UserIsInstructor, has_access, is_admin, is_instructor,
     JSONResponseMixin, JSONFormResponseMixin,
-    WorkflowView, ActionView, ColumnConditionView, SingleWorkflowMixin,
-    SingleActionMixin, error_redirect, store_workflow_in_session)
+    WorkflowView, ActionView, ColumnConditionView, ColumnView, ConditionView,
+    SingleWorkflowMixin, SingleActionMixin, SingleColumnMixin,
+    SingleColumnConditionMixin, SingleConditionMixin,
+    error_redirect, store_workflow_in_session)
 
 from ontask.core.session_ops import (
     _store_workflow_nrows_in_session, remove_workflow_from_session)

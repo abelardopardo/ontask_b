@@ -9,7 +9,4 @@ from ontask.column.services.errors import (
     OnTaskColumnAddError, OnTaskColumnCategoryValueError,
     OnTaskColumnIntegerLowerThanOneError,
 )
-from ontask.column.services.index import (
-    column_table_server_side, get_detail_context,
-)
 from ontask.column.services.restrict import restrict_column

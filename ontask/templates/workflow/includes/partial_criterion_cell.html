@@ -14,7 +14,7 @@
             title="{% trans 'Show stats about this criteria' %}">
       <span class="fa fa-chart-bar"></span></button>
     <button type="button" class="btn btn-primary btn-light  js-criterion-remove"
-            data-url="{% url 'column:criterion_remove' criterion.id %}"
+            data-url="{% url 'column:criterion_delete' criterion.id %}"
             data-toggle="tooltip"
             title="{% trans 'Remove this criterion' %}">
       <span class="fa fa-trash"></span></button>
