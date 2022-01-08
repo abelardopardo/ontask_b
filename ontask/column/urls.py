@@ -3,7 +3,7 @@
 """URLs to manipulate columns."""
 from django.urls import path
 
-from ontask.column import views
+from ontask.column import forms, views
 
 app_name = 'column'
 
@@ -42,15 +42,21 @@ urlpatterns = [
     path('<int:pk>/delete/', views.ColumnDeleteView.as_view(), name='delete'),
     path(
         '<int:pk>/column_edit/',
-        views.ColumnEditView.as_view(is_question=False),
+        views.ColumnEditView.as_view(
+            form_class=forms.ColumnRenameForm,
+            template_name='column/includes/partial_addedit.html'),
         name='column_edit'),
     path(
         '<int:pk>/question_edit/',
-        views.ColumnEditView.as_view(is_question=True),
+        views.ColumnEditView.as_view(
+            form_class=forms.QuestionForm,
+            template_name='column/includes/partial_question_addedit.html'),
         name='question_edit'),
     path(
         '<int:pk>/todoitem_edit/',
-        views.ColumnEditView.as_view(is_question=False),
+        views.ColumnEditView.as_view(
+            form_class=forms.ColumnRenameForm,
+            template_name='column/includes/partial_addedit.html'),
         name='todoitem_edit'),
     path(
         '<int:pk>/criterion_edit/',

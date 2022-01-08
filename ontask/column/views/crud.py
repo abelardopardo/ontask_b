@@ -287,15 +287,14 @@ class ColumnEditView(
 ):
     """Edit and update a column."""
 
-    is_question = None
+    form_class = None
+    template_name = None
 
-    def setup(self, request, *args, **kwargs):
-        if self.is_question:
-            self.form_class = forms.QuestionForm
-            self.template_name = 'column/includes/partial_question_addedit.html'
-        else:
-            self.form_class = forms.ColumnRenameForm
-            self.template_name = 'column/includes/partial_addedit.html'
+    def get_form_kwargs(self):
+        """Add the workflow and other params to the kwargs."""
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
 
     def get_context_data(self, **kwargs):
         """Insert is_question and add values."""

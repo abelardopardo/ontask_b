@@ -109,6 +109,26 @@ class UserIsInstructor(UserPassesTestMixin, permissions.BasePermission):
         return is_instructor(request.user)
 
 
+class UserIsAdmin(UserPassesTestMixin, permissions.BasePermission):
+    """Use in views to allow access only to admin users.
+
+    @DynamicAttrs
+    """
+
+    def test_func(self):
+        """Overwrite the user passes test mixing function."""
+        return is_admin(self.request.user)
+
+    def has_permission(self, request, view):
+        """Equivalent to has permission."""
+        return is_admin(request.user)
+
+    def has_object_permission(self, request, view, obj_param):
+        """Simply check if it is admin."""
+        del view, obj_param
+        return is_admin(request.user)
+
+
 class JSONResponseMixin(base.TemplateResponseMixin):
     """Renders a JSON response."""
 
