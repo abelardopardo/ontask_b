@@ -103,20 +103,6 @@ class FilterUpdateView(
 
 
 @method_decorator(ajax_required, name='dispatch')
-class FilterUpdateView(
-    UserIsInstructor,
-    JSONFormResponseMixin,
-    ActionView,
-    generic.FormView,
-):
-    """Process the filter update view."""
-
-    form_class = forms.FilterForm
-    template_name = 'condition/includes/partial_filter_addedit.html'
-    filter = None
-
-
-@method_decorator(ajax_required, name='dispatch')
 class FilterSetView(
     UserIsInstructor,
     JSONFormResponseMixin,
