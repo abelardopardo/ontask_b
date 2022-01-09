@@ -236,7 +236,7 @@ class ColumnFormulaAddView(ColumnBasicView, WorkflowView, generic.FormView):
 class ColumnRandomAddView(ColumnBasicView, WorkflowView, generic.FormView):
     """Create a column with random values (Modal)."""
 
-    form_class = forms.FormulaColumnAddForm
+    form_class = forms.RandomColumnAddForm
     template_name = 'column/includes/partial_random_add.html'
 
     def get_form_kwargs(self):
