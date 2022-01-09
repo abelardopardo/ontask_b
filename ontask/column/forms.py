@@ -426,13 +426,13 @@ class FormulaColumnAddForm(forms.ModelForm):
         required=True,
         label='Operation')
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Store the workflow columns and operands."""
         self.operands = kwargs.pop('operands')
         # Workflow columns
         self.wf_columns = kwargs.pop('columns')
 
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Populate the column choices
         self.fields['columns'].choices = [
