@@ -6,7 +6,7 @@ from rest_framework import status
 from ontask import models, tests
 
 
-class ColumnTestSetFilterRowsSelected(
+class ConditionTestSetFilterRowsSelected(
     tests.InitialWorkflowFixture,
     tests.OnTaskTestCase,
 ):
@@ -51,7 +51,7 @@ class ColumnTestSetFilterRowsSelected(
         resp = self.get_response(
             'condition:set_filter',
             url_params={'pk': action.id, 'view_id': view.id},
-            method='POST',
+            method='GET',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 

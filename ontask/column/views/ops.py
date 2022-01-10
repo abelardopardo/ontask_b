@@ -71,6 +71,7 @@ class ColumnMoveBottomView(UserIsInstructor, ColumnView):
 @method_decorator(ajax_required, name='dispatch')
 class ColumnRestrictValuesView(
     UserIsInstructor,
+    JSONFormResponseMixin,
     ColumnView,
     generic.TemplateView
 ):
@@ -84,7 +85,7 @@ class ColumnRestrictValuesView(
         df = pandas.load_table(self.workflow.get_data_frame_table_name())
         context['values'] = ', '.join([
             str(item)
-            for item in sorted(df[self.column.name].dropna().unique())]),
+            for item in sorted(df[self.column.name].dropna().unique())])
         return context
 
     def get(self, request, *args, **kwargs):
