@@ -5,17 +5,21 @@ from django.urls import path
 
 from ontask.connection import views
 
+from django.utils.translation import gettext_lazy as _
+
 app_name = 'connection'
 urlpatterns = [
     # SQL Connections
     path(
         'sqlconns_admin',
-        views.sql_connection_admin_index,
+        views.SQLConnectionAdminIndexView.as_view(
+            template_name='connection/index_admin.html',
+            title=_('SQL Connections')),
         name='sqlconns_admin_index'),
 
     path(
         'sqlconns_instructor/',
-        views.sql_connection_index,
+        views.sql.sql_connection_index,
         name='sqlconns_index'),
 
     path(
@@ -45,13 +49,15 @@ urlpatterns = [
 
     path(
         '<int:pk>/sqlconn_toggle/',
-        views.sqlconn_toggle,
+        views.sql_connection_toggle,
         name='sqlconn_toggle'),
 
     # Athena Connections
     path(
         'athenaconns_admin',
-        views.athena_connection_admin_index,
+        views.AthenaConnectionAdminIndexView.as_view(
+            template_name='connection/index_admin.html',
+            title=_('Athena Connections')),
         name='athenaconns_admin_index'),
 
     path(
@@ -61,31 +67,31 @@ urlpatterns = [
 
     path(
         'athenaconn_add/',
-        views.athena_connection_edit,
+        views.athena.athena_connection_edit,
         name='athenaconn_add'),
 
     path(
         '<int:pk>/athenaconn_edit/',
-        views.athena_connection_edit,
+        views.athena.athena_connection_edit,
         name='athenaconn_edit'),
 
     path(
         '<int:pk>/athenaconn_view/',
-        views.athena_connection_view,
+        views.athena.athena_connection_view,
         name='athenaconn_view'),
 
     path(
         '<int:pk>/athenaconn_clone/',
-        views.athena_connection_clone,
+        views.athena.athena_connection_clone,
         name='athenaconn_clone'),
 
     path(
         '<int:pk>/athenaconn_delete/',
-        views.athena_connection_delete,
+        views.athena.athena_connection_delete,
         name='athenaconn_delete'),
 
     path(
         '<int:pk>/athenaconn_toggle/',
-        views.athenaconn_toggle,
+        views.athena.athenaconn_toggle,
         name='athenaconn_toggle'),
 ]
