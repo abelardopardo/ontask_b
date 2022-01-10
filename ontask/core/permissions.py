@@ -477,7 +477,7 @@ def is_instructor(user) -> bool:
     )
 
 
-def is_admin(user):
+def is_admin(user) -> bool:
     """Check if the user is authenticated and is supergroup.
 
     @DynamicAttrs

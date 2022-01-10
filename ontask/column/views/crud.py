@@ -366,12 +366,7 @@ class ColumnDeleteView(
         return http.JsonResponse({'html_redirect': reverse('column:index')})
 
 
-class ColumnCloneView(
-    ColumnBasicView,
-    SingleColumnMixin,
-    ColumnView,
-    generic.TemplateView,
-):
+class ColumnCloneView(ColumnBasicView, ColumnView, generic.TemplateView,):
     """"Clone a column in the table attached to a workflow."""
 
     template_name = 'column/includes/partial_clone.html'

@@ -187,8 +187,8 @@ class ColumnCrudClone(ColumnCrudBasic):
 class ColumnCrudRestrict(ColumnCrudBasic):
     """Test restricting values in a column."""
 
+    # Test Column restriction
     def test(self):
-        """Test Column restriction."""
         column = self.workflow.columns.get(name='Gender')
         self.assertEqual(column.categories, [])
 

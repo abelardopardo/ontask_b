@@ -35,10 +35,10 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
         label=_('Multiple executions?'),
         help_text=_('Select if you want to execute multiple times.'))
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Set item_column values."""
         self.workflow = kwargs.pop('workflow', None)
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.set_fields_from_dict([
             'name',

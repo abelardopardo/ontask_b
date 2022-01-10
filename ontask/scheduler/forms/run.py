@@ -16,9 +16,9 @@ class ScheduleEmailForm(ScheduleBasicForm, action_forms.EmailActionForm):
     filter email addresses.
     """
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Set field order."""
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.order_fields([
             'name',
             'description_text',
@@ -38,9 +38,9 @@ class ScheduleEmailForm(ScheduleBasicForm, action_forms.EmailActionForm):
 class ScheduleSendListForm(ScheduleBasicForm, action_forms.SendListActionForm):
     """Form to create/edit objects of the ScheduleAction of type send list."""
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Set field order."""
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.order_fields([
             'name',
             'description_text',
@@ -57,9 +57,9 @@ class ScheduleSendListForm(ScheduleBasicForm, action_forms.SendListActionForm):
 class ScheduleJSONForm(ScheduleBasicForm, action_forms.JSONActionForm):
     """Form to edit ScheduleAction of type JSON."""
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Set field order."""
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.order_fields([
             'name',
             'description_text',
@@ -75,9 +75,9 @@ class ScheduleJSONForm(ScheduleBasicForm, action_forms.JSONActionForm):
 class ScheduleJSONReportForm(ScheduleBasicForm, action_forms.JSONReportActionForm):
     """Form to edit ScheduleAction of types JSON Report."""
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Set field order."""
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.order_fields([
             'name',
             'description_text',
