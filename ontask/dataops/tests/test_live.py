@@ -141,6 +141,24 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.selenium.find_element(By.LINK_TEXT, 'Done').click()
         self.wait_for_id_and_spinner('action-index')
 
+        # Click in the link to enable the URL for the action
+        self.open_action_operation('action in', 'fa-link')
+        self.assertIn(
+            'This URL provides access to the content personalised',
+            self.selenium.page_source)
+
+        # Click to Enable the URL
+        self.selenium.find_element(By.ID, 'id_serve_enabled').click()
+
+        # Click OK
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
+            'div.modal-footer > button.btn.btn-outline-primary'
+        ).click()
+
+        # close modal
+        self.wait_for_modal_close()
+
         # Click in the RUN link of the action in
         self.open_action_run('action in', is_action_in=True)
 
