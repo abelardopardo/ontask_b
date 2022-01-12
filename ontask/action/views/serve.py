@@ -49,7 +49,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ontask import models
 from ontask.action import forms, services
-from ontask.core import ActionView, UserIsInstructor, has_access
+from ontask.core import ActionView, UserIsInstructor, has_access, is_instructor
 
 
 class ActionServeActionView(generic.FormView):
@@ -65,9 +65,10 @@ class ActionServeActionView(generic.FormView):
         """Intercept when using an action that is not supposed to be used."""
         super().setup(request, *args, **kwargs)
         if (
-            not self.action or
-            not self.action.serve_enabled or
-            not self.action.is_active
+            not is_instructor and (
+                not self.action or
+                not self.action.serve_enabled or
+                not self.action.is_active)
         ):
             raise http.Http404(_('Action is not enabled.'))
         # Get the parameters
