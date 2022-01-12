@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from ontask import models
-from ontask.connection.services import sql_connection_select_table
+from ontask.connection.services import create_sql_connection_runtable
 from ontask.core import SessionPayload, get_workflow, is_instructor
 from ontask.scheduler import services
 
@@ -52,7 +52,7 @@ def sql_connection_index(
     :return: HTTP response
     """
     del workflow
-    table = sql_connection_select_table('scheduler:sqlupload')
+    table = create_sql_connection_runtable('scheduler:sqlupload')
     return render(
         request,
         'connection/index.html',
