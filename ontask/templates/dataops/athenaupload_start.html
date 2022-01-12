@@ -15,23 +15,23 @@
 
     <p class="text-center">{% trans 'The data will be accessed with the following parameters:' %}</p>
 
-    {% if connection.description_text %}
-      <p class="help-block text-center">{% blocktrans with n=connection.description_text %}Description:
+    {% if view.object.description_text %}
+      <p class="help-block text-center">{% blocktrans with n=view.object.description_text %}Description:
         {{ n }}{% endblocktrans %}</p>
     {% endif %}
-    {% if connection.aws_access_key %}
-      <p class="help-block text-center">{% blocktrans with n=connection.aws_access_key %}Access key:
+    {% if view.object.aws_access_key %}
+      <p class="help-block text-center">{% blocktrans with n=view.object.aws_access_key %}Access key:
         {{ n }}{% endblocktrans %}</p>
     {% endif %}
-    {% if connection.aws_bucket_name %}
-      <p class="help-block text-center">{% blocktrans with n=connection.aws_bucket_name %}Bucket name: {{ n }}{% endblocktrans %}</p>
+    {% if view.object.aws_bucket_name %}
+      <p class="help-block text-center">{% blocktrans with n=view.object.aws_bucket_name %}Bucket name: {{ n }}{% endblocktrans %}</p>
     {% endif %}
-    {% if connection.aws_file_path %}
-      <p class="help-block text-center">{% blocktrans with n=connection.aws_file_path %}File path: {{ n }}
+    {% if view.object.aws_file_path %}
+      <p class="help-block text-center">{% blocktrans with n=view.object.aws_file_path %}File path: {{ n }}
         {% endblocktrans %}</p>
     {% endif %}
-    {% if connection.aws_region_name %}
-        <p class="help-block text-center">{% blocktrans with n=connection.aws_region_name %}Region: {{ n }}{% endblocktrans %}</p>
+    {% if view.object.aws_region_name %}
+        <p class="help-block text-center">{% blocktrans with n=view.object.aws_region_name %}Region: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if table_name %}
       <p class="help-block text-center">

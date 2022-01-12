@@ -15,34 +15,34 @@
 
     <p class="text-center">{% trans 'The data will be accessed with the following parameters:' %}</p>
 
-    {% if conn_type %}
-      <p class="help-block text-center">{% blocktrans with n=conn_type %}Connection type:
+    {% if view.object.conn_type %}
+      <p class="help-block text-center">{% blocktrans with n=view.object.conn_type %}Connection type:
         {{ n }}{% endblocktrans %}</p>
     {% endif %}
-    {% if conn_driver %}
-      <p class="help-block text-center">{% blocktrans with n=conn_driver %}Connection
+    {% if view.object.conn_driver %}
+      <p class="help-block text-center">{% blocktrans with n=view.object.conn_driver %}Connection
         driver: {{ n }}{% endblocktrans %}</p>
     {% endif %}
-    {% if db_user %}
-      <p class="help-block text-center">{% blocktrans with n=db_user %}Username: {{ n }}
+    {% if view.object.db_user %}
+      <p class="help-block text-center">{% blocktrans with n=view.object.db_user %}Username: {{ n }}
         {% endblocktrans %}</p>
     {% endif %}
-    {% if db_password %}
+    {% if view.object.db_password %}
       <p class="help-block text-center">{% trans 'Password: Requested below' %}</p>
     {% endif %}
-    {% if db_host %}
+    {% if view.object.db_host %}
       <p class="help-block text-center">
-        {% blocktrans with n=db_host %}Host: {{ n }}{% endblocktrans %}</p>
+        {% blocktrans with n=view.object.db_host %}Host: {{ n }}{% endblocktrans %}</p>
     {% endif %}
-    {% if db_port %}
+    {% if view.object.db_port %}
       <p class="help-block text-center">
-        {% blocktrans with n=db_port %}Port: {{ n }}{% endblocktrans %}</p>
+        {% blocktrans with n=view.object.db_port %}Port: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     <p class="help-block text-center">
-      {% blocktrans with n=db_name %}Database name: {{ n }}{% endblocktrans %}
+      {% blocktrans with n=view.object.db_name %}Database name: {{ n }}{% endblocktrans %}
     </p>
     <p class="help-block text-center">
-      {% blocktrans with n=db_table %}Database table: {{ n }}{% endblocktrans %}
+      {% blocktrans with n=view.object.db_table %}Database table: {{ n }}{% endblocktrans %}
     </p>
     <div class="row justify-content-center">
       <form action="" method="post" enctype="multipart/form-data">
