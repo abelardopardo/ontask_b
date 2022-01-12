@@ -1,135 +1,123 @@
 # -*- coding: utf-8 -*-
 
 """Views to administer plugins."""
-from typing import Optional
+from typing import Dict
 
 from django import http
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import render
-from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 
 from ontask import OnTaskServiceException, models
-from ontask.core import ajax_required, is_admin, is_instructor
+from ontask.core import (
+    JSONFormResponseMixin, UserIsAdmin, UserIsInstructor,
+    WorkflowView, ajax_required)
 from ontask.core.session_ops import remove_workflow_from_session
 from ontask.dataops import services
 
 
-@user_passes_test(is_admin)
-def plugin_admin(
-    request: http.HttpRequest,
-) -> http.HttpResponse:
-    """Show the table of plugins and their status.
+class PluginAdminView(UserIsInstructor, WorkflowView, generic.TemplateView):
+    """Show the table of plugins and their status."""
 
-    :param request: HTTP Request
-    :return: Rendered page
-    """
-    remove_workflow_from_session(request)
+    template_name = 'dataops/plugin_admin.html'
 
-    # Traverse the plugin folder and refresh the db content.
-    services.refresh_plugin_data(request)
-    return render(
-        request,
-        'dataops/plugin_admin.html',
-        {'table': services.PluginAdminTable(models.Plugin.objects.all())})
+    def get_context_data(self, **kwargs) -> Dict:
+        context = super().get_context_data(**kwargs)
 
+        remove_workflow_from_session(self.request)
 
-@user_passes_test(is_instructor)
-@ajax_required
-def diagnose(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Show the diagnostics of a plugin that failed the verification tests.
+        # Traverse the plugin folder and refresh the db content.
+        services.refresh_plugin_data(self.request)
 
-    :param request: HTML request object
-    :param workflow: Workflow being processed.
-    :param pk: Primary key of the transform element
-    :return: JSON reponse
-    """
-    del workflow
-    # Action being used
-    plugin = models.Plugin.objects.filter(id=pk).first()
-    if not plugin:
-        return http.JsonResponse({'html_redirect': reverse('home')})
+        context['table'] = services.PluginAdminTable(
+            models.Plugin.objects.all())
 
-    # Reload the plugin to get the messages stored in the right place.
-    try:
-        pinstance, msgs = services.load_plugin(plugin.filename)
-    except OnTaskServiceException as exc:
-        exc.message_to_error(request)
-        return http.JsonResponse({
-            'html_redirect': reverse('dataops:plugin_admin')})
-
-    # If the new instance is now properly verified, simply redirect to the
-    # transform page
-    if pinstance:
-        models.Plugin.objects.filter(id=pk).update(is_verified=True)
-        return http.JsonResponse({
-            'html_redirect': reverse('dataops:plugin_admin')})
-
-    # Get the diagnostics from the plugin and use it for rendering.
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'dataops/includes/partial_diagnostics.html',
-            {'diagnostic_table': msgs},
-            request=request),
-    })
+        return context
 
 
-@user_passes_test(is_instructor)
-@ajax_required
-def moreinfo(
-    request: http.HttpRequest,
-    pk: int,
-) -> http.JsonResponse:
-    """Show the detailed information about a plugin.
+@method_decorator(ajax_required, name='dispatch')
+class PluginDiagnoseView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    generic.DetailView
+):
+    """Show the diagnostics of a plugin that failed the verification tests."""
 
-    :param request: HTML request object
-    :param pk: Primary key of the Plugin element
-    :return: JSON response
-    """
-    # Action being used
-    plugin = models.Plugin.objects.filter(id=pk).first()
-    if not plugin:
-        return http.JsonResponse({'html_redirect': reverse('home')})
+    model = models.Plugin
+    template_name = 'dataops/includes/partial_diagnostics.html'
+    msgs = None
 
-    # Reload the plugin to get the messages stored in the right place.
-    try:
-        pinstance, msgs = services.load_plugin(plugin.filename)
-    except OnTaskServiceException as exc:
-        exc.message_to_error(request)
-        return http.JsonResponse({
-            'html_redirect': reverse('dataops:plugin_admin')})
+    def get_context_data(self, **kwargs) -> Dict:
+        context = super().get_context_data(**kwargs)
+        context['diagnostic_table'] = self.msgs
+        return context
 
-    # Get the descriptions and show them in the modal
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'dataops/includes/partial_plugin_long_description.html',
-            {'pinstance': pinstance},
-            request=request),
-    })
+    def get(self, request, *args, **kwargs) -> http.JsonResponse:
+        plugin = self.get_object()
+        try:
+            p_instance, self.msgs = services.load_plugin(plugin.filename)
+        except OnTaskServiceException as exc:
+            exc.message_to_error(request)
+            return http.JsonResponse({
+                'html_redirect': reverse('dataops:plugin_admin')})
+
+        # If the new instance is now properly verified, simply redirect to the
+        # transform page
+        if p_instance:
+            models.Plugin.objects.filter(
+                id=kwargs['pk']).update(is_verified=True)
+            return http.JsonResponse({
+                'html_redirect': reverse('dataops:plugin_admin')})
+
+        return super().get(request, *args, **kwargs)
 
 
-@user_passes_test(is_admin)
-@ajax_required
-def plugin_toggle(
-    request: http.HttpRequest,
-    pk: int,
-) -> http.JsonResponse:
-    """Toggle the field is_enabled of a plugin.
+@method_decorator(ajax_required, name='dispatch')
+class PluginMoreInfoView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    generic.DetailView,
+):
 
-    :param request: HTML request object
-    :param pk: Primary key of the Plugin element
-    :return: JSON Response
-    """
-    del request
-    plugin_item = models.Plugin.objects.filter(pk=pk).first()
-    if not plugin_item:
-        return http.JsonResponse({})
+    model = models.Plugin
+    template_name = 'dataops/includes/partial_plugin_long_description.html'
 
-    if plugin_item.is_verified:
-        plugin_item.is_enabled = not plugin_item.is_enabled
-        plugin_item.save()
-    return http.JsonResponse({'is_checked': plugin_item.is_enabled})
+    p_instance = None
+    
+    def get_context_data(self, **kwargs) -> Dict:
+        context = super().get_context_data(**kwargs)
+        context['p_instance'] = self.p_instance
+        return context
+
+    def get(self, request, *args, **kwargs) -> http.JsonResponse:
+        plugin = self.get_object()
+
+        try:
+            self.p_instance, __ = services.load_plugin(plugin.filename)
+        except OnTaskServiceException as exc:
+            exc.message_to_error(request)
+            return http.JsonResponse({
+                'html_redirect': reverse('dataops:plugin_admin')})
+
+        return super().get(request, *args, **kwargs)
+
+
+@method_decorator(ajax_required, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')  # TODO: Remove this!
+class PluginToggleView(
+    UserIsAdmin,
+    JSONFormResponseMixin,
+    generic.DetailView,
+):
+    """Toggle the field is_enabled of a plugin."""
+
+    model = models.Plugin
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs) -> http.JsonResponse:
+        plugin_item = self.get_object()
+        if plugin_item.is_verified:
+            plugin_item.is_enabled = not plugin_item.is_enabled
+            plugin_item.save(update_fields=['is_enable'])
+        return http.JsonResponse({'is_checked': plugin_item.is_enabled})

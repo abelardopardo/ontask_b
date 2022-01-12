@@ -23,7 +23,6 @@ class DataopsTestCSVFormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):
     """Test the form error detection."""
 
     def test(self):
-        """Test the CSV upload."""
         # Get the regular form
         resp = self.get_response('dataops:csvupload_start')
         self.assertTrue(status.is_success(resp.status_code))
@@ -54,7 +53,6 @@ class DataopsTestGoogleFormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):
     """Test the form error detection."""
 
     def test(self):
-        """Test the Google Sheet upload."""
         # Get the regular form
         resp = self.get_response('dataops:googlesheetupload_start')
         self.assertTrue(status.is_success(resp.status_code))
@@ -83,7 +81,6 @@ class DataopsTestS3FormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):
     """Test the form error detection."""
 
     def test(self):
-        """Test the S3 upload."""
         # Get the regular form
         resp = self.get_response('dataops:s3upload_start')
         self.assertTrue(status.is_success(resp.status_code))

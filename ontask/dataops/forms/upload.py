@@ -101,6 +101,14 @@ class UploadCSVFileForm(UploadBasic):
 
         :return: The cleaned data
         """
+        # The form must be multipart
+        if not self.is_multipart():
+            self.add_error(
+                None,
+                _('CSV upload form is not multiform'),
+            )
+            return {}
+
         form_data = super().clean()
 
         if form_data['skip_lines_at_top'] < 0:

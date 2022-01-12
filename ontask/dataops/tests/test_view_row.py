@@ -106,7 +106,7 @@ class DataopsViewsRowEdit(DataopsViewsRowBasic):
                 '___ontask___upload_8': '06/05/2019 19:23'}
         )
         request = self.add_middleware(request)
-        resp = views.row_update(request)
+        resp = views.RowUpdateView.as_view()(request)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
         row_val = sql.get_row(

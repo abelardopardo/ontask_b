@@ -1,135 +1,121 @@
 # -*- coding: utf-8 -*-
 
 """Functions to update and create a row in the dataframe."""
-from typing import Optional
 
-from django import http
-from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.views import generic
 
 from ontask import models
-from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX, get_workflow, is_instructor
+from ontask.core import (
+    ONTASK_UPLOAD_FIELD_PREFIX, UserIsInstructor, WorkflowView)
 from ontask.dataops import forms, services, sql
 
 
-@user_passes_test(is_instructor)
-@get_workflow(pf_related=['columns', 'actions'])
-def row_create(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Process POST request to create a new row in the data table.
+class RowCreateView(UserIsInstructor, WorkflowView, generic.FormView):
+    """Process request to create a new row in the data table."""
 
-    :param request: Request object with all the data.
-    :param workflow: Workflow being processed.
-    :return: Nothing. Effect done in the database.
-    """
-    # If the workflow has no data, the operation should not be allowed
-    if workflow.nrows == 0:
-        return redirect('dataops:uploadmerge')
+    form_class = forms.RowForm
+    template_name = 'dataops/row_create.html'
 
-    # Create the form
-    form = forms.RowForm(request.POST or None, workflow=workflow)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        kwargs['cancel_url'] = reverse('table:display')
+        return context
 
-    if request.method == 'POST' and form.is_valid():
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
+
+    def form_valid(self, form):
         row_values = [
             form.cleaned_data[(ONTASK_UPLOAD_FIELD_PREFIX + '%s') % idx]
-            for idx in range(workflow.columns.count())]
+            for idx in range(self.workflow.columns.count())]
         try:
-            services.create_row(workflow, row_values)
+            services.create_row(self.workflow, row_values)
         except Exception as exc:
             form.add_error(None, str(exc))
             return render(
-                request,
+                self.request,
                 'dataops/row_create.html',
-                {'workflow': workflow,
+                {'workflow': self.workflow,
                  'form': form,
                  'cancel_url': reverse('table:display')})
 
-        workflow.log(
-            request.user,
+        self.workflow.log(
+            self.request.user,
             models.Log.WORKFLOW_DATA_ROW_CREATE,
             new_values=list(
-                zip([col.name for col in workflow.columns.all()],
+                zip([col.name for col in self.workflow.columns.all()],
                     [str(rval) for rval in row_values])))
         return redirect('table:display')
 
-    return render(
-        request,
-        'dataops/row_create.html',
-        {'workflow': workflow,
-         'form': form,
-         'cancel_url': reverse('table:display')})
 
+class RowUpdateView(UserIsInstructor, WorkflowView, generic.FormView):
+    """Process request to update a row in the data table."""
 
-@user_passes_test(is_instructor)
-@get_workflow(pf_related='columns')
-def row_update(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Process POST request to update a row in the data table.
+    form_class = forms.RowForm
+    template_name = 'dataops/row_filter.html'
 
-    :param request: Request object with all the data.
-    :param workflow: Workflow being manipulated
-    :return: Http Response with the page rendering.
-    """
-    # Get the pair key,value to fetch the row from the table
-    update_key = request.GET.get('k')
-    update_val = request.GET.get('v')
+    update_key = None
+    update_val = None
 
-    if not update_key or not update_val:
-        # Malformed request
-        return render(
-            request,
-            'error.html',
-            {'message': _('Unable to update table row')})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        kwargs['cancel_url'] = reverse('table:display')
+        return context
 
-    # Get the form populated with the row values
-    form = forms.RowForm(
-        request.POST or None,
-        workflow=workflow,
-        initial_values=sql.get_row(
-            workflow.get_data_frame_table_name(),
-            key_name=update_key,
-            key_value=update_val,
-            column_names=workflow.get_column_names()))
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        kwargs['initial_values'] = sql.get_row(
+            self.workflow.get_data_frame_table_name(),
+            key_name=self.update_key,
+            key_value=self.update_val,
+            column_names=self.workflow.get_column_names())
+        return kwargs
 
-    if request.method == 'POST' and form.is_valid():
+    def form_valid(self, form):
         if not form.has_changed():
             return redirect('table:display')
 
         try:
             row_values = [
                 form.cleaned_data[(ONTASK_UPLOAD_FIELD_PREFIX + '%s') % idx]
-                for idx in range(workflow.columns.count())]
+                for idx in range(self.workflow.columns.count())]
             services.update_row_values(
-                workflow,
-                update_key,
-                update_val,
+                self.workflow,
+                self.update_key,
+                self.update_val,
                 row_values)
         except Exception as exc:
             form.add_error(None, str(exc))
             return render(
-                request,
+                self.request,
                 'dataops/row_filter.html',
-                {'workflow': workflow,
+                {'workflow': self.workflow,
                  'form': form,
                  'cancel_url': reverse('table:display')})
 
-        workflow.log(
-            request.user,
+        self.workflow.log(
+            self.request.user,
             models.Log.WORKFLOW_DATA_ROW_UPDATE,
             new_values=list(zip(
-                [col.name for col in workflow.columns.all()],
+                [col.name for col in self.workflow.columns.all()],
                 [str(rval) for rval in row_values])))
         return redirect('table:display')
 
-    return render(
-        request,
-        'dataops/row_filter.html',
-        {'workflow': workflow,
-         'form': form,
-         'cancel_url': reverse('table:display')})
+    def dispatch(self, request, *args, **kwargs):
+        self.update_key = request.GET.get('k')
+        self.update_val = request.GET.get('v')
+
+        if not self.update_key or not self.update_val:
+            # Malformed request
+            return render(
+                request,
+                'error.html',
+                {'message': _('Unable to update table row')})
+
+        return super().dispatch(request, *args, **kwargs)
