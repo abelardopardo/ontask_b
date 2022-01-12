@@ -1,11 +1,11 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-<form method="post" action="{{ action_url }}" 
+<form method="post" action="{{ view.action_url }}"
   class="js-connection-addedit-form">
   {% csrf_token %}
   <div class="modal-header">
-  {% if add %}
+  {% if view.add %}
     <h4 class="modal-title">{% trans 'Add connection' %}</h4>
   {% else %}
     <h4 class="modal-title">{% trans 'Edit connection' %}</h4>
@@ -19,7 +19,7 @@
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-outline-primary">
-       <span class="fa fa-check"></span> {% if add %}{% trans 'Add connection' %}{% else %}{% trans 'Update' %}{% endif %}
+       <span class="fa fa-check"></span> {% if view.add %}{% trans 'Add connection' %}{% else %}{% trans 'Update' %}{% endif %}
     </button>
   </div>
 </form>

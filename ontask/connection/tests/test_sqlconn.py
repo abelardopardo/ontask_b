@@ -37,11 +37,11 @@ class DataopsViewSQLConnectionsAdmin(DataopsSQLConnectionsBasic):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Add a new connection (GET)
-        resp = self.get_response('connection:sqlconn_add', is_ajax=True)
+        resp = self.get_response('connection:sqlconn_create', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         # Add a new connection (POST)
         resp = self.get_response(
-            'connection:sqlconn_add',
+            'connection:sqlconn_create',
             method='POST',
             req_params={
                 'name': 'conn name',

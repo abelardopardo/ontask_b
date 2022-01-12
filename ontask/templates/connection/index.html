@@ -5,7 +5,7 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{{ title }}{% endblock %}
+{% block title %}{{ block.super }}{{ view.title }}{% endblock %}
 {% block extrahead %}
   {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
@@ -48,7 +48,7 @@
 {% endblock %}
 {% block container %}
   <div class="container" id="connection-instructor">
-    <h1 class="text-center">{{ title }}</h1>
+    <h1 class="text-center">{{ view.title }}</h1>
     {% if table.data|length %}
       <div class="justify-content-center">
         {% render_table table %}
@@ -59,7 +59,7 @@
       access data stored in external relational databases. The connections can only
         be created by the system administrator.{% endblocktrans %}</p>
       {% endif %}
-      {% if is_sql %}
+      {% if view.is_sql %}
         <p class="text-center">{% blocktrans %}In this page you will find the available SQL connections to
       access data stored in external relational databases. The connections can only
         be created by the system administrator.{% endblocktrans %}</p>
