@@ -108,6 +108,7 @@ class ActionSelectConditionQuestionView(UserIsInstructor, ColumnConditionView):
 
 
 @method_decorator(ajax_required, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')  # TODO: Remove this!
 class ActionShuffleQuestionsView(
     UserIsInstructor,
     JSONResponseMixin,
@@ -116,9 +117,9 @@ class ActionShuffleQuestionsView(
     """Toggle the shuffle questions field"""
 
     # Only AJAX Post requests allowed
-    http_method_names = ['get']
+    http_method_names = ['post']
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         self.action.shuffle = not self.action.shuffle
         self.action.save(update_fields=['shuffle'])
 
@@ -126,6 +127,7 @@ class ActionShuffleQuestionsView(
 
 
 @method_decorator(ajax_required, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')  # TODO: Remove this!
 class ActionToggleQuestionChangeView(
     UserIsInstructor,
     JSONResponseMixin,
@@ -134,9 +136,9 @@ class ActionToggleQuestionChangeView(
     """Enable/Disable changes in the question."""
 
     # Only AJAX Post requests allowed
-    http_method_names = ['get']
+    http_method_names = ['post']
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         self.cc_tuple.changes_allowed = not self.cc_tuple.changes_allowed
         self.cc_tuple.save(update_fields=['changes_allowed'])
         if self.cc_tuple.action.action_type == models.Action.SURVEY:

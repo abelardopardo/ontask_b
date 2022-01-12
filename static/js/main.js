@@ -202,7 +202,7 @@ let toggleCheckBox = function () {
   $('#div-spinner').show();
   $.ajax({
     url: $(this).attr("data-url"),
-    type: 'get',
+    type: 'post',
     dataType: 'json',
     success: function (data) {
         if (data.is_checked == true) {
