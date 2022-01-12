@@ -62,8 +62,7 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
             'description_text',
             'enabled'),
         orderable=False,
-        extra_columns=[(
-            'operations', op_column)])
+        extra_columns=[('operations', op_column)])
 
 
 def create_sql_connection_runtable() -> SQLConnectionTableSelect:

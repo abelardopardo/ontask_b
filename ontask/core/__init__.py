@@ -9,26 +9,21 @@ from ontask.core.checks import (
     check_key_columns, check_workflow, fix_non_unique_object_names)
 from ontask.core.decorators import (
     ajax_required, get_action, get_column, get_columncondition, get_condition,
-    get_view, get_workflow, get_filter)
-
+    get_filter, get_view, get_workflow)
 from ontask.core.forms import (
     DATE_TIME_WIDGET_OPTIONS, RestrictedFileField, column_to_field)
-
 from ontask.core.manage_session import SessionPayload
 from ontask.core.permissions import (
-    GROUP_NAMES, UserIsInstructor, has_access, is_admin, is_instructor,
-    JSONResponseMixin, JSONFormResponseMixin,
-    WorkflowView, ActionView, ColumnConditionView, ColumnView, ConditionView,
-    SingleWorkflowMixin, SingleActionMixin, SingleColumnMixin,
-    SingleColumnConditionMixin, SingleConditionMixin,
-    error_redirect, store_workflow_in_session)
-
+    ActionView, ColumnConditionView, ColumnView, ConditionView, GROUP_NAMES,
+    JSONFormResponseMixin, JSONResponseMixin, SingleActionMixin,
+    SingleColumnConditionMixin, SingleColumnMixin, SingleConditionMixin,
+    SingleWorkflowMixin, UserIsAdmin, UserIsInstructor, WorkflowView,
+    error_redirect, has_access, is_admin, is_instructor,
+    store_workflow_in_session)
+from ontask.core.serializers import OnTaskObjectIdField, OnTaskVersionField
 from ontask.core.session_ops import (
     _store_workflow_nrows_in_session, remove_workflow_from_session)
-
 from ontask.core.tables import DataTablesServerSidePaging, OperationsColumn
-
-from ontask.core.serializers import OnTaskObjectIdField, OnTaskVersionField
 
 ONTASK_UPLOAD_FIELD_PREFIX = '___ontask___upload_'
 

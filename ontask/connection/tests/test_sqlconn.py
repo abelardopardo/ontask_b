@@ -140,8 +140,6 @@ class DataopsRunSQLConnections(
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Execute the RUN step."""
-
         sql_conn = models.SQLConnection.objects.get(pk=1)
         self.assertIsNotNone(sql_conn)
 

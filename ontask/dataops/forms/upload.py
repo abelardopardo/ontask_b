@@ -68,9 +68,9 @@ class UploadBasic(forms.Form):
 class UploadCSVFileForm(UploadBasic):
     """Form to read a csv file.
 
-    It also allows to specify the number of lines to
-    skip at the top and the bottom of the file. This functionality is offered
-    by the underlyng function read_csv in Pandas
+    It also allows to specify the number of lines to skip at the top and the
+    bottom of the file. This functionality is offered by the underlying
+    function read_csv in Pandas
     """
 
     data_file = RestrictedFileField(
