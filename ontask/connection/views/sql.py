@@ -25,7 +25,16 @@ class SQLConnectionAdminIndexView(UserIsAdmin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['table'] = services.create_sql_connection_admintable()
-        context['data_url'] = reverse('connection:sqlconn_add')
+        context['data_url'] = reverse('connection:sqlconn_create')
+        return context
+
+
+class SQLConnectionIndexView(common.ConnectionIndexView):
+    """Show the SQL connections."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['table'] = services.create_sql_connection_runtable()
         return context
 
 

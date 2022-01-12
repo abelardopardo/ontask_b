@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Service functions to handle athena connections."""
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -15,17 +14,7 @@ from ontask.core import OperationsColumn
 class AthenaConnectionTableAdmin(ConnectionTableAdmin):
     """Table to render the Athena admin items."""
 
-    @staticmethod
-    def render_enabled(record):
-        """Render the boolean to allow changes."""
-        return render_to_string(
-            'connection/includes/partial_enable.html',
-            {
-                'id': record['id'],
-                'enabled': record['enabled'],
-                'toggle_url': reverse(
-                    'connection:athenaconn_toggle',
-                    kwargs={'pk': record['id']})})
+    toggle_url_name = 'connection:athenaconn_toggle'
 
     class Meta(ConnectionTableAdmin.Meta):
         """Define model, fields, sequence and attributes."""
@@ -34,6 +23,8 @@ class AthenaConnectionTableAdmin(ConnectionTableAdmin):
 
 class AthenaConnectionTableSelect(ConnectionTableSelect):
     """Class to render the table of Athena connections."""
+
+    select_url = 'dataops:athenaupload_start'
 
     class Meta(ConnectionTableSelect.Meta):
         """Define models, fields, sequence and attributes."""
@@ -46,7 +37,7 @@ def create_athena_connection_admintable() -> AthenaConnectionTableAdmin:
     :return: Athena Connection Table Admin object.
     """
     op_column = OperationsColumn(
-        verbose_name='',
+        verbose_name=_('Operations'),
         template_file='connection/includes/partial_adminop.html',
         template_context=lambda record: {
             'id': record['id'],
@@ -74,9 +65,9 @@ def create_athena_connection_admintable() -> AthenaConnectionTableAdmin:
 
 
 def create_athena_connection_runtable() -> AthenaConnectionTableSelect:
-    """Create the table structure with the SQL connections for Running.
+    """Create the table structure with the Athena connections for Running.
 
-    :return: SQL Connection Table Run object.
+    :return: Athena Connection Table Run object.
     """
     operation_column = OperationsColumn(
         verbose_name=_('Operations'),

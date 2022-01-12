@@ -11,9 +11,21 @@ from ontask import create_new_name, models
 
 
 class ConnectionTableAdmin(tables.Table):
-    """Base class for those used to render connection admin items."""
+    """Base class to render connection admin table."""
 
     enabled = tables.BooleanColumn(verbose_name=_('Enabled?'))
+    toggle_url_name = None
+
+    def render_enabled(self, record):
+        """Render the boolean to allow changes."""
+        return render_to_string(
+            'connection/includes/partial_enable.html',
+            {
+                'id': record['id'],
+                'enabled': record['enabled'],
+                'toggle_url': reverse(
+                    self.toggle_url_name,
+                    kwargs={'pk': record['id']})})
 
     class Meta:
         """Define model, fields, sequence and attributes."""
@@ -29,6 +41,15 @@ class ConnectionTableAdmin(tables.Table):
 
 class ConnectionTableSelect(tables.Table):
     """Base class to render connections to instructors."""
+
+    select_url = None
+
+    def render_name(self, record):
+        """Render the name as a link."""
+        return format_html(
+            '<a href="{0}">{1}</a>',
+            reverse(self.select_url, kwargs={'pk': record['id']}),
+            record['name'])
 
     class Meta:
         """Define fields, sequence and attributes."""

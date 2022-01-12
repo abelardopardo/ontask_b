@@ -2,9 +2,7 @@
 
 """Service functions to handle SQL connections."""
 
-from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from ontask import models
@@ -17,38 +15,17 @@ from ontask.core import OperationsColumn
 class SQLConnectionTableAdmin(ConnectionTableAdmin):
     """Table to render the SQL admin items."""
 
-    @staticmethod
-    def render_enabled(record):
-        """Render the boolean to allow changes."""
-        return render_to_string(
-            'connection/includes/partial_enable.html',
-            {
-                'id': record['id'],
-                'enabled': record['enabled'],
-                'toggle_url': reverse(
-                    'connection:sqlconn_toggle',
-                    kwargs={'pk': record['id']})})
+    toggle_url_name = 'connection:sqlconn_toggle'
 
     class Meta(ConnectionTableAdmin.Meta):
         """Define model."""
-
         model = models.SQLConnection
 
 
 class SQLConnectionTableSelect(ConnectionTableSelect):
     """Class to render the table of SQL connections."""
 
-    def __init__(self, *args, **kwargs):
-        """Store the select url string to use when rendering name."""
-        self.select_url = kwargs.pop('select_url')
-        super().__init__(*args, **kwargs)
-
-    def render_name(self, record):
-        """Render the name as a link."""
-        return format_html(
-            '<a href="{0}">{1}</a>',
-            reverse(self.select_url, kwargs={'pk': record['id']}),
-            record['name'])
+    select_url = 'dataops:sqlupload_start'
 
     class Meta(ConnectionTableSelect.Meta):
         """Define models, fields, sequence and attributes."""
@@ -89,10 +66,9 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
             'operations', op_column)])
 
 
-def sql_connection_select_table(select_url: str) -> SQLConnectionTableSelect:
+def create_sql_connection_runtable() -> SQLConnectionTableSelect:
     """Create the table structure with the SQL connections for Running.
 
-    :param select_url: URL to use for the select link in every row
     :return: SQL Connection Table Run object.
     """
     operation_column = OperationsColumn(
@@ -109,6 +85,5 @@ def sql_connection_select_table(select_url: str) -> SQLConnectionTableSelect:
             'id',
             'name',
             'description_text'),
-        select_url=select_url,
         orderable=False,
         extra_columns=[('operations', operation_column)])

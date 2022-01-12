@@ -9,5 +9,5 @@ from ontask.connection.services.crud import (
     toggle,
 )
 from ontask.connection.services.sql import (
-    create_sql_connection_admintable, sql_connection_select_table,
+    create_sql_connection_admintable, create_sql_connection_runtable,
 )
