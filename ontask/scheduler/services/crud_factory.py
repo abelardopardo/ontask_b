@@ -22,7 +22,7 @@ class SchedulerCRUDFactory:
         self._producers = {}
 
     def _get_creator(self, operation_type):
-        """Get the creator for the tiven operation_type and args."""
+        """Get the creator for the given operation_type and args."""
         creator_obj = self._producers.get(operation_type)
         if not creator_obj:
             raise ValueError(operation_type)

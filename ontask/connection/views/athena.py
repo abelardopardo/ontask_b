@@ -15,8 +15,9 @@ class AthenaConnectionAdminIndexView(common.ConnectionAdminIndexView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['table'] = services.create_athena_connection_admintable()
-        context['data_url'] = reverse('connection:athenaconn_create')
+        context.update({
+            'table': services.create_athena_connection_admintable(),
+            'data_url': reverse('connection:athenaconn_create')})
         return context
 
 

@@ -51,11 +51,10 @@ class WorkflowIndexView(UserIsInstructor, generic.ListView):
 
     def get_context_data(self, **kwargs):
         """Get additional workflow fields in the context"""
-        kwargs = super().get_context_data(**kwargs)
-        kwargs['n_star_wflows'] = self.object_list.filter(
+        context = super().get_context_data(**kwargs)
+        context['n_star_wflows'] = self.object_list.filter(
             star__in=[self.request.user]).count()
-
-        return kwargs
+        return context
 
 
 @method_decorator(ajax_required, name='dispatch')

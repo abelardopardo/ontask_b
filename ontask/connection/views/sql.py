@@ -15,8 +15,9 @@ class SQLConnectionAdminIndexView(common.ConnectionAdminIndexView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['table'] = services.create_sql_connection_admintable()
-        context['data_url'] = reverse('connection:sqlconn_create')
+        context.update({
+            'table': services.create_sql_connection_admintable(),
+            'data_url': reverse('connection:sqlconn_create')})
         return context
 
 

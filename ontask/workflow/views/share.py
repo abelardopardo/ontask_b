@@ -62,7 +62,6 @@ class WorkflowShareDeleteView(
     def get_context_data(self, **kwargs):
         """Add pk and user email to the context."""
         context = super().get_context_data(**kwargs)
-        context['pk'] = kwargs['pk']
         user = get_user_model().objects.filter(id=kwargs['pk']).first()
         if not user:
             raise http.Http404(_('Unable to find user'))

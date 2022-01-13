@@ -107,10 +107,11 @@ class ActionServeActionView(generic.FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['action'] = self.action
-        context['cancel_url'] = reverse(
-            'action:run', kwargs={'pk': self.action.id},
-        ) if has_access(self.request.user, self.action.workflow) else None
+        context.update({
+            'action': self.action,
+            'cancel_url': reverse('action:run', kwargs={'pk': self.action.id}) if has_access(
+                self.request.user,
+                self.action.workflow) else None})
         return context
 
     def form_valid(self, form):

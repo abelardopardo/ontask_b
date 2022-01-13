@@ -707,8 +707,8 @@ class ConditionNameWithSymbols(
     action_name1 = 'bug 1'
     action_name2 = 'bug 2'
 
+    # Test that first action renders correctly.
     def test(self):
-        """Test that first action renders correctly."""
         self.workflow = models.Workflow.objects.all().first()
         self.user = get_user_model().objects.filter(
             email='instructor01@bogus.com'
@@ -756,8 +756,8 @@ class ColumnNameTooLarge(tests.OnTaskTestCase):
               8.0,,d1_t2_8,,127.0,,False,,1/2/18 08:00:00+00:00""".format(
         'a' * (sql.COLUMN_NAME_SIZE + 1))
 
+    # Use the table store to detect column names that are too long.
     def test(self):
-        """Use the table store to detect column names that are too long."""
         data_frame = services.load_df_from_csvfile(io.StringIO(self.csv), 0, 0)
 
         self.assertTrue(any(

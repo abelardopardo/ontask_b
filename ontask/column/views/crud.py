@@ -86,8 +86,7 @@ class ColumnCreateView(ColumnBasicView, WorkflowView, generic.CreateView):
     def get_context_data(self, **kwargs):
         """Insert is_question and add values."""
         context = super().get_context_data(**kwargs)
-        context['is_question'] = False,
-        context['add'] = True
+        context.update({'is_question': False, 'add': True})
         return context
 
     def get_form_kwargs(self):
@@ -332,26 +331,21 @@ class ColumnDeleteView(
     def get_context_data(self, **kwargs):
         """Insert is_question and add values."""
         context = super().get_context_data(**kwargs)
-        # Get the conditions that need to be deleted
-        cond_to_delete = [
+        context.update({
+            # Get the conditions that need to be deleted
+            'cond_to_delete': [
             cond for cond in self.workflow.conditions.all()
-            if self.column in cond.columns.all()]
-        # In the context to show to the user before confirming the deletion
-        context['cond_to_delete'] = cond_to_delete
+            if self.column in cond.columns.all()],
 
-        # Get the action filters that need to be deleted
-        action_filter_to_delete = [
+            # Get the action filters that need to be deleted
+            'action_filter_to_delete': [
             action for action in self.workflow.actions.all()
-            if action.filter and self.column in action.filter.columns.all()]
-        # In the context to show to the user before confirming the deletion
-        context['action_filter_to_delete'] = action_filter_to_delete
+            if action.filter and self.column in action.filter.columns.all()],
 
-        # Get the views with filters that need to be deleted
-        view_filter_to_delete = [
+            # Get the views with filters that need to be deleted
+            'view_filter_to_delete': [
             view for view in self.workflow.views.all()
-            if view.filter and self.column in view.filter.columns.all()]
-        # In the context to show to the user before confirming the deletion
-        context['view_filter_to_delete'] = view_filter_to_delete
+            if view.filter and self.column in view.filter.columns.all()]})
         return context
 
     def delete(self, request, *args, **kwargs):
@@ -366,7 +360,7 @@ class ColumnDeleteView(
         return http.JsonResponse({'html_redirect': reverse('column:index')})
 
 
-class ColumnCloneView(ColumnBasicView, ColumnView, generic.TemplateView,):
+class ColumnCloneView(ColumnBasicView, ColumnView, generic.TemplateView):
     """"Clone a column in the table attached to a workflow."""
 
     template_name = 'column/includes/partial_clone.html'

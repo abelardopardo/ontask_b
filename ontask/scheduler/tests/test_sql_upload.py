@@ -114,8 +114,6 @@ class SchedulerViewCreateSQLUpload(
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Create a new SQL Scheduled operation."""
-
         initial_df = self.workflow.data_frame()
 
         # Create the new table in the DB for the scheduled operation

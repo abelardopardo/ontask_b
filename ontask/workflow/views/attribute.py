@@ -72,7 +72,6 @@ class WorkflowAttributeDeleteView(
     def get_context_data(self, **kwargs):
         """Add pk and the key name to the context."""
         context = super().get_context_data(**kwargs)
-        context['pk'] = kwargs['pk']
         context['key'], _ = list(
             self.workflow.attributes.items())[kwargs['pk']]
         return context

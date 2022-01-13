@@ -42,14 +42,14 @@ class DataopsTransform(tests.PluginExecutionFixture, tests.OnTaskTestCase):
 class DataopsPluginErrors(tests.OnTaskTestCase):
     """Test the error detection for plugins."""
 
+    # Class is subclass of OnTaskPluginAbstract
     def test_condition_1(self):
-        """Class is subclass of OnTaskPluginAbstract"""
         pinobj = BogusPlugin()
         p_tests = _verify_plugin(pinobj)
         self.assertTrue(p_tests[0][0] != 'Ok')
 
+    # Class is not documented, no fields.
     def test_condition_2(self):
-        """Class is not documented, no fields."""
         pinobj = BogusPlugin2()
         tests = _verify_plugin(pinobj)
         self.assertTrue(tests[1][0] != 'Ok')

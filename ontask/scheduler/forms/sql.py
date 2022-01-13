@@ -15,7 +15,8 @@ from ontask.scheduler.forms import ScheduleBasicForm
 class ScheduleSQLUploadForm(
     ScheduleBasicForm,
     dataops_forms.MergeForm,
-    ontask.connection.forms.SQLRequestConnectionParam):
+    ontask.connection.forms.SQLRequestConnectionParam
+):
     """Form to request info for the SQL scheduled upload
 
     Three blocks of information are requested:

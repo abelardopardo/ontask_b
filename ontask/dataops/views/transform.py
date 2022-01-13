@@ -31,12 +31,13 @@ class TransformModelShowView(
         if self.request.user.is_superuser:
             table_err = models.Plugin.objects.filter(is_model=None)
 
-        context['table'] = services.create_model_table(
-            self.request,
-            self.workflow,
-            self.is_model)
-        context['is_model'] = self.is_model
-        context['table_err'] = table_err
+        context.update({
+            'table': services.create_model_table(
+                self.request,
+                self.workflow,
+                self.is_model),
+            'is_model': self.is_model,
+            'table_err': table_err})
         return context
 
 
@@ -50,17 +51,20 @@ class PluginInvokeView(UserIsInstructor, WorkflowView, generic.FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         form = context['form']
-        context['input_column_fields'] = [
+        context.update({
+            'input_column_fields': [
                 fld for fld in list(form)
-                if fld.name.startswith(ONTASK_UPLOAD_FIELD_PREFIX + 'input')]
-        context['output_column_fields'] = [
+                if fld.name.startswith(ONTASK_UPLOAD_FIELD_PREFIX + 'input')],
+
+            'output_column_fields': [
                 fld for fld in list(form)
-                if fld.name.startswith(ONTASK_UPLOAD_FIELD_PREFIX + 'output')]
-        context['parameters'] = [
+                if fld.name.startswith(ONTASK_UPLOAD_FIELD_PREFIX + 'output')],
+
+            'parameters': [
                 fld for fld in list(form)
                 if fld.name.startswith(
-                    ONTASK_UPLOAD_FIELD_PREFIX + 'parameter')]
-        context['pinstance'] = self.plugin_instance
+                    ONTASK_UPLOAD_FIELD_PREFIX + 'parameter')],
+            'pinstance': self.plugin_instance})
         return context
 
     def get_form_kwargs(self):

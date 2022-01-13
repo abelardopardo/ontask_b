@@ -13,16 +13,9 @@ class UploadStart(UserIsInstructor, WorkflowView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['dtype'] = self.dtype
-        context['dtype_select'] = self.dtype_select
-        if self.workflow.has_table():
-            context['value_range'] = range(5)
-        else:
-            context['value_range'] = range(3)
-        context['prev_step'] = reverse(self.prev_step_url)
+        context.update({
+            'dtype': self.dtype,
+            'dtype_select': self.dtype_select,
+            'value_range': range(5) if self.workflow.has_table() else range (3),
+            'prev_step': reverse(self.prev_step_url)})
         return context
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['workflow'] = self.workflow
-        return kwargs

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Views to manipulate the CRUD for scheduled exections."""
+"""Views to manipulate the CRUD for scheduled executions."""
 from typing import Optional
 
 from django import http

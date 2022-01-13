@@ -42,8 +42,7 @@ class DataopsCSVUpload(DataopsUploadBasic):
 class DataopsExcelUpload(DataopsUploadBasic):
     """Test the excel upload code."""
 
-    def test_excel_upload(self):
-        """Test the excel upload."""
+    def test(self):
         # Get the regular form
         resp = self.get_response('dataops:excelupload_start')
         self.assertTrue(status.is_success(resp.status_code))
@@ -64,7 +63,7 @@ class DataopsExcelUpload(DataopsUploadBasic):
 class DataopsGoogleUpload(DataopsUploadBasic):
     """Test the Google upload code."""
 
-    def test_google_sheet_upload(self):
+    def test(self):
         # Get the regular form
         resp = self.get_response('dataops:googlesheetupload_start')
         self.assertTrue(status.is_success(resp.status_code))
