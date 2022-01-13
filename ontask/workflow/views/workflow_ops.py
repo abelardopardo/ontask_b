@@ -33,9 +33,8 @@ class WorkflowFlushView(
     def post(self, request, *args, **kwargs):
         """Perform the flush operation."""
 
-        workflow = self.get_object()
-        if workflow.nrows != 0:
-            services.do_flush(request, workflow)
+        if self.workflow.nrows != 0:
+            services.do_flush(request, self.workflow)
         return http.JsonResponse({'html_redirect': ''})
 
 
