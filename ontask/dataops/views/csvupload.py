@@ -35,6 +35,11 @@ class CSVUploadStart(common.UploadStart, generic.FormView):
     dtype = 'CSV'
     dtype_select = _('CSV file')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
+
     def form_valid(self, form):
         # Dictionary to populate gradually throughout the sequence of steps.
         # It is stored in the session.

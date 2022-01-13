@@ -35,6 +35,11 @@ class GoogleSheetUploadStart(common.UploadStart, generic.FormView):
     dtype = 'Google Sheet'
     dtype_select = _('Google Sheet URL')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
+
     def form_valid(self, form):
         # Dictionary to populate gradually throughout the sequence of steps.
         # It is stored in the session.

@@ -35,6 +35,11 @@ class S3UploadStart(common.UploadStart, generic.FormView):
     dtype = 'S3 CSV'
     dtype_select = _('S3 CSV file')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
+
     def form_valid(self, form):
         # Dictionary to populate gradually throughout the sequence of steps.
         # It is stored in the session.

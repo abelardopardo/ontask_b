@@ -30,6 +30,11 @@ class AthenaUploadStart(common.UploadStart, generic.UpdateView):
         """This view should only consider enabled connections."""
         return self.model.objects.filter(enabled=True)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
+
     def form_valid(self, form):
         log_item = self.workflow.log(
             self.request.user,
