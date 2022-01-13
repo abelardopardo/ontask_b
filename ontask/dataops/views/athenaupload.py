@@ -32,6 +32,7 @@ class AthenaUploadStart(common.UploadStart, generic.UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.object
         kwargs['workflow'] = self.workflow
         return kwargs
 

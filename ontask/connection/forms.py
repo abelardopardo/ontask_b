@@ -67,7 +67,7 @@ class SQLRequestConnectionParam(ontask_forms.FormWithPayload):
         self.connection = kwargs.pop('connection')
         if not self.connection:
             self.connection = models.SQLConnection.objects.get(
-                pk=kwargs.get('instance').payload['connection_id'])
+                pk=kwargs.get('connection').payload['connection_id'])
 
         super().__init__(*args, **kwargs)
 

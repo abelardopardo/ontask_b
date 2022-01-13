@@ -43,7 +43,7 @@ class SQLUploadStart(common.UploadStart, generic.UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['connection'] = self.object
+        kwargs['connection'] = kwargs.pop('instance')
         return kwargs
 
     def form_valid(self, form):
