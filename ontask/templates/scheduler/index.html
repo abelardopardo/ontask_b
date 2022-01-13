@@ -41,9 +41,9 @@
 {% block container %}
   <div class="container" id="scheduler-index">
     <h1 class="text-center">{% trans 'Scheduled Operations' %}<super>*</super></h1>
-    {% if not workflow.nrows %}
+    {% if not view.workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
-    {% elif not workflow.actions.all.count %}
+    {% elif not view.workflow.actions.all.count %}
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
     <div class="text-center mb-3">

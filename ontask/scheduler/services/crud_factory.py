@@ -200,6 +200,7 @@ class ScheduledOperationSaveBase:
             prev_url=prev_url)
 
         form = self.form_class(
+            request.POST or None,
             instance=schedule_item,
             workflow=workflow,
             connection=connection,

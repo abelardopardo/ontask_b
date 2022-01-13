@@ -12,7 +12,7 @@ app_name = 'scheduler'
 urlpatterns = [
 
     # List all schedule actions
-    path('', views.index, name='index'),
+    path('', views.SchedulerIndex.as_view(), name='index'),
 
     # Create scheduled action
     path(
@@ -21,7 +21,10 @@ urlpatterns = [
         name='create_action_run'),
 
     # Select a SQL connection
-    path('select_sql/', views.sql_connection_index, name='select_sql'),
+    path(
+        'select_sql/',
+        views.SchedulerConnectionIndex.as_view(),
+        name='select_sql'),
 
     # Create a SQL upload operation
     path('<int:pk>/sqlupload/', views.create_sql_upload, name='sqlupload'),
