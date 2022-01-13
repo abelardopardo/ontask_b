@@ -100,6 +100,7 @@ def check_action(action: models.Action) -> bool:
 
     return True
 
+
 def sanity_checks() -> bool:
     """Perform various sanity checks for consistency.
 

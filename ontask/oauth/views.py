@@ -30,7 +30,7 @@ def callback(request: WSGIRequest) -> http.HttpResponse:
         # Something is wrong with this execution. Return to action table.
         messages.error(
             request,
-            _('Incorrect Canvas callback invocation.'))
+            _('Incorrect callback invocation.'))
         return redirect('action:index')
 
     # Check first if there has been some error
