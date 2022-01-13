@@ -11,11 +11,11 @@ from django.utils.translation import gettext, gettext_lazy as _
 from ontask import models
 from ontask.core import SessionPayload
 from ontask.scheduler import forms
-from ontask.scheduler.services.crud_factory import ScheduledOperationSaveBase
+from ontask.scheduler.services.crud_factory import ScheduledOperationUpdateBase
 from ontask.scheduler.services.items import create_timedelta_string
 
 
-class ScheduledOperationSaveSQLUpload(ScheduledOperationSaveBase):
+class ScheduledOperationUpdateSQLUpload(ScheduledOperationUpdateBase):
     """Base class for those saving Action Run operations."""
 
     operation_type = models.Log.WORKFLOW_DATA_SQL_UPLOAD

@@ -100,7 +100,7 @@ class SchedulerCRUDFactory:
 schedule_crud_factory = SchedulerCRUDFactory()
 
 
-class ScheduledOperationSaveBase:
+class ScheduledOperationUpdateBase:
     """Base class for all the scheduled operation CRUD producers.
 
     :Attribute operation_type: The value to store in the scheduled item

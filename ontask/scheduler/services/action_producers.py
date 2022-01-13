@@ -12,11 +12,11 @@ from django.utils.translation import gettext, gettext_lazy as _
 from ontask import models
 from ontask.core import SessionPayload
 from ontask.scheduler import forms
-from ontask.scheduler.services.crud_factory import ScheduledOperationSaveBase
+from ontask.scheduler.services.crud_factory import ScheduledOperationUpdateBase
 from ontask.scheduler.services.items import create_timedelta_string
 
 
-class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
+class ScheduledOperationUpdateActionRun(ScheduledOperationUpdateBase):
     """Base class for those saving Action Run operations."""
 
     def _create_payload(self, **kwargs) -> SessionPayload:
@@ -151,28 +151,28 @@ class ScheduledOperationSaveActionRun(ScheduledOperationSaveBase):
             {'tdelta': tdelta, 's_item': schedule_item})
 
 
-class ScheduledOperationSaveEmail(ScheduledOperationSaveActionRun):
+class ScheduledOperationUpdateEmail(ScheduledOperationUpdateActionRun):
     """Process Personalised Email."""
 
     operation_type = models.Log.ACTION_RUN_PERSONALIZED_EMAIL
     form_class = forms.ScheduleEmailForm
 
 
-class ScheduledOperationSaveEmailReport(ScheduledOperationSaveActionRun):
+class ScheduledOperationUpdateEmailReport(ScheduledOperationUpdateActionRun):
     """Process Email Report."""
 
     operation_type = models.Log.ACTION_RUN_EMAIL_REPORT
     form_class = forms.ScheduleSendListForm
 
 
-class ScheduledOperationSaveJSON(ScheduledOperationSaveActionRun):
+class ScheduledOperationUpdateJSON(ScheduledOperationUpdateActionRun):
     """Process Personalised JSON."""
 
     operation_type = models.Log.ACTION_RUN_PERSONALIZED_JSON
     form_class = forms.ScheduleJSONForm
 
 
-class ScheduledOperationSaveJSONReport(ScheduledOperationSaveActionRun):
+class ScheduledOperationUpdateJSONReport(ScheduledOperationUpdateActionRun):
     """Process JSON Report."""
 
     operation_type = models.Log.ACTION_RUN_JSON_REPORT

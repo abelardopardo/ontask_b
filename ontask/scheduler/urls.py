@@ -76,7 +76,7 @@ urlpatterns = [
 
 urlpatterns = format_suffix_patterns(urlpatterns)
 
-EMAIL_PROCESSOR = services.ScheduledOperationSaveEmail()
+EMAIL_PROCESSOR = services.ScheduledOperationUpdateEmail()
 
 services.schedule_crud_factory.register_producer(
     models.Action.PERSONALIZED_TEXT,
@@ -88,16 +88,16 @@ services.schedule_crud_factory.register_producer(
 
 services.schedule_crud_factory.register_producer(
     models.Action.PERSONALIZED_JSON,
-    services.ScheduledOperationSaveJSON())
+    services.ScheduledOperationUpdateJSON())
 
 services.schedule_crud_factory.register_producer(
     models.Action.EMAIL_REPORT,
-    services.ScheduledOperationSaveEmailReport())
+    services.ScheduledOperationUpdateEmailReport())
 
 services.schedule_crud_factory.register_producer(
     models.Action.JSON_REPORT,
-    services.ScheduledOperationSaveJSONReport())
+    services.ScheduledOperationUpdateJSONReport())
 
 services.schedule_crud_factory.register_producer(
     models.Log.WORKFLOW_DATA_SQL_UPLOAD,
-    services.ScheduledOperationSaveSQLUpload())
+    services.ScheduledOperationUpdateSQLUpload())
