@@ -50,6 +50,7 @@ class ActionCreateView(
     http_method_names = ['get', 'post']
     form_class = forms.ActionForm
     template_name = 'action/includes/partial_action_create.html'
+    from_view = False
 
     def get_form_kwargs(self):
         """Add the user in the request to the context."""
@@ -60,13 +61,12 @@ class ActionCreateView(
     def get_context_data(self, **kwargs):
         """Get context data: fid as filter ID (optional)"""
         context = super().get_context_data(**kwargs)
-        fid = self.kwargs.get('fid')
-        if fid is None:
-            context['form_url'] = reverse('action:create')
-        else:
+        if self.from_view:
             context['form_url'] = reverse(
                 'action:create_from_view',
-                kwargs={'fid': fid})
+                kwargs={'fid': self.kwargs.get('fid')})
+        else:
+            context['form_url'] = reverse('action:create')
         return context
 
     def form_valid(self, form):

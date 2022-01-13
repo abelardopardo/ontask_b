@@ -18,10 +18,13 @@ urlpatterns = [
     path('<int:wid>/index/', views.ActionIndexView.as_view(), name='index_set'),
 
     # Create an action
-    path('create/', views.ActionCreateView.as_view(), name='create'),
+    path(
+        'create/',
+        views.ActionCreateView.as_view(from_view=False),
+        name='create'),
     path(
         '<int:fid>/create/',
-        views.ActionCreateView.as_view(),
+        views.ActionCreateView.as_view(from_view=True),
         name='create_from_view'),
 
     # Update an action
