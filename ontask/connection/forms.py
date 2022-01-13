@@ -64,8 +64,7 @@ class SQLRequestConnectionParam(ontask_forms.FormWithPayload):
     """Form to ask for a password for a SQL connection execution."""
 
     def __init__(self, *args, **kwargs):
-        self.connection = kwargs.pop('instance')
-        self.workflow = kwargs.pop('workflow')
+        self.connection = kwargs.pop('connection')
         if not self.connection:
             self.connection = models.SQLConnection.objects.get(
                 pk=kwargs.get('instance').payload['connection_id'])

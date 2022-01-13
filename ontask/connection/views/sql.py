@@ -25,7 +25,8 @@ class SQLConnectionIndexView(common.ConnectionIndexView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['table'] = services.create_sql_connection_runtable()
+        context['table'] = services.create_sql_connection_runtable(
+            'dataops:sqlupload_start')
         return context
 
 

@@ -3,6 +3,7 @@
 """Service functions to handle SQL connections."""
 
 from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from ontask import models
@@ -25,7 +26,17 @@ class SQLConnectionTableAdmin(ConnectionTableAdmin):
 class SQLConnectionTableSelect(ConnectionTableSelect):
     """Class to render the table of SQL connections."""
 
-    select_url = 'dataops:sqlupload_start'
+    def __init__(self, *args, **kwargs):
+        """Store the select url string to use when rendering name."""
+        self.select_url = kwargs.pop('select_url')
+        super().__init__(*args, **kwargs)
+
+    def render_name(self, record):
+        """Render the name as a link."""
+        return format_html(
+            '<a href="{0}">{1}</a>',
+            reverse(self.select_url, kwargs={'pk': record['id']}),
+            record['name'])
 
     class Meta(ConnectionTableSelect.Meta):
         """Define models, fields, sequence and attributes."""
@@ -65,7 +76,7 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
         extra_columns=[('operations', op_column)])
 
 
-def create_sql_connection_runtable() -> SQLConnectionTableSelect:
+def create_sql_connection_runtable(select_url: str) -> SQLConnectionTableSelect:
     """Create the table structure with the SQL connections for Running.
 
     :return: SQL Connection Table Run object.
@@ -84,5 +95,6 @@ def create_sql_connection_runtable() -> SQLConnectionTableSelect:
             'id',
             'name',
             'description_text'),
+        select_url=select_url,
         orderable=False,
         extra_columns=[('operations', operation_column)])
