@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.views import generic
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 from ontask import models, tasks
 from ontask.core.decorators import ajax_required
@@ -22,57 +23,59 @@ class ToBeDone(UserIsInstructor, generic.TemplateView):
     template_name = 'base.html'
 
 
-def home(request: http.HttpRequest) -> http.HttpResponse:
-    """Render the home page.
+class HomeView(generic.View):
+    """Render the home page."""
 
-    :param request: Received HTTP Request
-    :return: Rendered page.
-    """
-    if not request.user.is_authenticated:
-        return redirect(reverse('accounts:login'))
+    http_method_names = ['get']
 
-    if is_instructor(request.user) or is_admin(request.user):
-        return WorkflowIndexView.as_view()(request)
+    def get(self, request, *args, **kwargs) -> http.HttpResponse:
+        if not request.user.is_authenticated:
+            return redirect(reverse('accounts:login'))
 
-    # Authenticated request from learner, show profile
-    return redirect(reverse('profiles:show_self'))
+        if is_instructor(request.user) or is_admin(request.user):
+            return WorkflowIndexView.as_view()(request)
 
-
-@login_required
-@csrf_exempt
-@xframe_options_exempt
-@lti_role_required(['Instructor', 'Learner'])
-def lti_entry(request: http.HttpRequest) -> http.HttpResponse:
-    """Responde through LTI entry."""
-    del request
-    return redirect('home')
+        # Authenticated request from learner, show profile
+        return redirect(reverse('profiles:show_self'))
 
 
-# No permissions in this URL as it is supposed to be wide open to track email
-# reads.
-def trck(request: http.HttpRequest) -> http.HttpResponse:
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
+@method_decorator(xframe_options_exempt, name='dispatch')
+@method_decorator(
+    lti_role_required(['Instructor', 'Learner']),
+    name='dispatch')
+class LTIEntryView(generic.RedirectView):
+    """Response through LTI entry."""
+
+    url = 'home'
+
+
+class TrackView(generic.View):
     """Receive a request with a token from email read tracking.
 
-    :param request: Request object
-    :return: Reflects in the DB the reception and (optionally) in the data
-    table of the workflow
+    No permissions in this URL as it is supposed to be wide open to track email
+    reads.
     """
-    # Push the tracking to the asynchronous queue
-    tasks.execute_operation.delay(
-        operation_type=models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
-        payload={'method': request.method, 'get_dict': request.GET})
 
-    return http.HttpResponse(status=200)
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs) -> http.HttpResponse:
+        # Push the tracking to the asynchronous queue
+        tasks.execute_operation.delay(
+            operation_type=models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
+            payload={'method': request.method, 'get_dict': request.GET})
+
+        return http.HttpResponse(status=200)
 
 
-@login_required
-@csrf_exempt
-@ajax_required
-def keep_alive(request: http.HttpRequest) -> http.JsonResponse:
-    """Return empty response to keep session alive.
+@method_decorator(csrf_exempt, name='dispatch')
+@method_decorator(ajax_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')
+class KeepAliveView(generic.View):
+    """Return empty response to keep session alive."""
 
-    :param request:
-    :return: Empty JSON response
-    """
-    del request
-    return http.JsonResponse({})
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs) -> http.HttpResponse:
+        return http.JsonResponse({})
