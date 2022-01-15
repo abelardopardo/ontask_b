@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Service to manipulate items."""
+"""Service to manipulate scheduled items."""
 from datetime import datetime
 import json
 from typing import Dict, Optional
