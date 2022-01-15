@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """Index of scheduled operations."""
-from typing import Optional
 
-from django import http
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import models
 from ontask.connection.services import create_sql_connection_runtable
 from ontask.core import (
-    SessionPayload, UserIsInstructor, WorkflowView,
-    get_workflow, is_instructor)
+    SessionPayload, UserIsInstructor, WorkflowView)
 from ontask.scheduler import services
 
 
@@ -58,23 +53,3 @@ class SchedulerConnectionIndex(
         SessionPayload.flush(request.session)
 
         return super().get(request, *args, **kwargs)
-
-
-@user_passes_test(is_instructor)
-@get_workflow()
-def sql_connection_index(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Show table of SQL connections for user to choose one.
-
-    :param request: HTTP request
-    :param workflow: Workflow of the current context.
-    :return: HTTP response
-    """
-    del workflow
-    table = create_sql_connection_runtable('scheduler:sqlupload')
-    return render(
-        request,
-        'connection/index.html',
-        {'table': table, 'is_sql': True, 'title': _('SQL Connections')})

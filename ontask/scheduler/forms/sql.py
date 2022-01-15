@@ -45,9 +45,9 @@ class ScheduleSQLUploadForm(
         label=_('Key column in new table. '
                 'Leave empty if uploading to empty workflow'))
 
-    def __init__(self, *args, **kargs):
+    def __init__(self, *args, **kwargs):
         """Initialize all the fields"""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
         self.set_fields_from_dict(['dst_key', 'src_key', 'how_merge'])
 
         self.fields['how_merge'].required = False

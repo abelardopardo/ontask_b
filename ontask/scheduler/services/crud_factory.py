@@ -2,12 +2,13 @@
 
 """Factory handling the various Scheduled Item Producers."""
 from datetime import datetime
-from typing import Dict, Optional, Type
+from typing import Dict, Optional
 
-from django import forms, http
+from django import http
 from django.conf import settings
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
+from django.views import generic
 import pytz
 
 from ontask import models
@@ -15,7 +16,12 @@ from ontask.core import SessionPayload
 
 
 class SchedulerCRUDFactory:
-    """Factory to manipulate a scheduled operation."""
+    """Factory to store Views to manage scheduled operations.
+
+    Each item in the dictionary stores a tuple with:
+    - Class.as_view() for view processing
+    - Class to execute other methods
+    """
 
     def __init__(self):
         """Initialize the set of _creators."""
@@ -28,53 +34,47 @@ class SchedulerCRUDFactory:
             raise ValueError(operation_type)
         return creator_obj
 
-    def register_producer(self, operation_type: str, saver_obj):
+    def register_producer(self, operation_type: str, saver_cls):
         """Register the given object that will perform the save operation."""
         if operation_type in self._producers:
             raise ValueError(operation_type)
-        self._producers[operation_type] = saver_obj
+        view_function = saver_cls.as_view()
+        self._producers[operation_type] = (view_function, saver_cls)
 
-        if operation_type == saver_obj.operation_type:
+        if operation_type == saver_cls.operation_type:
             return
 
         # If the object has different operation_type field than the given
         # operation type, register it with both (one is for creation, the other
         # is once created, for editing)
-        self._producers[saver_obj.operation_type] = saver_obj
+        self._producers[saver_cls.operation_type] = (view_function, saver_cls)
 
-    def crud_process(self, operation_type, **kwargs):
-        """Execute the corresponding process function.
+    def crud_view(
+        self,
+        request: http.HttpRequest,
+        operation_type: int,
+        **kwargs
+    ) -> http.HttpResponse:
+        """Execute the corresponding view function.
 
+        :param request: Http request being processed
         :param operation_type: Type of scheduled item being processed.
         :param kwargs: Dictionary with the following fields:
-        - request: HttpRequest that prompted the process
-        - schedule_item: Item being processed (if it exists)
-        - workflow: Optional workflow being processed
-        - connection: Optional connection being processed
+        - workflow: Workflow being processed
         - action: Optional action being considered
-        - prev_url: Optional String with the URL to "go back" in case there is
-        an intermediate step
+        - scheduled_item: previously scheduled operation
+        - payload: Dictionary with the data for the ongoing operation
+        - is_finish_request: Boolean stating if this is a GET request to
+        finish a previous op
         :return: HttpResponse
         """
         try:
-            return self._get_creator(operation_type).process(**kwargs)
-        except ValueError:
-            return render(kwargs.get('request'), 'base.html', {})
-
-    def crud_finish(self, operation_type, **kwargs):
-        """Execute the corresponding finish function.
-
-        :param operation_type: Type of scheduled item being processed. If the
-        type is RUN_ACTION, the method explands its type looking at the type
-        of action (either as a parameter, or within the schedule_item)
-        :param kwargs: Dictionary with the following fields:
-        - request: HttpRequest that prompted the process
-        - schedule_item: Item being processed (if it exists)
-        - payload: Dictionary with all the additional fields for the request
-        :return: HttpResponse
-        """
-        try:
-            return self._get_creator(operation_type).finish(**kwargs)
+            # Invoke the corresponding view processor
+            view_processor, __ = self._get_creator(operation_type)
+            return view_processor(
+                request,
+                operation_type=operation_type,
+                **kwargs)
         except ValueError:
             return render(kwargs.get('request'), 'base.html', {})
 
@@ -92,29 +92,43 @@ class SchedulerCRUDFactory:
         :param s_item: Optional existing object
         :return: created object
         """
-        return self._get_creator(data_dict['operation_type']).create_or_update(
-            user,
-            data_dict,
-            s_item)
+        __, cru_processor = self._get_creator(data_dict['operation_type'])
+
+        return cru_processor.create_or_update(user, data_dict, s_item)
+
 
 schedule_crud_factory = SchedulerCRUDFactory()
 
 
-class ScheduledOperationUpdateBase:
+class ScheduledOperationUpdateBase(generic.UpdateView):
     """Base class for all the scheduled operation CRUD producers.
 
     :Attribute operation_type: The value to store in the scheduled item
     and needs to be overwritten by subclasses
 
-    :Attribute form_class: Form to be used when creating one operation in the
-    Web interface.
     """
 
-    operation_type: Optional[str] = None
-    form_class: Type[forms.Form] = None
+    operation_type: Optional[int] = None
+    model = models.ScheduledOperation
+    template_name = 'scheduler/edit.html'
+
+    object = None  # Placeholder for the schedule operation item
+
+    workflow = None  # Fetched from the preliminary step.
+    action = None  # Only valid for action execution (not uploads)
+    connection = None  # For SQL Upload operations
+    scheduled_item = None  # When editing a previously scheduled op
+
+    # Dictionary stored in the session for multi-page form filling
+    op_payload = None
+
+    is_finish_request = None  # Flagging if the request is the last step.
 
     @staticmethod
-    def _create_payload(**kwargs) -> SessionPayload:
+    def _create_payload(
+        request: http.HttpRequest,
+        **kwargs
+    ) -> SessionPayload:
         """Create the session payload to carry through the operation.
 
         :param kwargs: key/value pairs for the call
@@ -128,12 +142,12 @@ class ScheduledOperationUpdateBase:
         data_dict: Dict,
         s_item: Optional[models.ScheduledOperation] = None,
     ) -> models.ScheduledOperation:
-        """Create or update an object with the information in data_dict
+        """Create/update scheduled item with the information in data_dict
 
         :param user: User creating the element
         :param data_dict: Data dictionary with the required fields
         :param s_item: Existing element (or None)
-        :return: Nothing. Element created and inserted in the DB
+        :return: Element created or updated in the DB
         """
         if not s_item:
             s_item = models.ScheduledOperation(
@@ -177,87 +191,79 @@ class ScheduledOperationUpdateBase:
 
         return s_item
 
-    def process(
-        self,
-        request: http.HttpRequest,
-        schedule_item: models.ScheduledOperation,
-        workflow: Optional[models.Workflow] = None,
-        connection: Optional[models.Connection] = None,
-        action: Optional[models.Action] = None,
-        prev_url: Optional[str] = None,
-    ) -> http.HttpResponse:
-        """Process the request."""
-        if action:
-            workflow = action.workflow
+    def setup(self, request, *args, **kwargs):
+        """Store various fields in view, not kwargs."""
+        super().setup(request, *args, **kwargs)
+        self.workflow = kwargs.pop('workflow', None)
+        self.action = kwargs.pop('action', None)
+        self.scheduled_item = kwargs.pop('scheduled_item', None)
+        if self.scheduled_item:
+            self.object = self.scheduled_item
+            self.action = self.scheduled_item.action
+        self.connection = kwargs.pop('connection', None)
+        if not self.connection and self.scheduled_item:
+            self.connection = models.SQLConnection.objects.get(
+                pk=self.scheduled_item.payload['connection_id'])
+        self.op_payload = kwargs.pop('payload', self._create_payload(request))
+        self.is_finish_request = self.kwargs.pop('is_finish_request', False)
+        return
 
-        op_payload = self._create_payload(
-            request=request,
-            operation_type=self.operation_type,
-            schedule_item=schedule_item,
-            workflow=workflow,
-            connection=connection,
-            action=action,
-            prev_url=prev_url)
+    def dispatch(self, request, *args, **kwargs):
+        """If this is "finish" request, invoke the finish method."""
+        if self.is_finish_request:
+            return self.finish(request, self.op_payload, self.scheduled_item)
 
-        form = self.form_class(
-            request.POST or None,
-            instance=schedule_item,
-            workflow=workflow,
-            connection=connection,
-            action=action,
-            columns=workflow.columns.filter(is_key=True),
-            form_info=op_payload)
-        if request.method == 'POST' and form.is_valid():
-            return self.process_post(request, schedule_item, op_payload)
+        return super().dispatch(request, *args, **kwargs)
 
-        frequency = op_payload.get('frequency')
+    def get_object(self, queryset=None) -> Optional[models.ScheduledOperation]:
+        """Modify to use the view for Create and Update."""
+        return self.scheduled_item
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        frequency = self.op_payload.get('frequency')
         if not frequency:
             frequency = '0 5 * * 0'
 
         all_false_conditions = False
-        if action:
+        if self.action:
             all_false_conditions = any(
                 cond.selected_count == 0
-                for cond in action.conditions.all())
+                for cond in self.action.conditions.all())
 
-        return render(
-            request,
-            'scheduler/edit.html',
-            {
-                'workflow': workflow,
-                'action': action,
-                'form': form,
-                'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
-                'all_false_conditions': all_false_conditions,
-                'frequency': frequency,
-                'payload': op_payload})
+        context.update({
+            'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'payload': self.op_payload,
+            'frequency': frequency,
+            'valuerange': self.op_payload.get('valuerange'),
+            'all_false_conditions': all_false_conditions})
+        return context
 
-    def process_post(
-        self,
-        request: http.HttpRequest,
-        schedule_item: models.ScheduledOperation,
-        op_payload: SessionPayload,
-    ):
-        """Process a POST request."""
-        del request, schedule_item, op_payload
-        raise ValueError('Incorrect  invocation of process_post method')
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'workflow': self.workflow,
+            'action': self.action,
+            'connection': self.connection,
+            'columns': self.workflow.columns.filter(is_key=True),
+            'form_info': self.op_payload})
+        return kwargs
 
     def finish(
         self,
         request: http.HttpRequest,
         payload: SessionPayload,
-        schedule_item: models.ScheduledOperation = None,
     ) -> Optional[http.HttpResponse]:
         """Finalize the creation of a scheduled operation.
 
         All required data is passed through the payload.
 
         :param request: Request object received
-        :param schedule_item: ScheduledOperation item being processed. If None,
         it has to be extracted from the information in the payload.
         :param payload: Dictionary with all the required data coming from
         previous requests.
         :return: Http Response
         """
-        del request, schedule_item, schedule_item
+        del request
         return None

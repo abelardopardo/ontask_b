@@ -72,7 +72,10 @@ class ScheduleJSONForm(ScheduleBasicForm, action_forms.JSONActionForm):
             'token'])
 
 
-class ScheduleJSONReportForm(ScheduleBasicForm, action_forms.JSONReportActionForm):
+class ScheduleJSONReportForm(
+    ScheduleBasicForm,
+    action_forms.JSONReportActionForm
+):
     """Form to edit ScheduleAction of types JSON Report."""
 
     def __init__(self, *args, **kwargs):

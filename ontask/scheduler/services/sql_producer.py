@@ -16,63 +16,56 @@ from ontask.scheduler.services.items import create_timedelta_string
 
 
 class ScheduledOperationUpdateSQLUpload(ScheduledOperationUpdateBase):
-    """Base class for those saving Action Run operations."""
+    """Base class for those saving SQL Upload operations."""
 
     operation_type = models.Log.WORKFLOW_DATA_SQL_UPLOAD
     form_class = forms.ScheduleSQLUploadForm
 
-    def _create_payload(self, **kwargs) -> SessionPayload:
+    def _create_payload(
+        self,
+        request: http.HttpRequest,
+        **kwargs
+    ) -> SessionPayload:
         """Create a payload dictionary to store in the session.
 
         :param request: HTTP request
-        :param operation_type: String denoting the type of s_item being
-        processed
-        :param s_item: Existing schedule item being processed (Optional)
+        :param kwargs: Dictionary with extra parameters
         :return: Dictionary with pairs name/value
         """
-
         # Get the payload from the session, and if not, use the given one
         payload = SessionPayload(
-            kwargs.get('request').session,
+            request.session,
             initial_values={
-                'workflow_id': kwargs.get('workflow').id,
+                'workflow_id': self.workflow.id,
                 'operation_type': self.operation_type,
                 'valuerange': [],
                 'page_title': gettext('Schedule SQL Upload')})
 
-        s_item = kwargs.get('schedule_item')
-        if s_item:
-            payload.update(s_item.payload)
-            payload['schedule_id'] = s_item.id
-            payload['connection_id'] = s_item.payload['connection_id']
+        if self.scheduled_item:
+            payload.update(self.scheduled_item.payload)
+            payload['schedule_id'] = self.scheduled_item.id
+            payload['connection_id'] = self.scheduled_item.payload[
+                'connection_id']
         else:
-            payload['connection_id'] = kwargs.get('connection').id
-
+            payload['connection_id'] = self.connection.id
 
         return payload
 
-    def process_post(
-        self,
-        request: http.HttpRequest,
-        schedule_item: models.ScheduledOperation,
-        op_payload: SessionPayload,
-    ) -> http.HttpResponse:
+    def form_valid(self, form) -> http.HttpResponse:
         """Process the valid form."""
         # Go straight to the final step
-        return self.finish(request, op_payload, schedule_item)
+        return self.finish(self.request, self.op_payload)
 
     def finish(
         self,
         request: http.HttpRequest,
         payload: SessionPayload,
-        schedule_item: models.ScheduledOperation = None,
     ) -> Optional[http.HttpResponse]:
-        """Finalize the creation of a scheduled operation.
+        """Finalize the creation of a SQL upload operation.
 
         All required data is passed through the payload.
 
         :param request: Request object received
-        :param schedule_item: ScheduledOperation item being processed. If None,
         it has to be extracted from the information in the payload.
         :param payload: Dictionary with all the required data coming from
         previous requests.
@@ -81,14 +74,14 @@ class ScheduledOperationUpdateSQLUpload(ScheduledOperationUpdateBase):
         s_item_id = payload.pop('schedule_id', None)
         if s_item_id:
             # Get the item being processed
-            if not schedule_item:
-                schedule_item = models.ScheduledOperation.objects.filter(
+            if not self.scheduled_item:
+                self.scheduled_item = models.ScheduledOperation.objects.filter(
                     id=s_item_id).first()
-            if not schedule_item:
+            if not self.scheduled_item:
                 messages.error(
                     request,
                     _('Incorrect request for operation scheduling'))
-                return redirect('action:index')
+                return redirect('scheduler:index')
         else:
             payload['workflow'] = models.Workflow.objects.get(
                 pk=payload.pop('workflow_id'))
@@ -101,7 +94,7 @@ class ScheduledOperationUpdateSQLUpload(ScheduledOperationUpdateBase):
             schedule_item = self.create_or_update(
                 request.user,
                 payload.get_store(),
-                schedule_item)
+                self.scheduled_item)
         except Exception as exc:
             messages.error(
                 request,

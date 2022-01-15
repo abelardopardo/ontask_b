@@ -83,9 +83,3 @@ def create_timedelta_string(
         result = result + ', until ' + utime.strftime('%H:%M:%S %z %Y/%b/%d')
 
     return result
-
-
-def delete_item(s_item: models.ScheduledOperation):
-    """Delete a scheduled operation and log the event."""
-    s_item.log(models.Log.SCHEDULE_DELETE)
-    s_item.delete()

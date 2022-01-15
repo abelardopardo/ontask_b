@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'scheduler:delete' s_item.id %}"
+<form method="post" action="{% url 'scheduler:delete' view.object.id %}"
       class="js-scheduler-delete-form">
   {% csrf_token %}
   <div class="modal-header">
@@ -9,7 +9,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with n=s_item.name %}Are you sure
+    <p class="lead">{% blocktrans with n=view.object.name %}Are you sure
       you want to delete the scheduled operation
       <strong>{{ n }}</strong>?{% endblocktrans %}</p>
   </div>

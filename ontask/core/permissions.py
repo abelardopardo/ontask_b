@@ -289,6 +289,31 @@ class ConditionView(WorkflowView):
             return error_redirect(request)
 
 
+class ScheduledOperationView(WorkflowView):
+    """View that sets the scheduled operation attribute."""
+    def __init__(self, **kwargs):
+        """Initialise the scheduled operation attribute."""
+        super().__init__(**kwargs)
+        self.scheduled_operation = None
+
+    def setup(self, request, *args, **kwargs):
+        """Add scheduled operation attribute to view object."""
+        super().setup(request, *args, **kwargs)
+        if not self.workflow:
+            return
+
+        if self.workflow.nrows == 0:
+            self.error_message = workflow_no_data_error_message
+            self.error_redirect = 'action:index'
+            return
+
+        self.scheduled_operation = self.workflow.scheduled_operations.filter(
+            pk=kwargs.get('pk')).first()
+
+        if not self.scheduled_operation:
+            return error_redirect(request)
+
+
 class SingleWorkflowMixin(detail.SingleObjectMixin):
     """Select a workflow in Class-based Views"""
     model = models.Workflow

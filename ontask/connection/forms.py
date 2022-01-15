@@ -65,10 +65,6 @@ class SQLRequestConnectionParam(ontask_forms.FormWithPayload):
 
     def __init__(self, *args, **kwargs):
         self.connection = kwargs.pop('connection')
-        if not self.connection:
-            self.connection = models.SQLConnection.objects.get(
-                pk=kwargs.get('connection').payload['connection_id'])
-
         super().__init__(*args, **kwargs)
 
         if not self.connection.db_password:

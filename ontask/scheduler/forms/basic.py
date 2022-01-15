@@ -79,7 +79,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
             ('execute_until', str(form_data['execute_until']))])
 
         obj_name = self.workflow.scheduled_operations.filter(
-            name=form_data['name'])
+            name=form_data['name']).exclude(id=self.instance.id)
         if obj_name.exists():
             self.add_error(
                 'name',

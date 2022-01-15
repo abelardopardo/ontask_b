@@ -6,6 +6,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from ontask import models
 from ontask.scheduler import api, services, views
+from ontask.scheduler.services import schedule_crud_factory
 
 app_name = 'scheduler'
 
@@ -14,17 +15,17 @@ urlpatterns = [
     # List all schedule actions
     path('', views.SchedulerIndex.as_view(), name='index'),
 
-    # Create scheduled action
-    path(
-        '<int:pk>/create_action_run/',
-        views.create_action_run,
-        name='create_action_run'),
-
     # Select a SQL connection
     path(
         'select_sql/',
         views.SchedulerConnectionIndex.as_view(),
         name='select_sql'),
+
+    # Create scheduled action
+    path(
+        '<int:pk>/create_action_run/',
+        views.create_action_run,
+        name='create_action_run'),
 
     # Create a SQL upload operation
     path('<int:pk>/sqlupload/', views.create_sql_upload, name='sqlupload'),
@@ -35,22 +36,25 @@ urlpatterns = [
         views.edit_scheduled_operation,
         name='edit_scheduled_operation'),
 
-    # Toggle scheduled enable
-    path(
-        '<int:pk>/schedule_toggle/',
-        views.schedule_toggle,
-        name='schedule_toggle'),
-
-    # View the details of a scheduled operation
-    path('<int:pk>/view/', views.view, name='view'),
-
-    # Delete scheduled action
-    path('<int:pk>/delete/', views.delete, name='delete'),
-
     path(
         'finish_scheduling/',
         views.finish_scheduling,
         name='finish_scheduling'),
+
+    # View the details of a scheduled operation
+    path('<int:pk>/view/', views.SchedulerIndexView.as_view(), name='view'),
+
+    # Delete scheduled action
+    path(
+        '<int:pk>/delete/',
+        views.ScheduledItemDelete.as_view(),
+        name='delete'),
+
+    # Toggle scheduled enable
+    path(
+        '<int:pk>/schedule_toggle/',
+        views.ActionToggleQuestionChangeView.as_view(),
+        name='schedule_toggle'),
 
     # API
     path(
@@ -76,28 +80,28 @@ urlpatterns = [
 
 urlpatterns = format_suffix_patterns(urlpatterns)
 
-EMAIL_PROCESSOR = services.ScheduledOperationUpdateEmail()
+EMAIL_PROCESSOR = services.ScheduledOperationUpdateEmail
 
-services.schedule_crud_factory.register_producer(
+schedule_crud_factory.register_producer(
     models.Action.PERSONALIZED_TEXT,
     EMAIL_PROCESSOR)
 
-services.schedule_crud_factory.register_producer(
+schedule_crud_factory.register_producer(
     models.Action.RUBRIC_TEXT,
     EMAIL_PROCESSOR)
 
-services.schedule_crud_factory.register_producer(
+schedule_crud_factory.register_producer(
     models.Action.PERSONALIZED_JSON,
-    services.ScheduledOperationUpdateJSON())
+    services.ScheduledOperationUpdateJSON)
 
-services.schedule_crud_factory.register_producer(
+schedule_crud_factory.register_producer(
     models.Action.EMAIL_REPORT,
-    services.ScheduledOperationUpdateEmailReport())
+    services.ScheduledOperationUpdateEmailReport)
 
-services.schedule_crud_factory.register_producer(
+schedule_crud_factory.register_producer(
     models.Action.JSON_REPORT,
-    services.ScheduledOperationUpdateJSONReport())
+    services.ScheduledOperationUpdateJSONReport)
 
-services.schedule_crud_factory.register_producer(
+schedule_crud_factory.register_producer(
     models.Log.WORKFLOW_DATA_SQL_UPLOAD,
-    services.ScheduledOperationUpdateSQLUpload())
+    services.ScheduledOperationUpdateSQLUpload)
