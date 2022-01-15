@@ -51,11 +51,11 @@ urlpatterns = [
     # Clone the condition within the same action
     path(
         '<int:pk>/clone_condition/',
-        views.clone_condition,
+        views.ConditionCloneView.as_view(),
         name='clone_condition'),
     # To clone a condition from a different action
     path(
         '<int:pk>/<int:action_pk>/clone_condition/',
-        views.clone_condition,
+        views.ConditionCloneView.as_view(),
         name='clone_condition'),
 ]

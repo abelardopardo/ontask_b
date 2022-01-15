@@ -8,11 +8,11 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from ontask import models
-from ontask.condition import forms, services
+from ontask import create_new_name, models
+from ontask.condition import forms, services, services as condition_services
 from ontask.core import (
-    ActionView, ConditionView, JSONFormResponseMixin, SingleConditionMixin,
-    UserIsInstructor, ajax_required)
+    ActionView, ConditionView, JSONFormResponseMixin,
+    SingleConditionMixin, UserIsInstructor, ajax_required)
 
 
 @method_decorator(ajax_required, name='dispatch')
@@ -190,5 +190,43 @@ class FilterDeleteView(
         self.action.save(update_fields=['filter', 'rows_all_false'])
 
         self.action.update_selected_row_counts()
+
+        return http.JsonResponse({'html_redirect': ''})
+
+
+@method_decorator(ajax_required, name='dispatch')
+class ConditionCloneView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    ConditionView,
+    generic.DetailView
+):
+    """Process the Clone condition view."""
+
+    model = models.Condition
+    http_method_names = 'post'
+
+    def post(self, request, *args, **kwargs):
+        action_pk = kwargs.get('action_pk')
+        if action_pk:
+            action = self.workflow.actions.filter(id=action_pk).first()
+            if not action:
+                messages.error(request, _('Incorrect action id.'))
+                return http.JsonResponse({'html_redirect': ''})
+        else:
+            action = self.condition.action
+
+        # If the request has the 'action_content', update the action
+        action_content = request.POST.get('action_content')
+        if action_content and action:
+            self.condition.action.set_text_content(action_content)
+
+        condition_services.do_clone_condition(
+            request.user,
+            self.condition,
+            new_action=action,
+            new_name=create_new_name(self.condition.name, action.conditions))
+
+        messages.success(request, _('Condition successfully cloned.'))
 
         return http.JsonResponse({'html_redirect': ''})
