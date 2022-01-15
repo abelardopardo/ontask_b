@@ -165,10 +165,10 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
             'Allows a last minute check and select some elements to be '
             'excluded.'))
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Store column names and adjust initial values."""
         self.columns: QuerySet = kwargs.pop('columns')
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['item_column'].queryset = self.columns
 
@@ -252,9 +252,9 @@ class EmailActionForm(
         help_text=_('Adds an extra column to the workflow. '
                     'Results are aproximate.'))
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Store column names and adjust initial values."""
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.fields['item_column'].label = _(
             'Column to use for target email address')
