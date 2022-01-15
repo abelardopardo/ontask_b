@@ -69,13 +69,12 @@ class TrackView(generic.View):
         return http.HttpResponse(status=200)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 @method_decorator(ajax_required, name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class KeepAliveView(generic.View):
     """Return empty response to keep session alive."""
 
-    http_method_names = ['get']
+    http_method_names = ['post']
 
-    def get(self, request, *args, **kwargs) -> http.HttpResponse:
+    def post(self, request) -> http.HttpResponse:
         return http.JsonResponse({})
