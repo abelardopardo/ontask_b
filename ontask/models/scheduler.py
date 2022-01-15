@@ -51,7 +51,7 @@ OPERATION_TYPES = {
 
 
 class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
-    """Objects encoding the scheduling of a send email action.
+    """Objects representing the scheduled operations.
 
     @DynamicAttrs
     """

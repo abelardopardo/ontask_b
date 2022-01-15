@@ -68,7 +68,6 @@ class WorkflowCloneDelete(WorkflowCrudBasic):
     """Test workflow clone and delete."""
 
     def test(self):
-        """Clone a workflow."""
         # Invoke the clone function
         resp = self.get_response(
             'workflow:clone',

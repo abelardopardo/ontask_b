@@ -46,7 +46,7 @@ class ScheduleSQLUploadForm(
                 'Leave empty if uploading to empty workflow'))
 
     def __init__(self, *args, **kargs):
-        """Initalize all the fields"""
+        """Initialize all the fields"""
         super().__init__(*args, **kargs)
         self.set_fields_from_dict(['dst_key', 'src_key', 'how_merge'])
 

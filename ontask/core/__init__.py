@@ -15,11 +15,11 @@ from ontask.core.forms import (
 from ontask.core.manage_session import SessionPayload
 from ontask.core.permissions import (
     ActionView, ColumnConditionView, ColumnView, ConditionView, GROUP_NAMES,
-    JSONFormResponseMixin, JSONResponseMixin, SingleActionMixin,
-    SingleColumnConditionMixin, SingleColumnMixin, SingleConditionMixin,
-    SingleWorkflowMixin, UserIsAdmin, UserIsInstructor, WorkflowView,
-    error_redirect, has_access, is_admin, is_instructor,
-    store_workflow_in_session)
+    JSONFormResponseMixin, JSONResponseMixin, ScheduledOperationView,
+    SingleActionMixin, SingleColumnConditionMixin, SingleColumnMixin,
+    SingleConditionMixin, SingleWorkflowMixin,
+    UserIsAdmin, UserIsInstructor, WorkflowView, error_redirect, has_access,
+    is_admin, is_instructor, store_workflow_in_session)
 from ontask.core.serializers import OnTaskObjectIdField, OnTaskVersionField
 from ontask.core.session_ops import (
     _store_workflow_nrows_in_session, remove_workflow_from_session)
