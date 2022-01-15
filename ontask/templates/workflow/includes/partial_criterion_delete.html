@@ -9,7 +9,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with n=cname %}Are you sure you want to remove criterion <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+    <p class="lead">{% blocktrans with n=view.cc_tuple.column.name %}Are you sure you want to remove criterion <strong>{{ n }}</strong>?{% endblocktrans %}</p>
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-outline-danger">
