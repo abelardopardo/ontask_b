@@ -9,7 +9,7 @@ from django.views import generic
 from ontask.connection import services
 from ontask.core import ajax_required
 from ontask.core import (
-    JSONFormResponseMixin, UserIsAdmin, UserIsInstructor)
+    JSONFormResponseMixin, UserIsAdmin, UserIsInstructor, WorkflowView)
 
 
 class ConnectionAdminIndexView(UserIsAdmin, generic.TemplateView):
@@ -18,7 +18,7 @@ class ConnectionAdminIndexView(UserIsAdmin, generic.TemplateView):
     title = None
 
 
-class ConnectionIndexView(UserIsInstructor, generic.TemplateView):
+class ConnectionIndexView(UserIsInstructor, WorkflowView, generic.TemplateView):
     """Base class to show the connections to instructors."""
 
     title = None
