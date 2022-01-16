@@ -7,87 +7,42 @@ from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
+from django.views import generic
 
 from ontask import models
-from ontask.core import ajax_required, get_column, get_workflow, is_instructor
+from ontask.core import (
+    ColumnView, JSONFormResponseMixin, UserIsInstructor,
+    ajax_required, get_workflow, is_instructor)
 from ontask.table import services
 
 
-@user_passes_test(is_instructor)
-@get_column(pf_related='columns')
-def stat_column(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    column: Optional[models.Column] = None,
-) -> http.HttpResponse:
-    """Render the stat page for a column.
+class ColumnStatsView(UserIsInstructor, ColumnView, generic.TemplateView):
+    """Render the stat for a column."""
 
-    Render the page with stats and visualizations for the given column The
-    page includes the following visualizations: First row: quartile
-    information (only for integer and double) V1. Box plot. Only for columns
-    of type integer and double. V2. Histogram. For columns of type integer,
-    double, string, boolean
+    template_name = 'table/stat_column.html'
 
-    :param request: HTTP request
-    :param pk: primary key of the column
-    :param workflow: Workflow being manipulated (set by the decorators)
-    :param column: Column being manipulated (set by the decorators)
-    :return: Render the page
-    """
-    del pk
-    stat_data, __, visualizations = services.get_column_visualization_items(
-        workflow, column)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    return render(
-        request,
-        'table/stat_column.html',
-        {
-            'column': column,
+        stat_data, __, visualizations = services.get_column_visualization_items(
+            self.workflow,
+            self.column)
+
+        context.update({
             'stat_data': stat_data,
             'vis_scripts': [],
-            'visualizations': [viz.html_content for viz in visualizations]},
-    )
+            'visualizations': [viz.html_content for viz in visualizations]
+        })
+        return context
 
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_column(pf_related='columns')
-def stat_column_json(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    column: Optional[models.Column] = None,
-) -> http.JsonResponse:
-    """Process JSON GET request to show the column statistics in a modal.
+@method_decorator(ajax_required, name='dispatch')
+class ColumnStatsModalView(JSONFormResponseMixin, ColumnStatsView):
+    """Render the stat for a column to show in a modal."""
 
-    :param request: HTTP request
-    :param pk: Column primary key
-    :param workflow: Workflow being manipulated (set by the decorators)
-    :param column: Column being manipulated (set by the decorators)
-    :return: HTML rendering of the visualization
-    """
-    del pk
-    # Request to see the statistics for a non-key column that belongs to the
-    # selected workflow
-    stat_data, __, visualizations = services.get_column_visualization_items(
-        workflow,
-        column)
-
-    # Create the right key/value pair in the result dictionary
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'table/includes/partial_column_stats_modal.html',
-            context={
-                'column': column,
-                'stat_data': stat_data,
-                'visualizations': [
-                    viz.html_content for viz in visualizations],
-            },
-            request=request),
-    })
+    template_name = 'table/includes/partial_column_stats_modal.html'
 
 
 @user_passes_test(is_instructor)

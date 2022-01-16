@@ -174,7 +174,7 @@ class WorkflowView(base.View):
                 getattr(self, 's_related', None),
                 getattr(self, 'pf_related', None))
         except Exception as exc:
-            self.error_message = str(exc)
+            raise http.Http404(_('Unable to detect worlflow.'))
 
     def dispatch(self, request, *args, **kwargs):
         """Intercept if there has been any error."""
@@ -314,6 +314,31 @@ class ScheduledOperationView(WorkflowView):
             return error_redirect(request)
 
 
+class ViewView(WorkflowView):
+    """View that sets the table_view operation attribute."""
+    def __init__(self, **kwargs):
+        """Initialise the view operation attribute."""
+        super().__init__(**kwargs)
+        self.table_view = None
+
+    def setup(self, request, *args, **kwargs):
+        """Add view attribute to view object."""
+        super().setup(request, *args, **kwargs)
+        if not self.workflow:
+            return
+
+        if self.workflow.nrows == 0:
+            self.error_message = workflow_no_data_error_message
+            self.error_redirect = 'action:index'
+            return
+
+        self.table_view = self.workflow.views.filter(
+            pk=kwargs.get('pk')).first()
+
+        if not self.table_view:
+            return error_redirect(request)
+
+
 class SingleWorkflowMixin(detail.SingleObjectMixin):
     """Select a workflow in Class-based Views"""
     model = models.Workflow
@@ -357,6 +382,17 @@ class SingleConditionMixin(detail.SingleObjectMixin):
     def get_object(self, queryset=None) -> models.Condition:
         """Access the condition tuple in the View."""
         return self.condition
+
+
+class SingleViewMixin(detail.SingleObjectMixin):
+    """Select a table view in Class-based Views."""
+    model = models.View
+
+    context_object_name = 'table_view'
+
+    def get_object(self, queryset=None) -> models.View:
+        """Access the table_view in the View."""
+        return self.table_view
 
 
 class RequestColumnView(WorkflowView):

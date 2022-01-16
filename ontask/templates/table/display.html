@@ -91,23 +91,23 @@
 {% endblock %}
 {% block container %}
   <div id="table-content" class="container">
-    {% if view %}
-      <h1 class="text-center">{{ view.name }}
+    {% if view.table_view %}
+      <h1 class="text-center">{{ view.table_view.name }}
         <div class="btn-group btn-group-sm" role="group">
-          <button type="button" data-url="{% url 'table:view_edit' view.id %}"
+          <button type="button" data-url="{% url 'table:view_edit' view.table_view.id %}"
              class="btn btn-primary btn-light js-view-edit" data-toggle="tooltip"
              title="{% trans 'Change the columns present in the view' %}">
              <span class="fa fa-pencil-alt"></span></button>
           <button type="button"
                   class="btn btn-primary btn-light js-view-clone"
-                  data-url="{% url 'table:view_clone' view.id %}"
+                  data-url="{% url 'table:view_clone' view.table_view.id %}"
                   data-toggle="tooltip"
                   title="{% trans 'Create an identical view' %}">
             <span class="fa fa-clone"></span>
           </button>
           <button type="button"
                   class="btn btn-primary btn-light js-view-delete"
-                  data-url="{% url 'table:view_delete' view.id %}"
+                  data-url="{% url 'table:view_delete' view.table_view.id %}"
                   data-toggle="tooltip"
                   title="{% trans 'Delete the view' %}">
             <span class="fa fa-trash"></span>
@@ -143,7 +143,7 @@
                 <span class="fa fa-plus"></span> {% trans 'View' %}
               </button>
               <a href="{% url 'table:display' %}"
-                 {% if view %}
+                 {% if view.table_view %}
                   class="btn dropdown-item spin"
                  {% else %}
                   class="btn dropdown-item disabled"
@@ -160,8 +160,8 @@
             </div>
           </div>
           <a class="shadow btn btn-outline-dark spin"
-            {% if view %}
-              href="{% url 'table:stat_table_view' view.id %}"
+            {% if view.table_view %}
+              href="{% url 'table:stat_table_view' view.table_view.id %}"
               title="{% trans 'Dashboard created with the view data' %}"
             {% else %}
               href="{% url 'table:stat_table' %}"
@@ -172,8 +172,8 @@
           </a>
           {% include 'table/includes/partial_column_stats_selector.html' %}
           <a
-            {% if view %}
-              href="{% url 'table:csvdownload_view' view.id %}"
+            {% if view.table_view %}
+              href="{% url 'table:csvdownload_view' view.table_view.id %}"
               class="shadow btn btn-outline-dark"
             {% else %}
               href="{% url 'table:csvdownload' %}"
@@ -183,11 +183,11 @@
                 title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
           </a>
-          {% if view and not view.has_empty_formula %}
+          {% if view.table_view and not view.table_view.has_empty_formula %}
             <button
               type="button"
               class="shadow btn btn-outline-dark js-create-action"
-              data-url="{% url 'action:create_from_view' view.id %}"
+              data-url="{% url 'action:create_from_view' view.table_view.id %}"
               title="{% trans 'New action using this view as filter' %}"
               data-toggle="tooltip">
               <span class="fa fa-plus"></span> {% trans 'Action with filter' %}
@@ -195,7 +195,7 @@
           {% endif %}
         </div>
       </div>
-      {% if view %}
+      {% if view.table_view %}
         <p class="text-center lead">
           {% if not view.has_empty_formula %}
             {% trans 'Row filter:' %} {{ view.formula_text|safe }}

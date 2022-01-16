@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if stat_data %}
-  {% if column.data_type == 'integer' or column.data_type == 'double' %}
+  {% if view.column.data_type == 'integer' or view.column.data_type == 'double' %}
     <div class="justify-content-center">
       <table class="table table-hover table-bordered shadow"
              id="stat-column-a" role="grid" aria-describedby="stat-column_info">

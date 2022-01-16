@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-<form method="post" action="{% url 'table:view_edit' id %}"
+<form method="post" action="{% url 'table:view_edit' view.table_view.id %}"
       class="js-view-edit-form">
   {% csrf_token %}
   <div class="modal-header">
@@ -11,8 +11,8 @@
     </button>
   </div>
   <div class="modal-body">
-    {{ v_form|crispy }}
-    {{ f_form|crispy }}
+    {{ form|crispy }}
+    {{ filter_form|crispy }}
     <label class="control-label">{% trans 'Row will be shown if' %}</label>
     <div id="builder"></div>
   </div>

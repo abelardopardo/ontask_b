@@ -1,7 +1,5 @@
 from ontask.table.services.display import (
-    perform_row_delete, render_table_display_page,
-    render_table_display_server_side,
-)
+    create_dictionary_table_display_ss, perform_row_delete)
 from ontask.table.services.download import create_response_with_csv
 from ontask.table.services.errors import OnTaskTableNoKeyValueError
 from ontask.table.services.stats import (

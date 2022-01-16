@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'table:view_clone' pk %}" class="js-view-clone-form">
+<form method="post" action="{% url 'table:view_clone' view.table_view.id %}" class="js-view-clone-form">
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm view cloning' %}</h4>
@@ -8,7 +8,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with n=cname %}Are you sure you want to clone view <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+    <p class="lead">{% blocktrans with n=view.table_view.name %}Are you sure you want to clone view <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     <p>{% trans 'A new view with the prefix "Copy of " will be created' %}</p>
   </div>
   <div class="modal-footer">

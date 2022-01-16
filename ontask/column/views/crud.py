@@ -95,7 +95,7 @@ class ColumnCreateView(ColumnBasicView, WorkflowView, generic.CreateView):
         kwargs['workflow'] = self.workflow
         return kwargs
 
-    def get(
+    def dispatch(
         self,
         request: http.HttpRequest,
         *args,
@@ -109,7 +109,7 @@ class ColumnCreateView(ColumnBasicView, WorkflowView, generic.CreateView):
             )
             return http.JsonResponse({'html_redirect': ''})
 
-        return super().get(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         # Save the column object attached to the form

@@ -12,6 +12,67 @@ app_name = 'table'
 urlpatterns = [
 
     #
+    # Display
+    #
+    path('', views.TableDiplayCompleteView.as_view(), name='display'),
+    path(
+        'display_ss/',
+        views.TableDisplayCompleteSSView.as_view(),
+        name='display_ss'),
+    path(
+        '<int:pk>/display_view/',
+        views.TableDisplayViewView.as_view(),
+        name='display_view'),
+    path(
+        '<int:pk>/display_view_ss/',
+        views.TableDisplayViewSSView.as_view(),
+        name='display_view_ss'),
+    path('row_delete/', views.TableRowDeleteView.as_view(), name='row_delete'),
+
+    #
+    # Views
+    #
+    path('view_add/', views.ViewAddView.as_view(), name='view_add'),
+    path(
+        '<int:pk>/view_edit/',
+        views.ViewEditView.as_view(),
+        name='view_edit'),
+    path(
+        '<int:pk>/view_delete/',
+        views.ViewDeleteView.as_view(),
+        name='view_delete'),
+    path(
+        '<int:pk>/view_clone/',
+        views.ViewCloneView.as_view(),
+        name='view_clone'),
+
+    #
+    # Stats
+    #
+    path('stat_table/', stats.stat_table_view, name='stat_table'),
+    path(
+        '<int:pk>/stat_table_view/',
+        stats.stat_table_view,
+        name='stat_table_view'),
+    path(
+        '<int:pk>/stat_column/',
+        views.ColumnStatsView.as_view(),
+        name='stat_column'),
+    path(
+        '<int:pk>/stat_column_JSON/',
+        views.ColumnStatsModalView.as_view(),
+        name='stat_column_JSON'),
+
+    #
+    # CSV Download
+    #
+    path('csvdownload/', views.csvdownload, name='csvdownload'),
+    path(
+        '<int:pk>/csvdownload/',
+        views.csvdownload_view,
+        name='csvdownload_view'),
+
+    #
     # API JSON
     #
     path('<int:wid>/ops/', api.TableJSONOps.as_view(), name='api_ops'),
@@ -25,55 +86,7 @@ urlpatterns = [
         '<int:wid>/pmerge/',
         api.TablePandasMerge.as_view(),
         name='api_pmerge'),
-
-    #
-    # Display
-    #
-    path('', views.display, name='display'),
-    path('display_ss/', views.display_ss, name='display_ss'),
-    path(
-        '<int:pk>/display_view/',
-        views.display_view,
-        name='display_view'),
-    path(
-        '<int:pk>/display_view_ss/',
-        views.display_view_ss,
-        name='display_view_ss'),
-    path('row_delete/', views.row_delete, name='row_delete'),
-
-    #
-    # Views
-    #
-    path('view_add/', views.view_add, name='view_add'),
-    path('<int:pk>/view_edit/', views.view_edit, name='view_edit'),
-    path('<int:pk>/view_clone/', views.view_clone, name='view_clone'),
-    path('<int:pk>/view_delete/', views.view_delete, name='view_delete'),
-
-    #
-    # Stats
-    #
-    path('stat_table/', stats.stat_table_view, name='stat_table'),
-    path(
-        '<int:pk>/stat_table_view/',
-        stats.stat_table_view,
-        name='stat_table_view'),
-    path(
-        '<int:pk>/stat_column/',
-        stats.stat_column,
-        name='stat_column'),
-    path(
-        '<int:pk>/stat_column_JSON/',
-        stats.stat_column_json,
-        name='stat_column_JSON'),
-
-    #
-    # CSV Download
-    #
-    path('csvdownload/', views.csvdownload, name='csvdownload'),
-    path(
-        '<int:pk>/csvdownload/',
-        views.csvdownload_view,
-        name='csvdownload_view'),
 ]
 
+# For Django REST
 urlpatterns = format_suffix_patterns(urlpatterns)
