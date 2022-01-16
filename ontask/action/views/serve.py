@@ -65,7 +65,7 @@ class ActionServeActionView(generic.FormView):
         """Intercept when using an action that is not supposed to be used."""
         super().setup(request, *args, **kwargs)
         if (
-            not is_instructor and (
+            not is_instructor(self.request.user) and (
                 not self.action or
                 not self.action.serve_enabled or
                 not self.action.is_active)
