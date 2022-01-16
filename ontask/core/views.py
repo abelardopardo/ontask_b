@@ -13,6 +13,7 @@ from django.utils.decorators import method_decorator
 from ontask import models, tasks
 from ontask.core.decorators import ajax_required
 from ontask.core.permissions import UserIsInstructor, is_admin, is_instructor
+from ontask.core.services import ontask_handler404
 from ontask.django_auth_lti.decorators import lti_role_required
 from ontask.workflow.views import WorkflowIndexView
 
@@ -78,3 +79,10 @@ class KeepAliveView(generic.View):
 
     def post(self, request) -> http.HttpResponse:
         return http.JsonResponse({})
+
+
+class Custon404View(generic.TemplateView):
+    """Render the home page."""
+
+    def get(self, request, *args, **kwargs):
+        return ontask_handler404(request, Exception('Exception text'))

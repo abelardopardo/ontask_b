@@ -89,6 +89,8 @@ urlpatterns = [
         r'apidoc/',
         schema_view.with_ui('swagger', cache_timeout=0),
         name='ontask-api-doc'),
+    # See the 404 page
+    path('404/', views.Custon404View.as_view(), name="custom_404"),
 ]
 
 # User-uploaded files like profile pics need to be served in development

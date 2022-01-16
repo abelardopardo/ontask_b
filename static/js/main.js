@@ -277,9 +277,10 @@ $('#modal-item').on('hidden.bs.modal', function (e) {
 $(document).on("keyup", '.textEnable', function() {
   $(".button-enable").prop( "disabled", $(this).val() != $(this).attr('data-value'));
 });
+// Detect elements to toggle
+$(".button-to-toggle-message").click(function(){ $("#message-to-toggle").toggle();});
 $(function () {
   // Flush workflow
   $(".js-workflow-flush").on("click", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 })
-
