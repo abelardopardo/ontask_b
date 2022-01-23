@@ -13,7 +13,7 @@ from django.views import generic
 from ontask import OnTaskServiceException, models
 from ontask.celery import celery_is_up
 from ontask.core import (
-    JSONFormResponseMixin, SingleWorkflowMixin, WorkflowView,
+    JSONFormResponseMixin, WorkflowView,
     UserIsInstructor, ajax_required, remove_workflow_from_session)
 from ontask.workflow import forms, services
 
@@ -24,6 +24,7 @@ class WorkflowIndexView(UserIsInstructor, generic.ListView):
     http_method_names = ['get']
     model = models.Workflow
     ordering = ['name']
+    wf_pf_related = ['shared', 'workflows_star', 'actions']
 
     def setup(self, request, *args, **kwargs):
         """Remove workflow from session and check celery if superuser."""
@@ -87,7 +88,6 @@ class WorkflowCreateView(
 class WorkflowUpdateView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleWorkflowMixin,
     WorkflowView,
     generic.UpdateView
 ):
@@ -109,40 +109,12 @@ class WorkflowUpdateView(
             return http.JsonResponse({'html_redirect': ''})
 
         # Save object
-        super().form_valid(form)
+        self.object = form.save()
 
         return services.log_workflow_createupdate(
             self.request,
             self.object,
             models.Log.WORKFLOW_UPDATE)
-
-
-@method_decorator(ajax_required, name='dispatch')
-class WorkflowDeleteView(
-    UserIsInstructor,
-    JSONFormResponseMixin,
-    SingleWorkflowMixin,
-    WorkflowView,
-    generic.DeleteView
-):
-    """View to delete a workflow."""
-
-    http_method_names = ['get', 'post']
-    template_name = 'workflow/includes/partial_workflow_delete.html'
-
-    def delete(self, request, *args, **kwargs) -> http.JsonResponse:
-        """Delete the workflow and log the event"""
-        models.Log.objects.register(
-            request.user,
-            models.Log.WORKFLOW_DELETE,
-            self.workflow,
-            {
-                'name': self.workflow.name,
-                'ncols': self.workflow.ncols,
-                'nrows': self.workflow.nrows})
-
-        self.workflow.delete()
-        return http.JsonResponse({'html_redirect': reverse('home')})
 
 
 @method_decorator(ajax_required, name='dispatch')
@@ -160,7 +132,7 @@ class WorkflowCloneView(
     def post(self, request, *args, **kwargs):
         """Perform the clone operation."""
         try:
-            services.do_clone_workflow(self.request.user, self.workflow)
+            services.do_clone_workflow(request.user, self.workflow)
         except OnTaskServiceException as exc:
             exc.message_to_error(request)
             exc.delete()
@@ -168,3 +140,22 @@ class WorkflowCloneView(
             messages.success(request, _('Workflow successfully cloned.'))
 
         return http.JsonResponse({'html_redirect': ''})
+
+
+@method_decorator(ajax_required, name='dispatch')
+class WorkflowDeleteView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    WorkflowView,
+    generic.DeleteView
+):
+    """View to delete a workflow."""
+
+    http_method_names = ['get', 'post']
+    template_name = 'workflow/includes/partial_workflow_delete.html'
+
+    def delete(self, request, *args, **kwargs) -> http.JsonResponse:
+        """Delete the workflow and log the event"""
+        self.workflow.log(request.user, models.Log.WORKFLOW_DELETE)
+        self.workflow.delete()
+        return http.JsonResponse({'html_redirect': reverse('home')})

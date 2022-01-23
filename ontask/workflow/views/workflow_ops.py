@@ -69,8 +69,8 @@ class WorkflowOperationsView(
 
     http_method_names = ['get']
     template_name = 'workflow/operations.html'
-    s_related = 'luser_email_column'
-    pf_related = ['columns', 'shared']
+    wf_s_related = 'luser_email_column'
+    wf_pf_related = ['columns', 'shared']
 
     def get_context_data(self, **kwargs):
         """Add all elements required to view the operations."""

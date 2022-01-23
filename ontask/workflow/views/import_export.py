@@ -24,7 +24,7 @@ class WorkflowActionExportView(
     http_method_names = ['get', 'post']
     form_class = forms.WorkflowExportRequestForm
     template_name = 'workflow/export.html'
-    pf_related = 'actions'
+    wf_pf_related = 'actions'
     only_action_list = False
 
     def get_context_data(self, **kwargs):
@@ -64,7 +64,7 @@ class WorkflowExportDoneView(UserIsInstructor, WorkflowView):
     """View for downloading the exported workflow."""
 
     http_method_names = ['get']
-    pf_related = 'actions'
+    wf_pf_related = 'actions'
 
     def get(self, request, *args, **kwargs):
         """Extract ids from URL and return ZIP download response"""

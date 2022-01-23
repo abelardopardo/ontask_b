@@ -44,7 +44,7 @@ class TransformModelShowView(
 class PluginInvokeView(UserIsInstructor, WorkflowView, generic.FormView):
     """Render the view for the first step of plugin execution."""
 
-    pf_related = 'columns'
+    wf_pf_related = 'columns'
     form_class = forms.PluginInfoForm
     template_name = 'dataops/plugin_info_for_run.html'
 

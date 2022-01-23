@@ -16,7 +16,7 @@ class SchedulerIndex(UserIsInstructor, WorkflowView, generic.TemplateView):
     """Render the list of scheduled actions in the workflow."""
 
     template_name = 'scheduler/index.html'
-    pf_related = 'actions'
+    wf_pf_related = 'actions'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
