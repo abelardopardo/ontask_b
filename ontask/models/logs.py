@@ -49,6 +49,7 @@ class Log(Owner):
     ACTION_JSON_SENT = 'action_json_sent'
     ACTION_REPORT_EMAIL_SENT = 'action_report_email_sent'
     ACTION_QUESTION_ADD = 'question_add'
+    ACTION_QUESTION_REMOVE = 'question_remove'
     ACTION_TODOITEM_ADD = 'todoitem_add'
     ACTION_QUESTION_TOGGLE_CHANGES = 'question_toggle_changes'
     ACTION_TODOITEM_TOGGLE_CHANGES = 'todoitem_toggle_changes'
@@ -140,6 +141,7 @@ class Log(Owner):
         ACTION_JSON_SENT: _('Emails sent'),
         ACTION_REPORT_EMAIL_SENT: _('Email with data report sent'),
         ACTION_QUESTION_ADD: _('Question added'),
+        ACTION_QUESTION_REMOVE: _('Question removed'),
         ACTION_TODOITEM_ADD: _('TODO item added'),
         ACTION_QUESTION_TOGGLE_CHANGES: _('Question toggle changes'),
         ACTION_TODOITEM_TOGGLE_CHANGES: _('TODO item toggle changes'),
