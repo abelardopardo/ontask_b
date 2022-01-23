@@ -16,15 +16,15 @@
     <p class="text-center">{% trans 'The data will be accessed with the following parameters:' %}</p>
 
     {% if view.object.conn_type %}
-      <p class="help-block text-center">{% blocktrans with n=view.object.conn_type %}Connection type:
+      <p class="help-block text-center">{% blocktrans with n=object.conn_type %}Connection type:
         {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if view.object.conn_driver %}
-      <p class="help-block text-center">{% blocktrans with n=view.object.conn_driver %}Connection
+      <p class="help-block text-center">{% blocktrans with n=object.conn_driver %}Connection
         driver: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if view.object.db_user %}
-      <p class="help-block text-center">{% blocktrans with n=view.object.db_user %}Username: {{ n }}
+      <p class="help-block text-center">{% blocktrans with n=object.db_user %}Username: {{ n }}
         {% endblocktrans %}</p>
     {% endif %}
     {% if view.object.db_password %}
@@ -32,17 +32,17 @@
     {% endif %}
     {% if view.object.db_host %}
       <p class="help-block text-center">
-        {% blocktrans with n=view.object.db_host %}Host: {{ n }}{% endblocktrans %}</p>
+        {% blocktrans with n=object.db_host %}Host: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if view.object.db_port %}
       <p class="help-block text-center">
-        {% blocktrans with n=view.object.db_port %}Port: {{ n }}{% endblocktrans %}</p>
+        {% blocktrans with n=object.db_port %}Port: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     <p class="help-block text-center">
-      {% blocktrans with n=view.object.db_name %}Database name: {{ n }}{% endblocktrans %}
+      {% blocktrans with n=object.db_name %}Database name: {{ n }}{% endblocktrans %}
     </p>
     <p class="help-block text-center">
-      {% blocktrans with n=view.object.db_table %}Database table: {{ n }}{% endblocktrans %}
+      {% blocktrans with n=object.db_table %}Database table: {{ n }}{% endblocktrans %}
     </p>
     <div class="row justify-content-center">
       <form action="" method="post" enctype="multipart/form-data">

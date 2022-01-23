@@ -7,11 +7,11 @@
 </div>
 <div class="modal-body">
   {% if view.object.workflow %}
-    <h4 class="text-center">{% trans 'Workflow' %}: {{ view.object.workflow.name }}</h4>
+    <h4 class="text-center">{% trans 'Workflow' %}: {{ object.workflow.name }}</h4>
   {% endif %}
-  <p class="text-center">{% trans 'Last modified' %}: {{ view.object.modified }}</p>
+  <p class="text-center">{% trans 'Last modified' %}: {{ object.modified }}</p>
   <table class="table shadow" width="100%">
-    {% for c_key, c_val in view.object.payload.items %}
+    {% for c_key, c_val in object.payload.items %}
       <tr><td>{{ c_key }}</td><td>{% if c_val %}{{ c_val }}{% endif %}</td></tr>
     {% endfor %}
   </table>

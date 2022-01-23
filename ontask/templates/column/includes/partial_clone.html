@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'column:column_clone' view.column.pk %}" class="js-column-clone-form">
+<form method="post" action="{% url 'column:column_clone' object.pk %}" class="js-column-clone-form">
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm column cloning' %}</h4>
@@ -8,7 +8,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with n=view.column.name %}Are you sure you want to clone column <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+    <p class="lead">{% blocktrans with n=object.name %}Are you sure you want to clone column <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     <p>{% trans 'A new column with the prefix "Copy of " will be created' %}</p>
   </div>
   <div class="modal-footer">

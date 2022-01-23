@@ -18,9 +18,9 @@
 {% endblock %}
 {% block container %}
 <div class="container">
-  <h1 class="text-center">Column: {{ view.column.name }}</h1>
-  {% if view.column.description_text %}
-    <p class="lead text-center">{{ view.column.description_text }}</p>
+  <h1 class="text-center">Column: {{ object.name }}</h1>
+  {% if object.description_text %}
+    <p class="lead text-center">{{ object.description_text }}</p>
   {% endif %}
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"

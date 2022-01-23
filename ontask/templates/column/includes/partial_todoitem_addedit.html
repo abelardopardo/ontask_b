@@ -1,12 +1,13 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-<form method="post" 
+{{ form.media }}
+<form method="post"
   {% if add %}
-    action="{% url 'column:todoitem_add' view.action.id %}"
+    action="{% url 'column:todoitem_add' object.id %}"
     class="js-action-todoitem-add-form">
   {% else %}
-    action="{% url 'column:todoitem_edit' pk %}"
+    action="{% url 'column:todoitem_edit' object.id %}"
     class="js-todoitem-edit-form">
   {% endif %}
   {% csrf_token %}
@@ -14,7 +15,7 @@
     {% if add %}
       <h4 class="modal-title">{% trans 'Add TODO item' %}</h4>
     {% else %}
-      <h4 class="modal-title">{% blocktrans with n=cname %}Edit TODO item <strong>{{ n }}</strong>{% endblocktrans %}</h4>
+      <h4 class="modal-title">{% blocktrans with n=object.name %}Edit TODO item <strong>{{ n }}</strong>{% endblocktrans %}</h4>
     {% endif %}
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>

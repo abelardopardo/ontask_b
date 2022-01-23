@@ -16,22 +16,22 @@
     <p class="text-center">{% trans 'The data will be accessed with the following parameters:' %}</p>
 
     {% if view.object.description_text %}
-      <p class="help-block text-center">{% blocktrans with n=view.object.description_text %}Description:
+      <p class="help-block text-center">{% blocktrans with n=object.description_text %}Description:
         {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if view.object.aws_access_key %}
-      <p class="help-block text-center">{% blocktrans with n=view.object.aws_access_key %}Access key:
+      <p class="help-block text-center">{% blocktrans with n=object.aws_access_key %}Access key:
         {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if view.object.aws_bucket_name %}
-      <p class="help-block text-center">{% blocktrans with n=view.object.aws_bucket_name %}Bucket name: {{ n }}{% endblocktrans %}</p>
+      <p class="help-block text-center">{% blocktrans with n=object.aws_bucket_name %}Bucket name: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if view.object.aws_file_path %}
-      <p class="help-block text-center">{% blocktrans with n=view.object.aws_file_path %}File path: {{ n }}
+      <p class="help-block text-center">{% blocktrans with n=object.aws_file_path %}File path: {{ n }}
         {% endblocktrans %}</p>
     {% endif %}
     {% if view.object.aws_region_name %}
-        <p class="help-block text-center">{% blocktrans with n=view.object.aws_region_name %}Region: {{ n }}{% endblocktrans %}</p>
+        <p class="help-block text-center">{% blocktrans with n=object.aws_region_name %}Region: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     {% if table_name %}
       <p class="help-block text-center">

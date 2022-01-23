@@ -2,10 +2,10 @@
 {% load crispy_forms_tags %}
 <form method="post" 
   {% if form.instance.id is None %}
-    action="{% url 'condition:create_filter' view.action.id %}"
+    action="{% url 'condition:create_filter' object.id %}"
     class="js-filter-create-form"
   {% else %}
-    action="{% url 'condition:edit_filter' view.action.id %}"
+    action="{% url 'condition:edit_filter' object.id %}"
     class="js-filter-edit-form"
   {% endif %}>
   {% csrf_token %}

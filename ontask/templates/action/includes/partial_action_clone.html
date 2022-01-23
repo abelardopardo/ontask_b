@@ -8,7 +8,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with n=view.action.name %}Are you sure you want to clone action <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+    <p class="lead">{% blocktrans with n=object.name %}Are you sure you want to clone action <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     <p>{% trans 'A new action with the prefix "Copy of " will be created' %}</p>
   </div>
   <div class="modal-footer">

@@ -4,9 +4,9 @@
 {% block title %}{{ block.super }}{% trans 'Log View' %}{% endblock %}
 {% block container %}
 <div class="container">
-  <h1 class="text-center">{% trans 'Log' %} {{ view.object.id }}: {{ view.object }}</h1>
+  <h1 class="text-center">{% trans 'Log' %} {{ object.id }}: {{ object }}</h1>
   {% if view.object.workflow %}
-    <h4 class="text-center">{% trans 'Workflow' %}: {{ view.object.workflow.name }}</h4>
+    <h4 class="text-center">{% trans 'Workflow' %}: {{ object.workflow.name }}</h4>
   {% endif %}
   <p class="text-center">{% trans 'Last modified' %}: {{ view.object.modified }}</p>
   <p class="text-center">{% trans 'Payload:' %}</p>
