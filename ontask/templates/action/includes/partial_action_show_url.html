@@ -4,7 +4,7 @@
 {% load widget_tweaks %}
 {{ form.media }}
 <div class="js-action-showurl-form">
-  <form action="{% url 'action:showurl' action.id %}" method="post"
+  <form action="{% url 'action:showurl' object.id %}" method="post"
         class="js-action-showurl-form">
     {% csrf_token %}
     <div class="modal-header">
