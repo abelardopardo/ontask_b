@@ -49,7 +49,7 @@ class BackToHome(
             reverse('dataops:rowupdate'),
             reverse('dataops:rowcreate'),
             reverse('dataops:csvupload_start'),
-            reverse('dataops:excelupload_start'),
+            reverse('dataops:excel_upload_start'),
             reverse('dataops:googlesheetupload_start'),
             reverse('dataops:s3upload_start'),
             reverse('dataops:upload_s2'),
