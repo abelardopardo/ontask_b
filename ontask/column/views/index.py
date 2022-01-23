@@ -19,6 +19,7 @@ class ColumnIndexView(UserIsInstructor, WorkflowView, generic.TemplateView):
 
     http_method_names = ['get']
     template_name = 'column/detail.html'
+    wf_pf_related = 'columns'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -46,6 +47,7 @@ class ColumnIndexSSView(UserIsInstructor, WorkflowView):
     """
 
     http_method_names = ['post']
+    wf_pf_related = 'columns'
 
     def column_table_server_side(
         self,

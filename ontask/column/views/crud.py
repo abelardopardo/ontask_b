@@ -13,8 +13,8 @@ from django.views import generic
 from ontask import OnTaskServiceException, models
 from ontask.column import forms, services
 from ontask.core import (
-    ActionView, ColumnView, JSONFormResponseMixin, SingleColumnMixin,
-    UserIsInstructor, WorkflowView, ajax_required)
+    ActionView, ColumnView, JSONFormResponseMixin, UserIsInstructor,
+    ajax_required)
 
 # These are the column operands offered through the GUI. They have immediate
 # translations onto Pandas operators over dataframes. Each tuple has:
@@ -50,10 +50,7 @@ _formula_column_operands = [
 
 
 @method_decorator(ajax_required, name='dispatch')
-class ColumnBasicView(
-    UserIsInstructor,
-    JSONFormResponseMixin,
-):
+class ColumnBasicView(UserIsInstructor, JSONFormResponseMixin):
     """Basic Column View."""
 
     http_method_names = ['get', 'post']
@@ -77,7 +74,7 @@ class ColumnBasicView(
         return super().get(request, *args, **kwargs)
 
 
-class ColumnCreateView(ColumnBasicView, WorkflowView, generic.CreateView):
+class ColumnCreateView(ColumnBasicView, ColumnView, generic.CreateView):
     """Add a column."""
 
     form_class = forms.ColumnAddForm
@@ -94,22 +91,6 @@ class ColumnCreateView(ColumnBasicView, WorkflowView, generic.CreateView):
         kwargs = super().get_form_kwargs()
         kwargs['workflow'] = self.workflow
         return kwargs
-
-    def dispatch(
-        self,
-        request: http.HttpRequest,
-        *args,
-        **kwargs
-    ) -> http.JsonResponse:
-        """Check if the workflow has no rows"""
-        if self.workflow.nrows == 0:
-            messages.error(
-                request,
-                _('Cannot add column to a workflow without data'),
-            )
-            return http.JsonResponse({'html_redirect': ''})
-
-        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         # Save the column object attached to the form
@@ -142,11 +123,15 @@ class ColumnQuestionAddView(ColumnBasicView, ActionView, generic.FormView):
 
     def get_context_data(self, **kwargs):
         """Insert is_question and add values."""
+        self.object = self.get_object()
         context = super().get_context_data(**kwargs)
         context['add'] = True
         return context
 
     def form_valid(self, form):
+        # Get the action first
+        action = self.get_object()
+
         # Save the column object attached to the form
         column = form.save(commit=False)
         try:
@@ -156,7 +141,7 @@ class ColumnQuestionAddView(ColumnBasicView, ActionView, generic.FormView):
                 column,
                 form.initial_valid_value,
                 models.Log.ACTION_QUESTION_ADD,
-                self.action)
+                action)
             form.save_m2m()
         except OnTaskServiceException as exc:
             exc.message_to_error(self.request)
@@ -171,19 +156,23 @@ class ColumnTODOAddView(ColumnBasicView, ActionView, generic.FormView):
     form_class = forms.TODOItemForm
     template_name = 'column/includes/partial_todoitem_addedit.html'
 
+    def get_context_data(self, **kwargs):
+        """Insert is_question and add values."""
+        self.object = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context['add'] = True
+        return context
+
     def get_form_kwargs(self):
         """Add the workflow to the kwargs."""
         kwargs = super().get_form_kwargs()
         kwargs['workflow'] = self.workflow
         return kwargs
 
-    def get_context_data(self, **kwargs):
-        """Insert is_question and add values."""
-        context = super().get_context_data(**kwargs)
-        context['add'] = True
-        return context
-
     def form_valid(self, form):
+        # Get the action first
+        action = self.get_object()
+
         # Save the column object attached to the form
         column = form.save(commit=False)
         try:
@@ -202,11 +191,12 @@ class ColumnTODOAddView(ColumnBasicView, ActionView, generic.FormView):
         return http.JsonResponse({'html_redirect': ''})
 
 
-class ColumnFormulaAddView(ColumnBasicView, WorkflowView, generic.FormView):
+class ColumnFormulaAddView(ColumnBasicView, ColumnView, generic.CreateView):
     """Add a new formula column."""
 
     form_class = forms.FormulaColumnAddForm
     template_name = 'column/includes/partial_formula_add.html'
+    wf_pf_selected = 'columns'
 
     def get_form_kwargs(self):
         """Add the workflow to the kwargs."""
@@ -232,7 +222,7 @@ class ColumnFormulaAddView(ColumnBasicView, WorkflowView, generic.FormView):
         return http.JsonResponse({'html_redirect': ''})
 
 
-class ColumnRandomAddView(ColumnBasicView, WorkflowView, generic.FormView):
+class ColumnRandomAddView(ColumnBasicView, ColumnView, generic.CreateView):
     """Create a column with random values (Modal)."""
 
     form_class = forms.RandomColumnAddForm
@@ -278,12 +268,7 @@ class ColumnRandomAddView(ColumnBasicView, WorkflowView, generic.FormView):
         return http.JsonResponse({'html_redirect': ''})
 
 
-class ColumnEditView(
-    ColumnBasicView,
-    SingleColumnMixin,
-    ColumnView,
-    generic.UpdateView
-):
+class ColumnEditView(ColumnBasicView, ColumnView, generic.UpdateView):
     """Edit and update a column."""
 
     form_class = None
@@ -318,15 +303,11 @@ class ColumnEditView(
         return http.JsonResponse({'html_redirect': ''})
 
 
-class ColumnDeleteView(
-    ColumnBasicView,
-    SingleColumnMixin,
-    ColumnView,
-    generic.DeleteView
-):
+class ColumnDeleteView(ColumnBasicView, ColumnView, generic.DeleteView):
     """Delete a column."""
 
     template_name = 'column/includes/partial_delete.html'
+    wf_pf_related = ['actions', 'conditions', 'views']
 
     def get_context_data(self, **kwargs):
         """Insert is_question and add values."""
@@ -334,22 +315,24 @@ class ColumnDeleteView(
         context.update({
             # Get the conditions that need to be deleted
             'cond_to_delete': [
-            cond for cond in self.workflow.conditions.all()
-            if self.column in cond.columns.all()],
+                cond for cond in self.workflow.conditions.all()
+                if self.object in cond.columns.all()],
 
             # Get the action filters that need to be deleted
             'action_filter_to_delete': [
-            action for action in self.workflow.actions.all()
-            if action.filter and self.column in action.filter.columns.all()],
+                action for action in self.workflow.actions.all()
+                if
+                action.filter and self.object in action.filter.columns.all()],
 
             # Get the views with filters that need to be deleted
             'view_filter_to_delete': [
-            view for view in self.workflow.views.all()
-            if view.filter and self.column in view.filter.columns.all()]})
+                view for view in self.workflow.views.all()
+                if view.filter and self.object in view.filter.columns.all()]})
         return context
 
     def delete(self, request, *args, **kwargs):
-        services.delete_column(request.user, self.workflow, self.column)
+        column = self.get_object()
+        services.delete_column(request.user, self.workflow, column)
 
         # There are various points of return
         from_url = request.META['HTTP_REFERER']
@@ -360,15 +343,16 @@ class ColumnDeleteView(
         return http.JsonResponse({'html_redirect': reverse('column:index')})
 
 
-class ColumnCloneView(ColumnBasicView, ColumnView, generic.TemplateView):
+class ColumnCloneView(ColumnBasicView, ColumnView, generic.DetailView):
     """"Clone a column in the table attached to a workflow."""
 
     template_name = 'column/includes/partial_clone.html'
 
     def post(self, request, *args, **kwargs):
         # Proceed to clone the column
+        column = self.get_object()
         try:
-            services.clone_column(request.user, self.column)
+            services.clone_column(request.user, column)
         except Exception as exc:
             messages.error(
                 request,

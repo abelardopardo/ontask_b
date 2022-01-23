@@ -12,7 +12,7 @@ from ontask import OnTaskServiceException, models
 from ontask.column import forms, services
 from ontask.core import (
     ActionView, ColumnConditionView, JSONFormResponseMixin,
-    SingleColumnConditionMixin, UserIsInstructor, ajax_required)
+    UserIsInstructor, ajax_required)
 
 
 @method_decorator(ajax_required, name='dispatch')
@@ -20,7 +20,8 @@ class ColumnCriterionCreateView(
     UserIsInstructor,
     JSONFormResponseMixin,
     ActionView,
-    generic.FormView):
+    generic.FormView
+):
     """Add a new criteria to an action.
 
     If it is the first criteria, the form simply asks for a question with a
@@ -32,7 +33,8 @@ class ColumnCriterionCreateView(
 
     http_method_names = ['get', 'post']
     form_class = forms.CriterionForm
-    template_name = 'workflow/includes/partial_criterion_addedit.html'
+    template_name = 'workflow/includes/partial_criterion_add_edit.html'
+    pf_related = 'column_condition_pair'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -41,33 +43,30 @@ class ColumnCriterionCreateView(
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['other_criterion'] = self.action.column_condition_pair.first()
-        kwargs['workflow'] = self.action.workflow
+        kwargs['other_criterion'] = self.object.column_condition_pair.first()
+        kwargs['workflow'] = self.workflow
         return kwargs
 
-    def get(self, request, *args, **kwargs):
-        if self.action.action_type != models.Action.RUBRIC_TEXT:
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.action_type != models.Action.RUBRIC_TEXT:
             messages.error(
                 request,
                 _('Operation only valid or Rubric actions'),
             )
             return http.JsonResponse({'html_redirect': ''})
 
-        if self.action.workflow.nrows == 0:
-            messages.error(
-                request,
-                _('Cannot add criteria to a workflow without data'),
-            )
-            return http.JsonResponse({'html_redirect': ''})
-
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content:
-            self.action.set_text_content(action_content)
+            self.object.set_text_content(action_content)
 
-        return super().get(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
+        # Get the action first
+        action = self.get_object()
+
         column = form.save(commit=False)
         try:
             services.add_column_to_workflow(
@@ -76,7 +75,7 @@ class ColumnCriterionCreateView(
                 column,
                 form.initial_valid_value,
                 models.Log.ACTION_RUBRIC_CRITERION_ADD,
-                self.action)
+                action)
             form.save_m2m()
         except OnTaskServiceException as exc:
             exc.message_to_error(self.request)
@@ -96,12 +95,23 @@ class ColumnCriterionEditView(
 
     http_method_names = ['get', 'post']
     form_class = forms.CriterionForm
-    template_name = 'workflow/includes/partial_criterion_addedit.html'
+    template_name = 'workflow/includes/partial_criterion_add_edit.html'
+    pf_related = ['action', 'column']
+
+    def dispatch(self, request, *args, **kwargs):
+        # Set the cc_tuple object
+        self.object = self.get_object()
+        # If the request has the 'action_content', update the action
+        action_content = request.POST.get('action_content')
+        if action_content:
+            self.object.action.set_text_content(action_content)
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        action = self.cc_tuple.action
-        column = self.cc_tuple.column
+        action = self.object.action
+        column = self.object.column
 
         kwargs['workflow'] = action.workflow
         kwargs['other_criterion'] = action.column_condition_pair.exclude(
@@ -120,7 +130,7 @@ class ColumnCriterionEditView(
             column,
             form.old_name,
             form.old_position,
-            self.cc_tuple,
+            self.object,
             models.Log.ACTION_RUBRIC_CRITERION_EDIT)
         form.save_m2m()
 
@@ -131,7 +141,6 @@ class ColumnCriterionEditView(
 class ColumnCriterionDeleteView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleColumnConditionMixin,
     ColumnConditionView,
     generic.DeleteView,
 ):
@@ -139,12 +148,14 @@ class ColumnCriterionDeleteView(
 
     http_method_names = ['get', 'post']
     template_name = 'workflow/includes/partial_criterion_delete.html'
+    s_related = 'column'
 
     def delete(self, request, *args, **kwargs):
-        self.cc_tuple.log(
+        cc_tuple = self.get_object()
+        cc_tuple.log(
             request.user,
             models.Log.ACTION_RUBRIC_CRITERION_DELETE)
-        self.cc_tuple.delete()
+        cc_tuple.delete()
         return http.JsonResponse({'html_redirect': ''})
 
 
@@ -157,14 +168,17 @@ class ColumnCriterionInsertView(
     """Add an existing column as rubric criteria."""
 
     http_method_names = ['post']
+    wf_pf_related = 'columns'
+    pf_related = 'column_condition_pair'
 
     def post(self, request, *args, **kwargs):
+        action = self.get_object()
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content:
-            self.action.set_text_content(action_content)
+            action.set_text_content(action_content)
 
-        criteria = self.action.column_condition_pair.all()
+        criteria = action.column_condition_pair.all()
         column = self.workflow.columns.filter(pk=kwargs['cpk']).first()
         if not column or criteria.filter(column=column).exists():
             messages.error(
@@ -191,9 +205,8 @@ class ColumnCriterionInsertView(
             return http.JsonResponse({'html_redirect': ''})
 
         acc = models.ActionColumnConditionTuple.objects.create(
-            action=self.action,
-            column=column,
-            condition=None)
+            action=action,
+            column=column)
 
         acc.log(request.user, models.Log.ACTION_RUBRIC_CRITERION_ADD)
 

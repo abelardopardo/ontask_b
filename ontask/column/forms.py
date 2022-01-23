@@ -326,6 +326,9 @@ class CriterionForm(ColumnBasicForm):
         """Validate the position field."""
         form_data = super().clean()
 
+        if self.errors:
+            return form_data
+
         # Check and force a correct column index
         ncols = self.workflow.columns.count()
         if form_data['position'] < 1 or form_data['position'] > ncols:

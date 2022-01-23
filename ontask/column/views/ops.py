@@ -71,7 +71,7 @@ class ColumnRestrictValuesView(
     UserIsInstructor,
     JSONFormResponseMixin,
     ColumnView,
-    generic.TemplateView
+    generic.DetailView
 ):
     """Restrict values in this column to one of those already present."""
 
@@ -83,20 +83,24 @@ class ColumnRestrictValuesView(
         df = pandas.load_table(self.workflow.get_data_frame_table_name())
         context['values'] = ', '.join([
             str(item)
-            for item in sorted(df[self.column.name].dropna().unique())])
+            for item in sorted(df[self.object.name].dropna().unique())])
         return context
 
     def get(self, request, *args, **kwargs):
+        # First get the object
+        self.object = self.get_object()
         # If the columns is unique and it is the only one, we cannot allow
         # the operation
-        if self.column.is_key:
+        if self.object.is_key:
             messages.error(request, _('You cannot restrict a key column'))
             return http.JsonResponse({'html_redirect': reverse('column:index')})
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        # First get the object
+        self.object = self.get_object()
         try:
-            services.restrict_column(request.user, self.column)
+            services.restrict_column(request.user, self.object)
         except OnTaskServiceException as exc:
             exc.message_to_error(request)
 
@@ -114,6 +118,7 @@ class ColumnSelectView(
     http_method_names = ['get', 'post']
     form_class = forms.ColumnSelectForm
     template_name = 'column/includes/partial_select.html'
+    wf_pk_related = 'columns'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
