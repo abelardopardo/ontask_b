@@ -11,8 +11,8 @@ from django.views import generic
 from ontask import create_new_name, models
 from ontask.condition import forms, services, services as condition_services
 from ontask.core import (
-    ActionView, ConditionView, JSONFormResponseMixin,
-    SingleConditionMixin, UserIsInstructor, ajax_required)
+    ActionView, ConditionView, JSONFormResponseMixin, UserIsInstructor,
+    ajax_required)
 
 
 @method_decorator(ajax_required, name='dispatch')
@@ -20,29 +20,38 @@ class ConditionCreateView(
     UserIsInstructor,
     JSONFormResponseMixin,
     ActionView,
-    generic.CreateView
+    generic.FormView
 ):
     """Class to create a condition or filter."""
     form_class = None
     template_name = None
 
+    def dispatch(self, request, *args, **kwargs):
+        # Set the action object
+        self.object = self.get_object()
+        # If the request has the 'action_content', update the action
+        action_content = request.POST.get('action_content')
+        if action_content:
+            self.object.set_text_content(action_content)
+
+        return super().dispatch(request, *args, **kwargs)
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['action'] = self.action
+        kwargs['action'] = self.object
         return kwargs
 
     def form_valid(self, form):
         if not form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
-        return services.save_condition_form(self.request, form, self.action)
+        return services.save_condition_form(self.request, form, self.object)
 
 
 @method_decorator(ajax_required, name='dispatch')
 class ConditionUpdateView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleConditionMixin,
     ConditionView,
     generic.UpdateView
 ):
@@ -53,7 +62,7 @@ class ConditionUpdateView(
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['action'] = self.condition.action
+        kwargs['action'] = self.object.action
         return kwargs
 
     def form_valid(self, form):
@@ -63,7 +72,7 @@ class ConditionUpdateView(
         return services.save_condition_form(
             self.request,
             form,
-            self.condition.action)
+            self.object.action)
 
 
 @method_decorator(ajax_required, name='dispatch')
@@ -75,18 +84,31 @@ class FilterUpdateView(
 ):
     """Process the filter update view."""
 
+    http_method_names = ['get', 'post']
     form_class = forms.FilterForm
     template_name = 'condition/includes/partial_filter_addedit.html'
     filter = None
 
+    def dispatch(self, request, *args, **kwargs):
+        """Set the object/action and see if there is content to update."""
+        self.object = self.get_object()
+
+        # If the request has the 'action_content', update the action
+        action_content = request.POST.get('action_content')
+        if action_content:
+            self.object.set_text_content(action_content)
+
+        return super().dispatch(request, *args, **kwargs)
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['action'] = self.action
+        kwargs['action'] = self.object
         kwargs['instance'] = self.filter
         return kwargs
 
     def get(self, request, *args, **kwargs):
-        self.filter = self.action.filter
+        """Verify that action and filter are correct."""
+        self.filter = self.object.filter
         if self.filter is None:
             return http.JsonResponse({'html_redirect': None})
 
@@ -99,7 +121,7 @@ class FilterUpdateView(
         return services.save_condition_form(
             self.request,
             form,
-            self.action)
+            self.object)
 
 
 @method_decorator(ajax_required, name='dispatch')
@@ -110,7 +132,11 @@ class FilterSetView(
 ):
     """Set the formula in the view as the action filter."""
 
+    http_method_names = ['get']
+    wf_pf_related = 'views'
+
     def get(self, request, *args, **kwargs):
+        action = self.get_object()
         view = self.workflow.views.filter(pk=kwargs['view_id']).first()
         if not view or not view.filter:
             messages.error(
@@ -120,12 +146,12 @@ class FilterSetView(
             return http.JsonResponse({'html_redirect': ''})
 
         # If the action has a filter nuke it.
-        self.action.filter = view.filter
-        self.action.rows_all_false = None
-        self.action.save(update_fields=['filter', 'rows_all_false'])
+        action.filter = view.filter
+        action.rows_all_false = None
+        action.save(update_fields=['filter', 'rows_all_false'])
 
         # Row counts need to be updated.
-        self.action.update_selected_row_counts()
+        action.update_selected_row_counts()
 
         return http.JsonResponse({'html_redirect': ''})
 
@@ -134,23 +160,25 @@ class FilterSetView(
 class ConditionDeleteView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleConditionMixin,
     ConditionView,
     generic.DeleteView,
 ):
     """Delete a condition."""
 
+    http_method_names = ['get', 'post']
     template_name = 'condition/includes/partial_condition_delete.html'
+    s_related = 'action'
 
     def delete(self, request, *args, **kwargs):
-        action = self.condition.action
+        condition = self.get_object()
+        action = condition.action
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content:
             action.set_text_content(action_content)
 
-        self.condition.log(request.user, models.Log.CONDITION_DELETE)
-        self.condition.delete()
+        condition.log(request.user, models.Log.CONDITION_DELETE)
+        condition.delete()
         action.rows_all_false = None
         action.save(update_fields=['rows_all_false'])
         return http.JsonResponse({'html_redirect': ''})
@@ -167,29 +195,28 @@ class FilterDeleteView(
 
     http_method_names = ['get', 'post']
     template_name = 'condition/includes/partial_filter_delete.html'
+    s_related = 'filter'
 
     def get(self, request, *args, **kwargs):
-        filter_obj = self.action.filter
+        self.object = self.get_object()
+        filter_obj = self.object.filter
         if filter_obj is None:
             return http.JsonResponse({'html_redirect': ''})
 
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # If the request has 'action_content', update the action
-        filter_obj = self.action.filter
-        action_content = request.POST.get('action_content')
-        if action_content:
-            self.action.set_text_content(action_content)
+        action = self.get_object()
+        filter_obj = action.filter
 
         filter_obj.log(request.user, models.Log.CONDITION_DELETE)
         filter_obj.delete_from_action()
 
-        self.action.filter = None
-        self.action.rows_all_false = None
-        self.action.save(update_fields=['filter', 'rows_all_false'])
+        action.filter = None
+        action.rows_all_false = None
+        action.save(update_fields=['filter', 'rows_all_false'])
 
-        self.action.update_selected_row_counts()
+        action.update_selected_row_counts()
 
         return http.JsonResponse({'html_redirect': ''})
 
@@ -205,27 +232,31 @@ class ConditionCloneView(
 
     model = models.Condition
     http_method_names = 'post'
+    wf_pf_related = 'actions'
+    s_related = 'action'
 
     def post(self, request, *args, **kwargs):
+        condition = self.get_object()
         action_pk = kwargs.get('action_pk')
         if action_pk:
-            action = self.workflow.actions.filter(id=action_pk).first()
+            action = self.workflow.actions.filter(
+                id=action_pk).prefetch_related('conditions').first()
             if not action:
                 messages.error(request, _('Incorrect action id.'))
                 return http.JsonResponse({'html_redirect': ''})
         else:
-            action = self.condition.action
+            action = condition.action
 
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content and action:
-            self.condition.action.set_text_content(action_content)
+            condition.action.set_text_content(action_content)
 
         condition_services.do_clone_condition(
             request.user,
-            self.condition,
+            condition,
             new_action=action,
-            new_name=create_new_name(self.condition.name, action.conditions))
+            new_name=create_new_name(condition.name, action.conditions))
 
         messages.success(request, _('Condition successfully cloned.'))
 
