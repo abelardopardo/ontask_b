@@ -15,7 +15,8 @@ from django.views.generic import base, detail
 from rest_framework import permissions
 
 from ontask import models
-from ontask.core.session_ops import SessionStore, acquire_workflow_access
+from ontask.core.session_ops import (
+    SessionStore, acquire_workflow_access, expand_query_with_related)
 
 GROUP_NAMES = ['student', 'instructor']
 
@@ -154,6 +155,7 @@ class JSONFormResponseMixin(JSONResponseMixin):
 
 class WorkflowView(base.View):
     """View that sets the workflow attribute."""
+
     def __init__(self, **kwargs):
         """Initialise error field/redirect and the workflow attribute."""
         super().__init__(**kwargs)
@@ -164,6 +166,9 @@ class WorkflowView(base.View):
     def setup(self, request, *args, **kwargs):
         """Add workflow attribute to view object.
 
+        The query uses the two variables:
+        - wf_s_related: Workflow select related
+        - wf_pf_related: Workflow prefetch related
         If there is any problem, the exception message is stored instead.
         """
         super().setup(request, *args, **kwargs)
@@ -171,10 +176,16 @@ class WorkflowView(base.View):
             self.workflow = get_session_workflow(
                 request,
                 kwargs.get('wid'),
-                getattr(self, 's_related', None),
-                getattr(self, 'pf_related', None))
+                getattr(self, 'wf_s_related', None),
+                getattr(self, 'wf_pf_related', None))
         except Exception as exc:
-            raise http.Http404(_('Unable to detect worlflow.'))
+            self.workflow = None
+            self.error_message = _(
+                'Unable to detect workflow ({0}).').format(str(exc))
+
+    def get_object(self, queryset=None):
+        """Bypass request for object returning the existing attribute."""
+        return self.workflow
 
     def dispatch(self, request, *args, **kwargs):
         """Intercept if there has been any error."""
@@ -182,66 +193,63 @@ class WorkflowView(base.View):
             return error_redirect(
                 request,
                 where=self.error_redirect,
-                message=self.error_message)
+                message=_('ERROR: ') + self.error_message)
         return super().dispatch(request, *args, **kwargs)
 
 
-class ActionView(WorkflowView):
+class ActionView(detail.SingleObjectMixin, WorkflowView):
     """View that sets the action attribute."""
-    def __init__(self, **kwargs):
-        """Initialise the action attribute."""
-        super().__init__(**kwargs)
-        self.action = None
+
+    model = models.Action
 
     def setup(self, request, *args, **kwargs):
         """Add action attribute to view object."""
         super().setup(request, *args, **kwargs)
-        if not self.workflow:
+
+        if self.error_message:
             return
 
         if self.workflow.nrows == 0:
             self.error_message = workflow_no_data_error_message
             self.error_redirect = 'action:index'
-            return
 
-        self.action = self.workflow.actions.filter(pk=kwargs.get('pk')).first()
-        if not self.action:
-            self.error_message = _('Incorrect action.')
-            return
+    def get_queryset(self):
+        """Consider only the actions attached to this workflow."""
+        return expand_query_with_related(
+            self.workflow.actions.all(),
+            getattr(self, 's_related', None),
+            getattr(self, 'pf_related', None))
 
 
-class ColumnConditionView(WorkflowView):
+class ColumnConditionView(detail.SingleObjectMixin, WorkflowView):
     """View that sets the cc_tuple attribute."""
-    def __init__(self, **kwargs):
-        """Initialise the condition/column tuple attribute."""
-        super().__init__(**kwargs)
-        self.cc_tuple = None
 
     def setup(self, request, *args, **kwargs):
         """Add column condition attribute to view object."""
         super().setup(request, *args, **kwargs)
-        if not self.workflow:
+
+        if self.error_message:
             return
 
         if self.workflow.nrows == 0:
             self.error_message = workflow_no_data_error_message
             self.error_redirect = 'action:index'
-            return
 
-        self.cc_tuple = models.ActionColumnConditionTuple.objects.filter(
-            pk=kwargs.get('pk')).filter(
-            Q(action__workflow__user=request.user)
-            | Q(action__workflow__shared=request.user),
-            action__workflow=self.workflow,
-        ).select_related('action', 'condition', 'column').first()
+    def get_queryset(self):
+        """Consider only the items attached to this workflow."""
 
-        if not self.cc_tuple:
-            self.error_message = _('Incorrect column/condition tuple.')
-            return
+        return expand_query_with_related(
+            models.ActionColumnConditionTuple.objects.filter(
+                Q(action__workflow__user=self.request.user)
+                | Q(action__workflow__shared=self.request.user),
+                action__workflow=self.workflow),
+            getattr(self, 's_related', ['action', 'condition', 'column']),
+            getattr(self, 'pf_related', None))
 
 
 class ColumnView(WorkflowView):
     """View that sets the column attribute."""
+
     def __init__(self, **kwargs):
         """Initialise the column attribute."""
         super().__init__(**kwargs)
@@ -266,6 +274,7 @@ class ColumnView(WorkflowView):
 
 class ConditionView(WorkflowView):
     """View that sets the condition attribute."""
+
     def __init__(self, **kwargs):
         """Initialise the condition attribute."""
         super().__init__(**kwargs)
@@ -291,6 +300,7 @@ class ConditionView(WorkflowView):
 
 class ScheduledOperationView(WorkflowView):
     """View that sets the scheduled operation attribute."""
+
     def __init__(self, **kwargs):
         """Initialise the scheduled operation attribute."""
         super().__init__(**kwargs)
@@ -316,6 +326,7 @@ class ScheduledOperationView(WorkflowView):
 
 class ViewView(WorkflowView):
     """View that sets the table_view operation attribute."""
+
     def __init__(self, **kwargs):
         """Initialise the view operation attribute."""
         super().__init__(**kwargs)
@@ -337,24 +348,6 @@ class ViewView(WorkflowView):
 
         if not self.table_view:
             return error_redirect(request)
-
-
-class SingleWorkflowMixin(detail.SingleObjectMixin):
-    """Select a workflow in Class-based Views"""
-    model = models.Workflow
-
-    def get_object(self, queryset=None) -> models.Workflow:
-        """Return workflow directly from the View."""
-        return self.workflow
-
-
-class SingleActionMixin(detail.SingleObjectMixin):
-    """Select an Action in Class-based Views."""
-    model = models.Action
-
-    def get_object(self, queryset=None) -> models.Action:
-        """Access the Action in the View."""
-        return self.action
 
 
 class SingleColumnMixin(detail.SingleObjectMixin):
