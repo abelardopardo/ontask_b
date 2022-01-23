@@ -183,7 +183,7 @@ class ActionToggleQuestionChangeView(
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
-        sch_item = self.scheduled_operation
+        sch_item = self.get_object()
         sch_item.task.enabled = not sch_item.task.enabled
         sch_item.task.save(update_fields=['enabled'])
         return http.JsonResponse({'is_checked': sch_item.task.enabled})

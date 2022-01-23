@@ -14,12 +14,11 @@ from ontask.core.forms import (
     DATE_TIME_WIDGET_OPTIONS, RestrictedFileField, column_to_field)
 from ontask.core.manage_session import SessionPayload
 from ontask.core.permissions import (
-    ActionView, ColumnConditionView, ColumnView, ConditionView, GROUP_NAMES,
-    JSONFormResponseMixin, JSONResponseMixin, ScheduledOperationView,
-    SingleColumnConditionMixin, SingleColumnMixin,
-    SingleConditionMixin, SingleViewMixin, UserIsAdmin,
-    UserIsInstructor, ViewView, WorkflowView, error_redirect, has_access,
-    is_admin, is_instructor, store_workflow_in_session)
+    ActionView, ColumnConditionView, ColumnView, ConditionView,
+    GROUP_NAMES, JSONFormResponseMixin, JSONResponseMixin,
+    LogView, ScheduledOperationView, SingleViewMixin,
+    UserIsAdmin, UserIsInstructor, ViewView, WorkflowView, error_redirect,
+    has_access, is_admin, is_instructor, store_workflow_in_session)
 from ontask.core.serializers import OnTaskObjectIdField, OnTaskVersionField
 from ontask.core.session_ops import (
     _store_workflow_nrows_in_session, remove_workflow_from_session)

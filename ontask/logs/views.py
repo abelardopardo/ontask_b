@@ -7,9 +7,9 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from ontask import models
 from ontask.core import (
-    JSONFormResponseMixin, UserIsInstructor, WorkflowView, ajax_required)
+    JSONFormResponseMixin, LogView, UserIsInstructor, WorkflowView,
+    ajax_required)
 from ontask.logs import services
 
 
@@ -36,44 +36,39 @@ class LogIndexSSView(UserIsInstructor, WorkflowView):
     """Render the server side page for the table of columns."""
 
     http_method_names = ['post']
+    wf_pf_related = 'logs'
 
     def post(self, request, *args, **kwargs):
         return http.JsonResponse(
             services.log_table_server_side(request, self.workflow))
 
 
-class LogDetailBasicView(
+@method_decorator(ajax_required, name='dispatch')
+class LogDetailModalView(
     UserIsInstructor,
-    WorkflowView,
+    JSONFormResponseMixin,
+    LogView,
     generic.DetailView
 ):
-    """Basic class to view the content of one of the logs."""
-
-    model = models.Log
-    http_method_names = ['get']
-
-    def get_queryset(self):
-        """Consider only logs in this workflow."""
-        return self.workflow.logs.filter(user=self.request.user)
-
-
-@method_decorator(ajax_required, name='dispatch')
-class LogDetailModalView(LogDetailBasicView, JSONFormResponseMixin):
     """View the content of one of the logs in a modal."""
 
+    http_method_names = ['get']
     template_name = 'logs/includes/partial_show.html'
+    s_related = 'workflow'
 
 
-class LogDetailView(LogDetailBasicView):
+class LogDetailView(UserIsInstructor, LogView, generic.DetailView):
     """View the content of one of the logs."""
 
     template_name = 'logs/view.html'
+    s_related = 'workflow'
 
 
 class LogExportView(UserIsInstructor, WorkflowView):
     """Export the logs from the given workflow."""
 
     http_method_names = ['get']
+    wf_pf_related = 'logs'
 
     def get(self, request, *args, **kwargs):
         dataset = services.LogResource().export(

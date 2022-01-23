@@ -15,14 +15,14 @@ from ontask.scheduler import services
 class SchedulerIndex(UserIsInstructor, WorkflowView, generic.TemplateView):
     """Render the list of scheduled actions in the workflow."""
 
+    http_method_names = ['get']
     template_name = 'scheduler/index.html'
-    wf_pf_related = 'actions'
+    wf_pf_related = 'scheduled_operations'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['table'] = services.ScheduleActionTable(
-            models.ScheduledOperation.objects.filter(
-                workflow=self.workflow.id),
+            self.workflow.scheduled_operations.all(),
             orderable=False)
         return context
 
@@ -40,6 +40,7 @@ class SchedulerConnectionIndex(
 ):
     """Show table of SQL connections for user to choose one."""
 
+    http_method_names = ['get']
     template_name = 'connection/index.html'
     title = _('SQL Connections')
 

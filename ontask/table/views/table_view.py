@@ -21,7 +21,7 @@ from ontask.table import forms, services
 class ViewAddView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    WorkflowView,
+    ViewView,
     generic.CreateView,
 ):
     """Create a new View."""
@@ -43,15 +43,6 @@ class ViewAddView(
         kwargs = super().get_form_kwargs()
         kwargs['workflow'] = self.workflow
         return kwargs
-
-    def dispatch(self, request, *args, **kwargs):
-        """Catch if workflow is empty."""
-        if self.workflow.nrows == 0:
-            messages.error(
-                request,
-                _('Cannot add a view to a workflow without data'))
-            return http.JsonResponse({'html_redirect': ''})
-        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         filter_form = FilterForm(
@@ -83,7 +74,6 @@ class ViewAddView(
 class ViewEditView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleViewMixin,
     ViewView,
     generic.UpdateView,
 ):
@@ -136,7 +126,6 @@ class ViewEditView(
 class ViewDeleteView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleViewMixin,
     ViewView,
     generic.DeleteView,
 ):
@@ -145,10 +134,11 @@ class ViewDeleteView(
     template_name = 'table/includes/partial_view_delete.html'
 
     def delete(self, request, *args, **kwargs):
-        self.table_view.log(request.user, models.Log.VIEW_DELETE)
-        if self.table_view.filter:
-            self.table_view.filter.delete_from_view()
-        self.table_view.delete()
+        view = self.get_object()
+        view.log(request.user, models.Log.VIEW_DELETE)
+        if view.filter:
+            view.filter.delete_from_view()
+        view.delete()
         return http.JsonResponse({'html_redirect': reverse('table:display')})
 
 
@@ -164,14 +154,13 @@ class ViewCloneView(
     template_name = 'table/includes/partial_view_clone.html'
 
     def post(self, request, *args, **kwargs):
+        view = self.get_object()
         try:
             new_view = services.do_clone_view(
                 request.user,
-                self.table_view,
+                view,
                 new_workflow=None,
-                new_name=create_new_name(
-                    self.table_view.name,
-                    self.workflow.views))
+                new_name=create_new_name(view.name, self.workflow.views))
         except OnTaskServiceException as exc:
             exc.message_to_error(request)
             exc.delete()

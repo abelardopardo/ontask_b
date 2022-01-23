@@ -18,7 +18,7 @@ from ontask.dataops import sql
 from ontask.table import services
 
 
-class ColumnStatsView(UserIsInstructor, ColumnView, generic.TemplateView):
+class ColumnStatsView(UserIsInstructor, ColumnView, generic.DetailView):
     """Render the stat for a column."""
 
     template_name = 'table/stat_column.html'
@@ -26,13 +26,13 @@ class ColumnStatsView(UserIsInstructor, ColumnView, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        stat_data, __, visualizations = services.get_column_visualization_items(
+        stat_data, vs, visualizations = services.get_column_visualization_items(
             self.workflow,
-            self.column)
+            self.object)
 
         context.update({
             'stat_data': stat_data,
-            'vis_scripts': [],
+            'vis_scripts': vs,
             'visualizations': [viz.html_content for viz in visualizations]
         })
         return context

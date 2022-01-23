@@ -118,15 +118,16 @@ def get_column_visualization_items(
     # Extract the data to show at the top of the page
     stat_data = pandas.get_column_statistics(df[column.name])
 
+    viz_scripts = []
     visualizations = _get_column_visualisations(
         column,
         df[[column.name]],
-        [],
+        viz_scripts,
         context={
             'style': 'width:100%; height:100%;' + 'display:inline-block;'},
     )
 
-    return stat_data, [], visualizations
+    return stat_data, viz_scripts, visualizations
 
 
 def get_table_visualization_items(

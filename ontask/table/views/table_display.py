@@ -23,6 +23,7 @@ class TableDisplayBasicView(UserIsInstructor, generic.TemplateView):
 
     http_method_names = ['get']
     template_name = 'table/display.html'
+    wf_pf_related = ['actions', 'views', 'columns']
 
     def add_column_information(self, context, columns):
         if self.workflow.has_data_frame():
@@ -53,20 +54,22 @@ class TableDiplayCompleteView(WorkflowView, TableDisplayBasicView):
 
     wf_pf_related = 'columns'
 
+    def setup(self, request, *args, **kwargs):
+        """Add scheduled operation attribute to view object."""
+        super().setup(request, *args, **kwargs)
+        if self.error_message:
+            return
+
+        if self.workflow.nrows == 0:
+            self.error_message = _('Workflow has no data.')
+            self.error_redirect = 'dataops:uploadmerge'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ajax_url'] = reverse('table:display_ss')
         # Add information for all the columns in the workflow
         self.add_column_information(context, self.workflow.columns.all())
         return context
-
-    def dispatch(self, request, *args, **kwargs):
-        """Check and redirect if workflow has no data."""
-        if self.workflow.nrows == 0:
-            # Table is empty, redirect to data upload
-            return redirect('dataops:uploadmerge')
-
-        return super().dispatch(request, *args, **kwargs)
 
 
 class TableDisplayViewView(ViewView, TableDisplayBasicView):
@@ -78,16 +81,17 @@ class TableDisplayViewView(ViewView, TableDisplayBasicView):
         context = super().get_context_data(**kwargs)
         context['ajax_url'] = reverse(
             'table:display_view_ss',
-            kwargs={'pk': self.table_view.id})
+            kwargs={'pk': self.object.id})
         # Add information for all the columns in the workflow
-        self.add_column_information(context, self.table_view.columns.all())
+        self.add_column_information(context, self.object.columns.all())
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        if self.table_view.num_rows == 0:
+        self.object = self.get_object()
+        if self.object.num_rows == 0:
             messages.info(
                 request,
-                _('Formula is exluding all rows from the table'))
+                _('Formula is excluding all rows from the table'))
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -101,8 +105,6 @@ class TableDisplayBaseSSView(UserIsInstructor, WorkflowView):
     dt_page: Optional[DataTablesServerSidePaging] = None
 
     def dispatch(self, request, *args, **kwargs):
-        # Check that the POST parameter are correctly given
-
         if not self.workflow.has_data_frame():
             return http.JsonResponse(
                 {'error': _('There is no data in the table')})
@@ -129,12 +131,13 @@ class TableDisplayViewSSView(ViewView, TableDisplayBaseSSView):
     """Provide server side for the View dataTables visualization."""
 
     def post(self, request, *args, **kwargs):
+        view = self.get_object()
         return http.JsonResponse(services.create_dictionary_table_display_ss(
             self.dt_page,
             self.workflow,
-            self.table_view.columns.all(),
-            self.table_view.formula,
-            self.table_view.id))
+            view.columns.all(),
+            view.formula,
+            view.id))
 
 
 class TableRowDeleteView(
