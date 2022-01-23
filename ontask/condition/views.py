@@ -58,7 +58,8 @@ class ConditionUpdateView(
     """Process the Condition update view."""
 
     form_class = forms.ConditionForm
-    template_name = 'condition/includes/partial_condition_addedit.html'
+    template_name = 'condition/includes/partial_condition_add_edit.html'
+    s_related = 'action'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -86,7 +87,8 @@ class FilterUpdateView(
 
     http_method_names = ['get', 'post']
     form_class = forms.FilterForm
-    template_name = 'condition/includes/partial_filter_addedit.html'
+    template_name = 'condition/includes/partial_filter_add_edit.html'
+    s_related = 'filter'
     filter = None
 
     def dispatch(self, request, *args, **kwargs):

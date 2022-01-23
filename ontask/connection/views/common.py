@@ -46,7 +46,7 @@ class ConnectionShowView(
 class ConnectionBaseCreateEditView(UserIsAdmin, JSONFormResponseMixin):
     """Base class to Create/Edit a new view."""
 
-    template_name = 'connection/includes/partial_addedit.html'
+    template_name = 'connection/includes/partial_add_edit.html'
     action_url = None
     event_type = None
 

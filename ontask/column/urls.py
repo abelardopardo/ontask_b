@@ -44,19 +44,19 @@ urlpatterns = [
         '<int:pk>/column_edit/',
         views.ColumnEditView.as_view(
             form_class=forms.ColumnRenameForm,
-            template_name='column/includes/partial_addedit.html'),
+            template_name='column/includes/partial_add_edit.html'),
         name='column_edit'),
     path(
         '<int:pk>/question_edit/',
         views.ColumnEditView.as_view(
             form_class=forms.QuestionForm,
-            template_name='column/includes/partial_question_addedit.html'),
+            template_name='column/includes/partial_question_add_edit.html'),
         name='question_edit'),
     path(
         '<int:pk>/todoitem_edit/',
         views.ColumnEditView.as_view(
             form_class=forms.ColumnRenameForm,
-            template_name='column/includes/partial_addedit.html'),
+            template_name='column/includes/partial_add_edit.html'),
         name='todoitem_edit'),
     path(
         '<int:pk>/criterion_edit/',

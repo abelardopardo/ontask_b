@@ -78,7 +78,7 @@ class ColumnCreateView(ColumnBasicView, ColumnView, generic.CreateView):
     """Add a column."""
 
     form_class = forms.ColumnAddForm
-    template_name = 'column/includes/partial_addedit.html'
+    template_name = 'column/includes/partial_add_edit.html'
 
     def get_context_data(self, **kwargs):
         """Insert is_question and add values."""
@@ -113,7 +113,7 @@ class ColumnQuestionAddView(ColumnBasicView, ActionView, generic.FormView):
     """Add a new column to a survey action."""
 
     form_class = forms.QuestionForm
-    template_name = 'column/includes/partial_question_addedit.html'
+    template_name = 'column/includes/partial_question_add_edit.html'
 
     def get_form_kwargs(self):
         """Add the workflow to the kwargs."""
@@ -154,7 +154,7 @@ class ColumnTODOAddView(ColumnBasicView, ActionView, generic.FormView):
     """Add a new todo item to an action."""
 
     form_class = forms.TODOItemForm
-    template_name = 'column/includes/partial_todoitem_addedit.html'
+    template_name = 'column/includes/partial_todoitem_add_edit.html'
 
     def get_context_data(self, **kwargs):
         """Insert is_question and add values."""

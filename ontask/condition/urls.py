@@ -15,7 +15,7 @@ urlpatterns = [
         '<int:pk>/create_filter/',
         views.ConditionCreateView.as_view(
             form_class=forms.FilterForm,
-            template_name='condition/includes/partial_filter_addedit.html'),
+            template_name='condition/includes/partial_filter_add_edit.html'),
         name='create_filter'),
     path(
         '<int:pk>/edit_filter/',
@@ -37,7 +37,7 @@ urlpatterns = [
         '<int:pk>/create_condition/',
         views.ConditionCreateView.as_view(
             form_class=forms.ConditionForm,
-            template_name='condition/includes/partial_condition_addedit.html'),
+            template_name='condition/includes/partial_condition_add_edit.html'),
         name='create_condition'),
     path(
         '<int:pk>/edit_condition/',
