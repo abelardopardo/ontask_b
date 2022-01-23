@@ -22,7 +22,6 @@ class TableDisplayBasicView(UserIsInstructor, generic.TemplateView):
     """Render the table with the data frame."""
 
     http_method_names = ['get']
-    pf_related = 'columns'
     template_name = 'table/display.html'
 
     def add_column_information(self, context, columns):
@@ -52,6 +51,8 @@ class TableDisplayBasicView(UserIsInstructor, generic.TemplateView):
 class TableDiplayCompleteView(WorkflowView, TableDisplayBasicView):
     """View to render the complete data frame."""
 
+    wf_pf_related = 'columns'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ajax_url'] = reverse('table:display_ss')
@@ -70,6 +71,8 @@ class TableDiplayCompleteView(WorkflowView, TableDisplayBasicView):
 
 class TableDisplayViewView(ViewView, TableDisplayBasicView):
     """View to render the subset of the data frame defined by View."""
+
+    pf_related = 'columns'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

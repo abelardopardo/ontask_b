@@ -1,56 +1,47 @@
 # -*- coding: utf-8 -*-
 
-"""Views  to download a table in CSV format."""
-from typing import Optional
+"""Views  to download a table or a view in CSV format."""
 
 from django import http
-from django.contrib.auth.decorators import user_passes_test
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import gettext as _
+from django.views import generic
 
 from ontask import models
-from ontask.core import get_view, get_workflow, is_instructor
+from ontask.core import (
+    UserIsInstructor, WorkflowView)
 from ontask.dataops import pandas
 from ontask.table import services
 
 
-@user_passes_test(is_instructor)
-@get_workflow(pf_related=['columns'])
-def csvdownload(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Download the data in the workflow.
+class TableCSVDownloadView(UserIsInstructor, WorkflowView, generic.DetailView):
 
-    :param request: HTML request
-    :param workflow: Set by the decorator to the current workflow.
-    :return: Return a CSV download of the data in the table
-    """
-    del request
-    return services.create_response_with_csv(
-        pandas.get_subframe(
-            workflow.get_data_frame_table_name(),
-            None,
-            workflow.get_column_names()))
+    model = models.View
+    is_view = False
+    http_method_names = ['get']
 
+    def get_object(self, queryset=None):
+        """Get view from the workflow (if stats for view) or nothing."""
+        obj = None
+        if self.is_view:
+            try:
+                obj = self.workflow.views.get(pk=self.kwargs.get('pk'))
+            except ObjectDoesNotExist:
+                raise http.Http404(_("No view found matching the query."))
+        return obj
 
-@user_passes_test(is_instructor)
-@get_view(pf_related=['columns', 'views'])
-def csvdownload_view(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    view: Optional[models.View] = None,
-) -> http.HttpResponse:
-    """Download the data in a given view.
+    def get(self, request, *args, **kwargs):
+        """Return the download response for the table/view"""
+        obj = self.get_object()
+        formula = None
+        if obj:
+            formula = obj.formula
+            col_names = [col.name for col in obj.columns.all()]
+        else:
+            col_names = self.workflow.get_column_names()
 
-    :param request: HTML request
-    :param pk: View ID
-    :param workflow: Set by the decorator to the current workflow.
-    :param view: Set by the decorator to the view with the given PK
-    :return: Return a CSV download of the data in the table
-    """
-    del request, pk
-    return services.create_response_with_csv(
-        pandas.get_subframe(
-            workflow.get_data_frame_table_name(),
-            view.formula,
-            [col.name for col in view.columns.all()]))
+        return services.create_response_with_csv(
+            pandas.get_subframe(
+                self.workflow.get_data_frame_table_name(),
+                formula,
+                col_names))

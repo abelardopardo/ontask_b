@@ -5,7 +5,6 @@ from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from ontask.table import api, views
-from ontask.table.views import stats
 
 app_name = 'table'
 
@@ -49,10 +48,13 @@ urlpatterns = [
     #
     # Stats
     #
-    path('stat_table/', stats.stat_table_view, name='stat_table'),
+    path(
+        'stat_table/',
+        views.TableStatView.as_view(),
+        name='stat_table'),
     path(
         '<int:pk>/stat_table_view/',
-        stats.stat_table_view,
+        views.TableStatView.as_view(is_view=True),
         name='stat_table_view'),
     path(
         '<int:pk>/stat_column/',
@@ -66,10 +68,13 @@ urlpatterns = [
     #
     # CSV Download
     #
-    path('csvdownload/', views.csvdownload, name='csvdownload'),
+    path(
+        'csvdownload/',
+        views.TableCSVDownloadView.as_view(),
+        name='csvdownload'),
     path(
         '<int:pk>/csvdownload/',
-        views.csvdownload_view,
+        views.TableCSVDownloadView.as_view(is_view=True),
         name='csvdownload_view'),
 
     #
