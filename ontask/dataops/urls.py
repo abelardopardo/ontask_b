@@ -65,9 +65,9 @@ urlpatterns = [
 
     # Excel Upload/Merge
     path(
-        'excelupload_start/',
+        'excel_upload_start/',
         views.ExcelUploadStart.as_view(),
-        name='excelupload_start'),
+        name='excel_upload_start'),
 
     # Google Sheet Upload/Merge
     path(

@@ -44,7 +44,7 @@ class DataopsExcelUpload(DataopsUploadBasic):
 
     def test(self):
         # Get the regular form
-        resp = self.get_response('dataops:excelupload_start')
+        resp = self.get_response('dataops:excel_upload_start')
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the data
@@ -53,7 +53,7 @@ class DataopsExcelUpload(DataopsUploadBasic):
             'excel_upload.xlsx')
         with open(filename, 'rb') as fp:
             resp = self.get_response(
-                'dataops:excelupload_start',
+                'dataops:excel_upload_start',
                 method='POST',
                 req_params={'data_file': fp, 'sheet': 'results'})
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)

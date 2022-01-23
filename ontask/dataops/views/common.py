@@ -16,6 +16,7 @@ class UploadStart(UserIsInstructor, WorkflowView):
         context.update({
             'dtype': self.dtype,
             'dtype_select': self.dtype_select,
-            'value_range': range(5) if self.workflow.has_data_frame() else range (3),
+            'value_range': (
+                range(5) if self.workflow.has_data_frame() else range (3)),
             'prev_step': reverse(self.prev_step_url)})
         return context

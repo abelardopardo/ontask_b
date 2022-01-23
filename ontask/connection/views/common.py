@@ -15,13 +15,13 @@ from ontask.core import (
 class ConnectionAdminIndexView(UserIsAdmin, generic.TemplateView):
     """Base class to view the list of connections."""
 
-    title = None
+    title = None  # Set in urlpatterns
 
 
 class ConnectionIndexView(UserIsInstructor, WorkflowView, generic.TemplateView):
     """Base class to show the connections to instructors."""
 
-    title = None
+    title = None  # Set in urlpatterns
     is_sql = False
 
 

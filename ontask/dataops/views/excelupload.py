@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""View to start the excelupload process."""
+"""View to start the excel upload process."""
 
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -47,7 +47,7 @@ class ExcelUploadStart(common.UploadStart, generic.FormView):
             'initial_column_names': form.frame_info[0],
             'column_types': form.frame_info[1],
             'src_is_key_column': form.frame_info[2],
-            'step_1': reverse('dataops:excelupload_start'),
+            'step_1': reverse('dataops:excel_upload_start'),
             'log_upload': models.Log.WORKFLOW_DATA_EXCEL_UPLOAD}
 
         return redirect('dataops:upload_s2')
