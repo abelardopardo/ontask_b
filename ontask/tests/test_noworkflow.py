@@ -92,7 +92,7 @@ class BackToHome(
             reverse('action:delete', kwargs={'pk': 1}),
             reverse(
                 'action:select_key_column_action',
-                kwargs={'pk': 1, 'cpk': 1, 'key': 1}),
+                kwargs={'pk': 1, 'cpk': 1}),
             reverse('action:select_column_action', kwargs={'pk': 1, 'cpk': 1}),
             reverse('action:shuffle_questions', kwargs={'pk': 1}),
             reverse(

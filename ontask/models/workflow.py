@@ -472,8 +472,8 @@ class Workflow(NameAndDescription, CreateModifyFields):
     def log(
         self,
         user: get_user_model(),
-        operation_type:
-        str, **kwargs: str
+        operation_type: str,
+        **kwargs: str
     ) -> Log:
         """Log the operation with the object."""
         payload = {

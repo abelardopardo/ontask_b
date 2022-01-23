@@ -18,8 +18,8 @@
 {% block container %}
   <div class="container">
     <h1 class="text-center">
-      {% if view %}
-        {% blocktrans with n=view.name %}Dashboard for {{ n }}{% endblocktrans %}</h1>
+      {% if table_view %}
+        {% blocktrans with n=table_view.name %}Dashboard for {{ n }}{% endblocktrans %}</h1>
       {% else %}
         {% trans 'Dashboard' %}
       {% endif %}</h1>
