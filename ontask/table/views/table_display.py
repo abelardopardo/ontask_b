@@ -25,7 +25,7 @@ class TableDisplayBasicView(UserIsInstructor, generic.TemplateView):
     template_name = 'table/display.html'
 
     def add_column_information(self, context, columns):
-        if self.workflow.has_table():
+        if self.workflow.has_data_frame():
             context.update({
                 'columns': columns,
                 'column_types': str([''] + [col.data_type for col in columns]),
@@ -103,7 +103,7 @@ class TableDisplayBaseSSView(UserIsInstructor, WorkflowView):
     def dispatch(self, request, *args, **kwargs):
         # Check that the POST parameter are correctly given
 
-        if not self.workflow.has_table():
+        if not self.workflow.has_data_frame():
             return http.JsonResponse(
                 {'error': _('There is no data in the table')})
 

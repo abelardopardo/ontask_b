@@ -99,7 +99,7 @@ class WorkflowCloneDelete(WorkflowCrudBasic):
             method='POST',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
-        self.assertFalse(new_wf.has_table())
+        self.assertFalse(new_wf.has_data_frame())
         self.assertEqual(models.Workflow.objects.count(), 2)
         self.assertEqual(
             models.Column.objects.count(),

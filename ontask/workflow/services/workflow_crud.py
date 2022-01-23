@@ -83,7 +83,7 @@ def do_clone_workflow(user, workflow: models.Workflow) -> models.Workflow:
             )
 
         # Clone the DB table
-        if workflow.has_table():
+        if workflow.has_data_frame():
             sql.clone_table(
                 workflow.get_data_frame_table_name(),
                 new_workflow.get_data_frame_table_name())

@@ -37,7 +37,7 @@ def delete_data_frame_table(sender, **kwargs):
     if not instance:
         return
 
-    if instance.has_table():
+    if instance.has_data_frame():
         sql.delete_table(instance.get_data_frame_table_name())
 
 

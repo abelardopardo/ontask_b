@@ -254,7 +254,7 @@ def store_workflow_table(
     workflow.refresh_from_db()
 
     # Step 4: Rename the table (Drop the original one first
-    if workflow.has_table():
+    if workflow.has_data_frame():
         sql.delete_table(workflow.get_data_frame_table_name())
     sql.rename_table(db_table, workflow.get_data_frame_table_name())
 

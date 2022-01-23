@@ -160,11 +160,10 @@ class Workflow(NameAndDescription, CreateModifyFields):
             self.save(update_fields=['data_frame_table_name'])
         return self.upload_table_prefix.format(self.id)
 
-    def has_table(self) -> bool:
-        """Check if the workflow has a table.
+    def has_data_frame(self) -> bool:
+        """Check if a workflow has data frame.
 
-        Boolean stating if there is a table storing a data frame
-        :return: True if the workflow has a table storing the data frame
+        :return: If the workflow has a dataframe
         """
         return pandas.is_table_in_db(self.get_data_frame_table_name())
 
@@ -272,13 +271,6 @@ class Workflow(NameAndDescription, CreateModifyFields):
         :return: Query builder ops structure as string (JSON dumps)
         """
         return json.dumps(self.query_builder_ops)
-
-    def has_data_frame(self) -> bool:
-        """Check if a workflow has data frame.
-
-        :return: If the workflow has a dataframe
-        """
-        return pandas.is_table_in_db(self.get_data_frame_table_name())
 
     def is_locked(self) -> bool:
         """Check if the workflow is locked.

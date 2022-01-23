@@ -80,7 +80,7 @@ class ActionEditManager:
                 attr for attr in list(action.workflow.attributes.keys())
             ],
             'columns': action.workflow.columns.all(),
-            'has_data': action.workflow.has_table(),
+            'has_data': action.workflow.has_data_frame(),
             'total_rows': action.workflow.nrows,
             'views': action.workflow.views.filter(
                 filter__isnull=False).exclude(
