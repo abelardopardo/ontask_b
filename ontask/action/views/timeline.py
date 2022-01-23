@@ -15,26 +15,25 @@ class ActionShowTimelineView(
     WorkflowView,
     generic.TemplateView
 ):
-    """View to show the times an action has been executed."""
+    """Show the execution times of one/all actions."""
 
     template_name = 'action/timeline.html'
+    single_action = False
 
     def get_context_data(self, **kwargs):
         """Get logs and action."""
 
         context = super().get_context_data(**kwargs)
-        pk = kwargs.get('pk')
-        if pk:
-            action = self.workflow.actions.filter(pk=pk).first()
+        logs = self.workflow.logs
+        if self.single_action:
+            action = self.workflow.actions.filter(pk=kwargs.get('pk')).first()
 
             if not action:
                 # The action is not part of the selected workflow
                 raise http.Http404(_(
                     'Action does not belong to current workflow. '))
             context['action'] = action
-            logs = self.workflow.logs.filter(payload__action_id=action.id)
-        else:
-            logs = self.workflow.logs
+            logs = logs.filter(payload__action_id=action.id)
 
         logs = logs.order_by('created')
         event_names = [

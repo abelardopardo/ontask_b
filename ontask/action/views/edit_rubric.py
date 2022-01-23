@@ -26,22 +26,27 @@ class ActionEditRubricLOAView(
     http_method_names = ['get', 'post']
     form_class = forms.RubricLOAForm
     template_name = 'action/includes/partial_rubric_loas_edit.html'
+    pf_related = 'column_condition_pair'
+    object = None
 
-    def get(self, request, *args, **kwargs):
-        # If the request has the 'action_content', update the action
-        action_content = request.POST.get('action_content')
-        if action_content:
-            self.action.set_text_content(action_content)
-        return super().get(request, *args, **kwargs)
+    def setup(self, request, *args, **kwargs):
+        """Set the object as attribute."""
+        super().setup(request, *args, **kwargs)
+        self.object = self.get_object()
+        return
 
     def get_form_kwargs(self):
         """Add the criteria to the context for the form."""
         kwargs = super().get_form_kwargs()
         kwargs['criteria'] = [
-            acc.column for acc in self.action.column_condition_pair.all()]
+            acc.column for acc in self.object.column_condition_pair.all()]
         return kwargs
 
     def form_valid(self, form) -> http.JsonResponse:
+        action_content = self.request.POST.get('action_content')
+        if action_content:
+            self.object.set_text_content(action_content)
+
         if not form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
@@ -52,7 +57,7 @@ class ActionEditRubricLOAView(
         # Update all columns
         try:
             with transaction.atomic():
-                for acc in self.action.column_condition_pair.all():
+                for acc in self.object.column_condition_pair.all():
                     acc.column.set_categories(loas, validate=True)
         except Exception as exc:
             messages.error(
@@ -61,10 +66,14 @@ class ActionEditRubricLOAView(
                     str(exc)))
 
         # Log the event
-        self.action.log(
+        self.object.log(
             self.request.user,
             models.Log.ACTION_RUBRIC_LOA_EDIT,
             new_loas=loas)
+
+        messages.success(
+            self.request,
+            _('Levels of attainment successfully modified.'))
 
         # Done processing the correct POST request
         return http.JsonResponse({'html_redirect': ''})
@@ -81,31 +90,34 @@ class ActionEditRubricCellView(
     http_method_names = ['get', 'post']
     form_class = forms.RubricCellForm
     template_name = 'action/includes/partial_rubric_cell_edit.html'
+    object = None
 
-    def get(self, request, *args, **kwargs):
-        # If the request has the 'action_content', update the action
-        action_content = request.POST.get('action_content')
-        if action_content:
-            self.action.set_text_content(action_content)
-        return super().get(request, *args, **kwargs)
+    def setup(self, request, *args, **kwargs):
+        """Set the object as attribute."""
+        super().setup(request, *args, **kwargs)
+        self.object = self.get_object()
+        return
 
     def get_form_kwargs(self):
         """Add the criteria to the context for the form."""
         kwargs = super().get_form_kwargs()
-        kwargs['instance'] = self.action.rubric_cells.filter(
+        kwargs['instance'] = self.object.rubric_cells.filter(
             column=self.kwargs['cid'],
             loa_position=self.kwargs['loa_pos']).first()
         return kwargs
 
     def form_valid(self, form) -> http.JsonResponse:
+        action_content = self.request.POST.get('action_content')
+        if action_content:
+            self.object.set_text_content(action_content)
         if not form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
         cell = form.save(commit=False)
         if cell.id is None:
             # New cell in the rubric
-            cell.action = self.action
-            cell.column = self.action.workflow.columns.get(
+            cell.action = self.object
+            cell.column = self.object.workflow.columns.get(
                 pk=self.kwargs['cid'])
             cell.loa_position = self.kwargs['loa_pos']
         cell.save()

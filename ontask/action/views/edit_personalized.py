@@ -4,14 +4,16 @@
 from typing import Dict
 
 from django import http
+from django.contrib import messages
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import models
 from ontask.action import forms
 from ontask.core import (
-    ActionView, JSONFormResponseMixin, SingleActionMixin, UserIsInstructor,
+    ActionView, JSONFormResponseMixin, UserIsInstructor,
     ajax_required)
 
 
@@ -19,7 +21,6 @@ from ontask.core import (
 class ActionShowURLView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleActionMixin,
     ActionView,
     generic.UpdateView,
 ):
@@ -69,12 +70,14 @@ class ActionAddRemoveAttachmentView(
     field in the action.
     """
     http_method_names = ['post']
-    is_add_operation = None
+    is_add_operation = False
+    pf_related = 'attachments'
 
     def post(self, request, *args, **kwargs) -> http.JsonResponse:
         # Get the view
+        self.object = self.get_object()
         view = self.workflow.views.filter(pk=kwargs['view_id']).first()
-        if not view or self.action.action_type != models.Action.EMAIL_REPORT:
+        if not view or self.object.action_type != models.Action.EMAIL_REPORT:
             # View is not there, or does not point to the action or points to
             # the wrong action.
             return http.JsonResponse({'html_redirect': reverse('action:index')})
@@ -82,14 +85,17 @@ class ActionAddRemoveAttachmentView(
         # If the request has 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content:
-            self.action.set_text_content(action_content)
+            self.object.set_text_content(action_content)
 
         if self.is_add_operation:
-            self.action.attachments.add(view)
+            messages.success(request, _('Attachment {0} added.').format(
+                view.name))
+            self.object.attachments.add(view)
         else:
-            self.action.attachments.remove(view)
+            messages.success(request, _('Attachment removed.'))
+            self.object.attachments.remove(view)
 
-        self.action.save()
+        self.object.save()
 
         # Refresh the page to show the column in the list.
         return http.JsonResponse({'html_redirect': ''})

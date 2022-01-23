@@ -66,6 +66,7 @@ class ActionExportView(UserIsInstructor, WorkflowView):
     """Export the actions given as comma separated list of ids."""
 
     http_method_names = ['get', 'post']
+    wf_pf_related = 'actions'
 
     def get(self, request, *args, **kwargs):
         try:

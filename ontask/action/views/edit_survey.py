@@ -12,7 +12,7 @@ from ontask import models
 from ontask.action import forms
 from ontask.core import (
     ActionView, ColumnConditionView, JSONFormResponseMixin, JSONResponseMixin,
-    SingleActionMixin, UserIsInstructor, ajax_required)
+    UserIsInstructor, ajax_required)
 
 
 @method_decorator(ajax_required, name='dispatch')
@@ -25,36 +25,39 @@ class ActionSelectColumnSurveyView(
 
     # Only AJAX Post requests allowed
     http_method_names = ['post']
+    wf_pf_related = 'columns'
+    pf_related = ['conditions', 'column_condition_pair']
+    object = None
+    select_column = False
+    key_column = False
 
     def post(self, request, *args, **kwargs):
-        cpk = self.kwargs.get('cpk', -1)
+        action = self.get_object()
 
-        if cpk == -1:
-            # Unsetting key column
-            self.action.column_condition_pair.filter(
+        if not self.select_column:
+            # Unselecting column
+            action.log(request.user, models.Log.ACTION_QUESTION_REMOVE)
+            action.column_condition_pair.filter(
                 column__is_key=True).delete()
             return http.JsonResponse({'html_redirect': ''})
 
         # Get the column
-        column = self.workflow.columns.filter(pk=cpk).first()
+        column = self.workflow.columns.filter(pk=self.kwargs.get('cpk')).first()
         if not column:
             return http.JsonResponse({'html_redirect': reverse('action:index')})
 
         # Parameters are correct, so add the column to the action.
-        key = self.kwargs.get('key')
-        if key:
+        if self.key_column:
             # There can only be one key column in these pairs
-            self.action.column_condition_pair.filter(
+            action.column_condition_pair.filter(
                 column__is_key=True).delete()
 
-        if key != 0:
-            # Insert the column in the pairs
-            acc, __ = models.ActionColumnConditionTuple.objects.get_or_create(
-                action=self.action,
-                column=column,
-                condition=None)
+        # Insert the column in the pairs
+        acc, __ = models.ActionColumnConditionTuple.objects.get_or_create(
+            action=action,
+            column=column)
 
-            acc.log(request.user, models.Log.ACTION_QUESTION_ADD)
+        acc.log(request.user, models.Log.ACTION_QUESTION_ADD)
 
         # Refresh the page to show the column in the list.
         return http.JsonResponse({'html_redirect': ''})
@@ -63,42 +66,48 @@ class ActionSelectColumnSurveyView(
 class ActionUnselectColumnSurveyView(UserIsInstructor, ActionView):
     """Unselect a column from a survey."""
 
-    http_method_names = ['get']
-    pf_related = ['actions', 'columns']
+    http_method_names = ['post']
+    wf_pf_related = ['columns']
+    pf_related = 'column_condition_pair'
+    object = None
 
-    def get(self, request, *args, **kwargs) -> http.HttpResponse:
+    def post(self, request, *args, **kwargs) -> http.HttpResponse:
         # Get the column
+        action = self.get_object()
         column = self.workflow.columns.filter(pk=kwargs['cpk']).first()
         if not column:
             return redirect(reverse('action:index'))
 
-        # Parameters are correct, so remove the column from the action.
-        self.action.column_condition_pair.filter(column=column).delete()
+        action.log(request.user, models.Log.ACTION_QUESTION_REMOVE)
 
-        return redirect(reverse('action:edit', kwargs={'pk': self.action.id}))
+        # Parameters are correct, so remove the column from the action.
+        action.column_condition_pair.filter(column=column).delete()
+
+        return redirect(reverse('action:edit', kwargs={'pk': action.id}))
 
 
 @method_decorator(ajax_required, name='dispatch')
 class ActionSelectConditionQuestionView(UserIsInstructor, ColumnConditionView):
-    """Unselect a column from a survey."""
+    """Select/Unselect a condition to show a question in a survey."""
 
     http_method_names = ['post']
-    pf_related = ['actions', 'columns']
+    s_related = ['action', 'action__conditions']
 
     def post(self, request, *args, **kwargs):
+        cc_tuple = self.get_object()
         condition = None
         condition_pk = self.kwargs.get('condition_pk')
         if condition_pk:
             # Get the condition
-            condition = self.cc_tuple.action.conditions.filter(
+            condition = cc_tuple.action.conditions.filter(
                 pk=condition_pk).first()
             if not condition:
                 return http.JsonResponse(
                     {'html_redirect': reverse('action:index')})
 
         # Assign the condition to the tuple and save
-        self.cc_tuple.condition = condition
-        self.cc_tuple.save(update_fields=['condition'])
+        cc_tuple.condition = condition
+        cc_tuple.save(update_fields=['condition'])
 
         # Refresh the page to show the column in the list.
         return http.JsonResponse({'html_redirect': ''})
@@ -116,10 +125,11 @@ class ActionShuffleQuestionsView(
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
-        self.action.shuffle = not self.action.shuffle
-        self.action.save(update_fields=['shuffle'])
+        action = self.get_object()
+        action.shuffle = not action.shuffle
+        action.save(update_fields=['shuffle'])
 
-        return http.JsonResponse({'is_checked': self.action.shuffle})
+        return http.JsonResponse({'is_checked': action.shuffle})
 
 
 @method_decorator(ajax_required, name='dispatch')
@@ -132,27 +142,28 @@ class ActionToggleQuestionChangeView(
 
     # Only AJAX Post requests allowed
     http_method_names = ['post']
+    s_related = 'action'
 
     def post(self, request, *args, **kwargs):
-        self.cc_tuple.changes_allowed = not self.cc_tuple.changes_allowed
-        self.cc_tuple.save(update_fields=['changes_allowed'])
-        if self.cc_tuple.action.action_type == models.Action.SURVEY:
-            self.cc_tuple.log(
+        cc_tuple = self.get_object()
+        cc_tuple.changes_allowed = not cc_tuple.changes_allowed
+        cc_tuple.save(update_fields=['changes_allowed'])
+        if cc_tuple.action.action_type == models.Action.SURVEY:
+            cc_tuple.log(
                 request.user,
                 models.Log.ACTION_QUESTION_TOGGLE_CHANGES)
         else:
-            self.cc_tuple.log(
+            cc_tuple.log(
                 request.user,
                 models.Log.ACTION_TODOITEM_TOGGLE_CHANGES)
 
-        return http.JsonResponse({'is_checked': self.cc_tuple.changes_allowed})
+        return http.JsonResponse({'is_checked': cc_tuple.changes_allowed})
 
 
 @method_decorator(ajax_required, name='dispatch')
 class ActionEditDescriptionView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleActionMixin,
     ActionView,
     generic.UpdateView,
 ):
@@ -165,7 +176,7 @@ class ActionEditDescriptionView(
         if not form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
-        self.action.save(update_fields=['name', 'description_text'])
-        self.action.log(self.request.user, models.Log.ACTION_UPDATE)
+        self.object.save(update_fields=['name', 'description_text'])
+        self.object.log(self.request.user, models.Log.ACTION_UPDATE)
 
         return http.JsonResponse({'html_redirect': ''})

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Views to render the list of actions."""
-from typing import Optional, Union, List
 
 from django import http
 from django.contrib import messages
@@ -13,8 +12,8 @@ from django.views import generic
 from ontask import create_new_name, models
 from ontask.action import forms, services
 from ontask.core import (
-    SessionPayload, UserIsInstructor, ajax_required, JSONFormResponseMixin,
-    WorkflowView, ActionView, SingleActionMixin)
+    ActionView, JSONFormResponseMixin, SessionPayload, UserIsInstructor,
+    WorkflowView, ajax_required)
 
 
 class ActionIndexView(UserIsInstructor, WorkflowView, generic.ListView):
@@ -23,6 +22,7 @@ class ActionIndexView(UserIsInstructor, WorkflowView, generic.ListView):
     http_method_names = ['get']
     model = models.Action
     ordering = ['name']
+    wf_pf_related = ['actions', 'actions__last_executed_log']
 
     def get_queryset(self):
         """Return the actions for the workshop in the view"""
@@ -95,7 +95,6 @@ class ActionCreateView(
 class ActionUpdateView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleActionMixin,
     ActionView,
     generic.UpdateView
 ):
@@ -120,11 +119,56 @@ class ActionUpdateView(
             reverse('action:index'))
 
 
+class ActionEditView(UserIsInstructor, ActionView):
+    """View to edit an action."""
+
+    http_method_names = ['get', 'post']
+    wf_pf_related = ['columns']
+    s_related = 'filter'
+    pf_related = ['conditions', 'conditions__columns']
+
+    def get(self, request, *args, **kwargs):
+        return services.ACTION_PROCESS_FACTORY.process_edit_request(
+            request,
+            self.get_object())
+
+    def post(self, request, *args, **kwargs):
+        return services.ACTION_PROCESS_FACTORY.process_edit_request(
+            request,
+            self.get_object())
+
+
+@method_decorator(ajax_required, name='dispatch')
+class ActionCloneView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    ActionView,
+    generic.DetailView,
+):
+    """Process the Action Update view."""
+
+    http_method_names = ['get', 'post']
+    template_name = 'action/includes/partial_action_clone.html'
+    s_related = 'filter'
+    pf_related = ['conditions', 'conditions__columns']
+
+    def post(self, request, *args, **kwargs):
+        """Perform the clone operation."""
+        self.action = self.get_object()
+        services.do_clone_action(
+            self.request.user,
+            self.action,
+            new_workflow=None,
+            new_name=create_new_name(self.action.name, self.workflow.actions))
+
+        messages.success(request, _('Action successfully cloned.'))
+        return http.JsonResponse({'html_redirect': ''})
+
+
 @method_decorator(ajax_required, name='dispatch')
 class ActionDeleteView(
     UserIsInstructor,
     JSONFormResponseMixin,
-    SingleActionMixin,
     ActionView,
     generic.DeleteView
 ):
@@ -134,48 +178,8 @@ class ActionDeleteView(
     template_name = 'action/includes/partial_action_delete.html'
 
     def delete(self, request, *args, **kwargs):
-        self.action.log(request.user, models.Log.ACTION_DELETE)
-        self.action.delete()
+        action = self.get_object()
+        action.log(request.user, models.Log.ACTION_DELETE)
+        action.delete()
+        messages.success(request, _('Action successfully deleted.'))
         return http.JsonResponse({'html_redirect': reverse('action:index')})
-
-
-class ActionEditView(UserIsInstructor, ActionView):
-    """View to edit an action."""
-
-    http_method_names = ['get', 'post']
-    pf_related: Optional[Union[str, List]] = ['actions', 'columns']
-
-    def get(self, request, *args, **kwargs):
-        return services.ACTION_PROCESS_FACTORY.process_edit_request(
-            self.request,
-            self.action)
-
-    def post(self, request, *args, **kwargs):
-        return services.ACTION_PROCESS_FACTORY.process_edit_request(
-            self.request,
-            self.action)
-
-
-@method_decorator(ajax_required, name='dispatch')
-class ActionCloneView(
-    UserIsInstructor,
-    JSONFormResponseMixin,
-    ActionView,
-    generic.TemplateView
-):
-    """Process the Action Update view."""
-
-    http_method_names = ['get', 'post']
-    template_name = 'action/includes/partial_action_clone.html'
-    pf_related = 'actions'
-
-    def post(self, request, *args, **kwargs):
-        """Perform the clone operation."""
-        services.do_clone_action(
-            self.request.user,
-            self.action,
-            new_workflow=None,
-            new_name=create_new_name(self.action.name, self.workflow.actions))
-
-        messages.success(request, _('Action successfully cloned.'))
-        return http.JsonResponse({'html_redirect': ''})

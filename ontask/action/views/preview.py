@@ -32,22 +32,23 @@ class ActionPreviewView(
         return self.post(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs) -> http.JsonResponse:
+        action = self.get_object()
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content:
-            self.action.set_text_content(action_content)
+            action.set_text_content(action_content)
 
         # Initial context to render the response page.
         idx = kwargs.get('idx')
-        context = {'action': self.action, 'index': idx}
+        context = {'action': action, 'index': idx}
         if (
-            self.action.action_type == models.Action.EMAIL_REPORT
-            or self.action.action_type == models.Action.JSON_REPORT
+            action.action_type == models.Action.EMAIL_REPORT
+            or action.action_type == models.Action.JSON_REPORT
         ):
-            services.create_list_preview_context(self.action, context)
+            services.create_list_preview_context(action, context)
         else:
             services.create_row_preview_context(
-                self.action,
+                action,
                 idx,
                 context,
                 request.GET.get('subject_content'))
@@ -72,8 +73,9 @@ class ActionPreviewNextAllFalseView(ActionPreviewView):
     """
 
     def post(self, request, *args, **kwargs) -> http.JsonResponse:
+        action = self.get_object()
         # Get the list of indexes
-        idx_list = self.action.rows_all_false
+        idx_list = action.rows_all_false
 
         if not idx_list:
             # If empty, or None, something went wrong.

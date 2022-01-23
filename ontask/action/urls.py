@@ -46,7 +46,7 @@ urlpatterns = [
         name='timeline'),
     path(
         '<int:pk>/timeline/',
-        views.ActionShowTimelineView.as_view(),
+        views.ActionShowTimelineView.as_view(single_action=True),
         name='timeline'),
 
     # Action export the file
@@ -90,18 +90,20 @@ urlpatterns = [
     # ACTION IN EDIT PAGE
     # Manage columns for action in
     path(
-        '<int:pk>/<int:cpk>/<int:key>/select_column_action/',
-        views.ActionSelectColumnSurveyView.as_view(),
+        '<int:pk>/<int:cpk>/select_key_column_action/',
+        views.ActionSelectColumnSurveyView.as_view(
+            select_column=True,
+            key_column=True),
         name='select_key_column_action'),
     path(
-        '<int:pk>/select_column_action/',
+        '<int:pk>/unselect_key_column_action/',
         views.ActionSelectColumnSurveyView.as_view(),
         name='unselect_key_column_action'),
 
     # Select column for action in
     path(
         '<int:pk>/<int:cpk>/select_column_action/',
-        views.ActionSelectColumnSurveyView.as_view(),
+        views.ActionSelectColumnSurveyView.as_view(select_column=True),
         name='select_column_action'),
 
     # Unselect column for action in
