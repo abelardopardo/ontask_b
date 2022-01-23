@@ -136,6 +136,7 @@ $(function () {
 
   // Insert columns in action in
   $("#insert-questions").on("click", ".js-insert-question", ajaxSimplePost);
+  $("#column-selected-table").on("click", ".js-action-question-delete", ajaxSimplePost);
 
   // Insert columns in action in
   $("#edit-survey-tab-content").on("click", ".js-select-key-column-name", ajaxSimplePost);
@@ -182,7 +183,7 @@ $(function () {
 
   // Column Selected Edit
   $("#column-selected-table").on("click",
-    ".js-workflow-question-edit",
+    ".js-action-question-edit",
     loadForm);
   $("#modal-item").on("submit", ".js-question-edit-form", saveForm);
   $("#modal-item").on("submit", ".js-todoitem-edit-form", saveForm);
