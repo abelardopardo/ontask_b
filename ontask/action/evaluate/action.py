@@ -207,7 +207,6 @@ def get_row_values(
             row_idx,
         )
     else:
-
         row = sql.get_row(
             action.workflow.get_data_frame_table_name(),
             row_idx[0],

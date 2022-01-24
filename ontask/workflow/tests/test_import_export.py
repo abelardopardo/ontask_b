@@ -21,7 +21,6 @@ class WorkflowTestViewImportExport(
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Export ask followed by export request."""
         resp = self.get_response(
             'workflow:export_ask',
             {'wid': self.workflow.id})

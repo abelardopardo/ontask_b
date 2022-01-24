@@ -20,5 +20,6 @@ from ontask.action.views.run import (
     ActionRunActionItemFilterView, ActionRunDoneView, ActionRunView,
     ActionRunZipView, ActionShowSurveyTableSSView, ActionZipExportView)
 from ontask.action.views.serve import (
-    ActionRunSurveyRowView, ActionServeActionLTIView, ActionServeActionView)
+    ActionRunSurveyRowView, ActionServeActionLTIView,
+    ActionServeActionBasicView)
 from ontask.action.views.timeline import ActionShowTimelineView

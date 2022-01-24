@@ -170,7 +170,6 @@ class WorkflowCrudAssignLUser(WorkflowCrudBasic):
     """Test assign luser view."""
 
     def test(self):
-        """Test assign luser column option."""
         column = self.workflow.columns.get(name='email')
         self.assertEqual(self.workflow.luser_email_column, None)
 

@@ -176,11 +176,6 @@ urlpatterns = [
         views.ActionShowURLView.as_view(),
         name='showurl'),
 
-    # Serve the personalised content
-    path(
-        '<int:pk>/serve/',
-        views.ActionServeActionView.as_view(),
-        name='serve'),
     # Serve the personalised content with accessing through LTI. The action
     # id must be given as parameter to guarantee a single URL point of entry
     path(
