@@ -60,7 +60,7 @@ def get_row(
     :param column_names: Columns to access (all of them if empty)
     :param filter_formula: Optional filter formula
     :param filter_pairs: Optional dictionary to restrict the clause
-    :return: Dictionary with the row
+    :return: Dictionary with the row or None if something went wrong.
     """
     key_pair = {key_name: key_value}
     if filter_pairs:
@@ -80,7 +80,8 @@ def get_row(
     cursor.execute(query, fields)
 
     if cursor.rowcount != 1:
-        raise Exception('Query returned more than one row.')
+        # Either an empty row, or more than one, either case, invalid.
+        return None
 
     return cursor.fetchone()
 
