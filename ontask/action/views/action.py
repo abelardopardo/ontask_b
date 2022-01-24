@@ -123,7 +123,7 @@ class ActionEditView(UserIsInstructor, ActionView):
     """View to edit an action."""
 
     http_method_names = ['get', 'post']
-    wf_pf_related = ['columns']
+    wf_pf_related = ['columns', 'views']
     s_related = 'filter'
     pf_related = ['conditions', 'conditions__columns']
 
