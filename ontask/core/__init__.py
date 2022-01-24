@@ -16,7 +16,7 @@ from ontask.core.manage_session import SessionPayload
 from ontask.core.permissions import (
     ActionView, ColumnConditionView, ColumnView, ConditionView,
     GROUP_NAMES, JSONFormResponseMixin, JSONResponseMixin,
-    LogView, ScheduledOperationView, SingleViewMixin,
+    LogView, ScheduledOperationView,
     UserIsAdmin, UserIsInstructor, ViewView, WorkflowView, error_redirect,
     has_access, is_admin, is_instructor, store_workflow_in_session)
 from ontask.core.serializers import OnTaskObjectIdField, OnTaskVersionField

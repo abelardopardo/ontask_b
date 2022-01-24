@@ -222,10 +222,10 @@ class WorkflowView(base.View):
             self.error_message = _(
                 'Unable to detect workflow ({0}).').format(str(exc))
 
-    def get_object(self, queryset=None):
-        """Bypass request for object returning the existing attribute."""
-        return self.workflow
-
+    # def get_object(self, queryset=None):
+    #     """Bypass request for object returning the existing attribute."""
+    #     return self.workflow
+    #
     def dispatch(self, request, *args, **kwargs):
         """Intercept if there has been any error."""
         if self.error_message:
@@ -390,14 +390,3 @@ class ViewView(detail.SingleObjectMixin, WorkflowView):
             self.workflow.views.all(),
             getattr(self, 's_related', None),
             getattr(self, 'pf_related', None))
-
-
-class SingleViewMixin(detail.SingleObjectMixin):
-    """Select a table view in Class-based Views."""
-    model = models.View
-
-    context_object_name = 'table_view'
-
-    def get_object(self, queryset=None) -> models.View:
-        """Access the table_view in the View."""
-        return self.table_view
