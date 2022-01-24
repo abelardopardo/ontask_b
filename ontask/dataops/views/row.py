@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Functions to update and create a row in the dataframe."""
-
+from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -113,9 +113,7 @@ class RowUpdateView(UserIsInstructor, WorkflowView, generic.FormView):
 
         if not self.update_key or not self.update_val:
             # Malformed request
-            return render(
-                request,
-                'error.html',
-                {'message': _('Unable to update table row')})
+            messages.error(request, _('Unable to update table row'))
+            return redirect(reverse('home'))
 
         return super().dispatch(request, *args, **kwargs)

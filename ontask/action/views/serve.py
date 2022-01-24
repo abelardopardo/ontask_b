@@ -199,8 +199,8 @@ class ActionServeActionLTIView(ActionServeActionBasicView):
 
 class ActionRunSurveyRowView(
     UserIsInstructor,
-    ActionServeActionBasicView,
     ActionView,
+    ActionServeActionBasicView,
 ):
     """Render form for introducing information in a single row.
 
@@ -210,5 +210,7 @@ class ActionRunSurveyRowView(
 
     def dispatch(self, request, *args, **kwargs):
         """Get the action in the object with the given view parameter"""
+        if self.workflow is None:
+            return redirect(reverse('home'))
         self.action = self.get_object()
         return super().dispatch(request, *args, **kwargs)

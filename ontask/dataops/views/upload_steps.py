@@ -50,8 +50,8 @@ class UploadStepBasicView(UserIsInstructor, WorkflowView):
         self.upload_data = self.request.session.get('upload_data')
         if not self.upload_data:
             # If there is no object, or it is an empty dict, it denotes a direct
-            # jump to this step, get back to the dataops page
-            return redirect('dataops:uploadmerge')
+            # jump to this step, get back to the home page
+            return redirect('home')
 
     def dispatch(self, request, *args, **kwargs):
         error_response = self.request_is_valid()

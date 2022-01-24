@@ -5,7 +5,7 @@
 from django import http
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views import generic
@@ -62,6 +62,9 @@ class TableStatView(UserIsInstructor, WorkflowView, generic.DetailView):
         **kwargs
     ) -> http.JsonResponse:
         """Check if the workflow has no rows"""
+        if self.error_message:
+            return redirect(reverse('home'))
+
         if self.workflow.nrows == 0:
             messages.error(
                 request,

@@ -61,6 +61,7 @@ class BackToHome(
             reverse('logs:page_view', kwargs={'pk': 1}),
             # Table
             reverse('table:display_view', kwargs={'pk': 1}),
+            reverse('table:row_delete'),
             reverse('table:stat_column', kwargs={'pk': 1}),
             reverse('table:stat_table'),
             reverse('table:stat_table_view', kwargs={'pk': 1}),
@@ -127,7 +128,6 @@ class BackToHome(
             # Table
             reverse('table:display_ss'),
             reverse('table:display_view_ss', kwargs={'pk': 1}),
-            reverse('table:row_delete'),
             reverse('table:view_add'),
             reverse('table:stat_column_JSON', kwargs={'pk': 1}),
             reverse('table:view_edit', kwargs={'pk': 1}),

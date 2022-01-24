@@ -87,6 +87,9 @@ class TableDisplayViewView(ViewView, TableDisplayBasicView):
         return context
 
     def dispatch(self, request, *args, **kwargs):
+        if self.error_message:
+            return redirect(reverse('home'))
+
         self.object = self.get_object()
         if self.object.num_rows == 0:
             messages.info(
