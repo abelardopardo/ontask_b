@@ -40,11 +40,12 @@ class ActionRunView(ActionRunBasicView, ActionView):
                     'queueing.'))
             return redirect(reverse('action:index'))
 
+        action = self.get_object()
         return services.ACTION_PROCESS_FACTORY.process_run_request(
-            self.action.action_type,
+            action.action_type,
             request=request,
-            action=self.action,
-            prev_url=reverse('action:run', kwargs={'pk': self.action.id}))
+            action=action,
+            prev_url=reverse('action:run', kwargs={'pk': action.id}))
 
 
 class ActionRunDoneView(ActionRunBasicView, WorkflowView):
@@ -70,13 +71,14 @@ class ActionRunZipView(ActionRunBasicView, ActionView):
     """Request data to create a zip file."""
 
     def post(self, request, *args, **kwargs) -> http.HttpResponse:
+        action = self.get_object()
         return services.ACTION_PROCESS_FACTORY.process_run_request(
             models.action.ZIP_OPERATION,
             request=request,
-            action=self.action,
+            action=action,
             prev_url=reverse(
                 'action:zip_action',
-                kwargs={'pk': self.action.id}))
+                kwargs={'pk': action.id}))
 
 
 class ActionRunActionItemFilterView(
@@ -213,6 +215,7 @@ class ActionShowSurveyTableSSView(UserIsInstructor, ActionView):
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
+        action = self.get_object()
         # Check that the POST parameters are correctly given
         dt_page = DataTablesServerSidePaging(request)
         if not dt_page.is_valid:
@@ -221,5 +224,5 @@ class ActionShowSurveyTableSSView(UserIsInstructor, ActionView):
 
         return services.create_survey_table(
             self.workflow,
-            self.action,
+            action,
             dt_page)

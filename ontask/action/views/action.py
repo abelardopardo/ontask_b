@@ -154,12 +154,12 @@ class ActionCloneView(
 
     def post(self, request, *args, **kwargs):
         """Perform the clone operation."""
-        self.action = self.get_object()
+        action = self.get_object()
         services.do_clone_action(
             self.request.user,
-            self.action,
+            action,
             new_workflow=None,
-            new_name=create_new_name(self.action.name, self.workflow.actions))
+            new_name=create_new_name(action.name, self.workflow.actions))
 
         messages.success(request, _('Action successfully cloned.'))
         return http.JsonResponse({'html_redirect': ''})

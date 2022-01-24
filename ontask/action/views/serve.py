@@ -2,10 +2,11 @@
 
 """Views to serve personalised messages.
 
-URLs used:
-  - serve/?pk=nn (may come from outside the platform)
+URLs used as entry points:
 
-  - <pk>/run_survey_row/ (must come from inside the platform
+  - serve/?pk=nn (may come from outside the platform through LTI)
+
+  - <pk>/run_survey_row/ (must come from inside the platform)
 
 - ServeActionView
   - Action Out: GET
@@ -32,12 +33,13 @@ ServeActionLTI
   - id = request.GET.get('id')
   - call super (ServerActionView)
 
-RunSurveyRowView -- Action In (USELESS)
+RunSurveyRowView -- Action In
   - If action is out -> ERROR
   - Use Serve action View
 """
 
 from django import http
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -52,8 +54,8 @@ from ontask.action import forms, services
 from ontask.core import ActionView, UserIsInstructor, has_access, is_instructor
 
 
-class ActionServeActionView(generic.FormView):
-    """Manage a form to run a survey row."""
+class ActionServeActionBasicView(generic.FormView):
+    """Process request for action serve."""
 
     http_method_names = ['get', 'post']
     form_class = forms.EnterActionIn
@@ -61,21 +63,32 @@ class ActionServeActionView(generic.FormView):
     action = None
     user_attribute_name = None
 
-    def setup(self, request, *args, **kwargs):
-        """Intercept when using an action that is not supposed to be used."""
-        super().setup(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        """Check action is obtained, correct and attributes in place."""
+        # Check that action has been obtained
+        if self.action is None:
+            messages.error(request, _('Action not found'))
+            return redirect('action:index')
+
+        # Intercept when using an incorrect action.
         if (
             not is_instructor(self.request.user) and (
                 not self.action or
                 not self.action.serve_enabled or
                 not self.action.is_active)
         ):
-            raise http.Http404(_('Action is not enabled.'))
+            messages.error(request, _('Action is not enabled.'))
+            return redirect('action:index')
+
         # Get the parameters
         user_attribute_name = request.GET.get('uatn', 'email')
         if user_attribute_name not in self.action.workflow.get_column_names():
-            raise http.Http404(_('Unable to identify the user.'))
+            messages.error(request, _('Unable to identify the user.'))
+            return redirect('action:index')
+
         self.user_attribute_name = user_attribute_name
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -86,9 +99,10 @@ class ActionServeActionView(generic.FormView):
                 is_manager,
                 self.action,
                 self.user_attribute_name)
-        except services.OnTaskActionSurveyDataNotFound as exc:
-            raise http.Http404(str(exc))
-        except services.OnTaskActionSurveyNoTableData as exc:
+        except (
+            services.OnTaskActionSurveyDataNotFound,
+            services.OnTaskActionSurveyNoTableData
+        ) as exc:
             raise http.Http404(str(exc))
 
         # Get the active columns attached to the action
@@ -99,7 +113,8 @@ class ActionServeActionView(generic.FormView):
         kwargs.update({
             'tuples': colcon_items,
             'context': context,
-            'values': [context[colcon.column.name] for colcon in colcon_items],
+            'values': [
+                context[colcon.column.name] for colcon in colcon_items],
             'show_key': is_manager
         })
 
@@ -109,22 +124,12 @@ class ActionServeActionView(generic.FormView):
         context = super().get_context_data(**kwargs)
         context.update({
             'action': self.action,
-            'cancel_url': reverse('action:run', kwargs={'pk': self.action.id}) if has_access(
+            'cancel_url': reverse(
+                'action:run',
+                kwargs={'pk': self.action.id}) if has_access(
                 self.request.user,
                 self.action.workflow) else None})
         return context
-
-    def form_valid(self, form):
-        services.update_row_values(
-            self.request,
-            self.action,
-            form.get_key_value_pairs())
-        # If not instructor, just thank the user!
-        if not has_access(self.request.user, self.action.workflow):
-            return render(self.request, 'thanks.html', {})
-
-        # Back to running the action
-        return redirect(reverse('action:run', kwargs={'pk': self.action.id}))
 
     def get(self, request, *args, **kwargs) -> http.HttpResponse:
         if self.action.is_out:
@@ -134,46 +139,67 @@ class ActionServeActionView(generic.FormView):
                     self.action,
                     self.user_attribute_name)
             except Exception:
-                raise http.Http404()
+                messages.error(request, _('Unable to process the action.'))
+                return redirect('action:index')
 
-        # Only for action in actions.
+        # Only for action-in requests, process form and page as normal.
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs) -> http.HttpResponse:
         if self.action.is_out:
+            # Request is incorrect for thsi type of action
             raise http.Http404()
 
         if request.POST.get('lti_version'):
             # if the request has lti_version: process as a GET!
             return self.get(request, *args, **kwargs)
 
+        # Post received followed a previous get. Keep processing
         return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        # Update the newly received values in the table
+        services.update_row_values(
+            self.request,
+            self.action,
+            form.get_key_value_pairs())
+
+        # If not instructor, just thank the user!
+        if not has_access(self.request.user, self.action.workflow):
+            return render(self.request, 'thanks.html', {})
+
+        # Back to running the action
+        return redirect(reverse('action:run', kwargs={'pk': self.action.id}))
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 @method_decorator(xframe_options_exempt, name='dispatch')
 @method_decorator(login_required, name='dispatch')
-class ActionServeActionLTIView(ActionServeActionView):
+class ActionServeActionLTIView(ActionServeActionBasicView):
     """Serve an action accessed through LTI."""
 
     action = None
     workflow = None
 
-    def setup(self, request, *args, **kwargs):
-        """"""
+    def dispatch(self, request, *args, **kwargs):
+        """Get the action in the object with the request parameter"""
         try:
             action_id = int(request.GET.get('pk'))
         except Exception:
-            raise http.Http404()
+            messages.error(request, _('Action not found.'))
+            return redirect('action:index')
+
         self.action = models.Action.objects.filter(pk=action_id).first()
         if not self.action:
-            raise http.Http404(_('Action not found.'))
-        super().setup(request, *args, **kwargs)
+            messages.error(request, _('Action not found.'))
+            return redirect('home')
+
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ActionRunSurveyRowView(
     UserIsInstructor,
-    ActionServeActionView,
+    ActionServeActionBasicView,
     ActionView,
 ):
     """Render form for introducing information in a single row.
@@ -181,3 +207,8 @@ class ActionRunSurveyRowView(
     Runs the action in for a single row. The request must have query
     parameter uatn = key name to perform the user lookup.
     """
+
+    def dispatch(self, request, *args, **kwargs):
+        """Get the action in the object with the given view parameter"""
+        self.action = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
