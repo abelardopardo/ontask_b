@@ -91,7 +91,7 @@ class ActionSelectConditionQuestionView(UserIsInstructor, ColumnConditionView):
     """Select/Unselect a condition to show a question in a survey."""
 
     http_method_names = ['post']
-    s_related = ['action', 'action__conditions']
+    s_related = 'action'
 
     def post(self, request, *args, **kwargs):
         cc_tuple = self.get_object()
