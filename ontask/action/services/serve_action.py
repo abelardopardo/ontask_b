@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Tuple
 
 from django import http
 from django.template.loader import render_to_string
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from ontask import models
 from ontask.action.evaluate import (
@@ -94,22 +94,26 @@ def get_survey_context(
     if not user_attribute_value:
         user_attribute_value = request.user.email
 
-    # Get the dictionary containing column names, attributes and condition
-    # valuations:
-    context = get_action_evaluation_context(
-        action,
-        get_row_values(
+    # Get the row from the table with the appropriate values
+    row = get_row_values(
             action,
-            (user_attribute_name, user_attribute_value)))
+            (user_attribute_name, user_attribute_value))
+    if row is None:
+        # Proper row was not found
+        raise OnTaskActionSurveyDataNotFound(
+            message=gettext('Unable to find survey data.'))
+
+    # Get dictionary with column names, attributes and condition valuations:
+    context = get_action_evaluation_context(action, row)
 
     if not context:
         # If the data has not been found, flag
         if not is_manager:
             raise OnTaskActionSurveyDataNotFound(
-                message=_('Unable to find survey data.'))
+                message=gettext('Unable to find survey data.'))
 
         raise OnTaskActionSurveyNoTableData(
-            message=_('Data not found in the table'))
+            message=gettext('Data not found in the table'))
 
     return context
 
