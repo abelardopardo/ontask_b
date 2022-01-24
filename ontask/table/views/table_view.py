@@ -86,7 +86,7 @@ class ViewEditView(
         context.update({
             'filter_form': FilterForm(
                 self.request.POST or None,
-                instance=self.table_view.filter,
+                instance=self.object.filter,
                 include_description=False)
         })
         return context
