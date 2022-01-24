@@ -14,7 +14,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
 from django.core.mail import send_mail
 from django.db import models
-from django.utils import timezone
+from django.utils import functional, timezone
 from django.utils.translation import gettext_lazy as _
 
 
@@ -111,15 +111,14 @@ class OnTaskUser(models.Model):
         primary_key=True,
     )
 
+    @functional.cached_property
     def is_instructor(self) -> bool:
-        """Return boolean with is_instructor answer."""
-        return (
-            self.user.is_authenticated
-            and (
-                self.user.groups.filter(name='instructor').exists()
-                or self.user.is_superuser
-            )
-        )
+        """Return boolean with is_instructor answer (cache)."""
+        return  (
+                self.user.is_authenticated
+                and (
+                    self.user.groups.filter(name='instructor').exists()
+                    or self.user.is_superuser))
 
     def __str__(self) -> str:
         """Provide string representation (email)."""

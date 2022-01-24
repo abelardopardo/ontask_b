@@ -89,13 +89,7 @@ def is_instructor(user) -> bool:
     :param user: User object
     :return: Boolean stating if user belongs to the group
     """
-    return (
-        user.is_authenticated
-        and (
-            user.groups.filter(name='instructor').exists()
-            or user.is_superuser
-        )
-    )
+    return user.ontask_info.is_instructor
 
 
 def is_admin(user) -> bool:
@@ -222,10 +216,6 @@ class WorkflowView(base.View):
             self.error_message = _(
                 'Unable to detect workflow ({0}).').format(str(exc))
 
-    # def get_object(self, queryset=None):
-    #     """Bypass request for object returning the existing attribute."""
-    #     return self.workflow
-    #
     def dispatch(self, request, *args, **kwargs):
         """Intercept if there has been any error."""
         if self.error_message:
