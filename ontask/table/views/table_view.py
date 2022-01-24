@@ -3,17 +3,15 @@
 """Functions to implement CRUD views for Views."""
 
 from django import http
-from django.contrib import messages
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
 from ontask import OnTaskServiceException, create_new_name, models
 from ontask.condition.forms import FilterForm
 from ontask.core import (
-    JSONFormResponseMixin, SingleViewMixin, UserIsInstructor, ViewView,
-    WorkflowView, ajax_required)
+    JSONFormResponseMixin, UserIsInstructor, ViewView,
+    ajax_required)
 from ontask.table import forms, services
 
 
@@ -147,7 +145,7 @@ class ViewCloneView(
     UserIsInstructor,
     JSONFormResponseMixin,
     ViewView,
-    generic.TemplateView,
+    generic.DetailView,
 ):
     """Clone a view."""
 
