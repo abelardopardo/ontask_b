@@ -319,7 +319,7 @@ class ConditionView(detail.SingleObjectMixin, WorkflowView):
 
 
 class LogView(detail.SingleObjectMixin, WorkflowView):
-    """View that sets tthe object as a workflow log."""
+    """View that sets the object as a workflow log."""
 
     def setup(self, request, *args, **kwargs):
         """Check that the workflow has data."""
