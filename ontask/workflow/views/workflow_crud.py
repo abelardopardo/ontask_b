@@ -97,6 +97,9 @@ class WorkflowUpdateView(
     form_class = forms.WorkflowForm
     template_name = 'workflow/includes/partial_workflow_update.html'
 
+    def get_object(self, queryset=None):
+        return self.workflow
+
     def get_form_kwargs(self):
         """Add the user in the request to the context."""
         kwargs = super().get_form_kwargs()
@@ -153,6 +156,9 @@ class WorkflowDeleteView(
 
     http_method_names = ['get', 'post']
     template_name = 'workflow/includes/partial_workflow_delete.html'
+
+    def get_object(self, queryset=None):
+        return self.workflow
 
     def delete(self, request, *args, **kwargs) -> http.JsonResponse:
         """Delete the workflow and log the event"""
