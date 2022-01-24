@@ -174,6 +174,7 @@ class ConditionDeleteView(
     def delete(self, request, *args, **kwargs):
         condition = self.get_object()
         action = condition.action
+
         # If the request has the 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content:
@@ -210,6 +211,11 @@ class FilterDeleteView(
     def post(self, request, *args, **kwargs):
         action = self.get_object()
         filter_obj = action.filter
+
+        # If the request has the 'action_content', update the action
+        action_content = request.POST.get('action_content')
+        if action_content:
+            action.set_text_content(action_content)
 
         filter_obj.log(request.user, models.Log.CONDITION_DELETE)
         filter_obj.delete_from_action()
