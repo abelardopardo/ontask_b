@@ -81,10 +81,10 @@ class TableTestViewTableDisplay(tests.SimpleTableFixture, tests.OnTaskTestCase):
         get_url = req.get_full_path()
         req = self.factory.post(
             get_url,
-            {},
+            {'key': 'email', 'value': r_val['email']},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         req = self.add_middleware(req)
-        resp = views.row_delete(req)
+        resp = views.TableRowDeleteView.as_view()(req)
         self.assertTrue(status.is_success(resp.status_code))
         self.workflow.refresh_from_db()
         self.assertEqual(self.workflow.nrows, nrows - 1)

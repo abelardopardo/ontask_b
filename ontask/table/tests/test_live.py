@@ -518,12 +518,6 @@ class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
         ).click()
         self.wait_close_modal_refresh_table('table-data_previous')
 
-        # Open the view with the clone
-        self.click_dropdown_option('select-view-name', 'Copy of v1')
-
-        # Wait for the table to be refreshed
-        self.wait_for_id_and_spinner('table-data_previous')
-
         # Check the number of entries
         self.assertIn(
             'Showing 1 to 10 of 13 entries (filtered from 100 total entries)',

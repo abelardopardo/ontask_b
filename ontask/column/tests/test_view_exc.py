@@ -19,13 +19,13 @@ class ColumnCreate(tests.EmptyWorkflowFixture, tests.OnTaskTestCase):
         # Get the visualization for the whole table
 
         resp = self.get_response('column:create', is_ajax=True)
-        self.assertIn('{"html_redirect": ""}', str(resp.content))
+        self.assertIn(
+            '{"html_redirect": "/dataops/uploadmerge/"}',
+            str(resp.content))
 
         msgs = list(messages.get_messages(self.last_request))
         self.assertEqual(len(msgs), 1)
-        self.assertIn(
-            'Cannot add column to a workflow without data',
-            str(msgs[0]))
+        self.assertIn('Workflow has no data', str(msgs[0]))
 
 
 class ColumnCrudCreatePostError(
