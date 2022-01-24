@@ -201,7 +201,11 @@ class ScheduledOperationUpdateBase(generic.UpdateView):
             self.object = self.scheduled_item
             self.action = self.scheduled_item.action
         self.connection = kwargs.pop('connection', None)
-        if not self.connection and self.scheduled_item:
+        if (
+            not self.connection and
+            self.scheduled_item and
+            'connection_id' in self.scheduled_item.payload
+        ):
             self.connection = models.SQLConnection.objects.get(
                 pk=self.scheduled_item.payload['connection_id'])
         self.op_payload = kwargs.pop('payload', self._create_payload(request))
@@ -211,7 +215,7 @@ class ScheduledOperationUpdateBase(generic.UpdateView):
     def dispatch(self, request, *args, **kwargs):
         """If this is "finish" request, invoke the finish method."""
         if self.is_finish_request:
-            return self.finish(request, self.op_payload, self.scheduled_item)
+            return self.finish(request, self.op_payload)
 
         return super().dispatch(request, *args, **kwargs)
 
