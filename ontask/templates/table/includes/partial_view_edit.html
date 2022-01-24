@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-<form method="post" action="{% url 'table:view_edit' view.table_view.id %}"
+<form method="post" action="{% url 'table:view_edit' object.id %}"
       class="js-view-edit-form">
   {% csrf_token %}
   <div class="modal-header">
