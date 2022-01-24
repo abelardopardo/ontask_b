@@ -41,6 +41,11 @@ class ActionRunView(ActionRunBasicView, ActionView):
             return redirect(reverse('action:index'))
 
         action = self.get_object()
+        reason = action.is_executable()
+        if reason:
+            messages.error(request,  reason)
+            return redirect(reverse('action:index'))
+
         return services.ACTION_PROCESS_FACTORY.process_run_request(
             action.action_type,
             request=request,

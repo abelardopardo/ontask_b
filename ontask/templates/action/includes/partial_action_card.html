@@ -53,7 +53,7 @@
               title="{% trans 'Delete the action' %}">
         <span class="fa fa-trash"></span></button>
       <button onclick="location.href='{% url 'action:run' action.id %}'"
-              class="btn btn-secondary btn-light spin {% if not action.is_executable %}disabled{% endif %}"
+              class="btn btn-secondary btn-light spin"
               data-toggle="tooltip" role="button" type="button"
               title="{% if action.action_type == 'survey' or action.action_type == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action.action_type == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span></button>
       <div class="btn-group dropright" role="group">

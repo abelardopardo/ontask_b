@@ -509,45 +509,46 @@ class ActionDataIn(models.Model):  # noqa Z214
 class Action(ActionDataOut, ActionDataIn):
     """Object storing an action: content, conditions, filter, etc."""
 
-    @functional.cached_property
-    def is_executable(self) -> bool:
+    def is_executable(self) -> Optional[str]:
         """Answer if an action is ready to execute.
 
-        :return: Boolean stating correctness
+        :return: None if it is executable, or a message explaining why.
         """
-        for_out = (
+        if (
             self.action_type == Action.PERSONALIZED_TEXT
             or self.action_type == Action.RUBRIC_TEXT
             or self.action_type == Action.EMAIL_REPORT
             or self.action_type == Action.JSON_REPORT
             or (self.action_type == Action.PERSONALIZED_CANVAS_EMAIL
                 and settings.CANVAS_INFO_DICT is not None)
-        )
-        if for_out:
-            return True
+        ):
+            return None
 
         if self.action_type == Action.PERSONALIZED_JSON:
+            if not self.target_url:
+                return _('Action cannot run because it needs a valid URL.')
+
             # Validate the URL
             valid_url = True
             try:
                 URLValidator()(self.target_url)
             except ValidationError:
-                valid_url = False
+                return _('Action cannot run because it has an incorrect URL.')
 
-            return self.target_url and valid_url
+            return None
 
         if self.is_in:
             cc_pairs = self.column_condition_pair
-            return (
-                cc_pairs.filter(column__is_key=True).exists()
-                and cc_pairs.filter(column__is_key=False).exists()
-            )
+            if not cc_pairs.filter(column__is_key=True).exists():
+                return _('Action cannot run because it needs a key column.')
 
-        raise Exception(
-            'Function is_executable not implemented for action {0}'.format(
-                self.get_action_type_display(),
-            ),
-        )
+            if not cc_pairs.filter(column__is_key=False).exists():
+                return _('Action cannot run because it has no questions.')
+
+            return None
+
+        return _('Action type {0} cannot be executed.'.format(
+                self.get_action_type_display()))
 
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""
