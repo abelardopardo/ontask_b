@@ -173,8 +173,8 @@ class TableRowDeleteView(
         try:
             services.perform_row_delete(
                 self.workflow,
-                self.row_key,
-                self.row_value)
+                self.row_key_name,
+                self.row_key_value)
         except OnTaskServiceException as exc:
             exc.message_to_error(request)
 
