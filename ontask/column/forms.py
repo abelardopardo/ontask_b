@@ -115,7 +115,7 @@ class ColumnBasicForm(forms.ModelForm):
             # If the column is part of a rubric action, prevent this change as
             # it breaks the consistency of rubrics.
             if models.ActionColumnConditionTuple.objects.filter(
-                action__workflow=self.instance.workflow,
+                action__workflow=self.workflow,
                 action__action_type=models.Action.RUBRIC_TEXT,
                 column=self.instance
             ).exists():
