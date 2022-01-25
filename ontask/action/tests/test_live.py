@@ -991,9 +991,6 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
                 rubric_cell.feedback_text,
                 'FEEDBACK {0}'.format(idx))
 
-        column.refresh_from_db()
-        self.assertEqual(column.categories, [loa + '2' for loa in loas])
-
 
 class ActionIndexSelector(
     tests.InitialWorkflowFixture,
