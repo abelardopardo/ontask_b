@@ -24,7 +24,7 @@ class ColumnIndexView(UserIsInstructor, WorkflowView, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['table_info'] = None
-        if self.workflow.has_data_frame():
+        if self.workflow.has_data_frame:
             context['table_info'] = {
                 'num_actions': self.workflow.actions.count()}
 

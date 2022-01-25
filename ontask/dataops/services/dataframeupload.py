@@ -239,7 +239,7 @@ def batch_load_df_from_athenaconnection(
         'columns_to_upload': [True] * len(col_names),
         'keep_key_column': is_key[:]}
 
-    if not workflow.has_data_frame():
+    if not workflow.has_data_frame:
         # Regular load operation
         pandas.store_workflow_table(workflow, upload_data)
         log_item.payload['col_names'] = col_names

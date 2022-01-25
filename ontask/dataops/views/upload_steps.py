@@ -28,7 +28,8 @@ class UploadShowSourcesView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'value_range': range(5) if self.workflow.has_data_frame() else range(3),
+            'value_range': (
+                range(5) if self.workflow.has_data_frame else range(3)),
             'sql_enabled': models.SQLConnection.objects.filter(
                 enabled=True).count() > 0,
             'athena_enabled': models.AthenaConnection.objects.filter(
@@ -144,9 +145,10 @@ class UploadStepTwoView(UploadStepBasicView, generic.FormView):
             src_key_fields)]
         context.update({
             'prev_step': self.upload_data['step_1'],
-            'value_range': range(5) if self.workflow.has_data_frame() else range(3),
+            'value_range': (
+                range(5) if self.workflow.has_data_frame else range(3)),
             'df_info': df_info,
-            'next_name': _('Finish') if self.workflow.has_data_frame() else None})
+            'next_name': _('Finish') if self.workflow.has_data_frame else None})
 
         return context
 
@@ -240,8 +242,8 @@ class UploadStepThreeView(UploadStepBasicView, generic.FormView):
         context = super().get_context_data(**kwargs)
         context.update({
             'prev_step': reverse('dataops:upload_s2'),
-            'value_range': range(5) if self.workflow.has_data_frame() else range(3),
-        })
+            'value_range': (
+                range(5) if self.workflow.has_data_frame else range(3))})
         return context
 
     def get_form_kwargs(self):
@@ -329,7 +331,8 @@ class UploadStepFourView(UploadStepBasicView, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({
             'prev_step': reverse('dataops:upload_s3'),
-            'value_range': range(5) if self.workflow.has_data_frame() else range(3),
+            'value_range': (
+                range(5) if self.workflow.has_data_frame else range(3)),
             'next_name':  _('Finish'),
             'info': services.upload_prepare_step_four(self.upload_data)})
         return context

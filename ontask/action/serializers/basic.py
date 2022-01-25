@@ -284,7 +284,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
 
         workflow = self.context['workflow']
 
-        if not workflow.has_data_frame():
+        if not workflow.has_data_frame:
             # Cannot create actions with an empty workflow
             raise Exception(_(
                 'Unable to import action '

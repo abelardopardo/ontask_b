@@ -26,7 +26,7 @@ class TableDisplayBasicView(UserIsInstructor, generic.TemplateView):
     wf_pf_related = ['actions', 'views', 'columns']
 
     def add_column_information(self, context, columns):
-        if self.workflow.has_data_frame():
+        if self.workflow.has_data_frame:
             context.update({
                 'columns': columns,
                 'column_types': str([''] + [col.data_type for col in columns]),
@@ -108,7 +108,7 @@ class TableDisplayBaseSSView(UserIsInstructor, WorkflowView):
     dt_page: Optional[DataTablesServerSidePaging] = None
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.workflow.has_data_frame():
+        if not self.workflow.has_data_frame:
             return http.JsonResponse(
                 {'error': _('There is no data in the table')})
 

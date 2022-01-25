@@ -14,6 +14,7 @@ from django.db import models
 from django.db.models import JSONField
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
@@ -160,6 +161,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
             self.save(update_fields=['data_frame_table_name'])
         return self.upload_table_prefix.format(self.id)
 
+    @cached_property
     def has_data_frame(self) -> bool:
         """Check if a workflow has data frame.
 
@@ -378,6 +380,10 @@ class Workflow(NameAndDescription, CreateModifyFields):
         """
         # Step 1: Delete the data frame from the database
         sql.delete_table(self.get_data_frame_table_name())
+        try:
+            del self.has_data_frame
+        except AttributeError:
+            pass
 
         # Reset some of the workflow fields
         self.nrows = 0

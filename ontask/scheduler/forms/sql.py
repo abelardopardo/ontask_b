@@ -63,7 +63,7 @@ class ScheduleSQLUploadForm(
         # If the workflow has data, both keys have to be non empty, the
         # first one needs to be a unique column, and the merge method cannot
         # be empty
-        if self.workflow.has_data_frame():
+        if self.workflow.has_data_frame:
             if not form_data['dst_key'] or not form_data['src_key']:
                 self.add_error(
                     None,

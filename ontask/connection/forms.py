@@ -164,7 +164,7 @@ class AthenaRequestConnectionParam(forms.Form):
                 required=True,
                 help_text=_('Table to load'))
 
-        if self.workflow.has_data_frame():
+        if self.workflow.has_data_frame:
             if self.workflow.columns.filter(is_key=True).count() > 1:
                 merge_choices = [
                     (skey, skey)
@@ -190,7 +190,7 @@ class AthenaRequestConnectionParam(forms.Form):
         conn = self.instance
         to_return = self.instance.get_missing_fields(self.cleaned_data)
 
-        if self.workflow.has_data_frame():
+        if self.workflow.has_data_frame:
             if self.workflow.columns.filter(is_key=True).count() == 1:
                 to_return['merge_key'] = self.workflow.columns.filter(
                     is_key=True).first().name

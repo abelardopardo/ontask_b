@@ -193,7 +193,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         :return: List of row indexes that have all conditions equal to false
         """
         if self.rows_all_false is None:
-            if not self.workflow.has_data_frame():
+            if not self.workflow.has_data_frame:
                 # Workflow does not have a dataframe
                 raise ontask.OnTaskException(
                     'Workflow without DF in get_table_row_count_all_false')

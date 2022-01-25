@@ -152,7 +152,7 @@ class ExecuteSQLUpload:
         # IDEA: How to deal with failure to acquire access?
         #       Include a setting with the time to wait and number of retries?
 
-        if not workflow.has_data_frame():
+        if not workflow.has_data_frame:
             # Simple upload
             pandas.store_dataframe(src_df, workflow)
             return

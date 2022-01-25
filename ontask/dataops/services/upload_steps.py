@@ -44,7 +44,7 @@ def upload_step_two(
             # If the column is key, check if the user wants to keep it
             keep_key_column[idx] = select_column_data['make_key_%s' % idx]
 
-    if workflow.has_data_frame():
+    if workflow.has_data_frame:
         # A Merge operation is required so move to Step 3
         return redirect('dataops:upload_s3')
 

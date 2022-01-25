@@ -567,7 +567,7 @@ class ActionActionZip(
     tests.OnTaskLiveTestCase,
 ):
     """
-    This test case is to check if the ZIP opeation is correct
+    This test case is to check if the ZIP operation is correct
     """
 
     def test(self):
