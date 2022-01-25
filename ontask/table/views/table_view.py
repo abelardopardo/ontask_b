@@ -99,7 +99,7 @@ class ViewEditView(
     def form_valid(self, form):
         filter_form = FilterForm(
             self.request.POST or None,
-            instance=self.table_view.filter,
+            instance=self.object.filter,
             include_description=False)
         if not filter_form.is_valid():
             # Second part of the form is not valid, reload.

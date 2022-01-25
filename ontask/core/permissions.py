@@ -89,6 +89,8 @@ def is_instructor(user) -> bool:
     :param user: User object
     :return: Boolean stating if user belongs to the group
     """
+    if not user.id:
+        return False
     return user.ontask_info.is_instructor
 
 
