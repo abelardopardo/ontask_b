@@ -973,19 +973,6 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
         # Loop over the number of rows
         self.open_browse_preview(workflow.nrows)
 
-        # Change the LOAS
-        self.selenium.find_element(By.CLASS_NAME, 'js-rubric-loas-edit').click()
-        self.wait_for_modal_open()
-        elem = self.selenium.find_element(By.ID, 'id_levels_of_attainment')
-        elem.clear()
-        elem.send_keys(', '.join([loa + '2' for loa in loas]))
-        self.selenium.find_element(
-            By.XPATH,
-            '//div[@id="modal-item"]//button[@type="submit"]'
-        ).click()
-        self.wait_for_modal_close()
-        self.wait_for_id_and_spinner('rubric-table_previous')
-
         # Close the action and back to table of actions
         self.selenium.find_element(
             By.XPATH,

@@ -199,8 +199,6 @@ $(function () {
   $("#modal-item").on("submit", ".js-criterion-remove-form", saveForm);
   $("#rubric").on("click", ".js-rubric-cell-edit", loadForm);
   $("#modal-item").on("submit", ".js-rubric-cell-create-form", saveForm);
-  $("#rubric").on("click", ".js-rubric-loas-edit", loadForm);
-  $("#modal-item").on("submit", ".js-rubric-loas-edit-form", saveForm);
 
   // Delete column
   $("#column-selected-table").on("click", ".js-column-delete", loadForm);

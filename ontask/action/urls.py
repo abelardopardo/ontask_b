@@ -139,10 +139,6 @@ urlpatterns = [
         '<int:pk>/<int:cid>/<int:loa_pos>/rubric_cell_edit',
         views.ActionEditRubricCellView.as_view(),
         name='rubric_cell_edit'),
-    path(
-        '<int:pk>/rubric_loas_edit',
-        views.ActionEditRubricLOAView.as_view(),
-        name='rubric_loas_edit'),
 
     # RUN SURVEY
     # Server side update of the run survey page for action in

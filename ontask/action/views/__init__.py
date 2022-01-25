@@ -6,8 +6,7 @@ from ontask.action.views.action import (
     ActionIndexView, ActionUpdateView)
 from ontask.action.views.edit_personalized import (
     ActionAddRemoveAttachmentView, ActionShowURLView)
-from ontask.action.views.edit_rubric import (
-    ActionEditRubricCellView, ActionEditRubricLOAView)
+from ontask.action.views.edit_rubric import ActionEditRubricCellView
 from ontask.action.views.edit_survey import (
     ActionEditDescriptionView, ActionSelectColumnSurveyView,
     ActionSelectConditionQuestionView, ActionShuffleQuestionsView,
