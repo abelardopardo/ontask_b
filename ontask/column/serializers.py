@@ -40,7 +40,7 @@ class ColumnSerializer(serializers.ModelSerializer):
 
         column.set_categories(
             validated_data.get('categories', []),
-            validate=True,
+            validate_type=True,
             update=False)
 
         if not context.get('add_to_df_table', False):

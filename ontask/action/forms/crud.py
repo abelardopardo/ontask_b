@@ -136,10 +136,10 @@ class RubricLOAForm(forms.Form):
         """Check that the number of LOAs didn't change."""
         form_data = super().clean()
 
+        # Filter
         current_n_loas = [
             loa
-            for loa in form_data['levels_of_attainment'].split(',')
-            if loa]
+            for loa in form_data['levels_of_attainment'].split(',') if loa]
 
         if len(current_n_loas) != len(self.criteria[0].categories):
             self.add_error(

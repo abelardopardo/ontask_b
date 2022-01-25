@@ -2,7 +2,7 @@
 
 """Forms to manipulate the columns."""
 import re
-from typing import Dict
+from typing import Dict, List
 
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
@@ -15,6 +15,42 @@ from ontask.dataops import sql
 INITIAL_VALUE_LENGTH = 512
 
 INTERVAL_PATTERN = '(?P<from>-?\\d+)\\s+-\\s+(?P<to>-?\\d+)'
+
+
+def _parse_category_string(
+    category: str,
+    data_type: str,
+    allow_interval_syntax: bool,
+) -> List[str]:
+    """Given a category string, parse and expand to list of categories.
+
+    This function is to parse the specification of a list of categories. The
+    syntax allows to specify an interval pattern "number - number".
+
+    :param category: String to be parsed
+    :param data_type: data type expected for the values
+    :param allow_interval_syntax: Interval syntax is allowed
+    :return: List of categories after parsing
+    """
+    # Detect if an interval syntax is used (number column)
+
+    category_values = [cat.strip() for cat in category.split(',')]
+    if (
+        allow_interval_syntax
+        and (data_type == 'double' or data_type == 'integer')
+    ):
+        match = re.search(INTERVAL_PATTERN, category)
+        if match:
+            # If it is a number column, and there is an interval string
+            from_val = int(match.group('from'))
+            to_val = int(match.group('to'))
+            if from_val > to_val:
+                tmp = from_val
+                from_val = to_val
+                to_val = tmp
+            category_values = [str(val) for val in range(from_val, to_val + 1)]
+
+    return category_values
 
 
 class ColumnBasicForm(forms.ModelForm):
@@ -76,66 +112,32 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Categories must be valid types
         if 'raw_categories' in self.changed_data:
+            # If the column is part of a rubric action, prevent this change as
+            # it breaks the consistency of rubrics.
+            if models.ActionColumnConditionTuple.objects.filter(
+                action__workflow=self.instance.workflow,
+                action__action_type=models.Action.RUBRIC_TEXT,
+                column=self.instance
+            ).exists():
+                self.add_error(
+                    'raw_categories',
+                    _('Changes not allowed. Column is part of rubric action'))
+                return form_data
+
+            valid_values = []
             if form_data['raw_categories']:
-                # Detect if an interval syntax is used (number column)
-                match = re.search(
-                    INTERVAL_PATTERN,
-                    form_data['raw_categories'])
-                if (
-                    self.allow_interval_as_initial
-                    and (
-                        form_data['data_type'] == 'double'
-                        or form_data['data_type'] == 'integer')
-                    and match
-                ):
-                    # If it is a number column, and there is an interval string
-                    from_val = int(match.group('from'))
-                    to_val = int(match.group('to'))
-                    if from_val > to_val:
-                        tmp = from_val
-                        from_val = to_val
-                        to_val = tmp
-                    category_values = [
-                        str(val) for val in range(from_val, to_val + 1)]
-                else:
-                    category_values = [
-                        cat.strip()
-                        for cat in form_data['raw_categories'].split(',')]
+                category_values = _parse_category_string(
+                    form_data['raw_categories'],
+                    form_data['data_type'],
+                    self.allow_interval_as_initial)
 
-                # Condition 1: There must be more than one value
-                if len(category_values) < 2:
-                    self.add_error(
-                        'raw_categories',
-                        _('More than a single value needed.'))
-                    return form_data
+                valid_values, msg = self.instance.validate_categories(
+                    category_values)
 
-                # Condition 2: Values must be valid for the type of the column
-                try:
-                    valid_values = models.Column.validate_column_values(
-                        form_data['data_type'],
-                        category_values)
-                except (ValueError, KeyError):
-                    self.add_error(
-                        'raw_categories',
-                        _('Incorrect list of values'),
-                    )
+                if msg:
+                    # Categories are not correct.
+                    self.add_error('raw_categories', msg)
                     return form_data
-
-                # Condition 3: The values in the dataframe column must be in
-                # these categories (only if the column is being edited, though
-                if self.instance.name and not all(
-                    value in valid_values
-                    for value in self.data_frame[self.instance.name]
-                    if value and not pd.isnull(value)
-                ):
-                    self.add_error(
-                        'raw_categories',
-                        _(
-                            'The values in the column are not compatible '
-                            + ' with these ones.'))
-                    return form_data
-            else:
-                valid_values = []
 
             self.instance.set_categories(valid_values, update=False)
 
@@ -197,7 +199,7 @@ class ColumnAddForm(ColumnBasicForm):
         if initial_value:
             # See if the given value is allowed for the column data type
             try:
-                self.initial_valid_value = models.Column.validate_column_value(
+                self.initial_valid_value = models.Column.validate_value_type(
                     form_data['data_type'],
                     initial_value,
                 )

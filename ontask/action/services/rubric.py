@@ -5,7 +5,7 @@ from collections import OrderedDict
 from typing import Dict, List
 
 from django.template.loader import render_to_string
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 import django_tables2 as tables
 
 from ontask import models
@@ -122,7 +122,7 @@ class ActionManagerRubric(ActionManagerEmail):
         criteria = action.column_condition_pair.all()
         if not _verify_criteria_loas(criteria):
             raise OnTaskActionRubricIncorrectContext(
-                _('Inconsistent LOA in rubric criteria'))
+                gettext('Inconsistent LOA in rubric criteria'))
         _create_rubric_table(action, criteria, context)
 
         columns_to_insert_qs = action.workflow.columns.exclude(

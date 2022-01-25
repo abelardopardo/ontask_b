@@ -175,7 +175,7 @@ class Column(NameAndDescription):
         self.save(update_fields=['position'])
 
     @classmethod
-    def validate_column_value(cls, data_type, col_value) -> Any:
+    def validate_value_type(cls, data_type, col_value) -> Any:
         """Check if a value is correct for a column.
 
         Test that a value is suitable to be stored in this column. It is done
@@ -188,7 +188,7 @@ class Column(NameAndDescription):
         # Remove spaces
         col_value = col_value.strip()
 
-        distrib = {
+        convert_functions = {
             'string': lambda txt_val: str(txt_val),
             'double': lambda txt_val: float(txt_val),
             'boolean': lambda txt_val: (
@@ -197,7 +197,7 @@ class Column(NameAndDescription):
             'integer': None,
         }
 
-        if data_type not in distrib.keys():
+        if data_type not in convert_functions.keys():
             raise ValueError(
                 _('Unsupported type %(type)s') % {'type': str(data_type)})
 
@@ -209,12 +209,12 @@ class Column(NameAndDescription):
             except ValueError:
                 new_value = float(col_value)
         else:
-            newval = distrib[data_type](col_value)
+            new_value = convert_functions[data_type](col_value)
 
-        return newval
+        return new_value
 
     @classmethod
-    def validate_column_values(
+    def validate_values_type(
         cls,
         data_type: str,
         col_values: List[Any]
