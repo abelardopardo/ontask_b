@@ -57,7 +57,7 @@ def _verify_dataframe_columns(
     for col in workflow.columns.all():
         # Condition 1: If the column is marked as a key column, it should
         # maintain this property
-        if col.is_key and not pandas.is_unique_column(data_frame[col.name]):
+        if col.is_key and not pandas.is_unique_series(data_frame[col.name]):
             raise Exception(gettext(
                 'Column {0} looses its "key" property through this merge.'
                 + ' Either remove this property from the column or '

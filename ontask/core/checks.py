@@ -68,7 +68,7 @@ def check_workflow(workflow: models.Workflow) -> bool:
 
     # Verify that the columns marked as unique are preserved
     for col in workflow.columns.filter(is_key=True):
-        assert pandas.is_unique_column(df[col.name]), (
+        assert pandas.is_unique_series(df[col.name]), (
             'Column {0} should be unique.'.format(col.name)
         )
 

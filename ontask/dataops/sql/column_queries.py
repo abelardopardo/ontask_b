@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """DB queries to manipulate columns."""
-from typing import Dict
+from typing import Dict, List
 
 from django.db import connection
 from django.utils.translation import gettext_lazy as _
@@ -181,3 +181,39 @@ def get_text_column_hash(table_name: str, column_name: str) -> str:
     with connection.connection.cursor() as cursor:
         cursor.execute(query)
         return cursor.fetchone()[0]
+
+
+def get_column_distinct_values(table_name: str, column_name: str) -> List:
+    """Extract the values stored in a column of a given table.
+
+    :param table_name: Name of the table
+    :param column_name: Name of the column
+    :return: List of distinct values
+    """
+    query = sql.SQL(
+        'SELECT DISTINCT {0} FROM {1} WHERE {0} IS NOT NULL').format(
+        OnTaskDBIdentifier(column_name),
+        sql.Identifier(table_name))
+
+    with connection.connection.cursor() as cursor:
+        cursor.execute(query)
+        return [item[0] for item in cursor.fetchall()]
+
+
+def is_unique_column(table_name: str, column_name: str) -> bool:
+    """Check if a column has complete, unique non-empty values.
+
+    :param table_name: Name of the table
+    :param column_name: Name of the column
+    :return: Boolean encoding he answer
+    """
+    query = sql.SQL(
+        'SELECT CASE WHEN COUNT(DISTINCT {0}) = COUNT(*) ' +
+        'THEN TRUE ELSE FALSE END FROM {1}').format(
+        OnTaskDBIdentifier(column_name),
+        sql.Identifier(table_name))
+
+    with connection.connection.cursor() as cursor:
+        cursor.execute(query)
+        return cursor.fetchone()[0]
+

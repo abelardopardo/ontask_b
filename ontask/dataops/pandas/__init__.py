@@ -3,7 +3,7 @@
 """Functions to manipulate the dataframe, its columns, merging and the DB."""
 from ontask.dataops.pandas.columns import (
     are_unique_columns, detect_datetime_columns, get_column_statistics,
-    has_unique_column, is_unique_column,
+    has_unique_column, is_unique_series,
 )
 from ontask.dataops.pandas.database import (
     create_db_engine, destroy_db_engine, is_table_in_db, load_table,

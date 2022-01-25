@@ -67,7 +67,7 @@ def get_column_statistics(df_column) -> Optional[Dict]:
     return to_return
 
 
-def is_unique_column(df_column: pd.Series) -> bool:
+def is_unique_series(df_column: pd.Series) -> bool:
     """Check if a column has unique non-empty values.
 
     :param df_column: Column of a pandas data frame
@@ -83,7 +83,7 @@ def are_unique_columns(data_frame: pd.DataFrame) -> List[bool]:
     :return: Array of Booleans stating of a column has unique values
     """
     return [
-        is_unique_column(data_frame[col]) for col in list(data_frame.columns)
+        is_unique_series(data_frame[col]) for col in list(data_frame.columns)
     ]
 
 
@@ -94,7 +94,7 @@ def has_unique_column(data_frame: pd.DataFrame) -> bool:
     :return: Boolean with the result
     """
     return any(
-        is_unique_column(data_frame[col]) for col in data_frame.columns
+        is_unique_series(data_frame[col]) for col in data_frame.columns
     )
 
 
