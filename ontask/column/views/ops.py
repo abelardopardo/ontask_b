@@ -47,9 +47,10 @@ class ColumnMoveTopView(UserIsInstructor, ColumnView):
     http_method_names = ['get']
 
     def get(self, request, *args, **kwargs):
+        column = self.get_object()
         # The column object has been correctly obtained
-        if self.column.position > 1:
-            self.column.reposition_and_update_df(1)
+        if column.position > 1:
+            column.reposition_and_update_df(1)
 
         return redirect('column:index')
 
