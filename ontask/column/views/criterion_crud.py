@@ -148,14 +148,16 @@ class ColumnCriterionDeleteView(
 
     http_method_names = ['get', 'post']
     template_name = 'workflow/includes/partial_criterion_delete.html'
-    s_related = 'column'
+    s_related = ['column', 'action']
 
     def delete(self, request, *args, **kwargs):
         cc_tuple = self.get_object()
         cc_tuple.log(
             request.user,
             models.Log.ACTION_RUBRIC_CRITERION_DELETE)
+        cc_tuple.action.rubric_cells.filter(column=cc_tuple.column).delete()
         cc_tuple.delete()
+
         return http.JsonResponse({'html_redirect': ''})
 
 
