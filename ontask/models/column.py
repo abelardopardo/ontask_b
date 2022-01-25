@@ -2,7 +2,7 @@
 
 """Column model."""
 import datetime
-from typing import Any, List
+from typing import Any, List, Optional, Tuple
 
 from django.conf import settings
 from django.db import models
@@ -11,7 +11,7 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
 import pytz
 
-from ontask.dataops import pandas
+from ontask.dataops import pandas, sql
 from ontask.models.common import CHAR_FIELD_MID_SIZE, NameAndDescription
 from ontask.models.logs import Log
 
@@ -105,7 +105,12 @@ class Column(NameAndDescription):
 
         return self.categories
 
-    def set_categories(self, cat_values, validate=False, update=True):
+    def set_categories(
+        self,
+        cat_values,
+        validate_type: Optional[bool] = False,
+        update: Optional[bool] = True
+    ) -> bool:
         """Set the categories available in a column.
 
         The function checks that the values are compatible with the declared
@@ -114,13 +119,13 @@ class Column(NameAndDescription):
         the ISO 8601 string format and stored.
 
         :param cat_values: List of category values
-        :param validate: Boolean to enable validation of the given values
+        :param validate_type: Boolean to enable validation of the given values
         :param update: Boolean to control if the field is updated
-        :return: Nothing. Sets the value in the object
+        :return: Boolean saying if the update has been successful
         """
         # Calculate the values to store
-        if validate:
-            to_store = self.validate_column_values(
+        if validate_type:
+            to_store = self.validate_values_type(
                 self.data_type,
                 [cat_value.strip() for cat_value in cat_values])
         else:
@@ -129,10 +134,15 @@ class Column(NameAndDescription):
         if any(isinstance(elem, datetime.datetime) for elem in cat_values):
             to_store = [cat_val.isoformat() for cat_val in to_store]
 
+        # Update the field in memory
         self.categories = to_store
 
         if update:
+            # Update the field in the DB
             self.save(update_fields=['categories'])
+            return True
+
+        return False
 
     def get_simplified_data_type(self) -> str:
         """Get a data type name to show to users.
@@ -195,9 +205,9 @@ class Column(NameAndDescription):
             # In this case, although the column has been declared as an
             # integer, it could mutate to a float, so we allow this value.
             try:
-                newval = int(col_value)
+                new_value = int(col_value)
             except ValueError:
-                newval = float(col_value)
+                new_value = float(col_value)
         else:
             newval = distrib[data_type](col_value)
 
@@ -220,8 +230,47 @@ class Column(NameAndDescription):
         :return: The new values to be stored
         """
         return [
-            Column.validate_column_value(data_type, col_val)
+            Column.validate_value_type(data_type, col_val)
             for col_val in col_values]
+
+    def validate_categories(
+        self,
+        categories: List
+    ) -> Tuple[List, Optional[str]]:
+        """Check that categories are valid for this column.
+
+        The method checks for the following conditions:
+
+        1. There is more than one category
+        2. Categories must be compatible with column type
+        3. Categories are compatible with the existing data in the table
+
+        :param categories: List of values to consider in the column
+        :return: A pair: list of adjusted values and None if all conditions
+        are satisfied, or an empty list and a string with the reason the
+        values have not been validated.
+        """
+        # Condition 1: There must be more than one value
+        if len(categories) < 2:
+            return [], _('More than a single value needed.')
+
+        # Condition 2: Values must be valid for the type of the column
+        try:
+            valid_values = self.validate_values_type(self.data_type, categories)
+        except (ValueError, KeyError):
+            return [], _('Incorrect list of values')
+
+        # Condition 3: The values in the dataframe column must be in
+        # these categories
+        if self.id:
+            # Only needed when column is in DB (avoid new empty columns)
+            column_values = sql.get_column_distinct_values(
+                self.workflow.get_data_frame_table_name(),
+                self.name)
+            if not set(column_values).issubset(valid_values):
+                return [], _('Column values incompatible with categories.')
+
+        return valid_values, None
 
     @property
     def is_active(self) -> bool:
@@ -252,7 +301,7 @@ class Column(NameAndDescription):
             'categories': self.categories,
             'active_from': self.active_from,
             'active_to': self.active_to,
-            'workflow_id': self.workflow.id}
+            'workflow_id': self.workflow_id}
 
         payload.update(kwargs)
         return Log.objects.register(

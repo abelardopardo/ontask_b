@@ -7,11 +7,10 @@ from typing import Dict
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.utils.translation import gettext_lazy as _
-import pandas as pd
 
 from ontask import is_legal_name, models
 from ontask.core import DATE_TIME_WIDGET_OPTIONS
-from ontask.dataops import pandas
+from ontask.dataops import sql
 
 INITIAL_VALUE_LENGTH = 512
 
@@ -37,7 +36,6 @@ class ColumnBasicForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         """Store the workflow and data frame."""
         self.workflow = kwargs.pop('workflow', None)
-        self.data_frame = None
         self.allow_interval_as_initial = kwargs.pop(
             'allow_interval_as_initial',
             False)
@@ -59,11 +57,6 @@ class ColumnBasicForm(forms.ModelForm):
     def clean(self) -> Dict:
         """Check that the name is legal and the categories have right value."""
         form_data = super().clean()
-
-        # Load the data frame from the DB for various checks and leave it in
-        # the form for future use
-        self.data_frame = pandas.load_table(
-            self.workflow.get_data_frame_table_name())
 
         # Column name must be a legal variable name
         if 'name' in self.changed_data:
@@ -387,8 +380,9 @@ class ColumnRenameForm(ColumnBasicForm):
             # Case 2: False -> True Unique values must be verified
             if (
                 not self.instance.is_key
-                and not pandas.is_unique_column(
-                    self.data_frame[self.instance.name])
+                and not sql.is_unique_column(
+                    self.workflow.get_data_frame_table_name(),
+                    self.instance.name)
             ):
                 self.add_error(
                     'is_key',
