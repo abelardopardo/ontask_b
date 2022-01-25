@@ -108,9 +108,12 @@ urlpatterns += i18n_patterns(
 )
 
 # Include django debug toolbar if DEBUG is ons
-if settings.DEBUG:
+if settings.DEBUG_TOOLBAR and not settings.ONTASK_TESTING:
     import debug_toolbar
     urlpatterns += [path(r'__debug__/', include(debug_toolbar.urls))]
+
+if settings.PROFILE_SILK and not settings.ONTASK_TESTING:
+    urlpatterns += [path("silk/", include("silk.urls", namespace="silk"))]
 
 handler400 = 'ontask.core.services.ontask_handler400'
 handler403 = 'ontask.core.services.ontask_handler403'

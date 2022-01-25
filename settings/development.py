@@ -14,7 +14,19 @@ else:
 
 # Django Debug Toolbar
 if DEBUG and not ONTASK_TESTING:
-    INSTALLED_APPS += ['debug_toolbar']
+    if DEBUG_TOOLBAR:
+        INSTALLED_APPS += ['debug_toolbar']
+        MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+
+    if PROFILE_CPROFILE:
+        DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
+        MIDDLEWARE += [
+            'django_cprofile_middleware.middleware.ProfilerMiddleware']
+
+    if PROFILE_SILK:
+        INSTALLED_APPS += ['silk']
+        MIDDLEWARE += ['silk.middleware.SilkyMiddleware']
+
     TEMPLATES[0]['OPTIONS']['debug'] = True
 
 if ONTASK_TESTING:
@@ -34,10 +46,6 @@ else:
         'SHOW_TOOLBAR_CALLBACK': lambda r: True,  # enables it
         # '...
     }
-
-# Additional middleware introduced by debug toolbar
-if DEBUG:
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 # Show thumbnail generation errors
 THUMBNAIL_DEBUG = True

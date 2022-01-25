@@ -227,6 +227,8 @@ DATAOPS_PLUGIN_DIRECTORY = env(
 
 DEBUG = env.bool('DEBUG', default=False)
 
+DEBUG_TOOLBAR = env('DEBUG_TOOLBAR', default=DEBUG)
+
 EMAIL_ACTION_NOTIFICATION_SENDER = env('EMAIL_ACTION_NOTIFICATION_SENDER')
 EMAIL_ACTION_NOTIFICATION_SUBJECT = env(
     'EMAIL_ACTION_NOTIFICATION_SUBJECT',
@@ -285,6 +287,10 @@ LTI_INSTRUCTOR_GROUP_ROLES = env.list(
 MEDIA_LOCATION = env('MEDIA_LOCATION', default='media/')
 
 ONTASK_HELP_URL = env('ONTASK_HELP_URL', default='html/index.html')
+
+PROFILE_CPROFILE = env('PROFILE_CPROFILE', default=False)
+
+PROFILE_SILK = env('PROFILE_SILK', default=False)
 
 REDIS_URL = env.cache('REDIS_URL')
 
@@ -708,6 +714,7 @@ def show_configuration() -> None:
     print('DATABASES:', DATABASES)
     print('DATA_UPLOAD_MAX_NUMBER_FIELDS:', DATA_UPLOAD_MAX_NUMBER_FIELDS)
     print('DEBUG (conf):', DEBUG)
+    print('DEBUG_TOOLBAR (conf):', DEBUG_TOOLBAR)
     print('EMAIL_HOST (conf):', EMAIL_HOST)
     print('EMAIL_HOST_USER (conf):', EMAIL_HOST_USER)
     print('EMAIL_HOST_PASSWORD (conf):', EMAIL_HOST_PASSWORD)
@@ -723,6 +730,8 @@ def show_configuration() -> None:
     print('MEDIA_ROOT:', MEDIA_ROOT)
     print('MEDIA_URL:', MEDIA_URL)
     print('MIDDLEWARE:', MIDDLEWARE)
+    print('PROFILE_CPROFILE (conf):', PROFILE_CPROFILE)
+    print('PROFILE_SILK (conf):', PROFILE_SILK)
     print('ROOT_URLCONF:', ROOT_URLCONF)
     print('SECRET_KEY (conf):', SECRET_KEY)
     print('SHORT_DATETIME_FORMAT:', SHORT_DATETIME_FORMAT)
