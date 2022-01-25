@@ -165,14 +165,12 @@ def add_random_column(
     user,
     workflow: models.Workflow,
     column: models.Column,
-    data_frame: pd.DataFrame,
 ):
     """Add the formula column to the workflow.
 
     :param user: User making the request
     :param workflow: Workflow to add the column
     :param column: Column being added
-    :param data_frame: Data frame of the current workflow
     :return: Column is added to the workflow
     """
     # Empty new column
@@ -187,6 +185,9 @@ def add_random_column(
     for idx, indexes in enumerate(partitions):
         for col_idx in indexes:
             new_column[col_idx] = categories[idx]
+
+    # Load the data frame
+    data_frame = pandas.load_table(workflow.get_data_frame_table_name())
 
     # Assign the new column to the data frame
     data_frame[column.name] = pd.Series(
@@ -374,7 +375,7 @@ def do_clone_column_only(
     """Clone a column.
 
     :param column: Object to clone.
-    :param new_workflow: Optional new worklow object to link to.
+    :param new_workflow: Optional new workflow object to link to.
     :param new_name: Optional new name to use.
     :result: New object.
     """

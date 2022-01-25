@@ -242,11 +242,7 @@ class ColumnRandomAddView(ColumnBasicView, ColumnView, generic.CreateView):
         column.save()
 
         try:
-            services.add_random_column(
-                self.request.user,
-                self.workflow,
-                column,
-                form.data_frame)
+            services.add_random_column(self.request.user, self.workflow, column)
             form.save_m2m()
         except services.OnTaskColumnIntegerLowerThanOneError as exc:
             form.add_error(exc.field_name, str(exc))
