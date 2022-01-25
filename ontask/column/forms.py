@@ -132,7 +132,8 @@ class ColumnBasicForm(forms.ModelForm):
                     self.allow_interval_as_initial)
 
                 valid_values, msg = self.instance.validate_categories(
-                    category_values)
+                    category_values,
+                    form_data['data_type'])
 
                 if msg:
                     # Categories are not correct.

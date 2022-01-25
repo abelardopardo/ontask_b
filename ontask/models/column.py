@@ -235,7 +235,8 @@ class Column(NameAndDescription):
 
     def validate_categories(
         self,
-        categories: List
+        categories: List,
+        data_type: str,
     ) -> Tuple[List, Optional[str]]:
         """Check that categories are valid for this column.
 
@@ -246,6 +247,7 @@ class Column(NameAndDescription):
         3. Categories are compatible with the existing data in the table
 
         :param categories: List of values to consider in the column
+        :param data_type: Data type expected for the categories
         :return: A pair: list of adjusted values and None if all conditions
         are satisfied, or an empty list and a string with the reason the
         values have not been validated.
@@ -256,7 +258,7 @@ class Column(NameAndDescription):
 
         # Condition 2: Values must be valid for the type of the column
         try:
-            valid_values = self.validate_values_type(self.data_type, categories)
+            valid_values = self.validate_values_type(data_type, categories)
         except (ValueError, KeyError):
             return [], _('Incorrect list of values')
 
