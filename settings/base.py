@@ -268,7 +268,7 @@ EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default='')
 
 EXECUTE_ACTION_JSON_TRANSFER = env.bool(
     'EXECUTE_ACTION_JSON_TRANSFER',
-    default=False)
+    default=True)
 
 LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
 
@@ -552,7 +552,6 @@ CELERY_BEAT_SCHEDULE = {
             day_of_month=CELERY_SESSION_CLEANUP_CRONTAB[3],
             month_of_year=CELERY_SESSION_CLEANUP_CRONTAB[4]),
         #     'args': (DEBUG,),
-        'name': '__ONTASK_CLEANUP_SESSION_TASK',
     },
 }
 CELERY_BROKER_URL = REDIS_URL['LOCATION']
