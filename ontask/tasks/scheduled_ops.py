@@ -8,7 +8,7 @@ import pytz
 
 from ontask import CELERY_LOGGER, models
 from ontask.core import ONTASK_SCHEDULED_LOCKED_ITEM
-from ontask.tasks.execute_factory import task_execute_factory
+from ontask.action.services.execute_factory import TASK_EXECUTE_FACTORY
 
 
 def _update_item_status(s_item: models.ScheduledOperation):
@@ -85,7 +85,7 @@ def execute_scheduled_operation(s_item_id: int):
 
             payload = s_item.payload
 
-            task_execute_factory.execute_operation(
+            TASK_EXECUTE_FACTORY.execute_operation(
                 operation_type=s_item.operation_type,
                 user=s_item.user,
                 workflow=s_item.workflow,

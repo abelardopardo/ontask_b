@@ -3,6 +3,7 @@ from typing import Optional
 
 from django import http
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -14,7 +15,8 @@ from ontask.action import forms, services
 from ontask.celery import celery_is_up
 from ontask.core import (
     ActionView, DataTablesServerSidePaging, SessionPayload,
-    UserIsInstructor, WorkflowView, ajax_required)
+    UserIsInstructor, WorkflowView, ajax_required, get_action, get_workflow,
+    is_instructor)
 
 
 class ActionRunBasicView(UserIsInstructor):
@@ -26,62 +28,77 @@ class ActionRunBasicView(UserIsInstructor):
         return self.post(request, *args, **kwargs)
 
 
-class ActionRunView(ActionRunBasicView, ActionView):
-    """Export the actions given as comma separated list of ids."""
+@user_passes_test(is_instructor)
+@get_action()
+def action_run_initiate(
+    request: http.HttpRequest,
+    pk: int,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None
+) -> http.HttpResponse:
+    if not celery_is_up():
+        messages.error(
+            request,
+            _('Unable to execute actions due to a misconfiguration. '
+              + 'Ask your system administrator to enable message '
+                'queueing.'))
+        return redirect(reverse('action:index'))
 
-    def post(self, request, *args, **kwargs) -> http.HttpResponse:
-        if not celery_is_up():
-            messages.error(
-                request,
-                _('Unable to execute actions due to a misconfiguration. '
-                  + 'Ask your system administrator to enable message '
-                    'queueing.'))
-            return redirect(reverse('action:index'))
+    reason = action.is_executable()
+    if reason:
+        messages.error(request, reason)
+        return redirect(reverse('action:index'))
 
-        action = self.get_object()
-        reason = action.is_executable()
-        if reason:
-            messages.error(request,  reason)
-            return redirect(reverse('action:index'))
-
-        return services.ACTION_PROCESS_FACTORY.process_run_request(
-            action.action_type,
-            request=request,
-            action=action,
-            prev_url=reverse('action:run', kwargs={'pk': action.id}))
-
-
-class ActionRunDoneView(ActionRunBasicView, WorkflowView):
-    """Export the actions given as comma separated list of ids."""
-
-    def post(self, request, *args, **kwargs) -> http.HttpResponse:
-        payload = SessionPayload(request.session)
-        if payload is None:
-            # Something is wrong with this execution. Return to action table.
-            messages.error(
-                request,
-                _('Incorrect action run invocation.'))
-            return redirect('action:index')
-
-        return services.ACTION_PROCESS_FACTORY.process_run_request_done(
-            payload.get('operation_type'),
-            request=request,
-            workflow=self.workflow,
-            payload=payload)
+    return services.ACTION_RUN_FACTORY.process_request(
+        request,
+        action.action_type,
+        workflow=workflow,
+        action=action,
+        prev_url=reverse('action:run', kwargs={'pk': action.id}))
 
 
-class ActionRunZipView(ActionRunBasicView, ActionView):
-    """Request data to create a zip file."""
+@user_passes_test(is_instructor)
+@get_workflow()
+def action_run_finish(
+    request: http.HttpRequest,
+    workflow: Optional[models.Workflow] = None,
+) -> http.HttpResponse:
+    """Finish the processing of a run scheduling
 
-    def post(self, request, *args, **kwargs) -> http.HttpResponse:
-        action = self.get_object()
-        return services.ACTION_PROCESS_FACTORY.process_run_request(
-            models.action.ZIP_OPERATION,
-            request=request,
-            action=action,
-            prev_url=reverse(
-                'action:zip_action',
-                kwargs={'pk': action.id}))
+    :param request: Http request (should be a post)
+    :param workflow: Workflow object.
+    :param action: Action object
+    :return: Schedule an action execution
+    """
+    payload = SessionPayload(request.session)
+    if payload is None:
+        # Something is wrong with this execution. Return to action table.
+        messages.error(
+            request,
+            _('Incorrect action run invocation.'))
+        return redirect('action:index')
+
+    return services.ACTION_RUN_FACTORY.finish(
+        payload.get('operation_type'),
+        request=request,
+        workflow=workflow,
+        payload=payload)
+
+
+@user_passes_test(is_instructor)
+@get_action()
+def action_run_zip(
+    request: http.HttpRequest,
+    pk: int,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None
+) -> http.HttpResponse:
+    return services.ACTION_RUN_FACTORY.process_request(
+        request,
+        models.action.ZIP_OPERATION,
+        workflow=workflow,
+        action=action,
+        prev_url=reverse('action:zip_action', kwargs={'pk': action.id}))
 
 
 class ActionRunActionItemFilterView(

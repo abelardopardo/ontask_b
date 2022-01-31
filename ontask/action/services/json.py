@@ -12,8 +12,7 @@ from ontask import OnTaskSharedState, models
 from ontask.action.evaluate import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
-from ontask.action.services.edit_manager import ActionOutEditManager
-from ontask.action.services.run_manager import ActionRunManager
+from ontask.action.services.run_factory import ActionRunProducerBase
 
 LOGGER = get_task_logger('celery_execution')
 
@@ -54,8 +53,11 @@ def _send_and_log_json(
             settings.TIME_ZONE))))
 
 
-class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
-    """Class to serve running an email action."""
+class ActionRunProducerJSON(ActionRunProducerBase):
+    """Class execute personalised JSON actions."""
+
+    # Type of event to log when running the action
+    log_event = models.Log.ACTION_RUN_PERSONALIZED_JSON
 
     def execute_operation(
         self,
@@ -69,7 +71,7 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
         if log_item is None:
             log_item = action.log(user, self.log_event, **payload)
 
-        action_evals = evaluate_action(
+        action_evaluations = evaluate_action(
             action,
             column_name=action.workflow.columns.get(
                 pk=payload['item_column']).name,
@@ -84,7 +86,7 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
 
         # Iterate over all json objects to create the strings and check for
         # correctness
-        for json_string, _ in action_evals:
+        for json_string, _ in action_evaluations:
             _send_and_log_json(
                 user,
                 action,
@@ -97,11 +99,14 @@ class ActionManagerJSON(ActionOutEditManager, ActionRunManager):
         # Update excluded items in payload
         self._update_excluded_items(
             payload,
-            [column_value for __, column_value in action_evals])
+            [column_value for __, column_value in action_evaluations])
 
 
-class ActionManagerJSONReport(ActionOutEditManager, ActionRunManager):
-    """Class to serve running an email action."""
+class ActionRunProducerJSONReport(ActionRunProducerBase):
+    """Class to execute JSON report actions."""
+
+    # Type of event to log when running the action
+    log_event = models.Log.ACTION_RUN_JSON_REPORT
 
     def execute_operation(
         self,
@@ -113,9 +118,9 @@ class ActionManagerJSONReport(ActionOutEditManager, ActionRunManager):
     ):
         """Send single json object to target URL.
 
-        Sends a single json object to the URL in the action
+        Sends a single json object to the URL specified in the action.
 
-        :param user: User object that executed the action
+        :param user: User executing the action
         :param workflow: Workflow object (if relevant)
         :param action: Action from where to take the messages
         :param payload: Object with the additional parameters

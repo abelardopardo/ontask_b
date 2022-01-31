@@ -8,6 +8,7 @@ from ontask.core.checks import (
 from ontask.core.decorators import (
     ajax_required, get_action, get_column, get_columncondition, get_condition,
     get_filter, get_view, get_workflow)
+from ontask.core.factory import FactoryBase
 from ontask.core.forms import (
     DATE_TIME_WIDGET_OPTIONS, RestrictedFileField, column_to_field)
 from ontask.core.manage_session import SessionPayload

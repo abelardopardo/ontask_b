@@ -3,6 +3,7 @@ from typing import Optional
 
 from django import http
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
@@ -12,7 +13,7 @@ from ontask import create_new_name, models
 from ontask.action import forms, services
 from ontask.core import (
     ActionView, JSONFormResponseMixin, SessionPayload, UserIsInstructor,
-    WorkflowView, ajax_required)
+    WorkflowView, ajax_required, get_action, is_instructor)
 
 
 class ActionIndexView(UserIsInstructor, WorkflowView, generic.ListView):
@@ -118,23 +119,19 @@ class ActionUpdateView(
             reverse('action:index'))
 
 
-class ActionEditView(UserIsInstructor, ActionView):
-    """View to edit an action."""
-
-    http_method_names = ['get', 'post']
-    wf_pf_related = ['columns', 'views']
-    s_related = 'filter'
-    pf_related = ['conditions', 'conditions__columns']
-
-    def get(self, request, *args, **kwargs):
-        return services.ACTION_PROCESS_FACTORY.process_edit_request(
-            request,
-            self.get_object())
-
-    def post(self, request, *args, **kwargs):
-        return services.ACTION_PROCESS_FACTORY.process_edit_request(
-            request,
-            self.get_object())
+@user_passes_test(is_instructor)
+@get_action(pf_related=['views', 'columns', 'conditions'])
+def action_edit(
+    request: http.HttpRequest,
+    pk: int,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None
+) -> http.HttpResponse:
+    return services.ACTION_EDIT_FACTORY.process_request(
+        request,
+        action.action_type,
+        workflow=workflow,
+        action=action)
 
 
 @method_decorator(ajax_required, name='dispatch')

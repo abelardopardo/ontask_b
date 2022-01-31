@@ -12,11 +12,11 @@ from ontask.core import SessionPayload
 from ontask.scheduler.forms import (
     ScheduleEmailForm, ScheduleJSONForm, ScheduleJSONReportForm,
     ScheduleSendListForm)
-from ontask.scheduler.services.crud_factory import ScheduledOperationUpdateBase
+from ontask.scheduler.services.edit_factory import ScheduledOperationUpdateBaseView
 from ontask.scheduler.services.items import create_timedelta_string
 
 
-class ScheduledOperationUpdateActionRun(ScheduledOperationUpdateBase):
+class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
     """Base class for those saving Action Run operations."""
 
     def _create_payload(
@@ -90,10 +90,11 @@ class ScheduledOperationUpdateActionRun(ScheduledOperationUpdateBase):
             if not self.scheduled_item:
                 self.scheduled_item = models.ScheduledOperation.objects.filter(
                     id=s_item_id).first()
-                messages.error(
-                    request,
-                    _('Incorrect request for operation scheduling'))
-                return redirect('action:index')
+                if not self.scheduled_item:
+                    messages.error(
+                        request,
+                        _('Incorrect request for operation scheduling'))
+                    return redirect('action:index')
         else:
             action = models.Action.objects.get(pk=payload.pop('action_id'))
             payload['workflow'] = action.workflow
@@ -140,28 +141,32 @@ class ScheduledOperationUpdateActionRun(ScheduledOperationUpdateBase):
             {'tdelta': tdelta, 's_item': scheduled_item})
 
 
-class ScheduledOperationUpdateEmail(ScheduledOperationUpdateActionRun):
+class ScheduledOperationEmailUpdateView(ScheduledOperationActionRunUpdateView):
     """Process Personalised Email."""
 
     operation_type = models.Log.ACTION_RUN_PERSONALIZED_EMAIL
     form_class = ScheduleEmailForm
 
 
-class ScheduledOperationUpdateEmailReport(ScheduledOperationUpdateActionRun):
+class ScheduledOperationEmailReportUpdateView(
+    ScheduledOperationActionRunUpdateView
+):
     """Process Email Report."""
 
     operation_type = models.Log.ACTION_RUN_EMAIL_REPORT
     form_class = ScheduleSendListForm
 
 
-class ScheduledOperationUpdateJSON(ScheduledOperationUpdateActionRun):
+class ScheduledOperationJSONUpdateView(ScheduledOperationActionRunUpdateView):
     """Process Personalised JSON."""
 
     operation_type = models.Log.ACTION_RUN_PERSONALIZED_JSON
     form_class = ScheduleJSONForm
 
 
-class ScheduledOperationUpdateJSONReport(ScheduledOperationUpdateActionRun):
+class ScheduledOperationJSONReportUpdateView(
+    ScheduledOperationActionRunUpdateView
+):
     """Process JSON Report."""
 
     operation_type = models.Log.ACTION_RUN_JSON_REPORT

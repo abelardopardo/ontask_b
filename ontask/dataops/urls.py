@@ -3,7 +3,7 @@ from django.urls import path
 
 from ontask import models
 from ontask.dataops import services, views
-from ontask.tasks import task_execute_factory
+from ontask.action.services.execute_factory import TASK_EXECUTE_FACTORY
 
 app_name = 'dataops'
 urlpatterns = [
@@ -100,14 +100,14 @@ urlpatterns = [
 
 ]
 
-task_execute_factory.register_producer(
+TASK_EXECUTE_FACTORY.register_producer(
     models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
-    services.ExecuteIncreaseTrackCount())
+    services.ExecuteIncreaseTrackCount)
 
-task_execute_factory.register_producer(
+TASK_EXECUTE_FACTORY.register_producer(
     models.Log.PLUGIN_EXECUTE,
-    services.ExecuteRunPlugin())
+    services.ExecuteRunPlugin)
 
-task_execute_factory.register_producer(
+TASK_EXECUTE_FACTORY.register_producer(
     models.Log.WORKFLOW_DATA_SQL_UPLOAD,
-    services.ExecuteSQLUpload())
+    services.ExecuteSQLUpload)

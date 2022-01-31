@@ -19,8 +19,8 @@ from rest_framework import status
 
 from ontask import models
 from ontask.action.evaluate import evaluate_action
-from ontask.action.services.edit_manager import ActionOutEditManager
-from ontask.action.services.run_manager import ActionRunManager
+from ontask.action.services.edit_factory import ActionOutEditProducerBase
+from ontask.action.services.run_factory import ActionRunProducerBase
 from ontask.core import SessionPayload, is_instructor
 from ontask.oauth import services
 
@@ -185,48 +185,40 @@ def _send_single_canvas_message(
     return result_msg, response_status
 
 
-class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
+class ActionEditProducerCanvasEmail(ActionOutEditProducerBase):
     """Class to serve running an email action."""
 
-    def extend_edit_context(
-        self,
-        action: models.Action,
-        context: Dict,
-    ):
-        """Get the context dictionary to render the GET request.
+    def get_context_data(self, **kwargs) -> Dict:
+        """Add conditions, conditions to clone and columns to show stats."""
+        context = super().get_context_data(**kwargs)
+        self.add_conditions(context)
+        self.add_conditions_to_clone(context)
+        self.add_columns_show_stats(context)
+        return context
 
-        :param workflow: Workflow being used
-        :param action: Action being used
-        :param context: Initial dictionary to extend
-        :return: Nothing
-        """
-        self.add_conditions(action, context)
-        self.add_conditions_to_clone(action, context)
-        self.add_columns_show_stats(action, context)
 
-    def process_run_post(
-        self,
-        request: http.HttpRequest,
-        action: models.Action,
-        payload: SessionPayload,
-    ) -> http.HttpResponse:
+class ActionRunProducerCanvasEmail(ActionRunProducerBase):
+
+    log_event = models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL
+
+    def form_valid(self, form) -> http.HttpResponse:
         """Process the VALID POST request."""
-        if payload.get('confirm_items'):
+        if self.payload.get('confirm_items'):
             # Create a dictionary in the session to carry over all the
             # information to execute the next pages
-            payload['button_label'] = gettext('Send')
-            payload['valuerange'] = 2
-            payload['step'] = 2
+            self.payload['button_label'] = gettext('Send')
+            self.payload['valuerange'] = 2
+            self.payload['step'] = 2
             continue_url = 'action:item_filter'
         else:
             continue_url = 'action:run_done'
 
-        payload.store_in_session(request.session)
+        self.payload.store_in_session(self.request.session)
 
         # Check for the CANVAS token and proceed to the continue_url
         return _canvas_get_or_set_oauth_token(
-            request,
-            payload['target_url'],
+            self.request,
+            self.payload['target_url'],
             continue_url)
 
     def execute_operation(

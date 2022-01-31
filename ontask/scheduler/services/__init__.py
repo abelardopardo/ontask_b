@@ -1,7 +1,7 @@
 """All services for scheduled operation objects."""
 from ontask.scheduler.services.action_producers import (
-    ScheduledOperationUpdateEmail, ScheduledOperationUpdateEmailReport,
-    ScheduledOperationUpdateJSON, ScheduledOperationUpdateJSONReport,
+    ScheduledOperationEmailUpdateView, ScheduledOperationEmailReportUpdateView,
+    ScheduledOperationJSONUpdateView, ScheduledOperationJSONReportUpdateView,
 )
 from ontask.scheduler.services.edit_factory import SCHEDULE_CRUD_FACTORY
 from ontask.scheduler.services.errors import OnTaskScheduleIncorrectTimes

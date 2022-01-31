@@ -1,53 +1,39 @@
-# -*- coding: utf-8 -*-
-
 """Factory handling the various Scheduled Item Producers."""
 from datetime import datetime
 from typing import Dict, Optional
 
 from django import http
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.utils.dateparse import parse_datetime
 from django.views import generic
 import pytz
 
-from ontask import models
-from ontask.core import SessionPayload
+from ontask import core, models
 
 
-class SchedulerCRUDFactory:
+class SchedulerCRUDFactory(core.FactoryBase):
     """Factory to store Views to manage scheduled operations.
 
-    Each item in the dictionary stores a tuple with:
+    Producer stores a tuple with:
     - Class.as_view() for view processing
     - Class to execute other methods
     """
 
-    def __init__(self):
-        """Initialize the set of _creators."""
-        self._producers = {}
+    def register_producer(self, operation_type: str, producer_item):
+        """Register the given item that will handle the scheduling."""
+        to_register = (producer_item.as_view(), producer_item)
+        super().register_producer(operation_type, to_register)
 
-    def _get_creator(self, operation_type):
-        """Get the creator for the given operation_type and args."""
-        creator_obj = self._producers.get(operation_type)
-        if not creator_obj:
-            raise ValueError(operation_type)
-        return creator_obj
-
-    def register_producer(self, operation_type: str, saver_cls):
-        """Register the given object that will perform the save operation."""
-        if operation_type in self._producers:
-            raise ValueError(operation_type)
-        view_function = saver_cls.as_view()
-        self._producers[operation_type] = (view_function, saver_cls)
-
-        if operation_type == saver_cls.operation_type:
-            return
-
-        # If the object has different operation_type field than the given
-        # operation type, register it with both (one is for creation, the other
-        # is once created, for editing)
-        self._producers[saver_cls.operation_type] = (view_function, saver_cls)
+        if (
+            producer_item.operation_type != operation_type
+            and producer_item.operation_type not in self._producers
+        ):
+            # If the item has different operation_type field than the given
+            # operation type, register it with both (one is for creation,
+            # the other
+            # is once created, for editing)
+            super().register_producer(producer_item.operation_type, to_register)
 
     def crud_view(
         self,
@@ -70,21 +56,21 @@ class SchedulerCRUDFactory:
         """
         try:
             # Invoke the corresponding view processor
-            view_processor, __ = self._get_creator(operation_type)
+            view_processor, __ = self._get_producer(operation_type)
             return view_processor(
                 request,
                 operation_type=operation_type,
                 **kwargs)
         except ValueError:
-            return render(kwargs.get('request'), 'base.html', {})
+            return redirect('home')
 
-    def crud_create_or_update(
+    def api_create_or_update(
         self,
         user,
         data_dict: Dict,
         s_item: Optional[models.ScheduledOperation] = None,
     ):
-        """Execute the corresponding create/update function.
+        """Execute the function to create/update a scheduled operation.
 
         :param user: User creating the operation
         :param data_dict: Dictionary with all the information required to
@@ -92,15 +78,15 @@ class SchedulerCRUDFactory:
         :param s_item: Optional existing object
         :return: created object
         """
-        __, cru_processor = self._get_creator(data_dict['operation_type'])
+        __, api_producer = self._get_producer(data_dict['operation_type'])
 
-        return cru_processor.create_or_update(user, data_dict, s_item)
-
-
-schedule_crud_factory = SchedulerCRUDFactory()
+        return api_producer.create_or_update(user, data_dict, s_item)
 
 
-class ScheduledOperationUpdateBase(generic.UpdateView):
+SCHEDULE_CRUD_FACTORY = SchedulerCRUDFactory()
+
+
+class ScheduledOperationUpdateBaseView(generic.UpdateView):
     """Base class for all the scheduled operation CRUD producers.
 
     :Attribute operation_type: The value to store in the scheduled item
@@ -128,7 +114,7 @@ class ScheduledOperationUpdateBase(generic.UpdateView):
     def _create_payload(
         request: http.HttpRequest,
         **kwargs
-    ) -> SessionPayload:
+    ) -> core.SessionPayload:
         """Create the session payload to carry through the operation.
 
         :param kwargs: key/value pairs for the call
@@ -194,9 +180,9 @@ class ScheduledOperationUpdateBase(generic.UpdateView):
     def setup(self, request, *args, **kwargs):
         """Store various fields in view, not kwargs."""
         super().setup(request, *args, **kwargs)
-        self.workflow = kwargs.pop('workflow', None)
-        self.action = kwargs.pop('action', None)
-        self.scheduled_item = kwargs.pop('scheduled_item', None)
+        self.workflow = kwargs.get('workflow', None)
+        self.action = kwargs.get('action', None)
+        self.scheduled_item = kwargs.get('scheduled_item', None)
         if self.scheduled_item:
             self.object = self.scheduled_item
             self.action = self.scheduled_item.action
@@ -208,8 +194,8 @@ class ScheduledOperationUpdateBase(generic.UpdateView):
         ):
             self.connection = models.SQLConnection.objects.get(
                 pk=self.scheduled_item.payload['connection_id'])
-        self.op_payload = kwargs.pop('payload', self._create_payload(request))
-        self.is_finish_request = self.kwargs.pop('is_finish_request', False)
+        self.op_payload = kwargs.get('payload', self._create_payload(request))
+        self.is_finish_request = self.kwargs.get('is_finish_request', False)
         return
 
     def dispatch(self, request, *args, **kwargs):
@@ -240,7 +226,7 @@ class ScheduledOperationUpdateBase(generic.UpdateView):
             'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
             'payload': self.op_payload,
             'frequency': frequency,
-            'valuerange': self.op_payload.get('valuerange'),
+            'valuerange': range(2),
             'all_false_conditions': all_false_conditions})
         return context
 
@@ -257,7 +243,7 @@ class ScheduledOperationUpdateBase(generic.UpdateView):
     def finish(
         self,
         request: http.HttpRequest,
-        payload: SessionPayload,
+        payload: core.SessionPayload,
     ) -> Optional[http.HttpResponse]:
         """Finalize the creation of a scheduled operation.
 

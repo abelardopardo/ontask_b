@@ -77,28 +77,30 @@ urlpatterns = [
 
 urlpatterns = format_suffix_patterns(urlpatterns)
 
-EMAIL_PROCESSOR = services.ScheduledOperationUpdateEmail
-
-schedule_crud_factory.register_producer(
+services.SCHEDULE_CRUD_FACTORY.register_producer(
     models.Action.PERSONALIZED_TEXT,
-    EMAIL_PROCESSOR)
+    services.ScheduledOperationEmailUpdateView)
 
-schedule_crud_factory.register_producer(
-    models.Action.RUBRIC_TEXT,
-    EMAIL_PROCESSOR)
-
-schedule_crud_factory.register_producer(
-    models.Action.PERSONALIZED_JSON,
-    services.ScheduledOperationUpdateJSON)
-
-schedule_crud_factory.register_producer(
+services.SCHEDULE_CRUD_FACTORY.register_producer(
     models.Action.EMAIL_REPORT,
-    services.ScheduledOperationUpdateEmailReport)
+    services.ScheduledOperationEmailReportUpdateView)
 
-schedule_crud_factory.register_producer(
+services.SCHEDULE_CRUD_FACTORY.register_producer(
+    models.Action.RUBRIC_TEXT,
+    services.ScheduledOperationEmailUpdateView)
+
+services.SCHEDULE_CRUD_FACTORY.register_producer(
+    models.Action.PERSONALIZED_JSON,
+    services.ScheduledOperationJSONUpdateView)
+
+services.SCHEDULE_CRUD_FACTORY.register_producer(
     models.Action.JSON_REPORT,
-    services.ScheduledOperationUpdateJSONReport)
+    services.ScheduledOperationJSONReportUpdateView)
 
-schedule_crud_factory.register_producer(
+# services.SCHEDULE_CRUD_FACTORY.register_producer(
+#     models.Action.PERSONALIZED_CANVAS_EMAIL,
+#     services.ScheduleOperation???)
+
+services.SCHEDULE_CRUD_FACTORY.register_producer(
     models.Log.WORKFLOW_DATA_SQL_UPLOAD,
     services.ScheduledOperationUpdateSQLUpload)

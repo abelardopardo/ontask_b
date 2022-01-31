@@ -21,8 +21,8 @@ from ontask import (
 from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
-from ontask.action.services.edit_manager import ActionOutEditManager
-from ontask.action.services.run_manager import ActionRunManager
+from ontask.action.services.edit_factory import ActionOutEditProducerBase
+from ontask.action.services.run_factory import ActionRunProducerBase
 from ontask.celery import get_task_logger
 from ontask.dataops import pandas, sql
 
@@ -327,23 +327,26 @@ def _deliver_msg_burst(
             sleep(wait_time)
 
 
-class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
-    """Class to serve running an email action."""
+class ActionEditProducerEmail(ActionOutEditProducerBase):
+    """Class to edit Email Actions."""
 
-    def extend_edit_context(
-        self,
-        action: models.Action,
-        context: Dict,
-    ):
-        """Get the context dictionary to render the GET request.
+    def get_context_data(self, **kwargs) -> Dict:
+        """Add additional elements to the render context.
 
-        :param action: Action being used
-        :param context: Initial dictionary to extend
-        :return: Nothing
+        :return: Modify the context
         """
-        self.add_conditions(action, context)
-        self.add_conditions_to_clone(action, context)
-        self.add_columns_show_stats(action, context)
+        context = super().get_context_data(**kwargs)
+        self.add_conditions(context)
+        self.add_conditions_to_clone(context)
+        self.add_columns_show_stats(context)
+        return context
+
+
+class ActionRunProducerEmail(ActionRunProducerBase):
+    """Class to Run Email Actions."""
+
+    # Type of event to log when running the action
+    log_event = models.Log.ACTION_RUN_PERSONALIZED_EMAIL
 
     def execute_operation(
         self,
@@ -404,26 +407,23 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         self._update_excluded_items(payload, [msg.to[0] for msg in msgs])
 
 
-class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
+class ActionEditProducerEmailReport(ActionOutEditProducerBase):
     """Class to serve running an email action."""
 
-    def extend_edit_context(
-        self,
-        action: models.Action,
-        context: Dict,
-    ):
-        """Extend the context dictionary to render the GET request.
+    def get_context_data(self, **kwargs) -> Dict:
+        """Add attachments and available views."""
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'attachments': self.action.attachments.all(),
+            'available_views': self.action.workflow.views.exclude(
+            id__in=self.action.attachments.all())})
+        return context
 
-        It adds the attachments in the action, and the views available to
-        attach (those in the workflow not in the action)
 
-        :param action: Action being used
-        :param context: Initial dictionary to extend
-        :return: Nothing
-        """
-        context['attachments'] = action.attachments.all()
-        context['available_views'] = action.workflow.views.exclude(
-            id__in=action.attachments.all())
+class ActionRunProducerEmailReport(ActionRunProducerBase):
+    """Class to serve running an email action."""
+
+    log_event = models.Log.ACTION_RUN_EMAIL_REPORT
 
     def execute_operation(
         self,

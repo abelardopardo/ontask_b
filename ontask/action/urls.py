@@ -2,8 +2,9 @@
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 
-from ontask import models, tasks
+from ontask import models
 from ontask.action import forms, services, views
+
 
 app_name = 'action'
 
@@ -32,7 +33,7 @@ urlpatterns = [
     path('<int:pk>/clone/', views.ActionCloneView.as_view(), name='clone'),
 
     # Edit action
-    path('<int:pk>/edit/', views.ActionEditView.as_view(), name='edit'),
+    path('<int:pk>/edit/', views.action_edit, name='edit'),
 
     # Nuke the action
     path('<int:pk>/delete/', views.ActionDeleteView.as_view(), name='delete'),
@@ -57,10 +58,10 @@ urlpatterns = [
     path('import/', views.ActionImportView.as_view(), name='import'),
 
     # Run action
-    path('<int:pk>/run/', views.ActionRunView.as_view(), name='run'),
+    path('<int:pk>/run/', views.action_run_initiate, name='run'),
 
     # Run ZIP action
-    path('<int:pk>/zip/', views.ActionRunZipView.as_view(), name='zip_action'),
+    path('<int:pk>/zip/', views.action_run_zip, name='zip_action'),
 
     # Personalised text and JSON action steps
     path(
@@ -79,7 +80,7 @@ urlpatterns = [
         name='remove_attachment'),
 
     # URL to use when action finishes run
-    path('run_done/', views.ActionRunDoneView.as_view(), name='run_done'),
+    path('run_done/', views.action_run_finish, name='run_done'),
     path(
         'zip_export/',
         views.ActionZipExportView.as_view(),
@@ -187,123 +188,155 @@ urlpatterns = [
 
 # PERSONALIZED TEXT
 # ------------------------------------------------------------------------------
-EMAIL_PRODUCER = services.ActionManagerEmail(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.EmailActionRunForm,
-    run_template='action/request_email_data.html',
-    log_event=models.Log.ACTION_RUN_PERSONALIZED_EMAIL)
-
-EMAIL_REPORT_PRODUCER = services.ActionManagerEmailReport(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.SendListActionRunForm,
-    run_template='action/request_email_report_data.html',
-    log_event=models.Log.ACTION_RUN_EMAIL_REPORT)
-
-services.ACTION_PROCESS_FACTORY.register_producer(
+services.ACTION_EDIT_FACTORY.register_producer(
     models.Action.PERSONALIZED_TEXT,
-    EMAIL_PRODUCER)
-tasks.task_execute_factory.register_producer(
+    services.ActionEditProducerEmail.as_view(
+        form_class=forms.EditActionOutForm,
+        template_name='action/edit_out.html'))
+
+services.ACTION_RUN_FACTORY.register_producer(
+    models.Action.PERSONALIZED_TEXT,
+    (
+        services.ActionRunProducerEmail.as_view(
+            form_class=forms.EmailActionRunForm,
+            template_name='action/request_email_data.html'),
+        services.ActionRunProducerEmail))
+
+services.TASK_EXECUTE_FACTORY.register_producer(
     models.Log.ACTION_RUN_PERSONALIZED_EMAIL,
-    EMAIL_PRODUCER)
+    services.ActionRunProducerEmail)
 
 # EMAIL REPORT
 # ------------------------------------------------------------------------------
-services.ACTION_PROCESS_FACTORY.register_producer(
+services.ACTION_EDIT_FACTORY.register_producer(
     models.Action.EMAIL_REPORT,
-    EMAIL_REPORT_PRODUCER)
-tasks.task_execute_factory.register_producer(
+    services.ActionEditProducerEmailReport.as_view(
+        form_class=forms.EditActionOutForm,
+        template_name='action/edit_out.html'))
+
+services.ACTION_RUN_FACTORY.register_producer(
+    models.Action.EMAIL_REPORT,
+    (
+        services.ActionRunProducerEmailReport.as_view(
+            form_class=forms.SendListActionRunForm,
+            template_name='action/request_email_report_data.html'),
+        services.ActionRunProducerEmailReport))
+
+services.TASK_EXECUTE_FACTORY.register_producer(
     models.Log.ACTION_RUN_EMAIL_REPORT,
-    EMAIL_REPORT_PRODUCER)
+    services.ActionRunProducerEmailReport)
+
 
 # RUBRIC
 # ------------------------------------------------------------------------------
-RUBRIC_PRODUCER = services.ActionManagerRubric(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_rubric.html',
-    run_form_class=forms.EmailActionRunForm,
-    run_template='action/request_email_data.html',
-    log_event=models.Log.ACTION_RUN_PERSONALIZED_EMAIL)
-
-services.ACTION_PROCESS_FACTORY.register_producer(
+services.ACTION_EDIT_FACTORY.register_producer(
     models.Action.RUBRIC_TEXT,
-    RUBRIC_PRODUCER)
+    services.ActionEditProducerRubric.as_view(
+        form_class=forms.EditActionOutForm,
+        template_name='action/edit_rubric.html'))
+
+services.ACTION_RUN_FACTORY.register_producer(
+    models.Action.RUBRIC_TEXT,
+    (
+        services.ActionRunProducerEmail.as_view(
+            form_class=forms.EmailActionRunForm,
+            template_name='action/request_email_data.html'),
+        services.ActionRunProducerEmail))
 
 # PERSONALIZED JSON
 # ------------------------------------------------------------------------------
-JSON_PRODUCER = services.ActionManagerJSON(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.JSONActionRunForm,
-    run_template='action/request_json_data.html',
-    log_event=models.Log.ACTION_RUN_PERSONALIZED_JSON)
-
-JSON_REPORT_PRODUCER = services.ActionManagerJSONReport(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.JSONReportActionRunForm,
-    run_template='action/request_json_report_data.html',
-    log_event=models.Log.ACTION_RUN_JSON_REPORT)
-
-services.ACTION_PROCESS_FACTORY.register_producer(
+services.ACTION_EDIT_FACTORY.register_producer(
     models.Action.PERSONALIZED_JSON,
-    JSON_PRODUCER)
+    services.ActionOutEditProducerBase.as_view(
+        form_class=forms.EditActionOutForm,
+        template_name='action/edit_out.html'))
 
-tasks.task_execute_factory.register_producer(
+services.ACTION_RUN_FACTORY.register_producer(
+    models.Action.PERSONALIZED_JSON,
+    (
+        services.ActionRunProducerJSON.as_view(
+            form_class=forms.JSONActionRunForm,
+            template_name='action/request_json_data.html'),
+        services.ActionRunProducerJSON))
+
+services.TASK_EXECUTE_FACTORY.register_producer(
     models.Log.ACTION_RUN_PERSONALIZED_JSON,
-    JSON_PRODUCER)
+    services.ActionRunProducerJSON)
 
 # JSON REPORT
 # ------------------------------------------------------------------------------
-services.ACTION_PROCESS_FACTORY.register_producer(
+services.ACTION_EDIT_FACTORY.register_producer(
     models.Action.JSON_REPORT,
-    JSON_REPORT_PRODUCER)
+    services.ActionOutEditProducerBase.as_view(
+        form_class=forms.EditActionOutForm,
+        template_name='action/edit_out.html'))
 
-tasks.task_execute_factory.register_producer(
+services.ACTION_RUN_FACTORY.register_producer(
+    models.Action.JSON_REPORT,
+    (
+        services.ActionRunProducerJSONReport.as_view(
+            form_class=forms.JSONReportActionRunForm,
+            template_name='action/request_json_report_data.html'),
+        services.ActionRunProducerJSONReport))
+
+services.TASK_EXECUTE_FACTORY.register_producer(
     models.Log.ACTION_RUN_JSON_REPORT,
-    JSON_REPORT_PRODUCER)
+    services.ActionRunProducerJSONReport)
 
 # CANVAS PERSONALIZED EMAIL
 # ------------------------------------------------------------------------------
-CANVAS_EMAIL_PRODUCER = services.ActionManagerCanvasEmail(
-    edit_form_class=forms.EditActionOutForm,
-    edit_template='action/edit_out.html',
-    run_form_class=forms.CanvasEmailActionRunForm,
-    run_template='action/request_canvas_email_data.html',
-    log_event=models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL)
-
-services.ACTION_PROCESS_FACTORY.register_producer(
+services.ACTION_EDIT_FACTORY.register_producer(
     models.Action.PERSONALIZED_CANVAS_EMAIL,
-    CANVAS_EMAIL_PRODUCER)
+    services.ActionEditProducerCanvasEmail.as_view(
+        form_class=forms.EditActionOutForm,
+        template_name='action/edit_out.html'))
 
-tasks.task_execute_factory.register_producer(
+services.ACTION_RUN_FACTORY.register_producer(
+    models.Action.PERSONALIZED_CANVAS_EMAIL,
+    (
+        services.ActionRunProducerCanvasEmail.as_view(
+            form_class=forms.CanvasEmailActionRunForm,
+            template_name='action/request_canvas_email_data.html'),
+        services.ActionRunProducerCanvasEmail))
+
+services.TASK_EXECUTE_FACTORY.register_producer(
     models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL,
-    CANVAS_EMAIL_PRODUCER)
+    services.ActionRunProducerCanvasEmail)
 
 # ZIP action
 # ------------------------------------------------------------------------------
-services.ACTION_PROCESS_FACTORY.register_producer(
+services.ACTION_RUN_FACTORY.register_producer(
     models.action.ZIP_OPERATION,
-    services.ActionManagerZip(
-        run_form_class=forms.ZipActionRunForm,
-        run_template='action/action_zip_step1.html',
-        log_event=models.Log.ACTION_ZIP))
+    (
+        services.ActionRunProducerZip.as_view(
+            form_class=forms.ZipActionRunForm,
+            template_name='action/action_zip_step1.html'),
+        services.ActionRunProducerZip))
 
 # SURVEY
 # ------------------------------------------------------------------------------
-services.ACTION_PROCESS_FACTORY.register_producer(
+services.ACTION_EDIT_FACTORY.register_producer(
     models.Action.SURVEY,
-    services.ActionManagerSurvey(
-        edit_template='action/edit_in.html',
-        run_template='action/run_survey.html',
-        log_event=models.Log.ACTION_SURVEY_INPUT))
+    services.ActionEditProducerSurvey.as_view(
+        template_name='action/edit_in.html'))
+
+services.ACTION_RUN_FACTORY.register_producer(
+    models.Action.SURVEY,
+    (
+        services.ActionRunProducerSurvey.as_view(
+            template_name='action/run_survey.html'),
+        None))
 
 # TODO_LIST action
 # ------------------------------------------------------------------------------
-services.ACTION_PROCESS_FACTORY.register_producer(
+services.ACTION_EDIT_FACTORY.register_producer(
     models.Action.TODO_LIST,
-    services.ActionManagerSurvey(
-        edit_template='action/edit_in.html',
-        run_template='action/run_survey.html',
-        log_event=models.Log.ACTION_TODO_INPUT))
+    services.ActionEditProducerSurvey.as_view(
+        template_name='action/edit_in.html'))
+
+services.ACTION_RUN_FACTORY.register_producer(
+    models.Action.TODO_LIST,
+    (
+        services.ActionRunProducerTODO.as_view(
+            template_name='action/run_survey.html'),
+        None))
