@@ -543,7 +543,7 @@ AWS_S3_FILE_OVERWRITE = False
 CELERY_ACCEPT_CONTENT = ['application/json', 'pickle']
 CELERY_SESSION_CLEANUP_CRONTAB = SESSION_CLEANUP_CRONTAB.split()
 CELERY_BEAT_SCHEDULE = {
-    'ontask_scheduler': {
+    '__ONTASK_CLEANUP_SESSION_TASK': {
         'task': 'ontask.tasks.session_cleanup.session_cleanup',
         'schedule': crontab(
             minute=CELERY_SESSION_CLEANUP_CRONTAB[0],
