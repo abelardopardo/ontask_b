@@ -461,6 +461,7 @@ class ActionViewRunCanvasEmailDone(ActionViewRunBasic):
             method='POST',
             session_payload={
                 'item_column': column.pk,
+                'operation_type': action.action_type,
                 'action_id': action.id,
                 'target_url': 'Server one',
                 'prev_url': reverse('action:run', kwargs={'pk': action.id}),
