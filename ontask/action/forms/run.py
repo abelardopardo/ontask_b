@@ -527,8 +527,8 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
             column_names=[form_data['item_column'].name],
             filter_formula=self.action.get_filter_formula())
         if any(
-            not (
-                isinstance(row_item[0], int) or float.is_integer(row_item[0]))
+            not isinstance(row_item[0], (int, float))
+            or not float.is_integer(float(row_item[0]))
             for row_item in user_ids
         ):
             self.add_error(
