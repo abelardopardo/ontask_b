@@ -41,9 +41,9 @@ class ActionColumnConditionTuple(models.Model):
 
     condition = models.ForeignKey(
         Condition,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
-        blank=False,
+        blank=True,
         related_name='column_condition_pair',
     )
 
