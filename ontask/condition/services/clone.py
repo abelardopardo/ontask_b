@@ -40,13 +40,16 @@ def do_clone_condition(
     new_condition.save()
 
     try:
-        # Update the many to many field.
-        new_condition.columns.set(new_condition.action.workflow.columns.filter(
+        # Update the many-to-many field.
+        new_condition.columns.set(new_action.workflow.columns.filter(
             name__in=formula.get_variables(new_condition.formula),
         ))
     except Exception as exc:
         new_condition.delete()
         raise exc
+
+    new_action.rows_all_false = None
+    new_action.save(update_fields=['rows_all_false'])
 
     condition.log(
         user,
