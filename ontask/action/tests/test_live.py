@@ -891,7 +891,7 @@ class ActionServeLongSurvey(tests.LongSurveyFixture, tests.OnTaskLiveTestCase):
         self.open_action_run(self.action_name, is_action_in=True)
 
         pages = self.selenium.find_elements_by_xpath(
-            '//li[contains(@class, "paginate_button")]')
+            '//a[contains(@class, "paginate_button")]')
         self.assertEqual(len(pages), 4)
 
         self.logout()
