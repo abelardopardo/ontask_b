@@ -6,7 +6,7 @@ from psycopg2 import sql
 from psycopg2.extras import DictCursor
 
 from ontask import OnTaskDBIdentifier
-from ontask.dataops import formula, sql
+from ontask.dataops import formula
 from ontask.dataops.sql.table_queries import (
     get_boolean_clause, get_select_query,
 )
