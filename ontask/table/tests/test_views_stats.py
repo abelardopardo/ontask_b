@@ -4,6 +4,7 @@ from rest_framework import status
 
 from ontask import tests
 from ontask.dataops import pandas
+import ontask.dataops.sql.row_queries
 
 
 class TableTestStatView(tests.SimpleTableFixture, tests.OnTaskTestCase):
@@ -29,7 +30,7 @@ class TableTestStatView(tests.SimpleTableFixture, tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Get one of the rows
-        r_val = pandas.get_table_row_by_index(self.workflow, None, 1)
+        r_val = ontask.dataops.sql.row_queries.get_table_row_by_index(self.workflow, None, 1)
         resp = self.get_response(
             'table:stat_table',
             req_params={

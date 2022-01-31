@@ -262,32 +262,6 @@ def store_workflow_table(
     workflow.save(update_fields=['nrows', 'query_builder_ops'])
 
 
-def get_table_row_by_index(
-    workflow,
-    filter_formula,
-    idx: int,
-):
-    """Select the set of elements in the row with the given index.
-
-    :param workflow: Workflow object storing the data
-    :param filter_formula: Condition object to filter the data (or None)
-    :param idx: Row number to get (first row is idx = 1)
-    :return: A dictionary with the (column_name, value) data or None if the
-     index is out of bounds
-    """
-    # Get the data
-    df_data = sql.get_rows(
-        workflow.get_data_frame_table_name(),
-        column_names=workflow.get_column_names(),
-        filter_formula=filter_formula)
-
-    # If the data is not there, return None
-    if idx > df_data.rowcount:
-        return None
-
-    return df_data.fetchall()[idx - 1]
-
-
 def add_column_to_df(
     data_frame: pd.DataFrame,
     column,

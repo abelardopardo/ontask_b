@@ -14,10 +14,10 @@ from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
-import ontask
+from ontask import OnTaskException
 from ontask import models
 from ontask.action.evaluate.template import render_action_template
-from ontask.dataops import formula, pandas, sql
+from ontask.dataops import formula, sql
 
 
 def _render_tuple_result(
@@ -74,7 +74,7 @@ def action_condition_evaluation(
                 condition['_formula'],
                 formula.EVAL_EXP,
                 row_values)
-        except ontask.OnTaskException:
+        except OnTaskException:
             # Something went wrong evaluating a condition. Stop.
             return None
     return condition_eval
@@ -108,7 +108,7 @@ def get_action_evaluation_context(
                     condition['_formula'],
                     formula.EVAL_EXP,
                     row_values)
-            except ontask.OnTaskException:
+            except OnTaskException:
                 # Something went wrong evaluating a condition. Stop.
                 return None
 
@@ -134,7 +134,7 @@ def evaluate_action(
     3) Loop over each data row and
       3.1) Evaluate the conditions with respect to the values in the row
       3.2) Create a context with the result of evaluating the conditions,
-           attributes and column names to values
+           attributes and column names
       3.3) Run the template with the context
       3.4) Run the optional string argument with the template and the context
       3.5) Select the optional column_name
@@ -173,9 +173,9 @@ def evaluate_action(
         )
 
     if settings.DEBUG:
-        # Check that selected_count is equal to rows.rowcount
+        # Check that selected_count is rows.rowcount
         if action.filter and action.filter.selected_count != rows.rowcount:
-            raise ontask.OnTaskException(
+            raise OnTaskException(
                 'Inconsistent selected_count field value')
 
     return list_of_renders
@@ -199,7 +199,7 @@ def get_row_values(
 
     # If row_idx is an integer, get the data by index, otherwise, by key
     if isinstance(row_idx, int):
-        row = pandas.get_table_row_by_index(
+        row = sql.row_queries.get_table_row_by_index(
             action.workflow,
             filter_formula,
             row_idx,

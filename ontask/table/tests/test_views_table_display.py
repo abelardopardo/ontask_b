@@ -5,6 +5,7 @@ from rest_framework import status
 
 from ontask import tests
 from ontask.dataops import pandas
+import ontask.dataops.sql.row_queries
 from ontask.table import views
 
 
@@ -62,7 +63,7 @@ class TableTestViewTableDisplay(tests.SimpleTableFixture, tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Delete one row of the table
-        r_val = pandas.get_table_row_by_index(self.workflow, None, 1)
+        r_val = ontask.dataops.sql.row_queries.get_table_row_by_index(self.workflow, None, 1)
         resp = self.get_response(
             'table:row_delete',
             req_params={
