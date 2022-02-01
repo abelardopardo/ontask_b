@@ -39,15 +39,12 @@ class ViewAddForm(forms.ModelForm):
         """
         form_data = super().clean()
 
-        if form_data['columns'].count() == 0:
+        if not form_data['columns'].exists():
             self.add_error(
                 None,
                 _('The view needs at least one column to show'))
 
-        if not next(
-            (col for col in form_data['columns'] if col.is_key),
-            None,
-        ):
+        if not form_data['columns'].filter(is_key=True).exists():
             self.add_error(
                 None,
                 _('There needs to be at least one key column'))

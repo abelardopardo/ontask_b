@@ -41,7 +41,7 @@ class TableDisplayBasicView(UserIsInstructor, generic.TemplateView):
         context.update({
             'query_builder_ops': self.workflow.get_query_builder_ops(),
             'views': self.workflow.views.all(),
-            'no_actions': self.workflow.actions.count() == 0,
+            'no_actions': not self.workflow.actions.exists(),
             'vis_scripts': PlotlyHandler.get_engine_scripts(),
         })
         return context

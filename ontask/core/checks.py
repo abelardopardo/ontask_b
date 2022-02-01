@@ -14,7 +14,7 @@ def _check_logs(workflow: models.Workflow) -> bool:
     :param workflow: Workflow being processed.
     :result: True or a failed assertion
     """
-    assert(workflow.logs.exclude(name__in=models.Log.LOG_TYPES).count() == 0)
+    assert(not workflow.logs.exclude(name__in=models.Log.LOG_TYPES).exists())
     return True
 
 
@@ -96,7 +96,7 @@ def check_action(action: models.Action) -> bool:
     # Conditions should not have the number of columns equal to zero and should
     # not be filters.
     for cond in action.conditions.all():
-        assert cond.columns.count() != 0
+        assert cond.columns.exists()
 
     return True
 

@@ -29,9 +29,9 @@ class UploadShowSourcesView(
             'value_range': (
                 range(5) if self.workflow.has_data_frame else range(3)),
             'sql_enabled': models.SQLConnection.objects.filter(
-                enabled=True).count() > 0,
+                enabled=True).exists(),
             'athena_enabled': models.AthenaConnection.objects.filter(
-                enabled=True).count() > 0})
+                enabled=True).exists()})
         return context
 
 

@@ -196,7 +196,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                 raise ontask.OnTaskException(
                     'Workflow without DF in get_table_row_count_all_false')
 
-            if self.conditions.count() == 0:
+            if not self.conditions.exists():
                 # Condition list is either None or empty. No restrictions.
                 return []
 

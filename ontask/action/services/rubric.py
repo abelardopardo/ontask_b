@@ -70,7 +70,7 @@ def _create_rubric_table(
     table_data = []
     cell_ctx = {'action_id': action.id}
     for criterion in criteria:
-        cell_ctx['column_id'] = criterion.column.id
+        cell_ctx['column_id'] = criterion.column_id
         rubric_row = OrderedDict([(
             'criterion',
             render_to_string(

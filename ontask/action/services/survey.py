@@ -199,7 +199,7 @@ def create_survey_table(
     :param workflow: Workflow being processed
     :param action: Action representing the survey
     :param dt_page: Data tables server side paging object
-    :return : JSon respnse
+    :return : JSon response
     """
     columns = [ccpair.column for ccpair in action.column_condition_pair.all()]
     query_set = _create_initial_qs(

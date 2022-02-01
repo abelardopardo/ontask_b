@@ -62,7 +62,7 @@ class ActionColumnConditionTuple(models.Model):
             'action_name': self.action.name,
             'action_type': self.action.action_type,
             'column_name': self.column.name,
-            'workflow_id': self.action.workflow.id,
+            'workflow_id': self.action.workflow_id,
             'changes_allowed': self.changes_allowed}
 
         if self.condition:

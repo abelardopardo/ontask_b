@@ -59,7 +59,7 @@ def create_dictionary_table_display_ss(
         None)
     key_name = escape(key_name)
 
-    # Post processing + adding operation columns and performing the search
+    # Post-processing + adding operation columns and performing the search
     final_qs = []
     nitems = 0  # For counting the number of elements in the result
     for row in qs[dt_page.start:dt_page.start + dt_page.length]:

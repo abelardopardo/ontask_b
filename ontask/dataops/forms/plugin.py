@@ -161,7 +161,7 @@ class PluginInfoForm(forms.Form):
 
         # Input columns need to be non-empty
         columns = form_data.get('columns')
-        if columns and columns.count() == 0:
+        if columns and not columns.exists():
             self.add_error(
                 'columns',
                 _('The plugin needs at least one input column'),

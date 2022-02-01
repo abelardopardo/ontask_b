@@ -318,12 +318,12 @@ def delete_column(
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.
     for view in workflow.views.all():
-        if view.columns.count() == 0:
+        if not view.columns.exists():
             view.delete()
             continue
 
         # Views that loose the key column must be deleted as well
-        if view.columns.filter(is_key=True).count() == 0:
+        if not view.columns.filter(is_key=True).exists():
             view.delete()
 
 

@@ -189,10 +189,10 @@ class AthenaRequestConnectionParam(forms.Form):
         to_return = self.instance.get_missing_fields(self.cleaned_data)
 
         if self.workflow.has_data_frame:
-            if self.workflow.columns.filter(is_key=True).count() == 1:
+            try:
                 to_return['merge_key'] = self.workflow.columns.filter(
-                    is_key=True).first().name
-            else:
+                    is_key=True).get().name
+            except models.Workflow.MultipleObjectsReturned:
                 to_return['merge_key'] = self.cleaned_data['merge_key']
 
             to_return['merge_method'] = self.cleaned_data['how_merge']

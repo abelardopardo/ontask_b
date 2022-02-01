@@ -43,6 +43,7 @@ from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.db.models import QuerySet
+from django.db.models.functions import Lower
 from django.utils.translation import gettext_lazy as _
 
 from ontask import get_incorrect_email, is_correct_email, models
@@ -175,9 +176,8 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
             item_column = self.columns.get(pk=item_column_pk)
         else:
             # Try to guess if there is an "email" column
-            item_column = next(
-                (col for col in self.columns if col.name.lower() == 'email'),
-                None)
+            item_column = self.columns.annotate(
+                lower_name=Lower('name')).filter(lower_name='email').first()
         self.fields['item_column'].initial = item_column
 
         self.fields['confirm_items'].initial = bool(self.get_payload_field(

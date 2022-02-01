@@ -27,14 +27,14 @@ class ActionViewExport(ActionViewExportBasic):
 
         resp = self.get_response(
             'workflow:export_list_ask',
-            {'wid': action.workflow.id})
+            {'wid': action.workflow_id})
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue(action.name in str(resp.content))
 
         # Get export done
         resp = self.get_response(
             'workflow:export_list_ask',
-            {'wid': action.workflow.id},
+            {'wid': action.workflow_id},
             method='POST',
             req_params={'select_0': True})
 
