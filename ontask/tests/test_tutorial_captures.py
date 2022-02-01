@@ -128,7 +128,7 @@ class TutorialCaptures(ScreenTests):
             '//*[@id="div_id_columns"]//div[@class="sol-selection"]')
         for cname in ['email', 'Program', 'Enrolment Type']:
             options.find_element(
-            By.XPATH,
+                By.XPATH,
                 'div/label/div[normalize-space()="{0}"]'.format(cname)
             ).click()
 
@@ -737,19 +737,21 @@ class TutorialCaptures(ScreenTests):
 
         # Add the text for those that failed
         for topic in topics:
-            self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
-                ('{{% if {0} - Fail %}} Tips about {0} ' +
-                 'for those that failed.{{% endif %}}\n').format(
-                    topic[0:4].strip())
-            )
+            self.selenium.find_element(
+                By.CLASS_NAME,
+                'note-editable').send_keys(
+                    ('{{% if {0} - Fail %}} Tips about {0} ' +
+                     'for those that failed.{{% endif %}}\n').format(
+                        topic[0:4].strip()))
 
         # Add the text for those that passed
         for topic in topics:
-            self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
-                ('{{% if {0} - Passed %}}Tips about {0} ' +
-                 'for those that passed.{{% endif %}}\n').format(
-                    topic[0:4].strip())
-            )
+            self.selenium.find_element(
+                By.CLASS_NAME,
+                'note-editable').send_keys(
+                    ('{{% if {0} - Passed %}}Tips about {0} ' +
+                     'for those that passed.{{% endif %}}\n').format(
+                        topic[0:4].strip()))
 
         self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
             'Kind regards -- Jane Doe'

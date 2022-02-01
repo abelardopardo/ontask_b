@@ -416,7 +416,7 @@ class ActionEditProducerEmailReport(ActionOutEditProducerBase):
         context.update({
             'attachments': self.action.attachments.all(),
             'available_views': self.action.workflow.views.exclude(
-            id__in=self.action.attachments.all())})
+                id__in=self.action.attachments.all())})
         return context
 
 

@@ -9,7 +9,8 @@ from django.utils.translation import gettext, gettext_lazy as _
 from ontask import models
 from ontask.core import SessionPayload
 from ontask.scheduler import forms
-from ontask.scheduler.services.edit_factory import ScheduledOperationUpdateBaseView
+from ontask.scheduler.services.edit_factory import (
+    ScheduledOperationUpdateBaseView)
 from ontask.scheduler.services.items import create_timedelta_string
 
 

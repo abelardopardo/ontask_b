@@ -67,7 +67,6 @@ def action_run_finish(
 
     :param request: Http request (should be a post)
     :param workflow: Workflow object.
-    :param action: Action object
     :return: Schedule an action execution
     """
     payload = SessionPayload(request.session)

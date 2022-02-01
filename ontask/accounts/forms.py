@@ -95,13 +95,13 @@ class BetterReadOnlyPasswordHashWidget(ReadOnlyPasswordHashWidget):
         final_attrs = flatatt(self.build_attrs(attrs))
 
         if not value or not _is_password_usable(value):
-            summary = gettext("No password set.")
+            summary = gettext('No password set.')
         else:
             try:
                 identify_hasher(value)
             except ValueError:
-                summary = gettext("Invalid password format or unknown"
-                                   " hashing algorithm.")
+                summary = gettext(
+                    'Invalid password format or unknown hashing algorithm.')
             else:
                 summary = gettext('*************')
 

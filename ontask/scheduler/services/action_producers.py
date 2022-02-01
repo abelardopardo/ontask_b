@@ -12,7 +12,8 @@ from ontask.core import SessionPayload
 from ontask.scheduler.forms import (
     ScheduleEmailForm, ScheduleJSONForm, ScheduleJSONReportForm,
     ScheduleSendListForm)
-from ontask.scheduler.services.edit_factory import ScheduledOperationUpdateBaseView
+from ontask.scheduler.services.edit_factory import (
+    ScheduledOperationUpdateBaseView)
 from ontask.scheduler.services.items import create_timedelta_string
 
 

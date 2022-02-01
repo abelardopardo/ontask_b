@@ -3,8 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
-from ontask.core import OnTaskObjectIdField
-from ontask.condition.serializers import FilterSerializer, ColumnNameSerializer
+from ontask.condition.serializers import ColumnNameSerializer, FilterSerializer
 
 
 class ViewSerializer(serializers.ModelSerializer):

@@ -156,7 +156,6 @@ class ExecuteSQLUpload:
             return
 
         # At this point the operation is a merge
-
         dst_df = pandas.load_table(workflow.get_data_frame_table_name())
 
         dst_key = payload.get('dst_key')

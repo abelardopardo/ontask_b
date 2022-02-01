@@ -24,7 +24,7 @@ from ontask.models.view import View
 from ontask.models.workflow import Workflow
 
 # Regular expressions detecting the use of a variable, or the
-# presence of a "{% MACRONAME variable %} construct in a string (template)
+# presence of a "{% MACRO_NAME variable %} construct in a string (template)
 VAR_USE_RES = [
     # {{ varnane }}
     re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+}})'),
@@ -229,7 +229,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         """
 
         if self.filter and (
-            column is None or column in self.conditions.columns.all()):
+            column is None or column in self.conditions.columns.all()
+        ):
             # Recalculate number of selected rows for the filter
             old_count = self.filter.selected_count
             self.filter.save()

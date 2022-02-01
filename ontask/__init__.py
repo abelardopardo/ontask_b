@@ -215,6 +215,7 @@ def get_country_code(language_code: str) -> str:
     """Extract the country code from the language code."""
     return language_code[0:language_code.find('-')]
 
+
 def get_version() -> str:
     """Return the version string."""
     return __version__

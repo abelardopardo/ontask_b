@@ -43,10 +43,11 @@ class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
             for uemail in [x[1] for x in tests.user_info
                            if x[1].startswith('student')]:
                 self.assertEqual(
-                    int(data_frame.loc[data_frame['email'] == uemail,
-                               'EmailRead_1'].values[0]),
-                    idx
-                )
+                    int(
+                        data_frame.loc[
+                            data_frame['email'] == uemail,
+                            'EmailRead_1'].values[0]),
+                    idx)
 
 
 class ActionImport(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):

@@ -47,8 +47,8 @@ class ScheduledOperationAPIRetrieveUpdateDestroy(
 
     get: Returns the information for one of the scheduled actions
 
-    put: Modifies the scheduled action with the information included in the request
-    (all fields are overwritten)
+    put: Modifies the scheduled action with the information included in the
+    request (all fields are overwritten)
 
     delete: Delete the scheduled action.
     """

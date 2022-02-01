@@ -112,7 +112,7 @@ class OnTaskUser(models.Model):
     @functional.cached_property
     def is_instructor(self) -> bool:
         """Return boolean with is_instructor answer (cache)."""
-        return  (
+        return (
                 self.user.is_authenticated
                 and (
                     self.user.groups.filter(name='instructor').exists()

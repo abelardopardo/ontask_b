@@ -10,6 +10,7 @@ class TypeDict(dict):
             otype for dtype, otype in self.items() if key.startswith(dtype)
         )
 
+
 datatype_names = TypeDict({
     'object': 'string',
     'int64': 'integer',

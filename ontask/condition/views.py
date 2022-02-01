@@ -118,10 +118,7 @@ class FilterUpdateView(
         if not form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
-        return services.save_condition_form(
-            self.request,
-            form,
-            self.object)
+        return services.save_condition_form(self.request, form, self.object)
 
 
 @method_decorator(ajax_required, name='dispatch')

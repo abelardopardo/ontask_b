@@ -18,6 +18,7 @@ class ConditionAdmin(admin.ModelAdmin):
 
     search_fields = ['name', 'action', 'description_text']
 
+
 @admin.register(models.Filter)
 class FilterAdmin(admin.ModelAdmin):
     """Define Filter Admin."""

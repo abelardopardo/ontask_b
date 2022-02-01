@@ -36,7 +36,8 @@ class AthenaConnectionShowView(common.ConnectionShowView):
 
 class AthenaConnectionCreateView(
     common.ConnectionBaseCreateEditView,
-    generic.CreateView):
+    generic.CreateView
+):
     """Create a new Athena view."""
 
     model = models.AthenaConnection

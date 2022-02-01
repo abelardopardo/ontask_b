@@ -135,6 +135,7 @@ def ontask_datatables_bootstrap_js() -> str:
         'src="//cdn.datatables.net/v/bs4/cr-1.5.5/fc-4.0.1/r-2.2.9/rr-1.2.8/'
         'sc-2.0.5/datatables.min.js"></script>')
 
+
 @register.simple_tag
 def ontask_datetimepicker_css() -> str:
     """Provide the datetime picker CSS URL."""

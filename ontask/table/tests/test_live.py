@@ -418,7 +418,9 @@ class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
         )).select_by_visible_text("c1")
         self.selenium.find_element(By.NAME, "builder_rule_0_value_0").click()
         self.selenium.find_element(By.NAME, "builder_rule_0_value_0").clear()
-        self.selenium.find_element(By.NAME, "builder_rule_0_value_0").send_keys("5")
+        self.selenium.find_element(
+            By.NAME,
+            "builder_rule_0_value_0").send_keys("5")
 
         # Save the view
         self.selenium.find_element(

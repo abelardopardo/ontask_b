@@ -42,7 +42,7 @@ def schedule_task(s_item: models.ScheduledOperation):
             name=ONTASK_SCHEDULED_TASK_NAME_TEMPLATE.format(s_item.id),
             task='ontask.tasks.scheduled_ops.execute_scheduled_operation',
             args=json.dumps([s_item.id]),
-            enabled = enabled)
+            enabled=enabled)
     else:
         # Cases 3, 4, 7 and 8: crontab execution
         crontab_items = s_item.frequency.split()
@@ -58,7 +58,7 @@ def schedule_task(s_item: models.ScheduledOperation):
             name=ONTASK_SCHEDULED_TASK_NAME_TEMPLATE.format(s_item.id),
             task='ontask.tasks.scheduled_ops.execute_scheduled_operation',
             args=json.dumps([s_item.id]),
-            enabled = enabled)
+            enabled=enabled)
 
     models.ScheduledOperation.objects.filter(pk=s_item.id).update(task=task_id)
     s_item.refresh_from_db(fields=['task'])

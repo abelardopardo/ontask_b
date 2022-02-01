@@ -165,7 +165,8 @@ class ActionRunProducerBase(generic.FormView):
         """Finish processing the request after item selection."""
         # Get the information from the payload
         if not self.action:
-            self.action = workflow.actions.filter(pk=payload['action_id']).first()
+            self.action = workflow.actions.filter(
+                pk=payload['action_id']).first()
             if not self.action:
                 return redirect('home')
 

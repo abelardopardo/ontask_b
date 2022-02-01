@@ -61,7 +61,7 @@ def decorator_mixin(decorator):
 
     """
 
-    class Mixin(object):
+    class Mixin:
         __doc__ = decorator.__doc__
 
         @classmethod
@@ -94,7 +94,7 @@ class AuthDecoratorsMixin(
     pass
 
 
-class WithCurrentSiteMixin(object):
+class WithCurrentSiteMixin:
     def get_current_site(self):
         return get_current_site(self.request)
 
@@ -108,7 +108,7 @@ class WithCurrentSiteMixin(object):
         return kwargs
 
 
-class WithNextUrlMixin(object):
+class WithNextUrlMixin:
     redirect_field_name = REDIRECT_FIELD_NAME
     success_url = None
 

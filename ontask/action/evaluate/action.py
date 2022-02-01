@@ -191,7 +191,7 @@ def get_row_values(
     from the data frame.
 
     :param action: Action object
-    :param row_idx: Row index to use for evaluation
+    :param row_idx: index to use for evaluation
     :return Dictionary with the data row
     """
     # Step 1: Get the row of data from the DB
@@ -225,7 +225,7 @@ def evaluate_row_action_out(
     Given an action object and a row index:
     1) Evaluate the conditions with respect to the values in the row
     2) Create a context with the result of evaluating the conditions,
-       attributes and column names to values
+       attributes and column names
     3) Run the template with the context
     4) Return the resulting object (HTML?)
 

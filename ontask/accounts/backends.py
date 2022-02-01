@@ -1,7 +1,7 @@
 from django.contrib.auth.backends import ModelBackend
 
 
-class CaseInsensitiveUsernameFieldBackendMixin(object):
+class CaseInsensitiveUsernameFieldBackendMixin:
     """
     This authentication backend assumes that usernames are email addresses
     and changes a username to lower case before an attempt is made to

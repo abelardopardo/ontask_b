@@ -1,6 +1,6 @@
 """Conventional factory functionality.
 
-Used for the following operations:
+The platform currently uses four factories for the following functionality:
 
 |---------------------+------+-----+----------+---------+
 | Item/Operation      | Edit | Run | Schedule | Execute |
@@ -21,7 +21,7 @@ Used for the following operations:
 from typing import Any
 
 
-class FactoryBase(object):
+class FactoryBase:
     """Implement conventional factory methods."""
 
     def __init__(self):

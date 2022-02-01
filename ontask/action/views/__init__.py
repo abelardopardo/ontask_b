@@ -1,4 +1,4 @@
-"""Module with all the views used related to actions."""
+"""Module with all the views used to manipulate actions."""
 from ontask.action.views.action import (
     ActionCloneView, ActionCreateView, ActionDeleteView, ActionIndexView,
     ActionUpdateView, action_edit)
@@ -14,9 +14,8 @@ from ontask.action.views.import_export import (
 from ontask.action.views.preview import (
     ActionPreviewNextAllFalseView, ActionPreviewView)
 from ontask.action.views.run import (
-    ActionRunActionItemFilterView, action_run_zip,
-    ActionShowSurveyTableSSView, ActionZipExportView,
-    action_run_finish, action_run_initiate)
+    ActionRunActionItemFilterView, ActionShowSurveyTableSSView,
+    ActionZipExportView, action_run_finish, action_run_initiate, action_run_zip)
 from ontask.action.views.serve import (
     ActionRunSurveyRowView, ActionServeActionBasicView,
     ActionServeActionLTIView)
