@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext
 
 from ontask import models
-from ontask.action.services.execute_factory import TASK_EXECUTE_FACTORY
+from ontask.tasks.execute_factory import TASK_EXECUTE_FACTORY
 
 CELERY_LOGGER = get_task_logger('celery_execution')
 

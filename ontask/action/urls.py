@@ -202,10 +202,6 @@ services.ACTION_RUN_FACTORY.register_producer(
             template_name='action/request_email_data.html'),
         services.ActionRunProducerEmail))
 
-services.TASK_EXECUTE_FACTORY.register_producer(
-    models.Log.ACTION_RUN_PERSONALIZED_EMAIL,
-    services.ActionRunProducerEmail)
-
 # EMAIL REPORT
 # ------------------------------------------------------------------------------
 services.ACTION_EDIT_FACTORY.register_producer(
@@ -221,11 +217,6 @@ services.ACTION_RUN_FACTORY.register_producer(
             form_class=forms.SendListActionRunForm,
             template_name='action/request_email_report_data.html'),
         services.ActionRunProducerEmailReport))
-
-services.TASK_EXECUTE_FACTORY.register_producer(
-    models.Log.ACTION_RUN_EMAIL_REPORT,
-    services.ActionRunProducerEmailReport)
-
 
 # RUBRIC
 # ------------------------------------------------------------------------------
@@ -259,10 +250,6 @@ services.ACTION_RUN_FACTORY.register_producer(
             template_name='action/request_json_data.html'),
         services.ActionRunProducerJSON))
 
-services.TASK_EXECUTE_FACTORY.register_producer(
-    models.Log.ACTION_RUN_PERSONALIZED_JSON,
-    services.ActionRunProducerJSON)
-
 # JSON REPORT
 # ------------------------------------------------------------------------------
 services.ACTION_EDIT_FACTORY.register_producer(
@@ -279,10 +266,6 @@ services.ACTION_RUN_FACTORY.register_producer(
             template_name='action/request_json_report_data.html'),
         services.ActionRunProducerJSONReport))
 
-services.TASK_EXECUTE_FACTORY.register_producer(
-    models.Log.ACTION_RUN_JSON_REPORT,
-    services.ActionRunProducerJSONReport)
-
 # CANVAS PERSONALIZED EMAIL
 # ------------------------------------------------------------------------------
 services.ACTION_EDIT_FACTORY.register_producer(
@@ -298,10 +281,6 @@ services.ACTION_RUN_FACTORY.register_producer(
             form_class=forms.CanvasEmailActionRunForm,
             template_name='action/request_canvas_email_data.html'),
         services.ActionRunProducerCanvasEmail))
-
-services.TASK_EXECUTE_FACTORY.register_producer(
-    models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL,
-    services.ActionRunProducerCanvasEmail)
 
 # ZIP action
 # ------------------------------------------------------------------------------

@@ -1,9 +1,7 @@
 """Views to manipulate dataframes."""
 from django.urls import path
 
-from ontask import models
-from ontask.dataops import services, views
-from ontask.action.services.execute_factory import TASK_EXECUTE_FACTORY
+from ontask.dataops import views
 
 app_name = 'dataops'
 urlpatterns = [
@@ -97,17 +95,4 @@ urlpatterns = [
     path('upload_s3/', views.UploadStepThreeView.as_view(), name='upload_s3'),
 
     path('upload_s4/', views.UploadStepFourView.as_view(), name='upload_s4'),
-
 ]
-
-TASK_EXECUTE_FACTORY.register_producer(
-    models.Log.WORKFLOW_INCREASE_TRACK_COUNT,
-    services.ExecuteIncreaseTrackCount)
-
-TASK_EXECUTE_FACTORY.register_producer(
-    models.Log.PLUGIN_EXECUTE,
-    services.ExecuteRunPlugin)
-
-TASK_EXECUTE_FACTORY.register_producer(
-    models.Log.WORKFLOW_DATA_SQL_UPLOAD,
-    services.ExecuteSQLUpload)

@@ -2,9 +2,7 @@
 from django.urls import path, re_path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from ontask import models
-from ontask.action.services.execute_factory import TASK_EXECUTE_FACTORY
-from ontask.workflow import api, services, views
+from ontask.workflow import api, views
 
 app_name = 'workflow'
 
@@ -97,7 +95,3 @@ urlpatterns = [
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
-
-TASK_EXECUTE_FACTORY.register_producer(
-    models.Log.WORKFLOW_UPDATE_LUSERS,
-    services.ExecuteUpdateWorkflowLUser)
