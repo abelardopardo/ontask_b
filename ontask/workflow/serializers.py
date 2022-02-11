@@ -65,10 +65,10 @@ class WorkflowListSerializer(serializers.ModelSerializer):
 class WorkflowExportSerializer(serializers.ModelSerializer):
     """Serializer to export the workflow.
 
-    This serializer is use to export Workflows selecting a subset of actions.
-    Since the SerializerMethodField used for the selection is a read_only
-    field, the import is managed by a different serializer that uses a
-    regular one for the action field (see WorkflowImportSerializer)
+    This serializer is used to export Workflows selecting a subset of
+    actions. Since the SerializerMethodField used for the selection is a
+    read_only field, the import is managed by a different serializer that
+    uses a regular one for the action field (see WorkflowImportSerializer)
     """
 
     data_frame = DataFramePandasField(
