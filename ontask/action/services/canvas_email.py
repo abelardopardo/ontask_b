@@ -164,7 +164,9 @@ def _send_single_canvas_message(
     response = requests.post(
         url=conversation_url,
         data=canvas_email_payload,
-        headers=headers)
+        headers=headers,
+        verify=True)
+
     response_status = response.status_code
 
     req_rejected = (

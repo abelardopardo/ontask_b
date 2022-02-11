@@ -93,12 +93,11 @@ def refresh_token(user_token, oauth_info):
         oauth_info['access_token_url'].format(domain),
         {
             'grant_type': 'refresh_token',
-            'client_id': oauth_info['client_id'],
-            'client_secret': oauth_info['client_secret'],
             'refresh_token': user_token.refresh_token,
-            'redirect_uri': reverse('oauth:callback'),
-        },
-    )
+            'redirect_uri': reverse('oauth:callback')},
+        verify=True,
+        allow_redirects=False,
+        auth=(oauth_info['client_id'], oauth_info['client_secret']))
 
     if response.status_code != status.HTTP_200_OK:
         raise Exception(_('Unable to refresh OAuth token.'))
@@ -146,10 +145,11 @@ def process_callback(
         oauth_info['access_token_url'].format(domain),
         {
             'grant_type': 'authorization_code',
-            'client_id': oauth_info['client_id'],
-            'client_secret': oauth_info['client_secret'],
             'redirect_uri': request.session[callback_url_key],
-            'code': request.GET.get('code')})
+            'code': request.GET.get('code')},
+        verify=True,
+        allow_redirects=False,
+        auth=(oauth_info['client_id'], oauth_info['client_secret']))
 
     if response.status_code != status.HTTP_200_OK:
         return _('Unable to obtain access token from OAuth')
