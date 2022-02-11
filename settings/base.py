@@ -294,6 +294,9 @@ REDIS_URL = env.cache('REDIS_URL')
 
 SECRET_KEY = env('SECRET_KEY')
 
+# Set to ('HTTP_X_FORWARDED_PROTO', 'https') if behind a proxy
+SECURE_PROXY_SSL_HEADER = env('SECURE_PROXY_SSL_HEADER', default=None)
+
 SESSION_CLEANUP_CRONTAB = env('SESSION_CLEANUP_CRONTAB', default='05 5 6 * *')
 
 SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
@@ -303,6 +306,9 @@ STATIC_URL_SUFFIX = env('STATIC_URL_SUFFIX', default='static')
 TIME_ZONE = env('TIME_ZONE', default='UTC')
 
 USE_SSL = env.bool('USE_SSL', default=False)
+
+# True if behind a proxy and need to read the X-Forwarded-Host header
+USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', default=False)
 
 # -----------------------------------------------------------------------------
 # Configuration below this line at your own risk
