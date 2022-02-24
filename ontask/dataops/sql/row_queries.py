@@ -288,7 +288,7 @@ def get_table_row_by_index(
      index is out of bounds
     """
     # Get the data
-    df_data = sql.get_rows(
+    df_data = get_rows(
         workflow.get_data_frame_table_name(),
         column_names=workflow.get_column_names(),
         filter_formula=filter_formula)
