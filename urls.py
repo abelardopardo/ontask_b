@@ -34,7 +34,7 @@ schema_view = get_schema_view(
         default_version=ontask.get_version(),
         description=api_description),
     public=True,
-    permission_classes=(permissions.AllowAny,))
+    permission_classes=[permissions.AllowAny])
 
 urlpatterns = [
     # Home Page!

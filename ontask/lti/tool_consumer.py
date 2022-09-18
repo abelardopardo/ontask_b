@@ -48,9 +48,9 @@ class ToolConsumer(LaunchParamsMixin, RequestValidatorMixin, object):
         """
         Check if required parameters for a tool launch are set.
         """
-        return self.consumer_key and\
-            self.consumer_secret and\
-            self.resource_link_id and\
+        return self.consumer_key and \
+            self.consumer_secret and \
+            self.resource_link_id and \
             self.launch_url
 
     def generate_launch_data(self):

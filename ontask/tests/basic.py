@@ -71,7 +71,7 @@ class OnTaskBasicTestCase(TransactionTestCase):
     filename = None
 
     secret_key = 'd$2Jpj*.1fV:0J-s_]1r+~!-X*"sWp:/(pd(7vf2b]{' \
-                 'bl3*e`4\'oS/VDuO\ZZ!b?u~K*]Tz?_Mgu-n6icWo9#Lv<82HapCkaI8Sp'
+                 'bl3*e`4\'oS/VDuO\\ZZ!b?u~K*]Tz?_Mgu-n6icWo9#Lv<82HapCkaI8Sp'
 
     @classmethod
     def setUpClass(cls):

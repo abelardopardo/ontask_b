@@ -722,7 +722,7 @@ class ConditionNameWithSymbols(
                 # JSON request to obtain preview
                 resp = self.get_response(
                     'action:preview',
-                    url_params={'pk': action.id, 'idx': index + 1},
+                    url_params={'pk': action.id, 'idx': (index + 1)},
                     is_ajax=True)
                 self.assertTrue(status.is_success(resp.status_code))
                 self.assertTrue(attribute_value in str(resp.content))

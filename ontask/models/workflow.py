@@ -383,7 +383,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         except AttributeError:
             pass
 
-        # Reset some of the workflow fields
+        # Reset some workflow fields
         self.nrows = 0
         self.ncols = 0
         self.data_frame_table_name = ''
