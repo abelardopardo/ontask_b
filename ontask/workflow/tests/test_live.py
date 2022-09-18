@@ -452,7 +452,7 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         # There should only be a single element
         self.select_share_tab()
         self.assertEqual(
-            len(self.selenium.find_elements_(
+            len(self.selenium.find_elements(
                 By.XPATH,
                 "//table[@id='share-table']/tbody/tr")),
             1)
