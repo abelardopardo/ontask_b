@@ -407,7 +407,7 @@ class TutorialCaptures(ScreenTests):
             'id_item_column'))
         select.select_by_visible_text('email')
         self.selenium.find_element(By.ID, 'id_cc_email').send_keys(
-            'tutor1@example.com tutor2@example.com'
+            'tutor1@bogus.com tutor2@bogus.com'
         )
         self.selenium.find_element(By.ID, 'id_bcc_email').send_keys(
             'coursecoordinator@bogus.com'
