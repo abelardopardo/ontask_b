@@ -21,7 +21,7 @@ from ontask import models
 from ontask.action.evaluate import evaluate_action
 from ontask.action.services.edit_factory import ActionOutEditProducerBase
 from ontask.action.services.run_factory import ActionRunProducerBase
-from ontask.core import SessionPayload, is_instructor
+from ontask.core import is_instructor
 from ontask.oauth import services
 
 LOGGER = get_task_logger('celery_execution')
@@ -127,9 +127,7 @@ def _canvas_get_or_set_oauth_token(
 
     # Check if the token is valid
     now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-    dead = now > token.valid_until - datetime.timedelta(
-        seconds=settings.CANVAS_TOKEN_EXPIRY_SLACK)
-    if dead:
+    if now > token.valid_until:
         try:
             services.refresh_token(token, oauth_info)
         except Exception as exc:
