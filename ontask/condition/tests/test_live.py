@@ -58,9 +58,9 @@ class FilterLiveTest(ConditionTestBasic):
         )
 
         # There should only be eight operands
-        filter_ops = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_0_operator']/option"
-        )
+        filter_ops = self.selenium.find_elements(
+            By.XPATH,
+            "//select[@name='builder_rule_0_operator']/option")
         self.assertEqual(len(filter_ops), 10)
 
         # Set the operator to less or equal
@@ -131,9 +131,9 @@ class FilterLiveTest(ConditionTestBasic):
         )
 
         # There should only be eight operands
-        filter_ops = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_1_operator']/option"
-        )
+        filter_ops = self.selenium.find_elements(
+            By.XPATH,
+            "//select[@name='builder_rule_1_operator']/option")
         self.assertEqual(len(filter_ops), 10)
 
         # Set the operator to less or equal
@@ -370,9 +370,9 @@ class ConditionInActionIn(
         # Check there is a single field and click on next
         for __ in range(8):
             # There should be a single form field in the preview
-            inputs = self.selenium.find_elements_by_xpath(
-                "//div[@class='js-action-preview-form']//input"
-            )
+            inputs = self.selenium.find_elements(
+                By.XPATH,
+                "//div[@class='js-action-preview-form']//input")
             self.assertEqual(len(inputs), 1)
 
             # Click in the next button
@@ -405,9 +405,9 @@ class ConditionInActionIn(
         )
 
         # There should be only three fields here (csrf, key, field)
-        inputs = self.selenium.find_elements_by_xpath(
-            "//div[@id='action-row-datainput']//input"
-        )
+        inputs = self.selenium.find_elements(
+            By.XPATH,
+            "//div[@id='action-row-datainput']//input")
         self.assertEqual(len(inputs), 3)
 
         # Enter text in the third field

@@ -353,7 +353,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
             )
         )
         # Uncheck the columns that won't be keys
-        col_checks = self.selenium.find_elements_by_xpath(
+        col_checks = self.selenium.find_elements(
+            By.XPATH,
             '//input[contains(@id, "id_make_key_")]')
         for col_check in col_checks[1:]:
             col_check.click()

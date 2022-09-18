@@ -663,7 +663,8 @@ class ActionAllKeyColumns(tests.AllKeyColumnsFixture, tests.OnTaskLiveTestCase):
 
         # There should be four elements (all key column) in the drop-down
         self.assertEqual(
-            len(self.selenium.find_elements_by_xpath(
+            len(self.selenium.find_elements(
+                By.XPATH,
                 '//div[@id="column-selector"]/div/button')),
             4)
 
@@ -888,7 +889,8 @@ class ActionServeLongSurvey(tests.LongSurveyFixture, tests.OnTaskLiveTestCase):
         # Open action name
         self.open_action_run(self.action_name, is_action_in=True)
 
-        pages = self.selenium.find_elements_by_xpath(
+        pages = self.selenium.find_elements(
+            By.XPATH,
             '//a[contains(@class, "paginate_button")]')
         self.assertEqual(len(pages), 4)
 
@@ -951,7 +953,8 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
 
         column = models.Column.objects.get(name='Structure')
         for index in range(2 * len(column.categories)):
-            items = self.selenium.find_elements_by_class_name(
+            items = self.selenium.find_elements(
+                By.CLASS_NAME,
                 'js-rubric-cell-edit')
             items[index].click()
             self.wait_for_modal_open()
@@ -1016,7 +1019,8 @@ class ActionIndexSelector(
             sleep(0.5)
             self.assertEqual(
                 workflow.actions.filter(action_type=atype).count(),
-                len(self.selenium.find_elements_by_xpath(
+                len(self.selenium.find_elements(
+                    By.XPATH,
                     '//*[@id="action-cards"]/'
                     'div[not(contains(@style,"display: none"))]')))
 
@@ -1024,7 +1028,8 @@ class ActionIndexSelector(
         select.select_by_value('')
         self.assertEqual(
             workflow.actions.count(),
-            len(self.selenium.find_elements_by_xpath(
+            len(self.selenium.find_elements(
+                By.XPATH,
                 '//*[@id="action-cards"]/'
                 'div[not(contains(@style,"display: none"))]')))
 

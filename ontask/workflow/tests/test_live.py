@@ -322,11 +322,10 @@ class WorkflowAttribute(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
 
         # There should only be a single element
         self.assertEqual(
-            len(self.selenium.find_elements_by_xpath(
-                '//table[@id="attribute-table"]/tbody/tr'
-            )),
-            1
-        )
+            len(self.selenium.find_elements(
+                By.XPATH,
+                '//table[@id="attribute-table"]/tbody/tr')),
+            1)
         # Check that the attributes are properly stored in the workflow
         workflow = models.Workflow.objects.all()[0]
         self.assertEqual(len(workflow.attributes), 1)
@@ -453,11 +452,10 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         # There should only be a single element
         self.select_share_tab()
         self.assertEqual(
-            len(self.selenium.find_elements_by_xpath(
-                "//table[@id='share-table']/tbody/tr"
-            )),
-            1
-        )
+            len(self.selenium.find_elements_(
+                By.XPATH,
+                "//table[@id='share-table']/tbody/tr")),
+            1)
         # Check that the shared users are properly stored in the workflow
         workflow = models.Workflow.objects.all()[0]
         self.assertEqual(workflow.shared.count(), 1)

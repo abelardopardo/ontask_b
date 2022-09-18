@@ -145,15 +145,15 @@ class ColumnTestRename(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         )
 
         # There should only be two operands
-        filter_ops = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_0_operator']/option"
-        )
+        filter_ops = self.selenium.find_elements(
+            By.XPATH,
+            '//select[@name="builder_rule_0_operator"]/option')
         self.assertEqual(len(filter_ops), 4)
 
         # There should be as many values as in the categories
-        filter_vals = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_0_value_0']/option"
-        )
+        filter_vals = self.selenium.find_elements(
+            By.XPATH,
+            '//select[@name="builder_rule_0_value_0"]/option')
         self.assertEqual(len(filter_vals), len(categories.split(',')))
 
         # End of session
