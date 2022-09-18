@@ -131,7 +131,7 @@ def is_legal_name(strval: str) -> Optional[str]:
     - \" Provokes a db error when handling the templates due to the encoding
       produced by the text editor.
 
-    - ' String delimiter, python messes around with it and it is too complex to
+    - ' String delimiter, python messes around with it, and it is too complex to
         handle all possible cases and translations.
 
     In principle, arbitrary combinations of the following symbols should be
