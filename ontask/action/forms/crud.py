@@ -36,10 +36,9 @@ class ActionUpdateForm(forms.ModelForm):
         form_data = super().clean()
 
         # Check if the name already exists
-        name_exists = self.workflow.actions.filter(
+        if self.workflow.actions.filter(
             name=self.data['name'],
-        ).exclude(id=self.instance.id).exists()
-        if name_exists:
+        ).exclude(id=self.instance.id).exists():
             self.add_error(
                 'name',
                 _('There is already an action with this name.'),
@@ -135,11 +134,11 @@ class RubricLOAForm(forms.Form):
         form_data = super().clean()
 
         # Filter
-        current_n_loas = [
+        n_loas = len([
             loa
-            for loa in form_data['levels_of_attainment'].split(',') if loa]
+            for loa in form_data['levels_of_attainment'].split(',') if loa])
 
-        if len(current_n_loas) != len(self.criteria[0].categories):
+        if n_loas != len(self.criteria[0].categories):
             self.add_error(
                 'levels_of_attainment',
                 _('The number of levels cannot change.'))

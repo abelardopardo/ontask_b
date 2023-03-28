@@ -37,8 +37,7 @@ def serve_action_out(
 
     # Get the dictionary containing column names, attributes and condition
     # valuations:
-    context = get_action_evaluation_context(action, row_values)
-    if context is None:
+    if (context := get_action_evaluation_context(action, row_values)) is None:
         # Log the event
         action.log(
             user,
@@ -102,9 +101,7 @@ def get_survey_context(
             message=gettext('Unable to find survey data.'))
 
     # Get dictionary with column names, attributes and condition valuations:
-    context = get_action_evaluation_context(action, row)
-
-    if not context:
+    if not (context := get_action_evaluation_context(action, row)):
         # If the data has not been found, flag
         if not is_manager:
             raise OnTaskActionSurveyDataNotFound(

@@ -14,9 +14,8 @@ from ontask.scheduler import services
 def create_ontaskuser_handler(sender, **kwargs):
     """Create the user extensions whenever a new user is created."""
     del sender
-    created = kwargs.get('created', True)
     instance = kwargs.get('instance')
-    if not created or not instance:
+    if not kwargs.get('created', True) or not instance:
         return
 
     # Create the profile and ontask user objects, only if it is newly created
@@ -31,8 +30,8 @@ def create_ontaskuser_handler(sender, **kwargs):
 def delete_data_frame_table(sender, **kwargs):
     """Delete the data table when deleting the workflow."""
     del sender
-    instance = kwargs.get('instance')
-    if not instance:
+
+    if not (instance := kwargs.get('instance')):
         return
 
     if instance.has_data_frame:
@@ -44,8 +43,8 @@ def delete_data_frame_table(sender, **kwargs):
 def update_fields(sender, **kwargs):
     """Update various fields after saving conditions and filter."""
     del sender
-    instance = kwargs.get('instance')
-    if not instance:
+
+    if not (instance := kwargs.get('instance')):
         return
 
     instance.update_fields()
@@ -55,8 +54,11 @@ def update_fields(sender, **kwargs):
 def create_scheduled_task(sender, **kwargs):
     """Create the task in django_celery_beat for every scheduled operation."""
     del sender
-    instance = kwargs.get('instance')
-    if not instance or not instance.status == models.scheduler.STATUS_PENDING:
+
+    if (
+        not (instance := kwargs.get('instance')) or
+        not instance.status == models.scheduler.STATUS_PENDING
+    ):
         return
     services.schedule_task(instance)
 
@@ -65,8 +67,8 @@ def create_scheduled_task(sender, **kwargs):
 def delete_scheduled_task(sender, **kwargs):
     """Delete the task attached to a Scheduled Operation."""
     del sender
-    instance = kwargs.get('instance')
-    if not instance:
+
+    if not (instance := kwargs.get('instance')):
         return
 
     instance.delete_task()

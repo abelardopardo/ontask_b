@@ -56,32 +56,31 @@ def _refresh_and_retry_send(
     :param canvas_email_payload: Dictionary with additional information
     :return:
     """
-    # Request rejected due to token expiration. Refresh the
-    # token
-    user_token = None
+    # Request rejected due to token expiration. Refresh the token
     result_msg = gettext('OAuth token refreshed')
     response_status = None
+    user_token = None
     try:
         user_token = services.refresh_token(user_token, oauth_info)
+
+        if user_token := services.refresh_token(user_token, oauth_info):
+            # Update the header with the new token
+            headers = {
+                'content-type':
+                    'application/x-www-form-urlencoded; charset=UTF-8',
+                'Authorization': 'Bearer {0}'.format(
+                    user_token.access_token,
+                ),
+            }
+
+            # Second attempt at executing the API call
+            response = requests.post(
+                url=conversation_url,
+                data=canvas_email_payload,
+                headers=headers)
+            response_status = response.status_code
     except Exception as exc:
         result_msg = str(exc)
-
-    if user_token:
-        # Update the header with the new token
-        headers = {
-            'content-type':
-                'application/x-www-form-urlencoded; charset=UTF-8',
-            'Authorization': 'Bearer {0}'.format(
-                user_token.access_token,
-            ),
-        }
-
-        # Second attempt at executing the API call
-        response = requests.post(
-            url=conversation_url,
-            data=canvas_email_payload,
-            headers=headers)
-        response_status = response.status_code
 
     return result_msg, response_status
 
@@ -104,8 +103,7 @@ def _canvas_get_or_set_oauth_token(
     :return: Http response
     """
     # Get the information from the payload
-    oauth_info = settings.CANVAS_INFO_DICT.get(oauth_instance_name)
-    if not oauth_info:
+    if not (oauth_info := settings.CANVAS_INFO_DICT.get(oauth_instance_name)):
         messages.error(
             request,
             _('Unable to obtain Canvas OAuth information'),
@@ -113,11 +111,10 @@ def _canvas_get_or_set_oauth_token(
         return redirect('action:index')
 
     # Check if we have the token
-    token = models.OAuthUserToken.objects.filter(
+    if not (token := models.OAuthUserToken.objects.filter(
         user=request.user,
         instance_name=oauth_instance_name,
-    ).first()
-    if not token:
+    ).first()):
         # There is no token, authentication has to take place for the first
         # time
         return services.get_initial_token_step1(
@@ -166,12 +163,10 @@ def _send_single_canvas_message(
         verify=True)
 
     response_status = response.status_code
-
-    req_rejected = (
+    if (
         response.status_code == status.HTTP_401_UNAUTHORIZED
         and response.headers.get('WWW-Authenticate')
-    )
-    if req_rejected:
+    ):
         result_msg, response_status = _refresh_and_retry_send(
             oauth_info,
             conversation_url,
@@ -198,7 +193,6 @@ class ActionEditProducerCanvasEmail(ActionOutEditProducerBase):
 
 
 class ActionRunProducerCanvasEmail(ActionRunProducerBase):
-
     log_event = models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL
 
     def form_valid(self, form) -> http.HttpResponse:
@@ -255,16 +249,14 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
 
         # Get the oauth info
         target_url = payload['target_url']
-        oauth_info = settings.CANVAS_INFO_DICT.get(target_url)
-        if not oauth_info:
+        if not (oauth_info := settings.CANVAS_INFO_DICT.get(target_url)):
             raise Exception(_('Unable to find OAuth Information Record'))
 
         # Get the token
-        user_token = models.OAuthUserToken.objects.filter(
+        if not (user_token := models.OAuthUserToken.objects.filter(
             user=user,
             instance_name=target_url,
-        ).first()
-        if not user_token:
+        ).first()):
             # There is no token, execution cannot proceed
             raise Exception(_('Incorrect execution due to absence of token'))
 

@@ -155,9 +155,8 @@ class ActionSerializer(serializers.ModelSerializer):
         # Create the triplets action column condition
         for acc_data in column_condition_data:
             cname = acc_data.pop('column')['name']
-            cond_data = acc_data.pop('condition')
             condition = None
-            if cond_data:
+            if cond_data := acc_data.pop('condition'):
                 condition = action_obj.conditions.filter(
                     name=cond_data['name']).first()
             models.ActionColumnConditionTuple.objects.create(
@@ -225,14 +224,13 @@ class ActionSelfcontainedSerializer(ActionSerializer):
         """
         new_column_data = []
         for citem in validated_data:
-            cname = citem.get('name')
-            if not cname:
-                raise Exception(
-                    _('Incorrect column name {0}.').format(cname))
+            if not (cname := citem.get('name')):
+                raise Exception(_('Incorrect column name.'))
 
             # Search for the column in the workflow columns
-            col = self.context['workflow'].columns.filter(name=cname).first()
-            if not col:
+            if not (col := self.context['workflow'].columns.filter(
+                name=cname).first()
+            ):
                 # Accumulate the new columns just in case we have to undo
                 # the changes
                 if citem['is_key']:
@@ -243,11 +241,11 @@ class ActionSelfcontainedSerializer(ActionSerializer):
                 continue
 
             # Processing an existing column. Check data type compatibility
-            is_not_compatible = (
+            if (
                 col.data_type != citem.get('data_type')
                 or col.is_key != citem['is_key']
-                or set(col.categories) != set(citem['categories']))
-            if is_not_compatible:
+                or set(col.categories) != set(citem['categories'])
+            ):
                 # The two columns are different
                 raise Exception(_(
                     'Imported column {0} is different from existing '
@@ -270,8 +268,9 @@ class ActionSelfcontainedSerializer(ActionSerializer):
         :return: List of new views
         """
         workflow = self.context['workflow']
-        view_names = [view_data['name'] for view_data in validated_data]
-        if workflow.views.filter(name__in=view_names).exists():
+        if workflow.views.filter(
+            name__in=[view_data['name'] for view_data in validated_data]
+        ).exists():
             raise Exception(_(
                 'The new action creates duplicate view names'))
 
@@ -283,7 +282,6 @@ class ActionSelfcontainedSerializer(ActionSerializer):
         """Create the Action object with the validated data."""
 
         workflow = self.context['workflow']
-
         if not workflow.has_data_frame:
             # Cannot create actions with an empty workflow
             raise Exception(_(
@@ -291,8 +289,7 @@ class ActionSelfcontainedSerializer(ActionSerializer):
                 + ' in a workflow with and empty data table'))
 
         name = validated_data['name']
-        action_obj = workflow.actions.filter(name=name).first()
-        if action_obj:
+        if workflow.actions.filter(name=name).first():
             # Name collision
             raise Exception(_(
                 'Action with name "{0}" already exists'.format(name)))

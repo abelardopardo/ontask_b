@@ -110,9 +110,7 @@ class SPQEvaluate(OnTaskTransformation):
         :return: a Pandas data_frame to merge with the existing one 
         """
 
-        alist = parameters.get('answer_list')
-
-        if not alist:
+        if not (alist := parameters.get('answer_list')):
             raise Exception('Required parameter "answer_list" not found.')
 
         if not isinstance(alist, str):

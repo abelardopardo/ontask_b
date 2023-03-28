@@ -104,8 +104,7 @@ def _check_email_list(email_list_string: str) -> List[str]:
         return []
 
     email_list = email_list_string.split()
-    incorrect_email = get_incorrect_email(email_list)
-    if incorrect_email:
+    if incorrect_email := get_incorrect_email(email_list):
         raise Exception(_('Invalid email address "{0}".').format(
             incorrect_email))
 
@@ -123,8 +122,7 @@ def _create_track_column(action: models.Action) -> str:
     cnames = [col.name for col in action.workflow.columns.all()]
     while True:
         idx += 1
-        track_col_name = 'EmailRead_{0}'.format(idx)
-        if track_col_name not in cnames:
+        if (track_col_name := 'EmailRead_{0}'.format(idx)) not in cnames:
             break
 
     # Add the column if needed (before the mass email to avoid overload

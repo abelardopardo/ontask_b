@@ -134,14 +134,14 @@ class EmailCCBCCFormBase(ontask_forms.FormWithPayload):
                     email.strip()
                     for email in form_data['bcc_email'].split() if email]))])
 
-        incorrect_email = get_incorrect_email(form_data['cc_email'].split())
-        if incorrect_email:
+        if incorrect_email := get_incorrect_email(
+            form_data['cc_email'].split()):
             self.add_error(
                 'cc_email',
                 _('Incorrect email value "{0}".').format(incorrect_email))
 
-        incorrect_email = get_incorrect_email(form_data['bcc_email'].split())
-        if incorrect_email:
+        if incorrect_email := get_incorrect_email(
+            form_data['bcc_email'].split()):
             self.add_error(
                 'bcc_email',
                 _('Incorrect email value "{0}".').format(incorrect_email))
@@ -171,8 +171,7 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
 
         self.fields['item_column'].queryset = self.columns
 
-        item_column_pk = self.get_payload_field('item_column')
-        if item_column_pk:
+        if item_column_pk := self.get_payload_field('item_column'):
             item_column = self.columns.get(pk=item_column_pk)
         else:
             # Try to guess if there is an "email" column
@@ -287,9 +286,9 @@ class EmailActionForm(
             column_data = sql.get_rows(
                 self.action.workflow.get_data_frame_table_name(),
                 column_names=[pcolumn.name])
-            incorrect_email = get_incorrect_email(
-                [iname[0] for iname in column_data])
-            if incorrect_email:
+            if incorrect_email := get_incorrect_email(
+                [iname[0] for iname in column_data]
+            ):
                 # column has incorrect email addresses
                 self.add_error(
                     'item_column',
@@ -435,12 +434,13 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
             ('file_suffix', None),
             ('zip_for_moodle', None)])
 
-        # Participant column must be unique
-        pcolumn = form_data['item_column']
-        ufname_column = form_data['user_fname_column']
-
-        # If both values are given, and they are identical, return with error
-        if pcolumn and ufname_column and pcolumn == ufname_column:
+        # If both participant column and ufname column are given, and they are
+        # identical, return with error
+        if (
+            (pcolumn := form_data['item_column'])
+            and (ufname_column := form_data['user_fname_column'])
+            and pcolumn == ufname_column
+        ):
             self.add_error(
                 None,
                 _('The two columns must be different'))
@@ -455,14 +455,11 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
                 return form_data
 
             # Participant columns must match the pattern 'Participant [0-9]+'
-            pcolumn_data = sql.get_rows(
-                self.action.workflow.get_data_frame_table_name(),
-                column_names=[pcolumn.name])
-            participant_error = any(
+            if any(
                 not PARTICIPANT_RE.search(str(row[pcolumn.name]))
-                for row in pcolumn_data
-            )
-            if participant_error:
+                for row in sql.get_rows(
+                    self.action.workflow.get_data_frame_table_name(),
+                    column_names=[pcolumn.name])):
                 self.add_error(
                     'item_column',
                     _('Values in column must have format '
@@ -509,8 +506,7 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
         form_data = super().clean()
 
         # Move data to the payload so that is ready to be used
-        target_url = self.get_payload_field('target_url', None)
-        if not target_url:
+        if self.get_payload_field('target_url', None) is None:
             self.store_field_in_dict(
                 'target_url',
                 next(iter(settings.CANVAS_INFO_DICT.keys())))
@@ -521,14 +517,13 @@ class CanvasEmailActionForm(ItemColumnConfirmFormBase, EmailSubjectFormBase):
 
         # The given column for email destination has to have integers or
         # floats that can be transformed into integers
-        user_ids = sql.get_rows(
-            self.action.workflow.get_data_frame_table_name(),
-            column_names=[form_data['item_column'].name],
-            filter_formula=self.action.get_filter_formula())
         if any(
             not isinstance(row_item[0], (int, float))
             or not float.is_integer(float(row_item[0]))
-            for row_item in user_ids
+            for row_item in sql.get_rows(
+                self.action.workflow.get_data_frame_table_name(),
+                column_names=[form_data['item_column'].name],
+                filter_formula=self.action.get_filter_formula())
         ):
             self.add_error(
                 'item_column',
@@ -628,10 +623,12 @@ class EnableURLForm(forms.ModelForm):
         """Verify given datetimes."""
         form_data = super().clean()
 
-        # Check the datetimes. One needs to be after the other
-        a_from = self.cleaned_data.get('active_from')
-        a_to = self.cleaned_data.get('active_to')
-        if a_from and a_to and a_from >= a_to:
+        # Check the date/times. One needs to be after the other
+        if (
+            (a_from := self.cleaned_data.get('active_from'))
+            and (a_to := self.cleaned_data.get('active_to'))
+            and a_from >= a_to
+        ):
             self.add_error(
                 'active_from',
                 _('Incorrect date/time window'))

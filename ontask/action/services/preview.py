@@ -41,12 +41,10 @@ def _get_navigation_index(idx: int, n_items: int) -> Tuple[int, int, int]:
     if not 1 <= idx <= n_items:
         idx = 1
 
-    prv = idx - 1
-    if prv <= 0:
+    if (prv := idx - 1) <= 0:
         prv = n_items
 
-    nxt = idx + 1
-    if nxt > n_items:
+    if (nxt := idx + 1) > n_items:
         nxt = 1
 
     return prv, idx, nxt
@@ -164,11 +162,10 @@ def create_row_preview_context(
             '"{0}" = {1}'.format(col.name, row_values[col.name])
             for col in act_vars])
 
-    uses_plain_text = (
+    if (
         action.action_type == models.Action.PERSONALIZED_CANVAS_EMAIL
         or action.action_type == models.Action.PERSONALIZED_JSON
-    )
-    if uses_plain_text:
+    ):
         action_content = escape(action_content)
 
     if prelude:

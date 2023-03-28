@@ -27,8 +27,7 @@ def run_compatibility_patches(json_data: List) -> List:
             action_obj['target_url'] = ''
 
         # If filter is None, should be empty
-        f_obj = action_obj.get('filter', None)
-        if f_obj == {} or f_obj == []:
+        if (f_obj := action_obj.get('filter', None)) == {} or f_obj == []:
             action_obj.pop('filter')
             f_obj = None
 
@@ -39,10 +38,8 @@ def run_compatibility_patches(json_data: List) -> List:
         # Remove columns field
         action_obj.pop('columns', None)
 
-        action_type = action_obj.get('action_type')
-        is_out = action_obj.pop('is_out', True)
-        if not action_type:
-            if is_out:
+        if action_obj.get('action_type') is not None:
+            if action_obj.pop('is_out', True):
                 action_type = models.Action.PERSONALIZED_TEXT
             else:
                 action_type = models.Action.SURVEY
@@ -55,16 +52,15 @@ def run_compatibility_patches(json_data: List) -> List:
 
     # move filter condition to its own list
     for action_obj in json_data:
-        conditions = action_obj.get('conditions')
-        if not conditions:
+        if not (conditions := action_obj.get('conditions')):
             continue
 
         action_obj['conditions'] = [
             cond for cond in conditions if not cond.get('is_filter', False)]
 
-        filter_obj = [
+        if not (filter_obj := [
             cond for cond in conditions if cond.get('is_filter', False)]
-        if not filter_obj:
+        ):
             continue
 
         action_obj['filter'] = filter_obj[0]
@@ -78,8 +74,10 @@ def run_compatibility_patches(json_data: List) -> List:
             if '_formula_text' not in cond:
                 cond['_formula_text'] = cond.pop('formula_text', None)
 
-        filter_obj = action_obj.get('filter')
-        if filter_obj and '_formula' not in filter_obj:
+        if (
+            (filter_obj := action_obj.get('filter'))
+            and '_formula' not in filter_obj
+        ):
             filter_obj['_formula'] = filter_obj.pop('formula')
 
     return json_data

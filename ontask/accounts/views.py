@@ -114,10 +114,11 @@ class WithNextUrlMixin:
 
     def get_next_url(self):
         request = self.request
-        redirect_to = request.POST.get(
-            self.redirect_field_name,
-            request.GET.get(self.redirect_field_name, ''))
-        if not redirect_to:
+        if not (
+            redirect_to := request.POST.get(
+                self.redirect_field_name,
+                request.GET.get(self.redirect_field_name, ''))
+        ):
             return
 
         host = self.request.get_host()
@@ -128,13 +129,11 @@ class WithNextUrlMixin:
         except AttributeError:
             pass
 
-        url_is_safe = is_safe_url(
+        if is_safe_url(
             redirect_to,
             allowed_hosts=allowed_hosts,
             require_https=self.request.is_secure()
-        )
-
-        if url_is_safe:
+        ):
             return redirect_to
 
     # This mixin can be mixed with FormViews and RedirectViews. They each use
@@ -187,8 +186,7 @@ class LoginView(
     def form_valid(self, form):
         auth.login(self.request, form.get_user())
         redirect_response = super().form_valid(form)
-        remember_me = form.cleaned_data.get('remember_me')
-        if remember_me is True:
+        if (form.cleaned_data.get('remember_me')) is True:
             one_month = 30 * 24 * 60 * 60
             expiry = getattr(settings, 'KEEP_LOGGED_DURATION', one_month)
             self.request.session.set_expiry(expiry)
@@ -208,9 +206,7 @@ class LogoutView(
     url = reverse_lazy('home')
 
     def get_redirect_url(self, **kwargs):
-        redirect_to = super().get_redirect_url(**kwargs)
-
-        if redirect_to:
+        if redirect_to := super().get_redirect_url(**kwargs):
             return redirect_to
         elif settings.LOGOUT_REDIRECT_URL is not None:
             return resolve_url(settings.LOGOUT_REDIRECT_URL)

@@ -92,8 +92,6 @@ class BetterReadOnlyPasswordHashWidget(ReadOnlyPasswordHashWidget):
     """
 
     def render(self, name, value, attrs=None, renderer=None):
-        final_attrs = flatatt(self.build_attrs(attrs))
-
         if not value or not _is_password_usable(value):
             summary = gettext('No password set.')
         else:
@@ -107,7 +105,7 @@ class BetterReadOnlyPasswordHashWidget(ReadOnlyPasswordHashWidget):
 
         return format_html(
             '<div{attrs}><strong>{summary}</strong></div>',
-            attrs=final_attrs,
+            attrs=flatatt(self.build_attrs(attrs)),
             summary=summary)
 
 
@@ -155,9 +153,11 @@ class UserCreationForm(forms.ModelForm):
 
     def clean_password2(self):
         # Check that the two password entries match
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
+        if (
+            (password1 := self.cleaned_data.get("password1"))
+            and (password2 := self.cleaned_data.get("password2"))
+            and password1 != password2
+        ):
             raise forms.ValidationError(
                 self.error_messages['password_mismatch'])
         return password2
@@ -166,8 +166,7 @@ class UserCreationForm(forms.ModelForm):
         super(UserCreationForm, self)._post_clean()
         # Validate the password after self.instance is updated with form data
         # by super().
-        password = self.cleaned_data.get('password2')
-        if password:
+        if password := self.cleaned_data.get('password2'):
             try:
                 password_validation.validate_password(password, self.instance)
             except forms.ValidationError as error:
@@ -197,8 +196,7 @@ class UserChangeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(UserChangeForm, self).__init__(*args, **kwargs)
-        f = self.fields.get('user_permissions', None)
-        if f is not None:
+        if (f := self.fields.get('user_permissions', None)) is not None:
             f.queryset = f.queryset.select_related('content_type')
 
     def clean_password(self):

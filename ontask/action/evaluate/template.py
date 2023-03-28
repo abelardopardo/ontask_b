@@ -216,14 +216,15 @@ def render_rubric_criteria(action: models.Action, context: Dict) -> List[List]:
     text_sources = []
 
     for criterion in criteria:
-        c_value = context.get(_translate(escape(criterion.name)))
-        if not c_value:
+        if not (c_value := context.get(_translate(escape(criterion.name)))):
             # Skip criteria with no values
             continue
 
         value_idx = criterion.categories.index(c_value)
-        cell = cells.filter(column=criterion, loa_position=value_idx).first()
-        if not cell:
+        if not (cell := cells.filter(
+            column=criterion,
+            loa_position=value_idx).first()
+        ):
             continue
         text_sources.append([criterion.name, cell.feedback_text])
 

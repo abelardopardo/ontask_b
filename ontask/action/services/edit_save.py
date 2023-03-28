@@ -27,8 +27,8 @@ def save_action_form(
     """
 
     if view_as_filter is not None:
-        view = action.workflow.views.filter(pk=view_as_filter).first()
-        if view is None:
+        if (view := action.workflow.views.filter(
+                pk=view_as_filter).first()) is None:
             return http.JsonResponse({'html_redirect': None})
 
         action.filter = view.filter
