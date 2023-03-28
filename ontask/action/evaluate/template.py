@@ -278,15 +278,15 @@ def render_action_template(
     :return: The rendered template
     """
     # Steps 1 and 2. Apply the translation process to all variables that
-    # appear in the the template text
+    # appear in the template text
     new_template_text = template_text
-    for rexpr in models.VAR_USE_RES:
+    for regex in models.VAR_USE_RES:
         if action and action.has_html_text:
-            new_template_text = rexpr.sub(
+            new_template_text = regex.sub(
                 _change_unescape_vname,
                 new_template_text)
         else:
-            new_template_text = rexpr.sub(
+            new_template_text = regex.sub(
                 _change_vname,
                 new_template_text)
 

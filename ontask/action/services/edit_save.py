@@ -2,6 +2,7 @@
 from typing import Optional
 
 from django import http
+
 from ontask import models
 
 
