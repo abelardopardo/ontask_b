@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rsync -ahvz *.png ../../../docs/scaptures
+rsync -arhvz --delete *.png ../../../docs/scaptures
