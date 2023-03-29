@@ -43,9 +43,9 @@ Configuration variables
 
   These are variables that can be defined either in the execution environment (like the previous ones) or in the file with name specified in the variable ``ENV_FILENAME``. The value of the configuration variables is obtaineed with the following rules:
 
-    1. Read the value from the definitions in the file with name ``ENV_FILENAME`` (if not empty).
+    1. Take the value from the executing environment.
 
-    2. If no value is found in the previous step, take the value from the executing environment.
+    1. If no value is found in the previous step, read the value from the definitions in the file with name ``ENV_FILENAME`` (if not empty).
 
     3. If no value is found in the previous step, take the default value.
 
@@ -281,7 +281,7 @@ The following variables (in alphabetical order) can be defined outside the OnTas
 
   Default: ``html/index.html``
 
-``REDIS_URL``
+``REDIS_URL`` **Required**
   List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as ``'rediscache://master:6379,slave1:6379,slave2:6379/1'`` (see `Django Environ <https://github.com/joke2k/django-environ>`_)
 
   Default: ``rediscache:://localhost:6379??client_class=django_redis.client.DefaultClient&timeout=1000&key_prefix=ontask``
