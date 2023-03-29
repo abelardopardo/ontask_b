@@ -23,7 +23,7 @@ Download, install and configure OnTask
 OnTask Configuration
 ====================
 
-The next steps describe the variables used to configure the execution of OnTask. This configuration is divided into two groups of variables:
+The variables used to execute OnTask are divided into two groups:
 
 Environment variables
 
@@ -39,26 +39,24 @@ Environment variables
 
     Default: ``settings/local.env``
 
-Configuration variables (*script* level)
+Configuration variables
 
   These are variables that can be defined either in the execution environment (like the previous ones) or in the file with name specified in the variable ``ENV_FILENAME``. The value of the configuration variables is obtaineed with the following rules:
 
-    1. Read the value from the definition in ``ENV_FILENAME``.
+    1. Read the value from the definitions in the file with name ``ENV_FILENAME`` (if not empty).
 
     2. If no value is found in the previous step, take the value from the executing environment.
 
     3. If no value is found in the previous step, take the default value.
 
-Configuration script (*script* level)
-
-  This is a python file read by Django during its start-up procedure. The variables in this script can be defined using any python expression and may have arbitrarily complex expressions and operations (even function calls). The difference with the previous variables is that changes in these variables require changing the source code.
+The execution begins by running a python file read by Django during its start-up procedure. The first step is to read the environment and configuration variables followed by the definition of additional variables. The values of these additional variables can be any python expression and may have arbitrarily complex expressions and operations (even function calls).
 
 .. _configuration_variables:
 
 Configuration variables
 -----------------------
 
-The following variables (in alphabetical order) can be defined outside the OnTask code for its configuration:
+The following variables (in alphabetical order) can be defined outside the OnTask code for its configuration. All of them have deault values, some of them require a value, and the value of some of them can be changed without stopping the application.
 
 ``ALLOWED_HOSTS``
   Comma-separated list of host names used to validate the HTTP requests received by the platform. It helps to avoid processing requests that fake their Host headers. If OnTask is going to be hosted in ``www.yoursite.com``, then you may want to define it as ``www.yoursite.com,yoursite.com``. By default the platform allows request with any Host header.
@@ -129,15 +127,20 @@ The following variables (in alphabetical order) can be defined outside the OnTas
 
   Default: 600
 
-``DATABASE_URL`` **(Required)**
+``DATABASE_URL`` **Required**
   URL encoding the connection to the database. String of the format ``postgres://username:password@host:port/database``
 
-``DATAOPS_MAX_UPLOAD_SIZE``
+``DATAOPS_CONTENT_TYPES``
+  Content types allowed to be uploaded
+
+  Default: ``["text/csv", "application/json", "application/gzip", "application/x-gzip", "application/vnd.ms-excel"]``
+
+``DATAOPS_MAX_UPLOAD_SIZE`` **Change does not require reset**
   Maximum file size for uploads
 
   Default: ``209715200`` (200 Mb)
 
-``DATAOPS_PLUGIN_DIRECTORY``
+``DATAOPS_PLUGIN_DIRECTORY`` **Change does not require reset**
   Folder in the local file system containing the OnTask plugins.
 
   Default: `lib/plugins`
@@ -146,6 +149,39 @@ The following variables (in alphabetical order) can be defined outside the OnTas
   Flag to control if the execution is in DEBUG mode.
 
   Default: ``False``
+
+``EMAIL_ACTION_NOTIFICATION_SENDER`` **Required, Change does not require reset**
+  Value to use in the sender field for emails notifying the execution of an action
+
+``EMAIL_ACTION_NOTIFICATION_SUBJECT`` **Change does not require reset**
+  Value to use in the subject field for emails notifying the execution of an action
+
+  Default: ``OnTask: Action executed``
+
+``EMAIL_ACTION_NOTIFICATION_TEMPLATE`` **Change does not require reset**
+  Email template used to notify the execution of an action.
+
+  Default:
+
+.. code-block:: html
+
+   <html><head/><body>
+   <p>Dear {{ user.name }}</p>
+
+   <p>This message is to inform you that on {{ email_sent_datetime }}
+   {{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
+   resulting from the execution of the action with name "{{ action.name }}".</p>
+
+   {% if filter_present %}
+   <p>The action had a filter that reduced the number of messages from
+   {{ num_rows }} to {{ num_selected }}.</p>
+   {% else %}
+   <p>All the data rows stored in the workflow table were used.</p>
+   {% endif %}
+
+   Regards.
+   The OnTask Support Team
+   </body></html>``
 
 ``EMAIL_BURST``
   Number of consecutive emails to send before pausing (to adapt to potential throttling of the SMTP server)
@@ -177,7 +213,7 @@ The following variables (in alphabetical order) can be defined outside the OnTas
 
   Default: ``True`` (send HTML only)
 
-``EMAIL_OVERRIDE_FROM``
+``EMAIL_OVERRIDE_FROM`` **Change does not require reset**
   Send messages using this address in the `From` field
 
   Default: ``''`` (Use the user email)
@@ -197,11 +233,6 @@ The following variables (in alphabetical order) can be defined outside the OnTas
 
   Default: ``False``
 
-``EMAIL_ACTION_NOTIFICATION_SENDER``
-  Address to use in the `From` field when sending notifications to instructors
-
-  Default: ``''``
-
 ``EXECUTE_ACTION_JSON_TRANSFER``
   Boolean stating if the JSON transfers should be executed when sending personalized text.
 
@@ -217,6 +248,11 @@ The following variables (in alphabetical order) can be defined outside the OnTas
 
   Default: ``logs`` folder at the root of the project
 
+``LOGS_MAX_LIST_SIZE``
+  Maximum number of logs shown to the user
+
+  Default: 200
+
 ``LDAP_AUTH_SERVER_URI``
   URI pointing to the LDAP server (only if LDAP is configured)
 
@@ -227,20 +263,33 @@ The following variables (in alphabetical order) can be defined outside the OnTas
 
   Default: ``''``
 
+``LTI_OAUTH_CREDENTIALS``
+  Dictionary with credentials required for LTI authentication (if configured)
+
+  Default: ``{}``
+
+``LTI_INSTRUCTOR_GROUP_ROLES``
+  List with the roles used to identify instructors
+
+  Default: ``['Instructor']``
+
 ``MEDIA_LOCATION``
   URL suffix to be used by OnTask to access the media files in folder ``media``.
 
   Default: ``/media/``
+
+``ONTASK_HELP_URL`` **Change does not require reset**
+  Relative URL suffix for the documentation (with respect to the static URL)
+
+  Default: ``html/index.html``
 
 ``REDIS_URL``
   List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as ``'rediscache://master:6379,slave1:6379,slave2:6379/1'`` (see `Django Environ <https://github.com/joke2k/django-environ>`_)
 
   Default: ``rediscache:://localhost:6379??client_class=django_redis.client.DefaultClient&timeout=1000&key_prefix=ontask``
 
-``SECRET_KEY`` **(Required)**
+``SECRET_KEY`` **Required**
   Random string of characters used to generate internal hashes. It should be kept secret. If not defined the platform will raise an error upon start.
-
-  Default: ``''``
 
 ``SESSION_CLEANUP_CRONTAB``
   Crontab string specifying the frequency to run the ``cleansessions`` command.

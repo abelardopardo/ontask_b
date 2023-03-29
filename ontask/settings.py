@@ -11,56 +11,23 @@ from siteprefs.toolbox import (patch_locals, pref, pref_group, register_prefs)
 
 # NOTIFICATION EMAILS
 # ------------------------------------------------------------------------------
-NOTIFICATION_TEMPLATE = getattr(
-    settings,
-    'EMAIL_ACTION_NOTIFICATION_TEMPLATE',
-    """<html>
-<head/>
-<body>
-<p>Dear {{ user.name }}</p>
+NOTIFICATION_TEMPLATE = getattr(settings, 'EMAIL_ACTION_NOTIFICATION_TEMPLATE')
 
-<p>This message is to inform you that on {{ email_sent_datetime }}
-{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
-resulting from the execution of the action with name "{{ action.name }}".</p>
+NOTIFICATION_SUBJECT = getattr(settings, 'EMAIL_ACTION_NOTIFICATION_SUBJECT')
 
-{% if filter_present %}
-<p>The action had a filter that reduced the number of messages from
-{{ num_rows }} to {{ num_selected }}.</p>
-{% else %}
-<p>All the data rows stored in the workflow table were used.</p>
-{% endif %}
-
-Regards.
-The OnTask Support Team
-</body></html>""")
-
-NOTIFICATION_SUBJECT = getattr(
-    settings,
-    'EMAIL_ACTION_NOTIFICATION_SUBJECT',
-    _('OnTask: Action executed'))
-
-NOTIFICATION_SENDER = getattr(
-    settings,
-    'EMAIL_ACTION_NOTIFICATION_SENDER',
-    'ontask@ontasklearning.org')
+NOTIFICATION_SENDER = getattr(settings, 'EMAIL_ACTION_NOTIFICATION_SENDER')
 
 OVERRIDE_FROM_ADDRESS = getattr(settings, 'EMAIL_OVERRIDE_FROM')
 
 # UPLOADS
 # ------------------------------------------------------------------------------
-CONTENT_TYPES = getattr(
-    settings,
-    'DATAOPS_CONTENT_TYPES',
-    '["text/csv", "application/json", "application/gzip"]')
+CONTENT_TYPES = getattr(settings, 'DATAOPS_CONTENT_TYPES')
 
-MAX_UPLOAD_SIZE = getattr(settings, 'DATAOPS_MAX_UPLOAD_SIZE', 209715200)
+MAX_UPLOAD_SIZE = getattr(settings, 'DATAOPS_MAX_UPLOAD_SIZE')
 
 # TRANSFORMATIONS AND MODELS
 # ------------------------------------------------------------------------------
-PLUGIN_DIRECTORY = getattr(
-    settings,
-    'DATAOPS_PLUGIN_DIRECTORY',
-    os.path.join(settings.BASE_DIR, 'plugins'))
+PLUGIN_DIRECTORY = getattr(settings, 'DATAOPS_PLUGIN_DIRECTORY')
 
 # Get the plugin path in the sys.path
 plugin_folder = PLUGIN_DIRECTORY

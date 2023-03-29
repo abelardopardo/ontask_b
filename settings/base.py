@@ -46,6 +46,13 @@ env = environ.Env(
 
     DATABASE_URL=(str, os.environ.get('DATABASE_URL', '')),
 
+    DATAOPS_CONTENT_TYPES=(
+        str,
+        os.environ.get(
+            'DATAOPS_CONTENT_TYPES',
+            '["text/csv", "application/json", '
+            + '"application/gzip", "application/x-gzip", '
+            + '"application/vnd.ms-excel"]')),
     DATAOPS_MAX_UPLOAD_SIZE=(
         int,
         os.environ.get('DATAOPS_MAX_UPLOAD_SIZE', 209715200)),
@@ -57,6 +64,37 @@ env = environ.Env(
 
     DEBUG=(bool, os.environ.get('DEBUG', False)),
 
+    EMAIL_ACTION_NOTIFICATION_SENDER=(
+        str,
+        os.environ.get('EMAIL_ACTION_NOTIFICATION_SENDER', '')),
+    EMAIL_ACTION_NOTIFICATION_SUBJECT=(
+        str,
+        os.environ.get(
+            'EMAIL_ACTION_NOTIFICATION_SUBJECT',
+            'OnTask: Action executed')),
+    EMAIL_ACTION_NOTIFICATION_TEMPLATE=(
+        str,
+        os.environ.get(
+            """<html>
+<head/>
+<body>
+<p>Dear {{ user.name }}</p>
+
+<p>This message is to inform you that on {{ email_sent_datetime }}
+{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
+resulting from the execution of the action with name "{{ action.name }}".</p>
+
+{% if filter_present %}
+<p>The action had a filter that reduced the number of messages from
+{{ num_rows }} to {{ num_selected }}.</p>
+{% else %}
+<p>All the data rows stored in the workflow table were used.</p>
+{% endif %}
+
+Regards.
+The OnTask Support Team
+</body></html>""",
+        )),
     EMAIL_BURST=(int, os.environ.get('EMAIL_BURST', 0)),
     EMAIL_BURST_PAUSE=(int, os.environ.get('EMAIL_BURST_PAUSE', 0)),
     EMAIL_HOST=(str, os.environ.get('EMAIL_HOST', '')),
@@ -80,6 +118,8 @@ env = environ.Env(
     LANGUAGE_CODE=(str, os.environ.get('LANGUAGE_CODE', 'en-us')),
 
     LOG_FOLDER=(str, os.environ.get('LOG_FOLDER', 'logs')),
+
+    LOGS_MAX_LIST_SIZE=(int, os.environ.get('LOGS_MAX_LIST_SIZE', 200)),
 
     LDAP_AUTH_SERVER_URI=(str, os.environ.get('LDAP_AUTH_SERVER_URI', '')),
     LDAP_AUTH_BIND_PASSWORD=(
