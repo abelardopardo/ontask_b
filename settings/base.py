@@ -674,10 +674,10 @@ SUMMERNOTE_CONFIG = {
         'disableDragAndDrop': True},
     'css': (
         '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/'
-        + 'theme/base16-dark.min.css'),
+        + 'theme/base16-dark.min.css',),
     'css_for_inplace': (
         '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/'
-        + 'theme/base16-dark.min.css'),
+        + 'theme/base16-dark.min.css',),
     'codemirror': {
         'theme': 'base16-dark',
         'mode': 'htmlmixed',
