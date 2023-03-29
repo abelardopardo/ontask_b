@@ -120,16 +120,36 @@ env = environ.Env(
 
     USE_SSL=(bool, os.environ.get('USE_SSL', False)))
 
-# Load the values in the env file
-env_file = join(dirname(__file__), env('ENV_FILENAME'))
-if exists(env_file):
-    print('Loading environment file {0} through {1}'.format(
-        env('ENV_FILENAME'),
-        os.environ['DJANGO_SETTINGS_MODULE']))
-    environ.Env.read_env(str(env_file))
-else:
-    print('ERROR: File {0} not found.'.format(env_file))
-    sys.exit(1)
+# Load the values in the env file if it exists
+if env('ENV_FILENAME'):
+    env_file = join(dirname(__file__), env('ENV_FILENAME'))
+    if exists(env_file):
+        print('Loading environment file {0} through {1}'.format(
+            env('ENV_FILENAME'),
+            os.environ['DJANGO_SETTINGS_MODULE']))
+        environ.Env.read_env(str(env_file))
+    else:
+        print('ERROR: File {0} not found.'.format(env_file))
+        sys.exit(1)
+
+if not env('SECRET_KEY'):
+    print('The configuration variable "SECRET_KEY" cannot be empty.')
+    print('Create a value executing the following python code snippet:')
+    print("""python3 -c 'import random; import string; print("".join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))'""")
+    print("And assigining the resulting value to SECRET_KEY")
+    sys.exit()
+
+
+if not env('DATABASE_URL'):
+    print('The coniguration variable "DATABASE_URL" cannot be empty.')
+    print('The value must have the format "postgres://username:password@host:port/database"')
+    sys.exit()
+
+
+if not env('EMAIL_ACTION_NOTIFICATION_SENDER'):
+    print('The configuration variable "EMAIL_ACTION_NOTIFICATION_SENDER"')
+    print('cannot be empty. Must contain a valid email address')
+    sys.exit()
 
 
 def show_configuration() -> None:
