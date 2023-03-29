@@ -48,8 +48,7 @@ def ontask_jquery() -> str:
 def ontask_jqcron_js() -> str:
     """Provide the jqCron jquery files"""
     return format_html(
-        '<script src="{0}js/jqCron/jqCron.js"></script>'.format(
-            static('js/jqCron/jqCron.js'))
+        '<script src="{0}"></script>'.format(static('js/jqCron/jqCron.js'))
         + '<script src="{0}"></script>'.format(
             static(
                 'js/jqCron/jqCron.{0}.js'.format(ontask.get_country_code(
