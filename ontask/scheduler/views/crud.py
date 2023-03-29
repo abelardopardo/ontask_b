@@ -95,8 +95,13 @@ def create_sql_upload(
     :param workflow: Workflow of the current context.
     :return: HTTP response
     """
-    conn = models.SQLConnection.objects.filter(
-        pk=pk).filter(enabled=True).first()
+    conn = False
+    try:
+        conn = models.SQLConnection.objects.filter(
+            pk=pk).filter(enabled=True).first()
+    except Exception as e:
+        messages.error(request, 'Unable to retrieve connection.')
+
     if not conn:
         return redirect('scheduler:index')
 
