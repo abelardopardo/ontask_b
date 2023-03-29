@@ -1,11 +1,12 @@
 {% load i18n %}
+{% load static %}
 <div id="merge_outer" style="display:none;">
   <p style="max-width:400px;">{% blocktrans %}Selects all the rows from
     both the existing
     and new table for the update. For cells in rows with keys in both
     tables, the values are updated if the new table has a non-empty value
     (cell 4B remains with value "b").{% endblocktrans %}</p>
-  <img src="{{ MEDIA_URL }}merge_outer.png"
+  <img src="{% static 'merge_outer.png' %}"
        alt="{% trans 'Merge using all the keys in either the existing or new table' %}"
        style="width:400px;"/>
 </div>
@@ -17,7 +18,7 @@
   6 of the new table are removed. The cells in the result rows are
   updated only if the new value is non-empty (cell 4B remains with value
   "b").{% endblocktrans %}</p>
-  <img src="{{ MEDIA_URL }}merge_inner.png"
+  <img src="{% static 'merge_inner.png' %}"
        alt="{% trans 'Merge using only the keys in both the existing and new table' %}"
        style="width:400px;"/>
 </div>
@@ -29,7 +30,7 @@
   the existing one (rows 5 and 6 in the figure below). The cells in the
   result rows are updated only if the new value is non-empty (cell 4B
   remains with value "b").{% endblocktrans %}</p>
-  <img src="{{ MEDIA_URL }}merge_left.png"
+  <img src="{% static 'merge_left.png' %}"
        alt="{% trans 'Merge using only the keys in the existing table' %}"
        style="width:400px;"/>
 </div>
@@ -40,7 +41,7 @@
   in the new table (rows 1 and 2 in the figure below). The cells in the
   result rows are updated only if the new value is non-empty (cell 4B
   remains with value "b").{% endblocktrans %}</p>
-  <img src="{{ MEDIA_URL }}merge_right.png"
+  <img src="{% static 'merge_right.png' %}"
        alt="{% trans 'Merge using only the keys in the new table' %}"
        style="width:400px;"/>
 </div>
