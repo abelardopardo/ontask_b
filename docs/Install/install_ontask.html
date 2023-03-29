@@ -70,31 +70,46 @@ part of the python libraries in the system.</p>
 </ol>
 <div class="section" id="ontask-configuration">
 <h2><span class="section-number">2.2.1. </span>OnTask Configuration<a class="headerlink" href="#ontask-configuration" title="Permalink to this headline">¶</a></h2>
-<p>The next steps describe the configuration of the Django environment to run OnTask. This configuration is divided into in three groups of variables:</p>
-<p>Environment variables (<em>env</em> level)</p>
+<p>The next steps describe the variables used to configure the execution of OnTask. This configuration is divided into two groups of variables:</p>
+<p>Environment variables</p>
 <blockquote>
-<div><p>These are variables defined by the operating system and available to OnTask upon execution. The values are obtained at the start of the deployment. Changing these variables usually requires re-deploying the platform (for example if you are using a container platform like docker). These variables can only store strings.</p>
+<div><p>These variables need to be defined in the execution environment that starts OnTask.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code></dt><dd><p>Python expression pointing to the configuration script or initial module (python file) to execute on start up. Two of these modules are provided in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>. The file <code class="docutils literal notranslate"><span class="pre">development.py</span></code> provides definitions recommended for a development environment. The file <code class="docutils literal notranslate"><span class="pre">production.py</span></code> provides the suggested definitions for a production deployment. Both scripts load the definitions in the module <code class="docutils literal notranslate"><span class="pre">base.py</span></code>.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">settings.production</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code></dt><dd><p>Path and filename for the file with the configuration variables.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">settings/local.env</span></code></p>
+</dd>
+</dl>
 </div></blockquote>
-<p>Configuration file (<em>conf</em> level)</p>
+<p>Configuration variables (<em>script</em> level)</p>
 <blockquote>
-<div><p>The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file and kept within the system file readable by the application (in the <code class="docutils literal notranslate"><span class="pre">settings</span></code> folder). This variables can store strings, booleans, basic lists and dictionaries.</p>
+<div><p>These are variables that can be defined either in the execution environment (like the previous ones) or in the file with name specified in the variable <code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code>. The value of the configuration variables is obtaineed with the following rules:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Read the value from the definition in <code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code>.</p></li>
+<li><p>If no value is found in the previous step, take the value from the executing environment.</p></li>
+<li><p>If no value is found in the previous step, take the default value.</p></li>
+</ol>
+</div></blockquote>
 </div></blockquote>
 <p>Configuration script (<em>script</em> level)</p>
 <blockquote>
-<div><p>This is a python file that is read first by Django during its start-up procedure. The variables in this script can be defined using any python expression and may have arbitrarily complex expressions and operations (even function calls).</p>
+<div><p>This is a python file read by Django during its start-up procedure. The variables in this script can be defined using any python expression and may have arbitrarily complex expressions and operations (even function calls). The difference with the previous variables is that changes in these variables require changing the source code.</p>
 </div></blockquote>
-<p>OnTask processes the variables in these context in the following stages:</p>
-<ol class="arabic simple">
-<li><p>The environment variables are loaded (if present)</p></li>
-<li><p>The configuration file is loaded. If the file contains a definition for an environment variable, this is considered only if there is no value provided by the environment. In other words, an empty set of environment variables can be written in the configuration file and their values are considered. On the opposite side, if all environment variables are defined, any additional definition in the configuration file is ignored.</p></li>
-<li><p>The initialization script is loaded with all the variables previously defined available.</p></li>
-</ol>
-<div class="section" id="environment-variables">
-<span id="configuration-environment"></span><h3><span class="section-number">2.2.1.1. </span>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
-<p>The following variables, if defined in the environment, are considered by OnTask upon start.</p>
+<div class="section" id="configuration-variables">
+<span id="id1"></span><h3><span class="section-number">2.2.1.1. </span>Configuration variables<a class="headerlink" href="#configuration-variables" title="Permalink to this headline">¶</a></h3>
+<p>The following variables (in alphabetical order) can be defined outside the OnTask code for its configuration:</p>
 <dl>
-<dt><code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code></dt><dd><p>Amazon Web Services access key id. This value is used when the static files in the server are served from a S3 bucket.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">ALLOWED_HOSTS</span></code></dt><dd><p>Comma-separated list of host names used to validate the HTTP requests received by the platform. It helps to avoid processing requests that fake their Host headers. If OnTask is going to be hosted in <code class="docutils literal notranslate"><span class="pre">www.yoursite.com</span></code>, then you may want to define it as <code class="docutils literal notranslate"><span class="pre">www.yoursite.com,yoursite.com</span></code>. By default the platform allows request with any Host header.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">[*]</span></code> (any connection from any host)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code></dt><dd><p>Amazon Web Services access key id. This value is used to access static files when served from a S3 bucket.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AWS_LOCATION</span></code></dt><dd><p>Path within the AWS S3 Bucket where the static files are located</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">static</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">AWS_SECRET_ACCESS_KEY</span></code></dt><dd><p>Amazon Web Services secret attached to the given Access Key.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
@@ -102,26 +117,93 @@ part of the python libraries in the system.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">AWS_STORAGE_BUCKET_NAME</span></code></dt><dd><p>Name of the S3 Bucket used to serve the static content</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">AWS_LOCATION</span></code></dt><dd><p>Path within the AWS S3 Bucket where the static files are located</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">static</span></code></p>
-</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">BASE_URL</span></code></dt><dd><p>Suffix that follows the host name when accessing OnTask once deployed. This is to allow OnTask to be deployed as part of a larger web server when the application is accessed as, for example, <code class="docutils literal notranslate"><span class="pre">hostname.com/suffix/ontask</span></code>.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CANVAS_INFO_DICT</span></code></dt><dd><p>A dictionary with elements pairs containing the identifier for a Canvas instance that will be shown to the user and a dictionary with the following configuration parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">domain_port</span></code>: A string containing the domain and port (if needed) of the Canvas host.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">client_id</span></code>: This value is provided by the administrator of the Canvas instance once permission to use the API has been granted.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">client_secret</span></code>: This value is provided together with the <code class="docutils literal notranslate"><span class="pre">client_id</span></code> once the permission to use the API is granted. It is typically a large random sequence of characters.</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">authorize_url</span></code>: URL template to access the first step of the authorization. This is usually <code class="docutils literal notranslate"><span class="pre">https://{0}/login/oauth2/auth</span></code>. The string <code class="docutils literal notranslate"><span class="pre">{0}</span></code> is replaced internally with the value of <code class="docutils literal notranslate"><span class="pre">domain_port</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">access_token_url</span></code>: URL template to access the token. This is usually <code class="docutils literal notranslate"><span class="pre">https://{0}/login/oauth2/token</span></code>. The string <code class="docutils literal notranslate"><span class="pre">{0}</span></code> is replaced internally with the value of <code class="docutils literal notranslate"><span class="pre">domain_port</span></code>.</p></li>
+</ul>
+</div></blockquote>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">conversation_URL</span></code>: Similar to the previous two values, it is the entry point in the API to create a conversation (equivalent to send an email). This is usually <code class="docutils literal notranslate"><span class="pre">https://{0}/api/v1/conversations</span></code>. The string <code class="docutils literal notranslate"><span class="pre">{0}</span></code> is replaced internally with the value of <code class="docutils literal notranslate"><span class="pre">domain_port</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">aux_params</span></code>: A dictionary with additional parameters. The dictionary may include a value for the key <code class="docutils literal notranslate"><span class="pre">burst</span></code> to limit the number of consecutive API invocations (to prevent throttling) and a value for the key <code class="docutils literal notranslate"><span class="pre">pause</span></code> with the number of seconds to separate bursts. Here is an example of the definition of this variable in the <code class="docutils literal notranslate"><span class="pre">local.env</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CANVAS_INFO_DICT</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Server one&quot;</span><span class="p">:</span>
+        <span class="p">{</span><span class="s2">&quot;domain_port&quot;</span><span class="p">:</span> <span class="s2">&quot;yourcanvasdomain.edu&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;10000000000001&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="s2">&quot;YZnGjbkopt9MpSq2fujUO&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;authorize_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://</span><span class="si">{0}</span><span class="s2">/login/oauth2/auth&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;access_token_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://</span><span class="si">{0}</span><span class="s2">/login/oauth2/token&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;conversation_url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://</span><span class="si">{0}</span><span class="s2">/api/v1/conversations&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;aux_params&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;burst&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;pause&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}}</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Make sure you include this informtion <strong>all in a single line in the configuration file</strong>.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">{}</span></code> (Empty dictionary)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CANVAS_TOKEN_EXPIRY_SLACK</span></code></dt><dd><p>The number of seconds to renew a token before it expires. For example, if the variable is 300, any API call performed with a token five minutes before it expires will prompt a token refresh. Here is an example of such definition in <code class="docutils literal notranslate"><span class="pre">local.env</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CANVAS_TOKEN_EXPIRY_SLACK</span><span class="o">=</span><span class="mi">300</span>
+</pre></div>
+</div>
+<p>Default: 600</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DATABASE_URL</span></code> <strong>(Required)</strong></dt><dd><p>URL encoding the connection to the database. String of the format <code class="docutils literal notranslate"><span class="pre">postgres://username:password&#64;host:port/database</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DATAOPS_MAX_UPLOAD_SIZE</span></code></dt><dd><p>Maximum file size for uploads</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">209715200</span></code> (200 Mb)</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DATAOPS_PLUGIN_DIRECTORY</span></code></dt><dd><p>Folder in the local file system containing the OnTask plugins.</p>
-<p>Default: <cite>plugins</cite></p>
+<p>Default: <cite>lib/plugins</cite></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code></dt><dd><p>Python expression pointing to the configuration script or initial module (python file) to execute on start up. Two of these modules are provided in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>. The file <code class="docutils literal notranslate"><span class="pre">development.py</span></code> provides definitions recommended for a development environment. The file <code class="docutils literal notranslate"><span class="pre">production.py</span></code> provides the suggested definitions for a production deployment. Both scripts load the definitions in the module <code class="docutils literal notranslate"><span class="pre">base.py</span></code>. These scripts contain configuration definitions described in <a class="reference internal" href="#configuration-script"><span class="std std-ref">Configuration script</span></a>.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">settings.production</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code></dt><dd><p>Flag to control if the execution is in DEBUG mode.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME</span></code></dt><dd><p>Host name used to serve the application.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">localhost</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_BURST</span></code></dt><dd><p>Number of consecutive emails to send before pausing (to adapt to potential throttling of the SMTP server)</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code></dt><dd><p>Name for the configuration file. It must be in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code></p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">local.env</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_BURST_PAUSE</span></code></dt><dd><p>Number of seconds to wait between bursts.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_HOST</span></code></dt><dd><p>Host providing the SMTP service.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_HOST_USER</span></code></dt><dd><p>User account to log into the email host</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_HOST_PASSWORD</span></code></dt><dd><p>Password for the account to log into the email host</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_HTML_ONLY</span></code></dt><dd><p>Send HTML text only, or alternatively, send text and HTML as an attachment</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">True</span></code> (send HTML only)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_OVERRIDE_FROM</span></code></dt><dd><p>Send messages using this address in the <cite>From</cite> field</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code> (Use the user email)</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_PORT</span></code></dt><dd><p>Port to communicate with the host</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_USE_SSL</span></code></dt><dd><p>Boolean stating if the communication should use SSL</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_USE_TLS</span></code></dt><dd><p>Boolean stating if the communication should use TLS</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EMAIL_ACTION_NOTIFICATION_SENDER</span></code></dt><dd><p>Address to use in the <cite>From</cite> field when sending notifications to instructors</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EXECUTE_ACTION_JSON_TRANSFER</span></code></dt><dd><p>Boolean stating if the JSON transfers should be executed when sending personalized text.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">LANGUAGE_CODE</span></code></dt><dd><p>Official ISO 639-1 language code to use in the platform. Check the available languages in the file base.py.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">en-us</span></code></p>
@@ -129,20 +211,26 @@ part of the python libraries in the system.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">LOG_FOLDER</span></code></dt><dd><p>Folder where to store the logs produced by the tool</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">logs</span></code> folder at the root of the project</p>
 </dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LDAP_AUTH_SERVER_URI</span></code></dt><dd><p>URI pointing to the LDAP server (only if LDAP is configured)</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LDAP_AUTH_BIND_PASSWORD</span></code></dt><dd><p>Password to connect to the LDAP server (only if LDAP is configured)</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
+</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">MEDIA_LOCATION</span></code></dt><dd><p>URL suffix to be used by OnTask to access the media files in folder <code class="docutils literal notranslate"><span class="pre">media</span></code>.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">/media/</span></code></p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">RDS_DB_NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_USERNAME</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_PASSWORD</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_HOSTNAME</span></code>, <code class="docutils literal notranslate"><span class="pre">RDS_PORT</span></code></dt><dd><p>Parameters to access the platform database: database name, username, password, host name and port respectively.</p>
-<p>Default: All empty strings.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">SCHEDULER_MINUTE_STEP</span></code></dt><dd><p>Step in minutes to offer when scheduling action executions</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">15</span></code></p>
+<dt><code class="docutils literal notranslate"><span class="pre">REDIS_URL</span></code></dt><dd><p>List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as <code class="docutils literal notranslate"><span class="pre">'rediscache://master:6379,slave1:6379,slave2:6379/1'</span></code> (see <a class="reference external" href="https://github.com/joke2k/django-environ">Django Environ</a>)</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">rediscache:://localhost:6379??client_class=django_redis.client.DefaultClient&amp;timeout=1000&amp;key_prefix=ontask</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SECRET_KEY</span></code> <strong>(Required)</strong></dt><dd><p>Random string of characters used to generate internal hashes. It should be kept secret. If not defined the platform will raise an error upon start.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">''</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SESSION_CLEANUP_CRONTAB</span></code></dt><dd><p>Crontab string specifying the frequency to run the <code class="docutils literal notranslate"><span class="pre">cleansessions</span></code> command.</p>
 <p>Default <cite>‘05 5 6 * *’</cite></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHOW_HOME_FOOTER_IMAGE</span></code></dt><dd><p>Boolean to control the appearance of a footer image in the home page. If true, the file <code class="docutils literal notranslate"><span class="pre">footer_image.gif</span></code> is shown from the media folder.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">STATIC_URL_SUFFIX</span></code></dt><dd><p>URL suffix to be used by OnTask to access the static files. This definition is ignored if <code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code> is defined as it is assumed that the static content is served through AWS. Make sure this value is not terminated by a slash.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">static</span></code></p>
@@ -153,47 +241,20 @@ part of the python libraries in the system.</p>
 </div>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">UTC</span></code></p>
 </dd>
-</dl>
-<p>Remember that if any of these variables is undefined in the execution environment, they still can be defined in the configuration file.</p>
-</div>
-<div class="section" id="configuration-file">
-<span id="id1"></span><h3><span class="section-number">2.2.1.2. </span>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h3>
-<p>Using a plain text editor create a file with name <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in folder <code class="docutils literal notranslate"><span class="pre">settings</span></code> (or a file with the name assigned to the environment variable <code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code> as described in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>). Include in this file either:</p>
-<ul class="simple">
-<li><p>the assignment of a variable from those described in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a> that has no environment definition, or</p></li>
-<li><p>the assignment of any of the following variables for which you want a value different than the default.</p></li>
-</ul>
-<p>The variables suitable to be included in the configuration file are:</p>
-<dl>
-<dt><code class="docutils literal notranslate"><span class="pre">ALLOWED_HOSTS</span></code></dt><dd><p>Comma-separated list of host names used to validate the HTTP requests received by the platform. It helps to avoid processing requests that fake their Host headers. If OnTask is going to be hosted in <code class="docutils literal notranslate"><span class="pre">www.yoursite.com</span></code>, then you may want to define it as <code class="docutils literal notranslate"><span class="pre">www.yoursite.com,yoursite.com</span></code>. By default the platform allows request with any Host header.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">[*]</span></code> (any connection from any host)</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DATABASE_URL</span></code> <strong>(Required)</strong></dt><dd><p>URL encoding the connection to the database. String of the format <code class="docutils literal notranslate"><span class="pre">postgres://username:password&#64;host:port/database</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">DEBUG</span></code></dt><dd><p>Flag to control if the execution is in DEBUG mode.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">EXECUTE_ACTION_JSON_TRANSFER</span></code></dt><dd><p>Boolean stating if the JSON transfers should be executed when sending persnalized text.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">REDIS_URL</span></code></dt><dd><p>List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as <code class="docutils literal notranslate"><span class="pre">'rediscache://master:6379,slave1:6379,slave2:6379/1'</span></code> (see <a class="reference external" href="https://github.com/joke2k/django-environ">Django Environ</a>)</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">rediscache:://localhost:6379??client_class=django_redis.client.DefaultClient&amp;timeout=1000&amp;key_prefix=ontask</span></code></p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">SHOW_HOME_FOOTER_IMAGE</span></code></dt><dd><p>Boolean to control the appearance of a footer image in the home page. If true, the file <code class="docutils literal notranslate"><span class="pre">footer_image.gif</span></code> is shown from the media folder.</p>
-<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">USE_SSL</span></code></dt><dd><p>Boolean to control if the server should use SSL for communication. There are several security features that are enabled with using SSL.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 </dl>
-<p>There are additional variables to configure <a class="reference internal" href="email_config.html#email-config"><span class="std std-ref">Email</span></a> and <a class="reference internal" href="canvas_email_config.html#canvas-email-config"><span class="std std-ref">Canvas Email</span></a>.</p>
+</div>
+<div class="section" id="configuration-file">
+<span id="id2"></span><h3><span class="section-number">2.2.1.2. </span>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h3>
+<p>Using a plain text editor create a file with name <code class="docutils literal notranslate"><span class="pre">local.env</span></code> in folder <code class="docutils literal notranslate"><span class="pre">settings</span></code> (or a file with the name assigned to the environment variable <code class="docutils literal notranslate"><span class="pre">ENV_FILENAME</span></code> as described in <a class="reference internal" href="#configuration-variables"><span class="std std-ref">Configuration variables</span></a>). Include in this file the assignment of a variable from those described in <a class="reference internal" href="#configuration-variables"><span class="std std-ref">Configuration variables</span></a>.</p>
 <p>Here is an example of a minimalistic configuration file (note there is no space between variable names and the equal signs):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ALLOWED_HOSTS</span><span class="o">=</span><span class="n">HOSTNAME1</span><span class="p">,</span><span class="n">HOSTNAME2</span>
 <span class="n">BASE_URL</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
 <span class="c1"># syntax: DATABASE_URL=postgres://username:password@127.0.0.1:5432/database</span>
 <span class="n">DATABASE_URL</span><span class="o">=</span><span class="n">postgres</span><span class="p">:</span><span class="o">//</span><span class="p">[</span><span class="n">PSQLUSERNAME</span><span class="p">]:[</span><span class="n">PSQLPWD</span><span class="p">]</span><span class="o">@</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">5432</span><span class="o">/</span><span class="n">ontask</span>
 <span class="n">DEBUG</span><span class="o">=</span><span class="kc">False</span>
-<span class="n">DOMAIN_NAME</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">DOMAIN</span> <span class="n">NAME</span><span class="p">]</span>
 <span class="n">EXECUTE_ACTION_JSON_TRANSFER</span><span class="o">=</span><span class="kc">True</span>
 <span class="n">REDIS_URL</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">REDIS</span> <span class="n">URL</span><span class="p">]</span>
 <span class="n">TIME_ZONE</span><span class="o">=</span><span class="p">[</span><span class="n">YOUR</span> <span class="n">LOCAL</span> <span class="n">PYTHON</span> <span class="n">TIME</span> <span class="n">ZONE</span><span class="p">]</span>
@@ -210,18 +271,15 @@ previous step (the one that could access the ontask database and run
 queries). If you decided to use a different name for the database, adjust
 the last part of the line accordingly (replace <em>ontask</em> by the name of
 your database).</p></li>
-<li><p>Modify the line starting with <code class="docutils literal notranslate"><span class="pre">DOMAIN_NAME=</span></code> and change the field <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">DOMAIN</span> <span class="pre">NAME</span></code>] with the domain name of the machine hosting OnTask.</p></li>
 <li><p>Replace the string <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">REDIS</span> <span class="pre">URL]</span></code> with the URL where Redis can be
 accessed. This is typically something similar to
 <code class="docutils literal notranslate"><span class="pre">redis://127.0.0.1:6379/1</span></code>.</p></li>
-<li><p>Replace <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">LOCAL</span> <span class="pre">PYTHON</span> <span class="pre">TIME</span> <span class="pre">ZONE]</span></code> with the description of your time zone (see the definition of the variable <code class="docutils literal notranslate"><span class="pre">TIME_ZONE</span></code> in <a class="reference internal" href="#configuration-environment"><span class="std std-ref">Environment variables</span></a>.</p></li>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">[YOUR</span> <span class="pre">LOCAL</span> <span class="pre">PYTHON</span> <span class="pre">TIME</span> <span class="pre">ZONE]</span></code> with the description of your time zone (see the definition of the variable <code class="docutils literal notranslate"><span class="pre">TIME_ZONE</span></code> in <a class="reference internal" href="#configuration-variables"><span class="std std-ref">Configuration variables</span></a>.</p></li>
 <li><p>Open a command interpreter and execute the following python command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import random; import string; print(&quot;&quot;.join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))&#39;</span>
 </pre></div>
 </div>
-<p>Copy the long string produced as output and add it at the end of the last
-line of the file <code class="docutils literal notranslate"><span class="pre">local.env</span></code>. It should look something like (with
-different content after the equal sign):</p>
+<p>Copy the long string produced as output and add it at the end of the last line of the file . It should look something like (with different content after the equal sign):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SECRET_KEY</span><span class="o">=</span><span class="mi">4</span><span class="n">o93jf0572094jv</span><span class="o">...</span>
 </pre></div>
 </div>
@@ -230,7 +288,7 @@ different content after the equal sign):</p>
 <p>The configuration file may include additional variables to configure functionality such as <a class="reference internal" href="authentication.html#ims-lti-config"><span class="std std-ref">IMS LTI</span></a>, <a class="reference internal" href="authentication.html#ldap-config"><span class="std std-ref">LDAP Authentication</span></a>, <a class="reference internal" href="email_config.html#email-config"><span class="std std-ref">Email configuration</span></a>, or <a class="reference internal" href="canvas_email_config.html#canvas-email-config"><span class="std std-ref">Canvas Email Configuration</span></a>.</p>
 </div>
 <div class="section" id="configuration-script">
-<span id="id2"></span><h3><span class="section-number">2.2.1.3. </span>Configuration script<a class="headerlink" href="#configuration-script" title="Permalink to this headline">¶</a></h3>
+<span id="id3"></span><h3><span class="section-number">2.2.1.3. </span>Configuration script<a class="headerlink" href="#configuration-script" title="Permalink to this headline">¶</a></h3>
 <p>The are some additional configuration variables that directly defined in the modules <code class="docutils literal notranslate"><span class="pre">base.py</span></code>, <code class="docutils literal notranslate"><span class="pre">development.py</span></code> and <code class="docutils literal notranslate"><span class="pre">production.py</span></code> in the folder <code class="docutils literal notranslate"><span class="pre">settings</span></code>. Modify the python code to perform additional configuration considering:</p>
 <ol class="arabic simple">
 <li><p>The script <code class="docutils literal notranslate"><span class="pre">base.py</span></code> is always executed first</p></li>
@@ -238,7 +296,7 @@ different content after the equal sign):</p>
 </ol>
 </div>
 <div class="section" id="log-directory">
-<span id="id3"></span><h3><span class="section-number">2.2.1.4. </span>Log directory<a class="headerlink" href="#log-directory" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3><span class="section-number">2.2.1.4. </span>Log directory<a class="headerlink" href="#log-directory" title="Permalink to this headline">¶</a></h3>
 <p>Create a new folder with name <code class="docutils literal notranslate"><span class="pre">logs</span></code> in the OnTask top folder, next to the <code class="docutils literal notranslate"><span class="pre">requirements</span></code> folder, or in the location defined in the variable <code class="docutils literal notranslate"><span class="pre">LOG_FOLDER</span></code>. This folder <strong>is different</strong> from the folder with the same name in the <code class="docutils literal notranslate"><span class="pre">ontask</span></code> folder.</p>
 </div>
 </div>

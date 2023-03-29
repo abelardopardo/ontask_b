@@ -34,7 +34,8 @@ Environment variables
 
     Default: ``settings.production``
 
-  These are variables defined by the operating system and available to OnTask upon execution. The values are obtained at the start of the deployment. Changing these variables usually requires re-deploying the platform (for example if you are using a container platform like docker). These variables can only store strings.
+  ``ENV_FILENAME``
+    Path and filename for the file with the configuration variables.
 
     Default: ``settings/local.env``
 
