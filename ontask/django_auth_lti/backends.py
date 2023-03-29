@@ -42,7 +42,7 @@ class LTIAuthBackend(ModelBackend):
 
         if not request:
             if settings.DEBUG:
-                LOGGER.error('No request object in authentication')
+                LOGGER.info('No request object in authentication')
             return None
 
         request_key = request.POST.get('oauth_consumer_key')
@@ -53,13 +53,13 @@ class LTIAuthBackend(ModelBackend):
             return None
 
         if not settings.LTI_OAUTH_CREDENTIALS:
-            LOGGER.error('Missing LTI_OAUTH_CREDENTIALS in settings')
+            LOGGER.debug('Missing LTI_OAUTH_CREDENTIALS in settings')
             raise PermissionDenied
 
         secret = settings.LTI_OAUTH_CREDENTIALS.get(request_key)
 
         if secret is None:
-            LOGGER.error('Could not get a secret for key %s', request_key)
+            LOGGER.debug('Could not get a secret for key %s', request_key)
             raise PermissionDenied
 
         LOGGER.debug('using key/secret %s/%s', request_key, secret)
