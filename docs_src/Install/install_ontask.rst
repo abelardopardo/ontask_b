@@ -31,13 +31,13 @@ Environment variables (*env* level)
 
 Configuration file (*conf* level)
 
-  The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file and kept within the system file readable by the application (in the ``settings`` folder). This variables can store strings, booleans, basic lists and dictionaries.
+  The configuration file contains a set of variable definitions that are fixed for the given platform. The values are written in a file readable by the application (in the ``settings`` folder). These variables can store strings, booleans, basic lists and dictionaries.
 
 Configuration script (*script* level)
 
-  This is a python file that is read first by Django during its start-up procedure. The variables in this script can be defined using any python expression and may have arbitrarily complex expressions and operations (even function calls).
+  This is a python file that is read by Django during its start-up procedure. The variables in this script can be defined using any python expression and may have arbitrarily complex expressions and operations (even function calls).
 
-OnTask processes the variables in these context in the following stages:
+OnTask processes the variables in these contexts in the following stages:
 
 1) The environment variables are loaded (if present)
 
@@ -122,11 +122,6 @@ The following variables, if defined in the environment, are considered by OnTask
 
   Default: All empty strings.
 
-``SCHEDULER_MINUTE_STEP``
-  Step in minutes to offer when scheduling action executions
-
-  Default: ``15``
-
 ``SECRET_KEY`` **(Required)**
   Random string of characters used to generate internal hashes. It should be kept secret. If not defined the platform will raise an error upon start.
 
@@ -178,9 +173,14 @@ The variables suitable to be included in the configuration file are:
   Default: ``False``
 
 ``EXECUTE_ACTION_JSON_TRANSFER``
-  Boolean stating if the JSON transfers should be executed when sending persnalized text.
+  Boolean stating if the JSON transfers should be executed when sending personalized text.
 
   Default: ``False``
+
+``OVERRIDE_EMAIL_FROM``
+  Email address to use in the `From` field when sending emails. If empty, the user email is used.
+
+  Default: ````
 
 ``REDIS_URL``
   List of URLs to access the cache service for OnTask. If there are several of these services, they can be specified as a comma-separated list such as ``'rediscache://master:6379,slave1:6379,slave2:6379/1'`` (see `Django Environ <https://github.com/joke2k/django-environ>`_)
