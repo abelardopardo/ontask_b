@@ -11,7 +11,8 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
-from ontask import OnTaskSharedState, models, tests
+from ontask import (
+    OnTaskSharedState, models, tests, settings as ontask_settings)
 from ontask.core import SessionPayload
 
 
@@ -32,10 +33,14 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
 
     workflow_name = 'BIOL1011'
 
-    def _verify_content(self):
-        """Verify the content of the messages received."""
+    def _verify_content(self, from_email='instructor01@bogus.com'):
+        """Verify the content of the messages received.
+
+        :param from_email: String to verify is in from field
+        :return: Nothing. Runs assertion
+        """
         self.assertTrue(all(
-            message.from_email == 'instructor01@bogus.com'
+            message.from_email == from_email
             and message.subject == 'message subject'
             and 'Here are the comments about ' in message.body
             and 'user01@bogus.com' in message.cc
@@ -79,8 +84,47 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
         self._verify_content()
         self.assertTrue(status.is_success(resp.status_code))
 
+    def test_run_action_email_override_from(self):
+        """Run sequence of request to send email overwriting the from."""
+        # Modify the database with a new value
+        override_from = 'override@bogus.com'
+        ontask_settings.OVERRIDE_FROM_ADDRESS = override_from
+
+        action = self.workflow.actions.get(name='Midterm comments')
+        column = action.workflow.columns.get(name='email')
+
+        # Step 1 invoke the form
+        resp = self.get_response(
+            'action:run',
+            url_params={'pk': action.id})
+        payload = SessionPayload.get_session_payload(self.last_request)
+        self.assertTrue(action.id == payload['action_id'])
+        self.assertTrue(
+            payload['prev_url'] == reverse(
+                'action:run',
+                kwargs={'pk': action.id}))
+        self.assertTrue(payload['post_url'] == reverse('action:run_done'))
+        self.assertTrue('post_url' in payload.keys())
+        self.assertTrue(status.is_success(resp.status_code))
+
+        # Step 2 send POST
+        resp = self.get_response(
+            'action:run',
+            url_params={'pk': action.id},
+            method='POST',
+            req_params={
+                'cc_email': 'user01@bogus.com user02@bogus.com',
+                'bcc_email': 'user03@bogus.com user04@bogus.com',
+                'item_column': column.pk,
+                'subject': 'message subject'})
+        payload = SessionPayload.get_session_payload(self.last_request)
+        self.assertTrue(payload == {})
+        self.assertTrue(len(mail.outbox) == action.get_rows_selected())
+        self._verify_content(from_email=override_from)
+        self.assertTrue(status.is_success(resp.status_code))
+
     def test_email_with_filter(self):
-        """Run sequence of request to send email without filtering users."""
+        """Run sequence of request to send email filtering users."""
         action = self.workflow.actions.get(name='Midterm comments')
         column = action.workflow.columns.get(name='email')
         exclude_values = ['pzaz8370@bogus.com', 'tdrv2640@bogus.com']

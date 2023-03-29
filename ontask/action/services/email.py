@@ -80,11 +80,15 @@ def _send_confirmation_message(
     action.log(user, models.Log.ACTION_EMAIL_NOTIFY, **context)
 
     # Send email out
+    from_field = str(ontask_settings.NOTIFICATION_SENDER)
+    if str(ontask_settings.OVERRIDE_FROM_ADDRESS):
+        from_field = str(ontask_settings.OVERRIDE_FROM_ADDRESS)
+
     try:
         send_mail(
             str(ontask_settings.NOTIFICATION_SUBJECT),
             text_content,
-            str(ontask_settings.NOTIFICATION_SENDER),
+            from_field,
             [user.email],
             html_message=html_content)
     except Exception as exc:
@@ -266,10 +270,14 @@ def _create_messages(
                 ),
             )
 
+        from_field = user.email
+        if str(ontask_settings.OVERRIDE_FROM_ADDRESS):
+            from_field = str(ontask_settings.OVERRIDE_FROM_ADDRESS)
+
         msg = _create_single_message(
             msg_body_sbj_to,
             track_str,
-            user.email,
+            from_field,
             cc_email,
             bcc_email)
         msgs.append(msg)
@@ -457,10 +465,14 @@ class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
         bcc_email = _check_email_list(payload['bcc_email'])
 
         # Context to log the events
+        from_field = user.email
+        if str(ontask_settings.OVERRIDE_FROM_ADDRESS):
+            from_field = str(ontask_settings.OVERRIDE_FROM_ADDRESS)
+
         msg = _create_single_message(
             [action_text, payload['subject'], payload['email_to']],
             '',
-            user.email,
+            from_field,
             cc_email,
             bcc_email,
             attachments=action.attachments.all(),

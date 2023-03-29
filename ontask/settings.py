@@ -44,6 +44,8 @@ NOTIFICATION_SENDER = getattr(
     'EMAIL_ACTION_NOTIFICATION_SENDER',
     'ontask@ontasklearning.org')
 
+OVERRIDE_FROM_ADDRESS = getattr(settings, 'EMAIL_OVERRIDE_FROM')
+
 # UPLOADS
 # ------------------------------------------------------------------------------
 CONTENT_TYPES = getattr(
@@ -96,7 +98,11 @@ register_prefs(
                 verbose_name=_('"From:" field in notification emails'),
                 static=False,
                 field=models.CharField(max_length=1024)),
-        ),
+            pref(
+                OVERRIDE_FROM_ADDRESS,
+                verbose_name=_('"From": field in all outgoing emails'),
+                static=False,
+                field=models.CharField(max_length=1024))),
         static=False),
     pref_group(
         _('Uploads'),
