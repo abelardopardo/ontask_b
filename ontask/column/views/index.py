@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 from ontask import models
 from ontask.column import services
 from ontask.core import (
-    DataTablesServerSidePaging, ajax_required, check_wf_df, get_workflow,
+    DataTablesServerSidePaging, ajax_required, check_workflow, get_workflow,
     is_instructor,
 )
 
@@ -33,7 +33,7 @@ def index(
     """
     # Safety check for consistency (only in development)
     if settings.DEBUG:
-        check_wf_df(workflow)
+        check_workflow(workflow)
 
     return render(
         request,

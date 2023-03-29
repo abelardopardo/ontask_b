@@ -13,7 +13,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from ontask import models
-from ontask.core.checks import check_wf_df
+from ontask.core.checks import check_workflow
 from ontask.workflow import services
 from ontask.workflow.serializers import (
     WorkflowExportSerializer, WorkflowImportSerializer,
@@ -72,7 +72,7 @@ def do_import_workflow_parse(
     workflow = workflow_data.save()
 
     try:
-        check_wf_df(workflow)
+        check_workflow(workflow)
     except AssertionError:
         # Something went wrong.
         if workflow:

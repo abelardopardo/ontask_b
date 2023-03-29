@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import models, tests
-from ontask.core.checks import check_wf_df
+from ontask.core.checks import check_workflow
 
 
 class WorkflowModify(tests.OnTaskLiveTestCase):
@@ -58,7 +58,7 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
             idx += 1
-        check_wf_df(models.Workflow.objects.get(id=1))
+        check_workflow(models.Workflow.objects.get(id=1))
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
         idx = 5

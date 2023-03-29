@@ -14,7 +14,7 @@ from ontask.models.logs import Log
 
 
 class Condition(CreateModifyFields):
-    """Define object to store mainly a formula.
+    """Object to storing a formula.
 
     The object also encodes:
     - is filter or not

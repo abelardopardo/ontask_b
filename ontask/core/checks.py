@@ -17,7 +17,7 @@ def _check_logs(workflow: models.Workflow) -> bool:
     return True
 
 
-def check_wf_df(workflow: models.Workflow) -> bool:
+def check_workflow(workflow: models.Workflow) -> bool:
     """Check consistency between Workflow info and the data frame.
 
     Check the consistency between the information stored in the workflow
@@ -72,8 +72,28 @@ def check_wf_df(workflow: models.Workflow) -> bool:
     rng = range(1, len(cpos) + 1)
     assert sorted(cpos) == list(rng)
 
+    # Verify the sanity of all the actions
+    for action in workflow.actions.all():
+        check_action(action)
+
     return True
 
+
+def check_action(action: models.Action) -> bool:
+    """Check consistency in Action object.
+
+    Perform various sanity checks for an action
+
+    :param action: Workflow object
+    :return: Boolean stating the result of the check. True: Correct.
+    """
+
+    # Conditions should not have the number of columns equal to zero and should
+    # not be filters.
+    for cond in action.conditions.all():
+        assert cond.columns.count() != 0
+
+    return True
 
 def sanity_checks() -> bool:
     """Perform various sanity checks for consistency.
@@ -81,7 +101,7 @@ def sanity_checks() -> bool:
     :result: True or an assertion fail
     """
     for workflow in models.Workflow.objects.all():
-        check_wf_df(workflow)
+        check_workflow(workflow)
 
         _check_logs(workflow)
 

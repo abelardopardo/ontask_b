@@ -455,6 +455,1501 @@
     }
 },
 {
+    "model": "ontask.column",
+    "pk": 1,
+    "fields": {
+        "name": "key",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "double",
+        "is_key": true,
+        "position": 1,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 2,
+    "fields": {
+        "name": "text1",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "string",
+        "is_key": false,
+        "position": 2,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 3,
+    "fields": {
+        "name": "text2",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "string",
+        "is_key": false,
+        "position": 3,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 4,
+    "fields": {
+        "name": "double1",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "double",
+        "is_key": false,
+        "position": 4,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 5,
+    "fields": {
+        "name": "double2",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "double",
+        "is_key": false,
+        "position": 5,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 6,
+    "fields": {
+        "name": "bool1",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "boolean",
+        "is_key": false,
+        "position": 6,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 7,
+    "fields": {
+        "name": "bool2",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "boolean",
+        "is_key": false,
+        "position": 7,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 8,
+    "fields": {
+        "name": "date1",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "datetime",
+        "is_key": false,
+        "position": 8,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 9,
+    "fields": {
+        "name": "date2",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "datetime",
+        "is_key": false,
+        "position": 9,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1,
+    "fields": {
+        "created": "2019-04-07T01:03:01.985Z",
+        "modified": "2019-04-07T03:57:05.840Z",
+        "action": 1,
+        "name": "c1 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "text1",
+                    "type": "string",
+                    "field": "text1",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            2
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 2,
+    "fields": {
+        "created": "2019-04-07T01:03:15.636Z",
+        "modified": "2019-04-07T03:58:40.760Z",
+        "action": 1,
+        "name": "c2 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "text2",
+                    "type": "string",
+                    "field": "text2",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            3
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 3,
+    "fields": {
+        "created": "2019-04-07T01:03:34.100Z",
+        "modified": "2019-04-07T01:09:24.928Z",
+        "action": 1,
+        "name": "c3 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "double1",
+                    "type": "double",
+                    "field": "double1",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 4,
+    "fields": {
+        "created": "2019-04-07T01:03:42.864Z",
+        "modified": "2019-04-07T01:09:47.018Z",
+        "action": 1,
+        "name": "c4 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "double2",
+                    "type": "double",
+                    "field": "double2",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            5
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 5,
+    "fields": {
+        "created": "2019-04-07T01:03:51.851Z",
+        "modified": "2019-04-07T01:10:45.594Z",
+        "action": 1,
+        "name": "c5 is true",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "bool1",
+                    "type": "string",
+                    "field": "bool1",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "is_filter": false,
+        "columns": [
+            6
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 6,
+    "fields": {
+        "created": "2019-04-07T01:04:05.159Z",
+        "modified": "2019-04-07T01:11:11.527Z",
+        "action": 1,
+        "name": "c6 is true",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "bool2",
+                    "type": "string",
+                    "field": "bool2",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "is_filter": false,
+        "columns": [
+            7
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 7,
+    "fields": {
+        "created": "2019-04-07T01:11:36.568Z",
+        "modified": "2019-04-07T01:17:10.817Z",
+        "action": 1,
+        "name": "c7 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "date1",
+                    "type": "datetime",
+                    "field": "date1",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 8,
+    "fields": {
+        "created": "2019-04-07T01:11:48.940Z",
+        "modified": "2019-04-07T01:26:05.428Z",
+        "action": 1,
+        "name": "c8 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "date2",
+                    "type": "datetime",
+                    "field": "date2",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            9
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 10,
+    "fields": {
+        "created": "2019-04-07T01:26:52.692Z",
+        "modified": "2019-04-07T03:59:14.865Z",
+        "action": 1,
+        "name": "c1 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "text1",
+                    "type": "string",
+                    "field": "text1",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            2
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 11,
+    "fields": {
+        "created": "2019-04-07T01:27:05.378Z",
+        "modified": "2019-04-07T01:29:06.204Z",
+        "action": 1,
+        "name": "c2 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "text2",
+                    "type": "string",
+                    "field": "text2",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            3
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 12,
+    "fields": {
+        "created": "2019-04-07T01:27:14.771Z",
+        "modified": "2019-04-07T01:29:26.755Z",
+        "action": 1,
+        "name": "c3 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "double1",
+                    "type": "double",
+                    "field": "double1",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 13,
+    "fields": {
+        "created": "2019-04-07T01:27:25.611Z",
+        "modified": "2019-04-07T01:29:50.542Z",
+        "action": 1,
+        "name": "c4 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "double2",
+                    "type": "double",
+                    "field": "double2",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            5
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 14,
+    "fields": {
+        "created": "2019-04-07T01:27:34.842Z",
+        "modified": "2019-04-07T03:59:36.525Z",
+        "action": 1,
+        "name": "c5 is not true",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "bool1",
+                    "type": "string",
+                    "field": "bool1",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 6,
+        "is_filter": false,
+        "columns": [
+            6
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 15,
+    "fields": {
+        "created": "2019-04-07T01:27:46.377Z",
+        "modified": "2019-04-07T01:30:49.098Z",
+        "action": 1,
+        "name": "c6 is not true",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "bool2",
+                    "type": "string",
+                    "field": "bool2",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 6,
+        "is_filter": false,
+        "columns": [
+            7
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 16,
+    "fields": {
+        "created": "2019-04-07T01:27:57.426Z",
+        "modified": "2019-04-07T01:31:15.478Z",
+        "action": 1,
+        "name": "c7 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "date1",
+                    "type": "datetime",
+                    "field": "date1",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 17,
+    "fields": {
+        "created": "2019-04-07T01:28:07.471Z",
+        "modified": "2019-04-07T01:32:07.613Z",
+        "action": 1,
+        "name": "c8 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "date2",
+                    "type": "datetime",
+                    "field": "date2",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            9
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 18,
+    "fields": {
+        "created": "2019-04-07T05:11:18.226Z",
+        "modified": "2019-04-07T05:11:46.052Z",
+        "action": 2,
+        "name": "c1 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "text1",
+                    "type": "string",
+                    "field": "text1",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            2
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 19,
+    "fields": {
+        "created": "2019-04-07T05:11:18.230Z",
+        "modified": "2019-04-07T05:11:46.058Z",
+        "action": 2,
+        "name": "c2 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "text2",
+                    "type": "string",
+                    "field": "text2",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "is_filter": false,
+        "columns": [
+            3
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 20,
+    "fields": {
+        "created": "2019-04-07T05:11:18.232Z",
+        "modified": "2019-04-07T05:11:46.063Z",
+        "action": 2,
+        "name": "c3 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "double1",
+                    "type": "double",
+                    "field": "double1",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 21,
+    "fields": {
+        "created": "2019-04-07T05:11:18.234Z",
+        "modified": "2019-04-07T05:11:46.069Z",
+        "action": 2,
+        "name": "c4 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "double2",
+                    "type": "double",
+                    "field": "double2",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "is_filter": false,
+        "columns": [
+            5
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 22,
+    "fields": {
+        "created": "2019-04-07T05:11:18.236Z",
+        "modified": "2019-04-07T05:11:46.075Z",
+        "action": 2,
+        "name": "c5 is true",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "bool1",
+                    "type": "string",
+                    "field": "bool1",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "is_filter": false,
+        "columns": [
+            6
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 23,
+    "fields": {
+        "created": "2019-04-07T05:11:18.238Z",
+        "modified": "2019-04-07T05:11:46.081Z",
+        "action": 2,
+        "name": "c6 is true",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "bool2",
+                    "type": "string",
+                    "field": "bool2",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "is_filter": false,
+        "columns": [
+            7
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 24,
+    "fields": {
+        "created": "2019-04-07T05:11:18.240Z",
+        "modified": "2019-04-07T05:11:46.086Z",
+        "action": 2,
+        "name": "c7 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "date1",
+                    "type": "datetime",
+                    "field": "date1",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 25,
+    "fields": {
+        "created": "2019-04-07T05:11:18.242Z",
+        "modified": "2019-04-07T05:11:46.091Z",
+        "action": 2,
+        "name": "c8 is null",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "date2",
+                    "type": "datetime",
+                    "field": "date2",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "is_filter": false,
+        "columns": [
+            9
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 26,
+    "fields": {
+        "created": "2019-04-07T05:11:18.245Z",
+        "modified": "2019-04-07T05:11:46.096Z",
+        "action": 2,
+        "name": "c1 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "text1",
+                    "type": "string",
+                    "field": "text1",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "is_filter": false,
+        "columns": [
+            2
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 27,
+    "fields": {
+        "created": "2019-04-07T05:11:18.248Z",
+        "modified": "2019-04-07T05:11:46.101Z",
+        "action": 2,
+        "name": "c2 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "text2",
+                    "type": "string",
+                    "field": "text2",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            3
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 28,
+    "fields": {
+        "created": "2019-04-07T05:11:18.250Z",
+        "modified": "2019-04-07T05:11:46.106Z",
+        "action": 2,
+        "name": "c3 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "double1",
+                    "type": "double",
+                    "field": "double1",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "is_filter": false,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 29,
+    "fields": {
+        "created": "2019-04-07T05:11:18.252Z",
+        "modified": "2019-04-07T05:11:46.110Z",
+        "action": 2,
+        "name": "c4 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "double2",
+                    "type": "double",
+                    "field": "double2",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            5
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 30,
+    "fields": {
+        "created": "2019-04-07T05:11:18.254Z",
+        "modified": "2019-04-07T05:11:46.115Z",
+        "action": 2,
+        "name": "c5 is not true",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "bool1",
+                    "type": "string",
+                    "field": "bool1",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            6
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 31,
+    "fields": {
+        "created": "2019-04-07T05:11:18.256Z",
+        "modified": "2019-04-07T05:11:46.120Z",
+        "action": 2,
+        "name": "c6 is not true",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "bool2",
+                    "type": "string",
+                    "field": "bool2",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "is_filter": false,
+        "columns": [
+            7
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 32,
+    "fields": {
+        "created": "2019-04-07T05:11:18.259Z",
+        "modified": "2019-04-07T05:11:46.125Z",
+        "action": 2,
+        "name": "c7 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "date1",
+                    "type": "datetime",
+                    "field": "date1",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "is_filter": false,
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 33,
+    "fields": {
+        "created": "2019-04-07T05:11:18.261Z",
+        "modified": "2019-04-07T05:11:46.131Z",
+        "action": 2,
+        "name": "c8 is not null",
+        "description_text": "",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "date2",
+                    "type": "datetime",
+                    "field": "date2",
+                    "input": "text",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": false,
+        "columns": [
+            9
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 34,
+    "fields": {
+        "created": "2019-04-07T05:11:46.034Z",
+        "modified": "2019-04-07T05:11:46.148Z",
+        "action": 2,
+        "name": "",
+        "description_text": "",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "double1",
+                    "type": "double",
+                    "field": "double1",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "is_filter": true,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 1,
+    "fields": {
+        "action": 1,
+        "column": 2,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 2,
+    "fields": {
+        "action": 1,
+        "column": 3,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 3,
+    "fields": {
+        "action": 1,
+        "column": 4,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 4,
+    "fields": {
+        "action": 1,
+        "column": 5,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 5,
+    "fields": {
+        "action": 1,
+        "column": 6,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 6,
+    "fields": {
+        "action": 1,
+        "column": 7,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 7,
+    "fields": {
+        "action": 1,
+        "column": 8,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 8,
+    "fields": {
+        "action": 1,
+        "column": 9,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 9,
+    "fields": {
+        "action": 2,
+        "column": 2,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 10,
+    "fields": {
+        "action": 2,
+        "column": 3,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 11,
+    "fields": {
+        "action": 2,
+        "column": 4,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 12,
+    "fields": {
+        "action": 2,
+        "column": 5,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 13,
+    "fields": {
+        "action": 2,
+        "column": 6,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 14,
+    "fields": {
+        "action": 2,
+        "column": 7,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 15,
+    "fields": {
+        "action": 2,
+        "column": 8,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 16,
+    "fields": {
+        "action": 2,
+        "column": 9,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.workflow",
+    "pk": 1,
+    "fields": {
+        "name": "Testing Eval Conditions",
+        "description_text": "Fixture to test way conditions are evaluated",
+        "created": "2018-10-14T01:15:54.267Z",
+        "modified": "2019-04-07T04:35:50.224Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "nrows": 8,
+        "ncols": 9,
+        "attributes": {},
+        "query_builder_ops": [
+            {
+                "id": "key",
+                "type": "double",
+                "validation": {
+                    "step": "any"
+                }
+            },
+            {
+                "id": "text1",
+                "type": "string"
+            },
+            {
+                "id": "text2",
+                "type": "string"
+            },
+            {
+                "id": "double1",
+                "type": "double",
+                "validation": {
+                    "step": "any"
+                }
+            },
+            {
+                "id": "double2",
+                "type": "double",
+                "validation": {
+                    "step": "any"
+                }
+            },
+            {
+                "id": "bool1",
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
+                "operators": [
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
+                ]
+            },
+            {
+                "id": "bool2",
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
+                "operators": [
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
+                ]
+            },
+            {
+                "id": "date1",
+                "type": "datetime"
+            },
+            {
+                "id": "date2",
+                "type": "datetime"
+            }
+        ],
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
+        "session_key": "p8m53pulzcs005gg1azbh9x9yil26jpi",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "star": [],
+        "lusers": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 1,
+    "fields": {
+        "name": "Test action",
+        "description_text": "",
+        "created": "2019-04-07T01:00:56.368Z",
+        "modified": "2019-04-07T05:09:39.602Z",
+        "workflow": 1,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": [],
+        "serve_enabled": false,
+        "text_content": "<p>C1: {{ text1 }}</p><p>C2: {{ text2 }}</p><p>C3: {{ double1 }}</p><p>C4: {{ double2 }}</p><p>C5: {{ bool1 }}</p><p>C6: {{ bool2 }}</p><p>C7: {{ date1 }}</p><p>C8: {{ date2 }}</p><p>{% if c1 is null %}TEST Cond1-1{% endif %}</p><p>{% if c2 is null %}TEST Cond2-1{% endif %}</p><p>{% if c3 is null %}TEST Cond3-1{% endif %}</p><p>{% if c4 is null %}TEST Cond4-1{% endif %}</p><p>{% if c5 is true %}TEST Cond5-1{% endif %}</p><p>{% if c6 is true %}TEST Cond6-2{% endif %}</p><p>{% if c7 is null %}TEST Cond7-1{% endif %}</p><p>{% if c8 is null %}TEST Cond8-1{% endif %}</p><p>{% if c1 is not null %}TEST Cond1-2{% endif %}<br><br>{% if c2 is not null %}TEST Cond2-2{% endif %}<br><br>{% if c3 is not null %}TEST Cond3-2{% endif %}<br><br>{% if c4 is not null %}TEST Cond4-2{% endif %}<br><br>{% if c5 is not true %}TEST Cond5-2{% endif %}<br><br>{% if c6 is not true %}TEST Cond6-2{% endif %}<br><br>{% if c7 is not null %}TEST Cond7-2{% endif %}<br><br>{% if c8 is not null %}TEST Cond8-2{% endif %}<br></p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 2,
+    "fields": {
+        "name": "Test action 2",
+        "description_text": "",
+        "created": "2019-04-07T05:11:18.206Z",
+        "modified": "2019-04-07T05:14:51.479Z",
+        "workflow": 1,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": [],
+        "serve_enabled": false,
+        "text_content": "<p>C1: {{ text1 }}</p><p>C2: {{ text2 }}</p><p>C3: {{ double1 }}</p><p>C4: {{ double2 }}</p><p>C5: {{ bool1 }}</p><p>C6: {{ bool2 }}</p><p>C7: {{ date1 }}</p><p>C8: {{ date2 }}</p><p>{% if c1 is null %}TEST Cond1-1{% endif %}</p><p>{% if c2 is null %}TEST Cond2-1{% endif %}</p><p>{% if c3 is null %}TEST Cond3-1{% endif %}</p><p>{% if c4 is null %}TEST Cond4-1{% endif %}</p><p>{% if c5 is true %}TEST Cond5-1{% endif %}</p><p>{% if c6 is true %}TEST Cond6-2{% endif %}</p><p>{% if c7 is null %}TEST Cond7-1{% endif %}</p><p>{% if c8 is null %}TEST Cond8-1{% endif %}</p><p>{% if c1 is not null %}TEST Cond1-2{% endif %}<br><br>{% if c2 is not null %}TEST Cond2-2{% endif %}<br><br>{% if c3 is not null %}TEST Cond3-2{% endif %}<br><br>{% if c4 is not null %}TEST Cond4-2{% endif %}<br><br>{% if c5 is not true %}TEST Cond5-2{% endif %}<br><br>{% if c6 is not true %}TEST Cond6-2{% endif %}<br><br>{% if c7 is not null %}TEST Cond7-2{% endif %}<br><br>{% if c8 is not null %}TEST Cond8-2{% endif %}<br></p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
     "model": "ontask.profile",
     "pk": 1,
     "fields": {
@@ -665,1410 +2160,108 @@
     }
 },
 {
-    "model": "ontask.workflow",
+    "model": "ontask.ontaskuser",
     "pk": 1,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "name": "Testing Eval Conditions",
-        "description_text": "Fixture to test way conditions are evaluated",
-        "created": "2018-10-14T01:15:54.267Z",
-        "modified": "2019-04-07T04:35:50.224Z",
-        "nrows": 8,
-        "ncols": 9,
-        "attributes": {},
-        "query_builder_ops": [
-            {
-                "id": "key",
-                "type": "double",
-                "validation": {
-                    "step": "any"
-                }
-            },
-            {
-                "id": "text1",
-                "type": "string"
-            },
-            {
-                "id": "text2",
-                "type": "string"
-            },
-            {
-                "id": "double1",
-                "type": "double",
-                "validation": {
-                    "step": "any"
-                }
-            },
-            {
-                "id": "double2",
-                "type": "double",
-                "validation": {
-                    "step": "any"
-                }
-            },
-            {
-                "id": "bool1",
-                "type": "string",
-                "input": "select",
-                "values": [
-                    "true",
-                    "false"
-                ],
-                "operators": [
-                    "equal",
-                    "not_equal",
-                    "is_null",
-                    "is_not_null"
-                ]
-            },
-            {
-                "id": "bool2",
-                "type": "string",
-                "input": "select",
-                "values": [
-                    "true",
-                    "false"
-                ],
-                "operators": [
-                    "equal",
-                    "not_equal",
-                    "is_null",
-                    "is_not_null"
-                ]
-            },
-            {
-                "id": "date1",
-                "type": "datetime"
-            },
-            {
-                "id": "date2",
-                "type": "datetime"
-            }
-        ],
-        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "p8m53pulzcs005gg1azbh9x9yil26jpi",
-        "shared": []
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.column",
-    "pk": 1,
-    "fields": {
-        "name": "key",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "double",
-        "is_key": true,
-        "position": 1,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 2,
-    "fields": {
-        "name": "text1",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "string",
-        "is_key": false,
-        "position": 2,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 3,
-    "fields": {
-        "name": "text2",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "string",
-        "is_key": false,
-        "position": 3,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 4,
-    "fields": {
-        "name": "double1",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "double",
-        "is_key": false,
-        "position": 4,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 5,
-    "fields": {
-        "name": "double2",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "double",
-        "is_key": false,
-        "position": 5,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 6,
-    "fields": {
-        "name": "bool1",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "boolean",
-        "is_key": false,
-        "position": 6,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 7,
-    "fields": {
-        "name": "bool2",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "boolean",
-        "is_key": false,
-        "position": 7,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 8,
-    "fields": {
-        "name": "date1",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "datetime",
-        "is_key": false,
-        "position": 8,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 9,
-    "fields": {
-        "name": "date2",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "datetime",
-        "is_key": false,
-        "position": 9,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 1,
-    "fields": {
-        "workflow": 1,
-        "name": "Test action",
-        "description_text": "",
-        "created": "2019-04-07T01:00:56.368Z",
-        "modified": "2019-04-07T05:09:39.602Z",
-        "last_executed_log": null,
-        "action_type": "personalized_text",
-        "serve_enabled": false,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [],
-        "text_content": "<p>C1: {{ text1 }}</p><p>C2: {{ text2 }}</p><p>C3: {{ double1 }}</p><p>C4: {{ double2 }}</p><p>C5: {{ bool1 }}</p><p>C6: {{ bool2 }}</p><p>C7: {{ date1 }}</p><p>C8: {{ date2 }}</p><p>{% if c1 is null %}TEST Cond1-1{% endif %}</p><p>{% if c2 is null %}TEST Cond2-1{% endif %}</p><p>{% if c3 is null %}TEST Cond3-1{% endif %}</p><p>{% if c4 is null %}TEST Cond4-1{% endif %}</p><p>{% if c5 is true %}TEST Cond5-1{% endif %}</p><p>{% if c6 is true %}TEST Cond6-2{% endif %}</p><p>{% if c7 is null %}TEST Cond7-1{% endif %}</p><p>{% if c8 is null %}TEST Cond8-1{% endif %}</p><p>{% if c1 is not null %}TEST Cond1-2{% endif %}<br><br>{% if c2 is not null %}TEST Cond2-2{% endif %}<br><br>{% if c3 is not null %}TEST Cond3-2{% endif %}<br><br>{% if c4 is not null %}TEST Cond4-2{% endif %}<br><br>{% if c5 is not true %}TEST Cond5-2{% endif %}<br><br>{% if c6 is not true %}TEST Cond6-2{% endif %}<br><br>{% if c7 is not null %}TEST Cond7-2{% endif %}<br><br>{% if c8 is not null %}TEST Cond8-2{% endif %}<br></p>",
-        "target_url": "",
-        "shuffle": false
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 2,
-    "fields": {
-        "workflow": 1,
-        "name": "Test action 2",
-        "description_text": "",
-        "created": "2019-04-07T05:11:18.206Z",
-        "modified": "2019-04-07T05:14:51.479Z",
-        "last_executed_log": null,
-        "action_type": "personalized_text",
-        "serve_enabled": false,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [],
-        "text_content": "<p>C1: {{ text1 }}</p><p>C2: {{ text2 }}</p><p>C3: {{ double1 }}</p><p>C4: {{ double2 }}</p><p>C5: {{ bool1 }}</p><p>C6: {{ bool2 }}</p><p>C7: {{ date1 }}</p><p>C8: {{ date2 }}</p><p>{% if c1 is null %}TEST Cond1-1{% endif %}</p><p>{% if c2 is null %}TEST Cond2-1{% endif %}</p><p>{% if c3 is null %}TEST Cond3-1{% endif %}</p><p>{% if c4 is null %}TEST Cond4-1{% endif %}</p><p>{% if c5 is true %}TEST Cond5-1{% endif %}</p><p>{% if c6 is true %}TEST Cond6-2{% endif %}</p><p>{% if c7 is null %}TEST Cond7-1{% endif %}</p><p>{% if c8 is null %}TEST Cond8-1{% endif %}</p><p>{% if c1 is not null %}TEST Cond1-2{% endif %}<br><br>{% if c2 is not null %}TEST Cond2-2{% endif %}<br><br>{% if c3 is not null %}TEST Cond3-2{% endif %}<br><br>{% if c4 is not null %}TEST Cond4-2{% endif %}<br><br>{% if c5 is not true %}TEST Cond5-2{% endif %}<br><br>{% if c6 is not true %}TEST Cond6-2{% endif %}<br><br>{% if c7 is not null %}TEST Cond7-2{% endif %}<br><br>{% if c8 is not null %}TEST Cond8-2{% endif %}<br></p>",
-        "target_url": "",
-        "shuffle": false
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1,
-    "fields": {
-        "action": 1,
-        "name": "c1 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "text1",
-                    "type": "string",
-                    "field": "text1",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:03:01.985Z",
-        "modified": "2019-04-07T03:57:05.840Z",
-        "columns": [
-            2
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 2,
-    "fields": {
-        "action": 1,
-        "name": "c2 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "text2",
-                    "type": "string",
-                    "field": "text2",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:03:15.636Z",
-        "modified": "2019-04-07T03:58:40.760Z",
-        "columns": [
-            3
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 3,
-    "fields": {
-        "action": 1,
-        "name": "c3 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "double1",
-                    "type": "double",
-                    "field": "double1",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:03:34.100Z",
-        "modified": "2019-04-07T01:09:24.928Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 4,
-    "fields": {
-        "action": 1,
-        "name": "c4 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "double2",
-                    "type": "double",
-                    "field": "double2",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:03:42.864Z",
-        "modified": "2019-04-07T01:09:47.018Z",
-        "columns": [
-            5
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 5,
-    "fields": {
-        "action": 1,
-        "name": "c5 is true",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "bool1",
-                    "type": "string",
-                    "field": "bool1",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-04-07T01:03:51.851Z",
-        "modified": "2019-04-07T01:10:45.594Z",
-        "columns": [
-            6
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 6,
-    "fields": {
-        "action": 1,
-        "name": "c6 is true",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "bool2",
-                    "type": "string",
-                    "field": "bool2",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-04-07T01:04:05.159Z",
-        "modified": "2019-04-07T01:11:11.527Z",
-        "columns": [
-            7
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 7,
-    "fields": {
-        "action": 1,
-        "name": "c7 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "date1",
-                    "type": "datetime",
-                    "field": "date1",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:11:36.568Z",
-        "modified": "2019-04-07T01:17:10.817Z",
-        "columns": [
-            8
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 8,
-    "fields": {
-        "action": 1,
-        "name": "c8 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "date2",
-                    "type": "datetime",
-                    "field": "date2",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:11:48.940Z",
-        "modified": "2019-04-07T01:26:05.428Z",
-        "columns": [
-            9
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 10,
-    "fields": {
-        "action": 1,
-        "name": "c1 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "text1",
-                    "type": "string",
-                    "field": "text1",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:26:52.692Z",
-        "modified": "2019-04-07T03:59:14.865Z",
-        "columns": [
-            2
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 11,
-    "fields": {
-        "action": 1,
-        "name": "c2 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "text2",
-                    "type": "string",
-                    "field": "text2",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:27:05.378Z",
-        "modified": "2019-04-07T01:29:06.204Z",
-        "columns": [
-            3
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 12,
-    "fields": {
-        "action": 1,
-        "name": "c3 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "double1",
-                    "type": "double",
-                    "field": "double1",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:27:14.771Z",
-        "modified": "2019-04-07T01:29:26.755Z",
-        "columns": [
-            4
-        ]
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 13,
-    "fields": {
-        "action": 1,
-        "name": "c4 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "double2",
-                    "type": "double",
-                    "field": "double2",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:27:25.611Z",
-        "modified": "2019-04-07T01:29:50.542Z",
-        "columns": [
-            5
-        ]
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 14,
-    "fields": {
-        "action": 1,
-        "name": "c5 is not true",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "bool1",
-                    "type": "string",
-                    "field": "bool1",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 6,
-        "is_filter": false,
-        "created": "2019-04-07T01:27:34.842Z",
-        "modified": "2019-04-07T03:59:36.525Z",
-        "columns": [
-            6
-        ]
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 15,
-    "fields": {
-        "action": 1,
-        "name": "c6 is not true",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "bool2",
-                    "type": "string",
-                    "field": "bool2",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 6,
-        "is_filter": false,
-        "created": "2019-04-07T01:27:46.377Z",
-        "modified": "2019-04-07T01:30:49.098Z",
-        "columns": [
-            7
-        ]
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 16,
-    "fields": {
-        "action": 1,
-        "name": "c7 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "date1",
-                    "type": "datetime",
-                    "field": "date1",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:27:57.426Z",
-        "modified": "2019-04-07T01:31:15.478Z",
-        "columns": [
-            8
-        ]
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 17,
-    "fields": {
-        "action": 1,
-        "name": "c8 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "date2",
-                    "type": "datetime",
-                    "field": "date2",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T01:28:07.471Z",
-        "modified": "2019-04-07T01:32:07.613Z",
-        "columns": [
-            9
-        ]
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 18,
-    "fields": {
-        "action": 2,
-        "name": "c1 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "text1",
-                    "type": "string",
-                    "field": "text1",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.226Z",
-        "modified": "2019-04-07T05:11:46.052Z",
-        "columns": []
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 19,
-    "fields": {
-        "action": 2,
-        "name": "c2 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "text2",
-                    "type": "string",
-                    "field": "text2",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.230Z",
-        "modified": "2019-04-07T05:11:46.058Z",
-        "columns": []
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 20,
-    "fields": {
-        "action": 2,
-        "name": "c3 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "double1",
-                    "type": "double",
-                    "field": "double1",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.232Z",
-        "modified": "2019-04-07T05:11:46.063Z",
-        "columns": []
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
+    "model": "ontask.ontaskuser",
     "pk": 21,
-    "fields": {
-        "action": 2,
-        "name": "c4 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "double2",
-                    "type": "double",
-                    "field": "double2",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.234Z",
-        "modified": "2019-04-07T05:11:46.069Z",
-        "columns": []
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.condition",
-    "pk": 22,
-    "fields": {
-        "action": 2,
-        "name": "c5 is true",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "bool1",
-                    "type": "string",
-                    "field": "bool1",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.236Z",
-        "modified": "2019-04-07T05:11:46.075Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 23,
-    "fields": {
-        "action": 2,
-        "name": "c6 is true",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "bool2",
-                    "type": "string",
-                    "field": "bool2",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.238Z",
-        "modified": "2019-04-07T05:11:46.081Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 24,
-    "fields": {
-        "action": 2,
-        "name": "c7 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "date1",
-                    "type": "datetime",
-                    "field": "date1",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.240Z",
-        "modified": "2019-04-07T05:11:46.086Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 25,
-    "fields": {
-        "action": 2,
-        "name": "c8 is null",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "date2",
-                    "type": "datetime",
-                    "field": "date2",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.242Z",
-        "modified": "2019-04-07T05:11:46.091Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 26,
-    "fields": {
-        "action": 2,
-        "name": "c1 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "text1",
-                    "type": "string",
-                    "field": "text1",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.245Z",
-        "modified": "2019-04-07T05:11:46.096Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 27,
-    "fields": {
-        "action": 2,
-        "name": "c2 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "text2",
-                    "type": "string",
-                    "field": "text2",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.248Z",
-        "modified": "2019-04-07T05:11:46.101Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 28,
-    "fields": {
-        "action": 2,
-        "name": "c3 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "double1",
-                    "type": "double",
-                    "field": "double1",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.250Z",
-        "modified": "2019-04-07T05:11:46.106Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 29,
-    "fields": {
-        "action": 2,
-        "name": "c4 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "double2",
-                    "type": "double",
-                    "field": "double2",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.252Z",
-        "modified": "2019-04-07T05:11:46.110Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 30,
-    "fields": {
-        "action": 2,
-        "name": "c5 is not true",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "bool1",
-                    "type": "string",
-                    "field": "bool1",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.254Z",
-        "modified": "2019-04-07T05:11:46.115Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 31,
-    "fields": {
-        "action": 2,
-        "name": "c6 is not true",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "bool2",
-                    "type": "string",
-                    "field": "bool2",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.256Z",
-        "modified": "2019-04-07T05:11:46.120Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 32,
-    "fields": {
-        "action": 2,
-        "name": "c7 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "date1",
-                    "type": "datetime",
-                    "field": "date1",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.259Z",
-        "modified": "2019-04-07T05:11:46.125Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 33,
-    "fields": {
-        "action": 2,
-        "name": "c8 is not null",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "date2",
-                    "type": "datetime",
-                    "field": "date2",
-                    "input": "text",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "created": "2019-04-07T05:11:18.261Z",
-        "modified": "2019-04-07T05:11:46.131Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 34,
-    "fields": {
-        "action": 2,
-        "name": "",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "double1",
-                    "type": "double",
-                    "field": "double1",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "n_rows_selected": 4,
-        "is_filter": true,
-        "created": "2019-04-07T05:11:46.034Z",
-        "modified": "2019-04-07T05:11:46.148Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 1,
-    "fields": {
-        "action": 1,
-        "column": 2,
-        "condition": null
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 2,
-    "fields": {
-        "action": 1,
-        "column": 3,
-        "condition": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 3,
-    "fields": {
-        "action": 1,
-        "column": 4,
-        "condition": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 4,
-    "fields": {
-        "action": 1,
-        "column": 5,
-        "condition": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 5,
-    "fields": {
-        "action": 1,
-        "column": 6,
-        "condition": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 6,
-    "fields": {
-        "action": 1,
-        "column": 7,
-        "condition": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 7,
-    "fields": {
-        "action": 1,
-        "column": 8,
-        "condition": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 8,
-    "fields": {
-        "action": 1,
-        "column": 9,
-        "condition": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 9,
-    "fields": {
-        "action": 2,
-        "column": 2,
-        "condition": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 10,
-    "fields": {
-        "action": 2,
-        "column": 3,
-        "condition": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
+    "model": "ontask.ontaskuser",
     "pk": 11,
-    "fields": {
-        "action": 2,
-        "column": 4,
-        "condition": null
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 12,
-    "fields": {
-        "action": 2,
-        "column": 5,
-        "condition": null
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 13,
-    "fields": {
-        "action": 2,
-        "column": 6,
-        "condition": null
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 14,
-    "fields": {
-        "action": 2,
-        "column": 7,
-        "condition": null
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 15,
-    "fields": {
-        "action": 2,
-        "column": 8,
-        "condition": null
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 16,
-    "fields": {
-        "action": 2,
-        "column": 9,
-        "condition": null
-    }
+    "fields": {}
 }
 ]

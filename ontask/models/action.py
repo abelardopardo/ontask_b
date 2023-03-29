@@ -29,13 +29,13 @@ from ontask.models.workflow import Workflow
 # presence of a "{% MACRONAME variable %} construct in a string (template)
 VAR_USE_RES = [
     # {{ varnane }}
-    re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+\}\})'),
+    re.compile(r'(?P<mup_pre>{{\s+)(?P<vname>.+?)(?P<mup_post>\s+}})'),
     # {% if column name %}
-    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%\})'),
+    re.compile(r'(?P<mup_pre>{%\s+if\s+)(?P<vname>.+?)(?P<mup_post>\s+%})'),
     # {% ot_insert_report "c1" "c2" "c3" %}
     re.compile(
         r'(?P<mup_pre>{%\s+ot_insert_report\s+)'
-        r'(?P<args>(".+?"\s+)+)(?P<mup_post>%\})')]
+        r'(?P<args>(".+?"\s+)+)(?P<mup_post>%})')]
 
 ACTION_TYPE_LENGTH = 64
 

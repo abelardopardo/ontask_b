@@ -13,7 +13,7 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser
 
 from ontask import models, tests
-from ontask.tests.compare import compare_workflows
+from ontask.tests.compare import compare_conditions, compare_workflows
 from ontask.workflow import services
 
 
@@ -149,6 +149,7 @@ class WorkflowImportExportCycle(tests.OnTaskTestCase):
             self.assertEqual(a1.text_content, a2.text_content)
             self.assertEqual(a1.target_url, a2.target_url)
             self.assertEqual(a1.shuffle, a2.shuffle)
+            compare_conditions(a1.get_filter(), a2.get_filter())
 
             conditions1 = a1.conditions.all()
             conditions2 = a2.conditions.all()

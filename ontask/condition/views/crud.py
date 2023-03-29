@@ -135,8 +135,7 @@ def edit_filter(
                 'form': form,
                 'action_id': condition.action.id,
                 'condition': form.instance},
-            request=request),
-    })
+            request=request)})
 
 
 @user_passes_test(is_instructor)

@@ -103,9 +103,9 @@
     {% elif no_actions %}
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
-    <div id="table-operation-buttons">
-      <div class="text-center mb-3">
-        {% if columns %}
+    {% if columns %}
+      <div id="table-operation-buttons">
+        <div class="text-center mb-3">
           <a href="{% url 'dataops:rowcreate' %}"
              class="shadow btn btn-outline-dark spin"
              data-toggle="tooltip"
@@ -113,8 +113,6 @@
             <span class="fa fa-plus"></span> {% trans 'Row' %}
           </a>
           {% include 'column/includes/add_menu.html' %}
-        {% endif %}
-        {% if columns %}
           <div class="dropdown btn-group shadow">
             <button onclick="location.href='{% url 'table:view_index' %}'"
                     class="btn btn-outline-dark spin"
@@ -142,8 +140,6 @@
               </div>
             {% endif %}
           </div>
-        {% endif %}
-        {% if columns %}
           {% if view %}
             <button type="button"
                     class="shadow btn btn-outline-dark js-view-edit align-middle"
@@ -179,10 +175,8 @@
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
             </a>
           {% endif %}
-        {% endif %}
+        </div>
       </div>
-    </div>
-    {% if columns %}
       <table class="table table-hover table-bordered shadow w-100"
              id="table-data" data-url="{% url 'column:column_move' %}">
         <thead>

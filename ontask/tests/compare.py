@@ -55,6 +55,8 @@ def compare_actions(a1, a2):
     for c1, c2 in zip(a1.conditions.all(), a2.conditions.all()):
         compare_conditions(c1, c2)
 
+    compare_conditions(a1.get_filter(), a2.get_filter())
+
     for t1, t2 in zip(
         a1.column_condition_pair.all(),
         a2.column_condition_pair.all(),
@@ -64,6 +66,9 @@ def compare_actions(a1, a2):
 
 def compare_conditions(c1, c2):
     """Compare two conditions."""
+    if c1 is None and c2 is None:
+        return
+
     assert c1.name == c2.name
     assert c1.description_text == c2.description_text
     assert c1.formula == c2.formula

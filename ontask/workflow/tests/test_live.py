@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import models, tests
+from ontask.tests.compare import compare_conditions
 
 
 class WorkflowInitial(tests.OnTaskLiveTestCase):
@@ -528,6 +529,7 @@ class WorkflowImport(tests.OnTaskLiveTestCase):
             self.assertEqual(x.name, y.name)
             self.assertEqual(x.description_text, y.description_text)
             self.assertEqual(x.text_content, y.text_content)
+            compare_conditions(x.get_filter(), y.get_filter())
             self.assertEqual(
                 x.conditions.count(),
                 y.conditions.count())
