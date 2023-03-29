@@ -6,7 +6,7 @@
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% blocktrans with n=dtype %}Upload/Merge {{ n }}{% endblocktrans %}{% endblock %}
 {% block scripts %}
-  <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
 {% endblock %}
 {% block container %}
   <div class="container" id="sql-load-step1">

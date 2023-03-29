@@ -6,7 +6,7 @@
 {% load widget_tweaks %}
 {% block title %}{{ block.super }}{% trans 'Import workflow' %}{% endblock %}
 {% block scripts %}
-  <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'workflow/js/workflow.js' %}"></script>
 {% endblock %}
 {% block container %}
   <div class="container" id="workflow-import">

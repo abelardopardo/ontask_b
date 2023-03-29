@@ -12,9 +12,9 @@
   {% ontask_jqcron_js %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
-  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
-  <script src="{% static 'scheduler/js/scheduler.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+  <script src="{% static 'action/js/action.js' %}"></script>
+  <script src="{% static 'scheduler/js/scheduler.js' %}"></script>
   <script type="text/javascript">
     jqCronWidget = $('.ontask-scheduler-frequency').jqCron({
       default_value: '{{ frequency }}',

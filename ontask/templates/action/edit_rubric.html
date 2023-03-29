@@ -17,8 +17,8 @@
   {% with country=LANGUAGE_CODE|country %}
     <script src="{% static 'js/query-builder.'|add:country|add:'.js' %}"></script>
   {% endwith %}
-  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
-  <script src="{% static 'condition/js/condition.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'action/js/action.js' %}"></script>
+  <script src="{% static 'condition/js/condition.js' %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
