@@ -379,9 +379,7 @@ def column_edit(
     return http.JsonResponse({
         'html_form': render_to_string(
             template,
-            {'form': form,
-             'cname': column.name,
-             'pk': pk},
+            {'form': form, 'cname': column.name, 'pk': pk, 'add': False},
             request=request),
     })
 

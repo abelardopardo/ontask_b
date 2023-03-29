@@ -220,7 +220,7 @@ class TableBasicMerge(APIView):
     Retrieves the data frame attached to the workflow and returns it labeled
     as "data_frame"
 
-    post:
+    put:
     Request to merge a given data frame with the one attached to the workflow.
     """
 
