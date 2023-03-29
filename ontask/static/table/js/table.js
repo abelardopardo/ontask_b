@@ -1,4 +1,7 @@
 $(function () {
+  $(".js-create-action").click(loadForm);
+  $("#modal-item").on("submit", ".js-action-create-form", saveForm);
+
   $("#table-content").on("click", ".js-workflow-column-add", loadForm);
   // Column Add
   $("#modal-item").on("submit", ".js-workflow-column-add-form", saveForm);

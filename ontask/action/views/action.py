@@ -66,6 +66,7 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
             request,
             self.form_class(workflow=kwargs.get('workflow')),
             self.template_name,
+            view_as_filter=kwargs.get('fid'),
             workflow=kwargs.get('workflow'),
         )
 
@@ -78,6 +79,7 @@ class ActionCreateView(UserIsInstructor, generic.TemplateView):
             request,
             self.form_class(request.POST, workflow=kwargs.get('workflow')),
             self.template_name,
+            view_as_filter=kwargs.get('fid'),
             workflow=kwargs.get('workflow'),
         )
 

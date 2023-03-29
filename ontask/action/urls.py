@@ -19,6 +19,10 @@ urlpatterns = [
 
     # Create an action
     path('create/', views.ActionCreateView.as_view(), name='create'),
+    # path(
+    #     '<int:fid>create/',
+    #     views.ActionCreateView.as_view(),
+    #     name='create_from_view'),
 
     # Show timeline
     path('timeline/', views.show_timeline, name='timeline'),

@@ -160,6 +160,14 @@
                title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
             </a>
+            {% comment %}
+            <button type="button" class="shadow btn btn-outline-dark js-create-action"
+                    data-url="{% url 'action:create_from_view' view.id %}"
+                    data-toggle="tooltip"
+                    title="{% trans 'New action to collect data from learners' %}">
+              <span class="fa fa-plus"></span> {% trans 'Action' %}
+            </button>
+            {% endcomment %}
           {% else %}
             <a href="{% url 'table:stat_table' %}"
                class="shadow btn btn-outline-dark spin"

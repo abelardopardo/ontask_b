@@ -15,6 +15,7 @@ def save_action_form(
     request: http.HttpRequest,
     form: Union[forms.ActionForm, forms.ActionUpdateForm],
     template_name: str,
+    view_as_filter: Optional[int] = None,
     workflow: Optional[models.Workflow] = None,
 ) -> http.JsonResponse:
     """Save information from the form to manipulate condition/filter.
@@ -26,6 +27,7 @@ def save_action_form(
     :param request: Request object
     :param form: Form to be used in the request/render
     :param template_name: Template for rendering the content
+    :param view_as_filter: Id of optional view to use as filter
     :param workflow: workflow being processed.
     :return: JSON response
     """
@@ -51,9 +53,15 @@ def save_action_form(
         action_item.log(request.user, log_type)
         return http.JsonResponse({'html_redirect': return_url})
 
+    form_url = reverse('action:create')
+    if view_as_filter is not None:
+        form_url = reverse(
+            'action:create_from_view',
+            kwargs={'fid': view_as_filter})
+
     return http.JsonResponse({
         'html_form': render_to_string(
             template_name,
-            {'form': form},
+            {'form': form, 'form_url': form_url},
             request=request),
     })
