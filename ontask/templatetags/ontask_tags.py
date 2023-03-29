@@ -5,6 +5,7 @@ import json
 
 from django import template
 from django.conf import settings
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -48,18 +49,19 @@ def ontask_jqcron_js() -> str:
     """Provide the jqCron jquery files"""
     return format_html(
         '<script src="{0}js/jqCron/jqCron.js"></script>'.format(
-            settings.STATIC_URL)
-        + '<script src="{0}js/jqCron/jqCron.{1}.js"></script>'.format(
-            settings.STATIC_URL,
-            ontask.get_country_code(settings.LANGUAGE_CODE)))
+            static('js/jqCron/jqCron.js'))
+        + '<script src="{0}"></script>'.format(
+            static(
+                'js/jqCron/jqCron.{0}.js'.format(ontask.get_country_code(
+                    settings.LANGUAGE_CODE)))))
 
 
 @register.simple_tag
 def ontask_jqcron_css() -> str:
     """Provide the jqCron CSS files"""
     return format_html(
-        '<link rel="stylesheet" href="{0}css/jqCron/jqCron.css">'.format(
-            settings.STATIC_URL))
+        '<link rel="stylesheet" href="{0}">'.format(
+            static('css/jqCron/jqCron.css')))
 
 
 @register.simple_tag
@@ -123,25 +125,22 @@ def ontask_datetimepicker_css() -> str:
     return format_html(
         ('<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap'
          + '-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css" '
-         + 'type="text/css" media="all" rel="stylesheet"><link href="{'
-         + '0}bootstrap_datepicker_plus/css/datepicker-widget.css" '
+         + 'type="text/css" media="all" rel="stylesheet"><link href="{0}" '
          + 'type="text/css" media="all" rel="stylesheet">').format(
-            settings.STATIC_URL))
+            static('bootstrap_datepicker_plus/css/datepicker-widget.css')))
 
 
 @register.simple_tag
 def ontask_datetimepicker_js() -> str:
     """Provide the datetime picker JS URL."""
     return format_html(
-        ('<script type="text/javascript" src="{'
-         + '0}js/moment-with-locales.js"></script>').format(
-            settings.STATIC_URL)
-        + ('<script type="text/javascript" '
-           + 'src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4'
-           + '.17.47/js/bootstrap-datetimepicker.min.js"></script><script '
-           + 'type="text/javascript" src="{'
-           + '0}bootstrap_datepicker_plus/js/datepicker-widget.js"></script'
-           + '>').format(settings.STATIC_URL))
+        '<script type="text/javascript" src="{0}"></script>'.format(
+            static('js/moment-with-locales.js'))
+        + '<script type="text/javascript" '
+        + 'src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4'
+        + '.17.47/js/bootstrap-datetimepicker.min.js"></script><script '
+        + 'type="text/javascript" src="{0}"></script>'.format(
+        static('bootstrap_datepicker_plus/js/datepicker-widget.js')))
 
 
 @register.simple_tag(takes_context=True)

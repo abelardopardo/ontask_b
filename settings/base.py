@@ -594,6 +594,7 @@ if AWS_ACCESS_KEY_ID:
         AWS_STORAGE_BUCKET_NAME,
         AWS_LOCATION)
     STATICFILES_DIRS = [join(BASE_DIR(), AWS_LOCATION)]
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 else:
     STATIC_URL = BASE_URL + '/' + STATIC_URL_SUFFIX + '/'
     STATICFILES_DIRS = [join(BASE_DIR(), STATIC_URL_SUFFIX)]
@@ -605,6 +606,12 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Django-import-export
 # -----------------------------------------------------------------------------
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+# Django-stores
+# -----------------------------------------------------------------------------
+AWS_DEFAULT_ACL = None
+AWS_S3_FILE_OVERWRITE = False
+# AWS_QUERYSTRING_AUTH = False
 
 # Canvas
 # -----------------------------------------------------------------------------
