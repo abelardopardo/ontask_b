@@ -201,6 +201,8 @@ def show_configuration() -> None:
 
 # CONFIGURATION VARIABLES
 # ------------------------------------------------------------------------------
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
 AWS_LOCATION = env('AWS_LOCATION', default='static')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
@@ -208,40 +210,108 @@ AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
 
 BASE_URL = env('BASE_URL', default='')
 
+CANVAS_INFO_DICT = json.loads(env('CANVAS_INFO_DICT', default='{}'))
+CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', 600)
+
 DATABASE_URL = env.db()
+
+DATAOPS_CONTENT_TYPES = env(
+    'DATAOPS_CONTENT_TYPES',
+    default='["text/csv", "application/json", '
+            + '"application/gzip", "application/x-gzip", '
+            + '"application/vnd.ms-excel"]')
+DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE', default=209715200)
+DATAOPS_PLUGIN_DIRECTORY = env(
+    'DATAOPS_PLUGIN_DIRECTORY',
+    default=join(BASE_DIR(), 'lib', 'plugins'))
+
+DEBUG = env.bool('DEBUG', default=False)
+
+EMAIL_ACTION_NOTIFICATION_SENDER = env('EMAIL_ACTION_NOTIFICATION_SENDER')
+EMAIL_ACTION_NOTIFICATION_SUBJECT = env(
+    'EMAIL_ACTION_NOTIFICATION_SUBJECT',
+    default='OnTask: Action executed')
+EMAIL_ACTION_NOTIFICATION_TEMPLATE = env(
+    'EMAIL_ACTION_NOTIFICATION_TEMPLATE',
+    default="""<html>
+<head/>
+<body>
+<p>Dear {{ user.name }}</p>
+
+<p>This message is to inform you that on {{ email_sent_datetime }}
+{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
+resulting from the execution of the action with name "{{ action.name }}".</p>
+
+{% if filter_present %}
+<p>The action had a filter that reduced the number of messages from
+{{ num_rows }} to {{ num_selected }}.</p>
+{% else %}
+<p>All the data rows stored in the workflow table were used.</p>
+{% endif %}
+
+Regards.
+The OnTask Support Team
+</body></html>""")
+
+EMAIL_BURST = env.int('EMAIL_BURST', default=0)
+EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE', default=0)
+EMAIL_HOST = env('EMAIL_HOST', default='')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+EMAIL_HTML_ONLY = env.bool('EMAIL_HTML_ONLY', default=True)
+EMAIL_OVERRIDE_FROM = env('EMAIL_OVERRIDE_FROM', default='')
+EMAIL_PORT = env('EMAIL_PORT', default='')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default='')
+EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default='')
+
+EXECUTE_ACTION_JSON_TRANSFER = env.bool(
+    'EXECUTE_ACTION_JSON_TRANSFER',
+    default=False)
+
+LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
+
+LDAP_AUTH_SERVER_URI = env('LDAP_AUTH_SERVER_URI', default='')
+LDAP_AUTH_BIND_PASSWORD = env('LDAP_AUTH_BIND_PASSWORD', default='')
 
 LOG_FOLDER = env('LOG_FOLDER', default='logs')
 
+LOGS_MAX_LIST_SIZE = env.int('LOGS_MAX_LIST_SIZE', default=200)
+
+LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS', default={})
+LTI_INSTRUCTOR_GROUP_ROLES = env.list(
+    'LTI_INSTRUCTOR_GROUP_ROLES',
+    default=['Instructor'])
+
 MEDIA_LOCATION = env('MEDIA_LOCATION', default='media/')
+
+ONTASK_HELP_URL = env('ONTASK_HELP_URL', default='html/index.html')
 
 REDIS_URL = env.cache('REDIS_URL')
 
-# Frequency to run the clear session command
+SECRET_KEY = env('SECRET_KEY')
+
 SESSION_CLEANUP_CRONTAB = env('SESSION_CLEANUP_CRONTAB', default='05 5 6 * *')
+
+SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
 
 STATIC_URL_SUFFIX = env('STATIC_URL_SUFFIX', default='static')
 
+TIME_ZONE = env('TIME_ZONE', default='UTC')
+
 USE_SSL = env.bool('USE_SSL', default=False)
+
+# -----------------------------------------------------------------------------
+# Configuration below this line at your own risk
+# -----------------------------------------------------------------------------
 
 # Django Core
 # -----------------------------------------------------------------------------
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
-
 CACHE_TTL = 60 * 30
 CACHES = {"default": REDIS_URL}
 
 DATABASES = {'default': DATABASE_URL}
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
-
-DEBUG = env.bool('DEBUG', default=False)
-
-EMAIL_HOST = env('EMAIL_HOST', default='')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
-EMAIL_PORT = env('EMAIL_PORT', default='')
-EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default='')
-EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default='')
 
 INSTALLED_APPS = [
     'django_extensions',
@@ -277,7 +347,6 @@ INSTALLED_APPS = [
 if AWS_ACCESS_KEY_ID:
     INSTALLED_APPS += ['storages']
 
-LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
 LANGUAGES = [
     ('en-us', _('English')),
     ('es-es', _('Spanish')),
@@ -360,10 +429,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'urls'
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# Raises ImproperlyConfigured exception if SECRET_KEY not defined
-SECRET_KEY = env('SECRET_KEY')
-
 SHORT_DATETIME_FORMAT = 'r'
 
 TEMPLATES = [{
@@ -388,8 +453,6 @@ TEMPLATES = [{
             'ontask_tags': 'ontask.templatetags.ontask_tags',
             'vis_include':
                 'ontask.visualizations.templatetags.vis_include'}}}]
-
-TIME_ZONE = env('TIME_ZONE', default='UTC')
 
 USE_I18N = True
 USE_L10N = True
@@ -462,42 +525,6 @@ AWS_DEFAULT_ACL = None
 AWS_S3_FILE_OVERWRITE = False
 # AWS_QUERYSTRING_AUTH = False
 
-# Canvas
-# -----------------------------------------------------------------------------
-###############################################################################
-#
-# CANVAS API ENTRY POINTS
-#
-# The  variable must contain a dictionary with the following elements:
-#
-#   "Server name or domain descriptor (shown to the user": {
-#      domain_port: VALUE,
-#      client_id: VALUE,
-#      client_secret: VALUE ,
-#      authorize_url: VALUE (format {0} for domain_port),
-#      access_token_url: VALUE (format {0} for domain_port),
-#      conversation_URL: VALUE (format {0} for domain_port),
-#      aux_params: DICT with additional parameters)
-#    }
-#  For example:
-#
-# CANVAS_INFO_DICT={
-#     "Server one": {
-#         "domain_port": "yourcanvasdomain.edu",
-#         "client_id": "10000000000001",
-#         "client_secret":
-#             "YZnGjbkopt9MpSq2fujUOgbeVZ8NdkdCeGF2ufhWZdBKAZvNCuuTOWXHotsWMu6X",
-#         "authorize_url": "http://{0}/login/oauth2/auth",
-#         "access_token_url": "http://{0}/login/oauth2/token",
-#         "conversation_url": "http://{0}/api/v1/conversations",
-#         "aux_params": {"burst": 10, "pause": 5}
-#     }
-# }
-# ------------------------------------------------------------------------------
-CANVAS_INFO_DICT = json.loads(env('CANVAS_INFO_DICT', default='{}'))
-# Number of seconds left in the token validity to refresh
-CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', 600)
-
 # Celery
 # -----------------------------------------------------------------------------
 CELERY_ACCEPT_CONTENT = ['application/json', 'pickle']
@@ -528,16 +555,6 @@ THUMBNAIL_EXTENSION = 'png'  # Or any extn for your thumbnails
 
 # OnTask Configuration
 # -----------------------------------------------------------------------------
-DATAOPS_CONTENT_TYPES = env(
-    'DATAOPS_CONTENT_TYPES',
-    default='["text/csv", "application/json", '
-            + '"application/gzip", "application/x-gzip", '
-            + '"application/vnd.ms-excel"]')
-DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE', default=209715200)
-DATAOPS_PLUGIN_DIRECTORY = env(
-    'DATAOPS_PLUGIN_DIRECTORY',
-    default=join(BASE_DIR(), 'lib', 'plugins'))
-
 DISABLED_ACTIONS = [
     # 'models.Action.PERSONALIZED_TEXT',
     # 'models.Action.PERSONALIZED_JSON',
@@ -547,58 +564,8 @@ DISABLED_ACTIONS = [
     # 'models.Action.SURVEY',
     'models.Action.TODO_LIST']
 
-EMAIL_ACTION_NOTIFICATION_SENDER = env('EMAIL_ACTION_NOTIFICATION_SENDER')
-EMAIL_ACTION_NOTIFICATION_SUBJECT = env(
-    'EMAIL_ACTION_NOTIFICATION_SUBJECT',
-    default='OnTask: Action executed')
-EMAIL_ACTION_NOTIFICATION_TEMPLATE = env(
-    'EMAIL_ACTION_NOTIFICATION_TEMPLATE',
-    default="""<html>
-<head/>
-<body>
-<p>Dear {{ user.name }}</p>
-
-<p>This message is to inform you that on {{ email_sent_datetime }}
-{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
-resulting from the execution of the action with name "{{ action.name }}".</p>
-
-{% if filter_present %}
-<p>The action had a filter that reduced the number of messages from
-{{ num_rows }} to {{ num_selected }}.</p>
-{% else %}
-<p>All the data rows stored in the workflow table were used.</p>
-{% endif %}
-
-Regards.
-The OnTask Support Team
-</body></html>""")
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
                      '0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
-# Number of emails to send out in a burst (before pausing)
-EMAIL_BURST = env.int('EMAIL_BURST', default=0)
-# Pause between bursts (in seconds)
-EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE', default=0)
-# Include HTML only email or HTML and text
-EMAIL_HTML_ONLY = env.bool('EMAIL_HTML_ONLY', default=True)
-# Email address to override the From in emails (if empty, use user email)
-EMAIL_OVERRIDE_FROM = env('EMAIL_OVERRIDE_FROM', default='')
-
-EXECUTE_ACTION_JSON_TRANSFER = env.bool(
-    'EXECUTE_ACTION_JSON_TRANSFER',
-    default=False)
-
-LOGS_MAX_LIST_SIZE = env.int('LOGS_MAX_LIST_SIZE', default=200)
-
-ONTASK_HELP_URL = "html/index.html"
-
-SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
-
-# LTI Configuration
-# -----------------------------------------------------------------------------
-LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS', default={})
-LTI_INSTRUCTOR_GROUP_ROLES = env.list(
-    'LTI_INSTRUCTOR_GROUP_ROLES',
-    default=['Instructor'])
 
 # Django REST Framework and drf-yasg
 # -----------------------------------------------------------------------------
@@ -655,12 +622,6 @@ SUMMERNOTE_CONFIG = {
 # CORS_ORIGIN_ALLOW_ALL = False
 # CORS_ORIGIN_WHITELIST = []
 # CORS_ORIGIN_REGEX_WHITELIST = []
-
-# LDAP AUTHENTICATION
-# ------------------------------------------------------------------------------
-# Variables taken from local.env
-# LDAP_AUTH_SERVER_URI = env('LDAP_AUTH_SERVER_URI', defaut='')
-# LDAP_AUTH_BIND_PASSWORD = env('LDAP_AUTH_BIND_PASSWORD', default='')
 
 # Additional configuration variables (read django-auth-ldap documentation)
 # AUTH_LDAP_CONNECTION_OPTIONS = {
