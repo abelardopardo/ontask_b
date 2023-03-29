@@ -25,170 +25,19 @@ BASE_DIR = environ.Path(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ONTASK_TESTING = sys.argv[1:2] == ['test']
 
-# Use 12factor inspired environment variables. Copy the variables from the os
-# environment with a default value
-env = environ.Env(
-    ALLOWED_HOSTS=(list, os.environ.get('ALLOWED_HOSTS', ['*'])),
-
-    AWS_ACCESS_KEY_ID=(str, os.environ.get('AWS_ACCESS_KEY_ID', '')),
-    AWS_LOCATION=(str, os.environ.get('AWS_LOCATION', 'static')),
-    AWS_SECRET_ACCESS_KEY=(str, os.environ.get('AWS_SECRET_ACCESS_KEY', '')),
-    AWS_STORAGE_BUCKET_NAME=(
-        str,
-        os.environ.get('AWS_STORAGE_BUCKET_NAME', '')),
-
-    BASE_URL=(str, os.environ.get('BASE_URL', '')),
-
-    CANVAS_INFO_DICT=(str, os.environ.get('CANVAS_INFO_DICT', '{}')),
-    CANVAS_TOKEN_EXPIRY_SLACK=(
-        int,
-        os.environ.get('CANVAS_TOKEN_EXPIRY_SLACK', 600)),
-
-    DATABASE_URL=(str, os.environ.get('DATABASE_URL', '')),
-
-    DATAOPS_CONTENT_TYPES=(
-        str,
-        os.environ.get(
-            'DATAOPS_CONTENT_TYPES',
-            '["text/csv", "application/json", '
-            + '"application/gzip", "application/x-gzip", '
-            + '"application/vnd.ms-excel"]')),
-    DATAOPS_MAX_UPLOAD_SIZE=(
-        int,
-        os.environ.get('DATAOPS_MAX_UPLOAD_SIZE', 209715200)),
-    DATAOPS_PLUGIN_DIRECTORY=(
-        str,
-        os.environ.get(
-            'DATAOPS_PLUGIN_DIRECTORY',
-            join(BASE_DIR(), 'lib', 'plugins'))),
-
-    DEBUG=(bool, os.environ.get('DEBUG', False)),
-
-    EMAIL_ACTION_NOTIFICATION_SENDER=(
-        str,
-        os.environ.get('EMAIL_ACTION_NOTIFICATION_SENDER', '')),
-    EMAIL_ACTION_NOTIFICATION_SUBJECT=(
-        str,
-        os.environ.get(
-            'EMAIL_ACTION_NOTIFICATION_SUBJECT',
-            'OnTask: Action executed')),
-    EMAIL_ACTION_NOTIFICATION_TEMPLATE=(
-        str,
-        os.environ.get(
-            """<html>
-<head/>
-<body>
-<p>Dear {{ user.name }}</p>
-
-<p>This message is to inform you that on {{ email_sent_datetime }}
-{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
-resulting from the execution of the action with name "{{ action.name }}".</p>
-
-{% if filter_present %}
-<p>The action had a filter that reduced the number of messages from
-{{ num_rows }} to {{ num_selected }}.</p>
-{% else %}
-<p>All the data rows stored in the workflow table were used.</p>
-{% endif %}
-
-Regards.
-The OnTask Support Team
-</body></html>""",
-        )),
-    EMAIL_BURST=(int, os.environ.get('EMAIL_BURST', 0)),
-    EMAIL_BURST_PAUSE=(int, os.environ.get('EMAIL_BURST_PAUSE', 0)),
-    EMAIL_HOST=(str, os.environ.get('EMAIL_HOST', '')),
-    EMAIL_HOST_USER=(str, os.environ.get('EMAIL_HOST_USER', '')),
-    EMAIL_HOST_PASSWORD=(str, os.environ.get('EMAIL_HOST_PASSWORD', '')),
-    EMAIL_HTML_ONLY=(bool, os.environ.get('EMAIL_HTML_ONLY', True)),
-    EMAIL_OVERRIDE_FROM=(str, os.environ.get('EMAIL_OVERRIDE_FROM', '')),
-    EMAIL_PORT=(int, os.environ.get('EMAIL_PORT', None)),
-    EMAIL_USE_SSL=(bool, os.environ.get('EMAIL_USE_SSL', False)),
-    EMAIL_USE_TLS=(bool, os.environ.get('EMAIL_USE_TLS', False)),
-
-    ENV_FILENAME=(str, os.environ.get('ENV_FILENAME', '')),
-
-    EXECUTE_ACTION_JSON_TRANSFER=(
-        bool,
-        os.environ.get('EXECUTE_ACTION_JSON_TRANSFER', False)),
-
-    LANGUAGE_CODE=(str, os.environ.get('LANGUAGE_CODE', 'en-us')),
-
-    LOG_FOLDER=(str, os.environ.get('LOG_FOLDER', 'logs')),
-
-    LOGS_MAX_LIST_SIZE=(int, os.environ.get('LOGS_MAX_LIST_SIZE', 200)),
-
-    LDAP_AUTH_SERVER_URI=(str, os.environ.get('LDAP_AUTH_SERVER_URI', '')),
-    LDAP_AUTH_BIND_PASSWORD=(
-        str,
-        os.environ.get('LDAP_AUTH_BIND_PASSWORD', '')),
-
-    LTI_OAUTH_CREDENTIALS=(
-        dict,
-        os.environ.get('LTI_OAUTH_CREDENTIALS', {})),
-    LTI_INSTRUCTOR_GROUP_ROLES=(
-        list,
-        os.environ.get('LTI_INSTRUCTOR_GROUP_ROLES', ['Instructor'])),
-
-    MEDIA_LOCATION=(str, os.environ.get('MEDIA_LOCATION', 'media/')),
-
-    ONTASK_HELP_URL=(str, os.environ.get('ONTASK_HELP_URL', 'html/index.html')),
-
-    REDIS_URL=(
-        str,
-        os.environ.get(
-            'REDIS_URL',
-            'redis://localhost:6379/'
-            + '?client_class=django_redis.client.DefaultClient'
-            + '&timeout=1000'
-            + '&key_prefix=ontask')),
-
-    SECRET_KEY=(str, os.environ.get('SECRET_KEY', '')),
-
-    SESSION_CLEANUP_CRONTAB=(
-        str,
-        os.environ.get('SESSION_CLEANUP_CRONTAB', '05 5 6 * *')),
-
-    SHOW_HOME_FOOTER_IMAGE=(
-        bool,
-        os.environ.get('SHOW_HOME_FOOTER_IMAGE', False)),
-
-    STATIC_URL_SUFFIX=(str, os.environ.get('STATIC_URL_SUFFIX', 'static')),
-
-    TIME_ZONE=(str, os.environ.get('TIME_ZONE', 'UTC')),
-
-    USE_SSL=(bool, os.environ.get('USE_SSL', False)))
+# Use 12factor inspired environment variables.
+env = environ.Env()
 
 # Load the values in the env file if it exists
-if env('ENV_FILENAME'):
-    env_file = join(dirname(__file__), env('ENV_FILENAME'))
-    if exists(env_file):
-        print('Loading environment file {0} through {1}'.format(
-            env('ENV_FILENAME'),
-            os.environ['DJANGO_SETTINGS_MODULE']))
-        environ.Env.read_env(str(env_file))
-    else:
-        print('ERROR: File {0} not found.'.format(env_file))
-        sys.exit(1)
-
-if not env('SECRET_KEY'):
-    print('The configuration variable "SECRET_KEY" cannot be empty.')
-    print('Create a value executing the following python code snippet:')
-    print("""python3 -c 'import random; import string; print("".join([random.SystemRandom().choice(string.digits + string.ascii_letters + string.punctuation) for i in range(100)]))'""")
-    print("And assigining the resulting value to SECRET_KEY")
-    sys.exit()
-
-
-if not env('DATABASE_URL'):
-    print('The coniguration variable "DATABASE_URL" cannot be empty.')
-    print('The value must have the format "postgres://username:password@host:port/database"')
-    sys.exit()
-
-
-if not env('EMAIL_ACTION_NOTIFICATION_SENDER'):
-    print('The configuration variable "EMAIL_ACTION_NOTIFICATION_SENDER"')
-    print('cannot be empty. Must contain a valid email address')
-    sys.exit()
+ENV_FILENAME = join(
+    dirname(__file__),
+    env('ENV_FILENAME', default='local.env'))
+if exists(ENV_FILENAME):
+    print(
+        'Loading environment file {0} through {1}'.format(
+            ENV_FILENAME,
+            env('DJANGO_SETTINGS_MODULE')))
+    environ.Env.read_env(str(ENV_FILENAME))
 
 
 def show_configuration() -> None:
@@ -206,10 +55,10 @@ def show_configuration() -> None:
     print('AWS_STORAGE_BUCKET_NAME:', AWS_STORAGE_BUCKET_NAME)
     print('BASE_URL:', BASE_URL)
     print('DATABASE_URL:', DATABASE_URL)
-    print('ENV_FILENAME:', env('ENV_FILENAME'))
+    print('ENV_FILENAME:', ENV_FILENAME)
     print('MEDIA_LOCATION:', MEDIA_LOCATION)
     print('REDIS_URL:', REDIS_URL)
-    print('SESSION_CLEANUP_CRONTAB:', env('SESSION_CLEANUP_CRONTAB'))
+    print('SESSION_CLEANUP_CRONTAB:', SESSION_CLEANUP_CRONTAB)
     print('STATIC_URL_SUFFIX:', STATIC_URL_SUFFIX)
     print('USE_SSL:', USE_SSL)
     print()
@@ -329,7 +178,7 @@ def show_configuration() -> None:
     print('EMAIL_HTML_ONLY (conf):', EMAIL_HTML_ONLY)
     print('EMAIL_OVERRIDE_FROM (conf):', EMAIL_OVERRIDE_FROM)
     print('EXECUTE_ACTION_JSON_TRANSFER (conf):', EXECUTE_ACTION_JSON_TRANSFER)
-    print('LOG_FOLDER (conf):', env('LOG_FOLDER'))
+    print('LOG_FOLDER (conf):', LOG_FOLDER)
     print('LOGS_MAX_LIST_SIZE:', LOGS_MAX_LIST_SIZE)
     print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
     print('SHOW_HOME_FOOTER_IMAGE (conf):', SHOW_HOME_FOOTER_IMAGE)
@@ -352,47 +201,47 @@ def show_configuration() -> None:
 
 # CONFIGURATION VARIABLES
 # ------------------------------------------------------------------------------
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_LOCATION = env('AWS_LOCATION')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
+AWS_LOCATION = env('AWS_LOCATION', default='static')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
 
-BASE_URL = env('BASE_URL')
+BASE_URL = env('BASE_URL', default='')
 
 DATABASE_URL = env.db()
 
-LOG_FOLDER = env('LOG_FOLDER')
+LOG_FOLDER = env('LOG_FOLDER', default='logs')
 
-MEDIA_LOCATION = env('MEDIA_LOCATION')
+MEDIA_LOCATION = env('MEDIA_LOCATION', default='media/')
 
 REDIS_URL = env.cache('REDIS_URL')
 
 # Frequency to run the clear session command
-SESSION_CLEANUP_CRONTAB = env('SESSION_CLEANUP_CRONTAB')
+SESSION_CLEANUP_CRONTAB = env('SESSION_CLEANUP_CRONTAB', default='05 5 6 * *')
 
-STATIC_URL_SUFFIX = env('STATIC_URL_SUFFIX')
+STATIC_URL_SUFFIX = env('STATIC_URL_SUFFIX', default='static')
 
-USE_SSL = env.bool('USE_SSL')
+USE_SSL = env.bool('USE_SSL', default=False)
 
 # Django Core
 # -----------------------------------------------------------------------------
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 CACHE_TTL = 60 * 30
 CACHES = {"default": REDIS_URL}
 
-DATABASES = {'default': DATABASE_URL, }
+DATABASES = {'default': DATABASE_URL}
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
-DEBUG = env.bool('DEBUG')
+DEBUG = env.bool('DEBUG', default=False)
 
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
-EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL')
+EMAIL_HOST = env('EMAIL_HOST', default='')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+EMAIL_PORT = env('EMAIL_PORT', default='')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default='')
+EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default='')
 
 INSTALLED_APPS = [
     'django_extensions',
@@ -540,7 +389,7 @@ TEMPLATES = [{
             'vis_include':
                 'ontask.visualizations.templatetags.vis_include'}}}]
 
-TIME_ZONE = env('TIME_ZONE')
+TIME_ZONE = env('TIME_ZONE', default='UTC')
 
 USE_I18N = True
 USE_L10N = True
@@ -645,9 +494,9 @@ AWS_S3_FILE_OVERWRITE = False
 #     }
 # }
 # ------------------------------------------------------------------------------
-CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT'))
+CANVAS_INFO_DICT = json.loads(env('CANVAS_INFO_DICT', default='{}'))
 # Number of seconds left in the token validity to refresh
-CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK')
+CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', 600)
 
 # Celery
 # -----------------------------------------------------------------------------
@@ -679,9 +528,15 @@ THUMBNAIL_EXTENSION = 'png'  # Or any extn for your thumbnails
 
 # OnTask Configuration
 # -----------------------------------------------------------------------------
-DATAOPS_CONTENT_TYPES = env('DATAOPS_CONTENT_TYPES')
-DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE')
-DATAOPS_PLUGIN_DIRECTORY = env('DATAOPS_PLUGIN_DIRECTORY')
+DATAOPS_CONTENT_TYPES = env(
+    'DATAOPS_CONTENT_TYPES',
+    default='["text/csv", "application/json", '
+            + '"application/gzip", "application/x-gzip", '
+            + '"application/vnd.ms-excel"]')
+DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE', default=209715200)
+DATAOPS_PLUGIN_DIRECTORY = env(
+    'DATAOPS_PLUGIN_DIRECTORY',
+    default=join(BASE_DIR(), 'lib', 'plugins'))
 
 DISABLED_ACTIONS = [
     # 'models.Action.PERSONALIZED_TEXT',
@@ -693,22 +548,46 @@ DISABLED_ACTIONS = [
     'models.Action.TODO_LIST']
 
 EMAIL_ACTION_NOTIFICATION_SENDER = env('EMAIL_ACTION_NOTIFICATION_SENDER')
-EMAIL_ACTION_NOTIFICATION_SUBJECT = env('EMAIL_ACTION_NOTIFICATION_SUBJECT')
-EMAIL_ACTION_NOTIFICATION_TEMPLATE = env('EMAIL_ACTION_NOTIFICATION_TEMPLATE')
+EMAIL_ACTION_NOTIFICATION_SUBJECT = env(
+    'EMAIL_ACTION_NOTIFICATION_SUBJECT',
+    default='OnTask: Action executed')
+EMAIL_ACTION_NOTIFICATION_TEMPLATE = env(
+    'EMAIL_ACTION_NOTIFICATION_TEMPLATE',
+    default="""<html>
+<head/>
+<body>
+<p>Dear {{ user.name }}</p>
+
+<p>This message is to inform you that on {{ email_sent_datetime }}
+{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
+resulting from the execution of the action with name "{{ action.name }}".</p>
+
+{% if filter_present %}
+<p>The action had a filter that reduced the number of messages from
+{{ num_rows }} to {{ num_selected }}.</p>
+{% else %}
+<p>All the data rows stored in the workflow table were used.</p>
+{% endif %}
+
+Regards.
+The OnTask Support Team
+</body></html>""")
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
                      '0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 # Number of emails to send out in a burst (before pausing)
-EMAIL_BURST = env.int('EMAIL_BURST')
+EMAIL_BURST = env.int('EMAIL_BURST', default=0)
 # Pause between bursts (in seconds)
-EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE')
+EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE', default=0)
 # Include HTML only email or HTML and text
-EMAIL_HTML_ONLY = env.bool('EMAIL_HTML_ONLY')
+EMAIL_HTML_ONLY = env.bool('EMAIL_HTML_ONLY', default=True)
 # Email address to override the From in emails (if empty, use user email)
-EMAIL_OVERRIDE_FROM = env('EMAIL_OVERRIDE_FROM')
+EMAIL_OVERRIDE_FROM = env('EMAIL_OVERRIDE_FROM', default='')
 
-EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER')
+EXECUTE_ACTION_JSON_TRANSFER = env.bool(
+    'EXECUTE_ACTION_JSON_TRANSFER',
+    default=False)
 
-LOGS_MAX_LIST_SIZE = env.int('LOGS_MAX_LIST_SIZE')
+LOGS_MAX_LIST_SIZE = env.int('LOGS_MAX_LIST_SIZE', default=200)
 
 ONTASK_HELP_URL = "html/index.html"
 
@@ -716,8 +595,10 @@ SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
 
 # LTI Configuration
 # -----------------------------------------------------------------------------
-LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS')
-LTI_INSTRUCTOR_GROUP_ROLES = env.list('LTI_INSTRUCTOR_GROUP_ROLES')
+LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS', default={})
+LTI_INSTRUCTOR_GROUP_ROLES = env.list(
+    'LTI_INSTRUCTOR_GROUP_ROLES',
+    default=['Instructor'])
 
 # Django REST Framework and drf-yasg
 # -----------------------------------------------------------------------------
@@ -778,8 +659,8 @@ SUMMERNOTE_CONFIG = {
 # LDAP AUTHENTICATION
 # ------------------------------------------------------------------------------
 # Variables taken from local.env
-# LDAP_AUTH_SERVER_URI = get_from_os_or_env('LDAP_AUTH_SERVER_URI', env)
-# LDAP_AUTH_BIND_PASSWORD = get_from_os_or_env('LDAP_AUTH_BIND_PASSWORD', env)
+# LDAP_AUTH_SERVER_URI = env('LDAP_AUTH_SERVER_URI', defaut='')
+# LDAP_AUTH_BIND_PASSWORD = env('LDAP_AUTH_BIND_PASSWORD', default='')
 
 # Additional configuration variables (read django-auth-ldap documentation)
 # AUTH_LDAP_CONNECTION_OPTIONS = {
