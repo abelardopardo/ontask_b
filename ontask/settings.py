@@ -79,7 +79,7 @@ patch_locals()  # That's for bootstrapping.
 
 register_prefs(
     pref_group(
-        _('Notification Emails'),
+        _('Emails'),
         (
             pref(
                 NOTIFICATION_TEMPLATE,

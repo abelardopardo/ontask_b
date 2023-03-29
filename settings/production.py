@@ -4,16 +4,8 @@ import logging.config
 
 from settings.base import *  # NOQA
 
-# Show emails to console
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# Send email through SMTP server
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-################################################################################
-#
 # Security features
-#
-################################################################################
+# -----------------------------------------------------------------------------
 MIDDLEWARE += ['django.middleware.security.SecurityMiddleware']
 if USE_SSL:
     SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -35,9 +27,7 @@ else:
 loaders = [
     ('django.template.loaders.cached.Loader', [
         'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    ]),
-]
+        'django.template.loaders.app_directories.Loader'])]
 
 TEMPLATES[0]['OPTIONS'].update({"loaders": loaders})
 TEMPLATES[0].update({"APP_DIRS": False})
@@ -73,8 +63,6 @@ LOGGING['loggers'] = {
     },
     'ontask.django_auth_lti.middleware_patched': {
         'handlers': ['ontask_log_file'],
-        'level': 'DEBUG',
-    },
-}
+        'level': 'DEBUG'}}
 
 logging.config.dictConfig(LOGGING)

@@ -16,7 +16,7 @@ from ontask.core import SessionPayload
 
 
 class ActionViewRunEmailAction(tests.OnTaskTestCase):
-    """Test the view to run actio item filter, json and email."""
+    """Test the view to run action item filter, json and email."""
 
     fixtures = ['initial_workflow']
     filename = os.path.join(
@@ -170,7 +170,7 @@ class ActionViewRunEmailAction(tests.OnTaskTestCase):
 
 
 class ActionViewRunEmailReportAction(tests.OnTaskTestCase):
-    """Test the view to run actio item filter, json and email."""
+    """Test the view to run action item filter, json and email."""
 
     fixtures = ['initial_workflow']
     filename = os.path.join(
@@ -198,7 +198,6 @@ class ActionViewRunEmailReportAction(tests.OnTaskTestCase):
             and 'user02@bogus.com' in mail.outbox[0].cc
             and 'user03@bogus.com' in mail.outbox[0].bcc
             and 'user04@bogus.com' in mail.outbox[0].bcc)
-
 
     def test_run_action_email_no_filter(self):
         """Run sequence of request to send email list ."""
@@ -235,7 +234,7 @@ class ActionViewRunEmailReportAction(tests.OnTaskTestCase):
 
 
 class ActionViewRunJSONAction(tests.OnTaskTestCase):
-    """Test the view to run actio item filter, json and email."""
+    """Test the view to run action item filter, json and email."""
 
     fixtures = ['initial_workflow']
     filename = os.path.join(
@@ -353,7 +352,7 @@ class ActionViewRunJSONAction(tests.OnTaskTestCase):
 
 
 class ActionViewRunJSONReportAction(tests.OnTaskTestCase):
-    """Test the view to run actio item filter, json and email."""
+    """Test the view to run action item filter, json and email."""
 
     fixtures = ['initial_workflow']
     filename = os.path.join(
@@ -404,7 +403,7 @@ class ActionViewRunJSONReportAction(tests.OnTaskTestCase):
 
 
 class ActionViewRunCanvasEmailAction(tests.OnTaskTestCase):
-    """Test the view to run actio item filter, json and email."""
+    """Test the view to run action item filter, json and email."""
 
     fixtures = ['initial_workflow']
     filename = os.path.join(

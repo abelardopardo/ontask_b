@@ -27,7 +27,7 @@ else:
     sys.exit(1)
 
 
-def dump_config() -> None:
+def show_configuration() -> None:
     """Print the configuration in the console."""
     print('# Calculated variables')
     print('# --------------------')

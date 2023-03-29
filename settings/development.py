@@ -73,43 +73,41 @@ LOGGING['loggers'] = {
     },
     'ontask.django_auth_lti.middleware_patched': {
         'handlers': ['django_log_file'],
-        'level': 'DEBUG',
-    },
-}
+        'level': 'DEBUG'}}
 
 logging.config.dictConfig(LOGGING)
 
 GRAPH_MODELS = {
-'group_models': True,
-'all_applications': True,
-'output': 'data_model.png',
-'exclude_models': [
-    'TaskResult',
-    'SQLConnection',
-    'Plugin',
-    'Site',
-    'ThumbnailDimensions',
-    'Thumbnail',
-    'Source',
-    'File',
-    'Preference',
-    'PeriodicTask',
-    'PeriodicTasks',
-    'IntervalSchedule',
-    'CrontabSchedule',
-    'SolarSchedule',
-    'Attachment',
-    'AbstractAttachment',
-    'Session',
-    'AbstractBaseSession',
-    'Profile',
-    'BaseProfile',
-    'Token',
-    'LogEntry',
-    'Group',
-    'Permission',
-    'ContentType'
-]
+    'group_models': True,
+    'all_applications': True,
+    'output': 'data_model.png',
+    'exclude_models': [
+        'TaskResult',
+        'SQLConnection',
+        'Plugin',
+        'Site',
+        'ThumbnailDimensions',
+        'Thumbnail',
+        'Source',
+        'File',
+        'Preference',
+        'PeriodicTask',
+        'PeriodicTasks',
+        'IntervalSchedule',
+        'CrontabSchedule',
+        'SolarSchedule',
+        'Attachment',
+        'AbstractAttachment',
+        'Session',
+        'AbstractBaseSession',
+        'Profile',
+        'BaseProfile',
+        'Token',
+        'LogEntry',
+        'Group',
+        'Permission',
+        'ContentType'
+    ]
 }
 
-dump_config()
+show_configuration()
