@@ -55,9 +55,9 @@
 	</div>
       </div>
         <div class="card-body">
-            <strong>{% trans 'API Auth token' %}</strong> {{ user.auth_token }}
+            <strong>{% trans 'API Auth token' %}</strong> {{ api_token }}
           <a href="{% url 'profiles:reset_token' %}"
-             class="shadow btn btn-sm btn-info">{% if user.auth_token %}{% trans 'Reset' %}
+             class="shadow btn btn-sm btn-info">{% if api_token %}{% trans 'Reset' %}
               {% else %}{% trans 'Create' %}{% endif %}
           </a>
         </div>

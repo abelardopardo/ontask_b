@@ -163,7 +163,8 @@ def upload_s2(
         'wid': workflow.id,
         'prev_step': upload_data['step_1'],
         'valuerange': range(5) if workflow.has_table() else range(3),
-        'df_info': df_info}
+        'df_info': df_info,
+        'next_name': None}
 
     if not workflow.has_table():
         # It is an upload, not a merge, set the next step to finish

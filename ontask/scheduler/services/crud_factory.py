@@ -214,6 +214,12 @@ class ScheduledOperationSaveBase:
         if not frequency:
             frequency = '0 5 * * 0'
 
+        all_false_conditions = False
+        if action:
+            all_false_conditions = any(
+                cond.n_rows_selected == 0
+                for cond in action.conditions.all())
+
         return render(
             request,
             'scheduler/edit.html',
@@ -222,6 +228,7 @@ class ScheduledOperationSaveBase:
                 'action': action,
                 'form': form,
                 'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
+                'all_false_conditions': all_false_conditions,
                 'frequency': frequency,
                 'payload': op_payload})
 

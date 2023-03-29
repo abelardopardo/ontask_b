@@ -21,7 +21,7 @@
   <script src="{% static 'action/js/action.js' %}"></script>
   <script src="{% static 'condition/js/condition.js' %}"></script>
   <script type="text/javascript">
-    {% with js_var='qbuilder_options' allow_empty='false' %}
+    {% with js_var='qbuilder_options' allow_empty='false' empty_rules=False %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
     {% if load_summernote %}

@@ -25,12 +25,16 @@ class ShowProfile(LoginRequiredMixin, generic.TemplateView):
         else:
             user = self.request.user
 
+        try:
+            api_token = user.auth_token
+        except Exception:
+            api_token = ''
+
         if user == self.request.user:
             kwargs["editable"] = True
         kwargs["show_user"] = user
-        kwargs["tokens"] = models.OAuthUserToken.objects.filter(
-            user=user
-        )
+        kwargs["tokens"] = models.OAuthUserToken.objects.filter(user=user)
+        kwargs['api_token'] = api_token
         return super().get(request, *args, **kwargs)
 
 

@@ -62,8 +62,7 @@ def render_table_display_page(
         context['columns_datatables'] = []
 
     # If using a view, add it to the context
-    if view:
-        context['view'] = view
+    context['view'] = view
 
     return render(request, 'table/display.html', context)
 
