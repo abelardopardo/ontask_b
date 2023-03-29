@@ -261,7 +261,7 @@ class TableBasicMerge(APIView):
         # Get the dst_df
         dst_df = pandas.load_table(workflow.get_data_frame_table_name())
 
-        if not dst_df:
+        if dst_df is None:
             return Response(
                 _('Merge request requires a workflow with a non-empty table'),
                 status=status.HTTP_400_BAD_REQUEST)
