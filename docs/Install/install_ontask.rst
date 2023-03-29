@@ -121,9 +121,7 @@ The following variables (in alphabetical order) can be defined outside the OnTas
   Default: ``{}`` (Empty dictionary)
 
 ``CANVAS_TOKEN_EXPIRY_SLACK``
-  The number of seconds to renew a token before it expires. For example, if the variable is 300, any API call performed with a token five minutes before it expires will prompt a token refresh. Here is an example of such definition in ``local.env``::
-
-      CANVAS_TOKEN_EXPIRY_SLACK=300
+  The number of seconds to renew a token before it expires. For example, if the variable is 300, any API call performed with a token five minutes before it expires will prompt a token refresh.
 
   Default: 600
 
@@ -243,16 +241,6 @@ The following variables (in alphabetical order) can be defined outside the OnTas
 
   Default: ``en-us``
 
-``LOG_FOLDER``
-  Folder where to store the logs produced by the tool
-
-  Default: ``logs`` folder at the root of the project
-
-``LOGS_MAX_LIST_SIZE``
-  Maximum number of logs shown to the user
-
-  Default: 200
-
 ``LDAP_AUTH_SERVER_URI``
   URI pointing to the LDAP server (only if LDAP is configured)
 
@@ -262,6 +250,16 @@ The following variables (in alphabetical order) can be defined outside the OnTas
   Password to connect to the LDAP server (only if LDAP is configured)
 
   Default: ``''``
+
+``LOG_FOLDER``
+  Folder where to store the logs produced by the tool
+
+  Default: ``logs`` folder at the root of the project
+
+``LOGS_MAX_LIST_SIZE``
+  Maximum number of logs shown to the user
+
+  Default: 200
 
 ``LTI_OAUTH_CREDENTIALS``
   Dictionary with credentials required for LTI authentication (if configured)
