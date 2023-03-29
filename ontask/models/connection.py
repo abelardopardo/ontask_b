@@ -21,8 +21,7 @@ class Connection(NameAndDescription):
         default=False,
         verbose_name=_('Available to users?'),
         null=False,
-        blank=False,
-    )
+        blank=False)
 
     optional_fields = []
 
