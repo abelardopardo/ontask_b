@@ -75,8 +75,8 @@ the `documentation of the django-auth-ldap module
 
 - Edit the configuration file ``local.env`` and add the following two variable definitions::
 
-    AUTH_LDAP_SERVER_URI=[uri pointing to your ldap server]
-    AUTH_LDAP_PASSWORD=[Password to connect to the server]
+    LDAP_AUTH_SERVER_URI=[uri pointing to your ldap server]
+    LDAP_AUTH_PASSWORD=[Password to connect to the server]
 
 - Edit the  file ``settings/base.py`` and uncomment the lines that import the ``ldap`` library (``import ldap``) and the lines that import three methods from the ``django_auth_ldap.config`` module (``LDAPSearch``, ``GroupOfNamesType`` and ``LDAPGroupQuery``)
 

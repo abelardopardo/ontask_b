@@ -13,13 +13,118 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 import environ
 
-# Use 12factor inspired environment variables or from a file and define defaults
-env = environ.Env()
-ENV_FILENAME = os.environ.get('ENV_FILENAME', 'local.env')
-env_file = join(dirname(__file__), ENV_FILENAME)
+# import ldap
+# from django_auth_ldap.config import (
+#     LDAPSearch,
+#     GroupOfNamesType,
+#     LDAPGroupQuery
+# )
+
+# Variables required to process configuration
+BASE_DIR = environ.Path(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ONTASK_TESTING = sys.argv[1:2] == ['test']
+
+# Use 12factor inspired environment variables. Copy the variables from the os
+# environment with a default value
+env = environ.Env(
+    ALLOWED_HOSTS=(list, os.environ.get('ALLOWED_HOSTS', ['*'])),
+
+    AWS_ACCESS_KEY_ID=(str, os.environ.get('AWS_ACCESS_KEY_ID', '')),
+    AWS_LOCATION=(str, os.environ.get('AWS_LOCATION', 'static')),
+    AWS_SECRET_ACCESS_KEY=(str, os.environ.get('AWS_SECRET_ACCESS_KEY', '')),
+    AWS_STORAGE_BUCKET_NAME=(
+        str,
+        os.environ.get('AWS_STORAGE_BUCKET_NAME', '')),
+
+    BASE_URL=(str, os.environ.get('BASE_URL', '')),
+
+    CANVAS_INFO_DICT=(str, os.environ.get('CANVAS_INFO_DICT', '{}')),
+    CANVAS_TOKEN_EXPIRY_SLACK=(
+        int,
+        os.environ.get('CANVAS_TOKEN_EXPIRY_SLACK', 600)),
+
+    DATABASE_URL=(str, os.environ.get('DATABASE_URL', '')),
+
+    DATAOPS_MAX_UPLOAD_SIZE=(
+        int,
+        os.environ.get('DATAOPS_MAX_UPLOAD_SIZE', 209715200)),
+    DATAOPS_PLUGIN_DIRECTORY=(
+        str,
+        os.environ.get(
+            'DATAOPS_PLUGIN_DIRECTORY',
+            join(BASE_DIR(), 'lib', 'plugins'))),
+
+    DEBUG=(bool, os.environ.get('DEBUG', False)),
+
+    EMAIL_BURST=(int, os.environ.get('EMAIL_BURST', 0)),
+    EMAIL_BURST_PAUSE=(int, os.environ.get('EMAIL_BURST_PAUSE', 0)),
+    EMAIL_HOST=(str, os.environ.get('EMAIL_HOST', '')),
+    EMAIL_HOST_USER=(str, os.environ.get('EMAIL_HOST_USER', '')),
+    EMAIL_HOST_PASSWORD=(str, os.environ.get('EMAIL_HOST_PASSWORD', '')),
+    EMAIL_HTML_ONLY=(bool, os.environ.get('EMAIL_HTML_ONLY', True)),
+    EMAIL_OVERRIDE_FROM=(str, os.environ.get('EMAIL_OVERRIDE_FROM', '')),
+    EMAIL_PORT=(int, os.environ.get('EMAIL_PORT', None)),
+    EMAIL_USE_SSL=(bool, os.environ.get('EMAIL_USE_SSL', False)),
+    EMAIL_USE_TLS=(bool, os.environ.get('EMAIL_USE_TLS', False)),
+    EMAIL_ACTION_NOTIFICATION_SENDER=(
+        str,
+        os.environ.get('EMAIL_ACTION_NOTIFICATION_SENDER', '')),
+
+    EXECUTE_ACTION_JSON_TRANSFER=(
+        bool,
+        os.environ.get('EXECUTE_ACTION_JSON_TRANSFER', False)),
+
+    ENV_FILENAME=(str, os.environ.get('ENV_FILENAME', 'local.env')),
+
+    LANGUAGE_CODE=(str, os.environ.get('LANGUAGE_CODE', 'en-us')),
+
+    LOG_FOLDER=(str, os.environ.get('LOG_FOLDER', 'logs')),
+
+    LDAP_AUTH_SERVER_URI=(str, os.environ.get('LDAP_AUTH_SERVER_URI', '')),
+    LDAP_AUTH_BIND_PASSWORD=(
+        str,
+        os.environ.get('LDAP_AUTH_BIND_PASSWORD', '')),
+
+    LTI_OAUTH_CREDENTIALS=(
+        dict,
+        os.environ.get('LTI_OAUTH_CREDENTIALS', {})),
+    LTI_INSTRUCTOR_GROUP_ROLES=(
+        list,
+        os.environ.get('LTI_INSTRUCTOR_GROUP_ROLES', ['Instructor'])),
+
+    MEDIA_LOCATION=(str, os.environ.get('MEDIA_LOCATION', '/media/')),
+
+    REDIS_URL=(
+        str,
+        os.environ.get(
+            'REDIS_URL',
+            'redis://localhost:6379/'
+            + '?client_class=django_redis.client.DefaultClient'
+            + '&timeout=1000'
+            + '&key_prefix=ontask')),
+
+    SECRET_KEY=(str, os.environ.get('SECRET_KEY', '')),
+
+    SESSION_CLEANUP_CRONTAB=(
+        str,
+        os.environ.get('SESSION_CLEANUP_CRONTAB', '05 5 6 * *')),
+
+    SHOW_HOME_FOOTER_IMAGE=(
+        bool,
+        os.environ.get('SHOW_HOME_FOOTER_IMAGE', False)),
+
+    STATIC_URL_SUFFIX=(str, os.environ.get('STATIC_URL_SUFFIX', 'static')),
+
+    TIME_ZONE=(str, os.environ.get('TIME_ZONE', 'UTC')),
+
+    USE_SSL=(bool, os.environ.get('USE_SSL', False)))
+
+# Load the values in the env file
+env_file = join(dirname(__file__), env('ENV_FILENAME'))
 if exists(env_file):
     print('Loading environment file {0} through {1}'.format(
-        ENV_FILENAME,
+        env('ENV_FILENAME'),
         os.environ['DJANGO_SETTINGS_MODULE']))
     environ.Env.read_env(str(env_file))
 else:
@@ -41,17 +146,11 @@ def show_configuration() -> None:
     print('AWS_SECRET_ACCESS_KEY:', AWS_SECRET_ACCESS_KEY)
     print('AWS_STORAGE_BUCKET_NAME:', AWS_STORAGE_BUCKET_NAME)
     print('BASE_URL:', BASE_URL)
-    print('CELERY_SESSION_CLEANUP_CRONTAB:',CELERY_SESSION_CLEANUP_CRONTAB)
-    print('DATABASE_URL:', DATABASES['default'])
-    print('ENV_FILENAME:', ENV_FILENAME)
-    print('LOG_FOLDER:', LOG_FOLDER)
+    print('DATABASE_URL:', DATABASE_URL)
+    print('ENV_FILENAME:', env('ENV_FILENAME'))
     print('MEDIA_LOCATION:', MEDIA_LOCATION)
-    print('RDS_DB_NAME:', RDS_DB_NAME)
-    print('RDS_USERNAME:', RDS_USERNAME)
-    print('RDS_PASSWORD:', RDS_PASSWORD)
-    print('RDS_HOSTNAME:', RDS_HOSTNAME)
-    print('RDS_PORT:', RDS_PORT)
     print('REDIS_URL:', REDIS_URL)
+    print('SESSION_CLEANUP_CRONTAB:', env('SESSION_CLEANUP_CRONTAB'))
     print('STATIC_URL_SUFFIX:', STATIC_URL_SUFFIX)
     print('USE_SSL:', USE_SSL)
     print()
@@ -63,12 +162,12 @@ def show_configuration() -> None:
     print('DATABASES:', DATABASES)
     print('DATA_UPLOAD_MAX_NUMBER_FIELDS:', DATA_UPLOAD_MAX_NUMBER_FIELDS)
     print('DEBUG (conf):', DEBUG)
-    print('EMAIL_HOST:', EMAIL_HOST)
-    print('EMAIL_HOST_USER:', EMAIL_HOST_USER)
-    print('EMAIL_HOST_PASSWORD:', EMAIL_HOST_PASSWORD)
-    print('EMAIL_PORT:', EMAIL_PORT)
-    print('EMAIL_USE_TLS:', EMAIL_USE_TLS)
-    print('EMAIL_USE_SSL:', EMAIL_USE_SSL)
+    print('EMAIL_HOST (conf):', EMAIL_HOST)
+    print('EMAIL_HOST_USER (conf):', EMAIL_HOST_USER)
+    print('EMAIL_HOST_PASSWORD (conf):', EMAIL_HOST_PASSWORD)
+    print('EMAIL_PORT (conf):', EMAIL_PORT)
+    print('EMAIL_USE_TLS (conf):', EMAIL_USE_TLS)
+    print('EMAIL_USE_SSL (conf):', EMAIL_USE_SSL)
     print('INSTALLED_APPS:', INSTALLED_APPS)
     print('LANGUAGE_CODE (conf):', LANGUAGE_CODE)
     # print('LANGUAGES:', LANGUAGES)
@@ -131,8 +230,8 @@ def show_configuration() -> None:
 
     print('# Canvas')
     print('# ------')
-    print('CANVAS_INFO_DICT:', CANVAS_INFO_DICT)
-    print('CANVAS_TOKEN_EXPIRY_SLACK:', CANVAS_TOKEN_EXPIRY_SLACK)
+    print('CANVAS_INFO_DICT (conf):', CANVAS_INFO_DICT)
+    print('CANVAS_TOKEN_EXPIRY_SLACK (conf):', CANVAS_TOKEN_EXPIRY_SLACK)
 
     print('# Celery')
     print('# ------')
@@ -141,6 +240,7 @@ def show_configuration() -> None:
     print('CELERY_BROKER_URL:', CELERY_BROKER_URL)
     print('CELERY_RESULT_BACKEND:', CELERY_RESULT_BACKEND)
     print('CELERY_RESULT_SERIALIZER:', CELERY_RESULT_SERIALIZER)
+    print('CELERY_SESSION_CLEANUP_CRONTAB:', CELERY_SESSION_CLEANUP_CRONTAB)
     print('CELERY_TASK_ALWAYS_EAGER:', CELERY_TASK_ALWAYS_EAGER)
     print('CELERY_TASK_SERIALIZER:', CELERY_TASK_SERIALIZER)
     print('CELERY_TIMEZONE:', CELERY_TIMEZONE)
@@ -165,19 +265,20 @@ def show_configuration() -> None:
         'EMAIL_ACTION_NOTIFICATION_TEMPLATE:',
         EMAIL_ACTION_NOTIFICATION_TEMPLATE)
     print('EMAIL_ACTION_PIXEL:', EMAIL_ACTION_PIXEL)
-    print('EMAIL_BURST:', EMAIL_BURST)
-    print('EMAIL_BURST_PAUSE:', EMAIL_BURST_PAUSE)
-    print('EMAIL_HTML_ONLY:', EMAIL_HTML_ONLY)
+    print('EMAIL_BURST (conf):', EMAIL_BURST)
+    print('EMAIL_BURST_PAUSE (conf):', EMAIL_BURST_PAUSE)
+    print('EMAIL_HTML_ONLY (conf):', EMAIL_HTML_ONLY)
     print('EMAIL_OVERRIDE_FROM (conf):', EMAIL_OVERRIDE_FROM)
     print('EXECUTE_ACTION_JSON_TRANSFER (conf):', EXECUTE_ACTION_JSON_TRANSFER)
+    print('LOG_FOLDER (conf):', env('LOG_FOLDER'))
     print('LOGS_MAX_LIST_SIZE:', LOGS_MAX_LIST_SIZE)
     print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
     print('SHOW_HOME_FOOTER_IMAGE (conf):', SHOW_HOME_FOOTER_IMAGE)
 
     print('# LTI Authentication')
     print('# ------------------')
-    print('LTI_OAUTH_CREDENTIALS:', LTI_OAUTH_CREDENTIALS)
-    print('LTI_INSTRUCTOR_GROUP_ROLES:', LTI_INSTRUCTOR_GROUP_ROLES)
+    print('LTI_OAUTH_CREDENTIALS (conf):', LTI_OAUTH_CREDENTIALS)
+    print('LTI_INSTRUCTOR_GROUP_ROLES: (conf)', LTI_INSTRUCTOR_GROUP_ROLES)
 
     print('# Django REST Framework and drf-yasg')
     print('# ----------------------------------')
@@ -190,70 +291,27 @@ def show_configuration() -> None:
     print('SUMMERNOTE_CONFIG:', SUMMERNOTE_CONFIG)
 
 
-def get_from_os_or_env(key: str, env_obj, default_value=''):
-    """
-    Given a key, search for its value first in the os environment, then in the
-    given environment and if not present, return the default
-    :param key: key to search
-    :param env_obj: env object to use (see django-environ)
-    :param default_value: value to return if not found
-    :return: value assigned to key or default value
-    """
-    if key in os.environ:
-        return os.environ[key]
-
-    return env_obj(key, default=default_value)
-
-
-# import ldap
-# from django_auth_ldap.config import (
-#     LDAPSearch,
-#     GroupOfNamesType,
-#     LDAPGroupQuery
-# )
-
-# Variables required to process configuration
-BASE_DIR = environ.Path(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-ONTASK_TESTING = sys.argv[1:2] == ['test']
-
 # CONFIGURATION VARIABLES
 # ------------------------------------------------------------------------------
-AWS_ACCESS_KEY_ID = get_from_os_or_env('AWS_ACCESS_KEY_ID', env)
-AWS_LOCATION = get_from_os_or_env('AWS_LOCATION', env, 'static')
-AWS_SECRET_ACCESS_KEY = get_from_os_or_env('AWS_SECRET_ACCESS_KEY', env)
-AWS_STORAGE_BUCKET_NAME = get_from_os_or_env('AWS_STORAGE_BUCKET_NAME', env)
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_LOCATION = env('AWS_LOCATION')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
 
-BASE_URL = get_from_os_or_env('BASE_URL', env)
+BASE_URL = env('BASE_URL')
 
 DATABASE_URL = env.db()
 
-LOG_FOLDER = get_from_os_or_env('LOG_FOLDER', env, 'logs')
+LOG_FOLDER = env('LOG_FOLDER')
 
-MEDIA_LOCATION = get_from_os_or_env('MEDIA_LOCATION', env, '/media/')
+MEDIA_LOCATION = env('MEDIA_LOCATION')
 
-# Database parameters (takes precedence over DATABASE_URL
-RDS_DB_NAME = get_from_os_or_env('RDS_DB_NAME', env)
-RDS_USERNAME = get_from_os_or_env('RDS_USERNAME', env)
-RDS_PASSWORD = get_from_os_or_env('RDS_PASSWORD', env)
-RDS_HOSTNAME = get_from_os_or_env('RDS_HOSTNAME', env)
-RDS_PORT = get_from_os_or_env('RDS_PORT', env)
-
-REDIS_URL = env.cache(
-    'REDIS_URL',
-    default='redis://localhost:6379/'
-            + '?client_class=django_redis.client.DefaultClient'
-            + '&timeout=1000'
-            + '&key_prefix=ontask'
-)
+REDIS_URL = env.cache('REDIS_URL')
 
 # Frequency to run the clear session command
-CELERY_SESSION_CLEANUP_CRONTAB = get_from_os_or_env(
-    'SESSION_CLEANUP_CRONTAB',
-    env,
-    '05 5 6 * *').split()
+SESSION_CLEANUP_CRONTAB = env('SESSION_CLEANUP_CRONTAB')
 
-STATIC_URL_SUFFIX = get_from_os_or_env('STATIC_URL_SUFFIX', env, 'static')
+STATIC_URL_SUFFIX = env('STATIC_URL_SUFFIX')
 
 USE_SSL = env.bool('USE_SSL', default=False)
 
@@ -264,20 +322,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 CACHE_TTL = 60 * 30
 CACHES = {"default": REDIS_URL}
 
-if 'RDS_DB_NAME' in os.environ:
-    # Cater for AWS-style RDS definition in containers
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': RDS_DB_NAME,
-            'USER': RDS_USERNAME,
-            'PASSWORD': RDS_PASSWORD,
-            'HOST': RDS_HOSTNAME,
-            'PORT': RDS_PORT,
-        },
-    }
-else:
-    DATABASES = {'default': DATABASE_URL, }
+DATABASES = {'default': DATABASE_URL, }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
@@ -408,7 +453,7 @@ ROOT_URLCONF = 'urls'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Raises ImproperlyConfigured exception if SECRET_KEY not defined
-SECRET_KEY = get_from_os_or_env('SECRET_KEY', env, '')
+SECRET_KEY = env('SECRET_KEY')
 
 SHORT_DATETIME_FORMAT = 'r'
 
@@ -433,10 +478,9 @@ TEMPLATES = [{
         'libraries': {
             'ontask_tags': 'ontask.templatetags.ontask_tags',
             'vis_include':
-                'ontask.visualizations.templatetags.vis_include',
-        }}}]
+                'ontask.visualizations.templatetags.vis_include'}}}]
 
-TIME_ZONE = get_from_os_or_env('TIME_ZONE', env, 'UTC')
+TIME_ZONE = env('TIME_ZONE')
 
 USE_I18N = True
 USE_L10N = True
@@ -534,13 +578,14 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 #     }
 # }
 # ------------------------------------------------------------------------------
-CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT', default='{}'))
+CANVAS_INFO_DICT = json.loads(env.str('CANVAS_INFO_DICT'))
 # Number of seconds left in the token validity to refresh
-CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK', default=600)
+CANVAS_TOKEN_EXPIRY_SLACK = env.int('CANVAS_TOKEN_EXPIRY_SLACK')
 
 # Celery
 # -----------------------------------------------------------------------------
 CELERY_ACCEPT_CONTENT = ['application/json', 'pickle']
+CELERY_SESSION_CLEANUP_CRONTAB = SESSION_CLEANUP_CRONTAB.split()
 CELERY_BEAT_SCHEDULE = {
     'ontask_scheduler': {
         'task': 'ontask.tasks.session_cleanup.session_cleanup',
@@ -571,7 +616,7 @@ DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", ' \
                         '"application/gzip", "application/x-gzip", ' \
                         '"application/vnd.ms-excel"]'
 DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE', default=209715200)
-DATAOPS_PLUGIN_DIRECTORY = get_from_os_or_env(
+DATAOPS_PLUGIN_DIRECTORY = env(
     'DATAOPS_PLUGIN_DIRECTORY',
     env,
     join(BASE_DIR(), 'lib', 'plugins'))
@@ -618,11 +663,9 @@ EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE', default=0)
 # Include HTML only email or HTML and text
 EMAIL_HTML_ONLY = env.bool('EMAIL_HTML_ONLY', default=True)
 # Email address to override the From in emails (if empty, use user email)
-EMAIL_OVERRIDE_FROM = get_from_os_or_env('EMAIL_OVERRIDE_FROM', env)
+EMAIL_OVERRIDE_FROM = env('EMAIL_OVERRIDE_FROM')
 
-EXECUTE_ACTION_JSON_TRANSFER = env.bool(
-    'EXECUTE_ACTION_JSON_TRANSFER',
-    default=False)
+EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER')
 
 LOGS_MAX_LIST_SIZE = 200
 
@@ -696,8 +739,8 @@ SUMMERNOTE_CONFIG = {
 # LDAP AUTHENTICATION
 # ------------------------------------------------------------------------------
 # Variables taken from local.env
-# AUTH_LDAP_SERVER_URI = get_from_os_or_env('AUTH_LDAP_SERVER_URI', env)
-# AUTH_LDAP_BIND_PASSWORD = get_from_os_or_env('AUTH_LDAP_BIND_PASSWORD', env)
+# LDAP_AUTH_SERVER_URI = get_from_os_or_env('LDAP_AUTH_SERVER_URI', env)
+# LDAP_AUTH_BIND_PASSWORD = get_from_os_or_env('LDAP_AUTH_BIND_PASSWORD', env)
 
 # Additional configuration variables (read django-auth-ldap documentation)
 # AUTH_LDAP_CONNECTION_OPTIONS = {
