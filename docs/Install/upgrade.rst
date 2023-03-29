@@ -50,7 +50,7 @@ If you have OnTask already configured and running, here are the steps to follow 
 
 - Go to the sub-folder containing the tool documentation::
 
-    cd docs_src
+    cd docs
 
 - Re-create the tool documentation and place it in the appropriate folder::
 

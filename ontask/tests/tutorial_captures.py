@@ -58,7 +58,7 @@ class TutorialCaptures(ScreenTests):
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'docs_src',
+                         'docs',
                          'Dataset',
                          'all_data.csv')
         )
@@ -193,7 +193,7 @@ class TutorialCaptures(ScreenTests):
         )
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'docs_src',
+                         'docs',
                          'Dataset',
                          'moodle_grades.csv')
         )

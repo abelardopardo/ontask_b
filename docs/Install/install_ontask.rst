@@ -387,11 +387,11 @@ Create a new folder with name ``logs`` in the OnTask top folder, next to the ``r
 OnTask Installation
 ===================
 
-Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next steps create the documentation, initial database configuration, additional site files, and deploy. To generate the documentation go to the folder ``docs_src``, make sure it contains the sub-folders with names ``_static`` and ``_templates`` and execute the command::
+Once you have OnTask installed and configured and the tools Redis and Postgresql running, the next steps create the documentation, initial database configuration, additional site files, and deploy. To generate the documentation go to the folder ``docs``, make sure it contains the sub-folders with names ``_static`` and ``_templates`` and execute the command::
 
      make clean html copy_to_docs
 
-The documentation is created by the application ``sphinx-doc`` and stored in the directory ``_build`` which is then copied to the ``../docs`` folder. Once the documentation has been created, the next steps configure the database. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`. The following commands have to be execute from the project folder.
+The documentation is created by the application ``sphinx-doc`` and stored in the directory ``_build`` which is then copied to the ``../static`` folder. Once the documentation has been created, the next steps configure the database. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`. The following commands have to be execute from the project folder.
 
 1. Execute the following command to create the database internal structure::
 
