@@ -24,7 +24,7 @@ class AthenaConnectionTableAdmin(ConnectionTableAdmin):
                 'id': record['id'],
                 'enabled': record['enabled'],
                 'toggle_url': reverse(
-                    'dataops:athenaconn_toggle',
+                    'connection:athenaconn_toggle',
                     kwargs={'pk': record['id']})})
 
     class Meta(ConnectionTableAdmin.Meta):
@@ -51,16 +51,16 @@ def create_athena_connection_admintable() -> AthenaConnectionTableAdmin:
         template_context=lambda record: {
             'id': record['id'],
             'edit_url': reverse(
-                'dataops:athenaconn_edit',
+                'connection:athenaconn_edit',
                 kwargs={'pk': record['id']}),
             'view_url': reverse(
-                'dataops:athenaconn_view',
+                'connection:athenaconn_view',
                 kwargs={'pk': record['id']}),
             'clone_url': reverse(
-                'dataops:athenaconn_clone',
+                'connection:athenaconn_clone',
                 kwargs={'pk': record['id']}),
             'delete_url': reverse(
-                'dataops:athenaconn_delete',
+                'connection:athenaconn_delete',
                 kwargs={'pk': record['id']})})
 
     return AthenaConnectionTableAdmin(
@@ -83,11 +83,8 @@ def create_athena_connection_runtable() -> AthenaConnectionTableSelect:
         template_file='connection/includes/partial_select.html',
         template_context=lambda record: {
             'id': record['id'],
-            'run_url': reverse(
-                'dataops:athenaupload_start',
-                kwargs={'pk': record['id']}),
             'view_url': reverse(
-                'dataops:athenaconn_view',
+                'connection:athenaconn_view',
                 kwargs={'pk': record['id']})})
     return AthenaConnectionTableSelect(
         models.AthenaConnection.objects.filter(enabled=True).values(

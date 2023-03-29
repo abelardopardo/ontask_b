@@ -129,10 +129,10 @@ class BackToHome(tests.OnTaskTestCase):
                 kwargs={'pk': 1, 'action_pk': 1}),
             # Connection
             reverse('connection:sqlconn_view', kwargs={'pk': 1}),
+            reverse('connection:athenaconn_view', kwargs={'pk': 1}),
             # Dataops
             reverse('dataops:plugin_diagnose', kwargs={'pk': 1}),
             reverse('dataops:plugin_moreinfo', kwargs={'pk': 1}),
-            # reverse('dataops:athenaconn_view', kwargs={'pk': 1}),
             # Logs
             reverse('logs:display_ss'),
             reverse('logs:modal_view', kwargs={'pk': 1}),

@@ -49,7 +49,7 @@ def athena_connection_admin_index(
         {
             'table': services.create_athena_connection_admintable(),
             'title': _('Athena Connections'),
-            'data_url': reverse('dataops:athenaconn_add')})
+            'data_url': reverse('connection:athenaconn_add')})
 
 
 @user_passes_test(is_instructor)
@@ -166,9 +166,9 @@ def athena_connection_edit(
     is_add = pk is None
     form_class = forms.AthenaConnectionForm
     if is_add:
-        action_url = reverse('dataops:athenaconn_add')
+        action_url = reverse('connection:athenaconn_add')
     else:
-        action_url = reverse('dataops:athenaconn_edit', kwargs={'pk': pk})
+        action_url = reverse('connection:athenaconn_edit', kwargs={'pk': pk})
         conn = models.AthenaConnection.objects.filter(pk=pk).first()
         if not conn:
             return http.JsonResponse({'html_redirect': reverse('home')})
@@ -242,7 +242,7 @@ def athena_connection_clone(
         request,
         conn,
         models.AthenaConnection.objects,
-        reverse('dataops:athenaconn_clone', kwargs={'pk': conn.id}))
+        reverse('connection:athenaconn_clone', kwargs={'pk': conn.id}))
 
 
 @user_passes_test(is_admin)
@@ -288,7 +288,7 @@ def athena_connection_delete(
     return services.delete(
         request,
         conn,
-        reverse('dataops:athenaconn_delete', kwargs={'pk': conn.id}))
+        reverse('connection:athenaconn_delete', kwargs={'pk': conn.id}))
 
 
 @user_passes_test(is_instructor)
@@ -328,4 +328,4 @@ def athenaconn_toggle(
     return services.toggle(
         request,
         conn,
-        reverse('dataops:athenaconn_toggle', kwargs={'pk': conn.id}))
+        reverse('connection:athenaconn_toggle', kwargs={'pk': conn.id}))
