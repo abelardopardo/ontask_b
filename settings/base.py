@@ -105,15 +105,12 @@ The OnTask Support Team
     EMAIL_PORT=(int, os.environ.get('EMAIL_PORT', None)),
     EMAIL_USE_SSL=(bool, os.environ.get('EMAIL_USE_SSL', False)),
     EMAIL_USE_TLS=(bool, os.environ.get('EMAIL_USE_TLS', False)),
-    EMAIL_ACTION_NOTIFICATION_SENDER=(
-        str,
-        os.environ.get('EMAIL_ACTION_NOTIFICATION_SENDER', '')),
+
+    ENV_FILENAME=(str, os.environ.get('ENV_FILENAME', '')),
 
     EXECUTE_ACTION_JSON_TRANSFER=(
         bool,
         os.environ.get('EXECUTE_ACTION_JSON_TRANSFER', False)),
-
-    ENV_FILENAME=(str, os.environ.get('ENV_FILENAME', 'local.env')),
 
     LANGUAGE_CODE=(str, os.environ.get('LANGUAGE_CODE', 'en-us')),
 
@@ -133,7 +130,9 @@ The OnTask Support Team
         list,
         os.environ.get('LTI_INSTRUCTOR_GROUP_ROLES', ['Instructor'])),
 
-    MEDIA_LOCATION=(str, os.environ.get('MEDIA_LOCATION', '/media/')),
+    MEDIA_LOCATION=(str, os.environ.get('MEDIA_LOCATION', 'media/')),
+
+    ONTASK_HELP_URL=(str, os.environ.get('ONTASK_HELP_URL', 'html/index.html')),
 
     REDIS_URL=(
         str,
@@ -318,9 +317,9 @@ def show_configuration() -> None:
     print(
         'EMAIL_ACTION_NOTIFICATION_SENDER:',
         EMAIL_ACTION_NOTIFICATION_SENDER)
-    # print(
-    #     'EMAIL_ACTION_NOTIFICATION_SUBJECT:',
-    #     EMAIL_ACTION_NOTIFICATION_SUBJECT)
+    print(
+        'EMAIL_ACTION_NOTIFICATION_SUBJECT:',
+        EMAIL_ACTION_NOTIFICATION_SUBJECT)
     print(
         'EMAIL_ACTION_NOTIFICATION_TEMPLATE:',
         EMAIL_ACTION_NOTIFICATION_TEMPLATE)
@@ -373,11 +372,11 @@ SESSION_CLEANUP_CRONTAB = env('SESSION_CLEANUP_CRONTAB')
 
 STATIC_URL_SUFFIX = env('STATIC_URL_SUFFIX')
 
-USE_SSL = env.bool('USE_SSL', default=False)
+USE_SSL = env.bool('USE_SSL')
 
 # Django Core
 # -----------------------------------------------------------------------------
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 CACHE_TTL = 60 * 30
 CACHES = {"default": REDIS_URL}
@@ -386,14 +385,14 @@ DATABASES = {'default': DATABASE_URL, }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.bool('DEBUG')
 
-EMAIL_HOST = env('EMAIL_HOST', default='')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
-EMAIL_PORT = env('EMAIL_PORT', default='')
-EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=False)
-EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', default=False)
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
+EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL')
 
 INSTALLED_APPS = [
     'django_extensions',
@@ -488,11 +487,12 @@ LOGGING = {
 
 MEDIA_ROOT = join(BASE_DIR(), 'media')
 if AWS_ACCESS_KEY_ID:
-    MEDIA_URL = 'https://%s.s3.amazonaws.com/%s/' % (
+    MEDIA_URL = 'https://%s.s3.amazonaws.com/%s' % (
         AWS_STORAGE_BUCKET_NAME,
         MEDIA_LOCATION)
+    DEFAULT_FILE_STORAGE = 'ontask.core.storage_backends.PrivateMediaStorage'
 else:
-    MEDIA_URL = BASE_URL + MEDIA_LOCATION
+    MEDIA_URL = BASE_URL + '/' + MEDIA_LOCATION
 
 MIDDLEWARE = [
     # 'django.middleware.cache.UpdateCacheMiddleware',
@@ -672,14 +672,9 @@ THUMBNAIL_EXTENSION = 'png'  # Or any extn for your thumbnails
 
 # OnTask Configuration
 # -----------------------------------------------------------------------------
-DATAOPS_CONTENT_TYPES = '["text/csv", "application/json", ' \
-                        '"application/gzip", "application/x-gzip", ' \
-                        '"application/vnd.ms-excel"]'
-DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE', default=209715200)
-DATAOPS_PLUGIN_DIRECTORY = env(
-    'DATAOPS_PLUGIN_DIRECTORY',
-    env,
-    join(BASE_DIR(), 'lib', 'plugins'))
+DATAOPS_CONTENT_TYPES = env('DATAOPS_CONTENT_TYPES')
+DATAOPS_MAX_UPLOAD_SIZE = env.int('DATAOPS_MAX_UPLOAD_SIZE')
+DATAOPS_PLUGIN_DIRECTORY = env('DATAOPS_PLUGIN_DIRECTORY')
 
 DISABLED_ACTIONS = [
     # 'models.Action.PERSONALIZED_TEXT',
@@ -690,44 +685,23 @@ DISABLED_ACTIONS = [
     # 'models.Action.SURVEY',
     'models.Action.TODO_LIST']
 
-EMAIL_ACTION_NOTIFICATION_SENDER = env(
-    'EMAIL_ACTION_NOTIFICATION_SENDER',
-    default='')
-EMAIL_ACTION_NOTIFICATION_SUBJECT = _('OnTask: Action executed')
-EMAIL_ACTION_NOTIFICATION_TEMPLATE = """
-<html>
-<head/>
-<body>
-<p>Dear {{ user.name }}</p>
-
-<p>This message is to inform you that on {{ email_sent_datetime }}
-{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent
-resulting from the execution of the action with name "{{ action.name }}".</p>
-
-{% if filter_present %}
-<p>The action had a filter that reduced the number of messages from
-{{ num_rows }} to {{ num_selected }}.</p>
-{% else %}
-<p>All the data rows stored in the workflow table were used.</p>
-{% endif %}
-
-Regards.
-The OnTask Support Team
-</body></html>"""
+EMAIL_ACTION_NOTIFICATION_SENDER = env('EMAIL_ACTION_NOTIFICATION_SENDER')
+EMAIL_ACTION_NOTIFICATION_SUBJECT = env('EMAIL_ACTION_NOTIFICATION_SUBJECT')
+EMAIL_ACTION_NOTIFICATION_TEMPLATE = env('EMAIL_ACTION_NOTIFICATION_TEMPLATE')
 EMAIL_ACTION_PIXEL = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC' \
                      '0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII='
 # Number of emails to send out in a burst (before pausing)
-EMAIL_BURST = env.int('EMAIL_BURST', default=0)
+EMAIL_BURST = env.int('EMAIL_BURST')
 # Pause between bursts (in seconds)
-EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE', default=0)
+EMAIL_BURST_PAUSE = env.int('EMAIL_BURST_PAUSE')
 # Include HTML only email or HTML and text
-EMAIL_HTML_ONLY = env.bool('EMAIL_HTML_ONLY', default=True)
+EMAIL_HTML_ONLY = env.bool('EMAIL_HTML_ONLY')
 # Email address to override the From in emails (if empty, use user email)
 EMAIL_OVERRIDE_FROM = env('EMAIL_OVERRIDE_FROM')
 
 EXECUTE_ACTION_JSON_TRANSFER = env.bool('EXECUTE_ACTION_JSON_TRANSFER')
 
-LOGS_MAX_LIST_SIZE = 200
+LOGS_MAX_LIST_SIZE = env.int('LOGS_MAX_LIST_SIZE')
 
 ONTASK_HELP_URL = "html/index.html"
 
@@ -735,10 +709,8 @@ SHOW_HOME_FOOTER_IMAGE = env.bool('SHOW_HOME_FOOTER_IMAGE', default=False)
 
 # LTI Configuration
 # -----------------------------------------------------------------------------
-LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS', default={})
-LTI_INSTRUCTOR_GROUP_ROLES = env.list(
-    'LTI_INSTRUCTOR_GROUP_ROLES',
-    default=['Instructor'])
+LTI_OAUTH_CREDENTIALS = env.dict('LTI_OAUTH_CREDENTIALS')
+LTI_INSTRUCTOR_GROUP_ROLES = env.list('LTI_INSTRUCTOR_GROUP_ROLES')
 
 # Django REST Framework and drf-yasg
 # -----------------------------------------------------------------------------

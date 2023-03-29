@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+"""URLs for handling profile pages."""
 from django.urls import path
 
 from . import views
