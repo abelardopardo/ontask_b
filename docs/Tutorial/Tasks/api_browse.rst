@@ -101,7 +101,7 @@ Merge operation
 
   The Put operation performs the merge of the existing table with a table a given table. The operation needs the following parameters:
 
-  - ``how:`` A string encoding the type of merge to execute. There are four possible types: inner, outer, left and right. For a more detailed explanation of these operations check the `Usingn OnTask` section of the documentation.
+  - ``how:`` A string encoding the type of merge to execute. There are four possible types: inner, outer, left and right. For a more detailed explanation of these operations check the `Using OnTask` section of the documentation.
 
   - ``left_on``: The column in the existing table used to match the rows.
 

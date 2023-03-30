@@ -25,3 +25,4 @@ data in a CSV file through the following steps:
    this with the option ``-i`` in the script::
 
      $ python3 manage.py initialize_db -e your_email_column_name -i scripts/initial_learners.csv"
+

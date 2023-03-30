@@ -32,7 +32,7 @@
       <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
         {% block navbar-brand %}
           {% cache 3600 site-navbar-brand %}
-            <img src="{% static 'img/logo.png' %}" height="30" alt="logo">
+            <img src="{% static 'img/logo.png' %}" height="35" alt="logo">
           {% endcache %}
         {% endblock %}
         {% block navbar-menu %}
@@ -244,7 +244,7 @@
     {% block footer %}
       {% cache 3600 site-footer LANGUAGE_CODE %}
         <nav class="navbar navbar-light bg-light" id="base_footer">
-          <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %} | <a href="{% url 'accessibility' %}">{% trans 'Accessibility' %}</a></span>
+          <span class="text-muted">&copy; {% include "_brandname.html" %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %} | <a href="{% url 'accessibility' %}">{% trans 'Accessibility' %}</a></span>
         </nav>
       {% endcache %}
     {% endblock %}

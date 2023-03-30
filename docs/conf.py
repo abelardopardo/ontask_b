@@ -104,10 +104,8 @@ html_theme_options = {
     'show_powered_by': False,
     'show_relbars': True,
     'fixed_sidebar': False,
-    'github_banner': True,
-    'github_button': True,
-    'github_user': 'abelardopardo',
-    'github_repo': 'ontask_b',
+    'github_banner': False,
+    'github_button': False,
     'logo': 'ontask-logo-1.png'
 }
 
