@@ -18,26 +18,26 @@
                   data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
         {% endfor %}
       </div>
-      {% if is_survey %}
-        <button type="button"
-                class="btn btn-outline-dark js-action-question-add"
-                data-url="{% url 'column:question_add' action.id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Add a new question to the action' %}">
-          <span class="fa fa-plus"></span>
-            {% trans 'Create question' %}
-        </button>
-      {% else %}
-        <button type="button"
-                class="btn btn-outline-dark js-action-todoitem-add"
-                data-url="{% url 'column:todoitem_add' action.id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Add a new item to the list' %}">
-          <span class="fa fa-plus"></span>
-            {% trans 'Create item' %}
-        </button>
-      {% endif %}
     </div>
+    {% if is_survey %}
+      <button type="button"
+              class="btn btn-outline-dark js-action-question-add"
+              data-url="{% url 'column:question_add' action.id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Add a new question to the action' %}">
+        <span class="fa fa-plus"></span>
+          {% trans 'Create question' %}
+      </button>
+    {% else %}
+      <button type="button"
+              class="btn btn-outline-dark js-action-todoitem-add"
+              data-url="{% url 'column:todoitem_add' action.id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Add a new item to the list' %}">
+        <span class="fa fa-plus"></span>
+          {% trans 'Create item' %}
+      </button>
+    {% endif %}
   </div>
   <div class="justify-content-center mb-3">
     {% render_table column_selected_table %}
