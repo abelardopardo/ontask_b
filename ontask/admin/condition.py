@@ -16,8 +16,18 @@ class ConditionAdmin(admin.ModelAdmin):
         'action',
         'description_text',
         'formula',
-        'n_rows_selected',
-        'is_filter',
-    )
+        'n_rows_selected')
 
     search_fields = ['name', 'action', 'description_text']
+
+@admin.register(models.Filter)
+class FilterAdmin(admin.ModelAdmin):
+    """Define Filter Admin."""
+
+    list_display = (
+        'id',
+        'description_text',
+        'formula',
+        'n_rows_selected')
+
+    search_fields = ['description_text']

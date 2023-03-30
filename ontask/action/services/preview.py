@@ -131,7 +131,7 @@ def create_row_preview_context(
         condition_evaluation)
 
     all_false = False
-    if action.conditions.filter(is_filter=False).count():
+    if action.conditions.count():
         # If there are conditions, check if they are all false
         all_false = all(
             not bool_val for __, bool_val in condition_evaluation.items()

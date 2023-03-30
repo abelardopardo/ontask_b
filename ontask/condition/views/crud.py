@@ -13,10 +13,10 @@ from ontask import models
 from ontask.condition import forms, services
 from ontask.core import (
     UserIsInstructor, ajax_required, get_action, get_condition, is_instructor,
-)
+    get_filter)
 
 
-class ConditionFilterCreateViewBase(UserIsInstructor, generic.TemplateView):
+class ConditionBaseCreateView(UserIsInstructor, generic.TemplateView):
     """Class to create a filter."""
 
     form_class: Type[forms.FilterForm] = None
@@ -80,14 +80,14 @@ class ConditionFilterCreateViewBase(UserIsInstructor, generic.TemplateView):
         })
 
 
-class FilterCreateView(ConditionFilterCreateViewBase):
+class FilterCreateView(ConditionBaseCreateView):
     """Process AJAX request to create a filter through AJAX calls."""
 
     form_class = forms.FilterForm
     template_name = 'condition/includes/partial_filter_addedit.html'
 
 
-class ConditionCreateView(ConditionFilterCreateViewBase):
+class ConditionCreateView(ConditionBaseCreateView):
     """Handle AJAX requests to create a non-filter condition."""
 
     form_class = forms.ConditionForm
@@ -96,27 +96,27 @@ class ConditionCreateView(ConditionFilterCreateViewBase):
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_condition(pf_related='columns', is_filter=True)
+@get_filter(pf_related='columns')
 def edit_filter(
     request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-    condition: Optional[models.Condition] = None,
+    filter: Optional[models.Condition] = None,
 ) -> http.JsonResponse:
     """Edit the filter of an action through AJAX.
 
     :param request: HTTP request
     :param pk: condition ID
     :param workflow: Workflow being processed
-    :param condition: Filter to edit (set by the decorator)
+    :param filter: Filter to edit (set by the decorator)
     :return: AJAX response
     """
     del pk, workflow
     # Render the form with the Condition information
     form = forms.FilterForm(
         request.POST or None,
-        instance=condition,
-        action=condition.action)
+        instance=filter,
+        action=filter.action)
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
@@ -125,7 +125,7 @@ def edit_filter(
         return services.save_condition_form(
             request,
             form,
-            condition.action,
+            filter.action,
             is_filter=True)
 
     return http.JsonResponse({
@@ -133,7 +133,7 @@ def edit_filter(
             'condition/includes/partial_filter_addedit.html',
             {
                 'form': form,
-                'action_id': condition.action.id,
+                'action_id': filter.action.id,
                 'condition': form.instance},
             request=request)})
 
@@ -185,19 +185,19 @@ def edit_condition(
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_condition(pf_related='columns', is_filter=True)
+@get_filter(pf_related='columns')
 def delete_filter(
     request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-    condition: Optional[models.Condition] = None,
+    filter: Optional[models.Condition] = None,
 ) -> http.JsonResponse:
     """Handle the AJAX request to delete a filter.
 
     :param request: AJAX request
     :param pk: Filter ID
     :param workflow: Workflow being processed
-    :param condition: Filter to edit (set by the decorator)
+    :param filter: Filter to edit (set by the decorator)
     :return: AJAX response
     """
     del pk, workflow
@@ -205,18 +205,18 @@ def delete_filter(
         return http.JsonResponse({
             'html_form': render_to_string(
                 'condition/includes/partial_filter_delete.html',
-                {'id': condition.id},
+                {'id': filter.id},
                 request=request),
         })
 
     # If the request has 'action_content', update the action
     action_content = request.POST.get('action_content')
     if action_content:
-        condition.action.set_text_content(action_content)
+        filter.action.set_text_content(action_content)
 
-    condition.log(request.user, models.Log.CONDITION_DELETE)
-    action = condition.action
-    condition.delete()
+    filter.log(request.user, models.Log.CONDITION_DELETE)
+    action = filter.action
+    filter.delete()
     action.update_n_rows_selected()
     action.rows_all_false = None
     action.save(update_fields=['rows_all_false'])

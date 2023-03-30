@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
-
 """Functions to perform various checks."""
+from typing import List, Set
+
+from django import db
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
@@ -128,3 +129,25 @@ def check_key_columns(workflow: models.Workflow):
         raise Exception(_(
             'The new data does not preserve the key '
             + 'property of column "{0}"'.format(col_name)))
+
+
+def fix_non_unique_object_names(
+    obj_names: Set[str],
+    duplicates: List[db.models.Model],
+):
+    """Rename objects to remove duplicated names.
+
+    :param obj_names: Names currently existing that need to be unique
+    :param duplicates: Objects with duplicated names
+    :return: Reflect changes in the database
+    """
+
+    # Process each duplicated object to change the name
+    for obj in duplicates:
+        suffix = 1
+        while obj.name in obj_names:
+            # While the name is in the obj_names, keep increasing suffix
+            obj.name = obj.name + '_' + str(suffix)
+            obj.save()
+            suffix += 1
+

@@ -7,41 +7,23 @@ from django.utils.translation import ugettext_lazy as _
 
 from ontask.dataops import formula as dataops_formula, sql
 from ontask.models.column import Column
+from ontask.models.workflow import Workflow
 from ontask.models.common import (
     CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CreateModifyFields,
+    NameAndDescription,
 )
 from ontask.models.logs import Log
 
 
-class Condition(CreateModifyFields):
+class ConditionBase(CreateModifyFields):
     """Object to storing a formula.
 
     The object also encodes:
-    - is filter or not
     - list of columns in the support of the formula
     - number of rows for which the formula is true
 
     @DynamicAttrs
     """
-
-    action = models.ForeignKey(
-        'Action',
-        db_index=True,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False,
-        related_name='conditions')
-
-    name = models.CharField(
-        max_length=CHAR_FIELD_MID_SIZE,
-        blank=True,
-        verbose_name=_('name'))
-
-    description_text = models.CharField(
-        max_length=CHAR_FIELD_LONG_SIZE,
-        default='',
-        blank=True,
-        verbose_name=_('description'))
 
     formula = JSONField(
         default=dict,
@@ -56,12 +38,6 @@ class Condition(CreateModifyFields):
         null=True,
         verbose_name=_('formula text'))
 
-    # Set of columns that appear in this condition
-    columns = models.ManyToManyField(
-        Column,
-        verbose_name=_('Columns present in this condition'),
-        related_name='conditions')
-
     # Number or rows selected by the expression
     n_rows_selected = models.IntegerField(
         verbose_name=_('Number of rows selected'),
@@ -69,9 +45,6 @@ class Condition(CreateModifyFields):
         name='n_rows_selected',
         blank=False,
         null=False)
-
-    # Field to denote if this condition is the filter of an action
-    is_filter = models.BooleanField(default=False)
 
     def update_n_rows_selected(self, column=None, filter_formula=None):
         """Calculate the number of rows for which condition is true.
@@ -82,7 +55,7 @@ class Condition(CreateModifyFields):
         :param column: Column that has changed value (None when unknown)
         :param filter_formula: Formula provided by another filter condition
         and to take the conjunction with the condition formula.
-        :return: Nothing. Effect recorded in DB objects
+        :return: Boolean. True if number has changed
         """
         if column and column not in self.columns.all():
             # The column is not part of this condition. Nothing to do
@@ -98,19 +71,14 @@ class Condition(CreateModifyFields):
                 'valid': True,
             }
 
-        new_count = sql.get_num_rows(
+        old_count = self.n_rows_selected
+        self.n_rows_selected = sql.get_num_rows(
             self.action.workflow.get_data_frame_table_name(),
             formula,
         )
-        if new_count != self.n_rows_selected:
-            # Reset the field in the action storing rows with all conditions
-            # false. Needs to be recalculated because there is at least one
-            # condition that has changed its count. Flush the field to None
-            self.action.rows_all_false = None
-            self.action.save(update_fields=['rows_all_false'])
-
-        self.n_rows_selected = new_count
         self.save(update_fields=['n_rows_selected'])
+
+        return old_count != self.n_rows_selected
 
     def get_formula_text(self):
         """Translate the formula to plain text.
@@ -125,6 +93,46 @@ class Condition(CreateModifyFields):
             self.save(update_fields=['formula_text'])
         return self.formula_text
 
+    class Meta:
+        """Make the class abstract."""
+
+        abstract = True
+
+
+class Condition(NameAndDescription, ConditionBase):
+    """Object to storing a Condition that is used in an action.
+
+    @DynamicAttrs
+    """
+
+    workflow = models.ForeignKey(
+        Workflow,
+        db_index=True,
+        null=False,
+        blank=False,
+        default=None,
+        on_delete=models.CASCADE,
+        related_name='conditions')
+
+    action = models.ForeignKey(
+        'Action',
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name='conditions')
+
+    # Set of columns that appear in this condition
+    columns = models.ManyToManyField(
+        Column,
+        verbose_name=_('Columns present in this condition'),
+        related_name='conditions')
+
+    @property
+    def is_filter(self) -> bool:
+        """Identify as filter"""
+        return False
+
     def __str__(self) -> str:
         """Render string."""
         return self.name
@@ -137,7 +145,6 @@ class Condition(CreateModifyFields):
             'action': self.action.name,
             'formula': self.get_formula_text(),
             'n_rows_selected': self.n_rows_selected,
-            'is_filter': self.is_filter,
             'workflow_id': self.action.workflow.id}
 
         payload.update(kwargs)
@@ -150,10 +157,47 @@ class Condition(CreateModifyFields):
     class Meta:
         """Define unique criteria and ordering.
 
-        The unique criteria here is within the action, the name and being a
-        filter. We may choose to name a filter and a condition with the same
-        name (no need to restrict it)
+        The unique criteria here is within the action and the name.
         """
 
-        unique_together = ('action', 'name', 'is_filter')
-        ordering = ['-is_filter', 'name']
+        unique_together = ('action', 'name')
+        ordering = ['name']
+
+
+class Filter(ConditionBase):
+    """Object to storing a Filter that is used in an action or a view.
+
+    @DynamicAttrs
+    """
+
+    workflow = models.ForeignKey(
+        Workflow,
+        db_index=True,
+        null=False,
+        blank=False,
+        default=None,
+        on_delete=models.CASCADE,
+        related_name='filters')
+
+    description_text = models.CharField(
+        max_length=CHAR_FIELD_LONG_SIZE,
+        default='',
+        blank=True,
+        verbose_name=_('description'),
+    )
+
+    # Set of columns that appear in this condition
+    columns = models.ManyToManyField(
+        Column,
+        verbose_name=_('Columns present in this filter'),
+        related_name='filters')
+
+    @property
+    def is_filter(self) -> bool:
+        """Identify as filter"""
+        return True
+
+    class Meta:
+        """No definitions required here (so far)"""
+
+        pass

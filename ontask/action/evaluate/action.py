@@ -68,9 +68,7 @@ def action_condition_evaluation(
     :return: Dictionary condition_name: True/False or None if anomaly
     """
     condition_eval = {}
-    conditions = action.conditions.filter(is_filter=False).values(
-        'name', 'is_filter', 'formula',
-    )
+    conditions = action.conditions.values('name', 'formula')
     for condition in conditions:
         # Evaluate the condition
         try:
@@ -104,9 +102,7 @@ def get_action_evaluation_context(
     if not condition_eval:
         # Step 1: Evaluate all the conditions
         condition_eval = {}
-        conditions = action.conditions.filter(is_filter=False).values(
-            'name', 'is_filter', 'formula',
-        )
+        conditions = action.conditions.values('name', 'formula')
         for condition in conditions:
             # Evaluate the condition
             try:

@@ -5,10 +5,11 @@
 The constant ONTASK_FIELD_PREFIX is used in forms to avoid using column names
 (they are given by the user and may pose a problem)
 """
-from ontask.core.checks import check_key_columns, check_workflow
+from ontask.core.checks import (
+    check_key_columns, check_workflow, fix_non_unique_object_names)
 from ontask.core.decorators import (
     ajax_required, get_action, get_column, get_columncondition, get_condition,
-    get_view, get_workflow, store_workflow_in_session,
+    get_view, get_workflow, store_workflow_in_session, get_filter
 )
 from ontask.core.forms import (
     DATE_TIME_WIDGET_OPTIONS, RestrictedFileField, column_to_field,

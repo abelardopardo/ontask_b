@@ -19,7 +19,7 @@ from ontask.core import ajax_required, get_condition, is_instructor
 @csrf_exempt
 @ajax_required
 @require_POST
-@get_condition(pf_related='actions', is_filter=None)
+@get_condition(pf_related='actions')
 def clone_condition(
     request: http.HttpRequest,
     pk: int,

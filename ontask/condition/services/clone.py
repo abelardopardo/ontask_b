@@ -36,9 +36,7 @@ def do_clone_condition(
         description_text=condition.description_text,
         action=new_action,
         formula=copy.deepcopy(condition.formula),
-        n_rows_selected=condition.n_rows_selected,
-        is_filter=condition.is_filter
-    )
+        n_rows_selected=condition.n_rows_selected)
     new_condition.save()
 
     try:

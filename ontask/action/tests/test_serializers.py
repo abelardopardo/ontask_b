@@ -23,8 +23,7 @@ class ActionTestSerializers(tests.OnTaskTestCase):
     workflow_name = 'wflow2'
 
     action_obj = {
-        "conditions": [
-            {
+        "filter": {
                 "columns": [],
                 "name": "old",
                 "description_text": "",
@@ -40,6 +39,7 @@ class ActionTestSerializers(tests.OnTaskTestCase):
                     "condition": "AND"},
                 "n_rows_selected": 2,
                 "is_filter": True},
+        "conditions": [
             {
                 "columns": [],
                 "name": "Registered",

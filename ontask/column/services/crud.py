@@ -309,8 +309,7 @@ def delete_column(
         # The conditions to delete are not given, so calculate them
         # Get the conditions/actions attached to this workflow
         cond_to_delete = [
-            cond for cond in models.Condition.objects.filter(
-                action__workflow=workflow)
+            cond for cond in workflow.conditions
             if column in cond.columns.all()]
 
     # If a column disappears, the conditions that contain that variable
@@ -323,11 +322,15 @@ def delete_column(
         # Formula has the name of the deleted column. Delete it
         condition.delete()
 
-    # Traverse the actions for which the filter has been deleted and reassess
-    #  all their conditions
-    # TODO: Explore how to do this asynchronously (or lazy)
-    for act in actions_without_filters:
-        act.update_n_rows_selected()
+    # Remove the filters that contain the column
+    for filter_obj in workflow.filters.all():
+        if column not in filter_obj.columns.all():
+            continue
+        action = filter_obj.action
+        filter_obj.delete()
+
+        # Update the n_rows_selected
+        action.update_n_rows_selected()
 
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.

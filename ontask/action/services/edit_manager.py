@@ -30,7 +30,7 @@ class ActionEditManager:
         :param context: Context to modify
         :return: Nothing, the context is modified in place
         """
-        context['conditions'] = action.conditions.filter(is_filter=False)
+        context['conditions'] = action.conditions.all()
 
     @staticmethod
     def add_conditions_to_clone(action: models.Action, context: Dict):
@@ -40,9 +40,8 @@ class ActionEditManager:
         :param context: Context to modify
         :return: Nothing, the context is modified in place
         """
-        context['conditions_to_clone'] = models.Condition.objects.filter(
-                action__workflow=action.workflow, is_filter=False,
-            ).exclude(action=action)
+        context['conditions_to_clone'] = action.workflow.conditions.exclude(
+            action=action)
 
     @staticmethod
     def add_columns_show_stats(action: models.Action, context: Dict):

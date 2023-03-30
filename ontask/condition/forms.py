@@ -27,8 +27,8 @@ class FilterForm(forms.ModelForm):
     class Meta:
         """Select model and fields."""
 
-        model = models.Condition
-        fields = ('description_text', 'formula')
+        model = models.Filter
+        fields = ['description_text', 'formula']
         widgets = {'formula': forms.HiddenInput()}
 
 
@@ -89,4 +89,5 @@ class ConditionForm(FilterForm):
     class Meta(FilterForm.Meta):
         """Select name as extra field."""
 
+        model = models.Condition
         fields = ('name', 'description_text', 'formula')

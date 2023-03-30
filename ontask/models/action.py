@@ -20,7 +20,7 @@ from ontask.dataops import formula, sql
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
 from ontask.models.column import Column
 from ontask.models.common import CreateModifyFields, NameAndDescription
-from ontask.models.condition import Condition
+from ontask.models.condition import Condition, Filter
 from ontask.models.logs import Log
 from ontask.models.view import View
 from ontask.models.workflow import Workflow
@@ -123,6 +123,12 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         null=True,
         default=None)
 
+    filter = models.OneToOneField(
+        Filter,
+        null=True,
+        default=None,
+        on_delete=models.CASCADE)
+
     # Index of rows with all conditions false
     rows_all_false = JSONField(
         default=None,
@@ -159,11 +165,11 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
     def get_filter(self) -> Optional[Condition]:
         """Get filter condition."""
-        return self.conditions.filter(is_filter=True).first()
+        return self.filter
 
     def get_filter_formula(self):
         """Get filter condition."""
-        f_obj = self.conditions.filter(is_filter=True).first()
+        f_obj = self.get_filter()
         return f_obj.formula if f_obj else None
 
     def get_rows_selected(self):
@@ -219,21 +225,17 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
         :return: All conditions (except the filter) are updated
         """
-        start_idx = 0
         # Get the filter, if it exists.
-        filter_formula = None
-        conditions = self.conditions.all()
-        if conditions and conditions[0].is_filter:
-            # If there is a filter, update the formula
-            conditions[0].update_n_rows_selected(column=column)
-            filter_formula = conditions[0].formula
-            start_idx = 1
+        filter_obj = self.get_filter()
+        if filter_obj:
+            # If there is a filter, update the count
+            filter_obj.update_n_rows_selected(column=column)
 
         # Recalculate for the rest of conditions
-        for cond in conditions[start_idx:]:
+        for cond in self.conditions.all():
             cond.update_n_rows_selected(
                 column=column,
-                filter_formula=filter_formula)
+                filter_formula=filter_obj.formula if filter_obj else None)
 
     def used_columns(self) -> List[Column]:
         """List of column used in the action.

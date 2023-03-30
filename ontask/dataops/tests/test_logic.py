@@ -649,7 +649,7 @@ class ConditionSetEvaluation(tests.OnTaskTestCase):
         wflow_table = self.action.workflow.get_data_frame_table_name()
         filter_formula = self.action.get_filter_formula()
         column_names = self.action.workflow.get_column_names()
-        conditions = self.action.conditions.filter(is_filter=False)
+        conditions = self.action.conditions.all()
 
         # Get dataframe
         df = pandas.get_subframe(

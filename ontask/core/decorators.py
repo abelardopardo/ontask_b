@@ -222,7 +222,6 @@ def get_action(
 def get_condition(
     s_related=None,
     pf_related=None,
-    is_filter=False,
 ) -> Callable:
     """Check that the pk parameter refers to a condition in the Workflow."""
     def get_condition_decorator(func):  # noqa Z430
@@ -257,11 +256,7 @@ def get_condition(
                     Q(action__workflow__user=request.user)
                     | Q(action__workflow__shared=request.user),
                     action__workflow=workflow,
-                )
-                if is_filter is not None:
-                    condition = condition.filter(is_filter=is_filter)
-                    # Get the condition
-                condition = condition.select_related('action').first()
+                ).select_related('action').first()
                 if not condition:
                     return _error_redirect(request)
 
@@ -272,6 +267,56 @@ def get_condition(
         return function_wrapper
 
     return get_condition_decorator
+
+
+def get_filter(
+    s_related=None,
+    pf_related=None,
+) -> Callable:
+    """Check that the pk parameter refers to a filter in the action."""
+    def get_filter_decorator(func):  # noqa Z430
+        """Wrapper to get access to the function."""
+        @wraps(func)  # noqa: Z430
+        def function_wrapper(request, pk, **kwargs):  # noqa Z430
+            """Wrapper to get access to the request."""
+            workflow = _get_requested_workflow(
+                request,
+                kwargs.get('wid'),
+                s_related,
+                pf_related)
+            if not workflow:
+                return _error_redirect(request)
+
+            # Update the session
+            store_workflow_in_session(request.session, workflow)
+
+            kwargs['workflow'] = workflow
+
+            if workflow.nrows == 0:
+                messages.error(
+                    request,
+                    _('Workflow has no data. '
+                      + 'Go to "Manage table data" to upload data.'),
+                )
+                return _error_redirect(request, 'action:index')
+
+            if not kwargs.get('filter'):
+                # Get the condition
+                filter_obj = models.Filter.objects.filter(pk=pk).filter(
+                    Q(workflow__user=request.user)
+                    | Q(workflow__shared=request.user),
+                    workflow=workflow,
+                ).select_related('action').first()
+                if not filter_obj:
+                    return _error_redirect(request)
+
+                kwargs['filter'] = filter_obj
+
+            return func(request, pk, **kwargs)
+
+        return function_wrapper
+
+    return get_filter_decorator
 
 
 def get_columncondition(

@@ -72,8 +72,8 @@ def save_condition_form(
     # Update fields and save the condition
     condition = form.save(commit=False)
     condition.formula_text = None
+    condition.workflow = action.workflow
     condition.action = action
-    condition.is_filter = is_filter
     condition.save()
     condition.columns.set(action.workflow.columns.filter(
         name__in=formula.get_variables(condition.formula),
