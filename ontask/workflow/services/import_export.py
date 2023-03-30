@@ -31,6 +31,8 @@ def _run_compatibility_patches(json_data: Dict) -> Dict:
 
     2. Extract filters from the conditions array and put it in its own array
 
+    3. Remove spurious "filter": {} in the action object
+
     :param json_data: Json object to process
     :return: Modified json_data
     """
@@ -53,6 +55,12 @@ def _run_compatibility_patches(json_data: Dict) -> Dict:
         action_obj['conditions'] = [
             cond for cond in conditions if not cond.get('is_filter', False)]
         action_obj['filter'] = filter_obj
+
+    # Detect "filter": {} elements and remove
+    for action_obj in json_data['actions']:
+        f_obj = action_obj.get('filter', None)
+        if f_obj == {}:
+            action_obj.pop('filter')
 
     return json_data
 
