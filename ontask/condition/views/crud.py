@@ -211,6 +211,7 @@ def delete_filter(
         filter.log(request.user, models.Log.CONDITION_DELETE)
         filter.delete()
         action.rows_all_false = None
+        action.save()
         action.update_n_rows_selected()
         return http.JsonResponse({'html_redirect': ''})
 
