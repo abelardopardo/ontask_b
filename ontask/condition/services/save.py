@@ -21,10 +21,9 @@ def _propagate_changes(condition, changed_data, old_name):
     :param condition: Object being manipulated
     :param changed_data: Non-empty list of fields that have changed
     :param old_name: Previous name of the condition
-    :param is_new: if the condition has just been created
     :return: Nothing
     """
-    if 'formula' in changed_data:
+    if '_formula' in changed_data:
         if condition.action:
             # Reset the counter of rows with all conditions false
             condition.action.rows_all_false = None
@@ -74,7 +73,6 @@ def save_condition_form(
 
     # Update fields and save the condition
     condition = form.save(commit=False)
-    condition.formula_text = None
     condition.workflow = workflow
     condition.action = action
     condition.save()

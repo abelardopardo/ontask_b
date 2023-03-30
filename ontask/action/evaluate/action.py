@@ -68,12 +68,12 @@ def action_condition_evaluation(
     :return: Dictionary condition_name: True/False or None if anomaly
     """
     condition_eval = {}
-    conditions = action.conditions.values('name', 'formula')
+    conditions = action.conditions.values('name', '_formula')
     for condition in conditions:
         # Evaluate the condition
         try:
             condition_eval[condition['name']] = formula.evaluate(
-                condition['formula'],
+                condition['_formula'],
                 formula.EVAL_EXP,
                 row_values)
         except ontask.OnTaskException:
@@ -102,12 +102,12 @@ def get_action_evaluation_context(
     if not condition_eval:
         # Step 1: Evaluate all the conditions
         condition_eval = {}
-        conditions = action.conditions.values('name', 'formula')
+        conditions = action.conditions.values('name', '_formula')
         for condition in conditions:
             # Evaluate the condition
             try:
                 condition_eval[condition['name']] = formula.evaluate(
-                    condition['formula'],
+                    condition['_formula'],
                     formula.EVAL_EXP,
                     row_values)
             except ontask.OnTaskException:

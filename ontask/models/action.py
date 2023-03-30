@@ -20,7 +20,7 @@ from ontask.dataops import formula, sql
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
 from ontask.models.column import Column
 from ontask.models.common import CreateModifyFields, NameAndDescription
-from ontask.models.condition import Condition, Filter
+from ontask.models.condition import Filter
 from ontask.models.logs import Log
 from ontask.models.view import View
 from ontask.models.workflow import Workflow
@@ -197,11 +197,11 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
             # Workflow has a data frame and condition list is non empty
 
-            # Get the list of indeces
+            # Get the list of indexes
             self.rows_all_false = sql.select_ids_all_false(
                 self.workflow.get_data_frame_table_name(),
                 filter_item.formula if filter_item else None,
-                cond_list.values_list('formula', flat=True),
+                cond_list.values_list('_formula', flat=True),
             )
 
             self.save(update_fields=['rows_all_false'])
@@ -305,7 +305,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
         """Rename a variable present in the action content.
 
         Two steps are performed. Rename the variable in the text_content, and
-        rename the varaible in all the conditions.
+        rename the variable in all the conditions.
         :param old_name: Old name of the variable
         :param new_name: New name of the variable
         :return: Updates the current object
@@ -327,7 +327,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
                     new_name if vname == html.escape(old_name) else vname
                 ) + '"' for vname in shlex.split(match.group('args'))])
                 + ' ' + match.group('mup_post'),
-            self.text_content)
+                self.text_content)
 
             self.save(update_fields=['text_content'])
 
@@ -335,15 +335,13 @@ class ActionDataOut(ActionBase):  # noqa Z214
         for cond in self.conditions.all():
             cond.formula = formula.rename_variable(
                 cond.formula, old_name, new_name)
-            cond.formula_text = None
-            cond.save(update_fields=['formula'])
+            cond.save(update_fields=['_formula'])
 
         # Rename the variable in the filter
         filter_obj = self.get_filter()
         if filter_obj:
             filter_obj.formula = formula.rename_variable(
                 filter_obj.formula, old_name, new_name)
-            filter_obj.formula_text = None
             filter_obj.save()
 
     def get_used_conditions(self) -> List[str]:
@@ -408,7 +406,6 @@ class ActionDataOut(ActionBase):  # noqa Z214
             )
 
         self.save(update_fields=['text_content'])
-
 
     def used_columns(self) -> List[Column]:
         """Extend the used columns with those in the attachments.

@@ -23,7 +23,7 @@
                 title="Condition is false for all considered users"></span>
           {% endif %}</h5>
           <p class="card-text">{{ condition.description_text }}</p>
-          <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ condition.get_formula_text|safe }}</p>
+          <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ condition.formula_text|safe }}</p>
         </div>
         <div class="cond-buttons">
           <button type="button"

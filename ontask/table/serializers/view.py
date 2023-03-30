@@ -25,7 +25,7 @@ class ViewSerializer(serializers.ModelSerializer):
                 workflow=self.context['workflow'],
                 name=validated_data['name'],
                 description_text=validated_data['description_text'],
-                formula=validated_data['formula'],
+                _formula=validated_data['_formula'],
             )
             view_obj.save()
 

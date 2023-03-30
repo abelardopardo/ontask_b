@@ -346,7 +346,7 @@ def rename_df_column(
             view.formula,
             old_name,
             new_name)
-        view.save(update_fields=['formula'])
+        view.save(update_fields=['_formula'])
 
 
 def get_subframe(

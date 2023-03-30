@@ -27,7 +27,7 @@ class ActionTestSerializers(tests.OnTaskTestCase):
             {
                 "columns": [],
                 "description_text": "",
-                "formula": {
+                "_formula": {
                     "not": False, "rules": [{
                         "id": "age",
                         "type": "double",
@@ -43,7 +43,7 @@ class ActionTestSerializers(tests.OnTaskTestCase):
                 "columns": [],
                 "name": "Registered",
                 "description_text": "",
-                "formula": {
+                "_formula": {
                     "not": False, "rules": [{
                         "id": "registered",
                         "type": "boolean",

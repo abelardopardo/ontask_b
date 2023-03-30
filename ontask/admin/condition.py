@@ -15,7 +15,7 @@ class ConditionAdmin(admin.ModelAdmin):
         'name',
         'action',
         'description_text',
-        'formula',
+        '_formula',
         'n_rows_selected')
 
     search_fields = ['name', 'action', 'description_text']
@@ -27,7 +27,7 @@ class FilterAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'description_text',
-        'formula',
+        '_formula',
         'n_rows_selected')
 
     search_fields = ['description_text']

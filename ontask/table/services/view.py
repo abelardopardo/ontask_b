@@ -36,7 +36,7 @@ def do_clone_view(
         name=new_name,
         description_text=view.description_text,
         workflow=new_workflow,
-        formula=copy.deepcopy(view.formula),
+        _formula=copy.deepcopy(view.formula),
     )
     new_view.save()
 

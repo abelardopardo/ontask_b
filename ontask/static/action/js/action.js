@@ -84,14 +84,14 @@ let loadFormPost = function () {
   );
 }
 let transferFormula = function () {
-  if (document.getElementById("id_formula") != null) {
+  if (document.getElementById("id__formula") != null) {
     let formula = $("#builder").queryBuilder('getRules');
     if (formula == null || !formula['valid']) {
       $('#div-spinner').hide();
       return false;
     }
     let f_text = JSON.stringify(formula, undefined, 2);
-    $("#id_formula").val(f_text);
+    $("#id__formula").val(f_text);
    }
    return true;
 }
@@ -120,6 +120,9 @@ $(function () {
   $("#action-in-editor").on("click", ".js-description-edit", loadForm);
   $("#modal-item").on("submit", ".js-description-edit-form", saveForm);
 
+  // Set view as filter
+  $("#view-as-filter-selector").on("click", ".js-set-view-as-filter", loadForm);
+
   // Insert column name in content
   $("#insert-elements-in-editor").on("click", ".js-insert-column-name", insertAttributeInContent);
   // Insert column REPORT in content
@@ -131,7 +134,6 @@ $(function () {
   $("#insert-elements-in-editor").on("click", ".js-insert-attribute-name", insertAttributeInContent);
   // Insert rubric feedback text in content
   $("#insert-elements-in-editor").on("click", ".js-insert-rubric-text", insertRubricTextInContent);
-
 
   // Insert columns in action in
   $("#insert-questions").on("click", ".js-insert-question", ajaxSimplePost);

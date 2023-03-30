@@ -22,14 +22,14 @@ class FilterForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         # Required enforced in the server (not in the browser)
-        self.fields['formula'].required = False
+        self.fields['_formula'].required = False
 
     class Meta:
         """Select model and fields."""
 
         model = models.Filter
-        fields = ['description_text', 'formula']
-        widgets = {'formula': forms.HiddenInput()}
+        fields = ['description_text', '_formula']
+        widgets = {'_formula': forms.HiddenInput()}
 
 
 class ConditionForm(FilterForm):
@@ -90,4 +90,4 @@ class ConditionForm(FilterForm):
         """Select name as extra field."""
 
         model = models.Condition
-        fields = ('name', 'description_text', 'formula')
+        fields = ('name', 'description_text', '_formula')

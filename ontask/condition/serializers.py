@@ -30,7 +30,7 @@ def _create_condition(validated_data, context):
             workflow=context['workflow'],
             action=context['action'],
             description_text=validated_data['description_text'],
-            formula=validated_data['formula'],
+            _formula=validated_data['_formula'],
             n_rows_selected=validated_data.get('n_rows_selected', -1))
         condition_obj.save()
     else:
@@ -39,7 +39,7 @@ def _create_condition(validated_data, context):
             action=context['action'],
             name=validated_data['name'],
             description_text=validated_data['description_text'],
-            formula=validated_data['formula'],
+            _formula=validated_data['_formula'],
             n_rows_selected=validated_data.get('n_rows_selected', -1))
         condition_obj.save()
 
