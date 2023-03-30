@@ -12,7 +12,9 @@ from ontask.action.services.errors import (
     OnTaskActionRubricIncorrectContext, OnTaskActionSurveyDataNotFound,
     OnTaskActionSurveyNoTableData,
 )
-from ontask.action.services.import_export import do_import_action
+from ontask.action.services.import_export import (
+    do_import_action, run_compatibility_patches
+)
 from ontask.action.services.json import (
     ActionManagerJSON, ActionManagerJSONReport,
 )

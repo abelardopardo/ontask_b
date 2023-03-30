@@ -15,6 +15,7 @@ from rest_framework.renderers import JSONRenderer
 from ontask import models
 from ontask.core.checks import check_workflow
 from ontask.workflow import services
+from ontask.action import services as action_services
 from ontask.workflow.serializers import (
     WorkflowExportSerializer, WorkflowImportSerializer,
 )
@@ -27,40 +28,19 @@ def _run_compatibility_patches(json_data: Dict) -> Dict:
     has changed. These patches are to guarantee that an old workflow is
     compliant with the new structure. The patches applied are:
 
-    1. Change action.target_url from None to ''
-
-    2. Extract filters from the conditions array and put it in its own array
-
-    3. Remove spurious "filter": {} in the action object
-
     :param json_data: Json object to process
     :return: Modified json_data
     """
-    # Target_url field in actions should be present an empty by default
-    for action_obj in json_data['actions']:
-        if action_obj.get('target_url') is None:
-            action_obj['target_url'] = ''
 
-    # move filter condition to its own list
-    for action_obj in json_data['actions']:
-        conditions = action_obj.get('conditions')
-        if not conditions:
+    # Various changes in the actions
+    json_data['actions'] = action_services.run_compatibility_patches(
+        json_data['actions'])
+
+    # Change the formula field in the view
+    for view in json_data.get('views', []):
+        if '_formula' in view:
             continue
-
-        filter_obj = [
-            cond for cond in conditions if cond.get('is_filter', False)]
-        if not filter_obj:
-            continue
-
-        action_obj['conditions'] = [
-            cond for cond in conditions if not cond.get('is_filter', False)]
-        action_obj['filter'] = filter_obj
-
-    # Detect "filter": {} elements and remove
-    for action_obj in json_data['actions']:
-        f_obj = action_obj.get('filter', None)
-        if f_obj == {}:
-            action_obj.pop('filter')
+        view['_formula'] = view.pop('formula')
 
     return json_data
 
@@ -79,8 +59,13 @@ def do_import_workflow_parse(
     :param file_item: File item previously opened
     :return: workflow object or raise exception
     """
-    data_in = gzip.GzipFile(fileobj=file_item)
-    json_data = JSONParser().parse(data_in)
+    try:
+        data_in = gzip.GzipFile(fileobj=file_item)
+        json_data = JSONParser().parse(data_in)
+    except IOError:
+        raise Exception(
+            _('Incorrect file. Expecting a GZIP file (exported workflow).'),
+        )
 
     _run_compatibility_patches(json_data)
 
