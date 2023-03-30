@@ -195,7 +195,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
             # Separate filter from conditions
             filter_item = self.get_filter()
-            cond_list = self.conditions.filter(is_filter=False)
+            cond_list = self.conditions.all()
 
             if not cond_list:
                 # Condition list is either None or empty. No restrictions.
@@ -341,7 +341,16 @@ class ActionDataOut(ActionBase):  # noqa Z214
         for cond in self.conditions.all():
             cond.formula = formula.rename_variable(
                 cond.formula, old_name, new_name)
+            cond.formula_text = None
             cond.save(update_fields=['formula'])
+
+        # Rename the variable in the filter
+        filter_obj = self.get_filter()
+        if filter_obj:
+            filter_obj.formula = formula.rename_variable(
+                filter_obj.formula, old_name, new_name)
+            filter_obj.formula_text = None
+            filter_obj.save()
 
     def get_used_conditions(self) -> List[str]:
         """Get list of conditions that are used in the text_content.

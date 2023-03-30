@@ -145,7 +145,7 @@ class Condition(NameAndDescription, ConditionBase):
             'action': self.action.name,
             'formula': self.get_formula_text(),
             'n_rows_selected': self.n_rows_selected,
-            'workflow_id': self.action.workflow.id}
+            'workflow_id': self.workflow.id}
 
         payload.update(kwargs)
         return Log.objects.register(
@@ -196,6 +196,22 @@ class Filter(ConditionBase):
     def is_filter(self) -> bool:
         """Identify as filter"""
         return True
+
+    def log(self, user, operation_type: str, **kwargs):
+        """Log the operation with the object."""
+        payload = {
+            'id': self.id,
+            'action': self.action.name if self.action else '',
+            'formula': self.get_formula_text(),
+            'n_rows_selected': self.n_rows_selected,
+            'workflow_id': self.workflow.id}
+
+        payload.update(kwargs)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.action.workflow,
+            payload)
 
     class Meta:
         """No definitions required here (so far)"""
