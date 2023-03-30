@@ -309,7 +309,7 @@ def delete_column(
         # The conditions to delete are not given, so calculate them
         # Get the conditions/actions attached to this workflow
         cond_to_delete = [
-            cond for cond in workflow.conditions
+            cond for cond in workflow.conditions.all()
             if column in cond.columns.all()]
 
     # If a column disappears, the conditions that contain that variable
