@@ -36,7 +36,7 @@ class TableTestSerializers(tests.OnTaskTestCase):
                         {"name": "when"}],
                     "name": "simple view",
                     "description_text": "",
-                    "formula": {
+                    "_formula": {
                         "not": False,
                         "rules": [],
                         "valid": True,
@@ -65,7 +65,7 @@ class TableTestSerializers(tests.OnTaskTestCase):
                     {"name": "when"}],
                 "name": "simple view 2",
                 "description_text": "",
-                "formula": {
+                "_formula": {
                     "not": False,
                     "rules": [],
                     "valid": True,
