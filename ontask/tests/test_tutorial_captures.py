@@ -110,8 +110,8 @@ class TutorialCaptures(ScreenTests):
         # Create a new view
         self.go_to_table()
 
-        # Button to dropdown the Views
-        self.click_dropdown_option_num_and_wait('select-view-name', 1)
+        # Button to dropdown the Views and create one
+        self.click_dropdown_option_num_and_wait('select-view-name', 2)
 
         # Insert data to create the view
         element = self.selenium.find_element_by_id('id_name')

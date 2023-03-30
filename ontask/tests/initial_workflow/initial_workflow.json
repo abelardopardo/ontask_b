@@ -2260,7 +2260,7 @@
         "description_text": "High engagement with Video 1 in Week 2",
         "created": "2019-09-21T06:43:58.726Z",
         "modified": "2020-08-17T09:31:20.249Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2275,7 +2275,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "Video_1_W2 &gt; 75.0 and not empty",
+        "_formula_text": "Video_1_W2 &gt; 75.0 and not empty",
         "n_rows_selected": 6,
         "workflow": 1,
         "action": 1,
@@ -2292,7 +2292,7 @@
         "description_text": "Low activity detected in the first video of Week 2",
         "created": "2019-09-21T06:43:59.115Z",
         "modified": "2020-08-17T09:31:20.254Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2321,7 +2321,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "(Video_1_W2 &gt; 0.0 and not empty) AND (Video_1_W2 &#8924; 25.0 and not empty)",
+        "_formula_text": "(Video_1_W2 &gt; 0.0 and not empty) AND (Video_1_W2 &#8924; 25.0 and not empty)",
         "n_rows_selected": 1,
         "workflow": 1,
         "action": 1,
@@ -2338,7 +2338,7 @@
         "description_text": "Medium engagement with Video 1 in Week 2",
         "created": "2019-09-21T06:43:59.407Z",
         "modified": "2020-08-17T09:31:20.257Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2367,7 +2367,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "(Video_1_W2 &gt; 25.0 and not empty) AND (Video_1_W2 &#8924; 75.0 and not empty)",
+        "_formula_text": "(Video_1_W2 &gt; 25.0 and not empty) AND (Video_1_W2 &#8924; 75.0 and not empty)",
         "n_rows_selected": 5,
         "workflow": 1,
         "action": 1,
@@ -2384,7 +2384,7 @@
         "description_text": "No video activity",
         "created": "2019-09-21T06:43:59.679Z",
         "modified": "2020-08-17T09:31:20.267Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2399,7 +2399,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "Video_1_W2 &equals; 0.0 and not empty",
+        "_formula_text": "Video_1_W2 &equals; 0.0 and not empty",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 1,
@@ -2416,7 +2416,7 @@
         "description_text": "Didn't watch Video 1 Week 4",
         "created": "2019-09-21T06:44:01.086Z",
         "modified": "2020-08-17T09:31:20.262Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2431,7 +2431,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 1,
         "workflow": 1,
         "action": 2,
@@ -2448,7 +2448,7 @@
         "description_text": "Didn't watch Video 2 Week 4",
         "created": "2019-09-21T06:44:01.402Z",
         "modified": "2020-08-17T09:31:20.265Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2463,7 +2463,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 3,
         "workflow": 1,
         "action": 2,
@@ -2480,7 +2480,7 @@
         "description_text": "",
         "created": "2019-09-21T06:44:02.434Z",
         "modified": "2020-08-17T09:31:20.235Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2495,7 +2495,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 3,
@@ -2512,7 +2512,7 @@
         "description_text": "",
         "created": "2019-09-21T06:44:02.996Z",
         "modified": "2020-08-17T09:31:20.238Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2527,7 +2527,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 3,
         "workflow": 1,
         "action": 3,
@@ -2544,7 +2544,7 @@
         "description_text": "",
         "created": "2019-09-21T06:44:03.374Z",
         "modified": "2020-08-17T09:31:20.241Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2559,7 +2559,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 6,
         "workflow": 1,
         "action": 3,
@@ -2576,7 +2576,7 @@
         "description_text": "",
         "created": "2019-09-21T06:44:03.618Z",
         "modified": "2020-08-17T09:31:20.244Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2591,7 +2591,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 3,
         "workflow": 1,
         "action": 3,
@@ -2608,7 +2608,7 @@
         "description_text": "High score in topic 1",
         "created": "2019-09-21T06:44:04.538Z",
         "modified": "2020-08-17T09:31:20.272Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2631,7 +2631,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 1.0 and not empty)",
+        "_formula_text": "(Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 1.0 and not empty)",
         "n_rows_selected": 4,
         "workflow": 1,
         "action": 4,
@@ -2649,7 +2649,7 @@
         "description_text": "Low score in topic 1",
         "created": "2019-09-21T06:44:05.055Z",
         "modified": "2020-08-17T09:31:20.275Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2672,7 +2672,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 0.0 and not empty)",
+        "_formula_text": "(Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 0.0 and not empty)",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 4,
@@ -2690,7 +2690,7 @@
         "description_text": "One answer was correctly answered for topic 1",
         "created": "2019-09-21T06:44:05.436Z",
         "modified": "2020-08-17T09:31:20.277Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2741,7 +2741,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "((Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 1.0 and not empty)) OR ((Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 0.0 and not empty))",
+        "_formula_text": "((Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 1.0 and not empty)) OR ((Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 0.0 and not empty))",
         "n_rows_selected": 6,
         "workflow": 1,
         "action": 4,
@@ -2759,7 +2759,7 @@
         "description_text": "High score in topic 2",
         "created": "2019-09-21T06:44:05.687Z",
         "modified": "2020-08-17T09:31:20.281Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2782,7 +2782,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 1.0 and not empty)",
+        "_formula_text": "(Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 1.0 and not empty)",
         "n_rows_selected": 6,
         "workflow": 1,
         "action": 4,
@@ -2800,7 +2800,7 @@
         "description_text": "Low score in topic 2",
         "created": "2019-09-21T06:44:05.925Z",
         "modified": "2020-08-17T09:31:20.283Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2823,7 +2823,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 0.0 and not empty)",
+        "_formula_text": "(Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 0.0 and not empty)",
         "n_rows_selected": 3,
         "workflow": 1,
         "action": 4,
@@ -2841,7 +2841,7 @@
         "description_text": "One answer was correctly answered for topic 2",
         "created": "2019-09-21T06:44:06.214Z",
         "modified": "2020-08-17T09:31:20.285Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2892,7 +2892,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "((Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 1.0 and not empty)) OR ((Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 0.0 and not empty))",
+        "_formula_text": "((Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 1.0 and not empty)) OR ((Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 0.0 and not empty))",
         "n_rows_selected": 3,
         "workflow": 1,
         "action": 4,
@@ -2910,7 +2910,7 @@
         "description_text": "High score in topic 3",
         "created": "2019-09-21T06:44:06.686Z",
         "modified": "2020-08-17T09:31:20.288Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2933,7 +2933,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 1.0 and not empty)",
+        "_formula_text": "(Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 1.0 and not empty)",
         "n_rows_selected": 7,
         "workflow": 1,
         "action": 4,
@@ -2951,7 +2951,7 @@
         "description_text": "Low score in topic 3",
         "created": "2019-09-21T06:44:07.251Z",
         "modified": "2020-08-17T09:31:20.291Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2974,7 +2974,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 0.0 and not empty)",
+        "_formula_text": "(Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 0.0 and not empty)",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 4,
@@ -2992,7 +2992,7 @@
         "description_text": "One answer was correctly answered for topic 3",
         "created": "2019-09-21T06:44:07.603Z",
         "modified": "2020-08-17T09:31:20.294Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3043,7 +3043,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "((Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 1.0 and not empty)) OR ((Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 0.0 and not empty))",
+        "_formula_text": "((Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 1.0 and not empty)) OR ((Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 0.0 and not empty))",
         "n_rows_selected": 3,
         "workflow": 1,
         "action": 4,
@@ -3061,7 +3061,7 @@
         "description_text": "High score in topic 4",
         "created": "2019-09-21T06:44:07.851Z",
         "modified": "2020-08-17T09:31:20.297Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3084,7 +3084,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 1.0 and not empty)",
+        "_formula_text": "(Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 1.0 and not empty)",
         "n_rows_selected": 7,
         "workflow": 1,
         "action": 4,
@@ -3102,7 +3102,7 @@
         "description_text": "Low score in topic 4",
         "created": "2019-09-21T06:44:08.106Z",
         "modified": "2020-08-17T09:31:20.300Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3125,7 +3125,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 0.0 and not empty)",
+        "_formula_text": "(Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 0.0 and not empty)",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 4,
@@ -3143,7 +3143,7 @@
         "description_text": "One answer was correctly answered for topic 4",
         "created": "2019-09-21T06:44:08.381Z",
         "modified": "2020-08-17T09:31:20.303Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3194,7 +3194,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "((Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 1.0 and not empty)) OR ((Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 0.0 and not empty))",
+        "_formula_text": "((Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 1.0 and not empty)) OR ((Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 0.0 and not empty))",
         "n_rows_selected": 3,
         "workflow": 1,
         "action": 4,
@@ -3212,7 +3212,7 @@
         "description_text": "High score in topic 5",
         "created": "2019-09-21T06:44:08.935Z",
         "modified": "2020-08-17T09:31:20.305Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3235,7 +3235,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 1.0 and not empty)",
+        "_formula_text": "(Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 1.0 and not empty)",
         "n_rows_selected": 4,
         "workflow": 1,
         "action": 4,
@@ -3253,7 +3253,7 @@
         "description_text": "Low score in topic 5",
         "created": "2019-09-21T06:44:09.414Z",
         "modified": "2020-08-17T09:31:20.308Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3276,7 +3276,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "(Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 0.0 and not empty)",
+        "_formula_text": "(Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 0.0 and not empty)",
         "n_rows_selected": 4,
         "workflow": 1,
         "action": 4,
@@ -3294,7 +3294,7 @@
         "description_text": "One answer was correctly answered for topic 5",
         "created": "2019-09-21T06:44:09.785Z",
         "modified": "2020-08-17T09:31:20.310Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3345,7 +3345,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "((Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 1.0 and not empty)) OR ((Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 0.0 and not empty))",
+        "_formula_text": "((Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 1.0 and not empty)) OR ((Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 0.0 and not empty))",
         "n_rows_selected": 4,
         "workflow": 1,
         "action": 4,
@@ -3363,7 +3363,7 @@
         "description_text": "",
         "created": "2019-09-21T06:44:12.131Z",
         "modified": "2020-08-17T09:31:20.251Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3378,7 +3378,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 5,
@@ -3395,7 +3395,7 @@
         "description_text": "",
         "created": "2019-09-21T06:44:12.387Z",
         "modified": "2020-08-17T09:31:20.259Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3410,7 +3410,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 10,
         "workflow": 1,
         "action": 5,
@@ -3425,7 +3425,7 @@
     "fields": {
         "created": "2020-08-17T09:31:20.348Z",
         "modified": "2020-08-17T09:31:20.878Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3440,7 +3440,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "Q01 is not null",
+        "_formula_text": "Q01 is not null",
         "n_rows_selected": 12,
         "workflow": 1,
         "description_text": "",
@@ -3456,7 +3456,7 @@
     "fields": {
         "created": "2020-08-17T09:31:20.356Z",
         "modified": "2020-08-17T09:31:20.880Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3471,7 +3471,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "email starts with t",
+        "_formula_text": "email starts with t",
         "n_rows_selected": 4,
         "workflow": 1,
         "description_text": "Students starting with t",
@@ -3487,7 +3487,7 @@
     "fields": {
         "created": "2020-08-17T09:31:20.363Z",
         "modified": "2020-08-17T09:31:20.881Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3502,7 +3502,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 12,
         "workflow": 1,
         "description_text": "There is an exam score",
@@ -3518,7 +3518,7 @@
     "fields": {
         "created": "2020-08-17T09:31:20.369Z",
         "modified": "2020-08-17T09:31:20.883Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3533,7 +3533,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "description_text": "These are the students that haven't connected to the discussion forum yet.",
@@ -3549,7 +3549,7 @@
     "fields": {
         "created": "2020-08-17T09:31:20.375Z",
         "modified": "2020-08-17T09:31:20.884Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3572,7 +3572,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 3,
         "workflow": 1,
         "description_text": "Either Video 1 or Video 2 in Week 4 have zero engagement",
@@ -3812,7 +3812,7 @@
         "created": "2019-09-21T06:44:14.318Z",
         "modified": "2019-09-21T06:44:14.531Z",
         "workflow": 1,
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -3841,7 +3841,7 @@
         "created": "2019-09-21T06:44:14.591Z",
         "modified": "2019-09-21T06:44:14.765Z",
         "workflow": 1,
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [],
             "valid": true,
@@ -3872,7 +3872,7 @@
         "created": "2019-09-21T06:44:14.801Z",
         "modified": "2019-09-21T06:44:14.963Z",
         "workflow": 1,
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [],
             "valid": true,
@@ -3900,7 +3900,7 @@
         "created": "2019-09-21T06:50:54.016Z",
         "modified": "2019-09-21T06:50:54.016Z",
         "workflow": 1,
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [],
             "valid": true,

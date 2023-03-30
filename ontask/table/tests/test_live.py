@@ -352,7 +352,7 @@ class TableViews(tests.OnTaskLiveTestCase):
         self.go_to_table()
 
         # Button to add a view
-        self.click_dropdown_option_num_and_wait('select-view-name', 1)
+        self.click_dropdown_option_num_and_wait('select-view-name', 2)
 
         # Insert data to create the first view
         self.selenium.find_element_by_id("id_name").click()
@@ -394,7 +394,7 @@ class TableViews(tests.OnTaskLiveTestCase):
             self.selenium.page_source)
 
         # Add a second view
-        self.click_dropdown_option_num_and_wait('select-view-name', 1)
+        self.click_dropdown_option_num_and_wait('select-view-name', 2)
 
         # Add the details for the second view
         self.selenium.find_element_by_id("id_name").click()

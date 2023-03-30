@@ -875,7 +875,7 @@
         "description_text": "b",
         "created": "2017-11-20T10:49:53.383Z",
         "modified": "2020-08-17T09:34:15.180Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -890,7 +890,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": -1,
         "workflow": 5,
         "action": 2,
@@ -907,7 +907,7 @@
         "description_text": "",
         "created": "2017-11-20T10:49:53.383Z",
         "modified": "2020-08-17T09:34:15.185Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -922,7 +922,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": -1,
         "workflow": 5,
         "action": 2,

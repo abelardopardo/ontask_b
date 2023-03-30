@@ -341,7 +341,7 @@
         "created": "2018-05-23T03:11:29.097Z",
         "modified": "2018-05-23T03:11:29.097Z",
         "workflow": 35,
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [],
             "valid": true,

@@ -617,7 +617,7 @@
         "description_text": "",
         "created": "2019-10-03T08:52:03.035Z",
         "modified": "2020-08-17T09:35:50.183Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -632,7 +632,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 1,
@@ -649,7 +649,7 @@
         "description_text": "",
         "created": "2019-10-03T08:52:04.021Z",
         "modified": "2020-08-17T09:35:50.193Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -664,7 +664,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 1,
@@ -681,7 +681,7 @@
         "description_text": "",
         "created": "2019-10-03T08:52:04.641Z",
         "modified": "2020-08-17T09:35:50.195Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -696,7 +696,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 1,
@@ -713,7 +713,7 @@
         "description_text": "",
         "created": "2019-10-03T08:52:05.085Z",
         "modified": "2020-08-17T09:35:50.200Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -728,7 +728,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 1,
@@ -745,7 +745,7 @@
         "description_text": "",
         "created": "2019-10-03T08:52:05.427Z",
         "modified": "2020-08-17T09:35:50.187Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -760,7 +760,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 2,
@@ -777,7 +777,7 @@
         "description_text": "",
         "created": "2019-10-03T08:52:05.689Z",
         "modified": "2020-08-17T09:35:50.190Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -792,7 +792,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 2,
@@ -809,7 +809,7 @@
         "description_text": "",
         "created": "2019-10-03T08:52:05.974Z",
         "modified": "2020-08-17T09:35:50.198Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -824,7 +824,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 2,
@@ -841,7 +841,7 @@
         "description_text": "",
         "created": "2019-10-03T08:52:06.464Z",
         "modified": "2020-08-17T09:35:50.203Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -856,7 +856,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 1,
         "action": 2,

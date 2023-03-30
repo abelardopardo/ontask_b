@@ -691,7 +691,7 @@
         "description_text": "",
         "created": "2019-04-24T07:14:20.855Z",
         "modified": "2020-08-17T09:33:54.566Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -706,7 +706,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 5,
         "action": 2,
@@ -724,7 +724,7 @@
         "created": "2020-05-03T06:47:29.080Z",
         "modified": "2020-05-03T06:47:29.080Z",
         "workflow": 5,
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [],
             "valid": true,

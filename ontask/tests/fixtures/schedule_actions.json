@@ -756,7 +756,7 @@
         "description_text": "",
         "created": "2017-12-08T01:33:21.687Z",
         "modified": "2020-08-17T09:33:35.671Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -771,7 +771,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "registered &equals; true and not empty",
+        "_formula_text": "registered &equals; true and not empty",
         "n_rows_selected": 1,
         "workflow": 108,
         "action": 253,
@@ -786,7 +786,7 @@
     "fields": {
         "created": "2020-08-17T09:33:35.714Z",
         "modified": "2020-08-17T09:33:36.233Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -801,7 +801,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 108,
         "description_text": "",
@@ -817,7 +817,7 @@
     "fields": {
         "created": "2020-08-17T09:33:35.722Z",
         "modified": "2020-08-17T09:33:36.234Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -832,7 +832,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 108,
         "description_text": "",
@@ -848,7 +848,7 @@
     "fields": {
         "created": "2020-08-17T09:33:35.729Z",
         "modified": "2020-08-17T09:33:36.236Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -863,7 +863,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "age &gt; 12.0 and not empty",
+        "_formula_text": "age &gt; 12.0 and not empty",
         "n_rows_selected": 2,
         "workflow": 108,
         "description_text": "",
@@ -879,7 +879,7 @@
     "fields": {
         "created": "2020-08-17T09:33:35.735Z",
         "modified": "2020-08-17T09:33:36.238Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -894,7 +894,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "registered &equals; true and not empty",
+        "_formula_text": "registered &equals; true and not empty",
         "n_rows_selected": 2,
         "workflow": 108,
         "description_text": "",

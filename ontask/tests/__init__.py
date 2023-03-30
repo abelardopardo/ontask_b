@@ -614,11 +614,11 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         # Wait for the Full View to be clickable
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.LINK_TEXT, 'Full view')
+                (By.LINK_TEXT, 'View data')
             )
         )
         # Click on the full view element
-        self.selenium.find_element_by_link_text('Full view').click()
+        self.selenium.find_element_by_link_text('View data').click()
         # Wait for page to refresh
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'table-content'))
@@ -1276,8 +1276,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def create_view(self, vname, vdesc, cols):
         self.go_to_table()
 
-        # Button to dropdown the Views
-        self.click_dropdown_option_num_and_wait('select-view-name', 1)
+        # Button to dropdown the Views and click in create
+        self.click_dropdown_option_num_and_wait('select-view-name', 2)
 
         # Wait for the form to create the derived column
         self.wait_for_modal_open()

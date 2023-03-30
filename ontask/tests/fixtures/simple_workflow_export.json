@@ -1139,7 +1139,7 @@
         "description_text": "Low score in topic 1",
         "created": "2017-12-16T01:40:33.797Z",
         "modified": "2020-08-17T09:35:12.455Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1162,7 +1162,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 140,
         "action": 307,
@@ -1180,7 +1180,7 @@
         "description_text": "Low score in topic 2",
         "created": "2017-12-16T01:40:37.025Z",
         "modified": "2020-08-17T09:35:12.463Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1203,7 +1203,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 3,
         "workflow": 140,
         "action": 307,
@@ -1221,7 +1221,7 @@
         "description_text": "Low score in topic 3",
         "created": "2017-12-16T01:40:58.552Z",
         "modified": "2020-08-17T09:35:12.471Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1244,7 +1244,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 140,
         "action": 307,
@@ -1262,7 +1262,7 @@
         "description_text": "Low score in topic 4",
         "created": "2017-12-16T01:41:21.289Z",
         "modified": "2020-08-17T09:35:12.478Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1285,7 +1285,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 3,
         "workflow": 140,
         "action": 307,
@@ -1303,7 +1303,7 @@
         "description_text": "Low score in topic 5",
         "created": "2017-12-16T01:41:39.042Z",
         "modified": "2020-08-17T09:35:12.486Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1326,7 +1326,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 3,
         "workflow": 140,
         "action": 307,
@@ -1344,7 +1344,7 @@
         "description_text": "One answer was correctly answered for topic 1",
         "created": "2017-12-16T01:43:04.280Z",
         "modified": "2020-08-17T09:35:12.458Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1395,7 +1395,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 4,
         "workflow": 140,
         "action": 307,
@@ -1413,7 +1413,7 @@
         "description_text": "One answer was correctly answered for topic 2",
         "created": "2017-12-16T01:43:12.224Z",
         "modified": "2020-08-17T09:35:12.465Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1464,7 +1464,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 7,
         "workflow": 140,
         "action": 307,
@@ -1482,7 +1482,7 @@
         "description_text": "One answer was correctly answered for topic 3",
         "created": "2017-12-16T01:43:50.547Z",
         "modified": "2020-08-17T09:35:12.473Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1533,7 +1533,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 6,
         "workflow": 140,
         "action": 307,
@@ -1551,7 +1551,7 @@
         "description_text": "One answer was correctly answered for topic 4",
         "created": "2017-12-16T01:44:25.439Z",
         "modified": "2020-08-17T09:35:12.481Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1602,7 +1602,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 4,
         "workflow": 140,
         "action": 307,
@@ -1620,7 +1620,7 @@
         "description_text": "One answer was correctly answered for topic 5",
         "created": "2017-12-16T01:44:54.358Z",
         "modified": "2020-08-17T09:35:12.488Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1671,7 +1671,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 4,
         "workflow": 140,
         "action": 307,
@@ -1689,7 +1689,7 @@
         "description_text": "High score in topic 1",
         "created": "2017-12-16T01:45:33.862Z",
         "modified": "2020-08-17T09:35:12.453Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1712,7 +1712,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 4,
         "workflow": 140,
         "action": 307,
@@ -1730,7 +1730,7 @@
         "description_text": "High score in topic 2",
         "created": "2017-12-16T01:45:52.186Z",
         "modified": "2020-08-17T09:35:12.460Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1753,7 +1753,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 0,
         "workflow": 140,
         "action": 307,
@@ -1771,7 +1771,7 @@
         "description_text": "High score in topic 3",
         "created": "2017-12-16T01:46:06.726Z",
         "modified": "2020-08-17T09:35:12.468Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1794,7 +1794,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 140,
         "action": 307,
@@ -1812,7 +1812,7 @@
         "description_text": "High score in topic 4",
         "created": "2017-12-16T01:46:26.894Z",
         "modified": "2020-08-17T09:35:12.476Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1835,7 +1835,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 3,
         "workflow": 140,
         "action": 307,
@@ -1853,7 +1853,7 @@
         "description_text": "High score in topic 5",
         "created": "2017-12-16T01:46:46.225Z",
         "modified": "2020-08-17T09:35:12.483Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1876,7 +1876,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 3,
         "workflow": 140,
         "action": 307,
@@ -1894,7 +1894,7 @@
         "description_text": "Didn't watch Video 1",
         "created": "2017-12-16T02:03:15.633Z",
         "modified": "2020-08-17T09:35:12.433Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1909,7 +1909,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 4,
         "workflow": 140,
         "action": 309,
@@ -1926,7 +1926,7 @@
         "description_text": "Didn't watch Video 2",
         "created": "2017-12-16T02:03:17.354Z",
         "modified": "2020-08-17T09:35:12.435Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1941,7 +1941,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 5,
         "workflow": 140,
         "action": 309,
@@ -1958,7 +1958,7 @@
         "description_text": "Didn't watch Video 3",
         "created": "2017-12-16T02:03:37.666Z",
         "modified": "2020-08-17T09:35:12.438Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -1973,7 +1973,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 8,
         "workflow": 140,
         "action": 309,
@@ -1990,7 +1990,7 @@
         "description_text": "No video activity",
         "created": "2017-12-16T02:13:41.327Z",
         "modified": "2020-08-17T09:35:12.440Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2021,7 +2021,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 1,
         "workflow": 140,
         "action": 310,
@@ -2040,7 +2040,7 @@
         "description_text": "Activity detected in only one video",
         "created": "2017-12-16T02:13:44.160Z",
         "modified": "2020-08-17T09:35:12.443Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2137,7 +2137,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 5,
         "workflow": 140,
         "action": 310,
@@ -2156,7 +2156,7 @@
         "description_text": "Activity detected in two videos",
         "created": "2017-12-16T02:15:24.327Z",
         "modified": "2020-08-17T09:35:12.493Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2253,7 +2253,7 @@
             "valid": true,
             "condition": "OR"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 4,
         "workflow": 140,
         "action": 310,
@@ -2272,7 +2272,7 @@
         "description_text": "All three videos were watched",
         "created": "2017-12-16T02:16:30.820Z",
         "modified": "2020-08-17T09:35:12.490Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2303,7 +2303,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 140,
         "action": 310,
@@ -2322,7 +2322,7 @@
         "description_text": "Resources for Concept 1",
         "created": "2017-12-16T02:34:27.524Z",
         "modified": "2020-08-17T09:35:12.419Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2337,7 +2337,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 0,
         "workflow": 140,
         "action": 314,
@@ -2354,7 +2354,7 @@
         "description_text": "Resources for Concept 2",
         "created": "2017-12-16T02:34:30.221Z",
         "modified": "2020-08-17T09:35:12.421Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2369,7 +2369,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 0,
         "workflow": 140,
         "action": 314,
@@ -2386,7 +2386,7 @@
         "description_text": "Resources for Concept 3",
         "created": "2017-12-16T02:34:42.034Z",
         "modified": "2020-08-17T09:35:12.425Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2401,7 +2401,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 0,
         "workflow": 140,
         "action": 314,
@@ -2418,7 +2418,7 @@
         "description_text": "Resources for Concept 4",
         "created": "2017-12-16T02:35:02.866Z",
         "modified": "2020-08-17T09:35:12.429Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2433,7 +2433,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 0,
         "workflow": 140,
         "action": 314,
@@ -2448,7 +2448,7 @@
     "fields": {
         "created": "2020-08-17T09:35:12.527Z",
         "modified": "2020-08-17T09:35:13.058Z",
-        "formula": {
+        "_formula": {
             "not": true,
             "rules": [
                 {
@@ -2479,7 +2479,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 10,
         "workflow": 140,
         "description_text": "",
@@ -2497,7 +2497,7 @@
     "fields": {
         "created": "2020-08-17T09:35:12.536Z",
         "modified": "2020-08-17T09:35:13.060Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2512,7 +2512,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 10,
         "workflow": 140,
         "description_text": "Consider only those students that took the midterm examination.",
@@ -2528,7 +2528,7 @@
     "fields": {
         "created": "2020-08-17T09:35:12.543Z",
         "modified": "2020-08-17T09:35:13.061Z",
-        "formula": {
+        "_formula": {
             "not": false,
             "rules": [
                 {
@@ -2543,7 +2543,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "formula_text": "",
+        "_formula_text": "",
         "n_rows_selected": 2,
         "workflow": 140,
         "description_text": "These are the students that haven't connected to the discussion forum yet.",

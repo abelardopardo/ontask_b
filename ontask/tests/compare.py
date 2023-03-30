@@ -73,7 +73,7 @@ def compare_conditions(c1, c2):
     if not c1.is_filter:
         assert c1.name == c2.name
     assert c1.description_text == c2.description_text
-    assert c1.formula == c2.formula
+    assert c1._formula == c2._formula
     assert c1.columns.count() == c2.columns.count()
     assert c1.n_rows_selected == c2.n_rows_selected
     assert c1.is_filter == c2.is_filter
