@@ -620,7 +620,7 @@ class ScreenTestFixture(ScreenTests):
         # Action In URL enable
         #
         self.go_to_actions()
-        self.open_action_operation('Student comments Week 1', 'URl On')
+        self.open_action_operation('Student comments Week 1', 'URL On')
 
         # Take picture of the modal
         self.modal_ss('action_action_in_URL.png')

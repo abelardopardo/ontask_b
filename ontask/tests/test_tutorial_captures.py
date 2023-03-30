@@ -111,7 +111,7 @@ class TutorialCaptures(ScreenTests):
         self.go_to_table()
 
         # Button to dropdown the Views
-        self.click_dropdown_option_num_and_wait('select-view-names', 0)
+        self.click_dropdown_option_num_and_wait('select-view-name', 1)
 
         # Insert data to create the view
         element = self.selenium.find_element_by_id('id_name')
@@ -143,10 +143,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             '//button[normalize-space()="Add view"]'
         ).click()
-        self.wait_close_modal_refresh_table('view-table_previous')
-
-        # Open the view
-        self.open_view('Subset 1')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Take picture of the table
         self.body_ss('tutorial_table_view.png')

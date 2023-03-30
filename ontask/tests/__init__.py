@@ -505,12 +505,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         :param option_num: position of the option in the dropdown to click
         :return: Nothing
         """
-        self.selenium.find_element_by_xpath(id).click()
+        self.selenium.find_element_by_id(id).click()
         WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
             (By.XPATH,
              '//*[@id="{0}"]/div/*[{1}]'.format(id, option_num))))
         self.selenium.find_element_by_xpath(
-            '//*[@id="{0}"]/div/*[{0}]'.format(id, option_num)
+            '//*[@id="{0}"]/div/*[{1}]'.format(id, option_num)
         ).click()
 
     def click_dropdown_option_num_and_wait(
@@ -1310,7 +1310,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.selenium.find_element_by_xpath(
             '//button[normalize-space()="Add view"]'
         ).click()
-        self.wait_close_modal_refresh_table('view-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
     def open_add_regular_column(self):
         # Click on the Add Column button

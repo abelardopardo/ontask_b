@@ -316,7 +316,7 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         action = models.Action.objects.get(name='simple action')
         self.assertEqual(action.serve_enabled, True)
 
-        self.open_action_operation('simple action', 'URl On')
+        self.open_action_operation('simple action', 'URL On')
         # Disable the URL
         self.selenium.find_element_by_id('id_serve_enabled').click()
         # Click OK
