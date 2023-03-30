@@ -335,7 +335,7 @@ class ActionSerializer(serializers.ModelSerializer):
 
             # Load the filter pointing to the action
             filter_data = FilterSerializer(
-                data=validated_data.get('filter', None),
+                data=validated_data.get('filter', []),
                 many=True,
                 context={
                     'workflow': self.context['workflow'],
