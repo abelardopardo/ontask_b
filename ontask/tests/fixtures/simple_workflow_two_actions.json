@@ -701,7 +701,7 @@
         "name": "Registered",
         "description_text": "",
         "created": "2017-12-08T01:33:21.687Z",
-        "modified": "2020-08-16T08:35:21.653Z",
+        "modified": "2020-08-17T09:35:31.252Z",
         "formula": {
             "not": false,
             "rules": [
@@ -730,8 +730,8 @@
     "model": "ontask.filter",
     "pk": 1,
     "fields": {
-        "created": "2020-08-16T08:35:21.691Z",
-        "modified": "2020-08-16T08:35:21.698Z",
+        "created": "2020-08-17T09:35:31.291Z",
+        "modified": "2020-08-17T09:35:31.774Z",
         "formula": {
             "not": false,
             "rules": [
@@ -751,6 +751,7 @@
         "n_rows_selected": 2,
         "workflow": 108,
         "description_text": "",
+        "action": 253,
         "columns": [
             2928
         ]
@@ -783,13 +784,12 @@
         "name": "Detecting age",
         "description_text": "",
         "created": "2017-12-08T01:29:40.524Z",
-        "modified": "2020-08-16T08:35:21.880Z",
+        "modified": "2020-08-17T09:35:31.474Z",
         "workflow": 108,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": 1,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
@@ -811,7 +811,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "{% comment %}Your action content here{% endcomment %}",

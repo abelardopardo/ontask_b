@@ -618,7 +618,7 @@
         "name": "bbb",
         "description_text": "",
         "created": "2019-04-24T07:14:20.855Z",
-        "modified": "2020-08-16T08:38:12.796Z",
+        "modified": "2020-08-17T09:38:30.505Z",
         "formula": {
             "not": false,
             "rules": [
@@ -656,7 +656,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": [
             2
         ],

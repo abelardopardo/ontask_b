@@ -781,7 +781,7 @@
         "name": "bbb",
         "description_text": "",
         "created": "2019-04-24T07:14:20.855Z",
-        "modified": "2020-08-16T08:37:34.940Z",
+        "modified": "2020-08-17T09:37:51.917Z",
         "formula": {
             "not": false,
             "rules": [
@@ -819,7 +819,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": [
             2
         ],
@@ -843,7 +842,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "{\r\n  \"field1\": \"value1\",\r\n  \"field2\": 2\r\n}",
@@ -865,7 +863,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "Hi {{ name }}\r\n\r\nThis is a canvas action.",
@@ -887,7 +884,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "",

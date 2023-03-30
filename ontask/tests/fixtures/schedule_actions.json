@@ -755,7 +755,7 @@
         "name": "Registered",
         "description_text": "",
         "created": "2017-12-08T01:33:21.687Z",
-        "modified": "2020-08-16T08:33:27.935Z",
+        "modified": "2020-08-17T09:33:35.671Z",
         "formula": {
             "not": false,
             "rules": [
@@ -784,8 +784,8 @@
     "model": "ontask.filter",
     "pk": 1,
     "fields": {
-        "created": "2020-08-16T08:33:27.978Z",
-        "modified": "2020-08-16T08:33:27.985Z",
+        "created": "2020-08-17T09:33:35.714Z",
+        "modified": "2020-08-17T09:33:36.233Z",
         "formula": {
             "not": false,
             "rules": [
@@ -805,6 +805,7 @@
         "n_rows_selected": 2,
         "workflow": 108,
         "description_text": "",
+        "action": 255,
         "columns": [
             2929
         ]
@@ -814,8 +815,8 @@
     "model": "ontask.filter",
     "pk": 2,
     "fields": {
-        "created": "2020-08-16T08:33:27.989Z",
-        "modified": "2020-08-16T08:33:27.993Z",
+        "created": "2020-08-17T09:33:35.722Z",
+        "modified": "2020-08-17T09:33:36.234Z",
         "formula": {
             "not": false,
             "rules": [
@@ -835,6 +836,7 @@
         "n_rows_selected": 2,
         "workflow": 108,
         "description_text": "",
+        "action": 257,
         "columns": [
             2929
         ]
@@ -844,8 +846,8 @@
     "model": "ontask.filter",
     "pk": 3,
     "fields": {
-        "created": "2020-08-16T08:33:27.996Z",
-        "modified": "2020-08-16T08:33:27.999Z",
+        "created": "2020-08-17T09:33:35.729Z",
+        "modified": "2020-08-17T09:33:36.236Z",
         "formula": {
             "not": false,
             "rules": [
@@ -865,6 +867,7 @@
         "n_rows_selected": 2,
         "workflow": 108,
         "description_text": "",
+        "action": 253,
         "columns": [
             2928
         ]
@@ -874,8 +877,8 @@
     "model": "ontask.filter",
     "pk": 4,
     "fields": {
-        "created": "2020-08-16T08:33:28.002Z",
-        "modified": "2020-08-16T08:33:28.006Z",
+        "created": "2020-08-17T09:33:35.735Z",
+        "modified": "2020-08-17T09:33:36.238Z",
         "formula": {
             "not": false,
             "rules": [
@@ -895,6 +898,7 @@
         "n_rows_selected": 2,
         "workflow": 108,
         "description_text": "",
+        "action": 258,
         "columns": [
             2929
         ]
@@ -907,13 +911,12 @@
         "name": "send email",
         "description_text": "",
         "created": "2017-12-08T01:29:40.524Z",
-        "modified": "2020-08-16T08:33:28.188Z",
+        "modified": "2020-08-17T09:33:35.927Z",
         "workflow": 108,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": 3,
         "rows_all_false": [
             2
         ],
@@ -931,13 +934,12 @@
         "name": "send list",
         "description_text": "",
         "created": "2019-08-26T09:42:03.733Z",
-        "modified": "2020-08-16T08:33:28.184Z",
+        "modified": "2020-08-17T09:33:35.922Z",
         "workflow": 108,
         "action_type": "email_report",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": 1,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear madam/sir</p><p>Here is the list of students: {% ot_insert_report 'email' %}<br></p>",
@@ -959,7 +961,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "{\r\n  \"field1\": \"{{ age }}\",\r\n  \"field2\": \"{{ email }}\",\r\n  \"field3\": \"{{ when }}\"\r\n}",
@@ -975,13 +976,12 @@
         "name": "send json report",
         "description_text": "",
         "created": "2019-08-30T07:35:53.133Z",
-        "modified": "2020-08-16T08:33:28.186Z",
+        "modified": "2020-08-17T09:33:35.925Z",
         "workflow": 108,
         "action_type": "json_report",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": 2,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "{\r\n    \"students\": {% ot_insert_report \"email\" %}\r\n}",
@@ -997,13 +997,12 @@
         "name": "send email incrementally",
         "description_text": "To test incremental scheduled execution",
         "created": "2019-09-07T05:46:22.613Z",
-        "modified": "2020-08-16T08:33:28.190Z",
+        "modified": "2020-08-17T09:33:35.928Z",
         "workflow": 108,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": 4,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Hi {{ name }}</p><p>Welcome to the course!<br></p><p>ATT:&nbsp;{{ attribute name }}</p><p>Registered:&nbsp;{{ registered }}</p><p>When: {{ when }}<br></p>",

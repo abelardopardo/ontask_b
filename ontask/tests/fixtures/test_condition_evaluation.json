@@ -698,7 +698,7 @@
         "name": "c1 is null",
         "description_text": "",
         "created": "2019-04-07T01:03:01.985Z",
-        "modified": "2020-08-16T08:36:00.055Z",
+        "modified": "2020-08-17T09:36:09.661Z",
         "formula": {
             "not": false,
             "rules": [
@@ -730,7 +730,7 @@
         "name": "c2 is null",
         "description_text": "",
         "created": "2019-04-07T01:03:15.636Z",
-        "modified": "2020-08-16T08:36:00.063Z",
+        "modified": "2020-08-17T09:36:09.669Z",
         "formula": {
             "not": false,
             "rules": [
@@ -762,7 +762,7 @@
         "name": "c3 is null",
         "description_text": "",
         "created": "2019-04-07T01:03:34.100Z",
-        "modified": "2020-08-16T08:36:00.077Z",
+        "modified": "2020-08-17T09:36:09.681Z",
         "formula": {
             "not": false,
             "rules": [
@@ -794,7 +794,7 @@
         "name": "c4 is null",
         "description_text": "",
         "created": "2019-04-07T01:03:42.864Z",
-        "modified": "2020-08-16T08:36:00.088Z",
+        "modified": "2020-08-17T09:36:09.691Z",
         "formula": {
             "not": false,
             "rules": [
@@ -826,7 +826,7 @@
         "name": "c5 is true",
         "description_text": "",
         "created": "2019-04-07T01:03:51.851Z",
-        "modified": "2020-08-16T08:36:00.096Z",
+        "modified": "2020-08-17T09:36:09.698Z",
         "formula": {
             "not": false,
             "rules": [
@@ -858,7 +858,7 @@
         "name": "c6 is true",
         "description_text": "",
         "created": "2019-04-07T01:04:05.159Z",
-        "modified": "2020-08-16T08:36:00.108Z",
+        "modified": "2020-08-17T09:36:09.711Z",
         "formula": {
             "not": false,
             "rules": [
@@ -890,7 +890,7 @@
         "name": "c7 is null",
         "description_text": "",
         "created": "2019-04-07T01:11:36.568Z",
-        "modified": "2020-08-16T08:36:00.120Z",
+        "modified": "2020-08-17T09:36:09.720Z",
         "formula": {
             "not": false,
             "rules": [
@@ -922,7 +922,7 @@
         "name": "c8 is null",
         "description_text": "",
         "created": "2019-04-07T01:11:48.940Z",
-        "modified": "2020-08-16T08:36:00.131Z",
+        "modified": "2020-08-17T09:36:09.728Z",
         "formula": {
             "not": false,
             "rules": [
@@ -954,7 +954,7 @@
         "name": "c1 is not null",
         "description_text": "",
         "created": "2019-04-07T01:26:52.692Z",
-        "modified": "2020-08-16T08:36:00.046Z",
+        "modified": "2020-08-17T09:36:09.654Z",
         "formula": {
             "not": true,
             "rules": [
@@ -986,7 +986,7 @@
         "name": "c2 is not null",
         "description_text": "",
         "created": "2019-04-07T01:27:05.378Z",
-        "modified": "2020-08-16T08:36:00.058Z",
+        "modified": "2020-08-17T09:36:09.664Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1018,7 +1018,7 @@
         "name": "c3 is not null",
         "description_text": "",
         "created": "2019-04-07T01:27:14.771Z",
-        "modified": "2020-08-16T08:36:00.069Z",
+        "modified": "2020-08-17T09:36:09.673Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1050,7 +1050,7 @@
         "name": "c4 is not null",
         "description_text": "",
         "created": "2019-04-07T01:27:25.611Z",
-        "modified": "2020-08-16T08:36:00.080Z",
+        "modified": "2020-08-17T09:36:09.684Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1082,7 +1082,7 @@
         "name": "c5 is not true",
         "description_text": "",
         "created": "2019-04-07T01:27:34.842Z",
-        "modified": "2020-08-16T08:36:00.090Z",
+        "modified": "2020-08-17T09:36:09.693Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1114,7 +1114,7 @@
         "name": "c6 is not true",
         "description_text": "",
         "created": "2019-04-07T01:27:46.377Z",
-        "modified": "2020-08-16T08:36:00.101Z",
+        "modified": "2020-08-17T09:36:09.703Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1146,7 +1146,7 @@
         "name": "c7 is not null",
         "description_text": "",
         "created": "2019-04-07T01:27:57.426Z",
-        "modified": "2020-08-16T08:36:00.110Z",
+        "modified": "2020-08-17T09:36:09.713Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1178,7 +1178,7 @@
         "name": "c8 is not null",
         "description_text": "",
         "created": "2019-04-07T01:28:07.471Z",
-        "modified": "2020-08-16T08:36:00.128Z",
+        "modified": "2020-08-17T09:36:09.726Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1210,7 +1210,7 @@
         "name": "c1 is null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.226Z",
-        "modified": "2020-08-16T08:36:00.052Z",
+        "modified": "2020-08-17T09:36:09.659Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1242,7 +1242,7 @@
         "name": "c2 is null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.230Z",
-        "modified": "2020-08-16T08:36:00.066Z",
+        "modified": "2020-08-17T09:36:09.671Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1274,7 +1274,7 @@
         "name": "c3 is null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.232Z",
-        "modified": "2020-08-16T08:36:00.075Z",
+        "modified": "2020-08-17T09:36:09.679Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1306,7 +1306,7 @@
         "name": "c4 is null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.234Z",
-        "modified": "2020-08-16T08:36:00.085Z",
+        "modified": "2020-08-17T09:36:09.688Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1338,7 +1338,7 @@
         "name": "c5 is true",
         "description_text": "",
         "created": "2019-04-07T05:11:18.236Z",
-        "modified": "2020-08-16T08:36:00.098Z",
+        "modified": "2020-08-17T09:36:09.701Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1370,7 +1370,7 @@
         "name": "c6 is true",
         "description_text": "",
         "created": "2019-04-07T05:11:18.238Z",
-        "modified": "2020-08-16T08:36:00.106Z",
+        "modified": "2020-08-17T09:36:09.708Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1402,7 +1402,7 @@
         "name": "c7 is null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.240Z",
-        "modified": "2020-08-16T08:36:00.117Z",
+        "modified": "2020-08-17T09:36:09.718Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1434,7 +1434,7 @@
         "name": "c8 is null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.242Z",
-        "modified": "2020-08-16T08:36:00.134Z",
+        "modified": "2020-08-17T09:36:09.730Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1466,7 +1466,7 @@
         "name": "c1 is not null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.245Z",
-        "modified": "2020-08-16T08:36:00.049Z",
+        "modified": "2020-08-17T09:36:09.656Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1498,7 +1498,7 @@
         "name": "c2 is not null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.248Z",
-        "modified": "2020-08-16T08:36:00.060Z",
+        "modified": "2020-08-17T09:36:09.667Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1530,7 +1530,7 @@
         "name": "c3 is not null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.250Z",
-        "modified": "2020-08-16T08:36:00.072Z",
+        "modified": "2020-08-17T09:36:09.676Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1562,7 +1562,7 @@
         "name": "c4 is not null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.252Z",
-        "modified": "2020-08-16T08:36:00.083Z",
+        "modified": "2020-08-17T09:36:09.686Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1594,7 +1594,7 @@
         "name": "c5 is not true",
         "description_text": "",
         "created": "2019-04-07T05:11:18.254Z",
-        "modified": "2020-08-16T08:36:00.093Z",
+        "modified": "2020-08-17T09:36:09.696Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1626,7 +1626,7 @@
         "name": "c6 is not true",
         "description_text": "",
         "created": "2019-04-07T05:11:18.256Z",
-        "modified": "2020-08-16T08:36:00.103Z",
+        "modified": "2020-08-17T09:36:09.705Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1658,7 +1658,7 @@
         "name": "c7 is not null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.259Z",
-        "modified": "2020-08-16T08:36:00.113Z",
+        "modified": "2020-08-17T09:36:09.716Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1690,7 +1690,7 @@
         "name": "c8 is not null",
         "description_text": "",
         "created": "2019-04-07T05:11:18.261Z",
-        "modified": "2020-08-16T08:36:00.124Z",
+        "modified": "2020-08-17T09:36:09.723Z",
         "formula": {
             "not": true,
             "rules": [
@@ -1719,8 +1719,8 @@
     "model": "ontask.filter",
     "pk": 1,
     "fields": {
-        "created": "2020-08-16T08:36:00.169Z",
-        "modified": "2020-08-16T08:36:00.175Z",
+        "created": "2020-08-17T09:36:09.765Z",
+        "modified": "2020-08-17T09:36:10.253Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1740,6 +1740,7 @@
         "n_rows_selected": 4,
         "workflow": 1,
         "description_text": "",
+        "action": 2,
         "columns": [
             4
         ]
@@ -1918,7 +1919,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": [],
         "serve_enabled": false,
         "text_content": "<p>C1: {{ text1 }}</p><p>C2: {{ text2 }}</p><p>C3: {{ double1 }}</p><p>C4: {{ double2 }}</p><p>C5: {{ bool1 }}</p><p>C6: {{ bool2 }}</p><p>C7: {{ date1 }}</p><p>C8: {{ date2 }}</p><p>{% if c1 is null %}TEST Cond1-1{% endif %}</p><p>{% if c2 is null %}TEST Cond2-1{% endif %}</p><p>{% if c3 is null %}TEST Cond3-1{% endif %}</p><p>{% if c4 is null %}TEST Cond4-1{% endif %}</p><p>{% if c5 is true %}TEST Cond5-1{% endif %}</p><p>{% if c6 is true %}TEST Cond6-2{% endif %}</p><p>{% if c7 is null %}TEST Cond7-1{% endif %}</p><p>{% if c8 is null %}TEST Cond8-1{% endif %}</p><p>{% if c1 is not null %}TEST Cond1-2{% endif %}<br><br>{% if c2 is not null %}TEST Cond2-2{% endif %}<br><br>{% if c3 is not null %}TEST Cond3-2{% endif %}<br><br>{% if c4 is not null %}TEST Cond4-2{% endif %}<br><br>{% if c5 is not true %}TEST Cond5-2{% endif %}<br><br>{% if c6 is not true %}TEST Cond6-2{% endif %}<br><br>{% if c7 is not null %}TEST Cond7-2{% endif %}<br><br>{% if c8 is not null %}TEST Cond8-2{% endif %}<br></p>",
@@ -1934,13 +1934,12 @@
         "name": "Test action 2",
         "description_text": "",
         "created": "2019-04-07T05:11:18.206Z",
-        "modified": "2020-08-16T08:36:00.356Z",
+        "modified": "2020-08-17T09:36:09.949Z",
         "workflow": 1,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": 1,
         "rows_all_false": [],
         "serve_enabled": false,
         "text_content": "<p>C1: {{ text1 }}</p><p>C2: {{ text2 }}</p><p>C3: {{ double1 }}</p><p>C4: {{ double2 }}</p><p>C5: {{ bool1 }}</p><p>C6: {{ bool2 }}</p><p>C7: {{ date1 }}</p><p>C8: {{ date2 }}</p><p>{% if c1 is null %}TEST Cond1-1{% endif %}</p><p>{% if c2 is null %}TEST Cond2-1{% endif %}</p><p>{% if c3 is null %}TEST Cond3-1{% endif %}</p><p>{% if c4 is null %}TEST Cond4-1{% endif %}</p><p>{% if c5 is true %}TEST Cond5-1{% endif %}</p><p>{% if c6 is true %}TEST Cond6-2{% endif %}</p><p>{% if c7 is null %}TEST Cond7-1{% endif %}</p><p>{% if c8 is null %}TEST Cond8-1{% endif %}</p><p>{% if c1 is not null %}TEST Cond1-2{% endif %}<br><br>{% if c2 is not null %}TEST Cond2-2{% endif %}<br><br>{% if c3 is not null %}TEST Cond3-2{% endif %}<br><br>{% if c4 is not null %}TEST Cond4-2{% endif %}<br><br>{% if c5 is not true %}TEST Cond5-2{% endif %}<br><br>{% if c6 is not true %}TEST Cond6-2{% endif %}<br><br>{% if c7 is not null %}TEST Cond7-2{% endif %}<br><br>{% if c8 is not null %}TEST Cond8-2{% endif %}<br></p>",

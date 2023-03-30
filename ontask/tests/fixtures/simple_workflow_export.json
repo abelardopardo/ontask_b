@@ -1138,7 +1138,7 @@
         "name": "T1_LOW",
         "description_text": "Low score in topic 1",
         "created": "2017-12-16T01:40:33.797Z",
-        "modified": "2020-08-16T08:35:02.539Z",
+        "modified": "2020-08-17T09:35:12.455Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1179,7 +1179,7 @@
         "name": "T2_LOW",
         "description_text": "Low score in topic 2",
         "created": "2017-12-16T01:40:37.025Z",
-        "modified": "2020-08-16T08:35:02.546Z",
+        "modified": "2020-08-17T09:35:12.463Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1220,7 +1220,7 @@
         "name": "T3_LOW",
         "description_text": "Low score in topic 3",
         "created": "2017-12-16T01:40:58.552Z",
-        "modified": "2020-08-16T08:35:02.554Z",
+        "modified": "2020-08-17T09:35:12.471Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1261,7 +1261,7 @@
         "name": "T4_LOW",
         "description_text": "Low score in topic 4",
         "created": "2017-12-16T01:41:21.289Z",
-        "modified": "2020-08-16T08:35:02.562Z",
+        "modified": "2020-08-17T09:35:12.478Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1302,7 +1302,7 @@
         "name": "T5_LOW",
         "description_text": "Low score in topic 5",
         "created": "2017-12-16T01:41:39.042Z",
-        "modified": "2020-08-16T08:35:02.569Z",
+        "modified": "2020-08-17T09:35:12.486Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1343,7 +1343,7 @@
         "name": "T1_MID",
         "description_text": "One answer was correctly answered for topic 1",
         "created": "2017-12-16T01:43:04.280Z",
-        "modified": "2020-08-16T08:35:02.541Z",
+        "modified": "2020-08-17T09:35:12.458Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1412,7 +1412,7 @@
         "name": "T2_MID",
         "description_text": "One answer was correctly answered for topic 2",
         "created": "2017-12-16T01:43:12.224Z",
-        "modified": "2020-08-16T08:35:02.549Z",
+        "modified": "2020-08-17T09:35:12.465Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1481,7 +1481,7 @@
         "name": "T3_MID",
         "description_text": "One answer was correctly answered for topic 3",
         "created": "2017-12-16T01:43:50.547Z",
-        "modified": "2020-08-16T08:35:02.556Z",
+        "modified": "2020-08-17T09:35:12.473Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1550,7 +1550,7 @@
         "name": "T4_MID",
         "description_text": "One answer was correctly answered for topic 4",
         "created": "2017-12-16T01:44:25.439Z",
-        "modified": "2020-08-16T08:35:02.564Z",
+        "modified": "2020-08-17T09:35:12.481Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1619,7 +1619,7 @@
         "name": "T5_MID",
         "description_text": "One answer was correctly answered for topic 5",
         "created": "2017-12-16T01:44:54.358Z",
-        "modified": "2020-08-16T08:35:02.572Z",
+        "modified": "2020-08-17T09:35:12.488Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1688,7 +1688,7 @@
         "name": "T1_HIGH",
         "description_text": "High score in topic 1",
         "created": "2017-12-16T01:45:33.862Z",
-        "modified": "2020-08-16T08:35:02.536Z",
+        "modified": "2020-08-17T09:35:12.453Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1729,7 +1729,7 @@
         "name": "T2_HIGH",
         "description_text": "High score in topic 2",
         "created": "2017-12-16T01:45:52.186Z",
-        "modified": "2020-08-16T08:35:02.544Z",
+        "modified": "2020-08-17T09:35:12.460Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1770,7 +1770,7 @@
         "name": "T3_HIGH",
         "description_text": "High score in topic 3",
         "created": "2017-12-16T01:46:06.726Z",
-        "modified": "2020-08-16T08:35:02.551Z",
+        "modified": "2020-08-17T09:35:12.468Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1811,7 +1811,7 @@
         "name": "T4_HIGH",
         "description_text": "High score in topic 4",
         "created": "2017-12-16T01:46:26.894Z",
-        "modified": "2020-08-16T08:35:02.559Z",
+        "modified": "2020-08-17T09:35:12.476Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1852,7 +1852,7 @@
         "name": "T5_HIGH",
         "description_text": "High score in topic 5",
         "created": "2017-12-16T01:46:46.225Z",
-        "modified": "2020-08-16T08:35:02.567Z",
+        "modified": "2020-08-17T09:35:12.483Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1893,7 +1893,7 @@
         "name": "No_Video_1",
         "description_text": "Didn't watch Video 1",
         "created": "2017-12-16T02:03:15.633Z",
-        "modified": "2020-08-16T08:35:02.515Z",
+        "modified": "2020-08-17T09:35:12.433Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1925,7 +1925,7 @@
         "name": "No_Video_2",
         "description_text": "Didn't watch Video 2",
         "created": "2017-12-16T02:03:17.354Z",
-        "modified": "2020-08-16T08:35:02.518Z",
+        "modified": "2020-08-17T09:35:12.435Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1957,7 +1957,7 @@
         "name": "No_Video_3",
         "description_text": "Didn't watch Video 3",
         "created": "2017-12-16T02:03:37.666Z",
-        "modified": "2020-08-16T08:35:02.520Z",
+        "modified": "2020-08-17T09:35:12.438Z",
         "formula": {
             "not": false,
             "rules": [
@@ -1989,7 +1989,7 @@
         "name": "No_videos",
         "description_text": "No video activity",
         "created": "2017-12-16T02:13:41.327Z",
-        "modified": "2020-08-16T08:35:02.523Z",
+        "modified": "2020-08-17T09:35:12.440Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2039,7 +2039,7 @@
         "name": "One_video",
         "description_text": "Activity detected in only one video",
         "created": "2017-12-16T02:13:44.160Z",
-        "modified": "2020-08-16T08:35:02.526Z",
+        "modified": "2020-08-17T09:35:12.443Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2155,7 +2155,7 @@
         "name": "Two_videos",
         "description_text": "Activity detected in two videos",
         "created": "2017-12-16T02:15:24.327Z",
-        "modified": "2020-08-16T08:35:02.577Z",
+        "modified": "2020-08-17T09:35:12.493Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2271,7 +2271,7 @@
         "name": "Three_videos",
         "description_text": "All three videos were watched",
         "created": "2017-12-16T02:16:30.820Z",
-        "modified": "2020-08-16T08:35:02.575Z",
+        "modified": "2020-08-17T09:35:12.490Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2321,7 +2321,7 @@
         "name": "Concept_1",
         "description_text": "Resources for Concept 1",
         "created": "2017-12-16T02:34:27.524Z",
-        "modified": "2020-08-16T08:35:02.504Z",
+        "modified": "2020-08-17T09:35:12.419Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2353,7 +2353,7 @@
         "name": "Concept_2",
         "description_text": "Resources for Concept 2",
         "created": "2017-12-16T02:34:30.221Z",
-        "modified": "2020-08-16T08:35:02.507Z",
+        "modified": "2020-08-17T09:35:12.421Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2385,7 +2385,7 @@
         "name": "Concept_3",
         "description_text": "Resources for Concept 3",
         "created": "2017-12-16T02:34:42.034Z",
-        "modified": "2020-08-16T08:35:02.509Z",
+        "modified": "2020-08-17T09:35:12.425Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2417,7 +2417,7 @@
         "name": "Concept_4",
         "description_text": "Resources for Concept 4",
         "created": "2017-12-16T02:35:02.866Z",
-        "modified": "2020-08-16T08:35:02.512Z",
+        "modified": "2020-08-17T09:35:12.429Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2446,8 +2446,8 @@
     "model": "ontask.filter",
     "pk": 1,
     "fields": {
-        "created": "2020-08-16T08:35:02.611Z",
-        "modified": "2020-08-16T08:35:02.619Z",
+        "created": "2020-08-17T09:35:12.527Z",
+        "modified": "2020-08-17T09:35:13.058Z",
         "formula": {
             "not": true,
             "rules": [
@@ -2483,6 +2483,7 @@
         "n_rows_selected": 10,
         "workflow": 140,
         "description_text": "",
+        "action": 309,
         "columns": [
             4690,
             4691,
@@ -2494,8 +2495,8 @@
     "model": "ontask.filter",
     "pk": 2,
     "fields": {
-        "created": "2020-08-16T08:35:02.623Z",
-        "modified": "2020-08-16T08:35:02.627Z",
+        "created": "2020-08-17T09:35:12.536Z",
+        "modified": "2020-08-17T09:35:13.060Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2515,6 +2516,7 @@
         "n_rows_selected": 10,
         "workflow": 140,
         "description_text": "Consider only those students that took the midterm examination.",
+        "action": 307,
         "columns": [
             4688
         ]
@@ -2524,8 +2526,8 @@
     "model": "ontask.filter",
     "pk": 3,
     "fields": {
-        "created": "2020-08-16T08:35:02.629Z",
-        "modified": "2020-08-16T08:35:02.633Z",
+        "created": "2020-08-17T09:35:12.543Z",
+        "modified": "2020-08-17T09:35:13.061Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2545,6 +2547,7 @@
         "n_rows_selected": 2,
         "workflow": 140,
         "description_text": "These are the students that haven't connected to the discussion forum yet.",
+        "action": 308,
         "columns": [
             4689
         ]
@@ -2597,13 +2600,12 @@
         "name": "Midterm scores",
         "description_text": "Comment the midterm scores divided by topic",
         "created": "2017-12-16T01:33:35.442Z",
-        "modified": "2020-08-16T08:35:02.825Z",
+        "modified": "2020-08-17T09:35:12.726Z",
         "workflow": 140,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": 2,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear&nbsp;{{ first_name }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator_name }}</p><p>{{ course_name }}</p><div><br></div>",
@@ -2619,13 +2621,12 @@
         "name": "Reminder to post in the forum",
         "description_text": "Message to remind those students that haven't visited the forum to do so.",
         "created": "2017-12-16T01:52:24.867Z",
-        "modified": "2020-08-16T08:35:02.827Z",
+        "modified": "2020-08-17T09:35:12.729Z",
         "workflow": 140,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": 3,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear&nbsp;{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator_name }}</p><p>{{ Course_name }}</p>",
@@ -2641,13 +2642,12 @@
         "name": "Comment lecture preparation activities",
         "description_text": "A message commenting on the videos they watched.",
         "created": "2017-12-16T01:58:13.398Z",
-        "modified": "2020-08-16T08:35:02.823Z",
+        "modified": "2020-08-17T09:35:12.723Z",
         "workflow": 140,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": 1,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear&nbsp;{{ first_name }}</p><p>Here are some comments about the preparation videos for this week.</p><p style=\"\">{% if No_Video_1 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Genes and Proteins Activity</h4><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{% endif %}</p><p>{% if No_Video_2 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p><p>{% if No_Video_3 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Immune System</h4><p>This video contains an overview of the systems that protect the cell from infections. It is highly relevant to understand the rest of concepts such as for example, the way proteins are synthesized.&nbsp;</p><p>{% endif %}</p><p>Regards<br></p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Coordinator_name }}</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Course_name }}<br></p>",
@@ -2669,7 +2669,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": true,
         "text_content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1><p style=\"text-align: center;\">{% if Three_videos %}<img style=\"width: 128px;\" src=\"https://findicons.com/icon/download/134633/gold_medal/128/png\">{% endif %}</p><p style=\"text-align: center;\">{% if Two_videos %}<img style=\"width: 128px;\" src=\"https://findicons.com/icon/download/134646/silver_medal/128/png\">{% endif %}</p><p style=\"text-align: center;\">{% if One_video %}<img style=\"width: 128px;\" src=\"https://findicons.com/icon/download/134637/bronze_medal/128/png\">{% endif %}</p><p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
@@ -2691,7 +2690,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": true,
         "text_content": "{% comment %}Your action content here{% endcomment %}",
@@ -2713,7 +2711,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": true,
         "text_content": "{% comment %}Your action content here{% endcomment %}",
@@ -2735,7 +2732,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<h3>Additional resources to review concepts</h3><p>{% if Concept_1 %}</p><ul><li><a href=\"https://www.ontasklearning.org\" target=\"_blank\">Resource 1 for concept 1</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 2 for concept 1</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 3 for concept 1</a></li></ul><p>{% endif %}</p><p>{% if Concept_2 %}</p><ul><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 1 for concept 2</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 2 for concept 2</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 3 for concept 2</a></li></ul><p>{% endif %}</p><div><p>{% if Concept_3 %}</p><ul><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 1 for concept 3</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 2 for concept 3</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 3 for concept 3</a></li></ul><p>{% endif %}</p></div><div><br></div>",

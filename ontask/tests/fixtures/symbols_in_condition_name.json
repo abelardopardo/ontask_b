@@ -616,7 +616,7 @@
         "name": "c1<12.5",
         "description_text": "",
         "created": "2019-10-03T08:52:03.035Z",
-        "modified": "2020-08-16T08:35:40.984Z",
+        "modified": "2020-08-17T09:35:50.183Z",
         "formula": {
             "not": false,
             "rules": [
@@ -648,7 +648,7 @@
         "name": "c2>12.5",
         "description_text": "",
         "created": "2019-10-03T08:52:04.021Z",
-        "modified": "2020-08-16T08:35:40.992Z",
+        "modified": "2020-08-17T09:35:50.193Z",
         "formula": {
             "not": false,
             "rules": [
@@ -680,7 +680,7 @@
         "name": "c3>=12.5",
         "description_text": "",
         "created": "2019-10-03T08:52:04.641Z",
-        "modified": "2020-08-16T08:35:40.995Z",
+        "modified": "2020-08-17T09:35:50.195Z",
         "formula": {
             "not": false,
             "rules": [
@@ -712,7 +712,7 @@
         "name": "c4>=12.5",
         "description_text": "",
         "created": "2019-10-03T08:52:05.085Z",
-        "modified": "2020-08-16T08:35:41.000Z",
+        "modified": "2020-08-17T09:35:50.200Z",
         "formula": {
             "not": false,
             "rules": [
@@ -744,7 +744,7 @@
         "name": "c1<12.5",
         "description_text": "",
         "created": "2019-10-03T08:52:05.427Z",
-        "modified": "2020-08-16T08:35:40.987Z",
+        "modified": "2020-08-17T09:35:50.187Z",
         "formula": {
             "not": false,
             "rules": [
@@ -776,7 +776,7 @@
         "name": "c2>12.5",
         "description_text": "",
         "created": "2019-10-03T08:52:05.689Z",
-        "modified": "2020-08-16T08:35:40.990Z",
+        "modified": "2020-08-17T09:35:50.190Z",
         "formula": {
             "not": false,
             "rules": [
@@ -808,7 +808,7 @@
         "name": "c3>=12.5",
         "description_text": "",
         "created": "2019-10-03T08:52:05.974Z",
-        "modified": "2020-08-16T08:35:40.997Z",
+        "modified": "2020-08-17T09:35:50.198Z",
         "formula": {
             "not": false,
             "rules": [
@@ -840,7 +840,7 @@
         "name": "c4>=12.5",
         "description_text": "",
         "created": "2019-10-03T08:52:06.464Z",
-        "modified": "2020-08-16T08:35:41.002Z",
+        "modified": "2020-08-17T09:35:50.203Z",
         "formula": {
             "not": false,
             "rules": [
@@ -878,7 +878,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Attribute = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ ATTR }}</p><p>Column = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1 }}</p><p>{% if c1<12.5 %}Condition 1{% endif %}</p><p>{% if c2>12.5 %}Condition 2{% endif %}</p><p>{% if c3>=12.5 %}Condition 3{% endif %}</p><p>{% if c4>=12.5 %}Condition 4{% endif %}<br></p>",
@@ -900,7 +899,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "Attribute = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ ATTR }}\n\nColumn = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1 }}\n\n{% if c1<12.5 %}Condition 1{% endif %}\n\n\n{% if c2>12.5 %}Condition 2{% endif %}\n\n\n{% if c3>=12.5 %}Condition 3{% endif %}\n\n\n{% if c4>=12.5 %}Condition 4{% endif %}",

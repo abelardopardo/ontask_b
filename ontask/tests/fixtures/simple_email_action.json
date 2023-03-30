@@ -874,7 +874,7 @@
         "name": "c1",
         "description_text": "b",
         "created": "2017-11-20T10:49:53.383Z",
-        "modified": "2020-08-16T08:34:05.660Z",
+        "modified": "2020-08-17T09:34:15.180Z",
         "formula": {
             "not": false,
             "rules": [
@@ -906,7 +906,7 @@
         "name": "c2",
         "description_text": "",
         "created": "2017-11-20T10:49:53.383Z",
-        "modified": "2020-08-16T08:34:05.663Z",
+        "modified": "2020-08-17T09:34:15.185Z",
         "formula": {
             "not": false,
             "rules": [
@@ -944,7 +944,6 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",

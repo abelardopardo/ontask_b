@@ -59,7 +59,7 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2020-08-17T03:21:57.291Z"
+        "last_update": "2020-08-17T09:31:17.086Z"
     }
 },
 {
@@ -86,7 +86,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T03:21:57.246Z",
+        "date_changed": "2020-08-17T09:31:17.046Z",
         "description": ""
     }
 },
@@ -114,7 +114,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T03:21:57.258Z",
+        "date_changed": "2020-08-17T09:31:17.056Z",
         "description": ""
     }
 },
@@ -142,7 +142,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T03:21:57.270Z",
+        "date_changed": "2020-08-17T09:31:17.067Z",
         "description": ""
     }
 },
@@ -170,7 +170,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T03:21:57.281Z",
+        "date_changed": "2020-08-17T09:31:17.077Z",
         "description": ""
     }
 },
@@ -198,7 +198,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T03:21:57.292Z",
+        "date_changed": "2020-08-17T09:31:17.087Z",
         "description": ""
     }
 },
@@ -2259,7 +2259,7 @@
         "name": "High engagement",
         "description_text": "High engagement with Video 1 in Week 2",
         "created": "2019-09-21T06:43:58.726Z",
-        "modified": "2020-08-17T03:22:00.897Z",
+        "modified": "2020-08-17T09:31:20.249Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2291,7 +2291,7 @@
         "name": "Low video engagement",
         "description_text": "Low activity detected in the first video of Week 2",
         "created": "2019-09-21T06:43:59.115Z",
-        "modified": "2020-08-17T03:22:00.905Z",
+        "modified": "2020-08-17T09:31:20.254Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2337,7 +2337,7 @@
         "name": "Medium engagement",
         "description_text": "Medium engagement with Video 1 in Week 2",
         "created": "2019-09-21T06:43:59.407Z",
-        "modified": "2020-08-17T03:22:00.909Z",
+        "modified": "2020-08-17T09:31:20.257Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2383,7 +2383,7 @@
         "name": "No_videos",
         "description_text": "No video activity",
         "created": "2019-09-21T06:43:59.679Z",
-        "modified": "2020-08-17T03:22:00.925Z",
+        "modified": "2020-08-17T09:31:20.267Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2415,7 +2415,7 @@
         "name": "No Video 1",
         "description_text": "Didn't watch Video 1 Week 4",
         "created": "2019-09-21T06:44:01.086Z",
-        "modified": "2020-08-17T03:22:00.918Z",
+        "modified": "2020-08-17T09:31:20.262Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2447,7 +2447,7 @@
         "name": "No Video 2",
         "description_text": "Didn't watch Video 2 Week 4",
         "created": "2019-09-21T06:44:01.402Z",
-        "modified": "2020-08-17T03:22:00.922Z",
+        "modified": "2020-08-17T09:31:20.265Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2479,7 +2479,7 @@
         "name": "Enrolled in FASS",
         "description_text": "",
         "created": "2019-09-21T06:44:02.434Z",
-        "modified": "2020-08-17T03:22:00.874Z",
+        "modified": "2020-08-17T09:31:20.235Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2511,7 +2511,7 @@
         "name": "Enrolled in FEIT",
         "description_text": "",
         "created": "2019-09-21T06:44:02.996Z",
-        "modified": "2020-08-17T03:22:00.878Z",
+        "modified": "2020-08-17T09:31:20.238Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2543,7 +2543,7 @@
         "name": "Enrolled in FSCI",
         "description_text": "",
         "created": "2019-09-21T06:44:03.374Z",
-        "modified": "2020-08-17T03:22:00.884Z",
+        "modified": "2020-08-17T09:31:20.241Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2575,7 +2575,7 @@
         "name": "Enrolled in SMED",
         "description_text": "",
         "created": "2019-09-21T06:44:03.618Z",
-        "modified": "2020-08-17T03:22:00.891Z",
+        "modified": "2020-08-17T09:31:20.244Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2607,7 +2607,7 @@
         "name": "T1_HIGH",
         "description_text": "High score in topic 1",
         "created": "2019-09-21T06:44:04.538Z",
-        "modified": "2020-08-17T03:22:00.932Z",
+        "modified": "2020-08-17T09:31:20.272Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2648,7 +2648,7 @@
         "name": "T1_LOW",
         "description_text": "Low score in topic 1",
         "created": "2019-09-21T06:44:05.055Z",
-        "modified": "2020-08-17T03:22:00.935Z",
+        "modified": "2020-08-17T09:31:20.275Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2689,7 +2689,7 @@
         "name": "T1_MID",
         "description_text": "One answer was correctly answered for topic 1",
         "created": "2019-09-21T06:44:05.436Z",
-        "modified": "2020-08-17T03:22:00.938Z",
+        "modified": "2020-08-17T09:31:20.277Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2758,7 +2758,7 @@
         "name": "T2_HIGH",
         "description_text": "High score in topic 2",
         "created": "2019-09-21T06:44:05.687Z",
-        "modified": "2020-08-17T03:22:00.942Z",
+        "modified": "2020-08-17T09:31:20.281Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2799,7 +2799,7 @@
         "name": "T2_LOW",
         "description_text": "Low score in topic 2",
         "created": "2019-09-21T06:44:05.925Z",
-        "modified": "2020-08-17T03:22:00.946Z",
+        "modified": "2020-08-17T09:31:20.283Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2840,7 +2840,7 @@
         "name": "T2_MID",
         "description_text": "One answer was correctly answered for topic 2",
         "created": "2019-09-21T06:44:06.214Z",
-        "modified": "2020-08-17T03:22:00.950Z",
+        "modified": "2020-08-17T09:31:20.285Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2909,7 +2909,7 @@
         "name": "T3_HIGH",
         "description_text": "High score in topic 3",
         "created": "2019-09-21T06:44:06.686Z",
-        "modified": "2020-08-17T03:22:00.954Z",
+        "modified": "2020-08-17T09:31:20.288Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2950,7 +2950,7 @@
         "name": "T3_LOW",
         "description_text": "Low score in topic 3",
         "created": "2019-09-21T06:44:07.251Z",
-        "modified": "2020-08-17T03:22:00.957Z",
+        "modified": "2020-08-17T09:31:20.291Z",
         "formula": {
             "not": false,
             "rules": [
@@ -2991,7 +2991,7 @@
         "name": "T3_MID",
         "description_text": "One answer was correctly answered for topic 3",
         "created": "2019-09-21T06:44:07.603Z",
-        "modified": "2020-08-17T03:22:00.961Z",
+        "modified": "2020-08-17T09:31:20.294Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3060,7 +3060,7 @@
         "name": "T4_HIGH",
         "description_text": "High score in topic 4",
         "created": "2019-09-21T06:44:07.851Z",
-        "modified": "2020-08-17T03:22:00.965Z",
+        "modified": "2020-08-17T09:31:20.297Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3101,7 +3101,7 @@
         "name": "T4_LOW",
         "description_text": "Low score in topic 4",
         "created": "2019-09-21T06:44:08.106Z",
-        "modified": "2020-08-17T03:22:00.968Z",
+        "modified": "2020-08-17T09:31:20.300Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3142,7 +3142,7 @@
         "name": "T4_MID",
         "description_text": "One answer was correctly answered for topic 4",
         "created": "2019-09-21T06:44:08.381Z",
-        "modified": "2020-08-17T03:22:00.972Z",
+        "modified": "2020-08-17T09:31:20.303Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3211,7 +3211,7 @@
         "name": "T5_HIGH",
         "description_text": "High score in topic 5",
         "created": "2019-09-21T06:44:08.935Z",
-        "modified": "2020-08-17T03:22:00.975Z",
+        "modified": "2020-08-17T09:31:20.305Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3252,7 +3252,7 @@
         "name": "T5_LOW",
         "description_text": "Low score in topic 5",
         "created": "2019-09-21T06:44:09.414Z",
-        "modified": "2020-08-17T03:22:00.979Z",
+        "modified": "2020-08-17T09:31:20.308Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3293,7 +3293,7 @@
         "name": "T5_MID",
         "description_text": "One answer was correctly answered for topic 5",
         "created": "2019-09-21T06:44:09.785Z",
-        "modified": "2020-08-17T03:22:00.982Z",
+        "modified": "2020-08-17T09:31:20.310Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3362,7 +3362,7 @@
         "name": "Less than 50 in the midterm",
         "description_text": "",
         "created": "2019-09-21T06:44:12.131Z",
-        "modified": "2020-08-17T03:22:00.902Z",
+        "modified": "2020-08-17T09:31:20.251Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3394,7 +3394,7 @@
         "name": "More or equal to 50 in midterm",
         "description_text": "",
         "created": "2019-09-21T06:44:12.387Z",
-        "modified": "2020-08-17T03:22:00.914Z",
+        "modified": "2020-08-17T09:31:20.259Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3423,8 +3423,8 @@
     "model": "ontask.filter",
     "pk": 1,
     "fields": {
-        "created": "2020-08-17T03:22:01.034Z",
-        "modified": "2020-08-17T03:22:01.408Z",
+        "created": "2020-08-17T09:31:20.348Z",
+        "modified": "2020-08-17T09:31:20.878Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3444,7 +3444,7 @@
         "n_rows_selected": 12,
         "workflow": 1,
         "description_text": "",
-        "action": null,
+        "action": 4,
         "columns": [
             13
         ]
@@ -3454,8 +3454,8 @@
     "model": "ontask.filter",
     "pk": 2,
     "fields": {
-        "created": "2020-08-17T03:22:01.046Z",
-        "modified": "2020-08-17T03:22:01.410Z",
+        "created": "2020-08-17T09:31:20.356Z",
+        "modified": "2020-08-17T09:31:20.880Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3475,7 +3475,7 @@
         "n_rows_selected": 4,
         "workflow": 1,
         "description_text": "Students starting with t",
-        "action": null,
+        "action": 9,
         "columns": [
             2
         ]
@@ -3485,8 +3485,8 @@
     "model": "ontask.filter",
     "pk": 3,
     "fields": {
-        "created": "2020-08-17T03:22:01.058Z",
-        "modified": "2020-08-17T03:22:01.412Z",
+        "created": "2020-08-17T09:31:20.363Z",
+        "modified": "2020-08-17T09:31:20.881Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3506,7 +3506,7 @@
         "n_rows_selected": 12,
         "workflow": 1,
         "description_text": "There is an exam score",
-        "action": null,
+        "action": 5,
         "columns": [
             23
         ]
@@ -3516,8 +3516,8 @@
     "model": "ontask.filter",
     "pk": 4,
     "fields": {
-        "created": "2020-08-17T03:22:01.068Z",
-        "modified": "2020-08-17T03:22:01.414Z",
+        "created": "2020-08-17T09:31:20.369Z",
+        "modified": "2020-08-17T09:31:20.883Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3537,7 +3537,7 @@
         "n_rows_selected": 2,
         "workflow": 1,
         "description_text": "These are the students that haven't connected to the discussion forum yet.",
-        "action": null,
+        "action": 7,
         "columns": [
             40
         ]
@@ -3547,8 +3547,8 @@
     "model": "ontask.filter",
     "pk": 5,
     "fields": {
-        "created": "2020-08-17T03:22:01.077Z",
-        "modified": "2020-08-17T03:22:01.416Z",
+        "created": "2020-08-17T09:31:20.375Z",
+        "modified": "2020-08-17T09:31:20.884Z",
         "formula": {
             "not": false,
             "rules": [
@@ -3576,7 +3576,7 @@
         "n_rows_selected": 3,
         "workflow": 1,
         "description_text": "Either Video 1 or Video 2 in Week 4 have zero engagement",
-        "action": null,
+        "action": 2,
         "columns": [
             56,
             59
@@ -3942,7 +3942,7 @@
         "name": "Comments about how to prepare the lecture (Week 4)",
         "description_text": "A message commenting on the videos they watched for Week 4",
         "created": "2019-09-21T06:44:00.454Z",
-        "modified": "2020-08-17T03:22:01.296Z",
+        "modified": "2020-08-17T09:31:20.565Z",
         "workflow": 1,
         "action_type": "personalized_text",
         "last_executed_log": null,
@@ -3984,7 +3984,7 @@
         "name": "Midterm comments",
         "description_text": "Comment the midterm scores divided by topic",
         "created": "2019-09-21T06:44:04.025Z",
-        "modified": "2020-08-17T03:22:01.288Z",
+        "modified": "2020-08-17T09:31:20.558Z",
         "workflow": 1,
         "action_type": "personalized_text",
         "last_executed_log": null,
@@ -4005,7 +4005,7 @@
         "name": "Send JSON to remote server",
         "description_text": "Send a JSON object to a remote server (outside this platform)",
         "created": "2019-09-21T06:44:11.891Z",
-        "modified": "2020-08-17T03:22:01.292Z",
+        "modified": "2020-08-17T09:31:20.562Z",
         "workflow": 1,
         "action_type": "personalized_json",
         "last_executed_log": null,
@@ -4047,7 +4047,7 @@
         "name": "Suggestions about the forum",
         "description_text": "Message to remind those students that haven't visited the forum to do so.",
         "created": "2019-09-21T06:44:14.005Z",
-        "modified": "2020-08-17T03:22:01.294Z",
+        "modified": "2020-08-17T09:31:20.564Z",
         "workflow": 1,
         "action_type": "personalized_text",
         "last_executed_log": null,
@@ -4089,7 +4089,7 @@
         "name": "Send Email with report",
         "description_text": "Send email with column values as a report",
         "created": "2019-09-03T09:49:08.382Z",
-        "modified": "2020-08-17T03:22:01.291Z",
+        "modified": "2020-08-17T09:31:20.560Z",
         "workflow": 1,
         "action_type": "email_report",
         "last_executed_log": null,
