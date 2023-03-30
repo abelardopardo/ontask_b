@@ -46,14 +46,14 @@
       <p class="lead text-center my-3">{% blocktrans %}<strong>Next Step:</strong> Click in the <span class="fa fa-plus"></span> Action below to create a new
       action to execute based on the data stored in the table.{% endblocktrans %}</p>
     {% endif %}
-    <div class="text-center my-3">
-      <button type="button" class="shadow btn btn-outline-dark js-create-action"
-              data-url="{% url 'action:create' %}"
-              data-toggle="tooltip"
-              title="{% trans 'New action to collect data from learners' %}">
-        <span class="fa fa-plus"></span> {% trans 'Action' %}
-      </button>
-      {% if workflow.nrows %}
+    {% if workflow.nrows %}
+      <div class="text-center my-3">
+        <button type="button" class="shadow btn btn-outline-dark js-create-action"
+                data-url="{% url 'action:create' %}"
+                data-toggle="tooltip"
+                title="{% trans 'New action to collect data from learners' %}">
+          <span class="fa fa-plus"></span> {% trans 'Action' %}
+        </button>
         <a href="{% url 'action:import' %}"
            class="shadow spin btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'Import action previously exported' %}">
@@ -66,8 +66,8 @@
            class="shadow btn btn-outline-dark"
            data-toggle="tooltip" title="{% trans 'See when the actions were executed' %}">
           <span class="fa fa-clock-o"></span> {% trans 'Timeline' %}</a>
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
     {% if table.data|length %}
       <div class="justify-content-center">
         {% render_table table %}

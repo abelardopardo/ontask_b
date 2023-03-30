@@ -7,4 +7,4 @@ from ontask.table.services.errors import OnTaskTableNoKeyValueError
 from ontask.table.services.stats import (
     get_column_visualization_items, get_table_visualization_items,
 )
-from ontask.table.services.view import ViewTable, do_clone_view, save_view_form
+from ontask.table.services.view import do_clone_view, save_view_form

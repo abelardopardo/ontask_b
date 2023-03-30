@@ -4,39 +4,9 @@
 import copy
 
 from django.utils.translation import ugettext_lazy as _
-import django_tables2 as tables
 
 from ontask import models
-from ontask.core import OperationsColumn
 from ontask.table.services.errors import OnTaskTableCloneError
-
-
-class ViewTable(tables.Table):
-    """Table to display the set of views handled in a workflow."""
-
-    name = tables.Column(verbose_name=_('Name'))
-
-    description_text = tables.Column(
-        empty_values=[],
-        verbose_name=_('Description'))
-
-    operations = OperationsColumn(
-        verbose_name=_('Operations'),
-        template_file='table/includes/partial_view_operations.html',
-        template_context=lambda record: {'id': record['id']},
-    )
-
-    class Meta:
-        """Select the model and specify fields, sequence and attributes."""
-
-        model = models.View
-        fields = ('operations', 'name', 'description_text')
-        sequence = ('operations', 'name', 'description_text')
-        attrs = {
-            'class': 'table table-hover table-bordered shadow',
-            'style': 'width: 100%;',
-            'id': 'view-table',
-        }
 
 
 def do_clone_view(

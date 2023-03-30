@@ -109,12 +109,11 @@ class TutorialCaptures(ScreenTests):
 
         # Create a new view
         self.go_to_table()
-        self.go_to_table_views()
 
-        # Button to add a view
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space() = "View"]'
-        ).click()
+        # Button to dropdown the Views
+        self.click_dropdown_option_num_and_wait(
+            '//*[@id="viewsOperations"]',
+            0)
         # Wait for the form to create the derived column
         self.wait_for_modal_open()
 

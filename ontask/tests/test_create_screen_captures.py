@@ -518,7 +518,7 @@ class ScreenTestFixture(ScreenTests):
         #
         # Table Views
         #
-        self.go_to_table_views()
+        self.selenium.find_element_by_id('viewsOperations').click()
 
         # Picture of the body
         self.body_ss('table_views.png')
@@ -532,9 +532,10 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('table_view_view.png')
 
         # Click edit view definition
-        self.go_to_table_views()
-        element = self.search_table_row_by_string('view-table', 2, 'Midterm')
-        element.find_element_by_xpath("td[1]/div/button[1]").click()
+        self.go_to_table()
+
+        # Button to dropdown the Views and click in the Midterm
+        self.click_dropdown_option('//*[@id="viewsOperations"]', 'Midterm')
         self.wait_for_modal_open()
 
         # Take picture of the modal

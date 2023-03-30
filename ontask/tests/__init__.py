@@ -1281,12 +1281,13 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
 
     def create_view(self, vname, vdesc, cols):
-        self.go_to_table_views()
+        self.go_to_table()
 
-        # Button to add a view
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space() = "View"]'
-        ).click()
+        # Button to dropdown the Views
+        self.click_dropdown_option_num_and_wait(
+            '//*[@id="viewsOperations"]',
+            0)
+
         # Wait for the form to create the derived column
         self.wait_for_modal_open()
 
@@ -1520,8 +1521,13 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def open_view(self, vname):
         # Go to views first
-        self.go_to_table_views()
+        self.go_to_table()
 
+        # Button to dropdown the Views
+        self.click_dropdown_option('//*[@id="viewsOperations"]', vname)
+
+        # Wait for the form to create the derived column
+        self.wait_for_modal_open()
         element = self.search_table_row_by_string('view-table', 2, vname)
         element.find_element_by_xpath(
             'td[1]/div/button/span[contains(@class, "fa-eye")]'
