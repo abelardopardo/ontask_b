@@ -7,7 +7,7 @@ from rest_framework import serializers
 from ontask import models
 from ontask.column.serializers import ColumnNameSerializer, ColumnSerializer
 from ontask.condition.serializers import (
-    ConditionNameSerializer, ConditionSerializer)
+    ConditionNameSerializer, ConditionSerializer, FilterSerializer)
 from ontask.dataops import sql
 from ontask.table.serializers import ViewNameSerializer, ViewSerializer
 
@@ -180,6 +180,8 @@ class ActionSerializer(serializers.ModelSerializer):
 
     conditions = ConditionSerializer(required=False, many=True)
 
+    filter = FilterSerializer(required=False, many=False)
+
     # The columns field is a legacy construct. It needs a nested serializer
     # because at this point,
     # the column objects must contain only the name (not the entire model).
@@ -322,11 +324,29 @@ class ActionSerializer(serializers.ModelSerializer):
             condition_data = ConditionSerializer(
                 data=validated_data.get('conditions', []),
                 many=True,
-                context={'action': action_obj})
+                context={
+                    'workflow': self.context['workflow'],
+                    'action': action_obj,
+                    'is_filter': False})
             if condition_data.is_valid():
                 condition_data.save()
             else:
                 raise Exception(_('Invalid condition data'))
+
+            # Load the conditions pointing to the action
+            filter_data = FilterSerializer(
+                data=validated_data.get('filter', None),
+                many=False,
+                context={
+                    'workflow': self.context['workflow'],
+                    'action': action_obj,
+                    'is_filter': True})
+            if filter_data.is_valid():
+                filter_obj = filter_data.save()
+            else:
+                raise Exception(_('Invalid filter data'))
+            action_obj.filter = filter_obj
+            action_obj.save()
 
             # Process the fields columns (legacy) and column_condition_pairs
             self.create_column_condition_pairs(

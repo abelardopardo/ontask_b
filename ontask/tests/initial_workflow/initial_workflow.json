@@ -59,7 +59,7 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2020-08-16T08:31:07.508Z"
+        "last_update": "2020-08-16T08:39:09.671Z"
     }
 },
 {
@@ -86,7 +86,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-16T08:31:07.458Z",
+        "date_changed": "2020-08-16T08:39:09.625Z",
         "description": ""
     }
 },
@@ -114,7 +114,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-16T08:31:07.475Z",
+        "date_changed": "2020-08-16T08:39:09.636Z",
         "description": ""
     }
 },
@@ -142,7 +142,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-16T08:31:07.487Z",
+        "date_changed": "2020-08-16T08:39:09.648Z",
         "description": ""
     }
 },
@@ -170,7 +170,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-16T08:31:07.499Z",
+        "date_changed": "2020-08-16T08:39:09.661Z",
         "description": ""
     }
 },
@@ -198,7 +198,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-16T08:31:07.509Z",
+        "date_changed": "2020-08-16T08:39:09.672Z",
         "description": ""
     }
 },
@@ -207,7 +207,7 @@
     "pk": 1,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VlpTV3RVZUU5dkh1$iFEi/ej6nCIXpLiOgRLdVA",
-        "last_login": "2020-05-07T09:48:38.379Z",
+        "last_login": "2020-08-16T08:41:46.445Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -648,6 +648,15 @@
         "app": "ontask",
         "name": "help_url",
         "text": "html/index.html"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 9,
+    "fields": {
+        "app": "ontask",
+        "name": "override_from_address",
+        "text": ""
     }
 },
 {

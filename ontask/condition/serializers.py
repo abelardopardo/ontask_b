@@ -18,27 +18,35 @@ except NameError:
         return bogus  # noqa E731
 
 
-def _create_condition(validated_data, action):
+def _create_condition(validated_data, context):
     """Create a new condition with the validated data.
 
     :param validated_data: Dictionary with the data validated by the serializer
-    :param action: Action object to use as parent object.
+    :param context: Dictionary with workflow, action, is_filter
     :return: reference to new condition object.
     """
-    condition_obj = models.Condition(
-        action=action,
-        name=validated_data['name'],
-        description_text=validated_data['description_text'],
-        formula=validated_data['formula'],
-        n_rows_selected=validated_data.get('n_rows_selected', -1),
-        is_filter=validated_data['is_filter'],
-    )
-    condition_obj.save()
+    if context.get('is_filter', False):
+        condition_obj = models.Filter(
+            workflow=context['workflow'],
+            action=context['action'],
+            description_text=validated_data['description_text'],
+            formula=validated_data['formula'],
+            n_rows_selected=validated_data.get('n_rows_selected', -1))
+        condition_obj.save()
+    else:
+        condition_obj = models.Condition(
+            workflow=context['workflow'],
+            action=context['action'],
+            name=validated_data['name'],
+            description_text=validated_data['description_text'],
+            formula=validated_data['formula'],
+            n_rows_selected=validated_data.get('n_rows_selected', -1))
+        condition_obj.save()
 
     return condition_obj
 
 
-class ConditionSerializer(serializers.ModelSerializer):
+class ConditionBaseSerializer(serializers.ModelSerializer):
     """Class to serialize a Condition."""
 
     # The columns field needs a nested serializer because at this point,
@@ -60,9 +68,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         del kwargs
         condition_obj = None
         try:
-            condition_obj = _create_condition(
-                validated_data,
-                self.context['action'])
+            condition_obj = _create_condition(validated_data, self.context)
 
             # Process columns
             if validated_data.get('columns'):
@@ -81,7 +87,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
             # Set the condition values
             condition_obj.columns.set(
-                self.context['action'].workflow.columns.filter(
+                self.context['workflow'].columns.filter(
                     name__in=cnames),
             )
 
@@ -101,8 +107,24 @@ class ConditionSerializer(serializers.ModelSerializer):
     class Meta:
         """Define object condition and select fields to serialize."""
 
+        abstract = True
+
+class ConditionSerializer(ConditionBaseSerializer):
+
+    class Meta:
+        """Define object condition and select fields to serialize."""
+
         model = models.Condition
-        exclude = ('id', 'action', 'created', 'modified')
+        exclude = ('id', 'workflow', 'action', 'created', 'modified')
+
+
+class FilterSerializer(ConditionBaseSerializer):
+
+    class Meta:
+        """Define object condition and select fields to serialize."""
+
+        model = models.Filter
+        exclude = ('id', 'workflow', 'created', 'modified')
 
 
 class ConditionNameSerializer(serializers.ModelSerializer):
