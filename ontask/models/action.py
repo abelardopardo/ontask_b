@@ -174,7 +174,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
         return action_filter.n_rows_selected
 
-    def get_row_all_false_count(self):
+    def get_row_all_false_count(self) -> List[int]:
         """Extract the rows for which  all conditions are false.
 
         Given a table and a list of conditions return the number of rows in
@@ -193,7 +193,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
             if not cond_list:
                 # Condition list is either None or empty. No restrictions.
-                return 0
+                return []
 
             # Workflow has a data frame and condition list is non empty
 
