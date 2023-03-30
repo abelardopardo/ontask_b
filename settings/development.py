@@ -53,7 +53,7 @@ LOGGING['loggers'] = {
         'level': 'DEBUG',
     },
     'scripts': {
-        'handlers': ['console'],
+        'handlers': ['script_log_file'],
         'propagate': True,
         'level': 'DEBUG',
     },
@@ -63,7 +63,7 @@ LOGGING['loggers'] = {
         'level': 'DEBUG',
     },
     'django.security.DisallowedHost': {
-        'handlers': ['console'],
+        'handlers': ['django_log_file'],
         'propagate': True,
         'level': 'DEBUG',
     },
