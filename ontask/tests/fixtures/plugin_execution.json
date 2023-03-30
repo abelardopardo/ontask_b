@@ -333,6 +333,26 @@
     }
 },
 {
+    "model": "ontask.view",
+    "pk": 26,
+    "fields": {
+        "name": "sxx",
+        "description_text": "",
+        "created": "2018-05-23T03:11:29.097Z",
+        "modified": "2018-05-23T03:11:29.097Z",
+        "workflow": 35,
+        "formula": {
+            "not": false,
+            "rules": [],
+            "valid": true,
+            "condition": "AND"
+        },
+        "columns": [
+            1157
+        ]
+    }
+},
+{
     "model": "ontask.plugin",
     "pk": 7,
     "fields": {
@@ -448,23 +468,38 @@
     }
 },
 {
-    "model": "ontask.view",
-    "pk": 26,
-    "fields": {
-        "name": "sxx",
-        "description_text": "",
-        "created": "2018-05-23T03:11:29.097Z",
-        "modified": "2018-05-23T03:11:29.097Z",
-        "workflow": 35,
-        "formula": {
-            "not": false,
-            "rules": [],
-            "valid": true,
-            "condition": "AND"
-        },
-        "columns": [
-            1157
-        ]
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 11,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 12,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 13,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 4,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 14,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 2,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 3,
+    "fields": {}
 }
 ]

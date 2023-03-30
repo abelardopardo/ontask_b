@@ -683,166 +683,6 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 1037,
-    "fields": {
-        "created": "2017-12-08T01:29:51.431Z",
-        "modified": "2019-09-07T05:44:52.336Z",
-        "action": 253,
-        "name": "old",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "age",
-                    "type": "double",
-                    "field": "age",
-                    "input": "number",
-                    "value": "12",
-                    "operator": "greater"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "age &gt; 12.0 and not empty",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "columns": [
-            2928
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1038,
-    "fields": {
-        "created": "2017-12-08T01:33:21.687Z",
-        "modified": "2019-09-07T05:44:52.540Z",
-        "action": 253,
-        "name": "Registered",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "registered &equals; true and not empty",
-        "n_rows_selected": 1,
-        "is_filter": false,
-        "columns": [
-            2929
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1039,
-    "fields": {
-        "created": "2019-08-26T09:42:30.643Z",
-        "modified": "2019-08-26T09:42:39.851Z",
-        "action": 255,
-        "name": "",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "columns": [
-            2929
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1040,
-    "fields": {
-        "created": "2019-08-30T07:36:23.571Z",
-        "modified": "2019-08-30T07:36:23.605Z",
-        "action": 257,
-        "name": "",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "columns": [
-            2929
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1041,
-    "fields": {
-        "created": "2019-09-07T05:46:22.629Z",
-        "modified": "2019-09-07T05:47:21.033Z",
-        "action": 258,
-        "name": "old",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "registered &equals; true and not empty",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "columns": [
-            2929
-        ]
-    }
-},
-{
     "model": "ontask.workflow",
     "pk": 108,
     "fields": {
@@ -909,18 +749,171 @@
     }
 },
 {
+    "model": "ontask.condition",
+    "pk": 1038,
+    "fields": {
+        "name": "Registered",
+        "description_text": "",
+        "created": "2017-12-08T01:33:21.687Z",
+        "modified": "2020-08-16T08:33:27.935Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "registered &equals; true and not empty",
+        "n_rows_selected": 1,
+        "workflow": 108,
+        "action": 253,
+        "columns": [
+            2929
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 1,
+    "fields": {
+        "created": "2020-08-16T08:33:27.978Z",
+        "modified": "2020-08-16T08:33:27.985Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 108,
+        "description_text": "",
+        "columns": [
+            2929
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 2,
+    "fields": {
+        "created": "2020-08-16T08:33:27.989Z",
+        "modified": "2020-08-16T08:33:27.993Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 108,
+        "description_text": "",
+        "columns": [
+            2929
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 3,
+    "fields": {
+        "created": "2020-08-16T08:33:27.996Z",
+        "modified": "2020-08-16T08:33:27.999Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "age",
+                    "type": "double",
+                    "field": "age",
+                    "input": "number",
+                    "value": "12",
+                    "operator": "greater"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "age &gt; 12.0 and not empty",
+        "n_rows_selected": 2,
+        "workflow": 108,
+        "description_text": "",
+        "columns": [
+            2928
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 4,
+    "fields": {
+        "created": "2020-08-16T08:33:28.002Z",
+        "modified": "2020-08-16T08:33:28.006Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "registered &equals; true and not empty",
+        "n_rows_selected": 2,
+        "workflow": 108,
+        "description_text": "",
+        "columns": [
+            2929
+        ]
+    }
+},
+{
     "model": "ontask.action",
     "pk": 253,
     "fields": {
         "name": "send email",
         "description_text": "",
         "created": "2017-12-08T01:29:40.524Z",
-        "modified": "2019-09-07T05:46:03.293Z",
+        "modified": "2020-08-16T08:33:28.188Z",
         "workflow": 108,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 3,
         "rows_all_false": [
             2
         ],
@@ -938,12 +931,13 @@
         "name": "send list",
         "description_text": "",
         "created": "2019-08-26T09:42:03.733Z",
-        "modified": "2019-08-26T09:42:47.642Z",
+        "modified": "2020-08-16T08:33:28.184Z",
         "workflow": 108,
         "action_type": "email_report",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 1,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear madam/sir</p><p>Here is the list of students: {% ot_insert_report 'email' %}<br></p>",
@@ -965,6 +959,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "{\r\n  \"field1\": \"{{ age }}\",\r\n  \"field2\": \"{{ email }}\",\r\n  \"field3\": \"{{ when }}\"\r\n}",
@@ -980,12 +975,13 @@
         "name": "send json report",
         "description_text": "",
         "created": "2019-08-30T07:35:53.133Z",
-        "modified": "2019-08-30T07:36:41.475Z",
+        "modified": "2020-08-16T08:33:28.186Z",
         "workflow": 108,
         "action_type": "json_report",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 2,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "{\r\n    \"students\": {% ot_insert_report \"email\" %}\r\n}",
@@ -1001,12 +997,13 @@
         "name": "send email incrementally",
         "description_text": "To test incremental scheduled execution",
         "created": "2019-09-07T05:46:22.613Z",
-        "modified": "2019-09-07T05:55:50.800Z",
+        "modified": "2020-08-16T08:33:28.190Z",
         "workflow": 108,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 4,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Hi {{ name }}</p><p>Welcome to the course!<br></p><p>ATT:&nbsp;{{ attribute name }}</p><p>Registered:&nbsp;{{ registered }}</p><p>When: {{ when }}<br></p>",

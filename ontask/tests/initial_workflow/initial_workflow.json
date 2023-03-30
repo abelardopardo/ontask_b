@@ -59,7 +59,7 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2020-05-07T08:12:43.487Z"
+        "last_update": "2020-08-16T08:31:07.508Z"
     }
 },
 {
@@ -86,7 +86,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-07T08:12:43.443Z",
+        "date_changed": "2020-08-16T08:31:07.458Z",
         "description": ""
     }
 },
@@ -114,7 +114,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-07T08:12:43.454Z",
+        "date_changed": "2020-08-16T08:31:07.475Z",
         "description": ""
     }
 },
@@ -142,7 +142,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-07T08:12:43.466Z",
+        "date_changed": "2020-08-16T08:31:07.487Z",
         "description": ""
     }
 },
@@ -170,7 +170,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-07T08:12:43.477Z",
+        "date_changed": "2020-08-16T08:31:07.499Z",
         "description": ""
     }
 },
@@ -198,7 +198,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-05-07T08:12:43.488Z",
+        "date_changed": "2020-08-16T08:31:07.509Z",
         "description": ""
     }
 },
@@ -648,263 +648,6 @@
         "app": "ontask",
         "name": "help_url",
         "text": "html/index.html"
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 1,
-    "fields": {
-        "user": [
-            "superuser@bogus.com"
-        ],
-        "created": "2019-12-30T21:20:12.894Z",
-        "modified": "2019-12-30T21:20:12.894Z",
-        "name": "sql_connection_clone",
-        "workflow": null,
-        "payload": {
-            "id": 3,
-            "name": "Copy of remote server2",
-            "id_old": 2,
-            "db_host": "localhost",
-            "db_name": "ontask_b",
-            "db_port": 5432,
-            "db_user": "",
-            "db_table": "__ONTASK_TEST_TABLE",
-            "name_old": "remote server2",
-            "conn_type": "postgresql",
-            "conn_driver": "",
-            "db_password": ""
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 2,
-    "fields": {
-        "user": [
-            "superuser@bogus.com"
-        ],
-        "created": "2019-12-30T21:20:46.215Z",
-        "modified": "2019-12-30T21:20:46.215Z",
-        "name": "sql_connection_edit",
-        "workflow": null,
-        "payload": {
-            "id": 2,
-            "name": "remote server 3",
-            "db_host": "localhost",
-            "db_name": "ontask_b",
-            "db_port": 5432,
-            "db_user": "",
-            "db_table": null,
-            "conn_type": "postgresql",
-            "conn_driver": "",
-            "db_password": ""
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 3,
-    "fields": {
-        "user": [
-            "superuser@bogus.com"
-        ],
-        "created": "2019-12-30T21:21:33.883Z",
-        "modified": "2019-12-30T21:21:33.883Z",
-        "name": "sql_connection_edit",
-        "workflow": null,
-        "payload": {
-            "id": 3,
-            "name": "remote server2",
-            "db_host": "localhost",
-            "db_name": "ontask_b",
-            "db_port": 5432,
-            "db_user": "",
-            "db_table": "__ONTASK_TEST_TABLE",
-            "conn_type": "postgresql",
-            "conn_driver": "",
-            "db_password": ""
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 4,
-    "fields": {
-        "user": [
-            "superuser@bogus.com"
-        ],
-        "created": "2019-12-30T21:22:48.294Z",
-        "modified": "2019-12-30T21:22:48.294Z",
-        "name": "sql_connection_edit",
-        "workflow": null,
-        "payload": {
-            "id": 3,
-            "name": "remote server 2",
-            "db_host": "localhost",
-            "db_name": "ontask_b",
-            "db_port": 5432,
-            "db_user": "",
-            "db_table": "__ONTASK_TEST_TABLE",
-            "conn_type": "postgresql",
-            "conn_driver": "",
-            "db_password": ""
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 5,
-    "fields": {
-        "user": [
-            "superuser@bogus.com"
-        ],
-        "created": "2019-12-30T21:25:39.624Z",
-        "modified": "2019-12-30T21:25:39.624Z",
-        "name": "sql_connection_edit",
-        "workflow": null,
-        "payload": {
-            "id": 3,
-            "name": "remote server 2",
-            "db_host": "localhost",
-            "db_name": "ontask_b",
-            "db_port": 5432,
-            "db_user": "",
-            "db_table": "__ONTASK_TEST_TABLE",
-            "conn_type": "postgresql",
-            "conn_driver": "",
-            "db_password": ""
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 6,
-    "fields": {
-        "user": [
-            "superuser@bogus.com"
-        ],
-        "created": "2019-12-30T21:26:11.673Z",
-        "modified": "2019-12-30T21:26:11.673Z",
-        "name": "sql_connection_edit",
-        "workflow": null,
-        "payload": {
-            "id": 2,
-            "name": "remote server 3",
-            "db_host": "localhost",
-            "db_name": "ontask_b",
-            "db_port": 5432,
-            "db_user": "",
-            "db_table": null,
-            "conn_type": "postgresql",
-            "conn_driver": "",
-            "db_password": ""
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 7,
-    "fields": {
-        "user": [
-            "superuser@bogus.com"
-        ],
-        "created": "2019-12-30T21:27:04.875Z",
-        "modified": "2019-12-30T21:27:04.875Z",
-        "name": "athena_connection_toggle",
-        "workflow": null,
-        "payload": {
-            "id": 1,
-            "name": "athena connection",
-            "enabled": false,
-            "table_name": "",
-            "aws_file_path": "[FILE PATH WITHIN BUCKET HERE]",
-            "aws_access_key": "[YOUR AWS ACCESS KEY HERE]",
-            "aws_bucket_name": "[S3 BUCKET NAME HERE]",
-            "aws_region_name": "[AWS REGION NAME HERE]"
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 8,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2020-01-06T07:47:05.853Z",
-        "modified": "2020-01-06T07:47:05.853Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 4,
-            "name": "Midterm comments",
-            "type": "personalized_text",
-            "content": "<p>Dear&nbsp;{{ GivenName }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p><div><br></div>",
-            "workflow_id": 1
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 9,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2020-01-06T07:53:37.593Z",
-        "modified": "2020-01-06T07:53:37.593Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 1,
-            "name": "Badges",
-            "type": "personalized_text",
-            "content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1><p style=\"text-align: center;\">{% if High engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Gold-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Medium engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Silver-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Low video engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Bronze-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
-            "workflow_id": 1
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 10,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2020-05-03T06:22:51.626Z",
-        "modified": "2020-05-03T06:22:51.626Z",
-        "name": "condition_create",
-        "workflow": 1,
-        "payload": {
-            "id": 32,
-            "name": "",
-            "action": "Send Email with report",
-            "formula": "email starts with t",
-            "is_filter": true,
-            "workflow_id": 1,
-            "n_rows_selected": 4
-        }
-    }
-},
-{
-    "model": "ontask.log",
-    "pk": 11,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "created": "2020-05-03T06:23:17.295Z",
-        "modified": "2020-05-03T06:23:17.295Z",
-        "name": "action_update",
-        "workflow": 1,
-        "payload": {
-            "id": 9,
-            "name": "Send Email with report",
-            "type": "email_report",
-            "content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_report \"email\" \"Surname\" \"GivenName\" %}<br></p><p>Regards</p><p>Josh<br></p>",
-            "workflow_id": 1
-        }
     }
 },
 {
@@ -2036,1562 +1779,6 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 1,
-    "fields": {
-        "created": "2019-09-21T06:43:58.726Z",
-        "modified": "2019-09-21T06:50:09.072Z",
-        "action": 1,
-        "name": "High engagement",
-        "description_text": "High engagement with Video 1 in Week 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Video_1_W2",
-                    "type": "double",
-                    "field": "Video_1_W2",
-                    "input": "number",
-                    "value": "75",
-                    "operator": "greater"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "Video_1_W2 &gt; 75.0 and not empty",
-        "n_rows_selected": 6,
-        "is_filter": false,
-        "columns": [
-            44
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 2,
-    "fields": {
-        "created": "2019-09-21T06:43:59.115Z",
-        "modified": "2019-09-21T06:50:09.127Z",
-        "action": 1,
-        "name": "Low video engagement",
-        "description_text": "Low activity detected in the first video of Week 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Video_1_W2",
-                            "type": "double",
-                            "field": "Video_1_W2",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "greater"
-                        },
-                        {
-                            "id": "Video_1_W2",
-                            "type": "double",
-                            "field": "Video_1_W2",
-                            "input": "number",
-                            "value": "25",
-                            "operator": "less_or_equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "(Video_1_W2 &gt; 0.0 and not empty) AND (Video_1_W2 &#8924; 25.0 and not empty)",
-        "n_rows_selected": 1,
-        "is_filter": false,
-        "columns": [
-            44
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 3,
-    "fields": {
-        "created": "2019-09-21T06:43:59.407Z",
-        "modified": "2019-09-21T06:50:09.165Z",
-        "action": 1,
-        "name": "Medium engagement",
-        "description_text": "Medium engagement with Video 1 in Week 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Video_1_W2",
-                            "type": "double",
-                            "field": "Video_1_W2",
-                            "input": "number",
-                            "value": "25",
-                            "operator": "greater"
-                        },
-                        {
-                            "id": "Video_1_W2",
-                            "type": "double",
-                            "field": "Video_1_W2",
-                            "input": "number",
-                            "value": "75",
-                            "operator": "less_or_equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "(Video_1_W2 &gt; 25.0 and not empty) AND (Video_1_W2 &#8924; 75.0 and not empty)",
-        "n_rows_selected": 5,
-        "is_filter": false,
-        "columns": [
-            44
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 4,
-    "fields": {
-        "created": "2019-09-21T06:43:59.679Z",
-        "modified": "2019-09-21T06:50:09.219Z",
-        "action": 1,
-        "name": "No_videos",
-        "description_text": "No video activity",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Video_1_W2",
-                    "type": "double",
-                    "field": "Video_1_W2",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "Video_1_W2 &equals; 0.0 and not empty",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            44
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 5,
-    "fields": {
-        "created": "2019-09-21T06:44:00.554Z",
-        "modified": "2019-09-21T06:50:09.297Z",
-        "action": 2,
-        "name": "Those with any video missing in Week 4",
-        "description_text": "Either Video 1 or Video 2 in Week 4 have zero engagement",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Video_1_W4",
-                    "type": "double",
-                    "field": "Video_1_W4",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Video_2_W4",
-                    "type": "double",
-                    "field": "Video_2_W4",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": true,
-        "columns": [
-            56,
-            59
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 6,
-    "fields": {
-        "created": "2019-09-21T06:44:01.086Z",
-        "modified": "2019-09-21T06:50:09.338Z",
-        "action": 2,
-        "name": "No Video 1",
-        "description_text": "Didn't watch Video 1 Week 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Correct_1_W4",
-                    "type": "double",
-                    "field": "Correct_1_W4",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 1,
-        "is_filter": false,
-        "columns": [
-            58
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 7,
-    "fields": {
-        "created": "2019-09-21T06:44:01.402Z",
-        "modified": "2019-09-21T06:50:09.376Z",
-        "action": 2,
-        "name": "No Video 2",
-        "description_text": "Didn't watch Video 2 Week 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Video_2_W4",
-                    "type": "double",
-                    "field": "Video_2_W4",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            59
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 8,
-    "fields": {
-        "created": "2019-09-21T06:44:02.434Z",
-        "modified": "2019-09-21T06:50:09.468Z",
-        "action": 3,
-        "name": "Enrolled in FASS",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Program",
-                    "type": "string",
-                    "field": "Program",
-                    "input": "text",
-                    "value": "FASS",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            8
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 9,
-    "fields": {
-        "created": "2019-09-21T06:44:02.996Z",
-        "modified": "2019-09-21T06:50:09.514Z",
-        "action": 3,
-        "name": "Enrolled in FEIT",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Program",
-                    "type": "string",
-                    "field": "Program",
-                    "input": "text",
-                    "value": "FEIT",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            8
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 10,
-    "fields": {
-        "created": "2019-09-21T06:44:03.374Z",
-        "modified": "2019-09-21T06:50:09.564Z",
-        "action": 3,
-        "name": "Enrolled in FSCI",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Program",
-                    "type": "string",
-                    "field": "Program",
-                    "input": "text",
-                    "value": "FSCI",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 6,
-        "is_filter": false,
-        "columns": [
-            8
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 11,
-    "fields": {
-        "created": "2019-09-21T06:44:03.618Z",
-        "modified": "2019-09-21T06:50:09.594Z",
-        "action": 3,
-        "name": "Enrolled in SMED",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Program",
-                    "type": "string",
-                    "field": "Program",
-                    "input": "text",
-                    "value": "SMED",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            8
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 12,
-    "fields": {
-        "created": "2019-09-21T06:44:04.091Z",
-        "modified": "2019-09-21T06:50:09.672Z",
-        "action": 4,
-        "name": "",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q01",
-                    "type": "double",
-                    "field": "Q01",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_not_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "Q01 is not null",
-        "n_rows_selected": 12,
-        "is_filter": true,
-        "columns": [
-            13
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 13,
-    "fields": {
-        "created": "2019-09-21T06:44:04.538Z",
-        "modified": "2019-09-21T06:50:09.723Z",
-        "action": 4,
-        "name": "T1_HIGH",
-        "description_text": "High score in topic 1",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q01",
-                    "type": "double",
-                    "field": "Q01",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q02",
-                    "type": "double",
-                    "field": "Q02",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 1.0 and not empty)",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            13,
-            14
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 14,
-    "fields": {
-        "created": "2019-09-21T06:44:05.055Z",
-        "modified": "2019-09-21T06:50:09.760Z",
-        "action": 4,
-        "name": "T1_LOW",
-        "description_text": "Low score in topic 1",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q01",
-                    "type": "double",
-                    "field": "Q01",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q02",
-                    "type": "double",
-                    "field": "Q02",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 0.0 and not empty)",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            13,
-            14
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 15,
-    "fields": {
-        "created": "2019-09-21T06:44:05.436Z",
-        "modified": "2019-09-21T06:50:09.820Z",
-        "action": 4,
-        "name": "T1_MID",
-        "description_text": "One answer was correctly answered for topic 1",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q01",
-                            "type": "double",
-                            "field": "Q01",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q02",
-                            "type": "double",
-                            "field": "Q02",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q01",
-                            "type": "double",
-                            "field": "Q01",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q02",
-                            "type": "double",
-                            "field": "Q02",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "((Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 1.0 and not empty)) OR ((Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 0.0 and not empty))",
-        "n_rows_selected": 6,
-        "is_filter": false,
-        "columns": [
-            13,
-            14
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 16,
-    "fields": {
-        "created": "2019-09-21T06:44:05.687Z",
-        "modified": "2019-09-21T06:50:09.870Z",
-        "action": 4,
-        "name": "T2_HIGH",
-        "description_text": "High score in topic 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q03",
-                    "type": "double",
-                    "field": "Q03",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q04",
-                    "type": "double",
-                    "field": "Q04",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 1.0 and not empty)",
-        "n_rows_selected": 6,
-        "is_filter": false,
-        "columns": [
-            15,
-            16
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 17,
-    "fields": {
-        "created": "2019-09-21T06:44:05.925Z",
-        "modified": "2019-09-21T06:50:09.929Z",
-        "action": 4,
-        "name": "T2_LOW",
-        "description_text": "Low score in topic 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q03",
-                    "type": "double",
-                    "field": "Q03",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q04",
-                    "type": "double",
-                    "field": "Q04",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 0.0 and not empty)",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            15,
-            16
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 18,
-    "fields": {
-        "created": "2019-09-21T06:44:06.214Z",
-        "modified": "2019-09-21T06:50:10.078Z",
-        "action": 4,
-        "name": "T2_MID",
-        "description_text": "One answer was correctly answered for topic 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q03",
-                            "type": "double",
-                            "field": "Q03",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q04",
-                            "type": "double",
-                            "field": "Q04",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q03",
-                            "type": "double",
-                            "field": "Q03",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q04",
-                            "type": "double",
-                            "field": "Q04",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "((Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 1.0 and not empty)) OR ((Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 0.0 and not empty))",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            15,
-            16
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 19,
-    "fields": {
-        "created": "2019-09-21T06:44:06.686Z",
-        "modified": "2019-09-21T06:50:10.187Z",
-        "action": 4,
-        "name": "T3_HIGH",
-        "description_text": "High score in topic 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q05",
-                    "type": "double",
-                    "field": "Q05",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q06",
-                    "type": "double",
-                    "field": "Q06",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 1.0 and not empty)",
-        "n_rows_selected": 7,
-        "is_filter": false,
-        "columns": [
-            17,
-            18
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 20,
-    "fields": {
-        "created": "2019-09-21T06:44:07.251Z",
-        "modified": "2019-09-21T06:50:10.289Z",
-        "action": 4,
-        "name": "T3_LOW",
-        "description_text": "Low score in topic 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q05",
-                    "type": "double",
-                    "field": "Q05",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q06",
-                    "type": "double",
-                    "field": "Q06",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 0.0 and not empty)",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            17,
-            18
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 21,
-    "fields": {
-        "created": "2019-09-21T06:44:07.603Z",
-        "modified": "2019-09-21T06:50:10.374Z",
-        "action": 4,
-        "name": "T3_MID",
-        "description_text": "One answer was correctly answered for topic 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q05",
-                            "type": "double",
-                            "field": "Q05",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q06",
-                            "type": "double",
-                            "field": "Q06",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q05",
-                            "type": "double",
-                            "field": "Q05",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q06",
-                            "type": "double",
-                            "field": "Q06",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "((Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 1.0 and not empty)) OR ((Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 0.0 and not empty))",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            17,
-            18
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 22,
-    "fields": {
-        "created": "2019-09-21T06:44:07.851Z",
-        "modified": "2019-09-21T06:50:10.452Z",
-        "action": 4,
-        "name": "T4_HIGH",
-        "description_text": "High score in topic 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q07",
-                    "type": "double",
-                    "field": "Q07",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q08",
-                    "type": "double",
-                    "field": "Q08",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 1.0 and not empty)",
-        "n_rows_selected": 7,
-        "is_filter": false,
-        "columns": [
-            19,
-            20
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 23,
-    "fields": {
-        "created": "2019-09-21T06:44:08.106Z",
-        "modified": "2019-09-21T06:50:10.526Z",
-        "action": 4,
-        "name": "T4_LOW",
-        "description_text": "Low score in topic 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q07",
-                    "type": "double",
-                    "field": "Q07",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q08",
-                    "type": "double",
-                    "field": "Q08",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 0.0 and not empty)",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            19,
-            20
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 24,
-    "fields": {
-        "created": "2019-09-21T06:44:08.381Z",
-        "modified": "2019-09-21T06:50:10.604Z",
-        "action": 4,
-        "name": "T4_MID",
-        "description_text": "One answer was correctly answered for topic 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q07",
-                            "type": "double",
-                            "field": "Q07",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q08",
-                            "type": "double",
-                            "field": "Q08",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q07",
-                            "type": "double",
-                            "field": "Q07",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q08",
-                            "type": "double",
-                            "field": "Q08",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "((Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 1.0 and not empty)) OR ((Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 0.0 and not empty))",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            19,
-            20
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 25,
-    "fields": {
-        "created": "2019-09-21T06:44:08.935Z",
-        "modified": "2019-09-21T06:50:10.669Z",
-        "action": 4,
-        "name": "T5_HIGH",
-        "description_text": "High score in topic 5",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q09",
-                    "type": "double",
-                    "field": "Q09",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q10",
-                    "type": "double",
-                    "field": "Q10",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 1.0 and not empty)",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            21,
-            22
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 26,
-    "fields": {
-        "created": "2019-09-21T06:44:09.414Z",
-        "modified": "2019-09-21T06:50:10.754Z",
-        "action": 4,
-        "name": "T5_LOW",
-        "description_text": "Low score in topic 5",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q09",
-                    "type": "double",
-                    "field": "Q09",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Q10",
-                    "type": "double",
-                    "field": "Q10",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "(Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 0.0 and not empty)",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            21,
-            22
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 27,
-    "fields": {
-        "created": "2019-09-21T06:44:09.785Z",
-        "modified": "2019-09-21T06:50:10.837Z",
-        "action": 4,
-        "name": "T5_MID",
-        "description_text": "One answer was correctly answered for topic 5",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q09",
-                            "type": "double",
-                            "field": "Q09",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q10",
-                            "type": "double",
-                            "field": "Q10",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "Q09",
-                            "type": "double",
-                            "field": "Q09",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "Q10",
-                            "type": "double",
-                            "field": "Q10",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "((Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 1.0 and not empty)) OR ((Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 0.0 and not empty))",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            21,
-            22
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 28,
-    "fields": {
-        "created": "2019-09-21T06:44:11.929Z",
-        "modified": "2019-09-21T06:50:10.984Z",
-        "action": 5,
-        "name": "",
-        "description_text": "There is an exam score",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Total",
-                    "type": "double",
-                    "field": "Total",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_not_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 12,
-        "is_filter": true,
-        "columns": [
-            23
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 29,
-    "fields": {
-        "created": "2019-09-21T06:44:12.131Z",
-        "modified": "2019-09-21T06:50:11.055Z",
-        "action": 5,
-        "name": "Less than 50 in the midterm",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Total",
-                    "type": "double",
-                    "field": "Total",
-                    "input": "number",
-                    "value": "50",
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            23
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 30,
-    "fields": {
-        "created": "2019-09-21T06:44:12.387Z",
-        "modified": "2019-09-21T06:50:11.100Z",
-        "action": 5,
-        "name": "More or equal to 50 in midterm",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Total",
-                    "type": "double",
-                    "field": "Total",
-                    "input": "number",
-                    "value": "50",
-                    "operator": "greater_or_equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 10,
-        "is_filter": false,
-        "columns": [
-            23
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 31,
-    "fields": {
-        "created": "2019-09-21T06:44:14.057Z",
-        "modified": "2019-09-21T06:50:11.211Z",
-        "action": 7,
-        "name": "Students with days online <= 7",
-        "description_text": "These are the students that haven't connected to the discussion forum yet.",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Days online",
-                    "type": "integer",
-                    "field": "Days online",
-                    "input": "number",
-                    "value": "7",
-                    "operator": "less_or_equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "columns": [
-            40
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 32,
-    "fields": {
-        "created": "2020-05-03T06:22:51.549Z",
-        "modified": "2020-05-03T06:22:51.549Z",
-        "action": 9,
-        "name": "",
-        "description_text": "Students starting with t",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "email",
-                    "type": "string",
-                    "field": "email",
-                    "input": "text",
-                    "value": "t",
-                    "operator": "begins_with"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "email starts with t",
-        "n_rows_selected": 4,
-        "is_filter": true,
-        "columns": [
-            2
-        ]
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 1,
-    "fields": {
-        "action": 1,
-        "column": 44,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 2,
-    "fields": {
-        "action": 2,
-        "column": 44,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 3,
-    "fields": {
-        "action": 2,
-        "column": 47,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 4,
-    "fields": {
-        "action": 2,
-        "column": 58,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 5,
-    "fields": {
-        "action": 2,
-        "column": 59,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 6,
-    "fields": {
-        "action": 3,
-        "column": 8,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 7,
-    "fields": {
-        "action": 4,
-        "column": 13,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 8,
-    "fields": {
-        "action": 4,
-        "column": 14,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 9,
-    "fields": {
-        "action": 4,
-        "column": 15,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 10,
-    "fields": {
-        "action": 4,
-        "column": 16,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 11,
-    "fields": {
-        "action": 4,
-        "column": 17,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 12,
-    "fields": {
-        "action": 4,
-        "column": 18,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 13,
-    "fields": {
-        "action": 4,
-        "column": 19,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 14,
-    "fields": {
-        "action": 4,
-        "column": 20,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 15,
-    "fields": {
-        "action": 4,
-        "column": 21,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 16,
-    "fields": {
-        "action": 4,
-        "column": 22,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 17,
-    "fields": {
-        "action": 5,
-        "column": 23,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 18,
-    "fields": {
-        "action": 6,
-        "column": 2,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 19,
-    "fields": {
-        "action": 6,
-        "column": 11,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 20,
-    "fields": {
-        "action": 6,
-        "column": 12,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 23,
-    "fields": {
-        "action": 8,
-        "column": 68,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 24,
-    "fields": {
-        "action": 8,
-        "column": 69,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
     "model": "ontask.workflow",
     "pk": 1,
     "fields": {
@@ -4066,6 +2253,1552 @@
     }
 },
 {
+    "model": "ontask.condition",
+    "pk": 1,
+    "fields": {
+        "name": "High engagement",
+        "description_text": "High engagement with Video 1 in Week 2",
+        "created": "2019-09-21T06:43:58.726Z",
+        "modified": "2020-08-16T08:31:10.610Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Video_1_W2",
+                    "type": "double",
+                    "field": "Video_1_W2",
+                    "input": "number",
+                    "value": "75",
+                    "operator": "greater"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "Video_1_W2 &gt; 75.0 and not empty",
+        "n_rows_selected": 6,
+        "workflow": 1,
+        "action": 1,
+        "columns": [
+            44
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 2,
+    "fields": {
+        "name": "Low video engagement",
+        "description_text": "Low activity detected in the first video of Week 2",
+        "created": "2019-09-21T06:43:59.115Z",
+        "modified": "2020-08-16T08:31:10.616Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Video_1_W2",
+                            "type": "double",
+                            "field": "Video_1_W2",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "greater"
+                        },
+                        {
+                            "id": "Video_1_W2",
+                            "type": "double",
+                            "field": "Video_1_W2",
+                            "input": "number",
+                            "value": "25",
+                            "operator": "less_or_equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "(Video_1_W2 &gt; 0.0 and not empty) AND (Video_1_W2 &#8924; 25.0 and not empty)",
+        "n_rows_selected": 1,
+        "workflow": 1,
+        "action": 1,
+        "columns": [
+            44
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 3,
+    "fields": {
+        "name": "Medium engagement",
+        "description_text": "Medium engagement with Video 1 in Week 2",
+        "created": "2019-09-21T06:43:59.407Z",
+        "modified": "2020-08-16T08:31:10.619Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Video_1_W2",
+                            "type": "double",
+                            "field": "Video_1_W2",
+                            "input": "number",
+                            "value": "25",
+                            "operator": "greater"
+                        },
+                        {
+                            "id": "Video_1_W2",
+                            "type": "double",
+                            "field": "Video_1_W2",
+                            "input": "number",
+                            "value": "75",
+                            "operator": "less_or_equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "(Video_1_W2 &gt; 25.0 and not empty) AND (Video_1_W2 &#8924; 75.0 and not empty)",
+        "n_rows_selected": 5,
+        "workflow": 1,
+        "action": 1,
+        "columns": [
+            44
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 4,
+    "fields": {
+        "name": "No_videos",
+        "description_text": "No video activity",
+        "created": "2019-09-21T06:43:59.679Z",
+        "modified": "2020-08-16T08:31:10.631Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Video_1_W2",
+                    "type": "double",
+                    "field": "Video_1_W2",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "Video_1_W2 &equals; 0.0 and not empty",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 1,
+        "columns": [
+            44
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 6,
+    "fields": {
+        "name": "No Video 1",
+        "description_text": "Didn't watch Video 1 Week 4",
+        "created": "2019-09-21T06:44:01.086Z",
+        "modified": "2020-08-16T08:31:10.625Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Correct_1_W4",
+                    "type": "double",
+                    "field": "Correct_1_W4",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 1,
+        "workflow": 1,
+        "action": 2,
+        "columns": [
+            58
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 7,
+    "fields": {
+        "name": "No Video 2",
+        "description_text": "Didn't watch Video 2 Week 4",
+        "created": "2019-09-21T06:44:01.402Z",
+        "modified": "2020-08-16T08:31:10.628Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Video_2_W4",
+                    "type": "double",
+                    "field": "Video_2_W4",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "workflow": 1,
+        "action": 2,
+        "columns": [
+            59
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 8,
+    "fields": {
+        "name": "Enrolled in FASS",
+        "description_text": "",
+        "created": "2019-09-21T06:44:02.434Z",
+        "modified": "2020-08-16T08:31:10.599Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Program",
+                    "type": "string",
+                    "field": "Program",
+                    "input": "text",
+                    "value": "FASS",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 3,
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 9,
+    "fields": {
+        "name": "Enrolled in FEIT",
+        "description_text": "",
+        "created": "2019-09-21T06:44:02.996Z",
+        "modified": "2020-08-16T08:31:10.602Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Program",
+                    "type": "string",
+                    "field": "Program",
+                    "input": "text",
+                    "value": "FEIT",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "workflow": 1,
+        "action": 3,
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 10,
+    "fields": {
+        "name": "Enrolled in FSCI",
+        "description_text": "",
+        "created": "2019-09-21T06:44:03.374Z",
+        "modified": "2020-08-16T08:31:10.604Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Program",
+                    "type": "string",
+                    "field": "Program",
+                    "input": "text",
+                    "value": "FSCI",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 6,
+        "workflow": 1,
+        "action": 3,
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 11,
+    "fields": {
+        "name": "Enrolled in SMED",
+        "description_text": "",
+        "created": "2019-09-21T06:44:03.618Z",
+        "modified": "2020-08-16T08:31:10.607Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Program",
+                    "type": "string",
+                    "field": "Program",
+                    "input": "text",
+                    "value": "SMED",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "workflow": 1,
+        "action": 3,
+        "columns": [
+            8
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 13,
+    "fields": {
+        "name": "T1_HIGH",
+        "description_text": "High score in topic 1",
+        "created": "2019-09-21T06:44:04.538Z",
+        "modified": "2020-08-16T08:31:10.637Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q01",
+                    "type": "double",
+                    "field": "Q01",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q02",
+                    "type": "double",
+                    "field": "Q02",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 1.0 and not empty)",
+        "n_rows_selected": 4,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            13,
+            14
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 14,
+    "fields": {
+        "name": "T1_LOW",
+        "description_text": "Low score in topic 1",
+        "created": "2019-09-21T06:44:05.055Z",
+        "modified": "2020-08-16T08:31:10.640Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q01",
+                    "type": "double",
+                    "field": "Q01",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q02",
+                    "type": "double",
+                    "field": "Q02",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 0.0 and not empty)",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            13,
+            14
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 15,
+    "fields": {
+        "name": "T1_MID",
+        "description_text": "One answer was correctly answered for topic 1",
+        "created": "2019-09-21T06:44:05.436Z",
+        "modified": "2020-08-16T08:31:10.643Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q01",
+                            "type": "double",
+                            "field": "Q01",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q02",
+                            "type": "double",
+                            "field": "Q02",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q01",
+                            "type": "double",
+                            "field": "Q01",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q02",
+                            "type": "double",
+                            "field": "Q02",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "((Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 1.0 and not empty)) OR ((Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 0.0 and not empty))",
+        "n_rows_selected": 6,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            13,
+            14
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 16,
+    "fields": {
+        "name": "T2_HIGH",
+        "description_text": "High score in topic 2",
+        "created": "2019-09-21T06:44:05.687Z",
+        "modified": "2020-08-16T08:31:10.646Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q03",
+                    "type": "double",
+                    "field": "Q03",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q04",
+                    "type": "double",
+                    "field": "Q04",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 1.0 and not empty)",
+        "n_rows_selected": 6,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 17,
+    "fields": {
+        "name": "T2_LOW",
+        "description_text": "Low score in topic 2",
+        "created": "2019-09-21T06:44:05.925Z",
+        "modified": "2020-08-16T08:31:10.649Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q03",
+                    "type": "double",
+                    "field": "Q03",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q04",
+                    "type": "double",
+                    "field": "Q04",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 0.0 and not empty)",
+        "n_rows_selected": 3,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 18,
+    "fields": {
+        "name": "T2_MID",
+        "description_text": "One answer was correctly answered for topic 2",
+        "created": "2019-09-21T06:44:06.214Z",
+        "modified": "2020-08-16T08:31:10.653Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q03",
+                            "type": "double",
+                            "field": "Q03",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q04",
+                            "type": "double",
+                            "field": "Q04",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q03",
+                            "type": "double",
+                            "field": "Q03",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q04",
+                            "type": "double",
+                            "field": "Q04",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "((Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 1.0 and not empty)) OR ((Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 0.0 and not empty))",
+        "n_rows_selected": 3,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            15,
+            16
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 19,
+    "fields": {
+        "name": "T3_HIGH",
+        "description_text": "High score in topic 3",
+        "created": "2019-09-21T06:44:06.686Z",
+        "modified": "2020-08-16T08:31:10.656Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q05",
+                    "type": "double",
+                    "field": "Q05",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q06",
+                    "type": "double",
+                    "field": "Q06",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 1.0 and not empty)",
+        "n_rows_selected": 7,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            17,
+            18
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 20,
+    "fields": {
+        "name": "T3_LOW",
+        "description_text": "Low score in topic 3",
+        "created": "2019-09-21T06:44:07.251Z",
+        "modified": "2020-08-16T08:31:10.658Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q05",
+                    "type": "double",
+                    "field": "Q05",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q06",
+                    "type": "double",
+                    "field": "Q06",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 0.0 and not empty)",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            17,
+            18
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 21,
+    "fields": {
+        "name": "T3_MID",
+        "description_text": "One answer was correctly answered for topic 3",
+        "created": "2019-09-21T06:44:07.603Z",
+        "modified": "2020-08-16T08:31:10.662Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q05",
+                            "type": "double",
+                            "field": "Q05",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q06",
+                            "type": "double",
+                            "field": "Q06",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q05",
+                            "type": "double",
+                            "field": "Q05",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q06",
+                            "type": "double",
+                            "field": "Q06",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "((Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 1.0 and not empty)) OR ((Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 0.0 and not empty))",
+        "n_rows_selected": 3,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            17,
+            18
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 22,
+    "fields": {
+        "name": "T4_HIGH",
+        "description_text": "High score in topic 4",
+        "created": "2019-09-21T06:44:07.851Z",
+        "modified": "2020-08-16T08:31:10.665Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q07",
+                    "type": "double",
+                    "field": "Q07",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q08",
+                    "type": "double",
+                    "field": "Q08",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 1.0 and not empty)",
+        "n_rows_selected": 7,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            19,
+            20
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 23,
+    "fields": {
+        "name": "T4_LOW",
+        "description_text": "Low score in topic 4",
+        "created": "2019-09-21T06:44:08.106Z",
+        "modified": "2020-08-16T08:31:10.668Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q07",
+                    "type": "double",
+                    "field": "Q07",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q08",
+                    "type": "double",
+                    "field": "Q08",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 0.0 and not empty)",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            19,
+            20
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 24,
+    "fields": {
+        "name": "T4_MID",
+        "description_text": "One answer was correctly answered for topic 4",
+        "created": "2019-09-21T06:44:08.381Z",
+        "modified": "2020-08-16T08:31:10.671Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q07",
+                            "type": "double",
+                            "field": "Q07",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q08",
+                            "type": "double",
+                            "field": "Q08",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q07",
+                            "type": "double",
+                            "field": "Q07",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q08",
+                            "type": "double",
+                            "field": "Q08",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "((Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 1.0 and not empty)) OR ((Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 0.0 and not empty))",
+        "n_rows_selected": 3,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            19,
+            20
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 25,
+    "fields": {
+        "name": "T5_HIGH",
+        "description_text": "High score in topic 5",
+        "created": "2019-09-21T06:44:08.935Z",
+        "modified": "2020-08-16T08:31:10.674Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q09",
+                    "type": "double",
+                    "field": "Q09",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q10",
+                    "type": "double",
+                    "field": "Q10",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 1.0 and not empty)",
+        "n_rows_selected": 4,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            21,
+            22
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 26,
+    "fields": {
+        "name": "T5_LOW",
+        "description_text": "Low score in topic 5",
+        "created": "2019-09-21T06:44:09.414Z",
+        "modified": "2020-08-16T08:31:10.677Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q09",
+                    "type": "double",
+                    "field": "Q09",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Q10",
+                    "type": "double",
+                    "field": "Q10",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "(Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 0.0 and not empty)",
+        "n_rows_selected": 4,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            21,
+            22
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 27,
+    "fields": {
+        "name": "T5_MID",
+        "description_text": "One answer was correctly answered for topic 5",
+        "created": "2019-09-21T06:44:09.785Z",
+        "modified": "2020-08-16T08:31:10.680Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q09",
+                            "type": "double",
+                            "field": "Q09",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q10",
+                            "type": "double",
+                            "field": "Q10",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "Q09",
+                            "type": "double",
+                            "field": "Q09",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "Q10",
+                            "type": "double",
+                            "field": "Q10",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "((Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 1.0 and not empty)) OR ((Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 0.0 and not empty))",
+        "n_rows_selected": 4,
+        "workflow": 1,
+        "action": 4,
+        "columns": [
+            21,
+            22
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 29,
+    "fields": {
+        "name": "Less than 50 in the midterm",
+        "description_text": "",
+        "created": "2019-09-21T06:44:12.131Z",
+        "modified": "2020-08-16T08:31:10.613Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Total",
+                    "type": "double",
+                    "field": "Total",
+                    "input": "number",
+                    "value": "50",
+                    "operator": "less"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 5,
+        "columns": [
+            23
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 30,
+    "fields": {
+        "name": "More or equal to 50 in midterm",
+        "description_text": "",
+        "created": "2019-09-21T06:44:12.387Z",
+        "modified": "2020-08-16T08:31:10.622Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Total",
+                    "type": "double",
+                    "field": "Total",
+                    "input": "number",
+                    "value": "50",
+                    "operator": "greater_or_equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 10,
+        "workflow": 1,
+        "action": 5,
+        "columns": [
+            23
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 1,
+    "fields": {
+        "created": "2020-08-16T08:31:10.717Z",
+        "modified": "2020-08-16T08:31:10.725Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q01",
+                    "type": "double",
+                    "field": "Q01",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_not_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "Q01 is not null",
+        "n_rows_selected": 12,
+        "workflow": 1,
+        "description_text": "",
+        "columns": [
+            13
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 2,
+    "fields": {
+        "created": "2020-08-16T08:31:10.729Z",
+        "modified": "2020-08-16T08:31:10.734Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "email",
+                    "type": "string",
+                    "field": "email",
+                    "input": "text",
+                    "value": "t",
+                    "operator": "begins_with"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "email starts with t",
+        "n_rows_selected": 4,
+        "workflow": 1,
+        "description_text": "Students starting with t",
+        "columns": [
+            2
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 3,
+    "fields": {
+        "created": "2020-08-16T08:31:10.737Z",
+        "modified": "2020-08-16T08:31:10.741Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Total",
+                    "type": "double",
+                    "field": "Total",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_not_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 12,
+        "workflow": 1,
+        "description_text": "There is an exam score",
+        "columns": [
+            23
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 4,
+    "fields": {
+        "created": "2020-08-16T08:31:10.744Z",
+        "modified": "2020-08-16T08:31:10.747Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Days online",
+                    "type": "integer",
+                    "field": "Days online",
+                    "input": "number",
+                    "value": "7",
+                    "operator": "less_or_equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "description_text": "These are the students that haven't connected to the discussion forum yet.",
+        "columns": [
+            40
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 5,
+    "fields": {
+        "created": "2020-08-16T08:31:10.750Z",
+        "modified": "2020-08-16T08:31:10.754Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Video_1_W4",
+                    "type": "double",
+                    "field": "Video_1_W4",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Video_2_W4",
+                    "type": "double",
+                    "field": "Video_2_W4",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "workflow": 1,
+        "description_text": "Either Video 1 or Video 2 in Week 4 have zero engagement",
+        "columns": [
+            56,
+            59
+        ]
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 1,
+    "fields": {
+        "action": 1,
+        "column": 44,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 2,
+    "fields": {
+        "action": 2,
+        "column": 44,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 3,
+    "fields": {
+        "action": 2,
+        "column": 47,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 4,
+    "fields": {
+        "action": 2,
+        "column": 58,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 5,
+    "fields": {
+        "action": 2,
+        "column": 59,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 6,
+    "fields": {
+        "action": 3,
+        "column": 8,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 7,
+    "fields": {
+        "action": 4,
+        "column": 13,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 8,
+    "fields": {
+        "action": 4,
+        "column": 14,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 9,
+    "fields": {
+        "action": 4,
+        "column": 15,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 10,
+    "fields": {
+        "action": 4,
+        "column": 16,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 11,
+    "fields": {
+        "action": 4,
+        "column": 17,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 12,
+    "fields": {
+        "action": 4,
+        "column": 18,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 13,
+    "fields": {
+        "action": 4,
+        "column": 19,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 14,
+    "fields": {
+        "action": 4,
+        "column": 20,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 15,
+    "fields": {
+        "action": 4,
+        "column": 21,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 16,
+    "fields": {
+        "action": 4,
+        "column": 22,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 17,
+    "fields": {
+        "action": 5,
+        "column": 23,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 18,
+    "fields": {
+        "action": 6,
+        "column": 2,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 19,
+    "fields": {
+        "action": 6,
+        "column": 11,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 20,
+    "fields": {
+        "action": 6,
+        "column": 12,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 23,
+    "fields": {
+        "action": 8,
+        "column": 68,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 24,
+    "fields": {
+        "action": 8,
+        "column": 69,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
     "model": "ontask.view",
     "pk": 1,
     "fields": {
@@ -4189,6 +3922,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": [],
         "serve_enabled": true,
         "text_content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1><p style=\"text-align: center;\">{% if High engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Gold-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Medium engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Silver-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Low video engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Bronze-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
@@ -4204,12 +3938,13 @@
         "name": "Comments about how to prepare the lecture (Week 4)",
         "description_text": "A message commenting on the videos they watched for Week 4",
         "created": "2019-09-21T06:44:00.454Z",
-        "modified": "2019-09-21T06:44:22.870Z",
+        "modified": "2020-08-16T08:31:10.956Z",
         "workflow": 1,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 5,
         "rows_all_false": [],
         "serve_enabled": false,
         "text_content": "<p>Dear {{ GivenName }}<br></p><p>Here are some comments about the preparation videos for this week.</p><p style=\"\">{% if No Video 1 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Genes and Proteins Activity</h4><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{% endif %}</p><p>{% if No Video 2 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p>Regards<br><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Coordinator name }}</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Course name }}<br></p>",
@@ -4231,6 +3966,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": [],
         "serve_enabled": false,
         "text_content": "Dear {{ GivenName }}\r\n\r\nWe are just starting this course and I thought it would be good to share with you how this course will help you acquire the skills that are required for professionals in your area.\r\n\r\n\r\n{% if Enrolled in FASS %}Text for the students that are enrolled in FASS.{% endif %}\r\n\r\n{% if Enrolled in FEIT %}Text for the students that are enrolled in FEIT.{% endif %}\r\n\r\n{% if Enrolled in SMED %}Text for the students that are enrolled in SMED.{% endif %}\r\n\r\n{% if Enrolled in FSCI %}Text for the students that are enrolled in FSCI.{% endif %}\r\n\r\n\r\nIf you want additional information, do not hesitate to contact me.\r\n\r\n{{ Coordinator name }}\r\n\r\n{{ Course name }}",
@@ -4246,12 +3982,13 @@
         "name": "Midterm comments",
         "description_text": "Comment the midterm scores divided by topic",
         "created": "2019-09-21T06:44:04.025Z",
-        "modified": "2019-09-21T06:44:23.670Z",
+        "modified": "2020-08-16T08:31:10.949Z",
         "workflow": 1,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 1,
         "rows_all_false": [],
         "serve_enabled": false,
         "text_content": "<p>Dear&nbsp;{{ GivenName }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p><div><br></div>",
@@ -4267,12 +4004,13 @@
         "name": "Send JSON to remote server",
         "description_text": "Send a JSON object to a remote server (outside this platform)",
         "created": "2019-09-21T06:44:11.891Z",
-        "modified": "2019-09-21T06:44:24.110Z",
+        "modified": "2020-08-16T08:31:10.953Z",
         "workflow": 1,
         "action_type": "personalized_json",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 3,
         "rows_all_false": [],
         "serve_enabled": false,
         "text_content": "{\r\n  \"sid\": {{ SID }},\r\n  \"midterm_total\": {{ Total }},\r\n  \"msg\":\r\n     {% if Less than 50 in the midterm %}\"Message number 1\"{% endif %}\r\n    {% if More or equal to 50 in midterm %}\"Message number 2\"{% endif %}\r\n}",
@@ -4294,6 +4032,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": true,
         "text_content": "{% comment %}Your action content here{% endcomment %}",
@@ -4309,12 +4048,13 @@
         "name": "Suggestions about the forum",
         "description_text": "Message to remind those students that haven't visited the forum to do so.",
         "created": "2019-09-21T06:44:14.005Z",
-        "modified": "2019-09-21T06:44:14.005Z",
+        "modified": "2020-08-16T08:31:10.955Z",
         "workflow": 1,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 4,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear\u00a0{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
@@ -4336,6 +4076,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
@@ -4351,12 +4092,13 @@
         "name": "Send Email with report",
         "description_text": "Send email with column values as a report",
         "created": "2019-09-03T09:49:08.382Z",
-        "modified": "2020-05-03T06:10:45.489Z",
+        "modified": "2020-08-16T08:31:10.952Z",
         "workflow": 1,
         "action_type": "email_report",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 2,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_report \"email\" \"Surname\" \"GivenName\" %}<br></p><p>Regards</p><p>Josh<br></p>",
@@ -4380,6 +4122,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "{\r\n    \"inactive_students\": {% ot_insert_report \"email\" %}\r\n}",

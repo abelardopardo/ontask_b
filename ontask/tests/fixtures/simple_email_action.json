@@ -796,70 +796,6 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 6,
-    "fields": {
-        "created": "2017-11-20T10:49:53.383Z",
-        "modified": "2017-11-20T10:49:53.383Z",
-        "action": 2,
-        "name": "c1",
-        "description_text": "b",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "age",
-                    "type": "double",
-                    "field": "age",
-                    "input": "number",
-                    "value": "12.1",
-                    "operator": "less_or_equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": -1,
-        "is_filter": false,
-        "columns": [
-            263
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 7,
-    "fields": {
-        "created": "2017-11-20T10:49:53.383Z",
-        "modified": "2017-11-20T10:49:53.383Z",
-        "action": 2,
-        "name": "c2",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "age",
-                    "type": "double",
-                    "field": "age",
-                    "input": "number",
-                    "value": "12.1",
-                    "operator": "greater"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": -1,
-        "is_filter": false,
-        "columns": [
-            263
-        ]
-    }
-},
-{
     "model": "ontask.workflow",
     "pk": 5,
     "fields": {
@@ -932,6 +868,70 @@
     }
 },
 {
+    "model": "ontask.condition",
+    "pk": 6,
+    "fields": {
+        "name": "c1",
+        "description_text": "b",
+        "created": "2017-11-20T10:49:53.383Z",
+        "modified": "2020-08-16T08:34:05.660Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "age",
+                    "type": "double",
+                    "field": "age",
+                    "input": "number",
+                    "value": "12.1",
+                    "operator": "less_or_equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": -1,
+        "workflow": 5,
+        "action": 2,
+        "columns": [
+            263
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 7,
+    "fields": {
+        "name": "c2",
+        "description_text": "",
+        "created": "2017-11-20T10:49:53.383Z",
+        "modified": "2020-08-16T08:34:05.663Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "age",
+                    "type": "double",
+                    "field": "age",
+                    "input": "number",
+                    "value": "12.1",
+                    "operator": "greater"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": -1,
+        "workflow": 5,
+        "action": 2,
+        "columns": [
+            263
+        ]
+    }
+},
+{
     "model": "ontask.action",
     "pk": 2,
     "fields": {
@@ -944,6 +944,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",

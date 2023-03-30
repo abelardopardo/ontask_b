@@ -305,7 +305,7 @@
         "email": "instructor07@bogus.com",
         "is_staff": false,
         "is_active": true,
-        "date_joined": "2019-04-28T05:59:14.000Z",
+        "date_joined": "2019-04-28T05:59:14Z",
         "name": "User Name",
         "groups": [
             [
@@ -390,111 +390,6 @@
         "groups": [],
         "user_permissions": []
     }
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 21,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 11,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 12,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 13,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 14,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 15,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 16,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 17,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 18,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 19,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 20,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 1,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 2,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 3,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 4,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 5,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 6,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 7,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 8,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 9,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 10,
-    "fields": {}
 },
 {
     "model": "ontask.profile",
@@ -705,5 +600,110 @@
         "bio": "",
         "email_verified": false
     }
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 21,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 11,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 12,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 13,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 14,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 15,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 16,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 17,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 18,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 19,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 20,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 1,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 2,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 3,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 4,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 5,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 6,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 7,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 8,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 9,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 10,
+    "fields": {}
 }
 ]

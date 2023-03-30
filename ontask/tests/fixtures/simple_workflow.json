@@ -483,257 +483,6 @@
     }
 },
 {
-    "model": "ontask.ontaskuser",
-    "pk": 22,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 23,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 18,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 19,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 20,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 21,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 16,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 17,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 13,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 15,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 14,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 24,
-    "fields": {}
-},
-{
-    "model": "ontask.profile",
-    "pk": 22,
-    "fields": {
-        "slug": "ef52fc5d-2430-404c-908b-fac6e69953a6",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 23,
-    "fields": {
-        "slug": "c177cedd-cb33-4bb4-918f-ccae281e6d5b",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 18,
-    "fields": {
-        "slug": "9571cacb-e5d3-40be-bf69-ea74639aba6f",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 19,
-    "fields": {
-        "slug": "4ece251a-3407-47ca-b7dc-71447fefa4ab",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 20,
-    "fields": {
-        "slug": "a5453d07-72e1-41c2-824b-f4634473b607",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 21,
-    "fields": {
-        "slug": "8f24330d-f085-4807-88d1-33e101aba912",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 16,
-    "fields": {
-        "slug": "567613bf-a742-4b5c-873b-ddc9e6df45b9",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 17,
-    "fields": {
-        "slug": "620f70db-b00a-4bd5-a15e-7ecec2c2e1b8",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 13,
-    "fields": {
-        "slug": "0653d7df-bdb8-4cc4-9035-9b80990f63c4",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 15,
-    "fields": {
-        "slug": "3ba6fe28-5e6e-47fe-ae89-016632bda787",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 14,
-    "fields": {
-        "slug": "50c4e136-fe7f-4711-9336-68ce59484700",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 24,
-    "fields": {
-        "slug": "abe28602-5e04-4693-aa87-dbb0406fc52e",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.workflow",
-    "pk": 1,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "name": "wflow1",
-        "description_text": "description text for workflow 1",
-        "created": "2017-11-08T00:12:08.645Z",
-        "modified": "2019-05-26T07:21:25.695Z",
-        "nrows": 3,
-        "ncols": 8,
-        "attributes": {},
-        "query_builder_ops": [
-            {
-                "id": "age",
-                "type": "double",
-                "validation": {
-                    "step": "any"
-                }
-            },
-            {
-                "id": "email",
-                "type": "string"
-            },
-            {
-                "id": "sid",
-                "type": "integer"
-            },
-            {
-                "id": "another",
-                "type": "string"
-            },
-            {
-                "id": "name",
-                "type": "string"
-            },
-            {
-                "id": "one",
-                "type": "string"
-            },
-            {
-                "id": "registered",
-                "type": "string",
-                "input": "select",
-                "values": [
-                    "true",
-                    "false"
-                ],
-                "operators": [
-                    "equal",
-                    "not_equal",
-                    "is_null",
-                    "is_not_null"
-                ]
-            },
-            {
-                "id": "when",
-                "type": "datetime"
-            }
-        ],
-        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "r4ll8bgpktvjewcfqal6e4wk1cbwvten",
-        "luser_email_column": null,
-        "luser_email_column_md5": "",
-        "lusers_is_outdated": false,
-        "shared": [],
-        "lusers": []
-    }
-},
-{
     "model": "ontask.column",
     "pk": 1,
     "fields": {
@@ -862,63 +611,321 @@
     }
 },
 {
+    "model": "ontask.workflow",
+    "pk": 1,
+    "fields": {
+        "name": "wflow1",
+        "description_text": "description text for workflow 1",
+        "created": "2017-11-08T00:12:08.645Z",
+        "modified": "2019-05-26T07:21:25.695Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "nrows": 3,
+        "ncols": 8,
+        "attributes": {},
+        "query_builder_ops": [
+            {
+                "id": "age",
+                "type": "double",
+                "validation": {
+                    "step": "any"
+                }
+            },
+            {
+                "id": "email",
+                "type": "string"
+            },
+            {
+                "id": "sid",
+                "type": "integer"
+            },
+            {
+                "id": "another",
+                "type": "string"
+            },
+            {
+                "id": "name",
+                "type": "string"
+            },
+            {
+                "id": "one",
+                "type": "string"
+            },
+            {
+                "id": "registered",
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
+                "operators": [
+                    "equal",
+                    "not_equal",
+                    "is_null",
+                    "is_not_null"
+                ]
+            },
+            {
+                "id": "when",
+                "type": "datetime"
+            }
+        ],
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
+        "session_key": "r4ll8bgpktvjewcfqal6e4wk1cbwvten",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "star": [],
+        "lusers": []
+    }
+},
+{
     "model": "ontask.action",
     "pk": 1,
     "fields": {
-        "workflow": 1,
         "name": "a",
         "description_text": "",
         "created": "2019-05-26T07:25:36.550Z",
         "modified": "2019-05-26T07:25:40.905Z",
-        "last_executed_log": null,
+        "workflow": 1,
         "action_type": "personalized_text",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "attachments": []
     }
 },
 {
     "model": "ontask.action",
     "pk": 2,
     "fields": {
-        "workflow": 1,
         "name": "b",
         "description_text": "",
         "created": "2019-05-26T07:25:48.906Z",
         "modified": "2019-05-26T07:25:48.906Z",
-        "last_executed_log": null,
+        "workflow": 1,
         "action_type": "survey",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "attachments": []
     }
 },
 {
     "model": "ontask.action",
     "pk": 3,
     "fields": {
-        "workflow": 1,
         "name": "c",
         "description_text": "",
         "created": "2019-05-26T07:25:59.298Z",
         "modified": "2019-05-26T07:26:04.792Z",
-        "last_executed_log": null,
+        "workflow": 1,
         "action_type": "personalized_json",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "attachments": []
     }
+},
+{
+    "model": "ontask.profile",
+    "pk": 22,
+    "fields": {
+        "slug": "ef52fc5d-2430-404c-908b-fac6e69953a6",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 23,
+    "fields": {
+        "slug": "c177cedd-cb33-4bb4-918f-ccae281e6d5b",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 18,
+    "fields": {
+        "slug": "9571cacb-e5d3-40be-bf69-ea74639aba6f",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 19,
+    "fields": {
+        "slug": "4ece251a-3407-47ca-b7dc-71447fefa4ab",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 20,
+    "fields": {
+        "slug": "a5453d07-72e1-41c2-824b-f4634473b607",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 21,
+    "fields": {
+        "slug": "8f24330d-f085-4807-88d1-33e101aba912",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 16,
+    "fields": {
+        "slug": "567613bf-a742-4b5c-873b-ddc9e6df45b9",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 17,
+    "fields": {
+        "slug": "620f70db-b00a-4bd5-a15e-7ecec2c2e1b8",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 13,
+    "fields": {
+        "slug": "0653d7df-bdb8-4cc4-9035-9b80990f63c4",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 15,
+    "fields": {
+        "slug": "3ba6fe28-5e6e-47fe-ae89-016632bda787",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 14,
+    "fields": {
+        "slug": "50c4e136-fe7f-4711-9336-68ce59484700",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 24,
+    "fields": {
+        "slug": "abe28602-5e04-4693-aa87-dbb0406fc52e",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 22,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 23,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 18,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 19,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 20,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 21,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 16,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 17,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 13,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 15,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 14,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 24,
+    "fields": {}
 }
 ]

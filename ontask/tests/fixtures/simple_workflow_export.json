@@ -927,1471 +927,6 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 1110,
-    "fields": {
-        "created": "2017-12-16T01:39:41.366Z",
-        "modified": "2017-12-16T01:39:41.366Z",
-        "action": 307,
-        "name": "Students that took the midterm",
-        "description_text": "Consider only those students that took the midterm examination.",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "took_mt",
-                    "type": "string",
-                    "field": "took_mt",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 10,
-        "is_filter": true,
-        "columns": [
-            4688
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1111,
-    "fields": {
-        "created": "2017-12-16T01:40:33.797Z",
-        "modified": "2017-12-16T01:40:33.797Z",
-        "action": 307,
-        "name": "T1_LOW",
-        "description_text": "Low score in topic 1",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q01",
-                    "type": "integer",
-                    "field": "q01",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q02",
-                    "type": "integer",
-                    "field": "q02",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            4676,
-            4677
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1112,
-    "fields": {
-        "created": "2017-12-16T01:40:37.025Z",
-        "modified": "2017-12-16T01:40:55.387Z",
-        "action": 307,
-        "name": "T2_LOW",
-        "description_text": "Low score in topic 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q03",
-                    "type": "integer",
-                    "field": "q03",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q04",
-                    "type": "integer",
-                    "field": "q04",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            4678,
-            4679
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1113,
-    "fields": {
-        "created": "2017-12-16T01:40:58.552Z",
-        "modified": "2017-12-16T01:41:19.302Z",
-        "action": 307,
-        "name": "T3_LOW",
-        "description_text": "Low score in topic 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q05",
-                    "type": "integer",
-                    "field": "q05",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q06",
-                    "type": "integer",
-                    "field": "q06",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            4680,
-            4681
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1114,
-    "fields": {
-        "created": "2017-12-16T01:41:21.289Z",
-        "modified": "2017-12-16T01:41:36.750Z",
-        "action": 307,
-        "name": "T4_LOW",
-        "description_text": "Low score in topic 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q07",
-                    "type": "integer",
-                    "field": "q07",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q08",
-                    "type": "integer",
-                    "field": "q08",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            4682,
-            4683
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1115,
-    "fields": {
-        "created": "2017-12-16T01:41:39.042Z",
-        "modified": "2017-12-16T01:41:59.954Z",
-        "action": 307,
-        "name": "T5_LOW",
-        "description_text": "Low score in topic 5",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q09",
-                    "type": "integer",
-                    "field": "q09",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q10",
-                    "type": "integer",
-                    "field": "q10",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            4684,
-            4685
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1116,
-    "fields": {
-        "created": "2017-12-16T01:43:04.280Z",
-        "modified": "2017-12-16T01:48:46.832Z",
-        "action": 307,
-        "name": "T1_MID",
-        "description_text": "One answer was correctly answered for topic 1",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q01",
-                            "type": "integer",
-                            "field": "q01",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q02",
-                            "type": "integer",
-                            "field": "q02",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q01",
-                            "type": "integer",
-                            "field": "q01",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q02",
-                            "type": "integer",
-                            "field": "q02",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            4676,
-            4677
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1117,
-    "fields": {
-        "created": "2017-12-16T01:43:12.224Z",
-        "modified": "2017-12-16T01:48:59.614Z",
-        "action": 307,
-        "name": "T2_MID",
-        "description_text": "One answer was correctly answered for topic 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q03",
-                            "type": "integer",
-                            "field": "q03",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q04",
-                            "type": "integer",
-                            "field": "q04",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q03",
-                            "type": "integer",
-                            "field": "q03",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q04",
-                            "type": "integer",
-                            "field": "q04",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "",
-        "n_rows_selected": 7,
-        "is_filter": false,
-        "columns": [
-            4678,
-            4679
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1118,
-    "fields": {
-        "created": "2017-12-16T01:43:50.547Z",
-        "modified": "2017-12-16T01:49:05.491Z",
-        "action": 307,
-        "name": "T3_MID",
-        "description_text": "One answer was correctly answered for topic 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q05",
-                            "type": "integer",
-                            "field": "q05",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q06",
-                            "type": "integer",
-                            "field": "q06",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q05",
-                            "type": "integer",
-                            "field": "q05",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q06",
-                            "type": "integer",
-                            "field": "q06",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "",
-        "n_rows_selected": 6,
-        "is_filter": false,
-        "columns": [
-            4680,
-            4681
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1119,
-    "fields": {
-        "created": "2017-12-16T01:44:25.439Z",
-        "modified": "2017-12-16T01:49:10.759Z",
-        "action": 307,
-        "name": "T4_MID",
-        "description_text": "One answer was correctly answered for topic 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q07",
-                            "type": "integer",
-                            "field": "q07",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q08",
-                            "type": "integer",
-                            "field": "q08",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q07",
-                            "type": "integer",
-                            "field": "q07",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q08",
-                            "type": "integer",
-                            "field": "q08",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            4682,
-            4683
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1120,
-    "fields": {
-        "created": "2017-12-16T01:44:54.358Z",
-        "modified": "2017-12-16T01:49:16.121Z",
-        "action": 307,
-        "name": "T5_MID",
-        "description_text": "One answer was correctly answered for topic 5",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q09",
-                            "type": "integer",
-                            "field": "q09",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q10",
-                            "type": "integer",
-                            "field": "q10",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "q09",
-                            "type": "integer",
-                            "field": "q09",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "q10",
-                            "type": "integer",
-                            "field": "q10",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            4684,
-            4685
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1121,
-    "fields": {
-        "created": "2017-12-16T01:45:33.862Z",
-        "modified": "2017-12-16T01:45:50.185Z",
-        "action": 307,
-        "name": "T1_HIGH",
-        "description_text": "High score in topic 1",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q01",
-                    "type": "integer",
-                    "field": "q01",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q02",
-                    "type": "integer",
-                    "field": "q02",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            4676,
-            4677
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1122,
-    "fields": {
-        "created": "2017-12-16T01:45:52.186Z",
-        "modified": "2017-12-16T01:46:03.727Z",
-        "action": 307,
-        "name": "T2_HIGH",
-        "description_text": "High score in topic 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q03",
-                    "type": "integer",
-                    "field": "q03",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q04",
-                    "type": "integer",
-                    "field": "q04",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "columns": [
-            4678,
-            4679
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1123,
-    "fields": {
-        "created": "2017-12-16T01:46:06.726Z",
-        "modified": "2017-12-16T01:46:25.641Z",
-        "action": 307,
-        "name": "T3_HIGH",
-        "description_text": "High score in topic 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q05",
-                    "type": "integer",
-                    "field": "q05",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q06",
-                    "type": "integer",
-                    "field": "q06",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            4680,
-            4681
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1124,
-    "fields": {
-        "created": "2017-12-16T01:46:26.894Z",
-        "modified": "2017-12-16T01:46:44.254Z",
-        "action": 307,
-        "name": "T4_HIGH",
-        "description_text": "High score in topic 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q07",
-                    "type": "integer",
-                    "field": "q07",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q08",
-                    "type": "integer",
-                    "field": "q08",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            4682,
-            4683
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1125,
-    "fields": {
-        "created": "2017-12-16T01:46:46.225Z",
-        "modified": "2017-12-16T01:47:00.358Z",
-        "action": 307,
-        "name": "T5_HIGH",
-        "description_text": "High score in topic 5",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "q09",
-                    "type": "integer",
-                    "field": "q09",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "q10",
-                    "type": "integer",
-                    "field": "q10",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 3,
-        "is_filter": false,
-        "columns": [
-            4684,
-            4685
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1126,
-    "fields": {
-        "created": "2017-12-16T01:52:59.574Z",
-        "modified": "2017-12-16T01:52:59.574Z",
-        "action": 308,
-        "name": "Students with days_online = 0",
-        "description_text": "These are the students that haven't connected to the discussion forum yet.",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "days_online",
-                    "type": "double",
-                    "field": "days_online",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "columns": [
-            4689
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1127,
-    "fields": {
-        "created": "2017-12-16T01:59:31.493Z",
-        "modified": "2017-12-16T02:02:06.098Z",
-        "action": 309,
-        "name": "Only those with one video missing",
-        "description_text": "",
-        "formula": {
-            "not": true,
-            "rules": [
-                {
-                    "id": "video_1",
-                    "type": "integer",
-                    "field": "video_1",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "video_2",
-                    "type": "integer",
-                    "field": "video_2",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "video_3",
-                    "type": "integer",
-                    "field": "video_3",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 10,
-        "is_filter": true,
-        "columns": [
-            4690,
-            4691,
-            4693
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1128,
-    "fields": {
-        "created": "2017-12-16T02:03:15.633Z",
-        "modified": "2017-12-16T02:03:15.633Z",
-        "action": 309,
-        "name": "No_Video_1",
-        "description_text": "Didn't watch Video 1",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "video_1",
-                    "type": "integer",
-                    "field": "video_1",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            4690
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1129,
-    "fields": {
-        "created": "2017-12-16T02:03:17.354Z",
-        "modified": "2017-12-16T02:03:31.600Z",
-        "action": 309,
-        "name": "No_Video_2",
-        "description_text": "Didn't watch Video 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "video_2",
-                    "type": "integer",
-                    "field": "video_2",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 5,
-        "is_filter": false,
-        "columns": [
-            4691
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1130,
-    "fields": {
-        "created": "2017-12-16T02:03:37.666Z",
-        "modified": "2017-12-16T02:03:50.963Z",
-        "action": 309,
-        "name": "No_Video_3",
-        "description_text": "Didn't watch Video 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "video_3",
-                    "type": "integer",
-                    "field": "video_3",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 8,
-        "is_filter": false,
-        "columns": [
-            4693
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1131,
-    "fields": {
-        "created": "2017-12-16T02:13:41.327Z",
-        "modified": "2017-12-16T02:13:41.327Z",
-        "action": 310,
-        "name": "No_videos",
-        "description_text": "No video activity",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "video_1",
-                    "type": "integer",
-                    "field": "video_1",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "video_2",
-                    "type": "integer",
-                    "field": "video_2",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "video_3",
-                    "type": "integer",
-                    "field": "video_3",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 1,
-        "is_filter": false,
-        "columns": [
-            4690,
-            4691,
-            4693
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1132,
-    "fields": {
-        "created": "2017-12-16T02:13:44.160Z",
-        "modified": "2017-12-16T02:15:21.797Z",
-        "action": 310,
-        "name": "One_video",
-        "description_text": "Activity detected in only one video",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "video_1",
-                            "type": "integer",
-                            "field": "video_1",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_2",
-                            "type": "integer",
-                            "field": "video_2",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_3",
-                            "type": "integer",
-                            "field": "video_3",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "video_1",
-                            "type": "integer",
-                            "field": "video_1",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_2",
-                            "type": "integer",
-                            "field": "video_2",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_3",
-                            "type": "integer",
-                            "field": "video_3",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "video_1",
-                            "type": "integer",
-                            "field": "video_1",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_2",
-                            "type": "integer",
-                            "field": "video_2",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_3",
-                            "type": "integer",
-                            "field": "video_3",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "",
-        "n_rows_selected": 5,
-        "is_filter": false,
-        "columns": [
-            4690,
-            4691,
-            4693
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1133,
-    "fields": {
-        "created": "2017-12-16T02:15:24.327Z",
-        "modified": "2017-12-16T02:23:55.235Z",
-        "action": 310,
-        "name": "Two_videos",
-        "description_text": "Activity detected in two videos",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "video_1",
-                            "type": "integer",
-                            "field": "video_1",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_2",
-                            "type": "integer",
-                            "field": "video_2",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_3",
-                            "type": "integer",
-                            "field": "video_3",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "video_1",
-                            "type": "integer",
-                            "field": "video_1",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_2",
-                            "type": "integer",
-                            "field": "video_2",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_3",
-                            "type": "integer",
-                            "field": "video_3",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                },
-                {
-                    "not": false,
-                    "rules": [
-                        {
-                            "id": "video_1",
-                            "type": "integer",
-                            "field": "video_1",
-                            "input": "number",
-                            "value": "0",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_2",
-                            "type": "integer",
-                            "field": "video_2",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        },
-                        {
-                            "id": "video_3",
-                            "type": "integer",
-                            "field": "video_3",
-                            "input": "number",
-                            "value": "1",
-                            "operator": "equal"
-                        }
-                    ],
-                    "condition": "AND"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "formula_text": "",
-        "n_rows_selected": 4,
-        "is_filter": false,
-        "columns": [
-            4690,
-            4691,
-            4693
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1135,
-    "fields": {
-        "created": "2017-12-16T02:16:30.820Z",
-        "modified": "2017-12-16T02:16:48.139Z",
-        "action": 310,
-        "name": "Three_videos",
-        "description_text": "All three videos were watched",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "video_1",
-                    "type": "integer",
-                    "field": "video_1",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "video_2",
-                    "type": "integer",
-                    "field": "video_2",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                },
-                {
-                    "id": "video_3",
-                    "type": "integer",
-                    "field": "video_3",
-                    "input": "number",
-                    "value": "1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            4690,
-            4691,
-            4693
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1138,
-    "fields": {
-        "created": "2017-12-16T02:34:27.524Z",
-        "modified": "2017-12-16T02:34:27.524Z",
-        "action": 314,
-        "name": "Concept_1",
-        "description_text": "Resources for Concept 1",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "difficult_week01",
-                    "type": "string",
-                    "field": "difficult_week01",
-                    "input": "select",
-                    "value": "Concept 1",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "columns": [
-            4673
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1139,
-    "fields": {
-        "created": "2017-12-16T02:34:30.221Z",
-        "modified": "2017-12-16T02:34:40.514Z",
-        "action": 314,
-        "name": "Concept_2",
-        "description_text": "Resources for Concept 2",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "difficult_week01",
-                    "type": "string",
-                    "field": "difficult_week01",
-                    "input": "select",
-                    "value": "Concept 2",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "columns": [
-            4673
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1140,
-    "fields": {
-        "created": "2017-12-16T02:34:42.034Z",
-        "modified": "2017-12-16T02:34:52.299Z",
-        "action": 314,
-        "name": "Concept_3",
-        "description_text": "Resources for Concept 3",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "difficult_week01",
-                    "type": "string",
-                    "field": "difficult_week01",
-                    "input": "select",
-                    "value": "Concept 3",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "columns": [
-            4673
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1141,
-    "fields": {
-        "created": "2017-12-16T02:35:02.866Z",
-        "modified": "2017-12-16T02:35:13.202Z",
-        "action": 314,
-        "name": "Concept_4",
-        "description_text": "Resources for Concept 4",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "difficult_week01",
-                    "type": "string",
-                    "field": "difficult_week01",
-                    "input": "select",
-                    "value": "Concept 4",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 0,
-        "is_filter": false,
-        "columns": [
-            4673
-        ]
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 1,
-    "fields": {
-        "action": 311,
-        "column": 4664,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 2,
-    "fields": {
-        "action": 311,
-        "column": 4673,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 3,
-    "fields": {
-        "action": 312,
-        "column": 4664,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 4,
-    "fields": {
-        "action": 312,
-        "column": 4674,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
     "model": "ontask.workflow",
     "pk": 140,
     "fields": {
@@ -2597,18 +1132,1478 @@
     }
 },
 {
+    "model": "ontask.condition",
+    "pk": 1111,
+    "fields": {
+        "name": "T1_LOW",
+        "description_text": "Low score in topic 1",
+        "created": "2017-12-16T01:40:33.797Z",
+        "modified": "2020-08-16T08:35:02.539Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q01",
+                    "type": "integer",
+                    "field": "q01",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q02",
+                    "type": "integer",
+                    "field": "q02",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4676,
+            4677
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1112,
+    "fields": {
+        "name": "T2_LOW",
+        "description_text": "Low score in topic 2",
+        "created": "2017-12-16T01:40:37.025Z",
+        "modified": "2020-08-16T08:35:02.546Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q03",
+                    "type": "integer",
+                    "field": "q03",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q04",
+                    "type": "integer",
+                    "field": "q04",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4678,
+            4679
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1113,
+    "fields": {
+        "name": "T3_LOW",
+        "description_text": "Low score in topic 3",
+        "created": "2017-12-16T01:40:58.552Z",
+        "modified": "2020-08-16T08:35:02.554Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q05",
+                    "type": "integer",
+                    "field": "q05",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q06",
+                    "type": "integer",
+                    "field": "q06",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4680,
+            4681
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1114,
+    "fields": {
+        "name": "T4_LOW",
+        "description_text": "Low score in topic 4",
+        "created": "2017-12-16T01:41:21.289Z",
+        "modified": "2020-08-16T08:35:02.562Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q07",
+                    "type": "integer",
+                    "field": "q07",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q08",
+                    "type": "integer",
+                    "field": "q08",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4682,
+            4683
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1115,
+    "fields": {
+        "name": "T5_LOW",
+        "description_text": "Low score in topic 5",
+        "created": "2017-12-16T01:41:39.042Z",
+        "modified": "2020-08-16T08:35:02.569Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q09",
+                    "type": "integer",
+                    "field": "q09",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q10",
+                    "type": "integer",
+                    "field": "q10",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4684,
+            4685
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1116,
+    "fields": {
+        "name": "T1_MID",
+        "description_text": "One answer was correctly answered for topic 1",
+        "created": "2017-12-16T01:43:04.280Z",
+        "modified": "2020-08-16T08:35:02.541Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q01",
+                            "type": "integer",
+                            "field": "q01",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q02",
+                            "type": "integer",
+                            "field": "q02",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q01",
+                            "type": "integer",
+                            "field": "q01",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q02",
+                            "type": "integer",
+                            "field": "q02",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4676,
+            4677
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1117,
+    "fields": {
+        "name": "T2_MID",
+        "description_text": "One answer was correctly answered for topic 2",
+        "created": "2017-12-16T01:43:12.224Z",
+        "modified": "2020-08-16T08:35:02.549Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q03",
+                            "type": "integer",
+                            "field": "q03",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q04",
+                            "type": "integer",
+                            "field": "q04",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q03",
+                            "type": "integer",
+                            "field": "q03",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q04",
+                            "type": "integer",
+                            "field": "q04",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "",
+        "n_rows_selected": 7,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4678,
+            4679
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1118,
+    "fields": {
+        "name": "T3_MID",
+        "description_text": "One answer was correctly answered for topic 3",
+        "created": "2017-12-16T01:43:50.547Z",
+        "modified": "2020-08-16T08:35:02.556Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q05",
+                            "type": "integer",
+                            "field": "q05",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q06",
+                            "type": "integer",
+                            "field": "q06",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q05",
+                            "type": "integer",
+                            "field": "q05",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q06",
+                            "type": "integer",
+                            "field": "q06",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "",
+        "n_rows_selected": 6,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4680,
+            4681
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1119,
+    "fields": {
+        "name": "T4_MID",
+        "description_text": "One answer was correctly answered for topic 4",
+        "created": "2017-12-16T01:44:25.439Z",
+        "modified": "2020-08-16T08:35:02.564Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q07",
+                            "type": "integer",
+                            "field": "q07",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q08",
+                            "type": "integer",
+                            "field": "q08",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q07",
+                            "type": "integer",
+                            "field": "q07",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q08",
+                            "type": "integer",
+                            "field": "q08",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4682,
+            4683
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1120,
+    "fields": {
+        "name": "T5_MID",
+        "description_text": "One answer was correctly answered for topic 5",
+        "created": "2017-12-16T01:44:54.358Z",
+        "modified": "2020-08-16T08:35:02.572Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q09",
+                            "type": "integer",
+                            "field": "q09",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q10",
+                            "type": "integer",
+                            "field": "q10",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "q09",
+                            "type": "integer",
+                            "field": "q09",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "q10",
+                            "type": "integer",
+                            "field": "q10",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4684,
+            4685
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1121,
+    "fields": {
+        "name": "T1_HIGH",
+        "description_text": "High score in topic 1",
+        "created": "2017-12-16T01:45:33.862Z",
+        "modified": "2020-08-16T08:35:02.536Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q01",
+                    "type": "integer",
+                    "field": "q01",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q02",
+                    "type": "integer",
+                    "field": "q02",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4676,
+            4677
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1122,
+    "fields": {
+        "name": "T2_HIGH",
+        "description_text": "High score in topic 2",
+        "created": "2017-12-16T01:45:52.186Z",
+        "modified": "2020-08-16T08:35:02.544Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q03",
+                    "type": "integer",
+                    "field": "q03",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q04",
+                    "type": "integer",
+                    "field": "q04",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4678,
+            4679
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1123,
+    "fields": {
+        "name": "T3_HIGH",
+        "description_text": "High score in topic 3",
+        "created": "2017-12-16T01:46:06.726Z",
+        "modified": "2020-08-16T08:35:02.551Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q05",
+                    "type": "integer",
+                    "field": "q05",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q06",
+                    "type": "integer",
+                    "field": "q06",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4680,
+            4681
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1124,
+    "fields": {
+        "name": "T4_HIGH",
+        "description_text": "High score in topic 4",
+        "created": "2017-12-16T01:46:26.894Z",
+        "modified": "2020-08-16T08:35:02.559Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q07",
+                    "type": "integer",
+                    "field": "q07",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q08",
+                    "type": "integer",
+                    "field": "q08",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4682,
+            4683
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1125,
+    "fields": {
+        "name": "T5_HIGH",
+        "description_text": "High score in topic 5",
+        "created": "2017-12-16T01:46:46.225Z",
+        "modified": "2020-08-16T08:35:02.567Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "q09",
+                    "type": "integer",
+                    "field": "q09",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "q10",
+                    "type": "integer",
+                    "field": "q10",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 3,
+        "workflow": 140,
+        "action": 307,
+        "columns": [
+            4684,
+            4685
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1128,
+    "fields": {
+        "name": "No_Video_1",
+        "description_text": "Didn't watch Video 1",
+        "created": "2017-12-16T02:03:15.633Z",
+        "modified": "2020-08-16T08:35:02.515Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "video_1",
+                    "type": "integer",
+                    "field": "video_1",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "workflow": 140,
+        "action": 309,
+        "columns": [
+            4690
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1129,
+    "fields": {
+        "name": "No_Video_2",
+        "description_text": "Didn't watch Video 2",
+        "created": "2017-12-16T02:03:17.354Z",
+        "modified": "2020-08-16T08:35:02.518Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "video_2",
+                    "type": "integer",
+                    "field": "video_2",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 5,
+        "workflow": 140,
+        "action": 309,
+        "columns": [
+            4691
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1130,
+    "fields": {
+        "name": "No_Video_3",
+        "description_text": "Didn't watch Video 3",
+        "created": "2017-12-16T02:03:37.666Z",
+        "modified": "2020-08-16T08:35:02.520Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "video_3",
+                    "type": "integer",
+                    "field": "video_3",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 8,
+        "workflow": 140,
+        "action": 309,
+        "columns": [
+            4693
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1131,
+    "fields": {
+        "name": "No_videos",
+        "description_text": "No video activity",
+        "created": "2017-12-16T02:13:41.327Z",
+        "modified": "2020-08-16T08:35:02.523Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "video_1",
+                    "type": "integer",
+                    "field": "video_1",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "video_2",
+                    "type": "integer",
+                    "field": "video_2",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "video_3",
+                    "type": "integer",
+                    "field": "video_3",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 1,
+        "workflow": 140,
+        "action": 310,
+        "columns": [
+            4690,
+            4691,
+            4693
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1132,
+    "fields": {
+        "name": "One_video",
+        "description_text": "Activity detected in only one video",
+        "created": "2017-12-16T02:13:44.160Z",
+        "modified": "2020-08-16T08:35:02.526Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "video_1",
+                            "type": "integer",
+                            "field": "video_1",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_2",
+                            "type": "integer",
+                            "field": "video_2",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_3",
+                            "type": "integer",
+                            "field": "video_3",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "video_1",
+                            "type": "integer",
+                            "field": "video_1",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_2",
+                            "type": "integer",
+                            "field": "video_2",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_3",
+                            "type": "integer",
+                            "field": "video_3",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "video_1",
+                            "type": "integer",
+                            "field": "video_1",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_2",
+                            "type": "integer",
+                            "field": "video_2",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_3",
+                            "type": "integer",
+                            "field": "video_3",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "",
+        "n_rows_selected": 5,
+        "workflow": 140,
+        "action": 310,
+        "columns": [
+            4690,
+            4691,
+            4693
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1133,
+    "fields": {
+        "name": "Two_videos",
+        "description_text": "Activity detected in two videos",
+        "created": "2017-12-16T02:15:24.327Z",
+        "modified": "2020-08-16T08:35:02.577Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "video_1",
+                            "type": "integer",
+                            "field": "video_1",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_2",
+                            "type": "integer",
+                            "field": "video_2",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_3",
+                            "type": "integer",
+                            "field": "video_3",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "video_1",
+                            "type": "integer",
+                            "field": "video_1",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_2",
+                            "type": "integer",
+                            "field": "video_2",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_3",
+                            "type": "integer",
+                            "field": "video_3",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                },
+                {
+                    "not": false,
+                    "rules": [
+                        {
+                            "id": "video_1",
+                            "type": "integer",
+                            "field": "video_1",
+                            "input": "number",
+                            "value": "0",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_2",
+                            "type": "integer",
+                            "field": "video_2",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        },
+                        {
+                            "id": "video_3",
+                            "type": "integer",
+                            "field": "video_3",
+                            "input": "number",
+                            "value": "1",
+                            "operator": "equal"
+                        }
+                    ],
+                    "condition": "AND"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "formula_text": "",
+        "n_rows_selected": 4,
+        "workflow": 140,
+        "action": 310,
+        "columns": [
+            4690,
+            4691,
+            4693
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1135,
+    "fields": {
+        "name": "Three_videos",
+        "description_text": "All three videos were watched",
+        "created": "2017-12-16T02:16:30.820Z",
+        "modified": "2020-08-16T08:35:02.575Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "video_1",
+                    "type": "integer",
+                    "field": "video_1",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "video_2",
+                    "type": "integer",
+                    "field": "video_2",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "video_3",
+                    "type": "integer",
+                    "field": "video_3",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 140,
+        "action": 310,
+        "columns": [
+            4690,
+            4691,
+            4693
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1138,
+    "fields": {
+        "name": "Concept_1",
+        "description_text": "Resources for Concept 1",
+        "created": "2017-12-16T02:34:27.524Z",
+        "modified": "2020-08-16T08:35:02.504Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "difficult_week01",
+                    "type": "string",
+                    "field": "difficult_week01",
+                    "input": "select",
+                    "value": "Concept 1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "workflow": 140,
+        "action": 314,
+        "columns": [
+            4673
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1139,
+    "fields": {
+        "name": "Concept_2",
+        "description_text": "Resources for Concept 2",
+        "created": "2017-12-16T02:34:30.221Z",
+        "modified": "2020-08-16T08:35:02.507Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "difficult_week01",
+                    "type": "string",
+                    "field": "difficult_week01",
+                    "input": "select",
+                    "value": "Concept 2",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "workflow": 140,
+        "action": 314,
+        "columns": [
+            4673
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1140,
+    "fields": {
+        "name": "Concept_3",
+        "description_text": "Resources for Concept 3",
+        "created": "2017-12-16T02:34:42.034Z",
+        "modified": "2020-08-16T08:35:02.509Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "difficult_week01",
+                    "type": "string",
+                    "field": "difficult_week01",
+                    "input": "select",
+                    "value": "Concept 3",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "workflow": 140,
+        "action": 314,
+        "columns": [
+            4673
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1141,
+    "fields": {
+        "name": "Concept_4",
+        "description_text": "Resources for Concept 4",
+        "created": "2017-12-16T02:35:02.866Z",
+        "modified": "2020-08-16T08:35:02.512Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "difficult_week01",
+                    "type": "string",
+                    "field": "difficult_week01",
+                    "input": "select",
+                    "value": "Concept 4",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 0,
+        "workflow": 140,
+        "action": 314,
+        "columns": [
+            4673
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 1,
+    "fields": {
+        "created": "2020-08-16T08:35:02.611Z",
+        "modified": "2020-08-16T08:35:02.619Z",
+        "formula": {
+            "not": true,
+            "rules": [
+                {
+                    "id": "video_1",
+                    "type": "integer",
+                    "field": "video_1",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "video_2",
+                    "type": "integer",
+                    "field": "video_2",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                },
+                {
+                    "id": "video_3",
+                    "type": "integer",
+                    "field": "video_3",
+                    "input": "number",
+                    "value": "1",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 10,
+        "workflow": 140,
+        "description_text": "",
+        "columns": [
+            4690,
+            4691,
+            4693
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 2,
+    "fields": {
+        "created": "2020-08-16T08:35:02.623Z",
+        "modified": "2020-08-16T08:35:02.627Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "took_mt",
+                    "type": "string",
+                    "field": "took_mt",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 10,
+        "workflow": 140,
+        "description_text": "Consider only those students that took the midterm examination.",
+        "columns": [
+            4688
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 3,
+    "fields": {
+        "created": "2020-08-16T08:35:02.629Z",
+        "modified": "2020-08-16T08:35:02.633Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "days_online",
+                    "type": "double",
+                    "field": "days_online",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 140,
+        "description_text": "These are the students that haven't connected to the discussion forum yet.",
+        "columns": [
+            4689
+        ]
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 1,
+    "fields": {
+        "action": 311,
+        "column": 4664,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 2,
+    "fields": {
+        "action": 311,
+        "column": 4673,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 3,
+    "fields": {
+        "action": 312,
+        "column": 4664,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 4,
+    "fields": {
+        "action": 312,
+        "column": 4674,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
     "model": "ontask.action",
     "pk": 307,
     "fields": {
         "name": "Midterm scores",
         "description_text": "Comment the midterm scores divided by topic",
         "created": "2017-12-16T01:33:35.442Z",
-        "modified": "2018-09-06T00:16:15.495Z",
+        "modified": "2020-08-16T08:35:02.825Z",
         "workflow": 140,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 2,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear&nbsp;{{ first_name }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ mt_total }}.</p><p>Kind regards</p><p>{{ Coordinator_name }}</p><p>{{ course_name }}</p><div><br></div>",
@@ -2624,12 +2619,13 @@
         "name": "Reminder to post in the forum",
         "description_text": "Message to remind those students that haven't visited the forum to do so.",
         "created": "2017-12-16T01:52:24.867Z",
-        "modified": "2018-09-06T00:16:15.497Z",
+        "modified": "2020-08-16T08:35:02.827Z",
         "workflow": 140,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 3,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear&nbsp;{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator_name }}</p><p>{{ Course_name }}</p>",
@@ -2645,12 +2641,13 @@
         "name": "Comment lecture preparation activities",
         "description_text": "A message commenting on the videos they watched.",
         "created": "2017-12-16T01:58:13.398Z",
-        "modified": "2018-09-06T00:16:15.491Z",
+        "modified": "2020-08-16T08:35:02.823Z",
         "workflow": 140,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 1,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Dear&nbsp;{{ first_name }}</p><p>Here are some comments about the preparation videos for this week.</p><p style=\"\">{% if No_Video_1 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Genes and Proteins Activity</h4><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{% endif %}</p><p>{% if No_Video_2 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p><p>{% if No_Video_3 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Immune System</h4><p>This video contains an overview of the systems that protect the cell from infections. It is highly relevant to understand the rest of concepts such as for example, the way proteins are synthesized.&nbsp;</p><p>{% endif %}</p><p>Regards<br></p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Coordinator_name }}</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Course_name }}<br></p>",
@@ -2672,6 +2669,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": true,
         "text_content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1><p style=\"text-align: center;\">{% if Three_videos %}<img style=\"width: 128px;\" src=\"https://findicons.com/icon/download/134633/gold_medal/128/png\">{% endif %}</p><p style=\"text-align: center;\">{% if Two_videos %}<img style=\"width: 128px;\" src=\"https://findicons.com/icon/download/134646/silver_medal/128/png\">{% endif %}</p><p style=\"text-align: center;\">{% if One_video %}<img style=\"width: 128px;\" src=\"https://findicons.com/icon/download/134637/bronze_medal/128/png\">{% endif %}</p><p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
@@ -2693,6 +2691,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": true,
         "text_content": "{% comment %}Your action content here{% endcomment %}",
@@ -2714,6 +2713,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": true,
         "text_content": "{% comment %}Your action content here{% endcomment %}",
@@ -2735,6 +2735,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<h3>Additional resources to review concepts</h3><p>{% if Concept_1 %}</p><ul><li><a href=\"https://www.ontasklearning.org\" target=\"_blank\">Resource 1 for concept 1</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 2 for concept 1</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 3 for concept 1</a></li></ul><p>{% endif %}</p><p>{% if Concept_2 %}</p><ul><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 1 for concept 2</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 2 for concept 2</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 3 for concept 2</a></li></ul><p>{% endif %}</p><div><p>{% if Concept_3 %}</p><ul><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 1 for concept 3</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 2 for concept 3</a></li><li><a href=\"https://www.ontasklearning.org/\" target=\"_blank\">Resource 3 for concept 3</a></li></ul><p>{% endif %}</p></div><div><br></div>",

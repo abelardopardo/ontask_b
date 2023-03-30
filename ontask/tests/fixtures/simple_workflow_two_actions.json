@@ -629,90 +629,6 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 1037,
-    "fields": {
-        "created": "2017-12-08T01:29:51.431Z",
-        "modified": "2017-12-08T01:30:04.937Z",
-        "action": 253,
-        "name": "old",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "age",
-                    "type": "double",
-                    "field": "age",
-                    "input": "number",
-                    "value": "12",
-                    "operator": "greater"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "columns": [
-            2928
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1038,
-    "fields": {
-        "created": "2017-12-08T01:33:21.687Z",
-        "modified": "2017-12-08T01:33:21.687Z",
-        "action": 253,
-        "name": "Registered",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 1,
-        "is_filter": false,
-        "columns": [
-            2929
-        ]
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 1,
-    "fields": {
-        "action": 254,
-        "column": 2927,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 2,
-    "fields": {
-        "action": 254,
-        "column": 2929,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
     "model": "ontask.workflow",
     "pk": 108,
     "fields": {
@@ -779,18 +695,101 @@
     }
 },
 {
+    "model": "ontask.condition",
+    "pk": 1038,
+    "fields": {
+        "name": "Registered",
+        "description_text": "",
+        "created": "2017-12-08T01:33:21.687Z",
+        "modified": "2020-08-16T08:35:21.653Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 1,
+        "workflow": 108,
+        "action": 253,
+        "columns": [
+            2929
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 1,
+    "fields": {
+        "created": "2020-08-16T08:35:21.691Z",
+        "modified": "2020-08-16T08:35:21.698Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "age",
+                    "type": "double",
+                    "field": "age",
+                    "input": "number",
+                    "value": "12",
+                    "operator": "greater"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 108,
+        "description_text": "",
+        "columns": [
+            2928
+        ]
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 1,
+    "fields": {
+        "action": 254,
+        "column": 2927,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 2,
+    "fields": {
+        "action": 254,
+        "column": 2929,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
     "model": "ontask.action",
     "pk": 253,
     "fields": {
         "name": "Detecting age",
         "description_text": "",
         "created": "2017-12-08T01:29:40.524Z",
-        "modified": "2018-09-05T02:55:52.788Z",
+        "modified": "2020-08-16T08:35:21.880Z",
         "workflow": 108,
         "action_type": "personalized_text",
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": 1,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
@@ -812,6 +811,7 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
         "serve_enabled": false,
         "text_content": "{% comment %}Your action content here{% endcomment %}",

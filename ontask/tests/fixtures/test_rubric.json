@@ -539,13 +539,13 @@
     "model": "ontask.workflow",
     "pk": 2,
     "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
         "name": "test rubric",
         "description_text": "",
         "created": "2019-09-21T07:49:02.018Z",
         "modified": "2019-09-21T07:50:48.171Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
         "nrows": 15,
         "ncols": 4,
         "attributes": {},

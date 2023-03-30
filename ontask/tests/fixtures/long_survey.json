@@ -536,43 +536,16 @@
     }
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 1,
-    "fields": {
-        "action": 1,
-        "column": 3,
-        "condition": null
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 2,
-    "fields": {
-        "action": 1,
-        "column": 4,
-        "condition": null
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 3,
-    "fields": {
-        "action": 1,
-        "column": 5,
-        "condition": null
-    }
-},
-{
     "model": "ontask.workflow",
     "pk": 1,
     "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
         "name": "Test survey run pages",
         "description_text": "",
         "created": "2019-09-21T04:21:56.061Z",
         "modified": "2019-09-21T04:27:01.549Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
         "nrows": 12,
         "ncols": 5,
         "attributes": {},
@@ -633,23 +606,55 @@
     }
 },
 {
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 1,
+    "fields": {
+        "action": 1,
+        "column": 3,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 2,
+    "fields": {
+        "action": 1,
+        "column": 4,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 3,
+    "fields": {
+        "action": 1,
+        "column": 5,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
     "model": "ontask.action",
     "pk": 1,
     "fields": {
-        "workflow": 1,
         "name": "survey",
         "description_text": "Tutor observation for tutorial 1",
         "created": "2019-09-21T04:24:25.072Z",
         "modified": "2019-09-21T04:26:29.436Z",
-        "last_executed_log": null,
+        "workflow": 1,
         "action_type": "survey",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "attachments": []
     }
 },
 {

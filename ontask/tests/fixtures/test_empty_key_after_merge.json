@@ -455,6 +455,112 @@
     }
 },
 {
+    "model": "ontask.column",
+    "pk": 1,
+    "fields": {
+        "name": "key1",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "integer",
+        "is_key": true,
+        "position": 1,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 2,
+    "fields": {
+        "name": "key2",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "integer",
+        "is_key": true,
+        "position": 2,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 3,
+    "fields": {
+        "name": "d1",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "integer",
+        "is_key": false,
+        "position": 3,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 4,
+    "fields": {
+        "name": "d2",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "integer",
+        "is_key": false,
+        "position": 4,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.workflow",
+    "pk": 1,
+    "fields": {
+        "name": "Test Empty Key after Merge",
+        "description_text": "",
+        "created": "2019-04-15T05:32:44.877Z",
+        "modified": "2019-04-15T05:33:39.609Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "nrows": 3,
+        "ncols": 4,
+        "attributes": {},
+        "query_builder_ops": [
+            {
+                "id": "key1",
+                "type": "integer"
+            },
+            {
+                "id": "key2",
+                "type": "integer"
+            },
+            {
+                "id": "d1",
+                "type": "integer"
+            },
+            {
+                "id": "d2",
+                "type": "integer"
+            }
+        ],
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
+        "session_key": "",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "star": [],
+        "lusers": []
+    }
+},
+{
     "model": "ontask.profile",
     "pk": 12,
     "fields": {
@@ -665,104 +771,108 @@
     }
 },
 {
-    "model": "ontask.workflow",
-    "pk": 1,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "name": "Test Empty Key after Merge",
-        "description_text": "",
-        "created": "2019-04-15T05:32:44.877Z",
-        "modified": "2019-04-15T05:33:39.609Z",
-        "nrows": 3,
-        "ncols": 4,
-        "attributes": {},
-        "query_builder_ops": [
-            {
-                "id": "key1",
-                "type": "integer"
-            },
-            {
-                "id": "key2",
-                "type": "integer"
-            },
-            {
-                "id": "d1",
-                "type": "integer"
-            },
-            {
-                "id": "d2",
-                "type": "integer"
-            }
-        ],
-        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "",
-        "shared": []
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 12,
+    "fields": {}
 },
 {
-    "model": "ontask.column",
-    "pk": 1,
-    "fields": {
-        "name": "key1",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "integer",
-        "is_key": true,
-        "position": 1,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 13,
+    "fields": {}
 },
 {
-    "model": "ontask.column",
-    "pk": 2,
-    "fields": {
-        "name": "key2",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "integer",
-        "is_key": true,
-        "position": 2,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 14,
+    "fields": {}
 },
 {
-    "model": "ontask.column",
-    "pk": 3,
-    "fields": {
-        "name": "d1",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "integer",
-        "is_key": false,
-        "position": 3,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 15,
+    "fields": {}
 },
 {
-    "model": "ontask.column",
-    "pk": 4,
-    "fields": {
-        "name": "d2",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "integer",
-        "is_key": false,
-        "position": 4,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 16,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 17,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 18,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 19,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 20,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 21,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 22,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 23,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 24,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 25,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 26,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 27,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 28,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 29,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 30,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 31,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 32,
+    "fields": {}
 }
 ]

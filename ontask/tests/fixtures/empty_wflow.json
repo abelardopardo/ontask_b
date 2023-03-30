@@ -21,6 +21,21 @@
                 "action"
             ],
             [
+                "add_column",
+                "ontask",
+                "column"
+            ],
+            [
+                "change_column",
+                "ontask",
+                "column"
+            ],
+            [
+                "delete_column",
+                "ontask",
+                "column"
+            ],
+            [
                 "add_condition",
                 "ontask",
                 "condition"
@@ -49,21 +64,6 @@
                 "delete_log",
                 "ontask",
                 "log"
-            ],
-            [
-                "add_column",
-                "ontask",
-                "column"
-            ],
-            [
-                "change_column",
-                "ontask",
-                "column"
-            ],
-            [
-                "delete_column",
-                "ontask",
-                "column"
             ],
             [
                 "add_workflow",
@@ -553,6 +553,31 @@
     }
 },
 {
+    "model": "ontask.workflow",
+    "pk": 152,
+    "fields": {
+        "name": "wflow1",
+        "description_text": "",
+        "created": "2017-12-23T05:24:23.229Z",
+        "modified": "2017-12-23T07:13:43.757Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "nrows": 0,
+        "ncols": 0,
+        "attributes": {},
+        "query_builder_ops": [],
+        "data_frame_table_name": "",
+        "session_key": "",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "star": [],
+        "lusers": []
+    }
+},
+{
     "model": "ontask.profile",
     "pk": 4,
     "fields": {
@@ -663,23 +688,58 @@
     }
 },
 {
-    "model": "ontask.workflow",
-    "pk": 152,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "name": "wflow1",
-        "description_text": "",
-        "created": "2017-12-23T05:24:23.229Z",
-        "modified": "2017-12-23T07:13:43.757Z",
-        "nrows": 0,
-        "ncols": 0,
-        "attributes": {},
-        "query_builder_ops": [],
-        "data_frame_table_name": "",
-        "session_key": "",
-        "shared": []
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 4,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 6,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 5,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 1,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 7,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 8,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 9,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 10,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 2,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 3,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 27,
+    "fields": {}
 }
 ]

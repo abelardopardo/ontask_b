@@ -455,109 +455,132 @@
     }
 },
 {
-    "model": "ontask.ontaskuser",
-    "pk": 21,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 11,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 12,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 13,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 14,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 15,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 16,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 17,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 18,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 19,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 20,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
+    "model": "ontask.column",
     "pk": 1,
-    "fields": {}
+    "fields": {
+        "name": "Name",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "string",
+        "is_key": true,
+        "position": 1,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
 },
 {
-    "model": "ontask.ontaskuser",
+    "model": "ontask.column",
     "pk": 2,
-    "fields": {}
+    "fields": {
+        "name": "Column 1",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "integer",
+        "is_key": true,
+        "position": 2,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
 },
 {
-    "model": "ontask.ontaskuser",
+    "model": "ontask.column",
     "pk": 3,
-    "fields": {}
+    "fields": {
+        "name": "Column 2",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "integer",
+        "is_key": true,
+        "position": 3,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
 },
 {
-    "model": "ontask.ontaskuser",
+    "model": "ontask.column",
     "pk": 4,
-    "fields": {}
+    "fields": {
+        "name": "Column 3",
+        "description_text": "",
+        "workflow": 1,
+        "data_type": "integer",
+        "is_key": true,
+        "position": 4,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
 },
 {
-    "model": "ontask.ontaskuser",
-    "pk": 5,
-    "fields": {}
+    "model": "ontask.workflow",
+    "pk": 1,
+    "fields": {
+        "name": "all key columns",
+        "description_text": "",
+        "created": "2019-05-06T06:45:00.045Z",
+        "modified": "2019-05-06T06:48:49.625Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "nrows": 1,
+        "ncols": 4,
+        "attributes": {},
+        "query_builder_ops": [
+            {
+                "id": "Name",
+                "type": "string"
+            },
+            {
+                "id": "Column 1",
+                "type": "integer"
+            },
+            {
+                "id": "Column 2",
+                "type": "integer"
+            },
+            {
+                "id": "Column 3",
+                "type": "integer"
+            }
+        ],
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
+        "session_key": "",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "star": [],
+        "lusers": []
+    }
 },
 {
-    "model": "ontask.ontaskuser",
-    "pk": 6,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 7,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 8,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 9,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 10,
-    "fields": {}
+    "model": "ontask.action",
+    "pk": 1,
+    "fields": {
+        "name": "Test1",
+        "description_text": "",
+        "created": "2019-05-06T06:45:00.541Z",
+        "modified": "2019-05-06T06:45:00.541Z",
+        "workflow": 1,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "filter": null,
+        "rows_all_false": null,
+        "serve_enabled": false,
+        "text_content": "<p>Hello&nbsp;</p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
 },
 {
     "model": "ontask.profile",
@@ -770,128 +793,108 @@
     }
 },
 {
-    "model": "ontask.workflow",
-    "pk": 1,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "name": "all key columns",
-        "description_text": "",
-        "created": "2019-05-06T06:45:00.045Z",
-        "modified": "2019-05-06T06:48:49.625Z",
-        "nrows": 1,
-        "ncols": 4,
-        "attributes": {},
-        "query_builder_ops": [
-            {
-                "id": "Name",
-                "type": "string"
-            },
-            {
-                "id": "Column 1",
-                "type": "integer"
-            },
-            {
-                "id": "Column 2",
-                "type": "integer"
-            },
-            {
-                "id": "Column 3",
-                "type": "integer"
-            }
-        ],
-        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "",
-        "luser_email_column": null,
-        "luser_email_column_md5": "",
-        "lusers_is_outdated": false,
-        "shared": [],
-        "lusers": []
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 21,
+    "fields": {}
 },
 {
-    "model": "ontask.column",
-    "pk": 1,
-    "fields": {
-        "name": "Name",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "string",
-        "is_key": true,
-        "position": 1,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 11,
+    "fields": {}
 },
 {
-    "model": "ontask.column",
+    "model": "ontask.ontaskuser",
+    "pk": 12,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 13,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 14,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 15,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 16,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 17,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 18,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 19,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 20,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 1,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
     "pk": 2,
-    "fields": {
-        "name": "Column 1",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "integer",
-        "is_key": true,
-        "position": 2,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.column",
+    "model": "ontask.ontaskuser",
     "pk": 3,
-    "fields": {
-        "name": "Column 2",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "integer",
-        "is_key": true,
-        "position": 3,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.column",
+    "model": "ontask.ontaskuser",
     "pk": 4,
-    "fields": {
-        "name": "Column 3",
-        "description_text": "",
-        "workflow": 1,
-        "data_type": "integer",
-        "is_key": true,
-        "position": 4,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
+    "fields": {}
 },
 {
-    "model": "ontask.action",
-    "pk": 1,
-    "fields": {
-        "workflow": 1,
-        "name": "Test1",
-        "description_text": "",
-        "created": "2019-05-06T06:45:00.541Z",
-        "modified": "2019-05-06T06:45:00.541Z",
-        "last_executed_log": null,
-        "action_type": "personalized_text",
-        "serve_enabled": false,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "text_content": "<p>Hello&nbsp;</p>",
-        "target_url": "",
-        "shuffle": false
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 5,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 6,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 7,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 8,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 9,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 10,
+    "fields": {}
 }
 ]

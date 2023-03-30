@@ -544,272 +544,16 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 1,
-    "fields": {
-        "action": 1,
-        "name": "c1<12.5",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "type": "double",
-                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "input": "number",
-                    "value": 12.5,
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-10-03T08:52:03.035Z",
-        "modified": "2019-10-03T08:52:03.892Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 2,
-    "fields": {
-        "action": 1,
-        "name": "c2>12.5",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "type": "double",
-                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "input": "number",
-                    "value": 12.5,
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-10-03T08:52:04.021Z",
-        "modified": "2019-10-03T08:52:04.530Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 3,
-    "fields": {
-        "action": 1,
-        "name": "c3>=12.5",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "type": "double",
-                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "input": "number",
-                    "value": 12.5,
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-10-03T08:52:04.641Z",
-        "modified": "2019-10-03T08:52:05.016Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 4,
-    "fields": {
-        "action": 1,
-        "name": "c4>=12.5",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "type": "double",
-                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "input": "number",
-                    "value": 12.5,
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-10-03T08:52:05.085Z",
-        "modified": "2019-10-03T08:52:05.330Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 5,
-    "fields": {
-        "action": 2,
-        "name": "c1<12.5",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "type": "double",
-                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "input": "number",
-                    "value": 12.5,
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-10-03T08:52:05.427Z",
-        "modified": "2019-10-03T08:52:05.645Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 6,
-    "fields": {
-        "action": 2,
-        "name": "c2>12.5",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "type": "double",
-                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "input": "number",
-                    "value": 12.5,
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-10-03T08:52:05.689Z",
-        "modified": "2019-10-03T08:52:05.925Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 7,
-    "fields": {
-        "action": 2,
-        "name": "c3>=12.5",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "type": "double",
-                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "input": "number",
-                    "value": 12.5,
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-10-03T08:52:05.974Z",
-        "modified": "2019-10-03T08:52:06.373Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 8,
-    "fields": {
-        "action": 2,
-        "name": "c4>=12.5",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "type": "double",
-                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
-                    "input": "number",
-                    "value": 12.5,
-                    "operator": "less"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "created": "2019-10-03T08:52:06.464Z",
-        "modified": "2019-10-03T08:52:06.903Z",
-        "columns": [
-            4
-        ]
-    }
-},
-{
     "model": "ontask.workflow",
     "pk": 1,
     "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
         "name": "Issue 128",
         "description_text": "",
         "created": "2019-10-03T08:52:01.501Z",
         "modified": "2019-10-03T08:52:02.748Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
         "nrows": 3,
         "ncols": 6,
         "attributes": {
@@ -866,43 +610,303 @@
     }
 },
 {
+    "model": "ontask.condition",
+    "pk": 1,
+    "fields": {
+        "name": "c1<12.5",
+        "description_text": "",
+        "created": "2019-10-03T08:52:03.035Z",
+        "modified": "2020-08-16T08:35:40.984Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "type": "double",
+                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "input": "number",
+                    "value": 12.5,
+                    "operator": "less"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 1,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 2,
+    "fields": {
+        "name": "c2>12.5",
+        "description_text": "",
+        "created": "2019-10-03T08:52:04.021Z",
+        "modified": "2020-08-16T08:35:40.992Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "type": "double",
+                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "input": "number",
+                    "value": 12.5,
+                    "operator": "less"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 1,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 3,
+    "fields": {
+        "name": "c3>=12.5",
+        "description_text": "",
+        "created": "2019-10-03T08:52:04.641Z",
+        "modified": "2020-08-16T08:35:40.995Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "type": "double",
+                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "input": "number",
+                    "value": 12.5,
+                    "operator": "less"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 1,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 4,
+    "fields": {
+        "name": "c4>=12.5",
+        "description_text": "",
+        "created": "2019-10-03T08:52:05.085Z",
+        "modified": "2020-08-16T08:35:41.000Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "type": "double",
+                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "input": "number",
+                    "value": 12.5,
+                    "operator": "less"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 1,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 5,
+    "fields": {
+        "name": "c1<12.5",
+        "description_text": "",
+        "created": "2019-10-03T08:52:05.427Z",
+        "modified": "2020-08-16T08:35:40.987Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "type": "double",
+                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "input": "number",
+                    "value": 12.5,
+                    "operator": "less"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 2,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 6,
+    "fields": {
+        "name": "c2>12.5",
+        "description_text": "",
+        "created": "2019-10-03T08:52:05.689Z",
+        "modified": "2020-08-16T08:35:40.990Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "type": "double",
+                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "input": "number",
+                    "value": 12.5,
+                    "operator": "less"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 2,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 7,
+    "fields": {
+        "name": "c3>=12.5",
+        "description_text": "",
+        "created": "2019-10-03T08:52:05.974Z",
+        "modified": "2020-08-16T08:35:40.997Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "type": "double",
+                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "input": "number",
+                    "value": 12.5,
+                    "operator": "less"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 2,
+        "columns": [
+            4
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 8,
+    "fields": {
+        "name": "c4>=12.5",
+        "description_text": "",
+        "created": "2019-10-03T08:52:06.464Z",
+        "modified": "2020-08-16T08:35:41.002Z",
+        "formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "type": "double",
+                    "field": "!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1",
+                    "input": "number",
+                    "value": 12.5,
+                    "operator": "less"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 1,
+        "action": 2,
+        "columns": [
+            4
+        ]
+    }
+},
+{
     "model": "ontask.action",
     "pk": 1,
     "fields": {
-        "workflow": 1,
         "name": "bug 1",
         "description_text": "",
         "created": "2019-10-03T08:52:02.899Z",
         "modified": "2019-10-03T08:52:02.899Z",
-        "last_executed_log": null,
+        "workflow": 1,
         "action_type": "personalized_text",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "<p>Attribute = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ ATTR }}</p><p>Column = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1 }}</p><p>{% if c1<12.5 %}Condition 1{% endif %}</p><p>{% if c2>12.5 %}Condition 2{% endif %}</p><p>{% if c3>=12.5 %}Condition 3{% endif %}</p><p>{% if c4>=12.5 %}Condition 4{% endif %}<br></p>",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "attachments": []
     }
 },
 {
     "model": "ontask.action",
     "pk": 2,
     "fields": {
-        "workflow": 1,
         "name": "bug 2",
         "description_text": "",
         "created": "2019-10-03T08:52:05.377Z",
         "modified": "2019-10-03T08:52:05.377Z",
-        "last_executed_log": null,
+        "workflow": 1,
         "action_type": "personalized_canvas_email",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
+        "filter": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "Attribute = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ ATTR }}\n\nColumn = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1 }}\n\n{% if c1<12.5 %}Condition 1{% endif %}\n\n\n{% if c2>12.5 %}Condition 2{% endif %}\n\n\n{% if c3>=12.5 %}Condition 3{% endif %}\n\n\n{% if c4>=12.5 %}Condition 4{% endif %}",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "attachments": []
     }
 },
 {
