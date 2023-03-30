@@ -23,9 +23,9 @@ class ActionTestSerializers(tests.OnTaskTestCase):
     workflow_name = 'wflow2'
 
     action_obj = {
-        "filter": {
+        "filter": [
+            {
                 "columns": [],
-                "name": "old",
                 "description_text": "",
                 "formula": {
                     "not": False, "rules": [{
@@ -37,8 +37,7 @@ class ActionTestSerializers(tests.OnTaskTestCase):
                         "operator": "greater"}],
                     "valid": True,
                     "condition": "AND"},
-                "n_rows_selected": 2,
-                "is_filter": True},
+                "n_rows_selected": 2}],
         "conditions": [
             {
                 "columns": [],
@@ -53,8 +52,7 @@ class ActionTestSerializers(tests.OnTaskTestCase):
                         "operator": "equal"}],
                     "valid": True,
                     "condition": "AND"},
-                "n_rows_selected": 1,
-                "is_filter": False}],
+                "n_rows_selected": 1}],
         "column_condition_pair": [],
         "is_out": True,
         "used_columns": [
