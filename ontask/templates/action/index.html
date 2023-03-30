@@ -40,14 +40,13 @@
 {% endblock %}
 {% block container %}
   <div class="container" id="action-index">
-    <h1 class="text-center">{% trans 'Actions' %}</h1>
     {% if not workflow.nrows %}
       {% include 'workflow/includes/no_data.html' %}
     {% elif not workflow.actions.all|length %}
-      <p class="lead text-center">{% blocktrans %}<strong>Next Step:</strong> Click in the <span class="fa fa-plus"></span> Action below to create a new
+      <p class="lead text-center my-3">{% blocktrans %}<strong>Next Step:</strong> Click in the <span class="fa fa-plus"></span> Action below to create a new
       action to execute based on the data stored in the table.{% endblocktrans %}</p>
     {% endif %}
-    <div class="text-center mb-3">
+    <div class="text-center my-3">
       <button type="button" class="shadow btn btn-outline-dark js-create-action"
               data-url="{% url 'action:create' %}"
               data-toggle="tooltip"
