@@ -35,34 +35,37 @@ TEMPLATES[0].update({"APP_DIRS": False})
 LOGGING['loggers'] = {
     'django': {
         'handlers': ['django_log_file'],
-        'propagate': True,
+        'propagate': False,
         'level': 'ERROR',
     },
     'ontask': {
         'handlers': ['ontask_log_file'],
+        'propagate': False,
         'level': 'ERROR',
     },
     'scripts': {
         'handlers': ['script_log_file'],
-        'propagate': True,
+        'propagate': False,
         'level': 'DEBUG',
     },
     'celery_execution': {
         'handlers': ['celery_log_file'],
-        'propagate': True,
+        'propagate': False,
         'level': 'ERROR',
     },
     'django.security.DisallowedHost': {
         'handlers': ['ontask_log_file'],
-        'propagate': True,
+        'propagate': False,
         'level': 'DEBUG',
     },
     'ontask.django_auth_lti.backends': {
         'handlers': ['ontask_log_file'],
+        'propagate': False,
         'level': 'DEBUG',
     },
     'ontask.django_auth_lti.middleware_patched': {
         'handlers': ['ontask_log_file'],
+        'propagate': False,
         'level': 'DEBUG'}}
 
 logging.config.dictConfig(LOGGING)
