@@ -29,6 +29,8 @@ def _run_compatibility_patches(json_data: Dict) -> Dict:
 
     1. Change action.target_url from None to ''
 
+    2. Extract filters from the conditions array and put it in its own array
+
     :param json_data: Json object to process
     :return: Modified json_data
     """
@@ -36,6 +38,21 @@ def _run_compatibility_patches(json_data: Dict) -> Dict:
     for action_obj in json_data['actions']:
         if action_obj.get('target_url') is None:
             action_obj['target_url'] = ''
+
+    # move filter condition to its own list
+    for action_obj in json_data['actions']:
+        conditions = action_obj.get('conditions')
+        if not conditions:
+            continue
+
+        filter_obj = [
+            cond for cond in conditions if cond.get('is_filter', False)]
+        if not filter_obj:
+            continue
+
+        action_obj['conditions'] = [
+            cond for cond in conditions if not cond.get('is_filter', False)]
+        action_obj['filter'] = filter_obj
 
     return json_data
 
