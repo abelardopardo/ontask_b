@@ -200,7 +200,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             if action_data.is_valid():
                 action_data.save()
             else:
-                raise Exception(_('Unable to save column information'))
+                raise Exception(_('Unable to save action information'))
 
         except Exception:
             # Get rid of the objects created
