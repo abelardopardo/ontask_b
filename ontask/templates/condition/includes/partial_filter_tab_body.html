@@ -2,6 +2,7 @@
 <div class="shadow rounded tab-pane px-3 fade show border border-dark"
      id="filter" role="tabpanel" aria-labelledby="filter-tab">
   <div id="filter-set-header" class="text-center my-3">
+    {% include 'table/includes/partial_column_stats_selector.html' %}
     {% if filter_condition %}
       <div id="filter-set" class="card-deck justify-content-center my-3">
         <div class="shadow card ontask-ccard text-center mx-auto mb-3">
