@@ -2,13 +2,11 @@
 <div class="shadow rounded tab-pane px-3 fade show border border-dark"
      id="filter" role="tabpanel" aria-labelledby="filter-tab">
   <div id="filter-set-header" class="text-center my-3">
-    {% if not filter_condition %}
-      <button type="button"
-          class="btn btn-outline-dark js-filter-create{% if not has_data %} disabled{% endif %}"
-          data-url="{% url 'condition:create_filter' action.id %}"
-          data-type="filter">
-        <span class="glyphicon glyphicon-plus"></span> {% trans 'Add Filter' %}</button>
-    {% endif %}
+    <button type="button"
+        class="btn btn-outline-dark js-filter-create{% if filter_condition or not has_data %} disabled{% endif %}"
+        data-url="{% url 'condition:create_filter' action.id %}"
+        data-type="filter">
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'Add Filter' %}</button>
     {% include 'action/includes/partial_view_selector.html' %}
     {% include 'table/includes/partial_column_stats_selector.html' %}
     {% if filter_condition %}

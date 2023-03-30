@@ -144,11 +144,13 @@
                       title="{% trans 'Create a new table view' %}">
                 <span class="fa fa-plus"></span> {% trans 'View' %}
               </button>
-              {% if view %}
-                <a class="btn dropdown-item spin"
-                   href="{% url 'table:display' %}">
-                  <span class="fa fa-table"></span> {% trans 'Full table' %}</a>
-              {% endif%}
+              <a href="{% url 'table:display' %}"
+                 {% if view %}
+                  class="btn dropdown-item spin"
+                 {% else %}
+                  class="btn dropdown-item disabled"
+                 {% endif%}>
+                <span class="fa fa-table"></span> {% trans 'Full table' %}</a>
               {% if views %}
                 {% for v in views %}
                   {% if v != view %}
@@ -159,43 +161,43 @@
               {% endif %}
             </div>
           </div>
-          {% if view %}
-            <a href="{% url 'table:stat_table_view' view.id %}"
-               class="shadow btn btn-outline-dark spin"
-               data-toggle="tooltip"
-               title="{% trans 'Dashboard created with the view data' %}">
-              <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
-            </a>
-            {% include 'table/includes/partial_column_stats_selector.html' %}
-            <a href="{% url 'table:csvdownload_view' view.id %}" download
-               class="shadow btn btn-outline-dark js-logs-download"
-               data-toggle="tooltip"
-               title="{% trans 'Download a CSV file containing this table' %}">
-              <span class="fa fa-download"></span> {% trans 'CSV Download' %}
-            </a>
-            {% if not view.has_empty_formula %}
-              <button type="button" class="shadow btn btn-outline-dark js-create-action"
-                      data-url="{% url 'action:create_from_view' view.id %}"
-                      data-toggle="tooltip"
-                      title="{% trans 'New action using this view as filter' %}">
-                <span class="fa fa-plus"></span> {% trans 'Action with filter' %}
-              </button>
+          <a class="shadow btn btn-outline-dark spin"
+            {% if view %}
+              href="{% url 'table:stat_table_view' view.id %}"
+              title="{% trans 'Dashboard created with the view data' %}"
+            {% else %}
+              href="{% url 'table:stat_table' %}"
+              title="{% trans 'Dashboard created with the table data' %}"
             {% endif %}
-          {% else %}
-            <a href="{% url 'table:stat_table' %}"
-               class="shadow btn btn-outline-dark spin"
-               data-toggle="tooltip"
-               title="{% trans 'Dashboard created with the table data' %}">
-              <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
-            </a>
-            {% include 'table/includes/partial_column_stats_selector.html' %}
-            <a href="{% url 'table:csvdownload' %}"
-               class="shadow btn btn-outline-dark"
-               data-toggle="tooltip"
-               title="{% trans 'Download a CSV file containing this table' %}">
+            data-toggle="tooltip">
+            <span class="fa fa-dashboard"></span> {% trans 'Dashboard' %}
+          </a>
+          {% include 'table/includes/partial_column_stats_selector.html' %}
+          <a
+            {% if view %}
+              href="{% url 'table:csvdownload_view' view.id %}"
+              class="shadow btn btn-outline-dark"
+            {% else %}
+              href="{% url 'table:csvdownload' %}"
+              class="shadow btn btn-outline-dark"
+            {% endif %}
+                data-toggle="tooltip"
+                title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
-            </a>
-          {% endif %}
+          </a>
+          <button
+            type="button"
+            {% if view and not view.has_empty_formula %}
+              class="shadow btn btn-outline-dark js-create-action"
+              data-url="{% url 'action:create_from_view' view.id %}"
+              title="{% trans 'New action using this view as filter' %}"
+            {% else %}
+              class="shadow btn btn-outline-dark disabled"
+              title="{% trans 'A view with a filter expression is required.' %}"
+            {% endif %}
+            data-toggle="tooltip">
+            <span class="fa fa-plus"></span> {% trans 'Action with filter' %}
+          </button>
         </div>
       </div>
       {% if view %}

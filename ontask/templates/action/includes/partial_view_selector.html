@@ -1,17 +1,16 @@
 {% load i18n %}
-{% if views %}
-  <div id="view-as-filter-selector" class="dropdown btn-group">
-    <button type="button" class="btn btn-outline-dark dropdown-toggle"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <span class="fa fa-filter"></span> {% trans 'Set view as filter' %}
-    </button>
-    <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="view-as-filter-selector">
-      {% for view in views %}
-        <button type="button" class="dropdown-item js-set-view-as-filter"
-                data-url="{% url 'condition:set_filter' action.id view.id %}">
-          {{ view.name }}
-        </button>
-      {% endfor %}
-    </div>
+<div id="view-as-filter-selector" class="dropdown btn-group">
+  <button type="button"
+          class="btn btn-outline-dark dropdown-toggle{% if not views %} disabled{% endif %}"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <span class="fa fa-filter"></span> {% trans 'Set view as filter' %}
+  </button>
+  <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="view-as-filter-selector">
+    {% for view in views %}
+      <button type="button" class="dropdown-item js-set-view-as-filter"
+              data-url="{% url 'condition:set_filter' action.id view.id %}">
+        {{ view.name }}
+      </button>
+    {% endfor %}
   </div>
-{% endif %}
+</div>

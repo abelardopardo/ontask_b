@@ -1,14 +1,13 @@
 {% load i18n %}
-{% if conditions_to_clone %}
-  <div id="condition-clone" class="dropdown btn-group">
-    <button type="button" class="btn btn-outline-dark dropdown-toggle"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <span class="fa fa-clone"></span> {% trans 'Clone other conditions' %}</button>
-    <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="condition-clone">
-      {% for condition in conditions_to_clone %}
-        <button type="button" class="dropdown-item js-condition-clone"
-                data-url="{% url 'condition:clone_condition' condition.id action.id %}">{{ condition.name }}</button>
-      {% endfor %}
-    </div>
+<div id="condition-clone" class="dropdown btn-group">
+  <button type="button"
+          class="btn btn-outline-dark dropdown-toggle{% if not conditions_to_clone %} disabled{% endif %}"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <span class="fa fa-clone"></span> {% trans 'Clone other conditions' %}</button>
+  <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="condition-clone">
+    {% for condition in conditions_to_clone %}
+      <button type="button" class="dropdown-item js-condition-clone"
+              data-url="{% url 'condition:clone_condition' condition.id action.id %}">{{ condition.name }}</button>
+    {% endfor %}
   </div>
-{% endif %}
+</div>
