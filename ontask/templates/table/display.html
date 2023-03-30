@@ -132,12 +132,12 @@
             <span class="fa fa-plus"></span> {% trans 'Row' %}
           </a>
           {% include 'column/includes/add_menu.html' %}
-          <div class="dropdown btn-group shadow">
+          <div id="select-view-name" class="dropdown btn-group shadow">
             <button class="shadow btn btn-outline-dark dropdown-toggle" type="button"
               id="viewsOperations" data-toggle="dropdown">
               <span class="fa fa-eye"></span> {% trans 'Views' %}
             </button>
-            <div class="shadow dropdown-menu" aria-labelledby="viewsOperations">
+            <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="viewsOperations">
               <button type="button" class="btn dropdown-item js-view-add"
                       data-url="{% url 'table:view_add' %}"
                       data-toggle="tooltip"

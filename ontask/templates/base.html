@@ -113,8 +113,8 @@
               {% block navbar-right %}
                 {% if user.is_authenticated %}
                   {% if user.is_staff %}
-                    <li class="nav-item dropdown">
-                      <a href="#" id="ontask-base-admin"
+                    <li id="ontask-base-admin" class="nav-item dropdown">
+                      <a href="#"
                          class="nav-link dropdown-toggle{% if '_admin' in request.path %} active{% endif %}"
                          data-toggle="dropdown">
                         <span class="fa fa-cogs"></span> {% trans 'Admin' %}

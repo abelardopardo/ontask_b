@@ -112,7 +112,7 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
 
         # Set the right columns to process
         self.click_dropdown_option(
-            "//div[@id='column-selector']",
+            'column-selector',
             '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~2'
         )
         self.wait_for_datatable('column-selected-table_previous')
@@ -125,14 +125,12 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
 
         # Set some parameters
         self.select_parameters_tab()
-        self.click_dropdown_option(
-            "//div[@id='select-key-column-name']", 'sid')
+        self.click_dropdown_option('select-key-column-name', 'sid')
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.select_parameters_tab()
-        self.click_dropdown_option("//div[@id='select-key-column-name']",
-            'email')
+        self.click_dropdown_option('select-key-column-name', 'email')
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
@@ -194,17 +192,13 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_class_name('note-editable').click()
 
         # Insert attribute
-        self.click_dropdown_option(
-            "//div[@id='attribute-selector']",
-            symbols + '3')
+        self.click_dropdown_option('attribute-selector', symbols + '3')
 
         # Insert column name
-        self.click_dropdown_option("//div[@id='column-selector']", symbols)
+        self.click_dropdown_option('column-selector', symbols)
 
         # Insert second column name
-        self.click_dropdown_option(
-            "//div[@id='column-selector']",
-            symbols + '2')
+        self.click_dropdown_option('column-selector', symbols + '2')
 
         # Create new condition
         self.create_condition(symbols + "4",
@@ -287,8 +281,7 @@ class DataopsSymbols(tests.OnTaskLiveTestCase):
         # Set the correct values for an action-in
         # Set the right columns to process
         self.select_parameters_tab()
-        self.click_dropdown_option("//div[@id='select-key-column-name']",
-            'email' + symbols)
+        self.click_dropdown_option('select-key-column-name', 'email' + symbols)
         # This wait is incorrect. Don't know how to wait for an AJAX call.
         WebDriverWait(self.selenium, 10).until_not(
             EC.visibility_of_element_located((By.ID, 'div-spinner'))

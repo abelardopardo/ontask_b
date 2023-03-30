@@ -518,7 +518,7 @@ class ScreenTestFixture(ScreenTests):
         #
         # Table Views
         #
-        self.selenium.find_element_by_id('viewsOperations').click()
+        self.selenium.find_element_by_id('select-view-name').click()
 
         # Picture of the body
         self.body_ss('table_views.png')
@@ -532,10 +532,8 @@ class ScreenTestFixture(ScreenTests):
         self.body_ss('table_view_view.png')
 
         # Click edit view definition
-        self.go_to_table()
-
-        # Button to dropdown the Views and click in the Midterm
-        self.click_dropdown_option('//*[@id="viewsOperations"]', 'Midterm')
+        self.selenium.find_element_by_xpath(
+            '//button[contains(@class, "js-view-edit")]').click()
         self.wait_for_modal_open()
 
         # Take picture of the modal
@@ -622,7 +620,7 @@ class ScreenTestFixture(ScreenTests):
         # Action In URL enable
         #
         self.go_to_actions()
-        self.open_action_url('Student comments Week 1')
+        self.open_action_operation('Student comments Week 1', 'URl On')
 
         # Take picture of the modal
         self.modal_ss('action_action_in_URL.png')
@@ -825,7 +823,10 @@ class ScreenTestFixture(ScreenTests):
         # Create ZIP
         #
         self.go_to_actions()
-        self.open_action_zip('Midterm comments')
+        self.open_action_operation(
+            'Midterm comments',
+            'ZIP',
+            'zip-action-request-data')
 
         # Picture of the body
         self.body_ss('action_zip_request_data.png')
@@ -854,7 +855,7 @@ class ScreenTestFixture(ScreenTests):
         #
         # Action URL
         #
-        self.open_action_url('Midterm comments', 'URL Off')
+        self.open_action_operation('Midterm comments', 'URL Off')
 
         # Take picture of the modal
         self.modal_ss('action_URL_on.png')
@@ -878,7 +879,10 @@ class ScreenTestFixture(ScreenTests):
         #
         # Open Action Schedule and schedule the Personalized Text action
         #
-        self.open_action_schedule('Midterm comments')
+        self.open_action_operation(
+            'Midterm comments',
+            'Schedule',
+            'email-schedule-send')
 
         # Fill out some fields
         self.selenium.find_element_by_id('id_name').send_keys(
@@ -916,7 +920,10 @@ class ScreenTestFixture(ScreenTests):
         #
         # Open Action Schedule and schedule the Personalized JSON
         #
-        self.open_action_schedule('Send JSON to remote server')
+        self.open_action_operation(
+            'Send JSON to remote server',
+            'Schedule',
+            'email-schedule-send')
 
         # Fill out some fields
         self.selenium.find_element_by_id('id_name').send_keys(

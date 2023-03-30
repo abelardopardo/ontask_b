@@ -3,22 +3,20 @@
 <div class="shadow rounded tab-pane px-3 fade show border border-dark"
      id="questions" role="tabpanel" aria-labelledby="questions-tab">
   <div id="insert-questions" class="text-center mt-3">
-    <div id="column-selector">
-      <div class="dropdown btn-group">
-        <button type="button" class="btn btn-outline-dark dropdown-toggle"
-                data-toggle="dropdown">
-          {% if is_survey %}
-            {% trans 'Insert existing question' %}
-          {% else %}
-            {% trans 'Insert existing TODO item' %}
-          {% endif %}
-        </button>
-        <div class="shadow dropdown-menu scrollable-menu">
-          {% for column in columns_to_insert %}
-            <button type="button" class="dropdown-item js-insert-question"
-                    data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
-          {% endfor %}
-        </div>
+    <div id="column-selector" class="dropdown btn-group">
+      <button type="button" class="btn btn-outline-dark dropdown-toggle"
+              data-toggle="dropdown">
+        {% if is_survey %}
+          {% trans 'Insert existing question' %}
+        {% else %}
+          {% trans 'Insert existing TODO item' %}
+        {% endif %}
+      </button>
+      <div class="shadow dropdown-menu scrollable-menu">
+        {% for column in columns_to_insert %}
+          <button type="button" class="dropdown-item js-insert-question"
+                  data-url="{% url 'action:select_column_action' action.id column.id %}">{{ column.name }}</button>
+        {% endfor %}
       </div>
       {% if is_survey %}
         <button type="button"

@@ -351,14 +351,8 @@ class TableViews(tests.OnTaskLiveTestCase):
         # Open the Table view
         self.go_to_table()
 
-        # Open the Views menu
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space()="Views"]').click()
-
         # Button to add a view
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='View']").click()
-        self.wait_for_modal_open()
+        self.click_dropdown_option_num_and_wait('select-view-name', 1)
 
         # Insert data to create the first view
         self.selenium.find_element_by_id("id_name").click()
@@ -387,36 +381,20 @@ class TableViews(tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_name(
             "builder_rule_0_value_0"
         ).send_keys("5")
+
         # Save the view
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Add view']"
         ).click()
-        self.wait_close_modal_refresh_table('view-table_previous')
-
-        # Click in the link to see the table resulting from this view
-        self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']"
-            "//td[2][normalize-space() = 'v1']/../td[1]/div/button[2]"
-        ).click()
-        # Wait for the table to be refreshed
-        self.wait_for_datatable('table-data_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check the number of entries
         self.assertIn(
             'Showing 1 to 10 of 13 entries (filtered from 100 total entries)',
             self.selenium.page_source)
 
-        # Go back to the views page
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space()="Views"]').click()
-        # Wait for the table to be refreshed
-        self.wait_for_datatable('view-table_previous')
-
         # Add a second view
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='View']"
-        ).click()
-        self.wait_for_modal_open()
+        self.click_dropdown_option_num_and_wait('select-view-name', 1)
 
         # Add the details for the second view
         self.selenium.find_element_by_id("id_name").click()
@@ -453,35 +431,17 @@ class TableViews(tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Add view']"
         ).click()
-        self.wait_close_modal_refresh_table('view-table_previous')
-
-        # Check the table resulting from the view
-        self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']"
-            "//td[2][normalize-space() = 'v2']/../td[1]/div/button[2]"
-        ).click()
-        # Wait for the table to be refreshed
-        self.wait_for_datatable('table-data_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check the number of entries
         self.assertIn(
             'Showing 1 to 10 of 42 entries (filtered from 100 total entries)',
             self.selenium.page_source)
 
-        # Click in views button and go back to the full table
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space()="Views"]').click()
-        self.wait_for_datatable('view-table_previous')
+        # Click in views full table view
+        self.click_dropdown_option('select-view-name', 'Full table')
 
-        self.selenium.find_element_by_link_text("Full Table").click()
         # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='table-content']/h1"),
-                'Table'
-            )
-        )
-
         self.wait_for_datatable('table-data_previous')
 
         # Check the number of entries
@@ -489,34 +449,27 @@ class TableViews(tests.OnTaskLiveTestCase):
             'Showing 1 to 10 of 100 entries',
             self.selenium.page_source)
 
-        # Go back to the view management
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space()="Views"]').click()
-        # Wait for the table to be refreshed
-        self.wait_for_datatable('view-table_previous')
-
         # Click in the clone link of the first view
-        self.selenium.find_element_by_xpath(
-            '//table[@id="view-table"]//tr/td[2][normalize-space() = "v1"]/'
-            '../td[1]/div/button[3]'
-        ).click()
+        self.click_dropdown_option('select-view-name', 'v1')
+        self.wait_for_datatable('table-data_previous')
+
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, '//button[normalize-space()="Clone view"]')
-            )
-        )
+                (By.XPATH, '//button[contains(@class, "js-view-clone")]')))
+        self.selenium.find_element_by_xpath(
+            '//button[contains(@class, "js-view-clone")]').click()
+        self.wait_for_modal_open()
+
         # Confirm view cloning
         self.selenium.find_element_by_xpath(
             "//div[@class='modal-footer']/button[normalize-space()='Clone "
             "view']"
         ).click()
-        self.wait_close_modal_refresh_table('view-table_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Open the view with the clone
-        self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']"
-            "//td[2][normalize-space() = 'Copy of v1']/../td[1]/div/button[2]"
-        ).click()
+        self.click_dropdown_option('select-view-name', 'Copy of v1')
+
         # Wait for the table to be refreshed
         self.wait_for_datatable('table-data_previous')
 

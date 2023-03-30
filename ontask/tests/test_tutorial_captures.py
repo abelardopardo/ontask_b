@@ -58,9 +58,9 @@ class TutorialCaptures(ScreenTests):
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'docs',
-                         'Dataset',
-                         'all_data.csv')
+                'docs',
+                'Dataset',
+                'all_data.csv')
         )
 
         self.body_ss('tutorial_csv_upload_learner_information.png')
@@ -71,17 +71,17 @@ class TutorialCaptures(ScreenTests):
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, '//body/div/h1'),
-                                             'Select Columns')
+                'Select Columns')
         )
 
         # Uncheck two elements
         element = self.search_table_row_by_string('workflow-table',
-                                                  2,
-                                                  'Surname')
+            2,
+            'Surname')
         element.find_element_by_xpath('td[5]/input').click()
         element = self.search_table_row_by_string('workflow-table',
-                                                  2,
-                                                  'GivenName')
+            2,
+            'GivenName')
         element.find_element_by_xpath('td[5]/input').click()
 
         self.body_ss('tutorial_csv_upload_confirm.png')
@@ -97,7 +97,7 @@ class TutorialCaptures(ScreenTests):
 
         # Take picture of the top-bar menu
         self.element_ss('//nav[contains(@class, "fixed-top")]',
-                        'tutorial_top_menu_bar.png')
+            'tutorial_top_menu_bar.png')
 
         # Go back to details
         self.go_to_details()
@@ -111,11 +111,7 @@ class TutorialCaptures(ScreenTests):
         self.go_to_table()
 
         # Button to dropdown the Views
-        self.click_dropdown_option_num_and_wait(
-            '//*[@id="viewsOperations"]',
-            0)
-        # Wait for the form to create the derived column
-        self.wait_for_modal_open()
+        self.click_dropdown_option_num_and_wait('select-view-names', 0)
 
         # Insert data to create the view
         element = self.selenium.find_element_by_id('id_name')
@@ -157,8 +153,8 @@ class TutorialCaptures(ScreenTests):
 
         # select the statistics of one of the learners
         element = self.search_table_row_by_string('table-data',
-                                                  2,
-                                                  'ckrn7263@bogus.com')
+            2,
+            'ckrn7263@bogus.com')
         element = element.find_element_by_xpath('td[1]/div/button[2]')
         self.selenium.execute_script(element.get_attribute('onclick'))
         WebDriverWait(self.selenium, 10).until(
@@ -192,9 +188,9 @@ class TutorialCaptures(ScreenTests):
         )
         self.selenium.find_element_by_id('id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
-                         'docs',
-                         'Dataset',
-                         'moodle_grades.csv')
+                'docs',
+                'Dataset',
+                'moodle_grades.csv')
         )
 
         # Picture of the body
@@ -306,7 +302,7 @@ class TutorialCaptures(ScreenTests):
 
         # Take picture of the html editor
         self.element_ss('//div[@id="html-editor"]',
-                        'tutorial_personalized_text_editor_with_column.png')
+            'tutorial_personalized_text_editor_with_column.png')
 
         # Create the first condition
         self.select_condition_tab()
@@ -329,22 +325,22 @@ class TutorialCaptures(ScreenTests):
 
         # Take picture of the html editor
         self.element_ss('//div[@id="html-editor"]',
-                        'tutorial_personalized_text_condition_inserted.png')
+            'tutorial_personalized_text_condition_inserted.png')
 
         # Create the remaining conditions
         self.select_condition_tab()
         self.create_condition('Program is FSCI',
-                              '',
-                              [('Program', 'equal', 'FSCI')]
-                              )
+            '',
+            [('Program', 'equal', 'FSCI')]
+        )
         self.create_condition('Program is FEIT',
-                              '',
-                              [('Program', 'equal', 'FEIT')]
-                              )
+            '',
+            [('Program', 'equal', 'FEIT')]
+        )
         self.create_condition('Program is SMED',
-                              '',
-                              [('Program', 'equal', 'SMED')]
-                              )
+            '',
+            [('Program', 'equal', 'SMED')]
+        )
 
         # Insert additional sentences for each program
         self.select_text_tab()
@@ -355,12 +351,12 @@ class TutorialCaptures(ScreenTests):
 
         # Take picture of the html editor
         self.element_ss('//div[@id="html-editor"]',
-                        'tutorial_personalized_text_condition_inserted2.png')
+            'tutorial_personalized_text_condition_inserted2.png')
 
         # Open the filter condition
         self.select_filter_tab()
         self.create_filter('Full time attendance',
-                           [('Attendance', 'equal', 'Full Time')])
+            [('Attendance', 'equal', 'Full Time')])
         # Open it again for the picture
         self.open_filter()
         self.modal_ss('tutorial_personalized_text_filter.png')
@@ -448,7 +444,7 @@ class TutorialCaptures(ScreenTests):
         self.wait_for_datatable('action-table_previous')
 
         # Click in the URL link
-        self.open_action_url('Program advice', 'URL Off')
+        self.open_action_operation('Program advice', 'URL Off')
 
         # Capture the modal with the URL
         self.modal_ss('tutorial_personalzed_text_URL.png')
@@ -459,7 +455,10 @@ class TutorialCaptures(ScreenTests):
         #
         # Download ZIP (for Moodle)
         #
-        self.open_action_zip('Program advice')
+        self.open_action_operation(
+            'Program advice',
+            'ZIP',
+            'zip-action-request-data')
 
         # Select the key column
         select = Select(self.selenium.find_element_by_id(
@@ -519,11 +518,11 @@ class TutorialCaptures(ScreenTests):
         )
 
         self.create_condition('Less than 50 in the midterm',
-                              '',
-                              [('Total', 'less', '50')])
+            '',
+            [('Total', 'less', '50')])
         self.create_condition('More or equal to 50 in midterm',
-                              '',
-                              [('Total', 'greater or equal', '50')])
+            '',
+            [('Total', 'greater or equal', '50')])
 
         self.select_json_text_tab()
         self.selenium.find_element_by_id('id_text_content').send_keys(
@@ -652,8 +651,8 @@ class TutorialCaptures(ScreenTests):
         self.select_parameters_tab()
 
         # Select email column as key column
-        self.click_dropdown_option('//div[@id="select-key-column-name"]',
-                                   'email')
+        self.click_dropdown_option('select-key-column-name', 'email')
+
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
         WebDriverWait(self.selenium, 10).until_not(
@@ -735,8 +734,8 @@ class TutorialCaptures(ScreenTests):
         # Create the filter
         self.select_filter_tab()
         self.create_filter('Complete data',
-                           [('Survey Q1', 'is not null', None),
-                            ('Total', 'is not null', None)])
+            [('Survey Q1', 'is not null', None),
+             ('Total', 'is not null', None)])
 
         # Open to take the picture
         self.open_filter()

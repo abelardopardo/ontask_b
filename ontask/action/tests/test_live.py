@@ -39,7 +39,7 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Click on the action rename link
-        self.open_action_rename(self.action_name)
+        self.open_action_operation(self.action_name, 'Rename')
 
         # Rename the action
         self.selenium.find_element_by_id('id_name').send_keys(suffix)
@@ -294,7 +294,7 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.open_action_url('simple action', txt='URL Off')
+        self.open_action_operation('simple action', 'URL Off')
 
         # Assert the content in the modal
         self.assertIn(
@@ -316,7 +316,7 @@ class ActionActionEdit(tests.OnTaskLiveTestCase):
         action = models.Action.objects.get(name='simple action')
         self.assertEqual(action.serve_enabled, True)
 
-        self.open_action_url('simple action')
+        self.open_action_operation('simple action', 'URl On')
         # Disable the URL
         self.selenium.find_element_by_id('id_serve_enabled').click()
         # Click OK
@@ -370,8 +370,7 @@ class ActionActionInCreate(tests.OnTaskLiveTestCase):
 
         # Select email column as key column
         self.select_parameters_tab()
-        self.click_dropdown_option("//div[@id='select-key-column-name']",
-            'email')
+        self.click_dropdown_option('select-key-column-name', 'email')
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
         WebDriverWait(self.selenium, 10).until_not(
@@ -379,10 +378,7 @@ class ActionActionInCreate(tests.OnTaskLiveTestCase):
         )
 
         self.select_questions_tab()
-        self.click_dropdown_option(
-            "//div[@id='column-selector']",
-            'registered'
-        )
+        self.click_dropdown_option('column-selector', 'registered')
         self.wait_for_datatable('column-selected-table_previous')
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -568,7 +564,7 @@ class ActionActionZip(tests.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Click in the page to send email
-        self.open_action_zip('Detecting age')
+        self.open_action_operation('Detecting age', 'ZIP', 'zip-action-request-data')
 
         # The zip should include 2 files
         self.assertIn('A ZIP with 2 files will be created',
@@ -922,9 +918,7 @@ class ActionCreateRubric(tests.OnTaskLiveTestCase):
             + 'Course Coordinator')
 
         self.select_rubric_tab()
-        self.click_dropdown_option(
-            '//div[@id="insert-criterion"]',
-            'Structure')
+        self.click_dropdown_option('insert-criterion', 'Structure')
         self.wait_for_datatable('rubric-table_previous')
 
         # Insert an extra criterion
