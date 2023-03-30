@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
 
 """Functions for Condition CRUD."""
+import copy
+
 from typing import Optional, Type
 
 from django import http
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
 from ontask import models
 from ontask.condition import forms, services
 from ontask.core import (
-    UserIsInstructor, ajax_required, get_action, get_condition, is_instructor,
-    get_filter)
+    UserIsInstructor, ajax_required, get_action, get_condition, get_filter,
+    is_instructor)
 
 
 class ConditionBaseCreateView(UserIsInstructor, generic.TemplateView):
@@ -142,6 +146,56 @@ def edit_filter(
 
 @user_passes_test(is_instructor)
 @ajax_required
+@get_action()
+def set_filter(
+    request: http.HttpRequest,
+    pk: int,
+    view_id: int,
+    workflow: Optional[models.Workflow] = None,
+    action: Optional[models.Action] = None,
+) -> http.JsonResponse:
+    """Set the formula in the view as the action filter
+
+    :param request: HTTP request
+    :param pk: View ID
+    :param workflow: Workflow being processed
+    :param action: Action being used
+    :view_id: ID of the view to use as filter
+
+    :return: AJAX response
+    """
+    del pk
+    view = workflow.views.filter(pk=view_id).first()
+    if not view:
+        messages.error(
+            request,
+            _('Incorrect invocation of set view as filter'),
+        )
+        return http.JsonResponse({'html_redirect': ''})
+
+    # If the action has a filter nuke it.
+    filter_obj = action.get_filter()
+    if filter_obj:
+        filter_obj.delete_from_action()
+
+    filter_obj = models.Filter(
+        workflow=workflow,
+        action=action,
+        description_text=view.description_text,
+        formula=copy.deepcopy(view.formula),
+        n_rows_selected=-1)
+    filter_obj.save()
+
+    # Action counts need to be updated.
+    action.rows_all_false = None
+    action.save()
+    action.update_n_rows_selected()
+
+    return http.JsonResponse({'html_redirect': ''})
+
+
+@user_passes_test(is_instructor)
+@ajax_required
 @get_condition(pf_related=['columns'])
 def edit_condition(
     request: http.HttpRequest,
@@ -212,7 +266,8 @@ def delete_filter(
             filter.action.set_text_content(action_content)
 
         filter.log(request.user, models.Log.CONDITION_DELETE)
-        filter.delete()
+        filter.action = None
+        filter.delete_from_action()
         action.rows_all_false = None
         action.save()
         action.update_n_rows_selected()
@@ -253,7 +308,8 @@ def delete_condition(
             action.set_text_content(action_content)
 
         condition.log(request.user, models.Log.CONDITION_DELETE)
-        condition.delete()
+        condition.action = None
+        condition.delete_from_action()
         action.rows_all_false = None
         action.save(update_fields=['rows_all_false'])
         return http.JsonResponse({'html_redirect': ''})

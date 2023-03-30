@@ -17,6 +17,10 @@ urlpatterns = [
         name='create_filter'),
     path('<int:pk>/edit_filter/', views.edit_filter, name='edit_filter'),
     path('<int:pk>/delete_filter/', views.delete_filter, name='delete_filter'),
+    path(
+        '<int:pk>/<int:view_id>/set_filter/',
+        views.set_filter,
+        name='set_filter'),
 
     #
     # CONDITIONS

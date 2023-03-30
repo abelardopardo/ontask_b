@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """Condition Model."""
+from typing import Dict
+
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -24,13 +26,13 @@ class ConditionBase(CreateModifyFields):
     @DynamicAttrs
     """
 
-    formula = JSONField(
+    _formula = JSONField(
         default=dict,
         blank=True,
         null=True,
         verbose_name=_('formula'))
 
-    formula_text = models.CharField(
+    _formula_text = models.CharField(
         max_length=CHAR_FIELD_LONG_SIZE,
         default='',
         blank=True,
@@ -44,6 +46,34 @@ class ConditionBase(CreateModifyFields):
         name='n_rows_selected',
         blank=False,
         null=False)
+
+    # Boolean flagging if the formula is empty
+    empty_formula = None
+
+    def update_fields(self):
+        """Update some internal fields."""
+        self.empty_formula = dataops_formula.is_empty(self._formula)
+        if not self.empty_formula:
+            self._formula_text = dataops_formula.evaluate(
+                self._formula,
+                dataops_formula.EVAL_TXT)
+        else:
+            self._formula_text = ''
+
+    @property
+    def formula(self):
+        """Get the formula value"""
+        return self._formula
+
+    @formula.setter
+    def formula(self, value):
+        """Setter for the formula field"""
+        self._formula = value
+
+    @property
+    def formula_text(self) -> str:
+        """Return the text rendering of the formula."""
+        return self._formula_text
 
     def update_n_rows_selected(self, column=None, filter_formula=None):
         """Calculate the number of rows for which condition is true.
@@ -78,19 +108,6 @@ class ConditionBase(CreateModifyFields):
         self.save(update_fields=['n_rows_selected'])
 
         return old_count != self.n_rows_selected
-
-    def get_formula_text(self):
-        """Translate the formula to plain text.
-
-        Return the content of the formula in a string that is human readable
-        :return: String
-        """
-        if not self.formula_text:
-            self.formula_text = dataops_formula.evaluate(
-                self.formula,
-                dataops_formula.EVAL_TXT)
-            self.save(update_fields=['formula_text'])
-        return self.formula_text
 
     class Meta:
         """Make the class abstract."""
@@ -142,7 +159,7 @@ class Condition(NameAndDescription, ConditionBase):
             'id': self.id,
             'name': self.name,
             'action': self.action.name,
-            'formula': self.get_formula_text(),
+            'formula': self.formula_text,
             'n_rows_selected': self.n_rows_selected,
             'workflow_id': self.workflow.id}
 
@@ -199,17 +216,46 @@ class Filter(ConditionBase):
         blank=True,
         related_name='filter_tmp')
 
+    view = models.ForeignKey(
+        'View',
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='view')
+
     @property
     def is_filter(self) -> bool:
         """Identify as filter"""
         return True
+
+    def delete_from_action(self):
+        """Remove object from action (and delete if needed)"""
+        self.action = None
+
+        if self.view is None:
+            super().delete()
+            return
+
+        self.save()
+
+
+    def delete_from_view(self):
+        """Remove object from view (and delete if needed)"""
+        self.view = None
+
+        if self.action is None:
+            super().delete()
+            return
+
+        self.save()
 
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""
         payload = {
             'id': self.id,
             'action': self.action.name if self.action else '',
-            'formula': self.get_formula_text(),
+            'formula': self.formula_text,
             'n_rows_selected': self.n_rows_selected,
             'workflow_id': self.workflow.id}
 

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """View objects."""
+from typing import Dict
+
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ontask.dataops import formula, sql
+from ontask.dataops import formula as dataops_formula, sql
 from ontask.models.column import Column
 from ontask.models.common import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
@@ -38,7 +40,7 @@ class View(NameAndDescription, CreateModifyFields):
     )
 
     # Formula to select a subset of rows for action IN
-    formula = JSONField(
+    _formula = JSONField(
         verbose_name=_("Subset of rows to show"),
         default=dict,
         blank=True,
@@ -48,8 +50,19 @@ class View(NameAndDescription, CreateModifyFields):
     # Number of rows allowed by the formula.
     nrows = None
 
-    def __str__(self):
-        return self.name
+    # Boolean flagging if the formula is empty
+    empty_formula = None
+
+    @property
+    def formula(self):
+        """Get the formula value"""
+        return self._formula
+
+    @formula.setter
+    def formula(self, value: Dict):
+        """Setter for the formula field"""
+        self._formula = value
+        self.empty_formula = dataops_formula.is_empty(value)
 
     @property
     def num_columns(self):
@@ -81,15 +94,22 @@ class View(NameAndDescription, CreateModifyFields):
         """
         return [column.name for column in self.columns.all()]
 
+    @property
+    def has_empty_formula(self):
+        """Detect if the formula is empty"""
+        if self.empty_formula is None:
+            self.empty_formula = dataops_formula.is_empty(self.formula)
+        return self.empty_formula
+
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""
         payload = {
             'id': self.id,
             'name': self.name,
             'columns': [col.name for col in self.columns.all()],
-            'formula': formula.evaluate(
+            'formula': dataops_formula.evaluate(
                 self.formula,
-                formula.EVAL_TXT),
+                dataops_formula.EVAL_TXT),
             'nrows': self.nrows}
 
         payload.update(kwargs)
@@ -98,6 +118,17 @@ class View(NameAndDescription, CreateModifyFields):
             operation_type,
             self.workflow,
             payload)
+
+    def get_formula_text(self):
+        """Translate the formula to plain text.
+
+        Return the content of the formula in a string that is human readable
+        :return: String
+        """
+        return dataops_formula.evaluate(self.formula, dataops_formula.EVAL_TXT)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         """Define uniqueness with name in workflow and order by name."""

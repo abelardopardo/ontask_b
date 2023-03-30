@@ -138,6 +138,11 @@
               <span class="fa fa-eye"></span> {% trans 'Views' %}
             </button>
             <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="viewsOperations">
+              {% if view %}
+                <a class="btn dropdown-item spin"
+                   href="{% url 'table:display' %}">
+                  <span class="fa fa-table"></span> {% trans 'Full table' %}</a>
+              {% endif%}
               <button type="button" class="btn dropdown-item js-view-add"
                       data-url="{% url 'table:view_add' %}"
                       data-toggle="tooltip"
@@ -151,11 +156,6 @@
                        class="dropdown-item spin">{{ v.name }}</a>
                   {% endif %}
                 {% endfor %}
-                {% if view %}
-                  <a class="btn dropdown-item spin"
-                     href="{% url 'table:display' %}">
-                    <span class="fa fa-table"></span> {% trans 'Full table' %}</a>
-                {% endif%}
               {% endif %}
             </div>
           </div>
@@ -198,6 +198,15 @@
           {% endif %}
         </div>
       </div>
+      {% if view %}
+        <p class="text-center lead">
+          {% if not view.has_empty_formula %}
+            {% trans 'Row filter:' %} {{ view.get_formula_text|safe }}
+          {% else %}
+            {% trans 'No row filter defined. All rows are included.' %}
+          {% endif %}
+        </p>
+      {% endif %}
       <table class="table table-hover table-bordered shadow w-100"
              id="table-data" data-url="{% url 'column:column_move' %}">
         <thead>
