@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             name='action',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='filter_tmp', to='ontask.Action'),
         ),
-	migrations.RunPython(code=move_action_reference),
+        migrations.RunPython(code=move_action_reference),
         migrations.RemoveField(
             model_name='action',
             name='filter',

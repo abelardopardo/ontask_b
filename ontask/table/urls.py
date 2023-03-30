@@ -44,7 +44,6 @@ urlpatterns = [
     #
     # Views
     #
-    path('view_index/', views.view_index, name='view_index'),
     path('view_add/', views.view_add, name='view_add'),
     path('<int:pk>/view_edit/', views.view_edit, name='view_edit'),
     path('<int:pk>/view_clone/', views.view_clone, name='view_clone'),

@@ -71,11 +71,6 @@
                          data-toggle="tooltip"
                          title="{% trans 'View the complete table' %}">
                         {% trans 'Full view' %}</a>
-                      <a href="{% url 'table:view_index' %}"
-                         class="btn dropdown-item spin{% if not request.session.ontask_workflow_rows %} disabled{% endif %}"
-                         data-toggle="tooltip"
-                         title="{% trans 'Views available for this table' %}">
-                        {% trans 'Partial Views' %}</a>
                       <a href="{% url 'dataops:uploadmerge' %}"
                          class="btn dropdown-item spin"
                          data-toggle="tooltip"

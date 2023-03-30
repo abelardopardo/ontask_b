@@ -6,7 +6,6 @@ from typing import Optional
 from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -14,36 +13,6 @@ from django.utils.translation import ugettext_lazy as _
 from ontask import OnTaskServiceException, create_new_name, models
 from ontask.core import ajax_required, get_view, get_workflow, is_instructor
 from ontask.table import forms, services
-
-
-@user_passes_test(is_instructor)
-@get_workflow(pf_related='views')
-def view_index(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Render the list of views attached to a workflow.
-
-    :param request: Http request received.
-    :param workflow: Workflow being processed
-    :return: HTTP response with the table
-    """
-    # Get the views
-    views = workflow.views.values(
-        'id',
-        'name',
-        'description_text',
-        'modified')
-
-    # Build the table only if there is anything to show (prevent empty table)
-    return render(
-        request,
-        'table/view_index.html',
-        {
-            'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-            'table': services.ViewTable(views, orderable=False),
-        },
-    )
 
 
 @user_passes_test(is_instructor)
@@ -77,7 +46,10 @@ def view_add(
         services.save_view_form(request.user, workflow, view)
         form.save_m2m()  # Needed to propagate the save effect to M2M relations
 
-        return http.JsonResponse({'html_redirect': ''})
+        return http.JsonResponse({
+            'html_redirect': reverse(
+                'table:display_view',
+                kwargs={'pk': view.id})})
 
     return http.JsonResponse({
         'html_form': render_to_string(
@@ -149,7 +121,7 @@ def view_delete(
     if request.method == 'POST':
         view.log(request.user, models.Log.VIEW_DELETE)
         view.delete()
-        return http.JsonResponse({'html_redirect': reverse('table:view_index')})
+        return http.JsonResponse({'html_redirect': reverse('table:display')})
 
     return http.JsonResponse({
         'html_form': render_to_string(

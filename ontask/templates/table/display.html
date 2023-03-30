@@ -94,9 +94,28 @@
 {% block container %}
   <div id="table-content" class="container">
     {% if view %}
-      <h1 class="text-center">{{ view.name }}</h1>
-    {% else %}
-      <h1 class="text-center">{% trans 'Table' %}</h1>
+      <h1 class="text-center">{{ view.name }}
+        <div class="btn-group btn-group-sm" role="group">
+          <button type="button" data-url="{% url 'table:view_edit' view.id %}"
+             class="btn btn-primary btn-light js-view-edit" data-toggle="tooltip"
+             title="{% trans 'Change the columns present in the view' %}">
+             <span class="fa fa-pencil"></span></button>
+          <button type="button"
+                  class="btn btn-primary btn-light js-view-clone"
+                  data-url="{% url 'table:view_clone' view.id %}"
+                  data-toggle="tooltip"
+                  title="{% trans 'Create an identical view' %}">
+            <span class="fa fa-clone"></span>
+          </button>
+          <button type="button"
+                  class="btn btn-primary btn-light js-view-delete"
+                  data-url="{% url 'table:view_delete' view.id %}"
+                  data-toggle="tooltip"
+                  title="{% trans 'Delete the view' %}">
+            <span class="fa fa-trash"></span>
+          </button>
+        </div>
+      </h1>
     {% endif %}
     {% if not columns %}
       {% include 'workflow/includes/no_data.html' %}
@@ -105,7 +124,7 @@
     {% endif %}
     {% if columns %}
       <div id="table-operation-buttons">
-        <div class="text-center mb-3">
+        <div class="text-center my-3">
           <a href="{% url 'dataops:rowcreate' %}"
              class="shadow btn btn-outline-dark spin"
              data-toggle="tooltip"
@@ -114,19 +133,18 @@
           </a>
           {% include 'column/includes/add_menu.html' %}
           <div class="dropdown btn-group shadow">
-            <button onclick="location.href='{% url 'table:view_index' %}'"
-                    class="btn btn-outline-dark spin"
-                    data-toggle="tooltip"
-                    title="{% trans 'Views available for this table' %}">
+            <button class="shadow btn btn-outline-dark dropdown-toggle" type="button"
+              id="viewsOperations" data-toggle="dropdown">
               <span class="fa fa-eye"></span> {% trans 'Views' %}
             </button>
-            {% if views %}
-              <button type="button"
-                      class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split"
-                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="sr-only">Toggle Dropdown</span>
+            <div class="shadow dropdown-menu" aria-labelledby="viewsOperations">
+              <button type="button" class="btn dropdown-item js-view-add"
+                      data-url="{% url 'table:view_add' %}"
+                      data-toggle="tooltip"
+                      title="{% trans 'Create a new table view' %}">
+                <span class="fa fa-plus"></span> {% trans 'View' %}
               </button>
-              <div class="shadow dropdown-menu dropdown-menu-right">
+              {% if views %}
                 {% for v in views %}
                   {% if v != view %}
                     <a href="{% url 'table:display_view' v.id %}"
@@ -134,19 +152,14 @@
                   {% endif %}
                 {% endfor %}
                 {% if view %}
-                  <a class="dropdown-item spin"
-                     href="{% url 'table:display' %}">{% trans 'Full table' %}</a>
+                  <a class="btn dropdown-item spin"
+                     href="{% url 'table:display' %}">
+                    <span class="fa fa-table"></span> {% trans 'Full table' %}</a>
                 {% endif%}
-              </div>
-            {% endif %}
+              {% endif %}
+            </div>
           </div>
           {% if view %}
-            <button type="button"
-                    class="shadow btn btn-outline-dark js-view-edit align-middle"
-                    data-url="{% url 'table:view_edit' view.id %}"
-                    data-toggle="tooltip" title="{% trans 'Change elements in view' %}">
-              <span class="fa fa-pencil"></span> {% trans 'Edit view' %}
-            </button>
             <a href="{% url 'table:stat_table_view' view.id %}"
                class="shadow btn btn-outline-dark spin"
                data-toggle="tooltip"
