@@ -25,22 +25,23 @@ def _propagate_changes(condition, changed_data, old_name):
     :return: Nothing
     """
     if 'formula' in changed_data:
-        # Reset the counter of rows with all conditions false
-        condition.action.rows_all_false = None
-        condition.action.save(update_fields=['rows_all_false'])
+        if condition.action:
+            # Reset the counter of rows with all conditions false
+            condition.action.rows_all_false = None
+            condition.action.save(update_fields=['rows_all_false'])
 
-        if condition.is_filter:
-            # This update must propagate to the rest of conditions
-            condition.action.update_n_rows_selected()
-            condition.refresh_from_db(fields=['n_rows_selected'])
-        else:
-            # Update the number of rows selected in the condition
-            condition.update_n_rows_selected(
-                filter_formula=condition.action.get_filter_formula())
+            if condition.is_filter:
+                # This update must propagate to the rest of conditions
+                condition.action.update_n_rows_selected()
+                condition.refresh_from_db(fields=['n_rows_selected'])
+            else:
+                # Update the number of rows selected in the condition
+                condition.update_n_rows_selected(
+                    filter_formula=condition.action.get_filter_formula())
 
     # If condition name has changed, rename appearances in the content
     # field of the action.
-    if 'name' in changed_data:
+    if 'name' in changed_data and condition.action:
         # Performing string substitution in the content and saving
         replacing = '{{% if {0} %}}'
         condition.action.text_content = condition.action.text_content.replace(
@@ -52,13 +53,15 @@ def _propagate_changes(condition, changed_data, old_name):
 def save_condition_form(
     request: http.HttpRequest,
     form,
-    action: models.Action,
+    workflow: models.workflow,
+    action: Optional[models.Action] = None,
     is_filter: Optional[bool] = False,
 ) -> http.JsonResponse:
     """Process the AJAX form POST to create and update conditions and filters.
 
     :param request: HTTP request
     :param form: Form being used to ask for the fields
+    :param workflow: Workflow being processed
     :param action: The action to which the condition is attached to
     :param is_filter: The condition is a filter
     :return: JSON response
@@ -72,16 +75,16 @@ def save_condition_form(
     # Update fields and save the condition
     condition = form.save(commit=False)
     condition.formula_text = None
-    condition.workflow = action.workflow
+    condition.workflow = workflow
     condition.action = action
     condition.save()
-    condition.columns.set(action.workflow.columns.filter(
+    condition.columns.set(workflow.columns.filter(
         name__in=formula.get_variables(condition.formula),
     ))
 
     # If the request has the 'action_content' field, update the action
     action_content = request.POST.get('action_content')
-    if action_content:
+    if action_content and action:
         action.set_text_content(action_content)
 
     _propagate_changes(condition, form.changed_data, form.old_name)

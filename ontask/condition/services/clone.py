@@ -42,7 +42,7 @@ def do_clone_condition(
 
     try:
         # Update the many to many field.
-        new_condition.columns.set(new_condition.action.workflow.columns.filter(
+        new_condition.columns.set(new_condition.workflow.columns.filter(
             name__in=formula.get_variables(new_condition.formula),
         ))
     except Exception as exc:

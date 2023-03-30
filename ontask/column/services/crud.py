@@ -330,7 +330,8 @@ def delete_column(
         filter_obj.delete()
 
         # Update the n_rows_selected
-        action.update_n_rows_selected()
+        if action:
+            action.update_n_rows_selected()
 
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.

@@ -66,6 +66,7 @@ class ConditionBaseCreateView(UserIsInstructor, generic.TemplateView):
             return services.save_condition_form(
                 request,
                 form,
+                action.workflow,
                 action,
                 is_filter=isinstance(self, FilterCreateView))
 
@@ -125,6 +126,7 @@ def edit_filter(
         return services.save_condition_form(
             request,
             form,
+            filter.action.workflow,
             filter.action,
             is_filter=True)
 
@@ -169,6 +171,7 @@ def edit_condition(
         return services.save_condition_form(
             request,
             form,
+            condition.action.workflow,
             condition.action,
             is_filter=False)
 
