@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Service to save the action when editing."""
+import copy
 from typing import Optional, Union
 
 from django import http
@@ -43,6 +44,20 @@ def save_action_form(
             # Action is New. Update certain vars
             action_item.workflow = workflow
             action_item.save()
+
+            if view_as_filter is not None:
+                view = workflow.views.filter(pk=view_as_filter).first()
+                if view is None:
+                    return http.JsonResponse({'html_redirect': None})
+
+                new_filter = models.Filter(
+                    workflow=workflow,
+                    description_text=view.description_text,
+                    action=action_item,
+                    formula=copy.deepcopy(view.formula),
+                    n_rows_selected=view.num_rows)
+                new_filter.save()
+
             log_type = models.Log.ACTION_CREATE
             return_url = reverse('action:edit', kwargs={'pk': action_item.id})
         else:

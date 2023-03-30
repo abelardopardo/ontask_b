@@ -138,17 +138,17 @@
               <span class="fa fa-eye"></span> {% trans 'Views' %}
             </button>
             <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="viewsOperations">
-              {% if view %}
-                <a class="btn dropdown-item spin"
-                   href="{% url 'table:display' %}">
-                  <span class="fa fa-table"></span> {% trans 'Full table' %}</a>
-              {% endif%}
               <button type="button" class="btn dropdown-item js-view-add"
                       data-url="{% url 'table:view_add' %}"
                       data-toggle="tooltip"
                       title="{% trans 'Create a new table view' %}">
                 <span class="fa fa-plus"></span> {% trans 'View' %}
               </button>
+              {% if view %}
+                <a class="btn dropdown-item spin"
+                   href="{% url 'table:display' %}">
+                  <span class="fa fa-table"></span> {% trans 'Full table' %}</a>
+              {% endif%}
               {% if views %}
                 {% for v in views %}
                   {% if v != view %}
@@ -173,14 +173,14 @@
                title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
             </a>
-            {% comment %}
-            <button type="button" class="shadow btn btn-outline-dark js-create-action"
-                    data-url="{% url 'action:create_from_view' view.id %}"
-                    data-toggle="tooltip"
-                    title="{% trans 'New action to collect data from learners' %}">
-              <span class="fa fa-plus"></span> {% trans 'Action' %}
-            </button>
-            {% endcomment %}
+            {% if not view.has_empty_formula %}
+              <button type="button" class="shadow btn btn-outline-dark js-create-action"
+                      data-url="{% url 'action:create_from_view' view.id %}"
+                      data-toggle="tooltip"
+                      title="{% trans 'New action using this view as filter' %}">
+                <span class="fa fa-plus"></span> {% trans 'Action with filter' %}
+              </button>
+            {% endif %}
           {% else %}
             <a href="{% url 'table:stat_table' %}"
                class="shadow btn btn-outline-dark spin"
