@@ -394,7 +394,7 @@ class TableViews(tests.OnTaskLiveTestCase):
             self.selenium.page_source)
 
         # Add a second view
-        self.click_dropdown_option_num_and_wait('select-view-name', 2)
+        self.click_dropdown_option_num_and_wait('select-view-name', 1)
 
         # Add the details for the second view
         self.selenium.find_element_by_id("id_name").click()

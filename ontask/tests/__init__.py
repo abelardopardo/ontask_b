@@ -1285,7 +1285,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.go_to_table()
 
         # Button to dropdown the Views and click in create
-        self.click_dropdown_option_num_and_wait('select-view-name', 2)
+        self.click_dropdown_option_num_and_wait('select-view-name', 1)
 
         # Wait for the form to create the derived column
         self.wait_for_modal_open()
