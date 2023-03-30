@@ -123,12 +123,6 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         null=True,
         default=None)
 
-    filter = models.OneToOneField(
-        Filter,
-        null=True,
-        default=None,
-        on_delete=models.CASCADE)
-
     # Index of rows with all conditions false
     rows_all_false = JSONField(
         default=None,

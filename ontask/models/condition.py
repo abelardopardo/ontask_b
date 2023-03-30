@@ -192,6 +192,14 @@ class Filter(ConditionBase):
         verbose_name=_('Columns present in this filter'),
         related_name='filters')
 
+    action = models.ForeignKey(
+        'Action',
+        db_index=True,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='filter_tmp')
+
     @property
     def is_filter(self) -> bool:
         """Identify as filter"""
