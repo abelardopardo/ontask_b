@@ -4,7 +4,7 @@
 
 There are three possible evaluation types:
 
-- Conventional Boolean evalaution: Done with a set of values and returns
+- Conventional Boolean evaluation: Done with a set of values and returns
 either true or false.
 
 - SQL Evaluation: Returns a SQL query object suitable to be sent to the DB
@@ -48,7 +48,7 @@ def evaluate(
         evaluate(sub_formula, eval_type, given_variables)
         for sub_formula in node['rules']]
 
-    # Combine subresults depending on the type of evaluation
+    # Combine sub-results depending on the type of evaluation
     if eval_type == operands.EVAL_EXP:
         if node['condition'] == 'AND':
             result_bool = all(sub_clauses)
@@ -92,6 +92,12 @@ def evaluate(
         result_txt = 'NOT (' + result_txt + ')'
 
     return result_txt
+
+
+def is_empty(node: Optional[Dict]) -> bool:
+    """Detect if a formula is empty"""
+
+    return (not node) or (not node.get('rules'))
 
 
 def has_variable(node, var_name):

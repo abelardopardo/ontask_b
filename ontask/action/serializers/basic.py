@@ -180,6 +180,9 @@ class ActionSerializer(serializers.ModelSerializer):
 
     conditions = ConditionSerializer(required=False, many=True)
 
+    # Although filter is a single object, it is encoded as a ForeignKey and
+    # therefore, whenever accessing filter, a QuerySet is returned (not a
+    # single object) so the serializer needs to process it as a list
     filter = FilterSerializer(required=False, many=True)
 
     # The columns field is a legacy construct. It needs a nested serializer
