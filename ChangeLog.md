@@ -1,3 +1,19 @@
+## 8.0 (2020-08-??)
+
+### Fixed
+
+- Missing HTML to visualise colum histogram in filter view (action edit)
+
+### Changed
+
+- Started to change the rebranding
+
+### Added
+
+- Added possibility of using View formula as filter
+
+- Added possibility of creating an action using view as filter
+ 
 ## 7.2 (2020-07-04)
 
 ### Fixed
