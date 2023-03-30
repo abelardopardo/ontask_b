@@ -54,7 +54,7 @@ def run_compatibility_patches(json_data: List) -> List:
             if '_formula' not in cond:
                 cond['_formula'] = cond.pop('formula')
             if '_formula_text' not in cond:
-                cond['_formula_text'] = cond.pop('formula_text')
+                cond['_formula_text'] = cond.pop('formula_text', None)
 
         filter_obj = action_obj.get('filter')
         if filter_obj and '_formula' not in filter_obj[0]:

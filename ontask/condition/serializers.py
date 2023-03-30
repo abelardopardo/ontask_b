@@ -108,7 +108,8 @@ class ConditionBaseSerializer(serializers.ModelSerializer):
         """Define object condition and select fields to serialize."""
 
         abstract = True
-        exclude = ('id', 'workflow', 'action', 'created', 'modified')
+        exclude = (
+            'id', 'workflow', 'action', 'created', 'modified', '_formula_text')
 
 class ConditionSerializer(ConditionBaseSerializer):
 
