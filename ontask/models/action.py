@@ -157,7 +157,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
             (self.active_from and now < self.active_from)
             or (self.active_to and self.active_to < now))
 
-    def get_filter(self) -> Optional[Condition]:
+    def get_filter(self) -> Optional[Filter]:
         """Get filter condition."""
         return self.filter.first()
 

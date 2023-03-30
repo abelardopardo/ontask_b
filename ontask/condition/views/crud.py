@@ -201,26 +201,25 @@ def delete_filter(
     :return: AJAX response
     """
     del pk, workflow
-    if request.method == 'GET':
-        return http.JsonResponse({
-            'html_form': render_to_string(
-                'condition/includes/partial_filter_delete.html',
-                {'id': filter.id},
-                request=request),
-        })
+    if request.method == 'POST':
+        action = filter.action
+        # If the request has 'action_content', update the action
+        action_content = request.POST.get('action_content')
+        if action_content:
+            filter.action.set_text_content(action_content)
 
-    # If the request has 'action_content', update the action
-    action_content = request.POST.get('action_content')
-    if action_content:
-        filter.action.set_text_content(action_content)
+        filter.log(request.user, models.Log.CONDITION_DELETE)
+        filter.delete()
+        action.rows_all_false = None
+        action.update_n_rows_selected()
+        return http.JsonResponse({'html_redirect': ''})
 
-    filter.log(request.user, models.Log.CONDITION_DELETE)
-    action = filter.action
-    filter.delete()
-    action.update_n_rows_selected()
-    action.rows_all_false = None
-    action.save(update_fields=['rows_all_false'])
-    return http.JsonResponse({'html_redirect': ''})
+    return http.JsonResponse({
+        'html_form': render_to_string(
+            'condition/includes/partial_filter_delete.html',
+            {'id': filter.id},
+            request=request),
+    })
 
 
 @user_passes_test(is_instructor)

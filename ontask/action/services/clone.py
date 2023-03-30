@@ -72,6 +72,11 @@ def do_clone_action(
         for condition in action.conditions.all():
             services.do_clone_condition(user, condition, new_action)
 
+        # Clone the filter
+        filter_obj = action.get_filter()
+        if filter_obj:
+            services.do_clone_filter(user, filter_obj, new_action)
+
         # Update
         new_action.save()
     except Exception as exc:
