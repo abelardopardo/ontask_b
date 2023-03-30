@@ -72,7 +72,7 @@ Attributes
 
   The |fa-plus| *Attribute* button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The |fa-pencil| icon opens the form to edit its content. The |fa-trash| icon deletes the attribute.
 
-  The use of these attributes is to facilitate a single point of change when a value appears in multiple locations. For example, every personalized text actino is singed with the name of the instructor. If that name changes, all actions need to be edited. On the other hand, if the actions contain the name of an attribute, just changing the attribute value propagates the change to all actions.
+  The use of these attributes is to facilitate a single point of change when a value appears in multiple locations. For example, every personalized text action is singed with the name of the instructor. If that name changes, all actions need to be edited. On the other hand, if the actions contain the name of an attribute, just changing the attribute value propagates the change to all actions.
 
 .. _details_sharing:
 

@@ -145,4 +145,4 @@ The platform keeps a log of most of the operations that are executed when managi
    :align: center
    :width: 100%
 
-The |fa-download| *CSV Download* button allows to download the logs in CSV format for further processing. Additionally, the content of the table is paginated and the links to access each page are shown at the botton. The records can be searched using the box at the top right corner of the table.
+The |fa-download| *CSV Download* button allows to download the logs in CSV format for further processing. Additionally, the content of the table is paginated and the links to access each page are shown at the button. The records can be searched using the box at the top right corner of the table.

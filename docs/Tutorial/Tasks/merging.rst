@@ -18,7 +18,7 @@ Another way to look at these three cases is to think of the values in the key co
 Considering these three types of rows, there are **four** possible options to combine the rows from both tables:
 
 Use all rows from both tables
-  This option takes the **union** of all the rows in any of the tables. In other words, the resulting table will contall all rows. The following figure illustrates the effect of this option.
+  This option takes the **union** of all the rows in any of the tables. In other words, the resulting table will contain all rows. The following figure illustrates the effect of this option.
 
   .. figure:: /scaptures/merge_outer.png
      :align: center

@@ -15,7 +15,7 @@ If the action is a personalized text, the screen requests information to execute
    :align: center
    :width: 100%
 
-In the case of an action that produces personalized text, the :ref:`scheduling<schedule_email>` needs a name, description (optional), the column that contains the email addresses, the date/time of the execution (in the future), the email subject, comma separated list of CC and BCC email addresses, the choice if a confirmation email is sent, the option to track the emails, and the possibility of checking the list of emails to see if any of themm should be excluded. After introducing this information the request to execute the action is submitted to the system.
+In the case of an action that produces personalized text, the :ref:`scheduling<schedule_email>` needs a name, description (optional), the column that contains the email addresses, the date/time of the execution (in the future), the email subject, comma separated list of CC and BCC email addresses, the choice if a confirmation email is sent, the option to track the emails, and the possibility of checking the list of emails to see if any of them should be excluded. After introducing this information the request to execute the action is submitted to the system.
 
 Scheduling Personalized JSON Actions
 ====================================

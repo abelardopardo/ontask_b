@@ -39,7 +39,7 @@ Retrieve/Update/Destroy workflow
 
   The screen shows the elements of the selected workflow and its content pre-populating the form at the bottom of the screen. Change the some of the values in the form and click the button ``PUT``. The workflow is modified with the new data introduced.
 
-  The buttom ``DELETE`` at the top of the page will delete the selected workflow (the web interface asks for confirmation, this is not the case with the true API.
+  The button ``DELETE`` at the top of the page will delete the selected workflow (the web interface asks for confirmation, this is not the case with the true API.
 
 Table API
 =========
@@ -47,7 +47,7 @@ Table API
 The second set of URLs (shown when using the URL suffix  ``apidoc/``) allows the manipulation of the data in the workflow tables. All operations require to provide the workflow ID as part of the URL. OnTask manipulates the data internally with a structure called `Data Frame` that is provided by the library `Pandas <https://pandas.pydata.org/>`_ that is part of the `Python <https://www.python.org/>`_ programming language. At the same time, JSON is the most widely used format to exchange data among two applications due to its simplicity. For this reason, the URLs in this section of the API use the two formats to manipulate the data: JSON or encoded Pandas Data Frames.
 
 Get, upload, replace and flush operations
-  Use the URL ``/table/id/ops/`` replacing ``id`` with the workflow identifier to access the operations to get, upload, replace and flush content of the table. The regular `GET` operation returns a JSON object with the current cotent of the table.
+  Use the URL ``/table/id/ops/`` replacing ``id`` with the workflow identifier to access the operations to get, upload, replace and flush content of the table. The regular `GET` operation returns a JSON object with the current content of the table.
 
   Select the id of a workflow without a table. Type the URL ``/table/id/ops/`` replacing the word ``id`` by the workflow id (integer value). The new page shows the current content of the table for the selected workflow and forms to enter data through the other API methods.
 
@@ -61,7 +61,7 @@ Get, upload, replace and flush operations
 
   - Post: Upload the table (only valid if the workflow has not table).
 
-  - Delete: Remove the table fro mthe workflow
+  - Delete: Remove the table from the workflow
 
   - Post: Replace the table by a new one (currently not working)
 
@@ -110,7 +110,7 @@ Merge operation
   - ``src_df``: The new table to merge with the existing one.
 
 To try this operation follow these  steps:
-  - Load the url ``/table/id/merge`` (replacing ``id`` with the corrsponding workflow id).
+  - Load the url ``/table/id/merge`` (replacing ``id`` with the corresponding workflow id).
 
   - Verify the workflow has the table created in the previous example.
 

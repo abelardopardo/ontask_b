@@ -57,7 +57,7 @@ The information in this section is for those users that want to write a Python m
    ``('name', type, [list of allowed values], initial value, help_text)``
 
 
-   These elements will be requested from the user before executing the transformatino through a form. The conditions on these values are:
+   These elements will be requested from the user before executing the transformation through a form. The conditions on these values are:
 
    - name must be a string
 

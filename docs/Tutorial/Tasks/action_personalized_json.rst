@@ -20,7 +20,7 @@ The content is divided into three areas (similar to the ones used to edit :ref:`
 
 2. This section contains the conditions to be used to conform the personalized JSON object. Two conditions have been defined in the example. The first one with name ``Less than 50 in the midterm`` is exactly stating that condition, those students for which the score in the midterm has been less than 50. The second condition is the complementary, those students for which the midterm score has been greater or equal than 50. These conditions are used in the definition of the object in the screen area below.
 
-3. This area is JSON object editor. In the previous figure you see an example of an object that contains three string/value pairs. The first two values are extracted from columns ``SID`` and ``Total`` respectively. The last field with name ``msg`` is defined using the conditions created in the second areaw of this screen.
+3. This area is JSON object editor. In the previous figure you see an example of an object that contains three string/value pairs. The first two values are extracted from columns ``SID`` and ``Total`` respectively. The last field with name ``msg`` is defined using the conditions created in the second area of this screen.
 
 The *Target URL* field captures the URL to use to send these JSON objects. The action will not be executed unless there is a non-empty value in this field.
 

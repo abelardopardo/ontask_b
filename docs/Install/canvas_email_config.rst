@@ -33,7 +33,7 @@ OnTask allows to send personalized emails to users's inbox in an instance of a `
                "aux_params": {"burst": 10, "pause": 5}}
        }
 
-  Make sure you include this informtion **all in a single line in the configuration file**.
+  Make sure you include this information **all in a single line in the configuration file**.
 
   Default: ``{}`` (Empty dictionary)
 

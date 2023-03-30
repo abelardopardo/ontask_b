@@ -43,7 +43,7 @@ Filter learners
   An expression identical to the one used in the personalized text to select a subset of the learners for which the will be available.
 
 Conditions
-  Set of conditions to control the appearance of questions in the surve.
+  Set of conditions to control the appearance of questions in the survey.
 
 This page will show you warning messages when it detects a column in the survey with an empty description, the survey has an empty description, there is no key column specified to identify the users, or the conditions are false for some or all the students.
 

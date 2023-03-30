@@ -93,7 +93,7 @@ The filter
      :align: center
      :width: 100%
 
-  The botton *Set view as filter* allows to use the condition previously defined on a :ref:`table view <table_views>` with a formula that select a subset of table rows. When setting the filter in this way, the existing expression is lost. The button *Column statistics* offers data visualisations for each column.
+  The button *Set view as filter* allows to use the condition previously defined on a :ref:`table view <table_views>` with a formula that select a subset of table rows. When setting the filter in this way, the existing expression is lost. The button *Column statistics* offers data visualisations for each column.
 
 
   The filter element shows the name, description, and the formula defined. The icons at the bottom of the object provide access to the following operations:
@@ -210,7 +210,7 @@ Conditional text
 Personalized Rubric Feedback
 ============================
 
-These actions are a special case of the :ref:`personalized text <personalized_content>` where an email template is combined with a `rubric <https://en.wikipedia.org/wiki/Rubric_(academic)>`__ to provide learners with a set of comments based on the obtained scores. A rubric is a two dimensional table. Each row is a *criterion* used for assessment (for example, when using a rubric to grade a presentation, one criterion could be the clarith with which concepts have been presented. The columns of the table are *levels of attainment* that specify how well was the criterion addressed. In each cell of this two-dimensional table there is a paragraph describing the elements of the corresponding criterion and level of attainment.
+These actions are a special case of the :ref:`personalized text <personalized_content>` where an email template is combined with a `rubric <https://en.wikipedia.org/wiki/Rubric_(academic)>`__ to provide learners with a set of comments based on the obtained scores. A rubric is a two dimensional table. Each row is a *criterion* used for assessment (for example, when using a rubric to grade a presentation, one criterion could be the clarity with which concepts have been presented. The columns of the table are *levels of attainment* that specify how well was the criterion addressed. In each cell of this two-dimensional table there is a paragraph describing the elements of the corresponding criterion and level of attainment.
 
 OnTask extends the structure of each cell and complements the description with an additional text that is called the *feedback*. Once the table has been populated (multiple criteria and multiple levels of attainment), an email template can be created in which the appropriate feedback elements are selected based on the values of each criteria for each learner.
 
@@ -226,7 +226,7 @@ The personalized rubric feedback action is created and modified using the screen
    :align: center
    :width: 100%
 
-Three tabs are available in this screen. From left to right, the first one is the :ref:`personalized text editor <personalized_text_editor>`. It offers the same functionality as described for the `personalized text action <personalized_content>` with the difference that the only personalized content allowed is the comments extracted from the rubric. Place the cursor in the location in the email and click the buttom *Insert rubric text* to insert the mark that will be replaced by the rubric text.
+Three tabs are available in this screen. From left to right, the first one is the :ref:`personalized text editor <personalized_text_editor>`. It offers the same functionality as described for the `personalized text action <personalized_content>` with the difference that the only personalized content allowed is the comments extracted from the rubric. Place the cursor in the location in the email and click the button *Insert rubric text* to insert the mark that will be replaced by the rubric text.
 
 The second tab is identical to the one in the :ref:`personalized text action <personalized_content>` to select a subset of learners to consider for this action. The right-most tab is where the rubric table is manipulated. The criteria in the rubric are either already existing columns with a common set of pre-defined values, or you can create the criteria specifying these values. The following figure shows an example of rubric with two criteria (*Presentation* and *Structure*) and each of them with three levels of attainment (*High*, *Medium* and *Poor*).
 
@@ -382,7 +382,7 @@ This type of action is only available if OnTask is :ref:`appropriately configure
    :align: center
    :width: 60%
 
-The page to edit this action is almost identical to the one to edit a :ref:`Personalized Text actin <personalized_content>`.
+The page to edit this action is almost identical to the one to edit a :ref:`Personalized Text action <personalized_content>`.
 
 .. figure:: /scaptures/action_personalized_canvas_email_edit.png
    :align: center

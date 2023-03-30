@@ -13,7 +13,7 @@ More
   Additional operations to view:
 
   Workflow operations
-    This page contains links to export, rename, clone, flush the data, or delete the workflow. It also allows you to manipulat a set of attributes, and add users to share the workflow.
+    This page contains links to export, rename, clone, flush the data, or delete the workflow. It also allows you to manipulate a set of attributes, and add users to share the workflow.
 
   Column operations
     This page shows information about the columns in the workflow.
