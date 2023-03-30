@@ -87,11 +87,14 @@ The Personalized Text HTML Editor (left tab)
 .. _personalized_text_filter:
 
 The filter
-  The center tab shows a *filter*. This element is an expression used to decide which learners (or more precisely, the corresponding rows in the data table that) will be selected and used in this action.
+  The center tab shows a *filter* to select which learners (or more precisely, the corresponding rows in the data table that) will be considered for this action.
 
   .. figure:: /scaptures/action_action_out_filterpart.png
      :align: center
      :width: 100%
+
+  The botton *Set view as filter* allows to use the condition previously defined on a :ref:`table view <table_views>` with a formula that select a subset of table rows. When setting the filter in this way, the existing expression is lost. The button *Column statistics* offers data visualisations for each column.
+
 
   The filter element shows the name, description, and the formula defined. The icons at the bottom of the object provide access to the following operations:
 
