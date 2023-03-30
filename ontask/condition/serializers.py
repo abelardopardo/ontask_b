@@ -108,23 +108,22 @@ class ConditionBaseSerializer(serializers.ModelSerializer):
         """Define object condition and select fields to serialize."""
 
         abstract = True
+        exclude = ('id', 'workflow', 'action', 'created', 'modified')
 
 class ConditionSerializer(ConditionBaseSerializer):
 
-    class Meta:
+    class Meta(ConditionBaseSerializer.Meta):
         """Define object condition and select fields to serialize."""
 
         model = models.Condition
-        exclude = ('id', 'workflow', 'action', 'created', 'modified')
 
 
 class FilterSerializer(ConditionBaseSerializer):
 
-    class Meta:
+    class Meta(ConditionBaseSerializer.Meta):
         """Define object condition and select fields to serialize."""
 
         model = models.Filter
-        exclude = ('id', 'workflow', 'created', 'modified')
 
 
 class ConditionNameSerializer(serializers.ModelSerializer):

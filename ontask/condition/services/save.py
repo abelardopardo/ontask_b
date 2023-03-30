@@ -10,7 +10,7 @@ from ontask import models
 from ontask.dataops import formula
 
 
-def _propagate_changes(condition, changed_data, old_name, is_new):
+def _propagate_changes(condition, changed_data, old_name):
     """Propagate changes in the condition to the rest of the action.
 
     If the formula has been modified, the action rows_all_false is flushed and
@@ -24,7 +24,7 @@ def _propagate_changes(condition, changed_data, old_name, is_new):
     :param is_new: if the condition has just been created
     :return: Nothing
     """
-    if is_new or 'formula' in changed_data:
+    if 'formula' in changed_data:
         # Reset the counter of rows with all conditions false
         condition.action.rows_all_false = None
         condition.action.save(update_fields=['rows_all_false'])
@@ -40,7 +40,7 @@ def _propagate_changes(condition, changed_data, old_name, is_new):
 
     # If condition name has changed, rename appearances in the content
     # field of the action.
-    if is_new or 'name' in changed_data:
+    if 'name' in changed_data:
         # Performing string substitution in the content and saving
         replacing = '{{% if {0} %}}'
         condition.action.text_content = condition.action.text_content.replace(
@@ -84,7 +84,7 @@ def save_condition_form(
     if action_content:
         action.set_text_content(action_content)
 
-    _propagate_changes(condition, form.changed_data, form.old_name, is_new)
+    _propagate_changes(condition, form.changed_data, form.old_name)
 
     # Store the type of event to log
     if is_new:

@@ -9,8 +9,7 @@ from ontask.dataops import formula as dataops_formula, sql
 from ontask.models.column import Column
 from ontask.models.workflow import Workflow
 from ontask.models.common import (
-    CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CreateModifyFields,
-    NameAndDescription,
+    CHAR_FIELD_LONG_SIZE, CreateModifyFields, NameAndDescription,
 )
 from ontask.models.logs import Log
 

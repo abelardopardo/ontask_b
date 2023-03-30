@@ -159,7 +159,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
     def get_filter(self) -> Optional[Condition]:
         """Get filter condition."""
-        return self.filter
+        return self.filter.first()
 
     def get_filter_formula(self):
         """Get filter condition."""
