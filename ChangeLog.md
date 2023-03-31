@@ -2,7 +2,7 @@
 
 ## Changed
 
-- User model is now inside the platform (no longer in authtools library). Migration requires executing the following code directly on the database before `manage.py migrate`:
+- User model is now inside the platform (no longer in authtools library). Migration requires executing the following code directly on the database before `manage.py migrate`
 
        INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0001_authtools_user_initial', CURRENT_TIMESTAMP);
        INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0002_django18', CURRENT_TIMESTAMP);
@@ -29,7 +29,7 @@
 
 - Review configuration file to add clarity.
 
-- Removed the full blown installation doc from the manual (not needed in SAS)
+- Removed the full-blown installation doc from the manual (not needed in SAS)
 
 ## Added
 
@@ -71,7 +71,7 @@
 
 ## Changed
 
-- Email and JSON report actions now allow to include multiple columns (#185)
+- Email and JSON report actions now allow including multiple columns (#185)
 
 ## Added
 
@@ -101,7 +101,7 @@
 
 ## Added
 
-- Schedule the repeated exectuion of actions. The actions can be executed during a time window and with a frequency expressed using the crontab syntax.
+- Schedule the repeated execution of actions. The actions can be executed during a time window and with a frequency expressed using the crontab syntax.
 
 - Scheduled SQL updates from a remote database
 
@@ -111,13 +111,13 @@
 
 ## Changed
 
-- Unified table rendering to always have the buttons for operations in the left side. Avoid links in table rows unless the meaning is unique and clearly understood.
+- Unified table rendering to always have the buttons for operations on the left side. Avoid links in table rows unless the meaning is unique and clearly understood.
 
 - Substantial code refactoring to reduce duplication when executing actions and various operations.
 
 - Revamp of how events are logged.
 
-- Scheduled tasks are now implemented using djanto_celery_beat and PeriodicTasks
+- Scheduled tasks are now implemented using django_celery_beat and PeriodicTasks
 
 - Upgraded to use Django 2.2.8 (and some additional libraries)
 
@@ -229,7 +229,7 @@
 
 - Added scrollable dropdown menus (Issue #159)
 
-- Attribute "shared" can no be manipulated through the Admin menu (Issue #17)
+- Attribute "shared" cannot be manipulated through the Admin menu (Issue #17)
 
 - Error when selecting the first column to sort the data in a table
 
@@ -267,7 +267,7 @@
 
 - Error in function to search value in table
 
-- Error when cacheing page chunks without the language_code
+- Error when caching page chunks without the language_code
 
 - Fixed incorrect error reporting when uploading an incorrect file
 
@@ -295,7 +295,7 @@
 
 - Error in function to search value in table
 
-- Error when cacheing page chunks without the language_code
+- Error when caching page chunks without the language_code
 
 - Fixed incorrect error reporting when uploading an incorrect file
 
@@ -331,7 +331,7 @@
 
 - Option to export workflow after JSON action run
 
-- New page for system administratio to handle plugins
+- New page for system administration to handle plugins
 
 - Admin page to manage plugins (enable them for execution)
 
@@ -363,7 +363,7 @@
 
 ## Added 
 
-- The presence of a question in a survey can be controlled by a condition. Surveys now have conditions that can be assigned to questions.
+- The presence of a question in a survey can be controlled by a condition. Surveys now have conditions that can be assigned to question objects.
 
 - Support to deploy a development server using docker (Issue #81)
 
@@ -382,7 +382,7 @@
   
 - Import operation now allows to either provide a workflow name for the import or use the original workflow name (stored in the file).
 
-- Major refactoring of the code to use type hints and an more adequate division into packages. 
+- Major refactoring of the code to use type hints and a more adequate division into packages. 
 
 - Major rewriting of data frame manipulation to use direct database operations and reduce 
   the number of load/store operations from DB to Pandas.
@@ -481,7 +481,7 @@
 
 - Allowed the configuration of HTML email or text + html email (Issue #140)
 
-- Error allowing a key column to loose this property through a merge (Issue #142)
+- Error allowing a key column to lose this property through a merge (Issue #142)
 
 - Error in serialization handling the new Condition/Column pairs
 
@@ -516,7 +516,7 @@
 
 - Upgraded requirements and propagated changes to adapt to Pandas 0.24
 
-- Underlying models to handle conditions and columns in actions (new many to many relation)
+- Underlying models to handle conditions and columns in actions (new many-to-many relation)
 
 - Switched to email_validator to validate email addresses
 
@@ -596,13 +596,13 @@
 
 ## Fixed
 
-- Randomly populated columns now are guaranteed to have equal numer of elements in each partition (Issue #104)
+- Randomly populated columns now are guaranteed to have equal number of elements in each partition (Issue #104)
 
 - Bug when using the Check all box in CSV upload. It was selecting all checkboxes in the page, now only those related to column upload
 
-- Bug allowing a workflow to loose its key column through outer merge operation. 
+- Bug allowing a workflow to lose its key column through outer merge operation. 
 
-- Bug preventing the conditions to be clone in the actions
+- Bug preventing the conditions to be cloned in the actions
 
 # 3.2.0 (2018-11-12)
 
@@ -640,7 +640,7 @@
 
 ## Fixed
 
-- Misleading information shown when flushing a workflow (Iussue #97)
+- Misleading information shown when flushing a workflow (Issue #97)
 
 - Fixed bug when merging data frames using the "right" option (Issue #98)
 
@@ -668,7 +668,7 @@
 
 - Added API entry point to schedule action execution (Issue #53)
 
-- Added operators to filter data if the cell is empty/non empty (Issue #60)
+- Added operators to filter data if the cell is empty/non-empty (Issue #60)
 
 - Added additional code to remove Word markup when copy/pasting (Issue #63)
 
@@ -712,14 +712,14 @@
 - Fixed bug opening preview in personalized text when number of learners is 
   equal to zero (Issue #70)
   
-- Fixed bug that provoked some of the scheduled actions not to be picked 
+- Fixed bug that provoked some scheduled actions not to be picked 
   (Issue #79)
   
 - Replaced all http by https in URLs for libraries (Issue #85)
 
 - Unable to delete filters by users sharing workflows (Issue #86 #87)
 
-- Fixed two errors while evaluating some of the operands in the conditions 
+- Fixed two errors while evaluating some operands in the conditions 
   (Issue #88)
   
 - Removed duplicate Middleware (Issue #89)
@@ -803,7 +803,7 @@ the personalised message (Issue #47)
 
 - Emails are now sent asynchronously through a queue (Issue #45)
   
-- Subject line for emails is now properly processed in the preview it if 
+- Subject line for emails is now properly processed in the preview if it 
   contains variables like a template (Issue #54)
   
 - Fixed incorrect number comparison when providing a range (Issue #49)
@@ -895,7 +895,7 @@ the personalised message (Issue #47)
 - Conditions and filters now show the number of rows that satisfy the 
   specified condition (issue #26)
 
-- Removed the back buttom from the page for learner data submission (issue 
+- Removed the back button from the page for learner data submission (issue 
   #27)  
 
 - All columns are selected by default when uploading a new CSV (issue #28)
@@ -911,9 +911,9 @@ the personalised message (Issue #47)
   
 - Changed wording in the buttons to move columns in the workflow (issue #29)
 
-- Excel upload does not have a sheet name by default any more (issue #38)
+- Excel upload does not have a sheet name by default (issue #38)
 
-- Datetimes shown now without the T in between (issue #42)
+- Datetime objects shown now without the T in between (issue #42)
   
 ## Fixed
 
@@ -927,7 +927,7 @@ the personalised message (Issue #47)
 - Column picker widget was rendered in an incorrect location (issue #21)   
 
 - Modal windows now opening for all the operations are not closed when clicking
-  outside of the area (issue #20)
+  outside the area (issue #20)
   
 - Fixed glitch when inserting an image in action out after using the modal
   page to edit a condition (issue #32)
@@ -942,7 +942,7 @@ the personalised message (Issue #47)
   
 - Fixed how merge operation fails in the presence of NaN appearing in Key 
   columns. The merge operation now has a security check to prevent this from 
-  hapenning (issue #41) 
+  happening (issue #41) 
   
 # 2.6.0 (2018-05-13) 
 
@@ -955,16 +955,16 @@ the personalised message (Issue #47)
 ## Changed
 
 - Major overhaul of the documentation available when merging dataframes. When
-  choosing now the merging uption, a figure and corresponding text explains the
+  choosing now the merging option, a figure and corresponding text explains the
   result of the operation.
   
-- Preventing the modal window to close when clicking outside of it.
+- Preventing the modal window to close when clicking outside it.
 
 - Simplified the layout for the Action-Out screen
 
 - Changed the name of the Workflow "Rename" button to "Edit"
 
-- Search in tables is now case insensitive.
+- Search in tables is now case-insensitive.
 
 - End of CSV upload operation now is followed by workflow details screen
 
@@ -991,7 +991,7 @@ the personalised message (Issue #47)
 
 - Tables now remember their state (number of items shown, search item)
 
-- Documentation now has the initial set of *scenarios* to showcase the differet functionality available in the platform. This section is unfinished.
+- Documentation now has the initial set of *scenarios* to showcase the different functionality available in the platform. This section is unfinished.
 
 ## Changed
 
@@ -1016,7 +1016,7 @@ the personalised message (Issue #47)
 - Bug limiting the length of the action text when using preview (Issue 18)
 
 - Bug limiting the search in tables to only pure string columns (unable to
-  search columns with booleans that are promoted to strings)
+  search columns with booleans that are changed to string)
   
 - Bug when merging/updating data sets with overlapping columns. The code
   was not considering them as existing columns. Major rewriting of the
@@ -1026,7 +1026,7 @@ the personalised message (Issue #47)
 
 - Bug when enforcing new data types after merge/update operation
 
-- Bug when flushing a workflow that did not restored the selected number of 
+- Bug when flushing a workflow that did not restore the selected number of 
   rows in the action filters.
   
 - Bug when evaluating the condition and filter expressions in the presence of 
@@ -1053,7 +1053,7 @@ the personalised message (Issue #47)
   
 ## Changed
 
-- Folded some of the operations into a pull/down menu to simplify interface
+- Folded some operations into a pull/down menu to simplify interface
 
 - Rebranded the import button in the workflows page to make sure it says 
   "Workflow" and users do not think it is the link to upload data (which is 
@@ -1080,7 +1080,7 @@ the personalised message (Issue #47)
   - all (boolean conjunction)
   - any (boolean disjunction)
 
-- The table now can be viewed selecting a "View" which is a set of colums and 
+- The table now can be viewed selecting a "View" which is a set of columns and 
   a formula to filter rows. A workflow can have an arbitrary number of views.
   They are available in the Table section and can be created, edited, deleted
   and cloned.  
@@ -1093,7 +1093,7 @@ the personalised message (Issue #47)
 - Removed django-auth-ldap from requirements. Instructions mention the need to
   install it if needed.
   
-- Simplified operation menus. Less options visible and more tucked under 
+- Simplified operation menus. Fewer options visible and more tucked under 
   dropdown buttons. 
  
 - Improved rendering of the action in form for data input from the learners.
@@ -1107,7 +1107,7 @@ the personalised message (Issue #47)
 
 - Support for LDAP integration through django-auth-ldap
 
-- Read CSV now allows to specify number of lines at the top and
+- Read CSV now allows specifying number of lines at the top and
   bottom of the file to skip.
   
 - Read Excel files into Table
@@ -1116,7 +1116,7 @@ the personalised message (Issue #47)
 
 ## Changed
 
-- Fixed various glicthes when sending confirmation emails and HTML email
+- Fixed various glitches when sending confirmation emails and HTML email
   formatting 
   
 # 2.2.0 (2017-12-23)
@@ -1125,7 +1125,7 @@ the personalised message (Issue #47)
 
 - Removed the restriction of using only column, attribute and condition names
   starting with a letter followed by a letter, digit or '_'. The only 
-  restriction is that the names cannot contain the characters " and '.
+  restriction is that the names cannot contain the characters \" and \'.
    
 # 2.1.1 (2017-12-19)
 
@@ -1193,7 +1193,7 @@ information in the installation instructions.
 
 ## Changed
 
-- Matrix is out. Table is in. Thanks Marion
+- Matrix is out. Table is in. Thanks to Marion Blumenstein (Uni Auckland)
 
 - Fixed bug when importing a workflow without data frame and requesting to
   upload it.
@@ -1208,7 +1208,7 @@ information in the installation instructions.
 - New export functionality lets you choose which elements to include (table and
   actions)
   
-- Home text next to the icon (confussing otherwise)
+- Home text next to the icon (confusing otherwise)
 
 - Test for import/export functionality
 
@@ -1253,7 +1253,7 @@ information in the installation instructions.
 
 ## Changed
 
-- User search for sharing is now case insensitive.
+- User search for sharing is now case-insensitive.
 
 - Conditions in actions appear now in the order in which they have been 
   modified
@@ -1264,7 +1264,7 @@ information in the installation instructions.
 
 - Locked workflow now shows the user (email) locking it.
 
-- Column table in workflow detail is now redered with DataTables (paging,
+- Column table in workflow detail is now rendered with DataTables (paging,
   search capacity)
   
 - Fixed search functionality in table view to search all fields (despite data
@@ -1295,7 +1295,7 @@ information in the installation instructions.
 
 ## Added
 
-- Workflows are now shared among users (with some operations reserverd only
+- Workflows are now shared among users (with some operations reserved only
   for the owner)
   
 ## Changed
@@ -1360,7 +1360,7 @@ information in the installation instructions.
    is remove once the user goes back to the main page or the session expires.
    Any access to a workflow is checked against the owner, the users that can
    access it (ManyToMany relation in workflow) and if the workflow has the 
-   sesison_key of an active session.
+   session_key of an active session.
     
 - Filter name does not need to be restricted to have a "variable" name style.
 
@@ -1382,6 +1382,6 @@ information in the installation instructions.
     - Workflow operations to manage attributes, column names, key columns
     - Search and Data entry for individual rows
     - Column deletion
-    - Fully operational admin subsite with permission control of all the
-      objects, user and group manipulation, handling Token authentiation for 
+    - Fully operational admin sub-site with permission control of all the
+      objects, user and group manipulation, handling Token authentication for 
       the API, and user profile.
