@@ -33,12 +33,12 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.open_column_edit('name')
 
         # Replace name by symbols
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys(symbols)
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys(symbols)
 
         # Click in the submit/save button
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        self.selenium.find_element(By.XPATH, "//button[@type='submit']").click()
         # MODAL WAITING
         self.wait_close_modal_refresh_table('column-table_previous')
 
@@ -46,16 +46,17 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.open_add_regular_column()
 
         # Set name to symbols (new column) and type to string
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys(symbols)
-        self.selenium.find_element_by_id("id_data_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys(symbols)
+        self.selenium.find_element(By.ID, "id_data_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_data_type"
         )).select_by_visible_text("string")
 
         # Save the new column
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        self.selenium.find_element(By.XPATH, "//button[@type='submit']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'error_1_id_name')))
 
@@ -66,12 +67,12 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
             self.selenium.page_source)
 
         # Click again in the name and introduce something different
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys(symbols + '2')
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys(symbols + '2')
 
         # Save the new column
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        self.selenium.find_element(By.XPATH, "//button[@type='submit']").click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # Click in the attributes section
@@ -79,14 +80,16 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
 
         # Delete the existing one and confirm deletion
         # click the delete button in the second row
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//table[@id="attribute-table"]'
             '//tr[1]/td[1]//button[contains(@class, "js-attribute-delete")]'
         ).click()
         self.wait_for_modal_open()
 
         # Click in the delete confirm button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
 
@@ -135,33 +138,37 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
 
         # Save action-in
         self.select_questions_tab()
-        self.selenium.find_element_by_link_text('Done').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Done').click()
         self.wait_for_id_and_spinner('action-index')
 
         # Click in the RUN link of the action in
         self.open_action_run('action in', is_action_in=True)
 
         # Enter data using the RUN menu. Select one entry to populate
-        self.selenium.find_element_by_link_text("student01@bogus.com").click()
+        self.selenium.find_element(By.LINK_TEXT, "student01@bogus.com").click()
         self.wait_for_page(element_id='action-row-datainput')
-        field = self.selenium.find_element_by_id(
+        field = self.selenium.find_element(
+            By.ID,
             'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1')
         field.click()
         field.clear()
         field.send_keys('17')
-        field = self.selenium.find_element_by_id(
+        field = self.selenium.find_element(
+            By.ID,
             'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '2')
         field.click()
         field.clear()
         field.send_keys('Carmelo Coton2')
-        field = self.selenium.find_element_by_id(
+        field = self.selenium.find_element(
+            By.ID,
             'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '3')
         field.click()
         field.clear()
         field.send_keys('xxx')
 
         # Submit the data for one entry
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='action-row-datainput']//form//button").click()
         # Wait for paging widget
         WebDriverWait(self.selenium, 10).until(
@@ -181,7 +188,7 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
                 (By.CLASS_NAME, 'note-editable')
             )
         )
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
 
         # Insert attribute
         self.click_dropdown_option('attribute-selector', symbols + '3')
@@ -203,7 +210,7 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
 
         # Click the preview button
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('js-action-preview').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-action-preview').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.CLASS_NAME, 'js-action-preview-nxt'))
@@ -213,7 +220,8 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.assertIn('Carmelo Coton', self.selenium.page_source)
 
         # Click in the "Close" button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']/div/div/div/div[2]/button[2]").click()
 
         # End of session
@@ -238,22 +246,22 @@ class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.open_column_edit('email')
 
         # Append symbols to the name
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").send_keys(symbols)
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").send_keys(symbols)
 
         # Save column information
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        self.selenium.find_element(By.XPATH, "//button[@type='submit']").click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # Select the age column and click on the edit button
         self.open_column_edit('age')
 
         # Append symbols to the name
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").send_keys(symbols)
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").send_keys(symbols)
 
         # Save column information
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        self.selenium.find_element(By.XPATH, "//button[@type='submit']").click()
         self.wait_close_modal_refresh_table('column-table_previous')
 
         # Go to the table link
@@ -286,62 +294,68 @@ class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
 
         # Done editing the action in
         self.select_questions_tab()
-        self.selenium.find_element_by_link_text('Done').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Done').click()
         self.wait_for_id_and_spinner('action-index')
 
         # Click in the run link
         self.open_action_run('action in', True)
 
         # Click on the first value
-        self.selenium.find_element_by_link_text("student01@bogus.com").click()
+        self.selenium.find_element(By.LINK_TEXT, "student01@bogus.com").click()
 
         # Modify the value of the column
-        field = self.selenium.find_element_by_id(
+        field = self.selenium.find_element(
+            By.ID,
             'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1')
         field.click()
         field.clear()
         field.send_keys('14')
 
         # Submit changes to the first element
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//button[@name='submit'])[1]"
         ).click()
         self.wait_for_id_and_spinner('actioninrun-data_previous')
 
         # Click on the second value
-        self.selenium.find_element_by_link_text("student02@bogus.com").click()
+        self.selenium.find_element(By.LINK_TEXT, "student02@bogus.com").click()
 
         # Modify the value of the columne
-        field = self.selenium.find_element_by_id(
+        field = self.selenium.find_element(
+            By.ID,
             'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1')
         field.click()
         field.clear()
         field.send_keys('15')
 
         # Submit changes to the second element
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//button[@name='submit'])[1]"
         ).click()
         self.wait_for_id_and_spinner('actioninrun-data_previous')
 
         # Click on the third value
-        self.selenium.find_element_by_link_text("student03@bogus.com").click()
+        self.selenium.find_element(By.LINK_TEXT, "student03@bogus.com").click()
 
         # Modify the value of the column
-        field = self.selenium.find_element_by_id(
+        field = self.selenium.find_element(
+            By.ID,
             'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1')
         field.click()
         field.clear()
         field.send_keys('16')
 
         # Submit changes to the second element
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//button[@name='submit'])[1]"
         ).click()
         self.wait_for_id_and_spinner('actioninrun-data_previous')
 
         # Click in the back link!
-        self.selenium.find_element_by_link_text('Back').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Back').click()
         self.wait_for_id_and_spinner('action-index')
 
         # Go to the table page
@@ -375,19 +389,19 @@ class DataopsExcelUpload(tests.EmptyWorkflowFixture, tests.OnTaskLiveTestCase):
         self.go_to_excel_upload_merge_step_1()
 
         # Upload file
-        self.selenium.find_element_by_id("id_data_file").send_keys(
+        self.selenium.find_element(By.ID, "id_data_file").send_keys(
             os.path.join(settings.ONTASK_FIXTURE_DIR, 'excel_upload.xlsx')
         )
-        self.selenium.find_element_by_id("id_sheet").click()
-        self.selenium.find_element_by_id("id_sheet").clear()
-        self.selenium.find_element_by_id("id_sheet").send_keys("results")
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.ID, "id_sheet").click()
+        self.selenium.find_element(By.ID, "id_sheet").clear()
+        self.selenium.find_element(By.ID, "id_sheet").send_keys("results")
+        self.selenium.find_element(By.NAME, "Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.ID, 'checkAll'))
         )
         self.wait_for_spinner()
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
         self.wait_for_id_and_spinner('table-data_previous')
 
         # The number of rows must be 29
@@ -415,18 +429,18 @@ class DataopsExcelUploadSheet(
         self.go_to_excel_upload_merge_step_1()
 
         # Upload the file
-        self.selenium.find_element_by_id("id_data_file").send_keys(
+        self.selenium.find_element(By.ID, "id_data_file").send_keys(
             os.path.join(settings.ONTASK_FIXTURE_DIR, 'excel_upload.xlsx')
         )
-        self.selenium.find_element_by_id("id_sheet").click()
-        self.selenium.find_element_by_id("id_sheet").clear()
-        self.selenium.find_element_by_id("id_sheet").send_keys("second sheet")
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.ID, "id_sheet").click()
+        self.selenium.find_element(By.ID, "id_sheet").clear()
+        self.selenium.find_element(By.ID, "id_sheet").send_keys("second sheet")
+        self.selenium.find_element(By.NAME, "Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.ID, 'checkAll'))
         )
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
         self.wait_for_id_and_spinner('table-data_previous')
 
         # The number of rows must be 19
@@ -456,7 +470,8 @@ class DataopsNaNProcessing(
         self.create_new_workflow('NaN')
 
         # Go to CSV Upload/Merge
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
@@ -465,15 +480,16 @@ class DataopsNaNProcessing(
         )
 
         # Select file and upload
-        self.selenium.find_element_by_id("id_data_file").send_keys(
+        self.selenium.find_element(By.ID, "id_data_file").send_keys(
             os.path.join(
                 settings.ONTASK_FIXTURE_DIR,
                 'test_df_merge_update_df1.csv'))
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
         self.wait_for_page()
 
         # Submit
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//button[@name='Submit'])[2]"
         ).click()
         self.wait_for_id_and_spinner('table-data_previous')
@@ -482,12 +498,12 @@ class DataopsNaNProcessing(
         self.go_to_csv_upload_merge_step_1()
 
         # Select the second file and submit
-        self.selenium.find_element_by_id("id_data_file").send_keys(
+        self.selenium.find_element(By.ID, "id_data_file").send_keys(
             os.path.join(
                 settings.ONTASK_FIXTURE_DIR,
                 'test_df_merge_update_df2.csv')
         )
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
@@ -495,7 +511,7 @@ class DataopsNaNProcessing(
         )
 
         # Select all the columns for upload
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
         # Wait for the upload/merge
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
@@ -505,9 +521,9 @@ class DataopsNaNProcessing(
 
         # Choose the default options for the merge (key and outer)
         # Select the merger function type
-        select = Select(self.selenium.find_element_by_id('id_how_merge'))
+        select = Select(self.selenium.find_element(By.ID, 'id_how_merge'))
         select.select_by_value('outer')
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
@@ -515,7 +531,7 @@ class DataopsNaNProcessing(
         )
 
         # Check the merge summary and proceed
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
         # Wait for the upload/merge to finish
         self.wait_for_id_and_spinner('table-data_previous')
 
@@ -565,7 +581,7 @@ class DataopsPluginExecution1(
             'transform-table',
             1,
             'Test Plugin 1 Name')
-        element.find_element_by_link_text('Test Plugin 1 Name').click()
+        element.find_element(By.LINK_TEXT, 'Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -574,22 +590,24 @@ class DataopsPluginExecution1(
         )
 
         # Provide the execution data
-        self.selenium.find_element_by_xpath("//input[@type='text']").click()
-        self.selenium.find_element_by_name("columns").click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(By.XPATH, "//input[@type='text']").click()
+        self.selenium.find_element(By.NAME, "columns").click()
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[2]"
         ).click()
 
         # Select the merge key
         self.select_plugin_output_tab()
 
-        self.selenium.find_element_by_id("id_merge_key").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_merge_key").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_merge_key"
         )).select_by_visible_text("email")
 
         # Submit the execution
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
@@ -598,7 +616,8 @@ class DataopsPluginExecution1(
 
         # There should be a message on that page
         self.assertTrue(
-            self.selenium.find_element_by_xpath(
+            self.selenium.find_element(
+                By.XPATH,
                 "//div[@id='plugin-run-done']/div/a"
             ).text.startswith(
                 'You may check the status in log number'
@@ -628,7 +647,7 @@ class DataopsPluginExecution1(
             'transform-table',
             1,
             'Test Plugin 1 Name')
-        element.find_element_by_link_text('Test Plugin 1 Name').click()
+        element.find_element(By.LINK_TEXT, 'Test Plugin 1 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -637,33 +656,35 @@ class DataopsPluginExecution1(
         )
 
         # Provide the execution data
-        self.selenium.find_element_by_xpath("//input[@type='text']").click()
+        self.selenium.find_element(By.XPATH, "//input[@type='text']").click()
         # Wait for the column eleemnt to open
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.NAME, "columns"),
             )
         )
-        self.selenium.find_element_by_name("columns").click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(By.NAME, "columns").click()
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[2]"
         ).click()
 
         # Select the merge key
         self.select_plugin_output_tab()
-        self.selenium.find_element_by_id("id_merge_key").click()
-        Select(self.selenium.find_element_by_id(
-            "id_merge_key"
-        )).select_by_visible_text("email")
+        self.selenium.find_element(By.ID, "id_merge_key").click()
+        Select(self.selenium.find_element(
+            By.ID,
+            "id_merge_key")).select_by_visible_text("email")
 
         # Put the suffix _2
-        self.selenium.find_element_by_id("id_out_column_suffix").click()
-        self.selenium.find_element_by_id("id_out_column_suffix").clear()
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_out_column_suffix").click()
+        self.selenium.find_element(By.ID, "id_out_column_suffix").clear()
+        self.selenium.find_element(
+            By.ID,
             "id_out_column_suffix").send_keys("_2")
 
         # Submit the execution
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
@@ -672,7 +693,8 @@ class DataopsPluginExecution1(
 
         # There should be a message on that page
         self.assertTrue(
-            self.selenium.find_element_by_xpath(
+            self.selenium.find_element(
+                By.XPATH,
                 "//div[@id='plugin-run-done']/div/a"
             ).text.startswith(
                 'You may check the status in log number'
@@ -717,7 +739,7 @@ class DataopsPluginExecution2(
             'transform-table',
             1,
             'Test Plugin 2 Name')
-        element.find_element_by_link_text('Test Plugin 2 Name').click()
+        element.find_element(By.LINK_TEXT, 'Test Plugin 2 Name').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -725,26 +747,31 @@ class DataopsPluginExecution2(
         self.wait_for_spinner()
 
         # Provide the execution data (input columns and merge key
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(
+            By.ID,
             "id____ontask___upload_input_0"
         ).click()
-        Select(self.selenium.find_element_by_id(
+        Select(self.selenium.find_element(
+            By.ID,
             "id____ontask___upload_input_0"
         )).select_by_visible_text('A1')
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(
+            By.ID,
             "id____ontask___upload_input_1"
         ).click()
-        Select(self.selenium.find_element_by_id(
+        Select(self.selenium.find_element(
+            By.ID,
             "id____ontask___upload_input_1"
         )).select_by_visible_text('A2')
         # merge key
         self.select_plugin_output_tab()
-        self.selenium.find_element_by_id("id_merge_key").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_merge_key").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_merge_key"
         )).select_by_visible_text("email")
         # Submit the execution
-        self.selenium.find_element_by_name("Submit").click()
+        self.selenium.find_element(By.NAME, "Submit").click()
 
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
@@ -754,7 +781,8 @@ class DataopsPluginExecution2(
 
         # There should be a message on that page
         self.assertTrue(
-            self.selenium.find_element_by_xpath(
+            self.selenium.find_element(
+                By.XPATH,
                 "//div[@id='plugin-run-done']/div/a"
             ).text.startswith(
                 'You may check the status in log number'
@@ -791,15 +819,17 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
         self.go_to_upload_merge()
 
         # Dataops/Merge CSV Merge Step 1
-        self.selenium.find_element_by_link_text("CSV").click()
+        self.selenium.find_element(By.LINK_TEXT, "CSV").click()
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(
+            By.ID,
             'id_data_file').send_keys(self.merge_file)
 
         # Click the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@type='Submit']"
         ).click()
         self.wait_for_page()
@@ -812,10 +842,11 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
         # Dataops/Merge CSV Merge Step 2
         if rename:
             # Rename the column
-            self.selenium.find_element_by_id('id_new_name_0').send_keys('2')
+            self.selenium.find_element(By.ID, 'id_new_name_0').send_keys('2')
 
         # Click the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@type='Submit']"
         ).click()
         self.wait_for_page()
@@ -827,12 +858,14 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
 
         # Dataops/Merge CSV Merge Step 3
         # Select left merge
-        Select(self.selenium.find_element_by_id(
+        Select(self.selenium.find_element(
+            By.ID,
             'id_how_merge'
         )).select_by_value(method)
 
         # Click the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@type='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -843,7 +876,8 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
 
         # Dataops/Merge CSV Merge Step 4
         # Click in Finish
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Finish']"
         ).click()
         self.wait_for_id_and_spinner('table-data_previous')

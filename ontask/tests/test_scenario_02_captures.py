@@ -26,7 +26,7 @@ class Scenario2Captures(ScreenTests):
         self.login('instructor01@bogus.com')
 
         # Open Import page
-        self.selenium.find_element_by_link_text('Import workflow').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Import workflow')
@@ -35,10 +35,10 @@ class Scenario2Captures(ScreenTests):
         #
         # Import workflow
         #
-        self.selenium.find_element_by_id('id_name').send_keys(
+        self.selenium.find_element(By.ID, 'id_name').send_keys(
             self.workflow_name
         )
-        self.selenium.find_element_by_id('id_wf_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_wf_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          'docs',
                          'Scenarios',
@@ -47,7 +47,8 @@ class Scenario2Captures(ScreenTests):
         )
 
         # Click the import button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//form/div/button[@type='Submit']"
         ).click()
         self.wait_for_page(element_id='workflow-index')

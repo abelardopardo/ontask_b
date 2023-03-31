@@ -26,7 +26,7 @@ class Scenario1Captures(ScreenTests):
         self.login('instructor01@bogus.com')
 
         # Open Import page
-        self.selenium.find_element_by_link_text('Import workflow').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                                              'Import workflow')
@@ -35,10 +35,10 @@ class Scenario1Captures(ScreenTests):
         #
         # Import workflow
         #
-        self.selenium.find_element_by_id('id_name').send_keys(
+        self.selenium.find_element(By.ID, 'id_name').send_keys(
             self.workflow_name
         )
-        self.selenium.find_element_by_id('id_wf_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_wf_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                          'docs',
                          'Scenarios',
@@ -47,7 +47,8 @@ class Scenario1Captures(ScreenTests):
         )
 
         # Click the import button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//form/div/button[@type='Submit']"
         ).click()
         self.wait_for_page(element_id='workflow-index')
@@ -63,7 +64,7 @@ class Scenario1Captures(ScreenTests):
 
         # Edit the filter
         self.select_filter_tab()
-        self.selenium.find_element_by_class_name('js-filter-edit').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
             ElementHasFullOpacity((By.XPATH, "//div[@id='modal-item']"))

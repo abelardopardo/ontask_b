@@ -35,9 +35,10 @@ class ActionActionRename(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.open_action_operation(self.action_name, 'fa-pencil-alt')
 
         # Rename the action
-        self.selenium.find_element_by_id('id_name').send_keys(suffix)
+        self.selenium.find_element(By.ID, 'id_name').send_keys(suffix)
         # click on the Update button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()
 
@@ -75,18 +76,20 @@ class ActionActionSendEmail(
         self.wait_for_id_and_spinner('email-action-request-data')
 
         # Set the subject of the email
-        self.selenium.find_element_by_id('id_subject').send_keys('Subject TXT')
+        self.selenium.find_element(
+            By.ID,
+            'id_subject').send_keys('Subject TXT')
 
         # Set the email column
-        select = Select(self.selenium.find_element_by_id(
-            'id_item_column'))
+        select = Select(self.selenium.find_element(By.ID, 'id_item_column'))
         select.select_by_visible_text('email')
 
         # Tick the track email
-        self.selenium.find_element_by_id('id_track_read').click()
+        self.selenium.find_element(By.ID, 'id_track_read').click()
 
         # Click the send button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Send']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
@@ -97,7 +100,8 @@ class ActionActionSendEmail(
 
         # There should be a message on that page
         self.assertTrue(
-            self.selenium.find_element_by_xpath(
+            self.selenium.find_element(
+                By.XPATH,
                 "//div[@id='action-run-done']/div/a"
             ).text.startswith(
                 'You may check the status in log number'
@@ -154,7 +158,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
 
         # insert the second mark
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
         self.selenium.execute_script(
             """$('#id_text_content').summernote('editor.insertText', 
             "mark2");"""
@@ -174,7 +178,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
 
         # insert the third mark
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
         self.selenium.execute_script(
             """$('#id_text_content').summernote('editor.insertText', 
             "mark3");"""
@@ -192,7 +196,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         )
         # insert the first mark
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
         self.selenium.execute_script(
             """$('#id_text_content').summernote('editor.insertText', 
             "cmark1");"""
@@ -213,7 +217,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         )
 
         # insert the second mark
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
         self.selenium.execute_script(
             """$('#id_text_content').summernote('editor.insertText', 
             "cmark2");"""
@@ -232,7 +236,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         )
 
         # insert the third mark
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
         self.selenium.execute_script(
             """$('#id_text_content').summernote('editor.insertText', 
             "cmark3");"""
@@ -280,12 +284,14 @@ class ActionJsonAction(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
 
         # Introduce text and then the URL
         self.select_json_text_tab()
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(
+            By.ID,
             'id_text_content').send_keys(content_txt)
-        self.selenium.find_element_by_id('id_target_url').send_keys(target_url)
+        self.selenium.find_element(By.ID, 'id_target_url').send_keys(target_url)
 
         # Save action and back to action index
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_id_and_spinner('action-index')
@@ -321,10 +327,11 @@ class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
             self.selenium.page_source)
 
         # Enable the URL
-        self.selenium.find_element_by_id('id_serve_enabled').click()
+        self.selenium.find_element(By.ID, 'id_serve_enabled').click()
 
         # Click OK
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             'div.modal-footer > button.btn.btn-outline-primary'
         ).click()
 
@@ -337,9 +344,10 @@ class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
 
         self.open_action_operation('simple action', 'fa-link')
         # Disable the URL
-        self.selenium.find_element_by_id('id_serve_enabled').click()
+        self.selenium.find_element(By.ID, 'id_serve_enabled').click()
         # Click OK
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             'div.modal-footer > button.btn.btn-outline-primary'
         ).click()
 
@@ -397,20 +405,22 @@ class ActionActionInDataEntry(
             )
         )
         # Submit the action
-        self.selenium.find_element_by_link_text('Done').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Done').click()
         self.wait_for_id_and_spinner('action-index')
 
         # Run the action
         self.open_action_run('new action in', True)
 
         # Enter data for the remaining user
-        self.selenium.find_element_by_link_text("student02@bogus.com").click()
+        self.selenium.find_element(By.LINK_TEXT, "student02@bogus.com").click()
         # Mark as registered
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(
+            By.ID,
             'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '1').click()
 
         # Submit form
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//button[@name='submit'])[1]"
         ).click()
         # Wait for the table to be refreshed
@@ -419,7 +429,7 @@ class ActionActionInDataEntry(
                 (By.ID, 'actioninrun-data_previous'))
         )
         self.assertIn('No matching records found', self.selenium.page_source)
-        self.selenium.find_element_by_link_text('Back').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Back').click()
 
         # End of session
         self.logout()
@@ -479,10 +489,10 @@ class ActionActionRenameEffect(
         self.open_column_edit('registered')
 
         # Introduce the new column name and submit
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("registered new")
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("registered new")
+        self.selenium.find_element(By.XPATH, "//button[@type='submit']").click()
 
         self.wait_close_modal_refresh_table('column-table_previous')
 
@@ -490,10 +500,10 @@ class ActionActionRenameEffect(
         self.open_column_edit('age')
 
         # Introduce the new column name and submit
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("age new")
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("age new")
+        self.selenium.find_element(By.XPATH, "//button[@type='submit']").click()
 
         self.wait_close_modal_refresh_table('column-table_previous')
 
@@ -581,17 +591,20 @@ class ActionActionZip(
             self.selenium.page_source)
 
         # Set column 1
-        select = Select(self.selenium.find_element_by_id(
+        select = Select(self.selenium.find_element(
+            By.ID,
             'id_item_column'))
         select.select_by_visible_text('age')
 
         # Set column 2
-        select = Select(self.selenium.find_element_by_id(
+        select = Select(self.selenium.find_element(
+            By.ID,
             'id_user_fname_column'))
         select.select_by_visible_text('age')
 
         # Click the next
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Send']").click()
         self.wait_for_page(element_id='zip-action-request-data')
 
@@ -601,15 +614,17 @@ class ActionActionZip(
             self.selenium.page_source)
 
         # Set column 2
-        select = Select(self.selenium.find_element_by_id(
+        select = Select(self.selenium.find_element(
+            By.ID,
             'id_user_fname_column'))
         select.select_by_visible_text('email')
 
         # Choose the Moodle option
-        self.selenium.find_element_by_id('id_zip_for_moodle').click()
+        self.selenium.find_element(By.ID, 'id_zip_for_moodle').click()
 
         # Click the next
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Send']").click()
         self.wait_for_page(element_id='zip-action-request-data')
 
@@ -619,10 +634,11 @@ class ActionActionZip(
             self.selenium.page_source)
 
         # Unselect the Moodle option
-        self.selenium.find_element_by_id('id_zip_for_moodle').click()
+        self.selenium.find_element(By.ID, 'id_zip_for_moodle').click()
 
         # Click the next
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Send']").click()
         self.wait_for_page(element_id='zip-action-done')
 
@@ -686,28 +702,33 @@ class ActionSendReportActionCreate(
                 (By.XPATH, '//div[contains(@class, "note-editable")]')
             )
         )
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
         self.selenium.execute_script(
             """$('#id_text_content').summernote('editor.insertText',
              "{0}");""".format(self.action_text)
         )
 
         # Open the column selection and select two columns
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Insert Table']").click()
         self.wait_for_modal_open()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_name("columns").click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(By.NAME, "columns").click()
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[2]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[3]"
         ).click()
         # Close the modal
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']//button[normalize-space()='Select']"
         ).click()
         self.wait_for_modal_close()
@@ -724,34 +745,37 @@ class ActionSendReportActionCreate(
         # Click in the preview
         self.open_browse_preview(close=False)
 
-        preview_body = self.selenium.find_element_by_id('preview-body').text
+        preview_body = self.selenium.find_element(By.ID, 'preview-body').text
         self.assertIn('student01@bogus.com', preview_body)
         self.assertIn('student03@bogus.com', preview_body)
         self.assertEqual(
-            self.selenium.find_element_by_xpath(
+            self.selenium.find_element(
+                By.XPATH,
                 '//*[@id="preview-variables"]').text,
             'Attachments: ' + view.name)
 
         # Close the preview
         self.cancel_modal()
 
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//div[@id="action-preview-done"]/button[3]').click()
         self.wait_for_id_and_spinner('action-index')
 
         # Run the action
         self.open_action_run(self.action_name)
 
-        self.selenium.find_element_by_id('id_email_to').send_keys(
+        self.selenium.find_element(By.ID, 'id_email_to').send_keys(
             'recipient@bogus.com')
-        self.selenium.find_element_by_id('id_subject').send_keys(
+        self.selenium.find_element(By.ID, 'id_subject').send_keys(
             'Send Report Email Subject')
-        self.selenium.find_element_by_id('id_cc_email').send_keys(
+        self.selenium.find_element(By.ID, 'id_cc_email').send_keys(
             'tutor1@example.com tutor2@example.com')
-        self.selenium.find_element_by_id('id_bcc_email').send_keys(
+        self.selenium.find_element(By.ID, 'id_bcc_email').send_keys(
             'coursecoordinator@bogus.com')
         # Click in the next button to go to the filter email screen
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//button[@name="Submit"]'
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -801,7 +825,7 @@ class ActionJSONReportActionCreate(
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.ID, 'id_text_content'))
         )
-        self.selenium.find_element_by_id('id_text_content').send_keys(
+        self.selenium.find_element(By.ID, 'id_text_content').send_keys(
             self.action_text)
 
         # Create filter
@@ -820,17 +844,19 @@ class ActionJSONReportActionCreate(
         # Close the preview
         self.cancel_modal()
 
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//div[@id="action-preview-done"]/button[3]').click()
         self.wait_for_id_and_spinner('action-index')
 
         # Run the action
         self.open_action_run(self.action_name)
 
-        self.selenium.find_element_by_id('id_token').send_keys(
+        self.selenium.find_element(By.ID, 'id_token').send_keys(
             'bogus_token')
         # Click in the submit
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//button[@name="Submit"]'
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -893,8 +919,8 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
                 (By.XPATH, '//div[contains(@class, "note-editable")]')
             )
         )
-        self.selenium.find_element_by_class_name('note-editable').click()
-        self.selenium.find_element_by_class_name('note-editable').send_keys(
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
             'Dear {{ GivenName }}\n'
             + 'Here are some suggestions based on the project rubric.\n'
             + '{% ot_insert_rubric_feedback %}\n'
@@ -907,16 +933,18 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
         self.wait_for_id_and_spinner('rubric-table_previous')
 
         # Insert an extra criterion
-        self.selenium.find_element_by_class_name(
+        self.selenium.find_element(
+            By.CLASS_NAME,
             'js-workflow-criterion-add').click()
         self.wait_for_modal_open()
-        self.selenium.find_element_by_id('id_name').send_keys('CRIT 2')
-        element = self.selenium.find_element_by_id('id_description_text')
+        self.selenium.find_element(By.ID, 'id_name').send_keys('CRIT 2')
+        element = self.selenium.find_element(By.ID, 'id_description_text')
         element.click()
         element.clear()
         element.send_keys('CRIT 2 description text')
         # click on the Add criterion
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//div[@id="modal-item"]//button[@type="submit"]'
         ).click()
         self.wait_for_modal_close()
@@ -929,12 +957,13 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
                 'js-rubric-cell-edit')
             items[index].click()
             self.wait_for_modal_open()
-            self.selenium.find_element_by_id('id_description_text').send_keys(
+            self.selenium.find_element(By.ID, 'id_description_text').send_keys(
                 'DESC {0}'.format(index))
-            self.selenium.find_element_by_id('id_feedback_text').send_keys(
+            self.selenium.find_element(By.ID, 'id_feedback_text').send_keys(
                 'FEEDBACK {0}'.format(index))
             # click on the DONE button
-            self.selenium.find_element_by_xpath(
+            self.selenium.find_element(
+                By.XPATH,
                 '//div[@id="modal-item"]//button[@type="submit"]'
             ).click()
             self.wait_for_modal_close()
@@ -944,19 +973,21 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
         self.open_browse_preview(workflow.nrows)
 
         # Change the LOAS
-        self.selenium.find_element_by_class_name('js-rubric-loas-edit').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-rubric-loas-edit').click()
         self.wait_for_modal_open()
-        elem = self.selenium.find_element_by_id('id_levels_of_attainment')
+        elem = self.selenium.find_element(By.ID, 'id_levels_of_attainment')
         elem.clear()
         elem.send_keys(', '.join([loa + '2' for loa in loas]))
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//div[@id="modal-item"]//button[@type="submit"]'
         ).click()
         self.wait_for_modal_close()
         self.wait_for_id_and_spinner('rubric-table_previous')
 
         # Close the action and back to table of actions
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//div[@id="action-preview-done"]/button[3]').click()
         self.wait_for_id_and_spinner('action-index')
 
@@ -997,7 +1028,7 @@ class ActionIndexSelector(
 
         # Loop over all the action types
         select = Select(
-            self.selenium.find_element_by_id('action-show-display'))
+            self.selenium.find_element(By.ID, 'action-show-display'))
         for atype in models.Action.AVAILABLE_ACTION_TYPES.keys():
             select.select_by_value(atype)
             sleep(0.5)

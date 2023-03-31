@@ -33,7 +33,8 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.create_new_workflow(tests.WORKFLOW_NAME, tests.WORKFLOW_DESC)
 
         # Go to CSV Upload/Merge
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
@@ -42,12 +43,13 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Set the file name
-        self.selenium.find_element_by_id('id_data_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_data_file').send_keys(
             os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple.csv')
         )
 
         # Click on the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -57,14 +59,16 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Change the name of one of the columns
-        input_email = self.selenium.find_element_by_xpath(
+        input_email = self.selenium.find_element(
+            By.XPATH,
             "//table[@id='workflow-table']/tbody/tr[3]/td[3]/input"
         )
         input_email.clear()
         input_email.send_keys('email')
 
         # Click on the FINISH button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
 
@@ -96,12 +100,13 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.go_to_csv_upload_merge_step_1()
 
         # Set the file name
-        self.selenium.find_element_by_id('id_data_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_data_file').send_keys(
             os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple2.csv')
         )
 
         # Click on the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -111,14 +116,16 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Change the name of sid2 to sid
-        input_email = self.selenium.find_element_by_xpath(
+        input_email = self.selenium.find_element(
+            By.XPATH,
             "//table[@id='workflow-table']/tbody/tr[3]/td[3]/input"
         )
         input_email.clear()
         input_email.send_keys('sid')
 
         # Click on the Next button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         # Wait for the upload/merge
@@ -128,17 +135,17 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Select SID in the first key
-        self.selenium.find_element_by_id('id_dst_key').send_keys('sid')
+        self.selenium.find_element(By.ID, 'id_dst_key').send_keys('sid')
         # Select SID in the first key
-        self.selenium.find_element_by_id('id_src_key').send_keys('sid')
+        self.selenium.find_element(By.ID, 'id_src_key').send_keys('sid')
 
         # Select the merger function type
-        select = Select(self.selenium.find_element_by_id(
-            'id_how_merge'))
+        select = Select(self.selenium.find_element(By.ID, 'id_how_merge'))
         select.select_by_value('outer')
 
         # Click on the Next button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         # Wait for the upload/merge
@@ -148,7 +155,8 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Click on the FINISH button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         # Wait for the upload/merge to finish
@@ -179,7 +187,8 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.create_new_workflow(tests.WORKFLOW_NAME, tests.WORKFLOW_DESC)
 
         # Go to the CSV upload step 1
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
@@ -188,21 +197,23 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Set the file name
-        self.selenium.find_element_by_id('id_data_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_data_file').send_keys(
             os.path.join(
                 settings.ONTASK_FIXTURE_DIR,
                 'csv_with_prelude_postlude.csv'),
         )
         # Set the prelude to 6 lines and postlude to 3
-        self.selenium.find_element_by_id('id_skip_lines_at_top').clear()
-        self.selenium.find_element_by_id('id_skip_lines_at_top').send_keys('6')
-        self.selenium.find_element_by_id('id_skip_lines_at_bottom').clear()
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, 'id_skip_lines_at_top').clear()
+        self.selenium.find_element(By.ID, 'id_skip_lines_at_top').send_keys('6')
+        self.selenium.find_element(By.ID, 'id_skip_lines_at_bottom').clear()
+        self.selenium.find_element(
+            By.ID,
             'id_skip_lines_at_bottom'
         ).send_keys('3')
 
         # Click on the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -213,7 +224,8 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.wait_for_spinner()
 
         # Click on the FINISH button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
 
@@ -260,18 +272,21 @@ class WorkflowAttribute(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         self.search_table_row_by_string('attribute-table', 3, 'value2')
 
         # Rename second attribute
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//tr/td[2][normalize-space() = 'key2']/../td[1]/div/button[1]"
         ).click()
         self.wait_for_modal_open()
-        self.selenium.find_element_by_id('id_key').clear()
-        self.selenium.find_element_by_id('id_key').send_keys('newkey2')
-        self.selenium.find_element_by_id('id_attr_value').clear()
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, 'id_key').clear()
+        self.selenium.find_element(By.ID, 'id_key').send_keys('newkey2')
+        self.selenium.find_element(By.ID, 'id_attr_value').clear()
+        self.selenium.find_element(
+            By.ID,
             'id_attr_value').send_keys('newvalue2')
 
         # Click in the submit button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id = 'modal-item']//div[@class='modal-footer']/button"
         ).click()
 
@@ -288,7 +303,8 @@ class WorkflowAttribute(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         self.go_to_attribute_page()
 
         # click the delete button in the second row
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//table[@id="attribute-table"]'
             '//tr[2]/td[1]//button[contains(@class, "js-attribute-delete")]'
         ).click()
@@ -298,7 +314,8 @@ class WorkflowAttribute(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
                 '//div[@id="modal-item"]//div[@class="modal-footer"]/button')),
         )
         # Click in the delete confirm button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//div[@id = "modal-item"]//div[@class = "modal-footer"]/button'
         ).click()
 
@@ -334,18 +351,19 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         self.go_to_workflow_share()
 
         # Click in the add user button
-        self.selenium.find_element_by_class_name('js-share-create').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-share-create').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'modal-title'),
                 'Select user to allow access to the workflow'))
 
         # Fill out the form
-        self.selenium.find_element_by_id('id_user_email').send_keys(
+        self.selenium.find_element(By.ID, 'id_user_email').send_keys(
             'instructor02@bogus.com')
 
         # Click in the share button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
 
@@ -368,18 +386,19 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
             'instructor02@bogus.com')
 
         # Click in the create share dialog again
-        self.selenium.find_element_by_class_name('js-share-create').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-share-create').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'modal-title'),
                 'Select user to allow access to the workflow'))
 
         # Fill out the form
-        self.selenium.find_element_by_id('id_user_email').send_keys(
+        self.selenium.find_element(By.ID, 'id_user_email').send_keys(
             'superuser@bogus.com')
 
         # Click in the button to add the user
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
         # MODAL WAITING
@@ -413,7 +432,7 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
             'share-table',
             2,
             'superuser@bogus.com')
-        element.find_element_by_xpath('td[1]/button').click()
+        element.find_element(By.XPATH, 'td[1]/button').click()
 
         # Wait for the delete confirmation frame
         WebDriverWait(self.selenium, 10).until(
@@ -421,7 +440,8 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
                 (By.CLASS_NAME, 'modal-title'),
                 'Confirm user deletion'))
         # Click in the delete confirm button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
 
@@ -461,22 +481,23 @@ class WorkflowImport(
         self.login('instructor01@bogus.com')
 
         # Click in the import button and wait
-        self.selenium.find_element_by_link_text('Import workflow').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
                 'Import workflow'))
 
         # Set the workflow name and file
-        wname = self.selenium.find_element_by_id('id_name')
+        wname = self.selenium.find_element(By.ID, 'id_name')
         wname.send_keys('newwf')
-        wfile = self.selenium.find_element_by_id('id_wf_file')
+        wfile = self.selenium.find_element(By.ID, 'id_wf_file')
         wfile.send_keys(os.path.join(
             settings.ONTASK_FIXTURE_DIR,
             'ontask_workflow.gz'))
 
         # Click in the submit
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@type='Submit']"
         ).click()
         WebDriverWait(self.selenium, 20).until(

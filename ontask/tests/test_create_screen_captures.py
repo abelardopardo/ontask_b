@@ -27,13 +27,15 @@ class ScreenTutorialTest(tests.ScreenTests):
         #
         # Create new workflow
         #
-        self.selenium.find_element_by_class_name(
+        self.selenium.find_element(
+            By.CLASS_NAME,
             'js-create-workflow').click()
         self.wait_for_modal_open()
 
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(
+            By.ID,
             'id_name').send_keys(self.workflow_name)
-        desc = self.selenium.find_element_by_id('id_description_text')
+        desc = self.selenium.find_element(By.ID, 'id_description_text')
         desc.send_keys(self.description)
 
         # Take capture of the modal
@@ -65,7 +67,7 @@ class ScreenImportTest(tests.ScreenTests):
         self.login('instructor01@bogus.com')
 
         # Open Import page
-        self.selenium.find_element_by_link_text('Import workflow').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
                 'Import workflow')
@@ -74,10 +76,10 @@ class ScreenImportTest(tests.ScreenTests):
         #
         # Import workflow
         #
-        self.selenium.find_element_by_id('id_name').send_keys(
+        self.selenium.find_element(By.ID, 'id_name').send_keys(
             self.workflow_name
         )
-        self.selenium.find_element_by_id('id_wf_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_wf_file').send_keys(
             os.path.join(settings.BASE_DIR(), 'initial_workflow.gz')
         )
 
@@ -85,7 +87,8 @@ class ScreenImportTest(tests.ScreenTests):
         self.body_ss('workflow_import.png')
 
         # Click the import button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//form/div/button[@type='Submit']"
         ).click()
         self.wait_for_page(title='OnTask :: Workflows')
@@ -144,7 +147,8 @@ class ScreenTestSQLAdmin(ScreenTestFixtureBasic):
         self.body_ss('workflow_sql_connections_index.png')
 
         # click on the edit element
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//table[@id="connection-admin-table"]'
             '//tr/td[2][normalize-space() = "remote server"]/'
             '../td[1]/div/button[1]'
@@ -171,7 +175,8 @@ class ScreenTestSQLAdmin(ScreenTestFixtureBasic):
     #     self.body_ss('workflow_athena_connections_index.png')
     #
     #     # click on the edit element
-    #     self.selenium.find_element_by_xpath(
+    #     self.selenium.find_element(
+    #         By.XPATH,
     #         "//table[@id='connection-admin-table']"
     #         "//tr/td[1][normalize-space() = 'athena connection']"
     #     ).click()
@@ -240,7 +245,8 @@ class ScreenTestWorkflow(ScreenTestFixtureBasic):
         self.body_ss('workflow_export.png')
 
         # Click back to the details page
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//a[normalize-space()='Cancel']"
         ).click()
         self.wait_for_id_and_spinner('attribute-table_previous')
@@ -319,11 +325,11 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         self.go_to_upload_merge()
         self.body_ss('dataops_datauploadmerge.png')
 
-        self.selenium.find_element_by_link_text("CSV").click()
+        self.selenium.find_element(By.LINK_TEXT, "CSV").click()
         WebDriverWait(self.selenium, 10).until(
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
-        self.selenium.find_element_by_id('id_data_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_data_file').send_keys(
             os.path.join(settings.BASE_DIR(),
                 'ontask',
                 'tests',
@@ -338,7 +344,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         # Dataops/Merge CSV Merge Step 2
         #
         # Click the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@type='Submit']"
         ).click()
         self.wait_for_page()
@@ -361,7 +368,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         # Dataops/Merge CSV Merge Step 3
         #
         # Click the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@type='Submit']"
         ).click()
         self.wait_for_page()
@@ -376,7 +384,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         #
         # Click the NEXT button
         # Select left merge
-        Select(self.selenium.find_element_by_id(
+        Select(self.selenium.find_element(
+            By.ID,
             'id_how_merge'
         )).select_by_value('left')
 
@@ -384,7 +393,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         self.body_ss('dataops_upload_merge_step3.png')
 
         # Click the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@type='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -396,7 +406,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         self.body_ss('dataops_upload_merge_step4.png')
 
         # Click on Finish
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Finish']"
         ).click()
         self.wait_for_id_and_spinner('table-data_previous')
@@ -434,7 +445,7 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
             'conn-instructor-table',
             1,
             'remote server')
-        element.find_element_by_xpath('td[1]/a').click()
+        element.find_element(By.XPATH, 'td[1]/a').click()
         self.wait_for_page(None, 'sql-load-step1')
 
         # Picture of the RUN menu in SQL
@@ -448,7 +459,7 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         # self.body_ss('dataops_athena_available.png')
         #
         # # Click on the link RUN
-        # self.selenium.find_element_by_link_text('Run').click()
+        # self.selenium.find_element(By.LINK_TEXT, 'Run').click()
         # self.wait_for_page(None, 'athena-load-step1')
         #
         # # Picture of the RUN menu in Athena
@@ -468,7 +479,7 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
             'transform-table',
             1,
             'Test Plugin 1 Name')
-        element.find_element_by_xpath('td[1]/a').click()
+        element.find_element(By.XPATH, 'td[1]/a').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -487,7 +498,7 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
             'transform-table',
             1,
             'Linear Model')
-        element.find_element_by_xpath('td[1]/a').click()
+        element.find_element(By.XPATH, 'td[1]/a').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.NAME, 'csrfmiddlewaretoken'))
         )
@@ -523,7 +534,7 @@ class ScreenTestTable(ScreenTestFixtureBasic):
         #
         # Table Views
         #
-        self.selenium.find_element_by_id('select-view-name').click()
+        self.selenium.find_element(By.ID, 'select-view-name').click()
 
         # Picture of the body
         self.body_ss('table_views.png')
@@ -537,7 +548,8 @@ class ScreenTestTable(ScreenTestFixtureBasic):
         self.body_ss('table_view_view.png')
 
         # Click edit view definition
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//button[contains(@class, "js-view-edit")]').click()
         self.wait_for_modal_open()
 
@@ -585,7 +597,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.select_questions_tab()
         self.body_ss('action_edit_action_in_question_tab.png')
 
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[contains(@class, 'js-action-question-add')]").click()
         self.wait_for_modal_open()
         self.modal_ss("action_edit_action_in_create_question.png")
@@ -602,7 +615,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
 
         # Done
         # Submit the action
-        self.selenium.find_element_by_link_text('Done').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Done').click()
         self.wait_for_id_and_spinner('action-index')
 
         #
@@ -616,7 +629,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         #
         # Enter data manually
         #
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//table[@id='actioninrun-data']/tbody/tr[1]/td[1]/a"
         ).click()
         self.wait_for_page(title='OnTask :: Enter Data')
@@ -634,7 +648,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.modal_ss('action_action_in_URL.png')
 
         # click on the OK button to return
-        self.selenium.find_element_by_xpath("//button[@type='submit']").click()
+        self.selenium.find_element(By.XPATH, "//button[@type='submit']").click()
         self.wait_for_modal_close()
 
         #
@@ -651,7 +665,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         # Edit filter in action out
         #
         self.select_filter_tab()
-        self.selenium.find_element_by_class_name('js-filter-edit').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
             tests.ElementHasFullOpacity(
@@ -680,7 +694,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.cancel_modal()
 
         # Open the preview
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Preview']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -694,17 +709,17 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         #
         self.go_to_actions()
         # click on the create action button and create an action
-        self.selenium.find_element_by_class_name('js-create-action').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
 
         # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys(
+        self.selenium.find_element(By.ID, 'id_name').send_keys(
             'Initial motivation'
         )
-        desc = self.selenium.find_element_by_id('id_description_text')
+        desc = self.selenium.find_element(By.ID, 'id_description_text')
         # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select = Select(self.selenium.find_element(By.ID, 'id_action_type'))
         select.select_by_value(models.Action.PERSONALIZED_CANVAS_EMAIL)
         desc.send_keys('Motivating message depending on the program enrolled')
 
@@ -719,7 +734,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.body_ss('action_personalized_canvas_email_edit.png')
 
         # Save action and back to action index
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_id_and_spinner('action-index')
@@ -728,17 +744,17 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         # SEND LIST action
         #
         # click on the create action button and create an action
-        self.selenium.find_element_by_class_name('js-create-action').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
 
         # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys(
+        self.selenium.find_element(By.ID, 'id_name').send_keys(
             'Send Email with report'
         )
-        desc = self.selenium.find_element_by_id('id_description_text')
+        desc = self.selenium.find_element(By.ID, 'id_description_text')
         # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select = Select(self.selenium.find_element(By.ID, 'id_action_type'))
         select.select_by_value(models.Action.EMAIL_REPORT)
         desc.send_keys('Send email with column values as list')
 
@@ -759,7 +775,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.cancel_modal()
 
         # Save action and back to action index
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_id_and_spinner('action-index')
@@ -768,17 +785,17 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         # SEND JSON REPORT action
         #
         # click on the create action button and create an action
-        self.selenium.find_element_by_class_name('js-create-action').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
 
         # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys(
+        self.selenium.find_element(By.ID, 'id_name').send_keys(
             'Send JSON report'
         )
-        desc = self.selenium.find_element_by_id('id_description_text')
+        desc = self.selenium.find_element(By.ID, 'id_description_text')
         # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select = Select(self.selenium.find_element(By.ID, 'id_action_type'))
         select.select_by_value(models.Action.JSON_REPORT)
         desc.send_keys(
             'Send the list of inactive students '
@@ -797,7 +814,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.cancel_modal()
 
         # Save action and back to action index
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_id_and_spinner('action-index')
@@ -846,7 +864,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.open_action_edit('Send JSON to remote server')
         self.body_ss('action_personalized_json_edit.png')
         # Save action and back to action index
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Close']"
         ).click()
         self.wait_for_id_and_spinner('action-index')
@@ -857,7 +876,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.open_action_json_run('Send JSON to remote server')
         self.body_ss('action_json_run_request_data.png')
         # Save action and back to action index
-        self.selenium.find_element_by_link_text('Cancel').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Cancel').click()
         self.wait_for_id_and_spinner('action-index')
 
         #
@@ -869,7 +888,8 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.modal_ss('action_URL_on.png')
 
         # click on the OK button to return
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@type='submit']"
         ).click()
         self.wait_close_modal_refresh_table('action-index')
@@ -896,29 +916,32 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
             'email-schedule-send')
 
         # Fill out some fields
-        self.selenium.find_element_by_id('id_name').send_keys(
+        self.selenium.find_element(By.ID, 'id_name').send_keys(
             'Send Emails after week 3'
         )
-        Select(self.selenium.find_element_by_id(
+        Select(self.selenium.find_element(
+            By.ID,
             'id_item_column')
         ).select_by_visible_text('email')
-        dt_widget = self.selenium.find_element_by_xpath(
+        dt_widget = self.selenium.find_element(
+            By.XPATH,
             "//input[@id='id_execute']"
         )
         self.selenium.execute_script(
             "arguments[0].value = '2110-07-05 17:30:51';",
             dt_widget
         )
-        self.selenium.find_element_by_id('id_subject').send_keys(
+        self.selenium.find_element(By.ID, 'id_subject').send_keys(
             'Your preparation activities for the week'
         )
-        self.selenium.find_element_by_id('id_track_read').click()
+        self.selenium.find_element(By.ID, 'id_track_read').click()
 
         # Take picture of the export page.
         self.body_ss('schedule_action_email.png')
 
         # Click the schedule button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@id='next-step-off']"
         ).click()
         self.wait_for_page(title='OnTask :: Operation scheduled')
@@ -937,20 +960,22 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
             'email-schedule-send')
 
         # Fill out some fields
-        self.selenium.find_element_by_id('id_name').send_keys(
+        self.selenium.find_element(By.ID, 'id_name').send_keys(
             'Send JSON object in Week 5'
         )
-        Select(self.selenium.find_element_by_id(
+        Select(self.selenium.find_element(
+            By.ID,
             'id_item_column')
         ).select_by_visible_text('email')
-        dt_widget = self.selenium.find_element_by_xpath(
+        dt_widget = self.selenium.find_element(
+            By.XPATH,
             "//input[@id='id_execute']"
         )
         self.selenium.execute_script(
             "arguments[0].value = '2110-07-25 17:00:00';",
             dt_widget
         )
-        self.selenium.find_element_by_id('id_token').send_keys(
+        self.selenium.find_element(By.ID, 'id_token').send_keys(
             'afabkvaidlfvsidkfe..kekfioroelallasifjjf;alksid'
         )
 
@@ -958,7 +983,8 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         self.body_ss('schedule_action_json.png')
 
         # Click the schedule button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@id='next-step-off']"
         ).click()
         self.wait_for_page(title='OnTask :: Operation scheduled')
@@ -1009,18 +1035,18 @@ class ScreenTestRubric(ScreenTestFixtureBasic):
         self.go_to_actions()
 
         # click on the create action button
-        self.selenium.find_element_by_class_name('js-create-action').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-create-action').click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, 'id_name')))
 
         # Set the name, description and type of the action
-        self.selenium.find_element_by_id('id_name').send_keys(action_name)
-        desc = self.selenium.find_element_by_id('id_description_text')
+        self.selenium.find_element(By.ID, 'id_name').send_keys(action_name)
+        desc = self.selenium.find_element(By.ID, 'id_description_text')
         desc.send_keys(
             'Provide feedback about the project using the results '
             + 'from the rubric')
         # Select the action type
-        select = Select(self.selenium.find_element_by_id('id_action_type'))
+        select = Select(self.selenium.find_element(By.ID, 'id_action_type'))
         select.select_by_value(models.Action.RUBRIC_TEXT)
         self.modal_ss('rubric_create.png')
         self.cancel_modal()

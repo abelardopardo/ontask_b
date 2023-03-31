@@ -40,11 +40,12 @@ class ColumnTestCreateDelete(
         self.open_column_edit('age')
 
         # Untick the is_key option
-        is_key = self.selenium.find_element_by_id('id_is_key')
+        is_key = self.selenium.find_element(By.ID, 'id_is_key')
         self.assertTrue(is_key.is_selected())
         is_key.click()
         # Click on the Submit button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']/div/div/form/div/button[@type='submit']"
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
@@ -107,15 +108,14 @@ class ColumnTestRename(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         self.open_column_edit('another')
 
         # Change the name of the column
-        self.selenium.find_element_by_id('id_name').send_keys('2')
+        self.selenium.find_element(By.ID, 'id_name').send_keys('2')
         # Add list of comma separated categories
-        raw_cat = self.selenium.find_element_by_id(
-            'id_raw_categories'
-        )
+        raw_cat = self.selenium.find_element(By.ID, 'id_raw_categories')
         raw_cat.send_keys(categories)
 
         # Click the rename button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']/div/div/form/div/button[@type='submit']"
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
@@ -135,7 +135,8 @@ class ColumnTestRename(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
             None,
             "//button[contains(@class, 'js-filter-create')]")
         # Select the another2 column (with new name
-        select = Select(self.selenium.find_element_by_name(
+        select = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_0_filter'))
         select.select_by_value('another2')
         # Wait for the select elements to be clickable

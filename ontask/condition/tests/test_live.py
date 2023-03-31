@@ -35,7 +35,7 @@ class FilterLiveTest(ConditionTestBasic):
 
         # Click in the add filter button
         self.select_filter_tab()
-        self.selenium.find_element_by_class_name('js-filter-create').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-filter-create').click()
         # Wait for the form to appear
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -44,11 +44,12 @@ class FilterLiveTest(ConditionTestBasic):
         )
 
         # Add the description
-        self.selenium.find_element_by_id(
-            'id_description_text').send_keys('fdesc')
+        self.selenium.find_element(
+            By.ID, 'id_description_text').send_keys('fdesc')
 
         # Select the age filter
-        sel = Select(self.selenium.find_element_by_name(
+        sel = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_0_filter'))
         sel.select_by_value('age')
         # Wait for the select elements to be clickable
@@ -65,16 +66,19 @@ class FilterLiveTest(ConditionTestBasic):
         self.assertEqual(len(filter_ops), 10)
 
         # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
+        sel = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_0_operator'))
         sel.select_by_value('less_or_equal')
 
         # Set the value to 12.1
-        self.selenium.find_element_by_name(
+        self.selenium.find_element(
+            By.NAME,
             'builder_rule_0_value_0').send_keys('12.1')
 
         # Click in the "update filter"
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()
         # MODAL WAITING
@@ -97,7 +101,7 @@ class FilterLiveTest(ConditionTestBasic):
 
         # Add a second clause to the filter
         # Click in the edit filter button
-        self.selenium.find_element_by_class_name('js-filter-edit').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -106,7 +110,8 @@ class FilterLiveTest(ConditionTestBasic):
         )
 
         # Click in the Add rule of the filter builder button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='builder_group_0']/div/div/button[1]"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -116,7 +121,8 @@ class FilterLiveTest(ConditionTestBasic):
         )
 
         # Select the when filter
-        sel = Select(self.selenium.find_element_by_name(
+        sel = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_1_filter'))
         sel.select_by_value('when')
         # Wait for the select elements to be clickable
@@ -133,17 +139,20 @@ class FilterLiveTest(ConditionTestBasic):
         self.assertEqual(len(filter_ops), 10)
 
         # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
+        sel = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_1_operator'))
         sel.select_by_value('less_or_equal')
 
         # Set the value to 2017-10-11T00:32:44
-        self.selenium.find_element_by_name(
+        self.selenium.find_element(
+            By.NAME,
             'builder_rule_1_value_0').send_keys(
             '2017-10-11 00:32:44+1300')
 
         # Click in the "update filter"
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until_not(
@@ -199,7 +208,7 @@ class ConditionLiveTest(ConditionTestBasic):
         # Action now has two complementary conditions, add the conditions to
         # the message
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
         self.selenium.execute_script(
             """$('#id_text_content').summernote(
                    'editor.insertText',
@@ -212,7 +221,8 @@ class ConditionLiveTest(ConditionTestBasic):
         self.assertIn('Low', self.selenium.page_source)
 
         # Click in the next button
-        self.selenium.find_element_by_class_name(
+        self.selenium.find_element(
+            By.CLASS_NAME,
             'js-action-preview-nxt').click()
 
         self.wait_for_modal_open(
@@ -228,7 +238,8 @@ class ConditionLiveTest(ConditionTestBasic):
         self.assertIn('Low', self.selenium.page_source)
 
         # Click in the next button
-        self.selenium.find_element_by_class_name(
+        self.selenium.find_element(
+            By.CLASS_NAME,
             'js-action-preview-nxt').click()
 
         self.wait_for_modal_open(
@@ -277,7 +288,7 @@ class ConditionDetectAllFalseRows(ConditionTestBasic):
 
         # insert the action text (not needed, but...)
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
         self.selenium.execute_script(
             """$('#id_text_content').summernote('editor.insertText',
             "{0}");""".format(self.action_text)
@@ -367,7 +378,8 @@ class ConditionInActionIn(
             self.assertEqual(len(inputs), 1)
 
             # Click in the next button
-            self.selenium.find_element_by_class_name(
+            self.selenium.find_element(
+                By.CLASS_NAME,
                 'js-action-preview-nxt').click()
 
             WebDriverWait(self.selenium, 10).until(
@@ -380,14 +392,14 @@ class ConditionInActionIn(
         self.cancel_modal()
 
         # Done. Back to the table of actions
-        self.selenium.find_element_by_link_text('Done').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Done').click()
         self.wait_for_id_and_spinner('action-index')
 
         # Run the action
         self.open_action_run('Survey', True)
 
         # Click in the first element of the survey and wait for form
-        self.selenium.find_element_by_link_text('1.0').click()
+        self.selenium.find_element(By.LINK_TEXT, '1.0').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.ID, 'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '2')
@@ -405,13 +417,14 @@ class ConditionInActionIn(
         inputs[2].send_keys('text')
 
         # Click in the update button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='action-row-datainput']//form//button[@type = 'submit']"
         ).click()
         self.wait_for_id_and_spinner('actioninrun-data_previous')
 
         # Click in the same link
-        self.selenium.find_element_by_link_text('1.0').click()
+        self.selenium.find_element(By.LINK_TEXT, '1.0').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.ID, 'action-row-datainput')
