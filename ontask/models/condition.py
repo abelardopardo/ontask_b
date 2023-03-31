@@ -149,9 +149,9 @@ class Condition(NameAndDescription, ConditionBase):
         """Update some internal fields when saving an object."""
 
         super().update_fields()
-        filter_formula = self.action.get_filter_formula()
 
-        self.update_selected_count(filter_formula=filter_formula)
+        self.update_selected_count(
+            filter_formula=self.action.get_filter_formula())
 
     def __str__(self) -> str:
         """Render string."""
@@ -245,9 +245,10 @@ class Filter(ConditionBase):
 
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""
+        action = getattr(self, 'action', None)
         payload = {
             'id': self.id,
-            'action': self.action.name if self.action else '',
+            'action': action.name if action else '',
             'formula': self.formula_text,
             'selected_count': self.selected_count,
             'workflow_id': self.workflow.id}
