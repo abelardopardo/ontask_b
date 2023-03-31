@@ -182,8 +182,6 @@ texinfo_documents = [
 # -- Additional Options --------------------------------------------------
 
 rst_prolog = '.. |ontask_version| replace:: %s\n' % version
-rst_prolog += """
-.. |fa-book| raw:: html
 
 # -- Add fontawesome icons --------------------------------------------------
 fontawesome_icons = [
