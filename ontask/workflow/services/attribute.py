@@ -22,7 +22,7 @@ def save_attribute_form(
     :param template: Template to render in the response
     :param form: Form used to ask for data
     :param attr_idx: Index of the attribute being manipulated
-    :return: AJAX reponse
+    :return: AJAX response
     """
     if request.method == 'POST' and form.is_valid():
         # Correct form submitted

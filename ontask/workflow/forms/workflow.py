@@ -14,7 +14,7 @@ import ontask.settings
 
 
 class WorkflowForm(forms.ModelForm):
-    """Worflow create form."""
+    """Workflow create form."""
 
     def __init__(self, *args, **kwargs):
         """Store the user to put as owner of the workflow."""

@@ -52,23 +52,3 @@ def has_access(user, workflow):
     :return: True if it is owner or in the shared list
     """
     return workflow.user == user or user in workflow.shared.all()
-
-
-class UserIsInstructor(UserPassesTestMixin, permissions.BasePermission):
-    """Use in views to allow only instructors to access.
-
-    @DynamicAttrs
-    """
-
-    def test_func(self):
-        """Overwrite the user passes test mixing function."""
-        return is_instructor(self.request.user)
-
-    def has_permission(self, request, view):
-        """Equivalent to has permission."""
-        return is_instructor(request.user)
-
-    def has_object_permission(self, request, view, obj_param):
-        """Simply check if it is instructor."""
-        del view, obj_param
-        return is_instructor(request.user)

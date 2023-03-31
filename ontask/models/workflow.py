@@ -242,7 +242,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
                         'YYYY-MM-DD HH:mm:ss',
                         'YYYY-MM-DD HH:mm:ssZ',
                         'YYYY-MM-DD HH:mm:ss Z'],
-                        'messages': {
+                    'messages': {
                         'format': 'Date required format YYYY-MM-DD HH:mm:ss'}}
 
             if column.get_categories():
@@ -396,7 +396,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # Step 3: Delete all the views attached to the workflow
         self.views.all().delete()
 
-        # Step 4: Delete the column_names, column_types and column_unique
+        # Step 4: Delete the columns
         self.columns.all().delete()
         self.set_query_builder_ops()
 

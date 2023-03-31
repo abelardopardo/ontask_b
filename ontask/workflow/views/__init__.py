@@ -12,5 +12,5 @@ from ontask.workflow.views.workflow_crud import (
     WorkflowCreateView, clone_workflow, delete, index, update,
 )
 from ontask.workflow.views.workflow_ops import (
-    assign_luser_column, flush, operations, star,
-)
+    WorkflowFlushView, WorkflowStar, WorkflowOperationsView,
+    WorkflowAssignLUserColumn)

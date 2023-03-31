@@ -53,7 +53,7 @@ class AttributeItemForm(forms.Form):
         if attr_name in self.keys:
             self.add_error(
                 'key',
-                _('Name has to be different from all existing ones.'))
+                _('An attribute with this name already exists.'))
             return form_data
 
         # Enforce the property that Attribute names, column names and

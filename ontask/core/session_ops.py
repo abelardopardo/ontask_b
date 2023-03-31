@@ -98,8 +98,7 @@ def acquire_workflow_access(
 
         # Step 1: Get the workflow that is being accessed
         workflow = models.Workflow.objects.filter(id=wid).filter(
-            Q(user=user) | Q(shared__id=user.id),
-        )
+            Q(user=user) | Q(shared__id=user.id)).distinct()
 
         if not workflow:
             return None
