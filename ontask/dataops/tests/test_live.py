@@ -114,7 +114,7 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
             'column-selector',
             '!#$%&()*+,-./\\:;<=>?@[]^_`{|}~2'
         )
-        self.wait_for_datatable('column-selected-table_previous')
+        self.wait_for_id_and_spinner('column-selected-table_previous')
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -137,7 +137,7 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         # Save action-in
         self.select_questions_tab()
         self.selenium.find_element_by_link_text('Done').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Click in the RUN link of the action in
         element = self.search_action('action in')
@@ -296,7 +296,7 @@ class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         # Done editing the action in
         self.select_questions_tab()
         self.selenium.find_element_by_link_text('Done').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Click in the run link
         self.open_action_run('action in', True)
@@ -315,7 +315,7 @@ class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
         ).click()
-        self.wait_for_datatable('actioninrun-data_previous')
+        self.wait_for_id_and_spinner('actioninrun-data_previous')
 
         # Click on the second value
         self.selenium.find_element_by_link_text("student02@bogus.com").click()
@@ -331,7 +331,7 @@ class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
         ).click()
-        self.wait_for_datatable('actioninrun-data_previous')
+        self.wait_for_id_and_spinner('actioninrun-data_previous')
 
         # Click on the third value
         self.selenium.find_element_by_link_text("student03@bogus.com").click()
@@ -347,11 +347,11 @@ class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "(//button[@name='submit'])[1]"
         ).click()
-        self.wait_for_datatable('actioninrun-data_previous')
+        self.wait_for_id_and_spinner('actioninrun-data_previous')
 
         # Click in the back link!
         self.selenium.find_element_by_link_text('Back').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Go to the table page
         self.go_to_table()
@@ -399,7 +399,7 @@ class DataopsExcelUpload(tests.EmptyWorkflowFixture, tests.OnTaskLiveTestCase):
             EC.visibility_of_element_located((By.ID, 'div-spinner'))
         )
         self.selenium.find_element_by_name("Submit").click()
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # The number of rows must be 29
         wflow = models.Workflow.objects.all()[0]
@@ -438,7 +438,7 @@ class DataopsExcelUploadSheet(
                 (By.ID, 'checkAll'))
         )
         self.selenium.find_element_by_name("Submit").click()
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # The number of rows must be 19
         wflow = models.Workflow.objects.all()[0]
@@ -487,7 +487,7 @@ class DataopsNaNProcessing(
         self.selenium.find_element_by_xpath(
             "(//button[@name='Submit'])[2]"
         ).click()
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Select again the upload/merge function
         self.go_to_csv_upload_merge_step_1()
@@ -528,7 +528,7 @@ class DataopsNaNProcessing(
         # Check the merge summary and proceed
         self.selenium.find_element_by_name("Submit").click()
         # Wait for the upload/merge to finish
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Go to the actions page
         self.go_to_actions()
@@ -859,7 +859,7 @@ class DataopsMergeBasic(tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Finish']"
         ).click()
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
 
 class DataopsMergeInner(tests.TestMergeFixture, DataopsMergeBasic):

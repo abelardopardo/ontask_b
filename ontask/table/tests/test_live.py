@@ -432,7 +432,7 @@ class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
         self.click_dropdown_option('select-view-name', 'Full table')
 
         # Wait for the table to be refreshed
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Check the number of entries
         self.assertIn(
@@ -441,7 +441,7 @@ class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
 
         # Click in the clone link of the first view
         self.click_dropdown_option('select-view-name', 'v1')
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -461,7 +461,7 @@ class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
         self.click_dropdown_option('select-view-name', 'Copy of v1')
 
         # Wait for the table to be refreshed
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Check the number of entries
         self.assertIn(
@@ -522,7 +522,7 @@ class TableInsertRow(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//form//button[@type='submit']"
         ).click()
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Go to page 11 of the table
         self.selenium.find_element_by_link_text('11').click()

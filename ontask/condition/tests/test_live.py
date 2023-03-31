@@ -382,7 +382,7 @@ class ConditionInActionIn(
 
         # Done. Back to the table of actions
         self.selenium.find_element_by_link_text('Done').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Run the action
         self.open_action_run('Survey', True)
@@ -409,7 +409,7 @@ class ConditionInActionIn(
         self.selenium.find_element_by_xpath(
             "//div[@id='action-row-datainput']//form//button[@type = 'submit']"
         ).click()
-        self.wait_for_datatable('actioninrun-data_previous')
+        self.wait_for_id_and_spinner('actioninrun-data_previous')
 
         # Click in the same link
         self.selenium.find_element_by_link_text('1.0').click()

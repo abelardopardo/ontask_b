@@ -41,7 +41,7 @@ class ActionActionRename(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         ).click()
 
         # Wait for modal to close and refresh the table
-        self.wait_close_modal_refresh_table('action-table_previous')
+        self.wait_close_modal_refresh_table('action-index')
 
         action_element = self.search_action(self.action_name + suffix)
         self.assertTrue(action_element)
@@ -71,7 +71,7 @@ class ActionActionSendEmail(
 
         # Click in the page to send email
         self.open_action_run(self.action_name)
-        self.wait_for_datatable('email-action-request-data')
+        self.wait_for_id_and_spinner('email-action-request-data')
 
         # Set the subject of the email
         self.selenium.find_element_by_id('id_subject').send_keys('Subject TXT')
@@ -289,7 +289,7 @@ class ActionJsonAction(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Close']"
         ).click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         action = models.Action.objects.get(name=action_name)
         self.assertTrue(action.text_content == content_txt)
@@ -393,7 +393,7 @@ class ActionActionInDataEntry(
 
         self.select_questions_tab()
         self.click_dropdown_option('column-selector', 'registered')
-        self.wait_for_datatable('column-selected-table_previous')
+        self.wait_for_id_and_spinner('column-selected-table_previous')
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.LINK_TEXT, 'Done')
@@ -401,7 +401,7 @@ class ActionActionInDataEntry(
         )
         # Submit the action
         self.selenium.find_element_by_link_text('Done').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Run the action
         self.open_action_run('new action in', True)
@@ -741,7 +741,7 @@ class ActionSendReportActionCreate(
 
         self.selenium.find_element_by_xpath(
             '//div[@id="action-preview-done"]/button[3]').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Run the action
         self.open_action_run(self.action_name)
@@ -830,7 +830,7 @@ class ActionJSONReportActionCreate(
 
         self.selenium.find_element_by_xpath(
             '//div[@id="action-preview-done"]/button[3]').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Run the action
         self.open_action_run(self.action_name)
@@ -914,7 +914,7 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
 
         self.select_rubric_tab()
         self.click_dropdown_option('insert-criterion', 'Structure')
-        self.wait_for_datatable('rubric-table_previous')
+        self.wait_for_id_and_spinner('rubric-table_previous')
 
         # Insert an extra criterion
         self.selenium.find_element_by_class_name(
@@ -930,7 +930,7 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
             '//div[@id="modal-item"]//button[@type="submit"]'
         ).click()
         self.wait_for_modal_close()
-        self.wait_for_datatable('rubric-table_previous')
+        self.wait_for_id_and_spinner('rubric-table_previous')
 
         column = models.Column.objects.get(name='Structure')
         loas = column.categories[:]
@@ -948,7 +948,7 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
                 '//div[@id="modal-item"]//button[@type="submit"]'
             ).click()
             self.wait_for_modal_close()
-            self.wait_for_datatable('rubric-table_previous')
+            self.wait_for_id_and_spinner('rubric-table_previous')
 
         # Loop over the number of rows
         self.open_browse_preview(workflow.nrows)
@@ -963,12 +963,12 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
             '//div[@id="modal-item"]//button[@type="submit"]'
         ).click()
         self.wait_for_modal_close()
-        self.wait_for_datatable('rubric-table_previous')
+        self.wait_for_id_and_spinner('rubric-table_previous')
 
         # Close the action and back to table of actions
         self.selenium.find_element_by_xpath(
             '//div[@id="action-preview-done"]/button[3]').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Assertions
         action = workflow.actions.get(name=self.action_name)

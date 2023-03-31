@@ -569,4 +569,4 @@ class Action(ActionDataOut, ActionDataIn):
         """Define uniqueness with name and workflow. Order by name."""
 
         unique_together = ('name', 'workflow')
-        ordering = ['name']
+        ordering = ['action_type', 'name']

@@ -15,28 +15,6 @@
   <script src="{% static 'action/js/action.js' %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var action_table = $('#action-table').DataTable({
-        "autoWidth": false,
-        "search": {"caseInsensitive": true},
-        "stateSave": true,
-        "stateSaveParams": function (settings, data) {
-          delete data.search;
-          delete data.ColReorder;
-        },
-        "language": {"url": location.protocol + getLanguage()},
-        "order": [[1, 'asc']],
-        "columnDefs": [
-          {"className": "dt-center", "targets": [0, 1, 2, 4]},
-          {"orderable": false, "targets": [0, 2]},
-          {"searchable": false, "targets": [0, 2]},
-        ],
-        "colReorder": false,
-        "rowReorder": false,
-      });
-    });
-  </script>
 {% endblock %}
 {% block container %}
   <div class="container" id="action-index">
@@ -68,12 +46,12 @@
           <span class="fa fa-clock"></span> {% trans 'Timeline' %}</a>
       </div>
     {% endif %}
-    {% if table.data|length %}
-      <div class="justify-content-center">
-        {% render_table table %}
-      </div>
-      {% include 'action/includes/partial_type_legend.html' %}
-    {% endif %}
+    <div id="action-cards" class="card-deck justify-content-center my-3">
+      {% for action in actions %}
+        {% include 'action/includes/partial_action_card.html' %}
+      {% endfor %}
+    </div>
+    {% include 'action/includes/partial_type_legend.html' %}
   </div>
   {% include 'modal.html' %}
 {% endblock container %}

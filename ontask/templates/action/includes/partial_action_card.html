@@ -1,0 +1,106 @@
+{% load i18n %}
+<div class="shadow card ontask-acard text-center mb-3 mx-1">
+  <h5 class="card-header text-center spin"
+      onclick="location.href='{% url 'action:edit' action.id %}'">
+    {% if action.action_type == action.PERSONALIZED_TEXT %}
+      <span class="fa fa-file-alt"></span>
+    {% elif action.action_type == action.PERSONALIZED_CANVAS_EMAIL %}
+      <span class="fa fa-envelope-square"></span>
+    {% elif action.action_type == action.PERSONALIZED_JSON %}
+      <span class="fa fa-code"></span>
+    {% elif action.action_type == action.SURVEY %}
+      <span class="fa fa-question-circle"></span>
+    {% elif action.action_type == action.TODO_LIST %}
+      <span class="fa fa-check-square"></span>
+    {% elif action.action_type == action.EMAIL_REPORT %}
+      <span class="fa fa-share-square"></span>
+    {% elif action.action_type == action.JSON_REPORT %}
+      <span class="fa fa-file-code"></span>
+    {% elif action.action_type == action.RUBRIC_TEXT %}
+      <span class="fa fa-tasks"></span>
+    {% endif %}
+    {{ action.name }}
+  </h5>
+  <div class="card-body spin"
+      onclick="location.href='{% url 'action:edit' action.id %}'">
+    <p class="card-text">{{ action.description_text }}</p>
+  </div>
+  <div class="action-buttons text-center">
+    <p class="mb-0"><strong>Last Executed</strong><br/>{{ action.last_executed_log.created|default:"--" }}</p>
+  </div>
+  <div class="action-buttons text-center">
+    <div aria-label="Button group with nested dropdown" class="btn-group btn-group-sm"
+         role="group">
+      <button type="button"
+              class="btn btn-secondary btn-light js-action-preview "
+              data-url="{% url 'action:preview' action.id 1 %}"
+              data-toggle="tooltip"
+              title="See how is the content shown to each learner">
+        <span class="fa fa-eye"></span></button>
+      <button type="button" class="btn btn-secondary btn-light js-action-clone"
+              data-url="{% url 'action:clone_action' action.id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Create an identical action' %}">
+        <span class="fa fa-clone"></span></button>
+      <button type="button" class="btn btn-secondary btn-light js-action-update"
+              data-url="{% url 'action:update' action.id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Change name and/or description' %}">
+          <span class="fa fa-pencil-alt"></span></button>
+      <button type="button" class="btn btn-secondary btn-light js-action-delete"
+              data-url="{% url 'action:delete' action.id %}"
+              data-toggle="tooltip"
+              title="{% trans 'Delete the action' %}">
+        <span class="fa fa-trash"></span></button>
+      <button onclick="location.href='{% url 'action:run' action.id %}'"
+              class="btn btn-secondary btn-light spin {% if not action.is_executable %}disabled{% endif %}"
+              data-toggle="tooltip" role="button" type="button"
+              title="{% if action.action_type == 'survey' or action.action_type == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action.action_type == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span></button>
+      <div class="btn-group dropright" role="group">
+        <button id="actionMoreOperations" type="button"
+                class="btn btn-secondary btn-light dropdown-toggle" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+        </button>
+        <div class="dropdown-menu dropdown-menu-right shadow"
+             aria-labelledby="actionMoreOperations">
+          {% if action.action_type == 'personalized_text' or action.action_type == 'personalized_canvas_email' or action.action_type == 'survey' %}
+            <button type="button"
+                    class="dropdown-item js-action-showurl"
+                    data-url="{% url 'action:showurl' action.id %}"
+                    data-toggle="tooltip"
+                    {% if action.is_out %}
+                      title="{% trans 'URL for learners to access the personalised text' %}"
+                    {% else %}
+                      title="{% trans 'URL for learners to introduce data' %}"
+                    {% endif %}>
+              <span class="fa fa-link"></span> {% trans 'URL' %}
+              {% if action.serve_enabled %}<span class="badge  badge-pill badge-dark">On</span>
+              {% else %}<span class="badge badge-pill badge-light">Off</span>{% endif %}
+            </button>
+          {% endif %}
+          {% if action.action_type == 'personalized_text' %}
+            <a href="{% url 'action:zip_action' action.id %}"
+               class="spin dropdown-item"
+               data-toggle="tooltip"
+               title="{% trans 'Create a ZIP with each personalised text in a file' %}">
+              <span class="fa fa-file-archive"></span> {% trans 'ZIP' %}</a>
+          {% endif %}
+          <a href="{% url 'action:timeline' action.id %}" class="spin dropdown-item"
+             data-toggle="tooltip"
+             title="{% trans 'See when this action was executed' %}">
+            <span class="fa fa-clock"></span> {% trans 'Timeline' %}</a>
+          {% if action.is_out %}
+            <a href="{% url 'scheduler:create_action_run' action.id %}" class="spin dropdown-item"
+               data-toggle="tooltip"
+               title="{% trans 'Schedule the execution of the action' %}">
+              <span class="fa fa-calendar"></span> {% trans 'Schedule' %}</a>
+          {% endif %}
+          <a href="{% url 'action:export' action.id %}" class="dropdown-item"
+             data-toggle="tooltip"
+             title="{% trans 'Export the content of this action' %}">
+            <span class="fa fa-download"></span> {% trans 'Export' %}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

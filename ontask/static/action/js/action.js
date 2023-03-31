@@ -105,15 +105,15 @@ $(function () {
   $("#modal-item").on("submit", ".js-action-create-form", saveForm);
 
   // Edit Action
-  $("#action-table").on("click", ".js-action-update", loadForm);
+  $("#action-index").on("click", ".js-action-update", loadForm);
   $("#modal-item").on("submit", ".js-action-update-form", saveForm);
 
   // Delete Action
-  $("#action-table").on("click", ".js-action-delete", loadForm);
+  $("#action-index").on("click", ".js-action-delete", loadForm);
   $("#modal-item").on("submit", ".js-action-delete-form", saveForm);
 
   // Clone Action
-  $("#action-table").on("click", ".js-action-clone", loadForm);
+  $("#action-index").on("click", ".js-action-clone", loadForm);
   $("#modal-item").on("submit", ".js-action-clone-form", saveForm);
 
   // Edit Action Description
@@ -172,7 +172,7 @@ $(function () {
   $("#action-index").on("click", ".js-action-preview", loadForm);
 
   // Show URL
-  $("#action-table").on("click", ".js-action-showurl", loadForm);
+  $("#action-index").on("click", ".js-action-showurl", loadForm);
   $("#modal-item").on("submit", ".js-action-showurl-form", saveForm);
 
   // Column Add
@@ -216,7 +216,7 @@ $(function () {
   $("#action-index").on("click", ".js-workflow-flush", loadForm);
   $("#modal-item").on("submit", ".js-workflow-flush-form", saveForm);
 
-  $(".card:not(.nohover)").hover(function(){
+  $(".ontask-ccard:not(.nohover), .ontask-acard:not(.nohover)").hover(function(){
     $(this).css("background-color", "lightgray");
   }, function(){
     $(this).css("background-color", "white");

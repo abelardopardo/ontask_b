@@ -39,11 +39,7 @@ def action_index(
     return render(
         request,
         'action/index.html',
-        {
-            'workflow': workflow,
-            'table': services.ActionTable(
-                workflow.actions.all(),
-                orderable=False)})
+        {'workflow': workflow, 'actions': workflow.actions.all()})
 
 
 class ActionCreateView(UserIsInstructor, generic.TemplateView):

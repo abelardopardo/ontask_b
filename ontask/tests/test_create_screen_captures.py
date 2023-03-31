@@ -243,7 +243,7 @@ class ScreenTestWorkflow(ScreenTestFixtureBasic):
         self.selenium.find_element_by_xpath(
             "//a[normalize-space()='Cancel']"
         ).click()
-        self.wait_for_datatable('attribute-table_previous')
+        self.wait_for_id_and_spinner('attribute-table_previous')
 
         #
         # RENAME
@@ -399,7 +399,7 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Finish']"
         ).click()
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         #
         # Dataops/Merge Excel Merge
@@ -603,7 +603,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         # Done
         # Submit the action
         self.selenium.find_element_by_link_text('Done').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         #
         # Run Action In
@@ -722,7 +722,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Close']"
         ).click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         #
         # SEND LIST action
@@ -762,7 +762,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Close']"
         ).click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         #
         # SEND JSON REPORT action
@@ -800,7 +800,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Close']"
         ).click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Picture of Canvas scheduling
         # self.open_action_schedule('Send Canvas reminder')
@@ -809,10 +809,9 @@ class ScreenTestAction(ScreenTestFixtureBasic):
 
         # Picture of the action row
         self.element_ss(
-            "//table[@id='action-table']/tbody/tr/td[2][normalize-space("
-            ")='Midterm comments']/..",
-            'action_action_ops.png'
-        )
+            '//div[@id="action-cards"]//'
+            'h5[normalize-space()="Midterm comments"]/..',
+            'action_action_ops.png')
 
         #
         # Send emails
@@ -850,7 +849,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.selenium.find_element_by_xpath(
             "//button[normalize-space()='Close']"
         ).click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         #
         # JSON RUN
@@ -859,7 +858,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.body_ss('action_json_run_request_data.png')
         # Save action and back to action index
         self.selenium.find_element_by_link_text('Cancel').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         #
         # Action URL
@@ -873,7 +872,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.selenium.find_element_by_xpath(
             "//button[@type='submit']"
         ).click()
-        self.wait_close_modal_refresh_table('action-table_previous')
+        self.wait_close_modal_refresh_table('action-index')
 
         # End of session
         self.logout()

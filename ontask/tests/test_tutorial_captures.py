@@ -90,7 +90,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             '//button[@name="Submit"]'
         ).click()
-        self.wait_for_datatable('table-data_paginate')
+        self.wait_for_id_and_spinner('table-data_paginate')
 
         # Take picture of the table
         self.body_ss('tutorial_initial_table.png')
@@ -258,7 +258,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             '//button[normalize-space()="Finish"]'
         ).click()
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         #
         # Create PERSONALISED ACTION.
@@ -379,7 +379,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             '//button[normalize-space()="Close"]'
         ).click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Click in the email button
         self.open_action_run('Program advice')
@@ -438,7 +438,7 @@ class TutorialCaptures(ScreenTests):
 
         # Cancel email and go back to action index
         self.selenium.find_element_by_link_text('Cancel').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # Click in the URL link
         self.open_action_operation('Program advice', 'URL Off')
@@ -549,7 +549,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             '//button[normalize-space()="Close"]'
         ).click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         #
         # Click on the create action SURVEY
@@ -674,7 +674,7 @@ class TutorialCaptures(ScreenTests):
 
         # Save action and back to action index
         self.selenium.find_element_by_link_text('Done').click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         #
         # Create an new action combining existing data with survey data
@@ -747,7 +747,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             '//button[normalize-space()="Close"]'
         ).click()
-        self.wait_for_datatable('action-table_previous')
+        self.wait_for_id_and_spinner('action-index')
 
         # End of session
         self.logout()

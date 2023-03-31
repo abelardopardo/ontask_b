@@ -69,7 +69,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         ).click()
 
         # Wait for detail table
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Go to column details
         self.go_to_details()
@@ -152,7 +152,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
             "//button[@name='Submit']"
         ).click()
         # Wait for the upload/merge to finish
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Go to column details
         self.go_to_details()
@@ -220,7 +220,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         ).click()
 
         # Wait for the details table
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Check that the number of rows is the correct one in the only
         # workflow available

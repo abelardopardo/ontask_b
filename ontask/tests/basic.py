@@ -391,7 +391,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             )
         )
 
-    def wait_for_datatable(self, table_id):
+    def wait_for_id_and_spinner(self, table_id):
         # Wait for the table to be refreshed
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located((By.ID, table_id))
@@ -410,7 +410,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         """
         self.wait_for_modal_close()
         # Wait for the table to be refreshed
-        self.wait_for_datatable(table_id)
+        self.wait_for_id_and_spinner(table_id)
 
     def wait_for_page(self, title=None, element_id=None):
         if title:
@@ -546,7 +546,9 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
 
     def search_action(self, action_name):
-        return self.search_table_row_by_string('action-table', 2, action_name)
+        return self.selenium.find_element_by_xpath(
+            '//div[@id="action-cards"]//h5'
+            '[starts-with(normalize-space(), "{0}")]/..'.format(action_name))
 
     def search_column(self, column_name):
         return self.search_table_row_by_string('column-table', 2, column_name)
@@ -617,7 +619,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         element = self.selenium.find_element_by_id('table-data')
         if element:
             # The table is present!
-            self.wait_for_datatable('table-data_previous')
+            self.wait_for_id_and_spinner('table-data_previous')
 
         self.assertIn('CSV Download', self.selenium.page_source)
 
@@ -660,7 +662,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         element = self.selenium.find_element_by_id('column-table')
         if element:
             # The table is present!
-            self.wait_for_datatable('column-table_previous')
+            self.wait_for_id_and_spinner('column-table_previous')
 
         self.assertIn('Column Operations', self.selenium.page_source)
 
@@ -696,7 +698,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         element = self.selenium.find_element_by_id('log-table')
         if element:
             # Log table is present!
-            self.wait_for_datatable('log-table_previous')
+            self.wait_for_id_and_spinner('log-table_previous')
         self.assertIn('Logs', self.selenium.page_source)
 
     def go_to_sql_connections(self):
@@ -824,7 +826,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
         # Click on the upload and wait...
         self.selenium.find_element_by_link_text('Run Transformation').click()
-        self.wait_for_datatable('transform-table_previous')
+        self.wait_for_id_and_spinner('transform-table_previous')
 
     def go_to_model(self):
         # Click in the top menu
@@ -837,7 +839,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
         # Click on the upload and wait...
         self.selenium.find_element_by_link_text('Run Model').click()
-        self.wait_for_datatable('transform-table_previous')
+        self.wait_for_id_and_spinner('transform-table_previous')
 
     def go_to_attribute_page(self):
         self.selenium.find_element_by_id('ontask-base-settings').click()
@@ -1332,9 +1334,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def open_action_edit(self, name):
         self.selenium.find_element_by_xpath(
-            '//table[@id="action-table"]'
-            '//td[2][normalize-space() = "{0}"]/'
-            '../td[1]/div/button[1]'.format(name)).click()
+            '//div[@id="action-cards"]'
+            '//h5[normalize-space() = "{0}"]'.format(name)).click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[contains(@class, "js-action-preview")]')))
@@ -1395,7 +1396,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         element = self.search_action(name)
         element.find_element_by_xpath('td[1]/div/button[2]').click()
         if is_action_in:
-            self.wait_for_datatable('actioninrun-data_previous')
+            self.wait_for_id_and_spinner('actioninrun-data_previous')
         else:
             # Preview button clickable
             WebDriverWait(self.selenium, 10).until(
