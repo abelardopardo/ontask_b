@@ -328,7 +328,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     # 'corsheaders',
 
-    'authtools',
     'crispy_forms',
     'easy_thumbnails',
     'widget_tweaks',
@@ -470,7 +469,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.RemoteUserBackend',
     # 'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend']
-AUTH_USER_MODEL = 'authtools.User'
+AUTH_USER_MODEL = 'ontask.User'
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGIN_URL = reverse_lazy('accounts:login')
 PASSWORD_HASHERS = [

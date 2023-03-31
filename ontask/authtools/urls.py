@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from authtools import views
+from ontask.authtools import views
 
 
 urlpatterns = [

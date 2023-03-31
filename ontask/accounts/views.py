@@ -1,6 +1,6 @@
 from typing import Dict
 
-from authtools import views as authviews
+from ontask.authtools import views as authviews
 from braces import views as bracesviews
 from django.conf import settings
 from django.contrib import messages

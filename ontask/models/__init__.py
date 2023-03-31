@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Package with the OnTask models."""
+from ontask.models.user import User
 from ontask.models.action import Action, VAR_USE_RES
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
 from ontask.models.athenaconnection import AthenaConnection

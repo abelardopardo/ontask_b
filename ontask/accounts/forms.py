@@ -1,6 +1,6 @@
 
 
-from authtools import forms as authtoolsforms
+from ontask.authtools import forms as authtoolsforms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field, Layout, Submit
 from django import forms
