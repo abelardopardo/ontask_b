@@ -8,7 +8,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ontask', '__first__'),
+        ('auth', '__first__'),
     ]
 
     operations = [

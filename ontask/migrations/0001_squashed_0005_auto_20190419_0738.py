@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
         ('ontask', '0017_auto_20190213_1623'),
         ('ontask', '0027_auto_20190418_1057'),
         ('authtoken', '0002_auto_20160226_1747'),
-        ('ontask', '0003_authtools_user_auto_20160128_0912'),
+        ('ontask', '0003_auto_20160128_0912'),
         ('ontask', '0001_profiles_initial'),
         # ('ontask_oauth', '0004_auto_20181208_1306'),
         ('ontask', '0035_remove_scheduledaction_deleted'),

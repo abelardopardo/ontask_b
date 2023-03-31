@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ontask', '0002_authtools_user_django18'),
+        ('ontask', '0002_django18'),
     ]
 
     operations = [

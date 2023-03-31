@@ -1,3 +1,15 @@
+## 9.0 (2022-)
+
+### Changed
+
+- User model is now inside the platform (no longer in authtools library). Migration requires executing the following code directly on the database:
+
+       INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0001_authtools_user_initial', CURRENT_TIMESTAMP);
+       INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0002_django18', CURRENT_TIMESTAMP);
+       INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0003_auto_20160128_0912', CURRENT_TIMESTAMP);
+       DELETE FROM django_migrations WHERE app = 'authtools';
+       UPDATE django_content_type SET app_label = 'ontask' WHERE app_label = 'authtools' AND model = 'user';
+
 ## 8.0 (2021-12-21)
 
 ### Fixed
