@@ -2579,7 +2579,7 @@
         "active_to": null,
         "rows_all_false": null,
         "serve_enabled": false,
-        "text_content": "<p>Dear\u00a0{{ first_name }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
+        "text_content": "<p>Dear\u00a0{{ GivenName }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
         "target_url": "",
         "shuffle": false,
         "filter": 4,
