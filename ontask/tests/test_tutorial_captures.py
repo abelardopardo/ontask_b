@@ -12,7 +12,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
 from ontask import models
-from ontask.tests.basic import ElementHasFullOpacity, ScreenTests
+from ontask.tests.basic import ScreenTests
 
 
 class TutorialCaptures(ScreenTests):
@@ -50,14 +50,12 @@ class TutorialCaptures(ScreenTests):
             '//tbody/tr[1]/td[1]/a[1]'
         ).click()
         WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//form')
-            )
-        )
+            EC.visibility_of_element_located((By.XPATH, '//form')))
 
         # Set the file name
         self.selenium.find_element_by_id('id_data_file').send_keys(
-            os.path.join(settings.BASE_DIR(),
+            os.path.join(
+                settings.BASE_DIR(),
                 'docs',
                 'Dataset',
                 'all_data.csv')
@@ -66,20 +64,19 @@ class TutorialCaptures(ScreenTests):
         self.body_ss('tutorial_csv_upload_learner_information.png')
 
         # Click on the NEXT button
-        self.selenium.find_element_by_xpath(
-            '//button[@name="Submit"]'
-        ).click()
+        self.selenium.find_element_by_xpath('//button[@name="Submit"]').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.XPATH, '//body/div/h1'),
-                'Select Columns')
-        )
+            EC.text_to_be_present_in_element(
+                (By.XPATH, '//body/div/h1'), 'Select Columns'))
 
         # Uncheck two elements
-        element = self.search_table_row_by_string('workflow-table',
+        element = self.search_table_row_by_string(
+            'workflow-table',
             2,
             'Surname')
         element.find_element_by_xpath('td[5]/input').click()
-        element = self.search_table_row_by_string('workflow-table',
+        element = self.search_table_row_by_string(
+            'workflow-table',
             2,
             'GivenName')
         element.find_element_by_xpath('td[5]/input').click()
@@ -87,16 +84,15 @@ class TutorialCaptures(ScreenTests):
         self.body_ss('tutorial_csv_upload_confirm.png')
 
         # Click on the Next button
-        self.selenium.find_element_by_xpath(
-            '//button[@name="Submit"]'
-        ).click()
+        self.selenium.find_element_by_xpath('//button[@name="Submit"]').click()
         self.wait_for_id_and_spinner('table-data_paginate')
 
         # Take picture of the table
         self.body_ss('tutorial_initial_table.png')
 
         # Take picture of the top-bar menu
-        self.element_ss('//nav[contains(@class, "fixed-top")]',
+        self.element_ss(
+            '//nav[contains(@class, "fixed-top")]',
             'tutorial_top_menu_bar.png')
 
         # Go back to details
@@ -128,8 +124,7 @@ class TutorialCaptures(ScreenTests):
         self.selenium.find_element_by_xpath(
             '//*[@placeholder="Click here to search"]').click()
         options = self.selenium.find_element_by_xpath(
-            '//*[@id="div_id_columns"]//div[@class="sol-selection"]'
-        )
+            '//*[@id="div_id_columns"]//div[@class="sol-selection"]')
         for cname in ['email', 'Program', 'Enrolment Type']:
             options.find_element_by_xpath(
                 'div/label/div[normalize-space()="{0}"]'.format(cname)
@@ -141,15 +136,15 @@ class TutorialCaptures(ScreenTests):
 
         # Save the view
         self.selenium.find_element_by_xpath(
-            '//button[normalize-space()="Add view"]'
-        ).click()
+            '//button[normalize-space()="Add view"]').click()
         self.wait_close_modal_refresh_table('table-data_previous')
 
         # Take picture of the table
         self.body_ss('tutorial_table_view.png')
 
         # select the statistics of one of the learners
-        element = self.search_table_row_by_string('table-data',
+        element = self.search_table_row_by_string(
+            'table-data',
             2,
             'ckrn7263@bogus.com')
         element = element.find_element_by_xpath('td[1]/div/button[2]')
@@ -184,7 +179,8 @@ class TutorialCaptures(ScreenTests):
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
         self.selenium.find_element_by_id('id_data_file').send_keys(
-            os.path.join(settings.BASE_DIR(),
+            os.path.join(
+                settings.BASE_DIR(),
                 'docs',
                 'Dataset',
                 'moodle_grades.csv')
@@ -296,7 +292,8 @@ class TutorialCaptures(ScreenTests):
         )
 
         # Take picture of the html editor
-        self.element_ss('//div[@id="html-editor"]',
+        self.element_ss(
+            '//div[@id="html-editor"]',
             'tutorial_personalized_text_editor_with_column.png')
 
         # Create the first condition
@@ -319,20 +316,24 @@ class TutorialCaptures(ScreenTests):
         )
 
         # Take picture of the html editor
-        self.element_ss('//div[@id="html-editor"]',
+        self.element_ss(
+            '//div[@id="html-editor"]',
             'tutorial_personalized_text_condition_inserted.png')
 
         # Create the remaining conditions
         self.select_condition_tab()
-        self.create_condition('Program is FSCI',
+        self.create_condition(
+            'Program is FSCI',
             '',
             [('Program', 'equal', 'FSCI')]
         )
-        self.create_condition('Program is FEIT',
+        self.create_condition(
+            'Program is FEIT',
             '',
             [('Program', 'equal', 'FEIT')]
         )
-        self.create_condition('Program is SMED',
+        self.create_condition(
+            'Program is SMED',
             '',
             [('Program', 'equal', 'SMED')]
         )
@@ -345,12 +346,14 @@ class TutorialCaptures(ScreenTests):
         )
 
         # Take picture of the html editor
-        self.element_ss('//div[@id="html-editor"]',
+        self.element_ss(
+            '//div[@id="html-editor"]',
             'tutorial_personalized_text_condition_inserted2.png')
 
         # Open the filter condition
         self.select_filter_tab()
-        self.create_filter('Full time attendance',
+        self.create_filter(
+            'Full time attendance',
             [('Attendance', 'equal', 'Full Time')])
         # Open it again for the picture
         self.open_filter()
@@ -511,10 +514,12 @@ class TutorialCaptures(ScreenTests):
         )
         self.wait_for_spinner()
 
-        self.create_condition('Less than 50 in the midterm',
+        self.create_condition(
+            'Less than 50 in the midterm',
             '',
             [('Total', 'less', '50')])
-        self.create_condition('More or equal to 50 in midterm',
+        self.create_condition(
+            'More or equal to 50 in midterm',
             '',
             [('Total', 'greater or equal', '50')])
 
@@ -723,7 +728,8 @@ class TutorialCaptures(ScreenTests):
 
         # Create the filter
         self.select_filter_tab()
-        self.create_filter('Complete data',
+        self.create_filter(
+            'Complete data',
             [('Survey Q1', 'is not null', None),
              ('Total', 'is not null', None)])
 
