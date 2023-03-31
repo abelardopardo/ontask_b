@@ -175,7 +175,8 @@ class SingleActionMixin(detail.SingleObjectMixin, RequestWorkflowView):
         """Access the Action verify that belongs to workflow."""
         act_obj = super().get_object(queryset=queryset)
         if act_obj.workflow != self.workflow:
-            raise http.Http404(_('Action does not belong to current workflow'))
+            raise http.Http404(
+                _('Action does not belong to current workflow.'))
 
         return act_obj
 

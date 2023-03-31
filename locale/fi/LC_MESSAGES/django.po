@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-21 11:15+1030\n"
+"POT-Creation-Date: 2021-12-26 21:14+1030\n"
 "PO-Revision-Date: 2020-06-01 19:53+0300\n"
 "Last-Translator: Joonas Pesonen <joonas.pesonen@helsinki.fi>\n"
 "Language-Team: \n"
@@ -468,6 +468,63 @@ msgstr ""
 msgid "OnTask"
 msgstr "OnTask"
 
+#: ontask/authtools/admin.py:21
+#, fuzzy
+#| msgid "Permission denied"
+msgid "Permissions"
+msgstr "Lupa evätty"
+
+#: ontask/authtools/admin.py:28
+#, fuzzy
+#| msgid "Import actions"
+msgid "Important dates"
+msgstr "Tuo toimintoja"
+
+#: ontask/authtools/forms.py:38
+#, fuzzy
+#| msgid "Password Reset"
+msgid "No password set."
+msgstr "Salasanan nollaus"
+
+#: ontask/authtools/forms.py:43
+msgid "Invalid password format or unknown hashing algorithm."
+msgstr ""
+
+#: ontask/authtools/forms.py:46
+msgid "*************"
+msgstr ""
+
+#: ontask/authtools/forms.py:59
+msgid "The two password fields didn't match."
+msgstr ""
+
+#: ontask/authtools/forms.py:61
+#, fuzzy, python-format
+#| msgid "A column with that name already exists"
+msgid "A user with that %(username)s already exists."
+msgstr "Samanniminen sarake on jo olemassa"
+
+#: ontask/authtools/forms.py:64 ontask/authtools/forms.py:153
+#: ontask/connection/forms.py:77 ontask/models/sqlconnection.py:58
+msgid "Password"
+msgstr "Salasana"
+
+#: ontask/authtools/forms.py:65
+#, fuzzy
+#| msgid "Password reset confirmation"
+msgid "Password confirmation"
+msgstr "Salasanan palautuksen vahvistus"
+
+#: ontask/authtools/forms.py:67
+msgid "Enter the same password as above, for verification."
+msgstr ""
+
+#: ontask/authtools/forms.py:183
+msgid ""
+"This email address doesn't have an associated user account. Are you sure "
+"you've registered?"
+msgstr ""
+
 #: ontask/column/forms.py:27
 msgid "Comma separated list of values allowed in this column"
 msgstr "Tässä sarakkeessa pilkulla erotettu lista arvoista on sallittu"
@@ -747,10 +804,6 @@ msgstr "Kriteerien muokkaustoiminnon virheellinen kutsuminen"
 msgid "There is already a connection with this name."
 msgstr "Samanniminen yhteys on jo olemassa."
 
-#: ontask/connection/forms.py:77 ontask/models/sqlconnection.py:58
-msgid "Password"
-msgstr "Salasana"
-
 #: ontask/connection/forms.py:80
 msgid "Authentication for the database connection"
 msgstr "Tietokantayhteyden autentikaatio"
@@ -798,7 +851,7 @@ msgstr "SQL-yhteydet"
 msgid "Athena Connections"
 msgstr "Athena-yhteydet"
 
-#: ontask/core/checks.py:133
+#: ontask/core/checks.py:136
 #, python-brace-format
 msgid "The new data does not preserve the key property of column \"{0}\""
 msgstr "Uudet tiedot eivät säilytä sarakkeen ”{0}” avainominaisuutta"
@@ -806,8 +859,8 @@ msgstr "Uudet tiedot eivät säilytä sarakkeen ”{0}” avainominaisuutta"
 #: ontask/core/decorators.py:90 ontask/core/decorators.py:138
 #: ontask/core/decorators.py:186 ontask/core/decorators.py:234
 #: ontask/core/decorators.py:282 ontask/core/decorators.py:331
-#: ontask/core/permissions.py:193 ontask/core/permissions.py:226
-#: ontask/core/permissions.py:259 ontask/core/permissions.py:292
+#: ontask/core/permissions.py:194 ontask/core/permissions.py:227
+#: ontask/core/permissions.py:260 ontask/core/permissions.py:293
 #: ontask/workflow/views/workflow_ops.py:132
 msgid "Workflow has no data. Go to \"Manage table data\" to upload data."
 msgstr ""
@@ -825,27 +878,27 @@ msgstr ""
 msgid "File type ({0}) is not supported."
 msgstr "Tiedostotyyppiä ({0}) ei tueta."
 
-#: ontask/core/permissions.py:178
-msgid "Action does not belong to current workflow"
+#: ontask/core/permissions.py:179
+msgid "Action does not belong to current workflow."
 msgstr ""
 
-#: ontask/core/permissions.py:202
+#: ontask/core/permissions.py:203
 #, fuzzy
 #| msgid "Key column to match the user id"
 msgid "No column found matching the query"
 msgstr "Avainsarake, joka vastaa käyttäjätunnusta (user id)"
 
-#: ontask/core/permissions.py:235
+#: ontask/core/permissions.py:236
 msgid "No condition found matching the query"
 msgstr ""
 
-#: ontask/core/permissions.py:268
+#: ontask/core/permissions.py:269
 #, fuzzy
 #| msgid "No track_id found in request"
 msgid "No filter found matching the query"
 msgstr "Pyynnöstä puuttuu track_id"
 
-#: ontask/core/permissions.py:303
+#: ontask/core/permissions.py:304
 #, fuzzy
 #| msgid "Key column to match the user id"
 msgid "No column/condition found matching the query"
@@ -1719,7 +1772,7 @@ msgstr "Sarake on aktiivinen asti"
 msgid "Unsupported type %(type)s"
 msgstr "Ei-tuettu tyyppi %(type)s"
 
-#: ontask/models/common.py:35
+#: ontask/models/common.py:35 ontask/models/user.py:75
 msgid "name"
 msgstr "nimi"
 
@@ -2247,6 +2300,42 @@ msgstr "Tietokannan nimi"
 #: ontask/models/sqlconnection.py:86
 msgid "Database table"
 msgstr "Tietokantataulu"
+
+#: ontask/models/user.py:38
+#, fuzzy
+#| msgid "Email address"
+msgid "email address"
+msgstr "Sähköpostiosoite"
+
+#: ontask/models/user.py:41
+msgid "staff status"
+msgstr ""
+
+#: ontask/models/user.py:44
+msgid "Designates whether the user can log into this admin site."
+msgstr ""
+
+#: ontask/models/user.py:46
+msgid "active"
+msgstr ""
+
+#: ontask/models/user.py:49
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+
+#: ontask/models/user.py:51
+msgid "date joined"
+msgstr ""
+
+#: ontask/models/user.py:99
+msgid "user"
+msgstr ""
+
+#: ontask/models/user.py:100
+msgid "users"
+msgstr ""
 
 #: ontask/models/view.py:39
 msgid "Subset of columns to show"
@@ -5971,11 +6060,11 @@ msgstr "Työnkulku kopioitiin onnistuneesti."
 msgid "The list of workflow users will be updated shortly."
 msgstr "Lista työnkulun käyttäjistä päivitetään pian."
 
-#: settings/base.py:346
+#: settings/base.py:347
 msgid "English"
 msgstr "englanti"
 
-#: settings/base.py:346
+#: settings/base.py:347
 msgid "Spanish"
 msgstr "espanja"
 
@@ -6431,9 +6520,6 @@ msgstr ""
 
 #~ msgid "Your password has been set.  You may go ahead and log in now."
 #~ msgstr "Salasanasi on asetettu. Voit nyt kirjautua sisään."
-
-#~ msgid "Password reset confirmation"
-#~ msgstr "Salasanan palautuksen vahvistus"
 
 #~ msgid "Enter new password"
 #~ msgstr "Syötä uusi salasana"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-21 11:15+1030\n"
-"PO-Revision-Date: 2021-12-19 19:03+1030\n"
+"POT-Creation-Date: 2021-12-26 21:14+1030\n"
+"PO-Revision-Date: 2021-12-26 21:20+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: Abelardo Paro\n"
 "Language: es\n"
@@ -265,7 +265,7 @@ msgstr "La columna importada {0} es diferente de la ya existente."
 
 #: ontask/action/serializers/basic.py:276
 msgid "The new action creates duplicate view names"
-msgstr ""
+msgstr "La nueva acción crea vistas con nombres duplicados"
 
 #: ontask/action/serializers/basic.py:290
 msgid "Unable to import action  in a workflow with and empty data table"
@@ -454,11 +454,61 @@ msgstr "Petición incorrecta. No es posible procesarla"
 
 #: ontask/action/views/timeline.py:33
 msgid "Action does not belong to current workflow. "
-msgstr ""
+msgstr "Acción no pertenece al flujo actual."
 
 #: ontask/apps.py:10
 msgid "OnTask"
 msgstr "OnTask"
+
+#: ontask/authtools/admin.py:21
+msgid "Permissions"
+msgstr "Permisos"
+
+#: ontask/authtools/admin.py:28
+msgid "Important dates"
+msgstr "Fechas importantes"
+
+#: ontask/authtools/forms.py:38
+msgid "No password set."
+msgstr "No se ha definido clave."
+
+#: ontask/authtools/forms.py:43
+msgid "Invalid password format or unknown hashing algorithm."
+msgstr "Formato de clave inválido, o programa de hashing desconocido."
+
+#: ontask/authtools/forms.py:46
+msgid "*************"
+msgstr "*************"
+
+#: ontask/authtools/forms.py:59
+msgid "The two password fields didn't match."
+msgstr "Las dos palabras clave  no son idénticas"
+
+#: ontask/authtools/forms.py:61
+#, python-format
+msgid "A user with that %(username)s already exists."
+msgstr "Ya existe un usuario con nombre  %(username)s."
+
+#: ontask/authtools/forms.py:64 ontask/authtools/forms.py:153
+#: ontask/connection/forms.py:77 ontask/models/sqlconnection.py:58
+msgid "Password"
+msgstr "Clave"
+
+#: ontask/authtools/forms.py:65
+msgid "Password confirmation"
+msgstr "Confirmación de clave"
+
+#: ontask/authtools/forms.py:67
+msgid "Enter the same password as above, for verification."
+msgstr "Introduzca la misma clave que arriba, para verificarla."
+
+#: ontask/authtools/forms.py:183
+msgid ""
+"This email address doesn't have an associated user account. Are you sure "
+"you've registered?"
+msgstr ""
+"Esta dirección de correo no tiene una cuenta asociada. Está seguro que se ha "
+"registrado?"
 
 #: ontask/column/forms.py:27
 msgid "Comma separated list of values allowed in this column"
@@ -728,10 +778,6 @@ msgstr "Llamada incorrecta a la función para asignar una vista como filtro"
 msgid "There is already a connection with this name."
 msgstr "Ya hay una conexión con este nombre."
 
-#: ontask/connection/forms.py:77 ontask/models/sqlconnection.py:58
-msgid "Password"
-msgstr "Clave"
-
 #: ontask/connection/forms.py:80
 msgid "Authentication for the database connection"
 msgstr "Autenticación para la base de datos"
@@ -781,7 +827,7 @@ msgstr "Conexiones SQL"
 msgid "Athena Connections"
 msgstr "Conexiones a Athena"
 
-#: ontask/core/checks.py:133
+#: ontask/core/checks.py:136
 #, python-brace-format
 msgid "The new data does not preserve the key property of column \"{0}\""
 msgstr "Los datos nuevos no conservan la propiedad clave de la columna “{0}"
@@ -789,8 +835,8 @@ msgstr "Los datos nuevos no conservan la propiedad clave de la columna “{0}"
 #: ontask/core/decorators.py:90 ontask/core/decorators.py:138
 #: ontask/core/decorators.py:186 ontask/core/decorators.py:234
 #: ontask/core/decorators.py:282 ontask/core/decorators.py:331
-#: ontask/core/permissions.py:193 ontask/core/permissions.py:226
-#: ontask/core/permissions.py:259 ontask/core/permissions.py:292
+#: ontask/core/permissions.py:194 ontask/core/permissions.py:227
+#: ontask/core/permissions.py:260 ontask/core/permissions.py:293
 #: ontask/workflow/views/workflow_ops.py:132
 msgid "Workflow has no data. Go to \"Manage table data\" to upload data."
 msgstr ""
@@ -807,23 +853,23 @@ msgstr "El tamaño del fichero (%(current)s) ha de ser menor que %(max)s."
 msgid "File type ({0}) is not supported."
 msgstr "Los ficheros de tipo ({0}) no se pueden procesar."
 
-#: ontask/core/permissions.py:178
-msgid "Action does not belong to current workflow"
-msgstr ""
+#: ontask/core/permissions.py:179
+msgid "Action does not belong to current workflow."
+msgstr "Acción no pertenece al flujo actual."
 
-#: ontask/core/permissions.py:202
+#: ontask/core/permissions.py:203
 msgid "No column found matching the query"
 msgstr "No se ha encontrado una columna para la consulta dada"
 
-#: ontask/core/permissions.py:235
+#: ontask/core/permissions.py:236
 msgid "No condition found matching the query"
-msgstr ""
+msgstr "No se ha encontrado ninguna condición para esta petición"
 
-#: ontask/core/permissions.py:268
+#: ontask/core/permissions.py:269
 msgid "No filter found matching the query"
 msgstr "No se ha encontrado un filtro para laconsulta dada"
 
-#: ontask/core/permissions.py:303
+#: ontask/core/permissions.py:304
 msgid "No column/condition found matching the query"
 msgstr "No se ha encontrado una columna/condición para la consulta dada"
 
@@ -833,7 +879,7 @@ msgstr "Selecciona un flujo"
 
 #: ontask/core/session_ops.py:105 ontask/core/session_ops.py:123
 msgid "No workflow found matching the query"
-msgstr ""
+msgstr "No se ha encontrado un flujo para esta petición"
 
 #: ontask/core/session_ops.py:175
 #, python-brace-format
@@ -1700,7 +1746,7 @@ msgstr "Columna activa hasta"
 msgid "Unsupported type %(type)s"
 msgstr "Typo de datos %(type)s no soportado"
 
-#: ontask/models/common.py:35
+#: ontask/models/common.py:35 ontask/models/user.py:75
 msgid "name"
 msgstr "nombre"
 
@@ -2224,6 +2270,43 @@ msgstr "Nombre de la base de datos"
 msgid "Database table"
 msgstr "Tabla de la base de datos"
 
+#: ontask/models/user.py:38
+msgid "email address"
+msgstr "dirección de correo"
+
+#: ontask/models/user.py:41
+msgid "staff status"
+msgstr "estado del usuario"
+
+#: ontask/models/user.py:44
+msgid "Designates whether the user can log into this admin site."
+msgstr ""
+"Designa si el usuario puede conectarse como administrador a este sitio."
+
+#: ontask/models/user.py:46
+msgid "active"
+msgstr "activo"
+
+#: ontask/models/user.py:49
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+"Designa si el usuario se debe tratar como activo. Desactivar este campo en "
+"lugar de borrar cuentas."
+
+#: ontask/models/user.py:51
+msgid "date joined"
+msgstr "fecha de alta"
+
+#: ontask/models/user.py:99
+msgid "user"
+msgstr "Usuario"
+
+#: ontask/models/user.py:100
+msgid "users"
+msgstr "Usuarios"
+
 #: ontask/models/view.py:39
 msgid "Subset of columns to show"
 msgstr "Subconjunto de columnas a mostrar"
@@ -2603,7 +2686,7 @@ msgstr "No hay datos en la tabla"
 
 #: ontask/table/views/table_display.py:92
 msgid "Formula is exluding all rows from the table"
-msgstr ""
+msgstr "La  fórmula excluye todas las filas de  la tabla"
 
 #: ontask/table/views/table_view.py:36
 msgid "Cannot add a view to a workflow without data"
@@ -5094,7 +5177,7 @@ msgstr "Descarga CSV"
 
 #: ontask/templates/table/display.html:190
 msgid "New action using this view as filter"
-msgstr ""
+msgstr "Nueva acción usando esta vista como filtro"
 
 #: ontask/templates/table/display.html:192
 msgid "Action with filter"
@@ -5102,11 +5185,11 @@ msgstr "Acción con filtro"
 
 #: ontask/templates/table/display.html:200
 msgid "Row filter:"
-msgstr ""
+msgstr "Filtro de filas:"
 
 #: ontask/templates/table/display.html:202
 msgid "No row filter defined. All rows are included."
-msgstr ""
+msgstr "No se ha definido filtro. Todas las filas están incluidas."
 
 #: ontask/templates/table/display.html:220
 msgid ""
@@ -5620,7 +5703,7 @@ msgstr ""
 
 #: ontask/templates/workflow/includes/partial_workflow_flush.html:22
 msgid "The workflow has not data, so this operation will nave no effect."
-msgstr ""
+msgstr "El flujo no tiene datos, esta operación no tiene ningún efecto."
 
 #: ontask/templates/workflow/includes/partial_workflow_flush.html:28
 msgid "Flush workflow data"
@@ -5834,11 +5917,11 @@ msgstr "Flujo clonado con éxito."
 msgid "The list of workflow users will be updated shortly."
 msgstr "La lista de usuarios se actualizará en breve."
 
-#: settings/base.py:346
+#: settings/base.py:347
 msgid "English"
 msgstr "Inglés"
 
-#: settings/base.py:346
+#: settings/base.py:347
 msgid "Spanish"
 msgstr "Español"
 
@@ -6257,9 +6340,6 @@ msgstr ""
 
 #~ msgid "Your password has been set.  You may go ahead and log in now."
 #~ msgstr "Su clave ha sido asignada. Ya puede iniciar una sesión."
-
-#~ msgid "Password reset confirmation"
-#~ msgstr "Cambio de clave confirmado"
 
 #~ msgid "Enter new password"
 #~ msgstr "Entre la clave nueva"
