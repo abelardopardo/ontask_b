@@ -29,7 +29,7 @@ django-formtools
 django-siteprefs==1.2.1  # Creates a bug when migrating
 django-tables2
 django-import-export
-django-summernote
+django-summernote==0.8.11.6
 django-jquery
 email-validator
 psycopg2
@@ -52,3 +52,4 @@ supervisor
 django-debug-toolbar
 oauth2
 lxml
+Werkzeug

@@ -2,3 +2,4 @@
 coverage==6.2
 django-debug-toolbar==3.2.4
 selenium==4.1.0
+Werkzeug==2.0.2
