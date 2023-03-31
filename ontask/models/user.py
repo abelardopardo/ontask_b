@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 
-"""Additional profile for OnTaskUsers."""
+"""
+Models to manage users.
+
+This code has been derived from the django_authtools library and modified due
+to its lack of compatibility with Django 3, it has been partially rewritten.
+
+The license of the original code can be found in file authtools/README.md
+
+"""
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
@@ -29,12 +37,17 @@ class UserManager(BaseUserManager):
 class AbstractEmailUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), max_length=255, unique=True)
 
-    is_staff = models.BooleanField(_('staff status'), default=False,
-        help_text=_('Designates whether the user can log into this admin '
-                    'site.'))
-    is_active = models.BooleanField(_('active'), default=True,
-        help_text=_('Designates whether this user should be treated as '
-                    'active. Unselect this instead of deleting accounts.'))
+    is_staff = models.BooleanField(
+        _('staff status'),
+        default=False,
+        help_text=_(
+            'Designates whether the user can log into this admin site.'))
+    is_active = models.BooleanField(
+        _('active'),
+        default=True,
+        help_text=_(
+            'Designates whether this user should be treated as '
+            'active. Unselect this instead of deleting accounts.'))
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
     objects = UserManager()
@@ -85,7 +98,6 @@ class User(AbstractNamedUser):
         swappable = 'AUTH_USER_MODEL'
         verbose_name = _('user')
         verbose_name_plural = _('users')
-        db_table = 'authtools_user'
 
 
 class OnTaskUser(models.Model):
