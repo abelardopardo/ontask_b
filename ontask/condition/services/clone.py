@@ -34,7 +34,7 @@ def do_clone_condition(
 
     new_condition = models.Condition(
         name=new_name,
-        workflow=condition.workflow,
+        workflow=new_action.workflow,
         description_text=condition.description_text,
         action=new_action,
         formula=copy.deepcopy(condition.formula),

@@ -39,7 +39,7 @@ def do_clone_action(
             # if it is pointing to a view
             new_filter = action.filter
         else:
-            if action.filter.view is not None:
+            if getattr(action.filter, 'view', None):
                 # The filter has already been cloned because it is in a view
                 new_filter = new_workflow.views.get(
                     name=action.filter.view.name).filter
