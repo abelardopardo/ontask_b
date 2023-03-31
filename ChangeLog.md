@@ -1,8 +1,8 @@
-## 9.0 (2022-)
+# 9.0 (2022-)
 
-### Changed
+## Changed
 
-- User model is now inside the platform (no longer in authtools library). Migration requires executing the following code directly on the database:
+- User model is now inside the platform (no longer in authtools library). Migration requires executing the following code directly on the database before `manage.py migrate`:
 
        INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0001_authtools_user_initial', CURRENT_TIMESTAMP);
        INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0002_django18', CURRENT_TIMESTAMP);
@@ -10,9 +10,9 @@
        DELETE FROM django_migrations WHERE app = 'authtools';
        UPDATE django_content_type SET app_label = 'ontask' WHERE app_label = 'authtools' AND model = 'user';
 
-## 8.0 (2021-12-21)
+# 8.0 (2021-12-21)
 
-### Fixed
+## Fixed
 
 - Missing HTML to visualise column histogram in filter view (action edit)
 
@@ -21,7 +21,7 @@
 - Removing filters when flushing a workflow
 
 
-### Changed
+## Changed
 
 - Major rebranding of the platform with the corporate colours of Clariate
 
@@ -31,7 +31,7 @@
 
 - Removed the full blown installation doc from the manual (not needed in SAS)
 
-### Added
+## Added
 
 - Functionality to create an action from an existing view (by using condition as filter)
 
@@ -39,9 +39,9 @@
 
 - Workflow search
 
-## 7.2 (2020-07-04)
+# 7.2 (2020-07-04)
 
-### Fixed
+## Fixed
 
 - Wrong python version in apache configuration for docker
 
@@ -49,19 +49,19 @@
 
 - Error in date/time field when adding questions to a questionnaire 
 
-### Changed
+## Changed
 
 - Updated various packages (Django, Celery, dataTables, redis, django-redis, etc.)
 
-### Added
+## Added
 
 - Enabled the functionality to pull data from an Athena connection
 
 - Functionality to create TODO actions (still in Beta)
 
-## 7.1 (2020-05-09)
+# 7.1 (2020-05-09)
 
-### Fixed
+## Fixed
 
 - Error when showing number of table rows with all conditions false.
 
@@ -69,11 +69,11 @@
 
 - Error when merging data through the API with datetime columns
 
-### Changed
+## Changed
 
 - Email and JSON report actions now allow to include multiple columns (#185)
 
-### Added
+## Added
 
 - Action preview now shows the value of each condition.
 
@@ -81,25 +81,25 @@
 
 - Accessibility statement (#191)
 
-## 7.0.2 (2020-03-04)
+# 7.0.2 (2020-03-04)
 
-### Fixed
+## Fixed
 
 - Misconfiguration of image inlining in summernote (#183)
 
 - Fixed creation of a random column
 
-## 7.0.1 (2020-02-17)
+# 7.0.1 (2020-02-17)
 
-### Fixed
+## Fixed
 
 - Bug when merging a data frame with a column with no data and is detected as datetime without timezone.
 
 - Increased Django version requirement to deal with vulnerability
 
-## 7.0 (2020-01-01)
+# 7.0 (2020-01-01)
 
-### Added
+## Added
 
 - Schedule the repeated exectuion of actions. The actions can be executed during a time window and with a frequency expressed using the crontab syntax.
 
@@ -109,7 +109,7 @@
 
 - API calls to schedule operations.
 
-### Changed
+## Changed
 
 - Unified table rendering to always have the buttons for operations in the left side. Avoid links in table rows unless the meaning is unique and clearly understood.
 
@@ -121,35 +121,35 @@
 
 - Upgraded to use Django 2.2.8 (and some additional libraries)
 
-### Fixed
+## Fixed
 
 - Removed pages to fix the change password in admin (Issue #176)
 
-## 6.1.3 (2019-11-4)
+# 6.1.3 (2019-11-4)
 
-### Fixed
+## Fixed
 
 - Error preventing RUBRIC actions to execute
 
-## 6.1.2 (2019-11-2)
+# 6.1.2 (2019-11-2)
 
-### Fixed
+## Fixed
 
 - Error when handling action payload in canvas email actions (Issue #173)
 
 - Error in path for Docker container (PR #172)
 
-## 6.1.1 (2019-10-21)
+# 6.1.1 (2019-10-21)
 
-### Fixed
+## Fixed
 
 - Missing plotting information for the rubric rows
 
 - Error in migration to 6.1 to enforce column name length
 
-## 6.1 (2019-10-19)
+# 6.1 (2019-10-19)
 
-### Added
+## Added
 
 - New action type: personalized rubric. Write a rubric, extend each cell with a feedback paragraph, collect data about the level of attainment and create a personalized email with the appropriate messages for each student.
 
@@ -159,13 +159,13 @@
 
 - Link to the table views in the top menu
 
-### Changed
+## Changed
 
 - Revamped the logs created by the platform so that they have a uniform structure
 
 - Revamped how data connections are administered and added an enable/disable switch
 
-### Fixed
+## Fixed
 
 - Enforce a limit of 63 characters or column numbers (Issue #170)
 
@@ -173,31 +173,31 @@
 
 - Incorrect last executed time (Issue #157)
 
-## 6.0.3 (2019-10-9)
+# 6.0.3 (2019-10-9)
 
-### Fixed
+## Fixed
 
 - Error when processing formulas with boolean values
 
-## 6.0.2 (2019-10-8)
+# 6.0.2 (2019-10-8)
 
-### Fixed
+## Fixed
 
 - Error when condition names contain symbols
 
-## 6.0.1 (2019-09-14)
+# 6.0.1 (2019-09-14)
 
-### Fixed
+## Fixed
 
 - Error when inserting random and formula columns
 
-### Changed
+## Changed
 
 - Updated Chinese localization
 
-## 6.0 (2019-09-06)
+# 6.0 (2019-09-06)
 
-### Added
+## Added
 
 - Two new action types to send emails or JSON objects containing the content of a selected column  (Issue #158)
 
@@ -205,7 +205,7 @@
 
 - Additional test suites for the new actions.
 
-### Changed
+## Changed
 
 - Updated localization files
 
@@ -223,7 +223,7 @@
 
 - Use console for messages under development
 
-### Fixed
+## Fixed
 
 - Error when using extra parameters with the loggers
 
@@ -233,35 +233,35 @@
 
 - Error when selecting the first column to sort the data in a table
 
-## 5.2.2 (2019-08-10)
+# 5.2.2 (2019-08-10)
 
-### Fixed
+## Fixed
 
 - Error when invoking scheduled actions (Issue #153)
 
-### Changed
+## Changed
 
 - Upgraded requirements (Django and other libraries)
 
-## 5.2.1 (2019-08-02)
+# 5.2.1 (2019-08-02)
 
-### Changed
+## Changed
 
 - Decoupled documentation building from platform configuration
 
-## 5.2.0 (2019-08-01)
+# 5.2.0 (2019-08-01)
 
-### Added
+## Added
 
 - Role handling configuration for LTI (deciding which role is Instructor)
 
-### Changed
+## Changed
 
 - Moved admin URL
 
 - Improved HTML rendering for visualizations.
 
-### Fixed
+## Fixed
 
 - Mistake when cloning conditions from another action
 
@@ -283,13 +283,13 @@
 
 - Fixed inconsistencies in the documentation regarding paths in the tooltips
 
-## 5.1.4 (2019-07-05)
+# 5.1.4 (2019-07-05)
 
-### Changed
+## Changed
 
 - Upgrade django version to avoid vulnerability
 
-### Fixed
+## Fixed
 
 - Mistake when cloning conditions from another action
 
@@ -305,29 +305,29 @@
 
 - Fixed count of all false rows
 
-## 5.1.3 (2019-06-16)
+# 5.1.3 (2019-06-16)
 
-### Fixed
+## Fixed
 
 - Error when using conditions in the personalised text editor
 
 - Removed dependency from Jupyter, ipython and parso (due to vulnerability)
 
-## 5.1.2 (2019-06-14)
+# 5.1.2 (2019-06-14)
 
-### Fixed
+## Fixed
 
 - Error when exporting a workflow with no actions.
 
-## 5.1.1 (2019-06-13)
+# 5.1.1 (2019-06-13)
 
-### Fixed
+## Fixed
 
 - Error when serving surveys to users not owning the workflow
 
-## 5.1.0 (2019-06-11)
+# 5.1.0 (2019-06-11)
 
-### Added
+## Added
 
 - Option to export workflow after JSON action run
 
@@ -337,31 +337,31 @@
 
 - Mark workflows as favourite and show in separate area
 
-### Changed
+## Changed
 
 - Model name for PluginRegistry
 
 - Survey editor now allows the key column to be unset.
 
-### Fixed
+## Fixed
 
 - Error when handling the workflow row to user translation
 
 - Error when exporting workflow after action run
 
-## 5.0.1 (2019-06-08)
+# 5.0.1 (2019-06-08)
 
-### Changed
+## Changed
 
 - Requires Django 2.2.2
 
-### Fixed
+## Fixed
 
 - Error preventing import of duplicate workflow name for different users.
 
-## 5 (2019-06-07)
+# 5 (2019-06-07)
 
-### Added 
+## Added 
 
 - The presence of a question in a survey can be controlled by a condition. Surveys now have conditions that can be assigned to questions.
 
@@ -371,7 +371,7 @@
 
 - Support for CORS Headers (using library django-cors-headers)
 
-### Changed
+## Changed
 
 - Batch command for workflow import can now process multiple files (bulk upload of multiple workflows)
 
@@ -387,19 +387,19 @@
 - Major rewriting of data frame manipulation to use direct database operations and reduce 
   the number of load/store operations from DB to Pandas.
   
-### Fixed
+## Fixed
 
 - Error when taking the conjunction between two queryset and not using distinct
 
-## 4.3.5 (2019-05-06)
+# 4.3.5 (2019-05-06)
 
-### Fixed
+## Fixed
 
 - Incorrect column filter when editing (Issue #150)
 
-## 4.3.4 (2019-04-25)
+# 4.3.4 (2019-04-25)
 
-### Fixed
+## Fixed
 
 - Internal error while creating/editing shared users
 
@@ -407,41 +407,41 @@
 
 - Error in column operation button to insert formula and random row
 
-## 4.3.3 (2019-04-24)
+# 4.3.3 (2019-04-24)
 
-### Fixed
+## Fixed
 
 - Error when evaluating conditions
 
-## 4.3.2 (2019-04-23)
+# 4.3.2 (2019-04-23)
 
-### Fixed
+## Fixed
 
 - Error when exporting/importing workflows with luser field
 
-## 4.3.1 (2019-04-22)
+# 4.3.1 (2019-04-22)
 
-### Added
+## Added
 
 - Preliminary backend functionality to deploy a learner page (still under construction)
 
 - Increase the use of cache for portions of the pages
 
-### Changed
+## Changed
 
 - Import/export operations to improve performance
 
 - Backend management of DB queries to prefetch related relations and improve performance
 
-### Fixed
+## Fixed
 
 - Error when creating an empty column of type integer 
 
 - Legacy errors in migrations when handling some models
 
-## 4.3 (2019-04-16)
+# 4.3 (2019-04-16)
 
-### Added
+## Added
 
 - Read S3 buckets with possibility of providing Key/Secret
 
@@ -457,7 +457,7 @@
 
 - Button to preview emails when scheduling an action for future execution
 
-### Changed
+## Changed
 
 - Editor pages to use tabs in more intuitive ways
 
@@ -471,7 +471,7 @@
 
 - Library dependencies are now aligned and the new version does not require Python 2.7 and 3 at the same time. Only Python 3.
 
-### Fixed
+## Fixed
 
 - Incorrect number of entries shown at bottom of column page
 
@@ -485,17 +485,17 @@
 
 - Error in serialization handling the new Condition/Column pairs
 
-## 4.2.1 (2019-03-29)
+# 4.2.1 (2019-03-29)
 
-### Changed
+## Changed
 
 - Production configuration file needs USE_SSL=True to use HTTPS
 
 - Updated localization files
 
-## 4.2 (2019-03-27)
+# 4.2 (2019-03-27)
 
-### Added
+## Added
 
 - Export now allows to export a workflow without a data frame
 
@@ -506,13 +506,13 @@
 
 - New plugin to round numeric column to a number of decimal places
 
-### Fixed
+## Fixed
 
 - Bug when handling URL creation for row edition
 
 - Legacy problem with Python3 numpy and pickled data
 
-### Changed
+## Changed
 
 - Upgraded requirements and propagated changes to adapt to Pandas 0.24
 
@@ -522,13 +522,13 @@
 
 - Cleaner UI to insert attributes, columns, conditions in actions
 
-## 4.1 (2019-02-27)
+# 4.1 (2019-02-27)
 
-### Added
+## Added
 
 - Possibility of disabling the type of actions available in config file (Issue #112)
   
-### Fixed
+## Fixed
 
 - Conditions break when renaming them (Issue #128)
 
@@ -536,7 +536,7 @@
 
 - Fixed localization in dataTables using only the URL field
 
-### Changed
+## Changed
 
 - Footer is now sticky to the bottom of the viewport if body is shorter (Issue #121)
 
@@ -546,31 +546,31 @@
 
 - Moved the SQL icon in the admin profile to the right of the menu (Issue #127)
 
-## 4.0.1 (2019-02-19)
+# 4.0.1 (2019-02-19)
 
-### Fixed
+## Fixed
 
 - Incorrect download of table data into CSV format
 
 - API table upload did not check for presence of key column
 
-### Changed
+## Changed
 
 - Update the chinese i18n
 
-## 4.0 (2019-02-14)
+# 4.0 (2019-02-14)
 
-### Fixed
+## Fixed
 
 - Various bugs due to the incompatibility with Python3/Django2
 
-### Added
+## Added
 
 - Support for Python3/Django2
 
 - New type of personalized email actions that send messages using the Canvas API
 
-### Changed
+## Changed
 
 - Datetimepicker widget changed due to incompatibilities with Django 2
 
@@ -580,13 +580,13 @@
 
 - Migration to Bootstrap 4
 
-## 3.2.1 (2018-11-21)
+# 3.2.1 (2018-11-21)
 
-### Added
+## Added
 
 - Survey columns now can be queried about their null and not null status.
 
-### Changed
+## Changed
 
 - Significant changes in the documentation (more to come) to provide more activities and details in the tutorial
 
@@ -594,7 +594,7 @@
 
 - Updated the version of QueryBuilder and added localization files
 
-### Fixed
+## Fixed
 
 - Randomly populated columns now are guaranteed to have equal numer of elements in each partition (Issue #104)
 
@@ -604,41 +604,41 @@
 
 - Bug preventing the conditions to be clone in the actions
 
-## 3.2.0 (2018-11-12)
+# 3.2.0 (2018-11-12)
 
-### Added
+## Added
 
 - Personalized actions can now be downloaded in a ZIP with one file per message. Suitable to be used in combination with *Upload multiple feedback files in a ZIP* in [Moodle Assignments](https://docs.moodle.org/35/en/Assignment_settings#Feedback_types) (Issue #96)
 
-### Fixed
+## Fixed
 
 - Error when merging data frames with key columns with different name (Issue #103)
 
 - Error preventing the renaming of actions (Issue #101)
 
-### Changed
+## Changed
 
 - Reviewed the Chinese localization
 
-## 3.1.0 (2018-10-31)
+# 3.1.0 (2018-10-31)
 
-### Added
+## Added
 
 - Initial support for localization to Chinese
 
-## 3.0.4 (2018-10-20)
+# 3.0.4 (2018-10-20)
 
-### Changed
+## Changed
 
 - Cosmetic changes in menu bar to visualise properly in mobile devices.
 
-### Fixed
+## Fixed
 
 - Fixed bug that showed the spinner when an invalid field is present in a form
 
-## 3.0.3 (2018-10-16)
+# 3.0.3 (2018-10-16)
 
-### Fixed
+## Fixed
 
 - Misleading information shown when flushing a workflow (Iussue #97)
 
@@ -646,23 +646,23 @@
 
 - Fixed bug when loading/dumping dataframes with UTF-8 characters (Issue #99)
 
-## 3.0.2 (2018-10-13)
+# 3.0.2 (2018-10-13)
 
-### Fixed
+## Fixed
 
 - Bug preventing questions to be added to the workflow (Issue #95)
 
 - Fixed bug in localization preventing the use of translations
 
-## 3.0.1 (2018-09-25)
+# 3.0.1 (2018-09-25)
 
-### Fixed
+## Fixed
 
 - Bug preventing action creation (divergence between debug/production instance)
 
-## 3.0.0 (2018-09-24)
+# 3.0.0 (2018-09-24)
 
-### Added
+## Added
 
 - Added screen to exclude emails before sending messages (Issue #66)
 
@@ -680,7 +680,7 @@
   
 - EMAIL configuration can now be done through environment variables (Issue #84)
 
-### Changed
+## Changed
 
 - Log objects have been re-encoded to use enumeration types.
 
@@ -705,7 +705,7 @@
   
   - Restructuring of the operations shown in the workflow index. 
 
-### Fixed
+## Fixed
 
 - Bug preventing the visualisation of the API documentation.
 
@@ -724,37 +724,37 @@
   
 - Removed duplicate Middleware (Issue #89)
 
-## 2.8.3 (2018-08-21)
+# 2.8.3 (2018-08-21)
 
-### Changed
+## Changed
 
 - Several UI changes after the review provided by University of Auckland
   
 - About and Contacts link in the main page now open in separated windows (2B)
   
-### Fixed
+## Fixed
 
 - Fixed bug accidentally introduced when committing code.
 
-## 2.8.2 (2018-08-14)
+# 2.8.2 (2018-08-14)
 
-### Fixed
+## Fixed
 
 - Fixed celery configuration and bug in email send function
 
-## 2.8.1 (2018-08-11)
+# 2.8.1 (2018-08-11)
 
-### Added
+## Added
 
 - Surveys can be run directly from the editor (added Run button there)
 
-### Fixed
+## Fixed
 
 - Fixed a few bugs related to localisation
 
-## 2.8.0 (2018-08-07)
+# 2.8.0 (2018-08-07)
 
-### Added
+## Added
 
 - Localization and internationalization support. First language supported, 
   es-ES. There are still a few areas that need polishing, but the bulk of the
@@ -783,7 +783,7 @@
 - Preview screen now shows the value of those variables used when computing 
 the personalised message (Issue #47)
 
-### Changed
+## Changed
 
 - Changed configuration scripts to take the environment file name from the 
   environment variable ENV_FILENAME (if it exists). 
@@ -797,7 +797,7 @@ the personalised message (Issue #47)
 
 - Preview screen for emails now includes the total number of emails (Issue #64)
 
-### Fixed
+## Fixed
 
 - Row dashboard now takes into account the subset of data considered in a view.
 
@@ -818,18 +818,18 @@ the personalised message (Issue #47)
   
 - Bug when receiving a large volume of tracking requests (Issue #67)
 
-## 2.7.3 (2018-06-24)
+# 2.7.3 (2018-06-24)
 
-### Fixed
+## Fixed
 
 - Bug when checking the lock status of workflows through the API
 
-### Added
+## Added
 
 - New functionality to check the lock status, lock and unlock workflows 
   through the API
   
-### Changed
+## Changed
 
 - Policy to handle workflow locks. If a session tries to access a workflow 
   locked by another session, but with the same user, access is granted. This 
@@ -838,21 +838,21 @@ the personalised message (Issue #47)
   through Tokens (not sessions), and is needed to maintain workflow locks 
   through consecutive API calls due to the lack of a proper session object.
   
-## 2.7.2 (2018-06-19)
+# 2.7.2 (2018-06-19)
 
-### Fixed
+## Fixed
 
 - Bug preventing learner data input (Issue #46)
 
-## 2.7.1 (2018-06-15)
+# 2.7.1 (2018-06-15)
 
-### Fixed
+## Fixed
 
 - Bug preventing installation from scratch
 
-## 2.7.0 (2018-06-04)
+# 2.7.0 (2018-06-04)
 
-### Added
+## Added
 
 - Functionality to export and import actions alone. This is very useful to 
   simply transfer a single set of conditions or columns from one workflow to 
@@ -865,22 +865,22 @@ the personalised message (Issue #47)
 - Use of plugins. Arbitrary transformations of a subset of the dataframe are 
   now allowed by installing python modules in a specific folder. 
 
-### Changed
+## Changed
 
 - Revamped the structure of the page to edit the action ins.
 
 - Extended and polished documentation
 
-## 2.6.1 (2018-05-23)
+# 2.6.1 (2018-05-23)
 
-### Added
+## Added
 
 - Platform now notifies with a pop-up one minute before the session user session
   expires (Issue #31)
   
 - Arrows in the table view to move columns left and right (issue #33)
 
-### Changed
+## Changed
 
 - Changed the way a merge is reported before the last step. The key columns
   now appear separately if they have different names as they will both 
@@ -915,7 +915,7 @@ the personalised message (Issue #47)
 
 - Datetimes shown now without the T in between (issue #42)
   
-### Fixed
+## Fixed
 
 - Merge procedure improved to consider the case where src and dst keys are
   different, but still src key is equal to a column in dst (issue #41)
@@ -944,15 +944,15 @@ the personalised message (Issue #47)
   columns. The merge operation now has a security check to prevent this from 
   hapenning (issue #41) 
   
-## 2.6.0 (2018-05-13) 
+# 2.6.0 (2018-05-13) 
 
-### Added
+## Added
 
 - Possibility to change the order in which columns are shown.
 
 - Download the table as CSV
 
-### Changed
+## Changed
 
 - Major overhaul of the documentation available when merging dataframes. When
   choosing now the merging uption, a figure and corresponding text explains the
@@ -973,7 +973,7 @@ the personalised message (Issue #47)
   
 - Various navigation sequences to reduce the number of clicks
 
-### Fixed
+## Fixed
 
 - AND/OR button in condition builder is now easier to differentiate.
 
@@ -983,9 +983,9 @@ the personalised message (Issue #47)
 
 - Error in URL included in emails
 
-## 2.5.1 (2018-04-21)
+# 2.5.1 (2018-04-21)
 
-### Added
+## Added
 
 - Documentation on how to open the URL in OnTask to track email reading when using SAML authentication (Apache configuration)
 
@@ -993,7 +993,7 @@ the personalised message (Issue #47)
 
 - Documentation now has the initial set of *scenarios* to showcase the differet functionality available in the platform. This section is unfinished.
 
-### Changed
+## Changed
 
 - Column delete now returns to previous screen (table or workflow detail)
 
@@ -1006,7 +1006,7 @@ the personalised message (Issue #47)
   
 - Removed bootstrapped Admin interface and restored the original one.
 
-### Fixed
+## Fixed
 
 - Changed the update of the action out text to use a POST request and prevent
   the System Error due to the length of the text (Issues 13 and 15)
@@ -1036,9 +1036,9 @@ the personalised message (Issue #47)
 
 - Bug failing to detect a non gzip file when given to Import (Issue 11)
   
-## 2.5.0 (2018-02-18)
+# 2.5.0 (2018-02-18)
 
-### Added
+## Added
 
 - Visualisations
 
@@ -1051,7 +1051,7 @@ the personalised message (Issue #47)
   These visualizations are implemented using the open-source javascript 
   library plot.ly/javascript
   
-### Changed
+## Changed
 
 - Folded some of the operations into a pull/down menu to simplify interface
 
@@ -1059,13 +1059,13 @@ the personalised message (Issue #47)
   "Workflow" and users do not think it is the link to upload data (which is 
   the first step)
    
-### Fixed 
+## Fixed 
 
 - Bug when filtering columns and obtaining a row in the table
 
-## 2.4.0 (2017-12-18)
+# 2.4.0 (2017-12-18)
 
-### Added
+## Added
 
 - Take a set of already existing columns and combine them to create a new 
   one using the following operations:
@@ -1088,7 +1088,7 @@ the personalised message (Issue #47)
 - Documentation now available in [OnTask documentation in Github.io]
 (https://abelardopardo.github.io/ontask_b)
 
-### Changed
+## Changed
 
 - Removed django-auth-ldap from requirements. Instructions mention the need to
   install it if needed.
@@ -1101,9 +1101,9 @@ the personalised message (Issue #47)
 - Reimplemented attribute manipulation screen to make it similar in 
   functionality to the rest
   
-## 2.3.0 (2017-12-30)
+# 2.3.0 (2017-12-30)
 
-### Added
+## Added
 
 - Support for LDAP integration through django-auth-ldap
 
@@ -1114,30 +1114,30 @@ the personalised message (Issue #47)
 
 - Read SQL queries into Table giving the parameters to connect to a DB.
 
-### Changed
+## Changed
 
 - Fixed various glicthes when sending confirmation emails and HTML email
   formatting 
   
-## 2.2.0 (2017-12-23)
+# 2.2.0 (2017-12-23)
 
-### Changed
+## Changed
 
 - Removed the restriction of using only column, attribute and condition names
   starting with a letter followed by a letter, digit or '_'. The only 
   restriction is that the names cannot contain the characters " and '.
    
-## 2.1.1 (2017-12-19)
+# 2.1.1 (2017-12-19)
 
-### Changed
+## Changed
 
 - Fixed bug when creating API token and session expired.
 
 - Fixed bug preventing excel CSV files to be uploaded.
 
-## 2.1.0 (2017-12-13)
+# 2.1.0 (2017-12-13)
 
-### Added
+## Added
 
 - Edit columns from the table display
 
@@ -1150,7 +1150,7 @@ the personalised message (Issue #47)
 
 - New app to schedule execution of actions (not fully implemented yet)
 
-### Changed
+## Changed
 
 - Fixed bug showing wrong number of (filtered) entries in AJAX generated 
   tables.
@@ -1164,9 +1164,9 @@ the personalised message (Issue #47)
   columns are used in all the actions. A workflow without the data would be 
   reduced only to the text in the action out. 
 
-## 2.0.0
+# 2.0.0
 
-### Added
+## Added
 
 - Included new functionality to allow easy data entry. Data entry can be done
   as "Action In" (as opposed to Action Out for sending information). With 
@@ -1177,21 +1177,21 @@ the personalised message (Issue #47)
 
 - Write the documentation for the new actions.
 
-## 1.4.0
+# 1.4.0
 
-### Changed
+## Changed
 
 - Removed the use of query strings in URLs. All parameters are now path of the
   path
 
-### Added
+## Added
 
 - Support for LTI authentication (using the django-auth-lti package). More 
 information in the installation instructions.
 
-## 1.3.0
+# 1.3.0
 
-### Changed
+## Changed
 
 - Matrix is out. Table is in. Thanks Marion
 
@@ -1203,7 +1203,7 @@ information in the installation instructions.
 
 - Polished how columns in CSV file upload are managed (internally)  
 
-### Added
+## Added
 
 - New export functionality lets you choose which elements to include (table and
   actions)
@@ -1212,25 +1212,25 @@ information in the installation instructions.
 
 - Test for import/export functionality
 
-## 1.2.2
+# 1.2.2
 
-### Added
+## Added
 
 - Additional material in the tutorial (still unfinished)
 
-### Changed
+## Changed
 
 - Fixed bug preventing the edition of columns
 
 - Fixed bug when rendering the export done page.
 
-## 1.2.1
+# 1.2.1
 
-### Added
+## Added
 
 - Email tracking available. Creates an extra column in the table.
 
-### Changed
+## Changed
 
 - Cosmetic changes in the import screen and the email notification
 
@@ -1245,13 +1245,13 @@ information in the installation instructions.
   frame intact (encodes NaN and NaT). The latter is recommended whenever 
   possible.
 
-### Fixed
+## Fixed
 
 - Bug not showing the status of the action URL.
 
-## 1.2.0
+# 1.2.0
 
-### Changed
+## Changed
 
 - User search for sharing is now case insensitive.
 
@@ -1277,13 +1277,13 @@ information in the installation instructions.
 
 - Added skeleton for documentation!
 
-### Fixed
+## Fixed
 
 - A few bugs in import/export to guarantee isomorphism of the two
 
-## 1.1.2
+# 1.1.2
 
-### Changed
+## Changed
 
 - Handling the data frames in the import/export process using pickle to
   make sure the structure survives the process. Going to JSON nukes data
@@ -1291,30 +1291,30 @@ information in the installation instructions.
   
 - Added some additional events in the logs
 
-## 1.1.1
+# 1.1.1
 
-### Added
+## Added
 
 - Workflows are now shared among users (with some operations reserverd only
   for the owner)
   
-### Changed
+## Changed
 
 - Fixed bug to remember step 1 in csv upload. 
 
 - Fixed bug to require authenticated access to the API only to instructors
 
-## 1.1.0 
+# 1.1.0 
 
-### Removed
+## Removed
 
 - Support for SQLite3. Now using only postgresql
 
 - Major overhaul of code to polish bugs in all packages.
 
-## 1.0.2 2017-10-22
+# 1.0.2 2017-10-22
 
-### Added
+## Added
 
 - Shared workflows now have restricted operations. Delete, flush, rename are
   only allowed to owners.
@@ -1323,7 +1323,7 @@ information in the installation instructions.
 
 - Send email now checks for correctness of email addresses (basic check)
   
-### Changed
+## Changed
 
 - Fixed a bug in a redirect when finishing the attributes screen with a Save
   and close.
@@ -1350,9 +1350,9 @@ information in the installation instructions.
 
 - Wrote the templates and views for the pages for 404, 403, 400 and 500.
    
-## 1.0.1 2017-10-18
+# 1.0.1 2017-10-18
 
-### Added
+## Added
 
 - The possibility to turn the URL for serving an action on/off
 - The possibility to share workflows. The functionality relies on the sessions
@@ -1364,9 +1364,9 @@ information in the installation instructions.
     
 - Filter name does not need to be restricted to have a "variable" name style.
 
-## 1.0.0 2017-10-17
+# 1.0.0 2017-10-17
 
-### Added
+## Added
 
 - This CHANGELOG file will include the developments included in OnTask
 - Deployed the production instance with the basic functionality:
