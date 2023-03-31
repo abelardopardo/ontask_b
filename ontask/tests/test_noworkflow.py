@@ -97,7 +97,7 @@ class BackToHome(
             reverse('action:shuffle_questions', kwargs={'pk': 1}),
             reverse(
                 'action:edit_in_select_condition',
-                kwargs={'pk': 1, 'condpk': 1}),
+                kwargs={'pk': 1, 'condition_pk': 1}),
             reverse('action:edit_in_select_condition', kwargs={'pk': 1}),
             reverse('action:show_survey_table_ss', kwargs={'pk': 1}),
             reverse('action:preview', kwargs={'pk': 1, 'idx': 0}),

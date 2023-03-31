@@ -55,7 +55,7 @@ class Log(Owner):
     ACTION_RUBRIC_CRITERION_ADD = 'action_rubric_criterion_add'
     ACTION_RUBRIC_CRITERION_EDIT = 'action_rubric_criterion_edit'
     ACTION_RUBRIC_CRITERION_DELETE = 'action_rubric_criterion_delete'
-    ACTION_RUBRIC_CELL_EDIT = 'action_rubriccell_edit'
+    ACTION_RUBRIC_CELL_EDIT = 'action_rubric_cell_edit'
     ACTION_RUBRIC_LOA_EDIT = 'action_rubric_loa_edit'
     ACTION_RUN_EMAIL_REPORT = 'action_run_email_report'
     ACTION_RUN_JSON_REPORT = 'action_run_json_report'
