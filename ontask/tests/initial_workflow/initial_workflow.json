@@ -54,7 +54,7 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2020-08-17T09:31:17.086Z"
+        "last_update": "2021-12-28T06:46:25.351Z"
     }
 },
 {
@@ -81,7 +81,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T09:31:17.046Z",
+        "date_changed": "2021-12-28T06:46:25.308Z",
         "description": ""
     }
 },
@@ -109,7 +109,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T09:31:17.056Z",
+        "date_changed": "2021-12-28T06:46:25.319Z",
         "description": ""
     }
 },
@@ -137,7 +137,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T09:31:17.067Z",
+        "date_changed": "2021-12-28T06:46:25.331Z",
         "description": ""
     }
 },
@@ -165,7 +165,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T09:31:17.077Z",
+        "date_changed": "2021-12-28T06:46:25.342Z",
         "description": ""
     }
 },
@@ -193,16 +193,97 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2020-08-17T09:31:17.087Z",
+        "date_changed": "2021-12-28T06:46:25.353Z",
         "description": ""
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 1,
+    "fields": {
+        "app": "ontask",
+        "name": "notification_template",
+        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }}\n{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent\nresulting from the execution of the action with name \"{{ action.name }}\".</p>\n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from\n{{ num_rows }} to {{ num_selected }}.</p>\n{% else %}\n<p>All the data rows stored in the workflow table were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body></html>"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 2,
+    "fields": {
+        "app": "ontask",
+        "name": "notification_subject",
+        "text": "OnTask: Action executed"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 3,
+    "fields": {
+        "app": "ontask",
+        "name": "notification_sender",
+        "text": "abelardo.pardo@unisa.edu.au"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 4,
+    "fields": {
+        "app": "ontask",
+        "name": "content_types",
+        "text": "[\"text/csv\", \"application/json\", \"application/gzip\", \"application/x-gzip\", \"application/vnd.ms-excel\"]"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 5,
+    "fields": {
+        "app": "ontask",
+        "name": "max_upload_size",
+        "text": "209715200"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 6,
+    "fields": {
+        "app": "ontask",
+        "name": "plugin_directory",
+        "text": "/Users/pardosa/ontask_b/lib/plugins"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 7,
+    "fields": {
+        "app": "ontask",
+        "name": "max_log_list_size",
+        "text": "200"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 8,
+    "fields": {
+        "app": "ontask",
+        "name": "help_url",
+        "text": "html/index.html"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 9,
+    "fields": {
+        "app": "ontask",
+        "name": "override_from_address",
+        "text": ""
     }
 },
 {
     "model": "ontask.user",
     "pk": 1,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VlpTV3RVZUU5dkh1$iFEi/ej6nCIXpLiOgRLdVA",
-        "last_login": "2020-05-07T09:48:38.379Z",
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$QnN4aDQ3TXNmQ2JvWXRHNkY2aHZEeA$Sg3TArniZv7/jmkMqgo33mpvD2Woqhpj3ruNHjTzUgA",
+        "last_login": "2021-12-28T06:46:46.920Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -574,76 +655,109 @@
     }
 },
 {
-    "model": "siteprefs.preference",
+    "model": "ontask.ontaskuser",
+    "pk": 21,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
     "pk": 1,
-    "fields": {
-        "app": "ontask",
-        "name": "notification_template",
-        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }}\n{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent\nresulting from the execution of the action with name \"{{ action.name }}\".</p>\n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from\n{{ num_rows }} to {{ num_selected }}.</p>\n{% else %}\n<p>All the data rows stored in the workflow table were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body></html>"
-    }
+    "fields": {}
 },
 {
-    "model": "siteprefs.preference",
+    "model": "ontask.ontaskuser",
     "pk": 2,
-    "fields": {
-        "app": "ontask",
-        "name": "notification_subject",
-        "text": "OnTask: Action executed"
-    }
+    "fields": {}
 },
 {
-    "model": "siteprefs.preference",
+    "model": "ontask.ontaskuser",
     "pk": 3,
-    "fields": {
-        "app": "ontask",
-        "name": "notification_sender",
-        "text": "abelardo.pardo@unisa.edu.au"
-    }
+    "fields": {}
 },
 {
-    "model": "siteprefs.preference",
+    "model": "ontask.ontaskuser",
     "pk": 4,
-    "fields": {
-        "app": "ontask",
-        "name": "content_types",
-        "text": "[\"text/csv\", \"application/json\", \"application/gzip\", \"application/x-gzip\", \"application/vnd.ms-excel\"]"
-    }
+    "fields": {}
 },
 {
-    "model": "siteprefs.preference",
+    "model": "ontask.ontaskuser",
     "pk": 5,
-    "fields": {
-        "app": "ontask",
-        "name": "max_upload_size",
-        "text": "209715200"
-    }
+    "fields": {}
 },
 {
-    "model": "siteprefs.preference",
+    "model": "ontask.ontaskuser",
     "pk": 6,
-    "fields": {
-        "app": "ontask",
-        "name": "plugin_directory",
-        "text": "/Users/pardosa/ontask_b/lib/plugins"
-    }
+    "fields": {}
 },
 {
-    "model": "siteprefs.preference",
+    "model": "ontask.ontaskuser",
     "pk": 7,
-    "fields": {
-        "app": "ontask",
-        "name": "max_log_list_size",
-        "text": "200"
-    }
+    "fields": {}
 },
 {
-    "model": "siteprefs.preference",
+    "model": "ontask.ontaskuser",
     "pk": 8,
-    "fields": {
-        "app": "ontask",
-        "name": "help_url",
-        "text": "html/index.html"
-    }
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 9,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 10,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 11,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 12,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 13,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 14,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 15,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 16,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 17,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 18,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 19,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 20,
+    "fields": {}
 },
 {
     "model": "ontask.column",
@@ -2248,411 +2362,6 @@
     }
 },
 {
-    "model": "ontask.filter",
-    "pk": 1,
-    "fields": {
-        "created": "2020-08-17T09:31:20.348Z",
-        "modified": "2020-08-17T09:31:20.878Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Q01",
-                    "type": "double",
-                    "field": "Q01",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_not_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "Q01 is not null",
-        "selected_count": 12,
-        "workflow": 1,
-        "description_text": "",
-        "columns": [
-            13
-        ]
-    }
-},
-{
-    "model": "ontask.filter",
-    "pk": 2,
-    "fields": {
-        "created": "2020-08-17T09:31:20.356Z",
-        "modified": "2020-08-17T09:31:20.880Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "email",
-                    "type": "string",
-                    "field": "email",
-                    "input": "text",
-                    "value": "t",
-                    "operator": "begins_with"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "email starts with t",
-        "selected_count": 4,
-        "workflow": 1,
-        "description_text": "Students starting with t",
-        "columns": [
-            2
-        ]
-    }
-},
-{
-    "model": "ontask.filter",
-    "pk": 3,
-    "fields": {
-        "created": "2020-08-17T09:31:20.363Z",
-        "modified": "2020-08-17T09:31:20.881Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Total",
-                    "type": "double",
-                    "field": "Total",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_not_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "",
-        "selected_count": 12,
-        "workflow": 1,
-        "description_text": "There is an exam score",
-        "columns": [
-            23
-        ]
-    }
-},
-{
-    "model": "ontask.filter",
-    "pk": 4,
-    "fields": {
-        "created": "2020-08-17T09:31:20.369Z",
-        "modified": "2020-08-17T09:31:20.883Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Days online",
-                    "type": "integer",
-                    "field": "Days online",
-                    "input": "number",
-                    "value": "7",
-                    "operator": "less_or_equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "",
-        "selected_count": 2,
-        "workflow": 1,
-        "description_text": "These are the students that haven't connected to the discussion forum yet.",
-        "columns": [
-            40
-        ]
-    }
-},
-{
-    "model": "ontask.filter",
-    "pk": 5,
-    "fields": {
-        "created": "2020-08-17T09:31:20.375Z",
-        "modified": "2020-08-17T09:31:20.884Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Video_1_W4",
-                    "type": "double",
-                    "field": "Video_1_W4",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                },
-                {
-                    "id": "Video_2_W4",
-                    "type": "double",
-                    "field": "Video_2_W4",
-                    "input": "number",
-                    "value": "0",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "OR"
-        },
-        "_formula_text": "",
-        "selected_count": 3,
-        "workflow": 1,
-        "description_text": "Either Video 1 or Video 2 in Week 4 have zero engagement",
-        "columns": [
-            56,
-            59
-        ]
-    }
-},
-{
-    "model": "ontask.filter",
-    "pk": 6,
-    "fields": {
-        "created": "2020-08-17T09:31:20.375Z",
-        "modified": "2020-08-17T09:31:20.884Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "Days online",
-                    "type": "integer",
-                    "field": "Days online",
-                    "input": "number",
-                    "value": "7",
-                    "operator": "less_or_equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "",
-        "workflow": 1,
-        "description_text": "",
-        "columns": [
-            40
-        ]
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 1,
-    "fields": {
-        "name": "Badges",
-        "description_text": "A badge reflecting the activity with respect to the videos",
-        "created": "2019-09-21T06:43:58.635Z",
-        "modified": "2019-09-21T06:44:22.584Z",
-        "workflow": 1,
-        "action_type": "personalized_text",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [],
-        "serve_enabled": true,
-        "text_content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1><p style=\"text-align: center;\">{% if High engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Gold-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Medium engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Silver-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Low video engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Bronze-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 2,
-    "fields": {
-        "name": "Comments about how to prepare the lecture (Week 4)",
-        "description_text": "A message commenting on the videos they watched for Week 4",
-        "created": "2019-09-21T06:44:00.454Z",
-        "modified": "2020-08-17T09:31:20.565Z",
-        "workflow": 1,
-        "action_type": "personalized_text",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [],
-        "serve_enabled": false,
-        "text_content": "<p>Dear {{ GivenName }}<br></p><p>Here are some comments about the preparation videos for this week.</p><p style=\"\">{% if No Video 1 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Genes and Proteins Activity</h4><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{% endif %}</p><p>{% if No Video 2 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p>Regards<br><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Coordinator name }}</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Course name }}<br></p>",
-        "target_url": "",
-        "shuffle": false,
-        "filter": 5,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 3,
-    "fields": {
-        "name": "Initial motivation",
-        "description_text": "Motivating message depending on the program enrolled. This action sends email using the CANVAS platform",
-        "created": "2019-09-21T06:44:02.347Z",
-        "modified": "2019-09-21T06:44:23.145Z",
-        "workflow": 1,
-        "action_type": "personalized_canvas_email",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [],
-        "serve_enabled": false,
-        "text_content": "Dear {{ GivenName }}\r\n\r\nWe are just starting this course and I thought it would be good to share with you how this course will help you acquire the skills that are required for professionals in your area.\r\n\r\n\r\n{% if Enrolled in FASS %}Text for the students that are enrolled in FASS.{% endif %}\r\n\r\n{% if Enrolled in FEIT %}Text for the students that are enrolled in FEIT.{% endif %}\r\n\r\n{% if Enrolled in SMED %}Text for the students that are enrolled in SMED.{% endif %}\r\n\r\n{% if Enrolled in FSCI %}Text for the students that are enrolled in FSCI.{% endif %}\r\n\r\n\r\nIf you want additional information, do not hesitate to contact me.\r\n\r\n{{ Coordinator name }}\r\n\r\n{{ Course name }}",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 4,
-    "fields": {
-        "name": "Midterm comments",
-        "description_text": "Comment the midterm scores divided by topic",
-        "created": "2019-09-21T06:44:04.025Z",
-        "modified": "2020-08-17T09:31:20.558Z",
-        "workflow": 1,
-        "action_type": "personalized_text",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [],
-        "serve_enabled": false,
-        "text_content": "<p>Dear&nbsp;{{ GivenName }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ Total }}.</p><p>Kind regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p><div><br></div>",
-        "target_url": "",
-        "shuffle": false,
-        "filter": 1,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 5,
-    "fields": {
-        "name": "Send JSON to remote server",
-        "description_text": "Send a JSON object to a remote server (outside this platform)",
-        "created": "2019-09-21T06:44:11.891Z",
-        "modified": "2020-08-17T09:31:20.562Z",
-        "workflow": 1,
-        "action_type": "personalized_json",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [],
-        "serve_enabled": false,
-        "text_content": "{\r\n  \"sid\": {{ SID }},\r\n  \"midterm_total\": {{ Total }},\r\n  \"msg\":\r\n     {% if Less than 50 in the midterm %}\"Message number 1\"{% endif %}\r\n    {% if More or equal to 50 in midterm %}\"Message number 2\"{% endif %}\r\n}",
-        "target_url": "http://127.0.0.1",
-        "shuffle": false,
-        "filter": 3,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 6,
-    "fields": {
-        "name": "Student comments Week 1",
-        "description_text": "Feedback about today's lecture",
-        "created": "2019-09-21T06:44:12.978Z",
-        "modified": "2019-09-21T06:44:12.979Z",
-        "workflow": 1,
-        "action_type": "survey",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": true,
-        "text_content": "{% comment %}Your action content here{% endcomment %}",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 7,
-    "fields": {
-        "name": "Suggestions about the forum",
-        "description_text": "Message to remind those students that haven't visited the forum to do so.",
-        "created": "2019-09-21T06:44:14.005Z",
-        "modified": "2020-08-17T09:31:20.564Z",
-        "workflow": 1,
-        "action_type": "personalized_text",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "<p>Dear\u00a0{{ GivenName }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
-        "target_url": "",
-        "shuffle": false,
-        "filter": 4,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 8,
-    "fields": {
-        "name": "Project feedback",
-        "description_text": "Provide feedback about the project using the results from the rubric",
-        "created": "2019-09-21T06:52:22.617Z",
-        "modified": "2019-09-21T07:30:16.181Z",
-        "workflow": 1,
-        "action_type": "rubric_text",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 9,
-    "fields": {
-        "name": "Send Email with report",
-        "description_text": "Send email with column values as a report",
-        "created": "2019-09-03T09:49:08.382Z",
-        "modified": "2020-08-17T09:31:20.560Z",
-        "workflow": 1,
-        "action_type": "email_report",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_report \"email\" \"Surname\" \"GivenName\" %}<br></p><p>Regards</p><p>Josh<br></p>",
-        "target_url": "",
-        "shuffle": false,
-        "filter": 2,
-        "attachments": [
-            1
-        ]
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 10,
-    "fields": {
-        "name": "Send JSON report",
-        "description_text": "Send the list of inactive students in week 2 to another platform",
-        "created": "2019-09-03T10:41:07.348Z",
-        "modified": "2019-09-03T10:42:39.438Z",
-        "workflow": 1,
-        "action_type": "json_report",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "{\r\n    \"inactive_students\": {% ot_insert_report \"email\" %}\r\n}",
-        "target_url": "https://anotherinternalserver.yourinstution.edu",
-        "shuffle": false,
-        "attachments": []
-    }
-},
-{
     "model": "ontask.condition",
     "pk": 1,
     "fields": {
@@ -2831,7 +2540,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "_formula_text": "",
+        "_formula_text": "Correct_1_W4 &equals; 0.0 and not empty",
         "selected_count": 1,
         "workflow": 1,
         "action": 2,
@@ -2863,7 +2572,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "_formula_text": "",
+        "_formula_text": "Video_2_W4 &equals; 0.0 and not empty",
         "selected_count": 3,
         "workflow": 1,
         "action": 2,
@@ -2895,7 +2604,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "_formula_text": "",
+        "_formula_text": "Program &equals; FASS and not empty",
         "selected_count": 2,
         "workflow": 1,
         "action": 3,
@@ -2927,7 +2636,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "_formula_text": "",
+        "_formula_text": "Program &equals; FEIT and not empty",
         "selected_count": 3,
         "workflow": 1,
         "action": 3,
@@ -2959,7 +2668,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "_formula_text": "",
+        "_formula_text": "Program &equals; FSCI and not empty",
         "selected_count": 6,
         "workflow": 1,
         "action": 3,
@@ -2991,7 +2700,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "_formula_text": "",
+        "_formula_text": "Program &equals; SMED and not empty",
         "selected_count": 3,
         "workflow": 1,
         "action": 3,
@@ -3007,7 +2716,7 @@
         "name": "T1_HIGH",
         "description_text": "High score in topic 1",
         "created": "2019-09-21T06:44:04.538Z",
-        "modified": "2020-08-17T09:31:20.272Z",
+        "modified": "2021-12-28T06:48:00.850Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3048,7 +2757,7 @@
         "name": "T1_LOW",
         "description_text": "Low score in topic 1",
         "created": "2019-09-21T06:44:05.055Z",
-        "modified": "2020-08-17T09:31:20.275Z",
+        "modified": "2021-12-28T06:48:00.963Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3089,7 +2798,7 @@
         "name": "T1_MID",
         "description_text": "One answer was correctly answered for topic 1",
         "created": "2019-09-21T06:44:05.436Z",
-        "modified": "2020-08-17T09:31:20.277Z",
+        "modified": "2021-12-28T06:48:01.069Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3158,7 +2867,7 @@
         "name": "T2_HIGH",
         "description_text": "High score in topic 2",
         "created": "2019-09-21T06:44:05.687Z",
-        "modified": "2020-08-17T09:31:20.281Z",
+        "modified": "2021-12-28T06:48:01.165Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3199,7 +2908,7 @@
         "name": "T2_LOW",
         "description_text": "Low score in topic 2",
         "created": "2019-09-21T06:44:05.925Z",
-        "modified": "2020-08-17T09:31:20.283Z",
+        "modified": "2021-12-28T06:48:01.238Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3240,7 +2949,7 @@
         "name": "T2_MID",
         "description_text": "One answer was correctly answered for topic 2",
         "created": "2019-09-21T06:44:06.214Z",
-        "modified": "2020-08-17T09:31:20.285Z",
+        "modified": "2021-12-28T06:48:01.306Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3309,7 +3018,7 @@
         "name": "T3_HIGH",
         "description_text": "High score in topic 3",
         "created": "2019-09-21T06:44:06.686Z",
-        "modified": "2020-08-17T09:31:20.288Z",
+        "modified": "2021-12-28T06:48:01.359Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3350,7 +3059,7 @@
         "name": "T3_LOW",
         "description_text": "Low score in topic 3",
         "created": "2019-09-21T06:44:07.251Z",
-        "modified": "2020-08-17T09:31:20.291Z",
+        "modified": "2021-12-28T06:48:01.412Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3391,7 +3100,7 @@
         "name": "T3_MID",
         "description_text": "One answer was correctly answered for topic 3",
         "created": "2019-09-21T06:44:07.603Z",
-        "modified": "2020-08-17T09:31:20.294Z",
+        "modified": "2021-12-28T06:48:01.464Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3460,7 +3169,7 @@
         "name": "T4_HIGH",
         "description_text": "High score in topic 4",
         "created": "2019-09-21T06:44:07.851Z",
-        "modified": "2020-08-17T09:31:20.297Z",
+        "modified": "2021-12-28T06:48:01.517Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3501,7 +3210,7 @@
         "name": "T4_LOW",
         "description_text": "Low score in topic 4",
         "created": "2019-09-21T06:44:08.106Z",
-        "modified": "2020-08-17T09:31:20.300Z",
+        "modified": "2021-12-28T06:48:01.567Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3542,7 +3251,7 @@
         "name": "T4_MID",
         "description_text": "One answer was correctly answered for topic 4",
         "created": "2019-09-21T06:44:08.381Z",
-        "modified": "2020-08-17T09:31:20.303Z",
+        "modified": "2021-12-28T06:48:01.620Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3611,7 +3320,7 @@
         "name": "T5_HIGH",
         "description_text": "High score in topic 5",
         "created": "2019-09-21T06:44:08.935Z",
-        "modified": "2020-08-17T09:31:20.305Z",
+        "modified": "2021-12-28T06:48:01.672Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3652,7 +3361,7 @@
         "name": "T5_LOW",
         "description_text": "Low score in topic 5",
         "created": "2019-09-21T06:44:09.414Z",
-        "modified": "2020-08-17T09:31:20.308Z",
+        "modified": "2021-12-28T06:48:01.729Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3693,7 +3402,7 @@
         "name": "T5_MID",
         "description_text": "One answer was correctly answered for topic 5",
         "created": "2019-09-21T06:44:09.785Z",
-        "modified": "2020-08-17T09:31:20.310Z",
+        "modified": "2021-12-28T06:48:01.787Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3778,7 +3487,7 @@
             "valid": true,
             "condition": "AND"
         },
-        "_formula_text": "",
+        "_formula_text": "Total &lt; 50.0 and not empty",
         "selected_count": 2,
         "workflow": 1,
         "action": 5,
@@ -3810,12 +3519,201 @@
             "valid": true,
             "condition": "AND"
         },
-        "_formula_text": "",
+        "_formula_text": "Total &#8925; 50.0 and not empty",
         "selected_count": 10,
         "workflow": 1,
         "action": 5,
         "columns": [
             23
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 2,
+    "fields": {
+        "created": "2020-08-17T09:31:20.356Z",
+        "modified": "2020-08-17T09:31:20.880Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "email",
+                    "type": "string",
+                    "field": "email",
+                    "input": "text",
+                    "value": "t",
+                    "operator": "begins_with"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "email starts with t",
+        "selected_count": 4,
+        "workflow": 1,
+        "description_text": "Students starting with t",
+        "columns": [
+            2
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 3,
+    "fields": {
+        "created": "2020-08-17T09:31:20.363Z",
+        "modified": "2020-08-17T09:31:20.881Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Total",
+                    "type": "double",
+                    "field": "Total",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_not_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "Total is not null",
+        "selected_count": 12,
+        "workflow": 1,
+        "description_text": "There is an exam score",
+        "columns": [
+            23
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 4,
+    "fields": {
+        "created": "2020-08-17T09:31:20.369Z",
+        "modified": "2020-08-17T09:31:20.883Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Days online",
+                    "type": "integer",
+                    "field": "Days online",
+                    "input": "number",
+                    "value": "7",
+                    "operator": "less_or_equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "Days online &#8924; 7 and not empty",
+        "selected_count": 2,
+        "workflow": 1,
+        "description_text": "These are the students that haven't connected to the discussion forum yet.",
+        "columns": [
+            40
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 5,
+    "fields": {
+        "created": "2020-08-17T09:31:20.375Z",
+        "modified": "2020-08-17T09:31:20.884Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Video_1_W4",
+                    "type": "double",
+                    "field": "Video_1_W4",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                },
+                {
+                    "id": "Video_2_W4",
+                    "type": "double",
+                    "field": "Video_2_W4",
+                    "input": "number",
+                    "value": "0",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "OR"
+        },
+        "_formula_text": "(Video_1_W4 &equals; 0.0 and not empty) OR (Video_2_W4 &equals; 0.0 and not empty)",
+        "selected_count": 3,
+        "workflow": 1,
+        "description_text": "Either Video 1 or Video 2 in Week 4 have zero engagement",
+        "columns": [
+            56,
+            59
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 6,
+    "fields": {
+        "created": "2020-08-17T09:31:20.375Z",
+        "modified": "2020-08-17T09:31:20.884Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Days online",
+                    "type": "integer",
+                    "field": "Days online",
+                    "input": "number",
+                    "value": "7",
+                    "operator": "less_or_equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "Days online &#8924; 7 and not empty",
+        "selected_count": 2,
+        "workflow": 1,
+        "description_text": "",
+        "columns": [
+            40
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 7,
+    "fields": {
+        "created": "2021-12-28T06:47:21.985Z",
+        "modified": "2021-12-28T06:48:00.685Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q01",
+                    "type": "double",
+                    "field": "Q01",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_not_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "Q01 is not null",
+        "selected_count": 12,
+        "workflow": 1,
+        "description_text": "",
+        "columns": [
+            13
         ]
     }
 },
@@ -4061,8 +3959,9 @@
         "name": "Midterm",
         "description_text": "",
         "created": "2019-09-21T06:44:14.591Z",
-        "modified": "2019-09-21T06:44:14.765Z",
+        "modified": "2021-12-28T06:47:22.118Z",
         "workflow": 1,
+        "filter": 7,
         "columns": [
             2,
             13,
@@ -4088,6 +3987,7 @@
         "created": "2019-09-21T06:44:14.801Z",
         "modified": "2019-09-21T06:44:14.963Z",
         "workflow": 1,
+        "filter": null,
         "columns": [
             2,
             44,
@@ -4110,12 +4010,235 @@
         "created": "2019-09-21T06:50:54.016Z",
         "modified": "2019-09-21T06:50:54.016Z",
         "workflow": 1,
+        "filter": null,
         "columns": [
             1,
             2,
             68,
             69
         ]
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 1,
+    "fields": {
+        "name": "Badges",
+        "description_text": "A badge reflecting the activity with respect to the videos",
+        "created": "2019-09-21T06:43:58.635Z",
+        "modified": "2019-09-21T06:44:22.584Z",
+        "workflow": 1,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": [],
+        "filter": null,
+        "serve_enabled": true,
+        "text_content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1><p style=\"text-align: center;\">{% if High engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Gold-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Medium engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Silver-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Low video engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Bronze-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 2,
+    "fields": {
+        "name": "Comments about how to prepare the lecture (Week 4)",
+        "description_text": "A message commenting on the videos they watched for Week 4",
+        "created": "2019-09-21T06:44:00.454Z",
+        "modified": "2020-08-17T09:31:20.565Z",
+        "workflow": 1,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": [],
+        "filter": 5,
+        "serve_enabled": false,
+        "text_content": "<p>Dear {{ GivenName }}<br></p><p>Here are some comments about the preparation videos for this week.</p><p style=\"\">{% if No Video 1 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Genes and Proteins Activity</h4><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{% endif %}</p><p>{% if No Video 2 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p>Regards<br><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Coordinator name }}</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Course name }}<br></p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 3,
+    "fields": {
+        "name": "Initial motivation",
+        "description_text": "Motivating message depending on the program enrolled. This action sends email using the CANVAS platform",
+        "created": "2019-09-21T06:44:02.347Z",
+        "modified": "2019-09-21T06:44:23.145Z",
+        "workflow": 1,
+        "action_type": "personalized_canvas_email",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": [],
+        "filter": null,
+        "serve_enabled": false,
+        "text_content": "Dear {{ GivenName }}\r\n\r\nWe are just starting this course and I thought it would be good to share with you how this course will help you acquire the skills that are required for professionals in your area.\r\n\r\n\r\n{% if Enrolled in FASS %}Text for the students that are enrolled in FASS.{% endif %}\r\n\r\n{% if Enrolled in FEIT %}Text for the students that are enrolled in FEIT.{% endif %}\r\n\r\n{% if Enrolled in SMED %}Text for the students that are enrolled in SMED.{% endif %}\r\n\r\n{% if Enrolled in FSCI %}Text for the students that are enrolled in FSCI.{% endif %}\r\n\r\n\r\nIf you want additional information, do not hesitate to contact me.\r\n\r\n{{ Coordinator name }}\r\n\r\n{{ Course name }}",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 4,
+    "fields": {
+        "name": "Midterm comments",
+        "description_text": "Comment the midterm scores divided by topic",
+        "created": "2019-09-21T06:44:04.025Z",
+        "modified": "2020-08-17T09:31:20.558Z",
+        "workflow": 1,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": [],
+        "filter": 7,
+        "serve_enabled": false,
+        "text_content": "<p>Dear&nbsp;{{ GivenName }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Nutrition, Metabolism &amp; Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is&nbsp;{{ Total }}.</p><p>Kind regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p><div><br></div>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 5,
+    "fields": {
+        "name": "Send JSON to remote server",
+        "description_text": "Send a JSON object to a remote server (outside this platform)",
+        "created": "2019-09-21T06:44:11.891Z",
+        "modified": "2020-08-17T09:31:20.562Z",
+        "workflow": 1,
+        "action_type": "personalized_json",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": [],
+        "filter": 3,
+        "serve_enabled": false,
+        "text_content": "{\r\n  \"sid\": {{ SID }},\r\n  \"midterm_total\": {{ Total }},\r\n  \"msg\":\r\n     {% if Less than 50 in the midterm %}\"Message number 1\"{% endif %}\r\n    {% if More or equal to 50 in midterm %}\"Message number 2\"{% endif %}\r\n}",
+        "target_url": "http://127.0.0.1",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 6,
+    "fields": {
+        "name": "Student comments Week 1",
+        "description_text": "Feedback about today's lecture",
+        "created": "2019-09-21T06:44:12.978Z",
+        "modified": "2019-09-21T06:44:12.979Z",
+        "workflow": 1,
+        "action_type": "survey",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "filter": null,
+        "serve_enabled": true,
+        "text_content": "{% comment %}Your action content here{% endcomment %}",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 7,
+    "fields": {
+        "name": "Suggestions about the forum",
+        "description_text": "Message to remind those students that haven't visited the forum to do so.",
+        "created": "2019-09-21T06:44:14.005Z",
+        "modified": "2020-08-17T09:31:20.564Z",
+        "workflow": 1,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "filter": 4,
+        "serve_enabled": false,
+        "text_content": "<p>Dear {{ GivenName }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 8,
+    "fields": {
+        "name": "Project feedback",
+        "description_text": "Provide feedback about the project using the results from the rubric",
+        "created": "2019-09-21T06:52:22.617Z",
+        "modified": "2019-09-21T07:30:16.181Z",
+        "workflow": 1,
+        "action_type": "rubric_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "filter": null,
+        "serve_enabled": false,
+        "text_content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 9,
+    "fields": {
+        "name": "Send Email with report",
+        "description_text": "Send email with column values as a report",
+        "created": "2019-09-03T09:49:08.382Z",
+        "modified": "2020-08-17T09:31:20.560Z",
+        "workflow": 1,
+        "action_type": "email_report",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "filter": 2,
+        "serve_enabled": false,
+        "text_content": "<p>Dear Chris.</p><p>The emails of those students that have no activity in week 2 are: {% ot_insert_report \"email\" \"Surname\" \"GivenName\" %}<br></p><p>Regards</p><p>Josh<br></p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": [
+            1
+        ]
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 10,
+    "fields": {
+        "name": "Send JSON report",
+        "description_text": "Send the list of inactive students in week 2 to another platform",
+        "created": "2019-09-03T10:41:07.348Z",
+        "modified": "2019-09-03T10:42:39.438Z",
+        "workflow": 1,
+        "action_type": "json_report",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "filter": null,
+        "serve_enabled": false,
+        "text_content": "{\r\n    \"inactive_students\": {% ot_insert_report \"email\" %}\r\n}",
+        "target_url": "https://anotherinternalserver.yourinstution.edu",
+        "shuffle": false,
+        "attachments": []
     }
 },
 {
@@ -4692,110 +4815,5 @@
         "db_name": "ontask_b",
         "db_table": "__ONTASK_TEST_TABLE"
     }
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 21,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 1,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 2,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 3,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 4,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 5,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 6,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 7,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 8,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 9,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 10,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 11,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 12,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 13,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 14,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 15,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 16,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 17,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 18,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 19,
-    "fields": {}
-},
-{
-    "model": "ontask.ontaskuser",
-    "pk": 20,
-    "fields": {}
 }
 ]
