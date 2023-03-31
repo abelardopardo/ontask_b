@@ -141,17 +141,16 @@ class ActionSerializer(serializers.ModelSerializer):
         view_names = [view_data['name'] for view_data in attachments_data]
         action_obj.attachments.set(workflow.views.filter(name__in=view_names))
 
-        # Load the conditions pointing to the action
-        for condition_data in conditions_data:
-            ConditionSerializer.create_condition(condition_data, context)
-
         # Load the filter pointing to the action
         if filter_data:
             action_obj.filter = FilterSerializer.create_filter(
                 filter_data,
                 context)
-
         action_obj.save()
+
+        # Load the conditions pointing to the action
+        for condition_data in conditions_data:
+            ConditionSerializer.create_condition(condition_data, context)
 
         # Create the triplets action column condition
         for acc_data in column_condition_data:
