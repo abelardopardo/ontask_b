@@ -82,9 +82,6 @@ def get_column(
             except Exception:
                 return error_redirect(request)
 
-            # Update the session
-            store_workflow_in_session(request.session, workflow)
-
             kwargs['workflow'] = workflow
 
             if workflow.nrows == 0:
@@ -132,9 +129,6 @@ def get_action(
                     pf_related)
             except Exception:
                 return error_redirect(request)
-
-            # Update the session
-            store_workflow_in_session(request.session, workflow)
 
             kwargs['workflow'] = workflow
 
@@ -184,9 +178,6 @@ def get_condition(
             except Exception:
                 return error_redirect(request)
 
-            # Update the session
-            store_workflow_in_session(request.session, workflow)
-
             kwargs['workflow'] = workflow
 
             if workflow.nrows == 0:
@@ -235,9 +226,6 @@ def get_filter(
             except Exception:
                 return error_redirect(request)
 
-            # Update the session
-            store_workflow_in_session(request.session, workflow)
-
             kwargs['workflow'] = workflow
 
             if workflow.nrows == 0:
@@ -254,7 +242,7 @@ def get_filter(
                     Q(workflow__user=request.user)
                     | Q(workflow__shared=request.user),
                     workflow=workflow,
-                ).select_related('action').first()
+                ).first()
                 if not filter_obj:
                     return error_redirect(request)
 
@@ -285,9 +273,6 @@ def get_columncondition(
                     pf_related)
             except Exception:
                 return error_redirect(request)
-
-            # Update the session
-            store_workflow_in_session(request.session, workflow)
 
             kwargs['workflow'] = workflow
 
@@ -337,9 +322,6 @@ def get_view(
                     pf_related)
             except Exception:
                 return error_redirect(request)
-
-            # Update the session
-            store_workflow_in_session(request.session, workflow)
 
             kwargs['workflow'] = workflow
 

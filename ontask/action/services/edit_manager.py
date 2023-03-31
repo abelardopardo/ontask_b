@@ -85,9 +85,9 @@ class ActionEditManager:
             'columns': action.workflow.columns.all(),
             'has_data': action.workflow.has_table(),
             'total_rows': action.workflow.nrows,
-            'views': [
-                view for view in action.workflow.views.all()
-                if not view.has_empty_formula],
+            'views': action.workflow.views.filter(
+                filter__isnull=False).exclude(
+                filter=action.filter),
 
             # Action Elements
             'action': action,

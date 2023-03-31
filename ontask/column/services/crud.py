@@ -278,18 +278,16 @@ def delete_column(
     user: get_user_model(),
     workflow: models.Workflow,
     column: models.Column,
-    cond_to_delete: Optional[List[models.Condition]] = None,
 ):
     """Remove column from ontask.workflow.
 
     Given a workflow and a column, removes it from the workflow (and the
-    corresponding data frame
+    corresponding data frame). All conditions and filters that use that column
+    need to be removed as well.
 
     :param user: User performing the operation
     :param workflow: Workflow object
     :param column: Column object to delete
-    :param cond_to_delete: List of conditions to delete after removing the
-    column
     :return: Nothing. Effect reflected in the database
     """
     column.log(user, models.Log.COLUMN_DELETE)
@@ -307,38 +305,26 @@ def delete_column(
     workflow.ncols = workflow.ncols - 1
     workflow.save(update_fields=['ncols'])
 
-    if not cond_to_delete:
-        # The conditions to delete are not given, so calculate them
-        # Get the conditions/actions attached to this workflow
-        cond_to_delete = [
-            cond for cond in workflow.conditions.all()
-            if column in cond.columns.all()]
+    # Delete the conditions with this column
+    cond_to_delete = workflow.conditions.filter(columns=column)
+    for cond in cond_to_delete:
+        # Set rows_all_false to None as it now contains the wrong number
+        cond.action.rows_all_false = None
+        cond.action.save(update_fields=['rows_all_false'])
+    cond_to_delete.delete()
 
-    # If a column disappears, the conditions that contain that variable
-    # are removed
-    actions_without_filters = []
-    for condition in cond_to_delete:
-        if condition.is_filter:
-            actions_without_filters.append(condition.action)
-
-        # Formula has the name of the deleted column. Delete it
-        condition.delete()
-
-    # Remove the filters that contain the column
-    for filter_obj in workflow.filters.all():
-        if column not in filter_obj.columns.all():
-            continue
-        action = filter_obj.action
-        filter_obj.delete()
-
-        # Update the selected_count
-        if action:
-            action.update_selected_rows()
+    # Delete the filters
+    workflow.filters.filter(columns=column).delete()
 
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.
     for view in workflow.views.all():
         if view.columns.count() == 0:
+            view.delete()
+            continue
+
+        # Views that loose the key column must be deleted as well
+        if view.columns.filter(is_key=True).count() == 0:
             view.delete()
 
 

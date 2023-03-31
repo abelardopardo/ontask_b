@@ -76,15 +76,14 @@ class ConditionBase(CreateModifyFields):
         """Return the text rendering of the formula."""
         return self._formula_text
 
-    def update_selected_count(self, filter_formula=None):
+    def update_selected_row_count(self, filter_formula=None) -> bool:
         """Calculate the number of rows for which this condition is true.
 
-        Given a condition update the number of rows for which this condition
-        has true result.
+        The function may use a given filter to further restrict the filter.
 
         :param filter_formula: Formula provided by another filter condition
         and to take the conjunction with the condition formula.
-        :return: Boolean. True if number has changed
+        :return: True if number has changed
         """
 
         formula = self.formula
@@ -94,14 +93,12 @@ class ConditionBase(CreateModifyFields):
                 'condition': 'AND',
                 'not': False,
                 'rules': [filter_formula, self.formula],
-                'valid': True,
-            }
+                'valid': True}
 
         old_count = self.selected_count
         self.selected_count = sql.get_num_rows(
             self.workflow.get_data_frame_table_name(),
-            formula,
-        )
+            formula)
 
         return old_count != self.selected_count
 
@@ -112,7 +109,7 @@ class ConditionBase(CreateModifyFields):
 
 
 class Condition(NameAndDescription, ConditionBase):
-    """Object to storing a Condition that is used in an action.
+    """Object to store a Condition that is used in an action.
 
     @DynamicAttrs
     """
@@ -145,13 +142,23 @@ class Condition(NameAndDescription, ConditionBase):
         """Identify as filter"""
         return False
 
-    def update_fields(self):
-        """Update some internal fields when saving an object."""
+    def update_fields(self) -> bool:
+        """Update some internal fields when saving an object.
+
+        :return: Boolean true if htere has been a change
+        """
 
         super().update_fields()
 
-        self.update_selected_count(
+        changed = self.update_selected_row_count(
             filter_formula=self.action.get_filter_formula())
+
+        if changed:
+            # Number of rows all false is no longer valid.
+            self.action.rows_all_false = None
+            self.action.save(update_fields=['rows_all_false'])
+
+        return changed
 
     def __str__(self) -> str:
         """Render string."""
@@ -203,8 +210,7 @@ class Filter(ConditionBase):
         max_length=CHAR_FIELD_LONG_SIZE,
         default='',
         blank=True,
-        verbose_name=_('description'),
-    )
+        verbose_name=_('description'))
 
     # Set of columns that appear in this condition
     columns = models.ManyToManyField(
@@ -217,21 +223,19 @@ class Filter(ConditionBase):
         """Identify as filter"""
         return True
 
-    def update_fields(self):
-        """Update some internal fields when saving an object."""
+    def update_fields(self) -> bool:
+        """Update some internal fields when saving an object.
+
+        :return: Boolean true if htere has been a change
+        """
 
         super().update_fields()
-        self.update_selected_count()
+        return self.update_selected_row_count()
 
     def delete_from_action(self):
-        """Remove object from action (and delete if needed)"""
-        self.action = None
-
+        """Delete the filter only if it is not attached to a view."""
         if getattr(self, 'view', None) is None:
             self.delete()
-            return
-
-        self.save()
 
     def delete_from_view(self):
         """Remove object from view (and delete if needed)"""

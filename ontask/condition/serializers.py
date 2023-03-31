@@ -125,9 +125,14 @@ class FilterSerializer(ConditionBaseSerializer):
 
         filter_obj = models.Filter.objects.create(
             workflow=workflow,
-            action=context.get('action'),
             view=context.get('view'),
             **validated_data)
+        action = context.get('action')
+
+        if action:
+            action.filter = filter_obj
+            action.save()
+
         if filter_id is not None:
             filter_map[filter_id] = filter_obj
 

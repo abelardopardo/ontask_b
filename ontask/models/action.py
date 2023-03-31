@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
-from django.db import models
+from django.db import models, transaction
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
 import pytz
@@ -143,7 +143,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         null=True,
         default=None,
         on_delete=models.SET_NULL,
-        related_name='action')
+        related_name='actions')
 
     @functional.cached_property
     def is_in(self) -> bool:
@@ -240,9 +240,26 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         :return: All conditions (except the filter) are updated
         """
 
+        if self.filter and (
+            column is None or column in self.conditions.columns.all()):
+            # Recalculate number of selected rows for the filter
+            old_count = self.filter.selected_count
+            self.filter.save()
+            if old_count != self.filter.selected_count:
+                # If filter rows have changed, flush the rows_all_false counter
+                self.rows_all_false = None
+                self.save(update_fields=['rows_all_false'])
+
+
         # Recalculate for the rest of conditions
-        for cond in self.conditions.all():
-            cond.save()
+        if column:
+            cond_to_save = self.conditions.filter(columns=column)
+        else:
+            cond_to_save = self.conditions.all()
+
+        with transaction.atomic():
+            for cond in cond_to_save:
+                cond.save()
 
     def used_columns(self) -> List[Column]:
         """List of columns used in the action.

@@ -29,7 +29,7 @@ class ConditionBaseCreateView(UserIsInstructor, generic.TemplateView):
 
     @method_decorator(user_passes_test(is_instructor))
     @method_decorator(ajax_required)
-    @method_decorator(get_action(pf_related=['actions', 'columns']))
+    @method_decorator(get_action())
     def get(
         self,
         request: http.HttpRequest,
@@ -51,7 +51,7 @@ class ConditionBaseCreateView(UserIsInstructor, generic.TemplateView):
 
     @method_decorator(user_passes_test(is_instructor))
     @method_decorator(ajax_required)
-    @method_decorator(get_action(pf_related=['actions', 'columns']))
+    @method_decorator(get_action())
     def post(
         self,
         request: http.HttpRequest,
@@ -62,17 +62,11 @@ class ConditionBaseCreateView(UserIsInstructor, generic.TemplateView):
         del args
         action = kwargs.get('action')
         form = self.form_class(request.POST, action=action)
-        if request.method == 'POST' and form.is_valid():
-
+        if form.is_valid():
             if not form.has_changed():
                 return http.JsonResponse({'html_redirect': None})
 
-            return services.save_condition_form(
-                request,
-                form,
-                action.workflow,
-                action,
-                is_filter=isinstance(self, FilterCreateView))
+            return services.save_condition_form(request, form, action)
 
         return http.JsonResponse({
             'html_form': render_to_string(
@@ -101,46 +95,43 @@ class ConditionCreateView(ConditionBaseCreateView):
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_filter(pf_related='columns')
+@get_action()
 def edit_filter(
     request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-    filter: Optional[models.Condition] = None,
+    action: Optional[models.Action] = None,
 ) -> http.JsonResponse:
     """Edit the filter of an action through AJAX.
 
     :param request: HTTP request
     :param pk: condition ID
     :param workflow: Workflow being processed
-    :param filter: Filter to edit (set by the decorator)
+    :param Action: Action from which to edit the filter (set by the decorator)
     :return: AJAX response
     """
-    del pk, workflow
+    del pk
+
+    filter = action.filter
+    if filter is None:
+        return http.JsonResponse({'html_redirect': None})
+
     # Render the form with the Condition information
     form = forms.FilterForm(
         request.POST or None,
         instance=filter,
-        action=filter.action)
+        action=action)
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
-        return services.save_condition_form(
-            request,
-            form,
-            filter.action.workflow,
-            filter.action,
-            is_filter=True)
+        return services.save_condition_form(request, form, action)
 
     return http.JsonResponse({
         'html_form': render_to_string(
             'condition/includes/partial_filter_addedit.html',
-            {
-                'form': form,
-                'action_id': filter.action.id,
-                'condition': form.instance},
+            {'form': form, 'action_id': action.id, 'condition': form.instance},
             request=request)})
 
 
@@ -175,11 +166,10 @@ def set_filter(
 
     # If the action has a filter nuke it.
     action.filter = view.filter
+    action.save(update_fields=['filter'])
 
-    # Action counts need to be updated.
-    action.rows_all_false = None
-    action.save()
-    action.update_selected_rows()
+    # Row counts need to be updated.
+    action.update_selected_row_counts()
 
     return http.JsonResponse({'html_redirect': ''})
 
@@ -203,28 +193,24 @@ def edit_condition(
     """
     del pk, workflow
 
+    action = condition.action
     form = forms.ConditionForm(
         request.POST or None,
         instance=condition,
-        action=condition.action)
+        action=action)
 
     if request.method == 'POST' and form.is_valid():
         if not form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
-        return services.save_condition_form(
-            request,
-            form,
-            condition.action.workflow,
-            condition.action,
-            is_filter=False)
+        return services.save_condition_form(request, form, action)
 
     return http.JsonResponse({
         'html_form': render_to_string(
             'condition/includes/partial_condition_addedit.html',
             {
                 'form': form,
-                'action_id': condition.action.id,
+                'action_id': action.id,
                 'condition': form.instance},
             request=request),
     })
@@ -232,24 +218,27 @@ def edit_condition(
 
 @user_passes_test(is_instructor)
 @ajax_required
-@get_filter(pf_related='columns')
+@get_action(pf_related='columns')
 def delete_filter(
     request: http.HttpRequest,
     pk: int,
     workflow: Optional[models.Workflow] = None,
-    filter: Optional[models.Condition] = None,
+    action: Optional[models.Condition] = None,
 ) -> http.JsonResponse:
     """Handle the AJAX request to delete a filter.
 
     :param request: AJAX request
     :param pk: Filter ID
     :param workflow: Workflow being processed
-    :param filter: Filter to edit (set by the decorator)
+    :param action: Action with the filter to delete (set by the decorator)
     :return: AJAX response
     """
     del pk, workflow
+    filter = action.filter
+    if filter is None:
+        return http.JsonResponse({'html_redirect': ''})
+
     if request.method == 'POST':
-        action = filter.action
         # If the request has 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content:
@@ -260,15 +249,16 @@ def delete_filter(
 
         action.filter = None
         action.rows_all_false = None
-        action.save()
+        action.save(update_fields=['filter', 'rows_all_false'])
 
         action.update_selected_rows()
+
         return http.JsonResponse({'html_redirect': ''})
 
     return http.JsonResponse({
         'html_form': render_to_string(
             'condition/includes/partial_filter_delete.html',
-            {'id': filter.id},
+            {'action': action},
             request=request),
     })
 

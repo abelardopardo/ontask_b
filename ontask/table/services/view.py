@@ -81,6 +81,8 @@ def save_view_form(
     if not formula.is_empty(filter_obj.formula):
         filter_obj.workflow = workflow
         filter_obj.save()
+        filter_obj.columns.set(workflow.columns.filter(
+            name__in=formula.get_variables(filter_obj.formula)))
         view.filter = filter_obj
 
     view.save()

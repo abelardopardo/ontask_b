@@ -24,14 +24,11 @@ def _propagate_changes(condition, changed_data, old_name):
     :return: Nothing
     """
     if '_formula' in changed_data:
-        if condition.action:
-            # Reset the counter of rows with all conditions false
-            condition.action.rows_all_false = None
-            condition.action.save(update_fields=['rows_all_false'])
+        condition.update_fields()
 
-            if not condition.is_filter:
-                # Update the number of rows selected in the condition
-                condition.save()
+    if condition.is_filter:
+        # A filter does not have a name, thus no more changes needed.
+        return
 
     # If condition name has changed, rename appearances in the content
     # field of the action.
@@ -47,23 +44,15 @@ def _propagate_changes(condition, changed_data, old_name):
 def save_condition_form(
     request: http.HttpRequest,
     form,
-    workflow: models.workflow,
     action: Optional[models.Action] = None,
-    is_filter: Optional[bool] = False,
 ) -> http.JsonResponse:
     """Process the AJAX form POST to create and update conditions and filters.
 
     :param request: HTTP request
     :param form: Form being used to ask for the fields
-    :param workflow: Workflow being processed
     :param action: The action to which the condition is attached to
-    :param is_filter: The condition is a filter
     :return: JSON response
     """
-    if is_filter and form.instance.id is None and action.get_filter():
-        # Should not happen. Go back to editing the action
-        return http.JsonResponse({'html_redirect': ''})
-
     is_new = form.instance.id is None
 
     # If the request has the 'action_content' field, update the action
@@ -73,15 +62,20 @@ def save_condition_form(
 
     # Update fields and save the condition
     condition = form.save(commit=False)
-    condition.workflow = workflow
-    condition.action = action
+    condition.workflow = action.workflow
+    if not condition.is_filter:
+        condition.action = action
+    # Save object to processfurther (update row counts and column set
     condition.save()
-    condition.columns.set(workflow.columns.filter(
-        name__in=formula.get_variables(condition.formula),
-    ))
-    if is_filter:
+
+    if condition.is_filter:
         action.filter = condition
-        action.save()
+        action.rows_all_false = None
+        action.save(update_fields=['filter', 'rows_all_false'])
+        action.update_selected_row_counts()
+
+    condition.columns.set(action.workflow.columns.filter(
+        name__in=formula.get_variables(condition.formula)))
 
     _propagate_changes(condition, form.changed_data, form.old_name)
 

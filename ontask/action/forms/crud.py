@@ -47,6 +47,7 @@ class ActionUpdateForm(forms.ModelForm):
                 _('There is already an action with this name.'),
             )
 
+        self.instance.workflow = self.workflow
         return form_data
 
     class Meta:

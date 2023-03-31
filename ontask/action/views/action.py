@@ -1,190 +1,189 @@
 # -*- coding: utf-8 -*-
 
 """Views to render the list of actions."""
-from typing import Optional
+from typing import Optional, Union, List
 
 from django import http
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import render
-from django.template.loader import render_to_string
+from django.contrib import messages
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
-from ontask import models
+from ontask import create_new_name, models
 from ontask.action import forms, services
 from ontask.core import (
-    SessionPayload, UserIsInstructor, ajax_required, get_action, get_workflow,
-    is_instructor,
-)
+    SessionPayload, UserIsInstructor, ajax_required, RequestWorkflowView,
+    JSONFormResponseMixin, SingleActionMixin)
 
 
-@user_passes_test(is_instructor)
-@get_workflow(pf_related='actions')
-def action_index(
-    request: http.HttpRequest,
-    wid: Optional[int] = None,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Show all the actions attached to the workflow.
+class ActionIndexView(UserIsInstructor, RequestWorkflowView, generic.ListView):
+    """View to list actions in a workflow."""
 
-    :param request: HTTP Request
-    :param wid: Primary key of the workflow object to use
-    :param workflow: Workflow for the session.
-    :return: HTTP response
-    """
-    del wid
-    # Reset object to carry action info throughout dialogs
-    SessionPayload.flush(request.session)
-    return render(
-        request,
-        'action/index.html',
-        {
-            'workflow': workflow,
-            'actions': workflow.actions.all(),
-            'action_types': models.Action.AVAILABLE_ACTION_TYPES})
+    http_method_names = ['get']
+    model = models.Action
+    ordering = ['name']
+
+    def get_queryset(self):
+        """Return the actions for the workshop in the view"""
+        return self.workflow.actions.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'action_types': models.Action.AVAILABLE_ACTION_TYPES,
+            'workflow': self.workflow})
+        return context
+
+    def get(self, request, *args, **kwargs):
+        SessionPayload.flush(request.session)
+        return super().get(request, *args, **kwargs)
 
 
-class ActionCreateView(UserIsInstructor, generic.TemplateView):
+@method_decorator(ajax_required, name='dispatch')
+class ActionCreateView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    RequestWorkflowView,
+    generic.CreateView
+):
     """Process get/post requests to create an action."""
 
+    http_method_names = ['get', 'post']
     form_class = forms.ActionForm
-
     template_name = 'action/includes/partial_action_create.html'
 
-    @method_decorator(user_passes_test(is_instructor))
-    @method_decorator(ajax_required)
-    @method_decorator(get_workflow())
-    def get(
-        self,
-        request: http.HttpRequest,
-        *args, **kwargs
-    ) -> http.HttpResponse:
-        """Process the get requet when creating an action."""
+    def get_form_kwargs(self):
+        """Add the user in the request to the context."""
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        """Get context data: fid as filter ID (optional)"""
+        context = super().get_context_data(**kwargs)
+        fid = self.kwargs.get('fid')
+        if fid is None:
+            context['form_url'] = reverse('action:create')
+        else:
+            context['form_url'] = reverse(
+                'action:create_from_view',
+                kwargs={'fid': fid})
+        return context
+
+    def form_valid(self, form):
+        """Process a valid post to create the action."""
+        return_url = None
+
+        if form.instance.id:
+            log_type = models.Log.ACTION_UPDATE
+            return_url = reverse('action:index')
+        else:
+            log_type = models.Log.ACTION_CREATE
+
+        action = form.save()
+        if not return_url:
+            return_url = reverse('action:edit', kwargs={'pk': action.id})
+
         return services.save_action_form(
-            request,
-            self.form_class(workflow=kwargs.get('workflow')),
-            self.template_name,
-            view_as_filter=kwargs.get('fid'),
-            workflow=kwargs.get('workflow'),
-        )
-
-    @method_decorator(user_passes_test(is_instructor))
-    @method_decorator(ajax_required)
-    @method_decorator(get_workflow())
-    def post(self, request: http.HttpRequest, **kwargs) -> http.HttpResponse:
-        """Process the post request when creating an action."""
-        return services.save_action_form(
-            request,
-            self.form_class(request.POST, workflow=kwargs.get('workflow')),
-            self.template_name,
-            view_as_filter=kwargs.get('fid'),
-            workflow=kwargs.get('workflow'),
-        )
+            action,
+            self.request.user,
+            log_type,
+            return_url,
+            self.kwargs.get('fid'))
 
 
-class ActionUpdateView(UserIsInstructor, generic.DetailView):
-    """Process the Action Update view.
+@method_decorator(ajax_required, name='dispatch')
+class ActionUpdateView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    SingleActionMixin,
+    generic.UpdateView
+):
+    """Process the Action Update view."""
 
-    @DynamicAttrs
-    """
-
-    model = models.Action
-    template_name = 'action/includes/partial_action_update.html'
-    context_object_name = 'action'
+    http_method_names = ['get', 'post']
     form_class = forms.ActionUpdateForm
+    template_name = 'action/includes/partial_action_update.html'
 
-    def get_object(self, queryset=None) -> models.Action:
-        """Access the Action object being manipulated."""
-        act_obj = super().get_object(queryset=queryset)
-        if act_obj.workflow.id != self.request.session['ontask_workflow_id']:
-            raise http.Http404()
+    def get_form_kwargs(self):
+        """Add the user in the request to the context."""
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
 
-        return act_obj
-
-    @method_decorator(user_passes_test(is_instructor))
-    @method_decorator(ajax_required)
-    @method_decorator(get_workflow())
-    def get(
-        self,
-        request: http.HttpRequest,
-        *args,
-        **kwargs
-    ) -> http.HttpResponse:
-        """Process the get request."""
+    def form_valid(self, form):
+        """Process a valid post to create the action."""
         return services.save_action_form(
-            request,
-            self.form_class(
-                instance=self.get_object(),
-                workflow=kwargs['workflow']),
-            self.template_name)
-
-    @method_decorator(user_passes_test(is_instructor))
-    @method_decorator(ajax_required)
-    @method_decorator(get_workflow())
-    def post(self, request: http.HttpRequest, **kwargs) -> http.HttpResponse:
-        """Process post request."""
-        return services.save_action_form(
-            request,
-            self.form_class(
-                request.POST,
-                instance=self.get_object(),
-                workflow=kwargs['workflow'],
-            ),
-            self.template_name)
+            form.save(),
+            self.request.user,
+            models.Log.ACTION_UPDATE,
+            reverse('action:index'))
 
 
-@user_passes_test(is_instructor)
-@get_action(pf_related=['actions', 'columns'])
-def edit_action(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    action: Optional[models.Action] = None,
-) -> http.HttpResponse:
-    """Invoke the specific edit view.
+@method_decorator(ajax_required, name='dispatch')
+class ActionDeleteView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    SingleActionMixin,
+    generic.DeleteView
+):
+    """View to delete an action."""
 
-    :param request: Request object
-    :param pk: Action PK
-    :param workflow: Workflow being processed,
-    :param action: Action being edited (set by the decorator)
-    :return: HTML response
-    """
-    del pk
-    return services.ACTION_PROCESS_FACTORY.process_edit_request(
-        request,
-        workflow,
-        action)
+    http_method_names = ['get', 'post']
+    template_name = 'action/includes/partial_action_delete.html'
 
-
-@user_passes_test(is_instructor)
-@ajax_required
-@get_action()
-def delete_action(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    action: Optional[models.Action] = None,
-) -> http.JsonResponse:
-    """Process AJAX request to delete an action.
-
-    :param request: Request object
-    :param pk: Action id to delete.
-    :param workflow: Workflow being processed,
-    :param action: Action being deleted (set by the decorator)
-    :return: JSON Response
-    """
-    del pk, workflow
-    # JSON response object
-    # Get the appropriate action object
-    if request.method == 'POST':
+    def delete(self, request, *args, **kwargs):
+        action = self.get_object()
         action.log(request.user, models.Log.ACTION_DELETE)
         action.delete()
         return http.JsonResponse({'html_redirect': reverse('action:index')})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'action/includes/partial_action_delete.html',
-            {'action': action},
-            request=request),
-    })
+
+class ActionEditView(UserIsInstructor, SingleActionMixin, generic.UpdateView):
+    """View to edit an action."""
+
+    http_method_names = ['get', 'post']
+    pf_related: Optional[Union[str, List]] = ['actions', 'columns']
+    action = None
+
+    def get(self, request, *args, **kwargs):
+        self.action = self.get_object()
+        return services.ACTION_PROCESS_FACTORY.process_edit_request(
+            self.request,
+            self.action.workflow,
+            self.action)
+
+    def post(self, request, *args, **kwargs):
+        self.action = self.get_object()
+        return services.ACTION_PROCESS_FACTORY.process_edit_request(
+            self.request,
+            self.action.workflow,
+            self.action)
+
+
+@method_decorator(ajax_required, name='dispatch')
+class ActionCloneView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    SingleActionMixin,
+    generic.DetailView
+):
+    """Process the Action Update view."""
+
+    http_method_names = ['get', 'post']
+    template_name = 'action/includes/partial_action_clone.html'
+    pf_related = 'actions'
+
+    def post(self, request, *args, **kwargs):
+        """Perform the clone operation."""
+        self.action = self.get_object()
+        services.do_clone_action(
+            self.request.user,
+            self.action,
+            new_workflow=None,
+            new_name=create_new_name(self.action.name, self.workflow.actions))
+
+        messages.success(request, _('Action successfully cloned.'))
+
+        return http.JsonResponse({'html_redirect': ''})

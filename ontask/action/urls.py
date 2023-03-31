@@ -14,8 +14,8 @@ urlpatterns = [
     # Action CRUD
     #
     # List them all
-    path('', views.action_index, name='index'),
-    path('<int:wid>/index/', views.action_index, name='index_set'),
+    path('', views.ActionIndexView.as_view(), name='index'),
+    path('<int:wid>/index/', views.ActionIndexView.as_view(), name='index_set'),
 
     # Create an action
     path('create/', views.ActionCreateView.as_view(), name='create'),
@@ -24,12 +24,27 @@ urlpatterns = [
         views.ActionCreateView.as_view(),
         name='create_from_view'),
 
-    # Show timeline
-    path('timeline/', views.show_timeline, name='timeline'),
-    path('<int:pk>/timeline/', views.show_timeline, name='timeline'),
+    # Update an action
+    path('<int:pk>/update/', views.ActionUpdateView.as_view(), name='update'),
+
+    # Clone the action
+    path('<int:pk>/clone/', views.ActionCloneView.as_view(), name='clone'),
 
     # Edit action
-    path('<int:pk>/edit/', views.edit_action, name='edit'),
+    path('<int:pk>/edit/', views.ActionEditView.as_view(), name='edit'),
+
+    # Nuke the action
+    path('<int:pk>/delete/', views.ActionDeleteView.as_view(), name='delete'),
+
+    # Show timeline
+    path(
+        'timeline/',
+        views.ActionShowTimelineView.as_view(),
+        name='timeline'),
+    path(
+        '<int:pk>/timeline/',
+        views.ActionShowTimelineView.as_view(),
+        name='timeline'),
 
     # Save action out content
     path('<int:pk>/save_text/', views.save_text, name='save_text'),
@@ -43,29 +58,16 @@ urlpatterns = [
     # Action import
     path('import/', views.action_import, name='import'),
 
-    # Update an action
-    path('<int:pk>/update/', views.ActionUpdateView.as_view(), name='update'),
-
-    # Clone the action
-    path('<int:pk>/clone_action/', views.clone_action, name='clone_action'),
-
-    # Nuke the action
-    path('<int:pk>/delete/', views.delete_action, name='delete'),
-
     # Run action
     path('<int:pk>/run/', views.run_action, name='run'),
 
     # Run ZIP action
     path('<int:pk>/zip/', views.zip_action, name='zip_action'),
 
-    #
     # Personalised text and JSON action steps
-    #
     path('item_filter/', views.run_action_item_filter, name='item_filter'),
 
-    #
     # Handling attachments in EMAIL REPORT
-    #
     path(
         '<int:pk>/<int:action_id>/add_attachment/',
         views.add_attachment,
@@ -75,15 +77,11 @@ urlpatterns = [
         views.remove_attachment,
         name='remove_attachment'),
 
-    #
     # URL to use when action finishes run
-    #
     path('run_done/', views.run_done, name='run_done'),
     path('zip_export/', views.action_zip_export, name='zip_export'),
 
-    #
     # ACTION IN EDIT PAGE
-    #
     # Manage columns for action in
     path(
         '<int:pk>/<int:cpk>/<int:key>/select_column_action/',
@@ -138,9 +136,7 @@ urlpatterns = [
         views.edit_rubric_loas,
         name='rubric_loas_edit'),
 
-    #
     # RUN SURVEY
-    #
     # Server side update of the run survey page for action in
     path(
         '<int:pk>/show_survey_table_ss/',
@@ -157,9 +153,7 @@ urlpatterns = [
     # Say thanks
     path('thanks/', TemplateView.as_view(template_name='thanks.html')),
 
-    #
     # Preview action out
-    #
     path(
         '<int:pk>/<int:idx>/preview/',
         views.preview_response,
@@ -172,15 +166,11 @@ urlpatterns = [
     # Allow url on/off toggle
     path('<int:pk>/showurl/', views.showurl, name='showurl'),
 
-    #
     # Serve the personalised content
-    #
     path('<int:action_id>/serve/', views.serve_action, name='serve'),
     path('serve/', views.serve_action_lti, name='serve_lti'),
 
-    #
     # Edit action description and name
-    #
     path(
         '<int:pk>/edit_description/',
         views.edit_description,

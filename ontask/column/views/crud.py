@@ -406,17 +406,8 @@ def delete(
     # Get the name of the column to delete
     context = {'pk': pk, 'cname': column.name}
 
-    # Get the conditions/actions attached to this workflow
-    cond_to_delete = [
-        col for col in models.Condition.objects.filter(
-            action__workflow=workflow)
-        if evaluation.has_variable(col.formula, column.name)]
-    # Put it in the context because it is shown to the user before confirming
-    # the deletion
-    context['cond_to_delete'] = cond_to_delete
-
     if request.method == 'POST':
-        services.delete_column(request.user, workflow, column, cond_to_delete)
+        services.delete_column(request.user, workflow, column)
 
         # There are various points of return
         from_url = request.META['HTTP_REFERER']
@@ -425,6 +416,27 @@ def delete(
                 {'html_redirect': reverse('table:display')})
 
         return http.JsonResponse({'html_redirect': reverse('column:index')})
+
+    # Get the conditions that need to be deleted
+    cond_to_delete = [
+        cond for cond in workflow.conditions.all()
+        if column in cond.columns.all()]
+    # In the context to show to the user before confirming the deletion
+    context['cond_to_delete'] = cond_to_delete
+
+    # Get the action filters that need to be deleted
+    action_filter_to_delete = [
+        action for action in workflow.actions.all()
+        if action.filter and column in action.filter.columns.all()]
+    # In the context to show to the user before confirming the deletion
+    context['action_filter_to_delete'] = action_filter_to_delete
+
+    # Get the views with filters that need to be deleted
+    view_filter_to_delete = [
+        view for view in workflow.views.all()
+        if view.filter and column in view.filter.columns.all()]
+    # In the context to show to the user before confirming the deletion
+    context['view_filter_to_delete'] = view_filter_to_delete
 
     return http.JsonResponse({
         'html_form': render_to_string(

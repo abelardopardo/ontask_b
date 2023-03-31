@@ -182,19 +182,16 @@
                 title="{% trans 'Download a CSV file containing this table' %}">
               <span class="fa fa-download"></span> {% trans 'CSV Download' %}
           </a>
-          <button
-            type="button"
-            {% if view and not view.has_empty_formula %}
+          {% if view and not view.has_empty_formula %}
+            <button
+              type="button"
               class="shadow btn btn-outline-dark js-create-action"
               data-url="{% url 'action:create_from_view' view.id %}"
               title="{% trans 'New action using this view as filter' %}"
-            {% else %}
-              class="shadow btn btn-outline-dark disabled"
-              title="{% trans 'A view with a filter expression is required.' %}"
-            {% endif %}
-            data-toggle="tooltip">
-            <span class="fa fa-plus"></span> {% trans 'Action with filter' %}
-          </button>
+              data-toggle="tooltip">
+              <span class="fa fa-plus"></span> {% trans 'Action with filter' %}
+            </button>
+          {% endif %}
         </div>
       </div>
       {% if view %}

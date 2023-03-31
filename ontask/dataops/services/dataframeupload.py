@@ -65,6 +65,7 @@ def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
         sheet_name=sheet_name,
         index_col=False,
         engine='openpyxl')
+    data_frame.dropna(axis=0, how='all', inplace=True)
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case

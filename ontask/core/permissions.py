@@ -135,18 +135,14 @@ class RequestWorkflowView(base.View):
     s_related: Optional[Union[str, List]] = None
     pf_related: Optional[Union[str, List]] = None
 
-    def set_object(self, request, *args, **kwargs):
-        """Set the workflow object."""
-        self.workflow = get_session_workflow(
-            request,
-            kwargs.get('wid'),
-            self.s_related,
-            self.pf_related)
-
     def dispatch(self, request, *args, **kwargs):
         """Get the workflow, store it in object, and dispatch."""
         try:
-            self.set_object(request, *args, **kwargs)
+            self.workflow = get_session_workflow(
+                request,
+                kwargs.get('wid'),
+                self.s_related,
+                self.pf_related)
         except Exception as exc:
             return error_redirect(request, message=str(exc))
 
@@ -163,12 +159,25 @@ class SingleWorkflowMixin(detail.SingleObjectMixin):
     def get_object(self, queryset=None):
         """Return workflow, and store it in the session."""
 
-        obj = get_session_workflow(
+        return get_session_workflow(
             self.request,
             self.kwargs.get(self.pk_url_kwarg),
             self.s_related,
             self.pf_related)
-        return obj
+
+
+class SingleActionMixin(detail.SingleObjectMixin, RequestWorkflowView):
+    """Store action in View."""
+
+    model = models.Action
+
+    def get_object(self, queryset=None) -> models.Action:
+        """Access the Action verify that belongs to workflow."""
+        act_obj = super().get_object(queryset=queryset)
+        if act_obj.workflow != self.workflow:
+            raise http.Http404(_('Action does not belong to current workflow'))
+
+        return act_obj
 
 
 class RequestColumnView(RequestWorkflowView):
@@ -196,39 +205,6 @@ class RequestColumnView(RequestWorkflowView):
 
     def dispatch(self, request, *args, **kwargs):
         """Get the column, store it in object, and dispatch."""
-        try:
-            self.set_object(request, *args, **kwargs)
-        except Exception as exc:
-            return error_redirect(request, 'action:index', str(exc))
-
-        return super().dispatch(request, *args, **kwargs)
-
-
-class RequestActionView(RequestWorkflowView):
-    """Store action in View."""
-    action = None
-
-    def set_object(self, request, *args, **kwargs):
-        """Set the workflow object."""
-        super().set_object(request, *args, **kwargs)
-
-        if self.workflow.nrows == 0:
-            raise http.Http404(_(
-                'Workflow has no data. '
-                'Go to "Manage table data" to upload data.'))
-
-        action = self.workflow.actions.filter(
-            pk=self.kwargs.get(self.pk_url_kwarg)).filter(
-            Q(workflow__user=request.user)
-            | Q(workflow__shared=request.user),
-        ).first()
-        if not action:
-            raise http.Http404(_('No action found matching the query'))
-
-        self.action = action
-
-    def dispatch(self, request, *args, **kwargs):
-        """Get the action, store it in object, and dispatch."""
         try:
             self.set_object(request, *args, **kwargs)
         except Exception as exc:
