@@ -7,14 +7,16 @@
 #    source ~/.virtualenvs/env/bin/activate
 # 3. Upgrade pip
 #    python3 -m pip install --upgrade pip
-# 3. Install essential:
+# 4. Install Wheel
+#    python3 -m pip install wheel
+# 5. Install essential:
 #    LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip install -r requirements/essential.txt
-# 4. LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip freeze | sort > requirements/freeze.txt
-# 5. python3 -m pip check
-# 6. Copy freeze.txt into base.txt
-# 7. Move lines in base.txt to development.txt
+# 6. LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip freeze | sort > requirements/freeze.txt
+# 7. python3 -m pip check
+# 8. Copy freeze.txt into base.txt
+# 9. Move lines in base.txt to development.txt
 #
-Django[argon2]
+Django[argon2]==3.2.10
 celery
 django-environ
 django-extensions
@@ -26,10 +28,10 @@ django-crispy-forms
 sorl-thumbnail
 django-widget-tweaks
 django-formtools
-django-siteprefs==1.2.1  # Creates a bug when migrating
+django-siteprefs
 django-tables2
 django-import-export
-django-summernote==0.8.11.6
+django-summernote==0.8.11.6  # Bug detected in 0.8.19 and 0.8.20
 django-jquery
 email-validator
 psycopg2
