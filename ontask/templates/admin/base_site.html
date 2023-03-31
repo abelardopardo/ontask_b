@@ -7,8 +7,8 @@
   <a class="navbar-brand" href="{% url 'admin:index' %}">{% include "_brandname.html" %} {% trans 'Admin' %}&nbsp;</a>
 {% endblock %}
 {% block nav-global %}
-  <a class="shadow btn btn-outline-dark" href="{% url 'home' %}"><span class="fa fa-transfer"
-                                                           aria-hidden="true"></span> {% trans 'Switch to Site' %}</a>
+  <a class="shadow btn btn-outline-dark" href="{% url 'home' %}">
+    {% trans 'Switch to Site' %}</a>
 {% endblock %}
 {% block extrahead %}{{ block.super }}
   <link href="{% static 'css/main.css' %}" rel="stylesheet">

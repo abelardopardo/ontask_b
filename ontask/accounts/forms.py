@@ -22,7 +22,7 @@ class LoginForm(AuthenticationForm):
             Field('username', placeholder=_('Enter Email'), autofocus=''),
             Field('password', placeholder=_('Enter Password')),
             Submit('sign_in', _('Log in'),
-                   css_class='btn btn-lg btn-outline-primary btn-block'),
+                   css_class='btn btn-lg btn-block spin'),
             # HTML('<a href="{}">Forgot Password?</a>'.format(
             #    reverse('accounts:password-reset'))),
             Field('remember_me'),

@@ -1050,7 +1050,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def create_new_email_report_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
             aname,
-            models.Action.EMAIL_REPORT, adesc)
+            models.Action.EMAIL_REPORT,
+            adesc)
 
     def create_new_JSON_report_action(self, aname, adesc=''):
         self.create_new_action_out_basic(
@@ -1345,14 +1346,14 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
     def open_action_email(self, name):
         element = self.search_action(name)
-        element.find_element_by_xpath('td[1]/div/button[2]').click()
+        element.find_element_by_xpath('h5').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[contains(@class, "js-action-preview")]')))
 
     def open_action_canvas_email(self, name):
         element = self.search_action(name)
-        element.find_element_by_xpath('td[1]/div/button[2]').click()
+        element.find_element_by_xpath('h5').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.XPATH,
@@ -1366,19 +1367,29 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     ):
         """Execute one operation for the given action"""
         xpath_str = \
-            '//table[@id="action-table"]' \
-            '//tr/td[2][normalize-space() = "{0}"]/' \
-            '../td[1]/div/div'.format(name)
-        self.selenium.find_element_by_xpath(xpath_str).click()
+            '//div[@id="action-cards"]' \
+            '//h5[normalize-space() = "{0}"]/..'.format(name)
+        try:
+            elem = self.selenium.find_element_by_xpath(
+                xpath_str
+                + '/div/div/button/span[contains(@class, "{0}")]'.format(
+                    operation))
+        except NoSuchElementException:
+            # Operation not found, so look in the pull down menu
+            elem = self.selenium.find_element_by_xpath(
+                xpath_str + '//*[contains(@class, "dropdown-toggle")]')
 
-        WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
-            (By.XPATH,
-             xpath_str + '//*[normalize-space() = "{0}"]'.format(operation))))
+            elem.click()
+            WebDriverWait(self.selenium, 10).until(EC.element_to_be_clickable(
+                (By.XPATH,
+                 xpath_str + '//span[contains(@class, "{0}")]'.format(
+                     operation))))
+            elem = self.selenium.find_element_by_xpath(
+                xpath_str + '//span[contains(@class, "{0}")]'.format(
+                    operation))
 
-        self.selenium.find_element_by_xpath(
-            xpath_str + '//*[normalize-space() = "{0}"]'.format(
-                operation)).click()
-
+        # Click in the selected operation
+        elem.click()
         if wait_for:
             WebDriverWait(self.selenium, 10).until(
                 EC.presence_of_element_located((By.ID, wait_for)))
@@ -1388,13 +1399,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             self.wait_for_modal_open()
 
     def open_action_json_run(self, name):
-        element = self.search_action(name)
-        element.find_element_by_xpath('td[1]/div/button[2]').click()
-        self.wait_for_page(element_id='json-action-request-data')
+        self.open_action_run(name)
 
     def open_action_run(self, name, is_action_in=False):
         element = self.search_action(name)
-        element.find_element_by_xpath('td[1]/div/button[2]').click()
+        element.find_element_by_xpath(
+            'div/div/button/span[contains(@class, "fa-rocket")]').click()
         if is_action_in:
             self.wait_for_id_and_spinner('actioninrun-data_previous')
         else:

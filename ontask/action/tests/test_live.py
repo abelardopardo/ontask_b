@@ -13,7 +13,7 @@ from ontask.dataops import formula
 
 
 class ActionActionRename(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
-    """Test Action Edit."""
+    """Test Action Rename."""
 
     action_name = 'simple action'
 
@@ -31,7 +31,7 @@ class ActionActionRename(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Click on the action rename link
-        self.open_action_operation(self.action_name, 'Rename')
+        self.open_action_operation(self.action_name, 'fa-pencil-alt')
 
         # Rename the action
         self.selenium.find_element_by_id('id_name').send_keys(suffix)
@@ -314,7 +314,7 @@ class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.open_action_operation('simple action', 'URL Off')
+        self.open_action_operation('simple action', 'fa-link')
 
         # Assert the content in the modal
         self.assertIn(
@@ -336,7 +336,7 @@ class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         action = models.Action.objects.get(name='simple action')
         self.assertEqual(action.serve_enabled, True)
 
-        self.open_action_operation('simple action', 'URL On')
+        self.open_action_operation('simple action', 'fa-link')
         # Disable the URL
         self.selenium.find_element_by_id('id_serve_enabled').click()
         # Click OK
@@ -575,7 +575,8 @@ class ActionActionZip(
 
         # Click in the page to send email
         self.open_action_operation(
-            'Detecting age', 'ZIP',
+            'Detecting age',
+            'fa-file-archive',
             'zip-action-request-data')
 
         # The zip should include 2 files
@@ -803,9 +804,6 @@ class ActionJSONReportActionCreate(
         self.create_new_JSON_report_action(self.action_name, '')
 
         # insert the action text
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable((By.ID, 'id_text_content'))
         )

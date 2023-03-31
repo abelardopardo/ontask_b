@@ -140,13 +140,7 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.wait_for_id_and_spinner('action-index')
 
         # Click in the RUN link of the action in
-        element = self.search_action('action in')
-        element.find_element_by_xpath('td[1]/div/button[2]').click()
-        # Wait for paging widget
-        WebDriverWait(self.selenium, 10).until(
-            EC.presence_of_element_located(
-                (By.ID, 'actioninrun-data_previous'))
-        )
+        self.open_action_run('action in', is_action_in=True)
 
         # Enter data using the RUN menu. Select one entry to populate
         self.selenium.find_element_by_link_text("student01@bogus.com").click()
