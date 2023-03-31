@@ -55,6 +55,10 @@ def _run_compatibility_patches(json_data: Dict) -> Dict:
             '_formula': formula_info,
             'description_text': view['description_text']}
 
+    # Remove query_builder_ops, it is refreshed from the
+    # read columns
+    json_data.pop('builder_query_ops', None)
+
     return json_data
 
 

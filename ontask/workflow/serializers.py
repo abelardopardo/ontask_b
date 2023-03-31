@@ -154,6 +154,10 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                     col.position = idx + 1
                     col.save()
 
+            # Update the query_builder_filters
+            workflow_obj.set_query_builder_ops()
+            workflow_obj.save()
+
             # Load the data frame
             if data_frame_data is not None:
                 # Store the table in the DB
@@ -190,6 +194,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             'created',
             'modified',
             'data_frame_table_name',
+            'query_builder_ops',
             'session_key',
             'shared',
             'star',
