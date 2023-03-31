@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-#
 
 """Classes to serialize Actions."""
+from typing import Dict, List
+
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
@@ -8,7 +10,6 @@ from ontask import models
 from ontask.column.serializers import ColumnNameSerializer, ColumnSerializer
 from ontask.condition.serializers import (
     ConditionNameSerializer, ConditionSerializer, FilterSerializer)
-from ontask.dataops import sql
 from ontask.table.serializers import ViewNameSerializer, ViewSerializer
 
 try:
@@ -147,18 +148,25 @@ class RubricCellSerializer(serializers.ModelSerializer):
 
     column = ColumnNameSerializer(required=True, many=False)
 
-    def create(self, validated_data, **kwargs):
-        """Create the tuple object with column, condition, action."""
-        del kwargs
-        action = self.context['action']
+    @staticmethod
+    def create_rubric(
+        validated_data: Dict,
+        context: Dict
+    ) -> models.RubricCell:
+        """Create the tuple object with column, condition, action.
 
-        return models.RubricCell.objects.get_or_create(
+        :param validated_data: Dictionary with fields
+        :param context: Dictionary with context information
+        :return: New object
+        """
+        action = context['action']
+        column_data = validated_data.pop('column')
+        column = action.workflow.columns.get(name=column_data['name'])
+
+        return models.RubricCell.objects.create(
             action=action,
-            column=action.workflow.columns.get(
-                name=validated_data['column']['name']),
-            loa_position=validated_data['loa_position'],
-            description_text=validated_data['description_text'],
-            feedback_text=validated_data['feedback_text'])
+            column=column,
+            **validated_data)
 
     class Meta:
         """Define the model and select fields to seralize."""
@@ -172,27 +180,11 @@ class RubricCellSerializer(serializers.ModelSerializer):
 
 
 class ActionSerializer(serializers.ModelSerializer):
-    """Action serializer recursively traversing conditions but not columns.
+    """Action serializer.
 
-    The serializer does not create any columns and relies on them being
-    already created and receiving only the names
+    The serializer does not create any columns and assumes they exist.
     """
-
     conditions = ConditionSerializer(required=False, many=True)
-
-    # Although filter is a single object, it is encoded as a ForeignKey and
-    # therefore, whenever accessing filter, a QuerySet is returned (not a
-    # single object) so the serializer needs to process it as a list
-    filter = FilterSerializer(required=False, many=True)
-
-    # The columns field is a legacy construct. It needs a nested serializer
-    # because at this point,
-    # the column objects must contain only the name (not the entire model).
-    # An action is connected to a workflow which has a set of columns
-    # attached to it. Thus, the column records are created through the
-    # workflow structure, and at this point in the model, only the names are
-    # required to then restore the many to many relationship.
-    columns = ColumnNameSerializer(required=False, many=True)
 
     # Include the related ActionColumnConditionTuple objects
     column_condition_pair = ColumnConditionNameSerializer(
@@ -202,159 +194,83 @@ class ActionSerializer(serializers.ModelSerializer):
     # Include the RubricCell objects
     rubric_cells = RubricCellSerializer(many=True, required=False)
 
-    # Needed for backward compatibility
-    is_out = serializers.BooleanField(required=False, initial=True)
-
-    content = serializers.CharField(  # noqa Z110
-        required=False,
-        initial='',
-        allow_blank=True)
-
     attachments = ViewNameSerializer(required=False, many=True)
 
+    filter = FilterSerializer(required=False, many=False, allow_null=True)
+
     @staticmethod
-    def create_column_condition_pairs(
-        validated_data,
-        action_obj,
-        wflow_columns,
-    ):
-        """Create the column_condition pairs.
+    def create_action(validated_data, context: Dict) -> models.Action:
+        """Create an action with the validated data and context.
 
-        :param validated_data: Source data
-        :param action_obj: action hosting the condition
-        :param wflow_columns: All the columns available
-        :return: Create the objects and store them in the DB
+        :param validated_data: Dictionary with the basic data
+        :param context: Dictionary with context information
+        :return: New action
         """
-        field_data = validated_data.get('columns', [])
-        if field_data:
-            # Load the columns pointing to the action (if any) LEGACY FIELD!!
-            columns = ColumnNameSerializer(
-                data=field_data,
-                many=True,
-                required=False)
+        workflow = context['workflow']
 
-            if columns.is_valid():
-                # Legacy field "columns". Iterate over the names and create
-                # the triplets.
-                # First get the column names returned by the serailizer
-                column_names = [col_data['name'] for col_data in columns.data]
-                # List for bulk creation of objects
-                bulk_list = [
-                    models.ActionColumnConditionTuple(
-                        action=action_obj,
-                        column=col,
-                        condition=None,
-                    )
-                    for col in wflow_columns if col.name in column_names
-                ]
-                # Create the objects
-                models.ActionColumnConditionTuple.objects.bulk_create(
-                    bulk_list)
-            else:
-                raise Exception(_('Invalid column data'))
+        # Store the elements that need further processing
+        filter_data = validated_data.pop('filter', None)
+        conditions_data = validated_data.pop('conditions', [])
+        attachments_data = validated_data.pop('attachments', [])
+        column_condition_data = validated_data.pop('column_condition_pair', [])
+        rubric_cells_data = validated_data.pop('rubric_cells', [])
+        # no idea, but this field appears to be added here
+        validated_data.pop('user', None)
 
-        # Parse the column_condition_pair
-        column_condition_pairs = ColumnConditionNameSerializer(
-            data=validated_data.get('column_condition_pair', []),
-            many=True,
-            context={'action': action_obj})
+        # Create the action with the remaining elements
+        action_obj = models.Action.objects.create(
+            workflow=workflow,
+            **validated_data)
 
-        if column_condition_pairs.is_valid():
-            column_condition_pairs.save()
-        else:
-            raise Exception(_('Invalid column condition pair data'))
+        # Update the context to finish up processing
+        context['action'] = action_obj
 
-        # Parse the rubric_cell
-        rubric_cells = RubricCellSerializer(
-            data=validated_data.get('rubric_cells', []),
-            many=True,
-            context={'action': action_obj})
+        # Load the attachments in the action
+        view_names = [view_data['name'] for view_data in attachments_data]
+        action_obj.attachments.set(workflow.views.filter(name__in=view_names))
 
-        if rubric_cells.is_valid():
-            rubric_cells.save()
-        else:
-            raise Exception(_('Invalid rubric cell data'))
+        # Load the conditions pointing to the action
+        for condition_data in conditions_data:
+            ConditionSerializer.create_condition(condition_data, context)
+
+        # Load the filter pointing to the action
+        if filter_data:
+            action_obj.filter = FilterSerializer.create_filter(
+                filter_data,
+                context)
+
+        action_obj.save()
+
+        # Create the triplets action column condition
+        for acc_data in column_condition_data:
+            cname = acc_data.pop('column')['name']
+            cond_data = acc_data.pop('condition')
+            condition = None
+            if cond_data:
+                condition = action_obj.conditions.filter(
+                    name=cond_data['name']).first()
+            models.ActionColumnConditionTuple.objects.create(
+                action=action_obj,
+                column=workflow.columns.filter(name=cname).first(),
+                condition=condition,
+                **acc_data)
+
+        # Create the rubric data
+        for rubric_cell_data in rubric_cells_data:
+            RubricCellSerializer.create_rubric(rubric_cell_data, context)
+
+        return action_obj
 
     @profile
-    def create(self, validated_data, **kwargs):
+    def create(self, validated_data):
         """Create the action.
 
         :param validated_data: Validated data
-        :param kwargs: Extra material (unused)
         :return: Create the action in the DB
         """
-        del kwargs
         action_obj = None
         try:
-            action_type = validated_data.get('action_type')
-            if not action_type:
-                if validated_data['is_out']:
-                    action_type = models.Action.PERSONALIZED_TEXT
-                else:
-                    action_type = models.Action.SURVEY
-
-            action_obj = models.Action(
-                workflow=self.context['workflow'],
-                name=validated_data['name'],
-                description_text=validated_data['description_text'],
-                action_type=action_type,
-                serve_enabled=validated_data['serve_enabled'],
-                active_from=validated_data['active_from'],
-                active_to=validated_data['active_to'],
-                text_content=validated_data.get(
-                    'content',
-                    validated_data.get('text_content'),  # Legacy
-                ),
-                target_url=validated_data.get('target_url', ''),
-                shuffle=validated_data.get('shuffle', False),
-            )
-            action_obj.save()
-
-            # Load the attachments in the action
-            attachments = ViewNameSerializer(
-                data=validated_data.get('attachments', []),
-                many=True,
-                required=False)
-            if attachments.is_valid():
-                view_names = [item['name'] for item in attachments.data]
-                action_obj.attachments.set([
-                    view for view in self.context['workflow'].views.all()
-                    if view.name in view_names
-                ])
-                action_obj.save()
-
-            # Load the conditions pointing to the action
-            condition_data = ConditionSerializer(
-                data=validated_data.get('conditions', []),
-                many=True,
-                context={
-                    'workflow': self.context['workflow'],
-                    'action': action_obj,
-                    'is_filter': False})
-            if condition_data.is_valid():
-                condition_data.save()
-            else:
-                raise Exception(_('Invalid condition data'))
-
-            # Load the filter pointing to the action
-            filter_data = FilterSerializer(
-                data=validated_data.get('filter', []),
-                many=True,
-                context={
-                    'workflow': self.context['workflow'],
-                    'action': action_obj,
-                    'is_filter': True})
-            if filter_data.is_valid():
-                filter_data.save()
-            else:
-                raise Exception(_('Invalid filter data'))
-
-            # Process the fields columns (legacy) and column_condition_pairs
-            self.create_column_condition_pairs(
-                validated_data,
-                action_obj,
-                self.context['workflow'].columns.all(),
-            )
+            action_obj = self.create_action(validated_data, self.context)
         except Exception:
             if action_obj and action_obj.id:
                 models.ActionColumnConditionTuple.objects.filter(
@@ -383,24 +299,110 @@ class ActionSelfcontainedSerializer(ActionSerializer):
 
     used_columns = ColumnSerializer(many=True, required=False)
 
-    attachments = ViewSerializer(many=True, required=False)
+    used_views = ViewSerializer(many=True, required=False)
 
-    def create(self, validated_data, **kwargs):
+    attachments = ViewNameSerializer(many=True, required=False)
+
+    def _process_columns(self, validated_data) -> List:
+        """Process the used_columns field of a serializer.
+
+        Verifies if the column is new or not. If not new, it verifies that is
+        compatible with the columns already existing in the workflow
+
+        :param validated_data: Object with the parsed column items
+        :return: List of new columns
+        """
+        new_columns = []
+        for citem in validated_data:
+            cname = citem.get('name')
+            if not cname:
+                raise Exception(
+                    _('Incorrect column name {0}.').format(cname))
+
+            # Search for the column in the workflow columns
+            col = self.context['workflow'].columns.filter(name=cname).first()
+            if not col:
+                # Accumulate the new columns just in case we have to undo
+                # the changes
+                if citem['is_key']:
+                    raise Exception(_(
+                        'Action contains non-existing key column "{0}"'
+                    ).format(cname))
+                new_columns.append(citem)
+                continue
+
+            # Processing an existing column. Check data type compatibility
+            is_not_compatible = (
+                col.data_type != citem.get('data_type')
+                or col.is_key != citem['is_key']
+                or set(col.categories) != set(citem['categories']))
+            if is_not_compatible:
+                # The two columns are different
+                raise Exception(_(
+                    'Imported column {0} is different from existing '
+                    + 'one.').format(cname))
+
+        return [
+            ColumnSerializer.create_column(new_column_info, self.context)
+            for new_column_info in new_columns]
+
+    def _process_views(self, validated_data: Dict) -> List:
+        """Process the used_views field of a serializer.
+
+        Verifies that views are all new (no name collisions) and creates
+        them.
+
+        :param validated_data: Object with the parsed view items
+        :return: List of new views
+        """
+        workflow = self.context['workflow']
+        view_names = [view_data['name'] for view_data in validated_data]
+        if workflow.views.filter(name__in=view_names).exists():
+            raise Exception(_(
+                'The new action creates duplicate view names'))
+
+        return [
+            ViewSerializer.create_view(view_data, self.context)
+            for view_data in validated_data]
+
+    def create(self, validated_data):
         """Create the Action object with the validated data."""
-        if not self.context['workflow'].has_data_frame():
+
+        workflow = self.context['workflow']
+
+        if not workflow.has_data_frame():
             # Cannot create actions with an empty workflow
             raise Exception(_(
                 'Unable to import action '
                 + ' in a workflow with and empty data table'))
 
+        name = validated_data['name']
+        action_obj = workflow.actions.filter(name=name).first()
+        if action_obj:
+            # Name collision
+            raise Exception(_(
+                'Action with name "{0}" already exists'.format(name)))
+
+        # Insert filter map
+        self.context['filter_map'] = {}
+
         new_columns = []
         try:
-            new_columns = _process_columns(
-                validated_data['used_columns'],
-                self.context)
+            new_columns = self._process_columns(
+                validated_data.pop('used_columns'))
+
+            new_views = self._process_views(validated_data.pop('used_views'))
+
+            attachments_data = validated_data.pop('attachments', [])
 
             # Create the action, conditions and columns/condition-column pairs
-            action_obj = super().create(validated_data, **kwargs)
+            action_obj = super().create(validated_data)
+
+            # Load the attachments in the action
+            att_names = [att_data['name'] for att_data in attachments_data]
+            action_obj.attachments.set(
+                [view for view in new_views if view.name in att_names])
+
         except Exception:
             if new_columns:
                 for col in new_columns:

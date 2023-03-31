@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
 
-from ontask import models
+from ontask import models, core
 from ontask.action.serializers import ActionSerializer
 from ontask.column.serializers import ColumnSerializer
 from ontask.dataops import pandas
@@ -59,7 +59,7 @@ class WorkflowListSerializer(serializers.ModelSerializer):
         """Select model and fields to consider."""
 
         model = models.Workflow
-        fields = ('id', 'name', 'description_text', 'attributes')
+        fields = ['id', 'name', 'description_text', 'attributes']
 
 
 class WorkflowExportSerializer(serializers.ModelSerializer):
@@ -71,8 +71,6 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
     regular one for the action field (see WorkflowImportSerializer)
     """
 
-    actions = serializers.SerializerMethodField()
-
     data_frame = DataFramePandasField(
         required=False,
         allow_null=True,
@@ -83,14 +81,11 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
 
     columns = ColumnSerializer(many=True, required=False)
 
+    actions = serializers.SerializerMethodField()
+
     views = ViewSerializer(many=True, required=False)
 
-    version = serializers.CharField(
-        read_only=True,
-        default='NO VERSION',
-        allow_blank=True,
-        label='OnTask Version',
-        help_text=_('To guarantee compability'))
+    version = core.OnTaskVersionField()
 
     def get_actions(self, workflow: models.Workflow) -> List[models.Action]:
         """Get the list of selected actions."""
@@ -100,12 +95,9 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             # serializer
             return []
 
-        # Execute the query set
-        query_set = workflow.actions.filter(id__in=action_list)
-
         # Serialize the content and return data
         serializer = ActionSerializer(
-            instance=query_set,
+            instance=workflow.actions.filter(id__in=action_list),
             many=True,
             required=False)
 
@@ -114,44 +106,46 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
     @profile
     def create(self, validated_data, **kwargs):
         """Create the new workflow."""
+        version = validated_data.pop('version', None)
+
         wflow_name = self.context.get('name')
-        if not wflow_name:
-            wflow_name = self.validated_data.get('name')
+        if wflow_name:
+            validated_data['name'] = wflow_name
+        else:
+            wflow_name = validated_data.get('name')
             if not wflow_name:
                 raise Exception(_('Unexpected empty workflow name.'))
 
-            if models.Workflow.objects.filter(
-                name=wflow_name,
-                user=self.context['user']
-            ).exists():
-                raise Exception(_(
-                    'There is a workflow with this name. '
-                    + 'Please provide a workflow name in the import page.'))
+        if models.Workflow.objects.filter(
+            name=wflow_name,
+            user=self.context['user']
+        ).exists():
+            raise Exception(_(
+                'There is a workflow with this name. '
+                + 'Please provide a workflow name in the import page.'))
 
-        # Initial values
+        # Insert filter map
+        self.context['filter_map'] = {}
+
+        # Get the fields to process later
+        columns_data = validated_data.pop('columns', [])
+        data_frame_data = validated_data.pop('data_frame')
+        views_data = validated_data.pop('views', [])
+        actions_data = validated_data.pop('actions', [])
+
+        # Create the workflow
         workflow_obj = None
         try:
-            workflow_obj = models.Workflow(
+            workflow_obj = models.Workflow.objects.create(
                 user=self.context['user'],
-                name=wflow_name,
-                description_text=validated_data['description_text'],
-                nrows=0,
-                ncols=0,
-                attributes=validated_data['attributes'],
-                query_builder_ops=validated_data.get('query_builder_ops', {}),
-            )
-            workflow_obj.save()
+                **validated_data)
+            self.context['workflow'] = workflow_obj
 
-            # Create the columns
-            column_data = ColumnSerializer(
-                data=validated_data.get('columns', []),
-                many=True,
-                context={'workflow': workflow_obj})
-            # And save its content
-            if column_data.is_valid():
-                columns = column_data.save()
-            else:
-                raise Exception(_('Unable to save column information'))
+            # Create the columns but don't add them to the df table
+            self.context['add_to_df_table'] = False
+            columns = [
+                ColumnSerializer.create_column(column_data, self.context)
+                for column_data in columns_data]
 
             # If there is any column with position = 0, recompute (this is to
             # guarantee backward compatibility.
@@ -161,46 +155,22 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
                     col.save()
 
             # Load the data frame
-            data_frame = validated_data.get('data_frame')
-            if data_frame is not None:
+            if data_frame_data is not None:
                 # Store the table in the DB
                 pandas.store_table(
-                    data_frame,
+                    data_frame_data,
                     workflow_obj.get_data_frame_table_name(),
-                    dtype={
-                        col.name: col.data_type
-                        for col in workflow_obj.columns.all()
-                    },
-                )
-
-                # Reconcile now the information in workflow and columns with
-                # the one loaded
-                workflow_obj.ncols = validated_data['ncols']
-                workflow_obj.nrows = validated_data['nrows']
-
-                workflow_obj.save()
+                    dtype={col.name: col.data_type for col in columns})
 
             # Create the views pointing to the workflow
-            view_data = ViewSerializer(
-                data=validated_data.get('views', []),
-                many=True,
-                context={'workflow': workflow_obj, 'columns': columns})
+            self.context['columns'] = columns
+            views = [
+                ViewSerializer.create_view(view_data, self.context)
+                for view_data in views_data]
 
-            if view_data.is_valid():
-                view_data.save()
-            else:
-                raise Exception(_('Unable to save view information'))
-
-            # Create the actions pointing to the workflow
-            action_data = ActionSerializer(
-                data=validated_data.get('actions', []),
-                many=True,
-                context={'workflow': workflow_obj, 'columns': columns})
-
-            if action_data.is_valid():
-                action_data.save()
-            else:
-                raise Exception(_('Unable to save action information'))
+            self.context['views'] = views
+            for action_data in actions_data:
+                ActionSerializer.create_action(action_data, self.context)
 
         except Exception:
             # Get rid of the objects created
@@ -215,8 +185,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
         """Select model and fields to exclude."""
 
         model = models.Workflow
-        exclude = (
-            'id',
+        exclude = [
             'user',
             'created',
             'modified',
@@ -227,8 +196,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
             'luser_email_column',
             'luser_email_column_md5',
             'lusers',
-            'lusers_is_outdated',
-        )
+            'lusers_is_outdated']
 
 
 class WorkflowImportSerializer(WorkflowExportSerializer):

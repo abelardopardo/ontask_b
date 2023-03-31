@@ -23,6 +23,8 @@ from ontask.core.session_ops import (
 )
 from ontask.core.tables import DataTablesServerSidePaging, OperationsColumn
 
+from ontask.core.serializers import OnTaskObjectIdField, OnTaskVersionField
+
 ONTASK_UPLOAD_FIELD_PREFIX = '___ontask___upload_'
 
 # Field prefix to use in forms to avoid using column names (they are given by

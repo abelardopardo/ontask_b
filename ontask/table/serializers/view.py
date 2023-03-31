@@ -5,7 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
-from ontask.column.serializers import ColumnNameSerializer
+from ontask.core import OnTaskObjectIdField
+from ontask.condition.serializers import FilterSerializer, ColumnNameSerializer
 
 
 class ViewSerializer(serializers.ModelSerializer):
@@ -17,38 +18,38 @@ class ViewSerializer(serializers.ModelSerializer):
 
     columns = ColumnNameSerializer(required=False, many=True)
 
-    def create(self, validated_data, **kwargs):
-        """Create the View object."""
-        view_obj = None
-        try:
-            view_obj = models.View(
-                workflow=self.context['workflow'],
-                name=validated_data['name'],
-                description_text=validated_data['description_text'],
-                _formula=validated_data['_formula'],
-            )
-            view_obj.save()
+    filter = FilterSerializer(required=False, many=False, allow_null=True)
 
-            # Load the columns in the view
-            columns = ColumnNameSerializer(
-                data=validated_data.get('columns'),
-                many=True,
-                required=False,
-            )
-            if columns.is_valid():
-                view_column_names = [col['name'] for col in columns.data]
-                view_obj.columns.set([
-                    col for col in self.context['columns']
-                    if col.name in view_column_names
-                ])
-                view_obj.save()
-            else:
-                raise Exception(_('Incorrect column data'))
+    @staticmethod
+    def create_view(validated_data, context) -> models.View:
+        workflow = context['workflow']
+        columns_data = validated_data.pop('columns', [])
+        filter_data = validated_data.pop('filter', None)
 
-        except Exception:
-            if view_obj and view_obj.id:
-                view_obj.delete()
-            raise
+        if workflow.views.filter(name=validated_data['name']).exists():
+            raise Exception(_(
+                'View with name {0} already exists').format(
+                validated_data['name']))
+
+        view_obj = models.View.objects.create(
+            workflow=workflow,
+            **validated_data)
+
+        columns = []
+        for c_data in columns_data:
+            column = workflow.columns.filter(name=c_data['name']).first()
+            if column is None:
+                raise Exception(_('Invalid column name {0}').format(
+                    c_data['name']))
+            columns.append(column)
+        view_obj.columns.set(columns)
+
+        if filter_data:
+            view_obj.filter = FilterSerializer.create_filter(
+                filter_data,
+                context)
+
+        view_obj.save()
 
         return view_obj
 
@@ -56,11 +57,8 @@ class ViewSerializer(serializers.ModelSerializer):
         """Set the model and fields to exclude."""
 
         model = models.View
-        exclude = (
-            'id',
-            'workflow',
-            'created',
-            'modified')
+        exclude = ['id', 'workflow', 'created', 'modified']
+
 
 class ViewNameSerializer(serializers.ModelSerializer):
     """Trivial serializer to dump only the name of the view."""
@@ -69,4 +67,4 @@ class ViewNameSerializer(serializers.ModelSerializer):
         """Select the model and the only field required."""
 
         model = models.View
-        fields = ('name',)
+        fields = ['name']
