@@ -1,0 +1,52 @@
+#
+# Essential modules
+#
+# 1. Create a new env:
+#    python3 -m venv ~/.virtualenvs/env
+# 2. Activate:
+#    source ~/.virtualenvs/env/bin/activate
+# 3. Upgrade pip
+#    python3 -m pip install --upgrade pip
+# 3. Install essential:
+#    LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip install -r requirements/essential.txt
+# 4. LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip freeze | sort > requirements/freeze.txt
+# 5. python3 -m pip check
+# 6. Copy freeze.txt into base.txt
+# 7. Move lines in base.txt to development.txt
+#
+Django[argon2]
+celery
+django-environ
+django-extensions
+django-celery-beat
+django-celery-results
+django-bootstrap-datepicker-plus
+drf-yasg
+django-crispy-forms
+sorl-thumbnail
+django-widget-tweaks
+django-formtools
+django-siteprefs==1.2.1  # Creates a bug when migrating
+django-tables2
+django-import-export
+django-summernote
+django-jquery
+email-validator
+psycopg2
+pandas==0.25.3  # Hold before migrating to 1.0, breaks NULLs and various others thing
+SQLAlchemy
+django-fernet-fields
+django-datetime-widget
+PyAthena
+smart-open
+cron-descriptor
+future
+html2text
+django-braces
+django-redis
+Pillow
+Sphinx
+selenium
+coverage
+supervisor
+django-debug-toolbar
