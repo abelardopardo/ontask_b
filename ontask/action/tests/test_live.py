@@ -564,7 +564,6 @@ class ActionActionZip(
     """
 
     def test(self):
-        """Test ZIP action."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -671,7 +670,6 @@ class ActionSendReportActionCreate(
     action_text = 'Dear sir/madam\\nHere is the student list: '
 
     def test(self):
-        """Send Report action after creating and editing."""
         workflow = models.Workflow.objects.get(name=self.wflow_name)
         view = workflow.views.all().first()
 
@@ -792,7 +790,6 @@ class ActionJSONReportActionCreate(
     action_text = '{ "student_list": {% ot_insert_report "email" %} }'
 
     def test(self):
-        """Create and edit a list action."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -858,7 +855,6 @@ class ActionServeLongSurvey(tests.LongSurveyFixture, tests.OnTaskLiveTestCase):
     action_name = 'survey'
 
     def test(self):
-        """Test the serve_action view with a long number of entries."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -885,7 +881,6 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
     action_name = 'survey'
 
     def test(self):
-        """Test the creation of a rubric action."""
         # Login
         self.login('instructor01@bogus.com')
 
@@ -995,8 +990,6 @@ class ActionIndexSelector(
     user_pwd = 'boguspwd'
 
     def test(self):
-        """Test the action selector."""
-
         self.login('instructor01@bogus.com')
         workflow = models.Workflow.objects.get(name=self.wflow_name)
 
