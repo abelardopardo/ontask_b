@@ -32,7 +32,7 @@ Due to the potentially large size of the workflow table in either number of rows
 
 The title at the top of the page is the view's name. The buttons to the right of the name perform the following operations:
 
-|fa-pencil| Edit
+|fa-pencil-alt| Edit
   Edit the view: name, description, set of columns to show and row filter
 
 |fa-clone| Clone

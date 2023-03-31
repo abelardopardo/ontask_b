@@ -125,7 +125,7 @@ The table showing all the action scheduling operations can be access through the
 
 The operations available for each scheduled execution are:
 
-|fa-pencil| Edit
+|fa-pencil-alt| Edit
   Edit the elements in the scheduled operation.
 
 |fa-eye| View details

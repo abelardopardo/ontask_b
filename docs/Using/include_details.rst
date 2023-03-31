@@ -25,7 +25,7 @@ The buttons at the top of the page offer the following operations:
 
 .. _details_rename:
 
-|fa-pencil| Rename
+|fa-pencil-alt| Rename
   This functionality allows to change either the name or the description of the workflow.
 
   .. figure:: /scaptures/workflow_rename.png
@@ -70,7 +70,7 @@ Attributes
   .. figure:: /scaptures/workflow_attributes.png
      :align: center
 
-  The |fa-plus| *Attribute* button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The |fa-pencil| icon opens the form to edit its content. The |fa-trash| icon deletes the attribute.
+  The |fa-plus| *Attribute* button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The |fa-pencil-alt| icon opens the form to edit its content. The |fa-trash| icon deletes the attribute.
 
   The use of these attributes is to facilitate a single point of change when a value appears in multiple locations. For example, every personalized text action is singed with the name of the instructor. If that name changes, all actions need to be edited. On the other hand, if the actions contain the name of an attribute, just changing the attribute value propagates the change to all actions.
 
@@ -140,7 +140,7 @@ Position (#)
 Operations
   The operations available for columns are:
 
-  |fa-pencil| Edit
+  |fa-pencil-alt| Edit
     Change the name, description, unique and values allowed in the column. If the field *Has unique values per row* property is modified, OnTask checks if the values satisfy this condition.
 
     .. figure:: /scaptures/workflow_column_edit.png
@@ -152,7 +152,7 @@ Operations
   |fa-clone| Clone
     Clones the column in the workflow changing its name adding the prefix *Copy of* to the name.
 
-  |fa-bar-chart| Statistics (only for non-key columns)
+  |fa-chart-bar| Statistics (only for non-key columns)
     Shows a statistical summary of the values in the column. If the data type is *number*, the summary includes information about quartiles, a boxplot, and a histogram. For the rest of data types, the summary only includes the histogram.
 
   |fa-compress| Restrict

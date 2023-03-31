@@ -70,6 +70,7 @@ language = None
 # This patterns also effect to html_static_path and html_extra_path
 exclude_patterns = [
     '_build',
+    'Install/*.rst',
     'Thumbs.db',
     '.DS_Store',
     'Scenarios/scenario_04*',
@@ -184,126 +185,70 @@ rst_prolog = '.. |ontask_version| replace:: %s\n' % version
 rst_prolog += """
 .. |fa-book| raw:: html
 
-   <span class="fa fa-book"></span>
-   
-.. |fa-pencil| raw:: html
+# -- Add fontawesome icons --------------------------------------------------
+fontawesome_icons = [
+   "fa-angle-double-right",
+   "fa-angle-left",
+   "fa-angle-right",
+   "fa-arrow-left",
+   "fa-book",
+   "fa-calendar",
+   "fa-chart-bar",
+   "fa-chart-line",
+   "fa-check",
+   "fa-check-circle",
+   "fa-check-square",
+   "fa-clock",
+   "fa-clone",
+   "fa-code",
+   "fa-cog",
+   "fa-cogs",
+   "fa-comments",
+   "fa-compress",
+   "fa-download",
+   "fa-envelope-square",
+   "fa-exclamation-triangle",
+   "fa-eye",
+   "fa-file-alt",
+   "fa-file-archive",
+   "fa-file-code",
+   "fa-filter",
+   "fa-home",
+   "fa-link",
+   "fa-minus-square",
+   "fa-paperclip",
+   "fa-pencil-alt",
+   "fa-plus",
+   "fa-question-circle",
+   "fa-rocket",
+   "fa-save",
+   "fa-share-square",
+   "fa-star",
+   "fa-step-backward",
+   "fa-step-forward",
+   "fa-table",
+   "fa-tasks",
+   "fa-trash",
+   "fa-upload",
+   "fa-user",
+]
 
-   <span class="fa fa-pencil"></span>
-   
-.. |fa-clone| raw:: html
+rst_prolog += '\n'.join([
+    '.. |{0}| raw:: html\n\n   <span class="fa {0}"></span>\n'.format(icon_name)
+    for icon_name in fontawesome_icons
+])
 
-   <span class="fa fa-clone"></span>
-   
-.. |fa-minus-square| raw:: html
-
-   <span class="fa fa-minus-square"></span>
-   
-.. |fa-trash| raw:: html
-
-   <span class="fa fa-trash"></span>
-   
-.. |fa-plus| raw:: html
-
-   <span class="fa fa-plus"></span>
-   
-.. |fa-eye| raw:: html
-
-   <span class="fa fa-eye"></span>
-   
-.. |fa-dashboard| raw:: html
-
-   <span class="fa fa-dashboard"></span>
-
-.. |fa-download| raw:: html
-
-   <span class="fa fa-download"></span>
-
-.. |fa-clock-o| raw:: html
-
-   <span class="fa fa-clock-o"></span>
-
-.. |fa-upload| raw:: html
-
-   <span class="fa fa-upload"></span>
-
-.. |fa-bar-chart| raw:: html
-
-   <span class="fa fa-bar-chart"></span>
-
-.. |fa-calendar| raw:: html
-
-   <span class="fa fa-calendar"></span>
-
-.. |fa-home| raw:: html
-
-   <span class="fa fa-home"></span>
-
-.. |fa-table| raw:: html
-
-   <span class="fa fa-table"></span>
-
-.. |fa-comments| raw:: html
-
-   <span class="fa fa-comments"></span>
-
-.. |fa-rocket| raw:: html
-
-   <span class="fa fa-rocket"></span>
-
-.. |fa-link| raw:: html
-
-   <span class="fa fa-link"></span>
-
-.. |fa-file-archive-o| raw:: html
-
-   <span class="fa fa-file-archive-o"></span>
-
-.. |fa-floppy-o| raw:: html
-
-   <span class="fa fa-floppy-o"></span>
-
-.. |fa-check| raw:: html
-
-   <span class="fa fa-check"></span>
-
-.. |fa-cog| raw:: html
-
-   <span class="fa fa-cog"></span>
-
-.. |fa-compress| raw:: html
-
-   <span class="fa fa-compress"></span>
-
-.. |fa-step-forward| raw:: html
-
-   <span class="fa fa-step-forward"></span>
-
-.. |fa-step-backward| raw:: html
-
-   <span class="fa fa-step-backward"></span>
-
-.. |fa-user| raw:: html
-
-   <span class="fa fa-user"></span>
-
-.. |fa-database| raw:: html
-
-   <span class="fa fa-database"></span>
-
-.. |fa-cogs| raw:: html
-
-   <span class="fa fa-cogs"></span>
-
-.. |fa-star-o| raw:: html
-
-   <span class="fa fa-star-o"></span>
-"""
+rst_prolog += '\n.. |test-all-icons| raw:: html\n\n   <ul>'
+rst_prolog += '\n'.join([
+    '   <li><span class="fa {0}"></span></li>'.format(icon_name)
+    for icon_name in fontawesome_icons
+])
+rst_prolog += '\n   </ul>'
 
 
 def setup(app):
     """Add additional stylesheets."""
     app.add_css_file('css/custom.css')  # may also be an URL
     app.add_css_file(
-        'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/'
-        'css/font-awesome.min.css'
+        'https://use.fontawesome.com/releases/v5.0.10/css/all.css'
     )

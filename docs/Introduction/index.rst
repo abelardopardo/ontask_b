@@ -28,8 +28,9 @@ The existing data is uploaded and stored in a table so that instructors and desi
 
 The rest of the document is divided into the following blocks:
 
-:ref:`Installation <install>`
-  This block covers the technical details to download, install and configure the tool. It requires technological expertise and access to the adequate computing facilities (a virtual machine, a server, or similar). The main audience of this part is system administrators and advanced users that want to use the tool within their institution or for their own use.
+..
+   :ref:`Installation <install>`
+     This block covers the technical details to download, install and configure the tool. It requires technological expertise and access to the adequate computing facilities (a virtual machine, a server, or similar). The main audience of this part is system administrators and advanced users that want to use the tool within their institution or for their own use.
 
 :ref:`Using the tool <using>`
   This block explains how to use OnTask in the context of alearning experience, how to load data, manipulate the table and create the personalized actions. The audience for this part is teachers and designers that need to personalize the interactions they have with learners in a platform offering some data sources.

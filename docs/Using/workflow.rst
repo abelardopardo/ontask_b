@@ -53,7 +53,7 @@ The icons in the bottom of this element allow you to perform the following opera
      :align: center
      :width: 100%
 
-|fa-pencil| *Change name or description*
+|fa-pencil-alt| *Change name or description*
   Changes the name of the description given to the workflow.
 
 |fa-clone| *Create a duplicate*
@@ -65,7 +65,7 @@ The icons in the bottom of this element allow you to perform the following opera
 |fa-trash| *Delete the workflow*
   Delete the workflow from the system.
 
-|fa-star-o| *Mark as favourite*
+|fa-star| *Mark as favourite*
   Mark the workflow as favourite to be shown at the top of the screen.
 
 When a workflow is open, the top-bar menu appears with the structure shown in the following figure.

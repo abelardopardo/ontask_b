@@ -7,7 +7,7 @@ Actions
     vision"
     -- Dalai Lama
 
-This is the most important functionality of the platform. Actions are used exchange information with the learners or other platforms, either through personalized information, or requesting data through a survey. A workflow contains a set of actions shown when selecting |fa-comments| *Actions* page in the top-bar menu. The next figure shows an example of the actions available in one workflow.
+This is the most important functionality of the platform. Actions are used to exchange information with the learners, instructors, advisors or other platforms, either through personalized information, or requesting data through a survey. A workflow contains a set of actions shown when selecting the |fa-comments| *Actions* link in the top-bar menu. The next figure shows an example of the actions available in a workflow.
 
 .. figure:: /scaptures/actions.png
    :align: center
@@ -24,43 +24,71 @@ The buttons at the top of the page offer the following operations:
 |fa-download| Export actions
   Download a file with any of the actions in the workflow.
 
-|fa-clock-o| Timeline
+|fa-clock| Timeline
   Display the time line showing when the actions in the workflow have been executed.
 
-The actions in the workflow are shown in a tabular format. For each action the following main operations are offered:
+There platform supports the following action types:
 
-|fa-pencil| Edit
-  Edit the content of the action
+|fa-file-alt| :ref:`Personalized Text <personalized_content>`
+  Create a text *template* with content that can be included/excluded depending on a set of pre-defined conditions. The text can be either sent to the learner or embedded as part of a page in the LMS
 
-|fa-rocket| Run
-  Use the action to either provide personalized content or run a survey (see :ref:`running_actions` for more information)
+|fa-share-square| :ref:`Send Report <email_report_action>`
+  Create a message containing a subset of the data in the table to be sent to an instructor or advisor. The action may also include portions of the data table as attachments. This action is useful to automatically notify an instructor about a set of learners that satisfy certain condition.
+
+|fa-tasks| :ref:`Personalized Rubric <personalized_rubric>`
+  Create a message containing a list of suggestions based on the categories and levels of attainment previously defined in a rubric.
+
+|fa-question-circle| :ref:`Survey <surveys>`
+  A simple survey engine to use columns as questions and capture responses directly as data in the workflow table.
+
+|fa-check-square| TODO list
+  A special version of the survey in which the items are TODO items that can be marked as completed (under development).
+
+|fa-envelope-square| :ref:`Personalized Canvas Email <personalized_canvas_email>`
+  Functionality identical to the personalized text but the message is sent through the Canvas Email functionality (messages must be on plain-text format).
+
+|fa-code| :ref:`Personalized JSON object <personalized_json>`
+  Send a JSON object with the fields personalized based on the conditions.
+
+|fa-file-code| :ref:`JSON report <json_report_action>`
+  Send a JSON report including a subset of the table data to a given URL.
+
+The following operations are available for the actions.
+
+Edit
+  Edit the content of the action simply by clicking in the body of the box representing the action.
 
 |fa-eye| Preview
   See the content of the action when considered for each user (if applicable)
 
+|fa-clone| Clone
+  Create an exact duplicate of the action adding the prefix "Copy_of" to its name.
+
+|fa-pencil-alt| Rename
+  Edit the name and description of the action.
+
+|fa-trash| Delete
+  Remove the action from the workflow.
+
+|fa-rocket| Run
+  Use the action to either provide personalized content or run a survey (see :ref:`running_actions` for more information)
+
+The following additional operations are available clicking in the right-most icon for each action.
+
 |fa-link| URL
   Provide access to learners to the content of the action through a link (only available for actions of type Personalized Text)
 
-|fa-file-archive-o| ZIP
+|fa-file-archive| ZIP
   Download a ZIP file with as many files as selected learners in the action. Each file contains the personalized document for the learner (only available for Personalized Text actions)
 
-|fa-clock-o| Timeline
+|fa-clock| Timeline
   See when the action has been executed
 
 |fa-calendar| Schedule
   Schedule the execution of the action for some time in the future
 
-|fa-pencil| Rename
-  Edit the name and description of the action.
-
-|fa-clone| Clone
-  Create an exact duplicate of the action adding the prefix "Copy_of" to its name.
-
 |fa-download| Export
   Download a file containing the definition of the action suitable to be uploaded into another workflow.
-
-|fa-trash| Delete
-  Remove the action from the workflow.
 
 .. _personalized_content:
 
@@ -93,12 +121,11 @@ The filter
      :align: center
      :width: 100%
 
-  The button *Set view as filter* allows to use the condition previously defined on a :ref:`table view <table_views>` with a formula that select a subset of table rows. When setting the filter in this way, the existing expression is lost. The button *Column statistics* offers data visualisations for each column.
-
+  The button *Set view as filter* allows to use the condition previously defined on a :ref:`table view <table_views>` with a formula that select a subset of table rows. When setting the filter in this way, the existing expression is lost.
 
   The filter element shows the name, description, and the formula defined. The icons at the bottom of the object provide access to the following operations:
 
-  |fa-pencil| Edit
+  |fa-pencil-alt| Edit
     Edit the name, description, and formula of the filter.
 
   |fa-trash| Delete
@@ -127,14 +154,13 @@ Text conditions
      :align: center
      :width: 100%
 
-  The button |fa-plus| *Condition* at the top of the tab opens the form to define a new condition. Once created
-  The buttons in the screen allow you to edit the expression, insert the condition to control the appearance of text in the editor (below), clone the condition, or delete it from the action. The button |fa-clone| *Clone other conditions* creates a duplicate of a condition used in any other action. The button |fa-bar-chart| *Column statistics* allows to select a column and show a statistical summary of its values.
+  The button |fa-plus| *Condition* at the top of the tab opens the form to define a new condition. Once created, it can be used to control the appearance of text in the editor (below). The button |fa-clone| *Clone other conditions* creates a duplicate of a condition used in any other action.
 
   Each condition shows the number of learners for which the expression in that condition evaluates to **True** (if this value is zero, it means that any text you include in the editor controlled by this condition will not appear for any of the learners), the name, description, and the defined formula.
 
   The icons in the bottom of the condition element allow the following operations:
 
-  |fa-pencil| Edit
+  |fa-pencil-alt| Edit
     Open a form to edit the name, description and expression in a condition.
 
   |fa-clone| Clone
@@ -157,6 +183,9 @@ Text conditions
 
 The buttons at the top of the page offer the following operations:
 
+|fa-chart-bar| *Column statistics*
+  Selects a column and shows a statistical summary of its values.
+
 |fa-eye| Preview
   The Preview button shows how the text in the editor is shown for those
   learners selected by the filter (if any). After clicking in the button you
@@ -171,7 +200,7 @@ The buttons at the top of the page offer the following operations:
   Use the arrow buttons to see all the different versions of the text
   depending on the values stored in the table for each learner.
 
-|fa-floppy-o| Save
+|fa-save| Save
   This button saves the content of the text editor and continues in the same editor page.
 
 |fa-check| Close

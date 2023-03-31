@@ -26,7 +26,7 @@ You can always click on the |fa-home| *Workflows* link at the left corner of the
 Each workflow is represented by an element showing its name, description, size of the table, and number of actions. Additionally, the icons in the bottom of the element allow the following operations:
 
   - |fa-book| *Open* the workflow for manipulation
-  - |fa-pencil| *Rename* and change the workflow description,
+  - |fa-pencil-alt| *Rename* and change the workflow description,
   - |fa-clone| *Clone* the workflow (create and exact replica with a modified name),
   - |fa-minus-square| *Delete data* in the workflow table, or
   - |fa-trash| *Delete* the workflow.

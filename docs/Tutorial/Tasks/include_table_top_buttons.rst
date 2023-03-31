@@ -13,10 +13,10 @@ The buttons at the top of the page offer the following functions:
 |fa-eye| Views
   A view is a screen showing a subset of rows and/or columns in the table. Clicking in the **Views** shows options to create a new view, show the data in a view, or go back to the full table view.
 
-|fa-dashboard| Dashboard
+|fa-chart-line| Dashboard
   The dashboard shows a statistical summary for the columns shown in the table. This number may be too high, so you should consider using table views to reduce the amount of information shown in the dashboard.
 
-|fa-bar-chart| Column statistics
+|fa-chart-bar| Column statistics
   This button allows to choose a non-key column and show an statistic summary of its values
 
 |fa-download| CSV Download

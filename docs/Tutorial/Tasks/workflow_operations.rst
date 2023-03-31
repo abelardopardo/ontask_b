@@ -13,7 +13,7 @@ The links at the top of the page offer the operations to:
 |fa-download| Export
   This functionality allows you to take all the information included in a workflow and export it. The functionality offers the option of including in the export only the data, or the data and the actions.
 
-|fa-pencil| Rename
+|fa-pencil-alt| Rename
   Use this function to change the name and description of the workflow.
 
 |fa-clone| Clone

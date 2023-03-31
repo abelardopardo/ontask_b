@@ -49,7 +49,7 @@ Once a connection is defined, as described in :ref:`sql_connection_run`, all the
 
 The operations allowed for each connection are:
 
-|fa-pencil| Edit
+|fa-pencil-alt| Edit
   Change any of the parameters of the connection
 
 |fa-eye| View
