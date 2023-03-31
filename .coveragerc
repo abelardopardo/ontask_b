@@ -1,8 +1,6 @@
 [paths]
 source = 
-    /Users/pardosa/ontask_aws_b/ontask
-    /private/var/lib/gitlab-runner/builds/eo3xH1js/0/abelardopardo/ontask_b_aws/ontask
-    /var/lib/gitlab-runner/builds/eo3xH1js/0/abelardopardo/ontask_b_aws/ontask
+    ontask
     .
     
 [run]
