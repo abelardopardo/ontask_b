@@ -286,7 +286,7 @@ class ConditionDetectAllFalseRows(ConditionTestBasic):
         self.select_text_tab()
         self.selenium.find_element_by_class_name('note-editable').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
+            """$('#id_text_content').summernote('editor.insertText',
             "{0}");""".format(self.action_text)
         )
 
