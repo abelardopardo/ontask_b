@@ -868,6 +868,27 @@
     }
 },
 {
+    "model": "ontask.action",
+    "pk": 2,
+    "fields": {
+        "name": "simple action",
+        "description_text": "action description text",
+        "created": "2017-11-06T22:15:41.165Z",
+        "modified": "2018-09-04T22:12:00.458Z",
+        "workflow": 5,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "serve_enabled": false,
+        "text_content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
     "model": "ontask.condition",
     "pk": 6,
     "fields": {
@@ -929,27 +950,6 @@
         "columns": [
             263
         ]
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 2,
-    "fields": {
-        "name": "simple action",
-        "description_text": "action description text",
-        "created": "2017-11-06T22:15:41.165Z",
-        "modified": "2018-09-04T22:12:00.458Z",
-        "workflow": 5,
-        "action_type": "personalized_text",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "<p>{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}</p>",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
     }
 },
 {

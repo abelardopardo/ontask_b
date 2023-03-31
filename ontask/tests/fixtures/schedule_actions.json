@@ -749,38 +749,6 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 1038,
-    "fields": {
-        "name": "Registered",
-        "description_text": "",
-        "created": "2017-12-08T01:33:21.687Z",
-        "modified": "2020-08-17T09:33:35.671Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "registered &equals; true and not empty",
-        "n_rows_selected": 1,
-        "workflow": 108,
-        "action": 253,
-        "columns": [
-            2929
-        ]
-    }
-},
-{
     "model": "ontask.filter",
     "pk": 1,
     "fields": {
@@ -802,10 +770,9 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 108,
         "description_text": "",
-        "action": 255,
         "columns": [
             2929
         ]
@@ -833,10 +800,9 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 108,
         "description_text": "",
-        "action": 257,
         "columns": [
             2929
         ]
@@ -864,10 +830,9 @@
             "condition": "AND"
         },
         "_formula_text": "age &gt; 12.0 and not empty",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 108,
         "description_text": "",
-        "action": 253,
         "columns": [
             2928
         ]
@@ -895,10 +860,9 @@
             "condition": "AND"
         },
         "_formula_text": "registered &equals; true and not empty",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 108,
         "description_text": "",
-        "action": 258,
         "columns": [
             2929
         ]
@@ -924,6 +888,7 @@
         "text_content": "<p>Hi {{ name }}</p><p>ATT:\u00a0{{ attribute name }}</p><p>COL:\u00a0{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
         "target_url": "",
         "shuffle": false,
+        "filter": 3,
         "attachments": []
     }
 },
@@ -945,6 +910,7 @@
         "text_content": "<p>Dear madam/sir</p><p>Here is the list of students: {% ot_insert_report 'email' %}<br></p>",
         "target_url": "",
         "shuffle": false,
+        "filter": 1,
         "attachments": []
     }
 },
@@ -987,6 +953,7 @@
         "text_content": "{\r\n    \"students\": {% ot_insert_report \"email\" %}\r\n}",
         "target_url": "",
         "shuffle": false,
+        "filter": 2,
         "attachments": []
     }
 },
@@ -1008,7 +975,40 @@
         "text_content": "<p>Hi {{ name }}</p><p>Welcome to the course!<br></p><p>ATT:&nbsp;{{ attribute name }}</p><p>Registered:&nbsp;{{ registered }}</p><p>When: {{ when }}<br></p>",
         "target_url": "",
         "shuffle": false,
+        "filter": 4,
         "attachments": []
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1038,
+    "fields": {
+        "name": "Registered",
+        "description_text": "",
+        "created": "2017-12-08T01:33:21.687Z",
+        "modified": "2020-08-17T09:33:35.671Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "registered &equals; true and not empty",
+        "n_rows_selected": 1,
+        "workflow": 108,
+        "action": 253,
+        "columns": [
+            2929
+        ]
     }
 },
 {

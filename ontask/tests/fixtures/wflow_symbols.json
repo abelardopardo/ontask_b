@@ -715,26 +715,6 @@
     }
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 1,
-    "fields": {
-        "action": 342,
-        "column": 4786,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 2,
-    "fields": {
-        "action": 342,
-        "column": 4784,
-        "condition": null,
-        "changes_allowed": true
-    }
-},
-{
     "model": "ontask.action",
     "pk": 342,
     "fields": {
@@ -774,6 +754,26 @@
         "target_url": "",
         "shuffle": false,
         "attachments": []
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 1,
+    "fields": {
+        "action": 342,
+        "column": 4786,
+        "condition": null,
+        "changes_allowed": true
+    }
+},
+{
+    "model": "ontask.actioncolumnconditiontuple",
+    "pk": 2,
+    "fields": {
+        "action": 342,
+        "column": 4784,
+        "condition": null,
+        "changes_allowed": true
     }
 },
 {

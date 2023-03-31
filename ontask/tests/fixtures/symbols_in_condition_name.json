@@ -610,6 +610,48 @@
     }
 },
 {
+    "model": "ontask.action",
+    "pk": 1,
+    "fields": {
+        "name": "bug 1",
+        "description_text": "",
+        "created": "2019-10-03T08:52:02.899Z",
+        "modified": "2019-10-03T08:52:02.899Z",
+        "workflow": 1,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "serve_enabled": false,
+        "text_content": "<p>Attribute = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ ATTR }}</p><p>Column = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1 }}</p><p>{% if c1<12.5 %}Condition 1{% endif %}</p><p>{% if c2>12.5 %}Condition 2{% endif %}</p><p>{% if c3>=12.5 %}Condition 3{% endif %}</p><p>{% if c4>=12.5 %}Condition 4{% endif %}<br></p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.action",
+    "pk": 2,
+    "fields": {
+        "name": "bug 2",
+        "description_text": "",
+        "created": "2019-10-03T08:52:05.377Z",
+        "modified": "2019-10-03T08:52:05.377Z",
+        "workflow": 1,
+        "action_type": "personalized_canvas_email",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "serve_enabled": false,
+        "text_content": "Attribute = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ ATTR }}\n\nColumn = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1 }}\n\n{% if c1<12.5 %}Condition 1{% endif %}\n\n\n{% if c2>12.5 %}Condition 2{% endif %}\n\n\n{% if c3>=12.5 %}Condition 3{% endif %}\n\n\n{% if c4>=12.5 %}Condition 4{% endif %}",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
     "model": "ontask.condition",
     "pk": 1,
     "fields": {
@@ -863,48 +905,6 @@
         "columns": [
             4
         ]
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 1,
-    "fields": {
-        "name": "bug 1",
-        "description_text": "",
-        "created": "2019-10-03T08:52:02.899Z",
-        "modified": "2019-10-03T08:52:02.899Z",
-        "workflow": 1,
-        "action_type": "personalized_text",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "<p>Attribute = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ ATTR }}</p><p>Column = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1 }}</p><p>{% if c1<12.5 %}Condition 1{% endif %}</p><p>{% if c2>12.5 %}Condition 2{% endif %}</p><p>{% if c3>=12.5 %}Condition 3{% endif %}</p><p>{% if c4>=12.5 %}Condition 4{% endif %}<br></p>",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 2,
-    "fields": {
-        "name": "bug 2",
-        "description_text": "",
-        "created": "2019-10-03T08:52:05.377Z",
-        "modified": "2019-10-03T08:52:05.377Z",
-        "workflow": 1,
-        "action_type": "personalized_canvas_email",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "Attribute = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ ATTR }}\n\nColumn = {{ !#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1 }}\n\n{% if c1<12.5 %}Condition 1{% endif %}\n\n\n{% if c2>12.5 %}Condition 2{% endif %}\n\n\n{% if c3>=12.5 %}Condition 3{% endif %}\n\n\n{% if c4>=12.5 %}Condition 4{% endif %}",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
     }
 },
 {

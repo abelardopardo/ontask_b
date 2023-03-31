@@ -13,7 +13,9 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser
 
 from ontask import models, tests
-from ontask.tests.compare import compare_conditions, compare_workflows
+from ontask.tests.compare import (
+    compare_conditions, compare_filters,
+    compare_workflows)
 from ontask.workflow import services
 
 
@@ -113,71 +115,6 @@ class WorkflowImportExportCycle(tests.OnTaskTestCase):
         self.assertIsNotNone(workflow, 'Incorrect import operation')
 
         compare_workflows(workflow, workflow2)
-
-        # Compare the workflows
-        self.assertEqual(workflow.description_text, workflow2.description_text)
-        self.assertEqual(workflow.nrows, workflow2.nrows)
-        self.assertEqual(workflow.ncols, workflow2.ncols)
-        self.assertEqual(workflow.attributes, workflow2.attributes)
-        self.assertEqual(workflow.query_builder_ops,
-            workflow2.query_builder_ops)
-
-        columns1 = workflow.columns.all()
-        columns2 = workflow2.columns.all()
-        self.assertEqual(columns1.count(), columns2.count())
-        for c1, c2 in zip(columns1, columns2):
-            self.assertEqual(c1.name, c2.name)
-            self.assertEqual(c1.description_text, c2.description_text)
-            self.assertEqual(c1.data_type, c2.data_type)
-            self.assertEqual(c1.is_key, c2.is_key)
-            self.assertEqual(c1.position, c2.position)
-            self.assertEqual(c1.categories, c2.categories)
-            self.assertEqual(c1.active_from, c2.active_from)
-            self.assertEqual(c1.active_to, c2.active_to)
-
-        actions1 = workflow.actions.all()
-        actions2 = workflow2.actions.all()
-        self.assertEqual(actions1.count(), actions2.count())
-        for a1, a2 in zip(actions1, actions2):
-            self.assertEqual(a1.name, a2.name)
-            self.assertEqual(a1.description_text, a2.description_text)
-            self.assertEqual(a1.action_type, a2.action_type)
-            self.assertEqual(a1.serve_enabled, a2.serve_enabled)
-            self.assertEqual(a1.active_from, a2.active_from)
-            self.assertEqual(a1.active_to, a2.active_to)
-            self.assertEqual(a1.rows_all_false, a2.rows_all_false)
-            self.assertEqual(a1.text_content, a2.text_content)
-            self.assertEqual(a1.target_url, a2.target_url)
-            self.assertEqual(a1.shuffle, a2.shuffle)
-            compare_conditions(a1.get_filter(), a2.get_filter())
-
-            conditions1 = a1.conditions.all()
-            conditions2 = a2.conditions.all()
-            self.assertEqual(conditions1.count(), conditions2.count())
-            for c1, c2 in zip(conditions1, conditions2):
-                self.assertEqual(c1.name, c2.name)
-                self.assertEqual(c1.description_text, c2.description_text)
-                self.assertEqual(c1.formula, c2.formula)
-                self.assertEqual(c1.columns.count(), c2.columns.count())
-                self.assertEqual(c1.n_rows_selected, c2.n_rows_selected)
-                self.assertEqual(c1.is_filter, c2.is_filter)
-
-                cl1 = c1.columns.all()
-                cl2 = c2.columns.all()
-                self.assertEqual(cl1.count(), cl2.count())
-                for x1, x2 in zip(cl1, cl2):
-                    self.assertEqual(x1.name, x2.name)
-
-            tuple1 = a1.column_condition_pair.all()
-            tuple2 = a2.column_condition_pair.all()
-            self.assertEqual(tuple1.count(), tuple2.count())
-            for titem1, titem2 in zip(tuple1, tuple2):
-                self.assertEqual(titem1.action.name, titem2.action.name)
-                self.assertEqual(titem1.column.name, titem2.column.name)
-                if titem1.condition:
-                    self.assertEqual(
-                        titem1.condition.name,
-                        titem2.condition.name)
 
 
 class WorkflowDelete(tests.OnTaskTestCase):

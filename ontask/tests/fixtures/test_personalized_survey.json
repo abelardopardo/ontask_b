@@ -670,6 +670,27 @@
     }
 },
 {
+    "model": "ontask.action",
+    "pk": 1,
+    "fields": {
+        "name": "Survey",
+        "description_text": "Can you please take this survey?",
+        "created": "2019-04-23T05:15:40.224Z",
+        "modified": "2019-04-23T05:15:56.064Z",
+        "workflow": 1,
+        "action_type": "survey",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "serve_enabled": false,
+        "text_content": "",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 1,
     "fields": {
@@ -697,27 +718,6 @@
         "column": 3,
         "condition": null,
         "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 1,
-    "fields": {
-        "name": "Survey",
-        "description_text": "Can you please take this survey?",
-        "created": "2019-04-23T05:15:40.224Z",
-        "modified": "2019-04-23T05:15:56.064Z",
-        "workflow": 1,
-        "action_type": "survey",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
     }
 },
 {

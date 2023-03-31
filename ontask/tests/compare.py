@@ -17,6 +17,12 @@ def compare_workflows(w1, w2):
     assert w1.nrows == w2.nrows
     assert list(w1.shared.all()) == list(w2.shared.all())
 
+    assert w1.columns.count() == w2.columns.count()
+    assert w1.views.count() == w2.views.count()
+    assert w1.actions.count() == w2.actions.count()
+    assert w1.conditions.count() == w2.conditions.count()
+    assert w1.filters.count() == w2.filters.count()
+
     for c1, c2 in zip(w1.columns.all(), w2.columns.all()):
         compare_columns(c1, c2)
 
@@ -55,7 +61,7 @@ def compare_actions(a1, a2):
     for c1, c2 in zip(a1.conditions.all(), a2.conditions.all()):
         compare_conditions(c1, c2)
 
-    compare_conditions(a1.get_filter(), a2.get_filter())
+    compare_filters(a1.get_filter(), a2.get_filter())
 
     for t1, t2 in zip(
         a1.column_condition_pair.all(),
@@ -69,16 +75,23 @@ def compare_conditions(c1, c2):
     if c1 is None and c2 is None:
         return
 
-    assert c1.is_filter == c2.is_filter
-    if not c1.is_filter:
-        assert c1.name == c2.name
-    assert c1.description_text == c2.description_text
-    assert c1._formula == c2._formula
-    assert c1.columns.count() == c2.columns.count()
-    assert c1.n_rows_selected == c2.n_rows_selected
-    assert c1.is_filter == c2.is_filter
+    assert c1.name == c2.name
+    compare_filters(c1, c2)
 
-    for cl1, cl2 in zip(c1.columns.all(), c2.columns.all()):
+
+def compare_filters(f1, f2):
+    """Compare two filters."""
+    if f1 is None and f2 is None:
+        return
+
+    assert f1.is_filter == f2.is_filter
+    assert f1.description_text == f2.description_text
+    assert f1._formula == f2._formula
+    assert f1._formula_text == f2._formula_text
+    assert f1.columns.count() == f2.columns.count()
+    assert f1.selected_count == f2.selected_count
+
+    for cl1, cl2 in zip(f1.columns.all(), f2.columns.all()):
         assert cl1.name == cl2.name
 
 
@@ -86,8 +99,7 @@ def compare_views(v1, v2):
     """Compare two views."""
     assert v1.name == v2.name
     assert v1.description_text == v2.description_text
-    assert v1.formula == v2.formula
-    assert v1.nrows == v2.nrows
+    compare_filters(v1.filter, v2.filter)
 
 
 def compare_tuples(t1, t2):

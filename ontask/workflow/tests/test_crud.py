@@ -10,7 +10,7 @@ from ontask import entity_prefix, models, tests
 from ontask.tests.compare import compare_workflows
 
 
-class WorkflowTestViewWorkflowCrud(tests.OnTaskTestCase):
+class WorkflowUpdate(tests.OnTaskTestCase):
     """Test workflow views."""
 
     fixtures = ['initial_workflow']
@@ -47,6 +47,24 @@ class WorkflowTestViewWorkflowCrud(tests.OnTaskTestCase):
         self.workflow.refresh_from_db()
         self.assertEqual(self.workflow_name + '2', self.workflow.name)
         self.assertEqual(self.workflow.description_text, 'description')
+
+
+class WorkflowCloneDelete(tests.OnTaskTestCase):
+    """Test workflow views."""
+
+    fixtures = ['initial_workflow']
+    filename = os.path.join(
+        settings.BASE_DIR(),
+        'ontask',
+        'tests',
+        'initial_workflow',
+        'initial_workflow.sql',
+    )
+
+    user_email = 'instructor01@bogus.com'
+    user_pwd = 'boguspwd'
+
+    workflow_name = 'BIOL1011'
 
     def test_workflow_clone_and_delete(self):
         """Clone a workflow."""

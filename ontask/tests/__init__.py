@@ -85,14 +85,15 @@ class OnTaskBasicTestCase(TransactionTestCase):
     filename = None
 
     @classmethod
+    def setUpClass(cls):
+        if cls.filename:
+            cls._pg_restore_table(cls.filename)
+        super().setUpClass()
+
+    @classmethod
     def tearDownClass(cls):
         pandas.destroy_db_engine(OnTaskSharedState.engine)
         super().tearDownClass()
-
-    def setUp(self):
-        super().setUp()
-        if self.filename:
-            self._pg_restore_table(self.filename)
 
     def tearDown(self) -> None:
         sanity_checks()

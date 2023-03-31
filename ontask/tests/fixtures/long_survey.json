@@ -606,6 +606,27 @@
     }
 },
 {
+    "model": "ontask.action",
+    "pk": 1,
+    "fields": {
+        "name": "survey",
+        "description_text": "Tutor observation for tutorial 1",
+        "created": "2019-09-21T04:24:25.072Z",
+        "modified": "2019-09-21T04:26:29.436Z",
+        "workflow": 1,
+        "action_type": "survey",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "serve_enabled": false,
+        "text_content": "",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
     "model": "ontask.actioncolumnconditiontuple",
     "pk": 1,
     "fields": {
@@ -633,27 +654,6 @@
         "column": 5,
         "condition": null,
         "changes_allowed": true
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 1,
-    "fields": {
-        "name": "survey",
-        "description_text": "Tutor observation for tutorial 1",
-        "created": "2019-09-21T04:24:25.072Z",
-        "modified": "2019-09-21T04:26:29.436Z",
-        "workflow": 1,
-        "action_type": "survey",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
     }
 },
 {

@@ -87,8 +87,8 @@
     "model": "sites.site",
     "pk": 1,
     "fields": {
-        "domain": "127.0.0.1:8000",
-        "name": "127.0.0.1:8000"
+        "domain": "127.0.0.1",
+        "name": "127.0.0.1"
     }
 },
 {
@@ -147,8 +147,8 @@
     "model": "authtools.user",
     "pk": 4,
     "fields": {
-        "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
-        "last_login": "2017-12-07T21:59:28.562Z",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$SWp6cUxjdU9VWTRF$NuyZlmzXYsLMWaJY4J/0PQ",
+        "last_login": "2020-08-29T07:23:46.711Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -496,6 +496,69 @@
     }
 },
 {
+    "model": "siteprefs.preference",
+    "pk": 25,
+    "fields": {
+        "app": "ontask",
+        "name": "notification_template",
+        "text": "\n<html>\n<head/>\n<body>\n<p>Dear {{ user.name }}</p>\n\n<p>This message is to inform you that on {{ email_sent_datetime }}\n{{ num_messages }} email{% if num_messages > 1 %}s{% endif %} were sent\nresulting from the execution of the action with name \"{{ action.name }}\".</p>\n\n{% if filter_present %}\n<p>The action had a filter that reduced the number of messages from\n{{ num_rows }} to {{ num_selected }}.</p>\n{% else %}\n<p>All the data rows stored in the workflow table were used.</p>\n{% endif %}\n\nRegards.\nThe OnTask Support Team\n</body></html>"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 26,
+    "fields": {
+        "app": "ontask",
+        "name": "notification_subject",
+        "text": "OnTask: Action executed"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 27,
+    "fields": {
+        "app": "ontask",
+        "name": "notification_sender",
+        "text": "abelardo.pardo@unisa.edu.au"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 28,
+    "fields": {
+        "app": "ontask",
+        "name": "plugin_directory",
+        "text": "/Users/pardosa/ontask_b/lib/plugins"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 29,
+    "fields": {
+        "app": "ontask",
+        "name": "max_log_list_size",
+        "text": "200"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 30,
+    "fields": {
+        "app": "ontask",
+        "name": "help_url",
+        "text": "html/index.html"
+    }
+},
+{
+    "model": "siteprefs.preference",
+    "pk": 31,
+    "fields": {
+        "app": "ontask",
+        "name": "override_from_address",
+        "text": ""
+    }
+},
+{
     "model": "authtoken.token",
     "pk": "c5eac9be0365a24aca40633f7ebb3556d66a7a1d",
     "fields": {
@@ -534,60 +597,12 @@
 },
 {
     "model": "ontask.column",
-    "pk": 2925,
+    "pk": 3020,
     "fields": {
         "name": "sid",
         "description_text": "",
-        "workflow": 108,
+        "workflow": 112,
         "data_type": "integer",
-        "is_key": true,
-        "position": 3,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 2926,
-    "fields": {
-        "name": "name",
-        "description_text": "",
-        "workflow": 108,
-        "data_type": "string",
-        "is_key": false,
-        "position": 4,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 2927,
-    "fields": {
-        "name": "email",
-        "description_text": "",
-        "workflow": 108,
-        "data_type": "string",
-        "is_key": true,
-        "position": 2,
-        "in_viz": true,
-        "categories": [],
-        "active_from": null,
-        "active_to": null
-    }
-},
-{
-    "model": "ontask.column",
-    "pk": 2928,
-    "fields": {
-        "name": "age",
-        "description_text": "",
-        "workflow": 108,
-        "data_type": "double",
         "is_key": true,
         "position": 1,
         "in_viz": true,
@@ -598,11 +613,59 @@
 },
 {
     "model": "ontask.column",
-    "pk": 2929,
+    "pk": 3021,
+    "fields": {
+        "name": "name",
+        "description_text": "",
+        "workflow": 112,
+        "data_type": "string",
+        "is_key": false,
+        "position": 2,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 3022,
+    "fields": {
+        "name": "email",
+        "description_text": "",
+        "workflow": 112,
+        "data_type": "string",
+        "is_key": true,
+        "position": 3,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 3023,
+    "fields": {
+        "name": "age",
+        "description_text": "",
+        "workflow": 112,
+        "data_type": "double",
+        "is_key": true,
+        "position": 4,
+        "in_viz": true,
+        "categories": [],
+        "active_from": null,
+        "active_to": null
+    }
+},
+{
+    "model": "ontask.column",
+    "pk": 3024,
     "fields": {
         "name": "registered",
         "description_text": "",
-        "workflow": 108,
+        "workflow": 112,
         "data_type": "boolean",
         "is_key": false,
         "position": 5,
@@ -614,11 +677,11 @@
 },
 {
     "model": "ontask.column",
-    "pk": 2930,
+    "pk": 3025,
     "fields": {
         "name": "when",
         "description_text": "",
-        "workflow": 108,
+        "workflow": 112,
         "data_type": "datetime",
         "is_key": false,
         "position": 6,
@@ -630,32 +693,19 @@
 },
 {
     "model": "ontask.workflow",
-    "pk": 108,
+    "pk": 112,
     "fields": {
-        "name": "wflow2",
-        "description_text": "Simple workflow structure with two type of actions",
-        "created": "2017-12-08T01:25:32.160Z",
-        "modified": "2017-12-31T02:33:15.096Z",
+        "name": "ie",
+        "description_text": "",
+        "created": "2020-08-29T07:23:54.433Z",
+        "modified": "2020-08-29T07:23:54.433Z",
         "user": [
             "instructor01@bogus.com"
         ],
         "nrows": 3,
         "ncols": 6,
-        "attributes": {
-            "attribute name": "attribute value"
-        },
+        "attributes": {},
         "query_builder_ops": [
-            {
-                "id": "age",
-                "type": "double",
-                "validation": {
-                    "step": "any"
-                }
-            },
-            {
-                "id": "email",
-                "type": "string"
-            },
             {
                 "id": "sid",
                 "type": "integer"
@@ -663,6 +713,17 @@
             {
                 "id": "name",
                 "type": "string"
+            },
+            {
+                "id": "email",
+                "type": "string"
+            },
+            {
+                "id": "age",
+                "type": "double",
+                "validation": {
+                    "step": "any"
+                }
             },
             {
                 "id": "registered",
@@ -684,8 +745,8 @@
                 "type": "datetime"
             }
         ],
-        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_108",
-        "session_key": "fkozmzu50459dx5zplt2xfty2yypfylr",
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_112",
+        "session_key": "",
         "luser_email_column": null,
         "luser_email_column_md5": "",
         "lusers_is_outdated": false,
@@ -696,85 +757,10 @@
 },
 {
     "model": "ontask.filter",
-    "pk": 1,
+    "pk": 32,
     "fields": {
-        "created": "2020-08-17T09:35:31.291Z",
-        "modified": "2020-08-17T09:35:31.774Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "age",
-                    "type": "double",
-                    "field": "age",
-                    "input": "number",
-                    "value": "12",
-                    "operator": "greater"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "",
-        "selected_count": 2,
-        "workflow": 108,
-        "description_text": "",
-        "columns": [
-            2928
-        ]
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 253,
-    "fields": {
-        "name": "Detecting age",
-        "description_text": "",
-        "created": "2017-12-08T01:29:40.524Z",
-        "modified": "2020-08-17T09:35:31.474Z",
-        "workflow": 108,
-        "action_type": "personalized_text",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "<p>Hi {{ name }}</p><p>ATT:&nbsp;{{ attribute name }}</p><p>COL:&nbsp;{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
-        "target_url": "",
-        "shuffle": false,
-        "filter": 1,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 254,
-    "fields": {
-        "name": "Check registration",
-        "description_text": "",
-        "created": "2017-12-08T01:34:56.311Z",
-        "modified": "2018-09-05T02:55:52.786Z",
-        "workflow": 108,
-        "action_type": "survey",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": null,
-        "serve_enabled": false,
-        "text_content": "{% comment %}Your action content here{% endcomment %}",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1038,
-    "fields": {
-        "name": "Registered",
-        "description_text": "",
-        "created": "2017-12-08T01:33:21.687Z",
-        "modified": "2020-08-17T09:35:31.252Z",
+        "created": "2020-08-29T07:25:09.662Z",
+        "modified": "2020-08-29T07:25:09.662Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -790,64 +776,55 @@
             "valid": true,
             "condition": "AND"
         },
-        "_formula_text": "",
-        "n_rows_selected": 1,
-        "workflow": 108,
-        "action": 253,
-        "columns": [
-            2929
-        ]
-    }
-},
-{
-    "model": "ontask.filter",
-    "pk": 1,
-    "fields": {
-        "created": "2020-08-17T09:35:31.291Z",
-        "modified": "2020-08-17T09:35:31.774Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "age",
-                    "type": "double",
-                    "field": "age",
-                    "input": "number",
-                    "value": "12",
-                    "operator": "greater"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "",
-        "n_rows_selected": 2,
-        "workflow": 108,
+        "_formula_text": "registered &equals; true and not empty",
+        "selected_count": 2,
+        "workflow": 112,
         "description_text": "",
-        "action": 253,
         "columns": [
-            2928
+            3024
         ]
     }
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 1,
+    "model": "ontask.action",
+    "pk": 300,
     "fields": {
-        "action": 254,
-        "column": 2927,
-        "condition": null,
-        "changes_allowed": true
+        "name": "theaction",
+        "description_text": "",
+        "created": "2020-08-29T07:25:09.653Z",
+        "modified": "2020-08-29T07:25:15.703Z",
+        "workflow": 112,
+        "action_type": "email_report",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": null,
+        "serve_enabled": false,
+        "text_content": "<p>txt<br></p>",
+        "target_url": "",
+        "shuffle": false,
+        "filter": 32,
+        "attachments": [
+            13
+        ]
     }
 },
 {
-    "model": "ontask.actioncolumnconditiontuple",
-    "pk": 2,
+    "model": "ontask.view",
+    "pk": 13,
     "fields": {
-        "action": 254,
-        "column": 2929,
-        "condition": null,
-        "changes_allowed": true
+        "name": "theview",
+        "description_text": "",
+        "created": "2020-08-29T07:24:58.046Z",
+        "modified": "2020-08-29T07:24:58.046Z",
+        "workflow": 112,
+        "filter": 32,
+        "columns": [
+            3020,
+            3021,
+            3024,
+            3025
+        ]
     }
 },
 {

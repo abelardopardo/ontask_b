@@ -684,6 +684,47 @@
     }
 },
 {
+    "model": "ontask.action",
+    "pk": 2,
+    "fields": {
+        "name": "simple action",
+        "description_text": "action description text",
+        "created": "2017-11-06T22:15:41.165Z",
+        "modified": "2019-06-03T11:16:32.651Z",
+        "workflow": 5,
+        "action_type": "personalized_text",
+        "last_executed_log": null,
+        "active_from": null,
+        "active_to": null,
+        "rows_all_false": [
+            2
+        ],
+        "serve_enabled": false,
+        "text_content": "<p>{{ age }}</p><p>{{ email }}</p><p>{{ sid }}</p><p>{{ another }}</p><p>{{ name }}</p><p>{{ one }}</p><p>{{ registered }}</p><p>{{ when }}<br></p>",
+        "target_url": "",
+        "shuffle": false,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.view",
+    "pk": 1,
+    "fields": {
+        "name": "Some columns",
+        "description_text": "",
+        "created": "2020-05-03T06:47:29.080Z",
+        "modified": "2020-05-03T06:47:29.080Z",
+        "workflow": 5,
+        "columns": [
+            263,
+            262,
+            267,
+            264,
+            265
+        ]
+    }
+},
+{
     "model": "ontask.condition",
     "pk": 1,
     "fields": {
@@ -713,53 +754,6 @@
         "columns": [
             267
         ]
-    }
-},
-{
-    "model": "ontask.view",
-    "pk": 1,
-    "fields": {
-        "name": "Some columns",
-        "description_text": "",
-        "created": "2020-05-03T06:47:29.080Z",
-        "modified": "2020-05-03T06:47:29.080Z",
-        "workflow": 5,
-        "_formula": {
-            "not": false,
-            "rules": [],
-            "valid": true,
-            "condition": "AND"
-        },
-        "columns": [
-            263,
-            262,
-            267,
-            264,
-            265
-        ]
-    }
-},
-{
-    "model": "ontask.action",
-    "pk": 2,
-    "fields": {
-        "name": "simple action",
-        "description_text": "action description text",
-        "created": "2017-11-06T22:15:41.165Z",
-        "modified": "2019-06-03T11:16:32.651Z",
-        "workflow": 5,
-        "action_type": "personalized_text",
-        "last_executed_log": null,
-        "active_from": null,
-        "active_to": null,
-        "rows_all_false": [
-            2
-        ],
-        "serve_enabled": false,
-        "text_content": "<p>{{ age }}</p><p>{{ email }}</p><p>{{ sid }}</p><p>{{ another }}</p><p>{{ name }}</p><p>{{ one }}</p><p>{{ registered }}</p><p>{{ when }}<br></p>",
-        "target_url": "",
-        "shuffle": false,
-        "attachments": []
     }
 },
 {

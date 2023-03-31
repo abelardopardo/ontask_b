@@ -775,38 +775,6 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 1,
-    "fields": {
-        "name": "bbb",
-        "description_text": "",
-        "created": "2019-04-24T07:14:20.855Z",
-        "modified": "2020-08-17T09:37:51.917Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "another",
-                    "type": "string",
-                    "field": "another",
-                    "input": "text",
-                    "value": "bbb",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "",
-        "n_rows_selected": 2,
-        "workflow": 5,
-        "action": 2,
-        "columns": [
-            267
-        ]
-    }
-},
-{
     "model": "ontask.action",
     "pk": 2,
     "fields": {
@@ -890,6 +858,38 @@
         "target_url": "",
         "shuffle": false,
         "attachments": []
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1,
+    "fields": {
+        "name": "bbb",
+        "description_text": "",
+        "created": "2019-04-24T07:14:20.855Z",
+        "modified": "2020-08-17T09:37:51.917Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "another",
+                    "type": "string",
+                    "field": "another",
+                    "input": "text",
+                    "value": "bbb",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "",
+        "n_rows_selected": 2,
+        "workflow": 5,
+        "action": 2,
+        "columns": [
+            267
+        ]
     }
 },
 {
