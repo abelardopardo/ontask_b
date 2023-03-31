@@ -8,10 +8,10 @@ from typing import List, Tuple
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import JSONField
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.db import models
+from django.db.models import JSONField
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _

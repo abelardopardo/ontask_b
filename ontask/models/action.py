@@ -7,10 +7,10 @@ import shlex
 from typing import List, Optional
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import models, transaction
+from django.db.models import JSONField
 from django.utils import functional, html
 from django.utils.translation import ugettext_lazy as _
 import pytz

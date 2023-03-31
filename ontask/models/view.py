@@ -3,8 +3,8 @@
 """View objects."""
 from typing import Dict, Optional
 
-from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
+from django.db.models import JSONField
 from django.utils.translation import ugettext_lazy as _
 
 from ontask.dataops import formula as dataops_formula, sql

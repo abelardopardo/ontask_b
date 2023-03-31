@@ -4,8 +4,8 @@
 import json
 from typing import Dict
 
-from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.db.models import JSONField
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 

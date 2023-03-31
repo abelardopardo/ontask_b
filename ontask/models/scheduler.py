@@ -6,8 +6,8 @@ import json
 from typing import Optional
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.db.models import JSONField
 from django.utils.translation import ugettext_lazy as _
 from django_celery_beat.models import PeriodicTask
 import pytz
