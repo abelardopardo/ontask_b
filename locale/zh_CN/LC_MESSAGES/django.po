@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-19 18:43+1030\n"
+"POT-Creation-Date: 2021-12-21 11:15+1030\n"
 "PO-Revision-Date: 2019-09-14 19:37+0930\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -676,43 +676,43 @@ msgstr "工作流没有正确的列来运行这个插件"
 msgid "The column needs to have a fixed set of possible values"
 msgstr "列需要具有所有唯一值（没有空单元格）"
 
-#: ontask/column/views/crud.py:26
+#: ontask/column/views/crud.py:25
 msgid "sum: Sum selected columns"
 msgstr "求和：为选择列求和"
 
-#: ontask/column/views/crud.py:29
+#: ontask/column/views/crud.py:28
 msgid "prod: Product of the selected columns"
 msgstr "产品：选定列的产品"
 
-#: ontask/column/views/crud.py:31
+#: ontask/column/views/crud.py:30
 msgid "max: Maximum of the selected columns"
 msgstr "最大值:选定列的最大值"
 
-#: ontask/column/views/crud.py:32
+#: ontask/column/views/crud.py:31
 msgid "min: Minimum of the selected columns"
 msgstr "最小值:选定列的最小值"
 
-#: ontask/column/views/crud.py:33
+#: ontask/column/views/crud.py:32
 msgid "mean: Mean of the selected columns"
 msgstr "平均值:选定列的平均值"
 
-#: ontask/column/views/crud.py:36
+#: ontask/column/views/crud.py:35
 msgid "median: Median of the selected columns"
 msgstr "中位数:选定列的中位数"
 
-#: ontask/column/views/crud.py:40
+#: ontask/column/views/crud.py:39
 msgid "std: Standard deviation over the selected columns"
 msgstr "标准差:选定列的标准差"
 
-#: ontask/column/views/crud.py:44
+#: ontask/column/views/crud.py:43
 msgid "all: True when all elements in selected columns are true"
 msgstr "全部值:当选定列中的所有元素都为真时则为真"
 
-#: ontask/column/views/crud.py:48
+#: ontask/column/views/crud.py:47
 msgid "any: True when any element in selected columns is true"
 msgstr "任意值:当选定列中的任何元素为真时则为真"
 
-#: ontask/column/views/crud.py:69 ontask/column/views/crud.py:221
+#: ontask/column/views/crud.py:68 ontask/column/views/crud.py:221
 #: ontask/column/views/crud.py:271
 msgid "Cannot add column to a workflow without data"
 msgstr "无法向没有数据的工作流添加列"
@@ -1698,17 +1698,17 @@ msgstr "可用的操作来自"
 msgid "Action available until"
 msgstr "操作可用直到"
 
-#: ontask/models/action.py:301
+#: ontask/models/action.py:300
 msgid "URL available to users?"
 msgstr "用户可用的网址？"
 
-#: ontask/models/action.py:314
+#: ontask/models/action.py:313
 #, fuzzy
 #| msgid "Emails sent"
 msgid "Email attachments"
 msgstr "电子邮件已发送"
 
-#: ontask/models/action.py:502 ontask/templates/action/edit_in.html:178
+#: ontask/models/action.py:501 ontask/templates/action/edit_in.html:178
 msgid "Shuffle questions?"
 msgstr "调整问题？"
 
@@ -6287,25 +6287,13 @@ msgstr "工作流已成功克隆。"
 msgid "The list of workflow users will be updated shortly."
 msgstr "工作流用户列表将很快被更新。"
 
-#: settings/base.py:347
+#: settings/base.py:346
 msgid "English"
 msgstr "英语"
 
-#: settings/base.py:348
+#: settings/base.py:346
 msgid "Spanish"
 msgstr "西班牙语"
-
-#: settings/base.py:349
-msgid "Chinese"
-msgstr "中文"
-
-#: settings/base.py:350
-msgid "Finnish"
-msgstr "芬兰语"
-
-#: settings/base.py:351
-msgid "Russian"
-msgstr "俄语"
 
 #: urls.py:27
 msgid ""
@@ -6313,6 +6301,15 @@ msgid ""
 "logs. The interface provides CRUD operations over these objects."
 msgstr ""
 "OnTask API提供操作工作流、表和日志的功能。该接口提供对这些对象的CRUD操作。"
+
+#~ msgid "Chinese"
+#~ msgstr "中文"
+
+#~ msgid "Finnish"
+#~ msgstr "芬兰语"
+
+#~ msgid "Russian"
+#~ msgstr "俄语"
 
 #~ msgid "Unable to create column data"
 #~ msgstr "无法创建列数据"

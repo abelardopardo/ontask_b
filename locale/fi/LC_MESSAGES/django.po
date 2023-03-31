@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-19 18:43+1030\n"
+"POT-Creation-Date: 2021-12-21 11:15+1030\n"
 "PO-Revision-Date: 2020-06-01 19:53+0300\n"
 "Last-Translator: Joonas Pesonen <joonas.pesonen@helsinki.fi>\n"
 "Language-Team: \n"
@@ -644,47 +644,47 @@ msgstr "Kriteerillä ei ole oikeita suoriutumistasoja"
 msgid "The column needs to have a fixed set of possible values"
 msgstr "Sarakkeessa on oltava kiinteä joukko mahdollisia arvoja"
 
-#: ontask/column/views/crud.py:26
+#: ontask/column/views/crud.py:25
 msgid "sum: Sum selected columns"
 msgstr "summa: Valittujen sarakkeiden summa"
 
-#: ontask/column/views/crud.py:29
+#: ontask/column/views/crud.py:28
 msgid "prod: Product of the selected columns"
 msgstr "prod: Valittujen sarakkeiden tulo"
 
-#: ontask/column/views/crud.py:31
+#: ontask/column/views/crud.py:30
 msgid "max: Maximum of the selected columns"
 msgstr "max: Valittujen sarakkeiden maksimi"
 
-#: ontask/column/views/crud.py:32
+#: ontask/column/views/crud.py:31
 msgid "min: Minimum of the selected columns"
 msgstr "min: Valittujen sarakkeiden minimi"
 
-#: ontask/column/views/crud.py:33
+#: ontask/column/views/crud.py:32
 msgid "mean: Mean of the selected columns"
 msgstr "mean: Valittujen sarakkeiden keskiarvo"
 
-#: ontask/column/views/crud.py:36
+#: ontask/column/views/crud.py:35
 msgid "median: Median of the selected columns"
 msgstr "mediaani: Valittujen sarakkeiden mediaani"
 
-#: ontask/column/views/crud.py:40
+#: ontask/column/views/crud.py:39
 msgid "std: Standard deviation over the selected columns"
 msgstr "std: Keskihajonta valituista sarakkeista"
 
-#: ontask/column/views/crud.py:44
+#: ontask/column/views/crud.py:43
 msgid "all: True when all elements in selected columns are true"
 msgstr ""
 "all: Palauttaa arvon tosi, kun kaikki elementit valituissa sarakkeissa ovat "
 "totta"
 
-#: ontask/column/views/crud.py:48
+#: ontask/column/views/crud.py:47
 msgid "any: True when any element in selected columns is true"
 msgstr ""
 "any: Palauttaa arvon tosi, kun jokin elementti valituissa sarakkeissa on "
 "totta"
 
-#: ontask/column/views/crud.py:69 ontask/column/views/crud.py:221
+#: ontask/column/views/crud.py:68 ontask/column/views/crud.py:221
 #: ontask/column/views/crud.py:271
 msgid "Cannot add column to a workflow without data"
 msgstr "Saraketta ei voi lisätä työnkulkuun, jossa ei ole tietoja"
@@ -1640,15 +1640,15 @@ msgstr "Toiminto saatavilla alkaen"
 msgid "Action available until"
 msgstr "Toiminto saatavilla saakka"
 
-#: ontask/models/action.py:301
+#: ontask/models/action.py:300
 msgid "URL available to users?"
 msgstr "URL saatavilla käyttäjille?"
 
-#: ontask/models/action.py:314
+#: ontask/models/action.py:313
 msgid "Email attachments"
 msgstr "Sähköpostin liitteet"
 
-#: ontask/models/action.py:502 ontask/templates/action/edit_in.html:178
+#: ontask/models/action.py:501 ontask/templates/action/edit_in.html:178
 msgid "Shuffle questions?"
 msgstr "Sekoita kysymykset?"
 
@@ -5971,25 +5971,13 @@ msgstr "Työnkulku kopioitiin onnistuneesti."
 msgid "The list of workflow users will be updated shortly."
 msgstr "Lista työnkulun käyttäjistä päivitetään pian."
 
-#: settings/base.py:347
+#: settings/base.py:346
 msgid "English"
 msgstr "englanti"
 
-#: settings/base.py:348
+#: settings/base.py:346
 msgid "Spanish"
 msgstr "espanja"
-
-#: settings/base.py:349
-msgid "Chinese"
-msgstr "kiina"
-
-#: settings/base.py:350
-msgid "Finnish"
-msgstr "suomi"
-
-#: settings/base.py:351
-msgid "Russian"
-msgstr "venäjä"
 
 #: urls.py:27
 msgid ""
@@ -5998,6 +5986,15 @@ msgid ""
 msgstr ""
 "OnTask API tarjoaa toimintoja työnkulkujen, taulukoiden ja lokien "
 "käsittelyyn. Rajapinta mahdollistaa CRUD-operaatiot näille kohteille."
+
+#~ msgid "Chinese"
+#~ msgstr "kiina"
+
+#~ msgid "Finnish"
+#~ msgstr "suomi"
+
+#~ msgid "Russian"
+#~ msgstr "venäjä"
 
 #~ msgid "Unable to create column data"
 #~ msgstr "Sarakedatan luonti epäonnistui"

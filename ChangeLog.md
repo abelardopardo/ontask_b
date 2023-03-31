@@ -1,19 +1,32 @@
-## 8.0 (2020-08-??)
+## 8.0 (2021-12-21)
 
 ### Fixed
 
-- Missing HTML to visualise colum histogram in filter view (action edit)
+- Missing HTML to visualise column histogram in filter view (action edit)
+
+- Bug preventing password change for any user in the admin page
+
+- Removing filters when flushing a workflow
+
 
 ### Changed
 
-- Started to change the rebranding
+- Major rebranding of the platform with the corporate colours of Clariate
+
+- Updated various libraries
+
+- Review configuration file to add clarity.
+
+- Removed the full blown installation doc from the manual (not needed in SAS)
 
 ### Added
 
-- Added possibility of using View formula as filter
+- Functionality to create an action from an existing view (by using condition as filter)
 
-- Added possibility of creating an action using view as filter
- 
+- Support for Athena connection
+
+- Workflow search
+
 ## 7.2 (2020-07-04)
 
 ### Fixed

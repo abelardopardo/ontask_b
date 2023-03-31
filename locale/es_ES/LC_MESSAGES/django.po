@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-19 18:43+1030\n"
+"POT-Creation-Date: 2021-12-21 11:15+1030\n"
 "PO-Revision-Date: 2021-12-19 19:03+1030\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: Abelardo Paro\n"
@@ -632,44 +632,44 @@ msgstr "El criterio no tiene los niveles alcanzados correctos"
 msgid "The column needs to have a fixed set of possible values"
 msgstr "La columna ha de tener un conjunto fijo de valores"
 
-#: ontask/column/views/crud.py:26
+#: ontask/column/views/crud.py:25
 msgid "sum: Sum selected columns"
 msgstr "sum: Suma de columnas seleccionadas"
 
-#: ontask/column/views/crud.py:29
+#: ontask/column/views/crud.py:28
 msgid "prod: Product of the selected columns"
 msgstr "prod: Producto de columnas seleccionadas"
 
-#: ontask/column/views/crud.py:31
+#: ontask/column/views/crud.py:30
 msgid "max: Maximum of the selected columns"
 msgstr "max: Máximo de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:32
+#: ontask/column/views/crud.py:31
 msgid "min: Minimum of the selected columns"
 msgstr "min: Mínimo de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:33
+#: ontask/column/views/crud.py:32
 msgid "mean: Mean of the selected columns"
 msgstr "mean: Media de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:36
+#: ontask/column/views/crud.py:35
 msgid "median: Median of the selected columns"
 msgstr "median: Mediana de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:40
+#: ontask/column/views/crud.py:39
 msgid "std: Standard deviation over the selected columns"
 msgstr "std: Desviación estándar de las columnas seleccionadas"
 
-#: ontask/column/views/crud.py:44
+#: ontask/column/views/crud.py:43
 msgid "all: True when all elements in selected columns are true"
 msgstr ""
 "all: Cierto si todos los elementos en las columnas seleccionadas son ciertos"
 
-#: ontask/column/views/crud.py:48
+#: ontask/column/views/crud.py:47
 msgid "any: True when any element in selected columns is true"
 msgstr "any: Cierto si algún elemento de las columnas seleccionadas es cierto"
 
-#: ontask/column/views/crud.py:69 ontask/column/views/crud.py:221
+#: ontask/column/views/crud.py:68 ontask/column/views/crud.py:221
 #: ontask/column/views/crud.py:271
 msgid "Cannot add column to a workflow without data"
 msgstr "No es posible añadir una columna a un flujo sin datos"
@@ -1621,15 +1621,15 @@ msgstr "Acción disponible desde"
 msgid "Action available until"
 msgstr "Acción disponible hasta"
 
-#: ontask/models/action.py:301
+#: ontask/models/action.py:300
 msgid "URL available to users?"
 msgstr "¿URL disponible a los usuarios?"
 
-#: ontask/models/action.py:314
+#: ontask/models/action.py:313
 msgid "Email attachments"
 msgstr "Adjuntos al mensaje"
 
-#: ontask/models/action.py:502 ontask/templates/action/edit_in.html:178
+#: ontask/models/action.py:501 ontask/templates/action/edit_in.html:178
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
@@ -5834,25 +5834,13 @@ msgstr "Flujo clonado con éxito."
 msgid "The list of workflow users will be updated shortly."
 msgstr "La lista de usuarios se actualizará en breve."
 
-#: settings/base.py:347
+#: settings/base.py:346
 msgid "English"
 msgstr "Inglés"
 
-#: settings/base.py:348
+#: settings/base.py:346
 msgid "Spanish"
 msgstr "Español"
-
-#: settings/base.py:349
-msgid "Chinese"
-msgstr "Chino"
-
-#: settings/base.py:350
-msgid "Finnish"
-msgstr "Finés"
-
-#: settings/base.py:351
-msgid "Russian"
-msgstr "Ruso"
 
 #: urls.py:27
 msgid ""
@@ -5862,6 +5850,15 @@ msgstr ""
 "La API de OnTask ofrece funcionalidad para manipular los flujos, tablas y "
 "registros. El interfaz provee operaciones CRUD (crear, leer, actualizar y "
 "borrar) sobre estos objetos."
+
+#~ msgid "Chinese"
+#~ msgstr "Chino"
+
+#~ msgid "Finnish"
+#~ msgstr "Finés"
+
+#~ msgid "Russian"
+#~ msgstr "Ruso"
 
 #~ msgid "Unable to create column data"
 #~ msgstr "Imposible crear los datos para la columna"

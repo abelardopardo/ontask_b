@@ -309,7 +309,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     viewport_width = 1024
     device_pixel_ratio = 1
     max_image_height = 1440
-    headless = True
+    headless = False
 
     class_and_text_xpath = \
         '//{0}[contains(@class, "{1}") and normalize-space(text()) = "{2}"]'
