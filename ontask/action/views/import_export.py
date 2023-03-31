@@ -66,9 +66,7 @@ def action_import(
         messages.success(
             request,
             _('Actions imported: {0}'.format(', '.join(
-                [action.name for action in actions]
-            )))
-        )
+                [action.name for action in actions]))))
         # Go back to the list of actions
         return redirect('action:index')
 

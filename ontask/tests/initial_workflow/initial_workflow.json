@@ -2681,7 +2681,7 @@
             "condition": "AND"
         },
         "_formula_text": "Video_1_W2 &gt; 75.0 and not empty",
-        "n_rows_selected": 6,
+        "selected_count": 6,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -2727,7 +2727,7 @@
             "condition": "OR"
         },
         "_formula_text": "(Video_1_W2 &gt; 0.0 and not empty) AND (Video_1_W2 &#8924; 25.0 and not empty)",
-        "n_rows_selected": 1,
+        "selected_count": 1,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -2773,7 +2773,7 @@
             "condition": "OR"
         },
         "_formula_text": "(Video_1_W2 &gt; 25.0 and not empty) AND (Video_1_W2 &#8924; 75.0 and not empty)",
-        "n_rows_selected": 5,
+        "selected_count": 5,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -2805,7 +2805,7 @@
             "condition": "AND"
         },
         "_formula_text": "Video_1_W2 &equals; 0.0 and not empty",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -2837,7 +2837,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 1,
+        "selected_count": 1,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -2869,7 +2869,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 3,
+        "selected_count": 3,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -2901,7 +2901,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 3,
         "columns": [
@@ -2933,7 +2933,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 3,
+        "selected_count": 3,
         "workflow": 1,
         "action": 3,
         "columns": [
@@ -2965,7 +2965,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 6,
+        "selected_count": 6,
         "workflow": 1,
         "action": 3,
         "columns": [
@@ -2997,7 +2997,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 3,
+        "selected_count": 3,
         "workflow": 1,
         "action": 3,
         "columns": [
@@ -3037,7 +3037,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 1.0 and not empty)",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3078,7 +3078,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 0.0 and not empty)",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3147,7 +3147,7 @@
             "condition": "OR"
         },
         "_formula_text": "((Q01 &equals; 0.0 and not empty) AND (Q02 &equals; 1.0 and not empty)) OR ((Q01 &equals; 1.0 and not empty) AND (Q02 &equals; 0.0 and not empty))",
-        "n_rows_selected": 6,
+        "selected_count": 6,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3188,7 +3188,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 1.0 and not empty)",
-        "n_rows_selected": 6,
+        "selected_count": 6,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3229,7 +3229,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 0.0 and not empty)",
-        "n_rows_selected": 3,
+        "selected_count": 3,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3298,7 +3298,7 @@
             "condition": "OR"
         },
         "_formula_text": "((Q03 &equals; 0.0 and not empty) AND (Q04 &equals; 1.0 and not empty)) OR ((Q03 &equals; 1.0 and not empty) AND (Q04 &equals; 0.0 and not empty))",
-        "n_rows_selected": 3,
+        "selected_count": 3,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3339,7 +3339,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 1.0 and not empty)",
-        "n_rows_selected": 7,
+        "selected_count": 7,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3380,7 +3380,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 0.0 and not empty)",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3449,7 +3449,7 @@
             "condition": "OR"
         },
         "_formula_text": "((Q05 &equals; 0.0 and not empty) AND (Q06 &equals; 1.0 and not empty)) OR ((Q05 &equals; 1.0 and not empty) AND (Q06 &equals; 0.0 and not empty))",
-        "n_rows_selected": 3,
+        "selected_count": 3,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3490,7 +3490,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 1.0 and not empty)",
-        "n_rows_selected": 7,
+        "selected_count": 7,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3531,7 +3531,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 0.0 and not empty)",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3600,7 +3600,7 @@
             "condition": "OR"
         },
         "_formula_text": "((Q07 &equals; 0.0 and not empty) AND (Q08 &equals; 1.0 and not empty)) OR ((Q07 &equals; 1.0 and not empty) AND (Q08 &equals; 0.0 and not empty))",
-        "n_rows_selected": 3,
+        "selected_count": 3,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3641,7 +3641,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 1.0 and not empty)",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3682,7 +3682,7 @@
             "condition": "AND"
         },
         "_formula_text": "(Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 0.0 and not empty)",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3751,7 +3751,7 @@
             "condition": "OR"
         },
         "_formula_text": "((Q09 &equals; 0.0 and not empty) AND (Q10 &equals; 1.0 and not empty)) OR ((Q09 &equals; 1.0 and not empty) AND (Q10 &equals; 0.0 and not empty))",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 4,
         "columns": [
@@ -3784,7 +3784,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 5,
         "columns": [
@@ -3816,7 +3816,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 10,
+        "selected_count": 10,
         "workflow": 1,
         "action": 5,
         "columns": [

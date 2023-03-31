@@ -83,7 +83,7 @@ class ActionRunManager:
              'num_msgs': action.get_rows_selected(),
              'form': form,
              'all_false_conditions': any(
-                 cond.n_rows_selected == 0
+                 cond.selected_count == 0
                  for cond in action.conditions.all()),
              'valuerange': range(2)})
 

@@ -4,6 +4,7 @@
 from typing import Optional
 
 from django import http
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, reverse
 from django.template.loader import render_to_string
@@ -85,6 +86,10 @@ def display_view(
     :return: Initial rendering of the page with the table skeleton
     """
     del pk
+    if view.num_rows == 0:
+        messages.info(
+            request,
+            _('Formula is exluding all rows from the table'))
     return services.render_table_display_page(
         request,
         workflow,

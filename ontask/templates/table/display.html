@@ -203,7 +203,7 @@
       {% if view %}
         <p class="text-center lead">
           {% if not view.has_empty_formula %}
-            {% trans 'Row filter:' %} {{ view.get_formula_text|safe }}
+            {% trans 'Row filter:' %} {{ view.formula_text|safe }}
           {% else %}
             {% trans 'No row filter defined. All rows are included.' %}
           {% endif %}

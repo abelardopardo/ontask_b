@@ -41,7 +41,7 @@ $(function () {
 
   // View edit (both in view index and display pages)
   $("#table-content").on("click", ".js-view-edit", loadForm);
-  $("#modal-item").on("click", ".js-view-edit-form", saveForm);
+  $("#modal-item").on("submit", ".js-view-edit-form", saveForm);
 
   // View delete
   $("#table-content").on("click", ".js-view-delete", loadForm);

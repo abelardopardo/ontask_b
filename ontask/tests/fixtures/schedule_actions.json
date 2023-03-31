@@ -1003,7 +1003,7 @@
             "condition": "AND"
         },
         "_formula_text": "registered &equals; true and not empty",
-        "n_rows_selected": 1,
+        "selected_count": 1,
         "workflow": 108,
         "action": 253,
         "columns": [

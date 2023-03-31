@@ -5,9 +5,11 @@ from builtins import str
 from typing import Optional
 
 from django import http
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_GET
 
 from ontask import OnTaskServiceException, models
@@ -141,12 +143,17 @@ def import_workflow(request: http.HttpRequest):
     if request.method == 'POST' and form.is_valid():
         # UPLOAD THE FILE!
         try:
-            services.do_import_workflow(
+            workflow = services.do_import_workflow(
                 request.user,
                 form.cleaned_data['name'],
                 request.FILES['wf_file'])
+            messages.success(
+                request,
+                _('Workflow {0} successfully imported.'.format(workflow.name))
+            )
         except OnTaskServiceException as exc:
             exc.message_to_error(request)
+
 
         # Go back to the list of workflows
         return redirect('home')

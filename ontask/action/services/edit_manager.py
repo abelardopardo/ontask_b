@@ -95,7 +95,7 @@ class ActionEditManager:
             'form_filter': form_filter,
             'filter_condition': filter_condition,
             'selected_rows':
-                filter_condition.n_rows_selected
+                filter_condition.selected_count
                 if filter_condition else -1,
             'is_email_report':
                 action.action_type == models.Action.EMAIL_REPORT,
@@ -107,7 +107,7 @@ class ActionEditManager:
             'is_rubric': action.action_type == models.Action.RUBRIC_TEXT,
             'is_survey': action.action_type == models.Action.SURVEY,
             'all_false_conditions': any(
-                cond.n_rows_selected == 0
+                cond.selected_count == 0
                 for cond in action.conditions.all()),
             'rows_all_false': action.get_row_all_false_count(),
 

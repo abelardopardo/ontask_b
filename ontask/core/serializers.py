@@ -9,6 +9,7 @@ serialization for purposes of recreating the object during import.
 import ontask
 from rest_framework import serializers
 
+
 class OnTaskVersionField(serializers.Field):
     """Define the version field for serialization."""
 
@@ -22,6 +23,7 @@ class OnTaskVersionField(serializers.Field):
     def to_internal_value(self, data):
         """Return the object id"""
         return data
+
 
 class OnTaskObjectIdField(serializers.Field):
     """Define the object_id field for serialization."""

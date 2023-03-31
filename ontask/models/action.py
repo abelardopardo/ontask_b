@@ -188,14 +188,15 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         if not action_filter:
             return self.workflow.nrows
 
-        return action_filter.n_rows_selected
+        return action_filter.selected_count
 
     def get_row_all_false_count(self) -> List[int]:
         """Extract the rows for which  all conditions are false.
 
         Given a table and a list of conditions return the number of rows in
-        which all the conditions are false. :return: Number of rows that have
-        all conditions equal to false
+        which all the conditions are false.
+
+        :return: List of row indexes that have all conditions equal to false
         """
         if self.rows_all_false is None:
             if not self.workflow.has_data_frame():
@@ -203,13 +204,13 @@ class ActionBase(NameAndDescription, CreateModifyFields):
                 raise ontask.OnTaskException(
                     'Workflow without DF in get_table_row_count_all_false')
 
+            if self.conditions.count() == 0:
+                # Condition list is either None or empty. No restrictions.
+                return []
+
             # Separate filter from conditions
             filter_item = self.get_filter()
             cond_list = self.conditions.all()
-
-            if not cond_list:
-                # Condition list is either None or empty. No restrictions.
-                return []
 
             # Workflow has a data frame and condition list is non empty
 
@@ -224,8 +225,8 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
         return self.rows_all_false
 
-    def update_n_rows_selected(self, column: Optional[Column] = None):
-        """Reset the field n_rows_selected in all conditions.
+    def update_selected_rows(self, column: Optional[Column] = None):
+        """Reset the field selected_count in all conditions.
 
         If the column argument is present, select only those conditions that
         have column as part of their variables.
@@ -235,11 +236,6 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
         :return: All conditions (except the filter) are updated
         """
-        # Get the filter, if it exists.
-        filter_obj = self.get_filter()
-        if filter_obj:
-            # If there is a filter, update the count
-            filter_obj.update_n_rows_selected(column=column)
 
         # Recalculate for the rest of conditions
         for cond in self.conditions.all():
@@ -248,8 +244,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
     def used_columns(self) -> List[Column]:
         """List of columns used in the action.
 
-        These are those that are used in any condition + those used
-        in the columns field.
+        Columns used in any condition + those used in the columns field.
 
         :return: List of column objects
         """
@@ -305,8 +300,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
     attachments = models.ManyToManyField(
         View,
         verbose_name=_("Email attachments"),
-        related_name='attached_to'
-    )
+        related_name='attached_to')
 
     def used_views(self) -> List[View]:
         """List of views used in the action.

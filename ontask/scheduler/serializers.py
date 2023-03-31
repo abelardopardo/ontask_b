@@ -118,7 +118,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
 
         model = models.ScheduledOperation
 
-        fields = (
+        fields = [
             'id',
             'name',
             'description_text',
@@ -128,7 +128,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
             'execute_until',
             'workflow',
             'action',
-            'payload')
+            'payload']
 
 
 class ScheduledEmailSerializer(ScheduledOperationSerializer):

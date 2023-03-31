@@ -15,9 +15,9 @@ class LogSerializer(serializers.ModelSerializer):
         """Choose the model, fields and read_only."""
         model = models.Log
         fields = ('useremail', 'created', 'name', 'workflow', 'payload')
-        read_only_fields = (
+        read_only_fields = [
             'useremail',
             'created',
             'name',
             'workflow',
-            'payload')
+            'payload']

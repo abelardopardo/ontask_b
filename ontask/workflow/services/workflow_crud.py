@@ -111,12 +111,12 @@ def do_clone_workflow(user, workflow: models.Workflow) -> models.Workflow:
             workflow.get_data_frame_table_name(),
             new_workflow.get_data_frame_table_name())
 
+        for item_obj in workflow.views.all():
+            do_clone_view(user, item_obj, new_workflow)
+
         # Clone actions
         for item_obj in workflow.actions.all():
             do_clone_action(user, item_obj, new_workflow)
-
-        for item_obj in workflow.views.all():
-            do_clone_view(user, item_obj, new_workflow)
 
         # Done!
         new_workflow.save()

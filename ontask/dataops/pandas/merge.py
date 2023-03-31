@@ -336,4 +336,4 @@ def perform_dataframe_upload_merge(
 
     # Recompute all the values of the conditions in each of the actions
     for action in workflow.actions.all():
-        action.update_n_rows_selected()
+        action.update_selected_rows()

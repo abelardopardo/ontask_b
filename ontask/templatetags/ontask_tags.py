@@ -24,7 +24,7 @@ register = template.Library()
 @register.simple_tag
 def ontask_version() -> str:
     """Return ontask version."""
-    return ontask.__version__
+    return ontask.get_version()
 
 
 @register.filter

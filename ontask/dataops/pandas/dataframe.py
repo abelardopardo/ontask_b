@@ -194,14 +194,14 @@ def store_workflow_table(
     """
     # Check information on update_info and complete if needed
     if not update_info.get('initial_column_names'):
-        raise _('Internal error while processing database.')
+        raise Exception(_('Internal error while processing database.'))
     if not update_info.get('rename_column_names'):
         update_info['rename_column_names'] = update_info[
             'initial_column_names']
     if not update_info.get('column_types'):
-        raise _('Internal error while processing database.')
+        raise Exception(_('Internal error while processing database.'))
     if not update_info.get('keep_key_column'):
-        raise _('Internal error while processing database.')
+        raise Exception(_('Internal error while processing database.'))
     if not update_info.get('columns_to_upload'):
         update_info['columns_to_upload'] = [True] * len(update_info[
             'initial_column_names'])
@@ -225,7 +225,7 @@ def store_workflow_table(
 
             if current_col:
                 # Dropping an existing column. Incorrect.
-                raise _('Invalid column drop operation.')
+                raise Exception(_('Invalid column drop operation.'))
             continue
 
         # Step 2: Check if the column must be renamed
@@ -342,11 +342,12 @@ def rename_df_column(
 
     # Rename the appearances of the variable in the formulas in the views
     for view in workflow.views.all():
-        view.formula = formula.evaluation.rename_variable(
-            view.formula,
-            old_name,
-            new_name)
-        view.save(update_fields=['_formula'])
+        if view.filter is not None:
+            view.filter.formula = formula.evaluation.rename_variable(
+                view.filter.formula,
+                old_name,
+                new_name)
+            view.filter.save(update_fields=['_formula'])
 
 
 def get_subframe(

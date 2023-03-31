@@ -10,7 +10,7 @@ from rest_framework.authtoken.models import Token
 from ontask import models, tests
 
 
-class WorkflowApiCreate(tests.OnTaskApiTestCase):
+class WorkflowApiBasic(tests.OnTaskApiTestCase):
     fixtures = ['simple_workflow']
 
     filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
@@ -21,6 +21,8 @@ class WorkflowApiCreate(tests.OnTaskApiTestCase):
         token = Token.objects.get(user__email='instructor01@bogus.com')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
+
+class WorkflowApiList(WorkflowApiBasic):
     def test_workflow_list(self):
         # Get list of workflows
         response = self.client.get(reverse('workflow:api_workflows'))
@@ -35,6 +37,9 @@ class WorkflowApiCreate(tests.OnTaskApiTestCase):
         workflow = models.Workflow.objects.get(id=wflow_id)
         self.assertEqual(wflow_id, 1)
         self.compare_wflows(response.data['results'][0], workflow)
+
+
+class WorkflowApiCreate(WorkflowApiBasic):
 
     def test_workflow_create(self):
         # Trying to create an existing wflow and detecting its duplication
@@ -56,6 +61,9 @@ class WorkflowApiCreate(tests.OnTaskApiTestCase):
         workflow = models.Workflow.objects.get(name=tests.wflow_name + '2')
         self.compare_wflows(response.data, workflow)
 
+
+class WorkflowApiNoPost(WorkflowApiBasic):
+
     def test_workflow_no_post_on_update(self):
         # POST method is not allowed in this URL
         response = self.client.post(
@@ -66,6 +74,9 @@ class WorkflowApiCreate(tests.OnTaskApiTestCase):
 
         # Verify that the method post is not allowed
         self.assertIn('Method "POST" not allowed', response.data['detail'])
+
+
+class WorkflowApiUpdate(WorkflowApiBasic):
 
     def test_workflow_update(self):
         # Run the update (PUT) method
@@ -81,6 +92,8 @@ class WorkflowApiCreate(tests.OnTaskApiTestCase):
         workflow = models.Workflow.objects.get(id=wflow_id)
         self.assertEqual(workflow.name, tests.wflow_name + '2')
 
+
+class WorkflowApiDelete(WorkflowApiBasic):
     def test_workflow_delete(self):
         # Run the update delete
         self.client.delete(reverse('workflow:api_rud', kwargs={'pk': 1}))

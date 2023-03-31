@@ -38,7 +38,7 @@ def do_clone_condition(
         description_text=condition.description_text,
         action=new_action,
         formula=copy.deepcopy(condition.formula),
-        n_rows_selected=condition.n_rows_selected)
+        selected_count=condition.selected_count)
     new_condition.save()
 
     try:
@@ -80,7 +80,7 @@ def do_clone_filter(
         workflow=new_workflow,
         description_text=filter_obj.description_text,
         formula=copy.deepcopy(filter_obj.formula),
-        n_rows_selected=filter_obj.n_rows_selected)
+        selected_count=filter_obj.selected_count)
     new_filter.save()
 
     try:

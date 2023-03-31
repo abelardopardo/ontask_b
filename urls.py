@@ -33,7 +33,7 @@ SwaggerUIRenderer.template = 'api_ui.html'
 schema_view = get_schema_view(
     openapi.Info(
         title='OnTask API',
-        default_version=ontask.__version__,
+        default_version=ontask.get_version(),
         description=api_description),
     public=True,
     permission_classes=(permissions.AllowAny,))

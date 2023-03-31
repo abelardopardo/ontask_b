@@ -108,7 +108,7 @@ class ExecuteIncreaseTrackCount:
                 # FIX: Too aggressive?
                 track_col = action.workflow.columns.get(name=column_dst)
                 for action in action.workflow.actions.all():
-                    action.update_n_rows_selected(track_col)
+                    action.update_selected_rows(track_col)
 
         # Record the event
         action.log(user, self.log_event, **log_payload)

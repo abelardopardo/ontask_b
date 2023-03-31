@@ -20,94 +20,6 @@ except NameError:
         return bogus  # noqa E731
 
 
-def _create_columns(new_columns, context):
-    """Add new_columns just created to the DB in the given context.
-
-    :param new_columns: List of columns that have been already created
-    :param context: Dictionary to pass the serializer with extra info
-    :return: List of new column objects
-    """
-    if not new_columns:
-        return []
-
-    workflow = context['workflow']
-
-    # There are some new columns that need to be created
-    column_data = ColumnSerializer(
-        data=new_columns,
-        many=True,
-        context=context)
-
-    # And save its content
-    if not column_data.is_valid():
-        raise Exception(_('Unable to create column data'))
-    new_columns = column_data.save()
-
-    # Add columns to DB
-    for col in new_columns:
-        sql.add_column_to_db(
-            workflow.get_data_frame_table_name(),
-            col.name,
-            col.data_type)
-
-        # Update the column position and count in the workflow
-        workflow.ncols = workflow.ncols + 1
-        col.position = workflow.ncols
-        col.save(update_fields=['position'])
-
-    workflow.save(update_fields=['ncols'])
-
-    return new_columns
-
-
-def _process_columns(validated_data, context):
-    """Process the used_columns field of a serializer.
-
-    Verifies if the column is new or not. If not new, it verifies that is
-    compatible with the columns already existing in the workflow
-
-    :param validated_data: Object with the parsed column items
-    :param context: dictionary with additional objects for serialization
-    :return: List of new columns
-    """
-    new_columns = []
-    for citem in validated_data:
-        cname = citem.get('name')
-        if not cname:
-            raise Exception(
-                _('Incorrect column name {0}.').format(cname))
-
-        # Search for the column in the workflow columns
-        col = context['workflow'].columns.filter(name=cname).first()
-        if not col:
-            # Accumulate the new columns just in case we have to undo
-            # the changes
-            if citem['is_key']:
-                raise Exception(
-                    _('Action contains non-existing key column "{0}"').format(
-                        cname))
-            new_columns.append(citem)
-            continue
-
-        # Processing an existing column. Check data type compatibility
-        is_not_compatible = (
-            col.data_type != citem.get('data_type')
-            or col.is_key != citem['is_key']
-            or set(col.categories) != set(citem['categories'])
-        )
-        if is_not_compatible:
-            # The two columns are different
-            raise Exception(_(
-                'Imported column {0} is different from existing '
-                + 'one.').format(cname))
-
-        # Update the column categories (just in case the new one has a
-        # different order)
-        col.set_categories(citem['categories'])
-
-    return _create_columns(new_columns, context)
-
-
 class ColumnConditionNameSerializer(serializers.ModelSerializer):
     """Serialize Column/ConditionName tuples."""
 
@@ -140,7 +52,7 @@ class ColumnConditionNameSerializer(serializers.ModelSerializer):
         """Define the model and select only column and condition elements."""
 
         model = models.ActionColumnConditionTuple
-        fields = ('column', 'condition', 'changes_allowed')
+        fields = ['column', 'condition', 'changes_allowed']
 
 
 class RubricCellSerializer(serializers.ModelSerializer):
@@ -169,14 +81,14 @@ class RubricCellSerializer(serializers.ModelSerializer):
             **validated_data)
 
     class Meta:
-        """Define the model and select fields to seralize."""
+        """Define the model and select fields to process."""
 
         model = models.RubricCell
-        fields = (
+        fields = [
             'column',
             'loa_position',
             'description_text',
-            'feedback_text')
+            'feedback_text']
 
 
 class ActionSerializer(serializers.ModelSerializer):
@@ -286,12 +198,12 @@ class ActionSerializer(serializers.ModelSerializer):
 
         model = models.Action
 
-        exclude = (
+        exclude = [
             'id',
             'workflow',
             'created',
             'modified',
-            'last_executed_log')
+            'last_executed_log']
 
 
 class ActionSelfcontainedSerializer(ActionSerializer):
@@ -415,9 +327,9 @@ class ActionSelfcontainedSerializer(ActionSerializer):
         """Define the model and the field to exclude."""
 
         model = models.Action
-        exclude = (
+        exclude = [
             'id',
             'workflow',
             'created',
             'modified',
-            'last_executed_log')
+            'last_executed_log']

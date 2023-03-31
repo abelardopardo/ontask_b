@@ -112,7 +112,7 @@ def create_row_preview_context(
     # Get the total number of items
     filter_obj = action.get_filter()
     if filter_obj:
-        n_items = filter_obj.n_rows_selected
+        n_items = filter_obj.selected_count
     else:
         n_items = action.workflow.nrows
 

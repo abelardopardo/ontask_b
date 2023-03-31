@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import models, tests
-from ontask.tests.compare import compare_conditions
+from ontask.tests.compare import compare_workflows
 
 
 class WorkflowInitial(tests.OnTaskLiveTestCase):
@@ -498,48 +498,50 @@ class WorkflowImport(tests.OnTaskLiveTestCase):
         w1 = models.Workflow.objects.get(name=tests.wflow_name)
         w2 = models.Workflow.objects.get(name='newwf')
 
-        # Equal descriptions
-        self.assertEqual(
-            w1.description_text,
-            w2.description_text)
+        compare_workflows(w1, w2)
 
-        # Equal number of columns
-        self.assertEqual(w1.columns.count(), w2.columns.count())
-
-        # Identical attributes
-        self.assertEqual(w1.attributes, w2.attributes)
-
-        # Equal number of rows and columns
-        self.assertEqual(w1.nrows, w2.nrows)
-        self.assertEqual(w1.ncols, w2.ncols)
-
-        # Equal names and column types
-        for x, y in zip(w1.columns.all(), w2.columns.all()):
-            self.assertEqual(x.name, y.name)
-            self.assertEqual(x.data_type, y.data_type)
-            self.assertEqual(x.is_key, y.is_key)
-
-        # Equal number of actions
-        self.assertEqual(
-            w1.actions.count(),
-            w2.actions.count())
-
-        # Equal names and content in the conditions
-        for x, y in zip(w1.actions.all(), w2.actions.all()):
-            self.assertEqual(x.name, y.name)
-            self.assertEqual(x.description_text, y.description_text)
-            self.assertEqual(x.text_content, y.text_content)
-            compare_conditions(x.get_filter(), y.get_filter())
-            self.assertEqual(
-                x.conditions.count(),
-                y.conditions.count())
-            for c1, c2 in zip(x.conditions.all(), y.conditions.all()):
-                self.assertEqual(c1.name, c2.name)
-                self.assertEqual(
-                    c1.description_text,
-                    c2.description_text)
-                self.assertEqual(c1.formula, c2.formula)
-                self.assertEqual(c1.is_filter, c2.is_filter)
+        # # Equal descriptions
+        # self.assertEqual(
+        #     w1.description_text,
+        #     w2.description_text)
+        #
+        # # Equal number of columns
+        # self.assertEqual(w1.columns.count(), w2.columns.count())
+        #
+        # # Identical attributes
+        # self.assertEqual(w1.attributes, w2.attributes)
+        #
+        # # Equal number of rows and columns
+        # self.assertEqual(w1.nrows, w2.nrows)
+        # self.assertEqual(w1.ncols, w2.ncols)
+        #
+        # # Equal names and column types
+        # for x, y in zip(w1.columns.all(), w2.columns.all()):
+        #     self.assertEqual(x.name, y.name)
+        #     self.assertEqual(x.data_type, y.data_type)
+        #     self.assertEqual(x.is_key, y.is_key)
+        #
+        # # Equal number of actions
+        # self.assertEqual(
+        #     w1.actions.count(),
+        #     w2.actions.count())
+        #
+        # # Equal names and content in the conditions
+        # for x, y in zip(w1.actions.all(), w2.actions.all()):
+        #     self.assertEqual(x.name, y.name)
+        #     self.assertEqual(x.description_text, y.description_text)
+        #     self.assertEqual(x.text_content, y.text_content)
+        #     compare_filters(x.get_filter(), y.get_filter())
+        #     self.assertEqual(
+        #         x.conditions.count(),
+        #         y.conditions.count())
+        #     for c1, c2 in zip(x.conditions.all(), y.conditions.all()):
+        #         self.assertEqual(c1.name, c2.name)
+        #         self.assertEqual(
+        #             c1.description_text,
+        #             c2.description_text)
+        #         self.assertEqual(c1.formula, c2.formula)
+        #         self.assertEqual(c1.is_filter, c2.is_filter)
 
         # End of session
         self.logout()

@@ -791,42 +791,11 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 1,
+        "selected_count": 1,
         "workflow": 108,
         "action": 253,
         "columns": [
             2929
-        ]
-    }
-},
-{
-    "model": "ontask.filter",
-    "pk": 1,
-    "fields": {
-        "created": "2020-08-17T09:35:31.291Z",
-        "modified": "2020-08-17T09:35:31.774Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "age",
-                    "type": "double",
-                    "field": "age",
-                    "input": "number",
-                    "value": "12",
-                    "operator": "greater"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "",
-        "n_rows_selected": 2,
-        "workflow": 108,
-        "description_text": "",
-        "action": 253,
-        "columns": [
-            2928
         ]
     }
 },

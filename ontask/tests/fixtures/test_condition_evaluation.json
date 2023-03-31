@@ -788,7 +788,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -820,7 +820,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -852,7 +852,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -884,7 +884,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -916,7 +916,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -948,7 +948,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -980,7 +980,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1012,7 +1012,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1044,7 +1044,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1076,7 +1076,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1108,7 +1108,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1140,7 +1140,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1172,7 +1172,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 6,
+        "selected_count": 6,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1204,7 +1204,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 6,
+        "selected_count": 6,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1236,7 +1236,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1268,7 +1268,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 1,
         "columns": [
@@ -1300,7 +1300,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1332,7 +1332,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 0,
+        "selected_count": 0,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1364,7 +1364,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1396,7 +1396,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 0,
+        "selected_count": 0,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1428,7 +1428,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 0,
+        "selected_count": 0,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1460,7 +1460,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1492,7 +1492,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1524,7 +1524,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 0,
+        "selected_count": 0,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1556,7 +1556,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 0,
+        "selected_count": 0,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1588,7 +1588,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1620,7 +1620,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 0,
+        "selected_count": 0,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1652,7 +1652,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1684,7 +1684,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1716,7 +1716,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1748,7 +1748,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 0,
+        "selected_count": 0,
         "workflow": 1,
         "action": 2,
         "columns": [
@@ -1780,42 +1780,11 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 4,
+        "selected_count": 4,
         "workflow": 1,
         "action": 2,
         "columns": [
             9
-        ]
-    }
-},
-{
-    "model": "ontask.filter",
-    "pk": 1,
-    "fields": {
-        "created": "2020-08-17T09:36:09.765Z",
-        "modified": "2020-08-17T09:36:10.253Z",
-        "_formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "double1",
-                    "type": "double",
-                    "field": "double1",
-                    "input": "number",
-                    "value": null,
-                    "operator": "is_null"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "_formula_text": "",
-        "n_rows_selected": 4,
-        "workflow": 1,
-        "description_text": "",
-        "action": 2,
-        "columns": [
-            4
         ]
     }
 },

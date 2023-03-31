@@ -748,7 +748,7 @@
             "condition": "AND"
         },
         "_formula_text": "",
-        "n_rows_selected": 2,
+        "selected_count": 2,
         "workflow": 5,
         "action": 2,
         "columns": [

@@ -217,7 +217,7 @@ class ScheduledOperationSaveBase:
         all_false_conditions = False
         if action:
             all_false_conditions = any(
-                cond.n_rows_selected == 0
+                cond.selected_count == 0
                 for cond in action.conditions.all())
 
         return render(

@@ -37,7 +37,7 @@ class ActionTestSerializers(tests.OnTaskTestCase):
                         "operator": "greater"}],
                     "valid": True,
                     "condition": "AND"},
-                "n_rows_selected": 2}],
+                "selected_count": 2}],
         "conditions": [
             {
                 "columns": [],
@@ -52,7 +52,7 @@ class ActionTestSerializers(tests.OnTaskTestCase):
                         "operator": "equal"}],
                     "valid": True,
                     "condition": "AND"},
-                "n_rows_selected": 1}],
+                "selected_count": 1}],
         "column_condition_pair": [],
         "is_out": True,
         "used_columns": [

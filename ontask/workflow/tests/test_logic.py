@@ -13,9 +13,7 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser
 
 from ontask import models, tests
-from ontask.tests.compare import (
-    compare_conditions, compare_filters,
-    compare_workflows)
+from ontask.tests.compare import compare_workflows
 from ontask.workflow import services
 
 

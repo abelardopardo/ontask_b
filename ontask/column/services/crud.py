@@ -329,9 +329,9 @@ def delete_column(
         action = filter_obj.action
         filter_obj.delete()
 
-        # Update the n_rows_selected
+        # Update the selected_count
         if action:
-            action.update_n_rows_selected()
+            action.update_selected_rows()
 
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.

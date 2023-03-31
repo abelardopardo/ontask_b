@@ -109,7 +109,7 @@ def do_import_workflow(
     user,
     name: Optional[str],
     file_item,
-):
+) -> models.Workflow:
     """Create a new structure of workflow stored in the file item.
 
     Receives a name and a file item (submitted through a form) and creates
@@ -118,7 +118,7 @@ def do_import_workflow(
     :param user: User record to use for the import (own all created items)
     :param name: Workflow name (it has been checked that it does not exist)
     :param file_item: File item obtained through a form
-    :return:
+    :return: workflow object
     """
     try:
         workflow = do_import_workflow_parse(user, name, file_item)
@@ -142,6 +142,7 @@ def do_import_workflow(
 
     workflow.log(user, models.Log.WORKFLOW_IMPORT)
 
+    return workflow
 
 
 def do_export_workflow_parse(

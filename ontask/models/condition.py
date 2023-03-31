@@ -49,8 +49,11 @@ class ConditionBase(CreateModifyFields):
     empty_formula = None
 
     def update_fields(self):
-        """Update some internal fields."""
+        """Update some internal fields when saving an object."""
+        # Boolean flagging the formula as empty
         self.empty_formula = dataops_formula.is_empty(self._formula)
+
+        # Text rendering of the formula
         if not self.empty_formula:
             self._formula_text = dataops_formula.evaluate(
                 self._formula,
@@ -73,11 +76,11 @@ class ConditionBase(CreateModifyFields):
         """Return the text rendering of the formula."""
         return self._formula_text
 
-    def update_n_rows_selected(self, column=None, filter_formula=None):
-        """Calculate the number of rows for which condition is true.
+    def update_selected_count(self, filter_formula=None):
+        """Calculate the number of rows for which this condition is true.
 
-        Given a condition update the number of rows
-        for which this condition will have true result.
+        Given a condition update the number of rows for which this condition
+        has true result.
 
         :param filter_formula: Formula provided by another filter condition
         and to take the conjunction with the condition formula.
@@ -94,14 +97,13 @@ class ConditionBase(CreateModifyFields):
                 'valid': True,
             }
 
-        old_count = self.n_rows_selected
-        self.n_rows_selected = sql.get_num_rows(
-            self.action.workflow.get_data_frame_table_name(),
+        old_count = self.selected_count
+        self.selected_count = sql.get_num_rows(
+            self.workflow.get_data_frame_table_name(),
             formula,
         )
-        self.save(update_fields=['n_rows_selected'])
 
-        return old_count != self.n_rows_selected
+        return old_count != self.selected_count
 
     class Meta:
         """Make the class abstract."""
@@ -162,7 +164,7 @@ class Condition(NameAndDescription, ConditionBase):
             'name': self.name,
             'action': self.action.name,
             'formula': self.formula_text,
-            'n_rows_selected': self.n_rows_selected,
+            'selected_count': self.selected_count,
             'workflow_id': self.workflow.id}
 
         payload.update(kwargs)
@@ -231,7 +233,6 @@ class Filter(ConditionBase):
 
         self.save()
 
-
     def delete_from_view(self):
         """Remove object from view (and delete if needed)"""
         self.view = None
@@ -248,7 +249,7 @@ class Filter(ConditionBase):
             'id': self.id,
             'action': self.action.name if self.action else '',
             'formula': self.formula_text,
-            'n_rows_selected': self.n_rows_selected,
+            'selected_count': self.selected_count,
             'workflow_id': self.workflow.id}
 
         payload.update(kwargs)
