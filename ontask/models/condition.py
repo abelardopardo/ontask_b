@@ -228,7 +228,7 @@ class Filter(ConditionBase):
         self.action = None
 
         if getattr(self, 'view', None) is None:
-            super().delete()
+            self.delete()
             return
 
         self.save()
@@ -238,7 +238,7 @@ class Filter(ConditionBase):
         self.view = None
 
         if getattr(self, 'action', None) is None:
-            super().delete()
+            self.delete()
             return
 
         self.save()

@@ -319,7 +319,7 @@ class ActionDataOut(ActionBase):  # noqa Z214
             view_set.add(view)
 
         # Add a filter if used
-        if self.filter and self.filter.view:
+        if self.filter and getattr(self.filter, 'view', None):
             view_set.add(self.filter.view)
 
         return list(view_set)

@@ -174,12 +174,7 @@ def set_filter(
         return http.JsonResponse({'html_redirect': ''})
 
     # If the action has a filter nuke it.
-    filter_obj = action.get_filter()
-    if filter_obj:
-        filter_obj.delete_from_action()
-
-    view.filter.action=action
-    view.filter.save()
+    action.filter = view.filter
 
     # Action counts need to be updated.
     action.rows_all_false = None
@@ -258,13 +253,15 @@ def delete_filter(
         # If the request has 'action_content', update the action
         action_content = request.POST.get('action_content')
         if action_content:
-            filter.action.set_text_content(action_content)
+            action.set_text_content(action_content)
 
         filter.log(request.user, models.Log.CONDITION_DELETE)
-        filter.action = None
         filter.delete_from_action()
+
+        action.filter = None
         action.rows_all_false = None
         action.save()
+
         action.update_selected_rows()
         return http.JsonResponse({'html_redirect': ''})
 
@@ -303,8 +300,7 @@ def delete_condition(
             action.set_text_content(action_content)
 
         condition.log(request.user, models.Log.CONDITION_DELETE)
-        condition.action = None
-        condition.delete_from_action()
+        condition.delete()
         action.rows_all_false = None
         action.save(update_fields=['rows_all_false'])
         return http.JsonResponse({'html_redirect': ''})
