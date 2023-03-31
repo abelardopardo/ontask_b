@@ -178,18 +178,13 @@ def set_filter(
     if filter_obj:
         filter_obj.delete_from_action()
 
-    filter_obj = models.Filter(
-        workflow=workflow,
-        action=action,
-        description_text=view.description_text,
-        formula=copy.deepcopy(view.formula),
-        n_rows_selected=-1)
-    filter_obj.save()
+    view.filter.action=action
+    view.filter.save()
 
     # Action counts need to be updated.
     action.rows_all_false = None
     action.save()
-    action.update_n_rows_selected()
+    action.update_selected_rows()
 
     return http.JsonResponse({'html_redirect': ''})
 
@@ -270,7 +265,7 @@ def delete_filter(
         filter.delete_from_action()
         action.rows_all_false = None
         action.save()
-        action.update_n_rows_selected()
+        action.update_selected_rows()
         return http.JsonResponse({'html_redirect': ''})
 
     return http.JsonResponse({

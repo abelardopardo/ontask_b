@@ -31,6 +31,24 @@ def do_clone_action(
     if new_workflow is None:
         new_workflow = action.workflow
 
+    # Clone the filter
+    new_filter = None
+    if action.filter is not None:
+        if new_workflow == action.workflow:
+            # Cloning an action within the same workflow, so reuse the filter
+            # if it is pointing to a view
+            new_filter = action.filter
+        else:
+            if action.filter.view is not None:
+                # The filter has already been cloned because it is in a view
+                new_filter = new_workflow.views.get(
+                    name=action.filter.view.name).filter
+            else:
+                new_filter = services.do_clone_filter(
+                    user,
+                    action.filter,
+                    new_workflow)
+
     new_action = models.Action(
         name=new_name,
         description_text=action.description_text,
@@ -44,7 +62,7 @@ def do_clone_action(
         text_content=action.text_content,
         target_url=action.target_url,
         shuffle=action.shuffle,
-    )
+        filter=new_filter)
     new_action.save()
 
     try:
@@ -71,11 +89,6 @@ def do_clone_action(
         # Clone the conditions
         for condition in action.conditions.all():
             services.do_clone_condition(user, condition, new_action)
-
-        # Clone the filter
-        filter_obj = action.get_filter()
-        if filter_obj:
-            services.do_clone_filter(user, filter_obj, new_action)
 
         # Update
         new_action.save()

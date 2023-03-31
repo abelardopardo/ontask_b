@@ -13,9 +13,10 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from ontask import models
+from ontask.action import services as action_services
+from ontask.dataops.formula import is_empty
 from ontask.core.checks import check_workflow
 from ontask.workflow import services
-from ontask.action import services as action_services
 from ontask.workflow.serializers import (
     WorkflowExportSerializer, WorkflowImportSerializer,
 )
@@ -38,9 +39,21 @@ def _run_compatibility_patches(json_data: Dict) -> Dict:
 
     # Change the formula field in the view
     for view in json_data.get('views', []):
-        if '_formula' in view:
+        if '_formula' not in view and 'formula' not in view:
             continue
-        view['_formula'] = view.pop('formula')
+
+        if '_formula' in view:
+            formula_info = view.pop('_formula')
+        else:
+            formula_info = view.pop('formula')
+
+        if is_empty(formula_info):
+            continue
+
+        view['filter'] = {
+            'object_id': -1,
+            '_formula': formula_info,
+            'description_text': view['description_text']}
 
     return json_data
 
@@ -128,6 +141,7 @@ def do_import_workflow(
             _('Unable to import workflow: {0}').format(exc))
 
     workflow.log(user, models.Log.WORKFLOW_IMPORT)
+
 
 
 def do_export_workflow_parse(

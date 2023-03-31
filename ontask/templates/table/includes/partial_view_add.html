@@ -11,7 +11,8 @@
     </button>
   </div>
   <div class="modal-body">
-    {{ form|crispy }}
+    {{ view_form|crispy }}
+    {{ filter_form|crispy }}
     <label class="control-label">{% trans 'Row will be shown if' %}</label>
     <div id="builder"></div>
   </div>

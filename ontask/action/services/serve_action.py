@@ -144,7 +144,10 @@ def update_row_values(
     # Recompute all the values of the conditions in each of the actions
     # TODO: Explore how to do this asynchronously (or lazy)
     for act in action.workflow.actions.all():
-        act.update_n_rows_selected()
+        if act.filter:
+            # Recompute the number of rows that are considered
+            act.filter.save()
+        act.update_selected_rows()
 
     # Log the event and update its content in the action
     log_item = action.log(

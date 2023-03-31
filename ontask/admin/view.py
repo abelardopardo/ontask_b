@@ -18,7 +18,6 @@ class ViewAdmin(admin.ModelAdmin):
         'name',
         'description_text',
         'created',
-        'modified',
-        '_formula')
+        'modified')
 
     search_fields = ['workflow', 'name', 'description_text']

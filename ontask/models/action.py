@@ -129,6 +129,22 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         blank=True,
         null=True)
 
+    filter = models.ForeignKey(
+        Filter,
+        blank=True,
+        null=True,
+        default=None,
+        on_delete=models.SET_NULL,
+        related_name='action')
+
+    filter = models.OneToOneField(
+        Filter,
+        blank=True,
+        null=True,
+        default=None,
+        on_delete=models.CASCADE,
+        related_name='action')
+
     @functional.cached_property
     def is_in(self) -> bool:
         """Get bool stating if action is Survey or similar."""
@@ -159,7 +175,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
     def get_filter(self) -> Optional[Filter]:
         """Get filter condition."""
-        return self.filter.first()
+        return self.filter
 
     def get_filter_formula(self):
         """Get filter condition."""
@@ -227,12 +243,10 @@ class ActionBase(NameAndDescription, CreateModifyFields):
 
         # Recalculate for the rest of conditions
         for cond in self.conditions.all():
-            cond.update_n_rows_selected(
-                column=column,
-                filter_formula=filter_obj.formula if filter_obj else None)
+            cond.save()
 
     def used_columns(self) -> List[Column]:
-        """List of column used in the action.
+        """List of columns used in the action.
 
         These are those that are used in any condition + those used
         in the columns field.
@@ -250,6 +264,16 @@ class ActionBase(NameAndDescription, CreateModifyFields):
             column_set.add(ccpair.column)
 
         return list(column_set)
+
+    def used_views(self) -> List[View]:
+        """List of views used in the action.
+
+        Views used either as attachments, or as filters. Method to be
+        overridden by subclasses if needed.
+
+        :return: List of view objects
+        """
+        return []
 
     def __str__(self):
         """Render the name."""
@@ -283,6 +307,25 @@ class ActionDataOut(ActionBase):  # noqa Z214
         verbose_name=_("Email attachments"),
         related_name='attached_to'
     )
+
+    def used_views(self) -> List[View]:
+        """List of views used in the action.
+
+        Views used either as attachments, or as filters
+
+        :return: List of view objects
+        """
+        view_set = set()
+
+        # Accumulate all views for all attachments
+        for view in self.attachments.all():
+            view_set.add(view)
+
+        # Add a filter if used
+        if self.filter and self.filter.view:
+            view_set.add(self.filter.view)
+
+        return list(view_set)
 
     @property
     def attachment_names(self):

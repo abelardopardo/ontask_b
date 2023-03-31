@@ -2,11 +2,13 @@
 
 """Functions to support the display of a view."""
 import copy
+from typing import Optional
 
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import models
 from ontask.table.services.errors import OnTaskTableCloneError
+from ontask.condition.services import do_clone_filter
 
 
 def do_clone_view(
@@ -14,7 +16,7 @@ def do_clone_view(
     view: models.View,
     new_workflow: models.Workflow = None,
     new_name: str = None,
-) -> models.View:
+) -> Optional[models.View]:
     """Clone a view.
 
     :param user: User requesting the operation
@@ -23,6 +25,9 @@ def do_clone_view(
     :param new_name: Non empty if it has to be renamed.
     :result: New clone object
     """
+    if view is None:
+        return None
+
     id_old = view.id
     name_old = view.name
 
@@ -36,8 +41,7 @@ def do_clone_view(
         name=new_name,
         description_text=view.description_text,
         workflow=new_workflow,
-        _formula=copy.deepcopy(view.formula),
-    )
+        filter=do_clone_filter(user, view.filter, new_workflow))
     new_view.save()
 
     try:
@@ -61,16 +65,23 @@ def do_clone_view(
 def save_view_form(
     user,
     workflow: models.Workflow,
-    view: models.View
+    view: models.View,
+    filter: Optional[models.Filter] = None,
 ):
     """Save the data attached to a view.
 
     :param user: user requesting the operation
     :param workflow: Workflow being processed
     :param view: View being processed.
+    :param filter: Filter object containing the formula
     :return: AJAX Response
     """
     view.workflow = workflow
+    if filter:
+        filter.workflow = workflow
+        filter.save()
+        view.filter = filter
+
     view.save()
     view.log(
         user,

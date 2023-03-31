@@ -2,6 +2,7 @@
 
 """Functions to clone action/conditions."""
 import copy
+from typing import Optional
 
 from ontask import models
 from ontask.dataops import formula
@@ -59,23 +60,25 @@ def do_clone_condition(
 def do_clone_filter(
     user,
     filter_obj: models.Filter,
-    new_action: models.Action = None,
-):
+    new_workflow: models.Workflow = None,
+) -> Optional[models.Filter]:
     """Clone a filter.
 
     Function to clone a filter and change action.
 
     :param user: User executing the operation
     :param filter_obj: Condition to clone
-    :param new_action: New action to point
-    :return: Nothing
+    :param new_workflow: New workflow object to point
+    :return: The newly created object
     """
+    if filter_obj is None:
+        return None
+
     old_id = filter_obj.id
 
     new_filter = models.Filter(
-        workflow=filter_obj.workflow,
+        workflow=new_workflow,
         description_text=filter_obj.description_text,
-        action=new_action,
         formula=copy.deepcopy(filter_obj.formula),
         n_rows_selected=filter_obj.n_rows_selected)
     new_filter.save()
@@ -93,3 +96,5 @@ def do_clone_filter(
         user,
         models.Log.CONDITION_CLONE,
         id_old=old_id)
+
+    return new_filter

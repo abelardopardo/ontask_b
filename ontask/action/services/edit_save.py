@@ -50,13 +50,7 @@ def save_action_form(
                 if view is None:
                     return http.JsonResponse({'html_redirect': None})
 
-                new_filter = models.Filter(
-                    workflow=workflow,
-                    description_text=view.description_text,
-                    action=action_item,
-                    formula=copy.deepcopy(view.formula),
-                    n_rows_selected=view.num_rows)
-                new_filter.save()
+                view.filter.action = action_item
 
             log_type = models.Log.ACTION_CREATE
             return_url = reverse('action:edit', kwargs={'pk': action_item.id})

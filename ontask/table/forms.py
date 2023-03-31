@@ -22,16 +22,10 @@ class ViewAddForm(forms.ModelForm):
 
         super().__init__(data, *args, **kwargs)
 
-        # Rename some of the fields
+        # Rename some fields
         self.fields['name'].label = _('View name')
         self.fields['description_text'].label = _('View Description')
         self.fields['columns'].label = _('Columns to show')
-
-        # Required enforced in the server (not in the browser)
-        self.fields['_formula'].required = False
-
-        # Filter should be hidden.
-        self.fields['_formula'].widget = forms.HiddenInput()
 
         # The queryset for the columns must be extracted from the workflow
         self.fields['columns'].queryset = self.workflow.columns.all()
@@ -76,4 +70,4 @@ class ViewAddForm(forms.ModelForm):
         """Define models and fields to consider."""
 
         model = models.View
-        fields = ['name', 'description_text', '_formula', 'columns']
+        fields = ['name', 'description_text', 'columns']

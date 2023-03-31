@@ -16,7 +16,7 @@ class ConditionAdmin(admin.ModelAdmin):
         'action',
         'description_text',
         '_formula',
-        'n_rows_selected')
+        'selected_count')
 
     search_fields = ['name', 'action', 'description_text']
 
@@ -28,6 +28,6 @@ class FilterAdmin(admin.ModelAdmin):
         'id',
         'description_text',
         '_formula',
-        'n_rows_selected')
+        'selected_count')
 
     search_fields = ['description_text']

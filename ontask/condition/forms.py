@@ -17,9 +17,13 @@ class FilterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """Adjust formula field parameters to use QueryBuilder."""
-        self.action = kwargs.pop('action')
+        self.action = kwargs.pop('action', None)
+        include_description = kwargs.pop('include_description', True)
 
         super().__init__(*args, **kwargs)
+
+        if not include_description:
+            self.fields.pop('description_text')
 
         # Required enforced in the server (not in the browser)
         self.fields['_formula'].required = False

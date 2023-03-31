@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """Condition Model."""
-from typing import Dict
-
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -39,11 +37,11 @@ class ConditionBase(CreateModifyFields):
         null=True,
         verbose_name=_('formula text'))
 
-    # Number or rows selected by the expression
-    n_rows_selected = models.IntegerField(
+    # Number of rows selected by the expression
+    selected_count = models.IntegerField(
         verbose_name=_('Number of rows selected'),
         default=-1,
-        name='n_rows_selected',
+        name='selected_count',
         blank=False,
         null=False)
 
@@ -81,14 +79,10 @@ class ConditionBase(CreateModifyFields):
         Given a condition update the number of rows
         for which this condition will have true result.
 
-        :param column: Column that has changed value (None when unknown)
         :param filter_formula: Formula provided by another filter condition
         and to take the conjunction with the condition formula.
         :return: Boolean. True if number has changed
         """
-        if column and column not in self.columns.all():
-            # The column is not part of this condition. Nothing to do
-            return
 
         formula = self.formula
         if filter_formula:
@@ -149,6 +143,14 @@ class Condition(NameAndDescription, ConditionBase):
         """Identify as filter"""
         return False
 
+    def update_fields(self):
+        """Update some internal fields when saving an object."""
+
+        super().update_fields()
+        filter_formula = self.action.get_filter_formula()
+
+        self.update_selected_count(filter_formula=filter_formula)
+
     def __str__(self) -> str:
         """Render string."""
         return self.name
@@ -208,32 +210,22 @@ class Filter(ConditionBase):
         verbose_name=_('Columns present in this filter'),
         related_name='filters')
 
-    action = models.ForeignKey(
-        'Action',
-        db_index=True,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='filter_tmp')
-
-    view = models.ForeignKey(
-        'View',
-        db_index=True,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='view')
-
     @property
     def is_filter(self) -> bool:
         """Identify as filter"""
         return True
 
+    def update_fields(self):
+        """Update some internal fields when saving an object."""
+
+        super().update_fields()
+        self.update_selected_count()
+
     def delete_from_action(self):
         """Remove object from action (and delete if needed)"""
         self.action = None
 
-        if self.view is None:
+        if getattr(self, 'view', None) is None:
             super().delete()
             return
 
@@ -244,7 +236,7 @@ class Filter(ConditionBase):
         """Remove object from view (and delete if needed)"""
         self.view = None
 
-        if self.action is None:
+        if getattr(self, 'action', None) is None:
             super().delete()
             return
 

@@ -29,14 +29,9 @@ def _propagate_changes(condition, changed_data, old_name):
             condition.action.rows_all_false = None
             condition.action.save(update_fields=['rows_all_false'])
 
-            if condition.is_filter:
-                # This update must propagate to the rest of conditions
-                condition.action.update_n_rows_selected()
-                condition.refresh_from_db(fields=['n_rows_selected'])
-            else:
+            if not condition.is_filter:
                 # Update the number of rows selected in the condition
-                condition.update_n_rows_selected(
-                    filter_formula=condition.action.get_filter_formula())
+                condition.save()
 
     # If condition name has changed, rename appearances in the content
     # field of the action.
@@ -71,6 +66,11 @@ def save_condition_form(
 
     is_new = form.instance.id is None
 
+    # If the request has the 'action_content' field, update the action
+    action_content = request.POST.get('action_content')
+    if action_content and action:
+        action.set_text_content(action_content)
+
     # Update fields and save the condition
     condition = form.save(commit=False)
     condition.workflow = workflow
@@ -79,11 +79,6 @@ def save_condition_form(
     condition.columns.set(workflow.columns.filter(
         name__in=formula.get_variables(condition.formula),
     ))
-
-    # If the request has the 'action_content' field, update the action
-    action_content = request.POST.get('action_content')
-    if action_content and action:
-        action.set_text_content(action_content)
 
     _propagate_changes(condition, form.changed_data, form.old_name)
 

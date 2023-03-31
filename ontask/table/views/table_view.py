@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from ontask import OnTaskServiceException, create_new_name, models
+from ontask.condition.forms import FilterForm
 from ontask.core import ajax_required, get_view, get_workflow, is_instructor
 from ontask.table import forms, services
 
@@ -35,16 +36,24 @@ def view_add(
             _('Cannot add a view to a workflow without data'))
         return http.JsonResponse({'html_redirect': ''})
 
-    # Form to read/process data
-    form = forms.ViewAddForm(request.POST or None, workflow=workflow)
+    # Forms to read/process data
+    view_form = forms.ViewAddForm(request.POST or None, workflow=workflow)
+    filter_form = FilterForm(request.POST or None, include_description=False)
 
-    if request.method == 'POST' and form.is_valid():
-        if not form.has_changed():
+    if (
+        request.method == 'POST' and
+        view_form.is_valid() and
+        filter_form.is_valid()
+    ):
+        if not view_form.has_changed() and not filter_form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
-        view = form.save(commit=False)
-        services.save_view_form(request.user, workflow, view)
-        form.save_m2m()  # Needed to propagate the save effect to M2M relations
+        view = view_form.save(commit=False)
+        filter_obj = filter_form.save(commit=False)
+
+        services.save_view_form(request.user, workflow, view, filter_obj)
+        # Propagate the save effect to M2M relations
+        view_form.save_m2m()
 
         return http.JsonResponse({
             'html_redirect': reverse(
@@ -54,7 +63,10 @@ def view_add(
     return http.JsonResponse({
         'html_form': render_to_string(
             'table/includes/partial_view_add.html',
-            {'form': form, 'id': form.instance.id},
+            {
+                'id': view_form.instance.id,
+                'view_form': view_form,
+                'filter_form': filter_form},
             request=request),
     })
 
@@ -77,25 +89,38 @@ def view_edit(
     :return: AJAX Response
     """
     del pk
-    form = forms.ViewAddForm(
+
+    # Forms to read/process data
+    v_form = forms.ViewAddForm(
         request.POST or None,
         instance=view, workflow=workflow)
-    if request.method == 'POST' and form.is_valid():
-        if not form.has_changed():
+    f_form = FilterForm(
+        request.POST or None,
+        instance=view.filter,
+        include_description=False)
+
+    if (
+        request.method == 'POST' and
+        v_form.is_valid() and
+        f_form.is_valid()
+    ):
+        if not v_form.has_changed() and not f_form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
-        view = form.save(commit=False)
-        services.save_view_form(request.user, workflow, view)
-        form.save_m2m()  # Needed to propagate the save effect to M2M relations
+        view = v_form.save(commit=False)
+        filter_obj = f_form.save(commit=False)
+
+        services.save_view_form(request.user, workflow, view, filter_obj)
+        # Propagate the save effect to M2M relations
+        v_form.save_m2m()
 
         return http.JsonResponse({'html_redirect': ''})
 
     return http.JsonResponse({
         'html_form': render_to_string(
             'table/includes/partial_view_edit.html',
-            {'form': form, 'id': form.instance.id},
-            request=request),
-    })
+            {'id': v_form.instance.id, 'v_form': v_form, 'f_form': f_form},
+            request=request)})
 
 
 @user_passes_test(is_instructor)
@@ -120,6 +145,8 @@ def view_delete(
     del pk, workflow
     if request.method == 'POST':
         view.log(request.user, models.Log.VIEW_DELETE)
+        if view.filter:
+            view.filter.delete_from_view()
         view.delete()
         return http.JsonResponse({'html_redirect': reverse('table:display')})
 
