@@ -63,9 +63,7 @@ def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
     data_frame = pd.read_excel(
         file_obj,
         sheet_name=sheet_name,
-        index_col=False,
-        infer_datetime_format=True,
-        quotechar='"')
+        index_col=False)
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
