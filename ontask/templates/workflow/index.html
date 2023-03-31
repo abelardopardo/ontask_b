@@ -31,6 +31,7 @@
          data-toggle="tooltip"
          title="{% trans 'Import a file with an OnTask workflow' %}">
         <span class="fa fa-upload"></span>{% trans 'Import workflow' %}</a>
+      <input class="shadow btn btn-outline-dark" id="workflow-search" type="text" placeholder="Search..."/>
     </div>
     {% if workflows_star %}
       <h5 class="text-primary mb-0 pd-0 pl-0">{% trans 'Favourites' %}</h5>
@@ -40,7 +41,7 @@
         {% endfor %}
       </div>
     {% endif %}
-    <div class="card-deck justify-content-center my-3">
+    <div class="card-deck justify-content-center my-3" id="workflow-cards">
       {% for wflow in workflows %}
         {% include 'workflow/includes/partial_workflow_card.html' %}
       {% endfor %}
