@@ -252,6 +252,7 @@
     <script type="text/javascript" src="{% static 'js/initial.js' %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     {% ontask_bootstrap_js %}
+    <script type="text/javascript">window.CSRF_TOKEN = "{{ csrf_token }}";</script>
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
     {% block scripts %}
     {% endblock scripts %}
@@ -272,6 +273,7 @@
           ignoreUserActivity: true,
           warnAfter: ({{ ONTASK_TIMEOUT }} - 60) * 1000,
           redirAfter: {{ ONTASK_TIMEOUT }} * 1000,
+          ajaxData: {"csrfmiddlewaretoken": window.CSRF_TOKEN},
           onStart: false
         });
       </script>

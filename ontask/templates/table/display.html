@@ -39,6 +39,7 @@
           ajax: {
             url: "{{ ajax_url }}",
             type: 'POST',
+            headers: {'X-CSRFToken': window.CSRF_TOKEN},
           },
           columns: {{ columns_datatables|safe }},
           "order": [[1, 'asc']],

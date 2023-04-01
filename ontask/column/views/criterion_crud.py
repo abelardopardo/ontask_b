@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
 
 from ontask import OnTaskServiceException, models
 from ontask.column import forms, services
@@ -150,7 +149,6 @@ class ColumnCriterionDeleteView(
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
 class ColumnCriterionInsertView(
     UserIsInstructor,
     JSONFormResponseMixin,
@@ -201,66 +199,3 @@ class ColumnCriterionInsertView(
 
         # Refresh the page to show the column in the list.
         return http.JsonResponse({'html_redirect': ''})
-
-
-# @user_passes_test(is_instructor)
-# @csrf_exempt
-# @ajax_required
-# @require_POST
-# @get_action(pf_related=['columns', 'actions'])
-# def criterion_insert(
-#     request: http.HttpRequest,
-#     pk: int,
-#     cpk: int,
-#     workflow: Optional[models.Workflow] = None,
-#     action: Optional[models.Action] = None,
-# ) -> http.JsonResponse:
-#     """Operation to add a criterion to a rubric.
-#
-#     :param request: Request object
-#     :param pk: Action PK
-#     :param cpk: column PK.
-#     :param workflow: Workflow being manipulated
-#     :param action: Action object where the criterion is inserted
-#     :return: JSON response
-#     """
-#     # If the request has the 'action_content', update the action
-#     action_content = request.POST.get('action_content')
-#     if action_content:
-#         action.set_text_content(action_content)
-#
-#     criteria = action.column_condition_pair.filter(action_id=pk)
-#     column = workflow.columns.filter(pk=cpk).first()
-#     if not column or criteria.filter(column=column).exists():
-#         messages.error(
-#             request,
-#             _('Incorrect invocation of criterion insert operation.'),
-#         )
-#         return http.JsonResponse({'html_redirect': ''})
-#
-#     if (
-#         criteria
-#         and set(column.categories) != set(criteria[0].column.categories)
-#     ):
-#         messages.error(
-#             request,
-#             _('Criterion does not have the correct levels of attainment'),
-#         )
-#         return http.JsonResponse({'html_redirect': ''})
-#
-#     if not criteria and len(column.categories) == 0:
-#         messages.error(
-#             request,
-#             _('The column needs to have a fixed set of possible values'),
-#         )
-#         return http.JsonResponse({'html_redirect': ''})
-#
-#     acc = models.ActionColumnConditionTuple.objects.create(
-#         action=action,
-#         column=column,
-#         condition=None)
-#
-#     acc.log(request.user, models.Log.ACTION_RUBRIC_CRITERION_ADD)
-#
-#     # Refresh the page to show the column in the list.
-#     return http.JsonResponse({'html_redirect': ''})

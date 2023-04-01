@@ -45,10 +45,11 @@ let get_id_text_content = function() {
 };
 let ajaxSimplePost = function () {
   $('#div-spinner').show();
-  let data = []
+  let data = {"csrfmiddlewaretoken": window.CSRF_TOKEN}
   if (document.getElementById("id_text_content") != null) {
     value = get_id_text_content();
-    data.push({"name": "action_content", "value": value});
+    data["name"] = "action_content";
+    data["value"] = value;
   }
   $.ajax({
     url: $(this).attr('data-url'),
@@ -123,7 +124,7 @@ let loadForm = function () {
   if ($(this).is("[class*='disabled']")) {
     return;
   }
-  data = {};
+  let data = {"csrfmiddlewaretoken": window.CSRF_TOKEN}
   if (document.getElementById("id_subject") != null) {
     data["subject_content"] = $("#id_subject").val();
   }
@@ -145,7 +146,7 @@ let saveForm = function () {
     let data = form.serializeArray();
     if (document.getElementById("id_text_content") != null) {
       value = get_id_text_content();
-      data.push({"name": "action_content", "value": value});
+      data.push({"name": "action_content", "value": value, "csrfmiddlewaretoken": window.CSRF_TOKEN});
     }
     $("#modal-item .modal-content").html("");
     $.ajax({
@@ -200,9 +201,11 @@ let select_next_button = function(e) {
 let toggleCheckBox = function () {
   elem = $(this);
   $('#div-spinner').show();
+  data["csrfmiddlewaretoken"] = window.CSRF_TOKEN;
   $.ajax({
     url: $(this).attr("data-url"),
     type: 'post',
+    data: {"csrfmiddlewaretoken": window.CSRF_TOKEN},
     dataType: 'json',
     success: function (data) {
         if (data.is_checked == true) {
@@ -225,7 +228,7 @@ let toggleStar = function () {
     url: $(this).attr("data-url"),
     type: 'get',
     dataType: 'json',
-    data: [],
+    data: {"csrfmiddlewaretoken": window.CSRF_TOKEN},
     success: function (data) {
       $('#div-spinner').show();
       window.location.reload(true);

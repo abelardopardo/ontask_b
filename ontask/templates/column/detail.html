@@ -35,6 +35,7 @@
             ajax: {
               url: "{% url 'column:index_ss' %}",
               type: 'POST',
+              headers: {'X-CSRFToken': window.CSRF_TOKEN},
             },
             columns: [
               {"data": "number", "class": "dt-center"},

@@ -7,7 +7,6 @@ from django import http
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
 
 from ontask import models
 from ontask.action import forms
@@ -59,7 +58,6 @@ class ActionShowURLView(
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
 class ActionAddRemoveAttachmentView(
     UserIsInstructor,
     JSONFormResponseMixin,

@@ -6,7 +6,6 @@ from django import http
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
 
 from ontask import models
 from ontask.core import (
@@ -33,7 +32,6 @@ class LogIndexView(UserIsInstructor, WorkflowView, generic.TemplateView):
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
 class LogIndexSSView(UserIsInstructor, WorkflowView):
     """Render the server side page for the table of columns."""
 

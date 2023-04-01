@@ -6,7 +6,6 @@ from django import http
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 
 from ontask import models
 from ontask.action import services
@@ -15,7 +14,6 @@ from ontask.core import (
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
 class ActionPreviewView(
     UserIsInstructor,
     JSONFormResponseMixin,
@@ -62,7 +60,6 @@ class ActionPreviewView(
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
 class ActionPreviewNextAllFalseView(ActionPreviewView):
     """Preview message with all conditions evaluating to false.
 

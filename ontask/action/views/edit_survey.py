@@ -7,7 +7,6 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
 
 from ontask import models
 from ontask.action import forms
@@ -17,7 +16,6 @@ from ontask.core import (
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
 class ActionSelectColumnSurveyView(
     UserIsInstructor,
     JSONResponseMixin,
@@ -81,7 +79,6 @@ class ActionUnselectColumnSurveyView(UserIsInstructor, ActionView):
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
 class ActionSelectConditionQuestionView(UserIsInstructor, ColumnConditionView):
     """Unselect a column from a survey."""
 
@@ -108,7 +105,6 @@ class ActionSelectConditionQuestionView(UserIsInstructor, ColumnConditionView):
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')  # TODO: Remove this!
 class ActionShuffleQuestionsView(
     UserIsInstructor,
     JSONResponseMixin,
@@ -127,7 +123,6 @@ class ActionShuffleQuestionsView(
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')  # TODO: Remove this!
 class ActionToggleQuestionChangeView(
     UserIsInstructor,
     JSONResponseMixin,

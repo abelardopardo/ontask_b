@@ -9,7 +9,6 @@ from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-from django.views.decorators.csrf import csrf_exempt
 
 from ontask.core import (
     DataTablesServerSidePaging, UserIsInstructor, WorkflowView, ajax_required)
@@ -40,7 +39,6 @@ class ColumnIndexView(UserIsInstructor, WorkflowView, generic.TemplateView):
 
 
 @method_decorator(ajax_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
 class ColumnIndexSSView(UserIsInstructor, WorkflowView):
     """Render the server side page for the table of columns.
 

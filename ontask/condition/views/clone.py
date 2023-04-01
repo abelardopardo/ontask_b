@@ -7,7 +7,6 @@ from django import http
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from ontask import create_new_name, models
@@ -16,7 +15,6 @@ from ontask.core import ajax_required, get_condition, is_instructor
 
 
 @user_passes_test(is_instructor)
-@csrf_exempt
 @ajax_required
 @require_POST
 @get_condition(pf_related='action')

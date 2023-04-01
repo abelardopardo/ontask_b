@@ -29,6 +29,7 @@
         ajax: {
           url: "{% url 'logs:index_ss' %}",
           type: 'POST',
+          headers: {'X-CSRFToken': window.CSRF_TOKEN},
           deferRender: true,
         },
         ordering: false,
