@@ -4,7 +4,7 @@ html {
 }
 
 body.regular-body {
-  padding-top: 35px; /* To jump over the fixed nav-bar */
+  padding-top: 40px; /* To jump over the fixed nav-bar */
   margin-bottom: 45px;
   background-color: #fff;
 }
