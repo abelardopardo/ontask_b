@@ -16,7 +16,7 @@
 # 8. Copy freeze.txt into base.txt
 # 9. Move lines in base.txt to development.txt
 #
-Django[argon2]==3.2.10  # BSD-3-Clause
+Django[argon2]==3.2.15  # BSD-3-Clause
 celery  # BSD
 coverage  # Apache License 2.0
 cron-descriptor  # MIT
