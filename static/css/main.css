@@ -23,6 +23,7 @@ body.regular-body {
 }
 
 .wflow-buttons,
+.action-buttons,
 .cond-buttons {
   border-top:1px solid rgba(0,0,0,.125);
   background-color: #f8f9fa;
@@ -42,11 +43,20 @@ body.regular-body {
   border: 1px solid rgba(0,0,0,.125);
 }
 
-.ontask-card {
-  cursor: pointer;
+.ontask-card,
+.ontask-acard {
   min-width: 200px;
   max-width: 350px;
   margin-bottom: 15px;
+}
+
+.ontask-card {
+  cursor: pointer;
+}
+
+.ontask-acard .card-header,
+.ontask-acard .card-body {
+  cursor: pointer;
 }
 
 .ontask-ccard {
@@ -56,7 +66,8 @@ body.regular-body {
 }
 
 .ontask-card .card-body,
-.ontask-ccard .card-body {
+.ontask-ccard .card-body,
+.ontask-acard .card-body {
   min-height: 100px;
 }
 
@@ -293,7 +304,6 @@ td.dt-body-center { text-align: center; }
 
 table td,
 #actioninrun-data td,
-#action-table td,
 #attribute-table td,
 #column-selected-table td,
 #column-table td,
@@ -392,7 +402,7 @@ div.sol-container {
    display: block;
    opacity: 0.7;
    background-color: #fff;
-   z-index: 99;
+   z-index: 9999;
    text-align: center;
 }
 
