@@ -175,7 +175,6 @@ def get_table_visualization_items(
             VISUALIZATION_HEIGHT),
     }
     for idx, column in enumerate(columns_to_view):
-
         # Add the title and surrounding container
         visualizations.append(
             '<hr/><h4 class="text-center">' + column.name + '</h4>')

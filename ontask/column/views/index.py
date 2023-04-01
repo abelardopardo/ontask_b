@@ -108,7 +108,7 @@ class ColumnIndexSSView(UserIsInstructor, WorkflowView):
         }
 
     def post(self, request, *args, **kwargs):
-        # Check that the GET parameter are correctly given
+        # Check that the POST parameter are correctly given
         dt_page = DataTablesServerSidePaging(request)
         if not dt_page.is_valid:
             return http.JsonResponse(
