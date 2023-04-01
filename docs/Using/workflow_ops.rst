@@ -86,31 +86,30 @@ Authentication Token
 .. _schedule_canvas:
 
 
-..
-  Scheduling a Personalized Canvas Email Action
-  ---------------------------------------------
+Scheduling a Personalized Canvas Email Action
+---------------------------------------------
 
-  If OnTask is :ref:`appropriately configured <canvas_email_config>` to send emails using the Canvas API, the actions can be scheduled providing the information through a form as shown in the following figure.
+If OnTask is :ref:`appropriately configured <canvas_email_config>` to send emails using the Canvas API, the actions can be scheduled providing the information through a form as shown in the following figure.
 
-  .. figure:: /scaptures/scheduler_action_canvas_email.png
-     :align: center
+.. figure:: /scaptures/scheduler_action_canvas_email.png
+ :align: center
 
-  The fields in this form are:
+The fields in this form are:
 
-  Name
-    A name to identify this scheduling (not to be confused with the name of the action that has already been selected).
+Name
+A name to identify this scheduling (not to be confused with the name of the action that has already been selected).
 
-  Description
-    A brief description explaining this scheduled action (for example, "send reminder the night before the exam).
+Description
+A brief description explaining this scheduled action (for example, "send reminder the night before the exam).
 
-  Column in the table containing the Canvas ID
-    This field is mandatory because OnTask needs to know which column to use to differentiate the emails to send to Canvas.
+Column in the table containing the Canvas ID
+This field is mandatory because OnTask needs to know which column to use to differentiate the emails to send to Canvas.
 
-  Email subject
-    Text to include as subject of the message.
+Email subject
+Text to include as subject of the message.
 
-  When to execute the action
-    A date/time value in the future.
+When to execute the action
+A date/time value in the future.
 
 .. _scheduler_menu:
 

@@ -70,7 +70,6 @@ language = 'en'
 # This patterns also effect to html_static_path and html_extra_path
 exclude_patterns = [
     '_build',
-    'Install/*.rst',
     'Thumbs.db',
     '.DS_Store',
     'Scenarios/scenario_04*',
