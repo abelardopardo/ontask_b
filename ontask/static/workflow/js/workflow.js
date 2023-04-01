@@ -85,7 +85,7 @@ $(function () {
   // Insert columns in workflow operation
   $("#workflow-detail").on("click", ".js-select-key-column-name", ajaxSimplePost);
 
-  $(".card").hover(function(){
+  $(".ontask-card").hover(function(){
     $(this).css("background-color", "lightgray");
   }, function(){
     $(this).css("background-color", "white");
@@ -107,6 +107,12 @@ $(document).ready(function() {
   }
   $(document.body).on("click", "a[data-toggle]", function(event) {
     location.hash = this.getAttribute("href");
+  });
+  $("#workflow-search").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#workflow-cards .ontask-card").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
   });
 });
 $(window).on("popstate", function() {

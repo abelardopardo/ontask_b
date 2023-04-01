@@ -43,9 +43,9 @@ class WorkflowStar(
 ):
     """Star a workflow."""
 
-    http_method_names = ['get']
+    http_method_names = ['post']
 
-    def get(self, request, *args, **kwargs) -> http.JsonResponse:
+    def post(self, request, *args, **kwargs) -> http.JsonResponse:
         """Add/Remove star and log operation."""
 
         # Get the workflows with stars

@@ -464,7 +464,7 @@ class TutorialCaptures(ScreenTests):
         self.open_action_operation('Program advice', 'fa-link')
 
         # Capture the modal with the URL
-        self.modal_ss('tutorial_personalzed_text_URL.png')
+        self.modal_ss('tutorial_personalized_text_URL.png')
 
         # Cancel the modal
         self.cancel_modal()

@@ -12,7 +12,9 @@
     <!-- left column -->
     <div class="col-md-3">
       <div class="text-center">
-        <img title="{% trans 'profile picture' %}" class="rounded-circle img-fluid" src="{% thumbnail user.profile.picture|default:'default_profile.png' 140x140 crop %}">
+        {% thumbnail user.profile.picture|default:'default_profile.png' "140x140" crop="center" as im %}
+          <img title="{% trans 'profile picture' %}" class="rounded-circle img-fluid" src="{{ im.url }}">
+        {% endthumbnail %}
       </div>
     </div>
     <!-- edit form column -->

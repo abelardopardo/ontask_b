@@ -46,12 +46,6 @@ class View(NameAndDescription, CreateModifyFields):
         on_delete=models.SET_NULL,
         related_name='view')
 
-    # Number of rows allowed by the formula.
-    nrows = None
-
-    # Boolean flagging if the formula is empty
-    empty_formula = None
-
     @property
     def formula(self) -> Optional[Filter]:
         """Get the formula value"""

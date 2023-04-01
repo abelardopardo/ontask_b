@@ -67,7 +67,8 @@ class ScreenImportTest(tests.ScreenTests):
         # Open Import page
         self.selenium.find_element(By.LINK_TEXT, 'Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element((By.XPATH, "//body/div/h1"),
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//body/div/h1"),
                 'Import workflow')
         )
 
@@ -202,8 +203,9 @@ class ScreenTestWorkflow(ScreenTestFixtureBasic):
         # List of workflows, navigation
         self.body_ss('workflow_index.png')
 
-        # Workdlow card
-        self.element_ss('//div[contains(@class, "ontask-card")]',
+        # Workflow card
+        self.element_ss(
+            '//div[contains(@class, "ontask-card")]',
             'workflow_card.png')
         #
         # Navigation bar, details
@@ -292,10 +294,6 @@ class ScreenTestDetails(ScreenTestFixtureBasic):
         # Go to workflow details
         self.go_to_details()
 
-        # Table of columns (separated)
-        self.element_ss("//div[@id='column-table_wrapper']",
-            'wokflow_columns.png')
-
         #
         # Ops/Edit Column
         #
@@ -328,7 +326,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
             EC.title_is('OnTask :: Upload/Merge CSV')
         )
         self.selenium.find_element(By.ID, 'id_data_file').send_keys(
-            os.path.join(settings.BASE_DIR(),
+            os.path.join(
+                settings.BASE_DIR(),
                 'ontask',
                 'tests',
                 'initial_workflow',
@@ -527,7 +526,8 @@ class ScreenTestTable(ScreenTestFixtureBasic):
         self.body_ss('table.png')
 
         # Picture of the buttons
-        self.element_ss("//div[@id='table-operation-buttons']",
+        self.element_ss(
+            '//div[@id="table-operation-buttons"]',
             'table_buttons.png')
 
         #
