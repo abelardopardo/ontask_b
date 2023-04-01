@@ -48,8 +48,7 @@ let ajaxSimplePost = function () {
   let data = {"csrfmiddlewaretoken": window.CSRF_TOKEN}
   if (document.getElementById("id_text_content") != null) {
     value = get_id_text_content();
-    data["name"] = "action_content";
-    data["value"] = value;
+    data["action_content"] = value;
   }
   $.ajax({
     url: $(this).attr('data-url'),
@@ -124,14 +123,11 @@ let loadForm = function () {
   if ($(this).is("[class*='disabled']")) {
     return;
   }
-  let data = {"csrfmiddlewaretoken": window.CSRF_TOKEN}
+  let data = {}
   if (document.getElementById("id_subject") != null) {
     data["subject_content"] = $("#id_subject").val();
   }
-  ajaxPost(
-    btn.attr("data-url"),
-    data,
-    'get');
+  ajaxPost(btn.attr("data-url"), data, 'get');
 };
 let saveForm = function () {
     let form = $(this);
@@ -144,9 +140,10 @@ let saveForm = function () {
       $("#id_formula").val(f_text);
     }
     let data = form.serializeArray();
+    data.push({"name": "csrfmiddlewaretoken", "value": window.CSRF_TOKEN});
     if (document.getElementById("id_text_content") != null) {
       value = get_id_text_content();
-      data.push({"name": "action_content", "value": value, "csrfmiddlewaretoken": window.CSRF_TOKEN});
+      data.push({"name": "action_content", "value": value});
     }
     $("#modal-item .modal-content").html("");
     $.ajax({
@@ -201,7 +198,9 @@ let select_next_button = function(e) {
 let toggleCheckBox = function () {
   elem = $(this);
   $('#div-spinner').show();
-  data["csrfmiddlewaretoken"] = window.CSRF_TOKEN;
+  if (req_type == "post") {
+    data["csrfmiddlewaretoken"] = window.CSRF_TOKEN;
+  }
   $.ajax({
     url: $(this).attr("data-url"),
     type: 'post',
@@ -226,7 +225,7 @@ let toggleStar = function () {
   $('#div-spinner').show();
   $.ajax({
     url: $(this).attr("data-url"),
-    type: 'get',
+    type: 'post',
     dataType: 'json',
     data: {"csrfmiddlewaretoken": window.CSRF_TOKEN},
     success: function (data) {

@@ -77,11 +77,7 @@ let loadFormPost = function () {
   if ($(this).is('[class*="disabled"]')) {
     return;
   }
-  ajaxPost(
-    $(this).attr("data-url"),
-    [{'name': 'action_content', 'value': get_id_text_content()}],
-    'post'
-  );
+  ajaxPost($(this).attr("data-url"), {'action_content': get_id_text_content()}, 'post');
 }
 let transferFormula = function () {
   if (document.getElementById("id__formula") != null) {
