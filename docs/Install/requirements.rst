@@ -7,8 +7,8 @@ OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ applic
 
 - Redis
 - PostgreSQL (version 9.5 or later)
-- Python 3.7
-- Django 2.2
+- Python 3.9
+- Django 3.2
 - Additional Django modules listed in the file ``requirements/base.txt``
 
 Some of these requirements are handled using `pip <https://pypi.python.org/pypi/pip>`__ (Python's package index application).
