@@ -341,7 +341,7 @@ INSTALLED_APPS = [
     # 'corsheaders',
 
     'crispy_forms',
-    'easy_thumbnails',
+    'sorl.thumbnail',
     'widget_tweaks',
     'formtools',
     'siteprefs',
