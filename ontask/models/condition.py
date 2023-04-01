@@ -264,7 +264,7 @@ class Filter(ConditionBase):
         return Log.objects.register(
             user,
             operation_type,
-            self.action.workflow,
+            self.workflow,
             payload)
 
     class Meta:

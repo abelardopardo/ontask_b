@@ -27,7 +27,7 @@ class ActionUpdateForm(forms.ModelForm):
     """Basic class to edit name and description."""
 
     def __init__(self, *args, **kwargs):
-        """Store user and wokflow."""
+        """Store user and workflow."""
         self.workflow = kwargs.pop('workflow')
         super().__init__(*args, **kwargs)
 

@@ -70,5 +70,3 @@ LOGGING['loggers'] = {
 logging.config.dictConfig(LOGGING)
 
 show_configuration()
-
-show_configuration()
