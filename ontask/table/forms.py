@@ -16,11 +16,11 @@ class ViewAddForm(forms.ModelForm):
     # Columns to combine
     columns = forms.ModelMultipleChoiceField(queryset=None, required=False)
 
-    def __init__(self, data, *args, **kwargs):  # noqa: Z110
+    def __init__(self, *args, **kwargs):  # noqa: Z110
         """Initialize the object, store the workflow and rename fields."""
         self.workflow = kwargs.pop('workflow', None)
 
-        super().__init__(data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Rename some fields
         self.fields['name'].label = _('View name')
