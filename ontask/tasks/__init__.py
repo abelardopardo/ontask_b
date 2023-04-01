@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-"""Import packages and initialize the task_execute_factory."""
+"""Import packages and initialize the TASK_EXECUTE_FACTORY."""
 
 from ontask.tasks.execute_factory import (
     execute_operation, task_execute_factory,

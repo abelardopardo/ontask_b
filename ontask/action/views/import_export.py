@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views for import/export."""
 import datetime
 import gzip

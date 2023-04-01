@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to manipulate Pandas DataFrames an related operations."""
 from typing import Dict, List, Mapping, Optional
 

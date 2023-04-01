@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Methods to process the personalized zip action run request."""
 from datetime import datetime
 from io import BytesIO

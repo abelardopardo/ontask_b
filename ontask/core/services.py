@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Wrappers around asynchronous task executions."""
 
 from django import http

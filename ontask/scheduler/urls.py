@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """URLs for the scheduler package."""
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from ontask import models
 from ontask.scheduler import api, services, views
-from ontask.scheduler.services import schedule_crud_factory
 
 app_name = 'scheduler'
 

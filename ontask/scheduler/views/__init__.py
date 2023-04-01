@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Import the view modules"""
 from ontask.scheduler.views.crud import (
     ScheduledItemDelete, SchedulerIndexView, create_action_run,

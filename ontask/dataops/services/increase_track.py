@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Function to increase the tracking column in a workflow."""
 from typing import Dict, Optional
 

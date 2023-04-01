@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """First entry point to define URLs."""
 from django.conf import settings
 from django.conf.urls import include

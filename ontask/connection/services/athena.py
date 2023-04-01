@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle athena connections."""
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _

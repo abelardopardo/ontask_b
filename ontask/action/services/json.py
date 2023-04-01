@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-"""Views to run JSON actions."""
+"""Functions to run JSON actions."""
 import datetime
 import json
 from typing import Dict, Mapping, Optional

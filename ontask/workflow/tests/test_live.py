@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test live execution of operations related to workflows."""
 import os
 

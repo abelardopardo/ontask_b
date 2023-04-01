@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """View to edit rubric actions."""
 
 from django import http

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms required to schedule SQL upload/merge operation"""
 from typing import Dict
 
@@ -60,7 +58,7 @@ class ScheduleSQLUploadForm(
             ('src_key', None),
             ('how_merge', None)])
 
-        # If the workflow has data, both keys have to be non empty, the
+        # If the workflow has data, both keys have to be non-empty, the
         # first one needs to be a unique column, and the merge method cannot
         # be empty
         if self.workflow.has_data_frame:

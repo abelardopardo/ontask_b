@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test cases for the forms in the workflow package."""
 from ontask import tests
 import ontask.tests.basic

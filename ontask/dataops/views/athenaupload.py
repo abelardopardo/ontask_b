@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Function to upload a data frame from an Athena connection object."""
 
 from django.shortcuts import redirect

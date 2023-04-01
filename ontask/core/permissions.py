@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Basic functions and classes to check for permissions."""
 from typing import Optional
 

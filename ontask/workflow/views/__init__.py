@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Workflow views."""
 from ontask.workflow.views.attribute import (
     WorkflowAttributeCreateView, WorkflowAttributeEditView,

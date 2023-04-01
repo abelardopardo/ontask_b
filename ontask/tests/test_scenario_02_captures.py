@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Screen captures for scenario 2"""
 import os
 

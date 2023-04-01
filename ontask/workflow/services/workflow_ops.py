@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to manipulate other workflow ops."""
 from django import http
 from django.utils.translation import gettext_lazy as _

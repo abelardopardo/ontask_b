@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Tests redirection to login and profile creation."""
 from django.contrib.auth import get_user_model
 from django.test import TestCase

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the access to the API doc."""
 from rest_framework import status
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Implementation of visualizations using the Plotly JS library."""
 from abc import abstractmethod
 from builtins import str

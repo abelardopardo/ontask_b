@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for the scheduler pages."""
 import json
 

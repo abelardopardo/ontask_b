@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Send Email Messages with the rendered content in the action."""
 from collections import OrderedDict
 from typing import Dict, List

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions for LTI Configuration."""
 from collections import defaultdict
 

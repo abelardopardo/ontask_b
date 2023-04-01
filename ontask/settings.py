@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Configuration options that are persistent and editable among executions."""
 import os
 import sys

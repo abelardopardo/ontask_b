@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test live execution of action operations."""
 from time import sleep
 
@@ -952,7 +950,6 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
         self.wait_for_id_and_spinner('rubric-table_previous')
 
         column = models.Column.objects.get(name='Structure')
-        loas = column.categories[:]
         for index in range(2 * len(column.categories)):
             items = self.selenium.find_elements_by_class_name(
                 'js-rubric-cell-edit')

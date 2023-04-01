@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Index of scheduled operations."""
 
 from django.utils.translation import gettext_lazy as _

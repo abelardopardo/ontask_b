@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service to manipulate scheduled items."""
 from datetime import datetime
 import json

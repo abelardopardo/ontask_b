@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for the workflow pages."""
 
 from rest_framework import status

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to flush, show details, column server side, etc."""
 
 from django import http

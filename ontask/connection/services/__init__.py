@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Services to manage connections."""
 from ontask.connection.services.athena import (
     create_athena_connection_admintable, create_athena_connection_runtable,

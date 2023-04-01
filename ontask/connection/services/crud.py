@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle connections."""
 from django import http
 from django.template.loader import render_to_string

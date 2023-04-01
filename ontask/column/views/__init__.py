@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Column views."""
 from ontask.column.views.criterion_crud import (
     ColumnCriterionCreateView, ColumnCriterionDeleteView,

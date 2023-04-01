@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test plugin manager functions."""
 
 from rest_framework import status

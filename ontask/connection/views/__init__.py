@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Package with the connection views."""
 from ontask.connection.views.common import (
     ConnectionAdminIndexView, ConnectionIndexView, ConnectionShowView,

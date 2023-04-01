@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to select the colums for upload and decide which keys to keep."""
 from typing import Dict
 

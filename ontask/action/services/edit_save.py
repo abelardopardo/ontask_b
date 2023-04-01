@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service to save the action when editing."""
 from typing import Optional
 

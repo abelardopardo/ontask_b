@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to update and create a row in the dataframe."""
 from django.contrib import messages
 from django.shortcuts import redirect, render

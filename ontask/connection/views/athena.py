@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to handle Athena connections."""
 
 from django.urls import reverse

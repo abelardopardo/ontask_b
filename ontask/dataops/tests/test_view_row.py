@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the views to update or create new rews."""
 
 from django.urls import reverse

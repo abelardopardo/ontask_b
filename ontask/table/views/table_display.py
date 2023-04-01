@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views related to the table element."""
 from typing import Optional
 

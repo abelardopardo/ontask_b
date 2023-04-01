@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Model description for the Workflow."""
 import datetime
 from importlib import import_module

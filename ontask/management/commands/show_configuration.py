@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Command to show the configuration execution."""
 from django.core.management.base import BaseCommand
 from settings.base import show_configuration

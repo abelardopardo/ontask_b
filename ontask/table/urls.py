@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """URLs to manipulate the table."""
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns

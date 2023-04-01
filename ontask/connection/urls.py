@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """URLs to manipulate connections."""
 from django.urls import path
 

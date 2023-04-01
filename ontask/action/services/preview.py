@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Process requests to preview how an action is rendered."""
 import json
 from json.decoder import JSONDecodeError

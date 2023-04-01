@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-
+"""Configuration for development."""
 import logging.config
 
 from settings.base import *  # NOQA

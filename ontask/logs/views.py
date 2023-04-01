@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to show logs and log table."""
 
 from django import http

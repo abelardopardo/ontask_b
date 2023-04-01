@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Access the DB directly through psycopg2 and django connection."""
 from ontask.dataops.sql.column_queries import (
     COLUMN_NAME_SIZE, add_column_to_db, copy_column_in_db, db_rename_column,

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Methods to implement the API entry points."""
 from django.db.models import Q
 from rest_framework import generics

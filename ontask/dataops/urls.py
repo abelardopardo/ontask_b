@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to manipulate dataframes."""
 from django.urls import path
 

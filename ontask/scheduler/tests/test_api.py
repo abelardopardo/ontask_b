@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test scheduler API."""
 
 from django.shortcuts import reverse

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to handle SQL connections."""
 
 from django.urls import reverse

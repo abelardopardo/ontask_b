@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Module with all the views used related to actions."""
 from ontask.action.views.action import (
     ActionCloneView, ActionCreateView, ActionDeleteView, ActionEditView,

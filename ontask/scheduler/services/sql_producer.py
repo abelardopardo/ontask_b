@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service to create a SQL update operation.."""
 from typing import Optional
 

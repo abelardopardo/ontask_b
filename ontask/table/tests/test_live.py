@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Classes for testing."""
 import os
 

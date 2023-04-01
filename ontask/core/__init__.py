@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Core elements of the application.
 
 The constant ONTASK_FIELD_PREFIX is used in forms to avoid using column names

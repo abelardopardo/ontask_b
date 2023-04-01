@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Create screen captures to include in the documentation."""
 import os
 

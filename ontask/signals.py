@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Intercept signals when manipulating some objects."""
 
 from django.conf import settings

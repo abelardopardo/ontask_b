@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to render the table of columns."""
 from typing import Dict
 

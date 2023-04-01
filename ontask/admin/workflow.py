@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Admin apps to manage workflows."""
 from django.contrib import admin
 

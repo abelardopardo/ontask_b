@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the Workflow API."""
 
 from django.shortcuts import reverse

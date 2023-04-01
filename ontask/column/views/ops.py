@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to move columns and restrict values."""
 
 from django import http

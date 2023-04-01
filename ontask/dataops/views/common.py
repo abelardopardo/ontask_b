@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Common classes to upload data."""
 from django.urls import reverse
 

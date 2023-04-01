@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to compare objects."""
 import pandas as pd
 

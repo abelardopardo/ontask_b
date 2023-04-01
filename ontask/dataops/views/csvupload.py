@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """First step for CSV upload."""
 
 from django.shortcuts import redirect

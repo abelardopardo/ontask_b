@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Backend class to authenticate LTI requests."""
 from time import time
 from typing import Mapping, Optional

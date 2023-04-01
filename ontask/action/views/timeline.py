@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """View to implement the timeline visualization."""
 
 from django import http

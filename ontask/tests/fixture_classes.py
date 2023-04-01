@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Classes to use fixtures."""
 import os
 

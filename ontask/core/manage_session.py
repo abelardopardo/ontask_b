@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Classes to implement a payload with a dictionary."""
 import collections
 from typing import Dict, Optional

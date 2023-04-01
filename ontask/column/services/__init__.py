@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Imports for the column services."""
 from ontask.column.services.crud import (
     add_column_to_workflow, add_formula_column, add_random_column,

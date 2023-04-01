@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """All admin classes for OnTask"""
 from ontask.admin.action import ActionAdmin
 from ontask.admin.column import ColumnAdmin

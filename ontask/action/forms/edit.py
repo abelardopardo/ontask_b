@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to edit action content.
 
 EditActionOutForm: Form to process content action_out (Base class)

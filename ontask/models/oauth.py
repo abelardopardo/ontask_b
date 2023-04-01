@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Table storing oauth tokens."""
 from django.db import models
 from django.utils.translation import gettext_lazy as _

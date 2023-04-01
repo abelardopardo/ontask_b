@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Decorator to require an LTI role."""
 from functools import wraps
 from typing import Callable, List, Optional

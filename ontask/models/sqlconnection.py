@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """SQL Connection model."""
 from typing import Dict
 

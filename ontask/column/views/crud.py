@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views for create/rename/update/delete columns."""
 
 from django import http

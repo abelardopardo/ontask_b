@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to run and serve actions."""
 from typing import Optional
 

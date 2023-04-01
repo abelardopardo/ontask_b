@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle plugin invocations."""
 from datetime import datetime
 import inspect

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Screen captures for scenario 4"""
 import os
 from time import sleep

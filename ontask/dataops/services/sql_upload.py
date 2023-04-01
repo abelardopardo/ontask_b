@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Upload/Merge dataframe from an SQL connection."""
 from importlib import import_module
 from typing import Dict, Optional

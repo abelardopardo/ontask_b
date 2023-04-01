@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the upload operation."""
 import os
 

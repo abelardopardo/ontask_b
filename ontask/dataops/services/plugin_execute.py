@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to execute a plugin."""
 from datetime import datetime
 from typing import Dict, Optional

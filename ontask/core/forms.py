@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Generic forms to be used in various placdes in the platform."""
 from typing import Any, List, Optional
 

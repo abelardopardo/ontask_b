@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for the scheduler pages."""
 from ontask import tests
 from ontask.action.serializers import ActionSelfcontainedSerializer

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Celery definitions and a test function."""
 import os
 

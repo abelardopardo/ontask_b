@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Model for OnTask Logs."""
 import json
 from typing import Dict
@@ -138,7 +136,7 @@ class Log(Owner):
         ACTION_EMAIL_READ: _('Email read'),
         ACTION_EMAIL_SENT: _('Emails sent'),
         ACTION_IMPORT: _('Action imported'),
-        ACTION_JSON_SENT: _('Emails sent'),
+        ACTION_JSON_SENT: _('JSON object sent'),
         ACTION_REPORT_EMAIL_SENT: _('Email with data report sent'),
         ACTION_QUESTION_ADD: _('Question added'),
         ACTION_QUESTION_REMOVE: _('Question removed'),

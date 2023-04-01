@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to manage and check plugin compliance."""
 import datetime
 import json

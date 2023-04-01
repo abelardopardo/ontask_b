@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to support download a table in CSV format."""
 from django import http
 import pandas as pd

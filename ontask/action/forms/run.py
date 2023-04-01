@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to process action execution.
 
 1) ExportWokflowBase: export workflow boolean field
@@ -36,7 +34,7 @@
 
 17) ValueExcludeForm: Form to select some items to exclude from the processing
 
-18) EnableURLForm: Form to process the enable field for an action.
+18) EnableURLForm: Form to process enable field for an action.
 """
 import re
 from typing import Dict, List
@@ -183,7 +181,8 @@ class ItemColumnConfirmFormBase(ontask_forms.FormWithPayload):
         self.fields['item_column'].initial = item_column
 
         self.fields['confirm_items'].initial = bool(self.get_payload_field(
-            'exclude_values'))
+            'exclude_values',
+            False))
 
     def clean(self) -> Dict:
         """Detect uniques values in item_column."""
@@ -238,7 +237,7 @@ class EmailActionForm(
     EmailSubjectFormBase,
     EmailCCBCCFormBase
 ):
-    """Form to edit the Send Email action."""
+    """Form to edit Send Email action."""
 
     send_confirmation = forms.BooleanField(
         initial=False,
@@ -305,7 +304,7 @@ class EmailActionForm(
 
 
 class EmailActionRunForm(EmailActionForm, ExportWorkflowBase):
-    """Form to edit the Send Email Action Run."""
+    """Form to process Send Email Action Run."""
 
     def __init__(self, *args, **kwargs):
         """Adjust initial values."""
@@ -326,7 +325,7 @@ class EmailActionRunForm(EmailActionForm, ExportWorkflowBase):
 
 
 class SendListActionForm(EmailSubjectFormBase, EmailCCBCCFormBase):
-    """Form to edit the Send Email action."""
+    """Form to edit Send Email action."""
 
     email_to = forms.CharField(label=_('Recipient'), required=True)
 
@@ -355,7 +354,7 @@ class SendListActionForm(EmailSubjectFormBase, EmailCCBCCFormBase):
 
 
 class SendListActionRunForm(SendListActionForm, ExportWorkflowBase):
-    """Form to edit the Send Email action Run."""
+    """Form to edit Send Email action Run."""
 
     def __init__(self, *args, **kwargs):
         """Sort the fields."""
@@ -440,14 +439,14 @@ class ZipActionRunForm(ItemColumnConfirmFormBase, ExportWorkflowBase):
         pcolumn = form_data['item_column']
         ufname_column = form_data['user_fname_column']
 
-        # If both values are given and they are identical, return with error
+        # If both values are given, and they are identical, return with error
         if pcolumn and ufname_column and pcolumn == ufname_column:
             self.add_error(
                 None,
                 _('The two columns must be different'))
             return form_data
 
-        # If a moodle zip has been requested
+        # If a Moodle zip has been requested
         if form_data.get('zip_for_moodle'):
             if not pcolumn or not ufname_column:
                 self.add_error(

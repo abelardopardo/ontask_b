@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """URLs to access the logs."""
 from django.urls import path
 

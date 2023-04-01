@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the table API.s"""
 
 from django.contrib.auth import get_user_model

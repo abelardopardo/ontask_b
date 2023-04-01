@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Amazon Athena Connection model."""
 from typing import Dict
 

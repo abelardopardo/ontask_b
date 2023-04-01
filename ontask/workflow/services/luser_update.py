@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to support task execcution for workflows."""
 from typing import Dict, Optional
 

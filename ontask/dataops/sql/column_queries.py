@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """DB queries to manipulate columns."""
 from typing import Dict, List
 

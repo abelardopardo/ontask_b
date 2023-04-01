@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to implement CRUD views for Views."""
 
 from django import http

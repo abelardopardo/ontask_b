@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Package with the dataops views."""
 from ontask.dataops.views.common import UploadStart
 from ontask.dataops.views.athenaupload import AthenaUploadStart

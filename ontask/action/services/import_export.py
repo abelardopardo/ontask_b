@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service for action import."""
 import gzip
 from typing import List

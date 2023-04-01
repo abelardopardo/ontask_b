@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test views to run actions."""
 from datetime import timedelta
 

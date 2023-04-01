@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Manipulate template text within OnTask and evaluat it s content."""
 import re
 import shlex

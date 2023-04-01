@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """URLs to manipulate columns."""
 from django.urls import path
 

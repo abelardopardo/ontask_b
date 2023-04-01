@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test views to show the timeline."""
 
 from rest_framework import status

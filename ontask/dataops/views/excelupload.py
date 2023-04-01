@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """View to start the excel upload process."""
 
 from django.shortcuts import redirect

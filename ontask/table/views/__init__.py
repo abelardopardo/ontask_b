@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Viewing table and views."""
 from ontask.table.views.csvdownload import TableCSVDownloadView
 from ontask.table.views.stats import (

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Admin classes for Profiles"""
 from ontask.accounts.admin import NamedUserAdmin
 from django.contrib import admin

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test column basic operations"""
 import json
 

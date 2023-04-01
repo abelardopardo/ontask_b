@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Implementation of views providing visualisation and stats."""
 
 from django import http

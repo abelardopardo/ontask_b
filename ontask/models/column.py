@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Column model."""
 import datetime
 from typing import Any, List, Optional, Tuple

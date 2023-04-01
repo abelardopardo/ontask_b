@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Process the scheduled actions."""
 from datetime import datetime
 

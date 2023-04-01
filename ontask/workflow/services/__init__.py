@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Imports and exception base class for the workflow services."""
 from ontask.workflow.services.attribute import save_attribute_form
 from ontask.workflow.services.errors import (

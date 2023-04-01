@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to process attributes and sharing."""
 from typing import Dict
 

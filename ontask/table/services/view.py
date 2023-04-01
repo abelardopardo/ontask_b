@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to support the display of a view."""
 from typing import Optional
 

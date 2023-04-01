@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to process action related fields.
 
 ActionUpdateForm: Basic form to process the name/description of an action

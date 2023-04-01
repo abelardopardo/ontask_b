@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test views to manipulate the SQL connections."""
 
 from django.conf import settings

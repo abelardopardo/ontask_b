@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Package with the OnTask models."""
 from ontask.models.user import User
 from ontask.models.action import Action, VAR_USE_RES

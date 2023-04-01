@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Common serializer element for OnTask.
 
 The purpose of this common element is to include the object id in the

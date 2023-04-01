@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Function to manage celery tasks associated with the scheduled items.."""
 import json
 

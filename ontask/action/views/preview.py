@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to preview resulting text in the action."""
 
 from django import http

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Testing logic functions in the package."""
 import datetime
 import io

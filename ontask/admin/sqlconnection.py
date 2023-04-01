@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Classes for SQL connection admin."""
 from django.contrib import admin
 

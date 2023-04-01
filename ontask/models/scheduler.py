@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Model is to store process to execute in the platform at a certain time."""
 from datetime import datetime
 import json

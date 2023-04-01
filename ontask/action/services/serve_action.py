@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to serve actions through direct URL access."""
 import json
 import random

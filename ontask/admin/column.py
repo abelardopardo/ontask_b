@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Admin apps to manage columns."""
 from django.contrib import admin
 

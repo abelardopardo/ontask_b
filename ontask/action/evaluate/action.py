@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to evaluate actions based on the values in the table.
 
 - evaluate_action: Evaluates the content of an action

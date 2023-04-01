@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test live execution of operations related to columns."""
 
 from selenium.webdriver.common.by import By

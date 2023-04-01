@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle row creation/edition.."""
 from typing import Any, List
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Rubric Model.
 
 A rubric is modeled as a matrix with M criteria (which are columns in OnTask)

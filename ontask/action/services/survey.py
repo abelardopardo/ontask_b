@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to process the survey run request."""
 from typing import Dict, List
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse

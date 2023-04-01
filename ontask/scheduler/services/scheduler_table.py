@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service to produce the table with the scheduler objects."""
 from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
 from django.template.loader import render_to_string

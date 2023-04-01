@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Pages to manipulate attributes."""
 from typing import Optional
 

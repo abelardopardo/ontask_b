@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views for editing Surveys and TODO_list actions."""
 
 from django import http

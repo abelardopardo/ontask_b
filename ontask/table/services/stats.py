@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to support stats visualisation."""
 from typing import Dict, List, Optional, Tuple
 

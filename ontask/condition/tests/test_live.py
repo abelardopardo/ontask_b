@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test live execution of action operations."""
 
 from selenium.webdriver.common.by import By

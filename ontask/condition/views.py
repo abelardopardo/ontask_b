@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions for Condition CRUD."""
 
 from django import http

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """First step to load data from a Google Sheet."""
 
 from django.shortcuts import redirect

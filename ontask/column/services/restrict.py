@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Function to restrict column values."""
 from django.utils.translation import gettext_lazy as _
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions and classes to flag invalid LTI request/config errors."""
 from uuid import uuid1
 

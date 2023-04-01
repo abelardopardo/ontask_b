@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to handle OAuth2 authentication."""
 from datetime import timedelta
 from typing import Dict, Optional

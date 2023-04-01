@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Upload DataFrames from various sources."""
 from typing import Dict, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse

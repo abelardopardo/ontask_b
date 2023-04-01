@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views  to download a table or a view in CSV format."""
 
 from django import http

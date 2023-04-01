@@ -1,5 +1,3 @@
-1# -*- coding: utf-8 -*-
-
 """Include variables in the context available for templates."""
 from typing import Dict
 

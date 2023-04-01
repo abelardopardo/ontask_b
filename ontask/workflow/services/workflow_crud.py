@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to manipulate workflow CRUD ops."""
 import copy
 from typing import Dict

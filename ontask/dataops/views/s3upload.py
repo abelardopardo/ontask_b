@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """View for the initial step to load data from an S3 bucket."""
 
 from django.shortcuts import redirect

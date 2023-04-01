@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to process condition related fields."""
 from typing import Dict
 

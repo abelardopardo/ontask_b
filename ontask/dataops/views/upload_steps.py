@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views for steps 2 - 4 of the upload process."""
 from builtins import range, zip
 from typing import Optional

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to save the different types of scheduled actions."""
 from typing import Optional
 

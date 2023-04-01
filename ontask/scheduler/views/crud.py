@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to manipulate the CRUD for scheduled executions."""
 from typing import Optional
 
@@ -61,7 +59,7 @@ def create_action_run(
     :param action: Action being used
     :return: HTTP response
     """
-    return services.schedule_crud_factory.crud_view(
+    return services.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         action.action_type,
         workflow=workflow,
@@ -92,7 +90,7 @@ def create_sql_upload(
     if not conn:
         return redirect('scheduler:index')
 
-    return services.schedule_crud_factory.crud_view(
+    return services.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         models.Log.WORKFLOW_DATA_SQL_UPLOAD,
         workflow=workflow,
@@ -120,7 +118,7 @@ def edit_scheduled_operation(
     if not s_item:
         return redirect('home')
 
-    return services.schedule_crud_factory.crud_view(
+    return services.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         s_item.operation_type,
         workflow=s_item.workflow,
@@ -143,7 +141,7 @@ def finish_scheduling(
             _('Incorrect action scheduling invocation.'))
         return redirect('action:index')
 
-    return services.schedule_crud_factory.crud_view(
+    return services.SCHEDULE_CRUD_FACTORY.crud_view(
         request,
         payload.get('operation_type'),
         payload=payload,

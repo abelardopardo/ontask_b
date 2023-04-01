@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to administer plugins."""
 from typing import Dict
 

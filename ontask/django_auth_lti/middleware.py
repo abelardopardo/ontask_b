@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions related with the middleware."""
 from django.conf import settings
 from django.contrib import auth

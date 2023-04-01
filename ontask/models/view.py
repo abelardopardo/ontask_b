@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """View objects."""
 from typing import Dict, Optional
 

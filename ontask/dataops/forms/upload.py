@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to perform the first step of data upload in several formats.
 
 The currently supported formats are:

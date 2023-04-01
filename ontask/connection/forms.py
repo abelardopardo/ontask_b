@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to manage the connections."""
 from typing import Dict
 

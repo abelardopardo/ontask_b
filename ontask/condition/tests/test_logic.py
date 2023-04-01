@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test condition basic operations."""
 from rest_framework import status
 

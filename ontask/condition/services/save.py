@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service to manage condition operations."""
 from typing import Optional
 

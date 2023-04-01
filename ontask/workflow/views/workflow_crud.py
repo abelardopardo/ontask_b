@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views implementing CRUD operations with workflows."""
 
 from django import http

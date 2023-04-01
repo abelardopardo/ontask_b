@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to serve personalised messages.
 
 URLs used as entry points:

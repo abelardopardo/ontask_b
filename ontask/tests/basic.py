@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Basic class definitions for testing."""
 import io
 import math

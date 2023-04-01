@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Operations to manipulate dataframes."""
 from typing import Dict, List, Optional
 

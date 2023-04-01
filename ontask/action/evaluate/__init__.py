@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Module to evaluate actions, templates and conditions."""
 from ontask.action.evaluate.action import (
     action_condition_evaluation, evaluate_action, evaluate_row_action_out,

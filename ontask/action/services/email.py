@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Send Email Messages with the rendered content in the action."""
 import datetime
 from email.mime.text import MIMEText

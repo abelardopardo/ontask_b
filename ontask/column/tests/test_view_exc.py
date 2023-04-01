@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test error generation when handling columns."""
 
 from django.contrib import messages

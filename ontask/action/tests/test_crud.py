@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test action CRUD functions."""
 from rest_framework import status
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Decorators for functions in OnTask."""
 from functools import wraps
 from typing import Callable

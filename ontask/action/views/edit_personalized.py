@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to edit actions that send personalized information."""
 from typing import Dict
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from builtins import str
 import random
 from typing import Dict, Optional

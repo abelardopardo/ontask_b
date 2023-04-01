@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to evaluate the operands in OnTask conditions and filters."""
 from typing import Any, Dict, Tuple, Union
 

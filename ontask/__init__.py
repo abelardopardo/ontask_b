@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Basic functions and definitions used all over the platform."""
 from datetime import datetime
 import logging

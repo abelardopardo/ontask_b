@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Form to collect information to run a plugin."""
 from typing import Dict, List
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Serializers to import/export columns and column names."""
 from typing import Dict, Optional
 

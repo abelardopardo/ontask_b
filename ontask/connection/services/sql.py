@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle SQL connections."""
 
 from django.urls import reverse

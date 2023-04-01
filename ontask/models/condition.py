@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Condition Model."""
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models

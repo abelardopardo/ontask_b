@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle the upload steps."""
 from typing import Dict, List, Tuple
 

@@ -9,7 +9,7 @@ from rest_framework.exceptions import APIException
 
 from ontask import get_incorrect_email, models
 from ontask.dataops import sql
-from ontask.scheduler.services import schedule_crud_factory
+from ontask.scheduler.services import SCHEDULE_CRUD_FACTORY
 
 
 class ScheduledOperationSerializer(serializers.ModelSerializer):
@@ -88,7 +88,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         del kwargs
         try:
             self.extra_validation(validated_data)
-            scheduled_obj = schedule_crud_factory.crud_create_or_update(
+            scheduled_obj = SCHEDULE_CRUD_FACTORY.api_create_or_update(
                 self.context['request'].user,
                 validated_data)
         except Exception as exc:
@@ -102,7 +102,7 @@ class ScheduledOperationSerializer(serializers.ModelSerializer):
         """Update the information in the scheduled action."""
         try:
             self.extra_validation(validated_data)
-            scheduled_obj = schedule_crud_factory.crud_create_or_update(
+            scheduled_obj = SCHEDULE_CRUD_FACTORY.api_create_or_update(
                 self.context['request'].user,
                 validated_data,
                 instance)

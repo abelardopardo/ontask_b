@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for the column pages."""
 from django.urls import reverse
 from rest_framework import status
 
-from ontask import models, tests
-from ontask.dataops import pandas
+from ontask import tests
 
 
 class ColumnCriterionCrudBasic(

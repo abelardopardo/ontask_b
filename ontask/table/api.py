@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions implementing the API calls to manipulate the table."""
 from typing import Optional
 

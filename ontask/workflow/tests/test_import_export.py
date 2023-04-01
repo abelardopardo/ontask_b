@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for import export."""
 import os
 

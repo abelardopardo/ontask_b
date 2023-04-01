@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Data types considered in OnTask and its relation with Pandas data types"""
 
 

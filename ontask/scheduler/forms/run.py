@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms required to schedule Action Run"""
 from ontask.action import forms as action_forms
 from ontask.scheduler.forms import ScheduleBasicForm

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Models for the plugin registry and the SQL connections."""
 from django.db import models
 from django.utils.translation import gettext_lazy as _

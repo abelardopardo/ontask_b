@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views for create/update columns that are criteria in a rubric."""
 
 from django import http

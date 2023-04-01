@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test workflow basic operations"""
 import gzip
 from io import BytesIO

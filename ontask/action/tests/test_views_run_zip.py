@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test views to run ZIP actions."""
 
 from django.shortcuts import reverse

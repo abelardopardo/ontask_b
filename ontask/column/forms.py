@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to manipulate the columns."""
 import re
 from typing import Dict, List

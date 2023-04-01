@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to manipulate the workflow in the session."""
 from importlib import import_module
 from typing import List, Optional, Union

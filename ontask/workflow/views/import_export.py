@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to import/export a workflow."""
 from builtins import str
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Basic views to render error."""
 from django import http
 from django.contrib.auth.decorators import login_required

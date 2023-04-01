@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Common functions to handle connections."""
 
 from django import http

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Direct SQL operations in the DB."""
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to manipulate the transformations and models."""
 
 from django.contrib import messages

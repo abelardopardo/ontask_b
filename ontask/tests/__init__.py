@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from future import standard_library
 
 from ontask.tests.basic import (

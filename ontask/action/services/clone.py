@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to clone action/conditions."""
 import copy
 

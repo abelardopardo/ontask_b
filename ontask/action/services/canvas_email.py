@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to run the personalized canvas email action."""
 import datetime
 import json

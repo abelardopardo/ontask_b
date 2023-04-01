@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to create and delete a "share" item for a workflow."""
 from typing import Dict
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Create screen captures for theAPI to include in the documentation."""
 
 from django.urls import reverse

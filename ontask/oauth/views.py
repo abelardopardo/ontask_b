@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Call back view for OAuth2 authentication."""
 from django import http
 from django.contrib import messages

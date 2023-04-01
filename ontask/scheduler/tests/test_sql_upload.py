@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the views to create a scheduled SQL operation
 
 Assume we are using the initial workflow. We will use a table stored in the

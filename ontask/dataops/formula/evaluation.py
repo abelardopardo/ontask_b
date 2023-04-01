@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to evaluate the formulas in OnTask.
 
 There are three possible evaluation types:

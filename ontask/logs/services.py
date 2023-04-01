@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to manipulate logs."""
 from typing import Dict, Optional
 

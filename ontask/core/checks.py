@@ -155,25 +155,3 @@ def fix_non_unique_object_names(
             obj.name = obj.name + '_' + str(suffix)
             obj.save()
             suffix += 1
-
-
-def fix_non_unique_object_names(
-    obj_names: Set[str],
-    duplicates: List[db.models.Model],
-):
-    """Rename objects to remove duplicated names.
-
-    :param obj_names: Names currently existing that need to be unique
-    :param duplicates: Objects with duplicated names
-    :return: Reflect changes in the database
-    """
-
-    # Process each duplicated object to change the name
-    for obj in duplicates:
-        suffix = 1
-        while obj.name in obj_names:
-            # While the name is in the obj_names, keep increasing suffix
-            obj.name = obj.name + '_' + str(suffix)
-            obj.save()
-            suffix += 1
-

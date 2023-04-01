@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Define Plugin instantiation exceptions."""
 from ontask import OnTaskServiceException
 

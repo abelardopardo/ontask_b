@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Abstract model for connections."""
 from typing import Dict
 

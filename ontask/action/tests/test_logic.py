@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test task logic functions."""
 import os
 
