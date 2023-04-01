@@ -21,7 +21,7 @@ import environ
 # Variables required to process configuration
 BASE_DIR = environ.Path(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-ONTASK_TESTING = sys.argv[1:2] == ['test']
+ONTASK_TESTING = 'test' in sys.argv
 
 # Use 12factor inspired environment variables.
 env = environ.Env()
@@ -631,7 +631,7 @@ def show_configuration() -> None:
     print('LTI_OAUTH_CREDENTIALS (conf):', LTI_OAUTH_CREDENTIALS)
     print('LTI_INSTRUCTOR_GROUP_ROLES: (conf)', LTI_INSTRUCTOR_GROUP_ROLES)
     print()
-    print('# Clariate')
+    print('# OnTask')
     print('# --------')
     print('DATAOPS_CONTENT_TYPES:', DATAOPS_CONTENT_TYPES)
     print('DATAOPS_MAX_UPLOAD_SIZE (conf):', DATAOPS_MAX_UPLOAD_SIZE)
