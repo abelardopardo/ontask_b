@@ -1,7 +1,9 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 8.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 9.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
+[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-37/)
+![Twitter Follow](https://img.shields.io/twitter/follow/clariate?label=Follow&style=social)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/abelardopardo/ontask_b)
 ![Issues](https://img.shields.io/github/issues/abelardopardo/ontask_b.svg?style=flat-square)
 ![License](https://img.shields.io/github/license/abelardopardo/ontask_b.svg?style=flat-square)

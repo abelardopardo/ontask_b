@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-26 21:14+1030\n"
+"POT-Creation-Date: 2022-09-25 13:05+0930\n"
 "PO-Revision-Date: 2020-06-01 19:53+0300\n"
 "Last-Translator: Joonas Pesonen <joonas.pesonen@helsinki.fi>\n"
 "Language-Team: \n"
@@ -18,236 +18,287 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3.1\n"
 
-#: ontask/__init__.py:150
+#: ontask/__init__.py:148
 msgid "The symbol ' cannot be used in the name."
 msgstr "Symbolia ’ ei voi käyttää nimessä."
 
-#: ontask/__init__.py:153
+#: ontask/__init__.py:151
 msgid "The symbol \" cannot be used in the name."
 msgstr "Symbolia \" ei voi käyttää nimessä."
 
-#: ontask/__init__.py:156
+#: ontask/__init__.py:154
 msgid "The name cannot start with \"__\""
 msgstr "Nimi ei voi alkaa ”__”"
 
-#: ontask/__init__.py:163
+#: ontask/__init__.py:161
 msgid "Copy of "
 msgstr "Kopio kohteesta "
 
-#: ontask/accounts/forms.py:19
+#: ontask/accounts/admin.py:19
+#, fuzzy
+#| msgid "Permission denied"
+msgid "Permissions"
+msgstr "Lupa evätty"
+
+#: ontask/accounts/admin.py:26
+#, fuzzy
+#| msgid "Import actions"
+msgid "Important dates"
+msgstr "Tuo toimintoja"
+
+#: ontask/accounts/forms.py:38
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: ontask/accounts/forms.py:22
+#: ontask/accounts/forms.py:41
 msgid "Enter Email"
 msgstr "Syötä sähköpostiosoite"
 
-#: ontask/accounts/forms.py:23
+#: ontask/accounts/forms.py:42
 msgid "Enter Password"
 msgstr "Syötä salasana"
 
-#: ontask/accounts/forms.py:24
+#: ontask/accounts/forms.py:44
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
-#: ontask/accounts/views.py:49
+#: ontask/accounts/forms.py:98
+#, fuzzy
+#| msgid "Password Reset"
+msgid "No password set."
+msgstr "Salasanan nollaus"
+
+#: ontask/accounts/forms.py:104
+msgid "Invalid password format or unknown hashing algorithm."
+msgstr ""
+
+#: ontask/accounts/forms.py:106
+msgid "*************"
+msgstr ""
+
+#: ontask/accounts/forms.py:121
+msgid "The two password fields didn't match."
+msgstr ""
+
+#: ontask/accounts/forms.py:123
+#, fuzzy, python-format
+#| msgid "A column with that name already exists"
+msgid "A user with that %(username)s already exists."
+msgstr "Samanniminen sarake on jo olemassa"
+
+#: ontask/accounts/forms.py:126 ontask/accounts/forms.py:191
+#: ontask/connection/forms.py:71 ontask/models/sqlconnection.py:56
+msgid "Password"
+msgstr "Salasana"
+
+#: ontask/accounts/forms.py:130
+#, fuzzy
+#| msgid "Password reset confirmation"
+msgid "Password confirmation"
+msgstr "Salasanan palautuksen vahvistus"
+
+#: ontask/accounts/forms.py:132
+msgid "Enter the same password as above, for verification."
+msgstr ""
+
+#: ontask/accounts/views.py:257
 msgid ""
 "Your password was changed, hence you have been logged out. Please relogin"
 msgstr ""
 "Salasanasi vaihdettiin, joten sinut kirjattiin ulos. Kirjaudu uudelleen "
 "sisään"
 
-#: ontask/action/evaluate/action.py:249
+#: ontask/action/evaluate/action.py:246
 msgid "Incorrect type of action"
 msgstr "Virheellinen toiminnon tyyppi"
 
-#: ontask/action/evaluate/template.py:310
-#: ontask/action/evaluate/template.py:314
+#: ontask/action/evaluate/template.py:308
+#: ontask/action/evaluate/template.py:312
 #, python-brace-format
 msgid "Name {0} is reserved."
 msgstr "Nimi {0} on varattu."
 
-#: ontask/action/forms/crud.py:47
+#: ontask/action/forms/crud.py:45
 msgid "There is already an action with this name."
 msgstr "Samanniminen toiminto on jo olemassa."
 
-#: ontask/action/forms/crud.py:103
+#: ontask/action/forms/crud.py:101
 msgid "File with previously exported OnTask actions"
 msgstr "Tiedosto, joka sisältää aiemmin vietyjä OnTask-toimintoja"
 
-#: ontask/action/forms/crud.py:104
+#: ontask/action/forms/crud.py:102
 msgid "File containing a previously exported action"
 msgstr "TIedosto, joka sisältää aiemmin viedyn toiminnon"
 
-#: ontask/action/forms/crud.py:124
+#: ontask/action/forms/crud.py:122
 msgid "Comma separated list of levels of attainment"
 msgstr "Pilkkuerotettu luettelo saavutustasoista"
 
-#: ontask/action/forms/crud.py:147
+#: ontask/action/forms/crud.py:145
 msgid "The number of levels cannot change."
 msgstr "Tasojen lukumäärää ei voi vaihtaa."
 
-#: ontask/action/forms/edit.py:45
+#: ontask/action/forms/edit.py:43
 msgid "Target URL"
 msgstr "Kohde URL"
 
-#: ontask/action/forms/edit.py:52
+#: ontask/action/forms/edit.py:50
 msgid "URL to send the JSON object"
 msgstr "URL johon JSON-objekti lähetetään"
 
-#: ontask/action/forms/edit.py:62
+#: ontask/action/forms/edit.py:60
 msgid "Write a JSON object"
 msgstr "Kirjoita JSON-objekti"
 
-#: ontask/action/forms/edit.py:72
+#: ontask/action/forms/edit.py:70
 msgid "Write a plain text message"
 msgstr "Kirjoita viesti pelkkänä tekstinä"
 
-#: ontask/action/forms/run.py:64
+#: ontask/action/forms/run.py:63
 msgid "Download a snapshot of the workflow?"
 msgstr "Lataa tilannevedos työnkulusta?"
 
-#: ontask/action/forms/run.py:65
+#: ontask/action/forms/run.py:64
 msgid "A zip file is useful to review the emails sent."
 msgstr ""
 "Zip-tiedosto on hyödyöllinen lähetettyjen sähköpostiviestien tarkasteluun."
 
-#: ontask/action/forms/run.py:86
+#: ontask/action/forms/run.py:85
 msgid "Email subject"
 msgstr "Sähköpostin otsikko"
 
-#: ontask/action/forms/run.py:109
+#: ontask/action/forms/run.py:108
 msgid "Space-separated list of CC emails"
 msgstr "Välilyönneillä eroteltu lista CC sähköposteista"
 
-#: ontask/action/forms/run.py:113
+#: ontask/action/forms/run.py:112
 msgid "Space-separated list of BCC emails"
 msgstr "Välilyönneillä eroteltu lista BCC sähköposteista"
 
-#: ontask/action/forms/run.py:142 ontask/action/forms/run.py:148
+#: ontask/action/forms/run.py:141 ontask/action/forms/run.py:147
 #: ontask/scheduler/serializers.py:172 ontask/scheduler/serializers.py:184
 #: ontask/scheduler/serializers.py:195
 #, python-brace-format
 msgid "Incorrect email value \"{0}\"."
 msgstr "Virheellinen sähköpostiosoite ”{0}”."
 
-#: ontask/action/forms/run.py:163
+#: ontask/action/forms/run.py:162
 msgid "Check/exclude items before sending?"
 msgstr "Tarkista/sulje pois kohteita ennen lähettämistä?"
 
-#: ontask/action/forms/run.py:165
+#: ontask/action/forms/run.py:164
 msgid "Allows a last minute check and select some elements to be excluded."
 msgstr ""
 "Mahdollistaa viime hetken tarkistuksen ja tiettyjen elementtien pois "
 "jättämisen."
 
-#: ontask/action/forms/run.py:205
+#: ontask/action/forms/run.py:204
 msgid "Column needs to have all unique values (no empty cells)"
 msgstr "Sarakkeeseen vaaditaan uniikkeja arvoja (ei tyhjiä soluja)"
 
-#: ontask/action/forms/run.py:216
+#: ontask/action/forms/run.py:215
 msgid "Authentication Token"
 msgstr "Autentikaatiotietue"
 
-#: ontask/action/forms/run.py:227
+#: ontask/action/forms/run.py:226
 msgid "Authentication token provided by the external platform."
 msgstr "Ulkoisen järjestelmän tarjoama autentikaatiotietue."
 
-#: ontask/action/forms/run.py:246
+#: ontask/action/forms/run.py:245
 msgid "Send you a summary message?"
 msgstr "Lähetetäänkö sinulle yhteenvetoviesti?"
 
-#: ontask/action/forms/run.py:251
+#: ontask/action/forms/run.py:250
 msgid "Track email reading in an extra column?"
 msgstr "Jäljitetäänkö sähköpostin lukemista ylimääräisessä sarakkeessa?"
 
-#: ontask/action/forms/run.py:252
+#: ontask/action/forms/run.py:251
 msgid "Adds an extra column to the workflow. Results are aproximate."
 msgstr "Lisää ylimääräisen sarakkeen työnkulkuun. Tulokset ovat likimääräisiä."
 
-#: ontask/action/forms/run.py:260 ontask/action/forms/run.py:315
+#: ontask/action/forms/run.py:259 ontask/action/forms/run.py:314
 msgid "Column to use for target email address"
 msgstr "Sarake, jota käytetään kohdesähköpostiosoitteena"
 
-#: ontask/action/forms/run.py:297
+#: ontask/action/forms/run.py:296
 #, python-brace-format
 msgid "Incorrect email address \"{0}\"."
 msgstr "Virheellinen sähköpostiosoite ”{0}”."
 
-#: ontask/action/forms/run.py:302 ontask/scheduler/serializers.py:175
+#: ontask/action/forms/run.py:301 ontask/scheduler/serializers.py:175
 msgid "The column with email addresses has incorrect values."
 msgstr "Sähköpostiosoitteiden sarakkeessa on virheellisiä arvoja."
 
-#: ontask/action/forms/run.py:331
+#: ontask/action/forms/run.py:330
 msgid "Recipient"
 msgstr "Vastaanottaja"
 
-#: ontask/action/forms/run.py:352
+#: ontask/action/forms/run.py:351
 msgid "Field needs a valid email address."
 msgstr "Kenttään tarvitaan kelvollinen sähköpostiosoite."
 
-#: ontask/action/forms/run.py:377
+#: ontask/action/forms/run.py:376
 msgid "Column to use for file name prefix (Full name if Moodle ZIP)"
 msgstr ""
 "Sarake, jota käytetään tiedostonimen etuliitteenä (Full name, jos käytössä "
 "Moodle ZIP)"
 
-#: ontask/action/forms/run.py:389
+#: ontask/action/forms/run.py:388
 msgid "This ZIP will be uploaded to Moodle as feedback"
 msgstr "Tämä ZIP-tiedosto ladataan Moodleen palautteeksi"
 
-#: ontask/action/forms/run.py:396
+#: ontask/action/forms/run.py:395
 msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
 msgstr ""
 "Avainsarake, jota käytetään tiedostonimen etuliitteenä (Participant id, jos "
 "käytössä Moodle ZIP)"
 
-#: ontask/action/forms/run.py:447
+#: ontask/action/forms/run.py:446
 msgid "The two columns must be different"
 msgstr "Näiden kahden sarakkeen tulee olla eriävät"
 
-#: ontask/action/forms/run.py:455
+#: ontask/action/forms/run.py:454
 msgid "A Moodle ZIP requires two column names"
 msgstr "Moodle ZIP vaatii kaksi sarakenimeä"
 
-#: ontask/action/forms/run.py:469
+#: ontask/action/forms/run.py:468
 msgid "Values in column must have format \"Participant [number]\""
 msgstr "Sarakkeen arvojen tulee olla muodossa ”Osallistuja [numero]”"
 
-#: ontask/action/forms/run.py:492
+#: ontask/action/forms/run.py:491
 msgid "Canvas Host"
 msgstr "Canvas Host"
 
-#: ontask/action/forms/run.py:493
+#: ontask/action/forms/run.py:492
 msgid "Name of the Canvas host to send the messages"
 msgstr "Canvas-isännän nimi johon viestit lähetetään"
 
-#: ontask/action/forms/run.py:497
+#: ontask/action/forms/run.py:496
 msgid "Column with the Canvas ID"
 msgstr "Sarake, jossa on Canvas ID"
 
-#: ontask/action/forms/run.py:499
+#: ontask/action/forms/run.py:498
 msgid "Check/Exclude Canvas IDs before sending?"
 msgstr "Tarkista/sulje pois Canvas ID:itä ennen lähettämistä?"
 
-#: ontask/action/forms/run.py:521
+#: ontask/action/forms/run.py:520
 msgid "No Canvas Service available for this action."
 msgstr "Canvas-palvelua ei saatavilla tähän toimintoon."
 
-#: ontask/action/forms/run.py:536
+#: ontask/action/forms/run.py:535
 msgid "The column does not contain valid Canvas IDs."
 msgstr "Valitussa sarakkeessa ei ole kelvollista Canvas ID:tä."
 
-#: ontask/action/forms/run.py:563
+#: ontask/action/forms/run.py:562
 msgid "Column to exclude objects to send (empty to skip step)"
 msgstr "Sarake, jossa lähetyksessä ohteet (jätä tyhjäksi ohittaaksesi)"
 
-#: ontask/action/forms/run.py:603
+#: ontask/action/forms/run.py:602
 msgid "Values to exclude"
 msgstr "Pois suljettavat arvot"
 
-#: ontask/action/forms/run.py:638 ontask/action/forms/run.py:641
-#: ontask/column/forms.py:153 ontask/column/forms.py:154
+#: ontask/action/forms/run.py:637 ontask/action/forms/run.py:640
+#: ontask/column/forms.py:147 ontask/column/forms.py:148
 msgid "Incorrect date/time window"
 msgstr "Virheellinen päivämäärä/aikaikkuna"
 
@@ -282,30 +333,30 @@ msgstr "Toimintoa ei voi tuoda tyhjään datataulukkoon"
 msgid "Action with name \"{0}\" already exists"
 msgstr "Tämänniminen toiminto nimi on jo olemassa"
 
-#: ontask/action/services/canvas_email.py:64
+#: ontask/action/services/canvas_email.py:62
 msgid "OAuth token refreshed"
 msgstr "OAuth token virkistetty"
 
-#: ontask/action/services/canvas_email.py:113
+#: ontask/action/services/canvas_email.py:111
 msgid "Unable to obtain Canvas OAuth information"
 msgstr "Canvas OAuth -tietoja ei löytynyt"
 
-#: ontask/action/services/canvas_email.py:141
+#: ontask/action/services/canvas_email.py:137
 #, python-brace-format
 msgid "Error when invoking Canvas API: {0}."
 msgstr "Virhe kutsuessa Canvas API: {0}."
 
-#: ontask/action/services/canvas_email.py:162
+#: ontask/action/services/canvas_email.py:158
 msgid "Message successfuly sent"
 msgstr "Viestin lähetys onnistui"
 
-#: ontask/action/services/canvas_email.py:184
+#: ontask/action/services/canvas_email.py:182
 #, python-brace-format
 msgid "Unable to deliver message (code {0})"
 msgstr "Viestin toimittaminen epäonnistui (koodi {0})"
 
-#: ontask/action/services/canvas_email.py:220
-#: ontask/action/services/run_manager.py:99
+#: ontask/action/services/canvas_email.py:209
+#: ontask/action/services/run_factory.py:149
 #: ontask/templates/action/action_zip_step1.html:35
 #: ontask/templates/action/request_email_data.html:36
 #: ontask/templates/action/request_email_report_data.html:27
@@ -314,124 +365,145 @@ msgstr "Viestin toimittaminen epäonnistui (koodi {0})"
 msgid "Send"
 msgstr "Lähetä"
 
-#: ontask/action/services/canvas_email.py:271
+#: ontask/action/services/canvas_email.py:260
 msgid "Unable to find OAuth Information Record"
 msgstr "OAuth Information Record ei löytynyt"
 
-#: ontask/action/services/canvas_email.py:280
+#: ontask/action/services/canvas_email.py:269
 msgid "Incorrect execution due to absence of token"
 msgstr "Virheellinen suoritus, token puuttuu"
 
-#: ontask/action/services/email.py:67
+#: ontask/action/services/email.py:64
 #, python-brace-format
 msgid "Syntax error in notification template ({0})"
 msgstr "Syntaksivirhe ilmoituspohjassa ({0})"
 
-#: ontask/action/services/email.py:96
+#: ontask/action/services/email.py:93
 #, python-brace-format
 msgid "Error when sending the notification: {0}"
 msgstr "Virhe lähettäessä ilmoitusta: {0}"
 
-#: ontask/action/services/email.py:112
+#: ontask/action/services/email.py:109
 #, python-brace-format
 msgid "Invalid email address \"{0}\"."
 msgstr "Virheellinen sähköpostiosoite \"{0}\"."
 
-#: ontask/action/services/email.py:486
+#: ontask/action/services/email.py:479
 #, python-brace-format
 msgid "Error when sending the list email: {0}"
 msgstr "Virhe lähetettäessä luettelosähköpostia: {0}"
 
-#: ontask/action/services/import_export.py:110
+#: ontask/action/services/import_export.py:108
 #, fuzzy
 #| msgid "Incorrect file. Expecting a GZIP file (exported workflow)."
 msgid "Incorrect file. Expecting a GZIP file (exported action)."
 msgstr "Virheellinen tiedosto."
 
-#: ontask/action/services/import_export.py:124
+#: ontask/action/services/import_export.py:122
 #, python-brace-format
 msgid "Unable to import action: {0}"
 msgstr "Seuraavan toiminnon tuonti epäonnistui: {0}"
 
-#: ontask/action/services/preview.py:151
+#: ontask/action/services/preview.py:148
 #, python-brace-format
 msgid "Error while retrieving content (index: {0})"
 msgstr "Virhe haettaessa sisältöä (indeksi: {0})"
 
-#: ontask/action/services/rubric.py:22
+#: ontask/action/services/rubric.py:20
 msgid "Criterion"
 msgstr "Kriteeri"
 
-#: ontask/action/services/rubric.py:127
+#: ontask/action/services/rubric.py:115
 msgid "Inconsistent LOA in rubric criteria"
 msgstr "Epäjohdonmukainen suoriutumistaso rubriikkikriteereissä"
 
-#: ontask/action/services/serve_action.py:48
-#: ontask/action/services/serve_action.py:67
+#: ontask/action/services/serve_action.py:46
+#: ontask/action/services/serve_action.py:65
 #, python-brace-format
 msgid "Error when evaluating conditions for user {0}"
 msgstr "Virhetilanne soveltaessa ehtoja käyttäjälle {0}"
 
-#: ontask/action/services/serve_action.py:113
+#: ontask/action/services/serve_action.py:102
+#: ontask/action/services/serve_action.py:111
+#, fuzzy
+#| msgid "Unable to find user with id {0}"
+msgid "Unable to find survey data."
+msgstr "Ei löydetty käyttäjää, jolla id {0}"
+
+#: ontask/action/services/serve_action.py:114
 msgid "Data not found in the table"
 msgstr "Tietoja ei löydy taulukosta"
 
-#: ontask/action/services/survey.py:26
-#: ontask/scheduler/services/scheduler_table.py:26
-#: ontask/templates/column/detail.html:99
+#: ontask/action/services/survey.py:23
+#: ontask/scheduler/services/scheduler_table.py:24
+#: ontask/templates/column/detail.html:100
 #: ontask/templates/dataops/upload_s2.html:38
-#: ontask/workflow/forms/attribute_shared.py:21
-#: ontask/workflow/services/workflow_ops.py:16
+#: ontask/workflow/forms/attribute_shared.py:19
+#: ontask/workflow/services/workflow_ops.py:14
 msgid "Name"
 msgstr "Nimi"
 
-#: ontask/action/services/survey.py:29 ontask/templates/action/edit_in.html:141
+#: ontask/action/services/survey.py:26 ontask/templates/action/edit_in.html:141
 msgid "Description (shown to learners)"
 msgstr "Kuvaus (näkyy oppijoille)"
 
-#: ontask/action/services/survey.py:33
+#: ontask/action/services/survey.py:30
 msgid "Allow change?"
 msgstr "Salli muutokset?"
 
-#: ontask/action/services/survey.py:36
+#: ontask/action/services/survey.py:33
 #: ontask/templates/condition/includes/partial_condition_tab_body.html:10
 msgid "Condition"
 msgstr "Ehto"
 
-#: ontask/action/services/survey.py:264 ontask/connection/services/athena.py:82
-#: ontask/connection/services/sql.py:65 ontask/templates/column/detail.html:98
-#: ontask/workflow/services/workflow_ops.py:46
+#: ontask/action/services/survey.py:250 ontask/connection/services/athena.py:38
+#: ontask/connection/services/athena.py:71 ontask/connection/services/sql.py:51
+#: ontask/templates/column/detail.html:99
+#: ontask/workflow/services/workflow_ops.py:44
 msgid "Operations"
 msgstr "Tehtävät"
 
-#: ontask/action/views/action.py:187
+#: ontask/action/views/action.py:160
 msgid "Action successfully cloned."
 msgstr "Toiminto kopioitu onnistuneesti."
 
-#: ontask/action/views/edit_rubric.py:118
-#, python-brace-format
-msgid "Incorrect level of attainment values ({0})."
-msgstr "Virheelliset suoriutumistason arvot ({0})."
+#: ontask/action/views/action.py:180
+#, fuzzy
+#| msgid "Action successfully cloned."
+msgid "Action successfully deleted."
+msgstr "Toiminto kopioitu onnistuneesti."
 
-#: ontask/action/views/import_export.py:41
+#: ontask/action/views/edit_personalized.py:89
+#, fuzzy, python-brace-format
+#| msgid "Attachments"
+msgid "Attachment {0} added."
+msgstr "Liitteet"
+
+#: ontask/action/views/edit_personalized.py:93
+#, fuzzy
+#| msgid "Attachments"
+msgid "Attachment removed."
+msgstr "Liitteet"
+
+#: ontask/action/views/import_export.py:30
 msgid "Incorrect form (it does not have a file attached)"
 msgstr "Väärä muoto (ei liitetiedostoa)"
 
-#: ontask/action/views/import_export.py:55
+#: ontask/action/views/import_export.py:44
 msgid "Unable to import file. Incorrect fields."
 msgstr "Tiedoston tuonti epäonnistui. Virheelliset kentät."
 
-#: ontask/action/views/import_export.py:62
+#: ontask/action/views/import_export.py:51
 #, python-brace-format
 msgid "Unable to import file: {0}"
 msgstr "Tiedoston tuonti epäonnistui: {0}"
 
-#: ontask/action/views/import_export.py:68
+#: ontask/action/views/import_export.py:57
 #, python-brace-format
 msgid "Actions imported: {0}"
 msgstr "Tuodut toiminnot: {0}"
 
-#: ontask/action/views/run.py:108
+#: ontask/action/views/run.py:42
 msgid ""
 "Unable to execute actions due to a misconfiguration. Ask your system "
 "administrator to enable message queueing."
@@ -439,28 +511,53 @@ msgstr ""
 "Toimintoja ei voida suorittaa konfiguraatiovirheen vuoksi. Pyydä "
 "järjestelmänvalvojaa ottamaan käyttöön jonotustoiminto."
 
-#: ontask/action/views/run.py:131
+#: ontask/action/views/run.py:77
 msgid "Incorrect action run invocation."
 msgstr "Virheellinen toiminnon suorituskutsu."
 
-#: ontask/action/views/run.py:287 ontask/action/views/run.py:296
+#: ontask/action/views/run.py:131 ontask/action/views/run.py:142
 msgid "Incorrect item filter invocation."
 msgstr "Virheellinen suodattimen kutsu."
 
-#: ontask/action/views/run.py:338
+#: ontask/action/views/run.py:189
 msgid "Incorrect ZIP action invocation."
 msgstr "Virheellinen ZIP-toiminnon kutsu."
 
-#: ontask/action/views/run.py:349 ontask/action/views/run.py:361
+#: ontask/action/views/run.py:201 ontask/action/views/run.py:213
 msgid "Incorrect payload in ZIP action invocation"
 msgstr "Virheellinen hyötykuorma ZIP-toiminnon kutsussa"
 
-#: ontask/action/views/run.py:404 ontask/column/views/index.py:66
-#: ontask/table/services/display.py:93
+#: ontask/action/views/run.py:242 ontask/column/views/index.py:115
+#: ontask/table/views/table_display.py:116
 msgid "Incorrect request. Unable to process"
 msgstr "Virheellinen pyyntö. Ei voi käsitellä"
 
-#: ontask/action/views/timeline.py:33
+#: ontask/action/views/serve.py:68 ontask/action/views/serve.py:187
+#: ontask/action/views/serve.py:192
+#, fuzzy
+#| msgid "Action cloned"
+msgid "Action not found"
+msgstr "Toiminta kopioitu"
+
+#: ontask/action/views/serve.py:78
+#, fuzzy
+#| msgid "Action not enabled for user {0}"
+msgid "Action is not enabled."
+msgstr "Toiminto ei käytössä käyttäjälle {0}"
+
+#: ontask/action/views/serve.py:84
+#, fuzzy
+#| msgid "Unable to find user with id {0}"
+msgid "Unable to identify the user."
+msgstr "Ei löydetty käyttäjää, jolla id {0}"
+
+#: ontask/action/views/serve.py:140
+#, fuzzy
+#| msgid "Unable to process datatype"
+msgid "Unable to process the action."
+msgstr "Tietotyyppiä ei voida käsitellä"
+
+#: ontask/action/views/timeline.py:32
 msgid "Action does not belong to current workflow. "
 msgstr ""
 
@@ -468,176 +565,111 @@ msgstr ""
 msgid "OnTask"
 msgstr "OnTask"
 
-#: ontask/authtools/admin.py:21
-#, fuzzy
-#| msgid "Permission denied"
-msgid "Permissions"
-msgstr "Lupa evätty"
-
-#: ontask/authtools/admin.py:28
-#, fuzzy
-#| msgid "Import actions"
-msgid "Important dates"
-msgstr "Tuo toimintoja"
-
-#: ontask/authtools/forms.py:38
-#, fuzzy
-#| msgid "Password Reset"
-msgid "No password set."
-msgstr "Salasanan nollaus"
-
-#: ontask/authtools/forms.py:43
-msgid "Invalid password format or unknown hashing algorithm."
-msgstr ""
-
-#: ontask/authtools/forms.py:46
-msgid "*************"
-msgstr ""
-
-#: ontask/authtools/forms.py:59
-msgid "The two password fields didn't match."
-msgstr ""
-
-#: ontask/authtools/forms.py:61
-#, fuzzy, python-format
-#| msgid "A column with that name already exists"
-msgid "A user with that %(username)s already exists."
-msgstr "Samanniminen sarake on jo olemassa"
-
-#: ontask/authtools/forms.py:64 ontask/authtools/forms.py:153
-#: ontask/connection/forms.py:77 ontask/models/sqlconnection.py:58
-msgid "Password"
-msgstr "Salasana"
-
-#: ontask/authtools/forms.py:65
-#, fuzzy
-#| msgid "Password reset confirmation"
-msgid "Password confirmation"
-msgstr "Salasanan palautuksen vahvistus"
-
-#: ontask/authtools/forms.py:67
-msgid "Enter the same password as above, for verification."
-msgstr ""
-
-#: ontask/authtools/forms.py:183
-msgid ""
-"This email address doesn't have an associated user account. Are you sure "
-"you've registered?"
-msgstr ""
-
-#: ontask/column/forms.py:27
+#: ontask/column/forms.py:60
 msgid "Comma separated list of values allowed in this column"
 msgstr "Tässä sarakkeessa pilkulla erotettu lista arvoista on sallittu"
 
-#: ontask/column/forms.py:81
+#: ontask/column/forms.py:108
 msgid "There is a column already with this name"
 msgstr "Samanniminen sarake on jo olemassa"
 
-#: ontask/column/forms.py:116
-msgid "More than a single value needed."
-msgstr "Tarvitaan enemmän kuin yksi arvo."
+#: ontask/column/forms.py:122
+msgid "Changes not allowed. Column is part of rubric action"
+msgstr ""
 
-#: ontask/column/forms.py:127
-msgid "Incorrect list of values"
-msgstr "Virheellinen arvolista"
-
-#: ontask/column/forms.py:141
-msgid "The values in the column are not compatible  with these ones."
-msgstr "Sarakkeen arvot eivät ole yhteensopivia näiden kanssa."
-
-#: ontask/column/forms.py:190
+#: ontask/column/forms.py:184
 msgid "Value to assign to all cells in the column"
 msgstr "Kaikkiin sarakkeen soluihin kohdistettava arvo"
 
-#: ontask/column/forms.py:214 ontask/dataops/services/plugin_admin.py:304
+#: ontask/column/forms.py:208 ontask/dataops/services/plugin_admin.py:302
 msgid "Incorrect initial value"
 msgstr "Virheellinen alkuarvo"
 
-#: ontask/column/forms.py:221
+#: ontask/column/forms.py:215
 msgid "This value is not in the list of allowed values"
 msgstr "Tämä arvo ei ole sallittujen arvojen luettelossa"
 
-#: ontask/column/forms.py:245
+#: ontask/column/forms.py:239
 msgid "Question name"
 msgstr "Kysymyksen nimi"
 
-#: ontask/column/forms.py:247 ontask/column/forms.py:277
+#: ontask/column/forms.py:241 ontask/column/forms.py:271
 msgid "Description (shown to the learners)"
 msgstr "Kuvaus (näkyy oppijoille)"
 
-#: ontask/column/forms.py:249
+#: ontask/column/forms.py:243
 msgid "Question position (zero to insert last)"
 msgstr "Kysymyksen sijoitus (nolla lisätäksesi viimeiseksi)"
 
-#: ontask/column/forms.py:250
+#: ontask/column/forms.py:244
 msgid "Question active from"
 msgstr "Kysymys on aktiivinen alkaen"
 
-#: ontask/column/forms.py:251
+#: ontask/column/forms.py:245
 msgid "Question active until"
 msgstr "Kysymys on aktiivinen asti"
 
-#: ontask/column/forms.py:275
+#: ontask/column/forms.py:269
 #, fuzzy
 #| msgid "View name"
 msgid "Item name"
 msgstr "Näytä nimi"
 
-#: ontask/column/forms.py:279
+#: ontask/column/forms.py:273
 msgid "Item position (zero to insert last)"
 msgstr "sarakkeen sijainti (nolla lisätäksesi viimeiseksi)"
 
-#: ontask/column/forms.py:280
+#: ontask/column/forms.py:274
 #, fuzzy
 #| msgid "Column active from"
 msgid "Item active from"
 msgstr "Sarake on aktiivinen alkaen"
 
-#: ontask/column/forms.py:281
+#: ontask/column/forms.py:275
 msgid "Item active until"
 msgstr "Sarake on aktiivinen asti"
 
-#: ontask/column/forms.py:312
+#: ontask/column/forms.py:306
 msgid "Criterion name"
 msgstr "Kriteerin nimi"
 
-#: ontask/column/forms.py:314
+#: ontask/column/forms.py:308
 msgid "Criterion Description"
 msgstr "Kriteeirn kuvaus"
 
-#: ontask/column/forms.py:323
+#: ontask/column/forms.py:317
 msgid "Comma-separated list of levels of attainment"
 msgstr "Pilkuilla eroteltu lista suoriutumistasoista"
 
-#: ontask/column/forms.py:340
+#: ontask/column/forms.py:337
 msgid "The criterion needs a non-empty set of values"
 msgstr "Kriteeri tarvitsee ei-tyhjän arvojoukon"
 
-#: ontask/column/forms.py:380
+#: ontask/column/forms.py:377
 msgid "There must be at least one column with unique values"
 msgstr "On oltava vähintään yksi sarake, jossa on uniikit arvot"
 
-#: ontask/column/forms.py:392
+#: ontask/column/forms.py:390
 msgid "The column does not have unique values for each row."
 msgstr "Sarakkeessa ei ole uniikkeja arvoja kullekin riville."
 
-#: ontask/column/forms.py:422
+#: ontask/column/forms.py:420
 msgid "Columns to combine*"
 msgstr "Yhdistettävät sarakkeet*"
 
-#: ontask/column/forms.py:454
+#: ontask/column/forms.py:452
 msgid "A column with that name already exists"
 msgstr "Samanniminen sarake on jo olemassa"
 
-#: ontask/column/forms.py:462
+#: ontask/column/forms.py:460
 msgid "You need to select the columns to combine"
 msgstr "Sinun on valittava yhdistettävät sarakkeet"
 
-#: ontask/column/forms.py:482
+#: ontask/column/forms.py:480
 msgid "Incorrect data type for the selected operand"
 msgstr "Virheellinen tietotyyppi valitulle operandille"
 
-#: ontask/column/forms.py:514
+#: ontask/column/forms.py:512
 msgid ""
 "Comma-separated list of values. If a number, m - n means integer values from "
 "that interval."
@@ -645,298 +677,249 @@ msgstr ""
 "Pilkuilla erotettu luettelo arvoista. Jos luku, m - n tarkoittaa "
 "kokonaislukuarvoja tältä väliltä."
 
-#: ontask/column/forms.py:524
+#: ontask/column/forms.py:522
 msgid "Columns to insert"
 msgstr "Lisättävät sarakkeet"
 
-#: ontask/column/serializers.py:38
+#: ontask/column/serializers.py:36
 #, python-brace-format
 msgid "Incorrect date/times in the active window for column {0}"
 msgstr "Virheellinen päiväys tai aika sarakkeen {0} aktiivisessa ikkunassa"
 
-#: ontask/column/services/crud.py:90
+#: ontask/column/services/crud.py:88
 #, python-brace-format
 msgid "Unable to add element: {0}"
 msgstr "Elementtiä ei voi lisätä: {0}"
 
-#: ontask/column/services/crud.py:155
+#: ontask/column/services/crud.py:153
 #, python-brace-format
 msgid "Unable to add column: {0}"
 msgstr "Ei voitu lisätä saraketta: {0}"
 
-#: ontask/column/services/crud.py:210
+#: ontask/column/services/crud.py:209
 #, python-brace-format
 msgid "Unable to add the column: {0}"
 msgstr "Ei voitu lisätä saraketta: {0}"
 
-#: ontask/column/services/restrict.py:28
+#: ontask/column/services/restrict.py:24
 msgid "The column has no meaningful values"
 msgstr "Sarakkeessa ei ole merkityksellisiä arvoja"
 
-#: ontask/column/views/criterion_crud.py:46
+#: ontask/column/views/criterion_crud.py:53
 msgid "Operation only valid or Rubric actions"
 msgstr "Toiminto kelvollinen vain rubriikkitoiminnoissa"
 
-#: ontask/column/views/criterion_crud.py:53
-msgid "Cannot add criteria to a workflow without data"
-msgstr "Et voi lisätä kriteeriä työnkulkuun, jossa ei ole tietoja"
-
-#: ontask/column/views/criterion_crud.py:115
-msgid "Incorrect invocation of criterion edit function"
-msgstr "Kriteerien muokkaustoiminnon virheellinen kutsuminen"
-
-#: ontask/column/views/criterion_crud.py:177
-msgid "Incorrect invocation of criterion delete function"
-msgstr "Kriteerien poistotoiminnon virheellinen kutsuminen"
-
-#: ontask/column/views/criterion_crud.py:224
+#: ontask/column/views/criterion_crud.py:186
 msgid "Incorrect invocation of criterion insert operation."
 msgstr "Kriteerien lisäystoiminnan virheellinen kutsuminen."
 
-#: ontask/column/views/criterion_crud.py:234
+#: ontask/column/views/criterion_crud.py:196
 msgid "Criterion does not have the correct levels of attainment"
 msgstr "Kriteerillä ei ole oikeita suoriutumistasoja"
 
-#: ontask/column/views/criterion_crud.py:241
+#: ontask/column/views/criterion_crud.py:203
 msgid "The column needs to have a fixed set of possible values"
 msgstr "Sarakkeessa on oltava kiinteä joukko mahdollisia arvoja"
 
-#: ontask/column/views/crud.py:25
+#: ontask/column/views/crud.py:23
 msgid "sum: Sum selected columns"
 msgstr "summa: Valittujen sarakkeiden summa"
 
-#: ontask/column/views/crud.py:28
+#: ontask/column/views/crud.py:26
 msgid "prod: Product of the selected columns"
 msgstr "prod: Valittujen sarakkeiden tulo"
 
-#: ontask/column/views/crud.py:30
+#: ontask/column/views/crud.py:28
 msgid "max: Maximum of the selected columns"
 msgstr "max: Valittujen sarakkeiden maksimi"
 
-#: ontask/column/views/crud.py:31
+#: ontask/column/views/crud.py:29
 msgid "min: Minimum of the selected columns"
 msgstr "min: Valittujen sarakkeiden minimi"
 
-#: ontask/column/views/crud.py:32
+#: ontask/column/views/crud.py:30
 msgid "mean: Mean of the selected columns"
 msgstr "mean: Valittujen sarakkeiden keskiarvo"
 
-#: ontask/column/views/crud.py:35
+#: ontask/column/views/crud.py:33
 msgid "median: Median of the selected columns"
 msgstr "mediaani: Valittujen sarakkeiden mediaani"
 
-#: ontask/column/views/crud.py:39
+#: ontask/column/views/crud.py:37
 msgid "std: Standard deviation over the selected columns"
 msgstr "std: Keskihajonta valituista sarakkeista"
 
-#: ontask/column/views/crud.py:43
+#: ontask/column/views/crud.py:41
 msgid "all: True when all elements in selected columns are true"
 msgstr ""
 "all: Palauttaa arvon tosi, kun kaikki elementit valituissa sarakkeissa ovat "
 "totta"
 
-#: ontask/column/views/crud.py:47
+#: ontask/column/views/crud.py:45
 msgid "any: True when any element in selected columns is true"
 msgstr ""
 "any: Palauttaa arvon tosi, kun jokin elementti valituissa sarakkeissa on "
 "totta"
 
-#: ontask/column/views/crud.py:68 ontask/column/views/crud.py:221
-#: ontask/column/views/crud.py:271
+#: ontask/column/views/crud.py:68
 msgid "Cannot add column to a workflow without data"
 msgstr "Saraketta ei voi lisätä työnkulkuun, jossa ei ole tietoja"
 
-#: ontask/column/views/crud.py:169
-#, fuzzy
-#| msgid "Cannot add a view to a workflow without data"
-msgid "Cannot add todo items to a workflow without data"
-msgstr "Et voi lisätä näkymää työnkulkuun ilman tietoja"
-
-#: ontask/column/views/crud.py:307
+#: ontask/column/views/crud.py:259
 #, python-brace-format
 msgid "Unable to add random column: {0}"
 msgstr "Satunnaista saraketta ei voi lisätä: {0}"
 
-#: ontask/column/views/crud.py:403
-msgid "You cannot delete the only key column"
-msgstr "Et voi poistaa ainoaa avainsaraketta"
-
-#: ontask/column/views/crud.py:484
+#: ontask/column/views/crud.py:353
 #, python-brace-format
 msgid "Unable to clone column: {0}"
 msgstr "Ei voitu kloonata saraketta: {0}"
 
-#: ontask/column/views/ops.py:123
+#: ontask/column/views/ops.py:94
 msgid "You cannot restrict a key column"
 msgstr "Et voi rajoittaa avainsaraketta"
 
-#: ontask/condition/forms.py:60
+#: ontask/condition/forms.py:58
 msgid "Name cannot be empty"
 msgstr "Nimi ei voi olla tyhjä"
 
-#: ontask/condition/forms.py:74
+#: ontask/condition/forms.py:72
 msgid "There is already a condition with this name."
 msgstr "Samanniminen ehto on jo olemassa."
 
-#: ontask/condition/forms.py:81
+#: ontask/condition/forms.py:79
 msgid "The workflow has a column with this name."
 msgstr "Työnkulussa on tämänniminen sarake."
 
-#: ontask/condition/forms.py:88
+#: ontask/condition/forms.py:86
 msgid "The workflow has an attribute with this name."
 msgstr "Työnkulussa on tämänniminen attribuutti."
 
-#: ontask/condition/views/clone.py:45
-msgid "Incorrect action id."
-msgstr "Virheellinen toiminto-id {0}"
-
-#: ontask/condition/views/clone.py:61
-msgid "Condition successfully cloned."
-msgstr "Ehto kopioitu onnistuneesti."
-
-#: ontask/condition/views/crud.py:163
+#: ontask/condition/views.py:141
 #, fuzzy
 #| msgid "Incorrect invocation of criterion edit function"
 msgid "Incorrect invocation of set view as filter"
 msgstr "Kriteerien muokkaustoiminnon virheellinen kutsuminen"
 
-#: ontask/connection/forms.py:39 ontask/connection/forms.py:121
+#: ontask/condition/views.py:248
+msgid "Incorrect action id."
+msgstr "Virheellinen toiminto-id {0}"
+
+#: ontask/condition/views.py:264
+msgid "Condition successfully cloned."
+msgstr "Ehto kopioitu onnistuneesti."
+
+#: ontask/connection/forms.py:37 ontask/connection/forms.py:115
 msgid "There is already a connection with this name."
 msgstr "Samanniminen yhteys on jo olemassa."
 
-#: ontask/connection/forms.py:80
+#: ontask/connection/forms.py:74
 msgid "Authentication for the database connection"
 msgstr "Tietokantayhteyden autentikaatio"
 
-#: ontask/connection/forms.py:85 ontask/models/athenaconnection.py:95
+#: ontask/connection/forms.py:79 ontask/models/athenaconnection.py:93
 msgid "Table name"
 msgstr "Taulun nimi"
 
-#: ontask/connection/forms.py:87 ontask/connection/forms.py:169
+#: ontask/connection/forms.py:81 ontask/connection/forms.py:163
 msgid "Table to load"
 msgstr "Ladattava taulukko"
 
-#: ontask/connection/forms.py:156
+#: ontask/connection/forms.py:150
 msgid "Authentication for the connection"
 msgstr "Yhteyden autentikaatio"
 
-#: ontask/connection/forms.py:163
+#: ontask/connection/forms.py:157
 msgid "Authentication for the session"
 msgstr "Istunnon autentikaatio"
 
-#: ontask/connection/forms.py:182 ontask/dataops/forms/select.py:145
+#: ontask/connection/forms.py:176 ontask/dataops/forms/select.py:143
 msgid "Key Column in Existing Table"
 msgstr "Avainsarake nykyisessä taulukossa"
 
-#: ontask/connection/forms.py:189 ontask/dataops/forms/select.py:40
+#: ontask/connection/forms.py:183 ontask/dataops/forms/select.py:38
 msgid "Method to select rows to merge"
 msgstr "Yhdistettävien rivien valintatapa"
 
-#: ontask/connection/services/crud.py:16
-#: ontask/scheduler/services/scheduler_table.py:37
+#: ontask/connection/services/crud.py:15
+#: ontask/scheduler/services/scheduler_table.py:35
 msgid "Enabled?"
 msgstr "Käytössä?"
 
-#: ontask/connection/services/crud.py:115
-msgid "Incorrect invocation of toggle question change function."
-msgstr "Vaihtokysymyksen vaihtotoiminnon virheellinen kutsuminen."
-
-#: ontask/connection/views/admin.py:32 ontask/connection/views/instructor.py:33
-#: ontask/scheduler/views/index.py:59 ontask/templates/base.html:138
+#: ontask/connection/urls.py:15 ontask/connection/urls.py:22
+#: ontask/scheduler/views/index.py:43 ontask/templates/base.html:138
 msgid "SQL Connections"
 msgstr "SQL-yhteydet"
 
-#: ontask/connection/views/admin.py:51 ontask/connection/views/instructor.py:55
+#: ontask/connection/urls.py:62 ontask/connection/urls.py:69
 #: ontask/templates/base.html:143
 msgid "Athena Connections"
 msgstr "Athena-yhteydet"
 
-#: ontask/core/checks.py:136
+#: ontask/core/checks.py:135
 #, python-brace-format
 msgid "The new data does not preserve the key property of column \"{0}\""
 msgstr "Uudet tiedot eivät säilytä sarakkeen ”{0}” avainominaisuutta"
 
-#: ontask/core/decorators.py:90 ontask/core/decorators.py:138
-#: ontask/core/decorators.py:186 ontask/core/decorators.py:234
-#: ontask/core/decorators.py:282 ontask/core/decorators.py:331
-#: ontask/core/permissions.py:194 ontask/core/permissions.py:227
-#: ontask/core/permissions.py:260 ontask/core/permissions.py:293
-#: ontask/workflow/views/workflow_ops.py:132
+#: ontask/core/decorators.py:88 ontask/core/decorators.py:136
+#: ontask/core/decorators.py:184 ontask/core/decorators.py:232
+#: ontask/core/decorators.py:280 ontask/core/decorators.py:329
+#: ontask/core/permissions.py:22 ontask/workflow/views/workflow_ops.py:117
 msgid "Workflow has no data. Go to \"Manage table data\" to upload data."
 msgstr ""
 "Työnkululla ei ole dataa. Siirry kohteeseen ”Hallitse taulukkodataa” "
 "ladataksesi dataa."
 
-#: ontask/core/forms.py:54
+#: ontask/core/forms.py:52
 #, python-format
 msgid "File size must be under %(max)s. Current file size is %(current)s."
 msgstr ""
 "Tiedoston koon on oltava alle %(max)s. Nykyinen tiedostokoko on %(current)s."
 
-#: ontask/core/forms.py:62
+#: ontask/core/forms.py:60
 #, python-brace-format
 msgid "File type ({0}) is not supported."
 msgstr "Tiedostotyyppiä ({0}) ei tueta."
 
-#: ontask/core/permissions.py:179
-msgid "Action does not belong to current workflow."
+#: ontask/core/permissions.py:217
+#, fuzzy, python-brace-format
+#| msgid "Unable to clone workflow: {0}"
+msgid "Unable to detect workflow ({0})."
+msgstr "Ei voitu kloonata työnkulkua: {0}"
+
+#: ontask/core/permissions.py:225
+msgid "ERROR: "
 msgstr ""
 
-#: ontask/core/permissions.py:203
-#, fuzzy
-#| msgid "Key column to match the user id"
-msgid "No column found matching the query"
-msgstr "Avainsarake, joka vastaa käyttäjätunnusta (user id)"
-
-#: ontask/core/permissions.py:236
-msgid "No condition found matching the query"
-msgstr ""
-
-#: ontask/core/permissions.py:269
-#, fuzzy
-#| msgid "No track_id found in request"
-msgid "No filter found matching the query"
-msgstr "Pyynnöstä puuttuu track_id"
-
-#: ontask/core/permissions.py:304
-#, fuzzy
-#| msgid "Key column to match the user id"
-msgid "No column/condition found matching the query"
-msgstr "Avainsarake, joka vastaa käyttäjätunnusta (user id)"
-
-#: ontask/core/session_ops.py:88
+#: ontask/core/session_ops.py:107
 #, fuzzy
 #| msgid "Delete workflow"
 msgid "Select a workflow"
 msgstr "Poista työnkulku"
 
-#: ontask/core/session_ops.py:105 ontask/core/session_ops.py:123
-msgid "No workflow found matching the query"
-msgstr ""
-
-#: ontask/core/session_ops.py:175
+#: ontask/core/session_ops.py:180
 #, python-brace-format
 msgid "The workflow is being modified by user {0}"
 msgstr "Käyttäjä {0} muokkaa parhaillaan työnkulkua"
 
-#: ontask/dataops/forms/plugin.py:23
+#: ontask/dataops/forms/plugin.py:21
 msgid "Input Columns (to read data)"
 msgstr "Syöttösarakkeet (tietojen lukemiseen)"
 
-#: ontask/dataops/forms/plugin.py:25
+#: ontask/dataops/forms/plugin.py:23
 msgid "To select a subset of the table to pass to the plugin"
 msgstr "Voit valita laajennukselle välitettävän taulukon osajoukon"
 
-#: ontask/dataops/forms/plugin.py:72
+#: ontask/dataops/forms/plugin.py:70
 #, python-brace-format
 msgid "Name for result column \"{0}\""
 msgstr "Tulossarakkeen \"{0}\" nimi"
 
-#: ontask/dataops/forms/plugin.py:78
+#: ontask/dataops/forms/plugin.py:76
 msgid "Suffix to add to result columns (empty to ignore)"
 msgstr "Jälkiliite tulossarakkeisiin (tyhjä, jos haluat ohittaa)"
 
-#: ontask/dataops/forms/plugin.py:82
+#: ontask/dataops/forms/plugin.py:80
 msgid ""
 "Added to all output column names. Useful to keep results from several "
 "executions in separated columns."
@@ -944,196 +927,200 @@ msgstr ""
 "Lisätty kaikkien tulossarakkeiden nimiin. Kätevä eri suorituskertojen "
 "tulosten pitämiseen erillään."
 
-#: ontask/dataops/forms/plugin.py:132 ontask/dataops/forms/plugin.py:134
+#: ontask/dataops/forms/plugin.py:130 ontask/dataops/forms/plugin.py:132
 msgid "Select column"
 msgstr "Valitse sarake"
 
-#: ontask/dataops/forms/plugin.py:135
+#: ontask/dataops/forms/plugin.py:133
 #, python-brace-format
 msgid "Column for input {0}"
 msgstr "Sarake syötteeksi {0}"
 
-#: ontask/dataops/forms/plugin.py:147
+#: ontask/dataops/forms/plugin.py:145
 msgid "Key column for merging"
 msgstr "Avainsarake yhdistämistä varten"
 
-#: ontask/dataops/forms/plugin.py:150
+#: ontask/dataops/forms/plugin.py:148
 msgid "One of the existing key columns to merge the results"
 msgstr "Yksi olemassa olevista avainsarakkeista tulosten yhdistämiseen"
 
-#: ontask/dataops/forms/plugin.py:169
+#: ontask/dataops/forms/plugin.py:167
 msgid "The plugin needs at least one input column"
 msgstr "Liitännäinen tarvitsee vähintään yhden sarakkeen syötteeksi"
 
-#: ontask/dataops/forms/select.py:14
+#: ontask/dataops/forms/select.py:12
 msgid "- Choose row selection method -"
 msgstr "- Valitse rivin valintamenetelmä -"
 
-#: ontask/dataops/forms/select.py:15
+#: ontask/dataops/forms/select.py:13
 msgid "1) Select all rows in both the existing and new table"
 msgstr "1) Valitse kaikki rivit sekä nykyisessä että uudessa taulukossa"
 
-#: ontask/dataops/forms/select.py:17
+#: ontask/dataops/forms/select.py:15
 msgid ""
 "2) Select only the rows with keys present in both the existing and new table"
 msgstr ""
 "2) Valitse vain rivit, joissa on sekä nykyisessä että uudessa taulukossa "
 "olevat avaimet"
 
-#: ontask/dataops/forms/select.py:19
+#: ontask/dataops/forms/select.py:17
 msgid "3) Select only the rows with keys in the existing table"
 msgstr "3) Valitse vain rivit, joilla on nykyisen taulukon avaimet"
 
-#: ontask/dataops/forms/select.py:20
+#: ontask/dataops/forms/select.py:18
 msgid "4) Select only the rows with keys in the new table"
 msgstr "4) Valitse vain rivit, joilla on avaimet uudessa taulukossa"
 
-#: ontask/dataops/forms/select.py:23
+#: ontask/dataops/forms/select.py:21
 msgid "Select one method to see detailed information"
 msgstr "Valitse yksi menetelmä nähdäksesi yksityiskohtaiset tiedot"
 
-#: ontask/dataops/forms/select.py:107
+#: ontask/dataops/forms/select.py:105
 msgid "No unique column specified"
 msgstr "Ei yksilöllistä saraketta"
 
-#: ontask/dataops/forms/select.py:116
+#: ontask/dataops/forms/select.py:114
 msgid "Key column in the existing table to match with the new table."
 msgstr ""
 "Nykyisen taulukon avainsarake, josta saadaan vastaavuus uuteen taulukkoon."
 
-#: ontask/dataops/forms/select.py:119
+#: ontask/dataops/forms/select.py:117
 msgid "Key column in the new table to match with the existing table."
 msgstr ""
 "Uuden taulukon avainsarake, josta saadaan vastaavuus nykyiseen taulukkoon."
 
-#: ontask/dataops/forms/select.py:137
+#: ontask/dataops/forms/select.py:135
 msgid "- Select merge option -"
 msgstr "- Valitse yhdistämisvaihtoehto -"
 
-#: ontask/dataops/forms/select.py:152
+#: ontask/dataops/forms/select.py:150
 msgid "Key Column in New Table"
 msgstr "Avainsarake uudessa taulukossa"
 
-#: ontask/dataops/forms/upload.py:64
+#: ontask/dataops/forms/upload.py:62
 #, python-brace-format
 msgid "Unable to process file ({0})."
 msgstr "Tiedostoa ei voida käsitellä ({0})."
 
-#: ontask/dataops/forms/upload.py:82
+#: ontask/dataops/forms/upload.py:80
 msgid ""
 "File in CSV format (typically produced by a statistics package or Excel)"
 msgstr ""
 "Tiedosto CSV-muodossa (tuotetaan yleensä tilastopaketilla tai Excelillä)"
 
-#: ontask/dataops/forms/upload.py:86 ontask/dataops/forms/upload.py:202
-#: ontask/dataops/forms/upload.py:286
+#: ontask/dataops/forms/upload.py:84 ontask/dataops/forms/upload.py:208
+#: ontask/dataops/forms/upload.py:292
 msgid "Lines to skip at the top"
 msgstr "Ohitettavat rivit yläreunassa"
 
-#: ontask/dataops/forms/upload.py:88 ontask/dataops/forms/upload.py:204
-#: ontask/dataops/forms/upload.py:288
+#: ontask/dataops/forms/upload.py:86 ontask/dataops/forms/upload.py:210
+#: ontask/dataops/forms/upload.py:294
 msgid "Number of lines to skip at the top when reading the file"
 msgstr "Yläreunasta ohitettavien rivien määrä tiedostoa luettaessa"
 
-#: ontask/dataops/forms/upload.py:93 ontask/dataops/forms/upload.py:209
-#: ontask/dataops/forms/upload.py:293
+#: ontask/dataops/forms/upload.py:91 ontask/dataops/forms/upload.py:215
+#: ontask/dataops/forms/upload.py:299
 msgid "Lines to skip at the bottom"
 msgstr "Ohitettavat rivit alareunassa"
 
-#: ontask/dataops/forms/upload.py:95 ontask/dataops/forms/upload.py:211
-#: ontask/dataops/forms/upload.py:295
+#: ontask/dataops/forms/upload.py:93 ontask/dataops/forms/upload.py:217
+#: ontask/dataops/forms/upload.py:301
 msgid "Number of lines to skip at the bottom when reading the file"
 msgstr "Alareunassa ohitettavien rivien määrä tiedostoa luettaessa"
 
-#: ontask/dataops/forms/upload.py:109 ontask/dataops/forms/upload.py:116
-#: ontask/dataops/forms/upload.py:225 ontask/dataops/forms/upload.py:231
-#: ontask/dataops/forms/upload.py:309 ontask/dataops/forms/upload.py:316
+#: ontask/dataops/forms/upload.py:106
+msgid "CSV upload form is not multiform"
+msgstr "CSV-latauslomake ei ole monimuotoinen"
+
+#: ontask/dataops/forms/upload.py:115 ontask/dataops/forms/upload.py:122
+#: ontask/dataops/forms/upload.py:231 ontask/dataops/forms/upload.py:237
+#: ontask/dataops/forms/upload.py:315 ontask/dataops/forms/upload.py:322
 msgid "This number has to be zero or positive"
 msgstr "Tämän numeron on oltava nolla tai positiivinen"
 
-#: ontask/dataops/forms/upload.py:131
+#: ontask/dataops/forms/upload.py:137
 #, python-brace-format
 msgid "File could not be processed ({0})"
 msgstr "Tiedostoa ei voitu käsitellä ({0})"
 
-#: ontask/dataops/forms/upload.py:153
+#: ontask/dataops/forms/upload.py:159
 msgid "File in Excel format (.xls or .xlsx)"
 msgstr "Tiedosto Excel-muodossa (.xls tai .xlsx)"
 
-#: ontask/dataops/forms/upload.py:159
+#: ontask/dataops/forms/upload.py:165
 msgid "Sheet within the excelsheet to upload"
 msgstr "Ladattava välilehti Excel-tiedoston sisältä"
 
-#: ontask/dataops/forms/upload.py:176 ontask/dataops/forms/upload.py:242
+#: ontask/dataops/forms/upload.py:182 ontask/dataops/forms/upload.py:248
 #, python-brace-format
 msgid "File could not be processed: {0}"
 msgstr "Tiedostoa ei voitu käsitellä: {0}"
 
-#: ontask/dataops/forms/upload.py:198
+#: ontask/dataops/forms/upload.py:204
 #: ontask/templates/action/includes/partial_action_card.html:76
 msgid "URL"
 msgstr "URL"
 
-#: ontask/dataops/forms/upload.py:199
+#: ontask/dataops/forms/upload.py:205
 msgid "URL to access the Google Spreadsheet in CSV format"
 msgstr "Google Spreadsheet URL CSV-formaatissa"
 
-#: ontask/dataops/forms/upload.py:265
+#: ontask/dataops/forms/upload.py:271
 msgid "AWS S3 Bucket access key"
 msgstr "AWS S3 Bucket pääsyavain"
 
-#: ontask/dataops/forms/upload.py:271
+#: ontask/dataops/forms/upload.py:277
 msgid "AWS S3 Bucket secret access key"
 msgstr "AWS S3 Bucket salainen pääsyavain"
 
-#: ontask/dataops/forms/upload.py:277
+#: ontask/dataops/forms/upload.py:283
 msgid "AWS S3 Bucket name"
 msgstr "AWS S3 Bucket nimi"
 
-#: ontask/dataops/forms/upload.py:283 ontask/models/athenaconnection.py:79
+#: ontask/dataops/forms/upload.py:289 ontask/models/athenaconnection.py:77
 msgid "AWS S3 Bucket file path"
 msgstr "AWS S3 Bucket tiedostopolku"
 
-#: ontask/dataops/forms/upload.py:332
+#: ontask/dataops/forms/upload.py:338
 #, python-brace-format
 msgid "S3 bucket file could not be processed: {0}"
 msgstr "S3 bucket tiedostoa ei voitu käsitellä: {0}"
 
-#: ontask/dataops/formula/operands.py:425
+#: ontask/dataops/formula/operands.py:423
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS"
 msgstr "Virhe: Tyyppi {0} ei ole sallittu operaattorin LESS yhteydessä"
 
-#: ontask/dataops/formula/operands.py:463
+#: ontask/dataops/formula/operands.py:461
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator LESS OR EQUAL"
 msgstr ""
 "Virhe: Tyyppi {0} ei ole sallittu operaattorin LESS OR EQUAL yhteydessä"
 
-#: ontask/dataops/formula/operands.py:506
+#: ontask/dataops/formula/operands.py:504
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER"
 msgstr "Virhe: Tyyppi {0} ei ole sallittu operaattorin GREATER yhteydessä"
 
-#: ontask/dataops/formula/operands.py:548
+#: ontask/dataops/formula/operands.py:546
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator GREATER OR EQUAL"
 msgstr ""
 "Virhe: Tyyppi {0} ei ole sallittu operaattorin GREATER OR EQUAL yhteydessä"
 
-#: ontask/dataops/formula/operands.py:591
-#: ontask/dataops/formula/operands.py:643
+#: ontask/dataops/formula/operands.py:589
+#: ontask/dataops/formula/operands.py:641
 #, python-brace-format
 msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr "Virhe: Tyyppi {0} ei ole sallittu operaattorin BETWEEN yhteydessä"
 
-#: ontask/dataops/pandas/database.py:153 ontask/dataops/pandas/database.py:195
-#: ontask/dataops/sql/column_queries.py:144
+#: ontask/dataops/pandas/database.py:151 ontask/dataops/pandas/database.py:193
+#: ontask/dataops/sql/column_queries.py:142
 #, python-brace-format
 msgid "Column name is longer than {0} characters"
 msgstr "Sarakkeen nimi on pidempi kuin {0} merkkiä"
 
-#: ontask/dataops/pandas/database.py:190
+#: ontask/dataops/pandas/database.py:188
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -1141,7 +1128,7 @@ msgstr ""
 "Datassa ei ole saraketta, jossa on yksilölliset arvot riviä kohden. Ainakin "
 "yhdessä sarakkeessa on oltava yksilölliset arvot."
 
-#: ontask/dataops/pandas/dataframe.py:62
+#: ontask/dataops/pandas/dataframe.py:60
 #, python-brace-format
 msgid ""
 "Column {0} looses its \"key\" property through this merge. Either remove "
@@ -1152,60 +1139,60 @@ msgstr ""
 "sarakkeesta tai vaihtoehtoisesti poista rivit, jotka aiheuttavat ongelman "
 "uudessa datasetissä"
 
-#: ontask/dataops/pandas/dataframe.py:82 ontask/dataops/pandas/dataframe.py:95
+#: ontask/dataops/pandas/dataframe.py:80 ontask/dataops/pandas/dataframe.py:93
 #, python-brace-format
 msgid "New values in column {0} are not of type {1}"
 msgstr "Sarakkeen {0} uudet arvot eivät ole tyyppiä {1}"
 
-#: ontask/dataops/pandas/dataframe.py:90
+#: ontask/dataops/pandas/dataframe.py:88
 #, python-brace-format
 msgid "New values in column {0} are not of type number"
 msgstr "Sarakkeen {0} uudet arvot eivät ole numeerisia"
 
-#: ontask/dataops/pandas/dataframe.py:105
+#: ontask/dataops/pandas/dataframe.py:103
 #, python-brace-format
 msgid "New values in column {0} are not in categories {1}"
 msgstr "Sarakkeen {0} uudet arvot eivät kuulu luokkiin {1}"
 
-#: ontask/dataops/pandas/dataframe.py:200
+#: ontask/dataops/pandas/dataframe.py:198
+#: ontask/dataops/pandas/dataframe.py:203
 #: ontask/dataops/pandas/dataframe.py:205
-#: ontask/dataops/pandas/dataframe.py:207
 msgid "Internal error while processing database."
 msgstr "Sisäinen virhe tietokantaa prosessoidessa."
 
-#: ontask/dataops/pandas/dataframe.py:231
+#: ontask/dataops/pandas/dataframe.py:229
 msgid "Invalid column drop operation."
 msgstr "Sarakkeen poisto-operaatio ei ole kelvollinen."
 
-#: ontask/dataops/pandas/dataframe.py:322
+#: ontask/dataops/pandas/dataframe.py:294
 #, python-brace-format
 msgid "Type {0} not found"
 msgstr "Tyyppiä {0} ei löytynyt"
 
-#: ontask/dataops/pandas/merge.py:192
+#: ontask/dataops/pandas/merge.py:190
 msgid "Merge method must be one of left, right, outer or inner"
 msgstr "Yhdistämismenetelmän on oltava vasen, oikea, ulkoinen tai sisäinen"
 
-#: ontask/dataops/pandas/merge.py:197
+#: ontask/dataops/pandas/merge.py:195
 #, python-brace-format
 msgid "Column {0} not found in current data frame"
 msgstr "Saraketta {0} ei löydy nykyisestä tietokehyksestä"
 
-#: ontask/dataops/pandas/merge.py:200 ontask/dataops/pandas/merge.py:208
+#: ontask/dataops/pandas/merge.py:198 ontask/dataops/pandas/merge.py:206
 #, python-brace-format
 msgid "Column {0} is not a unique key."
 msgstr "Sarake {0} ei ole yksilöivä avain."
 
-#: ontask/dataops/pandas/merge.py:204
+#: ontask/dataops/pandas/merge.py:202
 #, python-brace-format
 msgid "Column {0} not found in new data frame"
 msgstr "Saraketta {0} ei löydy uudesta tietokehyksestä"
 
-#: ontask/dataops/pandas/merge.py:323
+#: ontask/dataops/pandas/merge.py:321
 msgid "Merge operation produced a result with no rows"
 msgstr "Yhdistämistoiminto tuotti tuloksen ilman rivejä"
 
-#: ontask/dataops/pandas/merge.py:329
+#: ontask/dataops/pandas/merge.py:327
 msgid ""
 "Merge operation produced a result without any key columns. Review the key "
 "columns in the data to upload."
@@ -1213,87 +1200,87 @@ msgstr ""
 "Yhdistämistoiminto tuotti tuloksen ilman avainsarakkeita. Tarkista "
 "ladattavien tietojen avainsarakkeet."
 
-#: ontask/dataops/plugin/ontask_plugin.py:68
+#: ontask/dataops/plugin/ontask_plugin.py:66
 msgid "This method should be implemented!"
 msgstr "Tämä menetelmä tulisi toteuttaa!"
 
-#: ontask/dataops/services/dataframeupload.py:275 ontask/table/api.py:304
+#: ontask/dataops/services/dataframeupload.py:273 ontask/table/api.py:302
 #, python-brace-format
 msgid "Unable to perform merge operation: {0}"
 msgstr "Yhdistämistoimintoa ei voida suorittaa: {0}"
 
-#: ontask/dataops/services/increase_track.py:44
+#: ontask/dataops/services/increase_track.py:42
 msgid "Non-GET request received in Track URL"
 msgstr "Muu kuin GET-pyyntö vastaanotettu, Track URL"
 
-#: ontask/dataops/services/increase_track.py:48
+#: ontask/dataops/services/increase_track.py:46
 msgid "No dictionary in Track URL"
 msgstr "Ei sanakirjaa seurannan URL-osoitteessa"
 
-#: ontask/dataops/services/increase_track.py:53
+#: ontask/dataops/services/increase_track.py:51
 msgid "No track_id found in request"
 msgstr "Pyynnöstä puuttuu track_id"
 
-#: ontask/dataops/services/increase_track.py:59
+#: ontask/dataops/services/increase_track.py:57
 msgid "Bad signature in track_id"
 msgstr "Väärä allekirjoitus track_id:ssa"
 
-#: ontask/dataops/services/increase_track.py:69
+#: ontask/dataops/services/increase_track.py:67
 #, python-format
 msgid "Incorrect user email %s"
 msgstr "Virheellinen käyttäjän sähköposti %s"
 
-#: ontask/dataops/services/increase_track.py:75
+#: ontask/dataops/services/increase_track.py:73
 #, python-format
 msgid "Incorrect action id %s"
 msgstr "Virheellinen toiminto-id %s"
 
-#: ontask/dataops/services/increase_track.py:86
+#: ontask/dataops/services/increase_track.py:84
 #, python-format
 msgid "Column %s does not exist"
 msgstr "Saraketta %s ei ole olemassa"
 
-#: ontask/dataops/services/plugin_admin.py:29
-#: ontask/dataops/services/plugin_run.py:28
-#: ontask/templates/action/includes/partial_rubriccell.html:2
-#: ontask/templates/column/detail.html:100
+#: ontask/dataops/services/plugin_admin.py:27
+#: ontask/dataops/services/plugin_run.py:26
+#: ontask/templates/action/includes/partial_rubric_cell.html:2
+#: ontask/templates/column/detail.html:101
 #: ontask/templates/dataops/includes/partial_plugin_long_description.html:4
 #: ontask/templates/dataops/plugin_info_for_run.html:62
 #: ontask/templates/dataops/uploadmerge.html:17
 msgid "Description"
 msgstr "Kuvaus"
 
-#: ontask/dataops/services/plugin_admin.py:33
-#: ontask/dataops/services/plugin_run.py:32
+#: ontask/dataops/services/plugin_admin.py:31
+#: ontask/dataops/services/plugin_run.py:30
 msgid "Last executed"
 msgstr "Viimeksi suoritettu"
 
-#: ontask/dataops/services/plugin_admin.py:35
+#: ontask/dataops/services/plugin_admin.py:33
 #: ontask/templates/dataops/transform_model.html:49
 msgid "Folder"
 msgstr "Kansio"
 
-#: ontask/dataops/services/plugin_admin.py:38
+#: ontask/dataops/services/plugin_admin.py:36
 msgid "Executions"
 msgstr "Suoritukset"
 
-#: ontask/dataops/services/plugin_admin.py:126
+#: ontask/dataops/services/plugin_admin.py:124
 msgid "Class inherits from OnTaskTransformation or OnTaskModel"
 msgstr "Luokka periytyy OnTaskTransformation tai OnTaskModel"
 
-#: ontask/dataops/services/plugin_admin.py:127
+#: ontask/dataops/services/plugin_admin.py:125
 msgid "Class has a non-empty documentation string"
 msgstr "Luokalla on epätyhjä dokumentaatiomerkkijono"
 
-#: ontask/dataops/services/plugin_admin.py:128
+#: ontask/dataops/services/plugin_admin.py:126
 msgid "Class has a non-empty string field with name \"name\""
 msgstr "Luokalla on epätyhjä merkkijonokenttä nimellä ”name”"
 
-#: ontask/dataops/services/plugin_admin.py:129
+#: ontask/dataops/services/plugin_admin.py:127
 msgid "Class has a string field with name \"description_text\""
 msgstr "Luokalla on merkkijonokenttä nimeltä ”description_txt”"
 
-#: ontask/dataops/services/plugin_admin.py:131
+#: ontask/dataops/services/plugin_admin.py:129
 msgid ""
 "Class has a field with name \"input_column_names\" storing a (possible "
 "empty) list of strings"
@@ -1301,7 +1288,7 @@ msgstr ""
 "Luokalla on kenttä nimellä ”input_column_names” ja se tallentaa "
 "(mahdollisesti tyhjän) merkkijonolistan"
 
-#: ontask/dataops/services/plugin_admin.py:134
+#: ontask/dataops/services/plugin_admin.py:132
 msgid ""
 "Class has a field with name \"output_column_names\" storing a (possibly "
 "empty) list of strings"
@@ -1309,7 +1296,7 @@ msgstr ""
 "Luokalla on kenttä nimellä ”output_column_names” ja se tallentaa "
 "(mahdollisesti tyhjän) merkkijonolistan"
 
-#: ontask/dataops/services/plugin_admin.py:137
+#: ontask/dataops/services/plugin_admin.py:135
 msgid ""
 "Class has a (possible empty) list of tuples with name \"parameters\". The "
 "tuples must have six elements: name (a string), type (one of \"double\", "
@@ -1323,7 +1310,7 @@ msgstr ""
 "sallituista arvoista, oikeantyyppinen alkuarvo sekä ohjeviesti joka "
 "näytetään kun parametria pyydetään."
 
-#: ontask/dataops/services/plugin_admin.py:146
+#: ontask/dataops/services/plugin_admin.py:144
 msgid ""
 "Class has a method with name run receiving a data frame and a dictionary "
 "with parameters."
@@ -1331,243 +1318,237 @@ msgstr ""
 "Luokalla on metodi nimeltä ”run” joka vastaanottaa datataulukon ja "
 "parametroidun sanakirjan."
 
-#: ontask/dataops/services/plugin_admin.py:206
-#: ontask/dataops/services/plugin_admin.py:214
-#: ontask/dataops/services/plugin_admin.py:222
-#: ontask/dataops/services/plugin_admin.py:232
-#: ontask/dataops/services/plugin_admin.py:245
-#: ontask/dataops/services/plugin_admin.py:258
-#: ontask/dataops/services/plugin_admin.py:323
-#: ontask/templates/action/includes/partial_action_showurl.html:29
+#: ontask/dataops/services/plugin_admin.py:204
+#: ontask/dataops/services/plugin_admin.py:212
+#: ontask/dataops/services/plugin_admin.py:220
+#: ontask/dataops/services/plugin_admin.py:230
+#: ontask/dataops/services/plugin_admin.py:243
+#: ontask/dataops/services/plugin_admin.py:256
+#: ontask/dataops/services/plugin_admin.py:321
+#: ontask/templates/action/includes/partial_action_show_url.html:29
 #: ontask/templates/base.html:237
 #: ontask/templates/workflow/includes/partial_workflow_flush.html:31
 msgid "Ok"
 msgstr "Ok"
 
-#: ontask/dataops/services/plugin_admin.py:208
+#: ontask/dataops/services/plugin_admin.py:206
 msgid "Incorrect parent class"
 msgstr "Virheellinen vanhemman luokka"
 
-#: ontask/dataops/services/plugin_admin.py:216
+#: ontask/dataops/services/plugin_admin.py:214
 msgid "Class is not documented"
 msgstr "Luokkaa ei ole dokumentoitu"
 
-#: ontask/dataops/services/plugin_admin.py:220
-#: ontask/dataops/services/plugin_admin.py:227
-#: ontask/dataops/services/plugin_admin.py:237
-#: ontask/dataops/services/plugin_admin.py:250
-#: ontask/dataops/services/plugin_admin.py:263
+#: ontask/dataops/services/plugin_admin.py:218
+#: ontask/dataops/services/plugin_admin.py:225
+#: ontask/dataops/services/plugin_admin.py:235
+#: ontask/dataops/services/plugin_admin.py:248
+#: ontask/dataops/services/plugin_admin.py:261
 msgid "Not found"
 msgstr "Ei löydetty"
 
-#: ontask/dataops/services/plugin_admin.py:224
-#: ontask/dataops/services/plugin_admin.py:234
-#: ontask/dataops/services/plugin_admin.py:247
-#: ontask/dataops/services/plugin_admin.py:268
+#: ontask/dataops/services/plugin_admin.py:222
+#: ontask/dataops/services/plugin_admin.py:232
+#: ontask/dataops/services/plugin_admin.py:245
+#: ontask/dataops/services/plugin_admin.py:266
 msgid "Incorrect type"
 msgstr "Virheellinen tyyppi"
 
-#: ontask/dataops/services/plugin_admin.py:260
+#: ontask/dataops/services/plugin_admin.py:258
 msgid "Incorrect type/value"
 msgstr "Virheellinen tyyppi/arvo"
 
-#: ontask/dataops/services/plugin_admin.py:275
+#: ontask/dataops/services/plugin_admin.py:273
 msgid "Key values should be strings"
 msgstr "Avainarvojen tulisi olla merkkijonoja"
 
-#: ontask/dataops/services/plugin_admin.py:281
+#: ontask/dataops/services/plugin_admin.py:279
 msgid "First tuple element should be as string"
 msgstr "Ensimmäisen tuple-elementin tulisi olla merkkijono"
 
-#: ontask/dataops/services/plugin_admin.py:288
+#: ontask/dataops/services/plugin_admin.py:286
 #, python-brace-format
 msgid "Incorrect type \"{0}\" in parameter"
 msgstr "Väärä tyyppi \"{0}\" parametrissa"
 
-#: ontask/dataops/services/plugin_admin.py:295
+#: ontask/dataops/services/plugin_admin.py:293
 msgid "Parameter of type datetime cannot have list of allowed values"
 msgstr "Tyypin datetime-parametrilla ei voi olla listaa sallittuja arvoja"
 
-#: ontask/dataops/services/plugin_admin.py:300
+#: ontask/dataops/services/plugin_admin.py:298
 msgid "Incorrect list of allowed value"
 msgstr "Virheellinen lista sallitusta arvosta"
 
-#: ontask/dataops/services/plugin_admin.py:310
+#: ontask/dataops/services/plugin_admin.py:308
 msgid "Help text must be as string"
 msgstr "Ohjetekstin on oltava merkkijono"
 
-#: ontask/dataops/services/plugin_admin.py:325
+#: ontask/dataops/services/plugin_admin.py:323
 msgid "Incorrect run method"
 msgstr "Virheellinen suoritusmenetelmä"
 
-#: ontask/dataops/services/plugin_admin.py:397
-#: ontask/dataops/services/plugin_admin.py:400
+#: ontask/dataops/services/plugin_admin.py:395
+#: ontask/dataops/services/plugin_admin.py:398
 msgid "Error while instantiating the plugin class"
 msgstr "Virhe liitännäisen käyttöönotossa"
 
-#: ontask/dataops/services/plugin_admin.py:454
+#: ontask/dataops/services/plugin_admin.py:452
 #, python-brace-format
 msgid "Unable to load plugin in folder \"{0}\"."
 msgstr "Liitännäistä ei voida ladata kansioon \"{0}\"."
 
-#: ontask/dataops/services/plugin_execute.py:45
-#: ontask/dataops/views/transform.py:85
+#: ontask/dataops/services/plugin_execute.py:43
+#: ontask/dataops/views/transform.py:121
 #, python-brace-format
 msgid "Unable to instantiate plugin \"{0}\""
 msgstr "Liitännäistä \"{0}\" ei voitu valmistella"
 
-#: ontask/dataops/services/plugin_execute.py:58
+#: ontask/dataops/services/plugin_execute.py:56
 #, python-brace-format
 msgid "Inconsistent number of inputs when invoking plugin \"{0}\""
 msgstr "Epäyhtenäinen määrä syötteitä kutsuessa liitännäistä ”{0}”"
 
-#: ontask/dataops/services/plugin_execute.py:71
+#: ontask/dataops/services/plugin_execute.py:69
 #, python-brace-format
 msgid "Inconsistent number of outputs when invoking plugin \"{0}\""
 msgstr "Epäyhtenäinen määrä tulosteita kutsuessa liitännäistä ”{0}”"
 
-#: ontask/dataops/services/plugin_execute.py:81
+#: ontask/dataops/services/plugin_execute.py:79
 #, python-brace-format
 msgid "Exception when retrieving the data frame from workflow: {0}"
 msgstr "Poikkeus noutaessa datakehystä työnkulussa: {0}"
 
-#: ontask/dataops/services/plugin_execute.py:99
+#: ontask/dataops/services/plugin_execute.py:97
 #, python-brace-format
 msgid "Error when creating data frame for plugin: {0}"
 msgstr "Virhe luodessa datakehystä liitännäiselle: {0}"
 
-#: ontask/dataops/services/plugin_execute.py:107
+#: ontask/dataops/services/plugin_execute.py:105
 #, python-brace-format
 msgid "Error while executing plugin: {0}"
 msgstr "Virhe suorittaessa liitännäistä: {0}"
 
-#: ontask/dataops/services/plugin_execute.py:114
+#: ontask/dataops/services/plugin_execute.py:112
 msgid "Plugin executed but did not return a pandas data frame."
 msgstr "Suoritettu liitännäinen ei palauttanut pandas tietokehystä."
 
-#: ontask/dataops/services/plugin_execute.py:123
+#: ontask/dataops/services/plugin_execute.py:121
 #, python-brace-format
 msgid "Incorrect number of rows ({0}) in result data frame."
 msgstr "Virheellinen rivien lukumäärä ({0})tulostietokehyksessä."
 
-#: ontask/dataops/services/plugin_execute.py:131
+#: ontask/dataops/services/plugin_execute.py:129
 #, python-brace-format
 msgid "Column name {0} cannot be in the result data frame."
 msgstr "Saraketta nimellä {0} ei voi olla tulosdatakehyksessä."
 
-#: ontask/dataops/services/plugin_execute.py:137
+#: ontask/dataops/services/plugin_execute.py:135
 msgid "Incorrect columns in result data frame."
 msgstr "Virheellisiä sarakkeita tulos data framessa."
 
-#: ontask/dataops/services/plugin_execute.py:159
-#: ontask/dataops/services/plugin_execute.py:164
+#: ontask/dataops/services/plugin_execute.py:157
+#: ontask/dataops/services/plugin_execute.py:162
 #, python-brace-format
 msgid "Error while merging result: {0}."
 msgstr "Virhe yhdistäessä tulosta: {0}."
 
-#: ontask/dataops/services/plugin_execute.py:222
+#: ontask/dataops/services/plugin_execute.py:220
 #, python-brace-format
 msgid "Unable to load plugin with id {pid}"
 msgstr "Liitännäisen id {pid} lataus epäonnistui"
 
-#: ontask/dataops/services/plugin_execute.py:245
-#: ontask/workflow/services/luser_update.py:96
+#: ontask/dataops/services/plugin_execute.py:243
+#: ontask/workflow/services/luser_update.py:94
 #, python-brace-format
 msgid "Error: {0}"
 msgstr "Virhe: {0}"
 
-#: ontask/dataops/services/plugin_run.py:49
+#: ontask/dataops/services/plugin_run.py:47
 #: ontask/templates/dataops/plugin_info_for_run.html:35
 msgid "Execute the transformation"
 msgstr "Suorita muutos"
 
-#: ontask/dataops/services/sql_upload.py:133
+#: ontask/dataops/services/sql_upload.py:131
 msgid "Incorrect connection identifier."
 msgstr "Virheellinen yhteyden tunniste."
 
-#: ontask/dataops/services/sql_upload.py:147
+#: ontask/dataops/services/sql_upload.py:145
 msgid "Unable to acquire access to workflow."
 msgstr "Pääsy työnkulkuun epäonnistui."
 
-#: ontask/dataops/services/sql_upload.py:166
+#: ontask/dataops/services/sql_upload.py:163
 msgid "Missing key column name of existing table."
 msgstr "Puuttuu olemassa olevan taulukon avainsarakkeen nimi."
 
-#: ontask/dataops/services/sql_upload.py:173
+#: ontask/dataops/services/sql_upload.py:170
 msgid "Missing key column name of new table."
 msgstr "Uudesta taulukosta puuttuu avainsarakkeen nimi."
 
-#: ontask/dataops/services/sql_upload.py:180
+#: ontask/dataops/services/sql_upload.py:177
 msgid "Missing merge method."
 msgstr "Yhdistämismenetelmä puuttuu."
 
-#: ontask/dataops/services/upload_steps.py:145
-#: ontask/dataops/services/upload_steps.py:148
+#: ontask/dataops/services/upload_steps.py:137
+#: ontask/dataops/services/upload_steps.py:140
 msgid " (Ignored)"
 msgstr " (Ohitettu)"
 
-#: ontask/dataops/services/upload_steps.py:155
+#: ontask/dataops/services/upload_steps.py:147
 msgid " (New)"
 msgstr " (Uusi)"
 
-#: ontask/dataops/services/upload_steps.py:157
+#: ontask/dataops/services/upload_steps.py:149
 msgid " (Update)"
 msgstr " (Päivitä)"
 
-#: ontask/dataops/services/upload_steps.py:161
+#: ontask/dataops/services/upload_steps.py:153
 msgid " (Renamed)"
 msgstr " (Uudelleennimetty)"
 
-#: ontask/dataops/services/upload_steps.py:189
+#: ontask/dataops/services/upload_steps.py:181
 msgid "Exception while loading data frame"
 msgstr "Poikkeus datakehyksen lataamisessa"
 
-#: ontask/dataops/services/upload_steps.py:208
+#: ontask/dataops/services/upload_steps.py:200
 msgid "Merge operation failed. "
 msgstr "Yhdistäminen epäonnistui. "
 
-#: ontask/dataops/views/athenaupload.py:74
+#: ontask/dataops/views/athenaupload.py:24
 msgid "Athena connection"
 msgstr "Athena-yhteys"
 
-#: ontask/dataops/views/csvupload.py:50
-msgid "CSV upload form is not multiform"
-msgstr "CSV-latauslomake ei ole monimuotoinen"
-
-#: ontask/dataops/views/csvupload.py:77
+#: ontask/dataops/views/csvupload.py:34
 msgid "CSV file"
 msgstr "CSV-tiedosto"
 
-#: ontask/dataops/views/excelupload.py:50
-msgid "Excel upload form is not multiform"
-msgstr "Excel-latauslomake ei ole monimuotoinen"
+#: ontask/dataops/views/excelupload.py:34
+#, fuzzy
+#| msgid "Excel"
+msgid "Excel file"
+msgstr "Excel"
 
-#: ontask/dataops/views/googlesheetupload.py:67
+#: ontask/dataops/views/googlesheetupload.py:34
 msgid "Google Sheet URL"
 msgstr "Google Sheet URL"
 
-#: ontask/dataops/views/row.py:88
+#: ontask/dataops/views/row.py:114
 msgid "Unable to update table row"
 msgstr "Taulukon riviä ei voida päivittää"
 
-#: ontask/dataops/views/s3upload.py:67
+#: ontask/dataops/views/s3upload.py:34
 msgid "S3 CSV file"
 msgstr "S3 CSV-tiedosto"
 
-#: ontask/dataops/views/sql_upload.py:63
+#: ontask/dataops/views/sql_upload.py:35
 msgid "SQL connection"
 msgstr "SQL-yhteys"
 
-#: ontask/dataops/views/sql_upload.py:69
-msgid "<PROTECTED>"
-msgstr "<PROTECTED>"
-
-#: ontask/dataops/views/sql_upload.py:91
+#: ontask/dataops/views/sql_upload.py:61
 #, python-brace-format
 msgid "Unable to obtain data: {0}"
 msgstr "Tietoja ei voi saada: {0}"
 
-#: ontask/dataops/views/transform.py:66
+#: ontask/dataops/views/transform.py:100
 msgid ""
 "Unable to run plugins due to a misconfiguration. Ask your system "
 "administrator to enable queueing."
@@ -1575,20 +1556,21 @@ msgstr ""
 "Liitännäisiä ei voida suorittaa konfiguraatiovirheen vuoksi. Pyydä "
 "järjestelmänvalvojaa ottamaan käyttöön jonotustoiminto."
 
-#: ontask/dataops/views/upload.py:155
+#: ontask/dataops/views/upload_steps.py:149
+#: ontask/dataops/views/upload_steps.py:334
+msgid "Finish"
+msgstr "Valmis"
+
+#: ontask/dataops/views/upload_steps.py:190
 #, python-brace-format
 msgid "Unable to upload the data: {0}"
 msgstr "Tietoja ei voida ladata: {0}"
 
-#: ontask/dataops/views/upload.py:171
-msgid "Finish"
-msgstr "Valmis"
-
-#: ontask/django_auth_lti/middleware.py:31
+#: ontask/django_auth_lti/middleware.py:29
 msgid "improperly configured: requeset has no user attr"
 msgstr "väärin konfiguroitu: pyynnössä ei ole käyttäjäattribuuttia"
 
-#: ontask/django_auth_lti/middleware.py:33
+#: ontask/django_auth_lti/middleware.py:31
 msgid ""
 "The Django LTI auth middleware requires the authentication middleware to be "
 "installed.  Edit your MIDDLEWARE_CLASSES setting to insert 'django.contrib."
@@ -1599,20 +1581,20 @@ msgstr ""
 "'django.contrib.auth.middleware.AuthenticationMiddleware' ennen "
 "PINAuthMiddleware -luokkaa."
 
-#: ontask/django_auth_lti/middleware.py:41
+#: ontask/django_auth_lti/middleware.py:39
 msgid "received a basic-lti-launch-request - authenticating the user"
 msgstr "vastaanotettu basic-lti-launch-request - autentikoidaan käyttäjä"
 
-#: ontask/django_auth_lti/middleware.py:47
+#: ontask/django_auth_lti/middleware.py:45
 #, python-format
 msgid "authenticate() took %s s"
 msgstr "authentidate() kesti %s s"
 
-#: ontask/django_auth_lti/middleware.py:54
+#: ontask/django_auth_lti/middleware.py:52
 msgid "user was successfully authenticated; now log them in"
 msgstr "käyttäjä tunnistettiin onnistuneesti; kirjataan käyttäjä sisään"
 
-#: ontask/django_auth_lti/middleware.py:116
+#: ontask/django_auth_lti/middleware.py:114
 msgid ""
 "user could not be authenticated via LTI params; let the request continue in "
 "case another auth plugin is configured"
@@ -1620,16 +1602,16 @@ msgstr ""
 "käyttäjää ei voitu tunnistaa LTI-parametrien avulla; anna pyynnön jatkaa jos "
 "toinen autentikaatioliitännäinen on määritetty"
 
-#: ontask/django_auth_lti/middleware.py:126
+#: ontask/django_auth_lti/middleware.py:124
 msgid "Could not find LTI launch parameters"
 msgstr "LTI-käynnistysparametreja ei löytynyt"
 
-#: ontask/django_auth_lti/middleware.py:137
+#: ontask/django_auth_lti/middleware.py:135
 #, python-brace-format
 msgid "calling the backend {0} clean_username with {1}"
 msgstr "kutsutaan backend {0} clean_username käyttäjälle {1}"
 
-#: ontask/django_auth_lti/middleware.py:141
+#: ontask/django_auth_lti/middleware.py:139
 #, python-brace-format
 msgid "cleaned username is {0}"
 msgstr "puhdistettu käyttäjätunnus on {0}"
@@ -1647,209 +1629,259 @@ msgstr "resources_link_id ei löytynyt pyynnön kontekstissa %s"
 msgid "Failed to get current request from thread_local"
 msgstr "Nykyisen pyynnön saaminen kohteesta thread_local epäonnistui"
 
-#: ontask/models/action.py:61
+#: ontask/models/action.py:59
 msgid "Personalized text"
 msgstr "Personoitu teksti"
 
-#: ontask/models/action.py:62
+#: ontask/models/action.py:60
 #: ontask/templates/action/includes/partial_type_legend.html:11
 msgid "Personalized Canvas Email"
 msgstr "Personoitu Canvas-sähköposti"
 
-#: ontask/models/action.py:63
+#: ontask/models/action.py:61
 #: ontask/templates/action/includes/partial_type_legend.html:9
 msgid "Survey"
 msgstr "Kysely"
 
-#: ontask/models/action.py:64
+#: ontask/models/action.py:62
 #: ontask/templates/action/includes/partial_type_legend.html:12
 msgid "Personalized JSON"
 msgstr "Personoitu JSON"
 
-#: ontask/models/action.py:65
+#: ontask/models/action.py:63
 msgid "Rubric feedback"
 msgstr "Rubriikki-palaute"
 
-#: ontask/models/action.py:66
+#: ontask/models/action.py:64
 #: ontask/templates/action/includes/partial_type_legend.html:7
 #: ontask/templates/action/request_email_report_data.html:7
 msgid "Send Report"
 msgstr "Lähetä raportti"
 
-#: ontask/models/action.py:67
+#: ontask/models/action.py:65
 msgid "Send Report as JSON"
 msgstr "Lähetä raportti JSON-muodossa"
 
-#: ontask/models/action.py:68
+#: ontask/models/action.py:66
 #: ontask/templates/action/includes/partial_type_legend.html:10
 msgid "TODO List"
 msgstr "Tehtävälista"
 
-#: ontask/models/action.py:115
+#: ontask/models/action.py:113
 msgid "Action available from"
 msgstr "Toiminto saatavilla alkaen"
 
-#: ontask/models/action.py:121
+#: ontask/models/action.py:119
 msgid "Action available until"
 msgstr "Toiminto saatavilla saakka"
 
-#: ontask/models/action.py:300
+#: ontask/models/action.py:289
 msgid "URL available to users?"
 msgstr "URL saatavilla käyttäjille?"
 
-#: ontask/models/action.py:313
+#: ontask/models/action.py:302
 msgid "Email attachments"
 msgstr "Sähköpostin liitteet"
 
-#: ontask/models/action.py:501 ontask/templates/action/edit_in.html:178
+#: ontask/models/action.py:489 ontask/templates/action/edit_in.html:178
 msgid "Shuffle questions?"
 msgstr "Sekoita kysymykset?"
 
-#: ontask/models/actioncolumnconditiontuple.py:55
+#: ontask/models/action.py:520
+msgid "Action cannot run because it needs a valid URL."
+msgstr ""
+
+#: ontask/models/action.py:527
+msgid "Action cannot run because it has an incorrect URL."
+msgstr ""
+
+#: ontask/models/action.py:534
+#, fuzzy
+#| msgid "You cannot restrict a key column"
+msgid "Action cannot run because it needs a key column."
+msgstr "Et voi rajoittaa avainsaraketta"
+
+#: ontask/models/action.py:537
+msgid "Action cannot run because it has no questions."
+msgstr ""
+
+#: ontask/models/action.py:541
+#, fuzzy, python-brace-format
+#| msgid "The action cannot be executed"
+msgid "Action type {0} cannot be executed."
+msgstr "Toimintoa ei voida suorittaa"
+
+#: ontask/models/actioncolumnconditiontuple.py:53
 msgid "Allow changes?"
 msgstr "Salli muutokset?"
 
-#: ontask/models/athenaconnection.py:46
+#: ontask/models/athenaconnection.py:44
 msgid "AWS access key"
 msgstr "AWS-pääsyavain"
 
-#: ontask/models/athenaconnection.py:54
+#: ontask/models/athenaconnection.py:52
 msgid "AWS secret access key"
 msgstr "AWS salainen pääsyavain"
 
-#: ontask/models/athenaconnection.py:59 ontask/models/athenaconnection.py:67
-#: ontask/models/athenaconnection.py:100
+#: ontask/models/athenaconnection.py:57 ontask/models/athenaconnection.py:65
+#: ontask/models/athenaconnection.py:98
 msgid "Leave blank to provide at execution"
 msgstr "Jätä tyhjäksi, jos annetaan suoritushetkellä"
 
-#: ontask/models/athenaconnection.py:63
+#: ontask/models/athenaconnection.py:61
 msgid "AWS session token"
 msgstr "AWS-istunnon token"
 
-#: ontask/models/athenaconnection.py:71
+#: ontask/models/athenaconnection.py:69
 msgid "AWS S3 Bucket name (no s3:// prefix)"
 msgstr "AWS S3 -Bucketin nimi (ilman s3: // etuliitettä)"
 
-#: ontask/models/athenaconnection.py:87
+#: ontask/models/athenaconnection.py:85
 msgid "AWS region name"
 msgstr "AWS-alueen nimi"
 
-#: ontask/models/athenaconnection.py:124 ontask/models/athenaconnection.py:128
-#: ontask/models/sqlconnection.py:110
+#: ontask/models/athenaconnection.py:122 ontask/models/athenaconnection.py:126
+#: ontask/models/sqlconnection.py:108
 msgid "REMOVED"
 msgstr "POISTETTU"
 
-#: ontask/models/column.py:53
+#: ontask/models/column.py:51
 msgid "type of data to store in the column"
 msgstr "sarakkeeseen tallennettavien tietojen tyyppi"
 
-#: ontask/models/column.py:58
+#: ontask/models/column.py:56
 msgid "has unique values per row"
 msgstr "sisältää uniikit arvot arvot per rivi"
 
-#: ontask/models/column.py:64
+#: ontask/models/column.py:62
 msgid "column position (zero to insert last)"
 msgstr "sarakkeen sijainti (nolla lisätäksesi viimeiseksi)"
 
-#: ontask/models/column.py:73
+#: ontask/models/column.py:71
 msgid "include in visualization"
 msgstr "sisällytä visualisointiin"
 
-#: ontask/models/column.py:83
+#: ontask/models/column.py:81
 msgid "comma separated list of values allowed"
 msgstr "pilkulla erotettu sallittujen arvojen luettelo"
 
-#: ontask/models/column.py:87
+#: ontask/models/column.py:85
 msgid "Column active from"
 msgstr "Sarake on aktiivinen alkaen"
 
-#: ontask/models/column.py:93
+#: ontask/models/column.py:91
 msgid "Column active until"
 msgstr "Sarake on aktiivinen asti"
 
-#: ontask/models/column.py:192
+#: ontask/models/column.py:200
 #, python-format
 msgid "Unsupported type %(type)s"
 msgstr "Ei-tuettu tyyppi %(type)s"
 
-#: ontask/models/common.py:35 ontask/models/user.py:75
+#: ontask/models/column.py:255
+msgid "More than a single value needed."
+msgstr "Tarvitaan enemmän kuin yksi arvo."
+
+#: ontask/models/column.py:261
+msgid "Incorrect list of values"
+msgstr "Virheellinen arvolista"
+
+#: ontask/models/column.py:271
+#, fuzzy
+#| msgid "The values in the column are not compatible  with these ones."
+msgid "Column values incompatible with categories."
+msgstr "Sarakkeen arvot eivät ole yhteensopivia näiden kanssa."
+
+#: ontask/models/common.py:33 ontask/models/user.py:73
 msgid "name"
 msgstr "nimi"
 
-#: ontask/models/common.py:42 ontask/models/condition.py:213
-#: ontask/models/rubriccell.py:58
+#: ontask/models/common.py:40 ontask/models/condition.py:216
+#: ontask/models/rubriccell.py:56
 msgid "description"
 msgstr "kuvaus"
 
-#: ontask/models/condition.py:31
+#: ontask/models/condition.py:30
 msgid "formula"
 msgstr "kaava"
 
-#: ontask/models/condition.py:38
+#: ontask/models/condition.py:37
 msgid "formula text"
 msgstr "kaavan teksti"
 
-#: ontask/models/condition.py:42
+#: ontask/models/condition.py:41
 msgid "Number of rows selected"
 msgstr "Valittujen rivien määrä"
 
-#: ontask/models/condition.py:137
+#: ontask/models/condition.py:136
 msgid "Columns present in this condition"
 msgstr "Sarakkeet tässä ehdossa"
 
-#: ontask/models/condition.py:218
+#: ontask/models/condition.py:221
 #, fuzzy
 #| msgid "Columns present in this condition"
 msgid "Columns present in this filter"
 msgstr "Sarakkeet tässä ehdossa"
 
-#: ontask/models/connection.py:22
+#: ontask/models/connection.py:20
 msgid "Available to users?"
 msgstr "Saatavilla käyttäjille?"
 
-#: ontask/models/logs.py:131
+#: ontask/models/logs.py:130
 msgid "Canvas emails sent"
 msgstr "Canvas-sähköpostit lähetetty"
 
-#: ontask/models/logs.py:132
+#: ontask/models/logs.py:131
 msgid "Action cloned"
 msgstr "Toiminta kopioitu"
 
-#: ontask/models/logs.py:133
+#: ontask/models/logs.py:132
 msgid "Action created"
 msgstr "Toiminto luotu"
 
-#: ontask/models/logs.py:134
+#: ontask/models/logs.py:133
 msgid "Action deleted"
 msgstr "Toimi poistettu"
 
-#: ontask/models/logs.py:135
+#: ontask/models/logs.py:134
 msgid "Download a ZIP with one file per text"
 msgstr "Lataa ZIP-tiedosto yhdellä tiedostolla tekstiä kohden"
 
-#: ontask/models/logs.py:136
+#: ontask/models/logs.py:135
 msgid "Notification email sent"
 msgstr "Ilmoitusviesti lähetetty"
 
-#: ontask/models/logs.py:137
+#: ontask/models/logs.py:136
 msgid "Email read"
 msgstr "Sähköposti luettu"
 
-#: ontask/models/logs.py:138 ontask/models/logs.py:140
+#: ontask/models/logs.py:137
 msgid "Emails sent"
 msgstr "Sähköposteja lähetetty"
 
-#: ontask/models/logs.py:139
+#: ontask/models/logs.py:138
 msgid "Action imported"
 msgstr "Toiminto tuotu"
 
-#: ontask/models/logs.py:141
+#: ontask/models/logs.py:139
+#, fuzzy
+#| msgid "%(n)s JSON objects will be sent."
+msgid "JSON object sent"
+msgstr "%(n)s JSON-objektia lähetetään."
+
+#: ontask/models/logs.py:140
 msgid "Email with data report sent"
 msgstr "Tietoraportti lähetetty sähköpostitse"
 
-#: ontask/models/logs.py:142
+#: ontask/models/logs.py:141
 msgid "Question added"
 msgstr "Kysymys lisätty"
+
+#: ontask/models/logs.py:142
+#, fuzzy
+#| msgid "Question name"
+msgid "Question removed"
+msgstr "Kysymyksen nimi"
 
 #: ontask/models/logs.py:143
 msgid "TODO item added"
@@ -2161,270 +2193,272 @@ msgstr "Työnkulku päivitetty"
 msgid "Update list of workflow users"
 msgstr "Päivitä työnkulun käyttäjien lista"
 
-#: ontask/models/logs.py:244 ontask/models/scheduler.py:132
+#: ontask/models/logs.py:244 ontask/models/scheduler.py:130
 msgid "payload"
 msgstr "sisältö"
 
-#: ontask/models/oauth.py:34
+#: ontask/models/oauth.py:32
 msgid "Token valid until"
 msgstr "Token kelvollinen saakka"
 
-#: ontask/models/plugin.py:29
+#: ontask/models/plugin.py:27
 msgid "Is a model"
 msgstr "On malli"
 
-#: ontask/models/plugin.py:37
+#: ontask/models/plugin.py:35
 msgid "Ready to run"
 msgstr "Valmiina suoritettavaksi"
 
-#: ontask/models/plugin.py:45
+#: ontask/models/plugin.py:43
 msgid "Enabled"
 msgstr "Käytössä"
 
-#: ontask/models/plugin.py:52
+#: ontask/models/plugin.py:50
 msgid "Last verified"
 msgstr "Viimeksi todennettu"
 
-#: ontask/models/profiles.py:22
+#: ontask/models/profiles.py:20
 msgid "Profile picture"
 msgstr "Profiilikuva"
 
-#: ontask/models/profiles.py:27
+#: ontask/models/profiles.py:25
 msgid "Email verified"
 msgstr "Sähköposti vahvistettu"
 
-#: ontask/models/profiles.py:39
+#: ontask/models/profiles.py:37
 msgid "{}'s profile"
 msgstr "Käyttäjän {} profiili"
 
-#: ontask/models/rubriccell.py:51
+#: ontask/models/rubriccell.py:49
 msgid "level of attainment"
 msgstr "suoriutumistaso"
 
-#: ontask/models/rubriccell.py:63
+#: ontask/models/rubriccell.py:61
 msgid "feedback"
 msgstr "palaute"
 
-#: ontask/models/scheduler.py:32
+#: ontask/models/scheduler.py:30
 msgid "Creating"
 msgstr "Luodaan"
 
-#: ontask/models/scheduler.py:33
+#: ontask/models/scheduler.py:31
 msgid "Pending"
 msgstr "Odottaa"
 
-#: ontask/models/scheduler.py:34
+#: ontask/models/scheduler.py:32
 msgid "Executing"
 msgstr "Suoritetaan"
 
-#: ontask/models/scheduler.py:35
+#: ontask/models/scheduler.py:33
 msgid "Finished"
 msgstr "Valmis"
 
-#: ontask/models/scheduler.py:36
+#: ontask/models/scheduler.py:34
 msgid "Finished with error"
 msgstr "Valmis, sisältää virheitä"
 
-#: ontask/models/scheduler.py:70
+#: ontask/models/scheduler.py:68
 msgid "When to execute this action"
 msgstr "Milloin tämä toiminto suoritetaan"
 
-#: ontask/models/scheduler.py:84
+#: ontask/models/scheduler.py:82
 msgid "End of execution period (Optional)"
 msgstr "Suoritusjakson päättyminen (valinnainen)"
 
-#: ontask/models/scheduler.py:92
+#: ontask/models/scheduler.py:90
 msgid "Execution Status"
 msgstr "Suorituksen tila"
 
-#: ontask/models/scheduler.py:158
+#: ontask/models/scheduler.py:156
 msgid "Incorrect execution time specification."
 msgstr "Virheellinen suoritusajan määrittely."
 
-#: ontask/models/scheduler.py:163
+#: ontask/models/scheduler.py:161
 msgid "Frequency of execution is missing."
 msgstr "Suoritusaikataulun frekvenssi puuttuu."
 
-#: ontask/models/scheduler.py:168
+#: ontask/models/scheduler.py:166
 msgid "Execution times in the past. No execution possible."
 msgstr "Suoritusajat menneisyydessä. Suoritus ei onnistu."
 
-#: ontask/models/scheduler.py:172
+#: ontask/models/scheduler.py:170
 msgid "Execution time is in the past. No execution possible."
 msgstr "Suoritusaika on mennyt. Suoritus ei onnistu."
 
-#: ontask/models/scheduler.py:175
+#: ontask/models/scheduler.py:173
 msgid "Incorrect execution dates."
 msgstr "Virheelliset suorituspäivämäärät."
 
-#: ontask/models/sqlconnection.py:34
-#: ontask/scheduler/services/scheduler_table.py:28
-#: ontask/templates/column/detail.html:101
+#: ontask/models/sqlconnection.py:32
+#: ontask/scheduler/services/scheduler_table.py:26
+#: ontask/templates/column/detail.html:102
 #: ontask/templates/dataops/upload_s2.html:40
 msgid "Type"
 msgstr "Tyyppi"
 
-#: ontask/models/sqlconnection.py:37
+#: ontask/models/sqlconnection.py:35
 msgid "Postgresql, Mysql, etc."
 msgstr "Postgresql, MySQL, jne."
 
-#: ontask/models/sqlconnection.py:41
+#: ontask/models/sqlconnection.py:39
 msgid "Driver"
 msgstr "Ajuri"
 
-#: ontask/models/sqlconnection.py:45
+#: ontask/models/sqlconnection.py:43
 msgid "Driver implementing the DBAPI"
 msgstr "DBAPI:n toteuttava ajuri"
 
-#: ontask/models/sqlconnection.py:49
-#: ontask/workflow/services/workflow_ops.py:39
+#: ontask/models/sqlconnection.py:47
+#: ontask/workflow/services/workflow_ops.py:37
 msgid "User"
 msgstr "Käyttäjä"
 
-#: ontask/models/sqlconnection.py:61 ontask/models/sqlconnection.py:90
+#: ontask/models/sqlconnection.py:59 ontask/models/sqlconnection.py:88
 msgid "Leave empty to enter at execution"
 msgstr "Jätä tyhjäksi, jos täytetään suoritushetkellä"
 
-#: ontask/models/sqlconnection.py:65
+#: ontask/models/sqlconnection.py:63
 msgid "Host"
 msgstr "Isäntä"
 
-#: ontask/models/sqlconnection.py:72
+#: ontask/models/sqlconnection.py:70
 msgid "Port"
 msgstr "Portti"
 
-#: ontask/models/sqlconnection.py:79
+#: ontask/models/sqlconnection.py:77
 msgid "Database name"
 msgstr "Tietokannan nimi"
 
-#: ontask/models/sqlconnection.py:86
+#: ontask/models/sqlconnection.py:84
 msgid "Database table"
 msgstr "Tietokantataulu"
 
-#: ontask/models/user.py:38
+#: ontask/models/user.py:36
 #, fuzzy
 #| msgid "Email address"
 msgid "email address"
 msgstr "Sähköpostiosoite"
 
-#: ontask/models/user.py:41
+#: ontask/models/user.py:39
 msgid "staff status"
 msgstr ""
 
-#: ontask/models/user.py:44
+#: ontask/models/user.py:42
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 
-#: ontask/models/user.py:46
+#: ontask/models/user.py:44
 msgid "active"
 msgstr ""
 
-#: ontask/models/user.py:49
+#: ontask/models/user.py:47
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
 
-#: ontask/models/user.py:51
+#: ontask/models/user.py:49
 msgid "date joined"
 msgstr ""
 
-#: ontask/models/user.py:99
+#: ontask/models/user.py:97
 msgid "user"
 msgstr ""
 
-#: ontask/models/user.py:100
+#: ontask/models/user.py:98
 msgid "users"
 msgstr ""
 
-#: ontask/models/view.py:39
+#: ontask/models/view.py:37
 msgid "Subset of columns to show"
 msgstr "Näytettävien sarakkeiden osajoukko"
 
-#: ontask/models/view.py:63
+#: ontask/models/view.py:61
 #, fuzzy
 #| msgid "Incorrect user email %s"
 msgid "Incorrect use of view.formula."
 msgstr "Virheellinen käyttäjän sähköposti %s"
 
-#: ontask/models/workflow.py:54
+#: ontask/models/workflow.py:53
 msgid "number of rows"
 msgstr "rivien lukumäärä"
 
-#: ontask/models/workflow.py:62
+#: ontask/models/workflow.py:61
 msgid "number of columns"
 msgstr "sarakkeiden lukumäärä"
 
-#: ontask/oauth/services.py:106
+#: ontask/oauth/services.py:103
 msgid "Unable to refresh OAuth token."
 msgstr "OAuth tokenia ei voitu päivittää."
 
-#: ontask/oauth/services.py:136
+#: ontask/oauth/services.py:133
 msgid "Inconsistent OAuth response. Unable to authorize"
 msgstr "Epäkonsistentti OAuth vastaus. Autorisointi ei onnistu"
 
-#: ontask/oauth/services.py:140
+#: ontask/oauth/services.py:137
 msgid "Internal error. Empty OAuth Instance name"
 msgstr "Sisäinen virhe. OAuth -instanssin nimi on tyhjä"
 
-#: ontask/oauth/services.py:144
+#: ontask/oauth/services.py:141
 msgid "Internal error. Invalid OAuth Dict element"
 msgstr "Sisäinen virhe. OAuth Dict -elementti ei ole kelvollinen"
 
-#: ontask/oauth/services.py:157
+#: ontask/oauth/services.py:155
 msgid "Unable to obtain access token from OAuth"
 msgstr "Acces tokenia ei voitu hakea OAuth:sta"
 
-#: ontask/oauth/views.py:33
-msgid "Incorrect Canvas callback invocation."
+#: ontask/oauth/views.py:31
+#, fuzzy
+#| msgid "Incorrect Canvas callback invocation."
+msgid "Incorrect callback invocation."
 msgstr "Virheellinen Canvas-sähköpostitoiminnon kutsu."
 
-#: ontask/oauth/views.py:41
+#: ontask/oauth/views.py:39
 #, python-brace-format
 msgid "Error in OAuth2 step 1 ({0})"
 msgstr "Virhe OAuth2 vaihe 1 ({0})"
 
-#: ontask/profiles/views.py:62
+#: ontask/profiles/views.py:60
 msgid "There was a problem with the form. Please check the details."
 msgstr "Lomakkeessa oli ongelma. Tarkista tiedot."
 
-#: ontask/profiles/views.py:74
+#: ontask/profiles/views.py:72
 msgid "Profile details saved!"
 msgstr "Profiilin tiedot tallennettu!"
 
-#: ontask/scheduler/forms/basic.py:35
+#: ontask/scheduler/forms/basic.py:33
 msgid "Multiple executions?"
 msgstr "Useita suorituksia?"
 
-#: ontask/scheduler/forms/basic.py:36
+#: ontask/scheduler/forms/basic.py:34
 msgid "Select if you want to execute multiple times."
 msgstr "Valitse, jos haluat suorittaa useita kertoja."
 
-#: ontask/scheduler/forms/basic.py:86
+#: ontask/scheduler/forms/basic.py:84
 msgid "There is an operation scheduled with this name"
 msgstr "Tämänniminen ajoitettu toimenpide on jo olemassa"
 
-#: ontask/scheduler/forms/sql.py:36
+#: ontask/scheduler/forms/sql.py:35
 msgid ""
 "Key column in the existing table. Leave empty if uploading to empty workflow"
 msgstr ""
 "Avainsarake nykyisessä taulukossa. Jätä tyhjäksi, jos lataat tyhjään "
 "työnkulkuun"
 
-#: ontask/scheduler/forms/sql.py:44
+#: ontask/scheduler/forms/sql.py:43
 msgid "Key column in new table. Leave empty if uploading to empty workflow"
 msgstr ""
 "Avainsarake uudessa taulukossa. Jätä tyhjäksi, jos lataat tyhjään työnkulkuun"
 
-#: ontask/scheduler/forms/sql.py:69
+#: ontask/scheduler/forms/sql.py:68
 msgid "The operation requires the names of two key columns."
 msgstr "Toimenpide vaatii kahden avainsarakkeen nimet."
 
-#: ontask/scheduler/forms/sql.py:76
+#: ontask/scheduler/forms/sql.py:75
 msgid "The column selected is not a key column."
 msgstr "Valittu sarake ei ole avainsarake."
 
-#: ontask/scheduler/forms/sql.py:81
+#: ontask/scheduler/forms/sql.py:80
 msgid "The operation requires a merge method."
 msgstr "Toimenpide vaatii yhdistämismenetelmän."
 
@@ -2498,39 +2532,39 @@ msgstr "Personoitu JSON tarvitsee tokenin hyötykuormassa."
 msgid "Schedule Action Execution"
 msgstr "Ajasta toimintojen suoritus"
 
-#: ontask/scheduler/services/action_producers.py:69
+#: ontask/scheduler/services/action_producers.py:63
 #: ontask/templates/action/includes/partial_action_card.html:96
 #: ontask/templates/scheduler/edit.html:71
 msgid "Schedule"
 msgstr "Ajastus"
 
-#: ontask/scheduler/services/action_producers.py:106
-#: ontask/scheduler/services/sql_producer.py:90
+#: ontask/scheduler/services/action_producers.py:97
+#: ontask/scheduler/services/sql_producer.py:82
 msgid "Incorrect request for operation scheduling"
 msgstr "Virheellinen pyyntö toimenpiteen ajastukseen"
 
-#: ontask/scheduler/services/action_producers.py:134
+#: ontask/scheduler/services/action_producers.py:125
 #, python-brace-format
 msgid "Unable to create scheduled operation: {0}"
 msgstr "Ajastetun toimenpiteen luonti ei onnistu: {0}"
 
-#: ontask/scheduler/services/items.py:77
+#: ontask/scheduler/services/items.py:75
 msgid "Starting at "
 msgstr "Alkaen "
 
-#: ontask/scheduler/services/scheduler_table.py:30
+#: ontask/scheduler/services/scheduler_table.py:28
 msgid "From"
 msgstr "Alkaen"
 
-#: ontask/scheduler/services/scheduler_table.py:32
+#: ontask/scheduler/services/scheduler_table.py:30
 msgid "Frequency"
 msgstr "Frekvenssi"
 
-#: ontask/scheduler/services/scheduler_table.py:34
+#: ontask/scheduler/services/scheduler_table.py:32
 msgid "Until"
 msgstr "Saakka"
 
-#: ontask/scheduler/services/scheduler_table.py:42
+#: ontask/scheduler/services/scheduler_table.py:40
 #: ontask/templates/dataops/includes/partial_diagnostics.html:13
 msgid "Status"
 msgstr "Tila"
@@ -2539,115 +2573,115 @@ msgstr "Tila"
 msgid "Schedule SQL Upload"
 msgstr "Ajasta SQL-lähetys"
 
-#: ontask/scheduler/services/sql_producer.py:108
+#: ontask/scheduler/services/sql_producer.py:100
 #, python-brace-format
 msgid "Unable to create scheduled operation ({0})"
 msgstr "Ajastetun toiminnon luominen ei onnistu ({0})"
 
-#: ontask/scheduler/views/crud.py:161
+#: ontask/scheduler/views/crud.py:141
 msgid "Incorrect action scheduling invocation."
 msgstr "Virheellinen toimintojen ajastuksen kutsu."
 
-#: ontask/settings.py:51
+#: ontask/settings.py:45
 #, fuzzy
 #| msgid "Email"
 msgid "Emails"
 msgstr "Sähköposti"
 
-#: ontask/settings.py:55
+#: ontask/settings.py:49
 msgid "Template to send email notification"
 msgstr "Viestipohjat sähköposti-ilmoituksiin"
 
-#: ontask/settings.py:60
+#: ontask/settings.py:54
 msgid "Subject line for notification messages"
 msgstr "Aihekenttä ilmoitusviesteihin"
 
-#: ontask/settings.py:65
+#: ontask/settings.py:59
 msgid "\"From:\" field in notification emails"
 msgstr "Lähettäjäkenttä sähköposti-ilmoituksissa"
 
-#: ontask/settings.py:70
+#: ontask/settings.py:64
 #, fuzzy
 #| msgid "\"From:\" field in notification emails"
 msgid "\"From\": field in all outgoing emails"
 msgstr "Lähettäjäkenttä sähköposti-ilmoituksissa"
 
-#: ontask/settings.py:75
+#: ontask/settings.py:69
 msgid "Uploads"
 msgstr "Lataukset"
 
-#: ontask/settings.py:79
+#: ontask/settings.py:73
 msgid "Content types allowed in uploads"
 msgstr "Sallitut sisältötyypit"
 
-#: ontask/settings.py:84
+#: ontask/settings.py:78
 msgid "Maximum size allowed in file uploads"
 msgstr "Suurin sallittu koko tiedostolatauksissa"
 
-#: ontask/settings.py:90
+#: ontask/settings.py:84
 msgid "Transformations and Models"
 msgstr "Muunnokset ja mallit"
 
-#: ontask/settings.py:94
+#: ontask/settings.py:88
 msgid "Folder where code packages are stored"
 msgstr "Kansio, johon koodipaketit tallennetaan"
 
-#: ontask/settings.py:100
+#: ontask/settings.py:94
 msgid "Logs"
 msgstr "Lokit"
 
-#: ontask/settings.py:104
+#: ontask/settings.py:98
 msgid "Maximum number of logs shown to the user"
 msgstr "Käyttäjälle näytettävien lokien enimmäismäärä"
 
-#: ontask/settings.py:110
+#: ontask/settings.py:104
 msgid "Miscellaneous"
 msgstr "Sekalaiset"
 
-#: ontask/settings.py:115
+#: ontask/settings.py:109
 msgid "URL prefix to access the documentation"
 msgstr "URL-etuliite dokumentaatioon pääsemiseksi"
 
-#: ontask/signals.py:29
+#: ontask/signals.py:27
 #, python-format
 msgid "New ontask user profile for %s created"
 msgstr "Uusi ontask käyttäjäprofiili %s luotu"
 
-#: ontask/table/api.py:103
+#: ontask/table/api.py:101
 msgid "Post request requires workflow without a table"
 msgstr "Lähetyspyyntö vaatii työnkulun ilman taulukkoa"
 
-#: ontask/table/api.py:266
+#: ontask/table/api.py:264
 #, fuzzy
 #| msgid "Post request requires workflow without a table"
 msgid "Merge request requires a workflow with a non-empty table"
 msgstr "Lähetyspyyntö vaatii työnkulun ilman taulukkoa"
 
-#: ontask/table/forms.py:26
+#: ontask/table/forms.py:24
 msgid "View name"
 msgstr "Näytä nimi"
 
-#: ontask/table/forms.py:27
+#: ontask/table/forms.py:25
 msgid "View Description"
 msgstr "Näytä kuvaus"
 
-#: ontask/table/forms.py:28
+#: ontask/table/forms.py:26
 msgid "Columns to show"
 msgstr "Näytettävät sarakkeet"
 
-#: ontask/table/forms.py:47
+#: ontask/table/forms.py:45
 msgid "The view needs at least one column to show"
 msgstr "Näkymässä tarvitaan vähintään yksi sarake"
 
-#: ontask/table/forms.py:55
+#: ontask/table/forms.py:50
 msgid "There needs to be at least one key column"
 msgstr "On oltava vähintään yksi avainsarake"
 
-#: ontask/table/forms.py:64
+#: ontask/table/forms.py:59
 msgid "There is already a view with this name."
 msgstr "Samanniminen näkymä on jo olemassa."
 
-#: ontask/table/serializers/json.py:14
+#: ontask/table/serializers/json.py:12
 msgid "JSON string encoding a pandas data frame"
 msgstr "JSON-merkkijono, joka sisältää pandas-tietokehyksen"
 
@@ -2685,70 +2719,78 @@ msgid ""
 msgstr ""
 "Tämän kentän on oltava pandas.to_pickle() -toiminnon Base64 -enkoodattu tulos"
 
-#: ontask/table/serializers/view.py:31
+#: ontask/table/serializers/view.py:28
 #, fuzzy, python-brace-format
 #| msgid "A view with that name already exists"
 msgid "View with name {0} already exists"
 msgstr "Tämänniminen näkymä on jo olemassa"
 
-#: ontask/table/serializers/view.py:42
+#: ontask/table/serializers/view.py:39
 #, fuzzy, python-brace-format
 #| msgid "Invalid column data"
 msgid "Invalid column name {0}"
 msgstr "Sarakedata ei ole kelvollinen"
 
-#: ontask/table/services/display.py:194
+#: ontask/table/services/display.py:136
 msgid "Incorrect URL invoked to delete a row"
 msgstr "Virheellinen URL-osoite kutsuttu rivin poistamiseksi"
 
-#: ontask/table/services/stats.py:185
+#: ontask/table/services/stats.py:158
 msgid "No values in this column"
 msgstr "Tässä sarakkeessa ei ole arvoja"
 
-#: ontask/table/services/stats.py:190
+#: ontask/table/services/stats.py:164
 msgid "No value in this column"
 msgstr "Ei arvoa tässä sarakkeessa"
 
-#: ontask/table/services/view.py:52
+#: ontask/table/services/view.py:50
 msgid "Error while cloning table view."
 msgstr "Virhe kopioidessa taulukkonäkymää."
 
-#: ontask/table/views/stats.py:112
+#: ontask/table/views/csvdownload.py:28 ontask/table/views/stats.py:80
+#, fuzzy
+#| msgid "No track_id found in request"
+msgid "No view found matching the query."
+msgstr "Pyynnöstä puuttuu track_id"
+
+#: ontask/table/views/stats.py:69
 msgid "Unable to provide visualisation without data."
 msgstr "Visualisointia ei voida näyttää ilman tietoja."
 
-#: ontask/table/views/stats.py:122
+#: ontask/table/views/stats.py:93
 msgid "Unable to visualize table row"
 msgstr "Taulukon riviä ei voi visualisoida"
 
 #: ontask/table/views/table_display.py:62
+#, fuzzy
+#| msgid "Column has no data"
+msgid "Workflow has no data."
+msgstr "Sarakkeessa ei ole tietoja"
+
+#: ontask/table/views/table_display.py:95
+msgid "Formula is excluding all rows from the table"
+msgstr ""
+
+#: ontask/table/views/table_display.py:111
 msgid "There is no data in the table"
 msgstr "Taulukossa ei ole dataa"
 
-#: ontask/table/views/table_display.py:92
-msgid "Formula is exluding all rows from the table"
-msgstr ""
-
-#: ontask/table/views/table_view.py:36
-msgid "Cannot add a view to a workflow without data"
-msgstr "Et voi lisätä näkymää työnkulkuun ilman tietoja"
-
-#: ontask/tasks/execute_factory.py:75
+#: ontask/tasks/execute.py:35
 #, python-brace-format
 msgid "Unable to find user with id {0}"
 msgstr "Ei löydetty käyttäjää, jolla id {0}"
 
-#: ontask/tasks/execute_factory.py:85
+#: ontask/tasks/execute.py:45
 #, python-brace-format
 msgid "Unable to find workflow with id {0}"
 msgstr "Ei löydetty työnkulkua, jolla id {0}"
 
-#: ontask/tasks/execute_factory.py:96
+#: ontask/tasks/execute.py:56
 #, python-brace-format
 msgid "Unable to find action with id {0}"
 msgstr "Ei löydetty toimintoa, jolla id {0}"
 
-#: ontask/tasks/execute_factory.py:148
+#: ontask/tasks/execute.py:108
 #, python-brace-format
 msgid "Error executing operation: {0}"
 msgstr "Virhe suorittaessa toimenpidettä: {0}"
@@ -2774,12 +2816,39 @@ msgid "No permission for the requested operation."
 msgstr "Ei lupaa pyydettyyn toimenpiteeseen."
 
 #: ontask/templates/404.html:4 ontask/templates/404.html:7
-msgid "Page not found"
-msgstr "Sivua ei löydy"
+#, fuzzy
+#| msgid "Unable to process datatype"
+msgid "Unable to process page"
+msgstr "Tietotyyppiä ei voida käsitellä"
 
 #: ontask/templates/404.html:8
-msgid "The page you requested was not found in the application."
-msgstr "Pyytämääsi sivua ei löytynyt sovelluksesta."
+#, fuzzy
+#| msgid "The workflow could not be accessed"
+msgid "The request could not be processed."
+msgstr "Pääsy työnkulkuun ei ole saatavilla"
+
+#: ontask/templates/404.html:10 ontask/templates/column/detail.html:8
+#: ontask/templates/workflow/operations.html:8
+msgid "Details"
+msgstr "Lisätiedot"
+
+#: ontask/templates/404.html:14 ontask/templates/action/action_zip_done.html:15
+#: ontask/templates/action/item_filter.html:27
+#: ontask/templates/action/run_done.html:20
+#: ontask/templates/action/run_survey.html:70
+#: ontask/templates/action/run_survey_row.html:21
+#: ontask/templates/action/run_survey_row.html:32
+#: ontask/templates/dataops/includes/upload_buttons.html:6
+#: ontask/templates/dataops/operation_done.html:13
+#: ontask/templates/table/stat_column.html:27
+#: ontask/templates/table/stat_column.html:33
+#: ontask/templates/table/stat_row.html:24
+#: ontask/templates/table/stat_row.html:34
+#: ontask/templates/table/stat_view.html:29
+#: ontask/templates/table/stat_view.html:43 ontask/templates/thanks.html:9
+#: ontask/templates/workflow/export_done.html:19
+msgid "Back"
+msgstr "Takaisin"
 
 #: ontask/templates/500.html:4 ontask/templates/500.html:7
 msgid "System error"
@@ -3016,24 +3085,6 @@ msgstr "Toiminto ZIP:n luominen"
 msgid "Your ZIP will start to download shortly."
 msgstr "ZIPin lataus alkaa pian."
 
-#: ontask/templates/action/action_zip_done.html:15
-#: ontask/templates/action/item_filter.html:27
-#: ontask/templates/action/run_done.html:20
-#: ontask/templates/action/run_survey.html:69
-#: ontask/templates/action/run_survey_row.html:21
-#: ontask/templates/action/run_survey_row.html:32
-#: ontask/templates/dataops/includes/upload_buttons.html:6
-#: ontask/templates/dataops/operation_done.html:13
-#: ontask/templates/table/stat_column.html:27
-#: ontask/templates/table/stat_column.html:33
-#: ontask/templates/table/stat_row.html:24
-#: ontask/templates/table/stat_row.html:34
-#: ontask/templates/table/stat_view.html:29
-#: ontask/templates/table/stat_view.html:43 ontask/templates/thanks.html:9
-#: ontask/templates/workflow/export_done.html:19
-msgid "Back"
-msgstr "Takaisin"
-
 #: ontask/templates/action/action_zip_step1.html:7
 msgid "ZIP action"
 msgstr "ZIP toiminto"
@@ -3163,7 +3214,7 @@ msgid "Save action and go back to action table"
 msgstr "Tallenna toiminto ja palaa toimintotaulukkoon"
 
 #: ontask/templates/action/edit_in.html:80
-#: ontask/templates/action/includes/partial_rubriccell_edit.html:17
+#: ontask/templates/action/includes/partial_rubric_cell_edit.html:17
 msgid "Done"
 msgstr "Valmis"
 
@@ -3231,7 +3282,7 @@ msgid "Edit description"
 msgstr "Muokkaa kuvausta"
 
 #: ontask/templates/action/edit_in.html:148
-#: ontask/templates/action/run_survey.html:55
+#: ontask/templates/action/run_survey.html:56
 #: ontask/templates/scheduler/includes/partial_show_schedule_action.html:30
 #: ontask/templates/scheduler/schedule_done.html:15
 msgid "Edit"
@@ -3372,16 +3423,15 @@ msgstr "Poista toiminto"
 
 #: ontask/templates/action/includes/partial_action_edit_description.html:17
 #: ontask/templates/action/includes/partial_action_update.html:17
-#: ontask/templates/action/includes/partial_rubric_loas_edit.html:17
 #: ontask/templates/action/run_survey_row.html:36
-#: ontask/templates/column/includes/partial_addedit.html:29
-#: ontask/templates/column/includes/partial_question_addedit.html:29
-#: ontask/templates/column/includes/partial_todoitem_addedit.html:28
-#: ontask/templates/condition/includes/partial_filter_addedit.html:28
-#: ontask/templates/connection/includes/partial_addedit.html:22
+#: ontask/templates/column/includes/partial_add_edit.html:29
+#: ontask/templates/column/includes/partial_question_add_edit.html:29
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:29
+#: ontask/templates/condition/includes/partial_filter_add_edit.html:28
+#: ontask/templates/connection/includes/partial_add_edit.html:22
 #: ontask/templates/dataops/row_filter.html:28
 #: ontask/templates/dataops/row_filter.html:38
-#: ontask/templates/workflow/includes/partial_criterion_addedit.html:28
+#: ontask/templates/workflow/includes/partial_criterion_add_edit.html:28
 msgid "Update"
 msgstr "Päivitä"
 
@@ -3425,16 +3475,16 @@ msgstr "Tallenna ja palaa toimintotaulukkoon"
 msgid "Close"
 msgstr "Sulje"
 
-#: ontask/templates/action/includes/partial_action_showurl.html:11
+#: ontask/templates/action/includes/partial_action_show_url.html:11
 msgid "URL to the personalised content"
 msgstr "Personoidun sisällön URL-osoite"
 
-#: ontask/templates/action/includes/partial_action_showurl.html:17
+#: ontask/templates/action/includes/partial_action_show_url.html:17
 msgid "This URL provides access to the content personalised for each user."
 msgstr ""
 "Tämä URL-osoite tarjoaa pääsyn jokaiselle käyttäjälle personoituun sisältöön."
 
-#: ontask/templates/action/includes/partial_action_showurl.html:20
+#: ontask/templates/action/includes/partial_action_show_url.html:20
 msgid ""
 "Access is protected by authentication,\n"
 "        and the user <strong>email</strong> is in a column named "
@@ -3447,7 +3497,7 @@ msgstr ""
 " Jos haluat käyttää eri saraketta, lisää tämä parametri URL-osoitteen "
 "loppuun:"
 
-#: ontask/templates/action/includes/partial_action_showurl.html:25
+#: ontask/templates/action/includes/partial_action_show_url.html:25
 msgid ""
 "replacing <code>[COLUMN NAME]</code> by the colum to use instead of "
 "<strong>email</strong>."
@@ -3472,7 +3522,7 @@ msgstr "Muokkaa kysymystä"
 msgid "Create an exact duplicate of this question"
 msgstr "Luo tarkka kopio tästä kysymyksestä"
 
-#: ontask/templates/action/includes/partial_column_selected_operations.html:15
+#: ontask/templates/action/includes/partial_column_selected_operations.html:16
 msgid "Remove question from this survey"
 msgstr "Poista kysymys tästä kyselystä"
 
@@ -3567,9 +3617,17 @@ msgstr "Sekoita kysymykset?"
 msgid "TODO List Items"
 msgstr "Tehtävälista"
 
-#: ontask/templates/action/includes/partial_rubric_loas_edit.html:7
-msgid "Levels of Attainment"
-msgstr "Suoriutumistaso"
+#: ontask/templates/action/includes/partial_rubric_cell.html:5
+msgid "Feedback"
+msgstr "Palaute"
+
+#: ontask/templates/action/includes/partial_rubric_cell.html:12
+msgid "Edit this cell"
+msgstr "Muokkaa tätä solua"
+
+#: ontask/templates/action/includes/partial_rubric_cell_edit.html:7
+msgid "Rubric cell content"
+msgstr "Rubriikin solun sisältö"
 
 #: ontask/templates/action/includes/partial_rubric_tab_body.html:11
 msgid "Insert existing criterion/column"
@@ -3583,30 +3641,10 @@ msgstr "Lisää uusi kriteeri rubriikkiin"
 msgid "Create criterion/column"
 msgstr "Luo kriteeri/sarake"
 
-#: ontask/templates/action/includes/partial_rubric_tab_body.html:33
-msgid "Modify the levels of attainment (top row) of the rubric"
-msgstr "Muokkaa rubriikin suoriutumistasoja (ylin rivi)"
-
-#: ontask/templates/action/includes/partial_rubric_tab_body.html:34
-msgid "Edit levels of attainment"
-msgstr "Muokkaa suoriutumistasoja"
-
 #: ontask/templates/action/includes/partial_rubric_tab_li.html:3
 #: ontask/templates/action/includes/partial_type_legend.html:8
 msgid "Rubric"
 msgstr "Rubriikki"
-
-#: ontask/templates/action/includes/partial_rubriccell.html:5
-msgid "Feedback"
-msgstr "Palaute"
-
-#: ontask/templates/action/includes/partial_rubriccell.html:12
-msgid "Edit this cell"
-msgstr "Muokkaa tätä solua"
-
-#: ontask/templates/action/includes/partial_rubriccell_edit.html:7
-msgid "Rubric cell content"
-msgstr "Rubriikin solun sisältö"
 
 #: ontask/templates/action/includes/partial_text_summernote_tab_body.html:9
 msgid "Insert rubric text"
@@ -3770,12 +3808,12 @@ msgid "View log content"
 msgstr "Näytä lokin sisältö"
 
 #: ontask/templates/admin/admin_title.html:1
-#: ontask/templates/admin/base_site.html:5
-#: ontask/templates/admin/base_site.html:7 ontask/templates/base.html:121
+#: ontask/templates/admin/base_site.html:6
+#: ontask/templates/admin/base_site.html:8 ontask/templates/base.html:121
 msgid "Admin"
 msgstr "Ylläpito"
 
-#: ontask/templates/admin/base_site.html:11
+#: ontask/templates/admin/base_site.html:12
 msgid "Switch to Site"
 msgstr "Siirry sivustolle"
 
@@ -3915,7 +3953,7 @@ msgstr "Käyttäjäprofiili"
 msgid "Profile"
 msgstr "Profiili"
 
-#: ontask/templates/base.html:166 ontask/templates/base.html:265
+#: ontask/templates/base.html:166 ontask/templates/base.html:266
 msgid "Logout"
 msgstr "Kirjaudu ulos"
 
@@ -3963,24 +4001,19 @@ msgstr "Versio:"
 msgid "Accessibility"
 msgstr "Saavutettavuus"
 
-#: ontask/templates/base.html:264
+#: ontask/templates/base.html:265
 msgid "Your session is about to expire."
 msgstr "Istuntosi on vanhentumassa."
 
-#: ontask/templates/base.html:266
+#: ontask/templates/base.html:267
 msgid "Remain Connected"
 msgstr "Pysy kirjautuneena"
 
-#: ontask/templates/column/detail.html:8
-#: ontask/templates/workflow/operations.html:8
-msgid "Details"
-msgstr "Lisätiedot"
-
-#: ontask/templates/column/detail.html:80
+#: ontask/templates/column/detail.html:81
 msgid "Column Operations"
 msgstr "Saraketoimenpiteet"
 
-#: ontask/templates/column/detail.html:102
+#: ontask/templates/column/detail.html:103
 msgid "Key?"
 msgstr "Avain?"
 
@@ -4065,12 +4098,12 @@ msgstr "Tee ensimmäiseksi sarakkeeksi"
 msgid "Make last column"
 msgstr "Tee viimeiseksi sarakkeeksi"
 
-#: ontask/templates/column/includes/partial_addedit.html:16
-#: ontask/templates/column/includes/partial_addedit.html:29
+#: ontask/templates/column/includes/partial_add_edit.html:16
+#: ontask/templates/column/includes/partial_add_edit.html:29
 msgid "Add column"
 msgstr "Lisää sarake"
 
-#: ontask/templates/column/includes/partial_addedit.html:18
+#: ontask/templates/column/includes/partial_add_edit.html:18
 #, python-format
 msgid "Edit column <strong>%(n)s</strong>"
 msgstr "Muokkaa saraketta <strong>%(n)s</strong>"
@@ -4093,14 +4126,18 @@ msgid "Clone column"
 msgstr "Kopioi sarake"
 
 #: ontask/templates/column/includes/partial_column_restrict.html:5
-#: ontask/templates/column/includes/partial_delete.html:5
-msgid "Confirm column deletion"
+#, fuzzy
+#| msgid "Confirm column deletion"
+msgid "Confirm column restriction"
 msgstr "Vahvista sarakkeen poisto"
 
 #: ontask/templates/column/includes/partial_column_restrict.html:11
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to restrict column \n"
+#| "      <strong>%(n)s</strong> to the values %(v)s?"
 msgid ""
-"Are you sure you want to restrict column \n"
+"Are you sure you want to restrict column\n"
 "      <strong>%(n)s</strong> to the values %(v)s?"
 msgstr ""
 "Haluatko varmasti rajoittaa sarakkeen <strong>%(n)s</strong> arvoihin %(v)s?"
@@ -4108,6 +4145,10 @@ msgstr ""
 #: ontask/templates/column/includes/partial_column_restrict.html:17
 msgid "Restrict column"
 msgstr "Rajoita sarake"
+
+#: ontask/templates/column/includes/partial_delete.html:5
+msgid "Confirm column deletion"
+msgstr "Vahvista sarakkeen poisto"
 
 #: ontask/templates/column/includes/partial_delete.html:11
 #, python-format
@@ -4164,12 +4205,12 @@ msgstr "Nämä ehdot poistetaan samalla."
 msgid "Add derived column"
 msgstr "Lisää johdettu sarake"
 
-#: ontask/templates/column/includes/partial_question_addedit.html:16
-#: ontask/templates/column/includes/partial_question_addedit.html:29
+#: ontask/templates/column/includes/partial_question_add_edit.html:16
+#: ontask/templates/column/includes/partial_question_add_edit.html:29
 msgid "Add question"
 msgstr "Lisää kysymys"
 
-#: ontask/templates/column/includes/partial_question_addedit.html:18
+#: ontask/templates/column/includes/partial_question_add_edit.html:18
 #, python-format
 msgid "Edit question <strong>%(n)s</strong>"
 msgstr "Muokkaa kysymystä <strong>%(n)s</strong>"
@@ -4188,35 +4229,35 @@ msgstr "Valitse sarakkeet"
 msgid "Select"
 msgstr "Valitse"
 
-#: ontask/templates/column/includes/partial_todoitem_addedit.html:15
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:16
 #, fuzzy
 #| msgid "TODO List"
 msgid "Add TODO item"
 msgstr "Tehtävälista"
 
-#: ontask/templates/column/includes/partial_todoitem_addedit.html:17
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:18
 #, fuzzy, python-format
 #| msgid "Edit criterion <strong>%(n)s</strong>"
 msgid "Edit TODO item <strong>%(n)s</strong>"
 msgstr "Muokkaa kriteeriä <strong>%(n)s</strong>"
 
-#: ontask/templates/column/includes/partial_todoitem_addedit.html:28
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:29
 #, fuzzy
 #| msgid "Add Filter"
 msgid "Add item"
 msgstr "Lisää suodatin"
 
-#: ontask/templates/condition/includes/partial_condition_addedit.html:15
-#: ontask/templates/condition/includes/partial_condition_addedit.html:32
+#: ontask/templates/condition/includes/partial_condition_add_edit.html:15
+#: ontask/templates/condition/includes/partial_condition_add_edit.html:32
 msgid "Create condition"
 msgstr "Luo ehto"
 
-#: ontask/templates/condition/includes/partial_condition_addedit.html:17
-#: ontask/templates/condition/includes/partial_condition_addedit.html:34
+#: ontask/templates/condition/includes/partial_condition_add_edit.html:17
+#: ontask/templates/condition/includes/partial_condition_add_edit.html:34
 msgid "Update condition"
 msgstr "Päivitä ehto"
 
-#: ontask/templates/condition/includes/partial_condition_addedit.html:25
+#: ontask/templates/condition/includes/partial_condition_add_edit.html:25
 msgid "The text will be shown if"
 msgstr "Teksti näytetään jos"
 
@@ -4257,8 +4298,8 @@ msgstr[0] "(%(n)s opiskelija)"
 msgstr[1] "(%(n)s opiskelijaa)"
 
 #: ontask/templates/condition/includes/partial_condition_tab_body.html:25
-#: ontask/templates/condition/includes/partial_filter_tab_body.html:21
-#: ontask/templates/condition/includes/partial_filter_tab_body.html:40
+#: ontask/templates/condition/includes/partial_filter_tab_body.html:23
+#: ontask/templates/condition/includes/partial_filter_tab_body.html:42
 msgid "Formula"
 msgstr "Kaava"
 
@@ -4281,19 +4322,25 @@ msgstr ""
 "Luo ehtoja, joilla näytetään tai piilotetaan viestin osia (valinnainen)"
 
 #: ontask/templates/condition/includes/partial_condition_tab_li.html:3
+#, fuzzy
+#| msgid "Conditions:"
+msgid "Conditions"
+msgstr "Ehdot:"
+
+#: ontask/templates/condition/includes/partial_condition_tab_li.html:3
 msgid "Text Conditions"
 msgstr "Tekstin ehdot"
 
-#: ontask/templates/condition/includes/partial_filter_addedit.html:13
-#: ontask/templates/condition/includes/partial_filter_addedit.html:26
+#: ontask/templates/condition/includes/partial_filter_add_edit.html:13
+#: ontask/templates/condition/includes/partial_filter_add_edit.html:26
 msgid "Create filter"
 msgstr "Luo suodatin"
 
-#: ontask/templates/condition/includes/partial_filter_addedit.html:13
+#: ontask/templates/condition/includes/partial_filter_add_edit.html:13
 msgid "Update filter"
 msgstr "Päivitä suodatin"
 
-#: ontask/templates/condition/includes/partial_filter_addedit.html:20
+#: ontask/templates/condition/includes/partial_filter_add_edit.html:20
 msgid "The learner will be selected if"
 msgstr "Oppija valitaan, jos"
 
@@ -4321,21 +4368,21 @@ msgstr "Lisää suodatin"
 msgid "Table View"
 msgstr "Taulukkonäkymät"
 
-#: ontask/templates/condition/includes/partial_filter_tab_body.html:28
-#: ontask/templates/condition/includes/partial_filter_tab_body.html:53
+#: ontask/templates/condition/includes/partial_filter_tab_body.html:30
+#: ontask/templates/condition/includes/partial_filter_tab_body.html:55
 msgid "Delete the filter"
 msgstr "Poista suodatin"
 
-#: ontask/templates/condition/includes/partial_filter_tab_body.html:36
+#: ontask/templates/condition/includes/partial_filter_tab_body.html:38
 msgid "Filter"
 msgstr "Suodatin"
 
-#: ontask/templates/condition/includes/partial_filter_tab_body.html:47
+#: ontask/templates/condition/includes/partial_filter_tab_body.html:49
 #, python-format
 msgid "Edit the filter (%(n)s rows satisfy this condition)"
 msgstr "Muokkaa suodatinta (%(n)s riviä täyttää tämän ehdon)"
 
-#: ontask/templates/condition/includes/partial_filter_tab_body.html:61
+#: ontask/templates/condition/includes/partial_filter_tab_body.html:63
 msgid "All learners considered for this action."
 msgstr "Kaikki oppijat huomioidaan tässä toiminnossa."
 
@@ -4354,12 +4401,12 @@ msgid_plural "(%(n)s learners of %(tot)s)"
 msgstr[0] "(%(n)s oppija valittu, yhteensä %(tot)s)"
 msgstr[1] "(%(n)s oppijaa valittu, yhteensä %(tot)s)"
 
-#: ontask/templates/connection/includes/partial_addedit.html:9
-#: ontask/templates/connection/includes/partial_addedit.html:22
+#: ontask/templates/connection/includes/partial_add_edit.html:9
+#: ontask/templates/connection/includes/partial_add_edit.html:22
 msgid "Add connection"
 msgstr "Lisää yhteys"
 
-#: ontask/templates/connection/includes/partial_addedit.html:11
+#: ontask/templates/connection/includes/partial_add_edit.html:11
 msgid "Edit connection"
 msgstr "Muokkaa yhteyttä"
 
@@ -5256,89 +5303,91 @@ msgstr "Toimenpide ajastettu"
 msgid "Operation execution: %(n)s"
 msgstr "Toimenpisteen suoritus: %(n)s"
 
-#: ontask/templates/table/display.html:98
+#: ontask/templates/table/display.html:99
 #: ontask/templates/table/includes/partial_view_operations.html:5
-msgid "Change the columns present in the view"
-msgstr "Muuta näkymässä näytettäviä sarakkeita"
+#, fuzzy
+#| msgid "Change elements in view"
+msgid "Edit the elements in the view"
+msgstr "Muuta näkymän elementtejä"
 
-#: ontask/templates/table/display.html:104
+#: ontask/templates/table/display.html:105
 #: ontask/templates/table/includes/partial_view_operations.html:15
 msgid "Create an identical view"
 msgstr "Luo identtinen näkymä"
 
-#: ontask/templates/table/display.html:111
+#: ontask/templates/table/display.html:112
 #: ontask/templates/table/includes/partial_view_operations.html:22
 msgid "Delete the view"
 msgstr "Poista näkymä"
 
-#: ontask/templates/table/display.html:128
+#: ontask/templates/table/display.html:129
 msgid "Add a new row to the table"
 msgstr "Lisää uusi rivi taulukkoon"
 
-#: ontask/templates/table/display.html:129
+#: ontask/templates/table/display.html:130
 msgid "Row"
 msgstr "Rivi"
 
-#: ontask/templates/table/display.html:135
+#: ontask/templates/table/display.html:136
 msgid "Views"
 msgstr "Näkymät"
 
-#: ontask/templates/table/display.html:141
+#: ontask/templates/table/display.html:142
 #, fuzzy
 #| msgid "Create an identical view"
 msgid "Create a new table view"
 msgstr "Luo identtinen näkymä"
 
-#: ontask/templates/table/display.html:142
+#: ontask/templates/table/display.html:143
 msgid "View"
 msgstr "Näkymä"
 
-#: ontask/templates/table/display.html:150
+#: ontask/templates/table/display.html:151
 msgid "Full table"
 msgstr "Koko taulukko"
 
-#: ontask/templates/table/display.html:164
+#: ontask/templates/table/display.html:165
 msgid "Dashboard created with the view data"
 msgstr "Dashboard näkymän tiedoilla"
 
-#: ontask/templates/table/display.html:167
+#: ontask/templates/table/display.html:168
 msgid "Dashboard created with the table data"
 msgstr "Taulukon tiedoista luotu dashboard"
 
-#: ontask/templates/table/display.html:170
+#: ontask/templates/table/display.html:171
 #: ontask/templates/table/stat_view.html:24
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: ontask/templates/table/display.html:182
+#: ontask/templates/table/display.html:183
 msgid "Download a CSV file containing this table"
 msgstr "Lataa tämä taulukko CSV-tiedostona"
 
-#: ontask/templates/table/display.html:183
+#: ontask/templates/table/display.html:184
 msgid "CSV Download"
 msgstr "CSV-lataus"
 
-#: ontask/templates/table/display.html:190
+#: ontask/templates/table/display.html:191
 msgid "New action using this view as filter"
 msgstr ""
 
-#: ontask/templates/table/display.html:192
+#: ontask/templates/table/display.html:193
 #, fuzzy
 #| msgid "Edit the filter"
 msgid "Action with filter"
 msgstr "Muokkaa suodatinta"
 
-#: ontask/templates/table/display.html:200
+#: ontask/templates/table/display.html:201
 #, fuzzy
 #| msgid "Row filter"
 msgid "Row filter:"
 msgstr "Rivisuodatin"
 
-#: ontask/templates/table/display.html:202
+#: ontask/templates/table/display.html:203
 msgid "No row filter defined. All rows are included."
 msgstr ""
 
-#: ontask/templates/table/display.html:220
+#: ontask/templates/table/display.html:221
 msgid ""
 "You may drag and drop a column header to change its position in the table"
 msgstr ""
@@ -5441,10 +5490,10 @@ msgid "Confirm view deletion"
 msgstr "Vahvista näkymän poistaminen"
 
 #: ontask/templates/table/includes/partial_view_delete.html:11
-#, python-format
-msgid ""
-"Are you sure you want to delete the view <strong>%(view.name)s</strong>?"
-msgstr "Haluatko varmasti poistaa näkymän <strong>%(view.name)s</strong>?"
+#, fuzzy, python-format
+#| msgid "Are you sure you want to delete the filter <strong>%(n)s</strong>?"
+msgid "Are you sure you want to delete the view <strong>%(n)s</strong>?"
+msgstr "Haluatko varmasti poistaa suodattimen <strong>%(n)s</strong>?"
 
 #: ontask/templates/table/includes/partial_view_delete.html:15
 msgid "Delete view"
@@ -5467,8 +5516,9 @@ msgid "Column: "
 msgstr "Sarake: "
 
 #: ontask/templates/table/stat_row.html:20
-#, python-format
-msgid "Stats for %(value)s"
+#, fuzzy, python-format
+#| msgid "Stats for %(value)s"
+msgid "Stats for %(reference_value)s"
 msgstr "Tilastot kohteelle %(value)s"
 
 #: ontask/templates/table/stat_view.html:22
@@ -5657,12 +5707,12 @@ msgstr "Muokkaa attribuuttia"
 msgid "Delete pair name/value"
 msgstr "Poista nimi/arvo -pari"
 
-#: ontask/templates/workflow/includes/partial_criterion_addedit.html:15
-#: ontask/templates/workflow/includes/partial_criterion_addedit.html:28
+#: ontask/templates/workflow/includes/partial_criterion_add_edit.html:15
+#: ontask/templates/workflow/includes/partial_criterion_add_edit.html:28
 msgid "Add criterion"
 msgstr "Lisää kriteeri"
 
-#: ontask/templates/workflow/includes/partial_criterion_addedit.html:17
+#: ontask/templates/workflow/includes/partial_criterion_add_edit.html:17
 #, python-format
 msgid "Edit criterion <strong>%(n)s</strong>"
 msgstr "Muokkaa kriteeriä <strong>%(n)s</strong>"
@@ -5679,16 +5729,16 @@ msgstr "Tilastot tästä kriteeristä"
 msgid "Remove this criterion"
 msgstr "Poista tämä kriteeri"
 
-#: ontask/templates/workflow/includes/partial_criterion_remove.html:6
+#: ontask/templates/workflow/includes/partial_criterion_delete.html:6
 msgid "Confirm criterion deletion"
 msgstr "Vahvista kriteerin poistaminen"
 
-#: ontask/templates/workflow/includes/partial_criterion_remove.html:12
+#: ontask/templates/workflow/includes/partial_criterion_delete.html:12
 #, python-format
 msgid "Are you sure you want to remove criterion <strong>%(n)s</strong>?"
 msgstr "Haluatko varmasti poistaa kriteerin <strong>%(n)s</strong>?"
 
-#: ontask/templates/workflow/includes/partial_criterion_remove.html:16
+#: ontask/templates/workflow/includes/partial_criterion_delete.html:16
 msgid "Remove criterion"
 msgstr "Poista kriteeri"
 
@@ -5842,7 +5892,7 @@ msgid "This operation will also remove actions, table views and records."
 msgstr "Tämä toiminto poistaa myös toiminnot, näkymät ja tietueet."
 
 #: ontask/templates/workflow/includes/partial_workflow_flush.html:22
-msgid "The workflow has not data, so this operation will nave no effect."
+msgid "The workflow has no data, so this operation will nave no effect."
 msgstr ""
 
 #: ontask/templates/workflow/includes/partial_workflow_flush.html:28
@@ -5907,66 +5957,66 @@ msgstr "Jaa opettajien kanssa"
 msgid "Learners"
 msgstr "Oppijat"
 
-#: ontask/visualizations/plotly.py:99 ontask/visualizations/plotly.py:106
+#: ontask/visualizations/plotly.py:97 ontask/visualizations/plotly.py:104
 msgid "Your value"
 msgstr "Sinun arvosi"
 
-#: ontask/visualizations/templatetags/vis_include.py:21
+#: ontask/visualizations/templatetags/vis_include.py:19
 msgid "Action object not found when processing tag"
 msgstr "Toimmin kohdetta ei löydy tunnistetta käsiteltäessä"
 
-#: ontask/visualizations/templatetags/vis_include.py:26
+#: ontask/visualizations/templatetags/vis_include.py:24
 #, python-brace-format
 msgid "Column {0} does not exist"
 msgstr "Saraketta {0} ei ole olemassa"
 
-#: ontask/workflow/forms/attribute_shared.py:56
+#: ontask/workflow/forms/attribute_shared.py:54
 #, fuzzy
 #| msgid "An action with this name already exists"
 msgid "An attribute with this name already exists."
 msgstr "Tämänniminen toiminto nimi on jo olemassa"
 
-#: ontask/workflow/forms/attribute_shared.py:64
+#: ontask/workflow/forms/attribute_shared.py:62
 msgid "There is a column with this name. Please change."
 msgstr "Tämänniminen sarake on jo olemassa. Vaihda nimi, ole hyvä."
 
-#: ontask/workflow/forms/attribute_shared.py:77
+#: ontask/workflow/forms/attribute_shared.py:75
 msgid "There is a condition already with this name."
 msgstr "Tämänniminen ehto on jo olemassa."
 
-#: ontask/workflow/forms/attribute_shared.py:97
+#: ontask/workflow/forms/attribute_shared.py:95
 msgid "User email"
 msgstr "Käyttäjän sähköpostiosoite"
 
-#: ontask/workflow/forms/attribute_shared.py:115
+#: ontask/workflow/forms/attribute_shared.py:113
 msgid "User not found"
 msgstr "Käyttäjää ei löydy"
 
-#: ontask/workflow/forms/attribute_shared.py:121
+#: ontask/workflow/forms/attribute_shared.py:119
 msgid "You do not need to add yourself to the share list"
 msgstr "Sinun ei tarvitse lisätä itseäsi jakolistalle"
 
-#: ontask/workflow/forms/attribute_shared.py:124
+#: ontask/workflow/forms/attribute_shared.py:122
 msgid "User already in the list"
 msgstr "Käyttäjä on jo luettelossa"
 
-#: ontask/workflow/forms/workflow.py:31
+#: ontask/workflow/forms/workflow.py:29
 msgid "You need to provide a name for the workflow."
 msgstr "Työnkululle on annettava nimi."
 
-#: ontask/workflow/forms/workflow.py:46 ontask/workflow/forms/workflow.py:98
+#: ontask/workflow/forms/workflow.py:44 ontask/workflow/forms/workflow.py:96
 msgid "A workflow with this name already exists"
 msgstr "Samanniminen työnkulku on jo olemassa"
 
-#: ontask/workflow/forms/workflow.py:72
+#: ontask/workflow/forms/workflow.py:70
 msgid "File"
 msgstr "Tiedosto"
 
-#: ontask/workflow/forms/workflow.py:73
+#: ontask/workflow/forms/workflow.py:71
 msgid "File containing a previously exported workflow"
 msgstr "Tiedosto, joka sisältää aiemmin viedyn työnkulun"
 
-#: ontask/workflow/forms/workflow.py:88
+#: ontask/workflow/forms/workflow.py:86
 msgid "Incorrect form request (it is not multipart)"
 msgstr "Väärän muotoinen pyyntö (ei ole moniosainen)"
 
@@ -5993,88 +6043,159 @@ msgid ""
 msgstr ""
 "Samanniminen työnkulku on jo olemassa. Syötä työnkulun nimi tuontisivulla."
 
-#: ontask/workflow/services/import_export.py:84
-#: ontask/workflow/services/import_export.py:131
+#: ontask/workflow/services/import_export.py:82
+#: ontask/workflow/services/import_export.py:129
 msgid "Incorrect file. Expecting a GZIP file (exported workflow)."
 msgstr "Virheellinen tiedosto."
 
-#: ontask/workflow/services/import_export.py:134
+#: ontask/workflow/services/import_export.py:132
 #, python-brace-format
 msgid "Unable to import workflow. Exception: {0}"
 msgstr "Työnkulkua ei voida tuoda. Poikkeus: {0}"
 
-#: ontask/workflow/services/import_export.py:137
+#: ontask/workflow/services/import_export.py:135
 #, python-brace-format
 msgid "Unable to import workflow. Validation error: {0}"
 msgstr "Työnkulkua ei voida tuoda. Validointivirhe: {0}"
 
-#: ontask/workflow/services/import_export.py:142
+#: ontask/workflow/services/import_export.py:140
 msgid "Workflow data with incorrect structure."
 msgstr "Työnkulun tiedot, joiden rakenne on virheellinen."
 
-#: ontask/workflow/services/import_export.py:145
+#: ontask/workflow/services/import_export.py:143
 #, python-brace-format
 msgid "Unable to import workflow: {0}"
 msgstr "Työnkulkua ei voida tuoda: {0}"
 
-#: ontask/workflow/services/luser_update.py:88
+#: ontask/workflow/services/luser_update.py:86
 msgid "Learner emails successfully updated."
 msgstr "Oppijoiden sähköpostit päivitetty onnistuneesti."
 
-#: ontask/workflow/services/workflow_crud.py:102
+#: ontask/workflow/services/workflow_crud.py:100
 #, python-brace-format
 msgid "Error while cloning workflow: {0}"
 msgstr "Virhe kopioidessa työnkulkua: {0}."
 
-#: ontask/workflow/services/workflow_ops.py:18
+#: ontask/workflow/services/workflow_ops.py:16
 msgid "Value"
 msgstr "Arvo"
 
-#: ontask/workflow/services/workflow_ops.py:113
+#: ontask/workflow/services/workflow_ops.py:111
 #, python-brace-format
 msgid "Incorrect email addresses \"{0}\"."
 msgstr "Virheellinen sähköpostiosoite ”{0}”."
 
-#: ontask/workflow/views/import_export.py:120
+#: ontask/workflow/views/import_export.py:102
 #, fuzzy, python-brace-format
 #| msgid "Workflow successfully cloned."
 msgid "Workflow {0} successfully imported."
 msgstr "Työnkulku kopioitiin onnistuneesti."
 
-#: ontask/workflow/views/share.py:67 ontask/workflow/views/share.py:75
+#: ontask/workflow/views/share.py:65 ontask/workflow/views/share.py:73
 #, fuzzy
 #| msgid "Unable to find user with id {0}"
 msgid "Unable to find user"
 msgstr "Ei löydetty käyttäjää, jolla id {0}"
 
-#: ontask/workflow/views/workflow_crud.py:43
+#: ontask/workflow/views/workflow_crud.py:41
 msgid ""
 "WARNING: Celery is not currently running. Please configure it correctly."
 msgstr "VAROITUS: Celery ei ole käynnissä. Konfiguroi se oikein, kiitos."
 
-#: ontask/workflow/views/workflow_crud.py:175
+#: ontask/workflow/views/workflow_crud.py:141
 msgid "Workflow successfully cloned."
 msgstr "Työnkulku kopioitiin onnistuneesti."
 
-#: ontask/workflow/views/workflow_ops.py:154
+#: ontask/workflow/views/workflow_ops.py:139
 msgid "The list of workflow users will be updated shortly."
 msgstr "Lista työnkulun käyttäjistä päivitetään pian."
 
-#: settings/base.py:347
+#: settings/base.py:201
 msgid "English"
 msgstr "englanti"
 
-#: settings/base.py:347
+#: settings/base.py:201
 msgid "Spanish"
 msgstr "espanja"
 
-#: urls.py:27
+#: urls.py:25
 msgid ""
 "The OnTask API offers functionality to manipulate workflows, tables and "
 "logs. The interface provides CRUD operations over these objects."
 msgstr ""
 "OnTask API tarjoaa toimintoja työnkulkujen, taulukoiden ja lokien "
 "käsittelyyn. Rajapinta mahdollistaa CRUD-operaatiot näille kohteille."
+
+#, fuzzy
+#~| msgid "Action cloned"
+#~ msgid "Action not found."
+#~ msgstr "Toiminta kopioitu"
+
+#, python-brace-format
+#~ msgid "Incorrect level of attainment values ({0})."
+#~ msgstr "Virheelliset suoriutumistason arvot ({0})."
+
+#~ msgid "Cannot add criteria to a workflow without data"
+#~ msgstr "Et voi lisätä kriteeriä työnkulkuun, jossa ei ole tietoja"
+
+#~ msgid "Incorrect invocation of criterion edit function"
+#~ msgstr "Kriteerien muokkaustoiminnon virheellinen kutsuminen"
+
+#~ msgid "Incorrect invocation of criterion delete function"
+#~ msgstr "Kriteerien poistotoiminnon virheellinen kutsuminen"
+
+#, fuzzy
+#~| msgid "Cannot add a view to a workflow without data"
+#~ msgid "Cannot add todo items to a workflow without data"
+#~ msgstr "Et voi lisätä näkymää työnkulkuun ilman tietoja"
+
+#~ msgid "You cannot delete the only key column"
+#~ msgstr "Et voi poistaa ainoaa avainsaraketta"
+
+#~ msgid "Incorrect invocation of toggle question change function."
+#~ msgstr "Vaihtokysymyksen vaihtotoiminnon virheellinen kutsuminen."
+
+#, fuzzy
+#~| msgid "Key column to match the user id"
+#~ msgid "No column found matching the query"
+#~ msgstr "Avainsarake, joka vastaa käyttäjätunnusta (user id)"
+
+#, fuzzy
+#~| msgid "Key column to match the user id"
+#~ msgid "No column/condition found matching the query"
+#~ msgstr "Avainsarake, joka vastaa käyttäjätunnusta (user id)"
+
+#~ msgid "Excel upload form is not multiform"
+#~ msgstr "Excel-latauslomake ei ole monimuotoinen"
+
+#~ msgid "<PROTECTED>"
+#~ msgstr "<PROTECTED>"
+
+#~ msgid "Cannot add a view to a workflow without data"
+#~ msgstr "Et voi lisätä näkymää työnkulkuun ilman tietoja"
+
+#~ msgid "Page not found"
+#~ msgstr "Sivua ei löydy"
+
+#~ msgid "The page you requested was not found in the application."
+#~ msgstr "Pyytämääsi sivua ei löytynyt sovelluksesta."
+
+#~ msgid "Levels of Attainment"
+#~ msgstr "Suoriutumistaso"
+
+#~ msgid "Modify the levels of attainment (top row) of the rubric"
+#~ msgstr "Muokkaa rubriikin suoriutumistasoja (ylin rivi)"
+
+#~ msgid "Edit levels of attainment"
+#~ msgstr "Muokkaa suoriutumistasoja"
+
+#~ msgid "Change the columns present in the view"
+#~ msgstr "Muuta näkymässä näytettäviä sarakkeita"
+
+#, python-format
+#~ msgid ""
+#~ "Are you sure you want to delete the view <strong>%(view.name)s</strong>?"
+#~ msgstr "Haluatko varmasti poistaa näkymän <strong>%(view.name)s</strong>?"
 
 #~ msgid "Chinese"
 #~ msgstr "kiina"
@@ -6124,10 +6245,6 @@ msgstr ""
 #~ msgid "Edit the action"
 #~ msgstr "Muokkaa toimintoa"
 
-#, python-format
-#~ msgid "Are you sure you want to delete the filter <strong>%(n)s</strong>?"
-#~ msgstr "Haluatko varmasti poistaa suodattimen <strong>%(n)s</strong>?"
-
 #~ msgid "Name has to be different from all existing ones."
 #~ msgstr "Nimen on erottava kaikista olemassaolevista nimistä."
 
@@ -6174,9 +6291,6 @@ msgstr ""
 
 #~ msgid "OnTask Project"
 #~ msgstr "OnTask-projekti"
-
-#~ msgid "Change elements in view"
-#~ msgstr "Muuta näkymän elementtejä"
 
 #~ msgid "Full Table"
 #~ msgstr "Koko taulukko"
@@ -6271,9 +6385,6 @@ msgstr ""
 
 #~ msgid "Invalid email address in bcc email"
 #~ msgstr "Sähköpostiosoite bcc-kentässä ei ole kelvollinen"
-
-#~ msgid "Action not enabled for user {0}"
-#~ msgstr "Toiminto ei käytössä käyttäjälle {0}"
 
 #~ msgid "Incorrect canvas email action invocation."
 #~ msgstr "Virheellinen canvas-sähköpostitoiminnon kutsu."
@@ -6418,9 +6529,6 @@ msgstr ""
 #~ msgid "Unable to find connection with id {0}"
 #~ msgstr "Ei löydetty toimintoa, jolla id {0}"
 
-#~ msgid "The action cannot be executed"
-#~ msgstr "Toimintoa ei voida suorittaa"
-
 #, fuzzy
 #~| msgid "Establish a %(n)s"
 #~ msgid "Establish an %(n)s"
@@ -6459,9 +6567,6 @@ msgstr ""
 #~| msgid "Unable to add column: {0}"
 #~ msgid "Unable to add criterion: {0}"
 #~ msgstr "Ei voitu lisätä saraketta: {0}"
-
-#~ msgid "Unable to clone workflow: {0}"
-#~ msgstr "Ei voitu kloonata työnkulkua: {0}"
 
 #~ msgid "OnTask Permission denied"
 #~ msgstr "OnTask Lupa evätty"
@@ -6830,9 +6935,6 @@ msgstr ""
 #~ "Canvas-sähköposteja ei voi lähettää konfiguraatio-ongelman vuoksi. Pyydä "
 #~ "järjestelmänvalvojaa kytkemään viestijono käyttöön."
 
-#~ msgid "Unable to process datatype"
-#~ msgstr "Tietotyyppiä ei voida käsitellä"
-
 #~ msgid "Merge operation failed. Exception: "
 #~ msgstr "Yhdistäminen epäonnistui. Poikkeus: "
 
@@ -6870,9 +6972,6 @@ msgstr ""
 
 #~ msgid "Unable to perform the requested operation ({0})"
 #~ msgstr "Pyydettyä toimenpidettä ei voida suorittaa ({0})"
-
-#~ msgid "The workflow could not be accessed"
-#~ msgstr "Pääsy työnkulkuun ei ole saatavilla"
 
 #~ msgid "Execute one of the available plugins"
 #~ msgstr "Suorita jokin käytettävissä olevista liitännäisistä"

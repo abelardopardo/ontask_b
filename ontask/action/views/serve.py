@@ -184,12 +184,12 @@ class ActionServeActionLTIView(ActionServeActionBasicView):
         try:
             action_id = int(request.GET.get('pk'))
         except Exception:
-            messages.error(request, _('Action not found.'))
+            messages.error(request, _('Action not found'))
             return redirect('action:index')
 
         self.action = models.Action.objects.filter(pk=action_id).first()
         if not self.action:
-            messages.error(request, _('Action not found.'))
+            messages.error(request, _('Action not found'))
             return redirect('home')
 
         return super().dispatch(request, *args, **kwargs)

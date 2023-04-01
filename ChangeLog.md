@@ -1,4 +1,4 @@
-# 9.0 (2022-)
+# 9.0 (2022-09-25)
 
 ## Fixed
 
@@ -8,6 +8,7 @@
 
 - Prevent execution of django-siteprefs in migrations and fixture creation/uploading
 
+- Bug when managing OAuth calls for Canvas
 
 ## Changed
 
@@ -19,13 +20,15 @@
        DELETE FROM django_migrations WHERE app = 'authtools';
        UPDATE django_content_type SET app_label = 'ontask' WHERE app_label = 'authtools' AND model = 'user';
 
-- Full upgrade to Django 3.0 LTS
+- Full upgrade to Django 3.2 LTS
 
 - Django-authtools is no longer required. Code merged with app accounts
 
 - Removed migrations no longer needed
 
-- 
+- Removed Authtools (no longer needed)
+
+- Major rewriting to adopt Class Based Views throughout the platform.
 
 ## Added
 
