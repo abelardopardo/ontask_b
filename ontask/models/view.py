@@ -2,10 +2,8 @@
 from typing import Dict, Optional
 
 from django.db import models
-from django.db.models import JSONField
 from django.utils.translation import gettext_lazy as _
 
-from ontask.dataops import formula as dataops_formula, sql
 from ontask.models.column import Column
 from ontask.models.condition import Filter
 from ontask.models.common import CreateModifyFields, NameAndDescription
