@@ -1,5 +1,10 @@
 -r base.txt
-coverage==6.2
+coverage==6.3
+django-cprofile-middleware==1.0.5
 django-debug-toolbar==3.2.4
+django-silk==4.2.0
+mypy-extensions==0.4.3
+mypy==0.931
 selenium==4.1.0
+snakeviz==2.1.1
 Werkzeug==2.0.2

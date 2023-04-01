@@ -1,7 +1,7 @@
 #
 # Essential modules
 #
-# 1. Create a new env:
+# 1. Create a new env: (or virtualenv --clear your-env-name)
 #    python3 -m venv ~/.virtualenvs/env
 # 2. Activate:
 #    source ~/.virtualenvs/env/bin/activate
@@ -16,42 +16,46 @@
 # 8. Copy freeze.txt into base.txt
 # 9. Move lines in base.txt to development.txt
 #
-Django[argon2]==3.2.10
-celery
-django-environ
-django-extensions
-django-celery-beat
-django-celery-results
-django-bootstrap-datepicker-plus
-drf-yasg
-django-crispy-forms
-sorl-thumbnail
-django-widget-tweaks
-django-formtools
-django-siteprefs
-django-tables2
-django-import-export
-django-summernote==0.8.11.6  # Bug detected in 0.8.19 and 0.8.20
-django-jquery
-email-validator
-psycopg2
-pandas
-SQLAlchemy
-django-fernet-fields
-django-datetime-widget
-PyAthena
-smart-open
-cron-descriptor
-future
-html2text
-django-braces
-django-redis
-Pillow
-Sphinx
-selenium
-coverage
-supervisor
-django-debug-toolbar
-oauth2
-lxml
-Werkzeug
+Django[argon2]==3.2.10  # BSD-3-Clause
+celery  # BSD
+coverage  # Apache License 2.0
+cron-descriptor  # MIT
+django-bootstrap-datepicker-plus  # Apache License 2.0
+django-braces  # BSD
+django-celery-beat  # BSD-3-Clause
+django-celery-results # BSD-3-Clause
+django-cprofile-middleware  # MIT
+django-crispy-forms  # MIT
+django-debug-toolbar  # BSD
+django-environ  # MIT
+django-extensions  # MIT
+django-fernet-fields  # BSD
+django-formtools  # BSD
+django-import-export  # BSD
+django-redis  # BSD-3-Clause
+django-siteprefs  # BSD-3-Clause
+django-silk  # MIT
+django-summernote==0.8.11.6  # MIT Bug detected in 0.8.19 and 0.8.20
+django-tables2  # BSD
+django-widget-tweaks  # MIT
+django-datetime-widget  # BSD
+django-jquery  # MIT
+drf-yasg  # BSD
+email-validator  # CC0 1.0 Universal
+future  # MIT
+html2text  # MIT
+lxml  # BSD
+mypy  # MIT
+oauth2  # MIT
+pandas  # Apache License 2.0
+Pillow  # HPND: Historical Permission Notice and Disclaimer
+psycopg2  # LGPLv3
+PyAthena  # MIT
+selenium  # Apache License 2.0
+smart-open  # MIT
+SnakeViz  # BSD
+sorl-thumbnail  # BSD
+Sphinx  # BSD
+SQLAlchemy   # MIT
+supervisor  # BSD-derived
+Werkzeug  # BSD-3-Clause
