@@ -87,13 +87,6 @@
                          data-toggle="tooltip" data-container="body"
                          title="{% trans 'Execute a model with the existing data' %}">
                         {% trans 'Run Model' %}</a>
-                      <button type="button"
-                        class="dropdown-item js-workflow-flush{% if not request.session.ontask_workflow_rows %} disabled{% endif %}"
-                        data-url="{% url 'workflow:flush' request.session.ontask_workflow_id %}"
-                        data-toggle="tooltip"
-                        title="{% trans 'Delete the data in the table of this workflow' %}">
-                        {% trans 'Flush data table' %}
-                      </button>
                     </div>
                   </li>
                   <li class="nav-item dropdown">

@@ -887,24 +887,15 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         )
 
     def go_to_workflow_flush(self):
-        # Click in the top menu
-        self.selenium.find_element(By.ID, 'ontask-base-table').click()
-        # Wait for the Full View to be clickable
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.XPATH, '//button[normalize-space() = "Flush data table"]')
-            )
-        )
-        # Click on the flush
+        # Go to workflow ops first
+        self.go_to_workflow_operations()
         self.selenium.find_element(
             By.XPATH,
-            '//button[normalize-space() = "Flush data table"]'
+            '//button[contains(@class, "js-workflow-flush")]'
         ).click()
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
-                (By.XPATH, '//div[@id="modal-item"]//form')
-            )
-        )
+                (By.XPATH, '//form')))
         WebDriverWait(self.selenium, 10).until(
             ElementHasFullOpacity((By.XPATH, '//div[@id="modal-item"]'))
         )
