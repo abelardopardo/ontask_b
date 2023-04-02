@@ -1,20 +1,23 @@
 #
 # Essential modules
 #
-# 1. Create a new env: (or virtualenv --clear your-env-name)
+# 1. Create and activate a new env: (or virtualenv --clear your-env-name)
 #    python3 -m venv ~/.virtualenvs/env
-# 2. Activate:
 #    source ~/.virtualenvs/env/bin/activate
-# 3. Upgrade pip
+#
+#    or (remove all installed packages from a virtual env
+#
+#    pip uninstall -r requirements.txt -y 
+# 2. Upgrade pip
 #    python3 -m pip install --upgrade pip
-# 4. Install Wheel
+# 3. Install Wheel
 #    python3 -m pip install wheel
-# 5. Install essential:
+# 4. Install essential:
 #    LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip install -r requirements/essential.txt
-# 6. LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip freeze | sort > requirements/freeze.txt
-# 7. python3 -m pip check
-# 8. Copy freeze.txt into base.txt
-# 9. Move lines in base.txt to development.txt
+# 5. LDFLAGS=`echo $(pg_config --ldflags)` python3 -m pip freeze | sort > requirements/freeze.txt
+# 6. python3 -m pip check
+# 7. Copy freeze.txt into base.txt
+# 8. Move lines in base.txt to development.txt
 #
 Django[argon2]==3.2.15  # BSD-3-Clause
 celery  # BSD

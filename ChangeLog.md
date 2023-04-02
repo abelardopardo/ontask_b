@@ -47,8 +47,6 @@
 
 ## Changed
 
-- Major rebranding of the platform with the corporate colours of Clariate
-
 - Updated various libraries
 
 - Review configuration file to add clarity.

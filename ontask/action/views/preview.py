@@ -66,7 +66,7 @@ class ActionPreviewNextAllFalseView(ActionPreviewView):
     next to the one specified by idx
 
     The function uses the list stored in rows_all_false and finds the next
-    index in that list (or the first one if it is the last. It then invokes
+    index in that list (or the first one if it is the last). It then invokes
     the preview_response method.
     """
 

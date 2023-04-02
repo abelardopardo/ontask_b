@@ -390,7 +390,7 @@
     "fields": {
         "app": "ontask",
         "name": "notification_subject",
-        "text": "Clariate: Action executed"
+        "text": "OnTask: Action executed"
     }
 },
 {
