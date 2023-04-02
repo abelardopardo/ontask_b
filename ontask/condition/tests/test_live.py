@@ -88,7 +88,7 @@ class FilterLiveTest(ConditionTestBasic):
         # Preview button clickable
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
+                (By.XPATH, "//button[contains(@class, 'js-filter-edit')]"),
             )
         )
         # Spinner not visible
