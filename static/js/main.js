@@ -58,14 +58,13 @@ let ajaxSimplePost = function () {
     success: function (data) {
       if (typeof data.html_redirect != 'undefined') {
         if (data.html_redirect == "") {
-          $('#div-spinner').show();
           window.location.reload(true);
         } else {
           location.href = data.html_redirect;
         }
-      } else {
-        $('#div-spinner').hide();
+        return;
       }
+      $('#div-spinner').hide();
       // Remove option from menu
       $(this).remove();
     },
@@ -75,6 +74,10 @@ let ajaxSimplePost = function () {
   });
 }
 let ajaxPost = function(url, data, req_type) {
+  $('#div-spinner').show();
+  if (req_type == "post") {
+    data["csrfmiddlewaretoken"] = window.CSRF_TOKEN;
+  }
   $.ajax({
     url: url,
     type: req_type,
@@ -85,6 +88,7 @@ let ajaxPost = function(url, data, req_type) {
       $("#modal-item").modal("show");
     },
     success: function(data) {
+      $('#div-spinner').hide();
       if (typeof data.html_redirect != 'undefined') {
         if (data.html_redirect == "") {
           $('#div-spinner').show();
@@ -98,8 +102,8 @@ let ajaxPost = function(url, data, req_type) {
       if ($('#modal-item .ontask-datetimepicker').length != 0) {
         $('#modal-item .ontask-datetimepicker').datetimepicker(dtp_opts);
       }
-      if (document.getElementById("id_formula") != null) {
-        set_qbuilder('#id_formula', qbuilder_options);
+      if (document.getElementById("id__formula") != null) {
+        set_qbuilder('#id__formula', qbuilder_options);
       }
       if (document.getElementById("id_columns") != null) {
         set_element_select("#id_columns");
@@ -109,7 +113,6 @@ let ajaxPost = function(url, data, req_type) {
       }
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      $('#div-spinner').show();
       location.reload(true);
     }
   });
@@ -130,53 +133,54 @@ let loadForm = function () {
   ajaxPost(btn.attr("data-url"), data, 'get');
 };
 let saveForm = function () {
-    let form = $(this);
-    if (document.getElementById("id_formula") != null) {
-      formula = $("#builder").queryBuilder('getRules');
-      if (formula == null || !formula['valid']) {
-        return false;
-      }
-      f_text = JSON.stringify(formula, undefined, 2);
-      $("#id_formula").val(f_text);
+  let form = $(this);
+  if (document.getElementById("id__formula") != null) {
+    formula = $("#builder").queryBuilder('getRules');
+    if (formula == null || !formula['valid']) {
+      return false;
     }
-    let data = form.serializeArray();
-    data.push({"name": "csrfmiddlewaretoken", "value": window.CSRF_TOKEN});
-    if (document.getElementById("id_text_content") != null) {
-      value = get_id_text_content();
-      data.push({"name": "action_content", "value": value});
-    }
-    $("#modal-item .modal-content").html("");
-    $.ajax({
-      url: form.attr("action"),
-      data: data,
-      type: form.attr("method"),
-      dataType: 'json',
-      success: function (data) {
-        if (typeof data.html_redirect != 'undefined') {
-          if (data.html_redirect == "") {
-            $('#div-spinner').show();
-            window.location.reload(true);
-          } else if (data.html_redirect != null) {
-            location.href = data.html_redirect;
-          } else {
-            $("#modal-item").modal('hide');
-          }
-          return;
+    f_text = JSON.stringify(formula, undefined, 2);
+    $("#id__formula").val(f_text);
+  }
+  $('#div-spinner').show();
+  let data = form.serializeArray();
+  data.push({"name": "csrfmiddlewaretoken", "value": window.CSRF_TOKEN});
+  if (document.getElementById("id_text_content") != null) {
+    value = get_id_text_content();
+    data.push({"name": "action_content", "value": value});
+  }
+  $("#modal-item .modal-content").html("");
+  $.ajax({
+    url: form.attr("action"),
+    data: data,
+    type: form.attr("method"),
+    dataType: 'json',
+    success: function (data) {
+      $('#div-spinner').hide();
+      if (typeof data.html_redirect != 'undefined') {
+        if (data.html_redirect == "") {
+          $('#div-spinner').show();
+          window.location.reload(true);
+        } else if (data.html_redirect != null) {
+          location.href = data.html_redirect;
+        } else {
+          $("#modal-item").modal('hide');
         }
-        $("#modal-item .modal-content").html(data.html_form);
-        if (document.getElementById("id_formula") != null) {
-          set_qbuilder('#id_formula', qbuilder_options);
-        }
-        if (document.getElementById("id_columns") != null) {
-          set_element_select("#id_columns");
-        }
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        $('#div-spinner').show();
-        location.reload(true);
+        return;
       }
-    });
-    return false;
+      $("#modal-item .modal-content").html(data.html_form);
+      if (document.getElementById("id__formula") != null) {
+        set_qbuilder('#id__formula', qbuilder_options);
+      }
+      if (document.getElementById("id_columns") != null) {
+        set_element_select("#id_columns");
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      location.reload(true);
+    }
+  });
+  return false;
 };
 let setDateTimePickers = function() {
   if ($('.ontask-datetimepicker').length != 0) {
@@ -198,9 +202,6 @@ let select_next_button = function(e) {
 let toggleCheckBox = function () {
   elem = $(this);
   $('#div-spinner').show();
-  if (req_type == "post") {
-    data["csrfmiddlewaretoken"] = window.CSRF_TOKEN;
-  }
   $.ajax({
     url: $(this).attr("data-url"),
     type: 'post',
