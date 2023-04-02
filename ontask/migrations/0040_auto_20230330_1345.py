@@ -3,14 +3,14 @@
 from django.db import migrations, models
 import django.db.models.deletion
 
+
 def move_action_reference(apps, schema_editor):
     """Move action reference from field to drop to new field."""
 
     Action = apps.get_model('ontask', 'Action')
     for aitem in Action.objects.all():
         if aitem.filter:
-            aitem.filter_tmp = aitem.filter
-            aitem.filter.save()
+            aitem.filter_tmp.add(aitem.filter)
 
 
 class Migration(migrations.Migration):
