@@ -57,8 +57,9 @@ def log_table_server_side(
     if not dt_page.is_valid:
         return {'error': _('Incorrect request. Unable to process')}
 
-    # Get the logs
-    qs = workflow.logs
+    # Get the logs (restrict LOG_TYPES in case there are old events with
+    # incorrect codes (for backward compatibility)
+    qs = workflow.logs.filter(name__in=models.Log.LOG_TYPES)
     records_total = qs.count()
 
     if dt_page.search_value:
