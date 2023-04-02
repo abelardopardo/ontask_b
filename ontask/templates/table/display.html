@@ -124,14 +124,14 @@
       <div id="table-operation-buttons">
         <div class="text-center my-3">
           <a href="{% url 'dataops:rowcreate' %}"
-             class="shadow btn btn-outline-dark spin"
+             class="shadow btn btn-outline-primary spin"
              data-toggle="tooltip"
              title="{% trans 'Add a new row to the table' %}">
             <span class="fa fa-plus"></span> {% trans 'Row' %}
           </a>
           {% include 'column/includes/add_menu.html' %}
           <div id="select-view-name" class="dropdown btn-group shadow">
-            <button class="shadow btn btn-outline-dark dropdown-toggle" type="button"
+            <button class="shadow btn btn-outline-primary dropdown-toggle" type="button"
               id="viewsOperations" data-toggle="dropdown">
               <span class="fa fa-eye"></span> {% trans 'Views' %}
             </button>
@@ -159,7 +159,7 @@
               {% endif %}
             </div>
           </div>
-          <a class="shadow btn btn-outline-dark spin"
+          <a class="shadow btn btn-outline-primary spin"
             {% if object %}
               href="{% url 'table:stat_table_view' object.id %}"
               title="{% trans 'Dashboard created with the view data' %}"
@@ -174,10 +174,10 @@
           <a
             {% if object %}
               href="{% url 'table:csvdownload_view' object.id %}"
-              class="shadow btn btn-outline-dark"
+              class="shadow btn btn-outline-primary"
             {% else %}
               href="{% url 'table:csvdownload' %}"
-              class="shadow btn btn-outline-dark"
+              class="shadow btn btn-outline-primary"
             {% endif %}
                 data-toggle="tooltip"
                 title="{% trans 'Download a CSV file containing this table' %}">
@@ -186,7 +186,7 @@
           {% if object and not object.has_empty_formula %}
             <button
               type="button"
-              class="shadow btn btn-outline-dark js-create-action"
+              class="shadow btn btn-outline-primary js-create-action"
               data-url="{% url 'action:create_from_view' object.id %}"
               title="{% trans 'New action using this view as filter' %}"
               data-toggle="tooltip">

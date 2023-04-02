@@ -26,26 +26,26 @@
     {% endif %}
     {% if view.workflow.nrows %}
       <div class="text-center my-3">
-        <button type="button" class="shadow btn btn-outline-dark js-create-action"
+        <button type="button" class="shadow btn btn-outline-primary js-create-action"
                 data-url="{% url 'action:create' %}"
                 data-toggle="tooltip"
                 title="{% trans 'New action to collect data from learners' %}">
           <span class="fa fa-plus"></span> {% trans 'Action' %}
         </button>
         <a href="{% url 'action:import' %}"
-           class="shadow spin btn btn-outline-dark"
+           class="shadow spin btn btn-outline-primary"
            data-toggle="tooltip" title="{% trans 'Import action previously exported' %}">
           <span class="fa fa-upload"></span> {% trans 'Import actions' %}</a>
         <a href="{% url 'workflow:export_list_ask' view.workflow.id %}"
-           class="shadow spin btn btn-outline-dark"
+           class="shadow spin btn btn-outline-primary"
            data-toggle="tooltip" title="{% trans 'Choose and export actions' %}">
           <span class="fa fa-download"></span> {% trans 'Export actions' %}</a>
         <a href="{% url 'action:timeline' %}"
-           class="shadow btn btn-outline-dark"
+           class="shadow btn btn-outline-primary"
            data-toggle="tooltip" title="{% trans 'See when the actions were executed' %}">
           <span class="fa fa-clock"></span> {% trans 'Timeline' %}</a>
         {% if action_list|length %}
-          Show <select class="shadow btn btn-outline-dark" id="action-show-display">
+          Show <select class="shadow btn btn-outline-primary" id="action-show-display">
             <option selected value="">All actions</option>
             {% for c_key, c_val in action_types.items %}
               <option value="{{ c_key }}">{{ c_val }}</option>

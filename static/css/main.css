@@ -483,8 +483,8 @@ ul.timeline > li:before {
     z-index: 400;
 }
 
-:not(.note-editable):not(.note-codable):not(#id_text_content):not(#modal-item):focus {
-  background-color: #eebdaaff !important;
+:not(.btn):not(.note-editable):not(.note-codable):not(#id_text_content):not(#modal-item):focus {
+  background-color: #79dfc1ff !important;
 }
 
 /* Fix error in django-datetimepicker-plus with validation messages */

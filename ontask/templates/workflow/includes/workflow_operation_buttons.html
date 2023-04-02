@@ -1,26 +1,26 @@
 {% load i18n %}
 <div class="text-center my-3">
   <a href="{% url 'workflow:export_ask' view.workflow.id %}"
-     class="shadow btn btn-outline-dark spin"
+     class="shadow btn btn-outline-primary spin"
      data-toggle="tooltip" title="{% trans 'Export the workflow and its actions' %}">
     <span class="fa fa-download"></span> {% trans 'Export' %}
   </a>
   {% if request.user == view.workflow.user %}
     <button type="button"
-            class="shadow btn btn-outline-dark js-workflow-update"
+            class="shadow btn btn-outline-primary js-workflow-update"
             data-url="{% url 'workflow:update' view.workflow.id %}" data-toggle="tooltip"
       title="{% trans 'Change the name and description of this workflow' %}">
         <span class="fa fa-pencil-alt"></span> {% trans 'Rename' %}
     </button>
     <button type="button"
-            class="shadow btn btn-outline-dark js-workflow-clone"
+            class="shadow btn btn-outline-primary js-workflow-clone"
             data-url="{% url 'workflow:clone' view.workflow.id %}" data-toggle="tooltip"
             title="{% trans 'Create a duplicate of this workflow' %}">
       <span class="fa fa-clone"></span> {% trans 'Clone' %}
     </button>
     {% if view.workflow.nrows %}
       <button type="button"
-              class="shadow btn btn-outline-dark js-workflow-flush"
+              class="shadow btn btn-outline-primary js-workflow-flush"
               data-url="{% url 'workflow:flush' view.workflow.id %}" data-toggle="tooltip"
               title="{% trans 'Delete the data in the table of this workflow' %}">
         <span class="fa fa-minus-square"></span> {% trans 'Flush data table' %}
