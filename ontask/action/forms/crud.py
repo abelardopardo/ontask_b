@@ -17,6 +17,7 @@ from typing import Dict
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
+from tinymce.widgets import TinyMCE
 
 from ontask import models
 from ontask.core import RestrictedFileField
@@ -110,6 +111,10 @@ class RubricCellForm(forms.ModelForm):
 
         model = models.RubricCell
         fields = ('description_text', 'feedback_text')
+        widgets = {
+            'description_text': TinyMCE(attrs={'cols': 80, 'rows': 30}),
+            'feedback_text': TinyMCE(attrs={'cols': 80, 'rows': 30}),
+        }
 
 
 class RubricLOAForm(forms.Form):

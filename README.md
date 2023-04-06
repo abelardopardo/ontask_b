@@ -226,7 +226,7 @@ SOFTWARE.
 
 - [django-datetime-widget](https://github.com/asaglimbeni/django-datetime-widget) BSD
 
-- [django-summernote](https://github.com/summernote/django-summernote) MIT
+- [tinyMCE](https://github.com/tinymce/tinymce/blob/5.10.7/LICENSE.TXT) LGPL 2.1
 
 - [jQuery QueryBuilder](http://querybuilder.js.org/) MIT
 

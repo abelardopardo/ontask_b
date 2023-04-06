@@ -337,15 +337,6 @@ div[aria-labelledby="rowMoreOperations"] > button {
   padding-left: 1rem;
 }
 
-/* Needed to show summer note aligned to the left */
-.note-editor.note-frame.panel .note-editing-area .note-editable {
-    text-align: left;
-}
-/* Disable file upload in Summernote */
-.note-group-select-from-files {
-  display: none;
-}
-
 /*
 .dropdown-menu .btn {
     width:100%;
@@ -483,7 +474,7 @@ ul.timeline > li:before {
     z-index: 400;
 }
 
-:not(.btn):not(.note-editable):not(.note-codable):not(#id_text_content):not(#modal-item):focus {
+:not(.btn):not(.note-codable):not(#id_text_content):not(#modal-item):focus {
   background-color: #79dfc1ff !important;
 }
 

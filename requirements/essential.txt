@@ -39,8 +39,8 @@ django-redis  # BSD-3-Clause
 django-siteprefs  # BSD-3-Clause
 django-silk  # MIT
 django-storages  # BSD-3-Clause
-django-summernote==0.8.11.6  # MIT Bug detected in 0.8.19 and 0.8.20
 django-tables2  # BSD
+django-tinymce # MIT
 django-widget-tweaks  # MIT
 django-datetime-widget  # BSD
 django-jquery  # MIT

@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Tuple
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from django_summernote.widgets import SummernoteInplaceWidget
+from tinymce.widgets import TinyMCE
 
 from ontask import models
 from ontask.action import evaluate
@@ -30,7 +30,8 @@ class EditActionOutForm(forms.ModelForm):
             or self.instance.action_type == models.Action.RUBRIC_TEXT
             or self.instance.action_type == models.Action.EMAIL_REPORT
         ):
-            self.fields['text_content'].widget = SummernoteInplaceWidget()
+            self.fields['text_content'].widget = TinyMCE(
+                attrs={'cols': 80, 'rows': 30})
 
         # Add the Target URL field
         if (

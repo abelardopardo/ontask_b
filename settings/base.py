@@ -189,8 +189,8 @@ INSTALLED_APPS = [
     'import_export',
     'rest_framework',
     'rest_framework.authtoken',
-    'django_summernote',
     'jquery',
+    'tinymce',
 
     'ontask.apps.OnTaskConfig',
     'ontask.django_auth_lti',
@@ -442,29 +442,23 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {'anon': '100/minute', 'user': '1000/minute'}}
 SWAGGER_SETTINGS = {'SECURITY_DEFINITIONS': {'basic': {'type': 'basic'}}}
 
-# django-summernote
+
+# django-tinymce
 # ------------------------------------------------------------------------------
-SUMMERNOTE_THEME = 'bs4'
-SUMMERNOTE_CONFIG = {
-    'iframe': False,
-    'summernote': {
-        'width': '100%',
-        'height': '400px',
-        'disableDragAndDrop': True},
-    'css': (
-        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/'
-        + 'theme/base16-dark.min.css',),
-    'css_for_inplace': (
-        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/'
-        + 'theme/base16-dark.min.css',),
-    'codemirror': {
-        'theme': 'base16-dark',
-        'mode': 'htmlmixed',
-        'lineNumbers': True,
-        'lineWrapping': True},
-    # Disable attachment feature so all images are inlined
-    'disable_attachment': True,
-    'lazy': True}
+TINYMCE_JS_URL = os.path.join(STATIC_URL, 'js', 'tinymce/tinymce.min.js')
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "height": 500,
+    "menubar": False,
+    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
+    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
+    "code,help,wordcount",
+    "toolbar": "undo redo | formatselect | "
+    "bold italic backcolor | alignleft aligncenter "
+    "alignright alignjustify | bullist numlist outdent indent | "
+    "removeformat | help",
+}
+TINYMCE_COMPRESSOR = False
 
 # django-cors-headers
 # ------------------------------------------------------------------------------
@@ -657,7 +651,8 @@ def show_configuration() -> None:
     print('ONTASK_HELP_URL:', ONTASK_HELP_URL)
     print('SHOW_HOME_FOOTER_IMAGE (conf):', SHOW_HOME_FOOTER_IMAGE)
     print()
-    print('# Summernote')
+    print('# TinyMCE')
     print('# ----------')
-    print('SUMMERNOTE_THEME:', SUMMERNOTE_THEME)
-    print('SUMMERNOTE_CONFIG:', SUMMERNOTE_CONFIG)
+    print('TINYMCE_JS_URL:', TINYMCE_JS_URL)
+    print('TINYMCE_DEFAULT_CONFIG:', TINYMCE_DEFAULT_CONFIG)
+    print('TINYMCE_COMPRESSOR:', TINYMCE_COMPRESSOR)

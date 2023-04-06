@@ -12,8 +12,8 @@ function insertAtCaret(areaId, text) {
     txtarea.scrollTop = scrollPos;
 }
 let insertText = function(areaId, insert_text) {
-  if (typeof $('#' + areaId).summernote != 'undefined') {
-    $('#' + areaId).summernote('editor.insertText', insert_text);
+  if (typeof tinymce != 'undefined' && tinymce.get(areaId) != 'undefined') {
+    tinymce.get(areaId).execCommand('mceInsertContent', false, insert_text);
   } else {
     insertAtCaret(areaId, insert_text);
   }
@@ -21,9 +21,8 @@ let insertText = function(areaId, insert_text) {
 let insertConditionInContent = function() {
   let btn = $(this);
   let condition_text = ''
-  if (typeof $('#id_text_content').summernote != 'undefined') {
-    let range = $("#id_text_content").summernote('createRange');
-    let range_text = range.toString();
+  if (typeof tinymce != 'undefined' && tinymce.get('id_text_content') != 'undefined') {
+    let range_text = tinymce.get('id_text_content').selection.getContent();
     condition_text = gettext('YOUR TEXT HERE');
     if (range_text != '') {
       condition_text = range_text;
@@ -41,16 +40,10 @@ let insertAttributeInContent = function() {
   if (val == '') {
     return;
   }
-  if (typeof $('#id_text_content').summernote != 'undefined') {
-    $("#id_text_content").summernote('createRange');
-  }
   insertText('id_text_content', "{{ " + val + " }}");
   $(this).val(this.defaultSelected);
 }
 let insertRubricTextInContent = function() {
-  if (typeof $('#id_text_content').summernote != 'undefined') {
-    $("#id_text_content").summernote('createRange');
-  }
   insertText('id_text_content', "{% ot_insert_rubric_feedback %}");
   $(this).val(this.defaultSelected);
 }
@@ -58,9 +51,6 @@ let insertColumnListInContent = function() {
   let report_column_list = $('#id_columns').val();
   if (report_column_list == '') {
     return;
-  }
-  if (typeof $('#id_text_content').summernote != 'undefined') {
-    $('#id_text_content').summernote('restoreRange')
   }
   insertText(
     'id_text_content',
@@ -222,9 +212,12 @@ $(function () {
   $("#id_confirm_items").on("change", function(e) {
     select_next_button($(this));
   })
-  $('#modal-item').on('show.bs.modal', function (e) {
-    if ($("#id_text_content").summernote != null) {
-      $("#id_text_content").summernote('saveRange');
+  $('#modal-item').on('shown.bs.modal', function (e) {
+    if (typeof tinyMCE != 'undefined' && document.getElementById('id_description_text')) {
+      tinyMCE.init({selector: 'textarea#id_description_text'});
+    }
+    if (typeof tinyMCE != 'undefined' && document.getElementById('id_feedback_text')) {
+      tinyMCE.init({selector: 'textarea#id_feedback_text'});
     }
   });
 });

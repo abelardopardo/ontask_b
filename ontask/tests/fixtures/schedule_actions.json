@@ -560,33 +560,6 @@
     }
 },
 {
-    "model": "django_summernote.attachment",
-    "pk": 1,
-    "fields": {
-        "name": "download.jpeg",
-        "file": "django-summernote/2017-11-15/1c610ce3-ed8e-46c4-8a42-d391962ce1fb.jpeg",
-        "uploaded": "2017-11-15T05:49:24.475Z"
-    }
-},
-{
-    "model": "django_summernote.attachment",
-    "pk": 2,
-    "fields": {
-        "name": "2_10_8__Read_about_the_floating_point_representation_and_share_views_py_-_ontask_B_-____ontask_B_.png",
-        "file": "django-summernote/2017-11-15/81cac62b-51a3-4cdc-9cf7-817386021c2b.png",
-        "uploaded": "2017-11-15T05:51:48.392Z"
-    }
-},
-{
-    "model": "django_summernote.attachment",
-    "pk": 3,
-    "fields": {
-        "name": "download.jpeg",
-        "file": "django-summernote/2017-11-15/5aa534cf-1bcd-47ed-b9a8-2e1c9a8707bd.jpeg",
-        "uploaded": "2017-11-15T05:52:38.966Z"
-    }
-},
-{
     "model": "ontask.column",
     "pk": 2925,
     "fields": {

@@ -75,16 +75,6 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         SURVEY: True,
         TODO_LIST: True}
 
-    LOAD_SUMMERNOTE = {
-        PERSONALIZED_TEXT: True,
-        PERSONALIZED_CANVAS_EMAIL: False,
-        PERSONALIZED_JSON: False,
-        RUBRIC_TEXT: True,
-        EMAIL_REPORT: True,
-        JSON_REPORT: False,
-        SURVEY: False,
-        TODO_LIST: False}
-
     AVAILABLE_ACTION_TYPES = dict(ACTION_TYPES)
 
     workflow = models.ForeignKey(

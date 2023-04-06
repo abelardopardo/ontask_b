@@ -138,8 +138,8 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
 
         # insert the first mark
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "mark1");"""
+            """tinymce.get('id_text_content').execCommand('mceInsertContent', 
+            false, "mark1");"""
         )
 
         # Create filter.
@@ -150,16 +150,16 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.assertIn(
             "mark1",
             self.selenium.execute_script(
-                """return $("#id_text_content").summernote('code')"""
+                """return tinymce.get('id_text_content').getContent()"""
             )
         )
 
         # insert the second mark
         self.select_text_tab()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "mark2");"""
+            """tinymce.get('id_text_content').execCommand('mceInsertContent', 
+            false, "mark2");"""
         )
 
         # Modify the filter. Click in the edit filter button
@@ -170,16 +170,16 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.assertIn(
             "mark2",
             self.selenium.execute_script(
-                """return $("#id_text_content").summernote('code')"""
+                """return tinymce.get('id_text_content').getContent()"""
             )
         )
 
         # insert the third mark
         self.select_text_tab()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "mark3");"""
+            """tinymce.get('id_text_content').execCommand('mceInsertContent', 
+            false, "mark3");"""
         )
 
         # Click in the more ops and then the delete filter button
@@ -189,15 +189,15 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.assertIn(
             "mark3",
             self.selenium.execute_script(
-                """return $("#id_text_content").summernote('code')"""
+                """return tinymce.get('id_text_content').getContent()"""
             )
         )
         # insert the first mark
         self.select_text_tab()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "cmark1");"""
+            """tinymce.get('id_text_content').execCommand('mceInsertContent', 
+            false, "cmark1");"""
         )
 
         # Create condition. Click in the add condition button
@@ -210,15 +210,15 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.assertIn(
             "cmark1",
             self.selenium.execute_script(
-                """return $("#id_text_content").summernote('code')"""
+                """return tinymce.get('id_text_content').getContent()"""
             )
         )
 
         # insert the second mark
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "cmark2");"""
+            """tinymce.get('id_text_content').execCommand('mceInsertContent', 
+            false, "cmark2");"""
         )
 
         # Modify the condition. Click in the condition edit button
@@ -229,15 +229,15 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.assertIn(
             "cmark2",
             self.selenium.execute_script(
-                """return $("#id_text_content").summernote("code")"""
+                """return tinymce.get('id_text_content').getContent()"""
             )
         )
 
         # insert the third mark
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "cmark3");"""
+            """tinymce.get('id_text_content').execCommand('mceInsertContent', 
+            false, "cmark3");"""
         )
 
         # Delete the condition
@@ -249,7 +249,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.assertIn(
             "cmark3",
             self.selenium.execute_script(
-                """return $("#id_text_content").summernote('code')"""
+                """return tinymce.get('id_text_content').getContent()"""
             )
         )
 
@@ -699,13 +699,13 @@ class ActionSendReportActionCreate(
         # insert the action text
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, '//div[contains(@class, "note-editable")]')
+                (By.XPATH, '//div[contains(@class, "tox-edit-area")]')
             )
         )
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText',
-             "{0}");""".format(self.action_text)
+            """tinymce.get('id_text_content').execCommand('mceInsertContent',
+             false, "{0}");""".format(self.action_text)
         )
 
         # Open the column selection and select two columns
@@ -917,17 +917,18 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
         # insert the text
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, '//div[contains(@class, "note-editable")]')
+                (By.XPATH, '//div[contains(@class, "tox-edit-area")]')
             )
         )
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
-            'Dear {{ GivenName }}\n'
-            + 'Here are some suggestions based on the project rubric.\n'
-            + '{% ot_insert_rubric_feedback %}\n'
-            + 'Regards\n'
-            + 'Chris Doe\n'
-            + 'Course Coordinator')
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
+        self.insert_string_in_text_editor(
+            'id_text_content',
+            '<p>Dear {{ GivenName }}</p>'
+            + '<p>Some suggestions based on the project rubric.</p>'
+            + '{% ot_insert_rubric_feedback %}'
+            + '<p>Regards</p>'
+            + '<p>Chris Doe</p>'
+            + '<p>Course Coordinator</p>')
 
         self.select_rubric_tab()
         self.click_dropdown_option('insert-criterion', 'Structure')
@@ -958,9 +959,11 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
                 'js-rubric-cell-edit')
             items[index].click()
             self.wait_for_modal_open()
-            self.selenium.find_element(By.ID, 'id_description_text').send_keys(
+            self.insert_string_in_text_editor(
+                'id_description_text',
                 'DESC {0}'.format(index))
-            self.selenium.find_element(By.ID, 'id_feedback_text').send_keys(
+            self.insert_string_in_text_editor(
+                'id_feedback_text',
                 'FEEDBACK {0}'.format(index))
             # click on the DONE button
             self.selenium.find_element(
@@ -986,10 +989,10 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
         for idx, rubric_cell in enumerate(action.rubric_cells.all()):
             self.assertEqual(
                 rubric_cell.description_text,
-                'DESC {0}'.format(idx))
+                '<p>DESC {0}</p>'.format(idx))
             self.assertEqual(
                 rubric_cell.feedback_text,
-                'FEEDBACK {0}'.format(idx))
+                '<p>FEEDBACK {0}</p>'.format(idx))
 
 
 class ActionIndexSelector(

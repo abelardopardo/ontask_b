@@ -89,12 +89,6 @@ class ActionEditProducerBase(generic.UpdateView):
                 for cond in self.action.conditions.all()),
             'rows_all_false': self.action.get_row_all_false_count(),
 
-            # Page elements
-            'load_summernote': (
-                self.action.action_type == models.Action.PERSONALIZED_TEXT
-                or self.action.action_type == models.Action.EMAIL_REPORT
-                or self.action.action_type == models.Action.RUBRIC_TEXT
-            ),
             'query_builder_ops': self.workflow.get_query_builder_ops(),
             'vis_scripts': PlotlyHandler.get_engine_scripts()})
         return context

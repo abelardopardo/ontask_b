@@ -36,8 +36,8 @@ let insert_fields = function (the_form) {
     return true;
 };
 let get_id_text_content = function() {
-  if (typeof $("#id_text_content").summernote != "undefined") {
-    value = $("#id_text_content").summernote("code");
+  if (typeof tinymce != 'undefined' && tinymce.get('id_text_content') != 'undefined') {
+    value = tinymce.get('id_text_content').getContent();
   } else {
     value = $("#id_text_content").val();
   }

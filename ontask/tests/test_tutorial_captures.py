@@ -17,15 +17,15 @@ class TutorialCaptures(ScreenTests):
     workflow_name = 'BIOL1011'
     description = 'Course on Cell Biology'
 
-    script1 = 'Dear {{ GivenName }}\n'
+    script1 = '<p>Dear {{ GivenName }}</p>'
     script2 = \
-        '{% if Program is FASS %}Some suggestions for FASS{% endif %}\n'
+        '{% if Program is FASS %}Some suggestions for FASS{% endif %}'
     script3 = \
-        '{% if Program is FSCI %}Some suggestions for FSCI{% endif %}\n' + \
-        '{% if Program is FEIT %}Some suggestions for FEIT{% endif %}\n' + \
-        '{% if Program is SMED %}Sme suggestions for SMED{% endif %}\n' + \
-        'Kind regards\n' + \
-        'Jane Doe'
+        '{% if Program is FSCI %}Some suggestions for FSCI{% endif %}' + \
+        '{% if Program is FEIT %}Some suggestions for FEIT{% endif %}' + \
+        '{% if Program is SMED %}Sme suggestions for SMED{% endif %}' + \
+        '<p>Kind regards</p>' + \
+        '<p>Jane Doe</p>'
 
     def test(self):
         """
@@ -296,10 +296,8 @@ class TutorialCaptures(ScreenTests):
         # Action editor
         self.body_ss('tutorial_personalized_text_editor.png')
 
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
-            self.script1
-        )
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
+        self.insert_string_in_text_editor('id_text_content', self.script1)
 
         # Take picture of the html editor
         self.element_ss(
@@ -320,10 +318,8 @@ class TutorialCaptures(ScreenTests):
         self.cancel_modal()
 
         self.select_text_tab()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
-            self.script2
-        )
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
+        self.insert_string_in_text_editor('id_text_content', self.script2)
 
         # Take picture of the html editor
         self.element_ss(
@@ -350,10 +346,8 @@ class TutorialCaptures(ScreenTests):
 
         # Insert additional sentences for each program
         self.select_text_tab()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
-            self.script3
-        )
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
+        self.insert_string_in_text_editor('id_text_content', self.script3)
 
         # Take picture of the html editor
         self.element_ss(
@@ -729,33 +723,30 @@ class TutorialCaptures(ScreenTests):
 
         # Action editor
         self.select_text_tab()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
-            'Dear {{ GivenName }}\n' +
-            'Here are some suggestions.\n'
-        )
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
+        self.insert_string_in_text_editor(
+            'id_text_content',
+            '<p>Dear {{ GivenName }}</p><p>Here are some suggestions.</p>')
 
         # Add the text for those that failed
         for topic in topics:
-            self.selenium.find_element(
-                By.CLASS_NAME,
-                'note-editable').send_keys(
-                    ('{{% if {0} - Fail %}} Tips about {0} ' +
-                     'for those that failed.{{% endif %}}\n').format(
-                        topic[0:4].strip()))
+            self.insert_string_in_text_editor(
+                'id_text_content',
+                ('{{% if {0} - Fail %}} Tips about {0} ' +
+                 'for those that failed.{{% endif %}}').format(
+                    topic[0:4].strip()))
 
         # Add the text for those that passed
         for topic in topics:
-            self.selenium.find_element(
-                By.CLASS_NAME,
-                'note-editable').send_keys(
-                    ('{{% if {0} - Passed %}}Tips about {0} ' +
-                     'for those that passed.{{% endif %}}\n').format(
-                        topic[0:4].strip()))
+            self.insert_string_in_text_editor(
+                'id_text_content',
+                ('{{% if {0} - Passed %}}Tips about {0} ' +
+                 'for those that passed.{{% endif %}}').format(
+                    topic[0:4].strip()))
 
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').send_keys(
-            'Kind regards -- Jane Doe'
-        )
+        self.insert_string_in_text_editor(
+            'id_text_content',
+            '<p>Kind regards -- Jane Doe</p>')
 
         # Create the filter
         self.select_filter_tab()

@@ -22,15 +22,10 @@
     {% with js_var='qbuilder_options' allow_empty='false' empty_rules=False %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
-    $(document).ready(function() {
-      if (document.getElementById("id_text_content") != null) {
-        initSummernote();
+    $(document).on('focusin', function(e) {
+      if ($(e.target).closest(".tox-tinymce, .tox-tinymce-aux, .moxman-window, .tam-assetmanager-root").length) {
+        e.stopImmediatePropagation();
       }
-    });
-    $("#id_text_content").on("summernote.paste",function(e,ne) {
-      var bufferText = ((ne.originalEvent || ne).clipboardData || window.clipboardData).getData('Text');
-      ne.preventDefault();
-      document.execCommand('insertText', false, bufferText);
     });
     $(document).ready(function() {
       $('#rubric-table').DataTable({
@@ -70,12 +65,12 @@
       <div class="my-3">
         <ul class="nav nav-tabs border-0 justify-content-center"
             id="edit-personalized-text-tabs" role="tablist">
-          {% include 'action/includes/partial_text_summernote_tab_li.html' %}
+          {% include 'action/includes/partial_text_editor_tab_li.html' %}
           {% include 'condition/includes/partial_filter_tab_li.html' %}
           {% include 'action/includes/partial_rubric_tab_li.html' %}
         </ul>
         <div class="tab-content" id="edit-personalized-text-tab-content">
-          {% include 'action/includes/partial_text_summernote_tab_body.html' %}
+          {% include 'action/includes/partial_text_editor_tab_body.html' %}
           {% include 'condition/includes/partial_filter_tab_body.html' %}
           {% include 'action/includes/partial_rubric_tab_body.html' %}
         </div>

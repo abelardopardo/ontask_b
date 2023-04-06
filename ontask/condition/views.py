@@ -158,7 +158,7 @@ class ConditionDeleteView(
     UserIsInstructor,
     JSONFormResponseMixin,
     ConditionView,
-    generic.DeleteView,
+    generic.TemplateView,
 ):
     """Delete a condition."""
 
@@ -166,7 +166,14 @@ class ConditionDeleteView(
     template_name = 'condition/includes/partial_condition_delete.html'
     s_related = 'action'
 
-    def delete(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object is None:
+            return http.JsonResponse({'html_redirect': ''})
+
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
         condition = self.get_object()
         action = condition.action
 

@@ -1534,7 +1534,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.selenium.find_element(By.ID, 'text-tab').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, '//div[contains(@class, "note-editable")]')
+                (By.XPATH, '//div[contains(@class, "tox-edit-area")]')
             )
         )
 
@@ -1826,6 +1826,12 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
 
         # Wait for modal to close and for table to refresh
         self.wait_close_modal_refresh_table('attribute-table_previous')
+
+    def insert_string_in_text_editor(self, id: str, message: str):
+        """Given text editor ID insert the string in the text editor"""
+        self.selenium.execute_script(
+            """tinymce.get('{0}').execCommand('mceInsertContent', 
+            false, '{1}')""".format(id, message))
 
     def assert_column_name_type(self, name, col_type, row_idx=None):
         """

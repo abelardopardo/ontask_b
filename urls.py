@@ -69,7 +69,7 @@ urlpatterns = [
         'scheduler/',
         include('ontask.scheduler.urls', namespace='scheduler')),
     path('logs/', include('ontask.logs.urls', namespace='logs')),
-    path('summernote/', include('django_summernote.urls')),
+    path('tinymce/', include('tinymce.urls')),
     path(
         'ontask_oauth/',
         include('ontask.oauth.urls', namespace='ontask_oauth')),

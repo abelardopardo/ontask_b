@@ -1,9 +1,9 @@
 {% load i18n %}
 <p class="text-center"><strong>{% trans 'Description' %}</strong></p>
-<p>{{ description_text }}</p>
+<p>{{ description_text|safe }}</p>
 <hr/>
 <p class="text-center"><strong>{% trans 'Feedback' %}</strong></p>
-<p>{{ feedback_text }}</p>
+<p>{{ feedback_text|safe }}</p>
 <hr/>
 <button type="button"
           class="btn btn-sm btn-light js-rubric-cell-edit"

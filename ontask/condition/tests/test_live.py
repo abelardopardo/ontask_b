@@ -206,11 +206,10 @@ class ConditionLiveTest(ConditionTestBasic):
         # Action now has two complementary conditions, add the conditions to
         # the message
         self.select_text_tab()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
-        self.selenium.execute_script(
-            """$('#id_text_content').summernote(
-                   'editor.insertText',
-                   "{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}")""")
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
+        self.insert_string_in_text_editor(
+            'id_text_content',
+            '{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}')
 
         # Click the preview button
         self.open_browse_preview(close=False)
@@ -285,10 +284,10 @@ class ConditionDetectAllFalseRows(ConditionTestBasic):
 
         # insert the action text (not needed, but...)
         self.select_text_tab()
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText',
-            "{0}");""".format(self.action_text)
+            """tinymce.get('id_text_content').execCommand('mceInsertContent', 
+            false, "{0}");""".format(self.action_text)
         )
 
         # Click in the preview and circle around the 12 rows

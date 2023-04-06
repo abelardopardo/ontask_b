@@ -201,10 +201,10 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         # Click in the editor
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'note-editable')
+                (By.CLASS_NAME, 'tox-edit-area')
             )
         )
-        self.selenium.find_element(By.CLASS_NAME, 'note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
 
         # Insert attribute
         self.click_dropdown_option('attribute-selector', symbols + '3')
@@ -565,9 +565,10 @@ class DataopsNaNProcessing(
 
         # insert the action text
         self.select_text_tab()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "{0}");""".format(self.action_text)
+            """tinymce.get('id_text_content').execCommand('mceInsertContent', 
+            false, "{0}");""".format(self.action_text)
         )
 
         # Click in the preview and circle around the 12 rows
