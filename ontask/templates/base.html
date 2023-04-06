@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 {% load ontask_tags %}
-{% load staticfiles %}
-{% load thumbnail %}
+{% load static %}
 {% load i18n %}
 {% load cache %}
 <html {% if LANGUAGE_CODE %}lang="{{ LANGUAGE_CODE }}"{% endif %}>
@@ -20,11 +19,12 @@
     {% ontask_jquery %}
     <!-- Custom tags for the head tag -->
     {% block extrahead %}{% endblock extrahead %}
-    <link href="{% static 'css/main.css' %}?v={% ontask_version %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     {% ontask_shim_respond %}
   </head>
-  <body style="">
+  <body style="" class="regular-body">
     <div id="div-spinner">
       <img id="img-spinner" src="{% static 'img/loading.gif' %}"
            alt="Loading..."/>
@@ -33,7 +33,7 @@
       <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
         {% block navbar-brand %}
           {% cache 3600 site-navbar-brand %}
-            <img src="{% static 'img/logo.png' %}" height="30" alt="logo">
+            <img src="{% static 'img/logo.png' %}" height="35" alt="logo">
           {% endcache %}
         {% endblock %}
         {% block navbar-menu %}
@@ -71,12 +71,7 @@
                          class="btn dropdown-item spin{% if not request.session.ontask_workflow_rows %} disabled{% endif %}"
                          data-toggle="tooltip"
                          title="{% trans 'View the complete table' %}">
-                        {% trans 'Full view' %}</a>
-                      <a href="{% url 'table:view_index' %}"
-                         class="btn dropdown-item spin{% if not request.session.ontask_workflow_rows %} disabled{% endif %}"
-                         data-toggle="tooltip"
-                         title="{% trans 'Views available for this table' %}">
-                        {% trans 'Partial Views' %}</a>
+                        {% trans 'View data' %}</a>
                       <a href="{% url 'dataops:uploadmerge' %}"
                          class="btn dropdown-item spin"
                          data-toggle="tooltip"
@@ -92,13 +87,6 @@
                          data-toggle="tooltip" data-container="body"
                          title="{% trans 'Execute a model with the existing data' %}">
                         {% trans 'Run Model' %}</a>
-                      <button type="button"
-                        class="dropdown-item js-workflow-flush{% if not request.session.ontask_workflow_rows %} disabled{% endif %}"
-                        data-url="{% url 'workflow:flush' request.session.ontask_workflow_id %}"
-                        data-toggle="tooltip"
-                        title="{% trans 'Delete the data in the table of this workflow' %}">
-                        <span class="fa fa-floppy-remove"></span> {% trans 'Flush data table' %}
-                      </button>
                     </div>
                   </li>
                   <li class="nav-item dropdown">
@@ -119,8 +107,8 @@
               {% block navbar-right %}
                 {% if user.is_authenticated %}
                   {% if user.is_staff %}
-                    <li class="nav-item dropdown">
-                      <a href="#" id="ontask-base-admin"
+                    <li id="ontask-base-admin" class="nav-item dropdown">
+                      <a href="#"
                          class="nav-link dropdown-toggle{% if '_admin' in request.path %} active{% endif %}"
                          data-toggle="dropdown">
                         <span class="fa fa-cogs"></span> {% trans 'Admin' %}
@@ -250,14 +238,15 @@
     {% block footer %}
       {% cache 3600 site-footer LANGUAGE_CODE %}
         <nav class="navbar navbar-light bg-light" id="base_footer">
-          <span class="text-muted">&copy; {% trans 'OnTask Project' %} {% now 'Y' %} | {% trans 'Version:' %} {% ontask_version %} | <a href="{% url 'accessibility' %}">{% trans 'Accessibility' %}</a></span>
+          <span class="text-muted">&copy; {% now 'Y' %} {% include "_brandname.html" %} | {% trans 'Version:' %} {% ontask_version %} | <a href="{% url 'accessibility' %}">{% trans 'Accessibility' %}</a></span>
         </nav>
       {% endcache %}
     {% endblock %}
-    <script type="text/javascript" src="{% static 'js/initial.js' %}?v={% ontask_version %}"></script>
+    <script type="text/javascript" src="{% static 'js/initial.js' %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
     {% ontask_bootstrap_js %}
-    <script type="text/javascript" src="{% static 'js/main.js' %}?v={% ontask_version %}"></script>
+    <script type="text/javascript">window.CSRF_TOKEN = "{{ csrf_token }}";</script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
     {% block scripts %}
     {% endblock scripts %}
     {% if user.is_authenticated %}
@@ -277,6 +266,7 @@
           ignoreUserActivity: true,
           warnAfter: ({{ ONTASK_TIMEOUT }} - 60) * 1000,
           redirAfter: {{ ONTASK_TIMEOUT }} * 1000,
+          ajaxData: {"csrfmiddlewaretoken": window.CSRF_TOKEN},
           onStart: false
         });
       </script>

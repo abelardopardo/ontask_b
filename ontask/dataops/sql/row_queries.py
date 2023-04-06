@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """DB queries to manipulate rows."""
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
@@ -60,7 +58,7 @@ def get_row(
     :param column_names: Columns to access (all of them if empty)
     :param filter_formula: Optional filter formula
     :param filter_pairs: Optional dictionary to restrict the clause
-    :return: Dictionary with the row
+    :return: Dictionary with the row or None if something went wrong.
     """
     key_pair = {key_name: key_value}
     if filter_pairs:
@@ -80,7 +78,8 @@ def get_row(
     cursor.execute(query, fields)
 
     if cursor.rowcount != 1:
-        raise Exception('Query returned more than one row.')
+        # Either an empty row, or more than one, either case, invalid.
+        return None
 
     return cursor.fetchone()
 
@@ -273,3 +272,29 @@ def delete_row(table_name: str, kv_pair: Tuple[str, Any]):
     # Execute the query
     with connection.connection.cursor() as cursor:
         cursor.execute(query, query_fields)
+
+
+def get_table_row_by_index(
+    workflow,
+    filter_formula,
+    idx: int,
+):
+    """Select the set of elements in the row with the given index.
+
+    :param workflow: Workflow object storing the data
+    :param filter_formula: Condition object to filter the data (or None)
+    :param idx: Row number to get (first row is idx = 1)
+    :return: A dictionary with the (column_name, value) data or None if the
+     index is out of bounds
+    """
+    # Get the data
+    df_data = get_rows(
+        workflow.get_data_frame_table_name(),
+        column_names=workflow.get_column_names(),
+        filter_formula=filter_formula)
+
+    # If the data is not there, return None
+    if idx > df_data.rowcount:
+        return None
+
+    return df_data.fetchall()[idx - 1]

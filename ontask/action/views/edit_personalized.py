@@ -1,181 +1,99 @@
-# -*- coding: utf-8 -*-
-
 """Views to edit actions that send personalized information."""
-from typing import Optional
+from typing import Dict
 
 from django import http
-from django.contrib.auth.decorators import user_passes_test
-from django.template.loader import render_to_string
+from django.contrib import messages
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
+from django.views import generic
 
 from ontask import models
 from ontask.action import forms
-from ontask.core import ajax_required, get_action, get_view, is_instructor
+from ontask.core import (
+    ActionView, JSONFormResponseMixin, UserIsInstructor,
+    ajax_required)
 
 
-@user_passes_test(is_instructor)
-@csrf_exempt
-@ajax_required
-@get_action(pf_related='actions')
-def save_text(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    action: Optional[models.Action] = None,
-) -> http.JsonResponse:
-    """Save text content of the action.
+@method_decorator(ajax_required, name='dispatch')
+class ActionShowURLView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    ActionView,
+    generic.UpdateView,
+):
+    """Create page to show the URL to access an action.
 
-    :param request: HTTP request (POST)
-    :param pk: Action ID
-    :param workflow: Workflow being manipulated (set by the decorators)
-    :param action: Action being saved (set by the decorators)
-    :return: Nothing, changes reflected in the DB
+    Given a JSON request with an action pk returns the URL used to retrieve
+    the personalised message.
     """
-    del pk, workflow
-    # Wrong type of action.
-    if action.is_in:
-        return http.JsonResponse({'html_redirect': reverse('home')})
 
-    # If the request has the 'action_content', update the action
-    action_content = request.POST.get('action_content')
-    if action_content:
-        action.set_text_content(action_content)
+    http_method_names = ['get', 'post']
+    form_class = forms.EnableURLForm
+    template_name = 'action/includes/partial_action_show_url.html'
 
-    return http.JsonResponse({'html_redirect': ''})
+    def get_context_data(self, **kwargs) -> Dict:
+        """Get context data: The absolute URL for this action."""
+        context = super().get_context_data(**kwargs)
+        context['url_text'] = self.request.build_absolute_uri(
+                    reverse('action:serve_lti') + '?pk=' + str(self.object.id))
+        return context
 
-
-@user_passes_test(is_instructor)
-@ajax_required
-@get_action()
-def showurl(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    action: Optional[models.Action] = None,
-) -> http.JsonResponse:
-    """Create page to show URL to access action.
-
-    Function that given a JSON request with an action pk returns the URL used
-    to retrieve the personalised message.
-
-    :param request: Json request
-    :param pk: Primary key of the action to show the URL
-    :param workflow: Workflow being manipulated (set by the decorators)
-    :param action: Action being manipulated (set by the decorators)
-    :return: Json response with the content to show in the screen
-    """
-    del pk, workflow
-    form = forms.EnableURLForm(request.POST or None, instance=action)
-
-    if request.method == 'POST' and form.is_valid():
+    def form_valid(self, form) -> http.JsonResponse:
         if form.has_changed():
             # Reflect the change in the action element
             form.save()
 
             # Recording the event
-            action.log(
-                request.user,
+            self.object.log(
+                self.request.user,
                 models.Log.ACTION_SERVE_TOGGLED,
-                served_enabled=action.serve_enabled)
+                served_enabled=self.object.serve_enabled)
 
             return http.JsonResponse(
                 {'html_redirect': reverse('action:index')})
 
         return http.JsonResponse({'html_redirect': None})
 
-    # Render the page with the absolute URI
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'action/includes/partial_action_showurl.html',
-            {'url_text': request.build_absolute_uri(
-                reverse('action:serve_lti') + '?id=' + str(action.id)),
-             'form': form,
-             'action': action},
-            request=request),
-    })
 
-
-@user_passes_test(is_instructor)
-@csrf_exempt
-@ajax_required
-@require_POST
-@get_view()
-def add_attachment(
-    request: http.HttpRequest,
-    pk: int,
-    action_id: int,
-    workflow: Optional[models.Workflow] = None,
-    view: Optional[models.View] = None,
-) -> http.JsonResponse:
+@method_decorator(ajax_required, name='dispatch')
+class ActionAddRemoveAttachmentView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    ActionView,
+):
     """Add a View to an Email Report action
 
-    Function that given a JSON request with an action pk returns the URL used
-    to retrieve the personalised message.
-
-    :param request: Json request
-    :param pk: Primary key of the view to attach to the action
-    :param action_id: Action being manipulated
-    :param workflow: Workflow being manipulated (set by the decorators)
-    :param view: View object to be attached to the action
-    :return: Json response that prompts refresh after operation
+    Given a JSON POST request with action and view pk updates the attachment
+    field in the action.
     """
-    del pk
-    # Get the action
-    action = workflow.actions.filter(pk=action_id).first()
-    if not action or action.action_type != models.Action.EMAIL_REPORT:
-        return http.JsonResponse({'html_rediret': reverse('action:index')})
+    http_method_names = ['post']
+    is_add_operation = False
+    pf_related = 'attachments'
 
-    # If the request has 'action_content', update the action
-    action_content = request.POST.get('action_content')
-    if action_content:
-        action.set_text_content(action_content)
+    def post(self, request, *args, **kwargs) -> http.JsonResponse:
+        # Get the view
+        self.object = self.get_object()
+        view = self.workflow.views.filter(pk=kwargs['view_id']).first()
+        if not view or self.object.action_type != models.Action.EMAIL_REPORT:
+            # View is not there, or does not point to the action or points to
+            # the wrong action.
+            return http.JsonResponse({'html_redirect': reverse('action:index')})
 
-    action.attachments.add(view)
-    action.save()
+        # If the request has 'action_content', update the action
+        action_content = request.POST.get('action_content')
+        if action_content:
+            self.object.set_text_content(action_content)
 
-    # Refresh the page to show the column in the list.
-    return http.JsonResponse({'html_redirect': ''})
+        if self.is_add_operation:
+            messages.success(request, _('Attachment {0} added.').format(
+                view.name))
+            self.object.attachments.add(view)
+        else:
+            messages.success(request, _('Attachment removed.'))
+            self.object.attachments.remove(view)
 
+        self.object.save()
 
-@user_passes_test(is_instructor)
-@csrf_exempt
-@ajax_required
-@require_POST
-@get_view()
-def remove_attachment(
-    request: http.HttpRequest,
-    pk: int,
-    action_id: int,
-    workflow: Optional[models.Workflow] = None,
-    view: Optional[models.View] = None,
-) -> http.JsonResponse:
-    """Remove a view from an Email Report action
-
-    Function that given a JSON request with an action pk returns the URL used
-    to retrieve the personalised message.
-
-    :param request: Json request
-    :param pk: Primary key of the view to attach to the action
-    :param action_id: Action being manipulated
-    :param workflow: Workflow being manipulated (set by the decorators)
-    :param view: View object to be attached to the action
-    :return: Json response that prompts refresh after operation
-    """
-    del pk
-    # Get the action
-    action = workflow.actions.filter(pk=action_id).first()
-    if not action or action.action_type != models.Action.EMAIL_REPORT:
-        return http.JsonResponse({'html_rediret': reverse('action:index')})
-
-    # If the request has 'action_content', update the action
-    action_content = request.POST.get('action_content')
-    if action_content:
-        action.set_text_content(action_content)
-
-    action.attachments.remove(view)
-    action.save()
-
-    # Refresh the page to show the column in the list.
-    return http.JsonResponse({'html_redirect': ''})
+        # Refresh the page to show the column in the list.
+        return http.JsonResponse({'html_redirect': ''})

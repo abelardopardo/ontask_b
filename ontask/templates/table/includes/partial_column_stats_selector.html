@@ -1,9 +1,9 @@
 {% load i18n %}
 {% if columns_show_stat %}
   <div id="column-stat-selector" class="dropdown btn-group">
-    <button type="button" class="btn btn-outline-dark dropdown-toggle"
+    <button type="button" class="btn btn-outline-primary dropdown-toggle"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <span class="fa fa-bar-chart"></span> {% trans 'Column statistics' %}</button>
+      <span class="fa fa-chart-bar"></span> {% trans 'Column statistics' %}</button>
     <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="column-stat-selector">
       {% for column in columns_show_stat %}
         <button type="button" class="dropdown-item js-show-stats"

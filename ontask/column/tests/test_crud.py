@@ -1,34 +1,22 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for the column pages."""
-import os
 
-from django.conf import settings
 from rest_framework import status
 
 from ontask import models, tests
 from ontask.dataops import pandas
 
 
-class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
+class ColumnCrudBasic(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
     """Test column views."""
-
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'BIOL1011'
 
-    def test_column_create(self):
-        """Add a column."""
+class ColumnCreate(ColumnCrudBasic):
+    """Test column views."""
+
+    def test(self):
         column_name = 'cname'
         column_description = 'column description'
         column_categories = '   a,b,c,d   '
@@ -56,8 +44,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
             len(new_col.categories),
             len([txt.strip() for txt in column_categories.split(',')]))
 
-    def test_question_add(self):
-        """Test adding a question to a survey."""
+
+class ColumnCrudQuestionAdd(ColumnCrudBasic):
+    """Test Question Add."""
+
+    def test(self):
         # Get the survey action
         survey = self.workflow.actions.get(action_type=models.Action.SURVEY)
 
@@ -82,8 +73,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_question_rename(self):
-        """Test renaming a question in a survey."""
+
+class ColumnCrudQuestionRename(ColumnCrudBasic):
+    """Test Question Rename."""
+
+    def test(self):
         # Get the survey action and the first of the columns
         survey = self.workflow.actions.get(action_type=models.Action.SURVEY)
         column = survey.column_condition_pair.first().column
@@ -112,8 +106,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         column.refresh_from_db()
         self.assertEqual(column.name, old_name + '2')
 
-    def test_formula_column_add(self):
-        """Test adding a formula column."""
+
+class ColumnCrudAddFormulaColumn(ColumnCrudBasic):
+    """Test adding a new column with a formula."""
+
+    def test(self):
         # GET the form
         resp = self.get_response('column:formula_column_add', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
@@ -136,8 +133,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         self.assertTrue(
             df['FORMULA COLUMN'].equals(df['Q01'] + df['Q02']))
 
-    def test_random_column_add(self):
-        """Test adding a random column."""
+
+class ColumnCrudAddRandomColumn(ColumnCrudBasic):
+    """Test adding a random column."""
+
+    def test(self):
         # GET the form
         resp = self.get_response('column:random_column_add', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
@@ -158,8 +158,11 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         df = pandas.load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(all(0 < num < 13 for num in df['RANDOM COLUMN']))
 
-    def test_column_clone(self):
-        """Test adding a random column."""
+
+class ColumnCrudClone(ColumnCrudBasic):
+    """Test cloning a column."""
+
+    def test(self):
         column = self.workflow.columns.get(name='Q01')
         resp = self.get_response(
             'column:column_clone',
@@ -178,8 +181,12 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         df = pandas.load_table(self.workflow.get_data_frame_table_name())
         self.assertTrue(df['Copy of Q01'].equals(df['Q01']))
 
-    def test_column_restrict(self):
-        """Test Column restriction."""
+
+class ColumnCrudRestrict(ColumnCrudBasic):
+    """Test restricting values in a column."""
+
+    # Test Column restriction
+    def test(self):
         column = self.workflow.columns.get(name='Gender')
         self.assertEqual(column.categories, [])
 
@@ -199,19 +206,23 @@ class WorkflowTestViewColumnCrud(tests.OnTaskTestCase):
         column.refresh_from_db()
         self.assertEqual(set(column.categories), {'female', 'male'})
 
-    def test_assign_luser_column(self):
-        """Test assign luser column option."""
-        column = self.workflow.columns.get(name='email')
-        self.assertEqual(self.workflow.luser_email_column, None)
+        # Try again with a column with float values
+        column = self.workflow.columns.get(name='Q01')
+        df = self.workflow.data_frame()
+        values = sorted(df[column.name].dropna().unique())
 
         resp = self.get_response(
-            'workflow:assign_luser_column',
+            'column:column_restrict',
+            {'pk': column.id},
+            is_ajax=True)
+        self.assertTrue(status.is_success(resp.status_code))
+        self.assertIn('to the values 0.0, 1.0?', str(resp.content))
+
+        resp = self.get_response(
+            'column:column_restrict',
             {'pk': column.id},
             method='POST',
             is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
-
-        column = self.workflow.columns.get(name='email')
-        self.workflow.refresh_from_db()
-        self.assertEqual(self.workflow.luser_email_column, column)
-        self.assertEqual(self.workflow.lusers.count(), self.workflow.nrows)
+        column.refresh_from_db()
+        self.assertTrue(sorted(column.get_categories()) == sorted(values))

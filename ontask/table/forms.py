@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Forms to manage Views."""
 from builtins import next
 from typing import Dict
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 
@@ -16,22 +14,16 @@ class ViewAddForm(forms.ModelForm):
     # Columns to combine
     columns = forms.ModelMultipleChoiceField(queryset=None, required=False)
 
-    def __init__(self, data, *args, **kwargs):  # noqa: Z110
+    def __init__(self, *args, **kwargs):  # noqa: Z110
         """Initialize the object, store the workflow and rename fields."""
         self.workflow = kwargs.pop('workflow', None)
 
-        super().__init__(data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
-        # Rename some of the fields
+        # Rename some fields
         self.fields['name'].label = _('View name')
         self.fields['description_text'].label = _('View Description')
         self.fields['columns'].label = _('Columns to show')
-
-        # Required enforced in the server (not in the browser)
-        self.fields['formula'].required = False
-
-        # Filter should be hidden.
-        self.fields['formula'].widget = forms.HiddenInput()
 
         # The queryset for the columns must be extracted from the workflow
         self.fields['columns'].queryset = self.workflow.columns.all()
@@ -47,15 +39,12 @@ class ViewAddForm(forms.ModelForm):
         """
         form_data = super().clean()
 
-        if form_data['columns'].count() == 0:
+        if not form_data['columns'].exists():
             self.add_error(
                 None,
                 _('The view needs at least one column to show'))
 
-        if not next(
-            (col for col in form_data['columns'] if col.is_key),
-            None,
-        ):
+        if not form_data['columns'].filter(is_key=True).exists():
             self.add_error(
                 None,
                 _('There needs to be at least one key column'))
@@ -67,8 +56,7 @@ class ViewAddForm(forms.ModelForm):
         if name_exists:
             self.add_error(
                 'name',
-                _('There is already a view with this name.'),
-            )
+                _('There is already a view with this name.'))
 
         return form_data
 
@@ -76,4 +64,4 @@ class ViewAddForm(forms.ModelForm):
         """Define models and fields to consider."""
 
         model = models.View
-        fields = ['name', 'description_text', 'formula', 'columns']
+        fields = ['name', 'description_text', 'columns']

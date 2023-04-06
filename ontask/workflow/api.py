@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """API classes to manipulate workflows."""
 from typing import Optional
 
@@ -98,7 +96,7 @@ class WorkflowAPIRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 class WorkflowAPILock(APIView):
     """Information stating if the workflow is locked.
 
-    get: return information about the worklfow
+    get: return information about the workflow
 
     post: Tries to lock the workflow
 

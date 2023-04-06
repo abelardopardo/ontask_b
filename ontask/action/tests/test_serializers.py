@@ -1,60 +1,47 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for the scheduler pages."""
-import os
-
-from django.conf import settings
-
 from ontask import tests
 from ontask.action.serializers import ActionSelfcontainedSerializer
 
 
-class ActionTestSerializers(tests.OnTaskTestCase):
+class ActionTestSerializers(
+    tests.SimpleWorkflowTwoActionsFixture,
+    tests.OnTaskTestCase,
+):
     """Test stat views."""
-
-    fixtures = ['simple_workflow_two_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_two_actions.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow2'
-
     action_obj = {
+        "filter": {
+            "columns": [],
+            "description_text": "",
+            "_formula": {
+                "not": False, "rules": [{
+                    "id": "age-2",
+                    "type": "double",
+                    "field": "age-2",
+                    "input": "number",
+                    "value": "12",
+                    "operator": "greater"}],
+                "valid": True,
+                "condition": "AND"},
+            "selected_count": 2},
         "conditions": [
-            {
-                "columns": [],
-                "name": "old",
-                "description_text": "",
-                "formula": {
-                    "not": False, "rules": [{
-                        "id": "age",
-                        "type": "double",
-                        "field": "age",
-                        "input": "number",
-                        "value": "12",
-                        "operator": "greater"}],
-                    "valid": True,
-                    "condition": "AND"},
-                "n_rows_selected": 2,
-                "is_filter": True},
             {
                 "columns": [],
                 "name": "Registered",
                 "description_text": "",
-                "formula": {
+                "_formula": {
                     "not": False, "rules": [{
-                        "id": "registered",
+                        "id": "registered-2",
                         "type": "boolean",
-                        "field": "registered",
+                        "field": "registered-2",
                         "input": "radio", "value": "1",
                         "operator": "equal"}],
                     "valid": True,
                     "condition": "AND"},
-                "n_rows_selected": 1,
-                "is_filter": False}],
+                "selected_count": 1}],
         "column_condition_pair": [],
         "is_out": True,
         "used_columns": [
@@ -87,14 +74,13 @@ class ActionTestSerializers(tests.OnTaskTestCase):
         "rows_all_False": [2],
         "text_content": "<p>Hi {{ name }}</p><p>ATT: "
                         + "{{ attribute name }}</p><p>COL: " +
-                        "{{ registered }}</p><p>{% if Registered %}"
+                        "{{ registered-2 }}</p><p>{% if Registered %}"
                         + "Thank you for registering{% else %}"
                         + "Remember to register{% endif %}</p>",
-        "target_url": "", "shuffle": False}
+        "target_url": "",
+        "shuffle": False}
 
-    def test_serializer(self):
-        """Test the self-contained action serializer."""
-        # Try to create a view with a name that already exists.
+    def test(self):
         action_data = ActionSelfcontainedSerializer(
             data=self.action_obj,
             many=False,

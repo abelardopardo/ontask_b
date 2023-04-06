@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to clone action/conditions."""
 import copy
 
@@ -31,6 +29,19 @@ def do_clone_action(
     if new_workflow is None:
         new_workflow = action.workflow
 
+    # Clone the filter
+    new_filter = None
+    if action.filter is not None:
+        if getattr(action.filter, 'view', None):
+            # The filter is in a view
+            new_filter = new_workflow.views.get(
+                name=action.filter.view.name).filter
+        else:
+            new_filter = services.do_clone_filter(
+                user,
+                action.filter,
+                new_workflow)
+
     new_action = models.Action(
         name=new_name,
         description_text=action.description_text,
@@ -44,7 +55,7 @@ def do_clone_action(
         text_content=action.text_content,
         target_url=action.target_url,
         shuffle=action.shuffle,
-    )
+        filter=new_filter)
     new_action.save()
 
     try:

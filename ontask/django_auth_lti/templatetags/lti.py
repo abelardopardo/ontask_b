@@ -2,7 +2,7 @@ import json
 
 from django import template
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import LOGGER
 from ontask.django_auth_lti.thread_local import get_current_request

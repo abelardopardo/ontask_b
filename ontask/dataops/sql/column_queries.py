@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """DB queries to manipulate columns."""
-from typing import List
+from typing import Dict, List
 
 from django.db import connection
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from psycopg2 import sql
 
 from ontask import OnTaskDBIdentifier
@@ -113,20 +111,22 @@ def is_column_unique(table_name: str, column_name: str) -> bool:
         return cursor.fetchone()[0]
 
 
-def get_df_column_types(table_name: str) -> List[str]:
-    """Get the list of data types in the given table.
+def get_df_column_types(table_name: str) -> Dict[str, str]:
+    """Get a dictionary of column names and data types in the given table.
 
     :param table_name: Table name
-    :return: List of SQL types
+    :return: Dictionary of column name: SQL Type
     """
     with connection.connection.cursor() as cursor:
         cursor.execute(sql.SQL(
-            'SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS '
+            'SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS '
             + 'WHERE TABLE_NAME = {0}').format(sql.Literal(table_name)))
 
-        type_names = cursor.fetchall()
+        type_names = dict(cursor.fetchall())
 
-    return [sql_to_ontask_datatype_names[dtype[0]] for dtype in type_names]
+    return {
+        col_name: sql_to_ontask_datatype_names[dtype]
+        for col_name, dtype in type_names.items()}
 
 
 def db_rename_column(table: str, old_name: str, new_name: str):
@@ -179,3 +179,39 @@ def get_text_column_hash(table_name: str, column_name: str) -> str:
     with connection.connection.cursor() as cursor:
         cursor.execute(query)
         return cursor.fetchone()[0]
+
+
+def get_column_distinct_values(table_name: str, column_name: str) -> List:
+    """Extract the values stored in a column of a given table.
+
+    :param table_name: Name of the table
+    :param column_name: Name of the column
+    :return: List of distinct values
+    """
+    query = sql.SQL(
+        'SELECT DISTINCT {0} FROM {1} WHERE {0} IS NOT NULL').format(
+        OnTaskDBIdentifier(column_name),
+        sql.Identifier(table_name))
+
+    with connection.connection.cursor() as cursor:
+        cursor.execute(query)
+        return [item[0] for item in cursor.fetchall()]
+
+
+def is_unique_column(table_name: str, column_name: str) -> bool:
+    """Check if a column has complete, unique non-empty values.
+
+    :param table_name: Name of the table
+    :param column_name: Name of the column
+    :return: Boolean encoding he answer
+    """
+    query = sql.SQL(
+        'SELECT CASE WHEN COUNT(DISTINCT {0}) = COUNT(*) ' +
+        'THEN TRUE ELSE FALSE END FROM {1}').format(
+        OnTaskDBIdentifier(column_name),
+        sql.Identifier(table_name))
+
+    with connection.connection.cursor() as cursor:
+        cursor.execute(query)
+        return cursor.fetchone()[0]
+

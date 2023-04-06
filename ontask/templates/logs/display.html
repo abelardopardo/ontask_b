@@ -10,7 +10,7 @@
   {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'logs/js/logs.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'logs/js/logs.js' %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
@@ -27,8 +27,9 @@
         processing: true,
         serverSide: true,
         ajax: {
-          url: "{% url 'logs:display_ss' %}",
+          url: "{% url 'logs:index_ss' %}",
           type: 'POST',
+          headers: {'X-CSRFToken': window.CSRF_TOKEN},
           deferRender: true,
         },
         ordering: false,
@@ -54,7 +55,7 @@
     <h1 class="text-center">{% trans 'Logs' %}<super>*</super></h1>
     <div class="text-center" id="log-table-page">
       <a href="{% url 'logs:export' workflow.id %}" download
-         class="shadow btn btn-outline-dark btn-sm js-logs-download"
+         class="shadow btn btn-outline-primary btn-sm"
          data-toggle="tooltip"
          title="{% trans 'Download a CSV file containing these logs' %}">
         <span class="fa fa-download"></span> {% trans 'CSV Download' %}
@@ -73,7 +74,7 @@
       </table>
     </div>
     <p class="text-left small mt-3"><strong><super>*</super></strong>{% blocktrans %}The platform records all operations
-      performed on the workflow as Logs. These elements are shown in the table above. You can view its content
+      performed on the workflow as Logs. These elements are shown in the table above. You can view the content
       by clicking on its number.{% endblocktrans %}</p>
   </div>
   {% include 'modal.html' %}

@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Forms required to schedule SQL upload/merge operation"""
 from typing import Dict
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 import ontask.connection.forms
@@ -15,7 +13,8 @@ from ontask.scheduler.forms import ScheduleBasicForm
 class ScheduleSQLUploadForm(
     ScheduleBasicForm,
     dataops_forms.MergeForm,
-    ontask.connection.forms.SQLRequestConnectionParam):
+    ontask.connection.forms.SQLRequestConnectionParam
+):
     """Form to request info for the SQL scheduled upload
 
     Three blocks of information are requested:
@@ -44,9 +43,9 @@ class ScheduleSQLUploadForm(
         label=_('Key column in new table. '
                 'Leave empty if uploading to empty workflow'))
 
-    def __init__(self, *args, **kargs):
-        """Initalize all the fields"""
-        super().__init__(*args, **kargs)
+    def __init__(self, *args, **kwargs):
+        """Initialize all the fields"""
+        super().__init__(*args, **kwargs)
         self.set_fields_from_dict(['dst_key', 'src_key', 'how_merge'])
 
         self.fields['how_merge'].required = False
@@ -59,10 +58,10 @@ class ScheduleSQLUploadForm(
             ('src_key', None),
             ('how_merge', None)])
 
-        # If the workflow has data, both keys have to be non empty, the
+        # If the workflow has data, both keys have to be non-empty, the
         # first one needs to be a unique column, and the merge method cannot
         # be empty
-        if self.workflow.has_data_frame():
+        if self.workflow.has_data_frame:
             if not form_data['dst_key'] or not form_data['src_key']:
                 self.add_error(
                     None,

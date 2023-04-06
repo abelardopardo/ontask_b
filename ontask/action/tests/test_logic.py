@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test task logic functions."""
 import os
 
@@ -7,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 from rest_framework import status
+from django.core import signing
 
 from ontask import models, tests
 from ontask.action import services
@@ -14,32 +13,30 @@ from ontask.core import SessionPayload
 from ontask.dataops import pandas
 
 
-class EmailActionTracking(tests.OnTaskTestCase):
+class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
     """Test Email tracking."""
 
-    fixtures = ['simple_email_action']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_email_action.sql')
+    trck_tokens = [signing.dumps(item) for item in
+        [{
+            'action': 2,
+            'sender': 'instructor01@bogus.com',
+            'to': 'student01@bogus.com',
+            'column_to': 'email',
+            'column_dst': 'EmailRead_1'},
+        {
+            'action': 2,
+            'sender': 'instructor01@bogus.com',
+            'to': 'student02@bogus.com',
+            'column_to': 'email',
+            'column_dst': 'EmailRead_1'},
+        {
+            'action': 2,
+            'sender': 'instructor01@bogus.com',
+            'to': 'student03@bogus.com',
+            'column_to': 'email',
+            'column_dst': 'EmailRead_1'}]]
 
-    trck_tokens = [
-        "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0by"
-        "I6InN0dWRlbnQwMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl"
-        "9kc3QiOiJFbWFpbFJlYWRfMSJ9:1hCeQr:oax6nggj9kBkSdz1oFXfYVz8R4I",
-        "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0byI6I"
-        "nN0dWRlbnQwMkBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl9kc3Q"
-        "iOiJFbWFpbFJlYWRfMSJ9:1hCeQr:nLzLJRAGgiJhZWyJ-D6oGXlIY_E",
-        "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0byI6In"
-        "N0dWRlbnQwM0Bib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl9kc3Qi"
-        "OiJFbWFpbFJlYWRfMSJ9:1hCeQr:5LuQISOvahDaiYuOYUufdfYRT_o"
-    ]
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
-
-    def test_tracking(self):
-        """Test that tracking hits are properly stored."""
+    def test(self):
         # Repeat the checks two times to test if they are accumulating
         for idx in range(1, 3):
             # Iterate over the tracking items
@@ -55,23 +52,17 @@ class EmailActionTracking(tests.OnTaskTestCase):
             for uemail in [x[1] for x in tests.user_info
                            if x[1].startswith('student')]:
                 self.assertEqual(
-                    int(data_frame.loc[data_frame['email'] == uemail,
-                               'EmailRead_1'].values[0]),
-                    idx
-                )
+                    int(
+                        data_frame.loc[
+                            data_frame['email'] == uemail,
+                            'EmailRead_1'].values[0]),
+                    idx)
 
-class ActionImport(tests.OnTaskTestCase):
+
+class ActionImport(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
     """Test action import."""
 
-    fixtures = ['simple_email_action']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_email_action.sql')
-
-    wflow_name = 'wflow1'
-
-    def test_do_import(self):
-        """Test the do_import_action functionality."""
+    def test(self):
         user = get_user_model().objects.get(email='instructor01@bogus.com')
         wflow = models.Workflow.objects.get(name=self.wflow_name)
 
@@ -85,23 +76,19 @@ class ActionImport(tests.OnTaskTestCase):
 
         models.Action.objects.get(name='Initial survey')
 
-class EmailActionDetectIncorrectEmail(tests.OnTaskTestCase):
-    """Test if incorrect email addresses are detected."""
 
-    fixtures = ['wrong_email']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'wrong_email.sql')
+class EmailActionDetectIncorrectEmail(
+    tests.WrongEmailFixture,
+    tests.OnTaskTestCase,
+):
+    """Test if incorrect email addresses are detected."""
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
-
-    def test_send_with_incorrect_email(self):
-        """Test the do_import_action functionality."""
+    def test(self):
         user = get_user_model().objects.get(email='instructor01@bogus.com')
-        wflow = models.Workflow.objects.get(name=self.workflow_name)
+        wflow = models.Workflow.objects.get(name=self.wflow_name)
         email_column = wflow.columns.get(name='email')
         action = wflow.actions.first()
 

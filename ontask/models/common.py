@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
 """Abstract model classes for common fields in mvarious objects."""
 from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 CHAR_FIELD_SMALL_SIZE = 512
 CHAR_FIELD_MID_SIZE = 1024

@@ -30,6 +30,9 @@ python3 manage.py create_superuser -u '$SUPERUSER_NAME' -e '$SUPERUSER_EMAIL' -p
 >&2 echo "Collecting static"
 python3 manage.py collectstatic --noinput
 
+# Change ownership of the whole project
+chown -R www-data.www-data /data/web
+
 # Wait for the database to be up and running
 until psql $DATABASE_URL -c '\l'; do
  >&2 echo "Postgres is not available in $DATABASE_URL - sleeping"

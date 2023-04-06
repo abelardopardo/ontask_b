@@ -1,13 +1,13 @@
 # -*- coding: UTF-8 -*-#
 
 """Classes to serialize Conditions."""
-from typing import Optional
+from typing import Dict
 
-from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from ontask import models
 from ontask.column.serializers import ColumnNameSerializer
+from ontask.core import OnTaskObjectIdField
 from ontask.dataops import formula
 
 try:
@@ -18,27 +18,7 @@ except NameError:
         return bogus  # noqa E731
 
 
-def _create_condition(validated_data, action):
-    """Create a new condition with the validated data.
-
-    :param validated_data: Dictionary with the data validated by the serializer
-    :param action: Action object to use as parent object.
-    :return: reference to new condition object.
-    """
-    condition_obj = models.Condition(
-        action=action,
-        name=validated_data['name'],
-        description_text=validated_data['description_text'],
-        formula=validated_data['formula'],
-        n_rows_selected=validated_data.get('n_rows_selected', -1),
-        is_filter=validated_data['is_filter'],
-    )
-    condition_obj.save()
-
-    return condition_obj
-
-
-class ConditionSerializer(serializers.ModelSerializer):
+class ConditionBaseSerializer(serializers.ModelSerializer):
     """Class to serialize a Condition."""
 
     # The columns field needs a nested serializer because at this point,
@@ -49,60 +29,128 @@ class ConditionSerializer(serializers.ModelSerializer):
     # required to restore the many to many relationship.
     columns = ColumnNameSerializer(required=False, many=True)
 
-    @profile
-    def create(self, validated_data, **kwargs) -> Optional[models.Condition]:
-        """Create a new condition object based on the validated_data.
+    @staticmethod
+    def set_columns(
+        cond_obj: models.ConditionBase,
+        columns_data: Dict
+    ):
+        """Set the column information in the condition/filter object.
 
-        :param validated_data: Validated data obtained by the parser
-        :param kwargs: Additional arguments (unused)
-        :return: Condition object
+        :param cond_obj: Condition/Filter object
+        :param columns_data: Serialized column name information
+        :return: Nothing. Side effects on the object
         """
-        del kwargs
-        condition_obj = None
-        try:
-            condition_obj = _create_condition(
-                validated_data,
-                self.context['action'])
+        if not columns_data:
+            # Columns data has no element, recompute from scratch
+            col_names = formula.get_variables(cond_obj.formula)
+        else:
+            col_names = [c_data['name'] for c_data in columns_data]
 
-            # Process columns
-            if validated_data.get('columns'):
-                # Load the columns pointing to the action (if any)
-                columns = ColumnNameSerializer(
-                    data=validated_data.get('columns'),
-                    many=True,
-                    required=False,
-                )
-                if columns.is_valid():
-                    cnames = [cdata['name'] for cdata in columns.data]
-                else:
-                    raise Exception(_('Incorrect column data'))
-            else:
-                cnames = formula.get_variables(condition_obj.formula)
+        # Set the columns in the condition
+        cond_obj.columns.set(
+            cond_obj.workflow.columns.filter(name__in=col_names))
 
-            # Set the condition values
-            condition_obj.columns.set(
-                self.context['action'].workflow.columns.filter(
-                    name__in=cnames),
-            )
-
-            # If n_rows_selected is -1, reevaluate
-            if condition_obj.n_rows_selected == -1:
-                condition_obj.update_n_rows_selected()
-
-            # Save condition object
-            condition_obj.save()
-        except Exception:
-            if condition_obj and condition_obj.id:
-                condition_obj.delete()
-            raise
-
-        return condition_obj
+        # Save condition object
+        cond_obj.save()
 
     class Meta:
         """Define object condition and select fields to serialize."""
 
+        abstract = True
+        exclude = [
+            'id',
+            'workflow',
+            'action',
+            'created',
+            'modified',
+            '_formula_text']
+
+
+class ConditionSerializer(ConditionBaseSerializer):
+
+    @staticmethod
+    def create_condition(
+        validated_data,
+        context: Dict
+    ) -> models.Condition:
+        """Create a new condition with the validated data.
+
+        :param validated_data: Dictionary with the data validated by the
+        serializer
+        :param context: Dictionary with context information
+        :return: new condition object
+        """
+        columns_data = validated_data.pop('columns', [])
+        workflow = context['workflow']
+
+        condition_obj = models.Condition.objects.create(
+            workflow=workflow,
+            action=context['action'],
+            **validated_data)
+
+        ConditionBaseSerializer.set_columns(condition_obj, columns_data)
+
+        return condition_obj
+
+    class Meta(ConditionBaseSerializer.Meta):
+        """Define object condition and select fields to serialize."""
+
         model = models.Condition
-        exclude = ('id', 'action', 'created', 'modified')
+
+
+class FilterSerializer(ConditionBaseSerializer):
+
+    object_id = OnTaskObjectIdField(required=False)
+
+    @staticmethod
+    def create_filter(
+        validated_data: Dict,
+        context: Dict
+    ) -> models.Filter:
+        """Create a new filter with the validated data.
+
+        :param validated_data: Dictionary with the data validated by the
+        serializer
+        :param context: Dictionary with context information
+        :return: new Filter object
+        """
+        columns_data = validated_data.pop('columns', [])
+        workflow = context['workflow']
+
+        filter_map = context['filter_map']
+        filter_id = validated_data.pop('object_id', None)
+        filter_obj = filter_map.get(filter_id)
+        if filter_obj:
+            return filter_obj
+
+        filter_obj = models.Filter.objects.create(
+            workflow=workflow,
+            view=context.get('view'),
+            **validated_data)
+        action = context.get('action')
+
+        if action:
+            action.filter = filter_obj
+            action.save()
+
+        if filter_id is not None:
+            filter_map[filter_id] = filter_obj
+
+        ConditionBaseSerializer.set_columns(filter_obj, columns_data)
+
+        return filter_obj
+
+    class Meta(ConditionBaseSerializer.Meta):
+        """Define object condition and select fields to serialize."""
+
+        model = models.Filter
+
+        exclude = [
+            'id',
+            'workflow',
+            'created',
+            'modified',
+            '_formula_text']
 
 
 class ConditionNameSerializer(serializers.ModelSerializer):
@@ -112,4 +160,4 @@ class ConditionNameSerializer(serializers.ModelSerializer):
         """Select the model and the only field required."""
 
         model = models.Condition
-        fields = ('name',)
+        fields = ['name']

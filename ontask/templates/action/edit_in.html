@@ -13,22 +13,19 @@
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
   <link href="{% static 'css/sol.css' %}" rel="stylesheet">
-  <link href="{% static 'css/query-builder.default.min.css' %}" rel="stylesheet">
+  {% ontask_query_builder_css %}
   {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
 {% block scripts %}
+  {% ontask_query_builder_js %}
   {% ontask_datetimepicker_js %}
-  <script src="{% static 'js/query-builder.standalone.min.js' %}" ></script>
-  {% with country=LANGUAGE_CODE|country %}
-    <script src="{% static 'js/query-builder.'|add:country|add:'.js' %}"></script>
-  {% endwith %}
   <script src="{% static 'js/sol.js' %}"></script>
-  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
-  <script src="{% static 'condition/js/condition.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'action/js/action.js' %}"></script>
+  <script src="{% static 'condition/js/condition.js' %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
-    {% with js_var='qbuilder_options' allow_empty='false' %}
+    {% with js_var='qbuilder_options' allow_empty='false' empty_rules=False %}
       {% include 'qbuilder_options.js' %}
     {% endwith %}
     if (document.getElementById("column-selected-table") != null) {
@@ -67,6 +64,7 @@
   <div class="container" id="action-in-editor">
     <h1 class="text-center">{{ action.name }}</h1>
     <div class="text-center my-3">
+      {% include 'table/includes/partial_column_stats_selector.html' %}
       <button type="button"
               class="shadow btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
               data-url="{% url 'action:preview' action.id 1 %}"
@@ -147,7 +145,7 @@
                     data-type="filter"
                     data-toggle="tooltip"
                     title="{% trans 'Edit description' %}">
-              <span class="fa fa-pencil"></span> {% trans 'Edit' %}</button>
+              <span class="fa fa-pencil-alt"></span> {% trans 'Edit' %}</button>
           </h5>
           {% if action.description_text %}
             <p class="border border-dark lead text-center">{{ action.description_text }}</p>
@@ -171,7 +169,7 @@
                 {% for column in key_columns %}
                   {% if column != key_selected.column %}
                     <button type="button" class="dropdown-item js-select-key-column-name"
-                            data-url="{% url 'action:select_key_column_action' action.id column.id 1 %}">{{ column.name }}</button>
+                            data-url="{% url 'action:select_key_column_action' action.id column.id %}">{{ column.name }}</button>
                   {% endif %}
                 {% endfor %}
               </div>

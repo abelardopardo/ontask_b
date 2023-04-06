@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
-
 """Testing logic functions in the package."""
 import datetime
 import io
-import os
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 import pandas as pd
 from rest_framework import status
@@ -14,10 +10,7 @@ from ontask import models, tests
 from ontask.dataops import formula, pandas, services, sql
 
 
-class DataopsMatrixManipulation(tests.OnTaskTestCase):
-    fixtures = ['test_merge']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'test_merge.sql')
-
+class DataopsMatrixBasic(tests.TestMergeFixture, tests.OnTaskTestCase):
     table_name = 'DUMP_BOGUS_TABLE'
 
     csv1 = """key,text1,text2,double1,double2,bool1,bool2,date1,date2
@@ -76,13 +69,13 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
 
         return df_dst, df_src
 
-    def test_df_equivalent_after_sql(self):
+
+class DataopsMatrixEquivalentAfterSQL(DataopsMatrixBasic):
+
+    def test(self):
 
         # Parse the CSV
-        df_source = services.load_df_from_csvfile(
-            io.StringIO(self.csv1),
-            0,
-            0)
+        df_source = services.load_df_from_csvfile(io.StringIO(self.csv1), 0, 0)
 
         # Store the DF in the DB
         pandas.store_table(df_source, self.table_name)
@@ -101,7 +94,10 @@ class DataopsMatrixManipulation(tests.OnTaskTestCase):
         # Data frames mut be identical
         assert df_source.equals(df_dst)
 
-    def test_merge_inner(self):
+
+class DataopsMatrixMergeInner(DataopsMatrixBasic):
+
+    def test(self):
 
         # Get the workflow
         self.workflow = models.Workflow.objects.all()[0]
@@ -164,7 +160,8 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         type_value,
         value1,
         value2,
-        value3):
+        value3
+    ):
 
         result1 = formula.evaluate(
             self.set_skel(
@@ -258,7 +255,10 @@ class FormulaEvaluation(tests.OnTaskTestCase):
             self.assertEqual(data_frame.shape[0], row_no)
             formula.evaluate(self.skel, formula.EVAL_TXT)
 
-    def test_eval_node(self):
+
+class FormulaTestEvaluation(FormulaEvaluation):
+
+    def test(self):
         #
         # EQUAL
         #
@@ -472,20 +472,23 @@ class FormulaEvaluation(tests.OnTaskTestCase):
              '4.0'],
             2.0,
             5.0)
-        self.do_operand('number',
+        self.do_operand(
+            'number',
             '{0}between',
             'double',
             ['1.0',
              '4.0'],
             None,
             None)
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}between',
             'datetime',
             ['2018-09-15T00:03:03', '2018-09-15T00:04:03'],
             datetime.datetime(2018, 9, 15, 0, 3, 30),
             datetime.datetime(2018, 9, 15, 0, 4, 30))
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             '{0}between',
             'datetime',
             ['2018-09-15T00:03:03', '2018-09-15T00:04:03'],
@@ -500,15 +503,18 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         self.do_operand('text', 'is_{0}null', 'string', None, None, 'aaa')
         self.do_operand('select', 'is_{0}null', 'boolean', None, None, True)
         self.do_operand('select', 'is_{0}null', 'boolean', None, None, False)
-        self.do_operand('text',
+        self.do_operand(
+            'text',
             'is_{0}null',
             'datetime',
             None,
             None,
             datetime.datetime(2018, 9, 15, 0, 3, 4))
 
-    def test_eval_sql(self):
 
+class FormulaTestSQLEvaluation(FormulaEvaluation):
+
+    def test(self):
         # Create the dataframe with the variables
         df = pd.DataFrame(
             [(1, 2.0, True, 'xxx', datetime.datetime(2018, 1, 1, 0, 0, 0)),
@@ -525,7 +531,8 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         self.do_sql_txt_operand('number', '{0}equal', 'double', '2.0')
         self.do_sql_txt_operand('select', '{0}equal', 'boolean', 'true')
         self.do_sql_txt_operand('text', '{0}equal', 'string', 'xxx')
-        self.do_sql_txt_operand('text',
+        self.do_sql_txt_operand(
+            'text',
             '{0}equal',
             'datetime',
             '2018-01-01T00:00:00')
@@ -533,7 +540,8 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         #
         # BEGINS WITH
         #
-        self.do_sql_txt_operand('text',
+        self.do_sql_txt_operand(
+            'text',
             '{0}begins_with',
             'string',
             'x')
@@ -541,14 +549,16 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         #
         # CONTAINS
         #
-        self.do_sql_txt_operand('text',
+        self.do_sql_txt_operand(
+            'text',
             '{0}contains',
             'string',
             'xx')
         #
         # ENDS WITH
         #
-        self.do_sql_txt_operand('text',
+        self.do_sql_txt_operand(
+            'text',
             '{0}ends_with',
             'string',
             'xx')
@@ -572,7 +582,8 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         #
         self.do_sql_txt_operand('number', 'less', 'integer', '2')
         self.do_sql_txt_operand('number', 'less', 'double', '3.2')
-        self.do_sql_txt_operand('text',
+        self.do_sql_txt_operand(
+            'text',
             'less',
             'datetime',
             '2018-01-02T00:00:00')
@@ -582,7 +593,8 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         #
         self.do_sql_txt_operand('number', 'less_or_equal', 'integer', '1')
         self.do_sql_txt_operand('number', 'less_or_equal', 'double', '2.0')
-        self.do_sql_txt_operand('text',
+        self.do_sql_txt_operand(
+            'text',
             'less_or_equal',
             'datetime',
             '2018-01-01T00:00:00')
@@ -592,7 +604,8 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         #
         self.do_sql_txt_operand('number', 'greater', 'integer', '0')
         self.do_sql_txt_operand('number', 'greater', 'double', '1.2')
-        self.do_sql_txt_operand('text',
+        self.do_sql_txt_operand(
+            'text',
             'greater',
             'datetime',
             '2017-01-01T00:00:00')
@@ -602,7 +615,8 @@ class FormulaEvaluation(tests.OnTaskTestCase):
         #
         self.do_sql_txt_operand('number', 'greater_or_equal', 'integer', '1')
         self.do_sql_txt_operand('number', 'greater_or_equal', 'double', '2.0')
-        self.do_sql_txt_operand('text',
+        self.do_sql_txt_operand(
+            'text',
             'greater_or_equal',
             'datetime',
             '2018-01-01T00:00:00')
@@ -634,14 +648,13 @@ class FormulaEvaluation(tests.OnTaskTestCase):
             0)
 
 
-class ConditionSetEvaluation(tests.OnTaskTestCase):
-    fixtures = ['test_condition_evaluation']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'test_condition_evaluation.sql')
+class ConditionSetEvaluation(
+    tests.TestConditionEvaluationFixture,
+    tests.OnTaskTestCase,
+):
     action_name = 'Test action'
 
-    def test_eval_conditions(self):
+    def test(self):
         # Get the action first
         self.action = models.Action.objects.get(name=self.action_name)
 
@@ -649,7 +662,7 @@ class ConditionSetEvaluation(tests.OnTaskTestCase):
         wflow_table = self.action.workflow.get_data_frame_table_name()
         filter_formula = self.action.get_filter_formula()
         column_names = self.action.workflow.get_column_names()
-        conditions = self.action.conditions.filter(is_filter=False)
+        conditions = self.action.conditions.all()
 
         # Get dataframe
         df = pandas.get_subframe(
@@ -685,16 +698,15 @@ class ConditionSetEvaluation(tests.OnTaskTestCase):
             assert cond_eval1 == cond_eval2
 
 
-class ConditionNameWithSymbols(tests.OnTaskTestCase):
-    fixtures = ['symbols_in_condition_name']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'symbols_in_condition_name.sql')
+class ConditionNameWithSymbols(
+    tests.SymbolsInConditionNameFixture,
+    tests.OnTaskTestCase,
+):
     action_name1 = 'bug 1'
     action_name2 = 'bug 2'
 
-    def test_action_1_preview(self):
-        """Test that first action renders correctly."""
+    # Test that first action renders correctly.
+    def test(self):
         self.workflow = models.Workflow.objects.all().first()
         self.user = get_user_model().objects.filter(
             email='instructor01@bogus.com'
@@ -705,11 +717,12 @@ class ConditionNameWithSymbols(tests.OnTaskTestCase):
         for action_name in [self.action_name1, self.action_name2]:
             action = self.workflow.actions.get(name=action_name)
             for index, row in df.iterrows():
-                condition_value = row['!#$%&()*+,-./\:;<=>?@[]^_`{|}~ 1'] < 12.5
+                condition_value = (
+                    row['!#$%&()*+,-./\\:;<=>?@[]^_`{|}~ 1'] < 12.5)
                 # JSON request to obtain preview
                 resp = self.get_response(
                     'action:preview',
-                    url_params={'pk': action.id, 'idx': index + 1},
+                    url_params={'pk': action.id, 'idx': (index + 1)},
                     is_ajax=True)
                 self.assertTrue(status.is_success(resp.status_code))
                 self.assertTrue(attribute_value in str(resp.content))
@@ -730,7 +743,7 @@ class ConditionNameWithSymbols(tests.OnTaskTestCase):
 class ColumnNameTooLarge(tests.OnTaskTestCase):
     """Test the storage of a dataframe with column that are too large."""
 
-    csv = """key,text1,text2,double1,double2,bool1,bool2,date1,date2
+    csv = """key,text1,text2,double1,double2,{0},bool2,date1,date2
               1.0,"d1_t1_1",,111.0,,True,,1/1/18 01:00:00+00:00,
               2.0,"d2_t1_2",,112.0,,False,,1/1/18 02:00:00+00:00,
               3.0,"",d1_t2_3,,123.0,,False,,1/2/18 03:00:00+00:00
@@ -738,10 +751,11 @@ class ColumnNameTooLarge(tests.OnTaskTestCase):
               5.0,"d1_t1_5",,115.0,,False,,1/1/18 05:00:00+00:00,
               6.0,"d1_t1_6",,116.0,,True,,1/1/18 06:00:00+00:00,
               7.0,,d1_t2_7,,126.0,,True,,1/2/18 07:00:00+00:00
-              8.0,,d1_t2_8,,127.0,,False,,1/2/18 08:00:00+00:00"""
+              8.0,,d1_t2_8,,127.0,,False,,1/2/18 08:00:00+00:00""".format(
+        'a' * (sql.COLUMN_NAME_SIZE + 1))
 
-    def upload_column_name_too_long(self):
-        """Use the table store to detect column names that are too long."""
+    # Use the table store to detect column names that are too long.
+    def test(self):
         data_frame = services.load_df_from_csvfile(io.StringIO(self.csv), 0, 0)
 
         self.assertTrue(any(

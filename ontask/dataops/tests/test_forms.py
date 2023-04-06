@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test form error detection."""
 import os
 
@@ -9,18 +7,20 @@ from rest_framework import status
 from ontask import tests
 
 
-class DataopsTestFormErrorsEmptyWorkflow(tests.OnTaskTestCase):
+class DataopsTestFormErrorsBasic(
+    tests.EmptyWorkflowFixture,
+    tests.OnTaskTestCase
+):
     """Test the form error detection."""
-
-    fixtures = ['empty_wflow']
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
 
-    def test_csv_upload(self):
-        """Test the CSV upload."""
+class DataopsTestCSVFormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):
+    """Test the form error detection."""
+
+    def test(self):
         # Get the regular form
         resp = self.get_response('dataops:csvupload_start')
         self.assertTrue(status.is_success(resp.status_code))
@@ -46,8 +46,11 @@ class DataopsTestFormErrorsEmptyWorkflow(tests.OnTaskTestCase):
                     'skip_lines_at_bottom': -1})
             self.assertNotEqual(resp.status_code, status.HTTP_302_FOUND)
 
-    def test_google_sheet_upload(self):
-        """Test the Google Sheet upload."""
+
+class DataopsTestGoogleFormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):
+    """Test the form error detection."""
+
+    def test(self):
         # Get the regular form
         resp = self.get_response('dataops:googlesheetupload_start')
         self.assertTrue(status.is_success(resp.status_code))
@@ -58,7 +61,7 @@ class DataopsTestFormErrorsEmptyWorkflow(tests.OnTaskTestCase):
             'dataops:googlesheetupload_start',
             method='POST',
             req_params={
-                'google_url': 'file://' + filename,
+                'google_url': 'file://' + filename + '/edit',
                 'skip_lines_at_top': -1,
                 'skip_lines_at_bottom': 0})
         self.assertNotEqual(resp.status_code, status.HTTP_302_FOUND)
@@ -71,8 +74,11 @@ class DataopsTestFormErrorsEmptyWorkflow(tests.OnTaskTestCase):
                 'skip_lines_at_bottom': -1})
         self.assertNotEqual(resp.status_code, status.HTTP_302_FOUND)
 
-    def test_s3_upload(self):
-        """Test the S3 upload."""
+
+class DataopsTestS3FormErrorsEmptyWorkflow(DataopsTestFormErrorsBasic):
+    """Test the form error detection."""
+
+    def test(self):
         # Get the regular form
         resp = self.get_response('dataops:s3upload_start')
         self.assertTrue(status.is_success(resp.status_code))

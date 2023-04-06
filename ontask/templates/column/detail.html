@@ -11,11 +11,11 @@
   <link href="{% static 'css/sol.css' %}" rel="stylesheet">
 {% endblock extrahead %}
 {% block scripts %}
-  {% if workflow %}
+  {% if view.workflow %}
     {% ontask_datetimepicker_js %}
     <script src="{% static 'js/sol.js' %}"></script>
-    <script src="{% static 'workflow/js/workflow.js' %}?v={% ontask_version %}"></script>
-    <script src="{% static 'column/js/column_move.js' %}?v={% ontask_version %}"></script>
+    <script src="{% static 'workflow/js/workflow.js' %}"></script>
+    <script src="{% static 'column/js/column_move.js' %}"></script>
     {% ontask_datatables_jquery_js %}
     {% ontask_datatables_bootstrap_js %}
     <script type="text/javascript">
@@ -35,6 +35,7 @@
             ajax: {
               url: "{% url 'column:index_ss' %}",
               type: 'POST',
+              headers: {'X-CSRFToken': window.CSRF_TOKEN},
             },
             columns: [
               {"data": "number", "class": "dt-center"},
@@ -84,7 +85,7 @@
       {% include 'workflow/includes/no_actions.html' %}
     {% endif %}
     <div class="text-center mb-3">
-      {% if workflow.nrows != 0 %}
+      {% if view.workflow.nrows != 0 %}
         {% include 'column/includes/add_menu.html' %}
       {% endif %}
     </div>
@@ -104,7 +105,6 @@
           </thead>
         </table>
       </div>
-      {% include 'table/includes/partial_type_legend.html' %}
       <p class="text-center">{% blocktrans %}You may drag and drop the columns from the left-most cell to change their position in the workflow.{% endblocktrans %}</p>
     {% endif %}
   </div>

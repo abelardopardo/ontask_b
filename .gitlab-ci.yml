@@ -1,43 +1,22 @@
 before_script:
+  - export PATH="$HOME/.local/bin:$PATH"
   - rm -f geckodriver.log
+  - cp $HOME/local.env settings/local.env
+  - dropdb --if-exists ontask
+  - createdb ontask
   - python3 -m pip install --upgrade --user pip
   - python3 -m pip install coverage
-  - python3 -m pip install --user -r requirements.txt
+  - python3 -m pip install -r requirements.txt
   - python3 manage.py collectstatic --no-input
   - python3 manage.py migrate
-
 stages:
   - Run tests
   - Build doc
 
-#services:
-#  - redis
-#  - postgres
-
-#prepare_celery:
-#  stage: Run tests
-#  allow_failure: true
-#  script:
-#    - supervisorctl -c supervisor/supervisor.conf shutdown
-#    - supervisord -c supervisor/supervisor.conf
-
 test:
   stage: Run tests
   script:
-    - coverage run ./manage.py test -v 2 ontask.workflow ontask.column ontask.dataops ontask.connection ontask.table ontask.condition ontask.action ontask.tests ontask.scheduler ontask.tasks
-  artifacts:
-    paths:
-      - htmlcov
-      - .coverage
-
-build_doc:
-  stage: Build doc
-  script:
-    - coverage run -a ./manage.py test -v 2 ontask.tests.create_screen_captures ontask.tests.scenario_01_captures ontask.tests.scenario_02_captures ontask.tests.scenario_03_captures ontask.tests.tutorial_captures ontask.tests.create_api_captures
-    - cd ontask/tests/images
-    - bash push.sh
-    - cd ../../..
-    - cd docs_src && make clean html copy_to_docs && cd ..
+    - coverage run ./manage.py test ontask.action ontask.column ontask.condition ontask.connection ontask.dataops ontask.logs ontask.scheduler ontask.table ontask.tasks ontask.workflow ontask.tests
     - coverage html
     - coverage report
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
@@ -46,27 +25,19 @@ build_doc:
       - htmlcov
       - .coverage
       - ontask/tests/images
-      - docs
 
-#variables:
-#  # Configure redis service (https://hub.docker.com/_/redis/)
-#  # Here's nothing to configure :)
-#  # POSTGRES_DB: custom_db
-#  # POSTGRES_USER: custom_user
-#  # POSTGRES_PASSWORD: custom_pass
-#
-#
-#connect:
-#  # Connect to PostgreSQL database as user postgres, without password
-#  image: redis
-#  script:
-#  - redis-cli -h redis PING
-#
-# connect:
-#  image: postgres
-#  script:
-#  # official way to provide password to psql: http://www.postgresql.org/docs/9.3/static/libpq-envars.html
-#  - export PGPASSWORD=$POSTGRES_PASSWORD
-#  - psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
-
-
+build_doc:
+  variables:
+    # Prevent any git checkout or cleanup. Add this for all jobs but the first one.
+    GIT_STRATEGY: none
+  stage: Build doc
+  script:
+    - cd tests/images
+    - bash push.sh
+    - cd ../..
+    - cd docs && make clean html copy_to_docs && cd ..
+  dependencies:
+    - test
+  artifacts:
+    paths:
+      - static/html

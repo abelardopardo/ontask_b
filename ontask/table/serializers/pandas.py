@@ -5,7 +5,7 @@ import base64
 from io import BytesIO
 import pickle
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 from rest_framework import serializers
 
@@ -42,11 +42,10 @@ def df_to_string(df):
     :param df: Pandas dataframe
     :return: Base64 encoded string of its pickled representation
     """
+    out_file = BytesIO()
     try:
-        out_file = BytesIO()
         pd.to_pickle(df, out_file)
     except ValueError:
-        out_file = BytesIO()
         pickle.dump(df, out_file)
 
     return base64.b64encode(out_file.getvalue())

@@ -48,10 +48,10 @@ class RequestValidatorMixin:
             self.oauth_server.verify_request(
                 oauth_request, self.oauth_consumer, {})
 
-        except oauth2.MissingSignature as e:
+        except oauth2.MissingSignature as exc:
             if handle_error:
                 return False
-            raise e
+            raise exc
         # Signature was valid
         return True
 

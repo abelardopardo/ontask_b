@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Process the scheduled actions."""
 from datetime import datetime
 
@@ -10,7 +8,7 @@ import pytz
 
 from ontask import CELERY_LOGGER, models
 from ontask.core import ONTASK_SCHEDULED_LOCKED_ITEM
-from ontask.tasks.execute_factory import task_execute_factory
+from ontask.tasks.execute_factory import TASK_EXECUTE_FACTORY
 
 
 def _update_item_status(s_item: models.ScheduledOperation):
@@ -87,7 +85,7 @@ def execute_scheduled_operation(s_item_id: int):
 
             payload = s_item.payload
 
-            task_execute_factory.execute_operation(
+            TASK_EXECUTE_FACTORY.execute_operation(
                 operation_type=s_item.operation_type,
                 user=s_item.user,
                 workflow=s_item.workflow,
@@ -101,7 +99,7 @@ def execute_scheduled_operation(s_item_id: int):
             _update_item_status(s_item)
         except Exception as exc:
             CELERY_LOGGER.error(
-                'Error processing action %s:: %s',
+                'Error processing action %s: %s',
                 s_item.name,
                 str(exc))
             models.ScheduledOperation.objects.filter(pk=s_item.id).update(

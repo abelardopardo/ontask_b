@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test views to run actions."""
 import os
 
@@ -8,37 +6,35 @@ from django.urls import reverse
 from rest_framework import status
 
 from ontask import tests
-from ontask.action.views import action_import
+from ontask.action import services
 
 
-class ActionViewExport(tests.OnTaskTestCase):
-    """Test the view to run actio item filter, json and email."""
-
-    fixtures = ['simple_workflow_two_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_two_actions.sql')
+class ActionViewExportBasic(
+    tests.SimpleWorkflowTwoActionsFixture,
+    tests.OnTaskTestCase,
+):
+    """Basic class to test the action export view."""
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow2'
 
-    def test_export_ask(self):
-        """Test the export views."""
+class ActionViewExport(ActionViewExportBasic):
+    """Test the action export view."""
+
+    def test(self):
         action = self.workflow.actions.get(name='Detecting age')
 
         resp = self.get_response(
             'workflow:export_list_ask',
-            {'wid': action.workflow.id})
+            {'wid': action.workflow_id})
         self.assertTrue(status.is_success(resp.status_code))
         self.assertTrue(action.name in str(resp.content))
 
         # Get export done
-        # BROKEN!!!
         resp = self.get_response(
             'workflow:export_list_ask',
-            {'wid': action.workflow.id},
+            {'wid': action.workflow_id},
             method='POST',
             req_params={'select_0': True})
 
@@ -52,8 +48,11 @@ class ActionViewExport(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(resp['Content-Type'], 'application/octet-stream')
 
-    def test_action_import(self):
-        """Test the import ."""
+
+class ActionViewImport(ActionViewExportBasic):
+    """Test the view to import a workflow."""
+
+    def test(self):
         # Get request
         resp = self.get_response(
             'action:import')
@@ -75,8 +74,12 @@ class ActionViewExport(tests.OnTaskTestCase):
         req.META['HTTP_ACCEPT_ENCODING'] = 'gzip, deflate'
         req.FILES['upload_file'].content_type = 'application/x-gzip'
         req = self.add_middleware(req)
-        resp = action_import(req)
 
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
+        services.do_import_action(
+            req.user,
+            self.workflow,
+            req.FILES['upload_file']
+        )
+
         # Fails if the action is not there
         self.workflow.actions.get(name='SPQ')

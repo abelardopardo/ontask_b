@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
 """Functions to support task execcution for workflows."""
 from typing import Dict, Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.crypto import get_random_string
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 
 from ontask import models
 from ontask.dataops import sql
@@ -84,7 +82,7 @@ class ExecuteUpdateWorkflowLUser:
             # Report status
             log_item.payload['total_users'] = emails.rowcount
             log_item.payload['new_users'] = created
-            log_item.payload['status'] = ugettext(
+            log_item.payload['status'] = gettext(
                 'Learner emails successfully updated.',
             )
             log_item.save(update_fields=['payload'])
@@ -93,5 +91,5 @@ class ExecuteUpdateWorkflowLUser:
             log_item.payload['status'] = 'Execution finished successfully'
             log_item.save(update_fields=['payload'])
         except Exception as exc:
-            log_item.payload['status'] = ugettext('Error: {0}').format(exc)
+            log_item.payload['status'] = gettext('Error: {0}').format(exc)
             log_item.save(update_fields=['payload'])

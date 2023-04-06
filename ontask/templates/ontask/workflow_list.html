@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load ontask_tags %}
+{% load static %}
+{% load django_tables2 %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block title %}{{ block.super }}{% trans 'Workflows' %}{% endblock %}
+{% block extrahead %}
+  {% ontask_datatables_bootstrap_css %}
+{% endblock extrahead %}
+{% block scripts %}
+  {% ontask_datatables_jquery_js %}
+  {% ontask_datatables_bootstrap_js %}
+  <script src="{% static 'workflow/js/workflow.js' %}"></script>
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+{% endblock %}
+{% block container %}
+  <div class="container" id="workflow-index">
+    {% if not object_list|length %}
+      <p class="text-center my-3"><strong>Next Step:</strong> The main element in OnTask is a Workflow. Start by first creating a workflow element using the <i>New Workflow</i> button below, and then upload data in its table.</p>
+    {% endif %}
+    <div class="text-center my-3">
+      <button type="button" class="shadow btn btn-outline-primary js-create-workflow"
+              data-url="{% url 'workflow:create' %}"
+              data-toggle="tooltip"
+              title="{% trans 'Provide the name and description for a new workflow' %}">
+        <span class="fa fa-plus"></span> {% trans 'New workflow' %}
+      </button>
+      <a href="{% url 'workflow:import' %}" class="shadow btn btn-outline-primary spin"
+         data-toggle="tooltip"
+         title="{% trans 'Import a file with an OnTask workflow' %}">
+        <span class="fa fa-upload"></span>{% trans 'Import workflow' %}</a>
+      <input class="shadow btn btn-outline-primary" id="workflow-search" type="text" placeholder="Search..."/>
+    </div>
+    {% if n_star_wflows %}
+      <h5 class="text-primary mb-0 pd-0 pl-0">{% trans 'Favourites' %}</h5>
+      <div id="workflows-star" class="shadow pt-3 card-deck justify-content-center">
+        {% for wflow in object_list %}
+          {% if wflow.star.exists %}
+            {% include 'workflow/includes/partial_workflow_card.html' with is_star=True %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div class="card-deck justify-content-center my-3" id="workflow-cards">
+      {% for wflow in object_list %}
+        {% if not wflow.star.exists %}
+          {% include 'workflow/includes/partial_workflow_card.html' %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    <p class="text-left small mt-3">{% blocktrans %}A workflow contains a table
+    with data about a set of learners and a
+      collection of actions. The table is organised by columns and the information in each row corresponds
+      to one learner. The actions will behave differently depending on the values stored for every learner and a set
+      of conditions. These conditions can be written based on the values of the columns for each student. Typically,
+      you create a workflow for a cohort of learners for which you have data available. Then you write the actions
+      depending on a) when you want students to introduce data or b) when you want students to receive personalised
+      data. The personalisation is done writing conditions to enable/disable text or other elements in a page. The
+      page can either be sent to the learner through email, shown through a HTML address, or sent to another
+      machine.{% endblocktrans %}
+    </p>
+  </div>
+  {% include 'modal.html' %}
+{% endblock container %}

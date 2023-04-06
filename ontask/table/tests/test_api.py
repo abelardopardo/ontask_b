@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Test the table API.s"""
-import os
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 import pandas as pd
@@ -16,11 +12,8 @@ from ontask.dataops import pandas
 from ontask.table import serializers
 
 
-class TableApiBase(tests.OnTaskApiTestCase):
+class TableApiBase(tests.SimpleTableFixture, tests.OnTaskApiTestCase):
     """Basic function and data for testing the API."""
-
-    fixtures = ['simple_table']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     new_table = {
         "email": ["student04@bogus.com",
@@ -80,10 +73,10 @@ class TableApiBase(tests.OnTaskApiTestCase):
         self.user = get_user_model().objects.get(email=self.user_name)
 
 
-class TableApiCreate(TableApiBase):
+class TableApiJSONGet(TableApiBase):
     """Test the api to create a table."""
 
-    def test_table_JSON_get(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -101,8 +94,12 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, dframe)
 
+
+class TableApiPandasGet(TableApiBase):
+    """Test the api to create a table."""
+
     # Getting the table attached to the workflow
-    def test_table_pandas_get(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -119,7 +116,11 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, dframe)
 
-    def test_table_try_JSON_overwrite(self):
+
+class TableApiJSONOverwrite(TableApiBase):
+    """Test the api to create a table."""
+
+    def test(self):
         # Upload a table and try to overwrite an existing one (should fail)
 
         # Get the only workflow in the fixture
@@ -138,7 +139,11 @@ class TableApiCreate(TableApiBase):
             'Post request requires workflow without a table',
             response.data['detail'])
 
-    def test_table_try_pandas_overwrite(self):
+
+class TableApiPandasOverwrite(TableApiBase):
+    """Test the api to create a table."""
+
+    def test(self):
         # Upload a table and try to overwrite an existing one (should fail)
 
         # Get the only workflow in the fixture
@@ -157,11 +162,15 @@ class TableApiCreate(TableApiBase):
             'Post request requires workflow without a table',
             response.data['detail'])
 
-    def test_table_json_create(self):
+
+class TableApiJSONCreate(TableApiBase):
+    """Test the api to create a table."""
+
+    def test(self):
         # Create a second workflow
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.WORKFLOW_NAME + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Get the only workflow in the fixture
@@ -185,11 +194,15 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, dframe)
 
-    def test_table_json_create_error(self):
+
+class TableApiJSONCreateError(TableApiBase):
+    """Test the api to create a table."""
+
+    def test(self):
         # Create a second workflow
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.WORKFLOW_NAME + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Get the only workflow in the fixture
@@ -206,11 +219,15 @@ class TableApiCreate(TableApiBase):
             response.data
         )
 
-    def test_table_pandas_create(self):
+
+class TableApiPandasCreate(TableApiBase):
+    """Test the api to create a table."""
+
+    def test(self):
         # Create a second workflow
         response = self.client.post(
             reverse('workflow:api_workflows'),
-            {'name': tests.wflow_name + '2', 'attributes': {'one': 'two'}},
+            {'name': tests.WORKFLOW_NAME + '2', 'attributes': {'one': 'two'}},
             format='json')
 
         # Get the only workflow in the fixture
@@ -235,7 +252,11 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, dframe)
 
-    def test_table_JSON_update(self):
+
+class TableApiJSONUpdate(TableApiBase):
+    """Test the api to create a table."""
+
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -260,7 +281,11 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, dframe)
 
-    def test_table_pandas_update(self):
+
+class TableApiPandasUpdate(TableApiBase):
+    """Test the api to create a table."""
+
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -285,7 +310,11 @@ class TableApiCreate(TableApiBase):
         # Compare both elements
         self.compare_tables(r_df, dframe)
 
-    def test_table_JSON_flush(self):
+
+class TableApiJSONFlush(TableApiBase):
+    """Test the api to create a table."""
+
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -294,7 +323,10 @@ class TableApiCreate(TableApiBase):
             'table:api_ops',
             kwargs={'wid': workflow.id}))
 
-    def test_table_pandas_flush(self):
+
+class TableApiPandasFlush(TableApiBase):
+    # Test the api to create a table
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -303,10 +335,10 @@ class TableApiCreate(TableApiBase):
             reverse('table:api_pops', kwargs={'wid': workflow.id}))
 
 
-class TableApiMerge(TableApiBase):
+class TableApiMergePandasJSONGet(TableApiBase):
 
     # Getting the table through the merge API
-    def test_table_pandas_JSON_get(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -326,7 +358,10 @@ class TableApiMerge(TableApiBase):
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, dframe)
 
-    def test_table_pandas_merge_get(self):
+
+class TableApiMergePandasGet(TableApiBase):
+
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -345,8 +380,11 @@ class TableApiMerge(TableApiBase):
         # Compare both elements and check wf df consistency
         self.compare_tables(r_df, dframe)
 
+
+class TableApiJSONMergeToEmpty(TableApiBase):
+
     # Merge and create an empty dataset
-    def test_table_JSON_merge_to_empty(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -366,7 +404,10 @@ class TableApiMerge(TableApiBase):
             'Unable to perform merge operation: '
             + 'Merge operation produced a result with no rows')
 
-    def test_table_pandas_merge_to_empty(self):
+
+class TableApiPandasMergeToEmpty(TableApiBase):
+
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -384,12 +425,16 @@ class TableApiMerge(TableApiBase):
             },
             format='json')
 
-        self.assertEqual(response.data['detail'],
+        self.assertEqual(
+            response.data['detail'],
             'Unable to perform merge operation: '
             + 'Merge operation produced a result with no rows')
 
+
+class TableApiJSONMergeInner(TableApiBase):
+
     # Merge with inner values
-    def test_table_JSON_merge_to_inner(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -410,7 +455,10 @@ class TableApiMerge(TableApiBase):
         # Result should have two rows
         self.assertEqual(workflow.nrows, 2)
 
-    def test_table_pandas_merge_to_inner(self):
+
+class TableApiPandasMergeInner(TableApiBase):
+
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -434,8 +482,11 @@ class TableApiMerge(TableApiBase):
         # Result should have two rows
         self.assertEqual(workflow.nrows, 2)
 
-    def test_table_JSON_merge_to_outer(self):
-        """Merge with outer values."""
+
+class TableApiJSONMergeOuter(TableApiBase):
+
+    # Merge with outer values.
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -467,7 +518,10 @@ class TableApiMerge(TableApiBase):
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 4)
 
-    def test_table_pandas_merge_to_outer(self):
+
+class TableApiPandasMergeOuter(TableApiBase):
+
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -501,9 +555,12 @@ class TableApiMerge(TableApiBase):
 
         # Result should have three rows as the initial DF
         self.assertEqual(workflow.nrows, 4)
+
+
+class TableApiJSONMergeLeft(TableApiBase):
 
     # Merge with left values
-    def test_table_JSON_merge_to_left(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -533,10 +590,14 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.nrows, 3)
 
         dframe = pandas.load_table(workflow.get_data_frame_table_name())
-        self.assertEqual(dframe[dframe['sid'] == 1]['newcol'].values[0],
+        self.assertEqual(
+            dframe[dframe['sid'] == 1]['newcol'].values[0],
             self.src_df['newcol'][0])
 
-    def test_table_pandas_merge_to_left(self):
+
+class TableApiPandasMergeLeft(TableApiBase):
+
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -561,11 +622,15 @@ class TableApiMerge(TableApiBase):
         self.assertEqual(workflow.nrows, 3)
 
         dframe = pandas.load_table(workflow.get_data_frame_table_name())
-        self.assertEqual(dframe[dframe['sid'] == 1]['newcol'].values[0],
+        self.assertEqual(
+            dframe[dframe['sid'] == 1]['newcol'].values[0],
             self.src_df['newcol'][0])
 
+
+class TableApiJSONMergeOuterNaN(TableApiBase):
+
     # Merge with outer values but producing NaN everywhere
-    def test_table_JSON_merge_to_outer_NaN(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -578,10 +643,8 @@ class TableApiMerge(TableApiBase):
         email.save()
 
         # Drop the column with booleans because the data type is lost
-        delete_column(
-            self.user,
-            workflow,
-            workflow.columns.get(name='registered'))
+        column = workflow.columns.get(name='registered')
+        delete_column(self.user, workflow, column)
 
         # Transform new table into string
         r_df = pd.DataFrame(self.src_df2)
@@ -619,7 +682,10 @@ class TableApiMerge(TableApiBase):
         # Compare both elements and check wf df consistency
         self.compare_tables(dframe, new_df)
 
-    def test_table_pandas_merge_to_outer_NaN(self):
+
+class TableApiJSONMergeOuterNaNSerializer(TableApiBase):
+
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 
@@ -632,10 +698,8 @@ class TableApiMerge(TableApiBase):
         email.save()
 
         # Drop the column with booleans because the data type is lost
-        delete_column(
-            self.user,
-            workflow,
-            workflow.columns.get(name='registered'))
+        column = workflow.columns.get(name='registered')
+        delete_column(self.user, workflow, column)
 
         # Transform new table into string
         r_df = pd.DataFrame(self.src_df2)
@@ -673,8 +737,11 @@ class TableApiMerge(TableApiBase):
         # Compare both elements and check wf df consistency
         self.compare_tables(dframe, new_df)
 
+
+class TableApiJSONMergeDatetimes(TableApiBase):
+
     # Merge a single row with non-localised date/time fields.
-    def test_table_JSON_merge_datetimes(self):
+    def test(self):
         # Get the only workflow in the fixture
         workflow = models.Workflow.objects.all()[0]
 

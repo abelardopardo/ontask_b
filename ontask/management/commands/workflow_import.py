@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Command to import a workflow."""
 import argparse
 

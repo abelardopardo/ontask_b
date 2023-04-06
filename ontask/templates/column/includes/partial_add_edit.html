@@ -1,0 +1,32 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{{ form.media }}
+<form method="post"
+  {% if add %}
+    action="{% url 'column:create' %}"
+    class="js-workflow-column-add-form">
+  {% else %}
+    action="{% url 'column:column_edit' object.id %}"
+    class="js-column-edit-form">
+  {% endif %}
+  {% csrf_token %}
+  <div class="modal-header">
+    {% if add %}
+      <h4 class="modal-title">{% trans 'Add column' %}</h4>
+    {% else %}
+      <h4 class="modal-title">{% blocktrans with n=object.name %}Edit column <strong>{{ n }}</strong>{% endblocktrans %}</h4>
+    {% endif %}
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{ form|crispy }}
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-primary">
+       <span class="fa fa-check"></span> {% if add %}{% trans 'Add column' %}{% else %}{% trans 'Update' %}{% endif %}
+    </button>
+  </div>
+</form>

@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Admin classes for Profiles"""
-from authtools.admin import NamedUserAdmin
+from ontask.accounts.admin import NamedUserAdmin
 from django.contrib import admin
 from django.contrib.auth import forms, get_user_model
 from django.urls import reverse

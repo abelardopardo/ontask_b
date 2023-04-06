@@ -1,5 +1,5 @@
 {% load i18n %}
-<form method="post" action="{% url 'column:delete' pk %}" class="js-column-delete-form">
+<form method="post" action="{% url 'column:delete' object.pk %}" class="js-column-delete-form">
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm column deletion' %}</h4>
@@ -8,13 +8,27 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with n=cname %}Are you sure you want to delete column <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+    <p class="lead">{% blocktrans with n=object.name %}Are you sure you want to delete column <strong>{{ n }}</strong>?{% endblocktrans %}</p>
     {% if cond_to_delete %}
-      <p>{% trans 'The column is currently used in the following conditions (inside an action):' %}</p>
+      <p>{% trans 'The column is used in the following conditions (inside an action):' %}</p>
       {% for cname in cond_to_delete %}
         <p>{{ cname.name }} ({{ cname.action.name }})</p>
       {% endfor %}
-      <p>{% trans 'These conditions will also be deleted.' %}</p>
+      <p>{% trans 'These conditions will be deleted.' %}</p>
+    {% endif %}
+    {% if action_filter_to_delete %}
+      <p>{% trans 'The column is used in the filter of the following actions:' %}</p>
+      {% for action in action_filter_to_delete %}
+        <p>{{ action.name }}</p>
+      {% endfor %}
+      <p>{% trans 'These filters will be deleted.' %}</p>
+    {% endif %}
+    {% if view_filter_to_delete %}
+      <p>{% trans 'The column is used in the following views:' %}</p>
+      {% for view in view_filter_to_delete %}
+        <p>{{ view.name }}</p>
+      {% endfor %}
+      <p>{% trans 'These views will be deleted.' %}</p>
     {% endif %}
   </div>
   <div class="modal-footer">

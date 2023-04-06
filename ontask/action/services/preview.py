@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Process requests to preview how an action is rendered."""
 import json
 from json.decoder import JSONDecodeError
@@ -8,7 +6,7 @@ from typing import Dict, Mapping, Optional, Tuple
 from django.template.base import Template
 from django.template.context import Context
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.action import forms
@@ -43,12 +41,10 @@ def _get_navigation_index(idx: int, n_items: int) -> Tuple[int, int, int]:
     if not 1 <= idx <= n_items:
         idx = 1
 
-    prv = idx - 1
-    if prv <= 0:
+    if (prv := idx - 1) <= 0:
         prv = n_items
 
-    nxt = idx + 1
-    if nxt > n_items:
+    if (nxt := idx + 1) > n_items:
         nxt = 1
 
     return prv, idx, nxt
@@ -110,9 +106,8 @@ def create_row_preview_context(
     :return: context is modified to include the appropriate items
     """
     # Get the total number of items
-    filter_obj = action.get_filter()
-    if filter_obj:
-        n_items = filter_obj.n_rows_selected
+    if action.filter:
+        n_items = action.filter.selected_count
     else:
         n_items = action.workflow.nrows
 
@@ -131,7 +126,7 @@ def create_row_preview_context(
         condition_evaluation)
 
     all_false = False
-    if action.conditions.filter(is_filter=False).count():
+    if action.conditions.count():
         # If there are conditions, check if they are all false
         all_false = all(
             not bool_val for __, bool_val in condition_evaluation.items()
@@ -167,11 +162,10 @@ def create_row_preview_context(
             '"{0}" = {1}'.format(col.name, row_values[col.name])
             for col in act_vars])
 
-    uses_plain_text = (
+    if (
         action.action_type == models.Action.PERSONALIZED_CANVAS_EMAIL
         or action.action_type == models.Action.PERSONALIZED_JSON
-    )
-    if uses_plain_text:
+    ):
         action_content = escape(action_content)
 
     if prelude:
@@ -208,6 +202,7 @@ def create_list_preview_context(
         action,
         get_action_evaluation_context(action, {}))
     context['action_content'] = action_final_text
+    context['all_false'] = False
     if action.action_type == models.Action.JSON_REPORT:
         incorrect_json = not _check_json_is_correct(action_final_text)
         context['incorrect_json'] = incorrect_json

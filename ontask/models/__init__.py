@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Package with the OnTask models."""
+from ontask.models.user import User
 from ontask.models.action import Action, VAR_USE_RES
 from ontask.models.actioncolumnconditiontuple import ActionColumnConditionTuple
 from ontask.models.athenaconnection import AthenaConnection
@@ -8,7 +7,7 @@ from ontask.models.column import Column
 from ontask.models.common import (
     CHAR_FIELD_LONG_SIZE, CHAR_FIELD_MID_SIZE, CHAR_FIELD_SMALL_SIZE, Owner,
 )
-from ontask.models.condition import Condition
+from ontask.models.condition import ConditionBase, Condition, Filter
 from ontask.models.connection import Connection
 from ontask.models.logs import Log
 from ontask.models.oauth import OAuthUserToken

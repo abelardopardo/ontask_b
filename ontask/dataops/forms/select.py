@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
-
 """Forms to select the colums for upload and decide which keys to keep."""
 from typing import Dict
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
-class   MergeForm(forms.Form):
+class MergeForm(forms.Form):
     """Form to choose the merge method for data frames."""
 
     how_merge_choices = [

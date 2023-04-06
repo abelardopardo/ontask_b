@@ -1,50 +1,16 @@
-# -*- coding: utf-8 -*-
-
 """Functions to support stats visualisation."""
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from pandas import DataFrame
+import pandas as pd
 
 from ontask import models
-from ontask.dataops import pandas, sql
+from ontask.dataops import pandas
 from ontask.visualizations.plotly import PlotlyBoxPlot, PlotlyColumnHistogram
 
 VISUALIZATION_WIDTH = 600
 VISUALIZATION_HEIGHT = 400
-
-
-def _get_df_and_columns(
-    workflow: models.Workflow,
-    pk: int,
-) -> Optional[Tuple[DataFrame, List, models.View]]:
-    """Get the DF and the columns to process.
-
-    :param workflow: Workflow object
-    :param pk: Optional id for a view
-    :return: Tuple DataFrame, List of columns (None, None if error
-    """
-    # If a view is given, filter the columns
-    view = None
-    if pk:
-        view = workflow.views.filter(pk=pk).first()
-        if not view:
-            # View not found. Redirect to workflow detail
-            return None
-        columns_to_view = view.columns.filter(is_key=False)
-
-        df = pandas.load_table(
-            workflow.get_data_frame_table_name(),
-            [col.name for col in columns_to_view],
-            view.formula)
-    else:
-        # No view given, fetch the entire data frame
-        columns_to_view = workflow.columns.filter(is_key=False)
-        df = pandas.load_table(
-            workflow.get_data_frame_table_name(),
-            [col.name for col in columns_to_view])
-
-    return df, columns_to_view, view
 
 
 def _get_column_visualisations(
@@ -107,6 +73,32 @@ def _get_column_visualisations(
     return visualizations
 
 
+def get_df_and_columns(
+    workflow: models.Workflow,
+    view: Optional[models.View],
+) -> Optional[Tuple[DataFrame, List]]:
+    """Get the DF and the columns to process.
+
+    :param workflow: Workflow object
+    :param view: Optional view (None if not  needed
+    :return: Tuple DataFrame, List of columns.
+    """
+    if view:
+        columns_to_view = view.columns.filter(is_key=False)
+        df = pandas.load_table(
+            workflow.get_data_frame_table_name(),
+            [col.name for col in columns_to_view],
+            view.formula)
+    else:
+        # No view given, fetch the entire data frame
+        columns_to_view = workflow.columns.filter(is_key=False)
+        df = pandas.load_table(
+            workflow.get_data_frame_table_name(),
+            [col.name for col in columns_to_view])
+
+    return df, columns_to_view
+
+
 def get_column_visualization_items(
     workflow: models.Workflow,
     column: models.Column,
@@ -124,49 +116,30 @@ def get_column_visualization_items(
     # Extract the data to show at the top of the page
     stat_data = pandas.get_column_statistics(df[column.name])
 
+    viz_scripts = []
     visualizations = _get_column_visualisations(
         column,
         df[[column.name]],
-        [],
+        viz_scripts,
         context={
             'style': 'width:100%; height:100%;' + 'display:inline-block;'},
     )
 
-    return stat_data, [], visualizations
+    return stat_data, viz_scripts, visualizations
 
 
 def get_table_visualization_items(
-    workflow: models.Workflow,
-    rowselect_key: Optional[str] = None,
-    rowselect_val: Optional[Any] = None,
-    pk: Optional[int] = None,
-) -> Optional[Tuple[str, Dict]]:
-    """Get a tuple with a template, and a dictionary to visualize a table.
+    data_frame: pd.DataFrame,
+    columns_to_view: List[models.Column],
+    row: Optional,
+) -> Tuple[List, List]:
+    """Get the HTML snippets to visualize the given list of columns.
 
-    :param workflow: Workflow being processed
-    :param rowselect_key: Optional key name to select a row
-    :param rowselect_val: Optional value to select a row
-    :param pk: Primary key of a view (could be none)
-    :return:
+    :param data_frame: Data frame containing the data
+    :param columns_to_view: List of columns to process
+    :param row: Row of values to take as reference (optional)
+    :return: Tuple with visualization scripts, and html snippets.
     """
-    # Get the data frame and the columns
-    df_col_view = _get_df_and_columns(workflow, pk)
-    if not df_col_view:
-        return None
-    df, columns_to_view, view = df_col_view
-
-    if bool(rowselect_key):
-        template = 'table/stat_row.html'
-        row = sql.get_row(
-            workflow.get_data_frame_table_name(),
-            rowselect_key,
-            rowselect_val,
-            column_names=[col.name for col in columns_to_view],
-        )
-    else:
-        row = None
-        template = 'table/stat_view.html'
-
     vis_scripts = []
     visualizations = []
     context = {
@@ -175,25 +148,25 @@ def get_table_visualization_items(
             VISUALIZATION_HEIGHT),
     }
     for idx, column in enumerate(columns_to_view):
-
         # Add the title and surrounding container
         visualizations.append(
             '<hr/><h4 class="text-center">' + column.name + '</h4>')
         # If all values are empty, no need to proceed
-        if all(not col_data for col_data in df[column.name]):
+        if all(not col_data for col_data in data_frame[column.name]):
             visualizations.append(
-                '<p>' + _('No values in this column') + '</p>')
+                '<p class="text-center">' +
+                _('No values in this column') +
+                '</p>')
             continue
 
         if row and not row[column.name]:
             visualizations.append(
                 '<p class="alert-warning">' + _('No value in this column')
-                + '</p>',
-            )
+                + '</p>')
 
         column_viz = _get_column_visualisations(
             column,
-            df[[column.name]],
+            data_frame[[column.name]],
             vis_scripts=vis_scripts,
             viz_id='column_{0}'.format(idx),
             single_val=row[column.name] if row else None,
@@ -201,8 +174,4 @@ def get_table_visualization_items(
 
         visualizations.extend([vis.html_content for vis in column_viz])
 
-    return template, {
-        'value': rowselect_val,
-        'view': view,
-        'vis_scripts': vis_scripts,
-        'visualizations': visualizations}
+    return vis_scripts, visualizations

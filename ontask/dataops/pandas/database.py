@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
-"""Functions to manipulate Pandas DataFrames an related operations."""
+"""Functions to manipulate Pandas DataFrames and related operations."""
 from typing import Dict, List, Mapping, Optional
 
 from django.conf import settings
 from django.core.cache import cache
 from django.db import connection
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 import pandas as pd
 import sqlalchemy
 import sqlalchemy.engine
@@ -15,7 +13,7 @@ from ontask import LOGGER, OnTaskDataFrameNoKey, OnTaskSharedState
 from ontask.dataops import pandas, sql
 
 # Translation between OnTask data types and SQLAlchemy
-ontask_to_sqlalchemy = {
+ONTASK_TO_SQLALCHEMY = {
     'string': sqlalchemy.UnicodeText(),
     'integer': sqlalchemy.BigInteger(),
     'double': sqlalchemy.Float(),
@@ -30,44 +28,36 @@ def set_engine() -> None:
         return
 
     OnTaskSharedState.engine = create_db_engine(
-        'postgresql',
-        '+psycopg2',
-        settings.DATABASES['default']['USER'],
-        settings.DATABASES['default']['PASSWORD'],
-        settings.DATABASES['default']['HOST'],
-        settings.DATABASES['default']['NAME'],
-    )
+        dialect='postgresql',
+        driver='+psycopg2',
+        username=settings.DATABASES['default']['USER'],
+        password=settings.DATABASES['default']['PASSWORD'],
+        host=settings.DATABASES['default']['HOST'],
+        dbname=settings.DATABASES['default']['NAME'])
 
 
-def create_db_engine(
-    dialect: str,
-    driver: str,
-    username: str,
-    password: str,
-    host: str,
-    dbname: str,
-):
+def create_db_engine(**kwargs):
     """Create SQLAlchemy DB Engine to connect Pandas <-> DB.
 
     Function that creates the engine object to connect to the database. The
     object is required by the pandas functions to_sql and from_sql
+    :param kwargs: Dictionary with the following driver parameters:
+      - dialect: Dialect for the engine (oracle, mysql, postgresql, etc)
+      - driver: DB API driver (psycopg2, ...)
+      - username: Username to connect with the database
+      - password: Password to connect with the database
+      - host: Host to connect with the database
+      - dbname: database name
 
-    :param dialect: Dialect for the engine (oracle, mysql, postgresql, etc)
-    :param driver: DBAPI driver (psycopg2, ...)
-    :param username: Username to connect with the database
-    :param password: Password to connect with the database
-    :param host: Host to connect with the database
-    :param dbname: database name
     :return: the engine
     """
     database_url = '{dial}{drv}://{usr}:{pwd}@{h}/{dbname}'.format(
-        dial=dialect,
-        drv=driver,
-        usr=username,
-        pwd=password,
-        h=host,
-        dbname=dbname,
-    )
+        dial=kwargs.get('dialect'),
+        drv=kwargs.get('driver'),
+        usr=kwargs.get('username'),
+        pwd=kwargs.get('password'),
+        h=kwargs.get('host'),
+        dbname=kwargs.get('dbname'))
 
     if settings.DEBUG:
         LOGGER.debug('Creating engine: %s', database_url)
@@ -75,7 +65,6 @@ def create_db_engine(
     return sqlalchemy.create_engine(
         database_url,
         client_encoding=str('utf8'),
-        encoding=str('utf8'),
         echo=False,
         paramstyle='format')
 
@@ -165,15 +154,15 @@ def store_table(
         dtype = {}
 
     with cache.lock(table_name):
-        # We ovewrite the content and do not create an index
+        # We overwrite the content and do not create an index
         data_frame.to_sql(
             table_name,
             OnTaskSharedState.engine,
             if_exists='replace',
             index=False,
             dtype={
-                key: ontask_to_sqlalchemy[tvalue]
-                for key, tvalue in dtype.items()
+                key: ONTASK_TO_SQLALCHEMY[type_value]
+                for key, type_value in dtype.items()
             },
         )
 
@@ -188,7 +177,7 @@ def verify_data_frame(data_frame: pd.DataFrame):
     2) All column names are below the maximum size
 
     :param data_frame: Data frame to verify
-    :return: None or an exception with the descripton of the problem in the
+    :return: None or an exception with the description of the problem in the
     text
     """
     # If the data frame does not have any unique key, it is not useful (no
@@ -196,15 +185,12 @@ def verify_data_frame(data_frame: pd.DataFrame):
     if not pandas.has_unique_column(data_frame):
         raise OnTaskDataFrameNoKey(_(
             'The data has no column with unique values per row. '
-            + 'At least one column must have unique values.'),
-        )
+            + 'At least one column must have unique values.'))
 
     if any(len(cname) > sql.COLUMN_NAME_SIZE for cname in data_frame.columns):
         raise Exception(
             _('Column name is longer than {0} characters').format(
                 sql.COLUMN_NAME_SIZE))
-
-    return
 
 
 def is_table_in_db(table_name: str) -> bool:

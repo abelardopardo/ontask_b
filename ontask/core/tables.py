@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Generic table elements for django-tables2 package."""
 from django.template.loader import render_to_string
 import django_tables2 as tables

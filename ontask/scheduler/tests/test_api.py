@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Test scheduler API."""
-import os
 
-from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -11,11 +7,8 @@ from rest_framework.authtoken.models import Token
 from ontask import models, tests
 
 
-class ScheduleApiCreate(tests.OnTaskApiTestCase):
+class ScheduleApiBasic(tests.ThreeActionsFixture, tests.OnTaskApiTestCase):
     """Test schedule creation through API"""
-
-    fixtures = ['three_actions']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'three_actions.sql')
 
     s_name = 'Scheduling first JSON'
     s_desc = 'First JSON intervention'
@@ -27,7 +20,11 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         token = Token.objects.get(user__email='instructor01@bogus.com')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-    def test_action_from_other_user(self):
+
+class ScheduleApiCreate(ScheduleApiBasic):
+    """Test schedule creation through API"""
+
+    def test(self):
         action_name = 'email action'
 
         # Get list of workflows
@@ -49,7 +46,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': self.s_name,
                 'description_text': self.s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -67,7 +64,11 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         self.assertEqual(response.status_code, 500)
         self.assertTrue('Incorrect permission' in response.data['detail'])
 
-    def test_anomalies(self):
+
+class ScheduleApiAnomalies(ScheduleApiBasic):
+    """Test schedule creation through API"""
+
+    def test(self):
         action_name = 'simple action'
 
         s_name = 'Scheduling first email'
@@ -90,7 +91,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': self.s_name,
                 'description_text': self.s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -111,7 +112,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': '2000-11-12 12:05:07+10:30',
                 'payload': {
@@ -135,7 +136,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -160,7 +161,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'description_text': s_desc,
                 'action': action.id,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'execute': self.s_execute,
                 'payload': {
                     'item_column': 'email',
@@ -184,7 +185,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
             },
@@ -200,7 +201,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -223,7 +224,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -247,7 +248,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -272,7 +273,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -298,7 +299,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -324,7 +325,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -350,7 +351,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': s_name,
                 'description_text': s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -369,7 +370,11 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
             'must be a space-separated list of emails'
             in response.data['detail'])
 
-    def test_schedule_email(self):
+
+class ScheduleApiEmail(ScheduleApiBasic):
+    """Test schedule creation through API"""
+
+    def test(self):
         action_name = 'simple action'
 
         s_subject = 'subject'
@@ -392,7 +397,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': self.s_name,
                 'description_text': self.s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -422,7 +427,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': self.s_name + '2',
                 'description_text': self.s_desc,
                 'operation_type': 'action_run_personalized_email',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -447,7 +452,11 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
         )
         self.assertEqual(response.status_code, 204)
 
-    def test_schedule_json(self):
+
+class ScheduleApiJSON(ScheduleApiBasic):
+    """Test schedule creation through API"""
+
+    def test(self):
         action_name = 'json action'
         # Get list of workflows
         response = self.client.get(reverse('scheduler:api_scheduled_json'))
@@ -468,7 +477,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': self.s_name,
                 'description_text': self.s_desc,
                 'operation_type': 'action_run_personalized_json',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -495,7 +504,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': self.s_name + '2',
                 'description_text': self.s_desc,
                 'operation_type': 'action_run_personalized_json',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {
@@ -527,7 +536,7 @@ class ScheduleApiCreate(tests.OnTaskApiTestCase):
                 'name': self.s_name,
                 'description_text': self.s_desc,
                 'operation_type': 'action_run_personalized_json',
-                'workflow': action.workflow.id,
+                'workflow': action.workflow_id,
                 'action': action.id,
                 'execute': self.s_execute,
                 'payload': {

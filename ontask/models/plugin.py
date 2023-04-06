@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 """Models for the plugin registry and the SQL connections."""
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask.models.common import (
     CHAR_FIELD_LONG_SIZE, CreateModifyFields, NameAndDescription,

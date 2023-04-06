@@ -1,138 +1,144 @@
-# -*- coding: utf-8 -*-
-
 """Views to flush, show details, column server side, etc."""
-from typing import Optional
 
 from django import http
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import render
-from django.template.loader import render_to_string
+from django.db.models import Q
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
+from django.views import generic
 
 from ontask import OnTaskServiceException, models
-from ontask.core import ajax_required, get_column, get_workflow, is_instructor
+from ontask.core import (
+    JSONFormResponseMixin, JSONResponseMixin, UserIsInstructor, WorkflowView,
+    ajax_required, error_redirect)
 from ontask.workflow import services
 
 
-@user_passes_test(is_instructor)
-@get_workflow(s_related='luser_email_column', pf_related=['columns', 'shared'])
-def operations(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow],
-) -> http.HttpResponse:
-    """Http request to serve the operations page for the workflow.
+@method_decorator(ajax_required, name='dispatch')
+class WorkflowFlushView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    WorkflowView,
+    generic.TemplateView
+):
+    """View to flush a workflow."""
 
-    :param request: HTTP Request
-    :param workflow: Workflow being manipulated.
-    :return: http.HttpResponse of the operations page.
-    """
-    # Check if lusers is active and if so, if it needs to be refreshed
-    services.check_luser_email_column_outdated(workflow)
+    http_method_names = ['get', 'post']
+    template_name = 'workflow/includes/partial_workflow_flush.html'
 
-    return render(
-        request,
-        'workflow/operations.html',
-        services.get_operations_context(workflow))
+    def post(self, request, *args, **kwargs):
+        """Perform the flush operation."""
 
-
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow()
-def flush(
-    request: http.HttpRequest,
-    wid: Optional[int] = None,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Render the view to flush a workflow."""
-    del wid
-    if workflow.nrows == 0:
-        # Table is empty, redirect to data upload
-        return http.JsonResponse({'html_redirect': reverse('dataops:uploadmerge')})
-
-    if request.method == 'POST':
-        services.do_flush(request, workflow)
+        if self.workflow.nrows != 0:
+            services.do_flush(request, self.workflow)
         return http.JsonResponse({'html_redirect': ''})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'workflow/includes/partial_workflow_flush.html',
-            {'workflow': workflow},
-            request=request),
-    })
+
+@method_decorator(ajax_required, name='dispatch')
+class WorkflowStar(
+    UserIsInstructor,
+    JSONResponseMixin,
+    WorkflowView
+):
+    """Star a workflow."""
+
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs) -> http.JsonResponse:
+        """Add/Remove star and log operation."""
+
+        # Get the workflows with stars
+        if self.workflow in request.user.workflows_star.all():
+            self.workflow.star.remove(request.user)
+        else:
+            self.workflow.star.add(request.user)
+
+        self.workflow.log(request.user, models.Log.WORKFLOW_STAR)
+        return self.render_to_response({})
 
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow()
-def star(
-    request: http.HttpRequest,
-    wid: Optional[int] = None,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Toggle the star mark in the workflow.
+class WorkflowOperationsView(
+    UserIsInstructor,
+    WorkflowView,
+    generic.TemplateView,
+):
+    """View workflow operations page."""
 
-    :param request: Http request
-    :param wid: Primary key of the workflow
-    :param workflow: Workflow being manipulated.
-    :return: Empty JSON, side effect start relation is updated.
-    """
-    del wid
-    # Get the workflows with stars
-    stars = request.user.workflows_star.all()
-    if workflow in stars:
-        workflow.star.remove(request.user)
-    else:
-        workflow.star.add(request.user)
+    http_method_names = ['get']
+    template_name = 'workflow/operations.html'
+    wf_s_related = 'luser_email_column'
+    wf_pf_related = ['columns', 'shared']
 
-    workflow.log(request.user, models.Log.WORKFLOW_STAR)
-    return http.JsonResponse({})
+    def get_context_data(self, **kwargs):
+        """Add all elements required to view the operations."""
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'attribute_table': services.AttributeTable([
+                {'id': idx, 'name': key, 'value': kval}
+                for idx, (key, kval) in enumerate(sorted(
+                    self.workflow.attributes.items()))],
+                orderable=False),
+            'share_table': services.WorkflowShareTable(
+                self.workflow.shared.values('email', 'id').order_by('email')),
+            'unique_columns': self.workflow.get_unique_columns()})
+        return context
+
+    def get(self, request, *args, **kwargs):
+        """Render the operations page."""
+
+        try:
+            # Check if lusers is active and if so, if it needs to be refreshed
+            services.check_luser_email_column_outdated(self.workflow)
+        except Exception as exc:
+            return error_redirect(request, message=str(exc))
+
+        return super().render_to_response(self.get_context_data())
 
 
-@user_passes_test(is_instructor)
-@csrf_exempt
-@ajax_required
-@require_POST
-@get_column()
-def assign_luser_column(
-    request: http.HttpRequest,
-    pk: Optional[int] = None,
-    workflow: Optional[models.Workflow] = None,
-    column: Optional[models.Column] = None,
-) -> http.JsonResponse:
-    """Render the view to assign the luser column.
+@method_decorator(ajax_required, name='dispatch')
+class WorkflowAssignLUserColumn(
+    UserIsInstructor,
+    JSONResponseMixin,
+    WorkflowView,
+):
+    """Assign the value of the LUser column."""
 
-    AJAX view to assign the column with id PK to the field luser_email_column
-    and calculate the hash
+    # Only AJAX Post requests allowed
+    http_method_names = ['post']
 
-    :param request: HTTP request
-    :param pk: Column id
-    :param workflow: Workflow being manipulated.
-    :param column: Column to assign as the LUSER value
-    :return: JSON data to perform the operation
-    """
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _(
-                'Workflow has no data. '
-                + 'Go to "Manage table data" to upload data.'))
-        return http.JsonResponse({'html_redirect': reverse('action:index')})
+    def post(self, request, *args, **kwargs):
+        """Assign the LUser column (if present)."""
 
-    try:
-        services.update_luser_email_column(
-            request.user,
-            pk,
-            workflow,
-            column)
-        messages.success(
-            request,
-            _('The list of workflow users will be updated shortly.'),
-        )
-    except OnTaskServiceException as exc:
-        exc.message_to_error(request)
+        if self.workflow.nrows == 0:
+            messages.error(
+                request,
+                _(
+                    'Workflow has no data. '
+                    + 'Go to "Manage table data" to upload data.'))
+            return http.JsonResponse({'html_redirect': reverse('action:index')})
 
-    return http.JsonResponse({'html_redirect': ''})
+        pk = kwargs.get('pk')
+        column = None
+
+        try:
+            if pk:
+                column = self.workflow.columns.filter(
+                        pk=pk,
+                    ).filter(
+                        Q(workflow__user=request.user)
+                        | Q(workflow__shared=request.user),
+                    ).distinct().get()
+            services.update_luser_email_column(
+                request.user,
+                pk,
+                self.workflow,
+                column)
+            messages.success(
+                request,
+                _('The list of workflow users will be updated shortly.'),
+            )
+        except OnTaskServiceException as exc:
+            exc.message_to_error(request)
+
+        return self.render_to_response({'html_redirect': ''})

@@ -1,23 +1,21 @@
-# -*- coding: utf-8 -*-
-
 """Test live execution of operations related to columns."""
-import os
 
-from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import models, tests
-from ontask.core.checks import check_wf_df
+from ontask.core.checks import check_workflow
 
 
-class WorkflowModify(tests.OnTaskLiveTestCase):
-    fixtures = ['simple_workflow']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
+class ColumnTestCreateDelete(
+    tests.SimpleWorkflowFixture,
+    tests.OnTaskLiveTestCase,
+):
+    """Testing column creation/deletion"""
 
-    def test_02_workflow_column_create_delete(self):
+    def test(self):
         new_cols = [
             ('newc1', 'string', 'male,female', ''),
             ('newc2', 'boolean', '', 'True'),
@@ -31,7 +29,7 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Go to the details page
-        self.access_workflow_from_home_page(tests.wflow_name)
+        self.access_workflow_from_home_page(tests.WORKFLOW_NAME)
 
         # Go to column details
         self.go_to_details()
@@ -40,11 +38,12 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
         self.open_column_edit('age')
 
         # Untick the is_key option
-        is_key = self.selenium.find_element_by_id('id_is_key')
+        is_key = self.selenium.find_element(By.ID, 'id_is_key')
         self.assertTrue(is_key.is_selected())
         is_key.click()
         # Click on the Submit button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']/div/div/form/div/button[@type='submit']"
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
@@ -58,7 +57,7 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
             # ADD A NEW COLUMN
             self.add_column(cname, ctype, clist, cinit, idx)
             idx += 1
-        check_wf_df(models.Workflow.objects.get(id=1))
+        check_workflow(models.Workflow.objects.get(id=1))
 
         # CHECK THAT THE COLUMNS HAVE BEEN CREATED (starting in the sixth)
         idx = 5
@@ -85,7 +84,11 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_03_workflow_column_rename(self):
+
+class ColumnTestRename(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
+    """Testing column rename"""
+
+    def test(self):
         categories = 'aaa, bbb, ccc'
         action_name = 'simple action'
         action_desc = 'action description text'
@@ -94,7 +97,7 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Open the workflow
-        self.access_workflow_from_home_page(tests.wflow_name)
+        self.access_workflow_from_home_page(tests.WORKFLOW_NAME)
 
         # Go to the details page
         self.go_to_details()
@@ -103,15 +106,14 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
         self.open_column_edit('another')
 
         # Change the name of the column
-        self.selenium.find_element_by_id('id_name').send_keys('2')
+        self.selenium.find_element(By.ID, 'id_name').send_keys('2')
         # Add list of comma separated categories
-        raw_cat = self.selenium.find_element_by_id(
-            'id_raw_categories'
-        )
+        raw_cat = self.selenium.find_element(By.ID, 'id_raw_categories')
         raw_cat.send_keys(categories)
 
         # Click the rename button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']/div/div/form/div/button[@type='submit']"
         ).click()
         self.wait_close_modal_refresh_table('column-table_previous')
@@ -131,7 +133,8 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
             None,
             "//button[contains(@class, 'js-filter-create')]")
         # Select the another2 column (with new name
-        select = Select(self.selenium.find_element_by_name(
+        select = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_0_filter'))
         select.select_by_value('another2')
         # Wait for the select elements to be clickable
@@ -142,15 +145,15 @@ class WorkflowModify(tests.OnTaskLiveTestCase):
         )
 
         # There should only be two operands
-        filter_ops = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_0_operator']/option"
-        )
+        filter_ops = self.selenium.find_elements(
+            By.XPATH,
+            '//select[@name="builder_rule_0_operator"]/option')
         self.assertEqual(len(filter_ops), 4)
 
         # There should be as many values as in the categories
-        filter_vals = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_0_value_0']/option"
-        )
+        filter_vals = self.selenium.find_elements(
+            By.XPATH,
+            '//select[@name="builder_rule_0_value_0"]/option')
         self.assertEqual(len(filter_vals), len(categories.split(',')))
 
         # End of session

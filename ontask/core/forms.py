@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
-
 """Generic forms to be used in various placdes in the platform."""
 from typing import Any, List, Optional
 
-from bootstrap_datepicker_plus import DateTimePickerInput
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.conf import settings
 from django.template.defaultfilters import filesizeformat
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pytz
 
 from ontask.settings import MAX_UPLOAD_SIZE
@@ -15,7 +13,7 @@ from ontask.settings import MAX_UPLOAD_SIZE
 DATE_TIME_WIDGET_OPTIONS = {
     'locale': settings.LANGUAGE_CODE,
     'icons': {
-        'time': 'fa fa-clock-o',
+        'time': 'fa fa-clock',
         'date': 'fa fa-calendar',
         'up': 'fa fa-angle-up',
         'down': 'fa fa-angle-down',

@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
-{% block title %}{{ block.super }}{% trans 'Page not found' %}{% endblock %}
+{% block title %}{{ block.super }}{% trans 'Unable to process page' %}{% endblock %}
 {% block container %}
-<div class="container my-3">
-  <h1 class="text-center">{% trans 'Page not found' %}</h1>
-  <p class="text-center">{% trans 'The page you requested was not found in the application.' %}</p>
+<div class="container my-3 text-center">
+  <h1>{% trans 'Unable to process page' %}</h1>
+  <p>{% trans 'The request could not be processed.' %}</p>
+  {% if exception %}
+    <p><button class="shadow btn btn-outline-dark button-to-toggle-message">{% trans 'Details' %}</button></p>
+    <p id="message-to-toggle" style="border: 1px solid black; display: none">{{ exception }}</p>
+  {% endif %}
+  <a class="shadow btn btn-outline-dark spin"
+     href="{% url 'home' %}">{% trans 'Back' %}</a>
 </div>
 {% endblock container %}

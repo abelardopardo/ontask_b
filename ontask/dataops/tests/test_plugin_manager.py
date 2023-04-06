@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Test plugin manager functions."""
-import os
 
-from django.conf import settings
 from rest_framework import status
 
 from ontask import models, tests
@@ -25,21 +21,13 @@ class BogusPlugin2(OnTaskModel):
         self.parameters = 3
 
 
-class DataopsTransform(tests.OnTaskTestCase):
+class DataopsTransform(tests.PluginExecutionFixture, tests.OnTaskTestCase):
     """Test the transformation views."""
-
-    fixtures = ['plugin_execution']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'plugin_execution.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'Plugin test'
-
-    def test_transform_model(self):
-        """Test the view to filter items."""
+    def test(self):
         # Make sure the plugins are reloaded
         models.Plugin.objects.all().delete()
         resp = self.get_response('dataops:transform')
@@ -52,14 +40,14 @@ class DataopsTransform(tests.OnTaskTestCase):
 class DataopsPluginErrors(tests.OnTaskTestCase):
     """Test the error detection for plugins."""
 
+    # Class is subclass of OnTaskPluginAbstract
     def test_condition_1(self):
-        """Class is subclass of OnTaskPlubinAbstract"""
         pinobj = BogusPlugin()
-        tests = _verify_plugin(pinobj)
-        self.assertTrue(tests[0][0] != 'Ok')
+        p_tests = _verify_plugin(pinobj)
+        self.assertTrue(p_tests[0][0] != 'Ok')
 
+    # Class is not documented, no fields.
     def test_condition_2(self):
-        """Class is not documented, no fields."""
         pinobj = BogusPlugin2()
         tests = _verify_plugin(pinobj)
         self.assertTrue(tests[1][0] != 'Ok')

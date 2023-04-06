@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Methods to implement the API entry points."""
 from django.db.models import Q
 from rest_framework import generics
@@ -49,8 +47,8 @@ class ScheduledOperationAPIRetrieveUpdateDestroy(
 
     get: Returns the information for one of the scheduled actions
 
-    put: Modifies the scheduled action with the information included in the request
-    (all fields are overwritten)
+    put: Modifies the scheduled action with the information included in the
+    request (all fields are overwritten)
 
     delete: Delete the scheduled action.
     """

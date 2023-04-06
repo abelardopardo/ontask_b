@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from builtins import str
 import random
 from typing import Dict, Optional
@@ -119,16 +117,14 @@ class MSLQEvaluate(OnTaskTransformation):
         :return: a Pandas data_frame to merge with the existing one 
         """
 
-        alist = parameters.get('answer_list')
-        if not alist:
+
+        if not (alist := parameters.get('answer_list')):
             raise Exception('Required parameter "answer_list" not found.')
 
         if not isinstance(alist, str):
             raise Exception('Parameter "answer_list" must be a string.')
 
-        answer_values = [x.strip() for x in alist.split(',')]
-
-        if not answer_values:
+        if not (answer_values := [x.strip() for x in alist.split(',')]):
             raise Exception('Parameter "answer_values" must contain the '
                             'comma-separated list of answer values.')
 

@@ -40,7 +40,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$36000$n34q6KM9uw3J$KqTx4Bc8X1mwZVRZjnTdUfrZ5xC0jN6JYlQ6sWY2yU4=",
@@ -56,7 +56,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 2,
     "fields": {
         "password": "pbkdf2_sha256$36000$1dlrxKGpgqOn$+REnnduyx2hgZpqX1q3mhVd6ZDIHTFFT3DvJmsnIfkc=",
@@ -72,7 +72,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 3,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Y25uQ3NERU1LVVlr$Y0ZqAnyp83/Hcu6cwcylyA",
@@ -92,7 +92,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 4,
     "fields": {
         "password": "pbkdf2_sha256$36000$46jLVZSRXzsz$yMjjEvf3RV/cqewzfD3DgE6K6v8Vl8zlFIkazalmLwo=",
@@ -112,7 +112,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 5,
     "fields": {
         "password": "pbkdf2_sha256$36000$0ReTsxa1X4e3$8rU3YEnKnSPSzcQToiLSoUWHHa/47Y0ooXb3/lWGsqw=",
@@ -132,7 +132,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 6,
     "fields": {
         "password": "pbkdf2_sha256$36000$Iha3zjN1yT0C$4UCn675ps9GJ6n0ZX2zz39+kyNH8GSraI2ro1gVcy2g=",
@@ -152,7 +152,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 7,
     "fields": {
         "password": "pbkdf2_sha256$36000$W4iOQiWpAkYL$JPhTL5CT8EAO3K8mFAI0FSzrU5oOc+UjuMbVFlM+WNo=",
@@ -172,7 +172,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 8,
     "fields": {
         "password": "pbkdf2_sha256$36000$dx0WImNuuA6F$M+UcZ3wVCf2c8U50thQQRAiSPbOvJSycHBa1NU00wMw=",
@@ -192,7 +192,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 9,
     "fields": {
         "password": "pbkdf2_sha256$36000$kq3aJWuTXYLz$TquGH/auppPSIFyPLoyBxRE7P2fJmccAQtYhv3F+Xec=",
@@ -212,7 +212,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 10,
     "fields": {
         "password": "pbkdf2_sha256$36000$APNp57FOFoiE$ldjo87XU3PNr8jigrPDIcmim7kS7BJJH7kW4RzIVD18=",
@@ -232,7 +232,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 11,
     "fields": {
         "password": "pbkdf2_sha256$36000$iFdns1aqcJM0$5+m3cVcvTRtdpuAMlQ/M0xlxm9P+ZRpXjsDSBR11w3Y=",
@@ -615,38 +615,6 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 1,
-    "fields": {
-        "created": "2019-04-24T07:14:20.855Z",
-        "modified": "2019-04-24T07:14:20.932Z",
-        "action": 2,
-        "name": "bbb",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "another",
-                    "type": "string",
-                    "field": "another",
-                    "input": "text",
-                    "value": "bbb",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": false,
-        "columns": [
-            267
-        ]
-    }
-},
-{
     "model": "ontask.workflow",
     "pk": 5,
     "fields": {
@@ -702,7 +670,13 @@
             },
             {
                 "id": "when",
-                "type": "datetime"
+                "type": "datetime",
+                "validation": {
+                    "format": ["YYYY-MM-DD HH:mm:ss","YYYY-MM-DD HH:mm:ssZ","YYYY-MM-DD HH:mm:ss Z"],
+                    "messages": {
+                        "format": "Date required format YYYY-MM-DD HH:mm:ss"
+                    }
+                }
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_5",
@@ -713,30 +687,6 @@
         "shared": [],
         "star": [],
         "lusers": []
-    }
-},
-{
-    "model": "ontask.view",
-    "pk": 1,
-    "fields": {
-        "name": "Some columns",
-        "description_text": "",
-        "created": "2020-05-03T06:47:29.080Z",
-        "modified": "2020-05-03T06:47:29.080Z",
-        "workflow": 5,
-        "formula": {
-            "not": false,
-            "rules": [],
-            "valid": true,
-            "condition": "AND"
-        },
-        "columns": [
-            263,
-            262,
-            267,
-            264,
-            265
-        ]
     }
 },
 {
@@ -760,6 +710,56 @@
         "target_url": "",
         "shuffle": false,
         "attachments": []
+    }
+},
+{
+    "model": "ontask.view",
+    "pk": 1,
+    "fields": {
+        "name": "Some columns",
+        "description_text": "",
+        "created": "2020-05-03T06:47:29.080Z",
+        "modified": "2020-05-03T06:47:29.080Z",
+        "workflow": 5,
+        "columns": [
+            263,
+            262,
+            267,
+            264,
+            265
+        ]
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1,
+    "fields": {
+        "name": "bbb",
+        "description_text": "",
+        "created": "2019-04-24T07:14:20.855Z",
+        "modified": "2020-08-17T09:33:54.566Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "another",
+                    "type": "string",
+                    "field": "another",
+                    "input": "text",
+                    "value": "bbb",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "",
+        "selected_count": 2,
+        "workflow": 5,
+        "action": 2,
+        "columns": [
+            267
+        ]
     }
 },
 {

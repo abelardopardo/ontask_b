@@ -1,27 +1,19 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for the scheduler pages."""
-import os
 
-from django.conf import settings
 from rest_framework import status
 
 from ontask import tests
 from ontask.dataops import pandas
+import ontask.dataops.sql.row_queries
 
 
-class TableTestStatView(tests.OnTaskTestCase):
+class TableTestStatView(tests.SimpleTableFixture, tests.OnTaskTestCase):
     """Test stat views."""
-
-    fixtures = ['simple_table']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
-
-    def test_stats(self):
+    def test(self):
         """Test the use of forms in to schedule actions."""
         # Remove is_key from column 'age'
         col = self.workflow.columns.get(name='age')
@@ -38,7 +30,8 @@ class TableTestStatView(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Get one of the rows
-        r_val = pandas.get_table_row_by_index(self.workflow, None, 1)
+        r_val = ontask.dataops.sql.row_queries.get_table_row_by_index(
+            self.workflow, None, 1)
         resp = self.get_response(
             'table:stat_table',
             req_params={

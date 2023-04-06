@@ -25,7 +25,7 @@ The following roles and responsibilities are considered in the project.
 ### Author
 
 This role is assigned once to the person that created the project 
-(Abelardo Pardo. Github user: abelardopardo)
+(Abelardo Pardo. GitHub user: abelardopardo)
 
 ### Owner
 
@@ -88,7 +88,7 @@ objective of the project.
 ## Support
 
 The project support will be done mainly through the "Issues" section of the 
-GitHub repository. Any requests, questions, concerns, suggestions, etc, should
+GitHub repository. Any requests, questions, concern, suggestions, etc., should
 be created in that platform. The owner and maintainers will then decide how 
 these [issues](https://github.com/abelardopardo/ontask_b/issues) can be addressed and solved.
 
@@ -96,13 +96,13 @@ The project cannot make any guarantees on how this process is managed in terms
 of issues to be solved or, if they are addressed, the time it will take to be
 solved.
 
-## Decision making process
+## Decision-making process
 
-The decision making process used in the project will have three stages:
+The decision-making process used in the project will have three stages:
 
 - Consultations with the contributors (optional) through the GitHub Issue system
 
-- Discussion withe the maintainers (optiona) through the GitHub Issue system or
+- Discussion with the maintainers (optional) through the GitHub Issue system or
   other channels such as private email
 
 - Final decision by the owner.

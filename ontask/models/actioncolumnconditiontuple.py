@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 """Models for a tuple Action/Column/Condition."""
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask.models.column import Column
 from ontask.models.condition import Condition
@@ -43,9 +41,9 @@ class ActionColumnConditionTuple(models.Model):
 
     condition = models.ForeignKey(
         Condition,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
-        blank=False,
+        blank=True,
         related_name='column_condition_pair',
     )
 
@@ -64,7 +62,7 @@ class ActionColumnConditionTuple(models.Model):
             'action_name': self.action.name,
             'action_type': self.action.action_type,
             'column_name': self.column.name,
-            'workflow_id': self.action.workflow.id,
+            'workflow_id': self.action.workflow_id,
             'changes_allowed': self.changes_allowed}
 
         if self.condition:

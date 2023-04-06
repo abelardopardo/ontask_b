@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Admin classes for the views."""
 from django.contrib import admin
 
@@ -18,7 +16,6 @@ class ViewAdmin(admin.ModelAdmin):
         'name',
         'description_text',
         'created',
-        'modified',
-        'formula')
+        'modified')
 
     search_fields = ['workflow', 'name', 'description_text']

@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
 """Forms for scheduling actions."""
 from typing import Dict
 
-from bootstrap_datepicker_plus import DateTimePickerInput
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
 from django.utils.dateparse import parse_datetime
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.core import forms as ontask_forms
@@ -35,10 +33,10 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
         label=_('Multiple executions?'),
         help_text=_('Select if you want to execute multiple times.'))
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Set item_column values."""
         self.workflow = kwargs.pop('workflow', None)
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.set_fields_from_dict([
             'name',
@@ -79,7 +77,7 @@ class ScheduleBasicForm(ontask_forms.FormWithPayload, forms.ModelForm):
             ('execute_until', str(form_data['execute_until']))])
 
         obj_name = self.workflow.scheduled_operations.filter(
-            name=form_data['name'])
+            name=form_data['name']).exclude(id=self.instance.id)
         if obj_name.exists():
             self.add_error(
                 'name',

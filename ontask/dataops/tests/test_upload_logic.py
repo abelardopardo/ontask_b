@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test the upload operation."""
 import os
 
@@ -10,18 +8,17 @@ from rest_framework import status
 from ontask import tests
 
 
-class DataopsUpload(tests.OnTaskTestCase):
+class DataopsUploadBasic(tests.EmptyWorkflowFixture, tests.OnTaskTestCase):
     """Test the upload code."""
-
-    fixtures = ['empty_wflow']
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
 
-    def test_csv_upload(self):
-        """Test the CSV upload."""
+class DataopsCSVUpload(DataopsUploadBasic):
+    """Test the upload code."""
+
+    def test(self):
         # Get the regular form
         resp = self.get_response('dataops:csvupload_start')
         self.assertTrue(status.is_success(resp.status_code))
@@ -39,10 +36,13 @@ class DataopsUpload(tests.OnTaskTestCase):
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('dataops:upload_s2'))
 
-    def test_excel_upload(self):
-        """Test the excel upload."""
+
+class DataopsExcelUpload(DataopsUploadBasic):
+    """Test the excel upload code."""
+
+    def test(self):
         # Get the regular form
-        resp = self.get_response('dataops:excelupload_start')
+        resp = self.get_response('dataops:excel_upload_start')
         self.assertTrue(status.is_success(resp.status_code))
 
         # POST the data
@@ -51,14 +51,17 @@ class DataopsUpload(tests.OnTaskTestCase):
             'excel_upload.xlsx')
         with open(filename, 'rb') as fp:
             resp = self.get_response(
-                'dataops:excelupload_start',
+                'dataops:excel_upload_start',
                 method='POST',
                 req_params={'data_file': fp, 'sheet': 'results'})
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('dataops:upload_s2'))
 
-    def test_google_sheet_upload(self):
-        """Test the Google Sheet upload."""
+
+class DataopsGoogleUpload(DataopsUploadBasic):
+    """Test the Google upload code."""
+
+    def test(self):
         # Get the regular form
         resp = self.get_response('dataops:googlesheetupload_start')
         self.assertTrue(status.is_success(resp.status_code))
@@ -75,8 +78,11 @@ class DataopsUpload(tests.OnTaskTestCase):
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(resp.url, reverse('dataops:upload_s2'))
 
-    def test_s3_upload(self):
-        """Test the S3 upload."""
+
+class DataopsS3Upload(DataopsUploadBasic):
+    """Test the S3 upload code."""
+
+    def test(self):
         # Get the regular form
         resp = self.get_response('dataops:s3upload_start')
         self.assertTrue(status.is_success(resp.status_code))

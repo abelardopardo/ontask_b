@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.test import TestCase
 
 from ontask.dataops import formula
@@ -43,7 +41,7 @@ class HasVariableTest(TestCase):
         # Dictionaries should have the same items (identically)
         return f1 == f2
 
-    def test_rename_variable_true(self):
+    def test(self):
 
         self.assertTrue(self.compare(self.formula1, self.formula2))
 

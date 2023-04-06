@@ -1,154 +1,108 @@
-# -*- coding: utf-8 -*-
-
 """Views to import/export a workflow."""
 from builtins import str
-from typing import Optional
 
-from django import http
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views.decorators.http import require_GET
+from django.utils.translation import gettext_lazy as _
+from django.views import generic
 
 from ontask import OnTaskServiceException, models
-from ontask.core import get_workflow, is_instructor
+from ontask.core import WorkflowView, UserIsInstructor
 from ontask.workflow import forms, services
 
 
-@user_passes_test(is_instructor)
-@get_workflow(pf_related='actions')
-def export_list_ask(
-    request: http.HttpRequest,
-    wid,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Request the list of actions to export (without data).
+class WorkflowActionExportView(
+    UserIsInstructor,
+    WorkflowView,
+    generic.FormView,
+):
+    """View to request information to export a workflow."""
 
-    :param request: Http request
-    :param wid: workflow id
-    :param workflow: workflow being manipulated
-    :return: Http response.
-    """
-    return export_ask(
-        request,
-        wid=wid,
-        workflow=workflow,
-        only_action_list=True)
+    http_method_names = ['get', 'post']
+    form_class = forms.WorkflowExportRequestForm
+    template_name = 'workflow/export.html'
+    wf_pf_related = 'actions'
+    only_action_list = False
 
+    def get_context_data(self, **kwargs):
+        """Store the workflow in the context."""
+        context = super().get_context_data(**kwargs)
+        context['only_action_list'] = self.only_action_list
+        return context
 
-@user_passes_test(is_instructor)
-@get_workflow(pf_related='actions')
-def export_ask(
-    request: http.HttpRequest,
-    wid,
-    workflow: Optional[models.Workflow] = None,
-    only_action_list: Optional[bool] = False,
-) -> http.HttpResponse:
-    """Request additional information for the export.
+    def get_form_kwargs(self):
+        """Set some required parameters in the form context."""
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['workflow'] = self.workflow
+        return form_kwargs
 
-    :param request: Http request
-    :param wid: workflow id
-    :param workflow: workflow being manipulated
-    :param only_action_list: Boolean denoting export actions only.
-    :return: Http response.
-    """
-    del wid
-    form = forms.WorkflowExportRequestForm(
-        request.POST or None,
-        actions=workflow.actions.all(),
-        put_labels=True)
-
-    if request.method == 'POST' and form.is_valid():
+    def form_valid(self, form):
+        """Render export done page and prepare for download."""
         to_include = []
         for idx, a_id in enumerate(
-            workflow.actions.values_list('id', flat=True),
+            self.workflow.actions.values_list('id', flat=True),
         ):
             if form.cleaned_data['select_%s' % idx]:
                 to_include.append(str(a_id))
 
-        if not to_include and only_action_list:
+        if not to_include and self.only_action_list:
             return redirect(reverse('action:index'))
 
+        # Render the export done page with the url to trigger the download
         return render(
-            request,
+            self.request,
             'workflow/export_done.html',
-            {'include': ','.join(to_include),
-             'wid': workflow.id,
-             'only_action_list': only_action_list})
-
-    context = {
-        'form': form,
-        'name': workflow.name,
-        'wid': workflow.id,
-        'nactions': workflow.actions.count(),
-        'only_action_list': only_action_list}
-
-    if not only_action_list:
-        context['nrows'] = workflow.nrows
-        context['ncols'] = workflow.ncols
-
-    # GET request, simply render the form
-    return render(request, 'workflow/export.html', context)
+            {
+                'include': ','.join(to_include),
+                'only_action_list': self.only_action_list})
 
 
-@user_passes_test(is_instructor)
-@require_GET
-@get_workflow(pf_related='actions')
-def export(
-    request: http.HttpRequest,
-    page_data: Optional[str] = '',
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
-    """Render the view to export a workflow.
+class WorkflowExportDoneView(UserIsInstructor, WorkflowView):
+    """View for downloading the exported workflow."""
 
-    This request receives a parameter include with a comma separated list.
-    The first value is a 0/1 stating if the data has to be included. The
-    remaining elements are the ids of the actions to include
+    http_method_names = ['get']
+    wf_pf_related = 'actions'
 
-    :param request:
-    :param page_data: Comma separated list of integers: First one is include: 0
-    (do not include) or 1 include data and conditions, followed by the ids of
-    the actions to include
-    :param workflow: workflow being manipulated
-    :return: Response with the file download
-    """
-    del request
-    try:
-        action_ids = [
-            int(a_idx) for a_idx in page_data.split(',') if a_idx]
-    except ValueError:
-        return redirect('home')
-
-    return services.do_export_workflow(workflow, action_ids)
-
-
-@user_passes_test(is_instructor)
-def import_workflow(request: http.HttpRequest):
-    """View to handle the workflow import.
-
-    View that handles a form for workflow import. It receives a file that
-    needs to be unpacked and the data uploaded. In this method there are some
-    basic checks to verify that the import procedure can go ahead.
-
-    :param request: HTTP request
-    :return: Rendering of the import page or back to the workflow index
-    """
-    form = forms.WorkflowImportForm(
-        request.POST or None,
-        request.FILES or None,
-        user=request.user)
-
-    if request.method == 'POST' and form.is_valid():
-        # UPLOAD THE FILE!
+    def get(self, request, *args, **kwargs):
+        """Extract ids from URL and return ZIP download response"""
+        page_data = kwargs['page_data']
         try:
-            services.do_import_workflow(
-                request.user,
+            action_ids = [
+                int(a_idx) for a_idx in page_data.split(',') if a_idx]
+        except ValueError:
+            return redirect('home')
+
+        return services.do_export_workflow(self.workflow, action_ids)
+
+
+class WorkflowImportView(UserIsInstructor, generic.FormView):
+    """View to request information to export a workflow."""
+
+    http_method_names = ['get', 'post']
+    form_class = forms.WorkflowImportForm
+    template_name = 'workflow/import.html'
+
+    def get_form_kwargs(self):
+        """Store user in form_kwargs."""
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['user'] = self.request.user
+        return form_kwargs
+
+    def form_valid(self, form):
+        """Upload the file."""
+
+        try:
+            workflow = services.do_import_workflow(
+                self.request.user,
                 form.cleaned_data['name'],
-                request.FILES['wf_file'])
+                self.request.FILES['wf_file'])
+            messages.success(
+                self.request,
+                _('Workflow {0} successfully imported.'.format(workflow.name))
+            )
         except OnTaskServiceException as exc:
-            exc.message_to_error(request)
+            exc.message_to_error(self.request)
 
         # Go back to the list of workflows
         return redirect('home')
-
-    return render(request, 'workflow/import.html', {'form': form})

@@ -1,99 +1,40 @@
-# -*- coding: utf-8 -*-
-
 """Functions to support the display of a table."""
 from builtins import next, str
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Dict, List, Optional
 
-from django import http
 from django.conf import settings
-from django.shortcuts import render, reverse
+from django.shortcuts import reverse
 from django.template.loader import render_to_string
 from django.utils.html import escape, urlencode
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from pytz import timezone
 
 from ontask import models
 from ontask.core import DataTablesServerSidePaging
 from ontask.dataops import sql
 from ontask.table.services.errors import OnTaskTableNoKeyValueError
-from ontask.visualizations.plotly import PlotlyHandler
 
 
-def render_table_display_page(
-    request: http.HttpRequest,
+def create_dictionary_table_display_ss(
+    dt_page: DataTablesServerSidePaging,
     workflow: models.Workflow,
-    view: Optional[models.View],
-    columns,
-    ajax_url: str,
-):
-    """Render content of the display page.
-
-    Function to render the content of the display page taking into account
-    the columns to show and the AJAX url to use to render the table content.
-
-    :param request: HTTP request
-    :param workflow: Workflow object used to access the data frame
-    :param view: View to use to render the table (or None)
-    :param columns: Columns to display in the page
-    :param ajax_url: URL to invoke to populate the table
-    :return: HTTP Response
-    """
-    # Create the initial context
-    context = {
-        'workflow': workflow,
-        'query_builder_ops': workflow.get_query_builder_ops_as_str(),
-        'ajax_url': ajax_url,
-        'views': workflow.views.all(),
-        'no_actions': workflow.actions.count() == 0,
-        'vis_scripts': PlotlyHandler.get_engine_scripts(),
-    }
-
-    # If there is a DF, add the columns
-    if workflow.has_table():
-        context['columns'] = columns
-        context['column_types'] = str([''] + [
-            col.data_type for col in columns])
-        context['columns_datatables'] = [{'data': 'Operations'}] + [
-            {'data': col.name.replace('.', '\\.')} for col in columns]
-        context['columns_show_stat'] = workflow.columns.filter(is_key=False)
-    else:
-        context['columns'] = None
-        context['columns_datatables'] = []
-
-    # If using a view, add it to the context
-    if view:
-        context['view'] = view
-
-    return render(request, 'table/display.html', context)
-
-
-def render_table_display_server_side(
-    request,
-    workflow,
-    columns,
-    formula,
-    view_id=None,
-) -> http.JsonResponse:
+    columns: List[models.Column],
+    formula: Optional[str] = None,
+    view_id: Optional[int] = None,
+) -> Dict:
     """Render the appropriate subset of the data table.
 
     Use the search string provided in the UI + the filter (if applicable)
     taken from a view.
 
-    :param request: AJAX request
+    :param dt_page: DataTables side paging object
     :param workflow: workflow object
     :param columns: Subset of columns to consider
-    :param formula: Expression to filter rows
+    :param formula: Expression to filter rows (if it exists)
     :param view_id: ID of the view restricting the display (if any)
     :return: JSON response
     """
-    # Check that the GET parameter are correctly given
-    dt_page = DataTablesServerSidePaging(request)
-    if not dt_page.is_valid:
-        return http.JsonResponse(
-            {'error': _('Incorrect request. Unable to process')},
-        )
-
     # Get columns and names
     column_names = [col.name for col in columns]
 
@@ -118,7 +59,7 @@ def render_table_display_server_side(
         None)
     key_name = escape(key_name)
 
-    # Post processing + adding operation columns and performing the search
+    # Post-processing + adding operation columns and performing the search
     final_qs = []
     nitems = 0  # For counting the number of elements in the result
     for row in qs[dt_page.start:dt_page.start + dt_page.length]:
@@ -168,12 +109,12 @@ def render_table_display_server_side(
             # We reached the number or requested elements, abandon.
             break
 
-    return http.JsonResponse({
+    return {
         'draw': dt_page.draw,
         'recordsTotal': workflow.nrows,
         'recordsFiltered': len(qs),
         'data': final_qs,
-    })
+    }
 
 
 def perform_row_delete(
@@ -205,4 +146,4 @@ def perform_row_delete(
     # Update the value of all the conditions in the actions
     # TODO: Explore how to do this asynchronously (or lazy)
     for action in workflow.actions.all():
-        action.update_n_rows_selected()
+        action.update_selected_row_counts()

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Upload/Merge dataframe from an SQL connection."""
 from importlib import import_module
 from typing import Dict, Optional
@@ -7,7 +5,7 @@ from typing import Dict, Optional
 from django import http
 from django.conf import settings
 from django.urls.base import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 import ontask
@@ -39,12 +37,12 @@ def _load_df_from_sqlconnection(
         table_name = run_params['db_table']
 
     db_engine = pandas.create_db_engine(
-        conn_item.conn_type,
-        conn_item.conn_driver,
-        conn_item.db_user,
-        password,
-        conn_item.db_host,
-        conn_item.db_name)
+        dialect=conn_item.conn_type,
+        driver=conn_item.conn_driver,
+        username=conn_item.db_user,
+        password=password,
+        host=conn_item.db_host,
+        dbname=conn_item.db_name)
 
     # Try to fetch the data
     data_frame = pd.read_sql_table(table_name, db_engine)
@@ -152,13 +150,12 @@ class ExecuteSQLUpload:
         # IDEA: How to deal with failure to acquire access?
         #       Include a setting with the time to wait and number of retries?
 
-        if not workflow.has_data_frame():
+        if not workflow.has_data_frame:
             # Simple upload
             pandas.store_dataframe(src_df, workflow)
-            return []
+            return
 
         # At this point the operation is a merge
-
         dst_df = pandas.load_table(workflow.get_data_frame_table_name())
 
         dst_key = payload.get('dst_key')

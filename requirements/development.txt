@@ -1,4 +1,10 @@
 -r base.txt
-Werkzeug==1.0.1
-django-debug-toolbar==2.2.1
-selenium==3.141.0
+coverage==7.2.2
+django-cprofile-middleware==1.0.5
+django-debug-toolbar==4.0.0
+django-silk==5.0.3
+mypy-extensions==1.0.0
+mypy==1.1.1
+selenium==4.8.3
+snakeviz==2.1.1
+Werkzeug==2.2.3

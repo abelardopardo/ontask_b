@@ -1,24 +1,21 @@
-# -*- coding: utf-8 -*-
-
 """Views for create/rename/update/delete columns."""
-from typing import Optional
 
 from django import http
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
+from django.views import generic
 
 from ontask import OnTaskServiceException, models
 from ontask.column import forms, services
 from ontask.core import (
-    ajax_required, get_action, get_column, get_workflow, is_instructor)
-from ontask.dataops.formula import evaluation
+    ActionView, ColumnView, JSONFormResponseMixin, UserIsInstructor,
+    ajax_required)
 
 # These are the column operands offered through the GUI. They have immediate
-# translations onto Pandas operators over dataframes.
-# Each tuple has:
+# translations onto Pandas operators over dataframes. Each tuple has:
 # - Pandas operation name
 # - Textual description
 # - List of data types that are allowed (for data type checking)
@@ -50,252 +47,197 @@ _formula_column_operands = [
 ]
 
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow(pf_related=['actions', 'columns'])
-def create(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Add a column.
+@method_decorator(ajax_required, name='dispatch')
+class ColumnBasicView(UserIsInstructor, JSONFormResponseMixin):
+    """Basic Column View."""
 
-    :param request: Http Request
-    :param workflow: Workflow to add the column
-    :return: JSON response
-    """
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Cannot add column to a workflow without data'),
-        )
-        return http.JsonResponse({'html_redirect': ''})
+    http_method_names = ['get', 'post']
+    form_class = None
+    template_name = None
 
-    form = forms.ColumnAddForm(request.POST or None, workflow=workflow)
+    def get(
+        self,
+        request: http.HttpRequest,
+        *args,
+        **kwargs
+    ) -> http.JsonResponse:
+        """Check if the workflow has no rows"""
+        if self.workflow.nrows == 0:
+            messages.error(
+                request,
+                _('Cannot add column to a workflow without data'),
+            )
+            return http.JsonResponse({'html_redirect': ''})
 
-    if request.method == 'POST' and form.is_valid():
+        return super().get(request, *args, **kwargs)
+
+
+class ColumnCreateView(ColumnBasicView, ColumnView, generic.CreateView):
+    """Add a column."""
+
+    form_class = forms.ColumnAddForm
+    template_name = 'column/includes/partial_add_edit.html'
+
+    def get_context_data(self, **kwargs):
+        """Insert is_question and add values."""
+        context = super().get_context_data(**kwargs)
+        context.update({'is_question': False, 'add': True})
+        return context
+
+    def get_form_kwargs(self):
+        """Add the workflow to the kwargs."""
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
+
+    def form_valid(self, form):
         # Save the column object attached to the form
         column = form.save(commit=False)
         try:
             services.add_column_to_workflow(
-                request.user,
-                workflow,
+                self.request.user,
+                self.workflow,
                 column,
                 form.initial_valid_value)
             form.save_m2m()
         except OnTaskServiceException as exc:
-            exc.message_to_error(request)
+            exc.message_to_error(self.request)
             exc.delete()
 
         return http.JsonResponse({'html_redirect': ''})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'column/includes/partial_addedit.html',
-            {
-                'form': form,
-                'is_question': False,
-                'add': True},
-            request=request),
-    })
 
+class ColumnQuestionAddView(ColumnBasicView, ActionView, generic.FormView):
+    """Add a new column to a survey action."""
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_action(pf_related=['columns'])
-def question_add(
-    request: http.HttpRequest,
-    pk: Optional[int] = None,
-    workflow: Optional[models.Workflow] = None,
-    action: Optional[models.Action] = None,
-) -> http.JsonResponse:
-    """Add a column to a survey action
+    form_class = forms.QuestionForm
+    template_name = 'column/includes/partial_question_add_edit.html'
 
-    :param request: Http Request
-    :param pk: Action ID where to add the question
-    :param workflow: Workflow being manipulated
-    :param action: Action being manipulated
-    :return: JSON response
-    """
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Cannot add question to a workflow without data'),
-        )
-        return http.JsonResponse({'html_redirect': ''})
+    def get_form_kwargs(self):
+        """Add the workflow to the kwargs."""
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
 
-    form = forms.QuestionForm(request.POST or None, workflow=workflow)
+    def get_context_data(self, **kwargs):
+        """Insert is_question and add values."""
+        self.object = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context['add'] = True
+        return context
 
-    if request.method == 'POST' and form.is_valid():
+    def form_valid(self, form):
+        # Get the action first
+        action = self.get_object()
+
         # Save the column object attached to the form
         column = form.save(commit=False)
         try:
             services.add_column_to_workflow(
-                request.user,
-                workflow,
+                self.request.user,
+                self.workflow,
                 column,
                 form.initial_valid_value,
                 models.Log.ACTION_QUESTION_ADD,
                 action)
             form.save_m2m()
         except OnTaskServiceException as exc:
-            exc.message_to_error(request)
+            exc.message_to_error(self.request)
             exc.delete()
 
         return http.JsonResponse({'html_redirect': ''})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'column/includes/partial_question_addedit.html',
-            {
-                'form': form,
-                'action_id': action.id,
-                'add': True},
-            request=request),
-    })
 
+class ColumnTODOAddView(ColumnBasicView, ActionView, generic.FormView):
+    """Add a new todo item to an action."""
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_action(pf_related=['columns'])
-def todoitem_add(
-    request: http.HttpRequest,
-    pk: Optional[int] = None,
-    workflow: Optional[models.Workflow] = None,
-    action: Optional[models.Action] = None,
-) -> http.JsonResponse:
-    """Add an item to the todo list
+    form_class = forms.TODOItemForm
+    template_name = 'column/includes/partial_todoitem_add_edit.html'
 
-    :param request: Http Request
-    :param pk: Action ID where to add the question
-    :param workflow: Workflow being manipulated
-    :return: JSON response
-    """
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Cannot add todo items to a workflow without data'),
-        )
-        return http.JsonResponse({'html_redirect': ''})
+    def get_context_data(self, **kwargs):
+        """Insert is_question and add values."""
+        self.object = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context['add'] = True
+        return context
 
-    form = forms.TODOItemForm(request.POST or None, workflow=workflow)
+    def get_form_kwargs(self):
+        """Add the workflow to the kwargs."""
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
 
-    if request.method == 'POST' and form.is_valid():
+    def form_valid(self, form):
         # Save the column object attached to the form
         column = form.save(commit=False)
         try:
             services.add_column_to_workflow(
-                request.user,
-                workflow,
+                self.request.user,
+                self.workflow,
                 column,
                 form.initial_valid_value,
                 models.Log.ACTION_TODOITEM_ADD,
-                action)
+                self.action)
             form.save_m2m()
         except OnTaskServiceException as exc:
-            exc.message_to_error(request)
+            exc.message_to_error(self.request)
             exc.delete()
 
         return http.JsonResponse({'html_redirect': ''})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'column/includes/partial_todoitem_addedit.html',
-            {
-                'form': form,
-                'action_id': action.id,
-                'add': True},
-            request=request),
-    })
 
+class ColumnFormulaAddView(ColumnBasicView, ColumnView, generic.CreateView):
+    """Add a new formula column."""
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow(pf_related='columns')
-def formula_column_add(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Add a formula column.
+    form_class = forms.FormulaColumnAddForm
+    template_name = 'column/includes/partial_formula_add.html'
+    wf_pf_selected = 'columns'
 
-    :param request: http.HttpRequest
-    :param workflow: Workflow being manipulated
-    :return: http.JsonResponse
-    """
-    # Get the workflow element
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Cannot add column to a workflow without data'))
-        return http.JsonResponse({'html_redirect': ''})
+    def get_form_kwargs(self):
+        """Add the workflow to the kwargs."""
+        kwargs = super().get_form_kwargs()
+        kwargs['operands'] = _formula_column_operands
+        kwargs['columns'] = self.workflow.columns.all()
+        return kwargs
 
-    # Form to read/process data
-    form = forms.FormulaColumnAddForm(
-        form_data=request.POST or None,
-        operands=_formula_column_operands,
-        columns=workflow.columns.all(),
-    )
-
-    if request.method == 'POST' and form.is_valid():
+    def form_valid(self, form):
         column = form.save(commit=False)
         try:
             services.add_formula_column(
-                request.user,
-                workflow,
+                self.request.user,
+                self.workflow,
                 column,
                 form.cleaned_data['op_type'],
                 form.selected_columns)
             form.save_m2m()
         except OnTaskServiceException as exc:
-            exc.message_to_error(request)
+            exc.message_to_error(self.request)
             exc.delete()
 
         return http.JsonResponse({'html_redirect': ''})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'column/includes/partial_formula_add.html',
-            {'form': form},
-            request=request)})
 
+class ColumnRandomAddView(ColumnBasicView, ColumnView, generic.CreateView):
+    """Create a column with random values (Modal)."""
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow(pf_related='columns')
-def random_column_add(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Create a column with random values (Modal).
+    form_class = forms.RandomColumnAddForm
+    template_name = 'column/includes/partial_random_add.html'
 
-    :param request: Http request
-    :param workflow: Workflow being manipulated
-    :return: Json Response
-    """
-    # Get the workflow element
-    if workflow.nrows == 0:
-        messages.error(
-            request,
-            _('Cannot add column to a workflow without data'))
-        return http.JsonResponse({'html_redirect': ''})
+    def get_form_kwargs(self):
+        """Add the workflow and other params to the kwargs."""
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        kwargs['allow_interval_as_initial'] = True
+        return kwargs
 
-    # Form to read/process data
-    form = forms.RandomColumnAddForm(
-        data=request.POST or None,
-        workflow=workflow,
-        allow_interval_as_initial=True)
-
-    if request.method == 'POST' and form.is_valid():
+    def form_valid(self, form):
         column = form.save(commit=False)
-        column.workflow = workflow
+        column.workflow = self.workflow
         column.is_key = False
         column.save()
 
         try:
-            services.add_random_column(
-                request.user,
-                workflow,
-                column,
-                form.data_frame)
+            services.add_random_column(self.request.user, self.workflow, column)
             form.save_m2m()
         except services.OnTaskColumnIntegerLowerThanOneError as exc:
             form.add_error(exc.field_name, str(exc))
@@ -303,67 +245,46 @@ def random_column_add(
                 'html_form': render_to_string(
                     'column/includes/partial_random_add.html',
                     {'form': form},
-                    request=request),
+                    request=self.request),
             })
         except OnTaskServiceException as exc:
-            exc.message_to_error(request)
+            exc.message_to_error(self.request)
             exc.delete()
         except Exception as exc:
             messages.error(
-                request,
+                self.request,
                 _('Unable to add random column: {0}').format(str(exc)))
 
         # The form has been successfully processed
         return http.JsonResponse({'html_redirect': ''})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'column/includes/partial_random_add.html',
-            {'form': form},
-            request=request),
-    })
 
+class ColumnEditView(ColumnBasicView, ColumnView, generic.UpdateView):
+    """Edit and update a column."""
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_column(pf_related=['columns', 'views', 'actions'])
-def column_edit(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    column: Optional[models.Column] = None,
-) -> http.JsonResponse:
-    """Edit a column.
+    form_class = None
+    template_name = None
 
-    :param request: Http Request received
-    :param pk: Column primary key for lookup
-    :param workflow: Workflow being processed
-    :param column: Column to edit (set by the decorator)
-    :return:
-    """
-    # Detect if this operation is to edit a new column or a new question (in
-    # the edit in page)
-    is_question = 'question_edit' in request.path_info
-    # Form to read/process data
-    if is_question:
-        form = forms.QuestionForm(
-            request.POST or None,
-            workflow=workflow,
-            instance=column)
-    else:
-        form = forms.ColumnRenameForm(
-            request.POST or None,
-            workflow=workflow,
-            instance=column)
+    def get_form_kwargs(self):
+        """Add the workflow and other params to the kwargs."""
+        kwargs = super().get_form_kwargs()
+        kwargs['workflow'] = self.workflow
+        return kwargs
 
-    if request.method == 'POST' and form.is_valid():
+    def get_context_data(self, **kwargs):
+        """Insert is_question and add values."""
+        context = super().get_context_data(**kwargs)
+        context['add'] = False
+        return context
+
+    def form_valid(self, form):
         if not form.has_changed():
             return http.JsonResponse({'html_redirect': None})
 
         column = form.save(commit=False)
         services.update_column(
-            request.user,
-            workflow,
+            self.request.user,
+            self.workflow,
             column,
             form.old_name,
             form.old_position)
@@ -372,112 +293,61 @@ def column_edit(
         # Done processing the correct POST request
         return http.JsonResponse({'html_redirect': ''})
 
-    if is_question:
-        template = 'column/includes/partial_question_addedit.html'
-    else:
-        template = 'column/includes/partial_addedit.html'
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            template,
-            {'form': form,
-             'cname': column.name,
-             'pk': pk},
-            request=request),
-    })
 
+class ColumnDeleteView(ColumnBasicView, ColumnView, generic.DetailView):
+    """Delete a column."""
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_column(pf_related=['columns', 'actions'])
-def delete(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    column: Optional[models.Column] = None,
-) -> http.JsonResponse:
-    """Delete a column in the table attached to a workflow.
+    template_name = 'column/includes/partial_delete.html'
+    wf_pf_related = ['actions', 'conditions', 'views']
 
-    :param request: HTTP request
-    :param pk: ID of the column to delete.
-    :param workflow: Workflow being processed
-    :param column: Column to delete (set by the decorator)
-    :return: Render the delete column form
-    """
-    # Get the workflow element
-    # If the columns is unique and it is the only one, we cannot allow
-    # the operation
-    unique_column = workflow.get_column_unique()
-    if column.is_key and len([col for col in unique_column if col]) == 1:
-        # This is the only key column
-        messages.error(request, _('You cannot delete the only key column'))
-        return http.JsonResponse({'html_redirect': reverse('column:index')})
+    def get_context_data(self, **kwargs):
+        """Insert is_question and add values."""
+        context = super().get_context_data(**kwargs)
+        context.update({
+            # Get the conditions that need to be deleted
+            'cond_to_delete': [
+                cond for cond in self.workflow.conditions.all()
+                if self.object in cond.columns.all()],
 
-    # Get the name of the column to delete
-    context = {'pk': pk, 'cname': column.name}
+            # Get the action filters that need to be deleted
+            'action_filter_to_delete': [
+                action for action in self.workflow.actions.all()
+                if
+                action.filter and self.object in action.filter.columns.all()],
 
-    # Get the conditions/actions attached to this workflow
-    cond_to_delete = [
-        col for col in models.Condition.objects.filter(
-            action__workflow=workflow)
-        if evaluation.has_variable(col.formula, column.name)]
-    # Put it in the context because it is shown to the user before confirming
-    # the deletion
-    context['cond_to_delete'] = cond_to_delete
+            # Get the views with filters that need to be deleted
+            'view_filter_to_delete': [
+                view for view in self.workflow.views.all()
+                if view.filter and self.object in view.filter.columns.all()]})
+        return context
 
-    if request.method == 'POST':
-        services.delete_column(request.user, workflow, column, cond_to_delete)
+    def post(self, request, *args, **kwargs):
+        column = self.get_object()
+        services.delete_column(self.request.user, self.workflow, column)
 
         # There are various points of return
-        from_url = request.META['HTTP_REFERER']
+        from_url = self.request.META['HTTP_REFERER']
         if from_url.endswith(reverse('table:display')):
-            return http.JsonResponse({'html_redirect': reverse('table:display')})
+            return http.JsonResponse(
+                {'html_redirect': reverse('table:display')})
 
         return http.JsonResponse({'html_redirect': reverse('column:index')})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'column/includes/partial_delete.html',
-            context,
-            request=request),
-    })
 
+class ColumnCloneView(ColumnBasicView, ColumnView, generic.DetailView):
+    """Clone a column in the table attached to a workflow."""
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_column(pf_related='columns')
-def column_clone(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-    column: Optional[models.Column] = None,
-) -> http.JsonResponse:
-    """Clone a column in the table attached to a workflow.
+    template_name = 'column/includes/partial_clone.html'
 
-    :param request: HTTP request
-    :param pk: ID of the column to clone.
-    :param workflow: Workflow being processed
-    :param column: Column to clone (set by the decorator)
-    :return: Render the clone column form
-    """
-    del workflow
-    # Get the name of the column to clone
-    context = {'pk': pk, 'cname': column.name}
+    def post(self, request, *args, **kwargs):
+        # Proceed to clone the column
+        column = self.get_object()
+        try:
+            services.clone_column(request.user, column)
+        except Exception as exc:
+            messages.error(
+                request,
+                _('Unable to clone column: {0}').format(str(exc)))
+            return http.JsonResponse({'html_redirect': ''})
 
-    if request.method == 'GET':
-        return http.JsonResponse({
-            'html_form': render_to_string(
-                'column/includes/partial_clone.html',
-                context,
-                request=request),
-        })
-
-    # Proceed to clone the column
-    try:
-        services.clone_column(request.user, column)
-    except Exception as exc:
-        messages.error(
-            request,
-            _('Unable to clone column: {0}').format(str(exc)))
         return http.JsonResponse({'html_redirect': ''})
-
-    return http.JsonResponse({'html_redirect': ''})

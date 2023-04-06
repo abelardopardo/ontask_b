@@ -25,15 +25,6 @@
               title="{% trans 'Add a new criterion to the rubric' %}">
         <span class="fa fa-plus"></span> {% trans 'Create criterion/column' %}
       </button>
-      {% if rubric_table %}
-        <button type="button"
-                class="btn btn-outline-dark js-rubric-loas-edit"
-                data-url="{% url 'action:rubric_loas_edit' action.id %}"
-                data-toggle="tooltip"
-                title="{% trans 'Modify the levels of attainment (top row) of the rubric' %}">
-          <span class="fa fa-pencil"></span> {% trans 'Edit levels of attainment' %}
-        </button>
-      {% endif %}
     </div>
   </div>
   {% if rubric_table %}

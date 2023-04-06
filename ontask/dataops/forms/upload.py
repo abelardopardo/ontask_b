@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to perform the first step of data upload in several formats.
 
 The currently supported formats are:
@@ -20,7 +18,7 @@ import json
 from typing import Dict, Optional
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 from ontask import OnTaskDataFrameNoKey, models, settings
@@ -68,9 +66,9 @@ class UploadBasic(forms.Form):
 class UploadCSVFileForm(UploadBasic):
     """Form to read a csv file.
 
-    It also allows to specify the number of lines to
-    skip at the top and the bottom of the file. This functionality is offered
-    by the underlyng function read_csv in Pandas
+    It also allows to specify the number of lines to skip at the top and the
+    bottom of the file. This functionality is offered by the underlying
+    function read_csv in Pandas
     """
 
     data_file = RestrictedFileField(
@@ -101,6 +99,14 @@ class UploadCSVFileForm(UploadBasic):
 
         :return: The cleaned data
         """
+        # The form must be multipart
+        if not self.is_multipart():
+            self.add_error(
+                None,
+                _('CSV upload form is not multiform'),
+            )
+            return {}
+
         form_data = super().clean()
 
         if form_data['skip_lines_at_top'] < 0:

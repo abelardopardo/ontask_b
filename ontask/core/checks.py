@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Functions to perform various checks."""
-from django.utils.translation import ugettext_lazy as _
+from typing import List, Set
+
+from django import db
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.dataops import pandas, sql
@@ -13,11 +14,11 @@ def _check_logs(workflow: models.Workflow) -> bool:
     :param workflow: Workflow being processed.
     :result: True or a failed assertion
     """
-    assert(workflow.logs.exclude(name__in=models.Log.LOG_TYPES).count() == 0)
+    assert(not workflow.logs.exclude(name__in=models.Log.LOG_TYPES).exists())
     return True
 
 
-def check_wf_df(workflow: models.Workflow) -> bool:
+def check_workflow(workflow: models.Workflow) -> bool:
     """Check consistency between Workflow info and the data frame.
 
     Check the consistency between the information stored in the workflow
@@ -58,12 +59,16 @@ def check_wf_df(workflow: models.Workflow) -> bool:
             continue
 
         assert col.data_type == df_dt, (
-            'Inconsistent data type {0}'.format(col.name)
+            'Inconsistent data type {0}: workflow = {1}, data = {2}'.format(
+                col.name,
+                col.data_type,
+                df_dt
+            )
         )
 
     # Verify that the columns marked as unique are preserved
     for col in workflow.columns.filter(is_key=True):
-        assert pandas.is_unique_column(df[col.name]), (
+        assert pandas.is_unique_series(df[col.name]), (
             'Column {0} should be unique.'.format(col.name)
         )
 
@@ -71,6 +76,27 @@ def check_wf_df(workflow: models.Workflow) -> bool:
     cpos = workflow.columns.values_list('position', flat=True)
     rng = range(1, len(cpos) + 1)
     assert sorted(cpos) == list(rng)
+
+    # Verify the sanity of all the actions
+    for action in workflow.actions.all():
+        check_action(action)
+
+    return True
+
+
+def check_action(action: models.Action) -> bool:
+    """Check consistency in Action object.
+
+    Perform various sanity checks for an action
+
+    :param action: Workflow object
+    :return: Boolean stating the result of the check. True: Correct.
+    """
+
+    # Conditions should not have the number of columns equal to zero and should
+    # not be filters.
+    for cond in action.conditions.all():
+        assert cond.columns.exists()
 
     return True
 
@@ -81,7 +107,7 @@ def sanity_checks() -> bool:
     :result: True or an assertion fail
     """
     for workflow in models.Workflow.objects.all():
-        check_wf_df(workflow)
+        check_workflow(workflow)
 
         _check_logs(workflow)
 
@@ -108,3 +134,24 @@ def check_key_columns(workflow: models.Workflow):
         raise Exception(_(
             'The new data does not preserve the key '
             + 'property of column "{0}"'.format(col_name)))
+
+
+def fix_non_unique_object_names(
+    obj_names: Set[str],
+    duplicates: List[db.models.Model],
+):
+    """Rename objects to remove duplicated names.
+
+    :param obj_names: Names currently existing that need to be unique
+    :param duplicates: Objects with duplicated names
+    :return: Reflect changes in the database
+    """
+
+    # Process each duplicated object to change the name
+    for obj in duplicates:
+        suffix = 1
+        while obj.name in obj_names:
+            # While the name is in the obj_names, keep increasing suffix
+            obj.name = obj.name + '_' + str(suffix)
+            obj.save()
+            suffix += 1

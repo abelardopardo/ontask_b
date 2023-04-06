@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Implementation of visualizations using the Plotly JS library."""
 from abc import abstractmethod
 from builtins import str
 import json
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from ontask.dataops import pandas
 from ontask.visualizations import VisHandler
@@ -15,8 +13,8 @@ class PlotlyHandler(VisHandler):
     """Handler to produce Plotly visualizations."""
 
     head_scripts = [
-        "//cdn.plot.ly/plotly-cartesian-latest.min.js"
-    ]
+        '//cdnjs.cloudflare.com/ajax/libs/plotly.js/2.8.3/'
+        'plotly-cartesian.min.js']
 
     html_skel = """<div id="{id}" style="{style}"></div>
         <script>Plotly.newPlot("{id}", {data}, 

@@ -21,6 +21,21 @@
                 "action"
             ],
             [
+                "add_column",
+                "ontask",
+                "column"
+            ],
+            [
+                "change_column",
+                "ontask",
+                "column"
+            ],
+            [
+                "delete_column",
+                "ontask",
+                "column"
+            ],
+            [
                 "add_condition",
                 "ontask",
                 "condition"
@@ -51,21 +66,6 @@
                 "log"
             ],
             [
-                "add_column",
-                "ontask",
-                "column"
-            ],
-            [
-                "change_column",
-                "ontask",
-                "column"
-            ],
-            [
-                "delete_column",
-                "ontask",
-                "column"
-            ],
-            [
                 "add_workflow",
                 "ontask",
                 "workflow"
@@ -92,7 +92,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$36000$JMX4YPJ3ahxr$Q8DJ+BINVcLXRb9zofOscibKccnux1f4gTWp3TNvPCk=",
@@ -112,7 +112,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 2,
     "fields": {
         "password": "pbkdf2_sha256$36000$yyR4qJnt4C68$u5UIYoLDOo5z7pJ9LEQ5xE/Wg3nw/cyIzKoh4tkP4ZQ=",
@@ -128,7 +128,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 3,
     "fields": {
         "password": "pbkdf2_sha256$36000$udn5nz4eFAvU$hj5La0k48upa6trsCv9TOb2LFOM6Iad3gv5Z8r2OtZ8=",
@@ -144,7 +144,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 4,
     "fields": {
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
@@ -164,7 +164,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 5,
     "fields": {
         "password": "pbkdf2_sha256$36000$Vi2lBnr5h5ee$awxW9s042y23fISIZHks3h1hHieogLXXroObZsqGv0c=",
@@ -184,7 +184,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 6,
     "fields": {
         "password": "pbkdf2_sha256$36000$QW3s2sNU1cL2$C/soQ1isU0Ogiehr627viw0zHugND6IyrTb/C1JrcXs=",
@@ -204,7 +204,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 7,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$clZqa011T0lEenZm$yBsDpozFscv1ZAJ3i3FliQ",
@@ -224,7 +224,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 8,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$WHNnZ0F0UDc0bVU2$5vkj2MOwx2FKkXM78LIahw",
@@ -244,7 +244,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 9,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$eEtFcWxBRVJWcTY3$JGDcGISmAu8A6otl1bc4Ow",
@@ -264,7 +264,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 10,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VVFoVjU5dTVoS3Uy$BhNAOZL0LvQuE/J+eYsFIA",
@@ -284,7 +284,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 27,
     "fields": {
         "password": "",
@@ -526,30 +526,28 @@
     }
 },
 {
-    "model": "django_summernote.attachment",
-    "pk": 1,
+    "model": "ontask.workflow",
+    "pk": 152,
     "fields": {
-        "name": "download.jpeg",
-        "file": "django-summernote/2017-11-15/1c610ce3-ed8e-46c4-8a42-d391962ce1fb.jpeg",
-        "uploaded": "2017-11-15T05:49:24.475Z"
-    }
-},
-{
-    "model": "django_summernote.attachment",
-    "pk": 2,
-    "fields": {
-        "name": "2_10_8__Read_about_the_floating_point_representation_and_share_views_py_-_ontask_B_-____ontask_B_.png",
-        "file": "django-summernote/2017-11-15/81cac62b-51a3-4cdc-9cf7-817386021c2b.png",
-        "uploaded": "2017-11-15T05:51:48.392Z"
-    }
-},
-{
-    "model": "django_summernote.attachment",
-    "pk": 3,
-    "fields": {
-        "name": "download.jpeg",
-        "file": "django-summernote/2017-11-15/5aa534cf-1bcd-47ed-b9a8-2e1c9a8707bd.jpeg",
-        "uploaded": "2017-11-15T05:52:38.966Z"
+        "name": "wflow1",
+        "description_text": "",
+        "created": "2017-12-23T05:24:23.229Z",
+        "modified": "2017-12-23T07:13:43.757Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "nrows": 0,
+        "ncols": 0,
+        "attributes": {},
+        "query_builder_ops": [],
+        "data_frame_table_name": "",
+        "session_key": "",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "star": [],
+        "lusers": []
     }
 },
 {
@@ -663,23 +661,58 @@
     }
 },
 {
-    "model": "ontask.workflow",
-    "pk": 152,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "name": "wflow1",
-        "description_text": "",
-        "created": "2017-12-23T05:24:23.229Z",
-        "modified": "2017-12-23T07:13:43.757Z",
-        "nrows": 0,
-        "ncols": 0,
-        "attributes": {},
-        "query_builder_ops": [],
-        "data_frame_table_name": "",
-        "session_key": "",
-        "shared": []
-    }
+    "model": "ontask.ontaskuser",
+    "pk": 4,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 6,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 5,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 1,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 7,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 8,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 9,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 10,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 2,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 3,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 27,
+    "fields": {}
 }
 ]

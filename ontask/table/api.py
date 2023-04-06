@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Functions implementing the API calls to manipulate the table."""
 from typing import Optional
 
 from django import http
 from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
@@ -69,7 +67,7 @@ class TableBasicOps(APIView):
 
         # Update all the counters in the conditions
         for action in workflow.actions.all():
-            action.update_n_rows_selected()
+            action.update_selected_row_counts()
 
         return Response(None, status=status.HTTP_201_CREATED)
 
@@ -220,7 +218,7 @@ class TableBasicMerge(APIView):
     Retrieves the data frame attached to the workflow and returns it labeled
     as "data_frame"
 
-    post:
+    put:
     Request to merge a given data frame with the one attached to the workflow.
     """
 
@@ -260,6 +258,11 @@ class TableBasicMerge(APIView):
         del wid, format
         # Get the dst_df
         dst_df = pandas.load_table(workflow.get_data_frame_table_name())
+
+        if dst_df is None:
+            return Response(
+                _('Merge request requires a workflow with a non-empty table'),
+                status=status.HTTP_400_BAD_REQUEST)
 
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():

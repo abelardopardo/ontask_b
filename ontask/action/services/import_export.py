@@ -1,14 +1,86 @@
-# -*- coding: utf-8 -*-
-
 """Service for action import."""
 import gzip
 from typing import List
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework.parsers import JSONParser
 
 from ontask import models
 from ontask.action import serializers
+
+
+def run_compatibility_patches(json_data: List) -> List:
+    """Patch list of actions to make it compatible.
+
+    1. Change action.target_url from None to ''
+
+    2. Extract filters from the conditions array and put it in its own array
+
+    3. Remove spurious "filter": {} in the action object
+
+    :param json_data: List of actions to process
+    :return: Modified json_data
+    """
+    for action_obj in json_data:
+        # Target_url field in actions should be present an empty by default
+        if action_obj.get('target_url') is None:
+            action_obj['target_url'] = ''
+
+        # If filter is None, should be empty
+        if (f_obj := action_obj.get('filter', None)) == {} or f_obj == []:
+            action_obj.pop('filter')
+            f_obj = None
+
+        # If it is a single element list, replace by single element
+        if isinstance(f_obj, List):
+            action_obj['filter'] = f_obj[0]
+
+        # Remove columns field
+        action_obj.pop('columns', None)
+
+        if action_obj.get('action_type') is not None:
+            if action_obj.pop('is_out', True):
+                action_type = models.Action.PERSONALIZED_TEXT
+            else:
+                action_type = models.Action.SURVEY
+            action_obj['action_type'] = action_type
+
+        # Replace content field (if it exists, with text_content)
+        action_obj['text_content'] = action_obj.get(
+            'content',
+            action_obj.get('text_content'))
+
+    # move filter condition to its own list
+    for action_obj in json_data:
+        if not (conditions := action_obj.get('conditions')):
+            continue
+
+        action_obj['conditions'] = [
+            cond for cond in conditions if not cond.get('is_filter', False)]
+
+        if not (filter_obj := [
+            cond for cond in conditions if cond.get('is_filter', False)]
+        ):
+            continue
+
+        action_obj['filter'] = filter_obj[0]
+
+    # move filter condition to its own list
+    for action_obj in json_data:
+        conditions = action_obj.get('conditions')
+        for cond in conditions:
+            if '_formula' not in cond:
+                cond['_formula'] = cond.pop('formula')
+            if '_formula_text' not in cond:
+                cond['_formula_text'] = cond.pop('formula_text', None)
+
+        if (
+            (filter_obj := action_obj.get('filter'))
+            and '_formula' not in filter_obj
+        ):
+            filter_obj['_formula'] = filter_obj.pop('formula')
+
+    return json_data
 
 
 def do_import_action(
@@ -31,17 +103,16 @@ def do_import_action(
         parsed_data = JSONParser().parse(data_in)
     except IOError:
         raise Exception(
-            _('Incorrect file. Expecting a GZIP file (exported workflow).'),
+            _('Incorrect file. Expecting a GZIP file (exported action).'),
         )
+
+    run_compatibility_patches(parsed_data)
 
     # Serialize content
     action_data = serializers.ActionSelfcontainedSerializer(
         data=parsed_data,
         many=True,
-        context={
-            'user': user,
-            'workflow': workflow},
-    )
+        context={'user': user, 'workflow': workflow})
 
     # If anything goes wrong, return a string to show in the page.
     if not action_data.is_valid():

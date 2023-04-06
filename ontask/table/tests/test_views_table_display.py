@@ -1,29 +1,21 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for the scheduler pages."""
-import os
 
-from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
 from ontask import tests
 from ontask.dataops import pandas
+import ontask.dataops.sql.row_queries
 from ontask.table import views
 
 
-class TableTestViewTableDisplay(tests.OnTaskTestCase):
+class TableTestViewTableDisplay(tests.SimpleTableFixture, tests.OnTaskTestCase):
     """Test stat views."""
-
-    fixtures = ['simple_table']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_table.sql')
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
-
-    def test_display(self):
+    def test(self):
         """Test the use of forms in to schedule actions."""
         # Remove is_key from column 'age'
         col = self.workflow.columns.get(name='age')
@@ -71,7 +63,8 @@ class TableTestViewTableDisplay(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
 
         # Delete one row of the table
-        r_val = pandas.get_table_row_by_index(self.workflow, None, 1)
+        r_val = ontask.dataops.sql.row_queries.get_table_row_by_index(
+            self.workflow, None, 1)
         resp = self.get_response(
             'table:row_delete',
             req_params={
@@ -88,10 +81,10 @@ class TableTestViewTableDisplay(tests.OnTaskTestCase):
         get_url = req.get_full_path()
         req = self.factory.post(
             get_url,
-            {},
+            {'key': 'email', 'value': r_val['email']},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         req = self.add_middleware(req)
-        resp = views.row_delete(req)
+        resp = views.TableRowDeleteView.as_view()(req)
         self.assertTrue(status.is_success(resp.status_code))
         self.workflow.refresh_from_db()
         self.assertEqual(self.workflow.nrows, nrows - 1)

@@ -8,13 +8,13 @@
 {% block extrahead %}
   {% ontask_datetimepicker_css %}
   {% ontask_jqcron_css %}
-  {% ontask_datetimepicker_js %}
-  {% ontask_jqcron_js %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'dataops/js/dataops.js' %}?v={% ontask_version %}"></script>
-  <script src="{% static 'action/js/action.js' %}?v={% ontask_version %}"></script>
-  <script src="{% static 'scheduler/js/scheduler.js' %}?v={% ontask_version %}"></script>
+  {% ontask_datetimepicker_js %}
+  {% ontask_jqcron_js %}
+  <script src="{% static 'dataops/js/dataops.js' %}"></script>
+  <script src="{% static 'action/js/action.js' %}"></script>
+  <script src="{% static 'scheduler/js/scheduler.js' %}"></script>
   <script type="text/javascript">
     jqCronWidget = $('.ontask-scheduler-frequency').jqCron({
       default_value: '{{ frequency }}',
@@ -38,15 +38,15 @@
 {% block container %}
   <div class="container" id="email-schedule-send">
     <div id="step_sequence" hidden>
-      {% include 'step_by_step.html' with valuerange=payload.valuerange step=1 %}
+      {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
     </div>
     <h1 class="text-center">{{ payload.page_title }}</h1>
     <p class="text-center">{% blocktrans with n=now %}Time now is {{ n }}{% endblocktrans %}</p>
-    {% if action %}
+    {% if view.action %}
       <p class="lead text-center">
         <a class="spin" data-toggle="tooltip"
            title="{% trans 'Edit the action scheduled for execution' %}"
-           href="{% url 'action:edit' action.id %}">{{ action.name }}</a>
+           href="{% url 'action:edit' view.action.id %}">{{ view.action.name }}</a>
       </p>
       {% include 'action/includes/partial_action_edit_out_warning.html' %}
     {% endif %}
@@ -58,9 +58,9 @@
         <div class="text-center mt-3 mb-3">
           <a type="button" class="shadow btn btn-outline-dark"
              href="{% url 'scheduler:index' %}"> {% trans 'Cancel' %}</a>
-          {% if action %}
+          {% if view.action %}
             <button type="button" class="shadow btn btn-outline-info js-action-preview"
-                    data-url="{% url 'action:preview' action.id 1 %}">
+                    data-url="{% url 'action:preview' view.action.id 1 %}">
               <span class="fa fa-eye"></span> {% trans 'Preview' %}</button>
           {% endif %}
           <button type="Submit" name="Submit" value="Submit" id="next-step-on" hidden

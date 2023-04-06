@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Abstract class to use to inherit a plugin."""
 from abc import ABCMeta
 from builtins import object
 from typing import Dict, Optional
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 

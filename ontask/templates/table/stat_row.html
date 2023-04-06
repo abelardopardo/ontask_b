@@ -13,15 +13,15 @@
 {% endblock %}
 {% block scripts %}
   <script src="{% static 'js/sol.js' %}"></script>
-  <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'table/js/table.js' %}"></script>
 {% endblock %}
 {% block container %}
 <div class="container">
-  <h1 class="text-center">{% blocktrans %}Stats for {{ value }}{% endblocktrans %}</h1>
+  <h1 class="text-center">{% blocktrans %}Stats for {{ reference_value }}{% endblocktrans %}</h1>
 
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-         class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+         class="shadow btn btn-outline-dark align-middle spin">{% trans 'Back' %}</a>
   </div>
   <br/>
   <div class="text-center">
@@ -31,7 +31,7 @@
   </div>
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-         class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+         class="shadow btn btn-outline-dark align-middle spin">{% trans 'Back' %}</a>
   </div>
 </div>
 {% endblock container %}

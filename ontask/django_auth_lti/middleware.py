@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Functions related with the middleware."""
 from django.conf import settings
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import LOGGER
 from ontask.django_auth_lti.timer import Timer

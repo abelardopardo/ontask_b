@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Test the views for the scheduler pages."""
 from datetime import datetime, timedelta
-import os
 
 from django.conf import settings
 import pytz
@@ -11,22 +8,21 @@ from rest_framework import status
 from ontask import models, tests
 
 
-class SchedulerForms(tests.OnTaskTestCase):
+class SchedulerFormsBasic(tests.ThreeActionsFixture, tests.OnTaskTestCase):
     """Test schedule creation through forms."""
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'  # noqa: S105
 
-    fixtures = ['three_actions']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'three_actions.sql')
-
-    workflow_name = 'wflow1'
-
     s_name = 'Scheduling first JSON'
     s_desc = 'First JSON intervention'
     s_execute = '2119-05-03 12:32:18+10:30'
 
-    def test_schedule_forms(self):
+
+class SchedulerForms(SchedulerFormsBasic):
+    """Test schedule creation through forms."""
+
+    def test(self):
         """Test the use of forms in to schedule actions."""
         # Index of all scheduled actions
         resp = self.get_response('scheduler:index')
@@ -116,6 +112,10 @@ class SchedulerForms(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
+
+class SchedulerJSONForms(SchedulerFormsBasic):
+    """Test schedule creation through forms."""
+
     def test_schedule_json_action(self):
         """Test creation of a scheduled execution of json action."""
         # Index of all scheduled actions
@@ -199,8 +199,11 @@ class SchedulerForms(tests.OnTaskTestCase):
         self.assertTrue(status.is_success(resp.status_code))
         self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
-    def test_schedule_times_in_forms(self):
-        """Test the date_time when scheduling actions"""
+
+class SchedulerTimesInForms(SchedulerFormsBasic):
+    """Test schedule creation through forms."""
+
+    def test(self):
         # Index of all scheduled actions
         resp = self.get_response('scheduler:index')
         self.assertTrue(status.is_success(resp.status_code))

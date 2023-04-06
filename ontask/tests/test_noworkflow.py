@@ -1,30 +1,18 @@
-# -*- coding: utf-8 -*-
-
 """Tests redirection to home when no workflow is selected."""
-import os
 
-from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
 from ontask import tests
 
 
-class BackToHome(tests.OnTaskTestCase):
+class BackToHome(
+    tests.InitialWorkflowFixture,
+    tests.OnTaskTestCase
+):
     """Test redirection to home page when no workflow is set."""
 
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql'
-    )
-
-    wflow_name = 'wflow2'
-
-    def test_back_to_home_page(self):
+    def test(self):
         """Loop over all URLs and check they redirect appropriately."""
         redirect = [
             # Workflow
@@ -59,7 +47,7 @@ class BackToHome(tests.OnTaskTestCase):
             reverse('dataops:rowupdate'),
             reverse('dataops:rowcreate'),
             reverse('dataops:csvupload_start'),
-            reverse('dataops:excelupload_start'),
+            reverse('dataops:excel_upload_start'),
             reverse('dataops:googlesheetupload_start'),
             reverse('dataops:s3upload_start'),
             reverse('dataops:upload_s2'),
@@ -71,7 +59,7 @@ class BackToHome(tests.OnTaskTestCase):
             reverse('logs:page_view', kwargs={'pk': 1}),
             # Table
             reverse('table:display_view', kwargs={'pk': 1}),
-            reverse('table:view_index'),
+            reverse('table:row_delete'),
             reverse('table:stat_column', kwargs={'pk': 1}),
             reverse('table:stat_table'),
             reverse('table:stat_table_view', kwargs={'pk': 1}),
@@ -98,18 +86,17 @@ class BackToHome(tests.OnTaskTestCase):
             reverse('column:column_restrict', kwargs={'pk': 1}),
             # Action
             reverse('action:create'),
-            reverse('action:save_text', kwargs={'pk': 1}),
             reverse('action:update', kwargs={'pk': 1}),
-            reverse('action:clone_action', kwargs={'pk': 1}),
+            reverse('action:clone', kwargs={'pk': 1}),
             reverse('action:delete', kwargs={'pk': 1}),
             reverse(
                 'action:select_key_column_action',
-                kwargs={'pk': 1, 'cpk': 1, 'key': 1}),
+                kwargs={'pk': 1, 'cpk': 1}),
             reverse('action:select_column_action', kwargs={'pk': 1, 'cpk': 1}),
             reverse('action:shuffle_questions', kwargs={'pk': 1}),
             reverse(
                 'action:edit_in_select_condition',
-                kwargs={'pk': 1, 'condpk': 1}),
+                kwargs={'pk': 1, 'condition_pk': 1}),
             reverse('action:edit_in_select_condition', kwargs={'pk': 1}),
             reverse('action:show_survey_table_ss', kwargs={'pk': 1}),
             reverse('action:preview', kwargs={'pk': 1, 'idx': 0}),
@@ -129,17 +116,16 @@ class BackToHome(tests.OnTaskTestCase):
                 kwargs={'pk': 1, 'action_pk': 1}),
             # Connection
             reverse('connection:sqlconn_view', kwargs={'pk': 1}),
+            reverse('connection:athenaconn_view', kwargs={'pk': 1}),
             # Dataops
             reverse('dataops:plugin_diagnose', kwargs={'pk': 1}),
             reverse('dataops:plugin_moreinfo', kwargs={'pk': 1}),
-            # reverse('dataops:athenaconn_view', kwargs={'pk': 1}),
             # Logs
-            reverse('logs:display_ss'),
+            reverse('logs:index_ss'),
             reverse('logs:modal_view', kwargs={'pk': 1}),
             # Table
             reverse('table:display_ss'),
             reverse('table:display_view_ss', kwargs={'pk': 1}),
-            reverse('table:row_delete'),
             reverse('table:view_add'),
             reverse('table:stat_column_JSON', kwargs={'pk': 1}),
             reverse('table:view_edit', kwargs={'pk': 1}),
@@ -154,7 +140,10 @@ class BackToHome(tests.OnTaskTestCase):
 
         for url_name in redirect:
             resp = self.client.get(url_name)
-            self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
+            self.assertEqual(
+                resp.status_code,
+                status.HTTP_302_FOUND,
+                msg='URL name: {0}'.format(url_name))
             self.assertEqual(resp.url, reverse('home'))
 
         for url_name in bad_request:

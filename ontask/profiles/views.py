@@ -1,10 +1,8 @@
-
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from rest_framework.authtoken.models import Token
 
@@ -25,12 +23,16 @@ class ShowProfile(LoginRequiredMixin, generic.TemplateView):
         else:
             user = self.request.user
 
+        try:
+            api_token = user.auth_token
+        except Exception:
+            api_token = ''
+
         if user == self.request.user:
             kwargs["editable"] = True
         kwargs["show_user"] = user
-        kwargs["tokens"] = models.OAuthUserToken.objects.filter(
-            user=user
-        )
+        kwargs["tokens"] = models.OAuthUserToken.objects.filter(user=user)
+        kwargs['api_token'] = api_token
         return super().get(request, *args, **kwargs)
 
 

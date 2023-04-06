@@ -14,23 +14,23 @@
 {% endblock %}
 {% block scripts %}
   <script src="{% static 'js/sol.js' %}"></script>
-  <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'table/js/table.js' %}"></script>
 {% endblock %}
 {% block container %}
 <div class="container">
-  <h1 class="text-center">Column: {{ column.name }}</h1>
-  {% if column.description_text %}
-    <p class="lead text-center">{{ column.description_text }}</p>
+  <h1 class="text-center">Column: {{ object.name }}</h1>
+  {% if object.description_text %}
+    <p class="lead text-center">{{ object.description_text }}</p>
   {% endif %}
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-       class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+       class="shadow btn btn-outline-dark align-middle spin">{% trans 'Back' %}</a>
   </div>
   <br/>
   {% include 'table/includes/partial_column_stats_data.html' %}
   <div class="text-center">
     <a href="{{ request.META.HTTP_REFERER }}"
-         class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+         class="shadow btn btn-outline-dark align-middle spin">{% trans 'Back' %}</a>
   </div>
 </div>
 {% endblock container %}

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Class implementing the ToolProvider for LTI."""
 from collections import defaultdict
 import re

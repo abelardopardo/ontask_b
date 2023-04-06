@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Test the views to update or create new rews."""
-import os
 
-from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
@@ -11,20 +7,19 @@ from ontask import tests
 from ontask.dataops import sql, views
 
 
-class DataopsViewsRow(tests.OnTaskTestCase):
+class DataopsViewsRowBasic(
+    tests.TestConditionEvaluationFixture,
+    tests.OnTaskTestCase,
+):
     """Test the views to create and update the row values."""
 
-    fixtures = ['test_condition_evaluation']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'test_condition_evaluation.sql')
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'Testing Eval Conditions'
 
-    def test_row_create(self):
-        """Test the view to filter items."""
+class DataopsViewsRowCreate(DataopsViewsRowBasic):
+
+    def test(self):
         nrows = self.workflow.nrows
 
         # Row create (GET)
@@ -79,8 +74,10 @@ class DataopsViewsRow(tests.OnTaskTestCase):
         self.assertEqual(row_val['double1'], 22)
         self.assertEqual(row_val['double2'], 23)
 
-    def test_row_edit(self):
-        """Test the view to filter items."""
+
+class DataopsViewsRowEdit(DataopsViewsRowBasic):
+
+    def test(self):
         # Row edit (GET)
         resp = self.get_response(
             'dataops:rowupdate',
@@ -107,7 +104,7 @@ class DataopsViewsRow(tests.OnTaskTestCase):
                 '___ontask___upload_8': '06/05/2019 19:23'}
         )
         request = self.add_middleware(request)
-        resp = views.row_update(request)
+        resp = views.RowUpdateView.as_view()(request)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
         row_val = sql.get_row(

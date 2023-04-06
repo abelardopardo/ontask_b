@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Export the workflows that belong to a user."""
 import shutil
 

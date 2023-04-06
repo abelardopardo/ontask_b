@@ -1,16 +1,17 @@
 {% extends "admin/base.html" %}
 {% load ontask_tags %}
 {% load i18n %}
-{% load admin_static %}
+{% load static %}
+{% block usertools %}{% endblock %}
 {% block title %}{{ block.super }}{% trans 'Admin' %} {% endblock %}
 {% block branding %}
   <a class="navbar-brand" href="{% url 'admin:index' %}">{% include "_brandname.html" %} {% trans 'Admin' %}&nbsp;</a>
 {% endblock %}
 {% block nav-global %}
-  <a class="shadow btn btn-outline-dark" href="{% url 'home' %}"><span class="fa fa-transfer"
-                                                           aria-hidden="true"></span> {% trans 'Switch to Site' %}</a>
+  <a class="shadow btn btn-outline-dark" href="{% url 'home' %}">
+    {% trans 'Switch to Site' %}</a>
 {% endblock %}
 {% block extrahead %}{{ block.super }}
-  <link href="{% static 'css/main.css' %}?v={% ontask_version %}" rel="stylesheet">
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
 {% endblock %}
 

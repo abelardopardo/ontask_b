@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
 """Test views to manipulate the SQL connections."""
-import os
 
 from django.conf import settings
 from django.urls import reverse
@@ -10,43 +7,39 @@ from rest_framework import status
 from ontask import models, tests
 
 
-class DataopsViewSQLConnections(tests.OnTaskTestCase):
+class DataopsSQLConnectionsBasic(
+    tests.EmptyWorkflowFixture,
+    tests.OnTaskTestCase,
+):
     """Test the SQL connection views."""
-
-    fixtures = ['empty_wflow']
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
 
-    def test_sql_views_instructor(self):
-        """Test the view to filter items."""
+class DataopsViewSQLConnections(DataopsSQLConnectionsBasic):
+    """Test the SQL connection views."""
+
+    def test(self):
         resp = self.get_response('connection:sqlconns_index')
         self.assertTrue(status.is_success(resp.status_code))
 
 
-class DataopsViewSQLConnectionsAdmin(tests.OnTaskTestCase):
+class DataopsViewSQLConnectionsAdmin(DataopsSQLConnectionsBasic):
     """Test the SQL connection views."""
 
-    fixtures = ['empty_wflow']
-
     user_email = 'superuser@bogus.com'
-    user_pwd = 'boguspwd'
 
-    workflow_name = 'wflow1'
-
-    def test_sql_views_admin(self):
-        """Test the view to filter items."""
+    def test(self):
         resp = self.get_response('connection:sqlconns_admin_index')
         self.assertTrue(status.is_success(resp.status_code))
 
         # Add a new connection (GET)
-        resp = self.get_response('connection:sqlconn_add', is_ajax=True)
+        resp = self.get_response('connection:sqlconn_create', is_ajax=True)
         self.assertTrue(status.is_success(resp.status_code))
         # Add a new connection (POST)
         resp = self.get_response(
-            'connection:sqlconn_add',
+            'connection:sqlconn_create',
             method='POST',
             req_params={
                 'name': 'conn name',
@@ -135,26 +128,16 @@ class DataopsViewSQLConnectionsAdmin(tests.OnTaskTestCase):
         self.assertEqual(models.SQLConnection.objects.count(), 1)
 
 
-class DataopsRunSQLConnections(tests.OnTaskTestCase):
+class DataopsRunSQLConnections(
+    tests.InitialWorkflowFixture,
+    tests.OnTaskTestCase,
+):
     """Test the SQL connection run."""
-
-    fixtures = ['ontask/tests/initial_workflow/initial_workflow.json']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql'
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'BIOL1011'
-
-    def test_sql_run(self):
-        """Execute the RUN step."""
-
+    def test(self):
         sql_conn = models.SQLConnection.objects.get(pk=1)
         self.assertIsNotNone(sql_conn)
 

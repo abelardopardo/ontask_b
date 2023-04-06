@@ -1,19 +1,30 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle connections."""
 from django import http
-from django.contrib import messages
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
+from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
 
 from ontask import create_new_name, models
 
 
 class ConnectionTableAdmin(tables.Table):
-    """Base class for those used to render connection admin items."""
+    """Base class to render connection admin table."""
 
     enabled = tables.BooleanColumn(verbose_name=_('Enabled?'))
+    toggle_url_name = None
+
+    def render_enabled(self, record):
+        """Render the boolean to allow changes."""
+        return render_to_string(
+            'connection/includes/partial_enable.html',
+            {
+                'id': record['id'],
+                'enabled': record['enabled'],
+                'toggle_url': reverse(
+                    self.toggle_url_name,
+                    kwargs={'pk': record['id']})})
 
     class Meta:
         """Define model, fields, sequence and attributes."""
@@ -29,6 +40,15 @@ class ConnectionTableAdmin(tables.Table):
 
 class ConnectionTableSelect(tables.Table):
     """Base class to render connections to instructors."""
+
+    select_url = None
+
+    def render_name(self, record):
+        """Render the name as a link."""
+        return format_html(
+            '<a href="{0}">{1}</a>',
+            reverse(self.select_url, kwargs={'pk': record['id']}),
+            record['name'])
 
     class Meta:
         """Define fields, sequence and attributes."""
@@ -46,24 +66,14 @@ def clone_connection(
     request: http.HttpRequest,
     conn: models.Connection,
     mgr,
-    clone_url: str,
 ) -> http.JsonResponse:
     """Finish AJAX handshake to clone a connection.
 
     :param request: HTTP request
     :param conn: Connection to clone.
     :param mgr: Manager to handle the right type of connection
-    :param clone_url: String with the URL to perform the clone operation.
     :return: AJAX response
     """
-    if request.method == 'GET':
-        return http.JsonResponse({
-            'html_form': render_to_string(
-                'connection/includes/partial_clone.html',
-                {'pk': conn.id, 'cname': conn.name, 'clone_url': clone_url},
-                request=request)})
-
-    # Proceed to clone the connection
     id_old = conn.id
     name_old = conn.name
     conn.id = None
@@ -75,47 +85,3 @@ def clone_connection(
         id_old=id_old,
         name_old=name_old)
     return http.JsonResponse({'html_redirect': ''})
-
-
-def delete(
-    request: http.HttpRequest,
-    conn: models.Connection,
-    delete_url: str,
-) -> http.JsonResponse:
-    """Finish processing AJAX request for the delete connection operation.
-
-    :param request: AJAX request
-    :param conn: Connection to delete.
-    :param delete_url: String with the URL to perform the delete operation.
-    :return: AJAX response to handle the form
-    """
-    if request.method == 'POST':
-        conn.log(request.user, conn.delete_event)
-        conn.delete()
-        return http.JsonResponse({'html_redirect': ''})
-
-    # This is a GET request
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'connection/includes/partial_delete.html',
-            {'name': conn.name, 'delete_url': delete_url},
-            request=request),
-    })
-
-
-def toggle(
-    request: http.HttpRequest,
-    conn: models.Connection,
-    toggle_url: str,
-) -> http.JsonResponse:
-    """Toggle the enable field in the given connection."""
-    if not conn:
-        messages.error(
-            request,
-            _('Incorrect invocation of toggle question change function.'))
-        return http.JsonResponse({}, status=404)
-
-    conn.enabled = not conn.enabled
-    conn.save(update_fields=['enabled'])
-    conn.log(request.user, conn.toggle_event, enabled=conn.enabled)
-    return http.JsonResponse({'is_checked': conn.enabled, 'toggle_url': toggle_url})

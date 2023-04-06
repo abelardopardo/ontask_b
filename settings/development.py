@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-
+"""Configuration for development."""
 import logging.config
 
 from settings.base import *  # NOQA
@@ -13,13 +12,28 @@ else:
     CELERY_TASK_ALWAYS_EAGER = True
 
 # Django Debug Toolbar
-if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
+if DEBUG and not ONTASK_TESTING:
+    if DEBUG_TOOLBAR:
+        INSTALLED_APPS += ['debug_toolbar']
+        MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+
+    if PROFILE_CPROFILE:
+        DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
+        MIDDLEWARE += [
+            'django_cprofile_middleware.middleware.ProfilerMiddleware']
+
+    if PROFILE_SILK:
+        INSTALLED_APPS += ['silk']
+        MIDDLEWARE += ['silk.middleware.SilkyMiddleware']
+
     TEMPLATES[0]['OPTIONS']['debug'] = True
 
 if ONTASK_TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
     ONTASK_FIXTURE_DIR = os.path.join(BASE_DIR, 'ontask', 'tests', 'fixtures')
+    ONTASK_HEADLESS_TEST = env.bool(
+        'ONTASK_HEADLESS_TEST',
+        default=bool(os.environ.get('ONTASK_HEADLESS_TEST', True)))
     FIXTURE_DIRS = [
         os.path.join(BASE_DIR, 'ontask', 'tests', 'initial_workflow'),
         ONTASK_FIXTURE_DIR]
@@ -32,10 +46,6 @@ else:
         # '...
     }
 
-# Additional middleware introduced by debug toolbar
-if DEBUG:
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-
 # Show thumbnail generation errors
 THUMBNAIL_DEBUG = True
 
@@ -45,7 +55,7 @@ INTERNAL_IPS = ['127.0.0.1', '0.0.0.1', 'localhost']
 LOGGING['loggers'] = {
     'django': {
         'handlers': ['django_log_file'],
-        'propagate': True,
+        'propagate': False,
         'level': 'DEBUG',
     },
     'ontask': {
@@ -53,63 +63,63 @@ LOGGING['loggers'] = {
         'level': 'DEBUG',
     },
     'scripts': {
-        'handlers': ['console'],
-        'propagate': True,
+        'handlers': ['script_log_file'],
+        'propagate': False,
         'level': 'DEBUG',
     },
     'celery_execution': {
         'handlers': ['celery_log_file'],
-        'propagate': True,
+        'propagate': False,
         'level': 'DEBUG',
     },
     'django.security.DisallowedHost': {
-        'handlers': ['console'],
-        'propagate': True,
+        'handlers': ['django_log_file'],
+        'propagate': False,
         'level': 'DEBUG',
     },
     'ontask.django_auth_lti.backends': {
         'handlers': ['django_log_file'],
+        'propagate': False,
         'level': 'DEBUG',
     },
     'ontask.django_auth_lti.middleware_patched': {
         'handlers': ['django_log_file'],
-        'level': 'DEBUG',
-    },
-}
+        'propagate': False,
+        'level': 'DEBUG'}}
 
 logging.config.dictConfig(LOGGING)
 
 GRAPH_MODELS = {
-'group_models': True,
-'all_applications': True,
-'output': 'data_model.png',
-'exclude_models': [
-    'TaskResult',
-    'SQLConnection',
-    'Plugin',
-    'Site',
-    'ThumbnailDimensions',
-    'Thumbnail',
-    'Source',
-    'File',
-    'Preference',
-    'PeriodicTask',
-    'PeriodicTasks',
-    'IntervalSchedule',
-    'CrontabSchedule',
-    'SolarSchedule',
-    'Attachment',
-    'AbstractAttachment',
-    'Session',
-    'AbstractBaseSession',
-    'Profile',
-    'BaseProfile',
-    'Token',
-    'LogEntry',
-    'Group',
-    'Permission',
-    'ContentType'
-]
+    'group_models': True,
+    'all_applications': True,
+    'output': 'data_model.png',
+    'exclude_models': [
+        'TaskResult',
+        'SQLConnection',
+        'Plugin',
+        'Site',
+        'ThumbnailDimensions',
+        'Thumbnail',
+        'Source',
+        'File',
+        'Preference',
+        'PeriodicTask',
+        'PeriodicTasks',
+        'IntervalSchedule',
+        'CrontabSchedule',
+        'SolarSchedule',
+        'Attachment',
+        'AbstractAttachment',
+        'Session',
+        'AbstractBaseSession',
+        'Profile',
+        'BaseProfile',
+        'Token',
+        'LogEntry',
+        'Group',
+        'Permission',
+        'ContentType'
+    ]
 }
 
-dump_config()
+show_configuration()

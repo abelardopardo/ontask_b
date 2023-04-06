@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Intercept signals when manipulating some objects."""
 
 from django.conf import settings
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, pre_save
 from django.dispatch.dispatcher import receiver
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import LOGGER, models
 from ontask.dataops import sql
@@ -16,14 +14,13 @@ from ontask.scheduler import services
 def create_ontaskuser_handler(sender, **kwargs):
     """Create the user extensions whenever a new user is created."""
     del sender
-    created = kwargs.get('created', True)
     instance = kwargs.get('instance')
-    if not created or not instance:
+    if not kwargs.get('created', True) or not instance:
         return
 
     # Create the profile and ontask user objects, only if it is newly created
-    ouser = models.OnTaskUser(user=instance)
-    ouser.save()
+    ontask_user = models.OnTaskUser(user=instance)
+    ontask_user.save()
     profile = models.Profile(user=instance)
     profile.save()
     LOGGER.info(_('New ontask user profile for %s created'), str(instance))
@@ -33,20 +30,35 @@ def create_ontaskuser_handler(sender, **kwargs):
 def delete_data_frame_table(sender, **kwargs):
     """Delete the data table when deleting the workflow."""
     del sender
-    instance = kwargs.get('instance')
-    if not instance:
+
+    if not (instance := kwargs.get('instance')):
         return
 
-    if instance.has_table():
+    if instance.has_data_frame:
         sql.delete_table(instance.get_data_frame_table_name())
+
+
+@receiver(pre_save, sender=models.Condition)
+@receiver(pre_save, sender=models.Filter)
+def update_fields(sender, **kwargs):
+    """Update various fields after saving conditions and filter."""
+    del sender
+
+    if not (instance := kwargs.get('instance')):
+        return
+
+    instance.update_fields()
 
 
 @receiver(post_save, sender=models.ScheduledOperation)
 def create_scheduled_task(sender, **kwargs):
     """Create the task in django_celery_beat for every scheduled operation."""
     del sender
-    instance = kwargs.get('instance')
-    if not instance or not instance.status == models.scheduler.STATUS_PENDING:
+
+    if (
+        not (instance := kwargs.get('instance')) or
+        not instance.status == models.scheduler.STATUS_PENDING
+    ):
         return
     services.schedule_task(instance)
 
@@ -55,8 +67,8 @@ def create_scheduled_task(sender, **kwargs):
 def delete_scheduled_task(sender, **kwargs):
     """Delete the task attached to a Scheduled Operation."""
     del sender
-    instance = kwargs.get('instance')
-    if not instance:
+
+    if not (instance := kwargs.get('instance')):
         return
 
     instance.delete_task()

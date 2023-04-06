@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-"""Service to manipulate items."""
+"""Service to manipulate scheduled items."""
 from datetime import datetime
 import json
 from typing import Dict, Optional
@@ -8,7 +6,7 @@ from typing import Dict, Optional
 from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
 from django.conf import settings
 from django.forms.models import model_to_dict
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 import pytz
 
 from ontask import models
@@ -74,7 +72,7 @@ def create_timedelta_string(
     if ftime:
         # Has start time
         result = (
-            ugettext('Starting at ')
+            gettext('Starting at ')
             + ftime.strftime('%H:%M:%S %z %Y/%b/%d')
             + ', ' + result)
 
@@ -83,9 +81,3 @@ def create_timedelta_string(
         result = result + ', until ' + utime.strftime('%H:%M:%S %z %Y/%b/%d')
 
     return result
-
-
-def delete_item(s_item: models.ScheduledOperation):
-    """Delete a scheduled operation and log the event."""
-    s_item.log(models.Log.SCHEDULE_DELETE)
-    s_item.delete()

@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Amazon Athena Connection model."""
 from typing import Dict
 
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedCharField, EncryptedTextField
 
 from ontask.models.common import CHAR_FIELD_MID_SIZE

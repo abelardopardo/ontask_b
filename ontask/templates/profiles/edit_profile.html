@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load staticfiles %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% load thumbnail %}
 {% block title %}{{ block.super }}{% trans 'Profile' %}{% endblock %}
@@ -12,7 +12,9 @@
     <!-- left column -->
     <div class="col-md-3">
       <div class="text-center">
-        <img title="{% trans 'profile picture' %}" class="rounded-circle img-fluid" src="{% thumbnail user.profile.picture|default:'default_profile.png' 140x140 crop %}">
+        {% thumbnail user.profile.picture|default:'default_profile.png' "140x140" crop="center" as im %}
+          <img title="{% trans 'profile picture' %}" class="rounded-circle img-fluid" src="{{ im.url }}">
+        {% endthumbnail %}
       </div>
     </div>
     <!-- edit form column -->

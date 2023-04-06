@@ -12,7 +12,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authtools', '0003_auto_20160128_0912'),
+        ('ontask', '0003_auto_20160128_0912'),
     ]
 
     operations = [

@@ -1,17 +1,17 @@
 {% load i18n %}
 <div class="modal-header" style="border-bottom: unset;">
-  <h4 class="modal-title">{% trans 'Log' %} {{ log_item.id }}: {{ log_item }}</h4>
+  <h4 class="modal-title">{% trans 'Log' %} {{ object.id }}: {{ object }}</h4>
   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
-  {% if log_item.workflow %}
-    <h4 class="text-center">{% trans 'Workflow' %}: {{ log_item.workflow.name }}</h4>
+  {% if object.workflow %}
+    <h4 class="text-center">{% trans 'Workflow' %}: {{ object.workflow.name }}</h4>
   {% endif %}
-  <p class="text-center">{% trans 'Last modified' %}: {{ log_item.modified }}</p>
+  <p class="text-center">{% trans 'Last modified' %}: {{ object.modified }}</p>
   <table class="table shadow" width="100%">
-    {% for c_key, c_val in c_vals.items %}
+    {% for c_key, c_val in object.payload.items %}
       <tr><td>{{ c_key }}</td><td>{% if c_val %}{{ c_val }}{% endif %}</td></tr>
     {% endfor %}
   </table>

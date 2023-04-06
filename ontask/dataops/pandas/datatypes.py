@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Data types considered in OnTask and its relation with Pandas data types"""
 
 
@@ -11,6 +9,7 @@ class TypeDict(dict):
         return next(
             otype for dtype, otype in self.items() if key.startswith(dtype)
         )
+
 
 datatype_names = TypeDict({
     'object': 'string',

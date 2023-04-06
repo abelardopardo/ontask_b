@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Data types considered in OnTask and its relation with Pandas data types"""
 from typing import Dict, List, Optional
 
@@ -48,7 +46,7 @@ def get_column_statistics(df_column) -> Optional[Dict]:
 
     data_type = pandas.datatype_names.get(df_column.dtype.name)
 
-    if data_type == 'integer' or data_type == 'double':
+    if data_type in ['integer', 'double']:
         quantiles = df_column.quantile([0, .25, .5, .75, 1])
         to_return['min'] = '{0:g}'.format(quantiles[0])
         to_return['q1'] = '{0:g}'.format(quantiles[.25])
@@ -67,7 +65,7 @@ def get_column_statistics(df_column) -> Optional[Dict]:
     return to_return
 
 
-def is_unique_column(df_column: pd.Series) -> bool:
+def is_unique_series(df_column: pd.Series) -> bool:
     """Check if a column has unique non-empty values.
 
     :param df_column: Column of a pandas data frame
@@ -83,7 +81,7 @@ def are_unique_columns(data_frame: pd.DataFrame) -> List[bool]:
     :return: Array of Booleans stating of a column has unique values
     """
     return [
-        is_unique_column(data_frame[col]) for col in list(data_frame.columns)
+        is_unique_series(data_frame[col]) for col in list(data_frame.columns)
     ]
 
 
@@ -94,7 +92,7 @@ def has_unique_column(data_frame: pd.DataFrame) -> bool:
     :return: Boolean with the result
     """
     return any(
-        is_unique_column(data_frame[col]) for col in data_frame.columns
+        is_unique_series(data_frame[col]) for col in data_frame.columns
     )
 
 

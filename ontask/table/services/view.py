@@ -1,42 +1,12 @@
-# -*- coding: utf-8 -*-
-
 """Functions to support the display of a view."""
-import copy
+from typing import Optional
 
-from django.utils.translation import ugettext_lazy as _
-import django_tables2 as tables
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
-from ontask.core import OperationsColumn
+from ontask.dataops import formula
 from ontask.table.services.errors import OnTaskTableCloneError
-
-
-class ViewTable(tables.Table):
-    """Table to display the set of views handled in a workflow."""
-
-    name = tables.Column(verbose_name=_('Name'))
-
-    description_text = tables.Column(
-        empty_values=[],
-        verbose_name=_('Description'))
-
-    operations = OperationsColumn(
-        verbose_name=_('Operations'),
-        template_file='table/includes/partial_view_operations.html',
-        template_context=lambda record: {'id': record['id']},
-    )
-
-    class Meta:
-        """Select the model and specify fields, sequence and attributes."""
-
-        model = models.View
-        fields = ('operations', 'name', 'description_text')
-        sequence = ('operations', 'name', 'description_text')
-        attrs = {
-            'class': 'table table-hover table-bordered shadow',
-            'style': 'width: 100%;',
-            'id': 'view-table',
-        }
+from ontask.condition.services import do_clone_filter
 
 
 def do_clone_view(
@@ -44,7 +14,7 @@ def do_clone_view(
     view: models.View,
     new_workflow: models.Workflow = None,
     new_name: str = None,
-) -> models.View:
+) -> Optional[models.View]:
     """Clone a view.
 
     :param user: User requesting the operation
@@ -53,6 +23,9 @@ def do_clone_view(
     :param new_name: Non empty if it has to be renamed.
     :result: New clone object
     """
+    if view is None:
+        return None
+
     id_old = view.id
     name_old = view.name
 
@@ -66,8 +39,7 @@ def do_clone_view(
         name=new_name,
         description_text=view.description_text,
         workflow=new_workflow,
-        formula=copy.deepcopy(view.formula),
-    )
+        filter=do_clone_filter(user, view.filter, new_workflow))
     new_view.save()
 
     try:
@@ -91,16 +63,26 @@ def do_clone_view(
 def save_view_form(
     user,
     workflow: models.Workflow,
-    view: models.View
+    view: models.View,
+    filter_obj: Optional[models.Filter] = None,
 ):
     """Save the data attached to a view.
 
     :param user: user requesting the operation
     :param workflow: Workflow being processed
     :param view: View being processed.
+    :param filter_obj: Filter object containing the formula
     :return: AJAX Response
     """
     view.workflow = workflow
+
+    if not formula.is_empty(filter_obj.formula):
+        filter_obj.workflow = workflow
+        filter_obj.save()
+        filter_obj.columns.set(workflow.columns.filter(
+            name__in=formula.get_variables(filter_obj.formula)))
+        view.filter = filter_obj
+
     view.save()
     view.log(
         user,

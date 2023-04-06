@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-
 """Celery definitions and a test function."""
 import os
 
 from celery import Celery
-from celery.task.control import inspect
 from celery.utils.log import get_task_logger
 from django.conf import settings
 
@@ -45,7 +42,7 @@ def celery_is_up() -> bool:
 
     # Verify that celery is running!
     try:
-        inspect().stats()
+        app.control.inspect().stats()
     except Exception:
         return False
 

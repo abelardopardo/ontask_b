@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to process action related fields.
 
 ActionUpdateForm: Basic form to process the name/description of an action
@@ -18,7 +16,8 @@ import json
 from typing import Dict
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
+from tinymce.widgets import TinyMCE
 
 from ontask import models
 from ontask.core import RestrictedFileField
@@ -29,7 +28,7 @@ class ActionUpdateForm(forms.ModelForm):
     """Basic class to edit name and description."""
 
     def __init__(self, *args, **kwargs):
-        """Store user and wokflow."""
+        """Store user and workflow."""
         self.workflow = kwargs.pop('workflow')
         super().__init__(*args, **kwargs)
 
@@ -38,15 +37,15 @@ class ActionUpdateForm(forms.ModelForm):
         form_data = super().clean()
 
         # Check if the name already exists
-        name_exists = self.workflow.actions.filter(
+        if self.workflow.actions.filter(
             name=self.data['name'],
-        ).exclude(id=self.instance.id).exists()
-        if name_exists:
+        ).exclude(id=self.instance.id).exists():
             self.add_error(
                 'name',
                 _('There is already an action with this name.'),
             )
 
+        self.instance.workflow = self.workflow
         return form_data
 
     class Meta:
@@ -59,9 +58,9 @@ class ActionUpdateForm(forms.ModelForm):
 class ActionForm(ActionUpdateForm):
     """Edit name, description and action type."""
 
-    def __init__(self, *args: str, **kargs: str):
+    def __init__(self, *args: str, **kwargs: str):
         """Adjust widget choices depending on action type."""
-        super().__init__(*args, **kargs)
+        super().__init__(*args, **kwargs)
 
         at_field = self.fields['action_type']
         at_field.widget.choices = [
@@ -112,6 +111,10 @@ class RubricCellForm(forms.ModelForm):
 
         model = models.RubricCell
         fields = ('description_text', 'feedback_text')
+        widgets = {
+            'description_text': TinyMCE(attrs={'cols': 80, 'rows': 30}),
+            'feedback_text': TinyMCE(attrs={'cols': 80, 'rows': 30}),
+        }
 
 
 class RubricLOAForm(forms.Form):
@@ -135,12 +138,12 @@ class RubricLOAForm(forms.Form):
         """Check that the number of LOAs didn't change."""
         form_data = super().clean()
 
-        current_n_loas = [
+        # Filter
+        n_loas = len([
             loa
-            for loa in form_data['levels_of_attainment'].split(',')
-            if loa]
+            for loa in form_data['levels_of_attainment'].split(',') if loa])
 
-        if len(current_n_loas) != len(self.criteria[0].categories):
+        if n_loas != len(self.criteria[0].categories):
             self.add_error(
                 'levels_of_attainment',
                 _('The number of levels cannot change.'))

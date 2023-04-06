@@ -4,7 +4,7 @@
 {% load static %}
 {% block title %}{{ block.super }}{% trans 'Timeline' %}{% endblock %}
 {% block scripts %}
-  <script src="{% static 'logs/js/logs.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'logs/js/logs.js' %}"></script>
 {% endblock %}
 {% block container %}
 <div id="timeline" class="container my-3">

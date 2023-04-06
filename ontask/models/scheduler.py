@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
-
 """Model is to store process to execute in the platform at a certain time."""
 from datetime import datetime
 import json
 from typing import Optional
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.db.models import JSONField
+from django.utils.translation import gettext_lazy as _
 from django_celery_beat.models import PeriodicTask
 import pytz
 
@@ -51,7 +49,7 @@ OPERATION_TYPES = {
 
 
 class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
-    """Objects encoding the scheduling of a send email action.
+    """Objects representing the scheduled operations.
 
     @DynamicAttrs
     """

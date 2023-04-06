@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Operations to manipulate dataframes."""
 from typing import Dict, List, Optional
 
 from django.conf import settings
-from django.utils.translation import gettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 import numpy as np
 import pandas as pd
 
@@ -57,7 +55,7 @@ def _verify_dataframe_columns(
     for col in workflow.columns.all():
         # Condition 1: If the column is marked as a key column, it should
         # maintain this property
-        if col.is_key and not pandas.is_unique_column(data_frame[col.name]):
+        if col.is_key and not pandas.is_unique_series(data_frame[col.name]):
             raise Exception(gettext(
                 'Column {0} looses its "key" property through this merge.'
                 + ' Either remove this property from the column or '
@@ -127,12 +125,15 @@ def store_temporary_dataframe(
     # Store the table in the DB
     pandas.store_table(data_frame, table_name)
 
-    # Get the column types
-    df_column_types = sql.get_df_column_types(table_name)
+    # Get the column nnames: types
+    column_name_types = sql.get_df_column_types(table_name)
+
+    column_names = list(data_frame.columns)
+    column_types = [column_name_types[col_name] for col_name in column_names]
 
     # Return a list with three list with information about the
     # data frame that will be needed in the next steps
-    return [list(data_frame.columns), df_column_types, column_unique]
+    return [column_names, column_types, column_unique]
 
 
 def store_dataframe(
@@ -194,14 +195,14 @@ def store_workflow_table(
     """
     # Check information on update_info and complete if needed
     if not update_info.get('initial_column_names'):
-        raise _('Internal error while processing database.')
+        raise Exception(_('Internal error while processing database.'))
     if not update_info.get('rename_column_names'):
         update_info['rename_column_names'] = update_info[
             'initial_column_names']
     if not update_info.get('column_types'):
-        raise _('Internal error while processing database.')
+        raise Exception(_('Internal error while processing database.'))
     if not update_info.get('keep_key_column'):
-        raise _('Internal error while processing database.')
+        raise Exception(_('Internal error while processing database.'))
     if not update_info.get('columns_to_upload'):
         update_info['columns_to_upload'] = [True] * len(update_info[
             'initial_column_names'])
@@ -225,7 +226,7 @@ def store_workflow_table(
 
             if current_col:
                 # Dropping an existing column. Incorrect.
-                raise _('Invalid column drop operation.')
+                raise Exception(_('Invalid column drop operation.'))
             continue
 
         # Step 2: Check if the column must be renamed
@@ -234,7 +235,7 @@ def store_workflow_table(
             sql.db_rename_column(db_table, old_n, new_n)
 
             if current_col:
-                rename_df_column(workflow, old_n, new_n)
+                rename_column(workflow, old_n, new_n)
 
         if current_col:
             if current_col.data_type != data_type:
@@ -251,7 +252,7 @@ def store_workflow_table(
     workflow.refresh_from_db()
 
     # Step 4: Rename the table (Drop the original one first
-    if workflow.has_table():
+    if workflow.has_data_frame:
         sql.delete_table(workflow.get_data_frame_table_name())
     sql.rename_table(db_table, workflow.get_data_frame_table_name())
 
@@ -261,34 +262,8 @@ def store_workflow_table(
     workflow.save(update_fields=['nrows', 'query_builder_ops'])
 
 
-def get_table_row_by_index(
-    workflow,
-    filter_formula,
-    idx: int,
-):
-    """Select the set of elements in the row with the given index.
-
-    :param workflow: Workflow object storing the data
-    :param filter_formula: Condition object to filter the data (or None)
-    :param idx: Row number to get (first row is idx = 1)
-    :return: A dictionary with the (column_name, value) data or None if the
-     index is out of bounds
-    """
-    # Get the data
-    df_data = sql.get_rows(
-        workflow.get_data_frame_table_name(),
-        column_names=workflow.get_column_names(),
-        filter_formula=filter_formula)
-
-    # If the data is not there, return None
-    if idx > df_data.rowcount:
-        return None
-
-    return df_data.fetchall()[idx - 1]
-
-
 def add_column_to_df(
-    df: pd.DataFrame,
+    data_frame: pd.DataFrame,
     column,
     initial_value=None,
 ) -> pd.DataFrame:
@@ -298,7 +273,7 @@ def add_column_to_df(
     match the given column. If the initial value is not give, it is decided
     based on the data type stored in the column object.
 
-    :param df: Data frame to modify
+    :param data_frame: Data frame to modify
     :param column: Column object to add
     :param initial_value: initial value in the column
     :return: new data frame with the additional column
@@ -319,12 +294,12 @@ def add_column_to_df(
             raise ValueError(_('Type {0} not found').format(column_type))
 
     # Create the empty column
-    df[column.name] = initial_value
+    data_frame[column.name] = initial_value
 
-    return df
+    return data_frame
 
 
-def rename_df_column(
+def rename_column(
     workflow,
     old_name: str,
     new_name: str,
@@ -342,11 +317,12 @@ def rename_df_column(
 
     # Rename the appearances of the variable in the formulas in the views
     for view in workflow.views.all():
-        view.formula = formula.evaluation.rename_variable(
-            view.formula,
-            old_name,
-            new_name)
-        view.save(update_fields=['formula'])
+        if view.filter is not None:
+            view.filter.formula = formula.evaluation.rename_variable(
+                view.filter.formula,
+                old_name,
+                new_name)
+            view.filter.save(update_fields=['_formula'])
 
 
 def get_subframe(

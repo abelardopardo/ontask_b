@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Basic functions and definitions used all over the platform."""
 from datetime import datetime
 import logging
@@ -7,7 +5,7 @@ from typing import List, Optional
 
 from django import conf
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
 import pytz
@@ -31,9 +29,7 @@ __all__ = [
     'OnTaskSharedState',
     'simplify_datetime_str']
 
-__version__ = 'B.7.2'
-
-app_config = 'ontask.apps.OnTaskConfig'
+__version__ = '10.0'
 
 LOGGER = logging.getLogger('ontask')
 
@@ -66,6 +62,7 @@ class OnTaskException(Exception):
 
     def __init__(self, message, value=0):
         """Store message and value."""
+        super().__init__()
         self.message = message
         self.value = value
 
@@ -134,7 +131,7 @@ def is_legal_name(strval: str) -> Optional[str]:
     - \" Provokes a db error when handling the templates due to the encoding
       produced by the text editor.
 
-    - ' String delimiter, python messes around with it and it is too complex to
+    - ' String delimiter, python messes around with it, and it is too complex to
         handle all possible cases and translations.
 
     In principle, arbitrary combinations of the following symbols should be
@@ -217,3 +214,8 @@ def create_new_name(old_name: str, obj_manager) -> str:
 def get_country_code(language_code: str) -> str:
     """Extract the country code from the language code."""
     return language_code[0:language_code.find('-')]
+
+
+def get_version() -> str:
+    """Return the version string."""
+    return __version__

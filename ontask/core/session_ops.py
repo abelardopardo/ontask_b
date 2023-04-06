@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to manipulate the workflow in the session."""
 from importlib import import_module
 from typing import List, Optional, Union
@@ -9,13 +7,28 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
+from django.db.models import QuerySet
 from django.db.models.query_utils import Q
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from ontask import OnTaskException, models
+from ontask import models
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+
+
+def _store_workflow_nrows_in_session(
+    session: SessionStore,
+    wflow: models.Workflow
+):
+    """Store the workflow id and name in the request.session dictionary.
+
+    :param session: Session object to store the worklfow
+    :param wflow: Workflow object
+    :return: Nothing. Store the id and the name in the session
+    """
+    session['ontask_workflow_rows'] = wflow.nrows
+    session.save()
 
 
 def _wf_lock_and_update(
@@ -33,24 +46,30 @@ def _wf_lock_and_update(
     :param workflow: Object to store
     """
     workflow.lock(session, user, create_session)
-    # Update nrows in case it was asynch modified
+    # Update nrows in case it was asynchronously modified
     _store_workflow_nrows_in_session(session, workflow)
 
     return workflow
 
 
-def _store_workflow_nrows_in_session(
-    session: SessionStore,
-    wflow: models.Workflow
-):
-    """Store the workflow id and name in the request.session dictionary.
+def expand_query_with_related(
+    qs: QuerySet,
+    select_related: Optional[Union[str, List[str]]] = None,
+    prefetch_related: Optional[Union[str, List[str]]] = None
+) -> QuerySet:
+    # Apply select and prefetch if given
+    if select_related:
+        if isinstance(select_related, list):
+            qs = qs.select_related(*select_related)
+        else:
+            qs = qs.select_related(select_related)
+    if prefetch_related:
+        if isinstance(prefetch_related, list):
+            qs = qs.prefetch_related(*prefetch_related)
+        else:
+            qs = qs.prefetch_related(prefetch_related)
 
-    :param session: Session object to store the worklfow
-    :param wflow: Workflow object
-    :return: Nothing. Store the id and the name in the session
-    """
-    session['ontask_workflow_rows'] = wflow.nrows
-    session.save()
+    return qs
 
 
 def remove_workflow_from_session(request: http.HttpRequest):
@@ -85,7 +104,7 @@ def acquire_workflow_access(
     sid = session.get('ontask_workflow_id')
     if wid is None and sid is None:
         # No key was given and none was found in the session (anomaly)
-        return None
+        raise http.Http404(_('Select a workflow'))
 
     if wid is None:
         # No WID provided, but the session contains one, carry on
@@ -97,27 +116,16 @@ def acquire_workflow_access(
     with cache.lock('ONTASK_WORKFLOW_{0}'.format(wid)):
 
         # Step 1: Get the workflow that is being accessed
-        workflow = models.Workflow.objects.filter(id=wid).filter(
-            Q(user=user) | Q(shared__id=user.id),
-        )
+        workflow_qs = models.Workflow.objects.filter(id=wid).filter(
+            Q(user=user) | Q(shared__id=user.id))
 
-        if not workflow:
-            return None
-
-        # Apply select and prefetch if given
-        if select_related:
-            if isinstance(select_related, list):
-                workflow = workflow.select_related(*select_related)
-            else:
-                workflow = workflow.select_related(select_related)
-        if prefetch_related:
-            if isinstance(prefetch_related, list):
-                workflow = workflow.prefetch_related(*prefetch_related)
-            else:
-                workflow = workflow.prefetch_related(prefetch_related)
+        workflow_qs = expand_query_with_related(
+            workflow_qs,
+            select_related,
+            prefetch_related)
 
         # Now get the unique element from the query set
-        workflow = workflow.first()
+        workflow = workflow_qs.distinct().get()
 
         # Step 2: If the workflow is locked by this user session, return
         # correct result (the session_key may be None if using the API)
@@ -168,7 +176,7 @@ def acquire_workflow_access(
         # Step 6: The workflow is locked by an existing session. See if the
         # session is valid
         if old_session.expire_date >= timezone.now():
-            raise OnTaskException(
+            raise http.Http404(
                 _('The workflow is being modified by user {0}').format(
                     owner.email),
             )

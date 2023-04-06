@@ -1,88 +1,81 @@
-# -*- coding: utf-8 -*-
-
 """Views to create and delete a "share" item for a workflow."""
-from typing import Optional
+from typing import Dict
 
 from django import http
+from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import user_passes_test
-from django.template.loader import render_to_string
-from django.urls import reverse
+from django.utils.translation import gettext as _
+from django.views import generic
 
 from ontask import models
-from ontask.core import ajax_required, get_workflow, is_instructor
+from ontask.core import (
+    JSONFormResponseMixin, WorkflowView, UserIsInstructor,
+    ajax_required)
 from ontask.workflow import forms
 
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow(pf_related='shared')
-def share_create(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Add a new user to the list of those sharing the workflow.
+@method_decorator(ajax_required, name='dispatch')
+class WorkflowShareCreateView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    WorkflowView,
+    generic.FormView,
+):
+    """View to create a new "share" user in the workflow."""
 
-    :param request: Http request received
-    :param workflow: Workflow object being used
-    :return: JSON response
-    """
-    # Create the form object with the form_fields just computed
-    form = forms.SharedForm(
-        request.POST or None,
-        user=request.user,
-        workflow=workflow)
+    http_method_names = ['get', 'post']
+    form_class = forms.SharedForm
+    template_name = 'workflow/includes/partial_share_create.html'
 
-    if request.method == 'POST' and form.is_valid():
-        # proceed with the update
-        workflow.shared.add(form.user_obj)
-        workflow.save()
-        workflow.log(
-            request.user,
+    def get_form_kwargs(self) -> Dict:
+        """Store workflow and request.user in kwargs"""
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['workflow'] = self.workflow
+        form_kwargs['user'] = self.request.user
+        return form_kwargs
+
+    def form_valid(self, form) -> http.JsonResponse:
+        """Store the new shared user"""
+        self.workflow.shared.add(form.user_obj)
+        self.workflow.save()
+        self.workflow.log(
+            self.request.user,
             models.Log.WORKFLOW_SHARE_ADD,
             share_email=form.user_obj.email)
         return http.JsonResponse({'html_redirect': ''})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'workflow/includes/partial_share_create.html',
-            {'form': form},
-            request=request),
-    })
 
+@method_decorator(ajax_required, name='dispatch')
+class WorkflowShareDeleteView(
+    UserIsInstructor,
+    JSONFormResponseMixin,
+    WorkflowView,
+    generic.TemplateView,
+):
+    """View to delete a "share" user in the workflow."""
 
-@user_passes_test(is_instructor)
-@ajax_required
-@get_workflow(pf_related='shared')
-def share_delete(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
-    """Delete one of the users sharing the workflow.
+    http_method_names = ['get', 'post']
+    template_name = 'workflow/includes/partial_share_delete.html'
 
-    :param request: Http Request
-    :param pk: Primery key of the user to remove
-    :param workflow: Workflow object being used
-    :return: JSON response after removing the user.
-    """
-    # If the user does not exist, go back to home page
-    user = get_user_model().objects.filter(id=pk).first()
-    if not user:
-        return http.JsonResponse({'html_redirect': reverse('home')})
+    def get_context_data(self, **kwargs):
+        """Add pk and user email to the context."""
+        context = super().get_context_data(**kwargs)
+        user = get_user_model().objects.filter(id=kwargs['pk']).first()
+        if not user:
+            raise http.Http404(_('Unable to find user'))
+        context['user'] = user
+        return context
 
-    if request.method == 'POST':
-        workflow.shared.remove(user)
-        workflow.save()
-        workflow.log(
+    def post(self, request, *args, **kwargs):
+        """Perform the share delete operation."""
+        user = get_user_model().objects.filter(id=kwargs['pk']).first()
+        if not user:
+            raise http.Http404(_('Unable to find user'))
+        self.workflow.shared.remove(user)
+        self.workflow.save()
+        self.workflow.log(
             request.user,
             models.Log.WORKFLOW_SHARE_DELETE,
             share_email=user.email)
-        return http.JsonResponse({'html_redirect': ''})
 
-    return http.JsonResponse({
-        'html_form': render_to_string(
-            'workflow/includes/partial_share_delete.html',
-            {'uid': pk, 'uemail': user.email},
-            request=request),
-    })
+        return http.JsonResponse({'html_redirect': ''})

@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Test live execution of action operations."""
-import os
 
-from django.conf import settings
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
@@ -12,19 +8,17 @@ from ontask import tests
 from ontask.core import ONTASK_UPLOAD_FIELD_PREFIX
 
 
-class ConditionEdit(tests.OnTaskLiveTestCase):
+class ConditionTestBasic(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
     """Test Filter/Condition Edit."""
 
     action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
 
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
+
+class FilterLiveTest(ConditionTestBasic):
+    """Test Filter Edit."""
 
     # Test operations with the filter
-    def test_filter(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -39,7 +33,7 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
 
         # Click in the add filter button
         self.select_filter_tab()
-        self.selenium.find_element_by_class_name('js-filter-create').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-filter-create').click()
         # Wait for the form to appear
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -48,11 +42,12 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         )
 
         # Add the description
-        self.selenium.find_element_by_id(
-            'id_description_text').send_keys('fdesc')
+        self.selenium.find_element(
+            By.ID, 'id_description_text').send_keys('fdesc')
 
         # Select the age filter
-        sel = Select(self.selenium.find_element_by_name(
+        sel = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_0_filter'))
         sel.select_by_value('age')
         # Wait for the select elements to be clickable
@@ -63,22 +58,25 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         )
 
         # There should only be eight operands
-        filter_ops = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_0_operator']/option"
-        )
+        filter_ops = self.selenium.find_elements(
+            By.XPATH,
+            "//select[@name='builder_rule_0_operator']/option")
         self.assertEqual(len(filter_ops), 10)
 
         # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
+        sel = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_0_operator'))
         sel.select_by_value('less_or_equal')
 
         # Set the value to 12.1
-        self.selenium.find_element_by_name(
+        self.selenium.find_element(
+            By.NAME,
             'builder_rule_0_value_0').send_keys('12.1')
 
         # Click in the "update filter"
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()
         # MODAL WAITING
@@ -90,20 +88,18 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         # Preview button clickable
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(@class, 'js-action-preview')]"),
+                (By.XPATH, "//button[contains(@class, 'js-filter-edit')]"),
             )
         )
         # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Check that the filter is selecting 2 out of 3 rows
         self.assertIn('2 learners of 3', self.selenium.page_source)
 
         # Add a second clause to the filter
         # Click in the edit filter button
-        self.selenium.find_element_by_class_name('js-filter-edit').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
             EC.presence_of_element_located(
@@ -112,7 +108,8 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         )
 
         # Click in the Add rule of the filter builder button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='builder_group_0']/div/div/button[1]"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -122,7 +119,8 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         )
 
         # Select the when filter
-        sel = Select(self.selenium.find_element_by_name(
+        sel = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_1_filter'))
         sel.select_by_value('when')
         # Wait for the select elements to be clickable
@@ -133,22 +131,26 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         )
 
         # There should only be eight operands
-        filter_ops = self.selenium.find_elements_by_xpath(
-            "//select[@name='builder_rule_1_operator']/option"
-        )
+        filter_ops = self.selenium.find_elements(
+            By.XPATH,
+            "//select[@name='builder_rule_1_operator']/option")
         self.assertEqual(len(filter_ops), 10)
 
         # Set the operator to less or equal
-        sel = Select(self.selenium.find_element_by_name(
+        sel = Select(self.selenium.find_element(
+            By.NAME,
             'builder_rule_1_operator'))
         sel.select_by_value('less_or_equal')
 
         # Set the value to 2017-10-11T00:32:44
-        self.selenium.find_element_by_name(
-            'builder_rule_1_value_0').send_keys('2017-10-11T00:32:44+1300')
+        self.selenium.find_element(
+            By.NAME,
+            'builder_rule_1_value_0').send_keys(
+            '2017-10-11 00:32:44+1300')
 
         # Click in the "update filter"
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until_not(
@@ -164,9 +166,7 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
             )
         )
         # Spinner not visible
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Check that the filter is selecting 2 out of 3 rows
         self.assertIn('1 learner of 3', self.selenium.page_source)
@@ -174,8 +174,12 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
+
+class ConditionLiveTest(ConditionTestBasic):
+    """Test Condition Edit."""
+
     # Test operations with the conditions and the email preview
-    def test_condition(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -202,11 +206,10 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         # Action now has two complementary conditions, add the conditions to
         # the message
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
-        self.selenium.execute_script(
-            """$('#id_text_content').summernote(
-                   'editor.insertText',
-                   "{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}")""")
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
+        self.insert_string_in_text_editor(
+            'id_text_content',
+            '{% if c1 %}Low{% endif %}{% if c2 %}High{% endif %}')
 
         # Click the preview button
         self.open_browse_preview(close=False)
@@ -215,7 +218,8 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         self.assertIn('Low', self.selenium.page_source)
 
         # Click in the next button
-        self.selenium.find_element_by_class_name(
+        self.selenium.find_element(
+            By.CLASS_NAME,
             'js-action-preview-nxt').click()
 
         self.wait_for_modal_open(
@@ -231,7 +235,8 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         self.assertIn('Low', self.selenium.page_source)
 
         # Click in the next button
-        self.selenium.find_element_by_class_name(
+        self.selenium.find_element(
+            By.CLASS_NAME,
             'js-action-preview-nxt').click()
 
         self.wait_for_modal_open(
@@ -241,140 +246,22 @@ class ConditionEdit(tests.OnTaskLiveTestCase):
         # First value should be high age
         self.assertIn('High', self.selenium.page_source)
 
-        # End of session
-        self.logout()
-
-
-class ConditionInActionIn(tests.OnTaskLiveTestCase):
-    """Class to test survey with conditions controlling questions."""
-    fixtures = ['test_personalized_survey']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'test_personalized_survey.sql')
-
-    wflow_name = 'Test personalized survey'
-
-    # Test operations with the filter
-    def test_condition_and_run(self):
-        # Login
-        self.login('instructor01@bogus.com')
-
-        # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(self.wflow_name)
-
-        # Goto the action page
-        self.go_to_actions()
-
-        # Open action in
-        self.open_action_edit('Survey')
-
-        # Select the condition tab
-        self.select_condition_tab()
-
-        # Create two conditions
-        self.create_condition(
-            'Text 1 is null', '',
-            [('text1', 'is null', None)])
-        self.create_condition(
-            'Text 2 is null', '',
-            [('text2', 'is null', None)])
-
-        # Go back to the questions
-        self.select_questions_tab()
-
-        # Select conditions to both questions
-        self.select_questions_condition('text1', 'Text 1 is null')
-        self.select_questions_condition('text2', 'Text 2 is null')
-
-        # Click the preview buttion
-        self.open_preview()
-
-        # Check there is a single field and click on next
-        for __ in range(8):
-            # There should be a single form field in the preview
-            inputs = self.selenium.find_elements_by_xpath(
-                "//div[@class='js-action-preview-form']//input"
-            )
-            self.assertEqual(len(inputs), 1)
-
-            # Click in the next button
-            self.selenium.find_element_by_class_name(
-                'js-action-preview-nxt').click()
-
-            WebDriverWait(self.selenium, 10).until(
-                EC.element_to_be_clickable(
-                    (By.CLASS_NAME, 'js-action-preview-nxt')
-                )
-            )
-
-        # Close the modal
+        # Close the preview
         self.cancel_modal()
 
-        # Done. Back to the table of actions
-        self.selenium.find_element_by_link_text('Done').click()
-        self.wait_for_datatable('action-table_previous')
-
-        # Run the action
-        self.open_action_run('Survey', True)
-
-        # Click in the first element of the survey and wait for form
-        self.selenium.find_element_by_link_text('1.0').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '2')
-            )
-        )
-
-        # There should be only three fields here (csrf, key, field)
-        inputs = self.selenium.find_elements_by_xpath(
-            "//div[@id='action-row-datainput']//input"
-        )
-        self.assertEqual(len(inputs), 3)
-
-        # Enter text in the third field
-        inputs[2].clear()
-        inputs[2].send_keys('text')
-
-        # Click in the update button
-        self.selenium.find_element_by_xpath(
-            "//div[@id='action-row-datainput']//form//button[@type = 'submit']"
-        ).click()
-        self.wait_for_datatable('actioninrun-data_previous')
-
-        # Click in the same link
-        self.selenium.find_element_by_link_text('1.0').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'action-row-datainput')
-            )
-        )
-
-        # There should be a "No responses required message"
-        self.assertIn(
-            'No responses required at this time',
-            self.selenium.page_source)
-
         # End of session
         self.logout()
 
 
-class ConditionDetectAllFalseRows(tests.OnTaskLiveTestCase):
+class ConditionDetectAllFalseRows(ConditionTestBasic):
     """Test the detection of all false rows."""
-    action_name = 'simple action'
-    fixtures = ['simple_action']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_action.sql')
-
-    wflow_name = 'wflow1'
-    wflow_desc = 'description text for workflow 1'
-    wflow_empty = 'The workflow does not have data'
 
     action_text = "Cond 1 = {{ cond 1 }}\\n" + \
                   "Cond 2 = {{ cond 2 }}\\n" + \
                   "{% if cond 1 %}Cond 1 is true{% endif %}\\n" + \
                   "{% if cond 2 %}Cond 2 is true{% endif %}\\n"
 
-    def test_detect_all_false_rows(self):
-        """Test action rename."""
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -397,10 +284,10 @@ class ConditionDetectAllFalseRows(tests.OnTaskLiveTestCase):
 
         # insert the action text (not needed, but...)
         self.select_text_tab()
-        self.selenium.find_element_by_class_name('note-editable').click()
+        self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
-            """$('#id_text_content').summernote('editor.insertText', 
-            "{0}");""".format(self.action_text)
+            """tinymce.get('id_text_content').execCommand('mceInsertContent', 
+            false, "{0}");""".format(self.action_text)
         )
 
         # Click in the preview and circle around the 12 rows
@@ -432,6 +319,118 @@ class ConditionDetectAllFalseRows(tests.OnTaskLiveTestCase):
         # False
         self.assertIn(
             'user has all conditions equal to FALSE',
+            self.selenium.page_source)
+
+        # End of session
+        self.logout()
+
+
+class ConditionInActionIn(
+    tests.TestPersonalisedSurveyFixture,
+    tests.OnTaskLiveTestCase,
+):
+    """Class to test survey with conditions controlling questions."""
+
+    def test(self):
+        action_name = 'Survey'
+        # Login
+        self.login('instructor01@bogus.com')
+
+        # GO TO THE WORKFLOW PAGE
+        self.access_workflow_from_home_page(self.wflow_name)
+
+        # Goto the action page
+        self.go_to_actions()
+
+        # Open action in
+        self.open_action_edit(action_name)
+
+        # Select the condition tab
+        self.select_condition_tab()
+
+        # Create two conditions
+        self.create_condition(
+            'Text 1 is null', '',
+            [('text1', 'is null', None)])
+        self.create_condition(
+            'Text 2 is null', '',
+            [('text2', 'is null', None)])
+
+        # Go back to the questions
+        self.select_questions_tab()
+
+        # Select conditions to both questions
+        self.select_questions_condition('text1', 'Text 1 is null')
+        self.select_questions_condition('text2', 'Text 2 is null')
+
+        # Click the preview button
+        self.open_preview()
+
+        # Check there is a single field and click on next
+        for __ in range(8):
+            # There should be a single form field in the preview
+            inputs = self.selenium.find_elements(
+                By.XPATH,
+                "//div[@class='js-action-preview-form']//input")
+            self.assertEqual(len(inputs), 1)
+
+            # Click in the next button
+            self.selenium.find_element(
+                By.CLASS_NAME,
+                'js-action-preview-nxt').click()
+
+            WebDriverWait(self.selenium, 10).until(
+                EC.element_to_be_clickable(
+                    (By.CLASS_NAME, 'js-action-preview-nxt')
+                )
+            )
+
+        # Close the modal
+        self.cancel_modal()
+
+        # Done. Back to the table of actions
+        self.selenium.find_element(By.LINK_TEXT, 'Done').click()
+        self.wait_for_id_and_spinner('action-index')
+
+        # Run the action
+        self.open_action_run(action_name, True)
+
+        # Click in the first element of the survey and wait for form
+        self.selenium.find_element(By.LINK_TEXT, '1.0').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'id_' + ONTASK_UPLOAD_FIELD_PREFIX + '2')
+            )
+        )
+
+        # There should be only three fields here (csrf, key, field)
+        inputs = self.selenium.find_elements(
+            By.XPATH,
+            "//div[@id='action-row-datainput']//input")
+        self.assertEqual(len(inputs), 3)
+
+        # Enter text in the third field
+        inputs[2].clear()
+        inputs[2].send_keys('text')
+
+        # Click in the update button
+        self.selenium.find_element(
+            By.XPATH,
+            "//div[@id='action-row-datainput']//form//button[@type = 'submit']"
+        ).click()
+        self.wait_for_id_and_spinner('actioninrun-data_previous')
+
+        # Click in the same link
+        self.selenium.find_element(By.LINK_TEXT, '1.0').click()
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.ID, 'action-row-datainput')
+            )
+        )
+
+        # There should be a "No responses required message"
+        self.assertIn(
+            'No responses required at this time',
             self.selenium.page_source)
 
         # End of session

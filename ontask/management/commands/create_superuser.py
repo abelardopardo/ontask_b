@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """File with a command to create a superuser."""
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
@@ -29,7 +27,7 @@ class Command(BaseCommand):
             help='Super user password')
 
     def handle(self, *args, **options):  # noqa: Z110
-        """Run the command to create the superuse.
+        """Run the command to create the superuser.
 
         :param args: Args received by the command
         :param options: Parsed options
@@ -41,5 +39,5 @@ class Command(BaseCommand):
             user_model.objects.create_superuser(
                 name=options['username'],
                 email=options['email'],
-                password=options['p'],
+                password=options['password'],
             )

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """WSGI config for ontask project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
@@ -9,7 +7,6 @@ https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
 """
 import os
 
-# Wrap werkzeug debugger if DEBUG is on
 from django.conf import settings
 from django.core.wsgi import get_wsgi_application
 
@@ -21,6 +18,7 @@ if settings.DEBUG:
     try:
         import django.views.debug
         import six
+        # Wrap werkzeug debugger if DEBUG is on
         from werkzeug.debug import DebuggedApplication
 
         def null_technical_500_response(request, exc_type, exc_value, tb):

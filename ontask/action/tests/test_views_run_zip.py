@@ -1,34 +1,22 @@
-# -*- coding: utf-8 -*-
-
 """Test views to run ZIP actions."""
-import os
 
-from django.conf import settings
 from django.shortcuts import reverse
 from rest_framework import status
 
 from ontask import tests
 
 
-class ActionViewRunZIP(tests.OnTaskTestCase):
+class ActionViewZIPBasic(tests.InitialWorkflowFixture, tests.OnTaskTestCase):
     """Test the view run a ZIP action."""
-
-    fixtures = ['initial_workflow']
-    filename = os.path.join(
-        settings.BASE_DIR(),
-        'ontask',
-        'tests',
-        'initial_workflow',
-        'initial_workflow.sql',
-    )
 
     user_email = 'instructor01@bogus.com'
     user_pwd = 'boguspwd'
 
-    workflow_name = 'BIOL1011'
 
-    def test_run_zip(self):
-        """Run the zip action."""
+class ActionViewRunZIP(ActionViewZIPBasic):
+    """Test the view run a ZIP action."""
+
+    def test(self):
         # Get the object first
         action = self.workflow.actions.get(name='Suggestions about the forum')
         column = action.workflow.columns.get(name='SID')
@@ -51,8 +39,11 @@ class ActionViewRunZIP(tests.OnTaskTestCase):
             })
         self.assertTrue(status.is_success(resp.status_code))
 
-    def test_run_zip_export(self):
-        """Test the ZIP export view."""
+
+class ActionViewRunZIPExport(ActionViewZIPBasic):
+    """Test the view run a ZIP action."""
+
+    def test(self):
         action = self.workflow.actions.get(name='Suggestions about the forum')
         column = action.workflow.columns.get(name='SID')
         column_fn = action.workflow.columns.get(name='email')

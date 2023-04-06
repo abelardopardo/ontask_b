@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """First entry point to define URLs."""
 from django.conf import settings
 from django.conf.urls import include
@@ -8,7 +6,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.urls import path, re_path
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 from django.views.decorators.cache import cache_page
 from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
@@ -23,7 +21,7 @@ from ontask.core import views
 from ontask.dataops import pandas
 from ontask.templatetags.ontask_tags import ontask_version
 
-api_description = ugettext(
+api_description = gettext(
     'The OnTask API offers functionality to manipulate workflows, tables '
     + 'and logs. The interface provides CRUD operations over these '
     + 'objects.')
@@ -33,17 +31,17 @@ SwaggerUIRenderer.template = 'api_ui.html'
 schema_view = get_schema_view(
     openapi.Info(
         title='OnTask API',
-        default_version=ontask.__version__,
+        default_version=ontask.get_version(),
         description=api_description),
     public=True,
-    permission_classes=(permissions.AllowAny,))
+    permission_classes=[permissions.AllowAny])
 
 urlpatterns = [
     # Home Page!
-    path('', views.home, name='home'),
+    path('', views.HomeView.as_view(), name='home'),
     path('', include('ontask.accounts.urls', namespace='accounts')),
-    path('lti_entry', views.lti_entry, name='lti_entry'),
-    path('not_authorized', views.home, name='not_authorized'),
+    path('lti_entry', views.LTIEntryView.as_view(), name='lti_entry'),
+    path('not_authorized', views.HomeView.as_view(), name='not_authorized'),
     path(
         'accessibility',
         TemplateView.as_view(template_name='accessibility-statement.html'),
@@ -54,8 +52,8 @@ urlpatterns = [
         name='under_construction'),
     path('users', include('ontask.profiles.urls', namespace='profiles')),
     path('ota', admin.site.urls),
-    path('trck', views.trck, name='trck'),
-    path('keep_alive', views.keep_alive, name='keep_alive'),
+    path('trck', views.TrackView.as_view(), name='trck'),
+    path('keep_alive', views.KeepAliveView.as_view(), name='keep_alive'),
     path('workflow/', include('ontask.workflow.urls', namespace='workflow')),
     path('column/', include('ontask.column.urls', namespace='column')),
     path(
@@ -63,14 +61,15 @@ urlpatterns = [
         include('ontask.connection.urls', namespace='connection')),
     path('dataops/', include('ontask.dataops.urls', namespace='dataops')),
     path('action/', include('ontask.action.urls', namespace='action')),
-    path('condition/',
+    path(
+        'condition/',
         include('ontask.condition.urls', namespace='condition')),
     path('table/', include('ontask.table.urls', namespace='table')),
     path(
         'scheduler/',
         include('ontask.scheduler.urls', namespace='scheduler')),
     path('logs/', include('ontask.logs.urls', namespace='logs')),
-    path('summernote/', include('django_summernote.urls')),
+    path('tinymce/', include('tinymce.urls')),
     path(
         'ontask_oauth/',
         include('ontask.oauth.urls', namespace='ontask_oauth')),
@@ -88,6 +87,8 @@ urlpatterns = [
         r'apidoc/',
         schema_view.with_ui('swagger', cache_timeout=0),
         name='ontask-api-doc'),
+    # See the 404 page
+    path('404/', views.Custon404View.as_view(), name="custom_404"),
 ]
 
 # User-uploaded files like profile pics need to be served in development
@@ -105,9 +106,12 @@ urlpatterns += i18n_patterns(
 )
 
 # Include django debug toolbar if DEBUG is ons
-if settings.DEBUG:
+if settings.DEBUG_TOOLBAR and not settings.ONTASK_TESTING:
     import debug_toolbar
     urlpatterns += [path(r'__debug__/', include(debug_toolbar.urls))]
+
+if settings.PROFILE_SILK and not settings.ONTASK_TESTING:
+    urlpatterns += [path("silk/", include("silk.urls", namespace="silk"))]
 
 handler400 = 'ontask.core.services.ontask_handler400'
 handler403 = 'ontask.core.services.ontask_handler403'

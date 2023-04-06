@@ -1,28 +1,17 @@
-# -*- coding: utf-8 -*-
-
 """Function to upload a data frame from an existing SQL connection object."""
-from typing import Optional
 
-from django import http
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import redirect, render
-from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
+from django.views import generic
 
 from ontask import models
-import ontask.connection.forms
-from ontask.core import get_workflow, is_instructor
+from ontask.connection import forms
 from ontask.dataops import services
+from ontask.dataops.views import common
 
 
-@user_passes_test(is_instructor)
-@get_workflow()
-def sqlupload_start(
-    request: http.HttpRequest,
-    pk: int,
-    workflow: Optional[models.Workflow] = None,
-) -> http.HttpResponse:
+class SQLUploadStart(common.UploadStart, generic.UpdateView):
     """Load a data frame using a SQL connection.
 
     The four step process will populate the following dictionary with name
@@ -37,60 +26,39 @@ def sqlupload_start(
     src_is_key_column: Boolean list with src columns that are unique
 
     step_1: URL name of the first step
-
-    :param request: Web request
-    :param pk: primary key of the SQL conn used
-    :param workflow: Workflow being used
-    :return: Creates the upload_data dictionary in the session
     """
-    conn = models.SQLConnection.objects.filter(
-        pk=pk).filter(enabled=True).first()
-    if not conn:
-        return redirect('connection:sqlconns_index')
+    model = models.SQLConnection
+    form_class = forms.SQLRequestConnectionParam
+    template_name = 'dataops/sqlupload_start.html'
 
-    form = None
-    missing_field = conn.has_missing_fields()
-    if missing_field:
-        # The connection needs a password  to operate
-        form = ontask.connection.forms.SQLRequestConnectionParam(
-            request.POST or None,
-            connection=conn)
+    dtype = 'SQL'
+    dtype_select = _('SQL connection')
+    prev_step_url = 'connection:sqlconns_index'
 
-    context = {
-        'form': form,
-        'wid': workflow.id,
-        'dtype': 'SQL',
-        'dtype_select': _('SQL connection'),
-        'valuerange': range(5) if workflow.has_table() else range(3),
-        'prev_step': reverse('connection:sqlconns_index'),
-        'conn_type': conn.conn_type,
-        'conn_driver': conn.conn_driver,
-        'db_user': conn.db_user,
-        'db_passwd': _('<PROTECTED>') if conn.db_password else '',
-        'db_host': conn.db_host,
-        'db_port': conn.db_port,
-        'db_name': conn.db_name,
-        'db_table': conn.db_table}
+    def get_queryset(self):
+        """This view should only consider enabled connections."""
+        return self.model.objects.filter(enabled=True)
 
-    if request.method == 'POST' and (not missing_field or form.is_valid()):
-        if form:
-            run_params = conn.get_missing_fields(form.cleaned_data)
-        else:
-            run_params = {}
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['connection'] = kwargs.pop('instance')
+        return kwargs
+
+    def form_valid(self, form):
+        conn = self.get_object()
+        run_params = self.object.get_missing_fields(form.cleaned_data)
 
         # Process SQL connection using pandas
         try:
             services.sql_upload_step_one(
-                request,
-                workflow,
+                self.request,
+                self.workflow,
                 conn,
                 run_params)
         except Exception as exc:
             messages.error(
-                request,
+                self.request,
                 _('Unable to obtain data: {0}').format(str(exc)))
-            return render(request, 'dataops/sqlupload_start.html', context)
+            return redirect('dataops:uploadmerge')
 
         return redirect('dataops:upload_s2')
-
-    return render(request, 'dataops/sqlupload_start.html', context)

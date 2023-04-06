@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+<form method="post" action="{{ view.action_url }}"
+  class="js-connection-addedit-form">
+  {% csrf_token %}
+  <div class="modal-header">
+  {% if view.add %}
+    <h4 class="modal-title">{% trans 'Add connection' %}</h4>
+  {% else %}
+    <h4 class="modal-title">{% trans 'Edit connection' %}</h4>
+  {% endif %}
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{ form|crispy }}
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-primary">
+       <span class="fa fa-check"></span> {% if view.add %}{% trans 'Add connection' %}{% else %}{% trans 'Update' %}{% endif %}
+    </button>
+  </div>
+</form>

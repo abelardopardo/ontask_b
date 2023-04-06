@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ontask.workflow.forms.attribute_shared import (
     AttributeItemForm, SharedForm,
 )

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Model description for the Workflow."""
 import datetime
 from importlib import import_module
@@ -8,12 +6,14 @@ from typing import List, Tuple
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import JSONField
 from django.contrib.sessions.models import Session
 from django.core.cache import cache
 from django.db import models
+from django.db.models import JSONField
+from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 from ontask.dataops import pandas, sql
@@ -159,13 +159,17 @@ class Workflow(NameAndDescription, CreateModifyFields):
             self.save(update_fields=['data_frame_table_name'])
         return self.upload_table_prefix.format(self.id)
 
-    def has_table(self) -> bool:
-        """Check if the workflow has a table.
+    @cached_property
+    def has_data_frame(self) -> bool:
+        """Check if a workflow has data frame.
 
-        Boolean stating if there is a table storing a data frame
-        :return: True if the workflow has a table storing the data frame
+        :return: If the workflow has a dataframe
         """
         return pandas.is_table_in_db(self.get_data_frame_table_name())
+
+    def get_absolute_url(self):
+        """URL to redirect whenever an operation in workflow takes place."""
+        return reverse('home')
 
     def get_column_info(self):
         """Access name, data_type and key for all columns.
@@ -236,6 +240,15 @@ class Workflow(NameAndDescription, CreateModifyFields):
                 # integer
                 op_item['validation'] = {'step': 'any'}
 
+            if column.data_type == 'datetime':
+                op_item['validation'] = {
+                    'format': [
+                        'YYYY-MM-DD HH:mm:ss',
+                        'YYYY-MM-DD HH:mm:ssZ',
+                        'YYYY-MM-DD HH:mm:ss Z'],
+                    'messages': {
+                        'format': 'Date required format YYYY-MM-DD HH:mm:ss'}}
+
             if column.get_categories():
                 op_item['input'] = 'select'
                 op_item['values'] = column.categories
@@ -244,6 +257,7 @@ class Workflow(NameAndDescription, CreateModifyFields):
                     'not_equal',
                     'is_null',
                     'is_not_null']
+
             # TODO: Filter is_null and is_not_null out of string columns if
             # NULL values are avoided.
 
@@ -251,19 +265,12 @@ class Workflow(NameAndDescription, CreateModifyFields):
 
         self.query_builder_ops = json_value
 
-    def get_query_builder_ops_as_str(self) -> str:
+    def get_query_builder_ops(self) -> str:
         """Obtain the query builder operands as a string.
 
         :return: Query builder ops structure as string (JSON dumps)
         """
         return json.dumps(self.query_builder_ops)
-
-    def has_data_frame(self) -> bool:
-        """Check if a workflow has data frame.
-
-        :return: If the workflow has a dataframe
-        """
-        return pandas.is_table_in_db(self.get_data_frame_table_name())
 
     def is_locked(self) -> bool:
         """Check if the workflow is locked.
@@ -371,8 +378,12 @@ class Workflow(NameAndDescription, CreateModifyFields):
         """
         # Step 1: Delete the data frame from the database
         sql.delete_table(self.get_data_frame_table_name())
+        try:
+            del self.has_data_frame
+        except AttributeError:
+            pass
 
-        # Reset some of the workflow fields
+        # Reset some workflow fields
         self.nrows = 0
         self.ncols = 0
         self.data_frame_table_name = ''
@@ -381,12 +392,21 @@ class Workflow(NameAndDescription, CreateModifyFields):
         # to the workflow.
         for act in self.actions.all():
             act.conditions.all().delete()
+            if act.filter:
+                act.filter.delete()
+            act.column_condition_pair.all().delete()
+            act.rubric_cells.all().delete()
+            act.scheduled_operations.all().delete()
+
             act.delete()
 
         # Step 3: Delete all the views attached to the workflow
-        self.views.all().delete()
+        for view in self.views.all():
+            if view.filter:
+                view.filter.delete()
+            view.delete()
 
-        # Step 4: Delete the column_names, column_types and column_unique
+        # Step 4: Delete the columns
         self.columns.all().delete()
         self.set_query_builder_ops()
 
@@ -448,8 +468,8 @@ class Workflow(NameAndDescription, CreateModifyFields):
     def log(
         self,
         user: get_user_model(),
-        operation_type:
-        str, **kwargs: str
+        operation_type: str,
+        **kwargs: str
     ) -> Log:
         """Log the operation with the object."""
         payload = {

@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
-
 """View objects."""
-from django.contrib.postgres.fields.jsonb import JSONField
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from typing import Dict, Optional
 
-from ontask.dataops import formula, sql
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
 from ontask.models.column import Column
+from ontask.models.condition import Filter
 from ontask.models.common import CreateModifyFields, NameAndDescription
 from ontask.models.logs import Log
 from ontask.models.workflow import Workflow
@@ -37,19 +36,36 @@ class View(NameAndDescription, CreateModifyFields):
         related_name='views'
     )
 
-    # Formula to select a subset of rows for action IN
-    formula = JSONField(
-        verbose_name=_("Subset of rows to show"),
-        default=dict,
+    filter = models.OneToOneField(
+        Filter,
         blank=True,
         null=True,
-        help_text=_('Preselect rows satisfying this condition'))
+        default=None,
+        on_delete=models.SET_NULL,
+        related_name='view')
 
-    # Number of rows allowed by the formula.
-    nrows = None
+    @property
+    def formula(self) -> Optional[Filter]:
+        """Get the formula value"""
+        if self.filter:
+            return self.filter.formula
 
-    def __str__(self):
-        return self.name
+        return None
+
+    @formula.setter
+    def formula(self, value: Dict):
+        """Setter for the formula field"""
+        if self.filter is None:
+            raise Exception(_('Incorrect use of view.formula.'))
+        self.filter._formula = value
+
+    @property
+    def formula_text(self) -> str:
+        """Return the text rendering of the formula."""
+        if self.filter is None:
+            return ''
+
+        return self.filter.formula_text
 
     @property
     def num_columns(self):
@@ -65,13 +81,10 @@ class View(NameAndDescription, CreateModifyFields):
 
         :return: Number of rows resulting from using the formula
         """
-        if not self.nrows:
-            self.nrows = sql.get_num_rows(
-                self.workflow.get_data_frame_table_name(),
-                self.formula
-            )
+        if self.filter:
+            return self.filter.selected_count
 
-        return self.nrows
+        return self.workflow.nrows
 
     @property
     def column_names(self):
@@ -81,16 +94,22 @@ class View(NameAndDescription, CreateModifyFields):
         """
         return [column.name for column in self.columns.all()]
 
+    @property
+    def has_empty_formula(self):
+        """Detect if the formula is empty"""
+        if self.filter is None:
+            return True
+
+        return self.filter.empty_formula
+
     def log(self, user, operation_type: str, **kwargs):
         """Log the operation with the object."""
         payload = {
             'id': self.id,
             'name': self.name,
             'columns': [col.name for col in self.columns.all()],
-            'formula': formula.evaluate(
-                self.formula,
-                formula.EVAL_TXT),
-            'nrows': self.nrows}
+            'formula': self.formula_text,
+            'nrows': self.num_rows}
 
         payload.update(kwargs)
         return Log.objects.register(
@@ -99,8 +118,11 @@ class View(NameAndDescription, CreateModifyFields):
             self.workflow,
             payload)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         """Define uniqueness with name in workflow and order by name."""
 
         unique_together = ('name', 'workflow')
-        ordering = ['name', ]
+        ordering = ['name']

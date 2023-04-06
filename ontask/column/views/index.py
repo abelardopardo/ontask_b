@@ -1,70 +1,118 @@
-# -*- coding: utf-8 -*-
-
 """Functions to render the table of columns."""
-from typing import Optional
+from typing import Dict
 
 from django import http
-from django.conf import settings
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import render
-from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.db.models import Q
+from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
+from django.views import generic
 
-from ontask import models
-from ontask.column import services
 from ontask.core import (
-    DataTablesServerSidePaging, ajax_required, check_wf_df, get_workflow,
-    is_instructor,
-)
+    DataTablesServerSidePaging, UserIsInstructor, WorkflowView, ajax_required)
 
 
-@user_passes_test(is_instructor)
-@get_workflow(pf_related=['columns', 'shared'])
-def index(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow],
-) -> http.HttpResponse:
-    """Http request to serve the details page for the workflow.
+class ColumnIndexView(UserIsInstructor, WorkflowView, generic.TemplateView):
+    """Show the list of columns."""
 
-    :param request: HTTP Request
-    :param workflow: Workflow being manipulated
-    :return: Http response with the page rendering
-    """
-    # Safety check for consistency (only in development)
-    if settings.DEBUG:
-        check_wf_df(workflow)
+    http_method_names = ['get']
+    template_name = 'column/detail.html'
+    wf_pf_related = 'columns'
 
-    return render(
-        request,
-        'column/detail.html',
-        services.get_detail_context(workflow))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['table_info'] = None
+        if self.workflow.has_data_frame:
+            context['table_info'] = {
+                'num_actions': self.workflow.actions.count()}
+
+        # Guarantee that column position is set for backward compatibility
+        columns = self.workflow.columns.all()
+        if any(col.position == 0 for col in columns):
+            # At least a column has index equal to zero, so reset all of them
+            for idx, col in enumerate(columns):
+                col.position = idx + 1
+                col.save(update_fields=['position'])
+
+        return context
 
 
-@user_passes_test(is_instructor)
-@csrf_exempt
-@ajax_required
-@require_POST
-@get_workflow(pf_related='columns')
-def index_ss(
-    request: http.HttpRequest,
-    workflow: Optional[models.Workflow] = None,
-) -> http.JsonResponse:
+@method_decorator(ajax_required, name='dispatch')
+class ColumnIndexSSView(UserIsInstructor, WorkflowView):
     """Render the server side page for the table of columns.
 
-    Given the workflow id and the request, return to DataTable the proper
-    list of columns to be rendered.
-
-    :param request: Http request received from DataTable
-    :param workflow: Workflow being manipulated.
-    :return: Data to visualize in the table
+    Return to DataTable the proper list of columns to be rendered.
     """
-    # Check that the GET parameter are correctly given
-    dt_page = DataTablesServerSidePaging(request)
-    if not dt_page.is_valid:
-        return http.JsonResponse(
-            {'error': _('Incorrect request. Unable to process')},
-        )
 
-    return http.JsonResponse(
-        services.column_table_server_side(dt_page, workflow))
+    http_method_names = ['post']
+    wf_pf_related = 'columns'
+
+    def column_table_server_side(
+        self,
+        dt_page: DataTablesServerSidePaging
+    ) -> Dict:
+        """Create the server side object to render a page of the table of
+        columns.
+
+        :param dt_page: Table structure for paging a query set.
+        :return: Dictionary to return to the server to render the sub-page
+        """
+        # Get the initial set
+        qs = self.workflow.columns.all()
+        records_total = qs.count()
+        records_filtered = records_total
+
+        # Reorder if required
+        if dt_page.order_col:
+            col_name = [
+                'position',
+                'name',
+                'description_text',
+                'data_type',
+                'is_key'][dt_page.order_col]
+            if dt_page.order_dir == 'desc':
+                col_name = '-' + col_name
+            qs = qs.order_by(col_name)
+
+        if dt_page.search_value:
+            qs = qs.filter(
+                Q(name__icontains=dt_page.search_value)
+                | Q(data_type__icontains=dt_page.search_value))
+            records_filtered = qs.count()
+
+        # Creating the result
+        final_qs = []
+        for col in qs[dt_page.start:dt_page.start + dt_page.length]:
+            ops_string = render_to_string(
+                'column/includes/operations.html',
+                {'id': col.id, 'is_key': col.is_key},
+            )
+
+            final_qs.append({
+                'number': col.position,
+                'name': col.name,
+                'description': col.description_text,
+                'type': col.get_simplified_data_type(),
+                'key': '<span class="true">✔</span>' if col.is_key else '',
+                'operations': ops_string,
+            })
+
+            if len(final_qs) == dt_page.length:
+                break
+
+        return {
+            'draw': dt_page.draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': final_qs,
+        }
+
+    def post(self, request, *args, **kwargs):
+        # Check that the POST parameter are correctly given
+        dt_page = DataTablesServerSidePaging(request)
+        if not dt_page.is_valid:
+            return http.JsonResponse(
+                {'error': _('Incorrect request. Unable to process')},
+            )
+
+        return http.JsonResponse(self.column_table_server_side(dt_page))

@@ -1,25 +1,22 @@
-# -*- coding: utf-8 -*-
-
-"""Module with all the views used related to actions."""
+"""Module with all the views used to manipulate actions."""
 from ontask.action.views.action import (
-    ActionCreateView, ActionUpdateView, action_index, delete_action,
-    edit_action,
-)
-from ontask.action.views.clone import clone_action
+    ActionCloneView, ActionCreateView, ActionDeleteView, ActionIndexView,
+    ActionUpdateView, action_edit)
 from ontask.action.views.edit_personalized import (
-    add_attachment, remove_attachment, save_text, showurl)
-from ontask.action.views.edit_rubric import edit_rubric_cell, edit_rubric_loas
+    ActionAddRemoveAttachmentView, ActionShowURLView)
+from ontask.action.views.edit_rubric import ActionEditRubricCellView
 from ontask.action.views.edit_survey import (
-    edit_description, select_column_action, select_condition_for_question,
-    shuffle_questions, toggle_question_change, unselect_column_action,
-)
-from ontask.action.views.import_export import action_import, export
+    ActionEditDescriptionView, ActionSelectColumnSurveyView,
+    ActionSelectConditionQuestionView, ActionShuffleQuestionsView,
+    ActionToggleQuestionChangeView, ActionUnselectColumnSurveyView)
+from ontask.action.views.import_export import (
+    ActionExportView, ActionImportView)
 from ontask.action.views.preview import (
-    preview_next_all_false, preview_response,
-)
+    ActionPreviewNextAllFalseView, ActionPreviewView)
 from ontask.action.views.run import (
-    action_zip_export, run_action, run_action_item_filter, run_done,
-    run_survey_row, serve_action, serve_action_lti, show_survey_table_ss,
-    survey_thanks, zip_action,
-)
-from ontask.action.views.timeline import show_timeline
+    ActionRunActionItemFilterView, ActionShowSurveyTableSSView,
+    ActionZipExportView, action_run_finish, action_run_initiate, action_run_zip)
+from ontask.action.views.serve import (
+    ActionRunSurveyRowView, ActionServeActionBasicView,
+    ActionServeActionLTIView)
+from ontask.action.views.timeline import ActionShowTimelineView

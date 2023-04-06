@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Test to verify that the scheduled actions are properly executed."""
 from datetime import datetime, timedelta
-import os
 
 from celery.contrib.testing.worker import start_worker
 from django.conf import settings
@@ -16,13 +13,11 @@ from ontask import OnTaskSharedState, models, tasks, tests
 from ontask.celery import app
 
 
-class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
+class ScheduledOperationTaskBasic(
+    tests.ScheduleActionsFixture,
+    tests.OnTaskTestCase
+):
     """Test the functions to execute through celery."""
-
-    fixtures = ['schedule_actions']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'schedule_actions.sql')
 
     tdelta = timedelta(minutes=2)
 
@@ -38,7 +33,11 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         super().tearDownClass()
         cls.celery_worker.__exit__(None, None, None)
 
-    def test_scheduled_email_action(self):
+
+class ScheduledOperationTaskEmailAction(ScheduledOperationTaskBasic):
+    """Test the function to execute through celery an email action."""
+
+    def test(self):
         """Create a scheduled send email action and execute it."""
 
         user = get_user_model().objects.get(email='instructor01@bogus.com')
@@ -75,7 +74,11 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         assert 'Hi Student Two' in mail.outbox[0].body
         assert 'Hi Student Three' in mail.outbox[1].body
 
-    def test_scheduled_json_action(self):
+
+class ScheduledOperationTaskJSONAction(ScheduledOperationTaskBasic):
+    """Test the function to execute through celery a JSON action."""
+
+    def test(self):
         """Create a scheduled send list action and execute it."""
         token = 'fake token'
 
@@ -112,7 +115,11 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         assert all(item['target'] == action.target_url for item in json_outbox)
         assert all(token in item['auth'] for item in json_outbox)
 
-    def test_scheduled_email_report(self):
+
+class ScheduledOperationTaskEmailReport(ScheduledOperationTaskBasic):
+    """Test the function to execute through celery an Email report."""
+
+    def test(self):
         """Create a scheduled send report action and execute it."""
 
         user = get_user_model().objects.get(email='instructor01@bogus.com')
@@ -146,7 +153,11 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         assert('student01@bogus.com' in mail.outbox[0].body)
         assert('student03@bogus.com' in mail.outbox[0].body)
 
-    def test_scheduled_json_report_action(self):
+
+class ScheduledOperationTaskJSONReport(ScheduledOperationTaskBasic):
+    """Test the function to execute through celery a JSON report."""
+
+    def test(self):
         """Create a scheduled send report action and execute it."""
 
         token = 'false token'
@@ -180,7 +191,11 @@ class ScheduledOperationTaskTestCase(tests.OnTaskTestCase):
         assert len(json_outbox) == 1
         assert all(token in item['auth'] for item in json_outbox)
 
-    def test_scheduled_incremental_email(self):
+
+class ScheduledOperationTaskIncrementalEmail(ScheduledOperationTaskBasic):
+    """Test the function to execute through celery an incremental email."""
+
+    def test(self):
         """Test an incremental scheduled action."""
         # Modify the data table so that initially all records have registered
         # equal to alse

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle the upload steps."""
 from typing import Dict, List, Tuple
 
@@ -7,7 +5,7 @@ from django import http
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from ontask import models
 from ontask.core import store_workflow_in_session
@@ -44,14 +42,8 @@ def upload_step_two(
             # If the column is key, check if the user wants to keep it
             keep_key_column[idx] = select_column_data['make_key_%s' % idx]
 
-    if workflow.has_data_frame():
-        # A Merge operation is required
-
-        # Update the dictionary with the session information so that it is
-        # available in the next step
-        request.session['upload_data'] = upload_data
-
-        # This is a merge operation, so move to Step 3
+    if workflow.has_data_frame:
+        # A Merge operation is required so move to Step 3
         return redirect('dataops:upload_s3')
 
     # This is the first data to be stored in the workflow. Save the uploaded

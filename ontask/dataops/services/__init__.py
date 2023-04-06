@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Services to process dataframes."""
 from ontask.dataops.services.dataframeupload import (
     batch_load_df_from_athenaconnection, load_df_from_csvfile,

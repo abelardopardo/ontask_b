@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to do data frame merging."""
 from typing import Dict, Optional
 
@@ -175,6 +173,7 @@ def _update_is_key_field(merge_info: Dict, workflow):
         col.is_key = col.is_key and keep_key
         col.save(update_fields=['is_key'])
 
+
 def validate_merge_parameters(
     dst_df: pd.DataFrame,
     src_df: pd.DataFrame,
@@ -195,14 +194,14 @@ def validate_merge_parameters(
         return gettext(
             'Column {0} not found in current data frame').format(left_on)
 
-    if not pandas.is_unique_column(dst_df[left_on]):
+    if not pandas.is_unique_series(dst_df[left_on]):
         return gettext('Column {0} is not a unique key.').format(left_on)
 
     if right_on not in list(src_df.columns):
         return gettext(
             'Column {0} not found in new data frame').format(right_on)
 
-    if not pandas.is_unique_column(src_df[right_on]):
+    if not pandas.is_unique_series(src_df[right_on]):
         return gettext(
             'Column {0} is not a unique key.').format(right_on)
 
@@ -284,7 +283,7 @@ def perform_dataframe_upload_merge(
     if 'keep_key_column' not in merge_info:
         kk_column = []
         for cname in merge_info['rename_column_names']:
-            kk_column.append(pandas.is_unique_column(src_df[cname]))
+            kk_column.append(pandas.is_unique_series(src_df[cname]))
         merge_info['keep_key_column'] = kk_column
 
     # Get the keys
@@ -336,4 +335,4 @@ def perform_dataframe_upload_merge(
 
     # Recompute all the values of the conditions in each of the actions
     for action in workflow.actions.all():
-        action.update_n_rows_selected()
+        action.update_selected_row_counts()

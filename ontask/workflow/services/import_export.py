@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to perform the import/export operations."""
 from datetime import datetime
 import gzip
@@ -7,13 +5,15 @@ from io import BytesIO
 from typing import Dict, List, Optional
 
 from django import http
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from ontask import models
-from ontask.core.checks import check_wf_df
+from ontask.action import services as action_services
+from ontask.dataops.formula import is_empty
+from ontask.core.checks import check_workflow
 from ontask.workflow import services
 from ontask.workflow.serializers import (
     WorkflowExportSerializer, WorkflowImportSerializer,
@@ -27,15 +27,35 @@ def _run_compatibility_patches(json_data: Dict) -> Dict:
     has changed. These patches are to guarantee that an old workflow is
     compliant with the new structure. The patches applied are:
 
-    1. Change action.target_url from None to ''
-
     :param json_data: Json object to process
     :return: Modified json_data
     """
-    # Target_url field in actions should be present an empty by default
-    for action_obj in json_data['actions']:
-        if action_obj.get('target_url') is None:
-            action_obj['target_url'] = ''
+
+    # Various changes in the actions
+    json_data['actions'] = action_services.run_compatibility_patches(
+        json_data['actions'])
+
+    # Change the formula field in the view
+    for view in json_data.get('views', []):
+        if '_formula' not in view and 'formula' not in view:
+            continue
+
+        if '_formula' in view:
+            formula_info = view.pop('_formula')
+        else:
+            formula_info = view.pop('formula')
+
+        if is_empty(formula_info):
+            continue
+
+        view['filter'] = {
+            'object_id': -1,
+            '_formula': formula_info,
+            'description_text': view['description_text']}
+
+    # Remove query_builder_ops, it is refreshed from the
+    # read columns
+    json_data.pop('builder_query_ops', None)
 
     return json_data
 
@@ -54,8 +74,13 @@ def do_import_workflow_parse(
     :param file_item: File item previously opened
     :return: workflow object or raise exception
     """
-    data_in = gzip.GzipFile(fileobj=file_item)
-    json_data = JSONParser().parse(data_in)
+    try:
+        data_in = gzip.GzipFile(fileobj=file_item)
+        json_data = JSONParser().parse(data_in)
+    except IOError:
+        raise Exception(
+            _('Incorrect file. Expecting a GZIP file (exported workflow).'),
+        )
 
     _run_compatibility_patches(json_data)
 
@@ -72,7 +97,7 @@ def do_import_workflow_parse(
     workflow = workflow_data.save()
 
     try:
-        check_wf_df(workflow)
+        check_workflow(workflow)
     except AssertionError:
         # Something went wrong.
         if workflow:
@@ -86,7 +111,7 @@ def do_import_workflow(
     user,
     name: Optional[str],
     file_item,
-):
+) -> models.Workflow:
     """Create a new structure of workflow stored in the file item.
 
     Receives a name and a file item (submitted through a form) and creates
@@ -95,7 +120,7 @@ def do_import_workflow(
     :param user: User record to use for the import (own all created items)
     :param name: Workflow name (it has been checked that it does not exist)
     :param file_item: File item obtained through a form
-    :return:
+    :return: workflow object
     """
     try:
         workflow = do_import_workflow_parse(user, name, file_item)
@@ -118,6 +143,8 @@ def do_import_workflow(
             _('Unable to import workflow: {0}').format(exc))
 
     workflow.log(user, models.Log.WORKFLOW_IMPORT)
+
+    return workflow
 
 
 def do_export_workflow_parse(

@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Forms to process attributes and sharing."""
 from typing import Dict
 
 from django import forms
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import is_legal_name, models
 from ontask.models.common import CHAR_FIELD_MID_SIZE
@@ -50,10 +48,10 @@ class AttributeItemForm(forms.Form):
             self.add_error('key', msg)
             return form_data
 
-        if attr_name in self.keys:
+        if attr_name != self.fields['key'].initial and attr_name in self.keys:
             self.add_error(
                 'key',
-                _('Name has to be different from all existing ones.'))
+                _('An attribute with this name already exists.'))
             return form_data
 
         # Enforce the property that Attribute names, column names and

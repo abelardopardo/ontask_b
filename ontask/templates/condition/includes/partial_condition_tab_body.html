@@ -9,28 +9,27 @@
             title="{% trans 'Define a condition to use in this action.' %}">
       <span class="fa fa-plus"></span> {% trans 'Condition' %}</button>
     {% include 'condition/includes/partial_condition_clone.html' %}
-    {% include 'table/includes/partial_column_stats_selector.html' %}
   </div>
   <div id="condition-set" class="card-deck justify-content-center my-3">
     {% for condition in conditions %}
       <div class="shadow card ontask-ccard text-center mb-3 mx-2">
         <h5 class="card-header js-condition-edit" data-url="{% url 'condition:edit_condition' condition.id %}">{{ condition.name }}</h5>
         <div class="card-body js-condition-edit" data-url="{% url 'condition:edit_condition' condition.id %}" style="min-height: 100px;">
-          <h5 class="card-subtitle mb-2 text-muted">{% blocktrans with n=condition.n_rows_selected count counter=condition.n_rows_selected %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}
-            {% if condition.n_rows_selected == 0 %}<span
+          <h5 class="card-subtitle mb-2 text-muted">{% blocktrans with n=condition.selected_count count counter=condition.selected_count %}({{ n }} learner){% plural %}({{ n }} learners){% endblocktrans %}
+            {% if condition.selected_count == 0 %}<span
                 class="fa fa-exclamation-triangle" style="color:red;"
                 data-toggle="tooltip"
                 title="Condition is false for all considered users"></span>
           {% endif %}</h5>
           <p class="card-text">{{ condition.description_text }}</p>
-          <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ condition.get_formula_text|safe }}</p>
+          <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ condition.formula_text|safe }}</p>
         </div>
         <div class="cond-buttons">
           <button type="button"
                   class="btn btn-light btn-sm js-condition-edit"
                   data-url="{% url 'condition:edit_condition' condition.id %}"
                   data-toggle="tooltip"
-                  title="{% blocktrans with n=condition.n_rows_selected %}Edit the condition ({{ n }} rows satisfy this condition){% endblocktrans %}"><span class="fa fa-pencil"></span>
+                  title="{% blocktrans with n=condition.selected_count %}Edit the condition ({{ n }} rows satisfy this condition){% endblocktrans %}"><span class="fa fa-pencil-alt"></span>
           </button>
           <button type="button"
              class="btn btn-light btn-sm js-condition-clone"

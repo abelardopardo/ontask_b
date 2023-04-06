@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Upload DataFrames from various sources."""
 from typing import Dict, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django.conf import settings
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 import pandas as pd
 from pyathena import connect
 import smart_open
@@ -64,8 +62,8 @@ def load_df_from_excelfile(file_obj, sheet_name: str) -> pd.DataFrame:
         file_obj,
         sheet_name=sheet_name,
         index_col=False,
-        infer_datetime_format=True,
-        quotechar='"')
+        engine='openpyxl')
+    data_frame.dropna(axis=0, how='all', inplace=True)
 
     # Strip white space from all string columns and try to convert to
     # datetime just in case
@@ -239,7 +237,7 @@ def batch_load_df_from_athenaconnection(
         'columns_to_upload': [True] * len(col_names),
         'keep_key_column': is_key[:]}
 
-    if not workflow.has_data_frame():
+    if not workflow.has_data_frame:
         # Regular load operation
         pandas.store_workflow_table(workflow, upload_data)
         log_item.payload['col_names'] = col_names

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Manipulate template text within OnTask and evaluat it s content."""
 import re
 import shlex
@@ -8,7 +6,7 @@ from typing import Callable, Dict, List, Mapping
 
 from django.template import Context, Template
 from django.utils.html import escape
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 # Variable name to store the action ID in the context used to render a
@@ -218,14 +216,15 @@ def render_rubric_criteria(action: models.Action, context: Dict) -> List[List]:
     text_sources = []
 
     for criterion in criteria:
-        c_value = context.get(_translate(escape(criterion.name)))
-        if not c_value:
+        if not (c_value := context.get(_translate(escape(criterion.name)))):
             # Skip criteria with no values
             continue
 
         value_idx = criterion.categories.index(c_value)
-        cell = cells.filter(column=criterion, loa_position=value_idx).first()
-        if not cell:
+        if not (cell := cells.filter(
+            column=criterion,
+            loa_position=value_idx).first()
+        ):
             continue
         text_sources.append([criterion.name, cell.feedback_text])
 
@@ -279,15 +278,15 @@ def render_action_template(
     :return: The rendered template
     """
     # Steps 1 and 2. Apply the translation process to all variables that
-    # appear in the the template text
+    # appear in the template text
     new_template_text = template_text
-    for rexpr in models.VAR_USE_RES:
+    for regex in models.VAR_USE_RES:
         if action and action.has_html_text:
-            new_template_text = rexpr.sub(
+            new_template_text = regex.sub(
                 _change_unescape_vname,
                 new_template_text)
         else:
-            new_template_text = rexpr.sub(
+            new_template_text = regex.sub(
                 _change_vname,
                 new_template_text)
 

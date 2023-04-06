@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to serve actions through direct URL access."""
 import json
 import random
@@ -7,7 +5,7 @@ from typing import Any, Dict, List, Tuple
 
 from django import http
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from ontask import models
 from ontask.action.evaluate import (
@@ -39,8 +37,7 @@ def serve_action_out(
 
     # Get the dictionary containing column names, attributes and condition
     # valuations:
-    context = get_action_evaluation_context(action, row_values)
-    if context is None:
+    if (context := get_action_evaluation_context(action, row_values)) is None:
         # Log the event
         action.log(
             user,
@@ -94,23 +91,24 @@ def get_survey_context(
     if not user_attribute_value:
         user_attribute_value = request.user.email
 
-    # Get the dictionary containing column names, attributes and condition
-    # valuations:
-    context = get_action_evaluation_context(
-        action,
-        get_row_values(
+    # Get the row from the table with the appropriate values
+    row = get_row_values(
             action,
-            (user_attribute_name, user_attribute_value),
-        ),
-    )
+            (user_attribute_name, user_attribute_value))
+    if row is None:
+        # Proper row was not found
+        raise OnTaskActionSurveyDataNotFound(
+            message=gettext('Unable to find survey data.'))
 
-    if not context:
+    # Get dictionary with column names, attributes and condition valuations:
+    if not (context := get_action_evaluation_context(action, row)):
         # If the data has not been found, flag
         if not is_manager:
-            raise OnTaskActionSurveyDataNotFound()
+            raise OnTaskActionSurveyDataNotFound(
+                message=gettext('Unable to find survey data.'))
 
         raise OnTaskActionSurveyNoTableData(
-            message=_('Data not found in the table'))
+            message=gettext('Data not found in the table'))
 
     return context
 
@@ -144,7 +142,7 @@ def update_row_values(
     # Recompute all the values of the conditions in each of the actions
     # TODO: Explore how to do this asynchronously (or lazy)
     for act in action.workflow.actions.all():
-        act.update_n_rows_selected()
+        act.update_selected_row_counts()
 
     # Log the event and update its content in the action
     log_item = action.log(
@@ -160,7 +158,8 @@ def update_row_values(
 
 
 def extract_survey_questions(
-    action: models.Action, user_seed: str,
+    action: models.Action,
+    user_seed: str,
 ) -> List[models.ActionColumnConditionTuple]:
     """Extract the set of questions to include in a survey.
 

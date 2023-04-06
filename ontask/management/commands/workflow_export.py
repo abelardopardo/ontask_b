@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Command to export a single workflow."""
 import shutil
 

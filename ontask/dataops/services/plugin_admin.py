@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle plugin invocations."""
 from datetime import datetime
 import inspect
@@ -14,7 +12,7 @@ from django.db.models.expressions import F
 from django.template.loader import render_to_string
 from django.utils.dateparse import parse_datetime
 from django.utils.html import format_html
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 import django_tables2 as tables
 
 from ontask import models, settings as ontask_settings
@@ -115,7 +113,7 @@ class PluginAdminTable(tables.Table):
             'td': {'style': 'vertical-align: middle'}}
 
 
-type_function = {
+TYPE_FUNCTION = {
     'integer': int,
     'double': float,
     'string': str,
@@ -281,7 +279,7 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
                     'First tuple element should be as string')
                 return list(zip(diag, _checks))
 
-            t_func = type_function.get(ptype)
+            t_func = TYPE_FUNCTION.get(ptype)
             if not t_func:
                 # This is an incorrect data type
                 diag[check_idx] = _(
@@ -325,7 +323,8 @@ def _verify_plugin(pinobj: models.Plugin) -> List[Tuple[str, str]]:
             diag[check_idx] = _('Incorrect run method')
         check_idx += 1
 
-    except Exception:
+    except Exception as exc:
+        diag[check_idx] = str(exc)
         return list(zip(diag, _checks))
 
     return list(zip(diag, _checks))
@@ -393,10 +392,10 @@ def load_plugin(foldername):
             return None, tests
     except AttributeError:
         raise services.OnTasDataopsPluginInstantiationError(
-            message=ugettext('Error while instantiating the plugin class'))
+            message=gettext('Error while instantiating the plugin class'))
     except Exception:
         raise services.OnTasDataopsPluginInstantiationError(
-            message=ugettext('Error while instantiating the plugin class'))
+            message=gettext('Error while instantiating the plugin class'))
 
     return plugin_instance, tests
 

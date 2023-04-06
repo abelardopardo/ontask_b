@@ -5,12 +5,12 @@
 {% load django_tables2 %}
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
-{% block title %}{{ block.super }}{{ title }}{% endblock %}
+{% block title %}{{ block.super }}{{ view.title }}{% endblock %}
 {% block extrahead %}
   {% ontask_datatables_bootstrap_css %}
 {% endblock extrahead %}
 {% block scripts %}
-  <script src="{% static 'connection/js/connection.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'connection/js/connection.js' %}"></script>
   {% ontask_datatables_jquery_js %}
   {% ontask_datatables_bootstrap_js %}
   <script type="text/javascript">
@@ -48,7 +48,7 @@
 {% endblock %}
 {% block container %}
   <div id="connection-admin" class="container">
-    <h1 class="text-center">{{ title }}</h1>
+    <h1 class="text-center">{{ view.title }}</h1>
     <div class="text-center mb-3">
       <button type="button" class="shadow btn btn-outline-dark js-connection-addedit"
               data-url="{{ data_url }}"

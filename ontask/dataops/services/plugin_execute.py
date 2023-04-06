@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to execute a plugin."""
 from datetime import datetime
 from typing import Dict, Optional
 
 from django.conf import settings
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
 import pandas as pd
 import pytz
 
@@ -42,7 +40,7 @@ def _execute_plugin(
         plugin_instance, msgs = load_plugin(plugin_info.filename)
     except OnTaskServiceException:
         raise Exception(
-            ugettext('Unable to instantiate plugin "{0}"').format(
+            gettext('Unable to instantiate plugin "{0}"').format(
                 plugin_info.name),
         )
 
@@ -54,7 +52,7 @@ def _execute_plugin(
         != len(input_column_names)
     ):
         raise Exception(
-            ugettext(
+            gettext(
                 'Inconsistent number of inputs when invoking plugin "{0}"',
             ).format(plugin_info.name),
         )
@@ -67,7 +65,7 @@ def _execute_plugin(
         != len(output_column_names)
     ):
         raise Exception(
-            ugettext(
+            gettext(
                 'Inconsistent number of outputs when invoking plugin "{0}"',
             ).format(plugin_info.name),
         )
@@ -77,7 +75,7 @@ def _execute_plugin(
         df = pandas.load_table(workflow.get_data_frame_table_name())
     except Exception as exc:
         raise Exception(
-            ugettext(
+            gettext(
                 'Exception when retrieving the data frame from workflow: {0}',
             ).format(str(exc)),
         )
@@ -95,7 +93,7 @@ def _execute_plugin(
         if plugin_instance.get_input_column_names():
             sub_df.columns = plugin_instance.get_input_column_names()
     except Exception as exc:
-        raise Exception(ugettext(
+        raise Exception(gettext(
             'Error when creating data frame for plugin: {0}',
         ).format(str(exc)))
 
@@ -104,13 +102,13 @@ def _execute_plugin(
         new_df = plugin_instance.run(sub_df, parameters=plugin_params)
     except Exception as exc:
         raise Exception(
-            ugettext('Error while executing plugin: {0}').format(str(exc)),
+            gettext('Error while executing plugin: {0}').format(str(exc)),
         )
 
     # If plugin does not return a data frame, flag as error
     if not isinstance(new_df, pd.DataFrame):
         raise Exception(
-            ugettext(
+            gettext(
                 'Plugin executed but did not return a pandas data frame.'),
         )
 
@@ -119,7 +117,7 @@ def _execute_plugin(
     # Result has to have the exact same number of rows
     if new_df.shape[0] != df.shape[0]:
         raise Exception(
-            ugettext(
+            gettext(
                 'Incorrect number of rows ({0}) in result data frame.',
             ).format(new_df.shape[0]),
         )
@@ -127,14 +125,14 @@ def _execute_plugin(
     # Merge key name cannot be part of the output df
     if merge_key in new_df.columns:
         raise Exception(
-            ugettext(
+            gettext(
                 'Column name {0} cannot be in the result data frame.'.format(
                     merge_key)),
         )
 
     # Result column names are consistent
     if set(new_df.columns) != set(plugin_instance.get_output_column_names()):
-        raise Exception(ugettext('Incorrect columns in result data frame.'))
+        raise Exception(gettext('Incorrect columns in result data frame.'))
 
     # Add the merge column to the result df
     new_df[merge_key] = df[merge_key]
@@ -156,12 +154,12 @@ def _execute_plugin(
         )
     except Exception as exc:
         raise Exception(
-            ugettext('Error while merging result: {0}.').format(str(exc)),
+            gettext('Error while merging result: {0}.').format(str(exc)),
         )
 
     if isinstance(new_frame, str):
         raise Exception(
-            ugettext('Error while merging result: {0}.').format(new_frame))
+            gettext('Error while merging result: {0}.').format(new_frame))
 
     # Update execution time in the plugin
     plugin_info.executed = datetime.now(
@@ -219,7 +217,7 @@ class ExecuteRunPlugin:
             plugin_info = models.Plugin.objects.filter(pk=plugin_id).first()
             if not plugin_info:
                 raise Exception(
-                    ugettext('Unable to load plugin with id {pid}').format(
+                    gettext('Unable to load plugin with id {pid}').format(
                         plugin_id),
                 )
 
@@ -241,6 +239,6 @@ class ExecuteRunPlugin:
             log_item.payload['status'] = 'Execution finished successfully'
             log_item.save(update_fields=['payload'])
         except Exception as exc:
-            log_item.payload['status'] = ugettext(
+            log_item.payload['status'] = gettext(
                 'Error: {0}').format(str(exc))
             log_item.save(update_fields=['payload'])

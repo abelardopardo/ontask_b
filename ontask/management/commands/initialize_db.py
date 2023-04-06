@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Script to create users. Execute without parameters for help."""
 from builtins import str
 import codecs

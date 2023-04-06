@@ -1,20 +1,35 @@
 {% load i18n %}
-<form method="post" action="{% url 'workflow:flush' workflow.id %}" class="js-workflow-flush-form">
+<form method="post" action="{% url 'workflow:flush' view.workflow.id %}" class="js-workflow-flush-form">
   {% csrf_token %}
   <div class="modal-header">
-    <h4 class="modal-title">{% trans 'Confirm data deletion' %}</h4>
+    <h4 class="modal-title">
+      {% if view.workflow.nrows %}
+        {% trans 'Confirm data deletion' %}
+      {% else %}
+        {% trans 'Workflow has no data' %}
+      {% endif %}
+    </h4>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p class="lead">{% blocktrans with n=workflow.name %}Are you sure you want to flush the data in workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
-    <p>{% blocktrans %}This operation will also remove actions, table views and records.{% endblocktrans %}</p>
-    <p>{% trans 'Type the name of the workflow:' %} <input type="text" id="txtInput" class="textEnable" data-value="{{ workflow.name }}"/></p>
+    {% if view.workflow.nrows %}
+      <p class="lead">{% blocktrans with n=view.workflow.name %}Are you sure you want to flush the data in workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
+      <p>{% blocktrans %}This operation will also remove actions, table views and records.{% endblocktrans %}</p>
+      <p>{% trans 'Type the name of the workflow:' %} <input type="text" id="txtInput" class="textEnable" data-value="{{ view.workflow.name }}"/></p>
+    {% else %}
+    <p class="lead">{% blocktrans %}The workflow has no data, so this operation will nave no effect.{% endblocktrans %}</p>
+    {% endif %}
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-danger button-enable" disabled>
-      <span class="fa fa-floppy-remove"></span> {% trans 'Flush workflow data' %}</button>
+    {% if view.workflow.nrows %}
+      <button type="submit" class="btn btn-danger button-enable" disabled>
+        <span class="fa fa-minus-square"></span> {% trans 'Flush workflow data' %}</button>
+    {% else %}
+      <button type="submit" class="btn btn-danger">
+        <span class="fa fa-minus-square"></span> {% trans 'Ok' %}</button>
+    {% endif %}
   </div>
 </form>
 

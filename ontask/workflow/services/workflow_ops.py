@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-
 """Functions to manipulate other workflow ops."""
-from typing import Dict
-
 from django import http
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
 
 from ontask import core, get_incorrect_email, models, tasks
@@ -61,27 +57,6 @@ class WorkflowShareTable(tables.Table):
             'id': 'share-table',
             'th': {'class': 'dt-body-center'},
         }
-
-
-def get_operations_context(workflow: models.Workflow) -> Dict:
-    """Create the context to render the operations page.
-
-    :param workflow: Workflow being manipulated.
-    :return: Dictionary with the context.
-    """
-    return {
-        'workflow': workflow,
-        'attribute_table': AttributeTable([
-            {'id': idx, 'name': key, 'value': kval}
-            for idx, (key, kval) in enumerate(sorted(
-                workflow.attributes.items()))],
-            orderable=False,
-        ),
-        'share_table': WorkflowShareTable(
-            workflow.shared.values('email', 'id').order_by('email'),
-        ),
-        'unique_columns': workflow.get_unique_columns(),
-    }
 
 
 def check_luser_email_column_outdated(workflow: models.Workflow):

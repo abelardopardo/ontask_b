@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Exceptions when manipulating scheduled items."""
 from ontask import OnTaskServiceException
 

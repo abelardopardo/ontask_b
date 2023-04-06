@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Rubric Model.
 
 A rubric is modeled as a matrix with M criteria (which are columns in OnTask)
@@ -9,7 +7,7 @@ stores each cell of the rubric and threfore has a reference to a criteria (or
 column) a category string, a description string, and a feedback string.
 """
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask.models.logs import Log
 
@@ -79,7 +77,11 @@ class RubricCell(models.Model):
             'feedback': self.feedback_text}
 
         payload.update(kwargs)
-        return Log.objects.register(user, operation_type, None, payload)
+        return Log.objects.register(
+            user,
+            operation_type,
+            self.action.workflow,
+            payload)
 
     class Meta:
         """Define unique criteria and ordering.

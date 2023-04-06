@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
-
 """Model for OnTask Logs."""
 import json
 from typing import Dict
 
-from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.db.models import JSONField
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask.models.common import CHAR_FIELD_MID_SIZE, Owner
 
@@ -49,13 +47,14 @@ class Log(Owner):
     ACTION_JSON_SENT = 'action_json_sent'
     ACTION_REPORT_EMAIL_SENT = 'action_report_email_sent'
     ACTION_QUESTION_ADD = 'question_add'
+    ACTION_QUESTION_REMOVE = 'question_remove'
     ACTION_TODOITEM_ADD = 'todoitem_add'
     ACTION_QUESTION_TOGGLE_CHANGES = 'question_toggle_changes'
     ACTION_TODOITEM_TOGGLE_CHANGES = 'todoitem_toggle_changes'
     ACTION_RUBRIC_CRITERION_ADD = 'action_rubric_criterion_add'
     ACTION_RUBRIC_CRITERION_EDIT = 'action_rubric_criterion_edit'
     ACTION_RUBRIC_CRITERION_DELETE = 'action_rubric_criterion_delete'
-    ACTION_RUBRIC_CELL_EDIT = 'action_rubriccell_edit'
+    ACTION_RUBRIC_CELL_EDIT = 'action_rubric_cell_edit'
     ACTION_RUBRIC_LOA_EDIT = 'action_rubric_loa_edit'
     ACTION_RUN_EMAIL_REPORT = 'action_run_email_report'
     ACTION_RUN_JSON_REPORT = 'action_run_json_report'
@@ -137,9 +136,10 @@ class Log(Owner):
         ACTION_EMAIL_READ: _('Email read'),
         ACTION_EMAIL_SENT: _('Emails sent'),
         ACTION_IMPORT: _('Action imported'),
-        ACTION_JSON_SENT: _('Emails sent'),
+        ACTION_JSON_SENT: _('JSON object sent'),
         ACTION_REPORT_EMAIL_SENT: _('Email with data report sent'),
         ACTION_QUESTION_ADD: _('Question added'),
+        ACTION_QUESTION_REMOVE: _('Question removed'),
         ACTION_TODOITEM_ADD: _('TODO item added'),
         ACTION_QUESTION_TOGGLE_CHANGES: _('Question toggle changes'),
         ACTION_TODOITEM_TOGGLE_CHANGES: _('TODO item toggle changes'),

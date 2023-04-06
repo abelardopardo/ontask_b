@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% load staticfiles %}
+{% load static %}
 {% block container %}
-  <div class="form-box">
-    <div class="text-center">
-      <img src="{% static 'img/ontask-logo-1.png' %}"
-           alt="{% trans 'OnTask Login' %}"
-           style="width: 300px;"/>
-      <h2>{% block form_heading %}{% endblock %}</h2>
-    {% block form %}
-    {% endblock %}
+  <div class="form-box container">
+    <div class="row">
+      <div class="col-sm-6 text-center">
+        <img src="{% static 'img/ontask-logo-1.png' %}"
+             alt="{% trans 'OnTask Login' %}"
+             style="width: 300px;"/>
+      </div>
+      <div class="col-sm-6">
+        <h2>{% block form_heading %}{% endblock %}</h2>
+        {% block form %}
+        {% endblock %}
+      </div>
     </div>
   </div>
   {% block extra_material %}

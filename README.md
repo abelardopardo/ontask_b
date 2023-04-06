@@ -1,21 +1,25 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 7.2 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 10.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
+![Twitter Follow](https://img.shields.io/twitter/follow/clariate?label=Follow&style=social)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/abelardopardo/ontask_b)
 ![Issues](https://img.shields.io/github/issues/abelardopardo/ontask_b.svg?style=flat-square)
 ![License](https://img.shields.io/github/license/abelardopardo/ontask_b.svg?style=flat-square)
 [![Documentation Status](https://readthedocs.org/projects/ontask-version-b/badge/?version=latest)](https://ontask-version-b.readthedocs.io/en/latest/?badge=latest)
-[![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-37/)
+[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-37/)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/abelardopardo/ontask_b)
 ![GitHub followers](https://img.shields.io/github/followers/abelardopardo?label=Follow&style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/ontasklearning?label=Follow&style=social)
 
 ## OnTask in a nutshell
+- **NEW** Uses TinyMCE as text editor
 
-- **NEW** Repeated action execution. 
+- **NEW** Creation of actions with filter defined in views 
 
-- **NEW** Scheduled SQL updates from a remote database
+- Repeated action execution. 
+
+- Scheduled SQL updates from a remote database
 
 - Functionality to export a set of actions from a single request.
 
@@ -64,7 +68,7 @@ the capacity to use data to personalise the experience for the learners. For
 a detailed description of what is OnTask, how to install it and use it, read
 the [OnTask Documentation](https://abelardopardo.github.io/ontask_b).
 
-Here is a quick summary about ontask:
+Here is a quick summary about OnTask:
 
 Q1. **What is it?** A web tool that allows instructors and learners to connect 
     data collected during a learning experience with the use of basic rules 
@@ -223,7 +227,7 @@ SOFTWARE.
 
 - [django-datetime-widget](https://github.com/asaglimbeni/django-datetime-widget) BSD
 
-- [django-summernote](https://github.com/summernote/django-summernote) MIT
+- [tinyMCE](https://github.com/tinymce/tinymce/blob/5.10.7/LICENSE.TXT) LGPL 2.1
 
 - [jQuery QueryBuilder](http://querybuilder.js.org/) MIT
 
@@ -243,8 +247,6 @@ licenses:
 - [Django](https://www.djangoproject.com) BSD License
 
 - [django-admin-bootstrapped](https://github.com/django-admin-bootstrapped/django-admin-bootstrapped) Apache 2.0
-
-- [django-authtools](https://github.com/fusionbox/django-authtools) BSD
 
 - [django-braces](https://pypi.python.org/pypi/django-braces/1.12.0). BSD 
   License
@@ -283,8 +285,6 @@ licenses:
 
 - [email_validator](https://github.com/JoshData/python-email-validator) CC
 
-- [easy-thumbnails](https://pypi.python.org/pypi/easy-thumbnails) BSD
-
 - [ims-lti-py](https://github.com/tophatmonocle/ims_lti_py) MIT
 
 - [Markdown](https://pypi.python.org/pypi/Markdown) BSD
@@ -306,6 +306,8 @@ licenses:
 - [pytz](https://pypi.python.org/pypi/pytz) MIT
 
 - [Redis](https://redis.io) BSD
+
+- [sorl.thumbnails](https://pypi.org/project/sorl-thumbnail/) BSD
 
 - [Sphinx](https://pypi.python.org/pypi/Sphinx) BSD
 

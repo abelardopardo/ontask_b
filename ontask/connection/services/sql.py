@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle SQL connections."""
 
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.connection.services.crud import (
@@ -17,21 +14,10 @@ from ontask.core import OperationsColumn
 class SQLConnectionTableAdmin(ConnectionTableAdmin):
     """Table to render the SQL admin items."""
 
-    @staticmethod
-    def render_enabled(record):
-        """Render the boolean to allow changes."""
-        return render_to_string(
-            'connection/includes/partial_enable.html',
-            {
-                'id': record['id'],
-                'enabled': record['enabled'],
-                'toggle_url': reverse(
-                    'connection:sqlconn_toggle',
-                    kwargs={'pk': record['id']})})
+    toggle_url_name = 'connection:sqlconn_toggle'
 
     class Meta(ConnectionTableAdmin.Meta):
         """Define model."""
-
         model = models.SQLConnection
 
 
@@ -85,14 +71,12 @@ def create_sql_connection_admintable() -> SQLConnectionTableAdmin:
             'description_text',
             'enabled'),
         orderable=False,
-        extra_columns=[(
-            'operations', op_column)])
+        extra_columns=[('operations', op_column)])
 
 
-def sql_connection_select_table(select_url: str) -> SQLConnectionTableSelect:
+def create_sql_connection_runtable(select_url: str) -> SQLConnectionTableSelect:
     """Create the table structure with the SQL connections for Running.
 
-    :param select_url: URL to use for the select link in every row
     :return: SQL Connection Table Run object.
     """
     operation_column = OperationsColumn(

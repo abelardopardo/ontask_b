@@ -21,6 +21,21 @@
                 "action"
             ],
             [
+                "add_column",
+                "ontask",
+                "column"
+            ],
+            [
+                "change_column",
+                "ontask",
+                "column"
+            ],
+            [
+                "delete_column",
+                "ontask",
+                "column"
+            ],
+            [
                 "add_condition",
                 "ontask",
                 "condition"
@@ -51,21 +66,6 @@
                 "log"
             ],
             [
-                "add_column",
-                "ontask",
-                "column"
-            ],
-            [
-                "change_column",
-                "ontask",
-                "column"
-            ],
-            [
-                "delete_column",
-                "ontask",
-                "column"
-            ],
-            [
                 "add_workflow",
                 "ontask",
                 "workflow"
@@ -92,7 +92,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$36000$JMX4YPJ3ahxr$Q8DJ+BINVcLXRb9zofOscibKccnux1f4gTWp3TNvPCk=",
@@ -112,7 +112,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 2,
     "fields": {
         "password": "pbkdf2_sha256$36000$yyR4qJnt4C68$u5UIYoLDOo5z7pJ9LEQ5xE/Wg3nw/cyIzKoh4tkP4ZQ=",
@@ -128,7 +128,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 3,
     "fields": {
         "password": "pbkdf2_sha256$36000$udn5nz4eFAvU$hj5La0k48upa6trsCv9TOb2LFOM6Iad3gv5Z8r2OtZ8=",
@@ -144,7 +144,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 4,
     "fields": {
         "password": "pbkdf2_sha256$36000$7IWHqHRmEqHJ$MACKzkY9ez1AP8w+m6vBWJDgnBB63qiZ8ltnHRgp9DA=",
@@ -164,7 +164,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 5,
     "fields": {
         "password": "pbkdf2_sha256$36000$Vi2lBnr5h5ee$awxW9s042y23fISIZHks3h1hHieogLXXroObZsqGv0c=",
@@ -184,7 +184,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 6,
     "fields": {
         "password": "pbkdf2_sha256$36000$QW3s2sNU1cL2$C/soQ1isU0Ogiehr627viw0zHugND6IyrTb/C1JrcXs=",
@@ -204,7 +204,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 7,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$NnNnUW9DeW5KTWdt$ITObulHRFTD5EQaH2BJuoQ",
@@ -224,7 +224,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 8,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$dlZ3Q2RpcURkb2VO$VhUFTpSIkz+romc/Ahcf7A",
@@ -244,7 +244,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 9,
     "fields": {
         "password": "boguspwd",
@@ -260,7 +260,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 10,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$cmNpTWZqcUc4aGVw$ZkuFA0n3CfV/tIOgjQ1hwQ",
@@ -280,7 +280,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 27,
     "fields": {
         "password": "",
@@ -522,232 +522,6 @@
     }
 },
 {
-    "model": "django_summernote.attachment",
-    "pk": 1,
-    "fields": {
-        "name": "download.jpeg",
-        "file": "django-summernote/2017-11-15/1c610ce3-ed8e-46c4-8a42-d391962ce1fb.jpeg",
-        "uploaded": "2017-11-15T05:49:24.475Z"
-    }
-},
-{
-    "model": "django_summernote.attachment",
-    "pk": 2,
-    "fields": {
-        "name": "2_10_8__Read_about_the_floating_point_representation_and_share_views_py_-_ontask_B_-____ontask_B_.png",
-        "file": "django-summernote/2017-11-15/81cac62b-51a3-4cdc-9cf7-817386021c2b.png",
-        "uploaded": "2017-11-15T05:51:48.392Z"
-    }
-},
-{
-    "model": "django_summernote.attachment",
-    "pk": 3,
-    "fields": {
-        "name": "download.jpeg",
-        "file": "django-summernote/2017-11-15/5aa534cf-1bcd-47ed-b9a8-2e1c9a8707bd.jpeg",
-        "uploaded": "2017-11-15T05:52:38.966Z"
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 9,
-    "fields": {
-        "slug": "f85b1b04-3d1b-4e3d-92d7-60e449c6ceeb",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 4,
-    "fields": {
-        "slug": "625c9377-9fa5-4565-8076-241cc5915c3f",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 6,
-    "fields": {
-        "slug": "5c5f63d2-bd40-4edf-b8ce-c942ef3f76c6",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 5,
-    "fields": {
-        "slug": "6c89d4f7-f6d4-4828-939c-e3eccb1a6ca7",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 1,
-    "fields": {
-        "slug": "a73d2eed-14b1-42b3-81a1-25fcc7284936",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 7,
-    "fields": {
-        "slug": "93e47077-a036-4d00-86f1-4ffcbb6b1f70",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 8,
-    "fields": {
-        "slug": "0d65117c-058c-4c45-8347-4c86aa33a4af",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 10,
-    "fields": {
-        "slug": "4ec90508-d8e6-4426-8c0f-ca597f144026",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 2,
-    "fields": {
-        "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 3,
-    "fields": {
-        "slug": "7196ba08-9652-47f9-8f1f-dbc4ee33fa35",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.profile",
-    "pk": 27,
-    "fields": {
-        "slug": "66816e31-b582-401e-94e0-702d101a5413",
-        "picture": "",
-        "bio": "",
-        "email_verified": false
-    }
-},
-{
-    "model": "ontask.workflow",
-    "pk": 112,
-    "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
-        "name": "combine columns",
-        "description_text": "",
-        "created": "2018-01-17T03:20:03.774Z",
-        "modified": "2018-01-17T07:08:09.399Z",
-        "nrows": 100,
-        "ncols": 12,
-        "attributes": {},
-        "query_builder_ops": [
-            {
-                "id": "aaa",
-                "type": "integer"
-            },
-            {
-                "id": "c0",
-                "type": "integer"
-            },
-            {
-                "id": "c1",
-                "type": "integer"
-            },
-            {
-                "id": "c2",
-                "type": "integer"
-            },
-            {
-                "id": "c3",
-                "type": "integer"
-            },
-            {
-                "id": "c4",
-                "type": "integer"
-            },
-            {
-                "id": "c5",
-                "type": "integer"
-            },
-            {
-                "id": "c6",
-                "type": "integer"
-            },
-            {
-                "id": "c7",
-                "type": "integer"
-            },
-            {
-                "id": "c8",
-                "type": "integer"
-            },
-            {
-                "id": "c9",
-                "type": "integer"
-            },
-            {
-                "id": "c91",
-                "type": "string",
-                "input": "select",
-                "values": [
-                    "true",
-                    "false"
-                ],
-                "operators": [
-                    "equal"
-                ]
-            },
-            {
-                "id": "c92",
-                "type": "string",
-                "input": "select",
-                "values": [
-                    "true",
-                    "false"
-                ],
-                "operators": [
-                    "equal"
-                ]
-            }
-        ],
-        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_112",
-        "session_key": "d635e2wpqxivpfss45nrofcnksf6lc9p",
-        "shared": []
-    }
-},
-{
     "model": "ontask.column",
     "pk": 2999,
     "fields": {
@@ -938,5 +712,264 @@
         "active_from": null,
         "active_to": null
     }
+},
+{
+    "model": "ontask.workflow",
+    "pk": 112,
+    "fields": {
+        "name": "combine columns",
+        "description_text": "",
+        "created": "2018-01-17T03:20:03.774Z",
+        "modified": "2018-01-17T07:08:09.399Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "nrows": 100,
+        "ncols": 12,
+        "attributes": {},
+        "query_builder_ops": [
+            {
+                "id": "aaa",
+                "type": "integer"
+            },
+            {
+                "id": "c0",
+                "type": "integer"
+            },
+            {
+                "id": "c1",
+                "type": "integer"
+            },
+            {
+                "id": "c2",
+                "type": "integer"
+            },
+            {
+                "id": "c3",
+                "type": "integer"
+            },
+            {
+                "id": "c4",
+                "type": "integer"
+            },
+            {
+                "id": "c5",
+                "type": "integer"
+            },
+            {
+                "id": "c6",
+                "type": "integer"
+            },
+            {
+                "id": "c7",
+                "type": "integer"
+            },
+            {
+                "id": "c8",
+                "type": "integer"
+            },
+            {
+                "id": "c9",
+                "type": "integer"
+            },
+            {
+                "id": "c91",
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
+                "operators": [
+                    "equal"
+                ]
+            },
+            {
+                "id": "c92",
+                "type": "string",
+                "input": "select",
+                "values": [
+                    "true",
+                    "false"
+                ],
+                "operators": [
+                    "equal"
+                ]
+            }
+        ],
+        "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_112",
+        "session_key": "d635e2wpqxivpfss45nrofcnksf6lc9p",
+        "luser_email_column": null,
+        "luser_email_column_md5": "",
+        "lusers_is_outdated": false,
+        "shared": [],
+        "star": [],
+        "lusers": []
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 9,
+    "fields": {
+        "slug": "f85b1b04-3d1b-4e3d-92d7-60e449c6ceeb",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 4,
+    "fields": {
+        "slug": "625c9377-9fa5-4565-8076-241cc5915c3f",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 6,
+    "fields": {
+        "slug": "5c5f63d2-bd40-4edf-b8ce-c942ef3f76c6",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 5,
+    "fields": {
+        "slug": "6c89d4f7-f6d4-4828-939c-e3eccb1a6ca7",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 1,
+    "fields": {
+        "slug": "a73d2eed-14b1-42b3-81a1-25fcc7284936",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 7,
+    "fields": {
+        "slug": "93e47077-a036-4d00-86f1-4ffcbb6b1f70",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 8,
+    "fields": {
+        "slug": "0d65117c-058c-4c45-8347-4c86aa33a4af",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 10,
+    "fields": {
+        "slug": "4ec90508-d8e6-4426-8c0f-ca597f144026",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 2,
+    "fields": {
+        "slug": "467cdea6-686d-45bc-ad95-a073f7241f07",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 3,
+    "fields": {
+        "slug": "7196ba08-9652-47f9-8f1f-dbc4ee33fa35",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.profile",
+    "pk": 27,
+    "fields": {
+        "slug": "66816e31-b582-401e-94e0-702d101a5413",
+        "picture": "",
+        "bio": "",
+        "email_verified": false
+    }
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 9,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 4,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 6,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 5,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 1,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 7,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 8,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 10,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 2,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 3,
+    "fields": {}
+},
+{
+    "model": "ontask.ontaskuser",
+    "pk": 27,
+    "fields": {}
 }
 ]

@@ -1,25 +1,37 @@
 let conditionClone = function() {
-  $('#div-spinner').show();
+  $("#div-spinner").show();
   $.ajax({
     url: $(this).attr("data-url"),
-    data: [{'name': 'action_content', 'value': get_id_text_content()}],
-    type: 'post',
-    dataType: 'json',
+    data: {"action_content": get_id_text_content(), "csrfmiddlewaretoken": window.CSRF_TOKEN},
+    type: "post",
+    dataType: "json",
     success: function (data) {
-      if (typeof data.html_redirect != 'undefined') {
-        if (data.html_redirect == '') {
+      if (typeof data.html_redirect != "undefined") {
+        if (data.html_redirect == "") {
           location.reload(true);
         } else {
           location.href = data.html_redirect;
         }
         return;
       }
-      $('#div-spinner').hide();
+      $("#div-spinner").hide();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       location.reload(true);
     },
   });
+}
+let transferFormula = function () {
+  if (document.getElementById("id__formula") != null) {
+    let formula = $("#builder").queryBuilder('getRules');
+    if (formula == null || !formula['valid']) {
+      $('#div-spinner').hide();
+      return false;
+    }
+    let f_text = JSON.stringify(formula, undefined, 2);
+    $("#id__formula").val(f_text);
+   }
+   return true;
 }
 $(function () {
   // Create Condition

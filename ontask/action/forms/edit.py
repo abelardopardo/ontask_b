@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to edit action content.
 
 EditActionOutForm: Form to process content action_out (Base class)
@@ -9,8 +7,8 @@ EditActionIn: Form to process action in elements
 from typing import Any, Dict, List, Tuple
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
-from django_summernote.widgets import SummernoteInplaceWidget
+from django.utils.translation import gettext_lazy as _
+from tinymce.widgets import TinyMCE
 
 from ontask import models
 from ontask.action import evaluate
@@ -32,7 +30,8 @@ class EditActionOutForm(forms.ModelForm):
             or self.instance.action_type == models.Action.RUBRIC_TEXT
             or self.instance.action_type == models.Action.EMAIL_REPORT
         ):
-            self.fields['text_content'].widget = SummernoteInplaceWidget()
+            self.fields['text_content'].widget = TinyMCE(
+                attrs={'cols': 80, 'rows': 30})
 
         # Add the Target URL field
         if (
@@ -146,21 +145,18 @@ class EnterActionIn(forms.Form):
         where_value = None
         # Create the SET name = value part of the query
         for idx, colcon in enumerate(self.tuples):
-            if colcon.column.is_key and not self.show_key:
-                # If it is a learner request and a key column, skip
-                continue
-
             # Skip the element if there is a condition and it is false
             if colcon.condition and not self.context[colcon.condition.name]:
                 continue
 
-            field_value = self.cleaned_data[
-                ONTASK_UPLOAD_FIELD_PREFIX + '{0}'.format(idx)]
             if colcon.column.is_key:
                 # Remember one unique key for selecting the row
                 where_field = colcon.column.name
-                where_value = field_value
+                where_value = self.form_values[idx]
                 continue
+
+            field_value = self.cleaned_data[
+                ONTASK_UPLOAD_FIELD_PREFIX + '{0}'.format(idx)]
 
             keys.append(colcon.column.name)
             values.append(field_value)

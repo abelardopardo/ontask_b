@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Classes to implement a payload with a dictionary."""
 import collections
 from typing import Dict, Optional
@@ -26,14 +24,14 @@ class SessionPayload(collections.MutableMapping):
         """Initialize the store with the given arguments."""
         super().__init__()
         self.__store = {}
-        if session:
-            in_session = session.get(PAYLOAD_SESSION_DICTIONARY)
-            if in_session:
-                self.__store = in_session
 
         if initial_values:
             self.__store.update(initial_values)
+
         if session:
+            in_session = session.get(PAYLOAD_SESSION_DICTIONARY)
+            if in_session:
+                self.__store.update(in_session)
             self.store_in_session(session)
 
     def __getitem__(self, key):

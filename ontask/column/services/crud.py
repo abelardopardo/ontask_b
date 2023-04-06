@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to manipulate column CRUD ops."""
 import copy
 import random
@@ -7,7 +5,7 @@ from typing import Any, List, Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import pandas as pd
 
 from ontask import create_new_name, models
@@ -31,7 +29,7 @@ _ontask_type_to_pd_type = {
     'integer': 'int64',
     'double':  'float64',
     'boolean': 'bool',
-    'datetime': 'datetime64[ns]'}
+    'datetime': 'datetime64[ns, {0}]'.format(settings.TIME_ZONE)}
 
 
 def _partition(list_in: List[Any], num: int) -> List[List[Any]]:
@@ -78,16 +76,6 @@ def add_column_to_workflow(
     column.workflow = workflow
     column.is_key = False
 
-    # Update the positions of the appropriate columns
-    workflow.reposition_columns(workflow.ncols + 1, column.position)
-
-    # Save column, refresh workflow, and increase number of columns
-    column.save()
-    workflow.refresh_from_db()
-    workflow.ncols += 1
-    workflow.set_query_builder_ops()
-    workflow.save(update_fields=['ncols', 'query_builder_ops'])
-
     # Add the new column to the DB
     try:
         sql.add_column_to_db(
@@ -97,8 +85,17 @@ def add_column_to_workflow(
             initial=column_initial_value)
     except Exception as exc:
         raise errors.OnTaskColumnAddError(
-            message=_('Unable to add element: {0}').format(str(exc)),
-            to_delete=[column])
+            message=_('Unable to add element: {0}').format(str(exc)))
+
+    # Update the positions of the appropriate columns
+    workflow.reposition_columns(workflow.ncols + 1, column.position)
+
+    # Save column, refresh workflow, and increase number of columns
+    column.save()
+    workflow.refresh_from_db()
+    workflow.ncols += 1
+    workflow.set_query_builder_ops()
+    workflow.save(update_fields=['ncols', 'query_builder_ops'])
 
     if action_column_event:
         acc, __ = models.ActionColumnConditionTuple.objects.get_or_create(
@@ -166,14 +163,12 @@ def add_random_column(
     user,
     workflow: models.Workflow,
     column: models.Column,
-    data_frame: pd.DataFrame,
 ):
     """Add the formula column to the workflow.
 
     :param user: User making the request
     :param workflow: Workflow to add the column
     :param column: Column being added
-    :param data_frame: Data frame of the current workflow
     :return: Column is added to the workflow
     """
     # Empty new column
@@ -189,13 +184,16 @@ def add_random_column(
         for col_idx in indexes:
             new_column[col_idx] = categories[idx]
 
+    # Load the data frame
+    data_frame = pandas.load_table(workflow.get_data_frame_table_name())
+
     # Assign the new column to the data frame
     data_frame[column.name] = pd.Series(
         new_column,
         dtype=_ontask_type_to_pd_type[column.data_type],
         index=data_frame.index)
 
-    if column.data_type == 'datetime':
+    if column.data_type == 'datetime' and data_frame[column.name].dt.tz is None:
         data_frame[column.name] = data_frame[column.name].dt.tz_localize(
             settings.TIME_ZONE)
 
@@ -242,16 +240,15 @@ def update_column(
     :return: Nothing. Side effect in the workflow.
     """
     # If there is a new name, rename the data frame columns
+    if old_position != column.position:
+        # Update the positions of the appropriate columns
+        workflow.reposition_columns(old_position, column.position)
+
     if old_name != column.name:
         sql.db_rename_column(
             workflow.get_data_frame_table_name(),
             old_name,
             column.name)
-        pandas.rename_df_column(workflow, old_name, column.name)
-
-    if old_position != column.position:
-        # Update the positions of the appropriate columns
-        workflow.reposition_columns(old_position, column.position)
 
     column.save()
 
@@ -260,6 +257,10 @@ def update_column(
     workflow = models.Workflow.objects.prefetch_related('columns').get(
         id=workflow.id,
     )
+
+    # Propagate the rename to the other actions and views
+    if old_name != column.name:
+        pandas.rename_column(workflow, old_name, column.name)
 
     # Changes in column require rebuilding the query_builder_ops
     workflow.set_query_builder_ops()
@@ -276,18 +277,16 @@ def delete_column(
     user: get_user_model(),
     workflow: models.Workflow,
     column: models.Column,
-    cond_to_delete: Optional[List[models.Condition]] = None,
 ):
     """Remove column from ontask.workflow.
 
     Given a workflow and a column, removes it from the workflow (and the
-    corresponding data frame
+    corresponding data frame). All conditions and filters that use that column
+    need to be removed as well.
 
     :param user: User performing the operation
     :param workflow: Workflow object
     :param column: Column object to delete
-    :param cond_to_delete: List of conditions to delete after removing the
-    column
     :return: Nothing. Effect reflected in the database
     """
     column.log(user, models.Log.COLUMN_DELETE)
@@ -305,34 +304,26 @@ def delete_column(
     workflow.ncols = workflow.ncols - 1
     workflow.save(update_fields=['ncols'])
 
-    if not cond_to_delete:
-        # The conditions to delete are not given, so calculate them
-        # Get the conditions/actions attached to this workflow
-        cond_to_delete = [
-            cond for cond in models.Condition.objects.filter(
-                action__workflow=workflow)
-            if column in cond.columns.all()]
+    # Delete the conditions with this column
+    cond_to_delete = workflow.conditions.filter(columns=column)
+    for cond in cond_to_delete:
+        # Set rows_all_false to None as it now contains the wrong number
+        cond.action.rows_all_false = None
+        cond.action.save(update_fields=['rows_all_false'])
+    cond_to_delete.delete()
 
-    # If a column disappears, the conditions that contain that variable
-    # are removed
-    actions_without_filters = []
-    for condition in cond_to_delete:
-        if condition.is_filter:
-            actions_without_filters.append(condition.action)
-
-        # Formula has the name of the deleted column. Delete it
-        condition.delete()
-
-    # Traverse the actions for which the filter has been deleted and reassess
-    #  all their conditions
-    # TODO: Explore how to do this asynchronously (or lazy)
-    for act in actions_without_filters:
-        act.update_n_rows_selected()
+    # Delete the filters
+    workflow.filters.filter(columns=column).delete()
 
     # If a column disappears, the views that contain only that column need to
     # disappear as well as they are no longer relevant.
     for view in workflow.views.all():
-        if view.columns.count() == 0:
+        if not view.columns.exists():
+            view.delete()
+            continue
+
+        # Views that loose the key column must be deleted as well
+        if not view.columns.filter(is_key=True).exists():
             view.delete()
 
 
@@ -382,7 +373,7 @@ def do_clone_column_only(
     """Clone a column.
 
     :param column: Object to clone.
-    :param new_workflow: Optional new worklow object to link to.
+    :param new_workflow: Optional new workflow object to link to.
     :param new_name: Optional new name to use.
     :result: New object.
     """

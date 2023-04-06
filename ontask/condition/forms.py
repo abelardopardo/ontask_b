@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Forms to process condition related fields."""
 from typing import Dict
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import is_legal_name, models
 
@@ -17,19 +15,23 @@ class FilterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """Adjust formula field parameters to use QueryBuilder."""
-        self.action = kwargs.pop('action')
+        self.action = kwargs.pop('action', None)
+        include_description = kwargs.pop('include_description', True)
 
         super().__init__(*args, **kwargs)
 
+        if not include_description:
+            self.fields.pop('description_text')
+
         # Required enforced in the server (not in the browser)
-        self.fields['formula'].required = False
+        self.fields['_formula'].required = False
 
     class Meta:
         """Select model and fields."""
 
-        model = models.Condition
-        fields = ('description_text', 'formula')
-        widgets = {'formula': forms.HiddenInput()}
+        model = models.Filter
+        fields = ['description_text', '_formula']
+        widgets = {'_formula': forms.HiddenInput()}
 
 
 class ConditionForm(FilterForm):
@@ -89,4 +91,5 @@ class ConditionForm(FilterForm):
     class Meta(FilterForm.Meta):
         """Select name as extra field."""
 
-        fields = ('name', 'description_text', 'formula')
+        model = models.Condition
+        fields = ('name', 'description_text', '_formula')

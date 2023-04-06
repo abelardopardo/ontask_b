@@ -92,7 +92,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 1,
     "fields": {
         "password": "pbkdf2_sha256$36000$JMX4YPJ3ahxr$Q8DJ+BINVcLXRb9zofOscibKccnux1f4gTWp3TNvPCk=",
@@ -112,7 +112,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 2,
     "fields": {
         "password": "pbkdf2_sha256$36000$yyR4qJnt4C68$u5UIYoLDOo5z7pJ9LEQ5xE/Wg3nw/cyIzKoh4tkP4ZQ=",
@@ -128,7 +128,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 3,
     "fields": {
         "password": "pbkdf2_sha256$36000$udn5nz4eFAvU$hj5La0k48upa6trsCv9TOb2LFOM6Iad3gv5Z8r2OtZ8=",
@@ -144,7 +144,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 4,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$SWp6cUxjdU9VWTRF$NuyZlmzXYsLMWaJY4J/0PQ",
@@ -164,7 +164,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 5,
     "fields": {
         "password": "pbkdf2_sha256$36000$Vi2lBnr5h5ee$awxW9s042y23fISIZHks3h1hHieogLXXroObZsqGv0c=",
@@ -184,7 +184,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 6,
     "fields": {
         "password": "pbkdf2_sha256$36000$QW3s2sNU1cL2$C/soQ1isU0Ogiehr627viw0zHugND6IyrTb/C1JrcXs=",
@@ -204,7 +204,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 7,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$QWxySVJIN242V3dP$LIvr5SElB5lCzdTRU27cgQ",
@@ -224,7 +224,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 8,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$QmExNmF6dXpVcDV1$kkAjR49Gse6OWsAH9L2zvQ",
@@ -244,7 +244,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 9,
     "fields": {
         "password": "boguspwd",
@@ -260,7 +260,7 @@
     }
 },
 {
-    "model": "authtools.user",
+    "model": "ontask.user",
     "pk": 10,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$Skx2YW5lMklRaWsx$Le5eeYv44zdASfFajhK2GA",
@@ -560,33 +560,6 @@
     }
 },
 {
-    "model": "django_summernote.attachment",
-    "pk": 1,
-    "fields": {
-        "name": "download.jpeg",
-        "file": "django-summernote/2017-11-15/1c610ce3-ed8e-46c4-8a42-d391962ce1fb.jpeg",
-        "uploaded": "2017-11-15T05:49:24.475Z"
-    }
-},
-{
-    "model": "django_summernote.attachment",
-    "pk": 2,
-    "fields": {
-        "name": "2_10_8__Read_about_the_floating_point_representation_and_share_views_py_-_ontask_B_-____ontask_B_.png",
-        "file": "django-summernote/2017-11-15/81cac62b-51a3-4cdc-9cf7-817386021c2b.png",
-        "uploaded": "2017-11-15T05:51:48.392Z"
-    }
-},
-{
-    "model": "django_summernote.attachment",
-    "pk": 3,
-    "fields": {
-        "name": "download.jpeg",
-        "file": "django-summernote/2017-11-15/5aa534cf-1bcd-47ed-b9a8-2e1c9a8707bd.jpeg",
-        "uploaded": "2017-11-15T05:52:38.966Z"
-    }
-},
-{
     "model": "ontask.column",
     "pk": 2925,
     "fields": {
@@ -683,172 +656,16 @@
     }
 },
 {
-    "model": "ontask.condition",
-    "pk": 1037,
-    "fields": {
-        "action": 253,
-        "name": "old",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "age",
-                    "type": "double",
-                    "field": "age",
-                    "input": "number",
-                    "value": "12",
-                    "operator": "greater"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "age &gt; 12.0 and not empty",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "created": "2017-12-08T01:29:51.431Z",
-        "modified": "2019-09-07T05:44:52.336Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1038,
-    "fields": {
-        "action": 253,
-        "name": "Registered",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "registered &equals; true and not empty",
-        "n_rows_selected": 1,
-        "is_filter": false,
-        "created": "2017-12-08T01:33:21.687Z",
-        "modified": "2019-09-07T05:44:52.540Z",
-        "columns": []
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1039,
-    "fields": {
-        "action": 255,
-        "name": "",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "created": "2019-08-26T09:42:30.643Z",
-        "modified": "2019-08-26T09:42:39.851Z",
-        "columns": [
-            2929
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1040,
-    "fields": {
-        "action": 257,
-        "name": "",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "created": "2019-08-30T07:36:23.571Z",
-        "modified": "2019-08-30T07:36:23.605Z",
-        "columns": [
-            2929
-        ]
-    }
-},
-{
-    "model": "ontask.condition",
-    "pk": 1041,
-    "fields": {
-        "action": 258,
-        "name": "old",
-        "description_text": "",
-        "formula": {
-            "not": false,
-            "rules": [
-                {
-                    "id": "registered",
-                    "type": "string",
-                    "field": "registered",
-                    "input": "select",
-                    "value": "true",
-                    "operator": "equal"
-                }
-            ],
-            "valid": true,
-            "condition": "AND"
-        },
-        "formula_text": "registered &equals; true and not empty",
-        "n_rows_selected": 2,
-        "is_filter": true,
-        "created": "2019-09-07T05:46:22.629Z",
-        "modified": "2019-09-07T05:47:21.033Z",
-        "columns": [
-            2929
-        ]
-    }
-},
-{
     "model": "ontask.workflow",
     "pk": 108,
     "fields": {
-        "user": [
-            "instructor01@bogus.com"
-        ],
         "name": "wflow2",
         "description_text": "Simple workflow structure with two type of actions",
         "created": "2017-12-08T01:25:32.160Z",
         "modified": "2019-09-07T05:56:02.561Z",
+        "user": [
+            "instructor01@bogus.com"
+        ],
         "nrows": 3,
         "ncols": 6,
         "attributes": {
@@ -891,7 +708,13 @@
             },
             {
                 "id": "when",
-                "type": "datetime"
+                "type": "datetime",
+                "validation": {
+                    "format": ["YYYY-MM-DD HH:mm:ss","YYYY-MM-DD HH:mm:ssZ","YYYY-MM-DD HH:mm:ss Z"],
+                    "messages": {
+                        "format": "Date required format YYYY-MM-DD HH:mm:ss"
+                    }
+                }
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_108",
@@ -905,105 +728,266 @@
     }
 },
 {
+    "model": "ontask.filter",
+    "pk": 1,
+    "fields": {
+        "created": "2020-08-17T09:33:35.714Z",
+        "modified": "2020-08-17T09:33:36.233Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "",
+        "selected_count": 2,
+        "workflow": 108,
+        "description_text": "",
+        "columns": [
+            2929
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 2,
+    "fields": {
+        "created": "2020-08-17T09:33:35.722Z",
+        "modified": "2020-08-17T09:33:36.234Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "",
+        "selected_count": 2,
+        "workflow": 108,
+        "description_text": "",
+        "columns": [
+            2929
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 3,
+    "fields": {
+        "created": "2020-08-17T09:33:35.729Z",
+        "modified": "2020-08-17T09:33:36.236Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "age",
+                    "type": "double",
+                    "field": "age",
+                    "input": "number",
+                    "value": "12",
+                    "operator": "greater"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "age &gt; 12.0 and not empty",
+        "selected_count": 2,
+        "workflow": 108,
+        "description_text": "",
+        "columns": [
+            2928
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 4,
+    "fields": {
+        "created": "2020-08-17T09:33:35.735Z",
+        "modified": "2020-08-17T09:33:36.238Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "registered &equals; true and not empty",
+        "selected_count": 2,
+        "workflow": 108,
+        "description_text": "",
+        "columns": [
+            2929
+        ]
+    }
+},
+{
     "model": "ontask.action",
     "pk": 253,
     "fields": {
-        "workflow": 108,
         "name": "send email",
         "description_text": "",
         "created": "2017-12-08T01:29:40.524Z",
-        "modified": "2019-09-07T05:46:03.293Z",
-        "last_executed_log": null,
+        "modified": "2020-08-17T09:33:35.927Z",
+        "workflow": 108,
         "action_type": "personalized_text",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
         "rows_all_false": [
             2
         ],
+        "serve_enabled": false,
         "text_content": "<p>Hi {{ name }}</p><p>ATT:\u00a0{{ attribute name }}</p><p>COL:\u00a0{{ registered }}</p><p>{% if Registered %}Thank you for registering{% else %}Remember to register{% endif %}</p>",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "filter": 3,
+        "attachments": []
     }
 },
 {
     "model": "ontask.action",
     "pk": 255,
     "fields": {
-        "workflow": 108,
         "name": "send list",
         "description_text": "",
         "created": "2019-08-26T09:42:03.733Z",
-        "modified": "2019-08-26T09:42:47.642Z",
-        "last_executed_log": null,
+        "modified": "2020-08-17T09:33:35.922Z",
+        "workflow": 108,
         "action_type": "email_report",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "<p>Dear madam/sir</p><p>Here is the list of students: {% ot_insert_report 'email' %}<br></p>",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "filter": 1,
+        "attachments": []
     }
 },
 {
     "model": "ontask.action",
     "pk": 256,
     "fields": {
-        "workflow": 108,
         "name": "send json",
         "description_text": "",
         "created": "2019-08-26T09:43:02.314Z",
         "modified": "2019-08-26T09:44:20.819Z",
-        "last_executed_log": null,
+        "workflow": 108,
         "action_type": "personalized_json",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "{\r\n  \"field1\": \"{{ age }}\",\r\n  \"field2\": \"{{ email }}\",\r\n  \"field3\": \"{{ when }}\"\r\n}",
         "target_url": "http://bogus.com",
-        "shuffle": false
+        "shuffle": false,
+        "attachments": []
     }
 },
 {
     "model": "ontask.action",
     "pk": 257,
     "fields": {
-        "workflow": 108,
         "name": "send json report",
         "description_text": "",
         "created": "2019-08-30T07:35:53.133Z",
-        "modified": "2019-08-30T07:36:41.475Z",
-        "last_executed_log": null,
+        "modified": "2020-08-17T09:33:35.925Z",
+        "workflow": 108,
         "action_type": "json_report",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "{\r\n    \"students\": {% ot_insert_report \"email\" %}\r\n}",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "filter": 2,
+        "attachments": []
     }
 },
 {
     "model": "ontask.action",
     "pk": 258,
     "fields": {
-        "workflow": 108,
         "name": "send email incrementally",
         "description_text": "To test incremental scheduled execution",
         "created": "2019-09-07T05:46:22.613Z",
-        "modified": "2019-09-07T05:55:50.800Z",
-        "last_executed_log": null,
+        "modified": "2020-08-17T09:33:35.928Z",
+        "workflow": 108,
         "action_type": "personalized_text",
-        "serve_enabled": false,
+        "last_executed_log": null,
         "active_from": null,
         "active_to": null,
         "rows_all_false": null,
+        "serve_enabled": false,
         "text_content": "<p>Hi {{ name }}</p><p>Welcome to the course!<br></p><p>ATT:&nbsp;{{ attribute name }}</p><p>Registered:&nbsp;{{ registered }}</p><p>When: {{ when }}<br></p>",
         "target_url": "",
-        "shuffle": false
+        "shuffle": false,
+        "filter": 4,
+        "attachments": []
+    }
+},
+{
+    "model": "ontask.condition",
+    "pk": 1038,
+    "fields": {
+        "name": "Registered",
+        "description_text": "",
+        "created": "2017-12-08T01:33:21.687Z",
+        "modified": "2020-08-17T09:33:35.671Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "registered",
+                    "type": "string",
+                    "field": "registered",
+                    "input": "select",
+                    "value": "true",
+                    "operator": "equal"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "registered &equals; true and not empty",
+        "selected_count": 1,
+        "workflow": 108,
+        "action": 253,
+        "columns": [
+            2929
+        ]
     }
 },
 {

@@ -13,20 +13,20 @@
 {% endblock %}
 {% block scripts %}
   <script src="{% static 'js/sol.js' %}"></script>
-  <script src="{% static 'table/js/table.js' %}?v={% ontask_version %}"></script>
+  <script src="{% static 'table/js/table.js' %}"></script>
 {% endblock %}
 {% block container %}
   <div class="container">
     <h1 class="text-center">
-      {% if view %}
-        {% blocktrans with n=view.name %}Dashboard for {{ n }}{% endblocktrans %}</h1>
+      {% if table_view %}
+        {% blocktrans with n=table_view.name %}Dashboard for {{ n }}{% endblocktrans %}</h1>
       {% else %}
         {% trans 'Dashboard' %}
       {% endif %}</h1>
     {% if visualizations %}
       <div class="text-center my-3">
         <a href="{{ request.META.HTTP_REFERER }}"
-             class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+             class="shadow btn btn-outline-dark align-middle spin">{% trans 'Back' %}</a>
       </div>
     {% endif %}
     <div class="justify-content-center">
@@ -35,12 +35,12 @@
           {{ vis_item|safe }}
         {% endfor %}
       {% else %}
-        <p class="lead my-3">{% trans 'There is no data to show in the dashboard' %}</p>
+        <p class="text-center lead my-3">{% trans 'There is no data to show in the dashboard' %}</p>
       {% endif %}
     </div>
     <div class="text-center my-3">
       <a href="{{ request.META.HTTP_REFERER }}"
-           class="shadow btn btn-outline-dark align-middle spin"> {% trans 'Back' %}</a>
+           class="shadow btn btn-outline-dark align-middle spin">{% trans 'Back' %}</a>
     </div>
   </div>
 {% endblock container %}

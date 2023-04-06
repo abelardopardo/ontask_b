@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Classes for testing."""
 import os
 
@@ -13,16 +11,10 @@ from ontask import models, tests
 from ontask.dataops import pandas
 
 
-class TableDerivedColumns(tests.OnTaskLiveTestCase):
+class TableDerivedColumns(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
     """Tests to check how the derived columns are created."""
 
-    fixtures = ['derived_column']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'derived_column.sql')
-
-    wflow_name = 'combine columns'
-
-    def test_create_derived_columns(self):
-        """Test operations to create derived columns."""
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -36,26 +28,32 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.open_add_derived_column()
 
         # Fill out the details for D1 = c1 + c2
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("d1")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("d1")
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_id("id_op_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_op_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_op_type"
         )).select_by_visible_text("sum: Sum selected columns")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[2]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[3]"
         ).click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
@@ -65,26 +63,32 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.open_add_derived_column()
 
         # Fill out the details for D2 = c3 * c4
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("d2")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("d2")
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_id("id_op_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_op_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_op_type"
         )).select_by_visible_text("prod: Product of the selected columns")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[4]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[5]"
         ).click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
@@ -94,23 +98,28 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.open_add_derived_column()
 
         # Fill out the details for D3 = max(c5, c6)
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("d3")
-        self.selenium.find_element_by_id("id_op_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("d3")
+        self.selenium.find_element(By.ID, "id_op_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_op_type"
         )).select_by_visible_text("max: Maximum of the selected columns")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[6]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[7]"
         ).click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
@@ -120,23 +129,28 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.open_add_derived_column()
 
         # Fill out the details for D4 = min(c7, c8)
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("d4")
-        self.selenium.find_element_by_id("id_op_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("d4")
+        self.selenium.find_element(By.ID, "id_op_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_op_type"
         )).select_by_visible_text("min: Minimum of the selected columns")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[8]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[9]"
         ).click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
@@ -146,26 +160,32 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.open_add_derived_column()
 
         # Fill out the details for D5 = mean(c1, c2)
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("d5")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("d5")
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_id("id_op_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_op_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_op_type"
         )).select_by_visible_text("mean: Mean of the selected columns")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[2]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[3]"
         ).click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
@@ -175,26 +195,32 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.open_add_derived_column()
 
         # Fill out the details for D6 = median(c3, c4)
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("d6")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("d6")
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_id("id_op_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_op_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_op_type"
         )).select_by_visible_text("median: Median of the selected columns")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[4]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[5]"
         ).click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
@@ -204,25 +230,30 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.open_add_derived_column()
 
         # Fill out the details for D7 = std(c5, c6)
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("d7")
-        self.selenium.find_element_by_id("id_op_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("d7")
+        self.selenium.find_element(By.ID, "id_op_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_op_type"
         )).select_by_visible_text(
             "std: Standard deviation over the selected columns"
         )
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[6]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[7]"
         ).click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
@@ -232,16 +263,18 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.open_add_derived_column()
 
         # Fill out the details for D8 = all(c91, c92)
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("d8")
-        self.selenium.find_element_by_id("id_op_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("d8")
+        self.selenium.find_element(By.ID, "id_op_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_op_type"
         )).select_by_visible_text(
             "all: True when all elements in selected columns are true"
         )
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
         # Wait for JS to do its thing
@@ -249,13 +282,16 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
             EC.element_to_be_clickable(
                 (By.XPATH, "(//input[@name='columns'])[12]"))
         )
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[11]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[12]"
         ).click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
@@ -265,16 +301,18 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.open_add_derived_column()
 
         # Fill out the details for D9 = any(c91, c92)
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("d9")
-        self.selenium.find_element_by_id("id_op_type").click()
-        Select(self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("d9")
+        self.selenium.find_element(By.ID, "id_op_type").click()
+        Select(self.selenium.find_element(
+            By.ID,
             "id_op_type"
         )).select_by_visible_text(
             "any: True when any element in selected columns is true"
         )
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
         # Wait for JS to do its thing
@@ -282,13 +320,16 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
             EC.element_to_be_clickable(
                 (By.XPATH, "(//input[@name='columns'])[12]"))
         )
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[11]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[12]"
         ).click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.modal-footer > button.btn.btn-outline-primary"
         ).click()
         # MODAL WAITING
@@ -332,16 +373,10 @@ class TableDerivedColumns(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class TableViews(tests.OnTaskLiveTestCase):
+class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
     """Test Table views."""
     
-    fixtures = ['derived_column']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'derived_column.sql')
-
-    wflow_name = 'combine columns'
-
-    # Test operations with all derived columns
-    def test_table_views(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -351,174 +386,137 @@ class TableViews(tests.OnTaskLiveTestCase):
         # Open the Table view
         self.go_to_table()
 
-        # Open the Views menu
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space()="Views"]').click()
-
         # Button to add a view
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='View']").click()
-        self.wait_for_modal_open()
+        self.click_dropdown_option_num_and_wait('select-view-name', 1)
 
         # Insert data to create the first view
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("v1")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("v1")
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_name("columns").click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(By.NAME, "columns").click()
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[2]"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[3]"
         ).click()
-        self.selenium.find_element_by_css_selector("div.modal-body").click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(By.CSS_SELECTOR, "div.modal-body").click()
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "button.btn.btn-xs.btn-success"
         ).click()
-        self.selenium.find_element_by_name("builder_rule_0_filter").click()
-        Select(self.selenium.find_element_by_name(
+        self.selenium.find_element(By.NAME, "builder_rule_0_filter").click()
+        Select(self.selenium.find_element(
+            By.NAME,
             "builder_rule_0_filter"
         )).select_by_visible_text("c1")
-        self.selenium.find_element_by_name("builder_rule_0_value_0").click()
-        self.selenium.find_element_by_name("builder_rule_0_value_0").clear()
-        self.selenium.find_element_by_name(
-            "builder_rule_0_value_0"
-        ).send_keys("5")
+        self.selenium.find_element(By.NAME, "builder_rule_0_value_0").click()
+        self.selenium.find_element(By.NAME, "builder_rule_0_value_0").clear()
+        self.selenium.find_element(
+            By.NAME,
+            "builder_rule_0_value_0").send_keys("5")
+
         # Save the view
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Add view']"
         ).click()
-        self.wait_close_modal_refresh_table('view-table_previous')
-
-        # Click in the link to see the table resulting from this view
-        self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']"
-            "//td[2][normalize-space() = 'v1']/../td[1]/div/button[2]"
-        ).click()
-        # Wait for the table to be refreshed
-        self.wait_for_datatable('table-data_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check the number of entries
         self.assertIn(
             'Showing 1 to 10 of 13 entries (filtered from 100 total entries)',
             self.selenium.page_source)
 
-        # Go back to the views page
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space()="Views"]').click()
-        # Wait for the table to be refreshed
-        self.wait_for_datatable('view-table_previous')
-
         # Add a second view
-        self.selenium.find_element_by_xpath(
-            "//button[normalize-space()='View']"
-        ).click()
-        self.wait_for_modal_open()
+        self.click_dropdown_option_num_and_wait('select-view-name', 1)
 
         # Add the details for the second view
-        self.selenium.find_element_by_id("id_name").click()
-        self.selenium.find_element_by_id("id_name").clear()
-        self.selenium.find_element_by_id("id_name").send_keys("v2")
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(By.ID, "id_name").click()
+        self.selenium.find_element(By.ID, "id_name").clear()
+        self.selenium.find_element(By.ID, "id_name").send_keys("v2")
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "div.sol-input-container > input[type=\"text\"]"
         ).click()
-        self.selenium.find_element_by_name("columns").click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(By.NAME, "columns").click()
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='div_id_columns']/div/div/div/div[3]/div[2]/label/div"
         ).click()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "(//input[@name='columns'])[3]"
         ).click()
-        self.selenium.find_element_by_id("div_id_columns").click()
-        self.selenium.find_element_by_css_selector(
+        self.selenium.find_element(By.ID, "div_id_columns").click()
+        self.selenium.find_element(
+            By.CSS_SELECTOR,
             "button.btn.btn-xs.btn-success"
         ).click()
-        self.selenium.find_element_by_name("builder_rule_0_filter").click()
-        Select(self.selenium.find_element_by_name(
+        self.selenium.find_element(By.NAME, "builder_rule_0_filter").click()
+        Select(self.selenium.find_element(
+            By.NAME,
             "builder_rule_0_filter"
         )).select_by_visible_text("c2")
-        self.selenium.find_element_by_name("builder_rule_0_operator").click()
-        Select(self.selenium.find_element_by_name(
+        self.selenium.find_element(By.NAME, "builder_rule_0_operator").click()
+        Select(self.selenium.find_element(
+            By.NAME,
             "builder_rule_0_operator"
         )).select_by_visible_text("greater or equal")
-        self.selenium.find_element_by_name("builder_rule_0_value_0").click()
-        self.selenium.find_element_by_name("builder_rule_0_value_0").clear()
-        self.selenium.find_element_by_name(
+        self.selenium.find_element(By.NAME, "builder_rule_0_value_0").click()
+        self.selenium.find_element(By.NAME, "builder_rule_0_value_0").clear()
+        self.selenium.find_element(
+            By.NAME,
             "builder_rule_0_value_0"
         ).send_keys("5")
         # Save the view
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[normalize-space()='Add view']"
         ).click()
-        self.wait_close_modal_refresh_table('view-table_previous')
-
-        # Check the table resulting from the view
-        self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']"
-            "//td[2][normalize-space() = 'v2']/../td[1]/div/button[2]"
-        ).click()
-        # Wait for the table to be refreshed
-        self.wait_for_datatable('table-data_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check the number of entries
         self.assertIn(
             'Showing 1 to 10 of 42 entries (filtered from 100 total entries)',
             self.selenium.page_source)
 
-        # Click in views button and go back to the full table
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space()="Views"]').click()
-        self.wait_for_datatable('view-table_previous')
+        # Click in views full table view
+        self.click_dropdown_option('select-view-name', 'Full table')
 
-        self.selenium.find_element_by_link_text("Full Table").click()
         # Wait for the table to be refreshed
-        WebDriverWait(self.selenium, 10).until(
-            EC.text_to_be_present_in_element(
-                (By.XPATH, "//div[@id='table-content']/h1"),
-                'Table'
-            )
-        )
-
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Check the number of entries
         self.assertIn(
             'Showing 1 to 10 of 100 entries',
             self.selenium.page_source)
 
-        # Go back to the view management
-        self.selenium.find_element_by_xpath(
-            '//button[normalize-space()="Views"]').click()
-        # Wait for the table to be refreshed
-        self.wait_for_datatable('view-table_previous')
-
         # Click in the clone link of the first view
-        self.selenium.find_element_by_xpath(
-            '//table[@id="view-table"]//tr/td[2][normalize-space() = "v1"]/'
-            '../td[1]/div/button[3]'
-        ).click()
+        self.click_dropdown_option('select-view-name', 'v1')
+        self.wait_for_id_and_spinner('table-data_previous')
+
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, '//button[normalize-space()="Clone view"]')
-            )
-        )
+                (By.XPATH, '//button[contains(@class, "js-view-clone")]')))
+        self.selenium.find_element(
+            By.XPATH,
+            '//button[contains(@class, "js-view-clone")]').click()
+        self.wait_for_modal_open()
+
         # Confirm view cloning
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@class='modal-footer']/button[normalize-space()='Clone "
             "view']"
         ).click()
-        self.wait_close_modal_refresh_table('view-table_previous')
-
-        # Open the view with the clone
-        self.selenium.find_element_by_xpath(
-            "//table[@id='view-table']"
-            "//td[2][normalize-space() = 'Copy of v1']/../td[1]/div/button[2]"
-        ).click()
-        # Wait for the table to be refreshed
-        self.wait_for_datatable('table-data_previous')
+        self.wait_close_modal_refresh_table('table-data_previous')
 
         # Check the number of entries
         self.assertIn(
@@ -529,14 +527,9 @@ class TableViews(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class TableInsertRow(tests.OnTaskLiveTestCase):
-    fixtures = ['derived_column']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'derived_column.sql')
+class TableInsertRow(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
 
-    wflow_name = 'combine columns'
-
-    def test_table_insert_row(self):
-        """Test operations  with derived columns."""
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
@@ -547,22 +540,23 @@ class TableInsertRow(tests.OnTaskLiveTestCase):
         self.go_to_table()
 
         # Click on the add row button
-        self.selenium.find_element_by_link_text('Row').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Row').click()
 
         # Fill out the fields in the form
         for idx in range(0, 10):
-            keyelem = self.selenium.find_element_by_id(
-                'id____ontask___upload_{0}'.format(idx)
-            )
+            keyelem = self.selenium.find_element(
+                By.ID,
+                'id____ontask___upload_{0}'.format(idx))
             keyelem.clear()
             keyelem.send_keys(str(idx))
 
         # Set c91 to true
-        c91 = self.selenium.find_element_by_id('id____ontask___upload_10')
+        c91 = self.selenium.find_element(By.ID, 'id____ontask___upload_10')
         self.assertFalse(c91.is_selected())
         c91.click()
         # Click on the Submit button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//form//button[@type='submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -574,33 +568,36 @@ class TableInsertRow(tests.OnTaskLiveTestCase):
                       self.selenium.page_source)
 
         # Introduce a valid primary key
-        keyelem = self.selenium.find_element_by_id(
-            'id____ontask___upload_0'
-        )
+        keyelem = self.selenium.find_element(
+            By.ID,
+            'id____ontask___upload_0')
         keyelem.clear()
         keyelem.send_keys('100')
         # Click on the Submit button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//form//button[@type='submit']"
         ).click()
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Go to page 11 of the table
-        self.selenium.find_element_by_link_text('11').click()
+        self.selenium.find_element(By.LINK_TEXT, '11').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element((By.CLASS_NAME, 'sorting_1'),
                                              '100')
         )
 
         # Click in the Ops -> delete button -> Delete row
-        element = self.selenium.find_element_by_xpath(
+        element = self.selenium.find_element(
+            By.XPATH,
             "//table[@id='table-data']"
             "//tr/td[2][normalize-space() = '100']/"
             "../td[1]/div/button[3]"
         )
         ActionChains(self.selenium).move_to_element(element).click().perform()
         self.wait_for_modal_open()
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id='modal-item']//button[@type='submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(

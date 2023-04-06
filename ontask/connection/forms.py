@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Forms to manage the connections."""
 from typing import Dict
 
 from django import forms
 from django.core import signing
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.core import forms as ontask_forms
@@ -65,10 +63,6 @@ class SQLRequestConnectionParam(ontask_forms.FormWithPayload):
 
     def __init__(self, *args, **kwargs):
         self.connection = kwargs.pop('connection')
-        if not self.connection:
-            self.connection = models.SQLConnection.objects.get(
-                pk=kwargs.get('instance').payload['connection_id'])
-
         super().__init__(*args, **kwargs)
 
         if not self.connection.db_password:
@@ -168,7 +162,7 @@ class AthenaRequestConnectionParam(forms.Form):
                 required=True,
                 help_text=_('Table to load'))
 
-        if self.workflow.has_data_frame():
+        if self.workflow.has_data_frame:
             if self.workflow.columns.filter(is_key=True).count() > 1:
                 merge_choices = [
                     (skey, skey)
@@ -194,11 +188,11 @@ class AthenaRequestConnectionParam(forms.Form):
         conn = self.instance
         to_return = self.instance.get_missing_fields(self.cleaned_data)
 
-        if self.workflow.has_data_frame():
-            if self.workflow.columns.filter(is_key=True).count() == 1:
+        if self.workflow.has_data_frame:
+            try:
                 to_return['merge_key'] = self.workflow.columns.filter(
-                    is_key=True).first().name
-            else:
+                    is_key=True).get().name
+            except models.Workflow.MultipleObjectsReturned:
                 to_return['merge_key'] = self.cleaned_data['merge_key']
 
             to_return['merge_method'] = self.cleaned_data['how_merge']

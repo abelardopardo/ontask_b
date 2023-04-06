@@ -1,20 +1,17 @@
-# -*- coding: utf-8 -*-
-
 """Functions to process the survey run request."""
 from typing import Dict, List
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django import http
-from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import django_tables2 as tables
 
 from ontask import models
-from ontask.action.services.edit_manager import ActionEditManager
-from ontask.action.services.run_manager import ActionRunManager
+from ontask.action.services.edit_factory import ActionEditProducerBase
+from ontask.action.services.run_factory import ActionRunProducerBase
 from ontask.core import DataTablesServerSidePaging, OperationsColumn
 from ontask.dataops import sql
 
@@ -202,7 +199,7 @@ def create_survey_table(
     :param workflow: Workflow being processed
     :param action: Action representing the survey
     :param dt_page: Data tables server side paging object
-    :return : JSon respnse
+    :return : JSon response
     """
     columns = [ccpair.column for ccpair in action.column_condition_pair.all()]
     query_set = _create_initial_qs(
@@ -231,28 +228,17 @@ def create_survey_table(
     })
 
 
-class ActionManagerSurvey(ActionEditManager, ActionRunManager):
+class ActionEditProducerSurvey(ActionEditProducerBase):
     """Class to serve running an email action."""
 
-    def extend_edit_context(
-        self,
-        workflow: models.Workflow,
-        action: models.Action,
-        context: Dict,
-    ):
-        """Get the context dictionary to render the GET request.
-
-        :param workflow: Workflow being used
-        :param action: Action being used
-        :param context: Initial dictionary to extend
-        :return: Nothing.
-        """
-        self.add_conditions(action, context)
-        self.add_conditions_to_clone(action, context)
-        self.add_columns_show_stats(action, context)
+    def get_context_data(self, **kwargs) -> Dict:
+        context = super().get_context_data(form=None, **kwargs)
+        self.add_conditions(context)
+        self.add_conditions_to_clone(context)
+        self.add_columns_show_stats(context)
 
         # All tuples (action, column, condition) to consider
-        tuples = action.column_condition_pair.all()
+        tuples = self.action.column_condition_pair.all()
 
         context.update({
             'column_selected_table': ColumnSelectedTable(
@@ -265,68 +251,53 @@ class ActionManagerSurvey(ActionEditManager, ActionRunManager):
                         template_file=ColumnSelectedTable.ops_template,
                         template_context=lambda record: {
                             'id': record.column.id,
-                            'aid': action.id}))],
+                            'aid': self.action.id}))],
                 condition_list=context['conditions']),
             'any_empty_description': tuples.filter(
                 column__description_text='',
                 column__is_key=False,
             ).exists(),
-            'key_columns': workflow.get_unique_columns(),
+            'key_columns': self.workflow.get_unique_columns(),
             'key_selected': tuples.filter(column__is_key=True).first(),
             'has_no_key': tuples.filter(column__is_key=False).exists()})
 
-        if action.action_type == models.Action.SURVEY:
+        if self.action.action_type == models.Action.SURVEY:
             # Add all columns that are not inserted nor key
-            context['columns_to_insert'] = workflow.columns.exclude(
-                column_condition_pair__action=action,
+            context['columns_to_insert'] = self.workflow.columns.exclude(
+                column_condition_pair__action=self.action,
             ).exclude(
                 is_key=True,
             ).distinct().order_by('position')
         else:
             # Add all columns that are not inserted nor key, and boolean type
-            context['columns_to_insert'] = workflow.columns.exclude(
-                column_condition_pair__action=action,
+            context['columns_to_insert'] = self.workflow.columns.exclude(
+                column_condition_pair__action=self.action,
             ).exclude(is_key=True).filter(
                 data_type='boolean').distinct().order_by('position')
 
-    def process_edit_request(
-        self,
-        request: http.HttpRequest,
-        workflow: models.Workflow,
-        action: models.Action
-    ) -> http.HttpResponse:
-        """Process the action edit request.
+        return context
 
-        :param request: Http Request received
-        :param workflow: Workflow being manipulated
-        :param action: Action being used as a survey
-        :return: Http response with the right edit template.
-        """
 
-        context = self.get_render_context(action)
-        try:
-            self.extend_edit_context(workflow, action, context)
-        except Exception as exc:
-            messages.error(request, str(exc))
-            return redirect(reverse('action:index'))
+class ActionRunProducerSurvey(ActionRunProducerBase):
+    """Run Survey action"""
 
-        return render(request, self.edit_template, context)
+    # Type of event to log when running the action
+    log_event = models.Log.ACTION_SURVEY_INPUT
 
-    def process_run_request(
-        self,
-        operation_type: str,
-        request: http.HttpRequest,
-        action: models.Action,
-        prev_url: str,
-    ) -> http.HttpResponse:
-        """Process a GET request."""
-        # Render template with active columns.
-        return render(
-            request,
-            self.run_template,
-            {
-                'columns': [
-                    cc_pair.column
-                    for cc_pair in action.column_condition_pair.all()
-                    if cc_pair.column.is_active],
-                'action': action})
+    def get_context_data(self, **kwargs) -> Dict:
+        context = super().get_context_data(form=None, **kwargs)
+        context.update({
+            'columns': [
+                cc_pair.column
+                for cc_pair in self.action.column_condition_pair.all()
+                if cc_pair.column.is_active],
+            'action': self.action})
+        return context
+
+
+class ActionRunProducerTODO(ActionRunProducerBase):
+    """Run TODO action"""
+
+    # Type of event to log when running the action
+    log_event = models.Log.ACTION_TODO_INPUT
+

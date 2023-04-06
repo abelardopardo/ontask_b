@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 """Forms to upload, import and export a workflow."""
 import json
 from typing import Dict
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ontask import models
 from ontask.core import RestrictedFileField
@@ -14,11 +12,11 @@ import ontask.settings
 
 
 class WorkflowForm(forms.ModelForm):
-    """Worflow create form."""
+    """Workflow create form."""
 
     def __init__(self, *args, **kwargs):
         """Store the user to put as owner of the workflow."""
-        self.user = kwargs.pop('workflow_user', None)
+        self.user = kwargs.pop('request_user', None)
         super().__init__(*args, **kwargs)
 
     def clean(self) -> Dict:
@@ -31,6 +29,9 @@ class WorkflowForm(forms.ModelForm):
                 _('You need to provide a name for the workflow.'),
             )
             return form_data
+
+        # Store the user in the instance
+        self.instance.user = self.user
 
         # Check if the name already exists
         name_exists = models.Workflow.objects.filter(
@@ -69,11 +70,11 @@ class WorkflowImportForm(forms.Form):
         label=_('File'),
         help_text=_('File containing a previously exported workflow'))
 
-    def __init__(self, data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Store the user that prompted the request."""
         self.user = kwargs.pop('user', None)
 
-        super().__init__(data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def clean(self) -> Dict:
         """Check that the name is unique and form multipart."""
@@ -104,31 +105,22 @@ class WorkflowExportRequestForm(forms.Form):
     def __init__(self, *args, **kargs):
         """Set actions, prefix and labels.
 
-        Kargs contain: actions: list of action objects, put_labels: boolean
-        stating if the labels should be included in the form
+        Kargs contain: actions: list of action objects
 
         :param args:
         :param kargs: Additional arguments such as list  of actions,
         field_prefix
         """
-        # List of columns to process and a field prefix
-        self.actions = kargs.pop('actions', [])
-        self.field_prefix = kargs.pop('field_prefix', 'select_')
+        workflow = kargs.pop('workflow')
 
-        # Should the labels be included?
-        self.put_labels = kargs.pop('put_labels')
+        # Set the field prefix
+        self.field_prefix = kargs.pop('field_prefix', 'select_')
 
         super().__init__(*args, **kargs)
 
-        # Create as many fields as the given columns
-        for idx, action in enumerate(self.actions):
-            # Include the labels if requested
-            if self.put_labels:
-                label = action.name
-            else:
-                label = ''
-
+        # Create as many fields as the actions in the workflow
+        for idx, action in enumerate(workflow.actions.all()):
             self.fields[self.field_prefix + '%s' % idx] = forms.BooleanField(
-                label=label,
+                label=action.name,
                 label_suffix='',
                 required=False)

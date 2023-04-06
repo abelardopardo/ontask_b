@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Test live execution of operations related to workflows."""
 import os
 
@@ -10,6 +8,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
 from ontask import models, tests
+from ontask.tests.compare import compare_workflows
 
 
 class WorkflowInitial(tests.OnTaskLiveTestCase):
@@ -19,7 +18,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         super().setUp()
         self.create_users()
 
-    def test_01_workflow_create_upload_merge_column_edit(self):
+    def test_01(self):
         """
         Create a workflow, upload data and merge
         :return:
@@ -29,10 +28,11 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Create the workflow
-        self.create_new_workflow(tests.wflow_name, tests.wflow_desc)
+        self.create_new_workflow(tests.WORKFLOW_NAME, tests.WORKFLOW_DESC)
 
         # Go to CSV Upload/Merge
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
@@ -41,12 +41,13 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Set the file name
-        self.selenium.find_element_by_id('id_data_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_data_file').send_keys(
             os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple.csv')
         )
 
         # Click on the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -56,19 +57,21 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Change the name of one of the columns
-        input_email = self.selenium.find_element_by_xpath(
+        input_email = self.selenium.find_element(
+            By.XPATH,
             "//table[@id='workflow-table']/tbody/tr[3]/td[3]/input"
         )
         input_email.clear()
         input_email.send_keys('email')
 
         # Click on the FINISH button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
 
         # Wait for detail table
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Go to column details
         self.go_to_details()
@@ -95,12 +98,13 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.go_to_csv_upload_merge_step_1()
 
         # Set the file name
-        self.selenium.find_element_by_id('id_data_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_data_file').send_keys(
             os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple2.csv')
         )
 
         # Click on the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -110,14 +114,16 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Change the name of sid2 to sid
-        input_email = self.selenium.find_element_by_xpath(
+        input_email = self.selenium.find_element(
+            By.XPATH,
             "//table[@id='workflow-table']/tbody/tr[3]/td[3]/input"
         )
         input_email.clear()
         input_email.send_keys('sid')
 
         # Click on the Next button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         # Wait for the upload/merge
@@ -127,17 +133,17 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Select SID in the first key
-        self.selenium.find_element_by_id('id_dst_key').send_keys('sid')
+        self.selenium.find_element(By.ID, 'id_dst_key').send_keys('sid')
         # Select SID in the first key
-        self.selenium.find_element_by_id('id_src_key').send_keys('sid')
+        self.selenium.find_element(By.ID, 'id_src_key').send_keys('sid')
 
         # Select the merger function type
-        select = Select(self.selenium.find_element_by_id(
-            'id_how_merge'))
+        select = Select(self.selenium.find_element(By.ID, 'id_how_merge'))
         select.select_by_value('outer')
 
         # Click on the Next button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         # Wait for the upload/merge
@@ -147,11 +153,12 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Click on the FINISH button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         # Wait for the upload/merge to finish
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Go to column details
         self.go_to_details()
@@ -165,7 +172,7 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         # End of session
         self.logout()
 
-    def test_02_workflow_create_upload_with_prelude(self):
+    def test_02(self):
         """
         Create a workflow, upload data and merge
         :return:
@@ -175,10 +182,11 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.login('instructor01@bogus.com')
 
         # Create the workflow
-        self.create_new_workflow(tests.wflow_name, tests.wflow_desc)
+        self.create_new_workflow(tests.WORKFLOW_NAME, tests.WORKFLOW_DESC)
 
         # Go to the CSV upload step 1
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//table[@id='dataops-table']//a[normalize-space()='CSV']").click()
         WebDriverWait(self.selenium, 10).until(
             EC.visibility_of_element_located(
@@ -187,21 +195,23 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         )
 
         # Set the file name
-        self.selenium.find_element_by_id('id_data_file').send_keys(
+        self.selenium.find_element(By.ID, 'id_data_file').send_keys(
             os.path.join(
                 settings.ONTASK_FIXTURE_DIR,
                 'csv_with_prelude_postlude.csv'),
         )
         # Set the prelude to 6 lines and postlude to 3
-        self.selenium.find_element_by_id('id_skip_lines_at_top').clear()
-        self.selenium.find_element_by_id('id_skip_lines_at_top').send_keys('6')
-        self.selenium.find_element_by_id('id_skip_lines_at_bottom').clear()
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, 'id_skip_lines_at_top').clear()
+        self.selenium.find_element(By.ID, 'id_skip_lines_at_top').send_keys('6')
+        self.selenium.find_element(By.ID, 'id_skip_lines_at_bottom').clear()
+        self.selenium.find_element(
+            By.ID,
             'id_skip_lines_at_bottom'
         ).send_keys('3')
 
         # Click on the NEXT button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
         WebDriverWait(self.selenium, 10).until(
@@ -209,17 +219,16 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
                 (By.XPATH, "//body/div/h1"),
                 'Select Columns')
         )
-        WebDriverWait(self.selenium, 10).until_not(
-            EC.visibility_of_element_located((By.ID, 'div-spinner'))
-        )
+        self.wait_for_spinner()
 
         # Click on the FINISH button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@name='Submit']"
         ).click()
 
         # Wait for the details table
-        self.wait_for_datatable('table-data_previous')
+        self.wait_for_id_and_spinner('table-data_previous')
 
         # Check that the number of rows is the correct one in the only
         # workflow available
@@ -231,18 +240,16 @@ class WorkflowInitial(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowAttribute(tests.OnTaskLiveTestCase):
-    fixtures = ['simple_workflow']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
+class WorkflowAttribute(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
 
-    def test_workflow_attributes(self):
+    def test(self):
         pass
 
         # Login
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(tests.wflow_name)
+        self.access_workflow_from_home_page(tests.WORKFLOW_NAME)
 
         # Click on the more-ops and then attributes button
         self.go_to_attribute_page()
@@ -263,18 +270,21 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
         self.search_table_row_by_string('attribute-table', 3, 'value2')
 
         # Rename second attribute
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//tr/td[2][normalize-space() = 'key2']/../td[1]/div/button[1]"
         ).click()
         self.wait_for_modal_open()
-        self.selenium.find_element_by_id('id_key').clear()
-        self.selenium.find_element_by_id('id_key').send_keys('newkey2')
-        self.selenium.find_element_by_id('id_attr_value').clear()
-        self.selenium.find_element_by_id(
+        self.selenium.find_element(By.ID, 'id_key').clear()
+        self.selenium.find_element(By.ID, 'id_key').send_keys('newkey2')
+        self.selenium.find_element(By.ID, 'id_attr_value').clear()
+        self.selenium.find_element(
+            By.ID,
             'id_attr_value').send_keys('newvalue2')
 
         # Click in the submit button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id = 'modal-item']//div[@class='modal-footer']/button"
         ).click()
 
@@ -291,7 +301,8 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
         self.go_to_attribute_page()
 
         # click the delete button in the second row
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//table[@id="attribute-table"]'
             '//tr[2]/td[1]//button[contains(@class, "js-attribute-delete")]'
         ).click()
@@ -301,7 +312,8 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
                 '//div[@id="modal-item"]//div[@class="modal-footer"]/button')),
         )
         # Click in the delete confirm button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             '//div[@id = "modal-item"]//div[@class = "modal-footer"]/button'
         ).click()
 
@@ -310,11 +322,10 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
 
         # There should only be a single element
         self.assertEqual(
-            len(self.selenium.find_elements_by_xpath(
-                '//table[@id="attribute-table"]/tbody/tr'
-            )),
-            1
-        )
+            len(self.selenium.find_elements(
+                By.XPATH,
+                '//table[@id="attribute-table"]/tbody/tr')),
+            1)
         # Check that the attributes are properly stored in the workflow
         workflow = models.Workflow.objects.all()[0]
         self.assertEqual(len(workflow.attributes), 1)
@@ -324,33 +335,32 @@ class WorkflowAttribute(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowShare(tests.OnTaskLiveTestCase):
-    fixtures = ['simple_workflow']
-    filename = os.path.join(settings.ONTASK_FIXTURE_DIR, 'simple_workflow.sql')
+class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
 
-    def test_workflow_share(self):
+    def test(self):
         # Login
         self.login('instructor01@bogus.com')
 
         # GO TO THE WORKFLOW PAGE
-        self.access_workflow_from_home_page(tests.wflow_name)
+        self.access_workflow_from_home_page(tests.WORKFLOW_NAME)
 
         # Click on the share
         self.go_to_workflow_share()
 
         # Click in the add user button
-        self.selenium.find_element_by_class_name('js-share-create').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-share-create').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'modal-title'),
                 'Select user to allow access to the workflow'))
 
         # Fill out the form
-        self.selenium.find_element_by_id('id_user_email').send_keys(
+        self.selenium.find_element(By.ID, 'id_user_email').send_keys(
             'instructor02@bogus.com')
 
         # Click in the share button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
 
@@ -373,18 +383,19 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
             'instructor02@bogus.com')
 
         # Click in the create share dialog again
-        self.selenium.find_element_by_class_name('js-share-create').click()
+        self.selenium.find_element(By.CLASS_NAME, 'js-share-create').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.CLASS_NAME, 'modal-title'),
                 'Select user to allow access to the workflow'))
 
         # Fill out the form
-        self.selenium.find_element_by_id('id_user_email').send_keys(
+        self.selenium.find_element(By.ID, 'id_user_email').send_keys(
             'superuser@bogus.com')
 
         # Click in the button to add the user
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
         # MODAL WAITING
@@ -418,7 +429,7 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
             'share-table',
             2,
             'superuser@bogus.com')
-        element.find_element_by_xpath('td[1]/button').click()
+        element.find_element(By.XPATH, 'td[1]/button').click()
 
         # Wait for the delete confirmation frame
         WebDriverWait(self.selenium, 10).until(
@@ -426,7 +437,8 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
                 (By.CLASS_NAME, 'modal-title'),
                 'Confirm user deletion'))
         # Click in the delete confirm button
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//div[@id = 'modal-item']//div[@class = 'modal-footer']/button"
         ).click()
 
@@ -440,11 +452,10 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
         # There should only be a single element
         self.select_share_tab()
         self.assertEqual(
-            len(self.selenium.find_elements_by_xpath(
-                "//table[@id='share-table']/tbody/tr"
-            )),
-            1
-        )
+            len(self.selenium.find_elements(
+                By.XPATH,
+                "//table[@id='share-table']/tbody/tr")),
+            1)
         # Check that the shared users are properly stored in the workflow
         workflow = models.Workflow.objects.all()[0]
         self.assertEqual(workflow.shared.count(), 1)
@@ -455,34 +466,34 @@ class WorkflowShare(tests.OnTaskLiveTestCase):
         self.logout()
 
 
-class WorkflowImport(tests.OnTaskLiveTestCase):
-    fixtures = ['simple_workflow_export']
-    filename = os.path.join(
-        settings.ONTASK_FIXTURE_DIR,
-        'simple_workflow_export.sql')
+class WorkflowImport(
+    tests.SimpleWorkflowExportFixture,
+    tests.OnTaskLiveTestCase,
+):
 
-    def test_import_complete(self):
+    def test(self):
 
         # Login and wait for the table of workflows
         self.login('instructor01@bogus.com')
 
         # Click in the import button and wait
-        self.selenium.find_element_by_link_text('Import workflow').click()
+        self.selenium.find_element(By.LINK_TEXT, 'Import workflow').click()
         WebDriverWait(self.selenium, 10).until(
             EC.text_to_be_present_in_element(
                 (By.XPATH, "//body/div/h1"),
                 'Import workflow'))
 
         # Set the workflow name and file
-        wname = self.selenium.find_element_by_id('id_name')
+        wname = self.selenium.find_element(By.ID, 'id_name')
         wname.send_keys('newwf')
-        wfile = self.selenium.find_element_by_id('id_wf_file')
+        wfile = self.selenium.find_element(By.ID, 'id_wf_file')
         wfile.send_keys(os.path.join(
             settings.ONTASK_FIXTURE_DIR,
             'ontask_workflow.gz'))
 
         # Click in the submit
-        self.selenium.find_element_by_xpath(
+        self.selenium.find_element(
+            By.XPATH,
             "//button[@type='Submit']"
         ).click()
         WebDriverWait(self.selenium, 20).until(
@@ -494,50 +505,53 @@ class WorkflowImport(tests.OnTaskLiveTestCase):
         )
 
         # Check elements in workflow and in newwf
-        w1 = models.Workflow.objects.get(name=tests.wflow_name)
+        w1 = models.Workflow.objects.get(name=tests.WORKFLOW_NAME)
         w2 = models.Workflow.objects.get(name='newwf')
 
-        # Equal descriptions
-        self.assertEqual(
-            w1.description_text,
-            w2.description_text)
+        compare_workflows(w1, w2)
 
-        # Equal number of columns
-        self.assertEqual(w1.columns.count(), w2.columns.count())
-
-        # Identical attributes
-        self.assertEqual(w1.attributes, w2.attributes)
-
-        # Equal number of rows and columns
-        self.assertEqual(w1.nrows, w2.nrows)
-        self.assertEqual(w1.ncols, w2.ncols)
-
-        # Equal names and column types
-        for x, y in zip(w1.columns.all(), w2.columns.all()):
-            self.assertEqual(x.name, y.name)
-            self.assertEqual(x.data_type, y.data_type)
-            self.assertEqual(x.is_key, y.is_key)
-
-        # Equal number of actions
-        self.assertEqual(
-            w1.actions.count(),
-            w2.actions.count())
-
-        # Equal names and content in the conditions
-        for x, y in zip(w1.actions.all(), w2.actions.all()):
-            self.assertEqual(x.name, y.name)
-            self.assertEqual(x.description_text, y.description_text)
-            self.assertEqual(x.text_content, y.text_content)
-            self.assertEqual(
-                x.conditions.count(),
-                y.conditions.count())
-            for c1, c2 in zip(x.conditions.all(), y.conditions.all()):
-                self.assertEqual(c1.name, c2.name)
-                self.assertEqual(
-                    c1.description_text,
-                    c2.description_text)
-                self.assertEqual(c1.formula, c2.formula)
-                self.assertEqual(c1.is_filter, c2.is_filter)
+        # # Equal descriptions
+        # self.assertEqual(
+        #     w1.description_text,
+        #     w2.description_text)
+        #
+        # # Equal number of columns
+        # self.assertEqual(w1.columns.count(), w2.columns.count())
+        #
+        # # Identical attributes
+        # self.assertEqual(w1.attributes, w2.attributes)
+        #
+        # # Equal number of rows and columns
+        # self.assertEqual(w1.nrows, w2.nrows)
+        # self.assertEqual(w1.ncols, w2.ncols)
+        #
+        # # Equal names and column types
+        # for x, y in zip(w1.columns.all(), w2.columns.all()):
+        #     self.assertEqual(x.name, y.name)
+        #     self.assertEqual(x.data_type, y.data_type)
+        #     self.assertEqual(x.is_key, y.is_key)
+        #
+        # # Equal number of actions
+        # self.assertEqual(
+        #     w1.actions.count(),
+        #     w2.actions.count())
+        #
+        # # Equal names and content in the conditions
+        # for x, y in zip(w1.actions.all(), w2.actions.all()):
+        #     self.assertEqual(x.name, y.name)
+        #     self.assertEqual(x.description_text, y.description_text)
+        #     self.assertEqual(x.text_content, y.text_content)
+        #     compare_filters(x.filter, y.filter)
+        #     self.assertEqual(
+        #         x.conditions.count(),
+        #         y.conditions.count())
+        #     for c1, c2 in zip(x.conditions.all(), y.conditions.all()):
+        #         self.assertEqual(c1.name, c2.name)
+        #         self.assertEqual(
+        #             c1.description_text,
+        #             c2.description_text)
+        #         self.assertEqual(c1.formula, c2.formula)
+        #         self.assertEqual(c1.is_filter, c2.is_filter)
 
         # End of session
         self.logout()

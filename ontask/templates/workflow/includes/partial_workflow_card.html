@@ -20,7 +20,7 @@
               class="btn btn-light btn-sm js-workflow-update align-middle"
               data-url="{% url 'workflow:update' wflow.id %}" data-toggle="tooltip"
               title="{% trans 'Change the name and description of this workflow' %}">
-          <span class="fa fa-pencil"></span>
+          <span class="fa fa-pencil-alt"></span>
       </button>
       <button type="button"
          class="btn btn-light btn-sm js-workflow-clone align-middle"
@@ -48,7 +48,7 @@
       {% if is_star %}
         <span class="fa fa-star"></span>
       {% else %}
-        <span class="fa fa-star-o"></span>
+        <span class="fa fa-star"></span>
       {% endif %}
     </button>
   </div>

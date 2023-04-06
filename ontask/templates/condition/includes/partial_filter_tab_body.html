@@ -2,40 +2,65 @@
 <div class="shadow rounded tab-pane px-3 fade show border border-dark"
      id="filter" role="tabpanel" aria-labelledby="filter-tab">
   <div id="filter-set-header" class="text-center my-3">
+    <button type="button"
+        class="btn btn-outline-dark js-filter-create{% if filter_condition or not has_data %} disabled{% endif %}"
+        data-url="{% url 'condition:create_filter' action.id %}"
+        data-type="filter">
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'Add Filter' %}</button>
+    {% include 'action/includes/partial_view_selector.html' %}
+
     {% if filter_condition %}
       <div id="filter-set" class="card-deck justify-content-center my-3">
-        <div class="shadow card ontask-ccard text-center mx-auto mb-3">
-          <h5 class="card-header js-filter-edit"
-              data-url="{% url 'condition:edit_filter' filter_condition.id %}">{% trans 'Filter' %}</h5>
-          <div class="card-body js-filter-edit"
-               data-url="{% url 'condition:edit_filter' filter_condition.id %}" style="min-height: 100px;">
-            <p class="card-text">{{ filter_condition.description_text }}</p>
-            <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ filter_condition.get_formula_text|safe }}</p>
+        {% if filter_condition.view %}
+          <div class="shadow card ontask-ccard text-center mx-auto mb-3 nohover"
+              style="cursor: default;">
+            <h5 class="alert-dark" style="margin-bottom:0px;">{% trans 'Table View' %}</h5>
+            <h5 class="card-header js-filter-edit"
+                data-url="{% url 'condition:edit_filter' action.id %}">{{ filter_condition.view.name }}</h5>
+            <div class="card-body js-filter-edit"
+                 data-url="{% url 'condition:edit_filter' action.id %}" style="min-height: 100px;">
+              <p class="card-text">{{ filter_condition.description_text }}</p>
+              <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ filter_condition.formula_text|safe }}</p>
+            </div>
+            <div class="cond-buttons">
+              <button type="button"
+                      class="btn btn-light btn-sm js-filter-delete"
+                      data-url="{% url 'condition:delete_filter' action.id %}"
+                      data-toggle="tooltip"
+                      title="{% trans 'Delete the filter' %}">
+                <span class="fa fa-trash"></span>
+              </button>
+            </div>
           </div>
-          <div class="cond-buttons">
-            <button type="button"
-                    class="btn btn-light btn-sm js-filter-edit"
-                    data-url="{% url 'condition:edit_filter' filter_condition.id %}"
-                    data-toggle="tooltip"
-                    title="{% blocktrans with n=filter_condition.n_rows_selected %}Edit the filter ({{ n }} rows satisfy this condition){% endblocktrans %}"><span class="fa fa-pencil"></span>
-            </button>
-            <button type="button"
-                    class="btn btn-light btn-sm js-filter-delete"
-                    data-url="{% url 'condition:delete_filter' filter_condition.id %}"
-                    data-toggle="tooltip"
-                    title="{% trans 'Delete the filter' %}">
-              <span class="fa fa-trash"></span>
-            </button>
+        {% else %}
+          <div class="shadow card ontask-ccard text-center mx-auto mb-3">
+            <h5 class="card-header js-filter-edit"
+                data-url="{% url 'condition:edit_filter' action.id %}">{% trans 'Filter' %}</h5>
+            <div class="card-body js-filter-edit" style="min-height: 100px;"
+                 data-url="{% url 'condition:edit_filter' action.id %}">
+              <p class="card-text">{{ filter_condition.description_text }}</p>
+              <p class="card-text"><strong>{% trans 'Formula' %}</strong><br/>{{ filter_condition.formula_text|safe }}</p>
+            </div>
+            <div class="cond-buttons">
+              <button type="button"
+                      class="btn btn-light btn-sm js-filter-edit"
+                      data-url="{% url 'condition:edit_filter' action.id %}"
+                      data-toggle="tooltip"
+                      title="{% blocktrans with n=filter_condition.selected_count %}Edit the filter ({{ n }} rows satisfy this condition){% endblocktrans %}"><span class="fa fa-pencil-alt"></span>
+              </button>
+              <button type="button"
+                      class="btn btn-light btn-sm js-filter-delete"
+                      data-url="{% url 'condition:delete_filter' action.id %}"
+                      data-toggle="tooltip"
+                      title="{% trans 'Delete the filter' %}">
+                <span class="fa fa-trash"></span>
+              </button>
+            </div>
           </div>
-        </div>
+        {% endif %}
       </div>
     {% else %}
-      <button type="button"
-          class="btn btn-outline-dark js-filter-create{% if not has_data %} disabled{% endif %} mb-3"
-          data-url="{% url 'condition:create_filter' action.id %}"
-          data-type="filter">
-        <span class="glyphicon glyphicon-plus"></span> {% trans 'Add Filter' %}</button>
-      <p class="text-center">{% trans 'All learners considered for this action.' %}</p>
+      <p class="text-center my-3">{% trans 'All learners considered for this action.' %}</p>
     {% endif %}
   </div>
 </div>

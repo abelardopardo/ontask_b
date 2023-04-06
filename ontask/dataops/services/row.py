@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service functions to handle row creation/edition.."""
 from typing import Any, List
 
@@ -38,7 +36,7 @@ def create_row(workflow: models.Workflow, row_values: List[Any]):
     # Recompute all the values of the conditions in each of the actions
     # TODO: Explore how to do this asynchronously (or lazy)
     for act in workflow.actions.all():
-        act.update_n_rows_selected()
+        act.update_selected_row_counts()
 
 
 def update_row_values(
@@ -71,4 +69,4 @@ def update_row_values(
     # Recompute all the values of the conditions in each of the actions
     # TODO: Explore how to do this asynchronously (or lazy)
     for act in workflow.actions.all():
-        act.update_n_rows_selected()
+        act.update_selected_row_counts()

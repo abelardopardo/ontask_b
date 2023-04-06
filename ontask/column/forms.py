@@ -1,21 +1,54 @@
-# -*- coding: utf-8 -*-
-
 """Forms to manipulate the columns."""
 import re
-from typing import Dict
+from typing import Dict, List
 
-from bootstrap_datepicker_plus import DateTimePickerInput
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django import forms
-from django.utils.translation import ugettext_lazy as _
-import pandas as pd
+from django.utils.translation import gettext_lazy as _
 
 from ontask import is_legal_name, models
 from ontask.core import DATE_TIME_WIDGET_OPTIONS
-from ontask.dataops import pandas
+from ontask.dataops import sql
 
 INITIAL_VALUE_LENGTH = 512
 
 INTERVAL_PATTERN = '(?P<from>-?\\d+)\\s+-\\s+(?P<to>-?\\d+)'
+
+
+def _parse_category_string(
+    category: str,
+    data_type: str,
+    allow_interval_syntax: bool,
+) -> List[str]:
+    """Given a category string, parse and expand to list of categories.
+
+    This function is to parse the specification of a list of categories. The
+    syntax allows to specify an interval pattern "number - number".
+
+    :param category: String to be parsed
+    :param data_type: data type expected for the values
+    :param allow_interval_syntax: Interval syntax is allowed
+    :return: List of categories after parsing
+    """
+    # Detect if an interval syntax is used (number column)
+
+    category_values = [cat.strip() for cat in category.split(',')]
+    if (
+        allow_interval_syntax
+        and (data_type == 'double' or data_type == 'integer')
+    ):
+        match = re.search(INTERVAL_PATTERN, category)
+        if match:
+            # If it is a number column, and there is an interval string
+            from_val = int(match.group('from'))
+            to_val = int(match.group('to'))
+            if from_val > to_val:
+                tmp = from_val
+                from_val = to_val
+                to_val = tmp
+            category_values = [str(val) for val in range(from_val, to_val + 1)]
+
+    return category_values
 
 
 class ColumnBasicForm(forms.ModelForm):
@@ -37,7 +70,6 @@ class ColumnBasicForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         """Store the workflow and data frame."""
         self.workflow = kwargs.pop('workflow', None)
-        self.data_frame = None
         self.allow_interval_as_initial = kwargs.pop(
             'allow_interval_as_initial',
             False)
@@ -60,11 +92,6 @@ class ColumnBasicForm(forms.ModelForm):
         """Check that the name is legal and the categories have right value."""
         form_data = super().clean()
 
-        # Load the data frame from the DB for various checks and leave it in
-        # the form for future use
-        self.data_frame = pandas.load_table(
-            self.workflow.get_data_frame_table_name())
-
         # Column name must be a legal variable name
         if 'name' in self.changed_data:
             # Name is legal
@@ -83,70 +110,37 @@ class ColumnBasicForm(forms.ModelForm):
 
         # Categories must be valid types
         if 'raw_categories' in self.changed_data:
+            # If the column is part of a rubric action, prevent this change as
+            # it breaks the consistency of rubrics.
+            if models.ActionColumnConditionTuple.objects.filter(
+                action__workflow=self.workflow,
+                action__action_type=models.Action.RUBRIC_TEXT,
+                column=self.instance
+            ).exists():
+                self.add_error(
+                    'raw_categories',
+                    _('Changes not allowed. Column is part of rubric action'))
+                return form_data
+
+            valid_values = []
             if form_data['raw_categories']:
-                # Detect if an interval syntax is used (number column)
-                match = re.search(
-                    INTERVAL_PATTERN,
-                    form_data['raw_categories'])
-                if (
-                    self.allow_interval_as_initial
-                    and (
-                        form_data['data_type'] == 'double'
-                        or form_data['data_type'] == 'integer')
-                    and match
-                ):
-                    # If it is a number column, and there is an interval string
-                    from_val = int(match.group('from'))
-                    to_val = int(match.group('to'))
-                    if from_val > to_val:
-                        tmp = from_val
-                        from_val = to_val
-                        to_val = tmp
-                    category_values = [
-                        str(val) for val in range(from_val, to_val + 1)]
-                else:
-                    category_values = [
-                        cat.strip()
-                        for cat in form_data['raw_categories'].split(',')]
+                category_values = _parse_category_string(
+                    form_data['raw_categories'],
+                    form_data['data_type'],
+                    self.allow_interval_as_initial)
 
-                # Condition 1: There must be more than one value
-                if len(category_values) < 2:
-                    self.add_error(
-                        'raw_categories',
-                        _('More than a single value needed.'))
-                    return form_data
+                valid_values, msg = self.instance.validate_categories(
+                    category_values,
+                    form_data['data_type'])
 
-                # Condition 2: Values must be valid for the type of the column
-                try:
-                    valid_values = models.Column.validate_column_values(
-                        form_data['data_type'],
-                        category_values)
-                except ValueError:
-                    self.add_error(
-                        'raw_categories',
-                        _('Incorrect list of values'),
-                    )
+                if msg:
+                    # Categories are not correct.
+                    self.add_error('raw_categories', msg)
                     return form_data
-
-                # Condition 3: The values in the dataframe column must be in
-                # these categories (only if the column is being edited, though
-                if self.instance.name and not all(
-                    vval in valid_values
-                    for vval in self.data_frame[self.instance.name]
-                    if vval and not pd.isnull(vval)
-                ):
-                    self.add_error(
-                        'raw_categories',
-                        _(
-                            'The values in the column are not compatible '
-                            + ' with these ones.'))
-                    return form_data
-            else:
-                valid_values = []
 
             self.instance.set_categories(valid_values, update=False)
 
-        # Check the datetimes. One needs to be after the other
+        # Check the date and times. One needs to be after the other
         a_from = self.cleaned_data.get('active_from')
         a_to = self.cleaned_data.get('active_to')
         if a_from and a_to and a_from >= a_to:
@@ -204,7 +198,7 @@ class ColumnAddForm(ColumnBasicForm):
         if initial_value:
             # See if the given value is allowed for the column data type
             try:
-                self.initial_valid_value = models.Column.validate_column_value(
+                self.initial_valid_value = models.Column.validate_value_type(
                     form_data['data_type'],
                     initial_value,
                 )
@@ -326,6 +320,9 @@ class CriterionForm(ColumnBasicForm):
         """Validate the position field."""
         form_data = super().clean()
 
+        if self.errors:
+            return form_data
+
         # Check and force a correct column index
         ncols = self.workflow.columns.count()
         if form_data['position'] < 1 or form_data['position'] > ncols:
@@ -384,8 +381,9 @@ class ColumnRenameForm(ColumnBasicForm):
             # Case 2: False -> True Unique values must be verified
             if (
                 not self.instance.is_key
-                and not pandas.is_unique_column(
-                    self.data_frame[self.instance.name])
+                and not sql.is_unique_column(
+                    self.workflow.get_data_frame_table_name(),
+                    self.instance.name)
             ):
                 self.add_error(
                     'is_key',
@@ -426,13 +424,13 @@ class FormulaColumnAddForm(forms.ModelForm):
         required=True,
         label='Operation')
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Store the workflow columns and operands."""
         self.operands = kwargs.pop('operands')
         # Workflow columns
         self.wf_columns = kwargs.pop('columns')
 
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Populate the column choices
         self.fields['columns'].choices = [
@@ -523,12 +521,12 @@ class ColumnSelectForm(forms.Form):
         required=True,
         label=_('Columns to insert'))
 
-    def __init__(self, form_data, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Store the workflow columns and operands."""
         # Workflow columns
         self.wf_columns = kwargs.pop('columns')
 
-        super().__init__(form_data, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Populate the column choices
         self.fields['columns'].choices = [

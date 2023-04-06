@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Views to run the personalized canvas email action."""
 import datetime
 import json
@@ -14,16 +12,16 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 import pytz
 import requests
 from rest_framework import status
 
 from ontask import models
 from ontask.action.evaluate import evaluate_action
-from ontask.action.services.edit_manager import ActionOutEditManager
-from ontask.action.services.run_manager import ActionRunManager
-from ontask.core import SessionPayload, is_instructor
+from ontask.action.services.edit_factory import ActionOutEditProducerBase
+from ontask.action.services.run_factory import ActionRunProducerBase
+from ontask.core import is_instructor
 from ontask.oauth import services
 
 LOGGER = get_task_logger('celery_execution')
@@ -58,32 +56,31 @@ def _refresh_and_retry_send(
     :param canvas_email_payload: Dictionary with additional information
     :return:
     """
-    # Request rejected due to token expiration. Refresh the
-    # token
-    user_token = None
-    result_msg = ugettext('OAuth token refreshed')
+    # Request rejected due to token expiration. Refresh the token
+    result_msg = gettext('OAuth token refreshed')
     response_status = None
+    user_token = None
     try:
         user_token = services.refresh_token(user_token, oauth_info)
+
+        if user_token := services.refresh_token(user_token, oauth_info):
+            # Update the header with the new token
+            headers = {
+                'content-type':
+                    'application/x-www-form-urlencoded; charset=UTF-8',
+                'Authorization': 'Bearer {0}'.format(
+                    user_token.access_token,
+                ),
+            }
+
+            # Second attempt at executing the API call
+            response = requests.post(
+                url=conversation_url,
+                data=canvas_email_payload,
+                headers=headers)
+            response_status = response.status_code
     except Exception as exc:
         result_msg = str(exc)
-
-    if user_token:
-        # Update the header with the new token
-        headers = {
-            'content-type':
-                'application/x-www-form-urlencoded; charset=UTF-8',
-            'Authorization': 'Bearer {0}'.format(
-                user_token.access_token,
-            ),
-        }
-
-        # Second attempt at executing the API call
-        response = requests.post(
-            url=conversation_url,
-            data=canvas_email_payload,
-            headers=headers)
-        response_status = response.status_code
 
     return result_msg, response_status
 
@@ -106,8 +103,7 @@ def _canvas_get_or_set_oauth_token(
     :return: Http response
     """
     # Get the information from the payload
-    oauth_info = settings.CANVAS_INFO_DICT.get(oauth_instance_name)
-    if not oauth_info:
+    if not (oauth_info := settings.CANVAS_INFO_DICT.get(oauth_instance_name)):
         messages.error(
             request,
             _('Unable to obtain Canvas OAuth information'),
@@ -115,11 +111,10 @@ def _canvas_get_or_set_oauth_token(
         return redirect('action:index')
 
     # Check if we have the token
-    token = models.OAuthUserToken.objects.filter(
+    if not (token := models.OAuthUserToken.objects.filter(
         user=request.user,
         instance_name=oauth_instance_name,
-    ).first()
-    if not token:
+    ).first()):
         # There is no token, authentication has to take place for the first
         # time
         return services.get_initial_token_step1(
@@ -129,9 +124,7 @@ def _canvas_get_or_set_oauth_token(
 
     # Check if the token is valid
     now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-    dead = now > token.valid_until - datetime.timedelta(
-        seconds=settings.CANVAS_TOKEN_EXPIRY_SLACK)
-    if dead:
+    if now > token.valid_until:
         try:
             services.refresh_token(token, oauth_info)
         except Exception as exc:
@@ -159,77 +152,67 @@ def _send_single_canvas_message(
     :param oauth_info: Authentication info
     :return: response message, response status
     """
-    result_msg = ugettext('Message successfuly sent')
+    result_msg = gettext('Message successfuly sent')
 
     # Send the email through the API call
     # First attempt
     response = requests.post(
         url=conversation_url,
         data=canvas_email_payload,
-        headers=headers)
-    response_status = response.status_code
+        headers=headers,
+        verify=True)
 
-    req_rejected = (
+    response_status = response.status_code
+    if (
         response.status_code == status.HTTP_401_UNAUTHORIZED
         and response.headers.get('WWW-Authenticate')
-    )
-    if req_rejected:
+    ):
         result_msg, response_status = _refresh_and_retry_send(
             oauth_info,
             conversation_url,
             canvas_email_payload,
         )
     elif response_status != status.HTTP_201_CREATED:
-        result_msg = ugettext(
+        result_msg = gettext(
             'Unable to deliver message (code {0})').format(
             response_status)
 
     return result_msg, response_status
 
 
-class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
+class ActionEditProducerCanvasEmail(ActionOutEditProducerBase):
     """Class to serve running an email action."""
 
-    def extend_edit_context(
-        self,
-        workflow: models.Workflow,
-        action: models.Action,
-        context: Dict,
-    ):
-        """Get the context dictionary to render the GET request.
+    def get_context_data(self, **kwargs) -> Dict:
+        """Add conditions, conditions to clone and columns to show stats."""
+        context = super().get_context_data(**kwargs)
+        self.add_conditions(context)
+        self.add_conditions_to_clone(context)
+        self.add_columns_show_stats(context)
+        return context
 
-        :param workflow: Workflow being used
-        :param action: Action being used
-        :param context: Initial dictionary to extend
-        :return: Nothing
-        """
-        self.add_conditions(action, context)
-        self.add_conditions_to_clone(action, context)
-        self.add_columns_show_stats(action, context)
 
-    def process_run_post(
-        self,
-        request: http.HttpRequest,
-        action: models.Action,
-        payload: SessionPayload,
-    ) -> http.HttpResponse:
+class ActionRunProducerCanvasEmail(ActionRunProducerBase):
+    log_event = models.Log.ACTION_RUN_PERSONALIZED_CANVAS_EMAIL
+
+    def form_valid(self, form) -> http.HttpResponse:
         """Process the VALID POST request."""
-        if payload.get('confirm_items'):
+        if self.payload.get('confirm_items'):
             # Create a dictionary in the session to carry over all the
             # information to execute the next pages
-            payload['button_label'] = ugettext('Send')
-            payload['valuerange'] = 2
-            payload['step'] = 2
+            self.payload['button_label'] = gettext('Send')
+            self.payload['valuerange'] = 2
+            self.payload['step'] = 2
             continue_url = 'action:item_filter'
         else:
             continue_url = 'action:run_done'
 
-        payload.store_in_session(request.session)
+        self.payload.store_in_session(self.request.session)
 
         # Check for the CANVAS token and proceed to the continue_url
         return _canvas_get_or_set_oauth_token(
-            request,
-            payload['target_url'],
+            self.request,
+            self.payload['target_url'],
             continue_url)
 
     def execute_operation(
@@ -266,16 +249,14 @@ class ActionManagerCanvasEmail(ActionOutEditManager, ActionRunManager):
 
         # Get the oauth info
         target_url = payload['target_url']
-        oauth_info = settings.CANVAS_INFO_DICT.get(target_url)
-        if not oauth_info:
+        if not (oauth_info := settings.CANVAS_INFO_DICT.get(target_url)):
             raise Exception(_('Unable to find OAuth Information Record'))
 
         # Get the token
-        user_token = models.OAuthUserToken.objects.filter(
+        if not (user_token := models.OAuthUserToken.objects.filter(
             user=user,
             instance_name=target_url,
-        ).first()
-        if not user_token:
+        ).first()):
             # There is no token, execution cannot proceed
             raise Exception(_('Incorrect execution due to absence of token'))
 

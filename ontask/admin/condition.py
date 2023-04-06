@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Admin for Conditions."""
 from django.contrib import admin
 
@@ -15,9 +13,20 @@ class ConditionAdmin(admin.ModelAdmin):
         'name',
         'action',
         'description_text',
-        'formula',
-        'n_rows_selected',
-        'is_filter',
-    )
+        '_formula',
+        'selected_count')
 
     search_fields = ['name', 'action', 'description_text']
+
+
+@admin.register(models.Filter)
+class FilterAdmin(admin.ModelAdmin):
+    """Define Filter Admin."""
+
+    list_display = (
+        'id',
+        'description_text',
+        '_formula',
+        'selected_count')
+
+    search_fields = ['description_text']

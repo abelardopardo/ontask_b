@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Service to manage condition operations."""
 from typing import Optional
 
@@ -10,7 +8,7 @@ from ontask import models
 from ontask.dataops import formula
 
 
-def _propagate_changes(condition, changed_data, old_name, is_new):
+def _propagate_changes(condition, changed_data, old_name):
     """Propagate changes in the condition to the rest of the action.
 
     If the formula has been modified, the action rows_all_false is flushed and
@@ -18,29 +16,21 @@ def _propagate_changes(condition, changed_data, old_name, is_new):
 
     If the name has changed, the text_content in the action is updated.
 
-    :param condition: Object being manipulated
+    :param condition: Object being manipulated (condition or filter)
     :param changed_data: Non-empty list of fields that have changed
     :param old_name: Previous name of the condition
-    :param is_new: if the condition has just been created
     :return: Nothing
     """
-    if is_new or 'formula' in changed_data:
-        # Reset the counter of rows with all conditions false
-        condition.action.rows_all_false = None
-        condition.action.save(update_fields=['rows_all_false'])
+    if '_formula' in changed_data:
+        condition.update_fields()
 
-        if condition.is_filter:
-            # This update must propagate to the rest of conditions
-            condition.action.update_n_rows_selected()
-            condition.refresh_from_db(fields=['n_rows_selected'])
-        else:
-            # Update the number of rows selected in the condition
-            condition.update_n_rows_selected(
-                filter_formula=condition.action.get_filter_formula())
+    if condition.is_filter:
+        # A filter does not have a name, thus no more changes needed.
+        return
 
     # If condition name has changed, rename appearances in the content
     # field of the action.
-    if is_new or 'name' in changed_data:
+    if 'name' in changed_data and condition.action:
         # Performing string substitution in the content and saving
         replacing = '{{% if {0} %}}'
         condition.action.text_content = condition.action.text_content.replace(
@@ -52,39 +42,40 @@ def _propagate_changes(condition, changed_data, old_name, is_new):
 def save_condition_form(
     request: http.HttpRequest,
     form,
-    action: models.Action,
-    is_filter: Optional[bool] = False,
+    action: Optional[models.Action] = None,
 ) -> http.JsonResponse:
     """Process the AJAX form POST to create and update conditions and filters.
 
     :param request: HTTP request
     :param form: Form being used to ask for the fields
     :param action: The action to which the condition is attached to
-    :param is_filter: The condition is a filter
     :return: JSON response
     """
-    if is_filter and form.instance.id is None and action.get_filter():
-        # Should not happen. Go back to editing the action
-        return http.JsonResponse({'html_redirect': ''})
-
     is_new = form.instance.id is None
-
-    # Update fields and save the condition
-    condition = form.save(commit=False)
-    condition.formula_text = None
-    condition.action = action
-    condition.is_filter = is_filter
-    condition.save()
-    condition.columns.set(action.workflow.columns.filter(
-        name__in=formula.get_variables(condition.formula),
-    ))
 
     # If the request has the 'action_content' field, update the action
     action_content = request.POST.get('action_content')
-    if action_content:
+    if action_content and action:
         action.set_text_content(action_content)
 
-    _propagate_changes(condition, form.changed_data, form.old_name, is_new)
+    # Update fields and save the condition
+    condition = form.save(commit=False)
+    condition.workflow = action.workflow
+    if not condition.is_filter:
+        condition.action = action
+    # Save object to processfurther (update row counts and column set
+    condition.save()
+
+    if condition.is_filter:
+        action.filter = condition
+        action.rows_all_false = None
+        action.save(update_fields=['filter', 'rows_all_false'])
+        action.update_selected_row_counts()
+
+    condition.columns.set(action.workflow.columns.filter(
+        name__in=formula.get_variables(condition.formula)))
+
+    _propagate_changes(condition, form.changed_data, form.old_name)
 
     # Store the type of event to log
     if is_new:

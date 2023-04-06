@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Forms to introduce values for a row in the data frame."""
 from django import forms
 

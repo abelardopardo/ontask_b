@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Errors while executing table services."""
 from ontask import OnTaskServiceException
 

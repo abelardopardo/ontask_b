@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Functions to handle OAuth2 authentication."""
 from datetime import timedelta
 from typing import Dict, Optional
@@ -10,7 +8,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import requests
 from rest_framework import status
 
@@ -47,8 +45,8 @@ def get_initial_token_step1(
     request.session[return_url_key] = return_url
 
     # Store in the session a random hash key to make sure the call back goes
-    # back to the right request
-    request.session[oauth_hash_key] = get_random_string()
+    # to the right request
+    request.session[oauth_hash_key] = get_random_string(20)
 
     # Store the callback URL in the session
     request.session[callback_url_key] = request.build_absolute_uri(
@@ -95,12 +93,11 @@ def refresh_token(user_token, oauth_info):
         oauth_info['access_token_url'].format(domain),
         {
             'grant_type': 'refresh_token',
-            'client_id': oauth_info['client_id'],
-            'client_secret': oauth_info['client_secret'],
             'refresh_token': user_token.refresh_token,
-            'redirect_uri': reverse('oauth:callback'),
-        },
-    )
+            'redirect_uri': reverse('oauth:callback')},
+        verify=True,
+        allow_redirects=False,
+        auth=(oauth_info['client_id'], oauth_info['client_secret']))
 
     if response.status_code != status.HTTP_200_OK:
         raise Exception(_('Unable to refresh OAuth token.'))
@@ -148,10 +145,11 @@ def process_callback(
         oauth_info['access_token_url'].format(domain),
         {
             'grant_type': 'authorization_code',
-            'client_id': oauth_info['client_id'],
-            'client_secret': oauth_info['client_secret'],
             'redirect_uri': request.session[callback_url_key],
-            'code': request.GET.get('code')})
+            'code': request.GET.get('code')},
+        verify=True,
+        allow_redirects=False,
+        auth=(oauth_info['client_id'], oauth_info['client_secret']))
 
     if response.status_code != status.HTTP_200_OK:
         return _('Unable to obtain access token from OAuth')

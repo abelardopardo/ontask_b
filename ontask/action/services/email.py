@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Send Email Messages with the rendered content in the action."""
 import datetime
 from email.mime.text import MIMEText
@@ -13,7 +11,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
 from django.template import Context, Template, TemplateSyntaxError
 from django.urls import reverse
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import html2text
 import pytz
 
@@ -23,8 +21,8 @@ from ontask import (
 from ontask.action.evaluate.action import (
     evaluate_action, evaluate_row_action_out, get_action_evaluation_context,
 )
-from ontask.action.services.edit_manager import ActionOutEditManager
-from ontask.action.services.run_manager import ActionRunManager
+from ontask.action.services.edit_factory import ActionOutEditProducerBase
+from ontask.action.services.run_factory import ActionRunProducerBase
 from ontask.celery import get_task_logger
 from ontask.dataops import pandas, sql
 
@@ -45,13 +43,12 @@ def _send_confirmation_message(
     """
     # Creating the context for the confirmation email
     now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
-    cfilter = action.get_filter()
     context = {
         'user': user,
         'action': action,
         'num_messages': nmsgs,
         'email_sent_datetime': now,
-        'filter_present': cfilter is not None,
+        'filter_present': action.filter is not None,
         'num_rows': action.workflow.nrows,
         'num_selected': action.get_rows_selected(),
     }
@@ -71,7 +68,7 @@ def _send_confirmation_message(
     context = {
         'num_messages': nmsgs,
         'email_sent_datetime': str(now),
-        'filter_present': cfilter is not None,
+        'filter_present': action.filter is not None,
         'num_rows': action.workflow.nrows,
         'subject': str(ontask_settings.NOTIFICATION_SUBJECT),
         'body': text_content,
@@ -80,11 +77,15 @@ def _send_confirmation_message(
     action.log(user, models.Log.ACTION_EMAIL_NOTIFY, **context)
 
     # Send email out
+    from_field = str(ontask_settings.NOTIFICATION_SENDER)
+    if str(ontask_settings.OVERRIDE_FROM_ADDRESS):
+        from_field = str(ontask_settings.OVERRIDE_FROM_ADDRESS)
+
     try:
         send_mail(
             str(ontask_settings.NOTIFICATION_SUBJECT),
             text_content,
-            str(ontask_settings.NOTIFICATION_SENDER),
+            from_field,
             [user.email],
             html_message=html_content)
     except Exception as exc:
@@ -103,8 +104,7 @@ def _check_email_list(email_list_string: str) -> List[str]:
         return []
 
     email_list = email_list_string.split()
-    incorrect_email = get_incorrect_email(email_list)
-    if incorrect_email:
+    if incorrect_email := get_incorrect_email(email_list):
         raise Exception(_('Invalid email address "{0}".').format(
             incorrect_email))
 
@@ -122,8 +122,7 @@ def _create_track_column(action: models.Action) -> str:
     cnames = [col.name for col in action.workflow.columns.all()]
     while True:
         idx += 1
-        track_col_name = 'EmailRead_{0}'.format(idx)
-        if track_col_name not in cnames:
+        if (track_col_name := 'EmailRead_{0}'.format(idx)) not in cnames:
             break
 
     # Add the column if needed (before the mass email to avoid overload
@@ -266,10 +265,14 @@ def _create_messages(
                 ),
             )
 
+        from_field = user.email
+        if str(ontask_settings.OVERRIDE_FROM_ADDRESS):
+            from_field = str(ontask_settings.OVERRIDE_FROM_ADDRESS)
+
         msg = _create_single_message(
             msg_body_sbj_to,
             track_str,
-            user.email,
+            from_field,
             cc_email,
             bcc_email)
         msgs.append(msg)
@@ -322,25 +325,26 @@ def _deliver_msg_burst(
             sleep(wait_time)
 
 
-class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
-    """Class to serve running an email action."""
+class ActionEditProducerEmail(ActionOutEditProducerBase):
+    """Class to edit Email Actions."""
 
-    def extend_edit_context(
-        self,
-        workflow: models.Workflow,
-        action: models.Action,
-        context: Dict,
-    ):
-        """Get the context dictionary to render the GET request.
+    def get_context_data(self, **kwargs) -> Dict:
+        """Add additional elements to the render context.
 
-        :param workflow: Workflow being used
-        :param action: Action being used
-        :param context: Initial dictionary to extend
-        :return: Nothing
+        :return: Modify the context
         """
-        self.add_conditions(action, context)
-        self.add_conditions_to_clone(action, context)
-        self.add_columns_show_stats(action, context)
+        context = super().get_context_data(**kwargs)
+        self.add_conditions(context)
+        self.add_conditions_to_clone(context)
+        self.add_columns_show_stats(context)
+        return context
+
+
+class ActionRunProducerEmail(ActionRunProducerBase):
+    """Class to Run Email Actions."""
+
+    # Type of event to log when running the action
+    log_event = models.Log.ACTION_RUN_PERSONALIZED_EMAIL
 
     def execute_operation(
         self,
@@ -401,28 +405,23 @@ class ActionManagerEmail(ActionOutEditManager, ActionRunManager):
         self._update_excluded_items(payload, [msg.to[0] for msg in msgs])
 
 
-class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
+class ActionEditProducerEmailReport(ActionOutEditProducerBase):
     """Class to serve running an email action."""
 
-    def extend_edit_context(
-        self,
-        workflow: models.Workflow,
-        action: models.Action,
-        context: Dict,
-    ):
-        """Extend the context dictionary to render the GET request.
+    def get_context_data(self, **kwargs) -> Dict:
+        """Add attachments and available views."""
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'attachments': self.action.attachments.all(),
+            'available_views': self.action.workflow.views.exclude(
+                id__in=self.action.attachments.all())})
+        return context
 
-        It adds the attachments in the action, and the views available to
-        attach (those in the workflow not in the action)
 
-        :param workflow: Workflow being used
-        :param action: Action being used
-        :param context: Initial dictionary to extend
-        :return: Nothing
-        """
-        context['attachments'] = action.attachments.all()
-        context['available_views'] = workflow.views.exclude(
-            id__in=action.attachments.all())
+class ActionRunProducerEmailReport(ActionRunProducerBase):
+    """Class to serve running an email action."""
+
+    log_event = models.Log.ACTION_RUN_EMAIL_REPORT
 
     def execute_operation(
         self,
@@ -457,10 +456,14 @@ class ActionManagerEmailReport(ActionOutEditManager, ActionRunManager):
         bcc_email = _check_email_list(payload['bcc_email'])
 
         # Context to log the events
+        from_field = user.email
+        if str(ontask_settings.OVERRIDE_FROM_ADDRESS):
+            from_field = str(ontask_settings.OVERRIDE_FROM_ADDRESS)
+
         msg = _create_single_message(
             [action_text, payload['subject'], payload['email_to']],
             '',
-            user.email,
+            from_field,
             cc_email,
             bcc_email,
             attachments=action.attachments.all(),
