@@ -1,3 +1,19 @@
+# 10.0 (2023-??)
+
+## Fixed
+
+- Adjusted tests to use the new signing functionality in Django
+
+- Removed references to Summernote in fixtures
+
+## Changed
+
+- Replaced Summernote HTML editor by TinyMCE
+
+- Migrated to Django 4 (LTS)
+
+- Upgraded libraries
+
 # 9.0 (2022-09-25)
 
 ## Fixed

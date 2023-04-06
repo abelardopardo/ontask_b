@@ -630,6 +630,9 @@ class TutorialCaptures(ScreenTests):
         ).click()
 
         self.wait_close_modal_refresh_table('column-selected-table_previous')
+        WebDriverWait(self.selenium, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//button[normalize-space()="Create question"]')))
 
         # Create the second column
         self.selenium.find_element(

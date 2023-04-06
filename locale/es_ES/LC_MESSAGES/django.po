@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 13:05+0930\n"
-"PO-Revision-Date: 2022-09-25 13:11+0930\n"
+"POT-Creation-Date: 2023-04-06 22:03+0930\n"
+"PO-Revision-Date: 2023-04-06 22:11+0930\n"
 "Last-Translator: Abelardo Pardo <abelardo.pardo@gmail.com>\n"
 "Language-Team: Abelardo Paro\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ontask/__init__.py:148
 msgid "The symbol ' cannot be used in the name."
@@ -58,41 +58,41 @@ msgstr "Introducir clave"
 msgid "Log in"
 msgstr "Iniciar sesión"
 
-#: ontask/accounts/forms.py:98
+#: ontask/accounts/forms.py:96
 msgid "No password set."
 msgstr "No se ha definido clave."
 
-#: ontask/accounts/forms.py:104
+#: ontask/accounts/forms.py:102
 msgid "Invalid password format or unknown hashing algorithm."
 msgstr "Formato de clave inválido, o programa de hashing desconocido."
 
-#: ontask/accounts/forms.py:106
+#: ontask/accounts/forms.py:104
 msgid "*************"
 msgstr "*************"
 
-#: ontask/accounts/forms.py:121
+#: ontask/accounts/forms.py:119
 msgid "The two password fields didn't match."
 msgstr "Las dos palabras clave no son idénticas."
 
-#: ontask/accounts/forms.py:123
+#: ontask/accounts/forms.py:121
 #, python-format
 msgid "A user with that %(username)s already exists."
 msgstr "Ya existe un usuario con nombre  %(username)s."
 
-#: ontask/accounts/forms.py:126 ontask/accounts/forms.py:191
+#: ontask/accounts/forms.py:124 ontask/accounts/forms.py:190
 #: ontask/connection/forms.py:71 ontask/models/sqlconnection.py:56
 msgid "Password"
 msgstr "Clave"
 
-#: ontask/accounts/forms.py:130
+#: ontask/accounts/forms.py:128
 msgid "Password confirmation"
 msgstr "Confirmación de clave"
 
-#: ontask/accounts/forms.py:132
+#: ontask/accounts/forms.py:130
 msgid "Enter the same password as above, for verification."
 msgstr "Introduzca la misma clave que arriba, para verificarla."
 
-#: ontask/accounts/views.py:257
+#: ontask/accounts/views.py:216
 msgid ""
 "Your password was changed, hence you have been logged out. Please relogin"
 msgstr ""
@@ -102,8 +102,8 @@ msgstr ""
 msgid "Incorrect type of action"
 msgstr "Tipo de acción incorrecta"
 
-#: ontask/action/evaluate/template.py:308
-#: ontask/action/evaluate/template.py:312
+#: ontask/action/evaluate/template.py:309
+#: ontask/action/evaluate/template.py:313
 #, python-brace-format
 msgid "Name {0} is reserved."
 msgstr "El nombre {0} está reservado."
@@ -120,27 +120,27 @@ msgstr "Fichero que contiene acciones previamente exportada"
 msgid "File containing a previously exported action"
 msgstr "Fichero que contiene una acción previamente exportada"
 
-#: ontask/action/forms/crud.py:122
+#: ontask/action/forms/crud.py:126
 msgid "Comma separated list of levels of attainment"
 msgstr "Lista de valores permitidos separados por comas"
 
-#: ontask/action/forms/crud.py:145
+#: ontask/action/forms/crud.py:149
 msgid "The number of levels cannot change."
 msgstr "El número de niveles no puede cambiar."
 
-#: ontask/action/forms/edit.py:43
+#: ontask/action/forms/edit.py:44
 msgid "Target URL"
 msgstr "URL Destino"
 
-#: ontask/action/forms/edit.py:50
+#: ontask/action/forms/edit.py:51
 msgid "URL to send the JSON object"
 msgstr "URL para enviar el objeto JSON"
 
-#: ontask/action/forms/edit.py:60
+#: ontask/action/forms/edit.py:61
 msgid "Write a JSON object"
 msgstr "Introduzca un objeto JSON"
 
-#: ontask/action/forms/edit.py:70
+#: ontask/action/forms/edit.py:71
 msgid "Write a plain text message"
 msgstr "Escriba un mensaje en texto plano"
 
@@ -179,62 +179,62 @@ msgstr "¿Comprobar/excluir elementos antes de enviarlos?"
 msgid "Allows a last minute check and select some elements to be excluded."
 msgstr "Permite eliminar algunos elementos antes de ejecutar."
 
-#: ontask/action/forms/run.py:204
+#: ontask/action/forms/run.py:203
 msgid "Column needs to have all unique values (no empty cells)"
 msgstr "La columna no tiene valores únicos en cada celda."
 
-#: ontask/action/forms/run.py:215
+#: ontask/action/forms/run.py:214
 msgid "Authentication Token"
 msgstr "Ficha de autenticación"
 
-#: ontask/action/forms/run.py:226
+#: ontask/action/forms/run.py:225
 msgid "Authentication token provided by the external platform."
 msgstr "Ficha de autenticación obtenida de la plataforma externa."
 
-#: ontask/action/forms/run.py:245
+#: ontask/action/forms/run.py:244
 msgid "Send you a summary message?"
 msgstr "¿Enviar un mensaje con el resúmen de envios?"
 
-#: ontask/action/forms/run.py:250
+#: ontask/action/forms/run.py:249
 msgid "Track email reading in an extra column?"
 msgstr "¿Rastrear la lectura del correo en una columna extra?"
 
-#: ontask/action/forms/run.py:251
+#: ontask/action/forms/run.py:250
 msgid "Adds an extra column to the workflow. Results are aproximate."
 msgstr "Añade una columna extra al flujo. Los resultados son aproximados."
 
-#: ontask/action/forms/run.py:259 ontask/action/forms/run.py:314
+#: ontask/action/forms/run.py:258 ontask/action/forms/run.py:313
 msgid "Column to use for target email address"
 msgstr "Columna con la dirección de correo"
 
-#: ontask/action/forms/run.py:296
+#: ontask/action/forms/run.py:295
 #, python-brace-format
 msgid "Incorrect email address \"{0}\"."
 msgstr "Direcciones de correo incorrectas “{0}."
 
-#: ontask/action/forms/run.py:301 ontask/scheduler/serializers.py:175
+#: ontask/action/forms/run.py:300 ontask/scheduler/serializers.py:175
 msgid "The column with email addresses has incorrect values."
 msgstr "La columna con las direcciones de correo tiene valores incorrectos."
 
-#: ontask/action/forms/run.py:330
+#: ontask/action/forms/run.py:329
 msgid "Recipient"
 msgstr "Destinatario"
 
-#: ontask/action/forms/run.py:351
+#: ontask/action/forms/run.py:350
 msgid "Field needs a valid email address."
 msgstr "Este campo necesita una dirección de correo válida."
 
-#: ontask/action/forms/run.py:376
+#: ontask/action/forms/run.py:375
 msgid "Column to use for file name prefix (Full name if Moodle ZIP)"
 msgstr ""
 "Columna a usar para el prefijo de fichero (“Full name” si el ZIP es para "
 "Moodle)"
 
-#: ontask/action/forms/run.py:388
+#: ontask/action/forms/run.py:387
 msgid "This ZIP will be uploaded to Moodle as feedback"
 msgstr "Este ZIP será cargado en Moodle como feedback"
 
-#: ontask/action/forms/run.py:395
+#: ontask/action/forms/run.py:394
 msgid "Key column to use for file name prefix (Participant id if Moodle ZIP)"
 msgstr ""
 "Columna clave de la que extraer el prefijo del nombre de fichero "
@@ -248,99 +248,100 @@ msgstr "Las dos columnas deben ser diferentes"
 msgid "A Moodle ZIP requires two column names"
 msgstr "Un ZIP para Moodle requiere dos columnas"
 
-#: ontask/action/forms/run.py:468
+#: ontask/action/forms/run.py:465
 msgid "Values in column must have format \"Participant [number]\""
 msgstr ""
 "Los valores en la columna deben tener el formato “Participant [número]”"
 
-#: ontask/action/forms/run.py:491
+#: ontask/action/forms/run.py:488
 msgid "Canvas Host"
 msgstr "Servidor Canvas"
 
-#: ontask/action/forms/run.py:492
+#: ontask/action/forms/run.py:489
 msgid "Name of the Canvas host to send the messages"
 msgstr "Nombre del servidor Canvas al que mandar los mensajes"
 
-#: ontask/action/forms/run.py:496
+#: ontask/action/forms/run.py:493
 msgid "Column with the Canvas ID"
 msgstr "Columna con identificadores de usuario Canvas"
 
-#: ontask/action/forms/run.py:498
+#: ontask/action/forms/run.py:495
 msgid "Check/Exclude Canvas IDs before sending?"
 msgstr "¿Comprobar/excluir identificadores de Canvas antes de enviar?"
 
-#: ontask/action/forms/run.py:520
+#: ontask/action/forms/run.py:516
 msgid "No Canvas Service available for this action."
 msgstr "No hay ningún servicio Canvas disponible para esta acción."
 
-#: ontask/action/forms/run.py:535
+#: ontask/action/forms/run.py:530
 msgid "The column does not contain valid Canvas IDs."
 msgstr "La columna no contiene identificadores de Canvas válidos."
 
-#: ontask/action/forms/run.py:562
+#: ontask/action/forms/run.py:557
 msgid "Column to exclude objects to send (empty to skip step)"
 msgstr "Columna para excluir objetos del envío (vacío para saltar este paso)"
 
-#: ontask/action/forms/run.py:602
+#: ontask/action/forms/run.py:597
 msgid "Values to exclude"
 msgstr "Valores a excluir"
 
-#: ontask/action/forms/run.py:637 ontask/action/forms/run.py:640
+#: ontask/action/forms/run.py:634 ontask/action/forms/run.py:637
 #: ontask/column/forms.py:147 ontask/column/forms.py:148
 msgid "Incorrect date/time window"
 msgstr "Intervalo de fecha/hora incorrecto"
 
-#: ontask/action/serializers/basic.py:231
-#, python-brace-format
-msgid "Incorrect column name {0}."
+#: ontask/action/serializers/basic.py:228
+#, fuzzy
+#| msgid "Incorrect column name {0}."
+msgid "Incorrect column name."
 msgstr "Nombre de columna incorrecto {0}."
 
-#: ontask/action/serializers/basic.py:240
+#: ontask/action/serializers/basic.py:238
 #, python-brace-format
 msgid "Action contains non-existing key column \"{0}\""
 msgstr "La nueva acción tiene una columna “{0}” que no existe"
 
-#: ontask/action/serializers/basic.py:253
+#: ontask/action/serializers/basic.py:251
 #, python-brace-format
 msgid "Imported column {0} is different from existing one."
 msgstr "La columna importada {0} es diferente de la ya existente."
 
-#: ontask/action/serializers/basic.py:276
+#: ontask/action/serializers/basic.py:275
 msgid "The new action creates duplicate view names"
 msgstr "La nueva acción crea vistas con nombres duplicados"
 
-#: ontask/action/serializers/basic.py:290
+#: ontask/action/serializers/basic.py:288
 msgid "Unable to import action  in a workflow with and empty data table"
 msgstr "La acción no se puede importar en un flujo sin datos en la tabla"
 
-#: ontask/action/serializers/basic.py:298
+#: ontask/action/serializers/basic.py:295
 #, python-brace-format
 msgid "Action with name \"{0}\" already exists"
 msgstr "Una acción con nombre “{0}” ya existe"
 
-#: ontask/action/services/canvas_email.py:62
+#: ontask/action/services/canvas_email.py:60
 msgid "OAuth token refreshed"
 msgstr "Autenticador OAuth renovado"
 
-#: ontask/action/services/canvas_email.py:111
+#: ontask/action/services/canvas_email.py:109
 msgid "Unable to obtain Canvas OAuth information"
 msgstr "Incapaz de obtener la información de Canvas OAuth"
 
-#: ontask/action/services/canvas_email.py:137
+#: ontask/action/services/canvas_email.py:134
 #, python-brace-format
 msgid "Error when invoking Canvas API: {0}."
 msgstr "Error al invocar Canvas API: {0}"
 
-#: ontask/action/services/canvas_email.py:158
+#: ontask/action/services/canvas_email.py:155
 msgid "Message successfuly sent"
 msgstr "Mensaje enviado"
 
-#: ontask/action/services/canvas_email.py:182
+#: ontask/action/services/canvas_email.py:177
 #, python-brace-format
 msgid "Unable to deliver message (code {0})"
 msgstr "No se puede enviar el mensaje: (código {0})"
 
-#: ontask/action/services/canvas_email.py:209
+#: ontask/action/services/canvas_email.py:203
 #: ontask/action/services/run_factory.py:149
 #: ontask/templates/action/action_zip_step1.html:35
 #: ontask/templates/action/request_email_data.html:36
@@ -350,11 +351,11 @@ msgstr "No se puede enviar el mensaje: (código {0})"
 msgid "Send"
 msgstr "Enviar"
 
-#: ontask/action/services/canvas_email.py:260
+#: ontask/action/services/canvas_email.py:253
 msgid "Unable to find OAuth Information Record"
 msgstr "No se ha encontrado información de OAuth para este elemento"
 
-#: ontask/action/services/canvas_email.py:269
+#: ontask/action/services/canvas_email.py:261
 msgid "Incorrect execution due to absence of token"
 msgstr "Ejecución incorrecta debido a la ausencia de token"
 
@@ -368,26 +369,26 @@ msgstr "Error de sintaxis detectado en la plantilla ({0})"
 msgid "Error when sending the notification: {0}"
 msgstr "Se ha producido un error al enviar la notificación: {0}"
 
-#: ontask/action/services/email.py:109
+#: ontask/action/services/email.py:108
 #, python-brace-format
 msgid "Invalid email address \"{0}\"."
 msgstr "Dirección de correo incorrecta “{0}."
 
-#: ontask/action/services/email.py:479
+#: ontask/action/services/email.py:477
 #, python-brace-format
 msgid "Error when sending the list email: {0}"
 msgstr "Se ha producido un error al enviar el correo: {0}"
 
-#: ontask/action/services/import_export.py:108
+#: ontask/action/services/import_export.py:106
 msgid "Incorrect file. Expecting a GZIP file (exported action)."
 msgstr "Fichero incorrecto. Se espera un fichero GZIP (acción exportada)."
 
-#: ontask/action/services/import_export.py:122
+#: ontask/action/services/import_export.py:120
 #, python-brace-format
 msgid "Unable to import action: {0}"
 msgstr "No se puede importar la acción: {0}"
 
-#: ontask/action/services/preview.py:148
+#: ontask/action/services/preview.py:146
 #, python-brace-format
 msgid "Error while retrieving content (index: {0})"
 msgstr "Error al acceder el contenido (índice: {0})"
@@ -400,18 +401,18 @@ msgstr "Criterio"
 msgid "Inconsistent LOA in rubric criteria"
 msgstr "El nivel alcanzado es inconsistente en el criterio de la rúbrica"
 
-#: ontask/action/services/serve_action.py:46
-#: ontask/action/services/serve_action.py:65
+#: ontask/action/services/serve_action.py:45
+#: ontask/action/services/serve_action.py:64
 #, python-brace-format
 msgid "Error when evaluating conditions for user {0}"
 msgstr "Error al evaluar las condiciones para el usuario {0}"
 
-#: ontask/action/services/serve_action.py:102
-#: ontask/action/services/serve_action.py:111
+#: ontask/action/services/serve_action.py:101
+#: ontask/action/services/serve_action.py:108
 msgid "Unable to find survey data."
 msgstr "No se ha encontrado la información del questionario."
 
-#: ontask/action/services/serve_action.py:114
+#: ontask/action/services/serve_action.py:111
 msgid "Data not found in the table"
 msgstr "No se han encontrado datos en la tabla"
 
@@ -448,7 +449,7 @@ msgstr "Operaciones"
 msgid "Action successfully cloned."
 msgstr "Acción duplicada con éxito."
 
-#: ontask/action/views/action.py:180
+#: ontask/action/views/action.py:179
 msgid "Action successfully deleted."
 msgstr "Acción borrada con éxito."
 
@@ -544,7 +545,7 @@ msgstr "Ya hay una columna con este nombre"
 #: ontask/column/forms.py:122
 msgid "Changes not allowed. Column is part of rubric action"
 msgstr ""
-"Los cambios no se permiten. La columna es parte de una rúbrica en una acción."
+"No se permiten cambios. La columna es parte de una rúbrica en una acción"
 
 #: ontask/column/forms.py:184
 msgid "Value to assign to all cells in the column"
@@ -727,12 +728,12 @@ msgstr "any: Cierto si algún elemento de las columnas seleccionadas es cierto"
 msgid "Cannot add column to a workflow without data"
 msgstr "No es posible añadir una columna a un flujo sin datos"
 
-#: ontask/column/views/crud.py:259
+#: ontask/column/views/crud.py:256
 #, python-brace-format
 msgid "Unable to add random column: {0}"
 msgstr "Imposible añadir columna con números aleatorios: {0}"
 
-#: ontask/column/views/crud.py:353
+#: ontask/column/views/crud.py:350
 #, python-brace-format
 msgid "Unable to clone column: {0}"
 msgstr "Imposible clonar la columna: {0}"
@@ -761,11 +762,11 @@ msgstr "El flujo tiene un atributo con este nombre."
 msgid "Incorrect invocation of set view as filter"
 msgstr "Llamada incorrecta a la función para asignar una vista como filtro"
 
-#: ontask/condition/views.py:248
+#: ontask/condition/views.py:255
 msgid "Incorrect action id."
 msgstr "Identificador de acción incorrecto."
 
-#: ontask/condition/views.py:264
+#: ontask/condition/views.py:271
 msgid "Condition successfully cloned."
 msgstr "La condiciono ha sido duplicada con éxito."
 
@@ -807,12 +808,12 @@ msgid "Enabled?"
 msgstr "¿Activado?"
 
 #: ontask/connection/urls.py:15 ontask/connection/urls.py:22
-#: ontask/scheduler/views/index.py:43 ontask/templates/base.html:138
+#: ontask/scheduler/views/index.py:43 ontask/templates/base.html:131
 msgid "SQL Connections"
 msgstr "Conexiones SQL"
 
 #: ontask/connection/urls.py:62 ontask/connection/urls.py:69
-#: ontask/templates/base.html:143
+#: ontask/templates/base.html:136
 msgid "Athena Connections"
 msgstr "Conexiones a Athena"
 
@@ -1072,13 +1073,13 @@ msgid "Evaluation error: Type {0} not allowed with operator BETWEEN"
 msgstr ""
 "Error de evaluación: El tipo {0} no está permitido con el operador BETWEEN"
 
-#: ontask/dataops/pandas/database.py:151 ontask/dataops/pandas/database.py:193
+#: ontask/dataops/pandas/database.py:150 ontask/dataops/pandas/database.py:192
 #: ontask/dataops/sql/column_queries.py:142
 #, python-brace-format
 msgid "Column name is longer than {0} characters"
 msgstr "El nombre de la columna el más largo de {0} letras"
 
-#: ontask/dataops/pandas/database.py:188
+#: ontask/dataops/pandas/database.py:187
 msgid ""
 "The data has no column with unique values per row. At least one column must "
 "have unique values."
@@ -1285,7 +1286,7 @@ msgstr ""
 #: ontask/dataops/services/plugin_admin.py:256
 #: ontask/dataops/services/plugin_admin.py:321
 #: ontask/templates/action/includes/partial_action_show_url.html:29
-#: ontask/templates/base.html:237
+#: ontask/templates/base.html:230
 #: ontask/templates/workflow/includes/partial_workflow_flush.html:31
 msgid "Ok"
 msgstr "De acuerdo"
@@ -1628,46 +1629,46 @@ msgstr "Enviar Informe  en JSON"
 msgid "TODO List"
 msgstr "Lista"
 
-#: ontask/models/action.py:113
+#: ontask/models/action.py:103
 msgid "Action available from"
 msgstr "Acción disponible desde"
 
-#: ontask/models/action.py:119
+#: ontask/models/action.py:109
 msgid "Action available until"
 msgstr "Acción disponible hasta"
 
-#: ontask/models/action.py:289
+#: ontask/models/action.py:279
 msgid "URL available to users?"
 msgstr "¿URL disponible a los usuarios?"
 
-#: ontask/models/action.py:302
+#: ontask/models/action.py:292
 msgid "Email attachments"
 msgstr "Adjuntos al mensaje"
 
-#: ontask/models/action.py:489 ontask/templates/action/edit_in.html:178
+#: ontask/models/action.py:479 ontask/templates/action/edit_in.html:178
 msgid "Shuffle questions?"
 msgstr "¿Barajar las preguntas?"
 
-#: ontask/models/action.py:520
+#: ontask/models/action.py:510
 msgid "Action cannot run because it needs a valid URL."
 msgstr "La acción no se puede ejecutar porque necesita una URL válida."
 
-#: ontask/models/action.py:527
+#: ontask/models/action.py:517
 msgid "Action cannot run because it has an incorrect URL."
 msgstr "La acción no se puede ejecutar porque tiene una URL incorrecta."
 
-#: ontask/models/action.py:534
+#: ontask/models/action.py:524
 msgid "Action cannot run because it needs a key column."
 msgstr "La acción no puede ejecutarse porque necesita una columna clave."
 
-#: ontask/models/action.py:537
+#: ontask/models/action.py:527
 msgid "Action cannot run because it has no questions."
 msgstr "La acción no se puede ejecutar porque no tienen ninguna pregunta."
 
-#: ontask/models/action.py:541
+#: ontask/models/action.py:531
 #, python-brace-format
 msgid "Action type {0} cannot be executed."
-msgstr "La acción de tipo {0} no se puede ejecutar"
+msgstr "La acción de tipo {0} no se puede ejecutar."
 
 #: ontask/models/actioncolumnconditiontuple.py:53
 msgid "Allow changes?"
@@ -2317,11 +2318,11 @@ msgstr "usuario"
 msgid "users"
 msgstr "usuarios"
 
-#: ontask/models/view.py:37
+#: ontask/models/view.py:35
 msgid "Subset of columns to show"
 msgstr "Subconjunto de columnas a mostrar"
 
-#: ontask/models/view.py:61
+#: ontask/models/view.py:59
 msgid "Incorrect use of view.formula."
 msgstr "Uso incorrecto de view.formula."
 
@@ -2580,7 +2581,7 @@ msgstr "Varios"
 msgid "URL prefix to access the documentation"
 msgstr "URL Prefijo para acceder a la documentación"
 
-#: ontask/signals.py:27
+#: ontask/signals.py:26
 #, python-format
 msgid "New ontask user profile for %s created"
 msgstr "Nuevo perfil de usuario OnTask creado para %s"
@@ -2789,13 +2790,13 @@ msgstr ""
 "¡Vaya! La plataforma ha tenido un error interno. Lo lamentamos. Esperamos  "
 "solventar esta anomalía pronto."
 
-#: ontask/templates/_navbar.html:3 ontask/templates/base.html:170
+#: ontask/templates/_navbar.html:3 ontask/templates/base.html:163
 msgid "About"
 msgstr "Conózcanos"
 
 #: ontask/templates/accounts/auth_base.html:9
-msgid "Clariate Login"
-msgstr "Login en Clariate"
+msgid "OnTask Login"
+msgstr "Sesión en OnTask"
 
 #: ontask/templates/accounts/emails/password-reset-email.html:2
 #, python-format
@@ -2843,6 +2844,22 @@ msgid "The importance of personalisation"
 msgstr "La importancia de la personalización"
 
 #: ontask/templates/accounts/login.html:15
+#, fuzzy
+#| msgid ""
+#| "Learners are more likely to have an effective\n"
+#| "          experience\n"
+#| "          when their environment is personalised. Resources, comments,\n"
+#| "          suggestions and feedback that take into account the reality of "
+#| "each\n"
+#| "          learner are much more effective than those addressing an "
+#| "entire\n"
+#| "          cohort. But personalisation has traditionally been based on "
+#| "highly\n"
+#| "          detailed pre-conceived models of learner behaviour. Clariate "
+#| "offers an\n"
+#| "          environment to personalise resources based on data collected "
+#| "from any\n"
+#| "          learning environment."
 msgid ""
 "Learners are more likely to have an effective\n"
 "          experience\n"
@@ -2852,8 +2869,8 @@ msgid ""
 "          learner are much more effective than those addressing an entire\n"
 "          cohort. But personalisation has traditionally been based on "
 "highly\n"
-"          detailed pre-conceived models of learner behaviour. Clariate "
-"offers an\n"
+"          detailed pre-conceived models of learner behaviour. OnTask offers "
+"an\n"
 "          environment to personalise resources based on data collected from "
 "any\n"
 "          learning environment."
@@ -2872,13 +2889,24 @@ msgid "The importance of feedback"
 msgstr "La importancia de la realimentación"
 
 #: ontask/templates/accounts/login.html:28
+#, fuzzy
+#| msgid ""
+#| "Feedback is more effective when framed as a\n"
+#| "          dialogue. But such\n"
+#| "          dialogue will be highly dependent on the personal situation of "
+#| "each\n"
+#| "          learner. How can we combine knowledge about the learners with "
+#| "the\n"
+#| "          need to have personalised interaction? Clariate will help "
+#| "instructors\n"
+#| "          and learners to initiate this dialogue."
 msgid ""
 "Feedback is more effective when framed as a\n"
 "          dialogue. But such\n"
 "          dialogue will be highly dependent on the personal situation of "
 "each\n"
 "          learner. How can we combine knowledge about the learners with the\n"
-"          need to have personalised interaction? Clariate will help "
+"          need to have personalised interaction? OnTask will help "
 "instructors\n"
 "          and learners to initiate this dialogue."
 msgstr ""
@@ -2893,6 +2921,20 @@ msgid "The importance of data"
 msgstr "La importancia de los datos"
 
 #: ontask/templates/accounts/login.html:37
+#, fuzzy
+#| msgid ""
+#| "In the era of technology-mediated learning, data is\n"
+#| "          ubiquitous. But instead of providing instantaneous benefits,\n"
+#| "          this abundance brings a serious challenge to tranform data "
+#| "into\n"
+#| "        actionable knowledge. It is not enough to have data, it is "
+#| "essential\n"
+#| "          to use data to support a clearly identified objective in the\n"
+#| "          learning environment. How can this support be articulated?\n"
+#| "          How can it be used in multiple environments? Clariate\n"
+#| "        establishes this connection between data and its use to provide "
+#| "a\n"
+#| "          scalable solution to learning personalisation."
 msgid ""
 "In the era of technology-mediated learning, data is\n"
 "          ubiquitous. But instead of providing instantaneous benefits,\n"
@@ -2901,7 +2943,7 @@ msgid ""
 "essential\n"
 "          to use data to support a clearly identified objective in the\n"
 "          learning environment. How can this support be articulated?\n"
-"          How can it be used in multiple environments? Clariate\n"
+"          How can it be used in multiple environments? OnTask\n"
 "        establishes this connection between data and its use to provide a\n"
 "          scalable solution to learning personalisation."
 msgstr ""
@@ -3503,31 +3545,31 @@ msgstr "Crear criterio/columna"
 msgid "Rubric"
 msgstr "Rúbrica"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:9
+#: ontask/templates/action/includes/partial_text_editor_tab_body.html:9
 msgid "Insert rubric text"
 msgstr "Insertar texto de la rúbrica"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:13
+#: ontask/templates/action/includes/partial_text_editor_tab_body.html:13
 msgid "Insert Table"
 msgstr "Añadir Tabla"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:19
+#: ontask/templates/action/includes/partial_text_editor_tab_body.html:19
 msgid "Insert Column Value"
 msgstr "Añadir valor de columna"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:36
+#: ontask/templates/action/includes/partial_text_editor_tab_body.html:36
 msgid "Use condition in highlighted text"
 msgstr "Utilizar condición en el texto resaltado"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:38
+#: ontask/templates/action/includes/partial_text_editor_tab_body.html:38
 msgid "Insert condition in text"
 msgstr "Insertar condición en el texto"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_body.html:56
+#: ontask/templates/action/includes/partial_text_editor_tab_body.html:56
 msgid "Insert Attribute"
 msgstr "Añadir attributo"
 
-#: ontask/templates/action/includes/partial_text_summernote_tab_li.html:5
+#: ontask/templates/action/includes/partial_text_editor_tab_li.html:5
 msgid "Text"
 msgstr "Texto"
 
@@ -3665,7 +3707,7 @@ msgstr "Ver contenido del registro"
 
 #: ontask/templates/admin/admin_title.html:1
 #: ontask/templates/admin/base_site.html:6
-#: ontask/templates/admin/base_site.html:8 ontask/templates/base.html:121
+#: ontask/templates/admin/base_site.html:8 ontask/templates/base.html:114
 msgid "Admin"
 msgstr "Admin"
 
@@ -3731,133 +3773,121 @@ msgid "Run Model"
 msgstr "Ejecutar modelo"
 
 #: ontask/templates/base.html:94
-#: ontask/templates/workflow/includes/partial_workflow_card.html:34
-#: ontask/templates/workflow/includes/workflow_basic_buttons.html:20
-#: ontask/templates/workflow/includes/workflow_operation_buttons.html:25
-msgid "Delete the data in the table of this workflow"
-msgstr "Borrar los datos en la tabla de este flujo"
-
-#: ontask/templates/base.html:95
-#: ontask/templates/workflow/includes/workflow_operation_buttons.html:26
-msgid "Flush data table"
-msgstr "Borrar datos"
-
-#: ontask/templates/base.html:101
 msgid "More"
 msgstr "Más"
 
-#: ontask/templates/base.html:104
+#: ontask/templates/base.html:97
 msgid "Workflow operations"
 msgstr "Operaciones para el flujo"
 
-#: ontask/templates/base.html:105
+#: ontask/templates/base.html:98
 msgid "Column operations"
 msgstr "Operaciones para las columnas"
 
-#: ontask/templates/base.html:106 ontask/templates/scheduler/index.html:8
+#: ontask/templates/base.html:99 ontask/templates/scheduler/index.html:8
 #: ontask/templates/scheduler/schedule_done.html:12
 msgid "Scheduled operations"
 msgstr "Operaciones planificadas"
 
-#: ontask/templates/base.html:107
+#: ontask/templates/base.html:100
 msgid "View logs"
 msgstr "Ver eventos"
 
-#: ontask/templates/base.html:127
+#: ontask/templates/base.html:120
 msgid "Change platform configuration parameters"
 msgstr "Cambiar los parámetros de configuración de la plataforma"
 
-#: ontask/templates/base.html:128
+#: ontask/templates/base.html:121
 msgid "Settings"
 msgstr "Configuración"
 
-#: ontask/templates/base.html:132
+#: ontask/templates/base.html:125
 msgid "Manage the platform database"
 msgstr "Gestión de base de datos"
 
-#: ontask/templates/base.html:133
+#: ontask/templates/base.html:126
 msgid "DB Admin"
 msgstr "Admin Base de Datos"
 
-#: ontask/templates/base.html:137
+#: ontask/templates/base.html:130
 msgid "Connections to SQL databases"
 msgstr "Conexiones a bases de datos SQL"
 
-#: ontask/templates/base.html:142
+#: ontask/templates/base.html:135
 msgid "Connections to Athena databases"
 msgstr "Conexiones a bases de datos Athena"
 
-#: ontask/templates/base.html:147
+#: ontask/templates/base.html:140
 msgid "Available Plugins"
 msgstr "Plugins disponibles"
 
-#: ontask/templates/base.html:148 ontask/templates/dataops/plugin_admin.html:43
+#: ontask/templates/base.html:141 ontask/templates/dataops/plugin_admin.html:43
 msgid "Plugins"
 msgstr "Plugins"
 
-#: ontask/templates/base.html:162
+#: ontask/templates/base.html:155
 msgid "User Profile"
 msgstr "Perfil de usuario"
 
-#: ontask/templates/base.html:162 ontask/templates/profiles/edit_profile.html:6
+#: ontask/templates/base.html:155 ontask/templates/profiles/edit_profile.html:6
 #: ontask/templates/profiles/show_profile.html:5
 #: ontask/templates/profiles/show_profile.html:27
 msgid "Profile"
 msgstr "Perfil"
 
-#: ontask/templates/base.html:166 ontask/templates/base.html:266
+#: ontask/templates/base.html:159 ontask/templates/base.html:259
 msgid "Logout"
 msgstr "Desconectar"
 
-#: ontask/templates/base.html:172
+#: ontask/templates/base.html:165
 msgid "Contact"
 msgstr "Contacte"
 
-#: ontask/templates/base.html:183
+#: ontask/templates/base.html:176
 msgid "OnTask Manual"
 msgstr "Manual de OnTask"
 
-#: ontask/templates/base.html:183
+#: ontask/templates/base.html:176
 msgid "Manual"
 msgstr "Manual"
 
-#: ontask/templates/base.html:187
+#: ontask/templates/base.html:180
 msgid "API documentation"
 msgstr "Documentación de la API"
 
-#: ontask/templates/base.html:187
+#: ontask/templates/base.html:180
 msgid "API Docs"
 msgstr "Documentación de la API"
 
-#: ontask/templates/base.html:216
+#: ontask/templates/base.html:209
 msgid "This functionality has not been implemented yet."
 msgstr "Esta función todavía no se ha implementatdo."
 
-#: ontask/templates/base.html:228
+#: ontask/templates/base.html:221
 msgid "Your session is about to expire"
 msgstr "Su sesión está a punto de expirar"
 
-#: ontask/templates/base.html:231
+#: ontask/templates/base.html:224
 msgid "Your session will expire in"
 msgstr "Su sesión va a expirar en"
 
-#: ontask/templates/base.html:232
+#: ontask/templates/base.html:225
 msgid "seconds."
 msgstr "segundos."
 
-#: ontask/templates/base.html:248
+#: ontask/templates/base.html:241
 msgid "Version:"
 msgstr "Versión:"
 
-#: ontask/templates/base.html:248
+#: ontask/templates/base.html:241
 msgid "Accessibility"
 msgstr "Accesibilidad"
 
-#: ontask/templates/base.html:265
+#: ontask/templates/base.html:258
 msgid "Your session is about to expire."
 msgstr "Su sesión está a punto de expirar."
 
-#: ontask/templates/base.html:267
+#: ontask/templates/base.html:260
 msgid "Remain Connected"
 msgstr "Mantener la sesión"
 
@@ -5111,8 +5141,9 @@ msgid ""
 msgstr ""
 "Esta página muestra las operaciones a ejecutar en el futuro. Para "
 "planificar\n"
-"    la ejecución de una acción, ir al menú  <a href=\"%(actionindex)s"
-"\">Acciones</a> y selecciona la operación  <i>Planificar</i> en una de ellas."
+"    la ejecución de una acción, ir al menú  <a "
+"href=\"%(actionindex)s\">Acciones</a> y selecciona la operación  "
+"<i>Planificar</i> en una de ellas."
 
 #: ontask/templates/scheduler/schedule_done.html:4
 msgid "Operation scheduled"
@@ -5466,8 +5497,8 @@ msgid ""
 "  Actions</a> menu at the top bar to create actions to execute with the data "
 "in the table."
 msgstr ""
-"<strong>Siguiente paso:</strong> Click en el menú <a href="
-"\"%(actionindex)s”>\n"
+"<strong>Siguiente paso:</strong> Click en el menú <a "
+"href=\"%(actionindex)s”>\n"
 " Acciones</a> en la barra superior para crear acciones y ejecutarlas con los "
 "datos de la tabla."
 
@@ -5475,8 +5506,8 @@ msgstr ""
 #, python-format
 msgid ""
 "<strong>Next Step:</strong> The workflow data table is empty. Click in the "
-"Table link in the top menu and select the option to <a href=\"%(uploadmerge)s"
-"\">upload data to the\n"
+"Table link in the top menu and select the option to <a "
+"href=\"%(uploadmerge)s\">upload data to the\n"
 "  table</a>."
 msgstr ""
 "<strong>Siguiente paso:</strong> La tabla de datos en el flujo está vacía. "
@@ -5611,6 +5642,12 @@ msgstr "Cambiar el nombre y la descripción de este flujo"
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:18
 msgid "Create a duplicate of this workflow"
 msgstr "Crear un duplicado de este flujo"
+
+#: ontask/templates/workflow/includes/partial_workflow_card.html:34
+#: ontask/templates/workflow/includes/workflow_basic_buttons.html:20
+#: ontask/templates/workflow/includes/workflow_operation_buttons.html:25
+msgid "Delete the data in the table of this workflow"
+msgstr "Borrar los datos en la tabla de este flujo"
 
 #: ontask/templates/workflow/includes/partial_workflow_card.html:40
 #: ontask/templates/workflow/includes/workflow_basic_buttons.html:27
@@ -5757,6 +5794,10 @@ msgstr "Borrar datos"
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:5
 msgid "Export the workflow and its actions"
 msgstr "Exportar el flujo y sus acciones"
+
+#: ontask/templates/workflow/includes/workflow_operation_buttons.html:26
+msgid "Flush data table"
+msgstr "Borrar datos"
 
 #: ontask/templates/workflow/operations.html:68
 msgid "Workflow Operations"
@@ -5923,11 +5964,11 @@ msgstr "Flujo clonado con éxito."
 msgid "The list of workflow users will be updated shortly."
 msgstr "La lista de usuarios se actualizará en breve."
 
-#: settings/base.py:201
+#: settings/base.py:225
 msgid "English"
 msgstr "Inglés"
 
-#: settings/base.py:201
+#: settings/base.py:225
 msgid "Spanish"
 msgstr "Español"
 
@@ -5939,6 +5980,9 @@ msgstr ""
 "La API de OnTask ofrece funcionalidad para manipular los flujos, tablas y "
 "registros. El interfaz provee operaciones CRUD (crear, leer, actualizar y "
 "borrar) sobre estos objetos."
+
+#~ msgid "Clariate Login"
+#~ msgstr "Login en Clariate"
 
 #, fuzzy
 #~| msgid "Action cloned"
@@ -6065,9 +6109,6 @@ msgstr ""
 
 #~ msgid "Preselect rows satisfying this condition"
 #~ msgstr "Preseleccionar las filas que satisfacen esta condición"
-
-#~ msgid "OnTask Login"
-#~ msgstr "Sesión en OnTask"
 
 #~ msgid "Edit the action"
 #~ msgstr "Editar acción"

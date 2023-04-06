@@ -968,10 +968,9 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
             By.XPATH,
             "//input[@id='id_execute']"
         )
-        self.selenium.execute_script(
-            "arguments[0].value = '2110-07-25 17:00:00';",
-            dt_widget
-        )
+        dt_widget.clear()
+        dt_widget.send_keys('2110-07-25 17:00:00')
+
         self.selenium.find_element(By.ID, 'id_token').send_keys(
             'afabkvaidlfvsidkfe..kekfioroelallasifjjf;alksid'
         )
@@ -1052,7 +1051,7 @@ class ScreenTestRubric(ScreenTestFixtureBasic):
         self.open_action_edit(action_name)
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.XPATH, '//div[contains(@class, "note-editable")]')
+                (By.XPATH, '//div[contains(@class, "tox-edit-area")]')
             )
         )
         self.body_ss('rubric_edit_text.png')

@@ -955,6 +955,8 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
             items = self.selenium.find_elements(
                 By.CLASS_NAME,
                 'js-rubric-cell-edit')
+            WebDriverWait(self.selenium, 10).until(
+                lambda driver: items[index].is_displayed())
             items[index].click()
             self.wait_for_modal_open()
             self.insert_string_in_text_editor(
