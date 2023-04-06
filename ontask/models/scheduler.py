@@ -1,14 +1,14 @@
 """Model is to store process to execute in the platform at a certain time."""
-from datetime import datetime
 import json
+from datetime import datetime
 from typing import Optional
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.db import models
 from django.db.models import JSONField
 from django.utils.translation import gettext_lazy as _
 from django_celery_beat.models import PeriodicTask
-import pytz
 
 from ontask import simplify_datetime_str
 from ontask.models.action import Action
@@ -160,7 +160,7 @@ class ScheduledOperation(Owner, NameAndDescription, CreateModifyFields):
             # Case 6
             return _('Frequency of execution is missing.')
 
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         if execute_until and execute_until < now:
             # Case 4 and 8 when current date/time is later
             return _('Execution times in the past. No execution possible.')

@@ -1,13 +1,13 @@
 """Service to manipulate scheduled items."""
-from datetime import datetime
 import json
+from datetime import datetime
 from typing import Dict, Optional
+from zoneinfo import ZoneInfo
 
 from cron_descriptor import CasingTypeEnum, ExpressionDescriptor
 from django.conf import settings
 from django.forms.models import model_to_dict
 from django.utils.translation import gettext
-import pytz
 
 from ontask import models
 
@@ -53,7 +53,7 @@ def create_timedelta_string(
     if diagnostic_msg:
         return None
 
-    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+    now = datetime.now(ZoneInfo(settings.TIME_ZONE))
 
     if ftime and not frequency and not utime:
         # Single execution

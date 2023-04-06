@@ -1,5 +1,6 @@
 """Test to verify that the scheduled actions are properly executed."""
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from celery.contrib.testing.worker import start_worker
 from django.conf import settings
@@ -7,7 +8,6 @@ from django.contrib.auth import get_user_model
 from django.core import mail
 from django.db import connection
 from psycopg2 import sql
-import pytz
 
 from ontask import OnTaskSharedState, models, tasks, tests
 from ontask.celery import app
@@ -46,7 +46,7 @@ class ScheduledOperationTaskEmailAction(ScheduledOperationTaskBasic):
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
         action = models.Action.objects.get(name='send email')
 
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         scheduled_item = models.ScheduledOperation(
             user=user,
             operation_type=models.Log.ACTION_RUN_PERSONALIZED_EMAIL,
@@ -91,7 +91,7 @@ class ScheduledOperationTaskJSONAction(ScheduledOperationTaskBasic):
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
         action = models.Action.objects.get(name='send json')
 
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         scheduled_item = models.ScheduledOperation(
             user=user,
             operation_type=models.Log.ACTION_RUN_PERSONALIZED_JSON,
@@ -128,7 +128,7 @@ class ScheduledOperationTaskEmailReport(ScheduledOperationTaskBasic):
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
         action = models.Action.objects.get(name='send list')
 
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         scheduled_item = models.ScheduledOperation(
             user=user,
             operation_type=models.Log.ACTION_RUN_EMAIL_REPORT,
@@ -170,7 +170,7 @@ class ScheduledOperationTaskJSONReport(ScheduledOperationTaskBasic):
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
         action = models.Action.objects.get(name='send json report')
 
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         scheduled_item = models.ScheduledOperation(
             user=user,
             operation_type=models.Log.ACTION_RUN_JSON_REPORT,
@@ -212,7 +212,7 @@ class ScheduledOperationTaskIncrementalEmail(ScheduledOperationTaskBasic):
         self.assertIsNotNone(user, 'User instructor01@bogus.com not found')
         action = models.Action.objects.get(name='send email incrementally')
 
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         scheduled_item = models.ScheduledOperation(
             user=user,
             operation_type=models.Log.ACTION_RUN_PERSONALIZED_EMAIL,

@@ -1,10 +1,10 @@
 """Process the scheduled actions."""
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from celery import shared_task
 from django.conf import settings
 from django.core.cache import cache
-import pytz
 
 from ontask import CELERY_LOGGER, models
 from ontask.core import ONTASK_SCHEDULED_LOCKED_ITEM
@@ -17,7 +17,7 @@ def _update_item_status(s_item: models.ScheduledOperation):
     :param s_item: Scheduled item
     :return: Nothing
     """
-    now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+    now = datetime.now(ZoneInfo(settings.TIME_ZONE))
     if s_item.frequency and (
         not s_item.execute_until or now < s_item.execute_until
     ):
@@ -56,7 +56,7 @@ def execute_scheduled_operation(s_item_id: int):
                 CELERY_LOGGER.info('Operation with status %s.', s_item.status)
             return
 
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         if s_item.execute and s_item.frequency and now < s_item.execute:
             # Not yet
             if settings.DEBUG:

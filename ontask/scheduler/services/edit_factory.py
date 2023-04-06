@@ -1,13 +1,13 @@
 """Factory handling the various Scheduled Item Producers."""
 from datetime import datetime
 from typing import Dict, Optional
+from zoneinfo import ZoneInfo
 
 from django import http
 from django.conf import settings
 from django.shortcuts import redirect
 from django.utils.dateparse import parse_datetime
 from django.views import generic
-import pytz
 
 from ontask import core, models
 
@@ -223,7 +223,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
                 for cond in self.action.conditions.all())
 
         context.update({
-            'now': datetime.now(pytz.timezone(settings.TIME_ZONE)),
+            'now': datetime.now(ZoneInfo(settings.TIME_ZONE)),
             'payload': self.op_payload,
             'frequency': frequency,
             'valuerange': range(2),

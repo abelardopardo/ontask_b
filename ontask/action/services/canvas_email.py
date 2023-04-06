@@ -13,7 +13,7 @@ from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
-import pytz
+from zoneinfo import ZoneInfo
 import requests
 from rest_framework import status
 
@@ -123,7 +123,7 @@ def _canvas_get_or_set_oauth_token(
             reverse(continue_url))
 
     # Check if the token is valid
-    now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+    now = datetime.datetime.now(ZoneInfo(settings.TIME_ZONE))
     if now > token.valid_until:
         try:
             services.refresh_token(token, oauth_info)
@@ -313,7 +313,7 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
             context['from_email'] = user.email
             context['to_email'] = canvas_email_payload['recipients[]']
             context['email_sent_datetime'] = str(
-                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
+                datetime.datetime.now(ZoneInfo(settings.TIME_ZONE)))
             context['response_status'] = response_status
             context['result_msg'] = result_msg
             action.log(

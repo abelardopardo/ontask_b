@@ -11,7 +11,7 @@ from django.db import models, transaction
 from django.db.models import JSONField
 from django.utils import functional, html
 from django.utils.translation import gettext_lazy as _
-import pytz
+from zoneinfo import ZoneInfo
 
 import ontask
 from ontask.dataops import formula, sql
@@ -148,7 +148,7 @@ class ActionBase(NameAndDescription, CreateModifyFields):
         interval defined by active_from - active_to.
         :return: Boolean encoding the active status
         """
-        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.datetime.now(ZoneInfo(settings.TIME_ZONE))
         return not (
             (self.active_from and now < self.active_from)
             or (self.active_to and self.active_to < now))

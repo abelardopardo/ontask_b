@@ -6,7 +6,7 @@ from django import forms
 from django.conf import settings
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import gettext_lazy as _
-import pytz
+from zoneinfo import ZoneInfo
 
 from ontask.settings import MAX_UPLOAD_SIZE
 
@@ -26,7 +26,7 @@ DATE_TIME_WIDGET_OPTIONS = {
     'showClear': True,
     'showClose': True,
     'calendarWeeks': True,
-    'timeZone': str(pytz.timezone(settings.TIME_ZONE)),
+    'timeZone': str(ZoneInfo(settings.TIME_ZONE)),
 }
 
 

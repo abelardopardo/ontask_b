@@ -1,8 +1,8 @@
 """Test the views for the scheduler pages."""
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
-import pytz
 from rest_framework import status
 
 from ontask import models, tests
@@ -235,7 +235,7 @@ class SchedulerTimesInForms(SchedulerFormsBasic):
         self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
         # POST the form to schedule this action
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         execute = now - timedelta(minutes=5)
         execute_until = now - timedelta(minutes=1)
         resp = self.get_response(
@@ -255,7 +255,7 @@ class SchedulerTimesInForms(SchedulerFormsBasic):
         self.assertEqual(models.ScheduledOperation.objects.count(), 0)
 
         # POST the form to schedule this action
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         execute = now - timedelta(minutes=5)
         execute_until = now + timedelta(days=1)
         resp = self.get_response(
@@ -275,7 +275,7 @@ class SchedulerTimesInForms(SchedulerFormsBasic):
         self.assertEqual(models.ScheduledOperation.objects.count(), 1)
 
         # POST the form to schedule this action
-        now = datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.now(ZoneInfo(settings.TIME_ZONE))
         execute = now + timedelta(minutes=5)
         execute_until = now + timedelta(days=15)
         resp = self.get_response(

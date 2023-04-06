@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 import html2text
-import pytz
+from zoneinfo import ZoneInfo
 
 from ontask import (
     get_incorrect_email, models, settings as ontask_settings,
@@ -42,7 +42,7 @@ def _send_confirmation_message(
     :return:
     """
     # Creating the context for the confirmation email
-    now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+    now = datetime.datetime.now(ZoneInfo(settings.TIME_ZONE))
     context = {
         'user': user,
         'action': action,
@@ -131,9 +131,8 @@ def _create_track_column(action: models.Action) -> str:
         name=track_col_name,
         description_text='Emails sent with action {0} on {1}'.format(
             action.name,
-            simplify_datetime_str(datetime.datetime.now(pytz.timezone(
-                settings.TIME_ZONE))),
-        ),
+            simplify_datetime_str(datetime.datetime.now(
+                ZoneInfo(settings.TIME_ZONE)))),
         workflow=action.workflow,
         data_type='integer',
         is_key=False,
@@ -283,7 +282,7 @@ def _create_messages(
         context['from_email'] = msg.from_email
         context['to_email'] = msg.to[0]
         context['email_sent_datetime'] = str(
-            datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))
+            datetime.datetime.now(ZoneInfo(settings.TIME_ZONE)))
         if track_str:
             context['track_id'] = track_str
         action.log(user, models.Log.ACTION_EMAIL_SENT, **context)
@@ -485,7 +484,7 @@ class ActionRunProducerEmailReport(ActionRunProducerBase):
             'from_email': msg.from_email,
             'to_email': msg.to[0],
             'email_sent_datetime': str(
-                datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)))}
+                datetime.datetime.now(ZoneInfo(settings.TIME_ZONE)))}
         action.last_executed_log = action.log(
             user,
             models.Log.ACTION_EMAIL_SENT,
