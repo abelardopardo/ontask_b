@@ -21,6 +21,18 @@ let conditionClone = function() {
     },
   });
 }
+let transferFormula = function () {
+  if (document.getElementById("id__formula") != null) {
+    let formula = $("#builder").queryBuilder('getRules');
+    if (formula == null || !formula['valid']) {
+      $('#div-spinner').hide();
+      return false;
+    }
+    let f_text = JSON.stringify(formula, undefined, 2);
+    $("#id__formula").val(f_text);
+   }
+   return true;
+}
 $(function () {
   // Create Condition
   $("#condition-set-header").on("click", ".js-condition-create", loadForm);

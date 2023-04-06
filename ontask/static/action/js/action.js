@@ -72,18 +72,6 @@ let loadFormPost = function () {
     {'action_content': get_id_text_content(), "csrfmiddlewaretoken": window.CSRF_TOKEN},
     'post');
 }
-let transferFormula = function () {
-  if (document.getElementById("id__formula") != null) {
-    let formula = $("#builder").queryBuilder('getRules');
-    if (formula == null || !formula['valid']) {
-      $('#div-spinner').hide();
-      return false;
-    }
-    let f_text = JSON.stringify(formula, undefined, 2);
-    $("#id__formula").val(f_text);
-   }
-   return true;
-}
 $(function () {
   $("#checkAll").click(function () {
        $("input[id*='id_upload_']").prop("checked", this.checked);

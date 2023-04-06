@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Views created with code obtained from django-authtools
-"""
+"""Views created with code obtained from django-authtools."""
 
 from typing import Dict
 

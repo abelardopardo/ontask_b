@@ -168,9 +168,6 @@ class ColumnTODOAddView(ColumnBasicView, ActionView, generic.FormView):
         return kwargs
 
     def form_valid(self, form):
-        # Get the action first
-        action = self.get_object()
-
         # Save the column object attached to the form
         column = form.save(commit=False)
         try:
@@ -338,7 +335,7 @@ class ColumnDeleteView(ColumnBasicView, ColumnView, generic.DetailView):
 
 
 class ColumnCloneView(ColumnBasicView, ColumnView, generic.DetailView):
-    """"Clone a column in the table attached to a workflow."""
+    """Clone a column in the table attached to a workflow."""
 
     template_name = 'column/includes/partial_clone.html'
 

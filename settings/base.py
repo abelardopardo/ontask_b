@@ -593,7 +593,6 @@ def show_configuration() -> None:
     print('TEMPLATES:', TEMPLATES)
     print('TIME_ZONE (conf):', TIME_ZONE)
     print('USE_I18N:', USE_I18N)
-    print('USE_L10N:', USE_L10N)
     print('USE_TZ:', USE_TZ)
     print('USE_X_FORWARDED_HOST:', USE_X_FORWARDED_HOST)
     print('WSGI_APPLICATION:', WSGI_APPLICATION)

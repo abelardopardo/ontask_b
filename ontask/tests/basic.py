@@ -187,6 +187,7 @@ class OnTaskTestCase(OnTaskBasicTestCase):
     def add_middleware(self, request: http.HttpRequest) -> http.HttpRequest:
         """Add middleware values to the request."""
         request.user = self.user
+
         # adding session
         session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
         session_engine = import_module(settings.SESSION_ENGINE)
@@ -1518,17 +1519,17 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             ElementHasFullOpacity((By.XPATH, '//div[@id="modal-item"]'))
         )
 
-    def open_view(self, vname):
+    def open_view(self, vname) -> None:
         # Go to views first
         self.go_to_table()
 
-        # Button to dropdown the Views
+        # Button to drop down the Views
         self.click_dropdown_option_and_wait(
             'select-view-name',
             vname,
             'table-data_previous')
 
-    def select_text_tab(self):
+    def select_text_tab(self) -> None:
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
                 (By.ID, 'text-tab')
@@ -1582,10 +1583,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.wait_for_spinner()
         self.selenium.find_element(By.ID, 'filter-tab').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'filter-set-header')
-            )
-        )
+            EC.element_to_be_clickable((By.ID, 'filter-set-header')))
 
     def select_condition_tab(self):
         """
@@ -1601,10 +1599,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.wait_for_spinner()
         self.selenium.find_element(By.ID, 'conditions-tab').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.CLASS_NAME, 'js-condition-create')
-            )
-        )
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-condition-create')))
 
     def select_attachment_tab(self):
         """
@@ -1618,10 +1613,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.wait_for_spinner()
         self.selenium.find_element(By.ID, 'attachments-tab').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable(
-                (By.ID, 'attachments')
-            )
-        )
+            EC.element_to_be_clickable((By.ID, 'attachments')))
 
     def select_share_tab(self):
         WebDriverWait(self.selenium, 10).until(
@@ -1632,8 +1624,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.wait_for_spinner()
         self.selenium.find_element(By.ID, 'share-tab').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create'))
-        )
+            EC.element_to_be_clickable((By.CLASS_NAME, 'js-share-create')))
 
     def select_questions_tab(self):
         WebDriverWait(self.selenium, 10).until(
@@ -1644,9 +1635,8 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         self.wait_for_spinner()
         self.selenium.find_element(By.ID, 'questions-tab').click()
         WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME,
-                                        'js-action-question-add'))
-        )
+            EC.element_to_be_clickable(
+                (By.CLASS_NAME, 'js-action-question-add')))
 
     def select_questions_condition(self, qname, cname):
         # Click in the pull down menu

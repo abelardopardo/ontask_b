@@ -105,7 +105,7 @@ class TutorialCaptures(ScreenTests):
         # Create a new view
         self.go_to_table()
 
-        # Button to dropdown the Views and create one
+        # Button to drop down the Views and create one
         self.click_dropdown_option_num_and_wait('select-view-name', 1)
 
         # Insert data to create the view

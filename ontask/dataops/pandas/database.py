@@ -1,4 +1,4 @@
-"""Functions to manipulate Pandas DataFrames an related operations."""
+"""Functions to manipulate Pandas DataFrames and related operations."""
 from typing import Dict, List, Mapping, Optional
 
 from django.conf import settings

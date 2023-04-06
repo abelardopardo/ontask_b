@@ -182,8 +182,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
             false, "mark3");"""
         )
 
-        # Click in the more ops and then the delete filter button
-        self.select_filter_tab()
+        # Click in the filter tab and then in the delete filter button
         self.delete_filter()
 
         self.assertIn(
@@ -241,7 +240,6 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         )
 
         # Delete the condition
-        self.select_condition_tab()
         self.delete_condition('fname2')
 
         # Make sure the content has the correct text
