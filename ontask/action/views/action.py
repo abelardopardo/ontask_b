@@ -173,9 +173,8 @@ class ActionDeleteView(
     http_method_names = ['get', 'post']
     template_name = 'action/includes/partial_action_delete.html'
 
-    def delete(self, request, *args, **kwargs):
-        action = self.get_object()
-        action.log(request.user, models.Log.ACTION_DELETE)
-        action.delete()
-        messages.success(request, _('Action successfully deleted.'))
+    def form_valid(self, form) -> http.JsonResponse:
+        self.object.log(self.request.user, models.Log.ACTION_DELETE)
+        self.object.delete()
+        messages.success(self.request, _('Action successfully deleted.'))
         return http.JsonResponse({'html_redirect': reverse('action:index')})

@@ -129,9 +129,9 @@ class ViewDeleteView(
 
     template_name = 'table/includes/partial_view_delete.html'
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form) -> http.JsonResponse:
         view = self.get_object()
-        view.log(request.user, models.Log.VIEW_DELETE)
+        view.log(self.request.user, models.Log.VIEW_DELETE)
         if view.filter:
             view.filter.delete_from_view()
         view.delete()

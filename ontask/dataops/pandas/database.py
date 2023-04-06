@@ -65,7 +65,6 @@ def create_db_engine(**kwargs):
     return sqlalchemy.create_engine(
         database_url,
         client_encoding=str('utf8'),
-        encoding=str('utf8'),
         echo=False,
         paramstyle='format')
 

@@ -36,7 +36,7 @@ def error_redirect(
     """
     if message:
         messages.error(request, message)
-    if request.is_ajax():
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         return http.JsonResponse({'html_redirect': reverse(where)})
     return redirect(where)
 

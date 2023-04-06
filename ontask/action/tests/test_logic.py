@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 from rest_framework import status
+from django.core import signing
 
 from ontask import models, tests
 from ontask.action import services
@@ -15,17 +16,25 @@ from ontask.dataops import pandas
 class EmailActionTracking(tests.SimpleEmailActionFixture, tests.OnTaskTestCase):
     """Test Email tracking."""
 
-    trck_tokens = [
-        "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0by"
-        "I6InN0dWRlbnQwMUBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl"
-        "9kc3QiOiJFbWFpbFJlYWRfMSJ9:1hCeQr:oax6nggj9kBkSdz1oFXfYVz8R4I",
-        "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0byI6I"
-        "nN0dWRlbnQwMkBib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl9kc3Q"
-        "iOiJFbWFpbFJlYWRfMSJ9:1hCeQr:nLzLJRAGgiJhZWyJ-D6oGXlIY_E",
-        "eyJhY3Rpb24iOjIsInNlbmRlciI6Imluc3RydWN0b3IwMUBib2d1cy5jb20iLCJ0byI6In"
-        "N0dWRlbnQwM0Bib2d1cy5jb20iLCJjb2x1bW5fdG8iOiJlbWFpbCIsImNvbHVtbl9kc3Qi"
-        "OiJFbWFpbFJlYWRfMSJ9:1hCeQr:5LuQISOvahDaiYuOYUufdfYRT_o"
-    ]
+    trck_tokens = [signing.dumps(item) for item in
+        [{
+            'action': 2,
+            'sender': 'instructor01@bogus.com',
+            'to': 'student01@bogus.com',
+            'column_to': 'email',
+            'column_dst': 'EmailRead_1'},
+        {
+            'action': 2,
+            'sender': 'instructor01@bogus.com',
+            'to': 'student02@bogus.com',
+            'column_to': 'email',
+            'column_dst': 'EmailRead_1'},
+        {
+            'action': 2,
+            'sender': 'instructor01@bogus.com',
+            'to': 'student03@bogus.com',
+            'column_to': 'email',
+            'column_dst': 'EmailRead_1'}]]
 
     def test(self):
         # Repeat the checks two times to test if they are accumulating

@@ -4,6 +4,7 @@ import math
 import os
 import subprocess
 from typing import Dict, Mapping, Optional
+from importlib import import_module
 
 from PIL import Image
 from django import http
@@ -187,7 +188,10 @@ class OnTaskTestCase(OnTaskBasicTestCase):
         """Add middleware values to the request."""
         request.user = self.user
         # adding session
-        SessionMiddleware().process_request(request)
+        session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
+        session_engine = import_module(settings.SESSION_ENGINE)
+        request.session = session_engine.SessionStore(session_key)
+
         # adding messages
         setattr(request, '_messages', FallbackStorage(request))
         if self.workflow:

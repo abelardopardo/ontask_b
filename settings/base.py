@@ -157,7 +157,30 @@ USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', default=False)
 # Django Core
 # -----------------------------------------------------------------------------
 CACHE_TTL = 60 * 30
-CACHES = {"default": REDIS_URL}
+# CACHES = {"default": REDIS_URL} # TODO: Fix REDIS configuration in Django 4
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        # 'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'TIMEOUT': 1000,
+        'KEY_PREFIX': 'ontask',
+        'OPTIONS': {
+             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+# This configuration does not work due to the Backend class
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+#         'LOCATION': REDIS_URL,
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+#         },
+#         'KEY_PREFIX': 'ontask'
+#     }
+# }
 
 DATABASES = {'default': DATABASE_URL}
 
@@ -181,6 +204,7 @@ INSTALLED_APPS = [
     # 'corsheaders',
 
     'crispy_forms',
+    'crispy_bootstrap4',
     'sorl.thumbnail',
     'widget_tweaks',
     'formtools',
@@ -312,7 +336,6 @@ TEMPLATES = [{
                 'ontask.visualizations.templatetags.vis_include'}}}]
 
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 WSGI_APPLICATION = 'wsgi.application'
@@ -371,6 +394,7 @@ else:
 # Django-crispy-forms
 # -----------------------------------------------------------------------------
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
 # Django-import-export
 # -----------------------------------------------------------------------------

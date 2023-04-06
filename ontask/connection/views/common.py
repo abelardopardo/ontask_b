@@ -68,9 +68,9 @@ class ConnectionDeleteView(
     template_name = 'connection/includes/partial_delete.html'
     object = None
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
         self.object = self.get_object()
-        self.object.log(request.user, self.object.delete_event)
+        self.object.log(self.request.user, self.object.delete_event)
         self.object.delete()
         return http.JsonResponse({'html_redirect': ''})
 

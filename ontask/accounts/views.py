@@ -11,12 +11,12 @@ from django.contrib import auth, messages
 from django.contrib.auth import (
     REDIRECT_FIELD_NAME, get_user_model, update_session_auth_hash)
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import SuccessURLAllowedHostsMixin
+from django.contrib.auth.views import RedirectURLMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect, resolve_url
 from django.urls import reverse_lazy
 from django.utils.functional import lazy
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -129,7 +129,7 @@ class WithNextUrlMixin:
         except AttributeError:
             pass
 
-        if is_safe_url(
+        if url_has_allowed_host_and_scheme(
             redirect_to,
             allowed_hosts=allowed_hosts,
             require_https=self.request.is_secure()
@@ -153,7 +153,7 @@ class WithNextUrlMixin:
 class LoginView(
     bracesviews.AnonymousRequiredMixin,
     AuthDecoratorsMixin,
-    SuccessURLAllowedHostsMixin,
+    RedirectURLMixin,
     WithCurrentSiteMixin,
     WithNextUrlMixin,
     FormView
@@ -162,7 +162,7 @@ class LoginView(
     form_class = forms.LoginForm
     authentication_form = None
     allow_authenticated = True
-    success_url = resolve_url_lazy(settings.LOGIN_REDIRECT_URL)
+    next_page = resolve_url_lazy(settings.LOGIN_REDIRECT_URL)
 
     def dispatch(self, *args, **kwargs):
         if not self.allow_authenticated and self.request.user.is_authenticated:
@@ -191,40 +191,6 @@ class LoginView(
             expiry = getattr(settings, 'KEEP_LOGGED_DURATION', one_month)
             self.request.session.set_expiry(expiry)
         return redirect_response
-
-
-class LogoutView(
-    NeverCacheMixin,
-    SuccessURLAllowedHostsMixin,
-    WithCurrentSiteMixin,
-    WithNextUrlMixin,
-    TemplateView,
-    RedirectView
-):
-    template_name = 'registration/logged_out.html'
-    permanent = False
-    url = reverse_lazy('home')
-
-    def get_redirect_url(self, **kwargs):
-        if redirect_to := super().get_redirect_url(**kwargs):
-            return redirect_to
-        elif settings.LOGOUT_REDIRECT_URL is not None:
-            return resolve_url(settings.LOGOUT_REDIRECT_URL)
-        elif self.request.POST.get(
-            self.redirect_field_name, self.request.GET.get(
-                self.redirect_field_name, '')):
-            # we have a url, but it is not safe. Django redirects back to the
-            # same view.
-            return self.request.path
-
-    def get(self, *args, **kwargs):
-        auth.logout(self.request)
-        # If we have a url to redirect to, do it. Otherwise render the
-        # logged-out template.
-        if self.get_redirect_url(**kwargs):
-            return RedirectView.get(self, *args, **kwargs)
-        else:
-            return TemplateView.get(self, *args, **kwargs)
 
 
 class PasswordChangeView(
@@ -258,3 +224,14 @@ class PasswordChangeView(
         # is enabled.
         update_session_auth_hash(self.request, form.user)
         return super().form_valid(form)
+
+
+class LogoutView(RedirectView):
+    http_method_names = ['get', 'post']
+
+    def get_redirect_url(self, **kwargs):
+        return reverse_lazy('home')
+
+    def get(self, *args, **kwargs):
+        auth.logout(self.request)
+        return RedirectView.get(self, *args, **kwargs)

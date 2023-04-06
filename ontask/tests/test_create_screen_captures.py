@@ -926,10 +926,8 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
             By.XPATH,
             "//input[@id='id_execute']"
         )
-        self.selenium.execute_script(
-            "arguments[0].value = '2110-07-05 17:30:51';",
-            dt_widget
-        )
+        dt_widget.clear()
+        dt_widget.send_keys('2110-07-05 17:30:51')
         self.selenium.find_element(By.ID, 'id_subject').send_keys(
             'Your preparation activities for the week'
         )

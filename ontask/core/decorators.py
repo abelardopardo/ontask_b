@@ -17,7 +17,7 @@ def ajax_required(func: Callable) -> Callable:
     @wraps(func)
     def function_wrapper(request, *args, **kwargs):  # noqa Z430
         """Verify that request is ajax and if so, call func."""
-        if not request.is_ajax():
+        if not request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             return http.HttpResponseBadRequest()
         return func(request, *args, **kwargs)
 

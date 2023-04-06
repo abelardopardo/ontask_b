@@ -162,7 +162,7 @@ class ScheduledItemDelete(
         """Only obtain the scheduled actions in the current workflow."""
         return self.workflow.scheduled_operations.all()
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, form):
         s_item = self.get_object()
         s_item.log(models.Log.SCHEDULE_DELETE)
         s_item.delete()

@@ -45,8 +45,8 @@ def get_initial_token_step1(
     request.session[return_url_key] = return_url
 
     # Store in the session a random hash key to make sure the call back goes
-    # back to the right request
-    request.session[oauth_hash_key] = get_random_string()
+    # to the right request
+    request.session[oauth_hash_key] = get_random_string(20)
 
     # Store the callback URL in the session
     request.session[callback_url_key] = request.build_absolute_uri(

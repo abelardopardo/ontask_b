@@ -158,8 +158,8 @@ class WorkflowDeleteView(
     def get_object(self, queryset=None):
         return self.workflow
 
-    def delete(self, request, *args, **kwargs) -> http.JsonResponse:
+    def form_valid(self, form) -> http.JsonResponse:
         """Delete the workflow and log the event"""
-        self.workflow.log(request.user, models.Log.WORKFLOW_DELETE)
+        self.workflow.log(self.request.user, models.Log.WORKFLOW_DELETE)
         self.workflow.delete()
         return http.JsonResponse({'html_redirect': reverse('home')})

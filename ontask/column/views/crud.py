@@ -297,7 +297,7 @@ class ColumnEditView(ColumnBasicView, ColumnView, generic.UpdateView):
         return http.JsonResponse({'html_redirect': ''})
 
 
-class ColumnDeleteView(ColumnBasicView, ColumnView, generic.DeleteView):
+class ColumnDeleteView(ColumnBasicView, ColumnView, generic.DetailView):
     """Delete a column."""
 
     template_name = 'column/includes/partial_delete.html'
@@ -324,12 +324,12 @@ class ColumnDeleteView(ColumnBasicView, ColumnView, generic.DeleteView):
                 if view.filter and self.object in view.filter.columns.all()]})
         return context
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         column = self.get_object()
-        services.delete_column(request.user, self.workflow, column)
+        services.delete_column(self.request.user, self.workflow, column)
 
         # There are various points of return
-        from_url = request.META['HTTP_REFERER']
+        from_url = self.request.META['HTTP_REFERER']
         if from_url.endswith(reverse('table:display')):
             return http.JsonResponse(
                 {'html_redirect': reverse('table:display')})
