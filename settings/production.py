@@ -69,4 +69,5 @@ LOGGING['loggers'] = {
 
 logging.config.dictConfig(LOGGING)
 
-show_configuration()
+if "celery" not in sys.argv[0]:
+    show_configuration()
