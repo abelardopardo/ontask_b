@@ -3,6 +3,9 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% ontask_settings_value "ONTASK_HELP_URL" as ONTASK_HELP_URL %}
+{% ontask_settings_value "BASE_URL" as ONTASK_BASE_URL %}
+{% ontask_settings_value "SESSION_COOKIE_AGE" as ONTASK_TIMEOUT %}
 <html {% if LANGUAGE_CODE %}lang="{{ LANGUAGE_CODE }}"{% endif %}>
   <head>
     <meta charset="utf-8">
@@ -47,7 +50,7 @@
               {% block navbar-left %}
                 {% if user.ontask_info.is_instructor %}
                   <li class="nav-item">
-                    <a class="nav-link spin{% if request.path == ONTASK_BASE_URL %} active{% endif %}"
+                    <a class="nav-link spin{% if request.path == ONTASK_BASE_URL|add:"/" %} active{% endif %}"
                        href="{% url 'home' %}" id="ontask-base-home"
                        data-toggle="tooltip" title="{% trans 'Your workflows' %}"><span class="fa fa-home"></span> {% trans 'Workflows' %}</a>
                   </li>

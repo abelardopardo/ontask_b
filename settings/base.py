@@ -328,7 +328,6 @@ TEMPLATES = [{
             'django.template.context_processors.tz',
             'django.template.context_processors.request',
             'django.contrib.messages.context_processors.messages',
-            'ontask.core.context_processors.conf_to_context',
         ],
         'libraries': {
             'ontask_tags': 'ontask.templatetags.ontask_tags',

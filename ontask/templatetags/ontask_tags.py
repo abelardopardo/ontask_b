@@ -17,6 +17,12 @@ ACTION_CONTEXT_VAR = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
 
 register = template.Library()
 
+ALLOWED_SETTINGS = {
+    'BASE_URL',
+    'DEBUG',
+    'ONTASK_HELP_URL',
+    'SESSION_COOKIE_AGE'}
+
 
 # Tag to get ontask_version
 @register.simple_tag
@@ -203,3 +209,11 @@ def ontask_shim_respond() -> str:
         'src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script'
         '><script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js'
         '"></script><![endif]-->')
+
+
+@register.simple_tag
+def ontask_settings_value(name: str) -> str:
+    """Provides access to a subset of the values in settings."""
+    if name in ALLOWED_SETTINGS:
+        return getattr(settings, name, '')
+    return ''
