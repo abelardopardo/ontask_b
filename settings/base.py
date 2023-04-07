@@ -113,7 +113,7 @@ LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
 LDAP_AUTH_SERVER_URI = env('LDAP_AUTH_SERVER_URI', default='')
 LDAP_AUTH_BIND_PASSWORD = env('LDAP_AUTH_BIND_PASSWORD', default='')
 
-LOG_FOLDER = env('LOG_FOLDER', default='logs')
+LOG_FOLDER = env('LOG_FOLDER', default=join(BASE_DIR(), 'logs'))
 
 LOGS_MAX_LIST_SIZE = env.int('LOGS_MAX_LIST_SIZE', default=200)
 
