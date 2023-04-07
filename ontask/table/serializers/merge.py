@@ -1,6 +1,4 @@
-# -*- coding: UTF-8 -*-#
-
-"""Serilizers for frames and merge operations."""
+"""Serializers for frames and merge operations."""
 import json
 
 from django.utils.translation import gettext_lazy as _

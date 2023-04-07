@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-#
-
 """Functions to serialize pandas data frames."""
 import base64
 from io import BytesIO

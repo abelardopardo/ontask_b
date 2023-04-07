@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # OnTask documentation build configuration file, created by
 # sphinx-quickstart on Fri Nov 10 14:03:15 2017.
 #

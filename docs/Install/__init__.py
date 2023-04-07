@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ontask.dataops.plugin import OnTaskTransformation
 
 # The field class_name contains the name of the class to load to execute the

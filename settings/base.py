@@ -1,4 +1,4 @@
-"""Django settings for ontask project."""
+"""Django settings for OnTask project."""
 import json
 import os
 from os.path import dirname, exists, join
@@ -30,11 +30,13 @@ env = environ.Env()
 ENV_FILENAME = join(
     dirname(__file__),
     env('ENV_FILENAME', default='local.env'))
+
+print('SYS.ARGV:', sys.argv)
+print('BASE_DIR:', BASE_DIR)
+print('ENV_FILENAME:', ENV_FILENAME)
+print('DJANGO_SETTINGS_MODULE:', env('DJANGO_SETTINGS_MODULE'))
+
 if exists(ENV_FILENAME):
-    print(
-        'Loading environment file {0} through {1}'.format(
-            ENV_FILENAME,
-            env('DJANGO_SETTINGS_MODULE')))
     environ.Env.read_env(str(ENV_FILENAME))
 
 # CONFIGURATION VARIABLES
@@ -368,7 +370,7 @@ MESSAGE_TAGS = {messages.ERROR: 'danger'}
 # Django Sessions
 # -----------------------------------------------------------------------------
 SESSION_CACHE_ALIAS = "default"
-SESSION_COOKIE_AGE = 1800  # set just 30 mins
+SESSION_COOKIE_AGE = 1800  # Seconds: 30 minutes
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True  # Needed to make sure timeout above works
@@ -474,8 +476,8 @@ TINYMCE_DEFAULT_CONFIG = {
     "height": 500,
     "menubar": False,
     "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
-    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
-    "code,help,wordcount",
+    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,"
+    "paste,code,help,wordcount",
     "toolbar": "undo redo | formatselect | "
     "bold italic backcolor | alignleft aligncenter "
     "alignright alignjustify | bullist numlist outdent indent | "

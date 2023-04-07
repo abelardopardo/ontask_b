@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-"""Implementation of visualizations using the Vega JS libarry."""
+"""Implementation of visualizations using the Vega JS library."""
 from abc import ABCMeta, abstractmethod
 from builtins import object
 
