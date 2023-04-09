@@ -56,10 +56,10 @@
         {{ form|crispy }}
         {% include 'dataops/merge_help.html' %}
         <div class="text-center mt-3 mb-3">
-          <a type="button" class="shadow btn btn-outline-dark"
+          <a type="button" class="btn btn-outline-dark"
              href="{% url 'scheduler:index' %}"> {% trans 'Cancel' %}</a>
           {% if view.action %}
-            <button type="button" class="shadow btn btn-outline-info js-action-preview"
+            <button type="button" class="btn btn-outline-info js-action-preview"
                     data-url="{% url 'action:preview' view.action.id 1 %}">
               <span class="fa fa-eye"></span> {% trans 'Preview' %}</button>
           {% endif %}

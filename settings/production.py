@@ -68,6 +68,3 @@ LOGGING['loggers'] = {
         'level': 'DEBUG'}}
 
 logging.config.dictConfig(LOGGING)
-
-if "celery" not in sys.argv[0]:
-    show_configuration()

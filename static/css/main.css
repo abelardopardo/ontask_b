@@ -117,6 +117,9 @@ body.regular-body {
   /* margin-top: 55px; */
   margin-bottom: 0;
 }
+.alert-dismissible {
+  text-align: center;
+}
 
 body>.navbar-transparent {
   /* background-color: transparent; */
@@ -337,17 +340,6 @@ div[aria-labelledby="rowMoreOperations"] > button {
   padding-left: 1rem;
 }
 
-/*
-.dropdown-menu .btn {
-    width:100%;
-}
-
-.dropdown-menu{
-    max-height:300px;
-    overflow-y:auto;
-}
-*/
-
 /* Wflow name */
 #wflow-name {
     padding: 0ex;
@@ -419,25 +411,10 @@ td.operations button {
     pointer-events: none;
 }
 
-.circle-solid, .circle {
-  width: 1.2em;
-  height: 1.2em;
-  border-radius: 50%;
-  font-size: 25px;
-  line-height: 26px;
-  text-align: center;
-}
-
-.circle {
-  border: solid 1pt black;
-  color: #000;
-  background: #fff
-}
-
-.circle-solid {
-  color: #fff;
-  background: #000
-}
+.ontask-step-number {
+  display: contents;
+  font-size: 2rem;
+  }
 
 /*
   TIMELINE style by http://totoprayogo.com/

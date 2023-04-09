@@ -38,7 +38,7 @@ class BooleanColumn(tables.Column):
 class DataTablesServerSidePaging:
     """Class to handle DataTables Server Side Paging request.
 
-    For large tables DataTables allows to pre-load a subset of a table
+    For large tables DataTables allows to preload a subset of a table
     that is requested through AJAX. These requests arrive with a set of
     paging parameters that are stored in these objects.
     """

@@ -80,7 +80,7 @@ urlpatterns = [
         include('rest_framework.urls', namespace='rest_framework')),
     # API Doc
     re_path(
-        r'apidoc(?P<format>\.json|\.yaml)',
+        r'apidoc(?P<format>\.json|\.yaml)$',
         schema_view.without_ui(cache_timeout=0),
         name='schema-json'),
     path(

@@ -1285,7 +1285,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
     def create_view(self, vname, vdesc, cols):
         self.go_to_table()
 
-        # Button to dropdown the Views and click in create
+        # Button to drop down the Views and click in create
         self.click_dropdown_option_num_and_wait('select-view-name', 1)
 
         # Wait for the form to create the derived column
@@ -1729,15 +1729,30 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
             EC.element_to_be_clickable((By.ID, 'div_id_merge_key'))
         )
 
-    def select_plugin_parameters_tab(self):
+    def select_questions_condition(self, qname, cname):
+        # Click in the pull down menu
+        element = self.selenium.find_element(
+            By.XPATH,
+            '//table[@id="column-selected-table"]'
+            '//td[2][normalize-space() = "{0}"]/'
+            '../td[5]/div/button'.format(qname))
+        element.click()
+        # Click in the condition name
+        self.selenium.find_element(
+            By.XPATH,
+            '//table[@id="column-selected-table"]'
+            '//td[2][normalize-space() = "{0}"]/'
+            '../td[5]/div/div/button[normalize-space() = "{1}"]'.format(
+                qname,
+                cname
+            )
+        ).click()
+        self.wait_for_spinner()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
-                (By.ID, 'parameters-tab')
+                (By.XPATH,
+                 '//button[contains(@class, "js-action-question-add")]')
             )
-        )
-        self.selenium.find_element(By.ID, 'parameters-tab').click()
-        WebDriverWait(self.selenium, 10).until(
-            EC.element_to_be_clickable((By.ID, 'parameters'))
         )
 
     def edit_condition(self, oldname, cname, cdesc, rule_tuples):

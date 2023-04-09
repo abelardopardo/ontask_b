@@ -191,7 +191,7 @@ def select_ids_all_false(
     :param table_name: Table in the DB
     :param filter_formula: Filter formula for the WHERE clause (if any)
     :param cond_formula_list: Non-empty list of condition formulas
-    :return: List of indeces for which all conditions (and filter) are false
+    :return: List of indexes for which all conditions (and filter) are false
     """
     # Prelude for the query
     query = sql.SQL(
@@ -255,11 +255,11 @@ def delete_row(table_name: str, kv_pair: Tuple[str, Any]):
     """Delete the row with the given key, value pair.
 
     :param table_name: Table to manipulate
-    :param kv_pair: A key=value pair to identify the row. Key is suppose to
+    :param kv_pair: A key=value pair to identify the row. Key is supposed to
     be unique.
     :return: Drops that row from the table in the DB
     """
-    # Get the key/value subclause
+    # Get the key/value sub-clause
     bool_clause, query_fields = get_boolean_clause(
         filter_pairs={kv_pair[0]: kv_pair[1]},
     )

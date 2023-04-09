@@ -15,7 +15,7 @@
   <div class="container" style="text-align:center;">
     <h1 class="text-center">{% if only_action_list %}{% trans 'Action Export' %}{% else %}{% trans 'Workflow export' %}{% endif %}</h1>
     <p class="text-center">{% trans 'Your download will start shortly' %}</p>
-    <a class="shadow btn btn-outline-dark spin"
+    <a class="btn btn-outline-dark spin"
        href="{% if only_action_list %}{% url 'action:index' %}{% else %}{% url 'workflow:operations' %}{% endif %}">{% trans 'Back' %}</a>
   </div>
 {% endblock container %}

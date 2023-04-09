@@ -121,5 +121,3 @@ GRAPH_MODELS = {
         'ContentType'
     ]
 }
-
-show_configuration()

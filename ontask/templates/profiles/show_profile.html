@@ -9,7 +9,7 @@
     <div class="col-sm-10">
       <h1>{{ show_user.get_full_name }}</h1>
       {% if editable %}
-      <a href="{% url 'profiles:edit_self' %}" class="shadow btn btn-outline-primary">
+      <a href="{% url 'profiles:edit_self' %}" class="btn btn-outline-primary">
         {% trans 'Edit Profile' %}</a>
       {% endif %}
     </div>

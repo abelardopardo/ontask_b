@@ -95,17 +95,16 @@ def get_select_query(
     :return: (sql query, sql params)
     """
     if column_names:
-        query = sql.SQL('SELECT {0} FROM {1}').format(
-            sql.SQL(', ').join([
-                OnTaskDBIdentifier(cname) for cname in column_names
-            ]),
-            sql.Identifier(table_name),
-        )
+        select_fields = sql.SQL(', ').join([
+                OnTaskDBIdentifier(cname) for cname in column_names])
     else:
-        query = sql.SQL('SELECT * FROM {0}').format(sql.Identifier(table_name))
+        select_fields = sql.SQL('*')
+
+    query = sql.SQL('SELECT {0} FROM {1}').format(
+        select_fields,
+        sql.Identifier(table_name))
 
     query_fields = []
-
     if filter_formula or filter_pairs:
         bool_clause, query_fields = get_boolean_clause(
             filter_formula=filter_formula,
