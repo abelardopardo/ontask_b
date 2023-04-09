@@ -54,7 +54,7 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2021-12-28T08:11:32.982Z"
+        "last_update": "2023-04-09T10:00:34.480Z"
     }
 },
 {
@@ -81,7 +81,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2021-12-28T08:11:32.925Z",
+        "date_changed": "2023-04-09T10:00:34.446Z",
         "description": ""
     }
 },
@@ -109,7 +109,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2021-12-28T08:11:32.945Z",
+        "date_changed": "2023-04-09T10:00:34.453Z",
         "description": ""
     }
 },
@@ -137,7 +137,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2021-12-28T08:11:32.959Z",
+        "date_changed": "2023-04-09T10:00:34.461Z",
         "description": ""
     }
 },
@@ -165,7 +165,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2021-12-28T08:11:32.972Z",
+        "date_changed": "2023-04-09T10:00:34.470Z",
         "description": ""
     }
 },
@@ -193,7 +193,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2021-12-28T08:11:32.984Z",
+        "date_changed": "2023-04-09T10:00:34.479Z",
         "description": ""
     }
 },
@@ -283,7 +283,7 @@
     "pk": 1,
     "fields": {
         "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$ME5TQUdhQ3ZzbjhNaEQ3TXNTZjdUcg$Ie5o2sUG87BWAPOf4xfDUtlTm30FPyS35ChpkgWALH8",
-        "last_login": "2021-12-28T08:12:04.235Z",
+        "last_login": "2023-04-09T10:00:55.456Z",
         "is_superuser": false,
         "email": "instructor01@bogus.com",
         "is_staff": false,
@@ -760,6 +760,325 @@
     "fields": {}
 },
 {
+    "model": "ontask.log",
+    "pk": 1,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:01:09.353Z",
+        "modified": "2023-04-09T10:01:09.353Z",
+        "name": "action_update",
+        "workflow": 1,
+        "payload": {
+            "id": 1,
+            "name": "Badges",
+            "type": "personalized_text",
+            "content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1>\r\n<p style=\"text-align: center;\">{% if High engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Gold-medal_Juhele_final.png\" />{% endif %}</p>\r\n<p style=\"text-align: center;\">{% if Medium engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Silver-medal_Juhele_final.png\" />{% endif %}</p>\r\n<p style=\"text-align: center;\">{% if Low video engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Bronze-medal_Juhele_final.png\" />{% endif %}</p>\r\n<p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:01:26.098Z",
+        "modified": "2023-04-09T10:01:26.098Z",
+        "name": "action_update",
+        "workflow": 1,
+        "payload": {
+            "id": 2,
+            "name": "Comments about how to prepare the lecture (Week 4)",
+            "type": "personalized_text",
+            "content": "<p>Dear {{ GivenName }}</p>\r\n<p>Here are some comments about the preparation videos for this week.</p>\r\n<p>{% if No Video 1 %}</p>\r\n<h4 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">Genes and Proteins Activity</h4>\r\n<p style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p>\r\n<p style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">{% endif %}</p>\r\n<p>{% if No Video 2 %}</p>\r\n<h4 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">STEM Cells</h4>\r\n<p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p>\r\n<p>{% endif %}</p>\r\n<p>Regards</p>\r\n<p style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">{{ Coordinator name }}</p>\r\n<p style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">{{ Course name }}</p>",
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:02:22.798Z",
+        "modified": "2023-04-09T10:02:22.798Z",
+        "name": "action_update",
+        "workflow": 1,
+        "payload": {
+            "id": 4,
+            "name": "Midterm comments",
+            "type": "personalized_text",
+            "content": "<p>Dear&nbsp;{{ GivenName }}</p>\r\n<p>Here are the comments about your answers to the midterm exam (ordered by topic).</p>\r\n<h4>Chemistry and Molecules of Life</h4>\r\n<p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p>\r\n<p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p>\r\n<p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p>\r\n<h4>Cell function and structure</h4>\r\n<p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p>\r\n<p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p>\r\n<p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p>\r\n<h4>Nutrition, Metabolism &amp; Enzymes</h4>\r\n<p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p>\r\n<p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p>\r\n<p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p>\r\n<h4><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4>\r\n<p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p>\r\n<p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p>\r\n<p>{% if T4_HIGH %}Good work with this block!{% endif %}</p>\r\n<h4>DNA Structure and Replication</h4>\r\n<p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p>\r\n<p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p>\r\n<p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p>\r\n<p>Your total score for the midterm is&nbsp;{{ Total }}.</p>\r\n<p>Kind regards</p>\r\n<p>{{ Coordinator name }}</p>\r\n<p>{{ Course name }}</p>\r\n<div>&nbsp;</div>",
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:02:31.913Z",
+        "modified": "2023-04-09T10:02:31.913Z",
+        "name": "action_update",
+        "workflow": 1,
+        "payload": {
+            "id": 4,
+            "name": "Midterm comments",
+            "type": "personalized_text",
+            "content": "<p>Dear&nbsp;{{ GivenName }}</p>\r\n<p>Here are the comments about your answers to the midterm exam (ordered by topic).</p>\r\n<h4>Chemistry and Molecules of Life</h4>\r\n<p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p>\r\n<p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p>\r\n<p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p>\r\n<h4>Cell function and structure</h4>\r\n<p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p>\r\n<p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p>\r\n<p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p>\r\n<h4>Nutrition, Metabolism &amp; Enzymes</h4>\r\n<p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p>\r\n<p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p>\r\n<p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p>\r\n<h4><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4>\r\n<p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p>\r\n<p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p>\r\n<p>{% if T4_HIGH %}Good work with this block!{% endif %}</p>\r\n<h4>DNA Structure and Replication</h4>\r\n<p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p>\r\n<p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p>\r\n<p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p>\r\n<p>Your total score for the midterm is&nbsp;{{ Total }}.</p>\r\n<p>Kind regards</p>\r\n<p>{{ Coordinator name }}</p>\r\n<p>{{ Course name }}</p>\r\n<div>&nbsp;</div>",
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:02:42.326Z",
+        "modified": "2023-04-09T10:02:42.326Z",
+        "name": "action_update",
+        "workflow": 1,
+        "payload": {
+            "id": 7,
+            "name": "Suggestions about the forum",
+            "type": "personalized_text",
+            "content": "<p>Dear&nbsp;{{ GivenName }}</p>\r\n<p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p>\r\n<p>Regards.</p>\r\n<p>{{ Coordinator name }}</p>\r\n<p>{{ Course name }}</p>",
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:03:23.237Z",
+        "modified": "2023-04-09T10:03:23.237Z",
+        "name": "action_update",
+        "workflow": 1,
+        "payload": {
+            "id": 8,
+            "name": "Project feedback",
+            "type": "rubric_text",
+            "content": "<p>Dear {{ GivenName }}</p>\r\n<p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p>\r\n<p>{% ot_insert_rubric_feedback %}</p>\r\n<p>Let us know if you have any questions.</p>\r\n<p>Regards</p>\r\n<p>{{ Coordinator name }}</p>\r\n<p>{{ Course name }}</p>",
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:04:27.040Z",
+        "modified": "2023-04-09T10:04:27.040Z",
+        "name": "condition_create",
+        "workflow": 1,
+        "payload": {
+            "id": 8,
+            "action": "",
+            "formula": "Q01 is not null",
+            "workflow_id": 1,
+            "selected_count": 12
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 8,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:05:05.078Z",
+        "modified": "2023-04-09T10:05:05.079Z",
+        "name": "action_update",
+        "workflow": 1,
+        "payload": {
+            "id": 6,
+            "name": "Student comments Week 1",
+            "type": "survey",
+            "content": "{% comment %}Your action content here{% endcomment %}",
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 9,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:06:24.988Z",
+        "modified": "2023-04-09T10:06:24.989Z",
+        "name": "action_update",
+        "workflow": 1,
+        "payload": {
+            "id": 6,
+            "name": "Student comments Week 1",
+            "type": "survey",
+            "content": "{% comment %}Your action content here{% endcomment %}",
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 10,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:06:43.173Z",
+        "modified": "2023-04-09T10:06:43.173Z",
+        "name": "column_edit",
+        "workflow": 1,
+        "payload": {
+            "id": 11,
+            "name": "Difficult Week 1",
+            "type": "string",
+            "is_key": false,
+            "position": 11,
+            "active_to": null,
+            "categories": [
+                "",
+                "Concept 1",
+                "Concept 2",
+                "Concept 3",
+                "Concept 4"
+            ],
+            "active_from": null,
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 11,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:07:00.371Z",
+        "modified": "2023-04-09T10:07:00.371Z",
+        "name": "column_edit",
+        "workflow": 1,
+        "payload": {
+            "id": 12,
+            "name": "Sat W1",
+            "type": "string",
+            "is_key": false,
+            "position": 12,
+            "active_to": null,
+            "categories": [
+                "Metabolism",
+                "DNA",
+                "RNA",
+                "No idea"
+            ],
+            "active_from": null,
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 12,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:07:30.407Z",
+        "modified": "2023-04-09T10:07:30.407Z",
+        "name": "column_edit",
+        "workflow": 1,
+        "payload": {
+            "id": 11,
+            "name": "Difficult Week 2",
+            "type": "string",
+            "is_key": false,
+            "position": 11,
+            "active_to": null,
+            "categories": [
+                "",
+                "Concept 1",
+                "Concept 2",
+                "Concept 3",
+                "Concept 4"
+            ],
+            "active_from": null,
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 13,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:07:43.745Z",
+        "modified": "2023-04-09T10:07:43.745Z",
+        "name": "column_edit",
+        "workflow": 1,
+        "payload": {
+            "id": 12,
+            "name": "Sat W2",
+            "type": "string",
+            "is_key": false,
+            "position": 12,
+            "active_to": null,
+            "categories": [
+                "Metabolism",
+                "DNA",
+                "RNA",
+                "No idea"
+            ],
+            "active_from": null,
+            "workflow_id": 1
+        }
+    }
+},
+{
+    "model": "ontask.log",
+    "pk": 14,
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2023-04-09T10:08:40.562Z",
+        "modified": "2023-04-09T10:08:40.562Z",
+        "name": "condition_create",
+        "workflow": 1,
+        "payload": {
+            "id": 31,
+            "name": "Connected in Week 2",
+            "action": "Student comments Week 1",
+            "formula": "Days online 2 &gt; 0 and not empty",
+            "workflow_id": 1,
+            "selected_count": 10
+        }
+    }
+},
+{
     "model": "ontask.column",
     "pk": 1,
     "fields": {
@@ -928,8 +1247,8 @@
     "model": "ontask.column",
     "pk": 11,
     "fields": {
-        "name": "Difficult Week 1",
-        "description_text": "What was the most difficult topic in this week's lecture?",
+        "name": "Difficult Week 2",
+        "description_text": "What was the most difficult topic in Week 2?",
         "workflow": 1,
         "data_type": "string",
         "is_key": false,
@@ -950,8 +1269,8 @@
     "model": "ontask.column",
     "pk": 12,
     "fields": {
-        "name": "Sat W1",
-        "description_text": "What was the most relevant topic in this week's lecture?",
+        "name": "Sat W2",
+        "description_text": "What do you think was the most relevant topic in Week 2?",
         "workflow": 1,
         "data_type": "string",
         "is_key": false,
@@ -1959,7 +2278,7 @@
                 "type": "string"
             },
             {
-                "id": "Difficult Week 1",
+                "id": "Difficult Week 2",
                 "type": "string",
                 "input": "select",
                 "values": [
@@ -1977,7 +2296,7 @@
                 ]
             },
             {
-                "id": "Sat W1",
+                "id": "Sat W2",
                 "type": "string",
                 "input": "select",
                 "values": [
@@ -2352,7 +2671,7 @@
             }
         ],
         "data_frame_table_name": "__ONTASK_WORKFLOW_TABLE_1",
-        "session_key": "63f5l09n5z0eg8u7my8dnvuig9vjaqxq",
+        "session_key": "4hlb1991eq1ohuu9yto2vgcz1clo0plf",
         "luser_email_column": null,
         "luser_email_column_md5": "",
         "lusers_is_outdated": false,
@@ -3529,11 +3848,43 @@
     }
 },
 {
+    "model": "ontask.condition",
+    "pk": 31,
+    "fields": {
+        "name": "Connected in Week 2",
+        "description_text": "",
+        "created": "2023-04-09T10:08:40.551Z",
+        "modified": "2023-04-09T10:08:40.551Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Days online 2",
+                    "type": "integer",
+                    "field": "Days online 2",
+                    "input": "number",
+                    "value": 0,
+                    "operator": "greater"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "Days online 2 &gt; 0 and not empty",
+        "selected_count": 10,
+        "workflow": 1,
+        "action": 6,
+        "columns": [
+            24
+        ]
+    }
+},
+{
     "model": "ontask.filter",
     "pk": 2,
     "fields": {
         "created": "2020-08-17T09:31:20.356Z",
-        "modified": "2020-08-17T09:31:20.880Z",
+        "modified": "2023-04-09T10:07:43.608Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3563,7 +3914,7 @@
     "pk": 3,
     "fields": {
         "created": "2020-08-17T09:31:20.363Z",
-        "modified": "2020-08-17T09:31:20.881Z",
+        "modified": "2023-04-09T10:07:43.625Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3593,7 +3944,7 @@
     "pk": 4,
     "fields": {
         "created": "2020-08-17T09:31:20.369Z",
-        "modified": "2020-08-17T09:31:20.883Z",
+        "modified": "2023-04-09T10:07:43.722Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3623,7 +3974,7 @@
     "pk": 5,
     "fields": {
         "created": "2020-08-17T09:31:20.375Z",
-        "modified": "2020-08-17T09:31:20.884Z",
+        "modified": "2023-04-09T10:07:43.644Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3692,7 +4043,37 @@
     "pk": 7,
     "fields": {
         "created": "2021-12-28T08:12:50.104Z",
-        "modified": "2021-12-28T08:13:26.820Z",
+        "modified": "2023-04-09T10:07:43.658Z",
+        "_formula": {
+            "not": false,
+            "rules": [
+                {
+                    "id": "Q01",
+                    "type": "double",
+                    "field": "Q01",
+                    "input": "number",
+                    "value": null,
+                    "operator": "is_not_null"
+                }
+            ],
+            "valid": true,
+            "condition": "AND"
+        },
+        "_formula_text": "Q01 is not null",
+        "selected_count": 12,
+        "workflow": 1,
+        "description_text": "",
+        "columns": [
+            13
+        ]
+    }
+},
+{
+    "model": "ontask.filter",
+    "pk": 8,
+    "fields": {
+        "created": "2023-04-09T10:04:27.024Z",
+        "modified": "2023-04-09T10:07:43.729Z",
         "_formula": {
             "not": false,
             "rules": [
@@ -3913,7 +4294,7 @@
     "fields": {
         "action": 6,
         "column": 12,
-        "condition": null,
+        "condition": 31,
         "changes_allowed": true
     }
 },
@@ -4035,7 +4416,7 @@
         "rows_all_false": [],
         "filter": null,
         "serve_enabled": true,
-        "text_content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1><p style=\"text-align: center;\">{% if High engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Gold-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Medium engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Silver-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if Low video engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Bronze-medal_Juhele_final.png\">{% endif %}</p><p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
+        "text_content": "<h1 style=\"text-align: center;\">Video Activity Badges</h1>\r\n<p style=\"text-align: center;\">{% if High engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Gold-medal_Juhele_final.png\" />{% endif %}</p>\r\n<p style=\"text-align: center;\">{% if Medium engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Silver-medal_Juhele_final.png\" />{% endif %}</p>\r\n<p style=\"text-align: center;\">{% if Low video engagement %}<img style=\"width: 128px;\" src=\"https://freesvg.org/img/Bronze-medal_Juhele_final.png\" />{% endif %}</p>\r\n<p style=\"text-align: center;\">{% if No_videos %}Work in progress{% endif %}</p>",
         "target_url": "",
         "shuffle": false,
         "attachments": []
@@ -4057,7 +4438,7 @@
         "rows_all_false": [],
         "filter": 5,
         "serve_enabled": false,
-        "text_content": "<p>Dear {{ GivenName }}<br></p><p>Here are some comments about the preparation videos for this week.</p><p style=\"\">{% if No Video 1 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">Genes and Proteins Activity</h4><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{% endif %}</p><p>{% if No Video 2 %}</p><h4 style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">STEM Cells</h4><p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p><p>{% endif %}</p>Regards<br><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Coordinator name }}</p><p style=\"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(0, 0, 0);\">{{ Course name }}<br></p>",
+        "text_content": "<p>Dear {{ GivenName }}</p>\r\n<p>Here are some comments about the preparation videos for this week.</p>\r\n<p>{% if No Video 1 %}</p>\r\n<h4 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">Genes and Proteins Activity</h4>\r\n<p style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">This video explains the role of the genes to synthesise proteins in the cell. It is very important to see the connection between the proteins and the rest of processes occurring in the cell.</p>\r\n<p style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">{% endif %}</p>\r\n<p>{% if No Video 2 %}</p>\r\n<h4 style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">STEM Cells</h4>\r\n<p>This video show how stem cells are a fundamental building block of how cellular organisms evolve. There are very valuable descriptions in this video about the mechanisms that are involved in this specialisation.</p>\r\n<p>{% endif %}</p>\r\n<p>Regards</p>\r\n<p style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">{{ Coordinator name }}</p>\r\n<p style=\"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000;\">{{ Course name }}</p>",
         "target_url": "",
         "shuffle": false,
         "attachments": []
@@ -4101,7 +4482,7 @@
         "rows_all_false": [],
         "filter": 7,
         "serve_enabled": false,
-        "text_content": "<p>Dear {{ GivenName }}</p><p>Here are the comments about your answers to the midterm exam (ordered by topic).</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Chemistry and Molecules of Life</h4><p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p><p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p><p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Cell function and structure</h4><p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p><p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p><p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">Nutrition, Metabolism & Enzymes</h4><p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p><p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p><p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\"><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4><p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p><p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p><p>{% if T4_HIGH %}Good work with this block!{% endif %}</p><h4 style=\"font-family: \" helvetica=\"\" neue\",=\"\" helvetica,=\"\" arial,=\"\" sans-serif;=\"\" color:=\"\" rgb(0,=\"\" 0,=\"\" 0);\"=\"\">DNA Structure and Replication</h4><p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p><p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p><p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p><p>Your total score for the midterm is {{ Total }}.</p><p>Kind regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p><div><br></div>",
+        "text_content": "<p>Dear&nbsp;{{ GivenName }}</p>\r\n<p>Here are the comments about your answers to the midterm exam (ordered by topic).</p>\r\n<h4>Chemistry and Molecules of Life</h4>\r\n<p>{% if T1_LOW %}You need to review the concepts in this topic. It is important that you identify those molecules that are important in a living organism, and differentiate them from other molecules. Also, make sure you review the basic steps of the chemical reactions we discussed in class.{% endif %}</p>\r\n<p>{% if T1_MID %}You need to review this topic again. Make sure you easily identify which molecules are present, for example, inside a cell and differentiate them from other.{% endif %}</p>\r\n<p>{% if T1_HIGH %}Good work with this topic!{% endif %}</p>\r\n<h4>Cell function and structure</h4>\r\n<p>{% if T2_LOW %}Go back and review in depth this chapter. You need to be able to identify the parts of the cell, and more importantly, the role they play in the various functions. It may help to build first a table of these functions, then a table of the parts of the cell, and then a paragraph in each category connecting one element from each table.{% endif %}</p>\r\n<p>{% if T2_MID %}You need to review the cell function and structure. You confused some of the parts and you need to make sure you are sure about all the functions and the parts that participate in each of them.{% endif %}</p>\r\n<p>{% if T2_HIGH %}Good work with this material! Can you envision how the cell gets the basic blocks for some of the functions such as DNA duplication?{% endif %}</p>\r\n<h4>Nutrition, Metabolism &amp; Enzymes</h4>\r\n<p>{% if T3_LOW %}Take another thorough review of this block. You need to connect the elements required in the cell to perform nutrition processes with the components required, and more importantly, with the enzymes that regulate these processes.{% endif %}</p>\r\n<p>{% if T3_MID %}You need to go back and review a bit more this part. Look again at the various processes that comprise what we call the metabolism of the cell, and the role of each enzyme in these processes.{% endif %}</p>\r\n<p>{% if T3_HIGH %}Good work with this block. Can you envision which metabolic processes will be affected if there are not enough nutrients reaching the cell? Can you think of any disease that is connected to these elements?{% endif %}</p>\r\n<h4><span style=\"color: inherit; font-family: inherit;\">Cell Division</span></h4>\r\n<p>{% if T4_LOW %}You need to review the material about mitosis and meiosis. The two processes have analogies and differences, you have to be able to analyse the steps and connect them with the other elements in the cell that participate.{% endif %}</p>\r\n<p>{% if T4_MID %}Good work with this topic, but you still need to review the material because some of the questions were not correctly answered. See if you can draw a diagram of the ttwo processes (mitosis and meiosis) without looking at the notes.{% endif %}</p>\r\n<p>{% if T4_HIGH %}Good work with this block!{% endif %}</p>\r\n<h4>DNA Structure and Replication</h4>\r\n<p>{% if T5_LOW %}Go back and review the structure of the DNA and its replication process. You need to be able to identify the different parts of the molecule, the basic elements, and how are they connected. Additionally, you need to be able to explain in detail the replication process.{% endif %}</p>\r\n<p>{% if T5_MID %}You need to review a bit more this block. Make sure you understand the role of each of the parts of the molecule with the replication process.{% endif %}</p>\r\n<p>{% if T5_HIGH %}Good work with this topic. Can you identify anomalies that may appear during the replication process?{% endif %}</p>\r\n<p>Your total score for the midterm is&nbsp;{{ Total }}.</p>\r\n<p>Kind regards</p>\r\n<p>{{ Coordinator name }}</p>\r\n<p>{{ Course name }}</p>\r\n<div>&nbsp;</div>",
         "target_url": "",
         "shuffle": false,
         "attachments": []
@@ -4134,7 +4515,7 @@
     "pk": 6,
     "fields": {
         "name": "Student comments Week 1",
-        "description_text": "Feedback about today's lecture",
+        "description_text": "Feedback about the material in Week 2",
         "created": "2019-09-21T06:44:12.978Z",
         "modified": "2019-09-21T06:44:12.979Z",
         "workflow": 1,
@@ -4142,8 +4523,11 @@
         "last_executed_log": null,
         "active_from": null,
         "active_to": null,
-        "rows_all_false": null,
-        "filter": null,
+        "rows_all_false": [
+            9,
+            11
+        ],
+        "filter": 8,
         "serve_enabled": true,
         "text_content": "{% comment %}Your action content here{% endcomment %}",
         "target_url": "",
@@ -4167,7 +4551,7 @@
         "rows_all_false": null,
         "filter": 4,
         "serve_enabled": false,
-        "text_content": "<p>Dear {{ GivenName }}</p><p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p><p>Regards.</p><p>{{ Coordinator name }}</p><p>{{ Course name }}</p>",
+        "text_content": "<p>Dear&nbsp;{{ GivenName }}</p>\r\n<p>This is just a reminder to let you know that the activities in this course will rely on the discussions appearing in the forum. See if you can take a look at the messages currently there and let us know if you need any additional information from us.</p>\r\n<p>Regards.</p>\r\n<p>{{ Coordinator name }}</p>\r\n<p>{{ Course name }}</p>",
         "target_url": "",
         "shuffle": false,
         "attachments": []
@@ -4189,7 +4573,7 @@
         "rows_all_false": null,
         "filter": null,
         "serve_enabled": false,
-        "text_content": "<p>Dear {{ GivenName }}</p><p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p><p>{% ot_insert_rubric_feedback %}</p><p>Let us know if you have any questions.</p><p>Regards</p><p>{{ Coordinator name }}</p><p>{{ Course name }}<br></p>",
+        "text_content": "<p>Dear {{ GivenName }}</p>\r\n<p>Here are some comments about the project you submitted a few days ago based on the published grading rubric:</p>\r\n<p>{% ot_insert_rubric_feedback %}</p>\r\n<p>Let us know if you have any questions.</p>\r\n<p>Regards</p>\r\n<p>{{ Coordinator name }}</p>\r\n<p>{{ Course name }}</p>",
         "target_url": "",
         "shuffle": false,
         "attachments": []
