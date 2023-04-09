@@ -77,9 +77,13 @@ objective of the project.
 
 - University of Technology Sydney (UTS), Australia
 
+- University of Copenhagen
+
 - RMIT, Australia
 
 - University Carlos III de Madrid, Spain
+
+- Monash University
 
 - North West University, South Africa
 
