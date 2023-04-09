@@ -1,4 +1,4 @@
-{% if value_range and value_range < 10 %}
+{% if value_range and value_range|length < 10 %}
   <div class="text-center mt-2 mb-2">
     {% for i in value_range %}
       <i class="bi-{{ forloop.counter }}-circle{% if forloop.counter == step %}-fill{% endif %} ontask-step-number"></i>

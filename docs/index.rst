@@ -21,6 +21,4 @@ Version |ontask_version|
    Tutorial/index
    Advanced/index
 
-|test-all-icons|
-
 `Changelog <https://github.com/abelardopardo/ontask_b/blob/master/ChangeLog.md>`_

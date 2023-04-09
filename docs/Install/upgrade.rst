@@ -25,6 +25,23 @@ Version 5.2 contains a significant reorganization of the file structure in the t
 
 - The files in the ``media`` folder need to be moved to ``ontask/media``.
 
+Are you upgrading from a version prior to 9.0?
+==============================================
+
+If you are upgrading from a version older than 9.0, the following SQL commands need to be directly executed in the database (using the database client)::
+
+       INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0001_authtools_user_initial', CURRENT_TIMESTAMP);
+       INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0002_django18', CURRENT_TIMESTAMP);
+       INSERT INTO django_migrations (app, name, applied) VALUES ('ontask', '0003_auto_20160128_0912', CURRENT_TIMESTAMP);
+       DELETE FROM django_migrations WHERE app = 'authtools';
+       UPDATE django_content_type SET app_label = 'ontask' WHERE app_label = 'authtools' AND model = 'user';
+
+You can run these queries with the command::
+
+    python3 manage.py upgrade_9
+
+These queries have to execute before the the command ``python3 manage.py migrate``.
+
 Upgrade Steps
 =============
 
@@ -64,7 +81,7 @@ If you have OnTask already configured and running, here are the steps to follow 
 
     python3 manage.py collectstatic
 
-- Apply the migrations to the database::
+- Apply the migrations to the database (see notes above about potential previous steps)::
 
     python3 manage.py migrate
 
