@@ -15,11 +15,6 @@ class Scenario1Captures(ScreenTests):
     description = 'Scenario 1 in the documentation'
 
     def test(self):
-        """
-        Create a workflow, upload data and merge
-        :return:
-        """
-
         # Login
         self.login('instructor01@bogus.com')
 

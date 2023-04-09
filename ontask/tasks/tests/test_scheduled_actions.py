@@ -198,7 +198,7 @@ class ScheduledOperationTaskIncrementalEmail(ScheduledOperationTaskBasic):
     def test(self):
         """Test an incremental scheduled action."""
         # Modify the data table so that initially all records have registered
-        # equal to alse
+        # equal to false
         workflow = models.Workflow.objects.all().first()
         with connection.cursor() as cursor:
             query = sql.SQL('UPDATE {0} SET {1} = false').format(

@@ -28,11 +28,6 @@ class TutorialCaptures(ScreenTests):
         '<p>Jane Doe</p>'
 
     def test(self):
-        """
-        Create a workflow, upload data and merge
-        :return:
-        """
-
         question_values = 'DNA duplication, Mitosis, Kreb\'s cycle, None'
 
         # Login

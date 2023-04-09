@@ -56,11 +56,6 @@ class ScreenTutorialTest(tests.ScreenTests):
 class ScreenImportTest(tests.ScreenTests):
 
     def test(self):
-        """
-        Create a workflow, upload data and merge
-        :return:
-        """
-
         # Login
         self.login('instructor01@bogus.com')
 
