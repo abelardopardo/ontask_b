@@ -273,9 +273,9 @@
     "fields": {
         "password": "pbkdf2_sha256$36000$LPWhVSb2jAue$Vz9Ah1DpEXQaiVN6idyGMIvAxCMFwYufNSYhoiRu794=",
         "last_login": null,
-        "is_superuser": false,
+        "is_superuser": true,
         "email": "superuser@bogus.com",
-        "is_staff": false,
+        "is_staff": true,
         "is_active": true,
         "date_joined": "2017-11-08T00:12:05.725Z",
         "name": "Super User",
