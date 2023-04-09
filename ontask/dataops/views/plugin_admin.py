@@ -14,7 +14,7 @@ from ontask.core.session_ops import remove_workflow_from_session
 from ontask.dataops import services
 
 
-class PluginAdminView(UserIsInstructor, WorkflowView, generic.TemplateView):
+class PluginAdminView(UserIsInstructor, generic.TemplateView):
     """Show the table of plugins and their status."""
 
     template_name = 'dataops/plugin_admin.html'
@@ -115,5 +115,5 @@ class PluginToggleView(
         plugin_item = self.get_object()
         if plugin_item.is_verified:
             plugin_item.is_enabled = not plugin_item.is_enabled
-            plugin_item.save(update_fields=['is_enable'])
+            plugin_item.save(update_fields=['is_enabled'])
         return http.JsonResponse({'is_checked': plugin_item.is_enabled})
