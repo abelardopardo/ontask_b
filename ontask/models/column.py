@@ -1,13 +1,13 @@
 """Column model."""
 import datetime
 from typing import Any, List, Optional, Tuple
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.db import models
 from django.db.models import JSONField
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
-import pytz
 
 from ontask.dataops import pandas, sql
 from ontask.models.common import CHAR_FIELD_MID_SIZE, NameAndDescription
@@ -281,7 +281,7 @@ class Column(NameAndDescription):
 
         :return: Boolean encoding the active status
         """
-        now = datetime.datetime.now(pytz.timezone(settings.TIME_ZONE))
+        now = datetime.datetime.now(ZoneInfo(settings.TIME_ZONE))
         return not (
             (self.active_from and now < self.active_from)
             or (self.active_to and self.active_to < now))

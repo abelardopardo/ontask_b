@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-#
-
 """Serialize the scheduled action."""
 from typing import Dict
 

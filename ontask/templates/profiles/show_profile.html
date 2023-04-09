@@ -9,7 +9,7 @@
     <div class="col-sm-10">
       <h1>{{ show_user.get_full_name }}</h1>
       {% if editable %}
-      <a href="{% url 'profiles:edit_self' %}" class="shadow btn btn-outline-primary">
+      <a href="{% url 'profiles:edit_self' %}" class="btn btn-outline-primary">
         {% trans 'Edit Profile' %}</a>
       {% endif %}
     </div>
@@ -27,11 +27,11 @@
         <li class="list-group-item text-muted">{% trans 'Profile' as profile %}</li>
         <li class="list-group-item text-right"><span class="float-left"><strong>{% trans 'Email:' %}</strong></span> {{ show_user.email|default:"missing" }}
 	  {% if show_user.profile.email_verified %}
-	    <span class="fa fa-check-circle" aria-hidden="true"
+	    <span class="bi-check-circle-fill" aria-hidden="true"
             title="{% trans 'This email address has been verified' %}"></span>
 	    <span class="sr-only">Verified</span>
 	  {% else %}
-	    <span class="fa fa-exclamation-triangle" aria-hidden="true"
+	    <span class="bi-exclamation-triangle" aria-hidden="true"
             title="{% trans 'This email address is not verified' %}"></span>
 	    <span class="sr-only">Not Verified</span>
 	  {% endif %}
@@ -45,8 +45,8 @@
         <div class="card-header">{{ profile }}
 	  {% if show_user.profile.slug %}
 	    <a href="{% url 'profiles:show' show_user.profile.slug %}">
-	    	<span class="fa fa-link" aria-hidden="true"
-              title="{% trans 'Profile permalink' %}"></span>
+	    	<i class="bi-link-45deg" aria-hidden="true"
+              title="{% trans 'Profile permalink' %}"></i>
 	    	<span class="sr-only">Permalink</span></a> {{ show_user.profile.get_absolute_url }}
 	  {% else %}
 		<a href="https://github.com/arocks/edge/issues/40"

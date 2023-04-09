@@ -144,7 +144,7 @@ class Condition(NameAndDescription, ConditionBase):
     def update_fields(self) -> bool:
         """Update some internal fields when saving an object.
 
-        :return: Boolean true if htere has been a change
+        :return: Boolean true if there has been a change
         """
 
         super().update_fields()

@@ -1,12 +1,12 @@
 The menu contains the following links:
 
-|fa-home| Workflows
+|bi-house-fill| Workflows
   Link back to the home page showing the workflows available for manipulation.
 
-|fa-comments| Actions
+|bi-chat-right-quote-fill| Actions
   Create, edit and execute actions.
 
-|fa-table| Table
+|bi-table| Table
   Operations to visualize and manipulate the table (search for values, add a row, add a column)
 
 More
@@ -24,8 +24,8 @@ More
   View logs
     A table showing the history of operations performed on this workflow
 
-|fa-user| User profile
+|bi-person-square| User profile
   Link to the user profile and logout
 
-|fa-book| Manual & API documentation
+|bi-journal-text| Manual & API documentation
   Link to the OnTask manual (this document) and the API documentation

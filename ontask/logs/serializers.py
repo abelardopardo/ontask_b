@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-#
-
 """Serializer for the API."""
 from rest_framework import serializers
 

@@ -241,7 +241,7 @@ let toggleStar = function () {
   $('#div-spinner').hide();
 }
 $(document).ready(function(){
-  $('[data-toggle="tooltip"]').tooltip({
+  $('[data-bs-toggle="tooltip"]').tooltip({
     trigger: "hover",
     placement: "auto",
     container: "body",

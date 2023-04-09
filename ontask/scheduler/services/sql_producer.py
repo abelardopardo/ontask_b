@@ -37,7 +37,7 @@ class ScheduledOperationUpdateSQLUpload(ScheduledOperationUpdateBaseView):
             initial_values={
                 'workflow_id': self.workflow.id,
                 'operation_type': self.operation_type,
-                'valuerange': [],
+                'value_range': [],
                 'page_title': gettext('Schedule SQL Upload')})
 
         if self.scheduled_item:
@@ -86,7 +86,7 @@ class ScheduledOperationUpdateSQLUpload(ScheduledOperationUpdateBaseView):
                 pk=payload.pop('workflow_id'))
 
         # Remove some parameters from the payload
-        for key in ['valuerange', 'workflow_id', 'page_title']:
+        for key in ['value_range', 'workflow_id', 'page_title']:
             payload.pop(key, None)
 
         try:

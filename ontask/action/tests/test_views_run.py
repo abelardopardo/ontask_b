@@ -200,7 +200,7 @@ class ActionViewRunEmailWithItemFilter(ActionViewRunBasic):
             'item_column': column.pk,
             'action_id': action.id,
             'button_label': 'Send',
-            'valuerange': 2,
+            'value_range': 2,
             'step': 2,
             'prev_url': reverse('action:run', kwargs={'pk': action.id}),
             'post_url': reverse('action:run_done')}

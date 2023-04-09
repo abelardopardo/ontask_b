@@ -26,9 +26,9 @@
               <button type="button"
                       class="btn btn-light btn-sm js-filter-delete"
                       data-url="{% url 'condition:delete_filter' action.id %}"
-                      data-toggle="tooltip"
+                      data-bs-toggle="tooltip"
                       title="{% trans 'Delete the filter' %}">
-                <span class="fa fa-trash"></span>
+                <i class="bi-trash-fill"></i>
               </button>
             </div>
           </div>
@@ -45,15 +45,15 @@
               <button type="button"
                       class="btn btn-light btn-sm js-filter-edit"
                       data-url="{% url 'condition:edit_filter' action.id %}"
-                      data-toggle="tooltip"
-                      title="{% blocktrans with n=filter_condition.selected_count %}Edit the filter ({{ n }} rows satisfy this condition){% endblocktrans %}"><span class="fa fa-pencil-alt"></span>
+                      data-bs-toggle="tooltip"
+                      title="{% blocktrans with n=filter_condition.selected_count %}Edit the filter ({{ n }} rows satisfy this condition){% endblocktrans %}"><i class="bi-pencil-fill"></i>
               </button>
               <button type="button"
                       class="btn btn-light btn-sm js-filter-delete"
                       data-url="{% url 'condition:delete_filter' action.id %}"
-                      data-toggle="tooltip"
+                      data-bs-toggle="tooltip"
                       title="{% trans 'Delete the filter' %}">
-                <span class="fa fa-trash"></span>
+                <i class="bi-trash-fill"></i>
               </button>
             </div>
           </div>

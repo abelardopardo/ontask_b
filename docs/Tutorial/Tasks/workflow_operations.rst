@@ -10,19 +10,19 @@ The link *Workflow operations* available in the pull down menu of the *More* lin
 
 The links at the top of the page offer the operations to:
 
-|fa-download| Export
+|bi-download| Export
   This functionality allows you to take all the information included in a workflow and export it. The functionality offers the option of including in the export only the data, or the data and the actions.
 
-|fa-pencil-alt| Rename
+|bi-pencil-fill| Rename
   Use this function to change the name and description of the workflow.
 
-|fa-clone| Clone
+|bi-files| Clone
   This button creates a clone of the workflow with the a name containing the prefix *Copy of*. Once the operation is executed, the workflow is available in the home screen (link in the upper left corner of the screen).
 
-|fa-minus-square| Flush data table
+|bi-dash-square-fill| Flush data table
   This function deletes the data associated with the workflow. It maintains the set of attributes and the actions, but it removes the conditions and filters from all the actions.
 
-|fa-trash| Delete
+|bi-trash-fill| Delete
   This function deletes completely the workflow from the platform.
 
 Additionally, the following two tabs offer the operations to manage two entities: attributes and sharing.

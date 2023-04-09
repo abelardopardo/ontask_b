@@ -5,7 +5,7 @@
   <div id="insert-questions" class="text-center mt-3">
     <div id="column-selector" class="dropdown btn-group">
       <button type="button" class="btn btn-outline-dark dropdown-toggle"
-              data-toggle="dropdown">
+              data-bs-toggle="dropdown">
         {% if is_survey %}
           {% trans 'Insert existing question' %}
         {% else %}
@@ -23,18 +23,18 @@
       <button type="button"
               class="btn btn-outline-dark js-action-question-add"
               data-url="{% url 'column:question_add' action.id %}"
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
               title="{% trans 'Add a new question to the action' %}">
-        <span class="fa fa-plus"></span>
+        <i class="<i class=""></i>
           {% trans 'Create question' %}
       </button>
     {% else %}
       <button type="button"
               class="btn btn-outline-dark js-action-todoitem-add"
               data-url="{% url 'column:todoitem_add' action.id %}"
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
               title="{% trans 'Add a new item to the list' %}">
-        <span class="fa fa-plus"></span>
+        <i class="<i class=""></i>
           {% trans 'Create item' %}
       </button>
     {% endif %}

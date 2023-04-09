@@ -1,12 +1,12 @@
 {% load i18n %}
 {% if selected_rows == 0 %}
-  <p class="alert-danger text-center"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'The filter excludes all the students' %}</p>
+  <p class="alert-danger text-center"><i class="bi-exclamation-triangle" style="color:red;"></i> {% trans 'The filter excludes all the students' %}</p>
 {% elif all_false_conditions %}
-  <p class="alert-danger text-center"><span class="fa fa-exclamation-triangle" style="color:red;"></span> {% trans 'Some condition evaluates to FALSE for all users' %}</p>
+  <p class="alert-danger text-center"><i class="bi-exclamation-triangle" style="color:red;"></i> {% trans 'Some condition evaluates to FALSE for all users' %}</p>
 {% endif %}
 {% if action.get_row_all_false_count %}
   <p class="alert-danger text-center">
-    <span class="fa fa-exclamation-triangle" style="color:red;"></span>
+    <i class="bi-exclamation-triangle" style="color:red;"></i>
     {% blocktrans count n=action.get_row_all_false_count|length %}{{ n }} user has all conditions equal to FALSE{% plural %}{{ n }} users have all conditions equal to FALSE{% endblocktrans %}
   </p>
 {% endif %}

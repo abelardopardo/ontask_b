@@ -448,7 +448,7 @@ class TableViews(tests.DerivedColumnFixture, tests.OnTaskLiveTestCase):
         self.selenium.find_element(By.NAME, "columns").click()
         self.selenium.find_element(
             By.XPATH,
-            "//div[@id='div_id_columns']/div/div/div/div[3]/div[2]/label/div"
+            "//div[@class='sol-label-text' and normalize-space(text()) = 'c2']"
         ).click()
         self.selenium.find_element(
             By.XPATH,

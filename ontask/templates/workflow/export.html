@@ -57,10 +57,10 @@
           </table>
         {% endif %}
         <div class="text-center">
-          <a class="shadow btn btn-outline-dark spin" href="{% if only_action_list %}{% url 'action:index' %}{% else %}{% url 'workflow:operations' %}{% endif %}">{% trans 'Cancel' %}</a>
-          <button class="shadow btn btn-outline-primary btn-space"
+          <a class="btn btn-outline-dark spin" href="{% if only_action_list %}{% url 'action:index' %}{% else %}{% url 'workflow:operations' %}{% endif %}">{% trans 'Cancel' %}</a>
+          <button class="btn btn-outline-primary btn-space"
                   type="Submit" name="Submit" value="Submit">
-            <span class="fa fa-download"></span> {% trans 'Export' %}</button>
+            <i class="bi-download"></i> {% trans 'Export' %}</button>
         </div>
       </form>
     </div>

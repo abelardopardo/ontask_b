@@ -42,7 +42,7 @@
         "searchDelay": 500,
         "drawCallback": function(settings) {
            // Needed to enable tooltips in ajax produced content
-           $('[data-toggle="tooltip"]').tooltip({ trigger: "hover"});
+           $('[data-bs-toggle="tooltip"]').tooltip({ trigger: "hover"});
         },
         colReorder: false,
         rowReorder: false,
@@ -55,10 +55,10 @@
     <h1 class="text-center">{% trans 'Logs' %}<super>*</super></h1>
     <div class="text-center" id="log-table-page">
       <a href="{% url 'logs:export' workflow.id %}" download
-         class="shadow btn btn-outline-primary btn-sm"
-         data-toggle="tooltip"
+         class="btn btn-outline-primary btn-sm"
+         data-bs-toggle="tooltip"
          title="{% trans 'Download a CSV file containing these logs' %}">
-        <span class="fa fa-download"></span> {% trans 'CSV Download' %}
+        <i class="bi-download"></i> {% trans 'CSV Download' %}
       </a>
     </div>
     <div class="justify-content-center">

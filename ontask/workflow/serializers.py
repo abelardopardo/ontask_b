@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-#
-
 """Serializers to import/export, list the workflows."""
 from builtins import str
 from typing import List
@@ -106,7 +104,7 @@ class WorkflowExportSerializer(serializers.ModelSerializer):
     @profile
     def create(self, validated_data, **kwargs):
         """Create the new workflow."""
-        version = validated_data.pop('version', None)
+        validated_data.pop('version', None)
 
         wflow_name = self.context.get('name')
         if wflow_name:

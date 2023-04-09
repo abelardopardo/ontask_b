@@ -1,17 +1,17 @@
 {% load i18n %}
 <div class="btn-group" role="group">
   <button type="button"
-          data-toggle="tooltip" title="{% trans 'Edit this scheduled operation' %}"
+          data-bs-toggle="tooltip" title="{% trans 'Edit this scheduled operation' %}"
           class="btn btn-secondary btn-sm btn-light mt-1"
           onclick="location.href='{% url 'scheduler:edit_scheduled_operation' id %}'">
-    <span class="fa fa-pencil-alt"></span></button>
+    <i class="bi-pencil-fill"></i></button>
   <button type="button"
-     data-url="{% url 'scheduler:view' id %}" data-toggle="tooltip"
+     data-url="{% url 'scheduler:view' id %}" data-bs-toggle="tooltip"
      title="{% trans 'View the details of this scheduled operation' %}"
      class="btn btn-secondary btn-sm btn-light js-scheduler-view mt-1">
-    <span class="fa fa-eye"></span></button>
+    <i class="bi-eye-fill"></i></button>
   <button type="button" class="btn btn-secondary btn-sm btn-light js-scheduler-delete mt-1"
-          data-toggle="tooltip" title="{% trans 'Delete this scheduled operation' %}"
+          data-bs-toggle="tooltip" title="{% trans 'Delete this scheduled operation' %}"
           data-url="{% url 'scheduler:delete' id %}">
-    <span class="fa fa-trash"></span></button>
+    <i class="bi-trash-fill"></i></button>
 </div>

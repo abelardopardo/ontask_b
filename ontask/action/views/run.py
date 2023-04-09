@@ -148,7 +148,7 @@ class ActionRunActionItemFilterView(
         context.update({
             'action': self.action,
             'button_label': self.payload['button_label'],
-            'valuerange': range(self.payload['valuerange']),
+            'value_range': range(self.payload['value_range']),
             'step': self.payload['step'],
             'prev_step': self.payload['prev_url']})
         return context

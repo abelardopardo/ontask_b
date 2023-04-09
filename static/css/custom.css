@@ -1,5 +1,4 @@
-/*! Themestr.app `Boldstrap` Bootstrap 4.3.1 theme */
-@import url(https://use.fontawesome.com/releases/v5.0.10/css/all.css);
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css");
 @import url(https://fonts.googleapis.com/css?family=Yantramanav:200,300,400,700);
 /*! Import Bootstrap 4 variables */
 /*!
@@ -1082,7 +1081,7 @@ fieldset:disabled a.btn {
   .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
   .show > .btn-primary.dropdown-toggle {
     color: #fff;
-    background-color: #038aed;
+    background-color: #13795b;
     border-color: #0383e0; }
     .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
     .show > .btn-primary.dropdown-toggle:focus {
@@ -1259,7 +1258,7 @@ fieldset:disabled a.btn {
     background-color: #20c997;
     border-color: #20c997; }
   .btn-outline-primary:focus, .btn-outline-primary.focus {
-    box-shadow: 0 0 0 0.2rem rgba(39, 162, 252, 0.5); }
+    box-shadow: 0 0 0 0.2rem rgba(32, 201, 150, 0.5); }
   .btn-outline-primary.disabled, .btn-outline-primary:disabled {
     color: #20c997;
     background-color: transparent; }
@@ -1270,7 +1269,11 @@ fieldset:disabled a.btn {
     border-color: #20c997; }
     .btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
     .show > .btn-outline-primary.dropdown-toggle:focus {
-      box-shadow: 0 0 0 0.2rem rgba(39, 162, 252, 0.5); }
+      box-shadow: 0 0 0 0.2rem rgba(32, 201, 150, 0.5); }
+  .btn-outline-primary.dropdown-toggle.show {
+    background-color: #20c997;
+    box-shadow: 0 0 0 0.2rem rgba(32, 201, 150, 0.5); }
+    border-color: #20c997; }
 
 .btn-outline-secondary {
   color: #a0b7bc;
@@ -2136,8 +2139,10 @@ input[type="button"].btn-block {
 
 .nav-link {
   display: block;
+  color: #20c997;
   padding: 0.5rem 1rem; }
   .nav-link:hover, .nav-link:focus {
+    color: #13795b;
     text-decoration: none; }
   .nav-link.disabled {
     color: #6c757d; }
@@ -2765,7 +2770,7 @@ input[type="button"].btn-block {
   .badge-primary[href]:hover, .badge-primary[href]:focus {
     color: #fff;
     text-decoration: none;
-    background-color: #038aed; }
+    background-color: #13795b; }
 
 .badge-secondary {
   color: #212529;
@@ -3669,7 +3674,7 @@ button.close {
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {
-  background-color: #038aed !important; }
+  background-color: #13795b !important; }
 
 .bg-secondary {
   background-color: #a0b7bc !important; }
@@ -5571,7 +5576,7 @@ button.bg-dark:focus {
   color: #20c997 !important; }
 
 a.text-primary:hover, a.text-primary:focus {
-  color: #038aed !important; }
+  color: #13795b !important; }
 
 .text-secondary {
   color: #a0b7bc !important; }

@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 from email_validator import validate_email
 from psycopg2 import sql
-import pytz
+from zoneinfo import ZoneInfo
 
 from ontask.celery import app as celery_app
 
@@ -29,7 +29,7 @@ __all__ = [
     'OnTaskSharedState',
     'simplify_datetime_str']
 
-__version__ = '10.0'
+__version__ = '10.1'
 
 LOGGER = logging.getLogger('ontask')
 
@@ -192,7 +192,7 @@ def simplify_datetime_str(dtime: datetime) -> str:
     if dtime is None:
         return ''
     return dtime.astimezone(
-        pytz.timezone(conf.settings.TIME_ZONE),
+        ZoneInfo(conf.settings.TIME_ZONE),
     ).strftime('%Y-%m-%d %H:%M:%S %z')
 
 

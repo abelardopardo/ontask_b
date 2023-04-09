@@ -128,7 +128,7 @@ class ColumnTestRename(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         self.create_new_personalized_text_action(action_name, action_desc)
 
         # Select filter tab
-        self.select_filter_tab()
+        self.select_tab('filter-tab')
         self.open_condition(
             None,
             "//button[contains(@class, 'js-filter-create')]")

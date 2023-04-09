@@ -6,6 +6,11 @@ from settings.base import show_configuration
 class Command(BaseCommand):
     """Class implementing a command to show the configuration."""
 
+    help = """This command prints all the configuration variables that affect
+    the execution of OnTask. It is useful to verify that the configuration is
+    correct.
+    """
+
     def handle(self, *args, **options):
         """Execute command to show the configuration.
 

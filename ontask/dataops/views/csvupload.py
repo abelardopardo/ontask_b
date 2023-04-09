@@ -13,8 +13,8 @@ from ontask.dataops.views import common
 class CSVUploadStart(common.UploadStart, generic.FormView):
     """Start the upload of a data frame from a CSV file.
 
-    The four step process will populate the following dictionary with name
-    upload_data (divided by steps in which they are set
+    The four-step process will populate the following dictionary with name
+    upload_data (divided by steps in which they are set)
 
     STEP 1:
 

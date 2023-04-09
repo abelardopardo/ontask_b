@@ -427,16 +427,6 @@
     }
 },
 {
-    "model": "authtoken.token",
-    "pk": "c5eac9be0365a24aca40633f7ebb3556d66a7a1d",
-    "fields": {
-        "user": [
-            "superuser@bogus.com"
-        ],
-        "created": "2017-11-11T20:56:38.250Z"
-    }
-},
-{
     "model": "ontask.column",
     "pk": 4663,
     "fields": {

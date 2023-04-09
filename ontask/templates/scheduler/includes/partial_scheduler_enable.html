@@ -1,5 +1,5 @@
 <input class="toggle-checkbox"
        {% if record.task.enabled %}checked{% endif %}
-       data-toggle="toggle"
+       data-bs-toggle="toggle"
        data-url="{% url 'scheduler:schedule_toggle' record.id %}"
        type="checkbox"/>

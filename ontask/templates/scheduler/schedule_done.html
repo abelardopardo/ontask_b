@@ -9,10 +9,10 @@
       <p class="text-center">{% blocktrans with n=tdelta %}Operation execution: {{ n }}{% endblocktrans %}</p>
     {% endif %}
     <div class="text-center">
-      <a class="shadow btn btn-outline-dark" href="{% url 'scheduler:index' %}">{% trans 'Scheduled operations' %}</a>
+      <a class="btn btn-outline-dark" href="{% url 'scheduler:index' %}">{% trans 'Scheduled operations' %}</a>
       <a href="{% url 'scheduler:edit_scheduled_operation' s_item.id %}"
-         class="shadow btn btn-outline-primary">
-      <span class="fa fa-pencil-alt"></span> {% trans 'Edit' %}</a>
+         class="btn btn-outline-primary">
+      <i class="bi-pencil-fill"></i> {% trans 'Edit' %}</a>
     </div>
   </div>
 {% endblock container %}

@@ -1,13 +1,13 @@
 {% load i18n %}
 <div class="dropdown btn-group">
-  <button class="shadow btn btn-outline-primary dropdown-toggle" type="button"
+  <button class="btn btn-outline-primary dropdown-toggle" type="button"
           id="addScheduleOperations"
-          data-toggle="dropdown"><span class="fa fa-plus"></span> {% trans 'Operation' %}
+          data-bs-toggle="dropdown"><i class="bi-plus"></i> {% trans 'Operation' %}
   </button>
-  <div class="shadow dropdown-menu" aria-labelledby="addColumnOpertions">
+  <div class="dropdown-menu" aria-labelledby="addColumnOpertions">
     <a type="button" class="dropdown-item"
        href="{% url 'scheduler:select_sql' %}"
-       data-toggle="tooltip"
+       data-bs-toggle="tooltip"
        title="{% trans 'Schedule a SQL upload/merge operation' %}">
       {% trans 'SQL upload/merge' %}
     </a>

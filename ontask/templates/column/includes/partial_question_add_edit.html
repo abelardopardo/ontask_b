@@ -17,16 +17,14 @@
     {% else %}
       <h4 class="modal-title">{% blocktrans with n=object.name %}Edit question <strong>{{ n }}</strong>{% endblocktrans %}</h4>
     {% endif %}
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     {{ form|crispy }}
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-outline-primary">
-       <span class="fa fa-check"></span> {% if add %}{% trans 'Add question' %}{% else %}{% trans 'Update' %}{% endif %}
+       <i class="bi-check"></i> {% if add %}{% trans 'Add question' %}{% else %}{% trans 'Update' %}{% endif %}
     </button>
   </div>
 </form>

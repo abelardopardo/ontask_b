@@ -3,29 +3,29 @@
   {% if request.user == workflow.user %}
     <button type="button"
             class="shadow btn btn-outline-dark btn-sm js-workflow-update align-middle"
-            data-url="{% url 'workflow:update' workflow.id %}" data-toggle="tooltip"
+            data-url="{% url 'workflow:update' workflow.id %}" data-bs-toggle="tooltip"
             title="{% trans 'Change the name and description of this workflow' %}">
-        <span class="fa fa-pencil-alt"></span> {% trans 'Rename' %}
+        <i class="bi-pencil-fill"></i> {% trans 'Rename' %}
     </button>
     <button type="button"
        class="shadow btn btn-outline-dark btn-sm js-workflow-clone align-middle"
-            data-url="{% url 'workflow:clone' workflow.id %}" data-toggle="tooltip"
+            data-url="{% url 'workflow:clone' workflow.id %}" data-bs-toggle="tooltip"
             title="{% trans 'Create a duplicate of this workflow' %}">
-      <span class="fa fa-clone"></span>
+      <i class="bi-files"></i>
       {% trans 'Clone' %}
     </button>
     <button type="button"
             class="shadow btn btn-outline-dark btn-sm js-workflow-flush{% if workflow.nrows == 0 %} disabled{% endif %}"
-            data-url="{% url 'workflow:flush' workflow.id %}" data-toggle="tooltip"
+            data-url="{% url 'workflow:flush' workflow.id %}" data-bs-toggle="tooltip"
             title="{% trans 'Delete the data in the table of this workflow' %}">
-      <span class="fa fa-minus-square"></span>
+      <i class="bi-dash-square-fill"></i>
       {% trans 'Flush Data' %}
     </button>
     <button type="button"
             class="shadow btn btn-outline-danger btn-sm js-workflow-delete"
-            data-url="{% url 'workflow:delete' workflow.id %}" data-toggle="tooltip"
+            data-url="{% url 'workflow:delete' workflow.id %}" data-bs-toggle="tooltip"
             title="{% trans 'Delete this workflow' %}">
-      <span class="fa fa-trash"></span> {% trans 'Delete' %}
+      <i class="bi-trash-fill"></i> {% trans 'Delete' %}
     </button>
   {% endif %}
 </div>

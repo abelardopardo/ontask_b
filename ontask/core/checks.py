@@ -77,6 +77,11 @@ def check_workflow(workflow: models.Workflow) -> bool:
     rng = range(1, len(cpos) + 1)
     assert sorted(cpos) == list(rng)
 
+    # Verify the name of the workflow
+    assert (
+        workflow.data_frame_table_name ==
+        workflow.df_table_prefix.format(workflow.id)), 'Inconsistent table name'
+
     # Verify the sanity of all the actions
     for action in workflow.actions.all():
         check_action(action)

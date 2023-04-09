@@ -16,11 +16,11 @@
         {% csrf_token %}
         {{ form|crispy }}
         <div class="text-center">
-          <a class="shadow btn btn-outline-dark spin"
+          <a class="btn btn-outline-dark spin"
              href="{% url 'home' %}">{% trans 'Cancel' %}</a>
-          <button class="shadow btn btn-outline-primary btn-space spin"
+          <button class="btn btn-outline-primary btn-space spin"
                   type="Submit" name="Submit" value="Submit">
-            <span class="fa fa-upload"></span> {% trans 'Import' %}</button>
+            <i class="bi-upload"></i> {% trans 'Import' %}</button>
         </div>
       </form>
     </div>

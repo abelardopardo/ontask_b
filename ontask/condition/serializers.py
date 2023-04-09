@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-#
-
 """Classes to serialize Conditions."""
 from typing import Dict
 

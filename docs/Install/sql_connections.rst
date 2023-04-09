@@ -49,15 +49,15 @@ Once a connection is defined, as described in :ref:`sql_connection_run`, all the
 
 The operations allowed for each connection are:
 
-|fa-pencil-alt| Edit
+|bi-pencil-fill| Edit
   Change any of the parameters of the connection
 
-|fa-eye| View
+|bi-eye-fill| View
   View the values of the connection
 
-|fa-clone| Clone
+|bi-files| Clone
   Create a duplicate of the connection (useful to reuse configuration parameters)
 
-|fa-trash| Delete
+|bi-trash-fill| Delete
   Remove the connection from the platform.
 

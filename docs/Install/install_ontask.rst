@@ -391,7 +391,7 @@ Once you have OnTask installed and configured and the tools Redis and Postgresql
 
 The documentation is created by the application ``sphinx-doc`` and stored in the directory ``_build`` which is then copied to the ``../static`` folder. Once the documentation has been created, the next steps configure the database. If at some point during the following steps you want to reset the content of the database, run the commands ``dropdb`` and ``createdb`` explained in :ref:`install_postgresql`. The following commands have to be execute from the project folder.
 
-1. Execute the following command to create the database internal structure::
+1. Execute the following command to create/update the database structure::
 
      python3 manage.py migrate
 

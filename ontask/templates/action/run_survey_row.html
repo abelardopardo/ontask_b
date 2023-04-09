@@ -17,7 +17,7 @@
     {% if form.is_empty %}
       <div class="text-center">
         <p>{% trans 'No responses required at this time' %}</p>
-        <a type="button" class="shadow btn btn-outline-dark spin"
+        <a type="button" class="btn btn-outline-dark spin"
            href="{{ cancel_url }}">{% trans 'Back' %}</a>
       </div>
     {% else %}
@@ -28,12 +28,12 @@
           {{ form|crispy }}
           <div class="text-center">
             {% if cancel_url %}
-              <a type="button" class="shadow btn btn-outline-dark spin"
+              <a type="button" class="btn btn-outline-dark spin"
                  href="{{ cancel_url }}">{% trans 'Back' %}</a>
             {% endif %}
             <button type="submit" name="submit" value="update"
-                    class="shadow btn btn-outline-primary spin">
-              <span class="fa fa-check"></span> {% trans 'Update' %}</button>
+                    class="btn btn-outline-primary spin">
+              <i class="bi-check"></i> {% trans 'Update' %}</button>
           </div>
         </form>
       {% endif %}

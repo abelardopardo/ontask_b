@@ -6,27 +6,27 @@ from django import forms
 from django.conf import settings
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import gettext_lazy as _
-import pytz
+from zoneinfo import ZoneInfo
 
 from ontask.settings import MAX_UPLOAD_SIZE
 
 DATE_TIME_WIDGET_OPTIONS = {
     'locale': settings.LANGUAGE_CODE,
     'icons': {
-        'time': 'fa fa-clock',
-        'date': 'fa fa-calendar',
-        'up': 'fa fa-angle-up',
-        'down': 'fa fa-angle-down',
-        'previous': 'fa fa-angle-left',
-        'next': 'fa fa-angle-right',
-        'today': 'fa fa-crosshairs',
-        'clear': 'fa fa-trash',
-        'close': 'fa fa-times-circle'},
+        'time': 'bi-clock-fill',
+        'date': 'bi-calendar',
+        'up': 'bi-chevron-up',
+        'down': 'bi-chevron-down',
+        'previous': 'bi-chevron-left',
+        'next': 'bi-chevron-right',
+        'today': 'bi-stop-circle',
+        'clear': 'bi-trash-fill',
+        'close': 'bi-x-circle'},
     'showTodayButton': True,
     'showClear': True,
     'showClose': True,
     'calendarWeeks': True,
-    'timeZone': str(pytz.timezone(settings.TIME_ZONE)),
+    'timeZone': str(ZoneInfo(settings.TIME_ZONE)),
 }
 
 

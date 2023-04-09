@@ -61,7 +61,7 @@ class Scenario3Captures(ScreenTests):
         self.body_ss('scenario_03_text.png')
 
         # Open the modal with the filter
-        self.select_filter_tab()
+        self.select_tab('filter-tab')
         self.open_filter()
 
         # Take picture of the filter
@@ -71,7 +71,7 @@ class Scenario3Captures(ScreenTests):
         self.cancel_modal()
 
         # Edit condition 1
-        self.select_condition_tab()
+        self.select_tab('conditions-tab')
         self.open_condition('Bottom third')
 
         # Take picture of the modal
@@ -93,7 +93,7 @@ class Scenario3Captures(ScreenTests):
         self.go_to_actions()
 
         # Open the email action
-        self.open_action_email('Send email with suggestions')
+        self.open_action_edit('Send email with suggestions')
 
         # Capture the email
         self.body_ss('scenario_03_email.png')

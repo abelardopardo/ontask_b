@@ -2,9 +2,9 @@
 {% if columns_show_stat %}
   <div id="column-stat-selector" class="dropdown btn-group">
     <button type="button" class="btn btn-outline-primary dropdown-toggle"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <span class="fa fa-chart-bar"></span> {% trans 'Column statistics' %}</button>
-    <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="column-stat-selector">
+            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="bi-bar-chart-line-fill"></i> {% trans 'Column statistics' %}</button>
+    <div class="dropdown-menu scrollable-menu" aria-labelledby="column-stat-selector">
       {% for column in columns_show_stat %}
         <button type="button" class="dropdown-item js-show-stats"
                 data-url="{% url 'table:stat_column_JSON' column.id %}">{{ column.name }}</button>

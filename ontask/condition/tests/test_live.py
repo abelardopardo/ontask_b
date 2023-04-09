@@ -32,7 +32,7 @@ class FilterLiveTest(ConditionTestBasic):
         self.open_action_edit(self.action_name)
 
         # Click in the add filter button
-        self.select_filter_tab()
+        self.select_tab('filter-tab')
         self.selenium.find_element(By.CLASS_NAME, 'js-filter-create').click()
         # Wait for the form to appear
         WebDriverWait(self.selenium, 10).until(
@@ -190,14 +190,12 @@ class ConditionLiveTest(ConditionTestBasic):
         self.open_action_edit(self.action_name)
 
         # Add condition
-        self.select_condition_tab()
         self.create_condition(
             'c1',
             'cdesc1',
             [('age', 'less or equal', '12.1')])
 
         # Click in the add a second condition
-        self.select_condition_tab()
         self.create_condition(
             'c2',
             'cdesc2',
@@ -205,7 +203,7 @@ class ConditionLiveTest(ConditionTestBasic):
 
         # Action now has two complementary conditions, add the conditions to
         # the message
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.insert_string_in_text_editor(
             'id_text_content',
@@ -272,7 +270,6 @@ class ConditionDetectAllFalseRows(ConditionTestBasic):
         self.create_new_personalized_text_action("action out", '')
 
         # Create three conditions
-        self.select_condition_tab()
         self.create_condition("cond 1", '', [('another', 'equal', 'bbb')])
         self.create_condition("cond 2", '', [('age', 'greater', '12.1')])
 
@@ -283,7 +280,7 @@ class ConditionDetectAllFalseRows(ConditionTestBasic):
             self.selenium.page_source)
 
         # insert the action text (not needed, but...)
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
             """tinymce.get('id_text_content').execCommand('mceInsertContent', 
@@ -343,10 +340,7 @@ class ConditionInActionIn(
         self.go_to_actions()
 
         # Open action in
-        self.open_action_edit(action_name)
-
-        # Select the condition tab
-        self.select_condition_tab()
+        self.open_action_edit(action_name, 'parameters')
 
         # Create two conditions
         self.create_condition(
@@ -357,7 +351,7 @@ class ConditionInActionIn(
             [('text2', 'is null', None)])
 
         # Go back to the questions
-        self.select_questions_tab()
+        self.select_tab('questions-tab')
 
         # Select conditions to both questions
         self.select_questions_condition('text1', 'Text 1 is null')

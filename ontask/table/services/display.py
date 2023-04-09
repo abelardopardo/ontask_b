@@ -2,13 +2,13 @@
 from builtins import next, str
 from datetime import datetime
 from typing import Any, Dict, List, Optional
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
 from django.utils.html import escape, urlencode
 from django.utils.translation import gettext_lazy as _
-from pytz import timezone
 
 from ontask import models
 from ontask.core import DataTablesServerSidePaging
@@ -95,7 +95,7 @@ def create_dictionary_table_display_ss(
         # Element to add to the final queryset
         new_element['Operations'] = ops_string
         column_values = [
-            rval.astimezone(timezone(
+            rval.astimezone(ZoneInfo(
                 settings.TIME_ZONE,
             )).strftime('%Y-%m-%d %H:%M:%S  %z')
             if isinstance(rval, datetime) else rval for rval in list(row)

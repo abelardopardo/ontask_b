@@ -1,4 +1,4 @@
-"""Django settings for ontask project."""
+"""Django settings for OnTask project."""
 import json
 import os
 from os.path import dirname, exists, join
@@ -30,11 +30,13 @@ env = environ.Env()
 ENV_FILENAME = join(
     dirname(__file__),
     env('ENV_FILENAME', default='local.env'))
+
+print('SYS.ARGV:', sys.argv)
+print('BASE_DIR:', BASE_DIR)
+print('ENV_FILENAME:', ENV_FILENAME)
+print('DJANGO_SETTINGS_MODULE:', env('DJANGO_SETTINGS_MODULE'))
+
 if exists(ENV_FILENAME):
-    print(
-        'Loading environment file {0} through {1}'.format(
-            ENV_FILENAME,
-            env('DJANGO_SETTINGS_MODULE')))
     environ.Env.read_env(str(ENV_FILENAME))
 
 # CONFIGURATION VARIABLES
@@ -113,7 +115,7 @@ LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
 LDAP_AUTH_SERVER_URI = env('LDAP_AUTH_SERVER_URI', default='')
 LDAP_AUTH_BIND_PASSWORD = env('LDAP_AUTH_BIND_PASSWORD', default='')
 
-LOG_FOLDER = env('LOG_FOLDER', default='logs')
+LOG_FOLDER = env('LOG_FOLDER', default=join(BASE_DIR(), 'logs'))
 
 LOGS_MAX_LIST_SIZE = env.int('LOGS_MAX_LIST_SIZE', default=200)
 
@@ -199,12 +201,13 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django_celery_beat',
     'django_celery_results',
+    'bootstrap5',
     'bootstrap_datepicker_plus',
     'drf_yasg',
     # 'corsheaders',
 
     'crispy_forms',
-    'crispy_bootstrap4',
+    'crispy_bootstrap5',
     'sorl.thumbnail',
     'widget_tweaks',
     'formtools',
@@ -328,7 +331,6 @@ TEMPLATES = [{
             'django.template.context_processors.tz',
             'django.template.context_processors.request',
             'django.contrib.messages.context_processors.messages',
-            'ontask.core.context_processors.conf_to_context',
         ],
         'libraries': {
             'ontask_tags': 'ontask.templatetags.ontask_tags',
@@ -369,7 +371,7 @@ MESSAGE_TAGS = {messages.ERROR: 'danger'}
 # Django Sessions
 # -----------------------------------------------------------------------------
 SESSION_CACHE_ALIAS = "default"
-SESSION_COOKIE_AGE = 1800  # set just 30 mins
+SESSION_COOKIE_AGE = 1800  # Seconds: 30 minutes
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True  # Needed to make sure timeout above works
@@ -393,8 +395,8 @@ else:
 
 # Django-crispy-forms
 # -----------------------------------------------------------------------------
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 # Django-import-export
 # -----------------------------------------------------------------------------
@@ -475,8 +477,8 @@ TINYMCE_DEFAULT_CONFIG = {
     "height": 500,
     "menubar": False,
     "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
-    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
-    "code,help,wordcount",
+    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,"
+    "paste,code,help,wordcount",
     "toolbar": "undo redo | formatselect | "
     "bold italic backcolor | alignleft aligncenter "
     "alignright alignjustify | bullist numlist outdent indent | "

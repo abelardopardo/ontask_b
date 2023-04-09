@@ -6,11 +6,7 @@
 <div class="container my-3 text-center">
   <h1>{% trans 'Unable to process page' %}</h1>
   <p>{% trans 'The request could not be processed.' %}</p>
-  {% if exception %}
-    <p><button class="shadow btn btn-outline-dark button-to-toggle-message">{% trans 'Details' %}</button></p>
-    <p id="message-to-toggle" style="border: 1px solid black; display: none">{{ exception }}</p>
-  {% endif %}
-  <a class="shadow btn btn-outline-dark spin"
+  <a class="btn btn-outline-dark spin"
      href="{% url 'home' %}">{% trans 'Back' %}</a>
 </div>
 {% endblock container %}

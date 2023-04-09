@@ -5,7 +5,7 @@ from typing import Dict, Mapping, Optional
 
 from celery.utils.log import get_task_logger
 from django.conf import settings
-import pytz
+from zoneinfo import ZoneInfo
 import requests
 
 from ontask import OnTaskSharedState, models
@@ -49,8 +49,8 @@ def _send_and_log_json(
         action=action.id,
         object=json.dumps(json_obj),
         status=status_val,
-        json_sent_datetime=str(datetime.datetime.now(pytz.timezone(
-            settings.TIME_ZONE))))
+        json_sent_datetime=str(
+            datetime.datetime.now(ZoneInfo(settings.TIME_ZONE))))
 
 
 class ActionRunProducerJSON(ActionRunProducerBase):

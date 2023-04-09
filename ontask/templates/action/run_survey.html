@@ -52,8 +52,8 @@
   <div class="container" id="action-survey-run">
     <h1 class="text-center">{{ action.name }}
       <a href="{% url 'action:edit' action.id %}"
-         class="shadow btn btn-outline-dark btn-sm align-middle">
-      <span class="fa fa-pencil-alt"></span> {% trans 'Edit' %}</a>
+         class="btn btn-outline-dark btn-sm align-middle">
+      <i class="bi-pencil-fill"></i> {% trans 'Edit' %}</a>
     </h1>
     <p class="help-block text-center">{{ action.description_text }}</p>
     <table class="table table-hover table-bordered shadow" style="width:100%;"
@@ -67,7 +67,7 @@
       </thead>
     </table>
     <div class="text-center">
-      <a class="shadow btn btn-outline-dark spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
+      <a class="btn btn-outline-dark spin" href="{% url 'action:index' %}">{% trans 'Back' %}</a>
     </div>
   </div>
   {% include 'modal.html' %}

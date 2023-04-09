@@ -66,18 +66,18 @@
     <div class="text-center my-3">
       {% include 'table/includes/partial_column_stats_selector.html' %}
       <button type="button"
-              class="shadow btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
+              class="btn btn-outline-info js-action-preview {% if not key_selected or not has_no_key or selected_rows == 0 %} disabled{% endif %}"
               data-url="{% url 'action:preview' action.id 1 %}"
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
               title="{% trans 'See the content as shown to each learner' %}">
-        <span class="fa fa-eye"></span> {% trans 'Preview' %}
+        <i class="bi-eye-fill"></i> {% trans 'Preview' %}
       </button>
       <a href="{% url 'action:index' %}"
-              class="shadow btn btn-outline-primary spin"
-              data-toggle="tooltip"
+              class="btn btn-outline-primary spin"
+              data-bs-toggle="tooltip"
               data-placement="auto"
               title="{% trans 'Save action and go back to action table' %}">
-        <span class="fa fa-check"></span> {% trans 'Done' %}</a>
+        <i class="bi-check"></i> {% trans 'Done' %}</a>
     </div>
     {% include 'action/includes/partial_action_edit_out_warning.html' %}
     <div class="alert-danger">
@@ -120,9 +120,9 @@
     </div>
     <ul class="nav nav-tabs border-0 justify-content-center"
         id="edit-personalized-text-tabs" role="tablist">
-      <li class="nav-item pr-1">
+      <li class="nav-item pr-1" role="presentation">
         <a class="nav-link active border border-dark border-bottom-0"
-           id="parameters-tab" data-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">
+           id="parameters-tab" data-bs-toggle="tab" href="#parameters" role="tab" aria-controls="parameters" aria-selected="false">
           {% if is_survey %}
             {% trans 'Survey parameters' %}
           {% else %}
@@ -135,7 +135,7 @@
       {% include 'condition/includes/partial_condition_tab_li.html' %}
     </ul>
     <div class="tab-content" id="edit-survey-tab-content">
-      <div class="shadow rounded tab-pane px-3 fade show active border border-dark"
+      <div class="rounded tab-pane px-3 fade show active border border-dark"
            id="parameters" role="tabpanel" aria-labelledby="parameters-tab">
         <div class="my-3">
           <h5 class="text-center">{% trans 'Description (shown to learners)' %}
@@ -143,9 +143,9 @@
                     class="btn btn-outline-dark js-description-edit"
                     data-url="{% url 'action:edit_description' action.id %}"
                     data-type="filter"
-                    data-toggle="tooltip"
+                    data-bs-toggle="tooltip"
                     title="{% trans 'Edit description' %}">
-              <span class="fa fa-pencil-alt"></span> {% trans 'Edit' %}</button>
+              <i class="bi-pencil-fill"></i> {% trans 'Edit' %}</button>
           </h5>
           {% if action.description_text %}
             <p class="border border-dark lead text-center">{{ action.description_text }}</p>
@@ -154,14 +154,14 @@
             {% trans 'Key column to match the user id' %}
             <div id="select-key-column-name" class="dropdown btn-group">
               <button type="button" class="btn btn-outline-dark dropdown-toggle"
-                      data-toggle="dropdown">
+                      data-bs-toggle="dropdown">
                 {% if not key_selected %}
                   {% trans 'Please, select Key column' %}
                 {% else %}
                   {{ key_selected.column.name }}
                 {% endif %}
               </button>
-              <div class="shadow dropdown-menu scrollable-menu">
+              <div class="dropdown-menu scrollable-menu">
                 {% if key_selected %}
                   <button type="button" class="dropdown-item js-select-key-column-name"
                           data-url="{% url 'action:unselect_key_column_action' action.id %}">-- {% trans 'Unset key column' %} --</button>
@@ -179,7 +179,7 @@
             <small>
               <input id="toggle-checkbox"
                      {% if action.shuffle %}checked{% endif %}
-                     data-toggle="toggle"
+                     data-bs-toggle="toggle"
                      data-url="{% url 'action:shuffle_questions' action.id %}"
                      type="checkbox"/>
             </small>

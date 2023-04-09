@@ -11,7 +11,7 @@
 {% block container %}
   <div class="container" id="email-action-request-data">
     <div id="step_sequence" hidden>
-      {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
+      {% include 'step_by_step.html' with value_range=value_range step=1 %}
     </div>
     <h1 class="text-center">{% blocktrans with n=action.name %}Send emails for
       action "{{ n }}"{% endblocktrans %}</h1>
@@ -23,17 +23,17 @@
           {% csrf_token %}
           {{ form|crispy }}
           <div class="text-center">
-            <a type="button" class="shadow btn btn-outline-dark"
+            <a type="button" class="btn btn-outline-dark"
                href="{% url 'action:index' %}"> {% trans 'Cancel' %}</a>
-            <button type="button" class="shadow btn btn-outline-info js-action-preview"
+            <button type="button" class="btn btn-outline-info js-action-preview"
                     data-url="{% url 'action:preview' action.id 1 %}">
-              <span class="fa fa-eye"></span> {% trans 'Preview' %}</button>
+              <i class="bi-eye-fill"></i> {% trans 'Preview' %}</button>
             <button type="Submit" name="Submit" value="Submit" id="next-step-on" hidden
-                    class="shadow btn btn-outline-primary btn-space spin">
-              <span class="fa fa-angle-right"></span> {% trans 'Next' %}</button>
+                    class="btn btn-outline-primary btn-space spin">
+              <i class="bi-chevron-right"></i> {% trans 'Next' %}</button>
             <button type="Submit" name="Submit" value="Submit" id="next-step-off"
-                    class="shadow btn btn-outline-primary btn-space spin">
-              <span class="fa fa-angle-right"></span> {% trans 'Send' %}</button>
+                    class="btn btn-outline-primary btn-space spin">
+              <i class="bi-chevron-right"></i> {% trans 'Send' %}</button>
           </div>
         </form>
       </div>

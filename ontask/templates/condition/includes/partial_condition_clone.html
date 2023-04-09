@@ -2,8 +2,8 @@
 <div id="condition-clone" class="dropdown btn-group">
   <button type="button"
           class="btn btn-outline-dark dropdown-toggle{% if not conditions_to_clone %} disabled{% endif %}"
-          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <span class="fa fa-clone"></span> {% trans 'Clone other conditions' %}</button>
+          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="bi-files"></i> {% trans 'Clone other conditions' %}</button>
   <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="condition-clone">
     {% for condition in conditions_to_clone %}
       <button type="button" class="dropdown-item js-condition-clone"

@@ -16,7 +16,7 @@ Scheduled Actions
    -- Jimmy Wales
 
 
-The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref:`send list through email <email_report_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON report <json_report_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |fa-comments| *Actions* page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation |fa-calendar| *Schedule*.
+The :ref:`personalized text <personalized_content>`, :ref:`personalized canvas email <personalized_canvas_email>`, :ref:`send list through email <email_report_action>`, :ref:`personalized JSON object <personalized_json>` and :ref:`send JSON report <json_report_action>` actions can be scheduled to run at some point in the future. To schedule the execution of an action go to the |bi-chat-right-quote-fill| *Actions* page from the top menu, click on the icon with three dots in the right-most column of the action and select the operation |bi-calendar| *Schedule*.
 
 When scheduling the execution of an operation, the following fields are always requested at the top of the form:
 
@@ -116,7 +116,7 @@ A date/time value in the future.
 Table with Scheduled Actions
 ----------------------------
 
-The table showing all the action scheduling operations can be access through the *More* link in the top-bar menu selecting the |fa-calendar| *Scheduled operations* link. The list of scheduled actions is shown as illustrated in the following figure.
+The table showing all the action scheduling operations can be access through the *More* link in the top-bar menu selecting the |bi-calendar| *Scheduled operations* link. The list of scheduled actions is shown as illustrated in the following figure.
 
 .. figure:: /scaptures/schedule.png
    :align: center
@@ -124,13 +124,13 @@ The table showing all the action scheduling operations can be access through the
 
 The operations available for each scheduled execution are:
 
-|fa-pencil-alt| Edit
+|bi-pencil-fill| Edit
   Edit the elements in the scheduled operation.
 
-|fa-eye| View details
+|bi-eye-fill| View details
   View all the details for this scheduled execution (includes values in the payload)
 
-|fa-trash| Delete
+|bi-trash-fill| Delete
   Delete the scheduled execution.
 
 .. _logs:
@@ -144,4 +144,4 @@ The platform keeps a log of most of the operations that are executed when managi
    :align: center
    :width: 100%
 
-The |fa-download| *CSV Download* button allows to download the logs in CSV format for further processing. Additionally, the content of the table is paginated and the links to access each page are shown at the button. The records can be searched using the box at the top right corner of the table.
+The |bi-download| *CSV Download* button allows to download the logs in CSV format for further processing. Additionally, the content of the table is paginated and the links to access each page are shown at the button. The records can be searched using the box at the top right corner of the table.

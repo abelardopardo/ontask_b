@@ -68,5 +68,3 @@ LOGGING['loggers'] = {
         'level': 'DEBUG'}}
 
 logging.config.dictConfig(LOGGING)
-
-show_configuration()

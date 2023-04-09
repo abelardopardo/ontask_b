@@ -1,7 +1,7 @@
-{% if valuerange %}
-  <div class="row justify-content-center mt-2 mb-2">
-    {% for i in valuerange %}
-      <div class="circle{% if forloop.counter == step %}-solid{% endif %} text-center mr-3">{{ forloop.counter }}</div>
+{% if value_range and value_range|length < 10 %}
+  <div class="text-center mt-2 mb-2">
+    {% for i in value_range %}
+      <i class="bi-{{ forloop.counter }}-circle{% if forloop.counter == step %}-fill{% endif %} ontask-step-number"></i>
     {% endfor %}
   </div>
 {% endif %}

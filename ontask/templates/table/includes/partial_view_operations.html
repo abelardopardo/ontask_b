@@ -1,25 +1,25 @@
 {% load i18n %}
 <div class="btn-group btn-group-sm" role="group">
   <button type="button" data-url="{% url 'table:view_edit' id %}"
-     class="btn btn-primary btn-light js-view-edit" data-toggle="tooltip"
+     class="btn btn-primary btn-light js-view-edit" data-bs-toggle="tooltip"
      title="{% trans 'Edit the elements in the view' %}">
-     <span class="fa fa-pencil-alt"></span></button>
+     <i class="bi-pencil-fill"></i></button>
   <button onclick="location.href='{% url 'table:display_view' id %}'"
-          type="button" class="btn btn-primary btn-light" data-toggle="tooltip"
+          type="button" class="btn btn-primary btn-light" data-bs-toggle="tooltip"
      title="{% trans 'Access the table with this view' %}">
-     <span class="fa fa-eye"></span></button>
+     <i class="bi-eye-fill"></i></button>
   <button type="button"
           class="btn btn-primary btn-light js-view-clone"
           data-url="{% url 'table:view_clone' id %}"
-          data-toggle="tooltip"
+          data-bs-toggle="tooltip"
           title="{% trans 'Create an identical view' %}">
-    <span class="fa fa-clone"></span>
+    <i class="bi-files"></i>
   </button>
   <button type="button"
           class="btn btn-primary btn-light js-view-delete"
           data-url="{% url 'table:view_delete' id %}"
-          data-toggle="tooltip"
+          data-bs-toggle="tooltip"
           title="{% trans 'Delete the view' %}">
-    <span class="fa fa-trash"></span>
+    <i class="bi-trash-fill"></i>
   </button>
 </div>

@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 {% load ontask_tags %}
+{% load bootstrap5 %}
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% ontask_settings_value "ONTASK_HELP_URL" as ONTASK_HELP_URL %}
+{% ontask_settings_value "BASE_URL" as ONTASK_BASE_URL %}
+{% ontask_settings_value "SESSION_COOKIE_AGE" as ONTASK_TIMEOUT %}
 <html {% if LANGUAGE_CODE %}lang="{{ LANGUAGE_CODE }}"{% endif %}>
   <head>
     <meta charset="utf-8">
@@ -12,7 +16,7 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'ico/favicon.ico' %}" type="favicon/ico">
     <title>{% block title %}{% include "_brandname.html" %} :: {% endblock %}</title>
     <!-- Bootstrap core  -->
-    {% ontask_bootstrap_css %}
+    {% bootstrap_css %}
     <!-- Custom styles for this site -->
     {% block styles %}
     {% endblock styles %}
@@ -23,6 +27,7 @@
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     {% ontask_shim_respond %}
+    {% bootstrap_messages %}
   </head>
   <body style="" class="regular-body">
     <div id="div-spinner">
@@ -37,7 +42,7 @@
           {% endcache %}
         {% endblock %}
         {% block navbar-menu %}
-          <button class="navbar-toggler" type="button" data-toggle="collapse"
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                   data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                   aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -47,51 +52,51 @@
               {% block navbar-left %}
                 {% if user.ontask_info.is_instructor %}
                   <li class="nav-item">
-                    <a class="nav-link spin{% if request.path == ONTASK_BASE_URL %} active{% endif %}"
+                    <a class="btn-outline-primary nav-link spin{% if request.path == ONTASK_BASE_URL|add:"/" %} active{% endif %}"
                        href="{% url 'home' %}" id="ontask-base-home"
-                       data-toggle="tooltip" title="{% trans 'Your workflows' %}"><span class="fa fa-home"></span> {% trans 'Workflows' %}</a>
+                       data-bs-toggle="tooltip" title="{% trans 'Your workflows' %}"><i class="bi-house-fill"></i> {% trans 'Workflows' %}</a>
                   </li>
                 {% endif %}
                 {% if request.session.ontask_workflow_id %}
                   {% url 'column:index' as workflow_detail %}
                   {% url 'workflow:operations' as workflow_ops %}
                   <li class="nav-item">
-                    <a class="nav-link spin{% if '/action/' in request.path %} active{% endif %}"
+                    <a class="btn-outline-primary nav-link spin{% if '/action/' in request.path %} active{% endif %}"
                        href="{% url 'action:index' %}"  id="ontask-base-actions"
-                       data-toggle="tooltip" title="{% trans 'Messages and Surveys' %}">
-                      <span class="fa fa-comments"></span> {% trans 'Actions' %}</a>
+                       data-bs-toggle="tooltip" title="{% trans 'Messages and Surveys' %}">
+                      <i class="bi-chat-right-quote-fill"></i> {% trans 'Actions' %}</a>
                   </li>
                   <li class="nav-item dropdown">
-                    <a href="#"  class="nav-link dropdown-toggle{% if '/table/' in request.path or '/dataops' in request.path %} active{% endif %}"
-                      id="ontask-base-table" data-toggle="dropdown">
-                      <span class="fa fa-table"></span> {% trans 'Table' %}
-                    </a>
+                    <button class="btn-outline-primary nav-link dropdown-toggle{% if '/table/' in request.path or '/dataops' in request.path %} active{% endif %}"
+                      id="ontask-base-table" data-bs-toggle="dropdown">
+                      <i class="bi-table"></i> {% trans 'Table' %}
+                    </button>
                     <div class="shadow dropdown-menu" aria-labelledby="ontask-base-table">
                       <a href="{% url 'table:display' %}"
                          class="btn dropdown-item spin{% if not request.session.ontask_workflow_rows %} disabled{% endif %}"
-                         data-toggle="tooltip"
+                         data-bs-toggle="tooltip"
                          title="{% trans 'View the complete table' %}">
                         {% trans 'View data' %}</a>
                       <a href="{% url 'dataops:uploadmerge' %}"
                          class="btn dropdown-item spin"
-                         data-toggle="tooltip"
+                         data-bs-toggle="tooltip"
                          title="{% trans 'Upload or merge data into the workflow table' %}">
                         {% trans 'Upload or merge data' %}</a>
                       <a href="{% url 'dataops:transform' %}"
                          class="btn dropdown-item spin"
-                         data-toggle="tooltip" data-container="body"
+                         data-bs-toggle="tooltip" data-container="body"
                          title="{% trans 'Apply a transformation to the data' %}">
                         {% trans 'Run Transformation' %}</a>
                       <a href="{% url 'dataops:model' %}"
                          class="btn dropdown-item spin"
-                         data-toggle="tooltip" data-container="body"
+                         data-bs-toggle="tooltip" data-container="body"
                          title="{% trans 'Execute a model with the existing data' %}">
                         {% trans 'Run Model' %}</a>
                     </div>
                   </li>
                   <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle{% if '/logs/' in request.path or '/scheduler/' in request.path or '/detail/' in request.path or '/operations/' in request.path %} active{% endif %}"
-                       data-toggle="dropdown" id="ontask-base-settings">{% trans 'More' %}</a>
+                    <a href="#" class="btn-outline-primary nav-link dropdown-toggle{% if '/logs/' in request.path or '/scheduler/' in request.path or '/detail/' in request.path or '/operations/' in request.path %} active{% endif %}"
+                       data-bs-toggle="dropdown" id="ontask-base-settings">{% trans 'More' %}</a>
                     <div class="shadow dropdown-menu">
                       <a class="dropdown-item spin" href="{{ workflow_ops }}"
                          id="ontask-base-workflow">{% trans 'Workflow operations' %}</a>
@@ -107,76 +112,74 @@
               {% block navbar-right %}
                 {% if user.is_authenticated %}
                   {% if user.is_staff %}
-                    <li id="ontask-base-admin" class="nav-item dropdown">
+                    <li id="ontask-base-admin" class="btn-outline-primary nav-item dropdown">
                       <a href="#"
-                         class="nav-link dropdown-toggle{% if '_admin' in request.path %} active{% endif %}"
-                         data-toggle="dropdown">
-                        <span class="fa fa-cogs"></span> {% trans 'Admin' %}
-                      </a>
+                         class="btn-outline-primary nav-link dropdown-toggle{% if '_admin' in request.path %} active{% endif %}"
+                         data-bs-toggle="dropdown">
+                        <i class="bi-sliders"></i> {% trans 'Admin' %}</a>
                       <div class="shadow dropdown-menu" aria-labelledby="ontask-base-table">
                         <a href="{% url 'admin:index' %}ontask/preferences"
                            class="btn dropdown-item spin"
-                           data-toggle="tooltip"
+                           data-bs-toggle="tooltip"
                            title="{% trans 'Change platform configuration parameters' %}">
                           {% trans 'Settings' %}</a>
                         <a href="{% url 'admin:index' %}"
                            class="btn dropdown-item spin"
-                           data-toggle="tooltip"
+                           data-bs-toggle="tooltip"
                            title="{% trans 'Manage the platform database' %}">
                           {% trans 'DB Admin' %}</a>
                         <a href="{% url 'connection:sqlconns_admin_index' %}"
                            class="btn dropdown-item spin"
-                           data-toggle="tooltip"
+                           data-bs-toggle="tooltip"
                            title="{% trans 'Connections to SQL databases' %}">
                           {% trans 'SQL Connections' %}</a>
                         <a href="{% url 'connection:athenaconns_admin_index' %}"
                            class="btn dropdown-item spin"
-                           data-toggle="tooltip"
+                           data-bs-toggle="tooltip"
                            title="{% trans 'Connections to Athena databases' %}">
                           {% trans 'Athena Connections' %}</a>
                         <a href="{% url 'dataops:plugin_admin' %}"
                            class="btn dropdown-item spin"
-                           data-toggle="tooltip"
+                           data-bs-toggle="tooltip"
                            title="{% trans 'Available Plugins' %}">
                           {% trans 'Plugins' %}</a>
                       </div>
                     </li>
                   {% endif %}
-                  <li class="nav-item dropdown">
+                  <li class="btn-outline-primary nav-item dropdown">
                     <a href="#"
-                       class="nav-link dropdown-toggle profile-menu"
-                       data-toggle="dropdown">
-                     <span class="fa fa-user"></span>
-                    </a>
-                    <div class="shadow dropdown-menu dropdown-menu-right">
+                       class="btn-outline-primary nav-link dropdown-toggle profile-menu"
+                       data-bs-toggle="dropdown">
+                     <i class="bi-person-square"></i></a>
+                    <div class="shadow dropdown-menu dropdown-menu-end">
                       <a class="dropdown-item spin"
                          href="{% url 'profiles:show_self' %}"
-                         data-toggle="tooltip"
+                         data-bs-toggle="tooltip"
                          title="{% trans 'User Profile' %}">{% trans 'Profile' %}</a>
                       <a class="dropdown-item spin"
                          href="{% url 'accounts:logout' %}"
-                         data-toggle="tooltip"
+                         data-bs-toggle="tooltip"
                          title="{% trans 'Logout' %}">{% trans 'Logout' %}</a>
                     </div>
                   </li>
                 {% else %}
-                  <li class="nav-item"><a href="https://ontasklearning.org" class="nav-link" target="blank">{% trans 'About' %}</a></li>
-                  <li class="nav-item"><a class="nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
+                  <li class="nav-item"><a href="https://ontasklearning.org" class="btn-outline-primary nav-link" target="blank">{% trans 'About' %}</a></li>
+                  <li class="nav-item"><a class="btn-outline-primary nav-link" href="https://www.ontasklearning.org/contact/" target="blank">
                     {% trans 'Contact' %}</a></li>
                 {% endif %}
-                <li class="nav-item">
+                <li class="nav-item dropdown">
                     <a href="#"
-                       class="nav-link dropdown-toggle help-menu"
-                       data-toggle="dropdown">
-                      <span class="fa fa-book"></span></a>
-                    <div class="shadow dropdown-menu dropdown-menu-right">
+                       class="btn-outline-primary nav-link dropdown-toggle help-menu"
+                       data-bs-toggle="dropdown">
+                      <span class="bi-journal-text"></span></a>
+                    <div class="shadow dropdown-menu dropdown-menu-end">
                       <a class="dropdown-item spin"
                          href="{% static ONTASK_HELP_URL %}"
-                         data-toggle="tooltip"
+                         data-bs-toggle="tooltip"
                          title="{% trans 'OnTask Manual' %}">{% trans 'Manual' %}</a>
                       <a class="dropdown-item spin"
                          href="{% url 'ontask-api-doc' %}"
-                         data-toggle="tooltip"
+                         data-bs-toggle="tooltip"
                          title="{% trans 'API documentation' %}">{% trans 'API Docs' %}</a>
 
                     </div>
@@ -192,16 +195,6 @@
         {{ request.session.ontask_workflow_name }}
       </div>
     {% endif %}
-    {% block messages %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="text-center alert alert-{{ message.tags }}">
-            <a class="close" data-dismiss="alert">×</a>
-            {{ message|safe }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endblock %}
     {% block container %}
       <div class="container my-3">
         <div class="starter-template">
@@ -227,7 +220,7 @@
               <div class="modal-footer">
                 <button type="button"
                         class="btn btn-outline-primary">
-                  <span class="fa fa-check"></span> {% trans 'Ok' %}</button>
+                  <i class="bi-check"></i> {% trans 'Ok' %}</button>
               </div>
             </div>
           </div>
@@ -244,7 +237,7 @@
     {% endblock %}
     <script type="text/javascript" src="{% static 'js/initial.js' %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-    {% ontask_bootstrap_js %}
+    {% bootstrap_javascript %}
     <script type="text/javascript">window.CSRF_TOKEN = "{{ csrf_token }}";</script>
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
     {% block scripts %}

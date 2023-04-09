@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.2
--- Dumped by pg_dump version 13.2
+-- Dumped from database version 14.7 (Homebrew)
+-- Dumped by pg_dump version 14.7 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -35,8 +35,8 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_1" (
     "Program" text,
     "Enrolment Type" text,
     "Attendance" text,
-    "Difficult Week 1" text,
-    "Sat W1" text,
+    "Difficult Week 2" text,
+    "Sat W2" text,
     "Q01" double precision,
     "Q02" double precision,
     "Q03" double precision,
@@ -101,7 +101,7 @@ CREATE TABLE public."__ONTASK_WORKFLOW_TABLE_1" (
 -- Data for Name: __ONTASK_WORKFLOW_TABLE_1; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."__ONTASK_WORKFLOW_TABLE_1" ("SID", email, "Surname", "GivenName", "MiddleInitial", "Gender", "UOS Code", "Program", "Enrolment Type", "Attendance", "Difficult Week 1", "Sat W1", "Q01", "Q02", "Q03", "Q04", "Q05", "Q06", "Q07", "Q08", "Q09", "Q10", "Total", "Days online 2", "Views 2", "Contributions 2", "Questions 2", "Days online 3", "Views 3", "Contributions 3", "Questions 3", "Days online 4", "Views 4", "Contributions 4", "Questions 4", "Days online 5", "Views 5", "Contributions 5", "Questions 5", "Days online", "Views", "Contributions", "Questions", "Video_1_W2", "Questions_1_W2", "Correct_1_W2", "Video_2_W2", "Questions_2_W2", "Correct_2_W2", "Video_1_W3", "Questions_1_W3", "Correct_1_W3", "Video_2_W3", "Questions_2_W3", "Correct_2_W3", "Video_1_W4", "Questions_1_W4", "Correct_1_W4", "Video_2_W4", "Questions_2_W4", "Correct_2_W4", "Video_1_W5", "Questions_1_W5", "Correct_1_W5", "Video_2_W5", "Questions_2_W5", "Correct_2_W5", "Presentation", "Structure") FROM stdin;
+COPY public."__ONTASK_WORKFLOW_TABLE_1" ("SID", email, "Surname", "GivenName", "MiddleInitial", "Gender", "UOS Code", "Program", "Enrolment Type", "Attendance", "Difficult Week 2", "Sat W2", "Q01", "Q02", "Q03", "Q04", "Q05", "Q06", "Q07", "Q08", "Q09", "Q10", "Total", "Days online 2", "Views 2", "Contributions 2", "Questions 2", "Days online 3", "Views 3", "Contributions 3", "Questions 3", "Days online 4", "Views 4", "Contributions 4", "Questions 4", "Days online 5", "Views 5", "Contributions 5", "Questions 5", "Days online", "Views", "Contributions", "Questions", "Video_1_W2", "Questions_1_W2", "Correct_1_W2", "Video_2_W2", "Questions_2_W2", "Correct_2_W2", "Video_1_W3", "Questions_1_W3", "Correct_1_W3", "Video_2_W3", "Questions_2_W3", "Correct_2_W3", "Video_1_W4", "Questions_1_W4", "Correct_1_W4", "Video_2_W4", "Questions_2_W4", "Correct_2_W4", "Video_1_W5", "Questions_1_W5", "Correct_1_W5", "Video_2_W5", "Questions_2_W5", "Correct_2_W5", "Presentation", "Structure") FROM stdin;
 396913155	pzaz8370@bogus.com	Bray	Phoebe	C	female	ELON3509	FEIT	HECS	Full Time			1	1	0	0	1	1	0	0	1	1	60	7	14	1	0	0	0	0	0	7	10	1	1	1	16	2	2	15	40	4	3	46.6280313544038	58.9992806379493	74.6882354588788	50.5410923691723	49.5935896012157	58.1114066876522	41.1893862888642	82.93009769511	20.5831415333933	67.7945152603163	69.9666747084306	47.5252485102928	69.4217373208668	57.6702479724861	88.3506065548316	42.2603083900964	63.0712692589931	85.5556118078322	65.8315217769724	61.7632292617577	63.2135132937715	57.1359432688236	77.4937951787486	59.4318369580227	High	High
 352120481	ucdx8510@bogus.com	Shao	Tain	L	male	ELON3509	FEIT	International	Full Time			\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	4	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	4	0	1	0	0	13.4353977999877	2.99279236578457	7.1761148314066	25.6467429722587	31.6300982559566	31.3298333620586	8.89908088043616	34.793559911511	0	0	39.7613886683257	24.7658415883461	5.62854365727957	0	0	7.52706116850574	0	30.4003169853445	0	0	7.41894659499031	12.7539457668409	29.3185960382934	Medium	High
 363393232	tdrv2640@bogus.com	Hague	Joel	K	male	ELON3509	FSCI	International	Full Time			0	0	1	0	1	1	1	1	1	1	70	2	49	0	0	4	74	0	0	4	19	1	1	6	8	0	0	16	150	1	1	79.0851271090119	79.6556752276833	25.618260869475	64.6746206416727	74.829145080424	77.4686056296414	74.5587618209058	80.1943773512066	51.753246697834	85.2428960713527	69.4857968052797	50.3098639522354	77.8548419635845	74.4557797648272	88.0575118331879	93.1487845621126	60.8274620665615	100	90.2318916278271	81.4914883187945	65.3878183323299	67.3504759684733	60.4161367465878	56.0587471043491	Medium	High

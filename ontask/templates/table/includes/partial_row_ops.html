@@ -3,12 +3,12 @@
   <button type="button" class="btn btn-secondary btn-light spin"
           onclick="location.href='{{ edit_url }}'"
           title="{% trans 'Edit the values in this row' %}">
-    <span class="fa fa-pencil-alt"></span></button>
+    <i class="bi-pencil-fill"></i></button>
   <button onclick="location.href='{{ stat_url }}'" class="btn btn-secondary btn-light spin"
           title="{% trans 'Compare values in the row with the rest of the table' %}">
-    <span class="fa fa-chart-bar"></span></button>
+    <i class="bi-bar-chart-line-fill"></i></button>
   <button type="button" class="btn btn-secondary btn-light js-row-delete"
      data-url="{% url 'table:row_delete' %}{{ delete_key }}"
      title="{% trans 'Delete this row' %}">
-    <span class="fa fa-trash"></span></button>
+    <i class="bi-trash-fill"></i></button>
 </div>

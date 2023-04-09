@@ -5,7 +5,7 @@ from typing import Dict, Optional
 from django.conf import settings
 from django.utils.translation import gettext
 import pandas as pd
-import pytz
+from zoneinfo import ZoneInfo
 
 from ontask import OnTaskServiceException, models
 from ontask.dataops import pandas
@@ -163,7 +163,7 @@ def _execute_plugin(
 
     # Update execution time in the plugin
     plugin_info.executed = datetime.now(
-        pytz.timezone(settings.TIME_ZONE),
+        ZoneInfo(settings.TIME_ZONE),
     )
     plugin_info.save(update_fields=['executed'])
 

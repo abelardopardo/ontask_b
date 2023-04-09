@@ -3,9 +3,7 @@
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm column cloning' %}</h4>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     <p class="lead">{% blocktrans with n=object.name %}Are you sure you want to clone column <strong>{{ n }}</strong>?{% endblocktrans %}</p>
@@ -13,7 +11,7 @@
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-outline-primary">
-      <span class="fa fa-clone"></span> {% trans 'Clone column' %}</button>
+      <i class="bi-files"></i> {% trans 'Clone column' %}</button>
   </div>
 </form>
 

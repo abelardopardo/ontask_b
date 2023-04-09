@@ -22,8 +22,9 @@
 Django[argon2]==4.2  # BSD-3-Clause
 celery  # BSD
 coverage  # Apache License 2.0
-crispy-bootstrap4 # MIT
+crispy-bootstrap5 # MIT
 cron-descriptor  # MIT
+django-bootstrap-v5 # BSD-3-Clause
 django-bootstrap-datepicker-plus  # Apache License 2.0
 django-braces  # BSD
 django-celery-beat  # BSD-3-Clause
@@ -57,11 +58,14 @@ Pillow  # HPND: Historical Permission Notice and Disclaimer
 psycopg2  # LGPLv3
 PyAthena  # MIT
 pyOpenSSL # Apache License 2.0
+readthedocs-sphinx-search # MIT
 selenium  # Apache License 2.0
 smart-open  # MIT
 SnakeViz  # BSD
 sorl-thumbnail  # BSD
 Sphinx  # BSD
+sphinx-material # As Is
+sphinx-copybutton # MIT
 SQLAlchemy<2.0   # MIT # Bug in SQLAlchemy 2.0 breaks pandas
 supervisor  # BSD-derived
 Werkzeug  # BSD-3-Clause

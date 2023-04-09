@@ -273,9 +273,9 @@
     "fields": {
         "password": "pbkdf2_sha256$36000$LPWhVSb2jAue$Vz9Ah1DpEXQaiVN6idyGMIvAxCMFwYufNSYhoiRu794=",
         "last_login": null,
-        "is_superuser": false,
+        "is_superuser": true,
         "email": "superuser@bogus.com",
-        "is_staff": false,
+        "is_staff": true,
         "is_active": true,
         "date_joined": "2017-11-08T00:12:05.725Z",
         "name": "Super User",
@@ -364,122 +364,12 @@
 },
 {
     "model": "authtoken.token",
-    "pk": "06464f54eda1490dc4c1ea18c9f14663024812df",
-    "fields": {
-        "user": [
-            "idesigner1@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.822Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "0c97ba5070e2d9e2a061c42ef48c61fcd415a545",
-    "fields": {
-        "user": [
-            "student03@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.827Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "122c225c41473e45469f96838b34931fb0baf3e9",
-    "fields": {
-        "user": [
-            "aidesigner1@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.817Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "3c6c561f36c62ac427a6b8a8951c818cbd63ab8f",
-    "fields": {
-        "user": [
-            "superuser@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.829Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "6107e481d04681ecca9a596b8963a87462370978",
-    "fields": {
-        "user": [
-            "idesigner2@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.823Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "788d99aea306704da8f956741b0e103643f6a212",
-    "fields": {
-        "user": [
-            "instructor02@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.825Z"
-    }
-},
-{
-    "model": "authtoken.token",
     "pk": "8001cacfac70def66a9137e66a3101eee55bc0ec",
     "fields": {
         "user": [
             "instructor01@bogus.com"
         ],
         "created": "2017-11-08T00:12:05.824Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "aecc4ebb9859a67ce75801e9c257719c5062874a",
-    "fields": {
-        "user": [
-            "student01@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.826Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "cacefa5ff27a42e428d7b4813ef55df1d3daa774",
-    "fields": {
-        "user": [
-            "student02@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.828Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "d342d0d701d534fefe4adaa30632d840c2c383bf",
-    "fields": {
-        "user": [
-            "aidesigner2@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.818Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "e57408af38c8215e56b03d5d1e2a51f9baab4b7c",
-    "fields": {
-        "user": [
-            "ainstructor02@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.821Z"
-    }
-},
-{
-    "model": "authtoken.token",
-    "pk": "f5d14afe853706bf8e48c266306e5b32a5c3c17d",
-    "fields": {
-        "user": [
-            "ainstructor01@bogus.com"
-        ],
-        "created": "2017-11-08T00:12:05.819Z"
     }
 },
 {

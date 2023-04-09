@@ -17,6 +17,12 @@ ACTION_CONTEXT_VAR = 'ONTASK_ACTION_CONTEXT_VARIABLE___'
 
 register = template.Library()
 
+ALLOWED_SETTINGS = {
+    'BASE_URL',
+    'DEBUG',
+    'ONTASK_HELP_URL',
+    'SESSION_COOKIE_AGE'}
+
 
 # Tag to get ontask_version
 @register.simple_tag
@@ -81,31 +87,6 @@ def ontask_jqcron_css() -> str:
     return format_html(
         '<link rel="stylesheet" href="{0}">'.format(
             static('css/jqCron/jqCron.css')))
-
-
-@register.simple_tag
-def ontask_bootstrap_js() -> str:
-    """Provide the bootstrap JS."""
-    return format_html(
-        '<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd'
-        '/popper.min.js" '
-        'integrity="sha384-ZMP7rVo3mIykV+2'
-        '+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" '
-        'crossorigin="anonymous"></script>'
-        + '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/'
-          'js/bootstrap.min.js" integrity="'
-          'sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/'
-          'KUEfYiJOMMV+rV" crossorigin="anonymous"></script>')
-
-
-@register.simple_tag
-def ontask_bootstrap_css() -> str:
-    """Provide bootstrap CSS."""
-    return format_html(
-        '<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/'
-        'bootstrap/4.5.2/css/bootstrap.min.css" integrity="'
-        'sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP'
-        '+VmmDGMN5t9UJ0Z" crossorigin="anonymous">')
 
 
 @register.simple_tag
@@ -203,3 +184,11 @@ def ontask_shim_respond() -> str:
         'src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script'
         '><script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js'
         '"></script><![endif]-->')
+
+
+@register.simple_tag
+def ontask_settings_value(name: str) -> str:
+    """Provides access to a subset of the values in settings."""
+    if name in ALLOWED_SETTINGS:
+        return getattr(settings, name, '')
+    return ''

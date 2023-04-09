@@ -7,7 +7,7 @@ Table
    but you feel it"
    -- Morpheus, The Matrix
 
-The information stored in the workflow table is accessed through the |fa-table| *Table* link in the top bar menu selecting the option **View data**. As this table can be arbitrarily large, the application groups the rows into pages and provides links to each of the pages at the bottom of the table. The top of the table includes a pull down menu to choose how many rows are shown per page. If the table has a large number of columns, a horizontal scroll is available to show the additional content. The order of the columns in the table can be changed by dragging them from the top row and dropping them in a new position.
+The information stored in the workflow table is accessed through the |bi-table| *Table* link in the top bar menu selecting the option **View data**. As this table can be arbitrarily large, the application groups the rows into pages and provides links to each of the pages at the bottom of the table. The top of the table includes a pull down menu to choose how many rows are shown per page. If the table has a large number of columns, a horizontal scroll is available to show the additional content. The order of the columns in the table can be changed by dragging them from the top row and dropping them in a new position.
 
 The following figure shows an example of the full table view page.
 
@@ -32,13 +32,13 @@ Due to the potentially large size of the workflow table in either number of rows
 
 The title at the top of the page is the view's name. The buttons to the right of the name perform the following operations:
 
-|fa-pencil-alt| Edit
+|bi-pencil-fill| Edit
   Edit the view: name, description, set of columns to show and row filter
 
-|fa-clone| Clone
+|bi-files| Clone
   Create a duplicate of this view with the prefix *Copy_of* added to its name. This operation is useful to create a new view with content that is similar to an already existing one (clone and edit).
 
-|fa-trash| Delete
+|bi-trash-fill| Delete
   Delete the view.
 
 If the view has defined a filter condition (to select a subset of the rows), it is shown on top of the table.

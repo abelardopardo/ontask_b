@@ -3,21 +3,21 @@
   <h5 class="card-header text-center spin"
       onclick="location.href='{% url 'action:edit' action.id %}'">
     {% if action.action_type == action.PERSONALIZED_TEXT %}
-      <span class="fa fa-file-alt"></span>
+      <i class="bi-file-earmark-text-fill"></i>
     {% elif action.action_type == action.PERSONALIZED_CANVAS_EMAIL %}
-      <span class="fa fa-envelope-square"></span>
+      <i class="bi-envelope-fill"></i>
     {% elif action.action_type == action.PERSONALIZED_JSON %}
-      <span class="fa fa-code"></span>
+      <i class="bi-code-slash"></i>
     {% elif action.action_type == action.SURVEY %}
-      <span class="fa fa-question-circle"></span>
+      <i class="bi-question-circle-fill"></i>
     {% elif action.action_type == action.TODO_LIST %}
-      <span class="fa fa-check-square"></span>
+      <i class="bi-check-square-fill"></i>
     {% elif action.action_type == action.EMAIL_REPORT %}
-      <span class="fa fa-share-square"></span>
+      <i class="bi-share-fill"></i>
     {% elif action.action_type == action.JSON_REPORT %}
-      <span class="fa fa-file-code"></span>
+      <i class="bi-file-earmark-code-fill"></i>
     {% elif action.action_type == action.RUBRIC_TEXT %}
-      <span class="fa fa-tasks"></span>
+      <i class="bi-list-task"></i>
     {% endif %}
     {{ action.name }}
   </h5>
@@ -34,31 +34,31 @@
       <button type="button"
               class="btn btn-secondary btn-light js-action-preview "
               data-url="{% url 'action:preview' action.id 1 %}"
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
               title="See how is the content shown to each learner">
-        <span class="fa fa-eye"></span></button>
+        <i class="bi-eye-fill"></i></button>
       <button type="button" class="btn btn-secondary btn-light js-action-clone"
               data-url="{% url 'action:clone' action.id %}"
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
               title="{% trans 'Create an identical action' %}">
-        <span class="fa fa-clone"></span></button>
+        <i class="bi-files"></i></button>
       <button type="button" class="btn btn-secondary btn-light js-action-update"
               data-url="{% url 'action:update' action.id %}"
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
               title="{% trans 'Change name and/or description' %}">
-          <span class="fa fa-pencil-alt"></span></button>
+          <i class="bi-pencil-fill"></i></button>
       <button type="button" class="btn btn-secondary btn-light js-action-delete"
               data-url="{% url 'action:delete' action.id %}"
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
               title="{% trans 'Delete the action' %}">
-        <span class="fa fa-trash"></span></button>
+        <i class="bi-trash-fill"></i></button>
       <button onclick="location.href='{% url 'action:run' action.id %}'"
               class="btn btn-secondary btn-light spin"
-              data-toggle="tooltip" role="button" type="button"
-              title="{% if action.action_type == 'survey' or action.action_type == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action.action_type == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><span class="fa fa-rocket"></span></button>
+              data-bs-toggle="tooltip" role="button" type="button"
+              title="{% if action.action_type == 'survey' or action.action_type == 'todo_list' %}{% trans 'Enter data manually' %}{% elif action.action_type == 'personalized_json' %}{% trans 'Send personalised JSONs' %}{% else %}{% trans 'Send personalised text' %}{% endif %}"><i class="bi-rocket-takeoff-fill"></i></button>
       <div class="btn-group dropright" role="group">
         <button id="actionMoreOperations" type="button"
-                class="btn btn-secondary btn-light dropdown-toggle" data-toggle="dropdown"
+                class="btn btn-secondary btn-light dropdown-toggle" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
         </button>
         <div class="dropdown-menu dropdown-menu-right shadow"
@@ -67,13 +67,13 @@
             <button type="button"
                     class="dropdown-item js-action-showurl"
                     data-url="{% url 'action:showurl' action.id %}"
-                    data-toggle="tooltip"
+                    data-bs-toggle="tooltip"
                     {% if action.is_out %}
                       title="{% trans 'URL for learners to access the personalised text' %}"
                     {% else %}
                       title="{% trans 'URL for learners to introduce data' %}"
                     {% endif %}>
-              <span class="fa fa-link"></span> {% trans 'URL' %}
+              <i class="bi-link-45deg"></i> {% trans 'URL' %}
               {% if action.serve_enabled %}<span class="badge  badge-pill badge-dark">On</span>
               {% else %}<span class="badge badge-pill badge-light">Off</span>{% endif %}
             </button>
@@ -81,24 +81,24 @@
           {% if action.action_type == 'personalized_text' %}
             <a href="{% url 'action:zip_action' action.id %}"
                class="spin dropdown-item"
-               data-toggle="tooltip"
+               data-bs-toggle="tooltip"
                title="{% trans 'Create a ZIP with each personalised text in a file' %}">
-              <span class="fa fa-file-archive"></span> {% trans 'ZIP' %}</a>
+              <i class="bi-file-earmark-zip-fill"></i> {% trans 'ZIP' %}</a>
           {% endif %}
           <a href="{% url 'action:timeline' action.id %}" class="spin dropdown-item"
-             data-toggle="tooltip"
+             data-bs-toggle="tooltip"
              title="{% trans 'See when this action was executed' %}">
-            <span class="fa fa-clock"></span> {% trans 'Timeline' %}</a>
+            <i class="bi-clock-fill"></i> {% trans 'Timeline' %}</a>
           {% if action.is_out %}
             <a href="{% url 'scheduler:create_action_run' action.id %}" class="spin dropdown-item"
-               data-toggle="tooltip"
+               data-bs-toggle="tooltip"
                title="{% trans 'Schedule the execution of the action' %}">
-              <span class="fa fa-calendar"></span> {% trans 'Schedule' %}</a>
+              <i class="bi-calendar"></i> {% trans 'Schedule' %}</a>
           {% endif %}
           <a href="{% url 'action:export' action.id %}" class="dropdown-item"
-             data-toggle="tooltip"
+             data-bs-toggle="tooltip"
              title="{% trans 'Export the content of this action' %}">
-            <span class="fa fa-download"></span> {% trans 'Export' %}</a>
+            <i class="bi-download"></i> {% trans 'Export' %}</a>
         </div>
       </div>
     </div>

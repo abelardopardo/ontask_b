@@ -376,7 +376,7 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         )
 
         # Value now should be in the table
-        self.select_share_tab()
+        self.select_tab('share-tab')
         self.search_table_row_by_string(
             'share-table',
             2,
@@ -411,7 +411,7 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         )
 
         # Value now should be in the table
-        self.select_share_tab()
+        self.select_tab('share-tab')
         self.search_table_row_by_string(
             'share-table',
             2,
@@ -450,7 +450,7 @@ class WorkflowShare(tests.SimpleWorkflowFixture, tests.OnTaskLiveTestCase):
         )
 
         # There should only be a single element
-        self.select_share_tab()
+        self.select_tab('share-tab')
         self.assertEqual(
             len(self.selenium.find_elements(
                 By.XPATH,

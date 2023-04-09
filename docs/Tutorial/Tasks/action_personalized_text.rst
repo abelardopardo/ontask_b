@@ -28,7 +28,7 @@ Place the cursor in the text area and start the text with a salutation. Then cli
 .. figure:: /scaptures/tutorial_personalized_text_editor_with_column.png
    :align: center
 
-Select the *Text Conditions* tab and click on the |fa-plus| *Condition* . A form appears to introduce the name, description and a formula. The formula may contain any combination of Boolean operators connecting column names. For example, the condition::
+Select the *Text Conditions* tab and click on the |bi-plus| *Condition* . A form appears to introduce the name, description and a formula. The formula may contain any combination of Boolean operators connecting column names. For example, the condition::
 
   Program equal to FASS
 

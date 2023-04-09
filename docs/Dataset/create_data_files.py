@@ -1,5 +1,4 @@
 #!/usr/bin/python2.7
-# -*- coding: UTF-8 -*-#
 #
 # Script to generate data set for the workshop.
 #

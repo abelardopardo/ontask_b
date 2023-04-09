@@ -30,7 +30,7 @@ class ActionActionRename(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Click on the action rename link
-        self.open_action_operation(self.action_name, 'fa-pencil-alt')
+        self.open_action_operation(self.action_name, 'bi-pencil-fill')
 
         # Rename the action
         self.selenium.find_element(By.ID, 'id_name').send_keys(suffix)
@@ -143,7 +143,6 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         )
 
         # Create filter.
-        self.select_filter_tab()
         self.create_filter('fdesc', [('age', 'less or equal', '12.1')])
 
         # Make sure the content has the correct text
@@ -155,7 +154,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         )
 
         # insert the second mark
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
             """tinymce.get('id_text_content').execCommand('mceInsertContent', 
@@ -163,7 +162,6 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         )
 
         # Modify the filter. Click in the edit filter button
-        self.select_filter_tab()
         self.edit_filter(None, '', [])
 
         # Make sure the content has the correct text
@@ -175,7 +173,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         )
 
         # insert the third mark
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
             """tinymce.get('id_text_content').execCommand('mceInsertContent', 
@@ -192,7 +190,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
             )
         )
         # insert the first mark
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
             """tinymce.get('id_text_content').execCommand('mceInsertContent', 
@@ -205,7 +203,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
             'fdesc',
             [('age', 'less or equal', '12.1')])
 
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.assertIn(
             "cmark1",
             self.selenium.execute_script(
@@ -224,7 +222,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.edit_condition('fname', 'fname2', '', [])
 
         # Make sure the content has the correct text
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.assertIn(
             "cmark2",
             self.selenium.execute_script(
@@ -243,7 +241,7 @@ class ActionActionSave(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.delete_condition('fname2')
 
         # Make sure the content has the correct text
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.assertIn(
             "cmark3",
             self.selenium.execute_script(
@@ -279,7 +277,7 @@ class ActionJsonAction(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.create_new_json_action(action_name)
 
         # Introduce text and then the URL
-        self.select_json_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(
             By.ID,
             'id_text_content').send_keys(content_txt)
@@ -315,7 +313,7 @@ class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.open_action_operation('simple action', 'fa-link')
+        self.open_action_operation('simple action', 'bi-link-45deg')
 
         # Assert the content in the modal
         self.assertIn(
@@ -338,7 +336,7 @@ class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         action = models.Action.objects.get(name='simple action')
         self.assertEqual(action.serve_enabled, True)
 
-        self.open_action_operation('simple action', 'fa-link')
+        self.open_action_operation('simple action', 'bi-link-45deg')
         # Disable the URL
         self.selenium.find_element(By.ID, 'id_serve_enabled').click()
         # Click OK
@@ -387,13 +385,13 @@ class ActionActionInDataEntry(
         self.assertIn('1 learner of 3', self.selenium.page_source)
 
         # Select email column as key column
-        self.select_parameters_tab()
+        self.select_tab('parameters-tab')
         self.click_dropdown_option('select-key-column-name', 'email')
         # Table disappears (page is updating) -- Wait for spinner, and then
         # refresh
         self.wait_for_spinner()
 
-        self.select_questions_tab()
+        self.select_tab('questions-tab')
         self.click_dropdown_option('column-selector', 'registered')
         self.wait_for_id_and_spinner('column-selected-table_previous')
         WebDriverWait(self.selenium, 10).until(
@@ -579,7 +577,7 @@ class ActionActionZip(
         # Click in the page to send email
         self.open_action_operation(
             'Detecting age',
-            'fa-file-archive',
+            'bi-file-earmark-zip-fill',
             'zip-action-request-data')
 
         # The zip should include 2 files
@@ -928,7 +926,7 @@ class ActionCreateRubric(tests.TestRubricFixture, tests.OnTaskLiveTestCase):
             + '<p>Chris Doe</p>'
             + '<p>Course Coordinator</p>')
 
-        self.select_rubric_tab()
+        self.select_tab('rubric-tab')
         self.click_dropdown_option('insert-criterion', 'Structure')
         self.wait_for_id_and_spinner('rubric-table_previous')
 
