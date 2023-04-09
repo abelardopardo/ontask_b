@@ -31,7 +31,7 @@ Parameters
 Description
   Text describing in detail the effect of the transformation.
 
-Once the data is filled, the program is executed by clicking in the |fa-rocket| *Run* button. The execution is done in the background (it may take some tie), and a link to the log including the report is shown.
+Once the data is filled, the program is executed by clicking in the |bi-rocket-takeoff-fill| *Run* button. The execution is done in the background (it may take some tie), and a link to the log including the report is shown.
 
 .. _plugin_requirements:
 

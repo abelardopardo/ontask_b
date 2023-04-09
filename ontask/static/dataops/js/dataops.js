@@ -60,12 +60,12 @@ $(document).ready(function() {
   if (location.hash) {
     $("a[href='" + location.hash + "']").tab("show");
   }
-  $(document.body).on("click", "a[data-toggle]", function(event) {
+  $(document.body).on("click", "a[data-bs-toggle]", function(event) {
     location.hash = this.getAttribute("href");
   });
 });
 $(window).on("popstate", function() {
-  let anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  let anchor = location.hash || $("a[data-bs-toggle='tab']").first().attr("href");
   $("a[href='" + anchor + "']").tab("show");
 });
 $('#dataops-get-plugin-info-to-run form').validate({

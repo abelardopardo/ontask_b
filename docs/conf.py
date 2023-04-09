@@ -180,63 +180,61 @@ texinfo_documents = [
 
 rst_prolog = '.. |ontask_version| replace:: %s\n' % version
 
-# -- Add fontawesome icons --------------------------------------------------
-fontawesome_icons = [
-   "fa-angle-double-right",
-   "fa-angle-left",
-   "fa-angle-right",
-   "fa-arrow-left",
-   "fa-book",
-   "fa-calendar",
-   "fa-chart-bar",
-   "fa-chart-line",
-   "fa-check",
-   "fa-check-circle",
-   "fa-check-square",
-   "fa-clock",
-   "fa-clone",
-   "fa-code",
-   "fa-cog",
-   "fa-cogs",
-   "fa-comments",
-   "fa-compress",
-   "fa-download",
-   "fa-envelope-square",
-   "fa-exclamation-triangle",
-   "fa-eye",
-   "fa-file-alt",
-   "fa-file-archive",
-   "fa-file-code",
-   "fa-filter",
-   "fa-home",
-   "fa-link",
-   "fa-minus-square",
-   "fa-paperclip",
-   "fa-pencil-alt",
-   "fa-plus",
-   "fa-question-circle",
-   "fa-rocket",
-   "fa-save",
-   "fa-share-square",
-   "fa-star",
-   "fa-step-backward",
-   "fa-step-forward",
-   "fa-table",
-   "fa-tasks",
-   "fa-trash",
-   "fa-upload",
-   "fa-user",
-]
+# -- Add bootstrap 5 icons --------------------------------------------------
+bootstrap_icons = [
+    'fast-forward',
+    'chevron-left',
+    'chevron-right',
+    'arrow-left',
+    'journal-text',
+    'calendar',
+    'bar-chart-line-fill',
+    'graph-up-arrow',
+    'check',
+    'check-circle-fill',
+    'check-square-fill',
+    'clock-fill',
+    'files',
+    'code-slash',
+    'gear',
+    'chat-right-quote-fill',
+    'file-zip-fill',
+    'download',
+    'envelope-fill',
+    'exclamation-triangle',
+    'eye-fill',
+    'file-earmark-text-fill',
+    'file-earmark-zip-fill',
+    'file-earmark-code-fill',
+    'funnel-fill',
+    'house-fill',
+    'link-45deg',
+    'dash-square-fill',
+    'paperclip',
+    'pencil-fill',
+    'plus',
+    'question-circle-fill',
+    'rocket-takeoff-fill',
+    'save-fill',
+    'share-fill',
+    'star-fill',
+    'skip-start-fill',
+    'skip-end-fill',
+    'table',
+    'list-task',
+    'trash-fill',
+    'upload',
+    'person-square']
 
 rst_prolog += '\n'.join([
-    '.. |{0}| raw:: html\n\n   <span class="fa {0}"></span>\n'.format(icon_name)
-    for icon_name in fontawesome_icons
+    '.. |bi-{0}| raw:: html\n\n   <i class="bi-{0}"></i>\n'.format(icon_name)
+    for icon_name in bootstrap_icons
 ])
 
 rst_prolog += '\n.. |test-all-icons| raw:: html\n\n   <ul>'
 rst_prolog += '\n'.join([
-    '   <li><span class="fa {0}"></span></li>'.format(icon_name)
-    for icon_name in fontawesome_icons
+    '   <li><i class="bi-{0}"></i></li>'.format(icon_name)
+    for icon_name in bootstrap_icons
 ])
 rst_prolog += '\n   </ul>'
 
@@ -245,5 +243,5 @@ def setup(app):
     """Add additional stylesheets."""
     app.add_css_file('css/custom.css')  # may also be an URL
     app.add_css_file(
-        'https://use.fontawesome.com/releases/v5.0.10/css/all.css'
+        'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css'
     )

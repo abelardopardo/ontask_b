@@ -2,10 +2,10 @@
 <div class="btn-group btn-group-sm" role="group">
   <button type="button" class="btn btn-secondary btn-light js-attribute-edit"
           data-url="{% url 'workflow:attribute_edit' id %}"
-          data-toggle="tooltip" title="{% trans 'Edit the attribute' %}">
-    <span class="fa fa-pencil-alt"></span></button>
+          data-bs-toggle="tooltip" title="{% trans 'Edit the attribute' %}">
+    <i class="bi-pencil-fill"></i></button>
   <button type="button" class="btn btn-secondary btn-light js-attribute-delete"
           data-url="{% url 'workflow:attribute_delete' id %}"
-          data-toggle="tooltip" title="{% trans 'Delete pair name/value' %}">
-    <span class="fa fa-trash"></span></button>
+          data-bs-toggle="tooltip" title="{% trans 'Delete pair name/value' %}">
+    <i class="bi-trash-fill"></i></button>
 </div>

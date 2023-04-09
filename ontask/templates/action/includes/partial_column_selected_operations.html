@@ -2,17 +2,17 @@
 <div class="btn-group btn-group-sm" role="group">
   <button type="button" data-url="{% url 'column:question_edit' id %}"
      class="btn btn-secondary btn-light js-action-question-edit"
-     data-toggle="tooltip" title="{% trans 'Edit the question' %}">
-    <span class="fa fa-pencil-alt"></span></button>
+     data-bs-toggle="tooltip" title="{% trans 'Edit the question' %}">
+    <i class="bi-pencil-fill"></i></button>
   <button type="button"
           class="btn btn-secondary btn-light js-column-clone align-middle"
-          data-url="{% url 'column:column_clone' id %}" data-toggle="tooltip"
+          data-url="{% url 'column:column_clone' id %}" data-bs-toggle="tooltip"
           title="{% trans 'Create an exact duplicate of this question' %}">
-      <span class="fa fa-clone"></span>
+      <i class="bi-files"></i>
   </button>
   <button type="button"
           class="btn btn-secondary btn-light js-action-question-delete align-middle"
-          data-url="{% url 'action:unselect_column_action' aid id %}" data-toggle="tooltip"
+          data-url="{% url 'action:unselect_column_action' aid id %}" data-bs-toggle="tooltip"
           title="{% trans 'Remove question from this survey' %}">
-    <span class="fa fa-trash"></span></button>
+    <i class="bi-trash-fill"></i></button>
 </div>

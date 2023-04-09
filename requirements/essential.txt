@@ -22,8 +22,9 @@
 Django[argon2]==4.2  # BSD-3-Clause
 celery  # BSD
 coverage  # Apache License 2.0
-crispy-bootstrap4 # MIT
+crispy-bootstrap5 # MIT
 cron-descriptor  # MIT
+django-bootstrap-v5 # BSD-3-Clause
 django-bootstrap-datepicker-plus  # Apache License 2.0
 django-braces  # BSD
 django-celery-beat  # BSD-3-Clause

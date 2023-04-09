@@ -1,24 +1,24 @@
 {% load i18n %}
 <div id="add-column-operations" class="dropdown btn-group">
-  <button class="shadow btn btn-outline-primary dropdown-toggle" type="button"
-          data-toggle="dropdown"><span class="fa fa-plus"></span> {% trans 'Column' %}
+  <button class="btn btn-outline-primary dropdown-toggle" type="button"
+          data-bs-toggle="dropdown"><i class="bi-plus"></i> {% trans 'Column' %}
   </button>
-  <div class="shadow dropdown-menu" aria-labelledby="addColumnOpertions">
+  <div class="dropdown-menu" aria-labelledby="addColumnOpertions">
     <button type="button" class="dropdown-item js-workflow-column-add"
             data-url="{% url 'column:create' %}"
-            data-toggle="tooltip"
+            data-bs-toggle="tooltip"
             title="{% trans 'Add a new column to the table' %}">
       {% trans 'Regular column' %}
     </button>
     <button type="button" class="dropdown-item js-workflow-formula-column-add"
             data-url="{% url 'column:formula_column_add' %}"
-            data-toggle="tooltip"
+            data-bs-toggle="tooltip"
             title="{% trans 'Add a new column combining columns with a formula' %}">
       {% trans 'Formula-derived column' %}
     </button>
     <button type="button" class="dropdown-item js-workflow-random-column-add"
             data-url="{% url 'column:random_column_add' %}"
-            data-toggle="tooltip"
+            data-bs-toggle="tooltip"
             title="{% trans 'Add a new column with ramdom values' %}">
       {% trans 'Column with random values' %}
     </button>

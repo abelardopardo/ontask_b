@@ -87,7 +87,7 @@ def log_table_server_side(
                 reverse('logs:modal_view', kwargs={'pk': log_item[0]}),
             )
             + ' class="btn btn-sm btn-light js-log-view"'
-            + ' data-toggle="tooltip" title="{0}">{1}</button>'.format(
+            + ' data-bs-toggle="tooltip" title="{0}">{1}</button>'.format(
                 gettext('View log content'),
                 log_item[0],
             ),

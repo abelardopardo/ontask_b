@@ -53,7 +53,7 @@ Let's assume you want to ask the learners two questions:
 
 - What was your dedication to the course this week?
 
-To make the data suitable for further processing, we will create the two questions/columns with a set of pre-defined answers. Use the |fa-plus| *Create question* button to create two columns of type string and provide the allowed answer values as a comma-separated list.
+To make the data suitable for further processing, we will create the two questions/columns with a set of pre-defined answers. Use the |bi-plus| *Create question* button to create two columns of type string and provide the allowed answer values as a comma-separated list.
 
 .. figure:: /scaptures/tutorial_survey_column_creation.png
    :align: center

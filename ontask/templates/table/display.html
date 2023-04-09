@@ -55,7 +55,7 @@
           ],
           "drawCallback": function(settings) {
              // Needed to enable tooltips in ajax produced content
-             $('[data-toggle="tooltip"]').tooltip({ trigger: "hover"});
+             $('[data-bs-toggle="tooltip"]').tooltip({ trigger: "hover"});
           },
           language: {url: getLanguage()},
           colReorder: {
@@ -95,22 +95,22 @@
       <h1 class="text-center">{{ object.name }}
         <div class="btn-group btn-group-sm" role="group">
           <button type="button" data-url="{% url 'table:view_edit' object.id %}"
-             class="btn btn-primary btn-light js-view-edit" data-toggle="tooltip"
+             class="btn btn-primary btn-light js-view-edit" data-bs-toggle="tooltip"
              title="{% trans 'Edit the elements in the view' %}">
-             <span class="fa fa-pencil-alt"></span></button>
+             <i class="bi-pencil-fill"></i></button>
           <button type="button"
                   class="btn btn-primary btn-light js-view-clone"
                   data-url="{% url 'table:view_clone' object.id %}"
-                  data-toggle="tooltip"
+                  data-bs-toggle="tooltip"
                   title="{% trans 'Create an identical view' %}">
-            <span class="fa fa-clone"></span>
+            <i class="bi-files"></i>
           </button>
           <button type="button"
                   class="btn btn-primary btn-light js-view-delete"
                   data-url="{% url 'table:view_delete' object.id %}"
-                  data-toggle="tooltip"
+                  data-bs-toggle="tooltip"
                   title="{% trans 'Delete the view' %}">
-            <span class="fa fa-trash"></span>
+            <i class="bi-trash-fill"></i>
           </button>
         </div>
       </h1>
@@ -124,23 +124,23 @@
       <div id="table-operation-buttons">
         <div class="text-center my-3">
           <a href="{% url 'dataops:rowcreate' %}"
-             class="shadow btn btn-outline-primary spin"
-             data-toggle="tooltip"
+             class="btn btn-outline-primary spin"
+             data-bs-toggle="tooltip"
              title="{% trans 'Add a new row to the table' %}">
-            <span class="fa fa-plus"></span> {% trans 'Row' %}
+            <i class="bi-plus"></i> {% trans 'Row' %}
           </a>
           {% include 'column/includes/add_menu.html' %}
-          <div id="select-view-name" class="dropdown btn-group shadow">
-            <button class="shadow btn btn-outline-primary dropdown-toggle" type="button"
-              id="viewsOperations" data-toggle="dropdown">
-              <span class="fa fa-eye"></span> {% trans 'Views' %}
+          <div id="select-view-name" class="dropdown btn-group">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button"
+              id="viewsOperations" data-bs-toggle="dropdown">
+              <i class="bi-eye-fill"></i> {% trans 'Views' %}
             </button>
-            <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="viewsOperations">
+            <div class="dropdown-menu scrollable-menu" aria-labelledby="viewsOperations">
               <button type="button" class="btn dropdown-item js-view-add"
                       data-url="{% url 'table:view_add' %}"
-                      data-toggle="tooltip"
+                      data-bs-toggle="tooltip"
                       title="{% trans 'Create a new table view' %}">
-                <span class="fa fa-plus"></span> {% trans 'View' %}
+                <i class="bi-plus"></i> {% trans 'View' %}
               </button>
               <a href="{% url 'table:display' %}"
                  {% if object %}
@@ -148,7 +148,7 @@
                  {% else %}
                   class="btn dropdown-item disabled"
                  {% endif%}>
-                <span class="fa fa-table"></span> {% trans 'Full table' %}</a>
+                <i class="bi-table"></i> {% trans 'Full table' %}</a>
               {% if views %}
                 {% for v in views %}
                   {% if v != view %}
@@ -159,7 +159,7 @@
               {% endif %}
             </div>
           </div>
-          <a class="shadow btn btn-outline-primary spin"
+          <a class="btn btn-outline-primary spin"
             {% if object %}
               href="{% url 'table:stat_table_view' object.id %}"
               title="{% trans 'Dashboard created with the view data' %}"
@@ -167,30 +167,30 @@
               href="{% url 'table:stat_table' %}"
               title="{% trans 'Dashboard created with the table data' %}"
             {% endif %}
-            data-toggle="tooltip">
-            <span class="fa fa-chart-line"></span> {% trans 'Dashboard' %}
+            data-bs-toggle="tooltip">
+            <i class="bi-graph-up-arrow"></i> {% trans 'Dashboard' %}
           </a>
           {% include 'table/includes/partial_column_stats_selector.html' %}
           <a
             {% if object %}
               href="{% url 'table:csvdownload_view' object.id %}"
-              class="shadow btn btn-outline-primary"
+              class="btn btn-outline-primary"
             {% else %}
               href="{% url 'table:csvdownload' %}"
-              class="shadow btn btn-outline-primary"
+              class="btn btn-outline-primary"
             {% endif %}
-                data-toggle="tooltip"
+                data-bs-toggle="tooltip"
                 title="{% trans 'Download a CSV file containing this table' %}">
-              <span class="fa fa-download"></span> {% trans 'CSV Download' %}
+              <i class="bi-download"></i> {% trans 'CSV Download' %}
           </a>
           {% if object and not object.has_empty_formula %}
             <button
               type="button"
-              class="shadow btn btn-outline-primary js-create-action"
+              class="btn btn-outline-primary js-create-action"
               data-url="{% url 'action:create_from_view' object.id %}"
               title="{% trans 'New action using this view as filter' %}"
-              data-toggle="tooltip">
-              <span class="fa fa-plus"></span> {% trans 'Action with filter' %}
+              data-bs-toggle="tooltip">
+              <i class="bi-plus"></i> {% trans 'Action with filter' %}
             </button>
           {% endif %}
         </div>

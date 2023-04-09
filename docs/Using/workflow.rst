@@ -53,19 +53,19 @@ The icons in the bottom of this element allow you to perform the following opera
      :align: center
      :width: 100%
 
-|fa-pencil-alt| *Change name or description*
+|bi-pencil-fill| *Change name or description*
   Changes the name of the description given to the workflow.
 
-|fa-clone| *Create a duplicate*
+|bi-files| *Create a duplicate*
   Creates a duplicate or exact copy of the workflow with the prefix *Copy_of_* added to the  workflow name.
 
-|fa-minus-square| *Delete all data*
+|bi-dash-square-fill| *Delete all data*
   Deletes all data and actions stored in the workflow (turns it into an empty workflow with just the name and the description).
 
-|fa-trash| *Delete the workflow*
+|bi-trash-fill| *Delete the workflow*
   Delete the workflow from the system.
 
-|fa-star| *Mark as favourite*
+|bi-star-fill| *Mark as favourite*
   Mark the workflow as favourite to be shown at the top of the screen.
 
 When a workflow is open, the top-bar menu appears with the structure shown in the following figure.

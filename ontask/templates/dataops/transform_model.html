@@ -56,11 +56,11 @@
               <td class="text-center">{{ err_item.filename }}</td>
               <td class="text-center">
                 <button type="button"
-                        class="shadow btn btn-outline-danger js-plugin-diagnose"
+                        class="btn btn-outline-danger js-plugin-diagnose"
                         data-url="{% url 'dataops:plugin_diagnose' err_item.id %}"
-                        data-toggle="tooltip"
+                        data-bs-toggle="tooltip"
                         title="{% trans 'Show diagnostics for this plugin' %}">
-                  <span class="fa fa-eye"></span> {% trans 'Diagnose' %}
+                  <i class="bi-eye-fill"></i> {% trans 'Diagnose' %}
                 </button>
               </td>
             </tr>
@@ -71,22 +71,8 @@
     {% endif %}
     {% if is_model %}
       <h1 class="text-center">{% trans 'Models' %}</h1>
-      <div class="text-center">
-        <a href="{% url 'dataops:transform' %}"
-           class="shadow btn btn-outline-dark spin"
-           data-toggle="tooltip" data-container="body"
-           title="{% trans 'Apply a transformation to the data' %}">
-          {% trans 'Transformations' %}</a>
-      </div>
     {% else %}
       <h1 class="text-center">{% trans 'Transformations' %}</h1>
-      <div class="text-center">
-        <a href="{% url 'dataops:model' %}"
-           class="shadow btn btn-outline-dark spin"
-           data-toggle="tooltip" data-container="body"
-           title="{% trans 'Execute a model with the existing data' %}">
-          {% trans 'Models' %}</a>
-      </div>
     {% endif %}
     <div class="justify-content-center" id="transform-selection">
       {% render_table table %}

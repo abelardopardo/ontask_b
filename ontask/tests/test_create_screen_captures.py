@@ -651,7 +651,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         # Action In URL enable
         #
         self.go_to_actions()
-        self.open_action_operation('Student comments Week 1', 'fa-link')
+        self.open_action_operation('Student comments Week 1', 'bi-link-45deg')
 
         # Take picture of the modal
         self.modal_ss('action_action_in_URL.png')
@@ -860,7 +860,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.go_to_actions()
         self.open_action_operation(
             'Midterm comments',
-            'fa-file-archive',
+            'bi-file-earmark-zip-fill',
             'zip-action-request-data')
 
         # Picture of the body
@@ -891,7 +891,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         #
         # Action URL
         #
-        self.open_action_operation('Midterm comments', 'fa-link')
+        self.open_action_operation('Midterm comments', 'bi-link-45deg')
 
         # Take picture of the modal
         self.modal_ss('action_URL_on.png')
@@ -921,7 +921,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         #
         self.open_action_operation(
             'Midterm comments',
-            'fa-calendar',
+            'bi-calendar',
             'email-schedule-send')
 
         # Fill out some fields
@@ -963,7 +963,7 @@ class ScreenTestScheduler(ScreenTestFixtureBasic):
         #
         self.open_action_operation(
             'Send JSON to remote server',
-            'fa-calendar',
+            'bi-calendar',
             'email-schedule-send')
 
         # Fill out some fields

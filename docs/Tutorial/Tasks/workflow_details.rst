@@ -15,7 +15,7 @@ The buttons at the top of the page are used to perform several operations over t
 Adding columns
 ==============
 
-The |fa-plus| *Column* button offers the following options:
+The |bi-plus| *Column* button offers the following options:
 
 Add a new column
   This function allows you to manually add a new column to the data table. You need to provide the name, a description (optional), the type of data (one of string, number, datetime, or boolean), the position where this column is inserted in the workflow, a date/time window when the columns is visible, an optional comma-separated list of possible value (useful to restrict the values), and an optional initial value.

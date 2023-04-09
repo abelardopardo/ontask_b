@@ -5,11 +5,11 @@
   <p class="lead text-center">{% blocktrans %}Click in the "Add Intructor" button below and provide the email for the user
     with whom you want to share the workflow.{% endblocktrans %}</p>
 {% endif %}
-<div class="row justify-content-center mb-3">
+<div class="text-center mb-3">
   <button type="button"
           class="btn btn-outline-dark js-share-create"
           data-url="{% url 'workflow:share_create' %}">
-    <span class="fa fa-plus"></span> {% trans 'Instructor' %}
+    <i class="bi-plus"></i> {% trans 'Instructor' %}
   </button>
 </div>
 {% if share_table.data|length %}

@@ -2,8 +2,8 @@
 {% if available_views %}
   <div id="attachment-selector" class="dropdown btn-group">
     <button type="button" class="btn btn-outline-dark dropdown-toggle"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <span class="fa fa-paperclip"></span> {% trans 'Select Attachment' %}</button>
+            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="bi-paperclip"></i> {% trans 'Select Attachment' %}</button>
     <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="column-stat-selector">
       {% for view in available_views %}
         <button type="button" class="dropdown-item js-attachment-insert"

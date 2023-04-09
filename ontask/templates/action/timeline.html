@@ -22,7 +22,7 @@
             type="button"
             data-url="{% url 'logs:modal_view' event.id %}"
             class="btn btn-sm btn-light js-log-view"
-            data-toggle="tooltip" title="{% trans 'View log content' %}">
+            data-bs-toggle="tooltip" title="{% trans 'View log content' %}">
             {{ event.get_name_display }}</button>
         </li>
       {% endfor %}

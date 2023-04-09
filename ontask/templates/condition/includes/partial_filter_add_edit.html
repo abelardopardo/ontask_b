@@ -11,9 +11,7 @@
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% if form.instance.id is None %}{% trans 'Create filter' %}{% else %}{% trans 'Update filter' %}{% endif %}</h4>
-    <button type="button" class="close" data-dismiss="modal" arial-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" arial-label="Close"></button>
   </div>
   <div class="modal-body">
     {{ form|crispy }}

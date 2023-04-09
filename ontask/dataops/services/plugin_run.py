@@ -42,7 +42,7 @@ class PluginAvailableTable(tables.Table):
         if record.is_verified:
             return format_html(
                 '<a href="{0}" '
-                + 'data-toggle="tooltip" title="{1}">{2}',
+                + 'data-bs-toggle="tooltip" title="{1}">{2}',
                 reverse('dataops:plugin_invoke', kwargs={'pk': record.id}),
                 _('Execute the transformation'),
                 record.name,

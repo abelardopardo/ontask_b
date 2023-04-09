@@ -461,7 +461,7 @@ class TutorialCaptures(ScreenTests):
         self.wait_for_id_and_spinner('action-index')
 
         # Click in the URL link
-        self.open_action_operation('Program advice', 'fa-link')
+        self.open_action_operation('Program advice', 'bi-link-45deg')
 
         # Capture the modal with the URL
         self.modal_ss('tutorial_personalized_text_URL.png')
@@ -474,7 +474,7 @@ class TutorialCaptures(ScreenTests):
         #
         self.open_action_operation(
             'Program advice',
-            'fa-file-archive',
+            'bi-file-earmark-zip-fill',
             'zip-action-request-data')
 
         # Select the key column

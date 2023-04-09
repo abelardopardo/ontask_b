@@ -201,12 +201,13 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django_celery_beat',
     'django_celery_results',
+    'bootstrap5',
     'bootstrap_datepicker_plus',
     'drf_yasg',
     # 'corsheaders',
 
     'crispy_forms',
-    'crispy_bootstrap4',
+    'crispy_bootstrap5',
     'sorl.thumbnail',
     'widget_tweaks',
     'formtools',
@@ -394,8 +395,8 @@ else:
 
 # Django-crispy-forms
 # -----------------------------------------------------------------------------
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 # Django-import-export
 # -----------------------------------------------------------------------------

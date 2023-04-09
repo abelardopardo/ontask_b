@@ -15,7 +15,7 @@ The buttons at the top of the page offer the following operations:
 
 .. _details_export:
 
-|fa-download| Export
+|bi-download| Export
   This functionality allows you to take a snapshot of the content of the workflow and store it in a file for your records. You may select which actions are included in the exported file
 
   .. figure:: /scaptures/workflow_export.png
@@ -25,7 +25,7 @@ The buttons at the top of the page offer the following operations:
 
 .. _details_rename:
 
-|fa-pencil-alt| Rename
+|bi-pencil-fill| Rename
   This functionality allows to change either the name or the description of the workflow.
 
   .. figure:: /scaptures/workflow_rename.png
@@ -34,7 +34,7 @@ The buttons at the top of the page offer the following operations:
 
 .. _details_clone:
 
-|fa-clone| Clone
+|bi-files| Clone
   This function creates a new workflow duplicating the data, actions and conditions of the current workflow. The new workflow will have the same name with the prefix *Copy of*.
 
 .. _details_flush_data:
@@ -50,7 +50,7 @@ Flush data table
 
 .. _details_delete:
 
-|fa-trash| Delete
+|bi-trash-fill| Delete
   Operation similar to the previous one, but now the whole workflow is deleted and therefore unselected. If executed, the platform will go back to the list of workflows as this one is no longer available for operations.
 
   .. figure:: /scaptures/workflow_delete.png
@@ -70,14 +70,14 @@ Attributes
   .. figure:: /scaptures/workflow_attributes.png
      :align: center
 
-  The |fa-plus| *Attribute* button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The |fa-pencil-alt| icon opens the form to edit its content. The |fa-trash| icon deletes the attribute.
+  The |bi-plus| *Attribute* button opens a form to introduce the name and value of a new attribute. The table below this button shows the attributes available for the workflow. The |bi-pencil-fill| icon opens the form to edit its content. The |bi-trash-fill| icon deletes the attribute.
 
   The use of these attributes is to facilitate a single point of change when a value appears in multiple locations. For example, every personalized text action is singed with the name of the instructor. If that name changes, all actions need to be edited. On the other hand, if the actions contain the name of an attribute, just changing the attribute value propagates the change to all actions.
 
 .. _details_sharing:
 
 Share
-  The *Share* tab on the right of the page is used to manage the list of users that have access to this workflow. The |fa-plus| *User* button opens a form to introduce a the id of the user to share the workflow.
+  The *Share* tab on the right of the page is used to manage the list of users that have access to this workflow. The |bi-plus| *User* button opens a form to introduce a the id of the user to share the workflow.
 
   .. figure:: /scaptures/workflow_share.png
      :align: center
@@ -95,7 +95,7 @@ The *Column Operations* page is available through the *More* link at the top-bar
 
 The buttons at the top of the page offer the following operations
 
-|fa-plus| Column
+|bi-plus| Column
   This menu opens three options: create a regular column, create a column combining the values of two existing columns, or create a new column with random values.
 
 .. _details_add_column:
@@ -140,7 +140,7 @@ Position (#)
 Operations
   The operations available for columns are:
 
-  |fa-pencil-alt| Edit
+  |bi-pencil-fill| Edit
     Change the name, description, unique and values allowed in the column. If the field *Has unique values per row* property is modified, OnTask checks if the values satisfy this condition.
 
     .. figure:: /scaptures/workflow_column_edit.png
@@ -149,22 +149,22 @@ Operations
 
     The column may also have a *validity window* defined by two date/times. This validity is used when executing *action in* tasks.
 
-  |fa-clone| Clone
+  |bi-files| Clone
     Clones the column in the workflow changing its name adding the prefix *Copy of* to the name.
 
-  |fa-chart-bar| Statistics (only for non-key columns)
+  |bi-bar-chart-line-fill| Statistics (only for non-key columns)
     Shows a statistical summary of the values in the column. If the data type is *number*, the summary includes information about quartiles, a boxplot, and a histogram. For the rest of data types, the summary only includes the histogram.
 
-  |fa-compress| Restrict
+  |bi-file-zip-fill| Restrict
     Assigns as *allowed values* for the column those currently stored. This operation is useful to transform a generic column into one with values limited to the current ones.
 
-  |fa-trash| Delete
+  |bi-trash-fill| Delete
     Deletes the column from the workflow. If there are conditions in the actions that use this column, those conditions will be removed from the action.
 
-  |fa-step-backward| Make first column
+  |bi-skip-start-fill| Make first column
     Move this column to the first position in the workflow
 
-  |fa-step-forward| Make last column
+  |bi-skip-end-fill| Make last column
     Move this column to the last position in the workflow
 
 Name

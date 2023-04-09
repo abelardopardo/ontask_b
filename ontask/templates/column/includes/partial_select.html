@@ -5,9 +5,7 @@
 <form id="column-select-form" action="">
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Select columns' %}</h4>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     {{ form|crispy }}
@@ -15,7 +13,7 @@
   <div class="modal-footer">
     <button type="button"
             class="btn btn-outline-primary js-table-insert">
-       <span class="fa fa-check"></span> {% trans 'Select' %}
+       <i class="bi-check"></i> {% trans 'Select' %}
     </button>
   </div>
 </form>

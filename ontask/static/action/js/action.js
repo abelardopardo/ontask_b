@@ -219,7 +219,7 @@ $(document).ready(function() {
   if (location.hash) {
     $("a[href='" + location.hash + "']").tab("show");
   }
-  $(document.body).on("click", "a[data-toggle]", function(event) {
+  $(document.body).on("click", "a[data-bs-toggle]", function(event) {
     location.hash = this.getAttribute("href");
   });
   select_next_button($("#id_confirm_items"));
@@ -236,6 +236,6 @@ $(document).ready(function() {
   });
 });
 $(window).on("popstate", function() {
-  let anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
+  let anchor = location.hash || $("a[data-bs-toggle='tab']").first().attr("href");
   $("a[href='" + anchor + "']").tab("show");
 });

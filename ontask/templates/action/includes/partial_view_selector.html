@@ -2,8 +2,8 @@
 <div id="view-as-filter-selector" class="dropdown btn-group">
   <button type="button"
           class="btn btn-outline-dark dropdown-toggle{% if filter_condition or not views %} disabled{% endif %}"
-          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <span class="fa fa-filter"></span> {% trans 'Set view as filter' %}
+          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="bi-funnel-fill"></i> {% trans 'Set view as filter' %}
   </button>
   <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="view-as-filter-selector">
     {% for view in views %}

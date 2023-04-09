@@ -3,9 +3,7 @@
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm workflow deletion' %}</h4>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     <p class="lead">{% blocktrans with n=workflow.name %}Are you sure you want to delete the workflow <strong>{{ n }}</strong>?{% endblocktrans %}</p>
@@ -14,7 +12,7 @@
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-danger button-enable" disabled>
-      <span class="fa fa-trash"></span> {% trans 'Delete workflow' %}</button>
+      <i class="bi-trash-fill"></i> {% trans 'Delete workflow' %}</button>
   </div>
 </form>
 

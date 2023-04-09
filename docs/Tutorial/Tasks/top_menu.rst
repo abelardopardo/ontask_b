@@ -10,7 +10,7 @@ OnTask assumes that you will be working with one workflow. The first screen (the
 
 .. sidebar:: Superuser
 
-   If your account has *superuser* or *admin* privileges, the top menu will include the additional option with name |fa-cog| *Admin*. This menu provides access to the  pages to manage administration tasks, the connections to SQL relational databases, and the set of installed plugins. These connections are available to instructors as part of the operations to Upload/Merge data into the table.
+   If your account has *superuser* or *admin* privileges, the top menu will include the additional option with name |bi-gear| *Admin*. This menu provides access to the  pages to manage administration tasks, the connections to SQL relational databases, and the set of installed plugins. These connections are available to instructors as part of the operations to Upload/Merge data into the table.
 
 .. include:: /Tutorial/Tasks/include_top_menu.rst
 

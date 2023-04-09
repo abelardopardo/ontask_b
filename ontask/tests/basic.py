@@ -456,7 +456,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         # Click in the cancel button
         self.selenium.find_element(
             By.XPATH,
-            '//div[@id="modal-item"]//button[@data-dismiss="modal"]'
+            '//div[@id="modal-item"]//button[@data-bs-dismiss="modal"]'
         ).click()
         # Wail until the modal-open element disappears
         WebDriverWait(self.selenium, 10).until_not(
@@ -1260,7 +1260,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         element = self.search_action(name)
         element.find_element(
             By.XPATH,
-            'div/div/button/span[contains(@class, "fa-rocket")]').click()
+            'div/div/button/i[contains(@class, "bi-rocket-takeoff-fill")]').click()
         if is_action_in:
             self.wait_for_id_and_spinner('actioninrun-data_previous')
         else:
@@ -1314,7 +1314,7 @@ class OnTaskLiveTestCase(OnTaskBasicTestCase, LiveServerTestCase):
         if close:
             self.selenium.find_element(
                 By.XPATH,
-                '//div[@id="modal-item"]//button[@data-dismiss="modal"]'
+                '//div[@id="modal-item"]//button[@data-bs-dismiss="modal"]'
             ).click()
             # Close modal (wail until the modal-open element disappears)
             WebDriverWait(self.selenium, 10).until_not(

@@ -2,14 +2,14 @@
 {% if conditions %}
   <div id="condition-selector-{{ id }}" class="dropdown btn-group">
     <button type="button" class="btn btn-outline-dark dropdown-toggle"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       {% if cond_selected %}
         {{ cond_selected }}
       {% else %}
         {% trans 'Always shown' %}
       {% endif %}
     </button>
-    <div class="shadow dropdown-menu scrollable-menu" aria-labelledby="condition-selector-{{ id }}">
+    <div class="dropdown-menu scrollable-menu" aria-labelledby="condition-selector-{{ id }}">
       {% if cond_selected %}
         <button type="button" class="dropdown-item js-select-condition"
                 data-url="{% url 'action:edit_in_select_condition' id %}">

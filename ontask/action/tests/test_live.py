@@ -30,7 +30,7 @@ class ActionActionRename(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Click on the action rename link
-        self.open_action_operation(self.action_name, 'fa-pencil-alt')
+        self.open_action_operation(self.action_name, 'bi-pencil-fill')
 
         # Rename the action
         self.selenium.find_element(By.ID, 'id_name').send_keys(suffix)
@@ -313,7 +313,7 @@ class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         # Goto the action page
         self.go_to_actions()
 
-        self.open_action_operation('simple action', 'fa-link')
+        self.open_action_operation('simple action', 'bi-link-45deg')
 
         # Assert the content in the modal
         self.assertIn(
@@ -336,7 +336,7 @@ class ActionActionURL(tests.SimpleActionFixture, tests.OnTaskLiveTestCase):
         action = models.Action.objects.get(name='simple action')
         self.assertEqual(action.serve_enabled, True)
 
-        self.open_action_operation('simple action', 'fa-link')
+        self.open_action_operation('simple action', 'bi-link-45deg')
         # Disable the URL
         self.selenium.find_element(By.ID, 'id_serve_enabled').click()
         # Click OK
@@ -577,7 +577,7 @@ class ActionActionZip(
         # Click in the page to send email
         self.open_action_operation(
             'Detecting age',
-            'fa-file-archive',
+            'bi-file-earmark-zip-fill',
             'zip-action-request-data')
 
         # The zip should include 2 files

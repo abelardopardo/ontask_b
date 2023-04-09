@@ -140,7 +140,7 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.wait_for_id_and_spinner('action-index')
 
         # Click in the link to enable the URL for the action
-        self.open_action_operation('action in', 'fa-link')
+        self.open_action_operation('action in', 'bi-link-45deg')
         self.assertIn(
             'This URL provides access to the content personalised',
             self.selenium.page_source)

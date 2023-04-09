@@ -2,7 +2,7 @@
 <small>
   <input class="toggle-checkbox"
          {% if changes_allowed %}checked{% endif %}
-         data-toggle="toggle"
+         data-bs-toggle="toggle"
          data-url="{% url 'action:toggle_question_change' id %}"
          type="checkbox"/>
 </small>

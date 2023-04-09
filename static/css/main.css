@@ -85,19 +85,21 @@ body.regular-body {
   margin-top: 6px;
 }
 
-.column-type-number, .column-type-integer, .column-type-double {
+th.column-type-number, th.column-type-integer, th.column-type-double,
+td.column-type-number, td.column-type-integer, td.column-type-double,
+span.column-type-number, span.column-type-integer, span.column-type-double
+ {
   background: #aed2f0;
 }
-.column-type-string {
+th.column-type-string, td.column-type-string, span.column-type-string {
   background: #f1b1b1;
 }
-.column-type-boolean {
+th.column-type-boolean, td.column-type-boolean, span.column-type-boolean {
   background: #f1e09d;
 }
-.column-type-datetime {
+th.column-type-datetime, td.column-type-datetime, span-column-type-datetime {
   background: #a5dcbf;
 }
-
 
 #preview-variables {
   background-color: rgba(0,0,0,.125);
@@ -342,8 +344,8 @@ div[aria-labelledby="rowMoreOperations"] > button {
 
 /* Wflow name */
 #wflow-name {
-    padding: 0ex;
-    background: #d2f4ea;
+ padding: 0ex;
+ background: #d2f4ea;
 }
 
 mark {
@@ -453,6 +455,7 @@ ul.timeline > li:before {
 
 :not(.btn):not(.note-codable):not(#id_text_content):not(#modal-item):focus {
   background-color: #79dfc1ff !important;
+  box-shadow: 0 0 0 0.2rem rgba(121, 223, 193, 0.5); }
 }
 
 /* Fix error in django-datetimepicker-plus with validation messages */

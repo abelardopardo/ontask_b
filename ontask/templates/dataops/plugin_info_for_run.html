@@ -29,35 +29,35 @@
       <form method="POST" action="">
         {% csrf_token %}
         <div class="text-center my-3">
-          <a class="shadow btn btn-outline-dark spin" href="{% url 'dataops:transform' %}">{% trans 'Cancel' %}</a>
+          <a class="btn btn-outline-dark spin" href="{% url 'dataops:transform' %}">{% trans 'Cancel' %}</a>
           <button type="submit" name="Submit" value="Submit"
-                  class="shadow btn btn-outline-primary spin" data-toggle="tooltip"
+                  class="btn btn-outline-primary spin" data-bs-toggle="tooltip"
                   title="{% trans 'Execute the transformation' %}">
-            <span class="fa fa-rocket"></span> {% trans 'Run' %}</button>
+            <i class="bi-rocket-takeoff-fill"></i> {% trans 'Run' %}</button>
         </div>
         <ul class="nav nav-tabs border-0 justify-content-center"
             id="dataops-get-plugin-info-tabs" role="tablist">
           <li class="nav-item pr-1">
             <a class="nav-link active border border-dark border-bottom-0"
-               id="inputs-tab" data-toggle="tab" href="#inputs"
+               id="inputs-tab" data-bs-toggle="tab" href="#inputs"
                role="tab" aria-controls="inputs"
                aria-selected="true">{% trans 'Input columns to transformation' %}</a>
           </li>
           <li class="nav-item pr-1">
             <a class="nav-link border border-dark border-bottom-0"
-               id="outputs-tab" data-toggle="tab" href="#outputs"
+               id="outputs-tab" data-bs-toggle="tab" href="#outputs"
                role="tab" aria-controls="outputs"
                aria-selected="false">{% trans 'Columns to store the result' %}</a>
           </li>
           <li class="nav-item pr-1">
             <a class="nav-link border border-dark border-bottom-0"
-               id="parameters-tab" data-toggle="tab" href="#parameters"
+               id="parameters-tab" data-bs-toggle="tab" href="#parameters"
                role="tab" aria-controls="parameters"
                aria-selected="false">{% trans 'Parameters' %}</a>
           </li>
           <li class="nav-item pr-1">
             <a class="nav-link border border-dark border-bottom-0"
-               id="description-tab" data-toggle="tab" href="#description"
+               id="description-tab" data-bs-toggle="tab" href="#description"
                role="tab" aria-controls="description"
                aria-selected="false">{% trans 'Description' %}</a>
           </li>

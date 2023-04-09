@@ -7,7 +7,7 @@
       {% if columns_to_insert %}
         <div class="dropdown btn-group">
           <button type="button" class="btn btn-outline-dark dropdown-toggle"
-                  data-toggle="dropdown">
+                  data-bs-toggle="dropdown">
             {% trans 'Insert existing criterion/column' %}
           </button>
           <div class="shadow dropdown-menu scrollable-menu">
@@ -21,9 +21,9 @@
       <button type="button"
               class="btn btn-outline-dark js-workflow-criterion-add"
               data-url="{% url 'column:criterion_create' action.id %}"
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
               title="{% trans 'Add a new criterion to the rubric' %}">
-        <span class="fa fa-plus"></span> {% trans 'Create criterion/column' %}
+        <i class="<i class=""></i> {% trans 'Create criterion/column' %}
       </button>
     </div>
   </div>

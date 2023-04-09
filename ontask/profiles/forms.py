@@ -32,7 +32,7 @@ class ProfileForm(forms.ModelForm):
         self.helper.layout = Layout(
             Field('picture'),
             Field('bio'),
-            Submit('update', 'Update', css_class="shadow btn-success"),
+            Submit('update', 'Update', css_class="btn-success"),
         )
 
     class Meta:

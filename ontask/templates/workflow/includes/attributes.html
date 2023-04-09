@@ -1,12 +1,12 @@
 {% load i18n %}
 {% load django_tables2 %}
-<div class="row justify-content-center mb-3">
+<div class="text-center mb-3">
   <button type="button"
           class="btn btn-outline-dark js-attribute-create"
           data-url="{% url 'workflow:attribute_create' %}"
-          data-toggle="tooltip"
+          data-bs-toggle="tooltip"
           title="{% trans 'Add a new name/value pair' %}">
-    <span class="fa fa-plus"></span> {% trans 'Attribute' %}
+    <i class="bi-plus"></i> {% trans 'Attribute' %}
   </button>
 </div>
 {% if attribute_table.data|length %}

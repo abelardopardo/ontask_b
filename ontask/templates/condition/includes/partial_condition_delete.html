@@ -3,9 +3,7 @@
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">{% trans 'Confirm condition deletion' %}</h4>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     <p class="lead">
@@ -14,7 +12,7 @@
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-outline-danger">
-      <span class="fa fa-trash"></span> {% trans 'Delete condition' %}</button>
+      <i class="bi-trash-fill"></i> {% trans 'Delete condition' %}</button>
   </div>
 </form>
 

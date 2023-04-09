@@ -33,7 +33,7 @@ Save the view and then click on the *View* button. The appropriate table subset 
 Column and Row Statistics
 =========================
 
-If you click on one of the |fa-chart-bar| *Statistics* icons in the left-most column of a row OnTask shows a page with statistical representation of the population values for the columns and a mark denoting where is the value of the selected row.
+If you click on one of the |bi-bar-chart-line-fill| *Statistics* icons in the left-most column of a row OnTask shows a page with statistical representation of the population values for the columns and a mark denoting where is the value of the selected row.
 
 .. figure:: /scaptures/tutorial_row_statistics.png
    :align: center

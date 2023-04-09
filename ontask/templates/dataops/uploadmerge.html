@@ -21,7 +21,7 @@
         <tr>
           <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:csvupload_start' %}" class="btn btn-outline-primary">
-              <span class="fa fa-plus"></span>
+              <i class="bi-plus"></i>
               {% trans 'CSV' %}
             </a>
           </td>
@@ -39,7 +39,7 @@
         <tr>
           <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:excel_upload_start' %}" class="btn btn-outline-primary">
-              <span class="fa fa-plus"></span>
+              <i class="bi-plus"></i>
               {% trans 'Excel' %}
             </a>
           </td>
@@ -60,7 +60,7 @@
         <tr>
           <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:googlesheetupload_start' %}" class="btn btn-outline-primary">
-              <span class="fa fa-plus"></span>
+              <i class="bi-plus"></i>
               {% trans 'Google Sheet' %}
             </a>
           </td>
@@ -81,7 +81,7 @@
           <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'dataops:s3upload_start' %}"
                class="btn btn-outline-primary">
-              <span class="fa fa-plus"></span>
+              <i class="bi-plus"></i>
               {% trans 'S3 Bucket CSV' %}
             </a>
           </td>
@@ -102,7 +102,7 @@
         <tr>
           <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'connection:sqlconns_index' %}" class="btn btn-outline-primary {% if not sql_enabled %}disabled{% endif %}">
-              <span class="fa fa-plus"></span>
+              <i class="bi-plus"></i>
               {% trans 'SQL Connection' %}
             </a>
           </td>
@@ -113,7 +113,7 @@
         <tr>
           <td class="text-center" style="vertical-align: middle;">
             <a href="{% url 'connection:athenaconns_index' %}" class="btn btn-outline-primary {% if not athena_enabled %}disabled{% endif %}">
-              <span class="fa fa-plus"></span>
+              <i class="bi-plus"></i>
               {% trans 'Athena Connection' %}
             </a>
           </td>

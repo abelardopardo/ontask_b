@@ -21,17 +21,17 @@
       <p class="text-center my-3"><strong>Next Step:</strong> The main element in OnTask is a Workflow. Start by first creating a workflow element using the <i>New Workflow</i> button below, and then upload data in its table.</p>
     {% endif %}
     <div class="text-center my-3">
-      <button type="button" class="shadow btn btn-outline-primary js-create-workflow"
+      <button type="button" class="btn btn-outline-primary js-create-workflow"
               data-url="{% url 'workflow:create' %}"
-              data-toggle="tooltip"
+              data-bs-toggle="tooltip"
               title="{% trans 'Provide the name and description for a new workflow' %}">
-        <span class="fa fa-plus"></span> {% trans 'New workflow' %}
+        <i class="bi-plus"></i> {% trans 'New workflow' %}
       </button>
-      <a href="{% url 'workflow:import' %}" class="shadow btn btn-outline-primary spin"
-         data-toggle="tooltip"
+      <a href="{% url 'workflow:import' %}" class="btn btn-outline-primary spin"
+         data-bs-toggle="tooltip"
          title="{% trans 'Import a file with an OnTask workflow' %}">
-        <span class="fa fa-upload"></span>{% trans 'Import workflow' %}</a>
-      <input class="shadow btn btn-outline-primary" id="workflow-search" type="text" placeholder="Search..."/>
+        <i class="bi-upload"></i> {% trans 'Import workflow' %}</a>
+      <input class="btn btn-outline-primary" id="workflow-search" type="text" placeholder="Search..."/>
     </div>
     {% if n_star_wflows %}
       <h5 class="text-primary mb-0 pd-0 pl-0">{% trans 'Favourites' %}</h5>
