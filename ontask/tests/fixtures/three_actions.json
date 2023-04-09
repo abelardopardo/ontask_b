@@ -405,6 +405,16 @@
     }
 },
 {
+    "model": "authtoken.token",
+    "pk": "8001cacfac70def66a9137e66a3101eee55bc0ec",
+    "fields": {
+        "user": [
+            "instructor01@bogus.com"
+        ],
+        "created": "2017-11-08T00:12:05.824Z"
+    }
+},
+{
     "model": "ontask.column",
     "pk": 260,
     "fields": {
