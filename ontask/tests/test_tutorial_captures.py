@@ -83,7 +83,11 @@ class TutorialCaptures(ScreenTests):
         self.body_ss('tutorial_csv_upload_confirm.png')
 
         # Click on the Next button
-        self.selenium.find_element(By.XPATH, '//button[@name="Submit"]').click()
+        submit_button = self.selenium.find_element(
+            By.XPATH,
+            '//button[@name="Submit"]')
+        self.scroll_element_into_view(submit_button)
+        submit_button.click()
         self.wait_for_id_and_spinner('table-data_paginate')
 
         # Take picture of the table
@@ -260,10 +264,12 @@ class TutorialCaptures(ScreenTests):
         self.body_ss('tutorial_moodle_merge_step4.png')
 
         # Click on Finish
-        self.selenium.find_element(
+        finish_button = self.selenium.find_element(
             By.XPATH,
             '//button[normalize-space()="Finish"]'
-        ).click()
+        )
+        self.scroll_element_into_view(finish_button)
+        finish_button.click()
         self.wait_for_id_and_spinner('table-data_previous')
 
         #
@@ -305,7 +311,7 @@ class TutorialCaptures(ScreenTests):
             'tutorial_personalized_text_editor_with_column.png')
 
         # Create the first condition
-        self.select_condition_tab()
+        self.select_tab('conditions-tab')
         self.create_condition(
             'Program is FASS',
             '',
@@ -317,7 +323,7 @@ class TutorialCaptures(ScreenTests):
 
         self.cancel_modal()
 
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.insert_string_in_text_editor('id_text_content', self.script2)
 
@@ -327,7 +333,7 @@ class TutorialCaptures(ScreenTests):
             'tutorial_personalized_text_condition_inserted.png')
 
         # Create the remaining conditions
-        self.select_condition_tab()
+        self.select_tab('conditions-tab')
         self.create_condition(
             'Program is FSCI',
             '',
@@ -345,7 +351,7 @@ class TutorialCaptures(ScreenTests):
         )
 
         # Insert additional sentences for each program
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.insert_string_in_text_editor('id_text_content', self.script3)
 
@@ -355,7 +361,7 @@ class TutorialCaptures(ScreenTests):
             'tutorial_personalized_text_condition_inserted2.png')
 
         # Open the filter condition
-        self.select_filter_tab()
+        self.select_tab('filter-tab')
         self.create_filter(
             'Full time attendance',
             [('Attendance', 'equal', 'Full Time')])
@@ -535,7 +541,7 @@ class TutorialCaptures(ScreenTests):
             '',
             [('Total', 'greater or equal', '50')])
 
-        self.select_json_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.ID, 'id_text_content').send_keys(
             """{
   "sid": {{ SID }},
@@ -597,7 +603,7 @@ class TutorialCaptures(ScreenTests):
         self.body_ss('tutorial_survey_editor.png')
 
         # Click on the Add Column button
-        self.select_questions_tab()
+        self.select_tab('questions-tab')
         self.selenium.find_element(
             By.XPATH,
             '//button[normalize-space()="Create question"]'
@@ -671,7 +677,7 @@ class TutorialCaptures(ScreenTests):
         self.wait_close_modal_refresh_table('column-selected-table_previous')
 
         # Click in the key-select
-        self.select_parameters_tab()
+        self.select_tab('parameters-tab')
 
         # Select email column as key column
         self.click_dropdown_option('select-key-column-name', 'email')
@@ -681,13 +687,7 @@ class TutorialCaptures(ScreenTests):
         self.wait_for_spinner()
 
         # Show the editor
-        self.select_questions_tab()
-        WebDriverWait(self.selenium, 10).until(
-            EC.visibility_of_element_located((By.ID, 'insert-questions'))
-        )
-        self.select_parameters_tab()
-        self.select_questions_tab()
-        sleep(1)
+        self.select_tab('questions-tab')
         self.body_ss('tutorial_survey_editor2.png')
 
         # Click the preview button
@@ -706,7 +706,7 @@ class TutorialCaptures(ScreenTests):
         self.create_new_personalized_text_action('More Strategies', '')
 
         # Create the conditions for those that failed the exam
-        self.select_condition_tab()
+        self.select_tab('conditions-tab')
         topics = [x.strip() for x in question_values.split(',')]
         for topic in topics:
             self.create_condition(
@@ -725,7 +725,7 @@ class TutorialCaptures(ScreenTests):
             )
 
         # Action editor
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.insert_string_in_text_editor(
             'id_text_content',
@@ -752,7 +752,7 @@ class TutorialCaptures(ScreenTests):
             '<p>Kind regards -- Jane Doe</p>')
 
         # Create the filter
-        self.select_filter_tab()
+        self.select_tab('filter-tab')
         self.create_filter(
             'Complete data',
             [('Survey Q1', 'is not null', None),
@@ -764,7 +764,7 @@ class TutorialCaptures(ScreenTests):
         self.cancel_modal()
 
         # Action editor
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.body_ss('tutorial_personalized_text_and_survey.png')
 
         # Save action and back to action index

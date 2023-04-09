@@ -61,7 +61,7 @@ class Scenario2Captures(ScreenTests):
         self.body_ss('scenario_02_text_all_conditions.png')
 
         # Edit the condition
-        self.select_condition_tab()
+        self.select_tab('conditions-tab')
         self.open_condition('Student in FASS')
 
         # Take picture of the modal
@@ -83,7 +83,7 @@ class Scenario2Captures(ScreenTests):
         self.go_to_actions()
 
         # Open the email action
-        self.open_action_email('Welcome email')
+        self.open_action_edit('Welcome email')
 
         # Capture the email
         self.body_ss('scenario_02_action_email.png')

@@ -108,10 +108,10 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Edit the action-in
-        self.open_action_edit('action in')
+        self.open_action_edit('action in', 'parameters')
 
         # Go to questions
-        self.select_questions_tab()
+        self.select_tab('questions-tab')
 
         # Set the right columns to process
         self.click_dropdown_option(
@@ -127,15 +127,15 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         )
 
         # Set some parameters
-        self.select_parameters_tab()
+        self.select_tab('parameters-tab')
         self.click_dropdown_option('select-key-column-name', 'sid')
         self.wait_for_spinner()
-        self.select_parameters_tab()
+        self.select_tab('parameters-tab')
         self.click_dropdown_option('select-key-column-name', 'email')
         self.wait_for_spinner()
 
         # Save action-in
-        self.select_questions_tab()
+        self.select_tab('questions-tab')
         self.selenium.find_element(By.LINK_TEXT, 'Done').click()
         self.wait_for_id_and_spinner('action-index')
 
@@ -225,7 +225,7 @@ class DataopsSymbols1(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.create_filter('', [(symbols + "2", "doesn't begin with", "x")])
 
         # Click the preview button
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'js-action-preview').click()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -299,17 +299,17 @@ class DataopsSymbols2(tests.WflowSymbolsFixture, tests.OnTaskLiveTestCase):
         self.go_to_actions()
 
         # Edit the action-in at the top of the table
-        self.open_action_edit('action in')
+        self.open_action_edit('action in', 'parameters')
 
         # Set the correct values for an action-in
         # Set the right columns to process
-        self.select_parameters_tab()
+        self.select_tab('parameters-tab')
         self.click_dropdown_option('select-key-column-name', 'email' + symbols)
         # This wait is incorrect. Don't know how to wait for an AJAX call.
         self.wait_for_spinner()
 
         # Done editing the action in
-        self.select_questions_tab()
+        self.select_tab('questions-tab')
         self.selenium.find_element(By.LINK_TEXT, 'Done').click()
         self.wait_for_id_and_spinner('action-index')
 
@@ -558,13 +558,12 @@ class DataopsNaNProcessing(
         self.create_new_personalized_text_action("action out", '')
 
         # Create three conditions
-        self.select_condition_tab()
         self.create_condition("bool1 cond", '', [('bool1', 'equal', 'true')])
         self.create_condition("bool 2 cond", '', [('bool2', 'equal', 'true')])
         self.create_condition('bool3 cond', '', [('bool3', 'equal', 'true')])
 
         # insert the action text
-        self.select_text_tab()
+        self.select_tab('text-tab')
         self.selenium.find_element(By.CLASS_NAME, 'tox-edit-area').click()
         self.selenium.execute_script(
             """tinymce.get('id_text_content').execCommand('mceInsertContent', 
@@ -615,7 +614,7 @@ class DataopsPluginExecution1(
         ).click()
 
         # Select the merge key
-        self.select_plugin_output_tab()
+        self.select_tab('outputs-tab')
 
         self.selenium.find_element(By.ID, "id_merge_key").click()
         Select(self.selenium.find_element(
@@ -687,7 +686,7 @@ class DataopsPluginExecution1(
         ).click()
 
         # Select the merge key
-        self.select_plugin_output_tab()
+        self.select_tab('outputs-tab')
         self.selenium.find_element(By.ID, "id_merge_key").click()
         Select(self.selenium.find_element(
             By.ID,
@@ -781,7 +780,7 @@ class DataopsPluginExecution2(
             "id____ontask___upload_input_1"
         )).select_by_visible_text('A2')
         # merge key
-        self.select_plugin_output_tab()
+        self.select_tab('outputs-tab')
         self.selenium.find_element(By.ID, "id_merge_key").click()
         Select(self.selenium.find_element(
             By.ID,

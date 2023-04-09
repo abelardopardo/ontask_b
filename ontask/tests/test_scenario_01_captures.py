@@ -61,7 +61,7 @@ class Scenario1Captures(ScreenTests):
         self.body_ss('scenario_01_action_SMED.png')
 
         # Edit the filter
-        self.select_filter_tab()
+        self.select_tab('filter-tab')
         self.selenium.find_element(By.CLASS_NAME, 'js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
@@ -76,7 +76,7 @@ class Scenario1Captures(ScreenTests):
 
         # Go to actions and open email
         self.go_to_actions()
-        self.open_action_email('Email students in SMED')
+        self.open_action_edit('Email students in SMED')
 
         # Picture of the body
         self.body_ss('scenario_01_action_SMED_email.png')

@@ -356,6 +356,8 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
             By.XPATH,
             '//input[contains(@id, "id_make_key_")]')
         for col_check in col_checks[1:]:
+            # Bring element until the middle of the page
+            self.scroll_element_into_view(col_check)
             col_check.click()
         self.selenium.execute_script("window.scroll(0,0);")
 
@@ -366,10 +368,16 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         # Dataops/Merge CSV Merge Step 3
         #
         # Click the NEXT button
-        self.selenium.find_element(
+        submit_button = self.selenium.find_element(
             By.XPATH,
             "//button[@type='Submit']"
-        ).click()
+        )
+        self.selenium.execute_script(
+            "arguments[0].scrollIntoView("
+            "{block: 'center', inline: 'nearest', behavior: 'instant'});",
+            submit_button)
+        WebDriverWait(self.selenium, 10).until(EC.visibility_of(submit_button))
+        submit_button.click()
         self.wait_for_page()
         WebDriverWait(self.selenium, 10).until(
             EC.element_to_be_clickable(
@@ -404,10 +412,12 @@ class ScreenTestDataops(ScreenTestFixtureBasic):
         self.body_ss('dataops_upload_merge_step4.png')
 
         # Click on Finish
-        self.selenium.find_element(
+        submit_button = self.selenium.find_element(
             By.XPATH,
             "//button[normalize-space()='Finish']"
-        ).click()
+        )
+        self.scroll_element_into_view(submit_button)
+        submit_button.click()
         self.wait_for_id_and_spinner('table-data_previous')
 
         #
@@ -579,13 +589,13 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         #
         # Edit Action In
         #
-        self.open_action_edit('Student comments Week 1')
+        self.open_action_edit('Student comments Week 1', 'parameters')
 
         # Picture of the body
         self.body_ss('action_edit_action_in.png')
 
         # Open the "Create question modal"
-        self.select_condition_tab()
+        self.select_tab('conditions-tab')
         self.create_condition(
             'Full time',
             '',
@@ -593,7 +603,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         )
 
         # Open the "Create question modal"
-        self.select_questions_tab()
+        self.select_tab('questions-tab')
         self.body_ss('action_edit_action_in_question_tab.png')
 
         self.selenium.find_element(
@@ -604,7 +614,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.cancel_modal()
 
         # Open the Survey Parameters
-        self.select_parameters_tab()
+        self.select_tab('parameters-tab')
         self.body_ss('action_edit_action_in_parameters.png')
 
         # Open the preview
@@ -663,7 +673,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         #
         # Edit filter in action out
         #
-        self.select_filter_tab()
+        self.select_tab('filter-tab')
         self.selenium.find_element(By.CLASS_NAME, 'js-filter-edit').click()
         # Wait for the form to modify the filter
         WebDriverWait(self.selenium, 10).until(
@@ -683,7 +693,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.body_ss('action_action_out_filterpart.png')
 
         # Take picture of the condition set
-        self.select_condition_tab()
+        self.select_tab('conditions-tab')
         self.body_ss('action_action_out_conditionpart.png')
 
         # Open one of the conditions
@@ -766,7 +776,7 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         self.open_action_edit('Send Email with report')
         self.body_ss('action_email_report_edit.png')
 
-        self.select_attachment_tab()
+        self.select_tab('attachments-tab')
         self.body_ss('action_email_report_attachments.png')
 
         self.open_preview()
@@ -833,13 +843,13 @@ class ScreenTestAction(ScreenTestFixtureBasic):
         #
         # Send emails
         #
-        self.open_action_email('Midterm comments')
+        self.open_action_edit('Midterm comments')
 
         # Picture of the body
         self.body_ss('action_email_request_data.png')
 
         self.go_to_actions()
-        self.open_action_canvas_email('Initial motivation')
+        self.open_action_edit('Initial motivation')
 
         # Picture of the body
         self.body_ss('action_personalized_canvas_email_run.png')
@@ -1057,7 +1067,7 @@ class ScreenTestRubric(ScreenTestFixtureBasic):
         self.body_ss('rubric_edit_text.png')
 
         # Go to the rubric tab
-        self.select_rubric_tab()
+        self.select_tab('rubric-tab')
         self.body_ss('rubric_edit_table_tab.png')
 
         # Preview
