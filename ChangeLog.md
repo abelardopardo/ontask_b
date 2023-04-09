@@ -1,4 +1,28 @@
-# 10.0 (2023-??)
+# 10.1 (2023-04-09)
+
+## Added
+- 
+- Commands for sanity check, show configuration, upgrade to 9.0
+
+## Changed
+
+- Migration to Bootstrap 5
+
+- New style for documentation
+
+- Replaced pytz by ZoneInfo
+
+- Dataframe manipulation due to new version of Pandas
+
+- Changed icons to use bootstrap 5
+
+- Updated list of institutions using the platform
+
+- Upgraded libraries
+
+## Fixed
+
+# 10.0 (2023-04-07)
 
 ## Fixed
 

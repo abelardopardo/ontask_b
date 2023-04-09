@@ -2,16 +2,12 @@
 
 ## Pending release:
 
-- Include conditions to control appearance of questions in survey
-
 - Support for a development platform in containers (Docker)
 
 ## Upcoming features (in no particular order)
 
-1) Plugin that reads from Moodle logs and creates a table that is merged (in batch mode)
+1) Plugin that rounds a column with float values
 
-2) Plugin that rounds a column with float values
+1) Load content from Canvas gradebook through API
 
-3) Load content from Canvas gradebook through API
-
-4) Explore unfolding a "learner platform" functionality condensing multiple workflows
+1) Explore unfolding a "learner platform" functionality condensing multiple workflows
