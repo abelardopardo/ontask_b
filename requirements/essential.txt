@@ -64,6 +64,7 @@ smart-open  # MIT
 SnakeViz  # BSD
 sorl-thumbnail  # BSD
 Sphinx  # BSD
+sphinx-material # As Is
 sphinx-copybutton # MIT
 SQLAlchemy<2.0   # MIT # Bug in SQLAlchemy 2.0 breaks pandas
 supervisor  # BSD-derived

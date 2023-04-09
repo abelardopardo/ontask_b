@@ -54,7 +54,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # The short X.Y version.
-version = 'v10.0'
+version = 'v10.1'
 # The full version, including alpha/beta/rc tags.
 release = version
 

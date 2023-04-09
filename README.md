@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 10.0 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 10.1 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ![Twitter Follow](https://img.shields.io/twitter/follow/clariate?label=Follow&style=social)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/abelardopardo/ontask_b)
@@ -13,6 +13,9 @@ Current Version: 10.0 ([documentation](http://ontask-version-b.readthedocs.io/en
 ![Twitter Follow](https://img.shields.io/twitter/follow/ontasklearning?label=Follow&style=social)
 
 ## OnTask in a nutshell
+
+- **NEW** Revamped interface using bootstrap 5
+
 - **NEW** Uses TinyMCE as text editor
 
 - **NEW** Creation of actions with filter defined in views 
