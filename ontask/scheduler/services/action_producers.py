@@ -46,7 +46,7 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
                 'action_id': self.action.id if self.action else None,
                 'exclude_values': exclude_values,
                 'operation_type': self.operation_type,
-                'valuerange': list(range(2)),
+                'value_range': list(range(2)),
                 'prev_url': request.path_info,
                 'post_url': reverse('scheduler:finish_scheduling'),
                 'page_title': gettext('Schedule Action Execution'),
@@ -61,7 +61,7 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
         if self.op_payload.get('confirm_items'):
             # Update information to carry to the filtering stage
             self.op_payload['button_label'] = gettext('Schedule')
-            self.op_payload['valuerange'] = 2
+            self.op_payload['value_range'] = 2
             self.op_payload['step'] = 2
             self.op_payload.store_in_session(self.request.session)
 
@@ -104,7 +104,7 @@ class ScheduledOperationActionRunUpdateView(ScheduledOperationUpdateBaseView):
         # Remove some parameters from the payload
         for key in [
             'button_label',
-            'valuerange',
+            'value_range',
             'step',
             'prev_url',
             'post_url',

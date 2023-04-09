@@ -11,7 +11,7 @@
 {% block container %}
   <div class="container" id="json-action-request-data">
     <div id="step_sequence" hidden>
-      {% include 'step_by_step.html' with valuerange=valuerange step=1 %}
+      {% include 'step_by_step.html' with value_range=value_range step=1 %}
     </div>
     <h1 class="text-center">{% blocktrans with n=action.name %}Send JSON objects for
       action "{{ n }}"{% endblocktrans %}</h1>

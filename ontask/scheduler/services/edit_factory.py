@@ -226,7 +226,7 @@ class ScheduledOperationUpdateBaseView(generic.UpdateView):
             'now': datetime.now(ZoneInfo(settings.TIME_ZONE)),
             'payload': self.op_payload,
             'frequency': frequency,
-            'valuerange': range(2),
+            'value_range': range(2),
             'all_false_conditions': all_false_conditions})
         return context
 

@@ -10,7 +10,7 @@
 {% endblock %}
 {% block container %}
   <div class="container" id="upload-merge-step1">
-    {% include 'step_by_step.html' with valuerange=valuerange step=2 %}
+    {% include 'step_by_step.html' with value_range=value_range step=2 %}
     <h1 class="text-center">{% trans 'Select' %} {{ dtype_select }}</h1>
     <div class="row justify-content-center">
       <form action="" method="post" enctype="multipart/form-data">

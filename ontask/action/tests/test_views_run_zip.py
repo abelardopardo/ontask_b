@@ -56,7 +56,7 @@ class ActionViewRunZIPExport(ActionViewZIPBasic):
                 'prev_url': reverse('action:run', kwargs={'pk': action.id}),
                 'post_url': reverse('action:run_done'),
                 'button_label': '',
-                'valuerange': 0,
+                'value_range': 0,
                 'step': 0,
                 'item_column': column.pk,
                 'user_fname_column': column_fn.pk,

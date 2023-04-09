@@ -131,7 +131,7 @@ class ActionRunProducerBase(generic.FormView):
             'all_false_conditions': any(
                  cond.selected_count == 0
                  for cond in self.action.conditions.all()),
-            'valuerange': range(2)})
+            'value_range': range(2)})
         return context
 
     def get_form_kwargs(self):
@@ -147,7 +147,7 @@ class ActionRunProducerBase(generic.FormView):
         if self.payload.get('confirm_items'):
             # Add information to the session object to execute the next pages
             self.payload['button_label'] = gettext('Send')
-            self.payload['valuerange'] = 2
+            self.payload['value_range'] = 2
             self.payload['step'] = 2
             self.payload.store_in_session(self.request.session)
 

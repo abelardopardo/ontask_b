@@ -201,7 +201,7 @@ class ActionRunProducerCanvasEmail(ActionRunProducerBase):
             # Create a dictionary in the session to carry over all the
             # information to execute the next pages
             self.payload['button_label'] = gettext('Send')
-            self.payload['valuerange'] = 2
+            self.payload['value_range'] = 2
             self.payload['step'] = 2
             continue_url = 'action:item_filter'
         else:
