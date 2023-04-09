@@ -123,7 +123,7 @@ def _perform_overlap_update(
         if not tmp1.empty:
             # Append only if the tmp1 data frame is not empty (otherwise it
             # looses the name of the index column
-            overlap_df = overlap_df.append(tmp1, sort=True)
+            pd.concat([overlap_df, tmp1], sort=True)
     elif how_merge == 'left':
         overlap_df = dst_df_tmp1
         overlap_df.update(src_df_tmp1)
@@ -141,7 +141,7 @@ def _perform_overlap_update(
         ].copy()
         if not tmp2.empty:
             # Append only if it is not empty
-            overlap_df = overlap_df.append(tmp2, sort=True)
+            pd.concat([overlap_df, tmp2], sort=True)
 
     # Return result
     return overlap_df.reset_index(drop=True)

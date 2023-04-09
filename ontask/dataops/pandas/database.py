@@ -109,7 +109,7 @@ def load_table(
         return pd.read_sql_query(
             query,
             OnTaskSharedState.engine,
-            params=query_fields)
+            params=tuple(query_fields))
 
     # No special fields given, load the whole thing
     return pd.read_sql_table(table_name, OnTaskSharedState.engine)
