@@ -189,7 +189,7 @@ Check out our [Governance structure](https://github.com/abelardopardo/ontask_b/b
 ## Credits
 
 OnTask started as a project combining ideas that were present in the Student 
-Relationship Engagement System [SRES](http://sres.io) and subsequent versions. 
+Relationship Engagement System [SRES](https://sres.io) and subsequent versions. 
 Support for this activity has been provided by the Australian Government 
 Office for Learning and Teaching as part of the 
 [OnTask Project](https://ontasklearning.org) 

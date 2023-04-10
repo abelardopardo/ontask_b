@@ -3,7 +3,7 @@
 Creating a Development Server using Docker
 ******************************************
 
-You may use `Docker <https://docker.com>`__ to create a set of containers that run a **development** server. The file ``docker-compose.yml`` and the folder ``docker`` contains the configuration files to create the required images and instantiate them as containers. The current configuration creates the following containers:
+You may use `Docker <https://www.docker.com>`__ to create a set of containers that run a **development** server. The file ``docker-compose.yml`` and the folder ``docker`` contains the configuration files to create the required images and instantiate them as containers. The current configuration creates the following containers:
 
 OnTask Server
   Built on top of an ubuntu instance with Python 3, Django and Apache installed. The application is installed internally on port 80 in the container mapped to port 8080 of the local machine.

@@ -466,7 +466,7 @@ Configure the Distributed Task Queue
 ====================================
 
 There are various tasks that need to be executed by OnTask outside the web
-server. The solution adopted is to use `Celery <http://www.celeryproject.org/>`_, `Supervisor <http://supervisord.org/>`_ (a process control system) and `Redis <https://redis.io/>`_. Redis has been configured in a previous step. This section explains how to set up the distributed task queue and make sure it is continuously executing in parallel with the web server.
+server. The solution adopted is to use `Celery <https://docs.celeryq.dev/en/stable/>`_, `Supervisor <http://supervisord.org/>`_ (a process control system) and `Redis <https://redis.io/>`_. Redis has been configured in a previous step. This section explains how to set up the distributed task queue and make sure it is continuously executing in parallel with the web server.
 
 1. Install the application ``supervisor`` using **pip**::
 

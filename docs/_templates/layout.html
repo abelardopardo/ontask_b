@@ -1,6 +1,13 @@
 {# Import the theme's layout. #}
 {% extends '!layout.html' %}
 
-{%- block header %}
-{{ super() }}
+{%- block hero %}
+  {% if pagename in theme_heroes %}
+  {% set hero = theme_heroes[pagename] %}
+  <div class="md-hero{% if nav_bar_tabs %} md-hero--expand{% endif %}" data-md-component="hero">
+    <div class="md-hero__inner md-grid">
+      {{ hero }}
+    </div>
+  </div>
+  {% endif %}
 {%- endblock %}

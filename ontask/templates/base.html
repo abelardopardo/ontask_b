@@ -35,7 +35,7 @@
            alt="Loading..."/>
     </div>
     {% block navbar %}
-      <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         {% block navbar-brand %}
           {% cache 3600 site-navbar-brand %}
             <img src="{% static 'img/logo.png' %}" height="35" alt="logo">
@@ -176,7 +176,7 @@
                       <a class="dropdown-item spin"
                          href="{% static ONTASK_HELP_URL %}"
                          data-bs-toggle="tooltip"
-                         title="{% trans 'OnTask Manual' %}">{% trans 'Manual' %}</a>
+                         title="{% trans 'OnTask Manual' %}">{% trans 'Documentation' %}</a>
                       <a class="dropdown-item spin"
                          href="{% url 'ontask-api-doc' %}"
                          data-bs-toggle="tooltip"

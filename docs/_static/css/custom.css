@@ -1,3 +1,10 @@
-/* dt {
-  border-bottom: 1px solid black;
-} */
+.md-hero__inner {
+  margin-top: 0;
+  padding: .0rem .8rem .4rem;
+}
+
+.align-center { text-align: center; }
+
+.md-footer-nav__link { padding-top: 0.4rem; }
+
+.md-footer-copyright { padding: 0; }

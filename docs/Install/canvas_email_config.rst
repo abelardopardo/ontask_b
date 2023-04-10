@@ -3,7 +3,7 @@
 Canvas Email Configuration
 **************************
 
-OnTask allows to send personalized emails to users's inbox in an instance of a `Canvas Learning Management System <https://www.canvaslms.com.au/>`_ using its API. Configuring this functionality requires permission from Canvas to access its API using OAuth2 authentication. Once this authorization is obtained, the following variables need to be defined in the file configuration file:
+OnTask allows to send personalized emails to users's inbox in an instance of a `Canvas Learning Management System <https://www.canvaslms.com/>`_ using its API. Configuring this functionality requires permission from Canvas to access its API using OAuth2 authentication. Once this authorization is obtained, the following variables need to be defined in the file configuration file:
 
 ``CANVAS_INFO_DICT``
   A dictionary with elements pairs containing the identifier for a Canvas instance that will be shown to the user and a dictionary with the following configuration parameters:

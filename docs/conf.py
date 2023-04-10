@@ -89,9 +89,7 @@ exclude_patterns = [
     'Thumbs.db',
     '.DS_Store',
     'Scenarios/scenario_04*',
-    '**/include_*.rst',
-    # 'Tutorial/Tasks*'
-]
+    '**/include_*.rst']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -101,7 +99,7 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-html_show_sourcelink = True
+html_show_sourcelink = False
 
 extensions.append('sphinx_material')
 html_theme_path = sphinx_material.html_theme_path()

@@ -2,13 +2,18 @@
 {% load i18n %}
 {% load static %}
 {% block container %}
-  <div class="form-box container">
-    <div class="row">
-      <div class="col-sm-6 text-center">
+  <div class="form-box container-md text-center">
+    <div class="row justify-content-md-center">
+      <div class="col-sm-6">
         <img src="{% static 'img/ontask-logo-1.png' %}"
              alt="{% trans 'OnTask Login' %}"
              style="width: 300px;"/>
       </div>
+    </div>
+    <div class="row">
+      <div>{% trans 'A platform to deploy personalised feedback at scale' %}</div>
+    </div>
+    <div class="row justify-content-md-center">
       <div class="col-sm-6">
         <h2>{% block form_heading %}{% endblock %}</h2>
         {% block form %}

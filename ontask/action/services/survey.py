@@ -3,7 +3,6 @@ from typing import Dict, List
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django import http
-from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _

@@ -53,7 +53,7 @@ LDAP Authentication
 
 OnTask may also be configured to use LDAP to authenticate users. This is done
 through the external package `django-auth-ldap
-<https://bitbucket.org/illocution/django-auth-ldap>`__. In its current version,
+<https://github.com/django-auth-ldap/django-auth-ldap>`__. In its current version,
 this authentication mode cannot be combined with the previous ones (this
 requires some non-trivial code changes). The following instructions describe
 the basic configuration to enable LDAP authentication. For more details check

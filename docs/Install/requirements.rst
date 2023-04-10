@@ -11,7 +11,7 @@ OnTask has been developed as a `Django <https://www.djangoproject.com/>`_ applic
 - Django 4.2
 - Additional Django modules listed in the file ``requirements/base.txt``
 
-Some of these requirements are handled using `pip <https://pypi.python.org/pypi/pip>`__ (Python's package index application).
+Some of these requirements are handled using `pip <https://pypi.org/project/pip>`__ (Python's package index application).
 
 .. _install_redis:
 
