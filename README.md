@@ -1,6 +1,6 @@
 # OnTask: Personalised feedback at scale
 
-Current Version: 10.1 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
+Current Version: 10.2 ([documentation](http://ontask-version-b.readthedocs.io/en/latest/))
 
 ![Twitter Follow](https://img.shields.io/twitter/follow/clariate?label=Follow&style=social)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/abelardopardo/ontask_b)

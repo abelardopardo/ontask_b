@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-06 22:03+0930\n"
+"POT-Creation-Date: 2023-04-10 18:39+0930\n"
 "PO-Revision-Date: 2019-09-14 19:37+0930\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -179,8 +179,8 @@ msgid "Space-separated list of BCC emails"
 msgstr "密件抄送邮件的逗号分隔列表"
 
 #: ontask/action/forms/run.py:141 ontask/action/forms/run.py:147
-#: ontask/scheduler/serializers.py:172 ontask/scheduler/serializers.py:184
-#: ontask/scheduler/serializers.py:195
+#: ontask/scheduler/serializers.py:170 ontask/scheduler/serializers.py:182
+#: ontask/scheduler/serializers.py:193
 #, fuzzy, python-brace-format
 #| msgid "Incorrect initial value"
 msgid "Incorrect email value \"{0}\"."
@@ -228,7 +228,7 @@ msgstr "用于目标邮件地址的列"
 msgid "Incorrect email address \"{0}\"."
 msgstr "无效列名{0}。"
 
-#: ontask/action/forms/run.py:300 ontask/scheduler/serializers.py:175
+#: ontask/action/forms/run.py:300 ontask/scheduler/serializers.py:173
 msgid "The column with email addresses has incorrect values."
 msgstr "具有电子邮件地址的列含有不正确的值。"
 
@@ -303,33 +303,33 @@ msgstr "排除值"
 msgid "Incorrect date/time window"
 msgstr "错误的日期/时间窗口"
 
-#: ontask/action/serializers/basic.py:228
+#: ontask/action/serializers/basic.py:226
 #, fuzzy
 #| msgid "Incorrect column name {0}."
 msgid "Incorrect column name."
 msgstr "无效列名{0}。"
 
-#: ontask/action/serializers/basic.py:238
+#: ontask/action/serializers/basic.py:236
 #, python-brace-format
 msgid "Action contains non-existing key column \"{0}\""
 msgstr "新操作不能有不存在的键列 {0}"
 
-#: ontask/action/serializers/basic.py:251
+#: ontask/action/serializers/basic.py:249
 #, python-brace-format
 msgid "Imported column {0} is different from existing one."
 msgstr "导入列{0}与现有的列不同。"
 
-#: ontask/action/serializers/basic.py:275
+#: ontask/action/serializers/basic.py:273
 #, fuzzy
 #| msgid "The data frame has duplicated column names"
 msgid "The new action creates duplicate view names"
 msgstr "数据帧具有重复的列名"
 
-#: ontask/action/serializers/basic.py:288
+#: ontask/action/serializers/basic.py:286
 msgid "Unable to import action  in a workflow with and empty data table"
 msgstr "不能用空数据表导入操作进入工作流"
 
-#: ontask/action/serializers/basic.py:295
+#: ontask/action/serializers/basic.py:293
 #, fuzzy, python-brace-format
 #| msgid "An action with this name already exists"
 msgid "Action with name \"{0}\" already exists"
@@ -391,7 +391,7 @@ msgstr "发送通知时发生错误：{0}"
 msgid "Invalid email address \"{0}\"."
 msgstr "抄送电子邮件中的无效电子邮件地址"
 
-#: ontask/action/services/email.py:477
+#: ontask/action/services/email.py:476
 #, python-brace-format
 msgid "Error when sending the list email: {0}"
 msgstr "发送邮件列表{0}时发生错误"
@@ -438,7 +438,7 @@ msgstr "使用id{0}无法找到用户"
 msgid "Data not found in the table"
 msgstr "表中未找到数据"
 
-#: ontask/action/services/survey.py:23
+#: ontask/action/services/survey.py:22
 #: ontask/scheduler/services/scheduler_table.py:24
 #: ontask/templates/column/detail.html:100
 #: ontask/templates/dataops/upload_s2.html:38
@@ -447,20 +447,20 @@ msgstr "表中未找到数据"
 msgid "Name"
 msgstr "名称"
 
-#: ontask/action/services/survey.py:26 ontask/templates/action/edit_in.html:141
+#: ontask/action/services/survey.py:25 ontask/templates/action/edit_in.html:141
 msgid "Description (shown to learners)"
 msgstr "描述(展示给学习者看)"
 
-#: ontask/action/services/survey.py:30
+#: ontask/action/services/survey.py:29
 msgid "Allow change?"
 msgstr ""
 
-#: ontask/action/services/survey.py:33
+#: ontask/action/services/survey.py:32
 #: ontask/templates/condition/includes/partial_condition_tab_body.html:10
 msgid "Condition"
 msgstr "条件"
 
-#: ontask/action/services/survey.py:250 ontask/connection/services/athena.py:38
+#: ontask/action/services/survey.py:249 ontask/connection/services/athena.py:38
 #: ontask/connection/services/athena.py:71 ontask/connection/services/sql.py:51
 #: ontask/templates/column/detail.html:99
 #: ontask/workflow/services/workflow_ops.py:44
@@ -567,7 +567,7 @@ msgstr "不能处理数据类型"
 msgid "Action does not belong to current workflow. "
 msgstr ""
 
-#: ontask/apps.py:10
+#: ontask/apps.py:9
 msgid "OnTask"
 msgstr "OnTask"
 
@@ -883,18 +883,18 @@ msgid "Enabled?"
 msgstr "启用"
 
 #: ontask/connection/urls.py:15 ontask/connection/urls.py:22
-#: ontask/scheduler/views/index.py:43 ontask/templates/base.html:131
+#: ontask/scheduler/views/index.py:43 ontask/templates/base.html:135
 msgid "SQL Connections"
 msgstr "SQL连接"
 
 #: ontask/connection/urls.py:62 ontask/connection/urls.py:69
-#: ontask/templates/base.html:136
+#: ontask/templates/base.html:140
 #, fuzzy
 #| msgid "SQL Connections"
 msgid "Athena Connections"
 msgstr "SQL连接"
 
-#: ontask/core/checks.py:135
+#: ontask/core/checks.py:140
 #, python-brace-format
 msgid "The new data does not preserve the key property of column \"{0}\""
 msgstr "新数据不保留列“{0}”的键属性"
@@ -1355,9 +1355,9 @@ msgstr "类有一个名为运行的方法，接收数据帧和带参数的字典
 #: ontask/dataops/services/plugin_admin.py:243
 #: ontask/dataops/services/plugin_admin.py:256
 #: ontask/dataops/services/plugin_admin.py:321
-#: ontask/templates/action/includes/partial_action_show_url.html:29
-#: ontask/templates/base.html:230
-#: ontask/templates/workflow/includes/partial_workflow_flush.html:31
+#: ontask/templates/action/includes/partial_action_show_url.html:27
+#: ontask/templates/base.html:223
+#: ontask/templates/workflow/includes/partial_workflow_flush.html:29
 msgid "Ok"
 msgstr "好"
 
@@ -2590,79 +2590,79 @@ msgstr "列选择错误。请选择一个键列。"
 msgid "The operation requires a merge method."
 msgstr "操作返回了一个未记录的错误。"
 
-#: ontask/scheduler/serializers.py:45
+#: ontask/scheduler/serializers.py:43
 #, fuzzy
 #| msgid "Incorrect permission to manipulate action."
 msgid "Incorrect permission to manipulate workflow"
 msgstr "处理操作的不正确的权限。"
 
-#: ontask/scheduler/serializers.py:51
+#: ontask/scheduler/serializers.py:49
 msgid "Incorrect permission to manipulate action."
 msgstr "处理操作的不正确的权限。"
 
-#: ontask/scheduler/serializers.py:64
+#: ontask/scheduler/serializers.py:62
 #, fuzzy
 #| msgid "Scheduled objects needs a payload."
 msgid "Scheduled objects need a payload."
 msgstr "已排程的对象需要有效载荷。"
 
-#: ontask/scheduler/serializers.py:74
+#: ontask/scheduler/serializers.py:72
 msgid "Invalid column name for selecting items"
 msgstr "用于选择项目的无效列名称"
 
-#: ontask/scheduler/serializers.py:79
+#: ontask/scheduler/serializers.py:77
 msgid "Exclude_values must be a list"
 msgstr "Exclude_values必须是一个列表"
 
-#: ontask/scheduler/serializers.py:84
+#: ontask/scheduler/serializers.py:82
 #, fuzzy
 #| msgid "Exclude items needs a value in item_column"
 msgid "Exclude items needs a column in item_column"
 msgstr "排除项目需要item_column有一个值"
 
-#: ontask/scheduler/serializers.py:96
+#: ontask/scheduler/serializers.py:94
 #, python-brace-format
 msgid "Scheduled action could not be created: {0}"
 msgstr "无法创建已排程的操作：{0}"
 
-#: ontask/scheduler/serializers.py:111
+#: ontask/scheduler/serializers.py:109
 #, python-brace-format
 msgid "Unable to update scheduled action: {0}"
 msgstr "无法更新已排程的操作：{0}"
 
-#: ontask/scheduler/serializers.py:146 ontask/scheduler/serializers.py:216
+#: ontask/scheduler/serializers.py:144 ontask/scheduler/serializers.py:214
 #, fuzzy
 #| msgid "Personalized text needs an item_column"
 msgid "Personalized text need a column name in payload field item_column."
 msgstr "个性化的文本需要一个 item_column"
 
-#: ontask/scheduler/serializers.py:153 ontask/scheduler/serializers.py:223
+#: ontask/scheduler/serializers.py:151 ontask/scheduler/serializers.py:221
 #, fuzzy
 #| msgid "Incorrect column name {0}."
 msgid "Incorrect column name in field item_column."
 msgstr "无效列名{0}。"
 
-#: ontask/scheduler/serializers.py:156 ontask/scheduler/serializers.py:210
+#: ontask/scheduler/serializers.py:154 ontask/scheduler/serializers.py:208
 msgid "Incorrect type of action to schedule."
 msgstr "不正确的待排程的操作类型。"
 
-#: ontask/scheduler/serializers.py:160
+#: ontask/scheduler/serializers.py:158
 msgid "Personalized text needs a subject."
 msgstr "个性化的文本需要一个主题。"
 
-#: ontask/scheduler/serializers.py:187
+#: ontask/scheduler/serializers.py:185
 #, fuzzy
 #| msgid "cc_email must be a comma-separated list of emails."
 msgid "cc_email must be a space-separated list of emails."
 msgstr "cc_email必须是一个逗号分隔的电子邮件列表。"
 
-#: ontask/scheduler/serializers.py:198
+#: ontask/scheduler/serializers.py:196
 #, fuzzy
 #| msgid "bcc_email must be a comma-separated list of emails."
 msgid "bcc_email must be a space-separated list of emails."
 msgstr "bcc_email必须是一个逗号分隔的电子邮件列表。"
 
-#: ontask/scheduler/serializers.py:228
+#: ontask/scheduler/serializers.py:226
 msgid "Personalized JSON needs a token in payload."
 msgstr "个性化JSON需要有效载荷中的令牌。"
 
@@ -2710,7 +2710,7 @@ msgid "Until"
 msgstr ""
 
 #: ontask/scheduler/services/scheduler_table.py:40
-#: ontask/templates/dataops/includes/partial_diagnostics.html:13
+#: ontask/templates/dataops/includes/partial_diagnostics.html:11
 msgid "Status"
 msgstr "状态"
 
@@ -2834,32 +2834,32 @@ msgstr "已存在以此命名的视图。"
 msgid "JSON string encoding a pandas data frame"
 msgstr "JSON字符串编码pandas数据帧"
 
-#: ontask/table/serializers/merge.py:44
+#: ontask/table/serializers/merge.py:42
 msgid "One of the following values: inner, outer, left or right"
 msgstr "以下数值之一：内，外，左或者右"
 
-#: ontask/table/serializers/merge.py:51
+#: ontask/table/serializers/merge.py:49
 msgid "ID of the column in destination data frame with unique key"
 msgstr "具有唯一密钥的目的地数据帧中的列ID"
 
-#: ontask/table/serializers/merge.py:56
+#: ontask/table/serializers/merge.py:54
 msgid "ID of column in source data frame with unique key"
 msgstr "具有唯一键的源数据框中的列的ID"
 
-#: ontask/table/serializers/merge.py:64
+#: ontask/table/serializers/merge.py:62
 msgid "Field must be a JSON string encoding a pandas data frame"
 msgstr "字段必须是编码pandas数据帧的JSON字符串"
 
-#: ontask/table/serializers/merge.py:73 ontask/workflow/serializers.py:78
+#: ontask/table/serializers/merge.py:71 ontask/workflow/serializers.py:76
 msgid ""
 "This field must be the Base64 encoded result of pandas.to_pickle() function"
 msgstr "此字段必须是pandas.to_pickle()函数Base64编码的结果"
 
-#: ontask/table/serializers/pandas.py:24
+#: ontask/table/serializers/pandas.py:22
 msgid "Unable to create data frame"
 msgstr "无法创建数据帧"
 
-#: ontask/table/serializers/pandas.py:34
+#: ontask/table/serializers/pandas.py:32
 msgid ""
 "This field must be the Base64 encoded result of the pandas.to_pickle() "
 "function"
@@ -2980,12 +2980,7 @@ msgstr "不能处理数据类型"
 msgid "The request could not be processed."
 msgstr "无法访问工作流"
 
-#: ontask/templates/404.html:10 ontask/templates/column/detail.html:8
-#: ontask/templates/workflow/operations.html:8
-msgid "Details"
-msgstr "详细信息"
-
-#: ontask/templates/404.html:14 ontask/templates/action/action_zip_done.html:15
+#: ontask/templates/404.html:10 ontask/templates/action/action_zip_done.html:15
 #: ontask/templates/action/item_filter.html:27
 #: ontask/templates/action/run_done.html:20
 #: ontask/templates/action/run_survey.html:70
@@ -3013,13 +3008,17 @@ msgid ""
 "    address this anomaly soon."
 msgstr "哎呀!平台有一个内部错误。我们很抱歉。我们希望尽快解决这种异常现象。"
 
-#: ontask/templates/_navbar.html:3 ontask/templates/base.html:163
+#: ontask/templates/_navbar.html:3 ontask/templates/base.html:166
 msgid "About"
 msgstr "关于"
 
 #: ontask/templates/accounts/auth_base.html:9
 msgid "OnTask Login"
 msgstr "OnTask登陆"
+
+#: ontask/templates/accounts/auth_base.html:14
+msgid "A platform to deploy personalised feedback at scale"
+msgstr ""
 
 #: ontask/templates/accounts/emails/password-reset-email.html:2
 #, python-format
@@ -3275,7 +3274,7 @@ msgid "Preview"
 msgstr "预览"
 
 #: ontask/templates/action/action_zip_step1.html:32
-#: ontask/templates/action/includes/partial_preview.html:26
+#: ontask/templates/action/includes/partial_preview.html:24
 #: ontask/templates/action/request_canvas_email_data.html:33
 #: ontask/templates/action/request_email_data.html:33
 #: ontask/templates/action/request_json_data.html:33
@@ -3347,7 +3346,7 @@ msgid "Save action and go back to action table"
 msgstr "保存操作并返回到操作表"
 
 #: ontask/templates/action/edit_in.html:80
-#: ontask/templates/action/includes/partial_rubric_cell_edit.html:17
+#: ontask/templates/action/includes/partial_rubric_cell_edit.html:15
 msgid "Done"
 msgstr "完成"
 
@@ -3414,7 +3413,7 @@ msgstr "编辑描述"
 
 #: ontask/templates/action/edit_in.html:148
 #: ontask/templates/action/run_survey.html:56
-#: ontask/templates/scheduler/includes/partial_show_schedule_action.html:30
+#: ontask/templates/scheduler/includes/partial_show_schedule_action.html:28
 #: ontask/templates/scheduler/schedule_done.html:15
 msgid "Edit"
 msgstr "编辑"
@@ -3522,16 +3521,16 @@ msgstr "导出"
 msgid "Confirm action cloning"
 msgstr "确定克隆动作"
 
-#: ontask/templates/action/includes/partial_action_clone.html:11
+#: ontask/templates/action/includes/partial_action_clone.html:9
 #, python-format
 msgid "Are you sure you want to clone action <strong>%(n)s</strong>?"
 msgstr "是否确定克隆动作<strong>%(n)s</strong>？"
 
-#: ontask/templates/action/includes/partial_action_clone.html:12
+#: ontask/templates/action/includes/partial_action_clone.html:10
 msgid "A new action with the prefix \"Copy of \" will be created"
 msgstr "将创建一个带有前缀\"Copy of\"的新操作"
 
-#: ontask/templates/action/includes/partial_action_clone.html:16
+#: ontask/templates/action/includes/partial_action_clone.html:14
 msgid "Clone action"
 msgstr "克隆操作"
 
@@ -3539,7 +3538,7 @@ msgstr "克隆操作"
 msgid "Create a new action"
 msgstr "创建一个新操作"
 
-#: ontask/templates/action/includes/partial_action_create.html:16
+#: ontask/templates/action/includes/partial_action_create.html:14
 msgid "Create action"
 msgstr "创建操作"
 
@@ -3547,26 +3546,26 @@ msgstr "创建操作"
 msgid "Confirm action deletion"
 msgstr "确定删除操作"
 
-#: ontask/templates/action/includes/partial_action_delete.html:11
+#: ontask/templates/action/includes/partial_action_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the action <strong>%(n)s</strong>?"
 msgstr "是否确定删除操作<strong>%(n)s</strong>?"
 
-#: ontask/templates/action/includes/partial_action_delete.html:15
+#: ontask/templates/action/includes/partial_action_delete.html:13
 msgid "Delete action"
 msgstr "删除操作"
 
-#: ontask/templates/action/includes/partial_action_edit_description.html:17
-#: ontask/templates/action/includes/partial_action_update.html:17
+#: ontask/templates/action/includes/partial_action_edit_description.html:15
+#: ontask/templates/action/includes/partial_action_update.html:15
 #: ontask/templates/action/run_survey_row.html:36
-#: ontask/templates/column/includes/partial_add_edit.html:29
-#: ontask/templates/column/includes/partial_question_add_edit.html:29
-#: ontask/templates/column/includes/partial_todoitem_addedit.html:29
-#: ontask/templates/condition/includes/partial_filter_add_edit.html:28
-#: ontask/templates/connection/includes/partial_add_edit.html:22
+#: ontask/templates/column/includes/partial_add_edit.html:27
+#: ontask/templates/column/includes/partial_question_add_edit.html:27
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:27
+#: ontask/templates/condition/includes/partial_filter_add_edit.html:26
+#: ontask/templates/connection/includes/partial_add_edit.html:20
 #: ontask/templates/dataops/row_filter.html:28
 #: ontask/templates/dataops/row_filter.html:38
-#: ontask/templates/workflow/includes/partial_criterion_add_edit.html:28
+#: ontask/templates/workflow/includes/partial_criterion_add_edit.html:26
 msgid "Update"
 msgstr "更新"
 
@@ -3597,7 +3596,7 @@ msgid "Save current data"
 msgstr "保存现有数据"
 
 #: ontask/templates/action/includes/partial_action_preview_done_buttons.html:15
-#: ontask/templates/workflow/includes/partial_workflow_update.html:16
+#: ontask/templates/workflow/includes/partial_workflow_update.html:14
 msgid "Save"
 msgstr "保存"
 
@@ -3613,11 +3612,11 @@ msgstr "关闭"
 msgid "URL to the personalised content"
 msgstr "个性化类容的网址"
 
-#: ontask/templates/action/includes/partial_action_show_url.html:17
+#: ontask/templates/action/includes/partial_action_show_url.html:15
 msgid "This URL provides access to the content personalised for each user."
 msgstr "此网址提供对每个用户个性化的内容的访问。"
 
-#: ontask/templates/action/includes/partial_action_show_url.html:20
+#: ontask/templates/action/includes/partial_action_show_url.html:18
 msgid ""
 "Access is protected by authentication,\n"
 "        and the user <strong>email</strong> is in a column named "
@@ -3628,7 +3627,7 @@ msgstr ""
 "用户<strong>电子邮件</strong>位于一个列为<strong>电子邮件</strong>。\n"
 "如需使用不同的列，请将此参数添加到网址的结尾："
 
-#: ontask/templates/action/includes/partial_action_show_url.html:25
+#: ontask/templates/action/includes/partial_action_show_url.html:23
 msgid ""
 "replacing <code>[COLUMN NAME]</code> by the colum to use instead of "
 "<strong>email</strong>."
@@ -3660,49 +3659,49 @@ msgstr "从这个调查中移除问题"
 msgid "Preview %(index)s of %(n_items)s"
 msgstr "预览%(index)s的%(n_items)s"
 
-#: ontask/templates/action/includes/partial_preview.html:19
+#: ontask/templates/action/includes/partial_preview.html:17
 msgid "Preview previous message"
 msgstr "预览之前的信息"
 
-#: ontask/templates/action/includes/partial_preview.html:20
+#: ontask/templates/action/includes/partial_preview.html:18
 msgid "Previous"
 msgstr "先前的"
 
-#: ontask/templates/action/includes/partial_preview.html:25
+#: ontask/templates/action/includes/partial_preview.html:23
 msgid "Preview next message"
 msgstr "预览下一条信息"
 
-#: ontask/templates/action/includes/partial_preview.html:32
+#: ontask/templates/action/includes/partial_preview.html:30
 msgid "Preview next message with all conditions false"
 msgstr "预览下一条信息，所有条件错误"
 
-#: ontask/templates/action/includes/partial_preview.html:33
+#: ontask/templates/action/includes/partial_preview.html:31
 msgid "Next with anomaly"
 msgstr "异常，下一个"
 
-#: ontask/templates/action/includes/partial_preview.html:40
+#: ontask/templates/action/includes/partial_preview.html:38
 msgid "All conditions evaluate to FALSE"
 msgstr "所有条件评估为FALSE"
 
-#: ontask/templates/action/includes/partial_preview.html:43
+#: ontask/templates/action/includes/partial_preview.html:41
 msgid "Incorrect JSON object. Check action text"
 msgstr "不正确的JSON对象。检查操作文本"
 
-#: ontask/templates/action/includes/partial_preview.html:47
+#: ontask/templates/action/includes/partial_preview.html:45
 msgid "Subject:"
 msgstr "主题："
 
-#: ontask/templates/action/includes/partial_preview.html:62
+#: ontask/templates/action/includes/partial_preview.html:60
 msgid "Values:"
 msgstr "数值："
 
-#: ontask/templates/action/includes/partial_preview.html:65
+#: ontask/templates/action/includes/partial_preview.html:63
 #, fuzzy
 #| msgid "Conditions"
 msgid "Conditions:"
 msgstr "条件"
 
-#: ontask/templates/action/includes/partial_preview.html:68
+#: ontask/templates/action/includes/partial_preview.html:66
 msgid "Attachments:"
 msgstr ""
 
@@ -3951,7 +3950,7 @@ msgstr "查看日志"
 
 #: ontask/templates/admin/admin_title.html:1
 #: ontask/templates/admin/base_site.html:6
-#: ontask/templates/admin/base_site.html:8 ontask/templates/base.html:114
+#: ontask/templates/admin/base_site.html:8 ontask/templates/base.html:119
 msgid "Admin"
 msgstr "管理员"
 
@@ -3959,189 +3958,194 @@ msgstr "管理员"
 msgid "Switch to Site"
 msgstr "切换到网站"
 
-#: ontask/templates/base.html:52
+#: ontask/templates/base.html:57
 msgid "Your workflows"
 msgstr "你的工作流"
 
-#: ontask/templates/base.html:52 ontask/templates/ontask/workflow_list.html:8
+#: ontask/templates/base.html:57 ontask/templates/ontask/workflow_list.html:8
 msgid "Workflows"
 msgstr "工作表"
 
-#: ontask/templates/base.html:61
+#: ontask/templates/base.html:66
 msgid "Messages and Surveys"
 msgstr "信息与调查"
 
-#: ontask/templates/base.html:62 ontask/templates/ontask/action_list.html:8
+#: ontask/templates/base.html:67 ontask/templates/ontask/action_list.html:8
 msgid "Actions"
 msgstr "操作"
 
-#: ontask/templates/base.html:67 ontask/templates/table/display.html:8
+#: ontask/templates/base.html:72 ontask/templates/table/display.html:8
 msgid "Table"
 msgstr "表格"
 
-#: ontask/templates/base.html:73
+#: ontask/templates/base.html:78
 msgid "View the complete table"
 msgstr "查看全表"
 
-#: ontask/templates/base.html:74
+#: ontask/templates/base.html:79
 #, fuzzy
 #| msgid "View name"
 msgid "View data"
 msgstr "视图名称"
 
-#: ontask/templates/base.html:78
+#: ontask/templates/base.html:83
 msgid "Upload or merge data into the workflow table"
 msgstr "将数据上传或合并到工作流表中"
 
-#: ontask/templates/base.html:79
+#: ontask/templates/base.html:84
 msgid "Upload or merge data"
 msgstr "上传或合并数据"
 
-#: ontask/templates/base.html:83
-#: ontask/templates/dataops/transform_model.html:78
+#: ontask/templates/base.html:88
 msgid "Apply a transformation to the data"
 msgstr "对数据进行转换"
 
-#: ontask/templates/base.html:84
+#: ontask/templates/base.html:89
 #: ontask/templates/dataops/plugin_info_for_run.html:8
 #: ontask/templates/dataops/plugin_info_for_run.html:23
 msgid "Run Transformation"
 msgstr "运行转换"
 
-#: ontask/templates/base.html:88
-#: ontask/templates/dataops/transform_model.html:87
+#: ontask/templates/base.html:93
 msgid "Execute a model with the existing data"
 msgstr "用现有数据执行模型"
 
-#: ontask/templates/base.html:89
+#: ontask/templates/base.html:94
 #: ontask/templates/dataops/plugin_info_for_run.html:21
 msgid "Run Model"
 msgstr "运行模型"
 
-#: ontask/templates/base.html:94
+#: ontask/templates/base.html:99
 msgid "More"
 msgstr "更多信息"
 
-#: ontask/templates/base.html:97
+#: ontask/templates/base.html:102
 msgid "Workflow operations"
 msgstr "工作流操作"
 
-#: ontask/templates/base.html:98
+#: ontask/templates/base.html:103
 msgid "Column operations"
 msgstr "列操作"
 
-#: ontask/templates/base.html:99 ontask/templates/scheduler/index.html:8
+#: ontask/templates/base.html:104 ontask/templates/scheduler/index.html:8
 #: ontask/templates/scheduler/schedule_done.html:12
 msgid "Scheduled operations"
 msgstr "已排程的操作"
 
-#: ontask/templates/base.html:100
+#: ontask/templates/base.html:105
 msgid "View logs"
 msgstr "查看日志"
 
-#: ontask/templates/base.html:120
+#: ontask/templates/base.html:124
 msgid "Change platform configuration parameters"
 msgstr "更改平台配置参数"
 
-#: ontask/templates/base.html:121
+#: ontask/templates/base.html:125
 msgid "Settings"
 msgstr "设置"
 
-#: ontask/templates/base.html:125
+#: ontask/templates/base.html:129
 msgid "Manage the platform database"
 msgstr "管理平台数据库"
 
-#: ontask/templates/base.html:126
+#: ontask/templates/base.html:130
 msgid "DB Admin"
 msgstr "数据库管理员"
 
-#: ontask/templates/base.html:130
+#: ontask/templates/base.html:134
 msgid "Connections to SQL databases"
 msgstr "连接SQL数据库"
 
-#: ontask/templates/base.html:135
+#: ontask/templates/base.html:139
 #, fuzzy
 #| msgid "Connections to SQL databases"
 msgid "Connections to Athena databases"
 msgstr "连接SQL数据库"
 
-#: ontask/templates/base.html:140
+#: ontask/templates/base.html:144
 msgid "Available Plugins"
 msgstr "可用插件"
 
-#: ontask/templates/base.html:141 ontask/templates/dataops/plugin_admin.html:43
+#: ontask/templates/base.html:145 ontask/templates/dataops/plugin_admin.html:43
 msgid "Plugins"
 msgstr "插件"
 
-#: ontask/templates/base.html:155
+#: ontask/templates/base.html:158
 #, fuzzy
 #| msgid "User Profiles"
 msgid "User Profile"
 msgstr "用户个人信息"
 
-#: ontask/templates/base.html:155 ontask/templates/profiles/edit_profile.html:6
+#: ontask/templates/base.html:158 ontask/templates/profiles/edit_profile.html:6
 #: ontask/templates/profiles/show_profile.html:5
 #: ontask/templates/profiles/show_profile.html:27
 msgid "Profile"
 msgstr "个人信息资料"
 
-#: ontask/templates/base.html:159 ontask/templates/base.html:259
+#: ontask/templates/base.html:162 ontask/templates/base.html:252
 msgid "Logout"
 msgstr "退出"
 
-#: ontask/templates/base.html:165
+#: ontask/templates/base.html:168
 msgid "Contact"
 msgstr "联系方式"
 
-#: ontask/templates/base.html:176
+#: ontask/templates/base.html:179
 #, fuzzy
 #| msgid "OnTask Login"
 msgid "OnTask Manual"
 msgstr "OnTask登陆"
 
-#: ontask/templates/base.html:176
-msgid "Manual"
-msgstr ""
+#: ontask/templates/base.html:179
+#, fuzzy
+#| msgid "Delete action"
+msgid "Documentation"
+msgstr "删除操作"
 
-#: ontask/templates/base.html:180
+#: ontask/templates/base.html:183
 msgid "API documentation"
 msgstr ""
 
-#: ontask/templates/base.html:180
+#: ontask/templates/base.html:183
 msgid "API Docs"
 msgstr ""
 
-#: ontask/templates/base.html:209
+#: ontask/templates/base.html:202
 msgid "This functionality has not been implemented yet."
 msgstr "此功能尚未实现。"
 
-#: ontask/templates/base.html:221
+#: ontask/templates/base.html:214
 msgid "Your session is about to expire"
 msgstr "你的操作即将到期"
 
-#: ontask/templates/base.html:224
+#: ontask/templates/base.html:217
 msgid "Your session will expire in"
 msgstr "你的操作还有（）到期"
 
-#: ontask/templates/base.html:225
+#: ontask/templates/base.html:218
 msgid "seconds."
 msgstr "秒。"
 
-#: ontask/templates/base.html:241
+#: ontask/templates/base.html:234
 msgid "Version:"
 msgstr "版本："
 
-#: ontask/templates/base.html:241
+#: ontask/templates/base.html:234
 msgid "Accessibility"
 msgstr ""
 
-#: ontask/templates/base.html:258
+#: ontask/templates/base.html:251
 msgid "Your session is about to expire."
 msgstr "操作即将到期。"
 
-#: ontask/templates/base.html:260
+#: ontask/templates/base.html:253
 msgid "Remain Connected"
 msgstr "保持连接"
+
+#: ontask/templates/column/detail.html:8
+#: ontask/templates/workflow/operations.html:8
+msgid "Details"
+msgstr "详细信息"
 
 #: ontask/templates/column/detail.html:81
 msgid "Column Operations"
@@ -4192,7 +4196,7 @@ msgid "Edit the parameters of this column"
 msgstr "编辑此列的参数"
 
 #: ontask/templates/column/includes/operations.html:9
-#: ontask/templates/column/includes/partial_delete.html:36
+#: ontask/templates/column/includes/partial_delete.html:34
 msgid "Delete column"
 msgstr "删除列"
 
@@ -4233,7 +4237,7 @@ msgid "Make last column"
 msgstr "生成最后一列"
 
 #: ontask/templates/column/includes/partial_add_edit.html:16
-#: ontask/templates/column/includes/partial_add_edit.html:29
+#: ontask/templates/column/includes/partial_add_edit.html:27
 msgid "Add column"
 msgstr "添加列"
 
@@ -4246,16 +4250,16 @@ msgstr "编辑列<strong>%(n)s</strong>"
 msgid "Confirm column cloning"
 msgstr "确认克隆列"
 
-#: ontask/templates/column/includes/partial_clone.html:11
+#: ontask/templates/column/includes/partial_clone.html:9
 #, python-format
 msgid "Are you sure you want to clone column <strong>%(n)s</strong>?"
 msgstr "是否确定克隆列<strong>%(n)s</strong>？"
 
-#: ontask/templates/column/includes/partial_clone.html:12
+#: ontask/templates/column/includes/partial_clone.html:10
 msgid "A new column with the prefix \"Copy of \" will be created"
 msgstr "将创建一个带有前缀\"Copy of\"的新列"
 
-#: ontask/templates/column/includes/partial_clone.html:16
+#: ontask/templates/column/includes/partial_clone.html:14
 msgid "Clone column"
 msgstr "克隆列"
 
@@ -4265,7 +4269,7 @@ msgstr "克隆列"
 msgid "Confirm column restriction"
 msgstr "确认删除列"
 
-#: ontask/templates/column/includes/partial_column_restrict.html:11
+#: ontask/templates/column/includes/partial_column_restrict.html:9
 #, fuzzy, python-format
 #| msgid ""
 #| "Are you sure you want to restrict column \n"
@@ -4277,7 +4281,7 @@ msgstr ""
 "是否确定限制列\n"
 "<strong>%(n)s</strong>为数值%(v)s?"
 
-#: ontask/templates/column/includes/partial_column_restrict.html:17
+#: ontask/templates/column/includes/partial_column_restrict.html:15
 msgid "Restrict column"
 msgstr "限制列"
 
@@ -4285,12 +4289,12 @@ msgstr "限制列"
 msgid "Confirm column deletion"
 msgstr "确认删除列"
 
-#: ontask/templates/column/includes/partial_delete.html:11
+#: ontask/templates/column/includes/partial_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete column <strong>%(n)s</strong>?"
 msgstr "是否确定删除列<strong>%(n)s</strong>?"
 
-#: ontask/templates/column/includes/partial_delete.html:13
+#: ontask/templates/column/includes/partial_delete.html:11
 #, fuzzy
 #| msgid ""
 #| "The column is currently used in the following conditions (inside an "
@@ -4298,13 +4302,13 @@ msgstr "是否确定删除列<strong>%(n)s</strong>?"
 msgid "The column is used in the following conditions (inside an action):"
 msgstr "该列当前用于以下条件 (在一个动作内)"
 
-#: ontask/templates/column/includes/partial_delete.html:17
+#: ontask/templates/column/includes/partial_delete.html:15
 #, fuzzy
 #| msgid "These conditions will also be deleted."
 msgid "These conditions will be deleted."
 msgstr "这些条件也将被删除。"
 
-#: ontask/templates/column/includes/partial_delete.html:20
+#: ontask/templates/column/includes/partial_delete.html:18
 #, fuzzy
 #| msgid ""
 #| "The column is currently used in the following conditions (inside an "
@@ -4312,13 +4316,13 @@ msgstr "这些条件也将被删除。"
 msgid "The column is used in the filter of the following actions:"
 msgstr "该列当前用于以下条件 (在一个动作内)"
 
-#: ontask/templates/column/includes/partial_delete.html:24
+#: ontask/templates/column/includes/partial_delete.html:22
 #, fuzzy
 #| msgid "These conditions will also be deleted."
 msgid "These filters will be deleted."
 msgstr "这些条件也将被删除。"
 
-#: ontask/templates/column/includes/partial_delete.html:27
+#: ontask/templates/column/includes/partial_delete.html:25
 #, fuzzy
 #| msgid ""
 #| "The column is currently used in the following conditions (inside an "
@@ -4326,19 +4330,19 @@ msgstr "这些条件也将被删除。"
 msgid "The column is used in the following views:"
 msgstr "该列当前用于以下条件 (在一个动作内)"
 
-#: ontask/templates/column/includes/partial_delete.html:31
+#: ontask/templates/column/includes/partial_delete.html:29
 #, fuzzy
 #| msgid "These conditions will also be deleted."
 msgid "These views will be deleted."
 msgstr "这些条件也将被删除。"
 
 #: ontask/templates/column/includes/partial_formula_add.html:8
-#: ontask/templates/column/includes/partial_formula_add.html:18
+#: ontask/templates/column/includes/partial_formula_add.html:16
 msgid "Add derived column"
 msgstr "添加派生列"
 
 #: ontask/templates/column/includes/partial_question_add_edit.html:16
-#: ontask/templates/column/includes/partial_question_add_edit.html:29
+#: ontask/templates/column/includes/partial_question_add_edit.html:27
 msgid "Add question"
 msgstr "添加问题"
 
@@ -4348,7 +4352,7 @@ msgid "Edit question <strong>%(n)s</strong>"
 msgstr "编辑问题<strong>%(n)s</strong>"
 
 #: ontask/templates/column/includes/partial_random_add.html:8
-#: ontask/templates/column/includes/partial_random_add.html:18
+#: ontask/templates/column/includes/partial_random_add.html:16
 msgid "Add random column"
 msgstr "添加随机列"
 
@@ -4358,7 +4362,7 @@ msgstr "添加随机列"
 msgid "Select columns"
 msgstr "选择列"
 
-#: ontask/templates/column/includes/partial_select.html:18
+#: ontask/templates/column/includes/partial_select.html:16
 #: ontask/templates/dataops/upload1.html:14
 msgid "Select"
 msgstr "选择"
@@ -4375,23 +4379,23 @@ msgstr "待办事件列表"
 msgid "Edit TODO item <strong>%(n)s</strong>"
 msgstr "编辑问题<strong>%(n)s</strong>"
 
-#: ontask/templates/column/includes/partial_todoitem_addedit.html:29
+#: ontask/templates/column/includes/partial_todoitem_addedit.html:27
 #, fuzzy
 #| msgid "Add Filter"
 msgid "Add item"
 msgstr "添加筛选标签"
 
 #: ontask/templates/condition/includes/partial_condition_add_edit.html:15
-#: ontask/templates/condition/includes/partial_condition_add_edit.html:32
+#: ontask/templates/condition/includes/partial_condition_add_edit.html:30
 msgid "Create condition"
 msgstr "创建条件"
 
 #: ontask/templates/condition/includes/partial_condition_add_edit.html:17
-#: ontask/templates/condition/includes/partial_condition_add_edit.html:34
+#: ontask/templates/condition/includes/partial_condition_add_edit.html:32
 msgid "Update condition"
 msgstr "更新条件"
 
-#: ontask/templates/condition/includes/partial_condition_add_edit.html:25
+#: ontask/templates/condition/includes/partial_condition_add_edit.html:23
 msgid "The text will be shown if"
 msgstr "文本将被显示，假设"
 
@@ -4403,18 +4407,18 @@ msgstr "克隆条件"
 msgid "Confirm condition deletion"
 msgstr "确定条件删除"
 
-#: ontask/templates/condition/includes/partial_condition_delete.html:12
+#: ontask/templates/condition/includes/partial_condition_delete.html:10
 #, python-format
 msgid "Are you sure you want to delete the condition <strong>%(n)s</strong>?"
 msgstr "是否确定要删除条件<strong>%(n)s<strong>？"
 
-#: ontask/templates/condition/includes/partial_condition_delete.html:13
+#: ontask/templates/condition/includes/partial_condition_delete.html:11
 msgid ""
 "Make sure there is no appearance of the condition in the text, otherwise, it "
 "will be incorrectly rendered."
 msgstr "确保文本中没有条件出现，否则将被错误地呈现。"
 
-#: ontask/templates/condition/includes/partial_condition_delete.html:17
+#: ontask/templates/condition/includes/partial_condition_delete.html:15
 msgid "Delete condition"
 msgstr "删除条件"
 
@@ -4462,7 +4466,7 @@ msgid "Text Conditions"
 msgstr "文本条件"
 
 #: ontask/templates/condition/includes/partial_filter_add_edit.html:13
-#: ontask/templates/condition/includes/partial_filter_add_edit.html:26
+#: ontask/templates/condition/includes/partial_filter_add_edit.html:24
 msgid "Create filter"
 msgstr "创建筛选标签"
 
@@ -4470,7 +4474,7 @@ msgstr "创建筛选标签"
 msgid "Update filter"
 msgstr "更新筛选标签"
 
-#: ontask/templates/condition/includes/partial_filter_add_edit.html:20
+#: ontask/templates/condition/includes/partial_filter_add_edit.html:18
 msgid "The learner will be selected if"
 msgstr "学习者将被选中如果"
 
@@ -4478,13 +4482,13 @@ msgstr "学习者将被选中如果"
 msgid "Confirm filter deletion"
 msgstr "确定筛选标签删除"
 
-#: ontask/templates/condition/includes/partial_filter_delete.html:11
+#: ontask/templates/condition/includes/partial_filter_delete.html:9
 #, fuzzy
 #| msgid "Are you sure you want to delete this row?"
 msgid "Are you sure you want to delete the filter?"
 msgstr "是否确定删除本行？"
 
-#: ontask/templates/condition/includes/partial_filter_delete.html:15
+#: ontask/templates/condition/includes/partial_filter_delete.html:13
 msgid "Delete filter"
 msgstr "删除筛选标签"
 
@@ -4531,7 +4535,7 @@ msgid_plural "(%(n)s learners of %(tot)s)"
 msgstr[0] "%(tot)s) 中有(%(n)s 学习者"
 
 #: ontask/templates/connection/includes/partial_add_edit.html:9
-#: ontask/templates/connection/includes/partial_add_edit.html:22
+#: ontask/templates/connection/includes/partial_add_edit.html:20
 msgid "Add connection"
 msgstr "添加连接"
 
@@ -4569,16 +4573,16 @@ msgstr "删除连接"
 msgid "Confirm connection cloning"
 msgstr "确定连接克隆"
 
-#: ontask/templates/connection/includes/partial_clone.html:11
+#: ontask/templates/connection/includes/partial_clone.html:9
 #, python-format
 msgid "Are you sure you want to clone connection <strong>%(n)s</strong>?"
 msgstr "是否确定克隆连接<strong>%(n)s</strong>?"
 
-#: ontask/templates/connection/includes/partial_clone.html:12
+#: ontask/templates/connection/includes/partial_clone.html:10
 msgid "A new connection with the prefix \"Copy of \" will be created"
 msgstr "将创建一个前缀是\"Copy_of_\"的新连接"
 
-#: ontask/templates/connection/includes/partial_clone.html:16
+#: ontask/templates/connection/includes/partial_clone.html:14
 msgid "Clone connection"
 msgstr "克隆连接"
 
@@ -4588,12 +4592,12 @@ msgstr "克隆连接"
 msgid "Confirm connection deletion"
 msgstr "确定删除SQL连接"
 
-#: ontask/templates/connection/includes/partial_delete.html:11
+#: ontask/templates/connection/includes/partial_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the connection <strong>%(n)s</strong>?"
 msgstr "是否确定删除连接<strong>%(n)s</strong>?"
 
-#: ontask/templates/connection/includes/partial_delete.html:15
+#: ontask/templates/connection/includes/partial_delete.html:13
 msgid "Delete connection"
 msgstr "删除连接"
 
@@ -4749,7 +4753,7 @@ msgstr "数据库表格：%(n)s"
 msgid "Diagnostics"
 msgstr "故障诊断"
 
-#: ontask/templates/dataops/includes/partial_diagnostics.html:14
+#: ontask/templates/dataops/includes/partial_diagnostics.html:12
 msgid "Requirements"
 msgstr "要求"
 
@@ -5035,12 +5039,10 @@ msgid "Folders with incorrect plugins"
 msgstr "存储错误插件的文件夹"
 
 #: ontask/templates/dataops/transform_model.html:73
-#: ontask/templates/dataops/transform_model.html:88
 msgid "Models"
 msgstr "模型"
 
-#: ontask/templates/dataops/transform_model.html:79
-#: ontask/templates/dataops/transform_model.html:82
+#: ontask/templates/dataops/transform_model.html:75
 msgid "Transformations"
 msgstr "转换"
 
@@ -5277,8 +5279,8 @@ msgstr "操作返回了一个未记录的错误。"
 #| "span> <i>Action</i> below to create a new\n"
 #| "      action to execute based on the data stored in the table."
 msgid ""
-"<strong>Next Step:</strong> Click in the <span class=\"fa fa-plus\"></span> "
-"Action below to create a new\n"
+"<strong>Next Step:</strong> Click in the <i class=\"bi-plus\"></i> Action "
+"below to create a new\n"
 "      action to execute based on the data stored in the table."
 msgstr ""
 "<strong>下一步：</strong>点击<i>新操作</i>来创建一个根据表中存储的数据执行的"
@@ -5446,8 +5448,8 @@ msgid "Auth token for"
 msgstr "Auth身份验证令牌对应于"
 
 #: ontask/templates/profiles/show_profile.html:71
-#: ontask/templates/scheduler/includes/partial_scheduler_delete.html:18
-#: ontask/templates/workflow/includes/partial_share_delete.html:15
+#: ontask/templates/scheduler/includes/partial_scheduler_delete.html:16
+#: ontask/templates/workflow/includes/partial_share_delete.html:13
 #: ontask/templates/workflow/includes/workflow_basic_buttons.html:28
 #: ontask/templates/workflow/includes/workflow_operation_buttons.html:33
 msgid "Delete"
@@ -5484,7 +5486,7 @@ msgstr "CSV上传/合并"
 msgid "Confirm scheduled operation deletion"
 msgstr "确认删除已排程的操作"
 
-#: ontask/templates/scheduler/includes/partial_scheduler_delete.html:12
+#: ontask/templates/scheduler/includes/partial_scheduler_delete.html:10
 #, fuzzy, python-format
 #| msgid ""
 #| "Are you sure\n"
@@ -5520,13 +5522,13 @@ msgstr "删除这个已预定的操作"
 msgid "Scheduled operation"
 msgstr "已排程的操作"
 
-#: ontask/templates/scheduler/includes/partial_show_schedule_action.html:10
+#: ontask/templates/scheduler/includes/partial_show_schedule_action.html:8
 #, fuzzy, python-format
 #| msgid "Executions"
 msgid "Execution: %(t)s"
 msgstr "执行"
 
-#: ontask/templates/scheduler/includes/partial_show_schedule_action.html:29
+#: ontask/templates/scheduler/includes/partial_show_schedule_action.html:27
 msgid "Edit this scheduled action execution"
 msgstr "编辑这个已预订的执行操作"
 
@@ -5704,11 +5706,11 @@ msgstr "统计表"
 msgid "Confirm row deletion"
 msgstr "确认删除行"
 
-#: ontask/templates/table/includes/partial_row_delete.html:11
+#: ontask/templates/table/includes/partial_row_delete.html:9
 msgid "Are you sure you want to delete this row?"
 msgstr "是否确定删除本行？"
 
-#: ontask/templates/table/includes/partial_row_delete.html:15
+#: ontask/templates/table/includes/partial_row_delete.html:13
 msgid "Delete row"
 msgstr "删除行"
 
@@ -5725,12 +5727,12 @@ msgid "Delete this row"
 msgstr "删除本行"
 
 #: ontask/templates/table/includes/partial_view_add.html:8
-#: ontask/templates/table/includes/partial_view_add.html:21
+#: ontask/templates/table/includes/partial_view_add.html:19
 msgid "Add view"
 msgstr "添加视图"
 
-#: ontask/templates/table/includes/partial_view_add.html:16
-#: ontask/templates/table/includes/partial_view_edit.html:16
+#: ontask/templates/table/includes/partial_view_add.html:14
+#: ontask/templates/table/includes/partial_view_edit.html:14
 msgid "Row will be shown if"
 msgstr "行将会显示如果"
 
@@ -5738,16 +5740,16 @@ msgstr "行将会显示如果"
 msgid "Confirm view cloning"
 msgstr "确认视图克隆"
 
-#: ontask/templates/table/includes/partial_view_clone.html:11
+#: ontask/templates/table/includes/partial_view_clone.html:9
 #, python-format
 msgid "Are you sure you want to clone view <strong>%(n)s</strong>?"
 msgstr "是否确定克隆视图<strong>%(n)s</strong>?"
 
-#: ontask/templates/table/includes/partial_view_clone.html:12
+#: ontask/templates/table/includes/partial_view_clone.html:10
 msgid "A new view with the prefix \"Copy of \" will be created"
 msgstr "一个前缀是\"Copy_of_\"的新视图将被创建"
 
-#: ontask/templates/table/includes/partial_view_clone.html:16
+#: ontask/templates/table/includes/partial_view_clone.html:14
 msgid "Clone view"
 msgstr "克隆视图"
 
@@ -5755,13 +5757,13 @@ msgstr "克隆视图"
 msgid "Confirm view deletion"
 msgstr "确定视图删除"
 
-#: ontask/templates/table/includes/partial_view_delete.html:11
+#: ontask/templates/table/includes/partial_view_delete.html:9
 #, fuzzy, python-format
 #| msgid "Are you sure you want to delete the filter <strong>%(n)s</strong>?"
 msgid "Are you sure you want to delete the view <strong>%(n)s</strong>?"
 msgstr "是否确定删除筛选标签 <strong>%(n)s</strong>?"
 
-#: ontask/templates/table/includes/partial_view_delete.html:15
+#: ontask/templates/table/includes/partial_view_delete.html:13
 msgid "Delete view"
 msgstr "删除视图"
 
@@ -5769,7 +5771,7 @@ msgstr "删除视图"
 msgid "Edit view"
 msgstr "编辑视图"
 
-#: ontask/templates/table/includes/partial_view_edit.html:21
+#: ontask/templates/table/includes/partial_view_edit.html:19
 msgid "Save view"
 msgstr "保存视图"
 
@@ -5948,7 +5950,7 @@ msgstr ""
 "<href=\"%(uploadmerge)s\">将数据上传到表</a>。"
 
 #: ontask/templates/workflow/includes/partial_attribute_create.html:6
-#: ontask/templates/workflow/includes/partial_attribute_create.html:16
+#: ontask/templates/workflow/includes/partial_attribute_create.html:14
 msgid "Create attribute"
 msgstr "创建属性"
 
@@ -5956,12 +5958,12 @@ msgstr "创建属性"
 msgid "Confirm attribute deletion"
 msgstr "确认删除属性"
 
-#: ontask/templates/workflow/includes/partial_attribute_delete.html:12
+#: ontask/templates/workflow/includes/partial_attribute_delete.html:10
 #, python-format
 msgid "Are you sure you want to delete the attribute <strong>%(key)s</strong>?"
 msgstr "是否确定将删除属性<strong>%(key)s</strong>?"
 
-#: ontask/templates/workflow/includes/partial_attribute_delete.html:16
+#: ontask/templates/workflow/includes/partial_attribute_delete.html:14
 msgid "Delete attribute"
 msgstr "删除属性"
 
@@ -5969,7 +5971,7 @@ msgstr "删除属性"
 msgid "Edit attribute"
 msgstr "编辑属性"
 
-#: ontask/templates/workflow/includes/partial_attribute_edit.html:16
+#: ontask/templates/workflow/includes/partial_attribute_edit.html:14
 msgid "Update attribute"
 msgstr "更新属性"
 
@@ -5982,7 +5984,7 @@ msgid "Delete pair name/value"
 msgstr "删除对名称/数值"
 
 #: ontask/templates/workflow/includes/partial_criterion_add_edit.html:15
-#: ontask/templates/workflow/includes/partial_criterion_add_edit.html:28
+#: ontask/templates/workflow/includes/partial_criterion_add_edit.html:26
 #, fuzzy
 #| msgid "Add Filter"
 msgid "Add criterion"
@@ -6016,13 +6018,13 @@ msgstr ""
 msgid "Confirm criterion deletion"
 msgstr "确定删除操作"
 
-#: ontask/templates/workflow/includes/partial_criterion_delete.html:12
+#: ontask/templates/workflow/includes/partial_criterion_delete.html:10
 #, fuzzy, python-format
 #| msgid "Are you sure you want to remove the user <strong>%(n)s</strong>?"
 msgid "Are you sure you want to remove criterion <strong>%(n)s</strong>?"
 msgstr "是否确定移除用户<strong>%(n)s</strong>?"
 
-#: ontask/templates/workflow/includes/partial_criterion_delete.html:16
+#: ontask/templates/workflow/includes/partial_criterion_delete.html:14
 msgid "Remove criterion"
 msgstr ""
 
@@ -6030,7 +6032,7 @@ msgstr ""
 msgid "Select user to allow access to the workflow"
 msgstr "选择用户以允许访问工作流"
 
-#: ontask/templates/workflow/includes/partial_share_create.html:16
+#: ontask/templates/workflow/includes/partial_share_create.html:14
 msgid "Share"
 msgstr "分享"
 
@@ -6038,7 +6040,7 @@ msgstr "分享"
 msgid "Confirm user deletion"
 msgstr "确定删除用户"
 
-#: ontask/templates/workflow/includes/partial_share_delete.html:11
+#: ontask/templates/workflow/includes/partial_share_delete.html:9
 #, python-format
 msgid "Are you sure you want to remove the user <strong>%(n)s</strong>?"
 msgstr "是否确定移除用户<strong>%(n)s</strong>?"
@@ -6101,16 +6103,16 @@ msgstr "收藏工作流"
 msgid "Confirm workflow cloning"
 msgstr "确认克隆工作流"
 
-#: ontask/templates/workflow/includes/partial_workflow_clone.html:11
+#: ontask/templates/workflow/includes/partial_workflow_clone.html:9
 #, python-format
 msgid "Are you sure you want to clone workflow <strong>%(n)s</strong>?"
 msgstr "是否确定克隆工作流<strong>%(n)s</strong>?"
 
-#: ontask/templates/workflow/includes/partial_workflow_clone.html:12
+#: ontask/templates/workflow/includes/partial_workflow_clone.html:10
 msgid "A new workflow with the prefix \"Copy of \" will be created"
 msgstr "将创建一个带有前缀\"Copy Of \"的新工作流"
 
-#: ontask/templates/workflow/includes/partial_workflow_clone.html:16
+#: ontask/templates/workflow/includes/partial_workflow_clone.html:14
 msgid "Clone workflow"
 msgstr "克隆工作流"
 
@@ -6118,7 +6120,7 @@ msgstr "克隆工作流"
 msgid "Create a workflow"
 msgstr "创建一个工作流"
 
-#: ontask/templates/workflow/includes/partial_workflow_create.html:12
+#: ontask/templates/workflow/includes/partial_workflow_create.html:10
 #, fuzzy
 #| msgid ""
 #| "Create a new <i>empty</i> workflow (that is, with no data table or "
@@ -6136,7 +6138,7 @@ msgstr ""
 "创建一个新的<i>空</i>工作流\n"
 "(即，没有数据表或操作)。下一页将请您用数据填充数据表。"
 
-#: ontask/templates/workflow/includes/partial_workflow_create.html:19
+#: ontask/templates/workflow/includes/partial_workflow_create.html:17
 msgid "Create workflow"
 msgstr "创建工作流"
 
@@ -6144,12 +6146,12 @@ msgstr "创建工作流"
 msgid "Confirm workflow deletion"
 msgstr "确认删除工作流"
 
-#: ontask/templates/workflow/includes/partial_workflow_delete.html:11
+#: ontask/templates/workflow/includes/partial_workflow_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the workflow <strong>%(n)s</strong>?"
 msgstr "是否确定删除工作流<strong>%(n)s</strong>?"
 
-#: ontask/templates/workflow/includes/partial_workflow_delete.html:12
+#: ontask/templates/workflow/includes/partial_workflow_delete.html:10
 msgid ""
 "This operation will also remove all the conditions and actions attached to "
 "it."
@@ -6157,12 +6159,12 @@ msgstr ""
 "此操作还将删除\n"
 "所有附带的条件和操作。"
 
-#: ontask/templates/workflow/includes/partial_workflow_delete.html:13
-#: ontask/templates/workflow/includes/partial_workflow_flush.html:20
+#: ontask/templates/workflow/includes/partial_workflow_delete.html:11
+#: ontask/templates/workflow/includes/partial_workflow_flush.html:18
 msgid "Type the name of the workflow:"
 msgstr "输入此工作流的名称："
 
-#: ontask/templates/workflow/includes/partial_workflow_delete.html:17
+#: ontask/templates/workflow/includes/partial_workflow_delete.html:15
 msgid "Delete workflow"
 msgstr "删除工作流"
 
@@ -6176,21 +6178,21 @@ msgstr "确认删除数据"
 msgid "Workflow has no data"
 msgstr "列没有数据"
 
-#: ontask/templates/workflow/includes/partial_workflow_flush.html:18
+#: ontask/templates/workflow/includes/partial_workflow_flush.html:16
 #, python-format
 msgid ""
 "Are you sure you want to flush the data in workflow <strong>%(n)s</strong>?"
 msgstr "确定要在工作流 <strong>%(n)s</strong> 中刷新数据吗？"
 
-#: ontask/templates/workflow/includes/partial_workflow_flush.html:19
+#: ontask/templates/workflow/includes/partial_workflow_flush.html:17
 msgid "This operation will also remove actions, table views and records."
 msgstr "此操作还将删除操作、表视图和记录。"
 
-#: ontask/templates/workflow/includes/partial_workflow_flush.html:22
+#: ontask/templates/workflow/includes/partial_workflow_flush.html:20
 msgid "The workflow has no data, so this operation will nave no effect."
 msgstr ""
 
-#: ontask/templates/workflow/includes/partial_workflow_flush.html:28
+#: ontask/templates/workflow/includes/partial_workflow_flush.html:26
 msgid "Flush workflow data"
 msgstr "刷新工作流数据"
 
@@ -6321,23 +6323,23 @@ msgstr "包含先前导出工作流的文件"
 msgid "Incorrect form request (it is not multipart)"
 msgstr "错误的表单请求(此非多部分的)"
 
-#: ontask/workflow/serializers.py:31
+#: ontask/workflow/serializers.py:29
 msgid "Attributes must be a dictionary of (string, string) pairs."
 msgstr "属性必须是(string, string)对的字典。"
 
-#: ontask/workflow/serializers.py:37
+#: ontask/workflow/serializers.py:35
 msgid "Attributes must be a dictionary (str, str)"
 msgstr "属性必须是一个(str, str)字典"
 
-#: ontask/workflow/serializers.py:54
+#: ontask/workflow/serializers.py:52
 msgid "Workflow could not be created."
 msgstr "无法创建工作流。"
 
-#: ontask/workflow/serializers.py:117
+#: ontask/workflow/serializers.py:115
 msgid "Unexpected empty workflow name."
 msgstr "意外的空工作流名称。"
 
-#: ontask/workflow/serializers.py:124
+#: ontask/workflow/serializers.py:122
 msgid ""
 "There is a workflow with this name. Please provide a workflow name in the "
 "import page."
@@ -6412,11 +6414,11 @@ msgstr "工作流已成功克隆。"
 msgid "The list of workflow users will be updated shortly."
 msgstr "工作流用户列表将很快被更新。"
 
-#: settings/base.py:225
+#: settings/base.py:228
 msgid "English"
 msgstr "英语"
 
-#: settings/base.py:225
+#: settings/base.py:228
 msgid "Spanish"
 msgstr "西班牙语"
 

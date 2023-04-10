@@ -1,3 +1,13 @@
+# 10.2 (2023-04-10)
+
+## Fixed
+
+- Various elements in the documentation
+
+- Incorrect links in the README page to the documentation
+
+- Faulty process to build the documentation in ReadTheDocs
+
 # 10.1 (2023-04-09)
 
 ## Added
